@@ -1,0 +1,18 @@
+<form method="post" action="{% url 'workflow:flush' workflow.id %}" class="js-workflow-flush-form">
+  {% csrf_token %}
+  <input type="hidden" name="dst" value="{{ dst }}"/>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Confirm workflow deletion</h4>
+  </div>
+  <div class="modal-body">
+    <p class="lead">Are you sure you want to flush the data in workflow <strong>{{ workflow.name }}</strong>? This operation will also remove all the conditions attached to its actions.</p>
+  </div>
+  <div class="modal-footer" style="text-align: center;">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-danger">Flush workflow data</button>
+  </div>
+</form>
+

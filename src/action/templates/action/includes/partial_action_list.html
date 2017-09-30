@@ -1,0 +1,20 @@
+{% for action in actions %}
+  <tr>
+    <td class="text-center"><a href="{% url 'action:edit' action.id %}">{{ action.name }}</a></td>
+    <td class="text-center">{{ action.description_text }}</td>
+    <td class="text-center">
+      <a href="{% url 'email_action:index' action.id %}"
+              class="btn btn-primary btn-sm">
+        <span class="glyphicon glyphicon-envelope"></span></a>
+      <button type="button"
+              class="btn btn-danger btn-sm js-action-delete"
+              data-url="{% url 'action:delete' action.id %}"
+              data-dst="refresh">
+        <span class="glyphicon glyphicon-trash"></span></button>
+    </td>
+  </tr>
+{% empty %}
+  <tr>
+    <td colspan="4" class="text-center bg-warning">No Actions</td>
+ </tr>
+{% endfor %}

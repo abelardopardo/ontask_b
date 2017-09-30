@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block scripts %}
+  <script src="{% static 'site/js/tinymce/tinymce.min.js' %}"></script>
+  <script type="text/javascript"
+          src="{% static 'site/js/tinymce/custom.js' %}" ></script>
+  <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
+  <script src="{% static 'action/js/action.js' %}"></script>
+  <script type="text/javascript">
+    var options = {
+      plugins: ['bt-tooltip-errors', 'not-group'],
+      operators: ['equal', 'not_equal', 'less', 'less_or_equal',
+                  'greater', 'greater_or_equal', 'between', 'not_between',
+                  'begins_with', 'not_begins_with', 'contains', 'not_contains',
+                  'ends_with', 'not_ends_with'],
+      allow_empty: false,
+      filters: {{ query_builder_ops|safe }},
+    };
+  </script>
+{% endblock %}
+
+{% block title %}{{ block.super }}Edit {{ action.name }}{% endblock %}
+
+{% block extrahead %}
+  <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
+{% endblock extrahead %}
+
+{% block container %}
+  <div align="center" class="container-fluid">
+    <h1 class="page-header">Edit action "{{ action.name }}"</h1>
+
+    {% include 'action/includes/partial_filter_create_buttons.html' %}
+
+    <div class="container">
+      {% include 'action/includes/partial_condition_buttons.html' %}
+      <div id="html-editor">
+        <h4 class="text-center">Content</h4>
+        <div id="attribute-names" style="margin-bottom:1ex;">
+          {% if attribute_names %}
+            <div style="display: table-cell; padding-right: 1ex;">
+              Insert attribute:
+                <select id="select-attribute-name">
+                  <option value="">-----</option>
+                  {% for attr in attribute_names %}
+                    <option value="{{ attr }}">{{ attr }}</option>
+                  {% endfor %}
+                </select>
+            </div>
+          {% endif %}
+          <div style="display: table-cell;">
+            Insert column value:
+              <select id="select-attribute-name">
+                <option value="">-----</option>
+                {% for colname in column_names %}
+                  <option value="{{ colname }}">{{ colname }}</option>
+                {% endfor %}
+              </select>
+          </div>
+        </div>
+        <form action="" method="POST">
+          {% csrf_token %}
+          {{ form.as_table }}
+          <div style="margin: 1ex 0 1ex 0;">
+            <button type="button" class="btn btn-info js-action-preview"
+                    style="margin-right:2ex;"
+                    data-url="{% url 'action:preview' action.id %}?idx=1">
+              <span class="glyphicon glyphicon-eye"></span> Preview
+            </button>
+            <button type="submit" name="Submit" value="Save"
+                    style="margin-right:2ex;"
+                    class="btn btn-success">Save</button>
+            <button type="submit" name="Submit" value="Save-and-close"
+                    class="btn btn-success">Save & Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modal-item">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+      </div>
+    </div>
+
+</div>
+{% endblock container %}
+

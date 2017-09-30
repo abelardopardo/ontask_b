@@ -1,0 +1,10 @@
+<div class="text-center" style="margin-bottom:1.5ex">
+  <button type="button" class="btn btn-default" style="margin-right:2ex;"
+  onclick="location.href='{{ prev_step }}'">Back
+  </button>
+  <button class="btn btn-primary btn-space"  style="margin-right:2ex;"
+          type="Submit" name="Submit" value="Submit">{% if next_name %}{{ next_name }}{% else %}Next{% endif %}</button>
+  <button type="button" class="btn btn-primary btn-danger"
+  onclick="location.href='{% url 'dataops:list' %}'">Cancel</button>
+</div>
+

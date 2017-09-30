@@ -1,0 +1,27 @@
+<a href="{% url 'workflow:attributes' %}"
+   class="btn btn-primary btn-sm">
+  <span class="glyphicon glyphicon-list"></span> Attributes
+</a>
+<a href="{% url 'workflow:logs' workflow.id %}"
+   class="btn btn-primary btn-sm">
+  <span class="glyphicon glyphicon-eye-open"></span> Logs
+</a>
+<a href="{% url 'workflow:share' workflow.id %}"
+   class="btn btn-primary btn-sm">
+  <span class="glyphicon glyphicon-share"></span> Share
+</a>
+{% if table_info %}
+  <button type="button"
+          class="btn btn-danger btn-sm js-workflow-flush"
+          data-url="{% url 'workflow:flush' workflow.id %}"
+          data-dst="redirect">
+    <span class="glyphicon glyphicon-floppy-remove"></span> Flush Data
+  </button>
+{% endif %}
+<button type="button"
+        class="btn btn-danger btn-sm js-workflow-delete"
+        data-url="{% url 'workflow:delete' workflow.id %}"
+        data-dst="redirect">
+  <span class="glyphicon glyphicon-trash"></span> Delete
+</button>
+

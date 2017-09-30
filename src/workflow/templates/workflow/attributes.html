@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+{% block scripts %}
+  <script src="{% static 'workflow/js/workflow.js' %}"></script>
+{% endblock %}
+
+{% block title %}{{ block.super }}{{ workflow.name }}{% endblock %}
+
+{% block container %}
+<div align="center" class="container">
+  <h1 class="page-header">Workflow Attributes</h1>
+
+  <div style="display: inline-block;" id="workflow-attributes">
+    <form action="" method="POST">
+      {% csrf_token %}
+      {% include 'workflow/includes/workflow_attribute_buttons.html' %}
+      {% if form.errors %}
+        {% for error in form.non_field_errors %}
+          <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+          </div>
+        {% endfor %}
+      {% endif %}
+      <table class="table table-bordered" id="attribute-table">
+        <thead>
+          <tr>
+            <th class="text-center">Name</th>
+            <th class="text-center">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for field in form %}
+            {% if forloop.counter0|divisibleby:2 %}<tr>{% endif %}
+              <td class="text-center">
+                {% if forloop.counter0|divisibleby:2 %}
+                  <button type="button"
+                          class="btn btn-danger btn-xs js-attribute-delete"
+                          data-url="{% url 'workflow:attribute_delete' %}?key={{ field.name }}"
+                          data-dst="refresh" style="margin-bottom:1ex;">
+                  <span class="glyphicon glyphicon-trash"></span>
+                  </button>
+                {% endif %}
+                {% render_field field %}
+                {% for error in field.errors %}
+                  <p class="help-block">{{ error }}</p>
+                {% endfor %}
+              </td>
+            {% if forloop.counter|divisibleby:2 %}</tr>{% endif %}
+          {% empty %}
+            <td colspan="2">No attributes defined</td>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% include 'workflow/includes/workflow_attribute_buttons.html' %}
+    </form>
+  </div>
+
+  <div class="modal fade" id="modal-item">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock container %}
+
+
+
+

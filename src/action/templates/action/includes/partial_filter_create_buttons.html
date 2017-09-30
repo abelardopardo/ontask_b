@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="col-lg-12" id="filter-set" style="padding: 1ex;">
+    {% if filter_condition %}
+      <button type="button" class="btn btn-primary js-filter-edit"
+              data-url="{% url 'action:edit_filter' action.id %}"
+              data-dst="refresh" data-type="filter">Edit Filter "{{ filter_condition.name }}"</button>
+      <button type="button" class="btn btn-danger js-filter-delete"
+              data-url="{% url 'action:delete_filter' action.id %}"
+              data-dst="redirect">
+        <span class="glyphicon glyphicon-trash"></span>
+      </button>
+      <p>Filter selects {{ selected_rows }} rows from {{ total_rows }}.</p>
+    {% else %}
+      <button type="button"
+              class="btn btn-primary js-filter-create{% if not has_data %} disabled{% endif %}"
+              data-url="{% url 'action:create_filter' action.id %}"
+              data-dst="refresh" data-type="filter">
+        <span class="glyphicon glyphicon-plus"></span> Create Filter</button>
+    {% endif %}
+  </div>
+</div>
+

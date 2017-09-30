@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block scripts %}
+  <script src="{% static 'dataops/js/dataops.js' %}"></script>
+{% endblock %}
+
+{% block title %}{{ block.super }}Select Columns ot Upload/Merge{% endblock %}
+
+{% block container %}
+<div class="container">
+  <h1 class="page-header">Select Columns</h1>
+
+  <form method="POST" action="{% url 'dataops:select_columns_to_upload' %}">
+    {% csrf_token %}
+    <table class="table table-bordered" id="workflow-table">
+      <thead>
+        <tr>
+          <th class="text-center">Is Unique</th>
+          <th class="text-center">
+            Load<br/>
+            <input type="checkbox" id="checkAll"></input>
+          </th>
+          <th class="text-center">Name</th>
+          <th class="text-center">Rename</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in df_data %}
+          <tr>
+            <td class="text-center"
+                style="vertical-align: middle;{% if item.1 %}background-color: #c4e3f3 !important;{% endif %}">
+              {% if item.1 %}YES{% endif %}
+            </td>
+            <td class="text-center" style="vertical-align: middle;{% if item.1 %}background-color: #c4e3f3 !important;{% endif %}">
+              <div class="checkbox">
+                <label><input type="checkbox"
+                              value="upload_{{ forloop.counter }}"></label>
+               </div>
+            </td>
+            <td class="text-center" style="vertical-align: middle;{% if item.1 %}background-color: #c4e3f3 !important;{% endif %}">{{ item.2 }}</td>
+            <td class="text-center"style="vertical-align: middle;{% if item.1 %}background-color: #c4e3f3 !important;{% endif %}">
+              <input type="text" class="form-control"
+                     id="new_name_{{ forloop.counter }}"
+                     value="{{ item.2 }}">
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="text-center"><input type="Submit"/></div>
+  </form>
+</div>
+
+{% endblock container %}

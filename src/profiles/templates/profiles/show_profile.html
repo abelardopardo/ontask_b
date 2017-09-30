@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}{{ block.super }}Profile{% endblock %}
+
+{% block container %}
+
+<div class="container profile-head">
+  <div class="row">
+    <div class="col-sm-10">
+      <h1>{{ show_user.get_full_name }}</h1>
+      {% if editable %}
+      <a href="{% url 'profiles:edit_self' %}" class="btn btn-info">Edit Profile</a>
+      {% endif %}
+    </div>
+    <div class="col-sm-2"><img title="profile picture" class="img-circle img-responsive" src="{% thumbnail show_user.profile.picture|default:'default_profile.png' 140x140 crop %}">
+    </div>
+  </div>
+</div>
+
+<div class="container profile-body">
+  <div class="row">
+    <div class="col-sm-4">
+      <ul class="list-group">
+        <li class="list-group-item text-muted">Profile</li>
+        <li class="list-group-item text-right"><span class="pull-left"><strong>Email:</strong></span> {{ show_user.email|default:"missing" }}
+	  {% if show_user.profile.email_verified %}
+	    <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" title="This email address has been verified"></span>
+	    <span class="sr-only">Verified</span>
+	  {% else %}
+	    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true" title="This email address is not verified"></span>
+	    <span class="sr-only">Not Verified</span>
+	  {% endif %}
+	</li>
+        <li class="list-group-item text-right"><span class="pull-left"><strong>Joined</strong></span> {{ show_user.date_joined }}</li>
+        <li class="list-group-item text-right"><span class="pull-left"><strong>Last seen</strong></span> {{ show_user.last_login }}</li>
+      </ul>
+    </div>
+    <div class="col-sm-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ show_user.get_full_name }}'s Profile
+	  {% if show_user.profile.slug %}
+	    <a href="{% url 'profiles:show' show_user.profile.slug %}">
+	    	<span class="glyphicon glyphicon-link" aria-hidden="true" title="Profile permalink"></span>
+	    	<span class="sr-only">Permalink</span></a> {{ show_user.profile.get_absolute_url }}
+	  {% else %}
+		<a href="https://github.com/arocks/edge/issues/40" target="_blank"><span>No permalink. See this issue.</span></a>
+	  {% endif %}
+	</div>
+        <div class="panel-body">
+	  <strong>Bio</strong>: {{ show_user.profile.bio }}
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+

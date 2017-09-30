@@ -1,0 +1,13 @@
+Django>=1.11.3
+django-environ>=0.4.3
+django-braces>=1.11.0
+django-crispy-forms>=1.6.1
+django-admin-bootstrapped>=2.5.7
+django-authtools>=1.6.0
+easy-thumbnails>=2.4.1
+django-extensions
+django-widget-tweaks
+django-formtools
+django-siteprefs
+pandas
+django-tinymce

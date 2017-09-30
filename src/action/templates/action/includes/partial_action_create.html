@@ -1,0 +1,17 @@
+<form method="post" action="{% url 'action:create' %}" class="js-action-create-form">
+  {% csrf_token %}
+  <input type="hidden" name="dst" value="{{ dst }}"/>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" arial-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Create a new action</h4>
+  </div>
+  <div class="modal-body">
+    {% include 'action/includes/partial_form_fields.html' %}
+  </div>
+  <div class="modal-footer" style="text-align: center;">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-primary">Create action</button>
+  </div>
+</form>
