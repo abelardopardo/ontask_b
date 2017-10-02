@@ -92,6 +92,7 @@ INSTALLED_APPS = (
     'django_tables2',
     'django_filters',
     'rest_framework',
+    'import_export',
 
     'profiles',
     'accounts',
@@ -165,6 +166,8 @@ LOGIN_REDIRECT_URL = reverse_lazy("profiles:show_self")
 LOGIN_URL = reverse_lazy("accounts:login")
 
 THUMBNAIL_EXTENSION = 'png'     # Or any extn for your thumbnails
+
+IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 # Extra configuration options
 DATAOPS_CONTENT_TYPES = '["text/csv", "application/json"]'

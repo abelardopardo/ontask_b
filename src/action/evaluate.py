@@ -27,7 +27,7 @@ def evaluate_action(action, **kargs):
 
     :param action: Action object with pointers to conditions, filter,
                    workflow, etc.
-    :return: set of strings resulting from the evaluation of the action
+    :return: list of lists resulting from the evaluation of the action
     """
 
     # Get the optional args
@@ -85,18 +85,16 @@ def evaluate_action(action, **kargs):
 
         # Step 5: run the template with the given context
         # Render the text and append to result
-        partial_result = template.render(Context(context))
+        partial_result = [template.render(Context(context))]
 
         # If there is extra message, render with context and create tuple
         if extra_string:
-            partial_result = (partial_result,
-                              extra_template.render(Context(context)))
+            partial_result.append(extra_template.render(Context(context)))
 
-        # If column_name was given, create a tuple
-        if column_name:
-            partial_result = (partial_result[0],
-                              partial_result[1],
-                              col_names[col_idx])
+        # If column_name was given (and it exists), create a tuple with that
+        # element as the third component
+        if col_idx != -1:
+            partial_result.append(row_values[col_names[col_idx]])
 
         # Append result
         result.append(partial_result)

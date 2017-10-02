@@ -12,6 +12,7 @@ from django.utils.decorators import method_decorator
 
 from ontask import is_instructor, decorators
 from logs import ops
+from dataops.panda_db import evaluate_node
 from .models import Action, Condition
 from .forms import ConditionForm
 
@@ -60,24 +61,33 @@ def save_condition_form(request, form, template_name, action_id, condition,
                     action.save()
                     log_type = 'filter'
                 else:
+                    action.n_selected_rows = -1
                     log_type = 'condition'
 
                 # Save the condition/filter
                 condition_item.save()
 
-                if form.instance.pk is None:
+                # Log the event
+                formula = evaluate_node(json.loads(condition_item.formula),
+                                                   None,
+                                                   'sql')
+                if is_new:
                     # Log the event
                     ops.put(request.user,
                             log_type + '_create',
+                            condition_item.action.workflow,
                             {'id': condition_item.id,
+                             'name': condition_item.name,
                              'selected_rows': action.n_selected_rows,
-                             'formula': condition_item.formula})
+                             'formula': formula})
                 else:
                     ops.put(request.user,
-                            log_type + '_create',
+                            log_type + '_update',
+                            condition_item.action.workflow,
                             {'id': condition_item.id,
+                             'name': condition_item.name,
                              'selected_rows': action.n_selected_rows,
-                             'formula': condition_item.formula})
+                             'formula': formula})
 
                 data['dst'] = 'redirect'
                 data['html_redirect'] = reverse('action:edit',
@@ -150,13 +160,15 @@ def delete_filter(request, pk):
     # Treat the two types of requests
     if request.method == 'POST':
 
-        # Perform the delete operation
-        filter.delete()
-
         # Log the event
+        formula = evaluate_node(json.loads(filter.formula), None, 'sql')
         ops.put(request.user,
                 'filter_delete',
-                {'id': filter.id})
+                filter.action.workflow,
+                {'id': filter.id,
+                 'name': filter.name,
+                 'selected_rows': filter.action.n_selected_rows,
+                 'formula': formula})
 
         # Perform the delete operation
         filter.delete()
@@ -165,11 +177,6 @@ def delete_filter(request, pk):
         action = Action.objects.get(pk=filter.action.id)
         action.n_selected_rows = -1
         action.save()
-
-        # Log the event
-        ops.put(request.user,
-                'filter_delete',
-                {'id': action.id})
 
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('action:edit',
@@ -239,10 +246,13 @@ def delete_condition(request, pk):
     # Treat the two types of requests
     if request.method == 'POST':
 
-        # Log the event
+        formula = evaluate_node(json.loads(condition.formula), None, 'sql')
         ops.put(request.user,
                 'condition_delete',
-                {'id': condition.id})
+                condition.action.workflow,
+                {'id': condition.id,
+                 'name': condition.name,
+                 'formula': formula})
 
         # Perform the delete operation
         condition.delete()

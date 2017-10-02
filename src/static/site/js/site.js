@@ -13,8 +13,8 @@ var loadForm = function () {
         $("#modal-item .modal-content").html(data.html_form);
       }
     });
-}
 
+}
 var saveForm = function () {
     var form = $(this);
     $.ajax({

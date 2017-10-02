@@ -20,15 +20,7 @@
 
       <form action="" method="post">
         {% csrf_token %}
-
-        {% include "includes/partial_form_char_field.html" with field=form.subject %}
-        {% include "includes/partial_form_checkbox_field.html" with field=form.send_confirmation %}
-        {% include "includes/partial_form_char_field.html" with field=form.email_column %}
-        {% comment %}
-        {% include "includes/partial_form_checkbox_field.html" with field=form.track_read %}
-        {% include "includes/partial_form_checkbox_field.html" with field=form.track_column %}
-        {% include "includes/partial_form_checkbox_field.html" with field=form.sent_column %}
-        {% endcomment %}
+        {{ form|crispy }}
         <div style="margin: 1ex 0 1ex 0;">
           <button type="button" class="btn btn-info js-email-preview"
                   style="margin-right:2ex;"

@@ -57,32 +57,33 @@ if 'siteprefs' in settings.INSTALLED_APPS:
             (pref(EMAIL_HOST,
                   verbose_name='Host name of the SMTP server',
                   static=False,
-                  field=models.CharField(max_length=256)),
+                  field=models.CharField(max_length=256, blank=True)),
 
              pref(EMAIL_PORT,
                   verbose_name='Host name of the SMTP server',
                   static=False,
-                  field=models.CharField(max_length=256)),
+                  field=models.CharField(max_length=256, blank=True)),
 
              pref(EMAIL_HOST_USER,
                   verbose_name='Username',
                   static=False,
-                  field=models.CharField(max_length=256)),
+                  field=models.CharField(max_length=256, blank=True)),
 
              pref(EMAIL_HOST_PASSWORD,
                   verbose_name='Password',
                   static=False,
-                  field=models.CharField(max_length=256)),
+                  field=models.CharField(max_length=256, blank=True)),
 
              pref(EMAIL_USE_TLS,
                   verbose_name='Use TLS?',
                   static=False,
-                  field=models.CharField(max_length=256)),
+                  field=models.CharField(max_length=256, blank=True)),
 
              pref(EMAIL_USE_SSL,
                   verbose_name='Use SSL?',
                   static=False,
-                  field=models.CharField(max_length=256)),),
+                  field=models.CharField(max_length=256, blank=True)),
+             ),
             static=False
         ),
 

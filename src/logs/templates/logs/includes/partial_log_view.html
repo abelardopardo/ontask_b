@@ -1,0 +1,70 @@
+<div>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">{{ op_name }}</h4>
+  </div>
+  <div class="modal-body" style="text-align: left; border: solid 1px black;margin: 0 2ex 0 2ex;">
+    {% if log_type == 'workflow_create' or log_type == 'workflow_update' or log_type == 'workflow_delete' or log_type == 'workflow_data_flush' %}
+      <p><strong>Workflow id: {{ id }}</p>
+      <p>Workflow name: {{ name }}</p>
+    {% elif log_type == 'workflow_data_upload' or log_type == 'workflow_data_merge' %}
+      <p><strong>Workflow id:</strong> {{ id }}</p>
+      <p><strong>Workflow name:</strong> {{ name }}</p>
+      <p><strong>Rows uploaded:</strong> {{ num_rows }}</p>
+      <p><strong>Rows uploaded:</strong> {{ num_cols }}</p>
+      <p><strong>Column names:</strong> {{ column_names|join:", " }}</p>
+      <p><strong>Column types:</strong> {{ column_types|join:", " }}</p>
+    {% elif log_type == 'workflow_data_failedmerge' %}
+      <p><strong>Workflow id:</strong> {{ id }}</p>
+      <p><strong>Workflow name:</strong> {{ name }}</p>
+      <p><strong>Rows uploaded:</strong> {{ num_rows }}</p>
+      <p><strong>Rows uploaded:</strong> {{ num_cols }}</p>
+      <p><strong>Column names:</strong> {{ column_names|join:", " }}</p>
+      <p><strong>Column types:</strong> {{ column_types|join:", " }}</p>
+      <p><strong>Message: {{ error_msg }}</p>
+    {% elif log_type == 'workflow_attribute_create' %}
+      <p><strong>Workflow id:</strong> {{ id }}</p>
+      <p><strong>Workflow name:</strong> {{ name }}</p>
+      <p><strong>New attribute:</strong> {{ attr_key }} = {{ attr_value }}</p>
+    {% elif log_type == 'workflow_attribute_update' %}
+      <p><strong>Workflow id:</strong> {{ id }}</p>
+      <p><strong>Workflow name:</strong> {{ name }}</p>
+      <p><strong>Attributes updated:</strong></p>
+      <ul>
+        {% for k, v in attr.iteritems %}
+          <li>{{ k }} = {{ v }}</li>
+        {% endfor %}
+      </ul>
+    {% elif log_type == 'workflow_attribute_delete' %}
+      <p><strong>Workflow id</strong>: {{ id }}</p>
+      <p><strong>Workflow name:</strong> {{ name }}</p>
+      <p><strong>New attribute:</strong> {{ attr_key }} = {{ attr_val }}</p>
+    {% elif log_type == 'action_create' or log_type == 'action_update' or log_type == 'action_delete' %}
+      <p><strong>Action id:</strong> {{ id }}</p>
+      <p><strong>Action name:</strong> {{ name }}</p>
+      <p><strong>Attached to workflow (name, id):</strong> ({{ workflow_name }},
+        {{ workflow_id }})</p>
+    {% elif log_type == 'action_email_sent' or log_type == 'action_email_notify' %}
+      <p><strong>From:</strong> {{ from_email }}</p>
+      <p><strong>To:</strong> {{ to_email|join:", " }}</p>
+      <p><strong>Subject:</strong> {{ subject }}</p>
+      <p><strong>Body:</strong></p>
+      <div style="border: solid 1px black;">{{ body|safe }}</div>
+    {% elif log_type == 'action_served_execute' %}
+      <p><strong>Not implemented yet</strong></p>
+    {% elif log_type == 'condition_create' or log_type == 'condition_update' or log_type == 'condition_delete' or log_type == 'filter_create' or log_type == 'filter_update' or log_type == 'filter_delete'%}
+      <p><strong>Condition id:</strong> {{ id }}</p>
+      <p><strong>Condition name:</strong> {{ name }}</p>
+      {% if selected_rows and selected_rows != -1 %}
+        <p><strong>Selected rows:</strong> {{ selected_rows }}</p>
+      {% endif %}
+      <p><strong>Formula:</strong> {{ formula }}</p>
+    {% endif %}
+  </div>
+  <div class="modal-footer" style="text-align: center;">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+  </div>
+</div>
+

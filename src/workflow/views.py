@@ -44,18 +44,21 @@ def save_workflow_form(request, form, template_name, is_new):
                 workflow_item.user = request.user
                 workflow_item.nrows = 0
                 workflow_item.ncols = 0
+                workflow_item.save()
 
                 # Log event
                 if form.instance.pk is None:
                     ops.put(request.user,
                             'workflow_create',
-                            {'id': workflow_item.id})
+                            workflow_item,
+                            {'id': workflow_item.id,
+                             'name': workflow_item.name})
                 else:
                     ops.put(request.user,
                             'workflow_update',
-                            {'id': workflow_item.id})
-
-                workflow_item.save()
+                            workflow_item,
+                            {'id': workflow_item.id,
+                             'name': workflow_item.name})
 
                 data['dst'] = dst
                 # Ok, here we can say that the form is done.
@@ -154,17 +157,21 @@ def flush(request, pk):
 
         # Log the event
         ops.put(request.user,
-                'workflow_flush',
-                {'id': workflow.id})
+                'workflow_data_flush',
+                workflow,
+                {'id': workflow.id,
+                 'name': workflow.name})
 
         # Delete the conditions attached to all the actions attached to the
         # workflow.
         to_delete = Condition.objects.filter(
-            action__workflow=workflow).delete()
+            action__workflow=workflow)
         for item in to_delete:
             ops.put(request.user,
+                    workflow,
                     'condition_delete',
-                    {'id': item.id})
+                    {'id': item.id,
+                     'name': item.name})
         to_delete.delete()
 
         # In this case, the form is valid
@@ -193,7 +200,9 @@ def delete(request, pk):
         # Log the event
         ops.put(request.user,
                 'workflow_delete',
-                {'id': workflow.id})
+                workflow,
+                {'id': workflow.id,
+                 'name': workflow.name})
 
         # Perform the delete operation
         workflow.delete()
@@ -285,8 +294,10 @@ def attributes(request):
             # Log the event
             ops.put(request.user,
                     'workflow_attribute_update',
+                    workflow,
                     {'id': workflow.id,
-                     'attr': new_attr})
+                     'name': workflow.name,
+                     'attr': attributes})
 
             # update the db
             workflow.attributes = new_attr
@@ -332,9 +343,11 @@ def attribute_create(request):
             # Log the event
             ops.put(request.user,
                     'workflow_attribute_create',
+                    workflow,
                     {'id': workflow.id,
+                     'name': workflow.name,
                      'attr_key': form.cleaned_data['key'],
-                     'attr_value': form.cleaned_data['value']})
+                     'attr_val': form.cleaned_data['value']})
 
             data['form_is_valid'] = True
             data['dst'] = 'redirect'
@@ -367,14 +380,16 @@ def attribute_delete(request):
     if request.method == 'POST' and key is not None:
 
         attributes = json.loads(workflow.attributes)
-        attributes.pop(key, None)
+        val = attributes.pop(key, None)
         workflow.attributes = json.dumps(attributes)
 
         # Log the event
         ops.put(request.user,
                 'workflow_attribute_delete',
+                workflow,
                 {'id': workflow.id,
-                 'attr_key': key})
+                 'attr_key': key,
+                 'attr_val': val})
 
         workflow.save()
 

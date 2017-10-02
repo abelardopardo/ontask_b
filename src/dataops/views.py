@@ -272,7 +272,9 @@ def csvupload2(request):
         # Log the event
         ops.put(request.user,
                 'workflow_data_upload',
+                workflow,
                 {'id': workflow.id,
+                 'name': workflow.name,
                  'num_rows': workflow.nrows,
                  'num_cols': workflow.ncols,
                  'column_names': json.loads(workflow.column_names),
@@ -570,12 +572,15 @@ def csvupload4(request):
     if status:
         ops.put(request.user,
                 'workflow_data_failedmerge',
+                workflow,
                 {'id': workflow.id,
+                 'name': workflow.name,
                  'num_rows': workflow.nrows,
                  'num_cols': workflow.ncols,
                  'column_names': json.loads(workflow.column_names),
                  'column_types': json.loads(workflow.column_types),
-                 'column_unique': json.loads(workflow.column_unique)})
+                 'column_unique': json.loads(workflow.column_unique),
+                 'error_msg': status})
 
         messages.error(request, 'Merge operation failed.'),
         return render(request, 'dataops/csvupload4.html',
@@ -585,7 +590,9 @@ def csvupload4(request):
     # Log the event
     ops.put(request.user,
             'workflow_data_merge',
+            workflow,
             {'id': workflow.id,
+             'name': workflow.name,
              'num_rows': workflow.nrows,
              'num_cols': workflow.ncols,
              'column_names': json.loads(workflow.column_names),

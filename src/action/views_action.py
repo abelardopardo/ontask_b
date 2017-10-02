@@ -55,14 +55,20 @@ def save_action_form(request, form, template_name, is_new):
                 # Log the event
                 if form.instance.pk:
                     ops.put(request.user,
-                            'action_create',
+                            'action_update',
+                            action_item.workflow,
                             {'id': action_item.id,
-                             'workflow_id': workflow.id})
+                             'name': action_item.name,
+                             'workflow_id': workflow.id,
+                             'workflow_name': workflow.name})
                 else:
                     ops.put(request.user,
-                            'action_update',
+                            'action_create',
+                            action_item.workflow,
                             {'id': action_item.id,
-                             'workflow_id': workflow.id})
+                             'name': action_item.name,
+                             'workflow_id': workflow.id,
+                             'workflow_name': workflow.name})
 
                 action_item.save()
                 data['dst'] = dst
@@ -195,7 +201,10 @@ def delete_action(request, pk):
         # Log the event
         ops.put(request.user,
                 'action_delete',
+                action.workflow,
                 {'id': action.id,
+                 'name': action.name,
+                 'workflow_name': action.workflow.name,
                  'workflow_id': action.workflow.id})
 
         # Perform the delete operation
@@ -294,8 +303,10 @@ def edit_action(request, pk):
 
             # Log the event
             ops.put(request.user,
-                    'action_edit',
+                    'action_update',
+                    action.workflow,
                     {'id': action.id,
+                     'name': action.name,
                      'content': content})
 
             # Text is good. Update the content of the action

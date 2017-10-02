@@ -74,7 +74,7 @@
                   href="{{ actions_url }}">Actions</a></li>
 
               <li class="{% if not request.session.ontask_workflow_id %}disabled{% endif %}"><a
-                  href="{% url 'tobedone' %}">Logs</a>
+                  href="{% url 'logs:show' %}">Logs</a>
               </li>
             {% endif %}
             <li><a href="#about">About</a></li>

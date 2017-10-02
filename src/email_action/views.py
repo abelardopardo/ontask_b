@@ -151,7 +151,7 @@ def send_messages(user,
         context['body'] = msg[1]
         context['from_email'] = msg[2]
         context['to_email'] = msg[3]
-        ops.put(user, 'action_email_sent', context)
+        ops.put(user, 'action_email_sent', action.workflow, context)
 
     # If no confirmation email is required, done
     if not send_confirmation:
@@ -172,20 +172,24 @@ def send_messages(user,
 
     # Send email out
     try:
-        send_mail(settings.NOTIFICATION_SUBJECT,
+        send_mail(str(getattr(settings, 'NOTIFICATION_SUBJECT')),
                   msg,
-                  settings.NOTIFICATION_SENDER,
+                  str(getattr(settings, 'NOTIFICATION_SENDER')),
                   [user.email])
     except Exception, e:
         return 'An error occurred when sending your notification: ' + e.message
 
     # Log the event
-    ops.put(user, 'action_email_notify',
+    ops.put(user, 'action_email_notify', action.workflow,
             {'user': user.id,
              'action': action.id,
              'num_messages': len(msgs),
              'email_sent_datetime': str(now),
              'filter_present': action.n_selected_rows != -1,
-             'num_rows': action.workflow.nrows})
+             'num_rows': action.workflow.nrows,
+             'subject': str(getattr(settings, 'NOTIFICATION_SUBJECT')),
+             'body': msg,
+             'from_email': str(getattr(settings, 'NOTIFICATION_SENDER')),
+             'to_email': [user.email]})
 
     return None
