@@ -10,13 +10,13 @@ from django.template.loader import render_to_string
 from django.utils.html import format_html
 import django_tables2 as tables
 from django_tables2 import RequestConfig, A
-from django_filters.views import FilterView
-from django_filters import FilterSet
 
 from ontask import is_instructor, decorators
 from workflow.models import Workflow
 from .models import Log
 from .ops import log_types
+from . import settings
+
 
 class LogTable(tables.Table):
 
@@ -89,7 +89,12 @@ def show(request):
 
     # Create the table and populate the request
     table = LogTable(logs)
-    RequestConfig(request, paginate={'per_page': 15}).configure(table)
+
+    RequestConfig(
+        request,
+        paginate={'per_page': int(str(getattr(settings,
+                                         'PAGE_SIZE',
+                                         15)))}).configure(table)
     context['table'] = table
 
     # Render the page with the table
