@@ -10,7 +10,7 @@ from . import views
 app_name = 'workflow'
 
 urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^$', views.workflow_index, name='index'),
 
     url(r'^create/$', views.WorkflowCreateView.as_view(), name='create'),
 

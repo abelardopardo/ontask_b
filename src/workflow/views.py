@@ -12,6 +12,9 @@ from django.shortcuts import get_object_or_404, redirect, reverse, render
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.decorators import method_decorator
 from django.contrib import messages
+import django_tables2 as tables
+from django_tables2 import RequestConfig
+
 
 from logs import ops
 from ontask import is_instructor, decorators
@@ -20,6 +23,71 @@ from action.models import Condition
 
 from .forms import WorkflowForm, AttributeForm, AttributeItemForm
 from .models import Workflow
+
+
+class OperationsColumn(tables.Column):
+
+    empty_values = []
+
+    def __init__(self, *args, **kwargs):
+        super(OperationsColumn, self).__init__(*args, **kwargs)
+        self.attrs = {'th': {'style': 'text-align:center;'},
+                      'td': {'style': 'text-align:center;'}}
+        self.orderable = False
+
+    def render(self, record):
+        return render_to_string(
+            'workflow/includes/partial_workflow_operations.html',
+            {'id': record.id})
+
+
+class WorkflowTable(tables.Table):
+
+    name = tables.Column(
+        attrs={'th': {'style': 'text-align:center;vertical-align:middle;'},
+               'td': {'style': 'text-align:center;vertical-align:middle;'}},
+        verbose_name=str('Name')
+    )
+
+    created = tables.DateTimeColumn(
+        attrs={'th': {'style': 'text-align:center;vertical-align:middle;'},
+               'td': {'style': 'text-align:center;vertical-align:middle;'}},
+        verbose_name='Created'
+
+    )
+
+    description_text = tables.Column(
+        attrs={'th': {'style': 'text-align:center;vertical-align:middle;'},
+               'td': {'style': 'text-align:center;vertical-align:middle;'}},
+        verbose_name=str('Description')
+    )
+
+    operations = OperationsColumn(
+        attrs={'th': {'style': 'text-align:center;vertical-align:middle;'},
+               'td': {'style': 'text-align:center;vertical-align:middle;'}},
+        verbose_name='Operations',
+        orderable=False
+    )
+
+    class Meta:
+        model = Workflow
+        fields = ('name', 'description_text', 'created')
+        sequence = ('name', 'description_text', 'created')
+        exclude = ('id', 'user', 'attributes', 'nrows', 'ncols', 'column_names',
+                   'column_types', 'column_unique', 'query_builder_ops',
+                   'data_frame_table_name')
+
+        attrs = {
+            'class': 'table table-stripped table-bordered table-hover',
+            'id': 'item-table'
+        }
+
+        row_attrs = {
+            'style': 'text-align:center;'
+        }
+
+        # class="text-center bg-warning"'No workflows'
+        empty_text = 'No workflows'
 
 
 def save_workflow_form(request, form, template_name, is_new):
@@ -65,10 +133,8 @@ def save_workflow_form(request, form, template_name, is_new):
                 data['form_is_valid'] = True
                 if dst == 'refresh':
                     workflows = Workflow.objects.filter(user=request.user)
-                    data['html_item_list'] = \
-                        render_to_string(
-                            'workflow/includes/partial_workflow_list.html',
-                            {'workflows': workflows})
+                    table = WorkflowTable(workflows)
+                    data['html_item_list'] = table.as_html(request)
     else:
         dst = request.GET['dst']
 
@@ -79,15 +145,15 @@ def save_workflow_form(request, form, template_name, is_new):
     return JsonResponse(data)
 
 
-@method_decorator(decorators, name='dispatch')
-class IndexView(generic.ListView):
-    template_name = 'workflow/index.html'
-    context_object_name = 'workflows'
+@login_required
+@user_passes_test(is_instructor)
+def workflow_index(request):
+    workflows = Workflow.objects.filter(user=request.user)
+    table = WorkflowTable(workflows)
+    RequestConfig(request,
+                  paginate={'per_page': 15}).configure(table)
 
-    def get_queryset(self):
-        self.request.session.pop('ontask_workflow_id', None)
-        self.request.session.pop('ontask_workflow_name', None)
-        return Workflow.objects.filter(user=self.request.user)
+    return render(request, 'workflow/index.html', {'table': table})
 
 
 @method_decorator(decorators, name='dispatch')
@@ -213,9 +279,8 @@ def delete(request, pk):
         if dst == 'refresh':
             # Create the html_item_list to refresh
             workflows = Workflow.objects.filter(user=request.user)
-            data['html_item_list'] = \
-                render_to_string('workflow/includes/partial_workflow_list.html',
-                                 {'workflows': workflows})
+            table = WorkflowTable(workflows)
+            data['html_item_list'] = table.as_html(request)
         else:  # dst = redirect
             data['html_redirect'] = reverse('workflow:index')
 

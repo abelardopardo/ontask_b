@@ -20,9 +20,9 @@ if 'siteprefs' in settings.INSTALLED_APPS:
         pref(CONTENT_TYPES,
              verbose_name='Content types allowed in uploads',
              static=False,
-             field=models.CharField(max_length=256)),
+             field=models.CharField(max_length=256, blank=True)),
         pref(MAX_UPLOAD_SIZE,
              verbose_name='Maximum size allowed in file uplaods',
              static=False,
-             field=models.IntegerField()),
+             field=models.IntegerField(blank=True)),
     )

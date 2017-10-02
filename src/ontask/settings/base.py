@@ -91,17 +91,17 @@ INSTALLED_APPS = (
     'siteprefs',
     'django_tables2',
     'django_filters',
-    'rest_framework',
     'import_export',
+    'rest_framework',
 
-    'profiles',
+    'profiles.apps.ProfileConfig',
     'accounts',
-    'workflow',
-    'dataops',
-    'matrix',
-    'action',
-    'email_action',
-    'logs',
+    'workflow.apps.WorkflowConfig',
+    'dataops.apps.DataopsConfig',
+    'matrix.apps.MatrixConfig',
+    'action.apps.ActionConfig',
+    'email_action.apps.EmailActionConfig',
+    'logs.apps.LogsConfig',
 
 )
 
@@ -120,6 +120,14 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.RemoteUserBackend',
     'django.contrib.auth.backends.ModelBackend'
 ]
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 ROOT_URLCONF = 'ontask.urls'
 

@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load django_tables2 %}
 {% load crispy_forms_tags %}
+{% load widget_tweaks %}
 
 {% block scripts %}
   <script src="{% static 'action/js/action.js' %}"></script>
@@ -22,18 +24,7 @@
     </button>
   </p>
 
-  <table class="table-condensed table-bordered" id="item-table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Operations</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% include 'action/includes/partial_action_list.html' %}
-    </tbody>
-  </table>
+  {% render_table table %}
 
   <div class="modal fade" id="modal-item">
     <div class="modal-dialog">

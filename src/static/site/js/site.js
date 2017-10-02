@@ -25,7 +25,8 @@ var saveForm = function () {
       success: function (data) {
         if (data.form_is_valid) {
           if (data.dst == 'refresh') {
-            $("#item-table tbody").html(data.html_item_list);
+            /* $("#item-table tbody").html(data.html_item_list); */
+            $("#item-table").html(data.html_item_list);
             $("#modal-item").modal("hide");
           }
           else {

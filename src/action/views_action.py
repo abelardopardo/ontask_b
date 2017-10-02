@@ -11,6 +11,8 @@ from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
 from django.template import Context
 from django.template import Template
+import django_tables2 as tables
+from django_tables2 import RequestConfig
 
 from logs import ops
 from ontask import is_instructor, decorators
@@ -24,6 +26,69 @@ from .forms import ActionForm, EditActionForm
 # TODO: Action should be automatically saved, otherwise, when
 # editing a condition, there is a warning and information may be
 # lost.
+
+
+class OperationsColumn(tables.Column):
+
+    empty_values = []
+
+    def __init__(self, *args, **kwargs):
+        super(OperationsColumn, self).__init__(*args, **kwargs)
+        self.attrs = {'th': {'style': 'text-align:center;'},
+                      'td': {'style': 'text-align:center;'}}
+        self.orderable = False
+
+    def render(self, record):
+        return render_to_string(
+            'action/includes/partial_action_operations.html',
+            {'id': record.id})
+
+
+class ActionTable(tables.Table):
+
+    name = tables.Column(
+        attrs={'th': {'style': 'text-align:center;vertical-align:middle;'},
+               'td': {'style': 'text-align:center;vertical-align:middle;'}},
+        verbose_name=str('Name')
+    )
+
+    description_text = tables.Column(
+        attrs={'th': {'style': 'text-align:center;vertical-align:middle;'},
+               'td': {'style': 'text-align:center;vertical-align:middle;'}},
+        verbose_name=str('Description')
+    )
+
+    created = tables.DateTimeColumn(
+        attrs={'th': {'style': 'text-align:center;vertical-align:middle;'},
+               'td': {'style': 'text-align:center;vertical-align:middle;'}},
+        verbose_name='Created'
+
+    )
+
+    operations = OperationsColumn(
+        attrs={'th': {'style': 'text-align:center;vertical-align:middle;'},
+               'td': {'style': 'text-align:center;vertical-align:middle;'}},
+        verbose_name='Operations',
+        orderable=False
+    )
+
+    class Meta:
+        model = Action
+        fields = ('name', 'description_text', 'created')
+        sequence = ('name', 'description_text', 'created')
+        exclude = ('n_selected_rows', 'content')
+
+        attrs = {
+            'class': 'table table-stripped table-bordered table-hover',
+            'id': 'item-table'
+        }
+
+        row_attrs = {
+            'style': 'text-align:center;'
+        }
+
+        # class="text-center bg-warning"'No workflows'
+        empty_text = 'No actions'
 
 
 def save_action_form(request, form, template_name, is_new):
@@ -79,10 +144,8 @@ def save_action_form(request, form, template_name, is_new):
                         workflow__user=request.user,
                         workflow=workflow
                     )
-                    data['html_item_list'] = \
-                        render_to_string(
-                            'action/includes/partial_action_list.html',
-                            {'actions': actions})
+                    table = ActionTable(actions)
+                    data['html_item_list'] = table.as_html(request)
                 else:
                     data['html_redirect'] = reverse(
                         'action:edit', kwargs={'pk': action_item.id}
@@ -169,6 +232,18 @@ class IndexView(generic.ListView):
                                      workflow__id=workflow_id)
 
 
+@login_required
+@user_passes_test(is_instructor)
+def action_index(request):
+    workflow_id = request.session.get('ontask_workflow_id', None)
+    actions = Action.objects.filter(workflow__user=request.user,
+                                    workflow__id=workflow_id)
+    table = ActionTable(actions)
+    RequestConfig(request,
+                  paginate={'per_page': 15}).configure(table)
+    return render(request, 'action/index.html', {'table': table})
+
+
 @method_decorator(decorators, name='dispatch')
 class ActionCreateView(generic.TemplateView):
     form_class = ActionForm
@@ -222,9 +297,8 @@ def delete_action(request, pk):
                 workflow__user=request.user,
                 workflow=workflow
             )
-            data['html_item_list'] = \
-                render_to_string('action/includes/partial_action_list.html',
-                                 {'actions': actions})
+            table = ActionTable(actions)
+            data['html_item_list'] = table.as_html(request)
         else:  # dst = redirect
             data['html_redirect'] = reverse('action:index')
 

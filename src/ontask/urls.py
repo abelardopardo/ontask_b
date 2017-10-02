@@ -35,6 +35,9 @@ urlpatterns = [
 
     url(r'^tinymce/', include('tinymce.urls')),
 
+    url(r'^api-auth/',
+        include('rest_framework.urls', namespace='rest_framework'))
+
 ]
 
 # User-uploaded files like profile pics need to be served in development
