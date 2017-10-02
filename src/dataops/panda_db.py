@@ -165,6 +165,22 @@ def execute_select_on_table(pk, subquery, fields, column_names=None):
     return cursor.fetchall()
 
 
+def update_row(pk, query, queryfields):
+    """
+    Given a primary key, a query string and a set of fields, executes an
+    UPDATE query in the matrix attached to the workflow with pk
+
+    :param pk: Primary key to detect workflow
+    :param query: Query without the ALTER <table> prefix. It is SET column =
+                  value
+    :param queryfields: Fields to insert in the query
+    :return:
+    """
+
+    query = 'UPDATE {0} '.format(create_table_name(pk)) + query
+    cursor.execute(query, queryfields)
+
+
 def get_table_column(pk, filter, column_name):
     """
     Given the primary key of a workflow with a table, return the values

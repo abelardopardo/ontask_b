@@ -259,18 +259,28 @@ class RowUpdateForm(forms.Form):
     def __init__(self, *args, **kargs):
 
         # Store the instance
-        self.workflow = kargs.pop('workflow')
-        self.row_initial_values = kargs.pop('initial_values')
+        self.workflow = kargs.pop('workflow', None)
+        self.row_initial_values = kargs.pop('initial_values', None)
+
+        super(RowUpdateForm, self).__init__(*args, **kargs)
+
+        if not self.workflow:
+            return
 
         # Get the unique keys names and types
         self.col_names = json.loads(self.workflow.column_names)
         self.col_types = json.loads(self.workflow.column_types)
+        self.col_unique = json.loads(self.workflow.column_unique)
 
-        super(RowUpdateForm, self).__init__(*args, **kargs)
-
-        for name, type, initial in zip(self.col_names,
-                                       self.col_types,
-                                       self.row_initial_values):
+        # Create the zipped list to handle 4 values per item. Let the unique
+        # keys on top.
+        four_vals = zip(self.col_names,
+                        self.col_types,
+                        self.row_initial_values,
+                        self.col_unique)
+        for name, type, initial, unique in sorted(four_vals,
+                                                  key=lambda x: x[3],
+                                                  reverse=True):
             if type == 'string':
                 self.fields[name] = forms.CharField(initial=initial,
                                                     label=name,
@@ -293,3 +303,18 @@ class RowUpdateForm(forms.Form):
                                                         label=name)
             else:
                 raise Exception('Unable to process datatype', type)
+
+    # def clean(self):
+    #     data = super(RowUpdateForm, self).clean()
+    #
+    #     # Check that primary keys were not modified
+    #     changed_keys = [n for x, n in enumerate(self.col_names)
+    #                     if self.fields[n].has_changed() and self.col_unique[x]]
+    #
+    #     if changed_keys != []:
+    #         raise forms.ValidationError(
+    #             'Unique column is not allowed to be modified'
+    #         )
+    #
+    #     return data
+
