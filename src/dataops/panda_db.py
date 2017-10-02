@@ -103,9 +103,12 @@ def load_from_db(pk):
 
 def get_table_data(pk, filter, column_names=None):
     """
+    Execute a select query in the database with an optional filter obtained
+    from the jquery QueryBuilder.
 
     :param pk: Primary key of the workflow storing the data
     :param filter: Condition object to filter the data (or None)
+    :param column_names: optional list of columns to select
     :return: ([list of column names], QuerySet with the data rows)
     """
 
@@ -125,6 +128,38 @@ def get_table_data(pk, filter, column_names=None):
 
     # Execute the query
     cursor.execute(query)
+
+    # Get the data
+    return cursor.fetchall()
+
+
+def execute_select_on_table(pk, subquery, fields, column_names=None):
+    """
+    Execute a select query in the database with an optional filter obtained
+    from the jquery QueryBuilder.
+
+    :param pk: Primary key of the workflow storing the data
+    :param filter: Condition object to filter the data (or None)
+    :param column_names: optional list of columns to select
+    :return: ([list of column names], QuerySet with the data rows)
+    """
+
+    # Create the query
+    if column_names:
+        query = 'SELECT {0} from {1}'.format(
+            ','.join(column_names),
+            create_table_name(pk)
+        )
+    else:
+        query = 'SELECT * from {0}'.format(create_table_name(pk))
+
+    # See if the action has a filter or not
+    if subquery is not None:
+        query += subquery
+        cursor.execute(query, fields)
+    else:
+        # Execute the query
+        cursor.execute(query)
 
     # Get the data
     return cursor.fetchall()

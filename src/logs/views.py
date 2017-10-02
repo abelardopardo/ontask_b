@@ -71,7 +71,8 @@ def show(request):
 
     workflow = get_object_or_404(Workflow,
                                  pk=request.session.get('ontask_workflow_id',
-                                                        -1))
+                                                        -1),
+                                 user=request.user)
     # Initial value for the context
     context = {'workflow': workflow}
 
@@ -93,26 +94,11 @@ def show(request):
     RequestConfig(
         request,
         paginate={'per_page': int(str(getattr(settings,
-                                         'PAGE_SIZE',
-                                         15)))}).configure(table)
+                                              'PAGE_SIZE')))}).configure(table)
     context['table'] = table
 
     # Render the page with the table
     return render(request, 'logs/show.html', context)
-
-
-# class LogFilter(FilterSet):
-#     class Meta:
-#         model = Log
-#         fields = ['name', 'created']
-#
-#
-# class LogFilteredListView(FilterView, SingleTableView):
-#     table_class = LogTable
-#     model = Log
-#     template_name = 'logs/show.html'
-#
-#     filterset_class = LogFilter
 
 
 @login_required

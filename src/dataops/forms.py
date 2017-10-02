@@ -107,7 +107,6 @@ class SelectColumnForm(forms.Form):
             )
 
 
-
 # Step 3 of the CSV upload: select unique keys to merge
 class SelectUniqueKeysForm(forms.Form):
 
@@ -213,3 +212,84 @@ class SelectUniqueKeysForm(forms.Form):
                                   label='Columns with already existing names'
                                         ' will',
                                   help_text=self.merge_help)
+
+
+# Form to allow value selection through unique keys in a workflow
+class RowFilterForm(forms.Form):
+
+    def __init__(self, *args, **kargs):
+
+        # Store the instance
+        self.workflow = kargs.pop('workflow')
+
+        # Get the unique keys names and types
+        col_names = json.loads(self.workflow.column_names)
+        col_types = json.loads(self.workflow.column_types)
+        col_unique =json.loads(self.workflow.column_unique)
+
+        self.key_names = [n for x, n in enumerate(col_names) if col_unique[x]]
+        self.key_types = [n for x, n in enumerate(col_types) if col_unique[x]]
+
+        super(RowFilterForm, self).__init__(*args, **kargs)
+
+        for name, type in zip(self.key_names, self.key_types):
+            if type == 'string':
+                self.fields[name] = forms.CharField(initial='',
+                                                    label=name,
+                                                    required=False)
+            elif type == 'integer':
+                self.fields[name] = forms.IntegerField(label=name,
+                                                       required=False)
+            elif type == 'double':
+                self.fields[name] = forms.FloatField(label=name,
+                                                     required=False)
+            elif type == 'boolean':
+                self.fields[name] = forms.BooleanField(required=False,
+                                                       label=name)
+            elif type == 'datetime':
+                self.fields[name] = forms.DateTimeField(required=False,
+                                                        label=name)
+            else:
+                raise Exception('Unable to process datatype', type)
+
+
+# Form to allow value selection through unique keys in a workflow
+class RowUpdateForm(forms.Form):
+
+    def __init__(self, *args, **kargs):
+
+        # Store the instance
+        self.workflow = kargs.pop('workflow')
+        self.row_initial_values = kargs.pop('initial_values')
+
+        # Get the unique keys names and types
+        self.col_names = json.loads(self.workflow.column_names)
+        self.col_types = json.loads(self.workflow.column_types)
+
+        super(RowUpdateForm, self).__init__(*args, **kargs)
+
+        for name, type, initial in zip(self.col_names,
+                                       self.col_types,
+                                       self.row_initial_values):
+            if type == 'string':
+                self.fields[name] = forms.CharField(initial=initial,
+                                                    label=name,
+                                                    required=False)
+            elif type == 'integer':
+                self.fields[name] = forms.IntegerField(initial=initial,
+                                                       label=name,
+                                                       required=False)
+            elif type == 'double':
+                self.fields[name] = forms.FloatField(initial=initial,
+                                                     label=name,
+                                                     required=False)
+            elif type == 'boolean':
+                self.fields[name] = forms.BooleanField(initial=initial,
+                                                       required=False,
+                                                       label=name)
+            elif type == 'datetime':
+                self.fields[name] = forms.DateTimeField(initial=initial,
+                                                        required=False,
+                                                        label=name)
+            else:
+                raise Exception('Unable to process datatype', type)

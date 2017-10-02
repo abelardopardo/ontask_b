@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block scripts %}
+  <script src="{% static 'dataops/js/dataops.js' %}"></script>
+{% endblock %}
+
+{% block title %}{{ block.super }}Row filter{% endblock %}
+
+{% block container %}
+<div align="center" class="container">
+  <h1 class="page-header">Row filter for workflow {{ workflow.name }}</h1>
+
+  {% if form %}
+    <div class="container">
+      <form action="{% url 'dataops:rowfilter' %}" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" value="submit" class="btn btn-primary">
+          <span class="glyphicon glyphicon-search"> Search</span>
+        </button>
+      </form>
+    </div>
+  {% else %}
+    <p><strong>No data available for this workflow</strong></p>
+  {% endif %}
+
+  {% if form and row_form %}
+    <div class="container">
+      <form action="{% url 'dataops:rowupdate' %}" method="post">
+        {% csrf_token %}
+        {{ row_form|crispy }}
+        <button type="submit" value="submit" class="btn btn-primary">Update
+        </button>
+      </form>
+    </div>
+  {% endif %}
+</div>
+{% endblock container %}
