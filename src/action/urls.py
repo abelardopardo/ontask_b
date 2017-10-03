@@ -10,8 +10,6 @@ from . import views_action, views_condition
 app_name = 'action'
 
 urlpatterns = [
-    # url(r'^$', views_action.IndexView.as_view(), name='index'),
-
     url(r'^$', views_action.action_index, name='index'),
 
     url(r'^create/$', views_action.ActionCreateView.as_view(), name='create'),

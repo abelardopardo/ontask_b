@@ -12,6 +12,7 @@ from django.shortcuts import get_object_or_404, redirect, reverse, render
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.decorators import method_decorator
 from django.contrib import messages
+from django.utils.html import format_html
 import django_tables2 as tables
 from django_tables2 import RequestConfig
 
@@ -69,6 +70,13 @@ class WorkflowTable(tables.Table):
         orderable=False
     )
 
+    def render_name(self, record):
+        return format_html(
+            """<a href="{0}">{1}</a>""".format(
+                reverse('workflow:detail', kwargs={'pk': record.id}),
+                record.name
+            )
+        )
     class Meta:
         model = Workflow
         fields = ('name', 'description_text', 'created')
@@ -112,10 +120,12 @@ def save_workflow_form(request, form, template_name, is_new):
                 workflow_item.user = request.user
                 workflow_item.nrows = 0
                 workflow_item.ncols = 0
+                is_new = form.instance.pk is None
+                # Save the workflow
                 workflow_item.save()
 
                 # Log event
-                if form.instance.pk is None:
+                if is_new:
                     ops.put(request.user,
                             'workflow_create',
                             workflow_item,
@@ -148,6 +158,8 @@ def save_workflow_form(request, form, template_name, is_new):
 @login_required
 @user_passes_test(is_instructor)
 def workflow_index(request):
+    request.session.pop('ontask_workflow_id', None)
+    request.session.pop('ontask_workflow_name', None)
     workflows = Workflow.objects.filter(user=request.user)
     table = WorkflowTable(workflows)
     RequestConfig(request,

@@ -1,8 +1,8 @@
 <a href="{% url 'email_action:index' id %}"
         class="btn btn-primary btn-sm">
-  <span class="glyphicon glyphicon-envelope"></span></a>
+  <span class="glyphicon glyphicon-envelope"> Send email</span></a>
 <button type="button"
         class="btn btn-danger btn-sm js-action-delete"
         data-url="{% url 'action:delete' id %}"
-        data-dst="refresh">
-  <span class="glyphicon glyphicon-trash"></span></button>
+        data-dst="refresh" data-toggle="tooltip" title="Delete">
+  <span class="glyphicon glyphicon-trash"></span> Delete</button>

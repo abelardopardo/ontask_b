@@ -12,6 +12,7 @@ from django.utils.decorators import method_decorator
 from django.template import Context
 from django.template import Template
 import django_tables2 as tables
+from django.utils.html import format_html
 from django_tables2 import RequestConfig
 
 from logs import ops
@@ -71,6 +72,14 @@ class ActionTable(tables.Table):
         verbose_name='Operations',
         orderable=False
     )
+
+    def render_name(self, record):
+        return format_html(
+            """<a href="{0}">{1}</a>""".format(
+                reverse('action:edit', kwargs={'pk': record.id}),
+                record.name
+            )
+        )
 
     class Meta:
         model = Action
@@ -219,17 +228,6 @@ def preview_response(request, pk, template, prelude=None):
                          request=request)
 
     return JsonResponse(data)
-
-
-@method_decorator(decorators, name='dispatch')
-class IndexView(generic.ListView):
-    template_name = 'action/index.html'
-    context_object_name = 'actions'
-
-    def get_queryset(self):
-        workflow_id = self.request.session.get('ontask_workflow_id', None)
-        return Action.objects.filter(workflow__user=self.request.user,
-                                     workflow__id=workflow_id)
 
 
 @login_required

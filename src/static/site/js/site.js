@@ -52,3 +52,7 @@ $(window).scroll(function () {
   else
     $('.navbar').addClass('navbar-transparent');
 }).trigger('scroll');
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
