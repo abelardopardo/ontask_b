@@ -43,11 +43,13 @@ class Workflow(models.Model):
 
     # Storing the number of rows currently in the data_frame
     nrows = models.IntegerField(verbose_name='Number of rows',
+                                default=0,
                                 name='nrows',
                                 blank=True)
 
     # Storing the number of rows currently in the data_frame
     ncols = models.IntegerField(verbose_name='Number of columns',
+                                default=0,
                                 name='ncols',
                                 blank=True)
 

@@ -12,8 +12,7 @@ import dataops.urls
 import action.urls
 import email_action.urls
 import logs.urls
-
-# import matrix.urls
+import matrix.urls
 
 from . import views
 
@@ -26,7 +25,7 @@ urlpatterns = [
     url(r'^workflow/', include(workflow.urls, namespace='workflow')),
     url(r'^dataops/', include(dataops.urls, namespace='dataops')),
     url(r'^action/', include(action.urls, namespace='action')),
-    # url(r'^matrix/', include(matrix.urls, namespace='matrix')),
+    url(r'^matrix/', include(matrix.urls, namespace='matrix')),
     url(r'^email_action/', include(email_action.urls,
                                    namespace='email_action')),
     url(r'^logs/', include(logs.urls, namespace='logs')),

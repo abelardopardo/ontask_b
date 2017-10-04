@@ -2,10 +2,11 @@
 from __future__ import unicode_literals
 
 from django.conf.urls import url
+from rest_framework.urlpatterns import format_suffix_patterns
 
 import ontask.views
 
-from . import views
+from . import views, api
 
 app_name = 'workflow'
 
@@ -37,4 +38,10 @@ urlpatterns = [
 
     url(r'^(?P<pk>\d+)/logs/$', ontask.views.ToBeDone.as_view(), name='logs'),
 
+    url(r'^workflows/$', api.WorkflowAPIListCreate.as_view()),
+
+    url(r'^(?P<pk>\d+)/rud/$',
+        api.WorkflowAPIRetrieveUpdateDestroy.as_view()),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)

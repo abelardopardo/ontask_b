@@ -133,6 +133,21 @@ def get_table_data(pk, filter, column_names=None):
     return cursor.fetchall()
 
 
+def get_matrix_cell(pk, cell):
+    # CELL_VALUE = df1.loc[df1['UNIQUE_NAME'] == 'UNIQUE_VALUE','COLNAME']
+    df = load_from_db(pk)
+
+    try:
+        result = df.loc[
+            df[cell['uni_triplet']['name'] == df[cell['uni_triplet']['value']]],
+            cell['col_triplet']['name']
+        ]
+    except Exception, e:
+        return None
+
+    return result
+
+
 def execute_select_on_table(pk, subquery, fields, column_names=None):
     """
     Execute a select query in the database with an optional filter obtained

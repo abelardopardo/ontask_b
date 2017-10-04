@@ -3,28 +3,39 @@ from __future__ import unicode_literals
 
 import json
 
-from django.http import Http404
-from django.http import JsonResponse
-
-from django.template.loader import render_to_string
-from django.views import generic
-from django.shortcuts import get_object_or_404, redirect, reverse, render
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.utils.decorators import method_decorator
-from django.contrib import messages
-from django.utils.html import format_html
 import django_tables2 as tables
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import Http404
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import get_object_or_404, redirect, reverse, render
+from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
+from django.utils.html import format_html
+from django.views import generic
+from django.views.decorators.csrf import csrf_exempt
 from django_tables2 import RequestConfig
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from rest_framework import generics
+from rest_framework import mixins
+from rest_framework import generics
 
 
+from rest_framework.response import Response
+
+from rest_framework import permissions
+
+from action.models import Condition
+from dataops import panda_db
 from logs import ops
 from ontask import is_instructor, decorators
-from dataops import panda_db
-from action.models import Condition
-
 from .forms import WorkflowForm, AttributeForm, AttributeItemForm
 from .models import Workflow
-
+from .serializers import WorkflowSerializer
 
 class OperationsColumn(tables.Column):
 
@@ -77,6 +88,7 @@ class WorkflowTable(tables.Table):
                 record.name
             )
         )
+
     class Meta:
         model = Workflow
         fields = ('name', 'description_text', 'created')

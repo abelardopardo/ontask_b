@@ -39,3 +39,7 @@ class Log(models.Model):
                                 self.created,
                                 self.name,
                                 self.payload)
+
+    @property
+    def log_useremail(self):
+        return self.user.email
