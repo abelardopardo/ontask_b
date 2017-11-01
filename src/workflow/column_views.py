@@ -26,22 +26,33 @@ def column_add(request):
     # Get the workflow element
     workflow = get_workflow(request)
     if not workflow:
+        data['form_is_valid'] = True
         data['html_redirect'] = reverse('workflow:index')
+        return JsonResponse(data)
+
+    # Form to read/process data
     form = ColumnAddForm(request.POST or None, workflow=workflow)
+
+    if request.method == 'POST':
         context = {'form': form}
+        if form.is_valid():
             # Access the updated information
             column_name = form.cleaned_data['name']
             column_type = form.cleaned_data['data_type']
             column_initial_value = form.initial_valid_value
+
             # Save the column object attached to the form
             column = form.save(commit=False)
+
             # Fill in the remaining fields in the column
             column.workflow = workflow
             column.is_key = False
             column.save()
+
             # Update the data frame, which must be stored in the form because
             # it was loaded when validating it.
             df = pandas_db.load_from_db(workflow.id)
+
             # Add the column with the initial value
             df = ops.data_frame_add_empty_column(df,
                                                  column_name,
@@ -49,89 +60,24 @@ def column_add(request):
                                                  column_initial_value)
             # Store the df to DB
             ops.store_dataframe_in_db(df, workflow.id)
-                         'column_add',
-                          'column_name': column_name,
-                          'column_type': column_type})
-            data['form_is_valid'] = True
-            data['html_redirect'] = reverse('workflow:detail',
-                                            kwargs={'pk': workflow.id})
-            return JsonResponse(data)
-        'workflow/includes/partial_column_add.html',
-        {'form': form},
-def column_edit(request, pk):
-    # Data to send as JSON response
-    data = {}
-
-    # Get the workflow element
-    workflow = get_workflow(request)
-    if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
-        return JsonResponse(data)
-
-    # Get the column object and make sure it belongs to the workflow
-    try:
-        column = Column.objects.get(pk=pk,
-                                    workflow=workflow)
-    except ObjectDoesNotExist:
-        # Something went wrong, redirect to the workflow detail page
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:detail',
-                                        kwargs={'pk': workflow.id})
-        return JsonResponse(data)
-    # Form to read/process data
-    form = ColumnRenameForm(request.POST or None,
-                            workflow=workflow,
-                            instance=column)
-
-    old_name = column.name
-    context = {'form': form,
-               'cname': old_name,
-               'pk': pk}
-    if request.method == 'POST':
-        if form.is_valid():
-            if form.changed_data:
-                # Some field changed value, so save the result, but
-                # no commit as there are additional operations.
-                column = form.save(commit=False)
-
-                # Get the data frame from the form (should be
-                # loaded)
-                df = form.data_frame
-
-                if 'name' in form.changed_data:
-                    # Rename the column in the data frame
-                    df = ops.rename_df_column(df,
-                                              workflow,
-                                              old_name,
-                                              column.name)
-
-                # Save the column information
-                form.save()
-
-
-                # And save the DF in the DB
-                ops.store_dataframe_in_db(df, workflow.id)
-
-            data['form_is_valid'] = True
-            data['html_redirect'] = reverse('workflow:detail',
-                                            kwargs={'pk': workflow.id})
 
             # Log the event
             logs.ops.put(request.user,
-                         'column_rename',
+                         'column_add',
                          workflow,
                          {'id': workflow.id,
                           'name': workflow.name,
-                          'column_name': old_name,
-                          'new_name': column.name})
+                          'column_name': column_name,
+                          'column_type': column_type})
 
-            # Done processing the correct POST request
+            data['form_is_valid'] = True
+            data['html_redirect'] = reverse('workflow:detail',
+                                            kwargs={'pk': workflow.id})
             return JsonResponse(data)
 
     data['html_form'] = render_to_string(
-        'workflow/includes/partial_column_edit.html',
-        context,
+        'workflow/includes/partial_column_add.html',
+        {'form': form},
         request=request)
 
     return JsonResponse(data)
@@ -171,14 +117,27 @@ def column_edit(request, pk):
                'pk': pk}
     if request.method == 'POST':
         if form.is_valid():
-            # Save the result
-            column = form.save()
+            if form.changed_data:
+                # Some field changed value, so save the result, but
+                # no commit as there are additional operations.
+                column = form.save(commit=False)
 
-            # Get the data frame from the form (should be loaded)
-            df = form.data_frame
+                # Get the data frame from the form (should be
+                # loaded)
+                df = form.data_frame
 
-            # Rename the column in the data frame
-            rename_df_column(df, workflow, old_name, column.name)
+                if 'name' in form.changed_data:
+                    # Rename the column in the data frame
+                    df = ops.rename_df_column(df,
+                                              workflow,
+                                              old_name,
+                                              column.name)
+
+                # Save the column information
+                form.save()
+
+                # And save the DF in the DB
+                ops.store_dataframe_in_db(df, workflow.id)
 
             data['form_is_valid'] = True
             data['html_redirect'] = reverse('workflow:detail',
@@ -237,9 +196,6 @@ def column_delete(request, pk):
                                         kwargs={'pk': workflow.id})
         return JsonResponse(data)
 
-        action__workflow=workflow)
-                      if formula_evaluation.has_variable(x.formula,
-                                                         column.name)]
     # If the columns is unique and it is the only one, we cannot allow
     # the operation
     unique_column = workflow.get_column_unique()
@@ -253,8 +209,7 @@ def column_delete(request, pk):
 
     # Get the name of the column to delete
     context['cname'] = column.name
-        # TODO: Reimplement as an alter direct query to the DB to save the
-        # load/store cycle
+
     # Get the conditions/actions attached to this workflow
     cond_to_delete = [x for x in Condition.objects.filter(
         action__workflow=workflow)
