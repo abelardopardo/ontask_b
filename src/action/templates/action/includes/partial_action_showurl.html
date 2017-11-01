@@ -1,0 +1,36 @@
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+<div class="js-action-showurl-form">
+  <form action="{% url 'action:showurl' action.id %}" method="post">
+    {% csrf_token %}
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title">URL to access the personalised content</h4>
+    </div>
+    <div class="modal-body">
+      <p class="lead">This URL will serve the content personaslised for each user.</p>
+      <pre>{{ url_text }}</pre>
+      {{ form|crispy }}
+      <p class="text-left">Access to this URL is protected by authentication,
+        and the data used to render the content will be selected based on
+         the value of the column with name <strong>email</strong>. To use other
+        columns, include the following additional parameters:</p>
+      <ul class="text-left">
+        <li><code>&uatn=[COLUMN NAME]</code>: Column to check (must be a unique
+          key column, different values for each row). This column name
+          <strong>must be an attribute of the user record in the
+          platform</strong>. </li>
+        <li><code>&uatv=[COLUMN VALUE]</code>: Column value to use for the
+          check.</li>
+      </ul>
+    </div>
+    <div class="modal-footer" style="text-align: center;">
+      <button type="submit" class="btn btn-primary">
+        <span class="glyphicon glyphicon-ok"></span> Ok
+      </button>
+    </div>
+  </form>
+</div>

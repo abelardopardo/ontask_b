@@ -9,6 +9,9 @@ var loadLogView = function () {
       },
       success: function(data) {
         $("#modal-item .modal-content").html(data.html_form);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        location.reload();
       }
     });
 }

@@ -1,0 +1,13 @@
+<div class="alert-danger">
+  <p class="alert-danger">This preview could not be produced because the row 
+  in the matrix does not have values in the following variables:</p>
+
+  <ul>
+    {% for v in missing_values %}
+      <li class="alert-danger">{{ v }}</li>
+    {% endfor %}
+  </ul>
+
+  <p class="alert-danger">Review the conditions in the action or use a filter 
+  to exclude these entries.</p>
+</div>

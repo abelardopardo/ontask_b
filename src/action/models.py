@@ -1,19 +1,26 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
+
+import json
 
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 from django.conf import settings
-from tinymce.models import HTMLField
 
 from workflow.models import Workflow
 
 
 class Action(models.Model):
+    """
+    @DynamicAttrs
+    """
+
     workflow = models.ForeignKey(Workflow,
                                  db_index=True,
                                  on_delete=models.CASCADE,
                                  null=False,
-                                 blank=False)
+                                 blank=False,
+                                 related_name='actions')
 
     name = models.CharField(max_length=256, blank=False)
 
@@ -23,16 +30,25 @@ class Action(models.Model):
 
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
+    modified = models.DateTimeField(auto_now=True, null=False)
+
     # Number or rows selected by the filter in the action (if any)
     n_selected_rows = models.IntegerField(
         verbose_name='Number of rows selected by filter',
         name='n_selected_rows',
         blank=True)
 
-    content = HTMLField(
+    # Text to be personalised.
+    content = models.TextField(
         default='{% comment %} Your action content here{% endcomment %}',
         null=False,
         blank=True)
+
+    # Boolean that enables the URL to be visible ot the outside.
+    serve_enabled = models.BooleanField(default=False,
+                                        verbose_name='URL available to users?',
+                                        null=False,
+                                        blank=False)
 
     def __str__(self):
         return self.name
@@ -42,12 +58,16 @@ class Action(models.Model):
 
 
 class Condition(models.Model):
+    """
+    @DynamicAttrs
+    """
 
     action = models.ForeignKey(Action,
                                db_index=True,
                                on_delete=models.CASCADE,
                                null=False,
-                               blank=False)
+                               blank=False,
+                               related_name='conditions')
 
     name = models.CharField(max_length=256, blank=False)
 
@@ -55,7 +75,7 @@ class Condition(models.Model):
                                         default='',
                                         blank=True)
 
-    formula = models.CharField(max_length=2048, blank=False)
+    formula = JSONField(default=dict, blank=True, null=True)
 
     # Field to denote if this condition is the filter of an action
     is_filter = models.BooleanField(default=False)
@@ -64,4 +84,4 @@ class Condition(models.Model):
         return self.name
 
     class Meta:
-        unique_together = ('action', 'name')
+        unique_together = ('action', 'name', 'is_filter')

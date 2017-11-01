@@ -1,85 +1,80 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-import json
+from __future__ import unicode_literals, print_function
 
 import django_tables2 as tables
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import Http404
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import get_object_or_404, redirect, reverse, render
+from django.contrib.auth.decorators import user_passes_test
+from django.http import JsonResponse
+from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
-from django.utils.decorators import method_decorator
 from django.utils.html import format_html
 from django.views import generic
-from django.views.decorators.csrf import csrf_exempt
-from django_tables2 import RequestConfig
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
-from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.views import APIView
-from rest_framework import generics
-from rest_framework import mixins
-from rest_framework import generics
 
-
-from rest_framework.response import Response
-
-from rest_framework import permissions
-
+import logs.ops
 from action.models import Condition
-from dataops import panda_db
-from logs import ops
-from ontask import is_instructor, decorators
-from .forms import WorkflowForm, AttributeForm, AttributeItemForm
-from .models import Workflow
-from .serializers import WorkflowSerializer
+from dataops import ops, pandas_db
+from ontask.permissions import is_instructor, UserIsInstructor
+from .forms import (WorkflowForm)
+from .models import Workflow, Column
+from .ops import (get_workflow,
+                  unlock_workflow_by_id)
+
 
 class OperationsColumn(tables.Column):
-
     empty_values = []
 
     def __init__(self, *args, **kwargs):
+        self.template_file = kwargs.pop('template_file')
+        self.get_operation_id = kwargs.pop('get_operation_id')
+
         super(OperationsColumn, self).__init__(*args, **kwargs)
-        self.attrs = {'th': {'style': 'text-align:center;'},
-                      'td': {'style': 'text-align:center;'}}
+        self.attrs = {'td': {'class': 'dt-body-center'}}
         self.orderable = False
 
-    def render(self, record):
-        return render_to_string(
-            'workflow/includes/partial_workflow_operations.html',
-            {'id': record.id})
+    def render(self, record, table):
+        return render_to_string(self.template_file,
+                                {'id': self.get_operation_id(record)})
 
 
 class WorkflowTable(tables.Table):
-
     name = tables.Column(
-        attrs={'th': {'style': 'text-align:center;vertical-align:middle;'},
-               'td': {'style': 'text-align:center;vertical-align:middle;'}},
+        attrs={'td': {'class': 'dt-body-center'}},
         verbose_name=str('Name')
     )
 
-    created = tables.DateTimeColumn(
-        attrs={'th': {'style': 'text-align:center;vertical-align:middle;'},
-               'td': {'style': 'text-align:center;vertical-align:middle;'}},
-        verbose_name='Created'
-
-    )
-
     description_text = tables.Column(
-        attrs={'th': {'style': 'text-align:center;vertical-align:middle;'},
-               'td': {'style': 'text-align:center;vertical-align:middle;'}},
+        attrs={'td': {'class': 'dt-body-center'}},
         verbose_name=str('Description')
     )
 
-    operations = OperationsColumn(
-        attrs={'th': {'style': 'text-align:center;vertical-align:middle;'},
-               'td': {'style': 'text-align:center;vertical-align:middle;'}},
-        verbose_name='Operations',
-        orderable=False
+    nrows_cols = tables.Column(
+        empty_values=[],
+        attrs={'td': {'class': 'dt-body-center'}},
+        verbose_name=str('Rows/Columns'),
+        default='No data'
     )
+
+    modified = tables.DateTimeColumn(
+        attrs={'td': {'class': 'dt-body-center'}},
+        verbose_name='Last modified'
+
+    )
+
+    operations = OperationsColumn(
+        attrs={'td': {'class': 'dt-body-center'}},
+        verbose_name='Operations',
+        orderable=False,
+        template_file='workflow/includes/partial_workflow_operations.html',
+        get_operation_id=lambda x: x.id
+    )
+
+    def __init__(self, data, *args, **kwargs):
+        table_id = kwargs.pop('id')
+
+        super(WorkflowTable, self).__init__(data, *args, **kwargs)
+        # If an ID was given, pass it on to the table attrs.
+        if table_id:
+            self.attrs['id'] = table_id
 
     def render_name(self, record):
         return format_html(
@@ -89,35 +84,82 @@ class WorkflowTable(tables.Table):
             )
         )
 
+    def render_nrows_cols(self, record):
+        if record.nrows == 0 and record.ncols == 0:
+            return "No data"
+
+        return format_html("{0}/{1}".format(record.nrows, record.ncols))
+
     class Meta:
         model = Workflow
-        fields = ('name', 'description_text', 'created')
-        sequence = ('name', 'description_text', 'created')
-        exclude = ('id', 'user', 'attributes', 'nrows', 'ncols', 'column_names',
+
+        fields = ('name', 'description_text', 'nrows_cols', 'modified')
+
+        sequence = ('name', 'description_text', 'nrows_cols', 'modified',
+                    'operations')
+
+        exclude = ('user', 'attributes', 'nrows', 'ncols', 'column_names',
                    'column_types', 'column_unique', 'query_builder_ops',
                    'data_frame_table_name')
 
         attrs = {
-            'class': 'table table-stripped table-bordered table-hover',
+            'class': 'table display',
             'id': 'item-table'
         }
 
-        row_attrs = {
-            'style': 'text-align:center;'
+
+class WorkflowDetailTable(tables.Table):
+    column_name = tables.Column(
+        attrs={'td': {'class': 'dt-body-center'}},
+        verbose_name=str('Column')
+    )
+
+    column_type = tables.Column(
+        attrs={'td': {'class': 'dt-body-center'}},
+        verbose_name=str('Type')
+    )
+
+    is_key = tables.BooleanColumn(
+        attrs={'td': {'class': 'dt-body-center'}},
+        verbose_name=str('Key?')
+    )
+
+    operations = OperationsColumn(
+        attrs={'td': {'class': 'dt-body-center'}},
+        verbose_name='Operations',
+        orderable=False,
+        template_file='workflow/includes/workflow_column_operations.html',
+        get_operation_id=lambda x: x['id']
+    )
+
+    class Meta:
+        fields = ('column_name', 'column_type', 'is_key', 'operations')
+
+        sequence = ('column_name', 'column_type', 'is_key', 'operations')
+
+        attrs = {
+            'class':
+                'table table-striped table-bordered table-hover cell-border',
+            'id': 'column-table'
         }
 
-        # class="text-center bg-warning"'No workflows'
-        empty_text = 'No workflows'
+        row_attrs = {
+            'class': lambda record: 'success' if record['is_key'] else ''
+        }
+
+        empty_text = 'No data in the workflow. Go to the Dataops section to ' \
+                     'upload some data.'
 
 
 def save_workflow_form(request, form, template_name, is_new):
+    # Ajax response
     data = dict()
-    # The form is false (thu s needs to be rendered again, until proven
+
+    # The form is false (thus needs to be rendered again, until proven
     # otherwise
     data['form_is_valid'] = False
 
     if request.method == 'POST':
-        dst = request.POST['dst']
         if form.is_valid():
             workflow_item = form.save(commit=False)
             # Verify that that workflow does comply with the combined unique
@@ -132,99 +174,181 @@ def save_workflow_form(request, form, template_name, is_new):
                 workflow_item.user = request.user
                 workflow_item.nrows = 0
                 workflow_item.ncols = 0
+                workflow_item.session_key = request.session.session_key
                 is_new = form.instance.pk is None
                 # Save the workflow
                 workflow_item.save()
 
                 # Log event
                 if is_new:
-                    ops.put(request.user,
-                            'workflow_create',
-                            workflow_item,
-                            {'id': workflow_item.id,
-                             'name': workflow_item.name})
+                    logs.ops.put(request.user,
+                                 'workflow_create',
+                                 workflow_item,
+                                 {'id': workflow_item.id,
+                                  'name': workflow_item.name})
                 else:
-                    ops.put(request.user,
-                            'workflow_update',
-                            workflow_item,
-                            {'id': workflow_item.id,
-                             'name': workflow_item.name})
+                    logs.ops.put(request.user,
+                                 'workflow_update',
+                                 workflow_item,
+                                 {'id': workflow_item.id,
+                                  'name': workflow_item.name})
 
-                data['dst'] = dst
                 # Ok, here we can say that the form is done.
                 data['form_is_valid'] = True
-                if dst == 'refresh':
-                    workflows = Workflow.objects.filter(user=request.user)
-                    table = WorkflowTable(workflows)
-                    data['html_item_list'] = table.as_html(request)
-    else:
-        dst = request.GET['dst']
+                data['html_redirect'] = reverse('workflow:index')
 
-    context = {'form': form, 'dst': dst}
+    context = {'form': form}
     data['html_form'] = render_to_string(template_name,
                                          context,
                                          request=request)
     return JsonResponse(data)
 
 
-@login_required
 @user_passes_test(is_instructor)
 def workflow_index(request):
-    request.session.pop('ontask_workflow_id', None)
+    wid = request.session.pop('ontask_workflow_id', None)
+    # If removing workflow from session, mark it as available for sharing
+    if wid:
+        unlock_workflow_by_id(wid)
     request.session.pop('ontask_workflow_name', None)
+
+    # Get the available workflows
     workflows = Workflow.objects.filter(user=request.user)
-    table = WorkflowTable(workflows)
-    RequestConfig(request,
-                  paginate={'per_page': 15}).configure(table)
 
-    return render(request, 'workflow/index.html', {'table': table})
+    # We include the table only if it is not empty.
+    context = {}
+    if len(workflows) > 0:
+        context['table'] = WorkflowTable(workflows,
+                                         id='item-table',
+                                         orderable=False)
+
+    return render(request, 'workflow/index.html', context)
 
 
-@method_decorator(decorators, name='dispatch')
-class WorkflowCreateView(generic.TemplateView):
+class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
     form_class = WorkflowForm
     template_name = 'workflow/includes/partial_workflow_create.html'
 
     def get_context_data(self, **kwargs):
         context = super(WorkflowCreateView, self).get_context_data(**kwargs)
-        context['dst'] = self.request.GET['dst']
         return context
 
     def get(self, request, *args, **kwargs):
+        del args
         form = self.form_class()
         return save_workflow_form(request, form, self.template_name, True)
 
     def post(self, request, *args, **kwargs):
+        del args
         form = self.form_class(request.POST)
         return save_workflow_form(request, form, self.template_name, True)
 
 
-@login_required
+class WorkflowDetailView(UserIsInstructor, generic.DetailView):
+    """
+    @DynamicAttrs
+    """
+    model = Workflow
+    template_name = 'workflow/detail.html'
+    context_object_name = 'workflow'
+
+    def get_object(self, queryset=None):
+        obj = super(WorkflowDetailView, self).get_object(queryset=queryset)
+
+        # Check if the workflow is locked
+        obj = get_workflow(self.request, obj.id)
+        if not obj:
+            messages.error(
+                self.request,
+                'The workflow is being modified by another user.')
+            return None
+
+        # Remember the current workflow
+        self.request.session['ontask_workflow_id'] = obj.id
+        # Store the current session to lock the workflow
+        obj.session_key = self.request.session.session_key
+        obj.save()
+        self.request.session['ontask_workflow_name'] = obj.name
+        return obj
+
+    def get_context_data(self, **kwargs):
+
+        context = super(WorkflowDetailView, self).get_context_data(**kwargs)
+
+        wflow_id = self.request.session.get('ontask_workflow_id', None)
+        if not wflow_id:
+            return context
+
+        # Get the table information (if it exist)
+        table_info = ops.workflow_table_info(self.object)
+        if table_info is not None:
+            table = WorkflowDetailTable(
+                table_info['table'],
+                orderable=False)
+            table_info['table_data'] = table
+            context['table_info'] = table_info
+
+        # put the number of key columns in the workflow
+        context['num_key_columns'] = Column.objects.filter(
+            workflow__id=wflow_id,
+            is_key=True
+        ).count()
+        return context
+
+
 @user_passes_test(is_instructor)
 def update(request, pk):
-    workflow = get_object_or_404(Workflow, pk=pk, user=request.user)
+    workflow = get_workflow(request, pk)
+    if not workflow:
+        return redirect('workflow:index')
+
     form = WorkflowForm(request.POST or None, instance=workflow)
 
-    return save_workflow_form(request,
-                              form,
-                              'workflow/includes/partial_workflow_update.html',
-                              False)
+    # If the user owns the workflow, proceed
+    if workflow.user == request.user:
+        return save_workflow_form(
+            request,
+            form,
+            'workflow/includes/partial_workflow_update.html',
+            False)
+
+    # If the user does not own the workflow, notify error and go back to
+    # index
+    messages.error(request,
+                   'You can only rename workflows you created.')
+    if request.is_ajax():
+        data = {'form_is_valid': True,
+                'html_redirect': reverse('workflow:index')}
+        return JsonResponse(data)
+
+    return redirect('workflow:index')
 
 
-@login_required
 @user_passes_test(is_instructor)
 def flush(request, pk):
-    workflow = get_object_or_404(Workflow, pk=pk, user=request.user)
-    data = dict()
-    # This form will always redirect
-    data['dst'] = 'redirect'
-    if request.method == 'POST':
-        # Set the destination to be used in the JS for the last action
-        dst = request.POST['dst']
-        data['dst'] = dst
+    workflow = get_workflow(request, pk)
+    if not workflow:
+        return redirect('workflow:index')
 
+    data = dict()
+
+    if request.user != workflow.user:
+        # If the user does not own the workflow, notify error and go back to
+        # index
+        messages.error(
+            request,
+            'You can only flush the data of  workflows you created.')
+
+        if request.is_ajax():
+            data = {'form_is_valid': True,
+                    'html_redirect': reverse('workflow:index')}
+            return JsonResponse(data)
+
+        return redirect('workflow:index')
+
+    if request.method == 'POST':
         # Delete the table
-        panda_db.delete_table(workflow.id)
+        pandas_db.delete_table(workflow.id)
 
         # Delete number of rows and columns
         workflow.nrows = 0
@@ -232,12 +356,10 @@ def flush(request, pk):
         workflow.n_filterd_rows = -1
 
         # Delete the column_names, column_types and column_unique
-        workflow.column_names = ''
-        workflow.column_types = ''
-        workflow.column_unique = ''
+        Column.objects.filter(workflow__id=workflow.id).delete()
 
         # Delete the info for QueryBuilder
-        workflow.query_builder_ops = ''
+        workflow.set_query_builder_ops()
 
         # Table name
         workflow.data_frame_table_name = ''
@@ -246,22 +368,22 @@ def flush(request, pk):
         workflow.save()
 
         # Log the event
-        ops.put(request.user,
-                'workflow_data_flush',
-                workflow,
-                {'id': workflow.id,
-                 'name': workflow.name})
+        logs.ops.put(request.user,
+                     'workflow_data_flush',
+                     workflow,
+                     {'id': workflow.id,
+                      'name': workflow.name})
 
         # Delete the conditions attached to all the actions attached to the
         # workflow.
         to_delete = Condition.objects.filter(
             action__workflow=workflow)
         for item in to_delete:
-            ops.put(request.user,
-                    workflow,
-                    'condition_delete',
-                    {'id': item.id,
-                     'name': item.name})
+            logs.ops.put(request.user,
+                         'condition_delete',
+                         workflow,
+                         {'id': item.id,
+                          'name': item.name})
         to_delete.delete()
 
         # In this case, the form is valid
@@ -270,232 +392,50 @@ def flush(request, pk):
     else:
         data['html_form'] = \
             render_to_string('workflow/includes/partial_workflow_flush.html',
-                             {'workflow': workflow,
-                              'dst': request.GET['dst']},
+                             {'workflow': workflow},
                              request=request)
 
     return JsonResponse(data)
 
 
-@login_required
 @user_passes_test(is_instructor)
 def delete(request, pk):
-    workflow = get_object_or_404(Workflow, pk=pk, user=request.user)
-    data = dict()
-    if request.method == 'POST':
-        # Set the destination to be used in the JS for last action
-        dst = request.POST['dst']
-        data['dst'] = dst
+    workflow = get_workflow(request, pk)
+    if not workflow:
+        return redirect('workflow:index')
 
+    # Ajax result
+    data = dict()
+
+    # If the request is not done by the user, flat the error
+    if workflow.user != request.user:
+        messages.error(request,
+                       'You can only delete workflows that you createds.')
+
+        if request.is_ajax():
+            data['form_is_valid'] = True
+            data['html_redirect'] = reverse('workflow:index')
+            return JsonResponse(data)
+
+        return redirect('workflow:index')
+
+    if request.method == 'POST':
         # Log the event
-        ops.put(request.user,
-                'workflow_delete',
-                workflow,
-                {'id': workflow.id,
-                 'name': workflow.name})
+        logs.ops.put(request.user,
+                     'workflow_delete',
+                     workflow,
+                     {'id': workflow.id,
+                      'name': workflow.name})
 
         # Perform the delete operation
         workflow.delete()
 
         # In this case, the form is valid anyway
         data['form_is_valid'] = True
-
-        if dst == 'refresh':
-            # Create the html_item_list to refresh
-            workflows = Workflow.objects.filter(user=request.user)
-            table = WorkflowTable(workflows)
-            data['html_item_list'] = table.as_html(request)
-        else:  # dst = redirect
-            data['html_redirect'] = reverse('workflow:index')
-
+        data['html_redirect'] = reverse('workflow:index')
     else:
         data['html_form'] = \
             render_to_string('workflow/includes/partial_workflow_delete.html',
-                             {'workflow': workflow,
-                              'dst': request.GET['dst']},
+                             {'workflow': workflow},
                              request=request)
     return JsonResponse(data)
-
-
-@method_decorator(decorators, name='dispatch')
-class WorkflowDetailView(generic.DetailView):
-    model = Workflow
-    template_name = 'workflow/detail.html'
-    context_object_name = 'workflow'
-
-    def get_object(self, queryset=None):
-        obj = super(WorkflowDetailView, self).get_object(queryset=queryset)
-        if obj.user != self.request.user:
-            raise Http404()
-        self.request.session['ontask_workflow_id'] = obj.id
-        self.request.session['ontask_workflow_name'] = obj.name
-        return obj
-
-    def get_context_data(self, **kwargs):
-
-        context = super(WorkflowDetailView, self).get_context_data(**kwargs)
-
-        wflow_id = self.request.session['ontask_workflow_id']
-
-        table_info = panda_db.workflow_table_info(wflow_id)
-
-        if table_info is not None:
-            context['table_info'] = table_info
-
-        return context
-
-
-@login_required
-@user_passes_test(is_instructor)
-def attributes(request):
-    workflow = get_object_or_404(Workflow,
-                                 pk=request.session['ontask_workflow_id'],
-                                 user=request.user)
-    attributes = {}
-    if workflow.attributes != '':
-        attributes = json.loads(workflow.attributes)
-
-    # Get the form fields from the attributes and the current values
-    form_fields = [(x, x + '__value', y)
-                   for x, y in sorted(attributes.items())]
-
-    # Create the form object with the form_fields just computed
-    form = AttributeForm(request.POST or None, form_fields=form_fields)
-
-    if request.method == 'POST':
-        if form.is_valid():
-
-            # Collect the data from the form and update the workflow
-            new_attr = {}
-            for key in sorted(attributes.keys()):
-                new_attr[form.cleaned_data[key]] = \
-                    form.cleaned_data[key + '__value']
-
-            try:
-                new_attr = json.dumps(new_attr)
-            except Exception, e:
-                messages.error(request, 'Unable to store attributes. '
-                                        'Edit and retry.')
-                return render(request,
-                              'workflow/attributes.html',
-                              {'form': form})
-
-            # Log the event
-            ops.put(request.user,
-                    'workflow_attribute_update',
-                    workflow,
-                    {'id': workflow.id,
-                     'name': workflow.name,
-                     'attr': attributes})
-
-            # update the db
-            workflow.attributes = new_attr
-            workflow.save()
-
-            return redirect(reverse('workflow:detail',
-                                    kwargs={'pk': workflow.id}))
-
-    return render(request,
-                  'workflow/attributes.html',
-                  {'form': form})
-
-
-# TODO: there is an issue with name spaces. In principle, there
-# should be no duplicated names between attribute names, column
-# names, and condition names. They can all appear in a template.
-
-@login_required
-@user_passes_test(is_instructor)
-def attribute_create(request):
-    # Get the workflow
-    workflow = get_object_or_404(Workflow,
-                                 pk=request.session['ontask_workflow_id'],
-                                 user=request.user)
-    data = dict()
-    data['form_is_valid'] = False
-
-    attributes = {}
-    if workflow.attributes != '':
-        attributes = json.loads(workflow.attributes)
-
-    # Create the form object with the form_fields just computed
-    form = AttributeItemForm(request.POST or None,
-                             keys=attributes.keys())
-
-    if request.method == 'POST':
-        dst = request.POST['dst']
-        if form.is_valid():
-            attributes[form.cleaned_data['key']] = form.cleaned_data['value']
-            workflow.attributes = json.dumps(attributes)
-            workflow.save()
-
-            # Log the event
-            ops.put(request.user,
-                    'workflow_attribute_create',
-                    workflow,
-                    {'id': workflow.id,
-                     'name': workflow.name,
-                     'attr_key': form.cleaned_data['key'],
-                     'attr_val': form.cleaned_data['value']})
-
-            data['form_is_valid'] = True
-            data['dst'] = 'redirect'
-            data['html_redirect'] = reverse('workflow:attributes')
-    else:
-        dst = request.GET['dst']
-
-    context = {'form': form,
-               'dst': dst}
-
-    data['html_form'] = render_to_string(
-        'workflow/includes/partial_attribute_create.html',
-        context,
-        request=request)
-
-    return JsonResponse(data)
-
-
-@login_required
-@user_passes_test(is_instructor)
-def attribute_delete(request):
-    # Get the workflow
-    workflow = get_object_or_404(Workflow,
-                                 pk=request.session['ontask_workflow_id'],
-                                 user=request.user)
-    data = dict()
-    data['form_is_valid'] = False
-    key = request.GET.get('key', None)
-
-    if request.method == 'POST' and key is not None:
-
-        attributes = json.loads(workflow.attributes)
-        val = attributes.pop(key, None)
-        workflow.attributes = json.dumps(attributes)
-
-        # Log the event
-        ops.put(request.user,
-                'workflow_attribute_delete',
-                workflow,
-                {'id': workflow.id,
-                 'attr_key': key,
-                 'attr_val': val})
-
-        workflow.save()
-
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:attributes')
-    else:
-        key = request.GET['key']
-
-    data['html_form'] = render_to_string(
-        'workflow/includes/partial_attribute_delete.html',
-        {'key': key},
-        request=request)
-
-    return JsonResponse(data)
-
-
-# @login_required
-# @user_passes_test(is_instructor)
-def share(request, pk):
-    return render(request, 'base.html')

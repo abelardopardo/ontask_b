@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 
 from django.contrib import admin
 
@@ -13,7 +13,8 @@ class ActionAdmin(admin.ModelAdmin):
                     'description_text',
                     'created',
                     'n_selected_rows',
-                    'content'
+                    'content',
+                    'serve_enabled'
                     )
 
 
@@ -22,6 +23,7 @@ class ConditionAdmin(admin.ModelAdmin):
                     'name',
                     'action',
                     'description_text',
+                    'formula',
                     'is_filter')
 
 

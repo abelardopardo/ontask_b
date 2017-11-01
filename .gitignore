@@ -28,6 +28,10 @@ local.sample.env
 *.mo
 *.pot
 
+# Coverage
+.coverage
+htmlcov
+
 # Eclipse
 .project
 .pydevproject
@@ -57,13 +61,12 @@ Thumbs.db
 Desktop.ini
 
 # Project settings
-./site/
+/site/
 
 /logs
 
 migrations
 
-test
 
 .idea
 

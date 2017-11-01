@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block scripts %}
+  <script src="{% static 'dataops/js/dataops.js' %}"></script>
+{% endblock %}
+
+{% block title %}{{ block.super }}Review Operation{% endblock %}
+
+{% block container %}
+<div align="center" class="container">
+  <h1 class="page-header">Step 4: Review and confirm</h1>
+
+  <form method="POST" action="">
+    {% csrf_token %}
+    {% include 'dataops/includes/csvupload_buttons.html' %}
+  </form>
+
+  <div align="center" class="container" style="display:inline-block;">
+    <table class="table table-bordered" id="workflow-detail"
+           style="display:table-cell;">
+      <thead>
+        <tr>
+          <th class="text-center">Existing Matrix</th>
+          <th class="text-center"><button class=" glyphicon glyphicon-arrow-left"></button></th>
+          <th class="text-center">New Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="success">
+          <td class="text-center">{{ request.session.upload_data.dst_selected_key }}: Key</td>
+          <td class="text-center"><button class=" glyphicon glyphicon-arrow-left"></button></td>
+          <td class="text-center">{{ request.session.upload_data.src_selected_key }}: Key</td>
+        </tr>
+        {% for item in info %}
+          <tr>
+            <td class="text-center" style="max-width:220px">{{ item.0 }}</td>
+            <td class="text-center">{% if item.1 %}<button class=" glyphicon glyphicon-arrow-left"></button>{% endif %}</td>
+            <td class="text-center">{{ item.2 }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <form method="POST" action="">
+    {% csrf_token %}
+    {% include 'dataops/includes/csvupload_buttons.html' %}
+  </form>
+</div>
+{% endblock container %}

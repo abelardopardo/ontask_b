@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 
 
 class LoginForm(AuthenticationForm):
-    remember_me = forms.BooleanField(required=False, initial=False)
+    # remember_me = forms.BooleanField(required=False, initial=False)
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
@@ -20,9 +20,9 @@ class LoginForm(AuthenticationForm):
         self.helper.layout = Layout(
             Field('username', placeholder="Enter Email", autofocus=""),
             Field('password', placeholder="Enter Password"),
-            HTML('<a href="{}">Forgot Password?</a>'.format(
-                reverse("accounts:password-reset"))),
-            Field('remember_me'),
+            # HTML('<a href="{}">Forgot Password?</a>'.format(
+            #    reverse("accounts:password-reset"))),
+            # Field('remember_me'),
             Submit('sign_in', 'Log in',
                    css_class="btn btn-lg btn-primary btn-block"),
             )

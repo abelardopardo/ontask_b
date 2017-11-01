@@ -1,0 +1,8 @@
+<a class="btn btn-primary btn-xm" href="{{ edit_url }}">
+  <span class="glyphicon glyphicon-pencil"></span>
+</a>
+<button type="button"
+        class="btn btn-danger btn-xm js-row-delete"
+        data-url="{% url 'matrix:row_delete' %}{{ delete_key }}">
+  <span class="glyphicon glyphicon-trash"></span>
+</button>

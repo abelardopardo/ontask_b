@@ -39,8 +39,7 @@
                 {% if forloop.counter0|divisibleby:2 %}
                   <button type="button"
                           class="btn btn-danger btn-xs js-attribute-delete"
-                          data-url="{% url 'workflow:attribute_delete' %}?key={{ field.name }}"
-                          data-dst="refresh" style="margin-bottom:1ex;">
+                          data-url="{% url 'workflow:attribute_delete' %}?key={{ field.name }}">
                   <span class="glyphicon glyphicon-trash"></span>
                   </button>
                 {% endif %}
@@ -51,7 +50,7 @@
               </td>
             {% if forloop.counter|divisibleby:2 %}</tr>{% endif %}
           {% empty %}
-            <td colspan="2">No attributes defined</td>
+            <tr><td colspan="2">No attributes defined</td></tr>
           {% endfor %}
         </tbody>
       </table>

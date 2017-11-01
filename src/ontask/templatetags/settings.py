@@ -2,12 +2,13 @@
 from __future__ import unicode_literals
 
 from django import template
-from django.conf import settings
+
+import ontask
 
 register = template.Library()
+
 
 # settings value
 @register.simple_tag
 def ontask_version():
-    return getattr(settings, 'VERSION', "")
-
+    return ontask.__version__

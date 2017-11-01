@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 from __future__ import unicode_literals
 
 import environ
+import os
 
 from django.core.urlresolvers import reverse_lazy
 from os.path import dirname, join, exists
@@ -22,7 +23,8 @@ STATICFILES_DIRS = [join(BASE_DIR, 'static')]
 MEDIA_ROOT = join(BASE_DIR, 'media')
 MEDIA_URL = "/media/"
 
-VERSION = 'B.0'
+# Project root folder
+PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
 
 # Use Django templates using the new Django 1.8 TEMPLATES settings
 TEMPLATES = [
@@ -82,6 +84,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'authtools',
     'crispy_forms',
@@ -90,9 +93,9 @@ INSTALLED_APPS = (
     'formtools',
     'siteprefs',
     'django_tables2',
-    'django_filters',
     'import_export',
     'rest_framework',
+    'django_summernote',
 
     'profiles.apps.ProfileConfig',
     'accounts',
@@ -121,6 +124,10 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 1800  # set just 30 mins
+SESSION_SAVE_EVERY_REQUEST = True  # Needed to make sure timeout above works
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
@@ -134,9 +141,24 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PARSER_CLASSES': (
     #     'rest_framework.parsers.JSONParser',
     # )
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 100
 }
+
+# PANDAS_RENDERERS = [
+#     "rest_pandas.renderers.PandasJSONRenderer",
+#     "rest_pandas.renderers.PandasCSVRenderer",
+#     "rest_pandas.renderers.PandasTextRenderer",
+#     "rest_pandas.renderers.PandasExcelRenderer",
+#     "rest_pandas.renderers.PandasOldExcelRenderer",
+#     "rest_pandas.renderers.PandasPNGRenderer",
+#     "rest_pandas.renderers.PandasSVGRenderer",
+# ]
 
 ROOT_URLCONF = 'ontask.urls'
 
@@ -156,7 +178,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = env('TIME_ZONE')
 
 USE_I18N = True
 
@@ -186,8 +208,146 @@ THUMBNAIL_EXTENSION = 'png'     # Or any extn for your thumbnails
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
+SITE_ID = 1
+
+#
+# Auxiliary variables
+#
+if DATABASES['default']['ENGINE'].find('postgresql') != -1:
+    DATABASE_TYPE = 'postgresql'
+elif DATABASES['default']['ENGINE'].find('sqlite') != -1:
+    DATABASE_TYPE = 'sqlite'
+
+# SUMMERNOTE_CONFIG = {
+#     # Using SummernoteWidget - iframe mode
+#     'iframe': False,  # or set False to use SummernoteInplaceWidget - no iframe
+#     # mode
+#
+#     # Using Summernote Air-mode
+#     'airMode': False,
+#
+#     # Use native HTML tags (`<b>`, `<i>`, ...) instead of style attributes
+#     # (Firefox, Chrome only)
+#     'styleWithTags': True,
+#
+#     # Set text direction : 'left to right' is default.
+#     'direction': 'ltr',
+#
+#     # Change editor size
+#     # 'width': '100%',
+#     # 'height': '480',
+#
+#     # Use proper language setting automatically (default)
+#     'lang': None,
+#
+#     # Customize toolbar buttons
+#     # 'toolbar': [
+#     #     ['style', ['style']],
+#     #     ['style', ['bold', 'italic', 'underline', 'clear']],
+#     #     ['para', ['ul', 'ol', 'height']],
+#     #     ['insert', ['link']],
+#     # ],
+#
+#     # Need authentication while uploading attachments.
+#     'attachment_require_authentication': True,
+#
+#     # Set `upload_to` function for attachments.
+#     # 'attachment_upload_to': my_custom_upload_to_func(),
+#
+#     # Set custom storage class for attachments.
+#     # attachment_storage_class': 'my.custom.storage.class.name',
+#
+#     # Set custom model for attachments (default: 'django_summernote.Attachment')
+#     # 'attachment_model': 'my.custom.attachment.model', # must inherit
+#                                 # 'django_summernote.AbstractAttachment'
+#
+#     # Set common css/js media files
+#     # 'base_css': (
+#     #     '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css',
+#     # ),
+#     # 'base_js': (
+#     #     '//code.jquery.com/jquery-1.9.1.min.js',
+#     #     '//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js',
+#     # ),
+#     'default_css': (
+#         os.path.join(STATIC_URL, 'django_summernote/summernote.css'),
+#         os.path.join(STATIC_URL, 'django_summernote/django_summernote.css'),
+#     ),
+#     'default_js': (
+#         os.path.join(STATIC_URL,
+#                      'django_summernote/jquery.ui.widget.js'),
+#         os.path.join(STATIC_URL,
+#                      'django_summernote/jquery.iframe-transport.js'),
+#         os.path.join(STATIC_URL,
+#                      'django_summernote/jquery.fileupload.js'),
+#         os.path.join(STATIC_URL,
+#                      'django_summernote/summernote.min.js'),
+#     ),
+#
+#     # You can also add custom css/js for SummernoteInplaceWidget.
+#     # !!! Be sure to put {{ form.media }} in template before initiate
+#     # summernote.
+#     'css_for_inplace': (
+#     ),
+#     'js_for_inplace': (
+#     ),
+#
+#     # You can disable file upload feature.
+#     'disable_upload': False,
+#
+#     # Codemirror as codeview
+#     # If any codemirror settings are defined, it will include codemirror files
+#     # automatically.
+#     'css': {
+#         '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/theme/monokai.min.css',
+#     },
+#     'codemirror': {
+#         'mode': 'htmlmixed',
+#         'lineNumbers': 'true',
+#
+#         # You have to include theme file in 'css' or 'css_for_inplace' before
+#         # using it.
+#         'theme': 'monokai',
+#     },
+#
+#     # Lazy initialize
+#     # If you want to initialize summernote at the bottom of page, set this as
+#     # True and call `initSummernote()` on your page.
+#     'lazy': True,
+#
+#     # To use external plugins,
+#     # Include them within `css` and `js`.
+#     # 'js': {
+#     #     '/some_static_folder/summernote-ext-print.js',
+#     #     '//somewhere_in_internet/summernote-plugin-name.js',
+#     # },
+#     # # You can also add custom settings in `summernote` section.
+#     # 'summernote': {
+#     #     'print': {
+#     #         'stylesheetUrl': '/some_static_folder/printable.css',
+#     #     },
+#     # }
+# }
+
+SUMMERNOTE_CONFIG = {
+    'width': '100%',
+    'height': '400px',
+    'css': (
+        '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/theme/base16-dark.min.css',
+    ),
+    'css_for_inplace': (
+        '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/theme/base16-dark.min.css',
+    ),
+    'codemirror': {
+        'theme': 'base16-dark',
+        'mode': 'htmlmixed',
+        'lineNumbers': 'true',
+    },
+    'lazy': True,
+}
+
 # Extra configuration options
-DATAOPS_CONTENT_TYPES = '["text/csv", "application/json"]'
+DATAOPS_CONTENT_TYPES = '["text/csv", "application/json", "application/gzip", "application/x-gzip"]'
 DATAOPS_MAX_UPLOAD_SIZE = 209715200  # 200 MB
 
 # Email configuration
@@ -221,3 +381,7 @@ The OnTask Support Team
 """
 EMAIL_ACTION_NOTIFICATION_SUBJECT = "OnTask: Action executed"
 EMAIL_ACTION_NOTIFICATION_SENDER = 'ontask@ontasklearning.org'
+
+LOGS_MAX_LIST_SIZE = 200
+
+SHORT_DATETIME_FORMAT = 'r'

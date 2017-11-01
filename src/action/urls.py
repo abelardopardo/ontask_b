@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 
 from django.conf.urls import url
-
-import ontask.views
 
 from . import views_action, views_condition
 
@@ -16,10 +14,21 @@ urlpatterns = [
 
     url(r'^(?P<pk>\d+)/edit/$', views_action.edit_action, name='edit'),
 
+    url(r'^(?P<pk>\d+)/update/$',
+        views_action.ActionUpdateView.as_view(),
+        name='update'),
+
     url(r'^(?P<pk>\d+)/delete/$', views_action.delete_action, name='delete'),
 
     url(r'^(?P<pk>\d+)/preview/$', views_action.preview, name='preview'),
 
+    url(r'^(?P<pk>\d+)/showurl/$', views_action.showurl, name='showurl'),
+
+    url(r'^serve/$', views_action.serve, name='serve'),
+
+    #
+    # FILTERS
+    #
     url(r'^(?P<pk>\d+)/create_filter/$',
         views_condition.FilterCreateView.as_view(),
         name='create_filter'),
@@ -32,6 +41,9 @@ urlpatterns = [
         views_condition.delete_filter,
         name='delete_filter'),
 
+    #
+    # CONDITIONS
+    #
     url(r'^(?P<pk>\d+)/create_condition/$',
         views_condition.ConditionCreateView.as_view(),
         name='create_condition'),

@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 
-import ontask.views
-
+from . import attribute_views, column_views, import_export_views
 from . import views, api
 
 app_name = 'workflow'
@@ -24,19 +23,39 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/detail/$', views.WorkflowDetailView.as_view(),
         name='detail'),
 
-    url(r'^attributes/$', views.attributes, name='attributes'),
+    # Import Export
+
+    url(r'^export_ask/$', import_export_views.export_ask, name='export_ask'),
+
+    url(r'^export/$', import_export_views.export, name='export'),
+
+    url(r'^import/$', import_export_views.import_workflow, name='import'),
+
+    # Attributes
+
+    url(r'^attributes/$', attribute_views.attributes, name='attributes'),
 
     url(r'^attribute_create/$',
-        views.attribute_create,
+        attribute_views.attribute_create,
         name='attribute_create'),
 
     url(r'^attribute_delete/$',
-        views.attribute_delete,
+        attribute_views.attribute_delete,
         name='attribute_delete'),
 
-    url(r'^(?P<pk>\d+)/share/$', ontask.views.ToBeDone.as_view(), name='share'),
+    # Column manipulation
 
-    url(r'^(?P<pk>\d+)/logs/$', ontask.views.ToBeDone.as_view(), name='logs'),
+    url(r'^column_add/$', column_views.column_add, name='column_add'),
+
+    url(r'^(?P<pk>\d+)/column_delete/$',
+        column_views.column_delete,
+        name='column_delete'),
+
+    url(r'^(?P<pk>\d+)/column_edit/$',
+        column_views.column_edit,
+        name='column_edit'),
+
+    # API
 
     url(r'^workflows/$', api.WorkflowAPIListCreate.as_view()),
 

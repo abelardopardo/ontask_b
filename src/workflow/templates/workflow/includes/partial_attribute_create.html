@@ -1,8 +1,7 @@
 <form method="post" action="{% url 'workflow:attribute_create' %}" class="js-attribute-create-form">
   {% csrf_token %}
-  <input type="hidden" name="dst" value="{{ dst }}"/>
   <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" arial-label="Close">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
     <h4 class="modal-title">Create a new attribute</h4>
@@ -12,6 +11,7 @@
   </div>
   <div class="modal-footer" style="text-align: center;">
     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-    <button type="submit" class="btn btn-primary">Create attribute</button>
+    <button type="submit" class="btn btn-primary">
+      <span class="glyphicon glyphicon-ok"></span> Create attribute</button>
   </div>
 </form>

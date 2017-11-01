@@ -2,8 +2,11 @@
 from __future__ import unicode_literals
 # In production set the environment variable like this:
 #    DJANGO_SETTINGS_MODULE=ontask.settings.production
+import socket
+
 from .base import *             # NOQA
 import logging.config
+
 
 # For security and performance reasons, DEBUG is turned off
 DEBUG = False
@@ -11,6 +14,7 @@ TEMPLATE_DEBUG = False
 
 # Must mention ALLOWED_HOSTS in production!
 # ALLOWED_HOSTS = ["ontask.com"]
+ALLOWED_HOSTS = [socket.getfqdn()]
 
 # Cache the templates in memory for speed-up
 loaders = [
@@ -60,6 +64,11 @@ LOGGING = {
         'project': {
             'handlers': ['proj_log_file'],
             'level': 'DEBUG',
+        },
+    'django.request': {
+        'handlers': ['proj_log_file'],
+        'level': 'ERROR',
+        'propagate': True,
         },
     }
 }

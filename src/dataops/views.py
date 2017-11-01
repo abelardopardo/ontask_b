@@ -1,122 +1,125 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 
-import json
+import pandas as pd
+from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import redirect, render, reverse
 
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.shortcuts import get_object_or_404, redirect, render
-import django_tables2 as tables
+import logs.ops
+from dataops import pandas_db, ops
+from ontask.permissions import is_instructor
+from workflow.ops import get_workflow
+from .forms import RowFilterForm, RowForm
 
-from workflow.models import Workflow
-from dataops import panda_db
-from ontask import is_instructor, slugify
-from .forms import RowFilterForm, RowUpdateForm
 
-@login_required
 @user_passes_test(is_instructor)
 def dataops(request):
-    workflow_id = request.session.get('ontask_workflow_id', None)
-    if workflow_id is None:
-        # Redirect to the workflow page to choose a workflow
+    # Get the workflow that is being used
+    workflow = get_workflow(request)
+    if not workflow:
         return redirect('workflow:index')
 
-    # Get the workflow that is being used
-    get_object_or_404(Workflow, pk=workflow_id)
-
-    return render(request, 'dataops/data_ops.html')
+    return render(request, 'dataops/data_ops.html', {})
 
 
-@login_required
+@user_passes_test(is_instructor)
+def uploadmerge(request):
+    return render(request, 'dataops/uploadmerge.html', {})
+
+
 @user_passes_test(is_instructor)
 def row_filter(request):
     # Get the workflow object
-    workflow = get_object_or_404(
-        Workflow,
-        pk=request.session.get('ontask_workflow_id', -1),
-        user=request.user)
+    workflow = get_workflow(request)
+    if not workflow:
+        return redirect('workflow:index')
 
     # Add to context for rendering the title
-    context = {'workflow': workflow}
+    context = {'workflow': workflow,
+               'cancel_url': reverse('dataops:list')}
 
     # If the workflow does not have any rows, there is no point on doing this.
     if workflow.nrows == 0:
         return render(request, 'dataops/row_filter.html', context)
 
+    # Fetch the information for the search form regardless
     form = RowFilterForm(request.POST or None, workflow=workflow)
+    # This form is always rendered, so it is included in the context anyway
     context['form'] = form
 
     if request.method == 'POST':
+        if request.POST.get('submit') == 'update':
+            # This is the case in which the row is updated
+            row_form = RowForm(request.POST, workflow=workflow)
+            if row_form.is_valid() and row_form.has_changed():
+                # Update content in the DB
 
-        if form.is_valid():
+                set_fields = []
+                set_values = []
+                where_field = None
+                where_value = None
+                log_payload = []
+                # Create the SET name = value part of the query
+                for name, is_unique in zip(row_form.col_names,
+                                           row_form.col_unique):
+                    value = row_form.cleaned_data[name]
+                    if is_unique:
+                        if not where_field:
+                            # Remember one unique key for selecting the row
+                            where_field = name
+                            where_value = value
+                        continue
 
-            where_clause = []
-            where_fields = []
-            for name, type in zip(form.key_names, form.key_types):
-                # None or '', skip
-                if not form.cleaned_data[name]:
-                    continue
+                    set_fields.append(name)
+                    set_values.append(value)
+                    log_payload.append((name, value))
 
-                where_clause.append('{0} = %s'.format(name))
-                where_fields.append(form.cleaned_data[name])
+                pandas_db.update_row(workflow.id,
+                                     set_fields,
+                                     set_values,
+                                     [where_field],
+                                     [where_value])
 
-            if where_clause:
-                where_clause = ' WHERE ' + ' AND '.join(where_clause)
-            else:
-                where_clause = None
+                # Log the event
+                logs.ops.put(request.user,
+                             'matrixrow_update',
+                             workflow,
+                             {'id': workflow.id,
+                              'name': workflow.name,
+                              'new_values': log_payload})
 
-            # Get the queryset from the matrix
-            queryset = panda_db.execute_select_on_table(
-                workflow.id,
-                where_clause,
-                where_fields
-            )
+                # Change is done.
+        else:
+            if form.is_valid():
+                # Request is a POST of the SEARCH (first form)
+                where_field = []
+                where_value = []
+                for name in form.key_names:
+                    value = form.cleaned_data[name]
+                    if value:
+                        # Remember the value of the key
+                        where_field = name
+                        where_value = value
+                        break
 
-            # If the queryset returned a single element, create the row form
-            # and return
-            if len(queryset) == 1:
-                if request.POST['submit'] == 'submit':
-                    row_form = RowUpdateForm(None,
-                                             workflow=workflow,
-                                             initial_values=list(queryset[0]))
+                # Get the row from the matrix
+                rows = pandas_db.execute_select_on_table(workflow.id,
+                                                         [where_field],
+                                                         [where_value])
+
+                if len(rows) == 1:
+                    # A single row has been selected. Create and pre-populate
+                    # the update form
+                    row_form = RowForm(None,
+                                       workflow=workflow,
+                                       initial_values=list(rows[0]))
+                    context['row_form'] = row_form
                 else:
-                    row_form = RowUpdateForm(request.POST,
-                                             workflow=workflow,
-                                             initial_values=list(queryset[0]))
-                    if row_form.is_valid() and row_form.has_changed():
-                        # Update content in the DB
-                        set_values = []
-                        set_fields = []
-                        for name, type in zip(row_form.col_names,
-                                              row_form.col_types):
-
-                            set_values.append('{0} = %s'.format(name))
-                            set_fields.append(row_form.cleaned_data[name])
-
-
-                        set_values = ' SET ' + ', '.join(set_values)
-                        fields = set_fields + where_fields
-
-                        # Update db with new data
-                        panda_db.update_row(
-                            workflow.id,
-                            set_values + ' ' + where_clause,
-                            fields
-                        )
-
-                # Insert the form in the context
-                context['row_form'] = row_form
-
-            else:
-                if request.POST['submit'] == 'submit':
-                    # Add error in form and redisplay
                     form.add_error(None, 'No data found with the given keys')
-                else:
-                    form.add_error(None, 'Modification not allowed')
 
     return render(request, 'dataops/row_filter.html', context)
 
 
-@login_required
 @user_passes_test(is_instructor)
 def row_update(request):
     """
@@ -125,50 +128,162 @@ def row_update(request):
     :return:
     """
 
-    # This method can only be invoked through a POST operation
-    if request.method == 'GET':
-        return redirect('dataops:rowfilter')
-
-    workflow = get_object_or_404(
-        Workflow,
-        pk=request.session.get('ontask_workflow_id', -1),
-        user=request.user)
+    # If there is no workflow object, go back to the index
+    workflow = get_workflow(request)
+    if not workflow:
+        return redirect('workflow:index')
 
     # If the workflow has no data, something went wrong, go back to the
     # rowfilter page
     if workflow.nrows == 0:
-        return redirect('dataops:rowfilter')
+        return redirect('dataops:list')
+
+    # Get the pair key,value to fetch the row from the table
+    update_key = request.GET.get('update_key', None)
+    update_val = request.GET.get('update_val', None)
+
+    if not update_key or not update_val:
+        # Malformed request
+        return render(request, 'error.html',
+                      {'message': 'Unable to update matrix row'})
+
+    # Get the rows from the matrix
+    rows = pandas_db.execute_select_on_table(workflow.id,
+                                             [update_key],
+                                             [update_val])
+
+    # This method can only be invoked through a POST operation
+    if request.method == 'GET':
+        # Get the row form and render the page
+        row_form = RowForm(None,
+                           workflow=workflow,
+                           initial_values=list(rows[0]))
+
+        return render(request,
+                      'dataops/row_filter.html',
+                      {'workflow': workflow,
+                       'row_form': row_form,
+                       'cancel_url': reverse('matrix:display')})
+
+    # This is A POST request
 
     # Initialise the form
-    row_form = RowUpdateForm(request.POST,
-                             workflow=workflow)
+    row_form = RowForm(request.POST,
+                       workflow=workflow,
+                       initial_values=list(rows[0]))
 
     # If the form was not valid, something went wrong
     if not row_form.is_valid():
-        return redirect('dataops:rowfilter')
+        return redirect('dataops:rowupdate')
 
-    # Create the query to update thd row
-    querystring = []
-    queryfields = []
-    unique_names = json.loads(workflow.column_unique)
-    unique_name = None
+    # Create the query to update the row
+    set_fields = []
+    set_values = []
+    columns = workflow.get_columns()
+    unique_names = [c.name for c in columns if c.is_key]
     unique_field = None
-    for name, value in row_form.cleaned_data.items():
-        querystring.append(name + ' = %s')
-        queryfields.append(value)
+    unique_value = None
+    log_payload = []
+    for col in columns:
+        value = row_form.cleaned_data[col.name]
+        set_fields.append(col.name)
+        set_values.append(value)
+        log_payload.append((col.name, str(value)))
 
-        if not unique_name and name in unique_names:
-            unique_name = name
-            unique_field = value
+        if not unique_field and col.name in unique_names:
+            unique_field = col.name
+            unique_value = value
 
     # If there is no unique key, something went wrong.
-    if not unique_name:
+    if not unique_field:
         raise Exception('Unique key not found when updating row')
 
-    query = 'SET ' + ', '.join(querystring) + \
-            ' WHERE {0} = %s'.format(unique_name)
-    queryfields.append(unique_field)
+    pandas_db.update_row(workflow.id,
+                         set_fields,
+                         set_values,
+                         [unique_field],
+                         [unique_value])
 
-    panda_db.update_row(workflow.id, query, queryfields)
+    # Log the event
+    logs.ops.put(request.user,
+                 'matrixrow_update',
+                 workflow,
+                 {'id': workflow.id,
+                  'name': workflow.name,
+                  'new_values': log_payload})
 
-    return redirect('dataops:rowfilter')
+    return redirect('matrix:display')
+
+
+@user_passes_test(is_instructor)
+def row_create(request):
+    """
+    Receives a POST request to create a new row in the data matrix
+    :param request: Request object with all the data.
+    :return:
+    """
+
+    # If there is no workflow object, go back to the index
+    workflow = get_workflow(request)
+    if not workflow:
+        return redirect('workflow:index')
+
+    # If the workflow has no data, the operation should not be allowed
+    if workflow.nrows == 0:
+        return redirect('dataops:list')
+
+    # Create the form
+    form = RowForm(request.POST or None, workflow=workflow)
+
+    if request.method == 'POST':
+
+        # If the form is valid proceed with the operation
+        if form.is_valid():
+            # Create the query to update the row
+            columns = workflow.get_columns()
+            column_names = [c.name for c in columns]
+            row_vals = [form.cleaned_data[c.name] for c in columns]
+
+            # Load the existing df from the db
+            df = pandas_db.load_from_db(workflow.id)
+
+            # Perform the row addition in the DF first
+            # df2 = pd.DataFrame([[5, 6], [7, 8]], columns=list('AB'))
+            # df.append(df2, ignore_index=True)
+            new_row = pd.DataFrame([row_vals], columns=column_names)
+            df = df.append(new_row, ignore_index=True)
+
+            # Verify that the unique columns remain unique
+            for ucol in [c for c in columns if c.is_key]:
+                if not ops.is_unique_column(df[ucol.name]):
+                    form.add_error(
+                        ucol.name,
+                        'Value in column ' + ucol.name + ' is in another row.' +
+                        ' It must be different to maintain Key property'
+                    )
+                    return render(request,
+                                  'dataops/row_create.html',
+                                  {'workflow': workflow,
+                                   'form': form,
+                                   'cancel_url': reverse('matrix:display')})
+
+            # Restore the dataframe to the DB
+            ops.store_dataframe_in_db(df, workflow.id)
+
+            # Log the event
+            log_payload = zip(column_names, row_vals)
+            logs.ops.put(request.user,
+                         'matrixrow_create',
+                         workflow,
+                         {'id': workflow.id,
+                          'name': workflow.name,
+                          'new_values': log_payload})
+
+            # Done. Back to the matrix view
+            return redirect('matrix:display')
+
+    return render(request,
+                  'dataops/row_create.html',
+                  {'workflow': workflow,
+                   'form': form,
+                   'cancel_url': reverse('matrix:display')})

@@ -7,7 +7,7 @@
   </div>
   <div class="modal-body" style="text-align: left; border: solid 1px black;margin: 0 2ex 0 2ex;">
     {% if log_type == 'workflow_create' or log_type == 'workflow_update' or log_type == 'workflow_delete' or log_type == 'workflow_data_flush' %}
-      <p><strong>Workflow id: {{ id }}</p>
+      <p><strong>Workflow id:</strong> {{ id }}</p>
       <p>Workflow name: {{ name }}</p>
     {% elif log_type == 'workflow_data_upload' or log_type == 'workflow_data_merge' %}
       <p><strong>Workflow id:</strong> {{ id }}</p>
@@ -16,6 +16,7 @@
       <p><strong>Rows uploaded:</strong> {{ num_cols }}</p>
       <p><strong>Column names:</strong> {{ column_names|join:", " }}</p>
       <p><strong>Column types:</strong> {{ column_types|join:", " }}</p>
+      <p><strong>Column unique:</strong> {{ column_unique|join:", " }}</p>
     {% elif log_type == 'workflow_data_failedmerge' %}
       <p><strong>Workflow id:</strong> {{ id }}</p>
       <p><strong>Workflow name:</strong> {{ name }}</p>
@@ -23,7 +24,7 @@
       <p><strong>Rows uploaded:</strong> {{ num_cols }}</p>
       <p><strong>Column names:</strong> {{ column_names|join:", " }}</p>
       <p><strong>Column types:</strong> {{ column_types|join:", " }}</p>
-      <p><strong>Message: {{ error_msg }}</p>
+      <p><strong>Message:</strong> {{ error_msg }}</p>
     {% elif log_type == 'workflow_attribute_create' %}
       <p><strong>Workflow id:</strong> {{ id }}</p>
       <p><strong>Workflow name:</strong> {{ name }}</p>
@@ -46,14 +47,26 @@
       <p><strong>Action name:</strong> {{ name }}</p>
       <p><strong>Attached to workflow (name, id):</strong> ({{ workflow_name }},
         {{ workflow_id }})</p>
-    {% elif log_type == 'action_email_sent' or log_type == 'action_email_notify' %}
+      <p><strong>Content:</strong> {{ content }}</p>
+    {% elif log_type == 'action_email_sent' %}
+      <p><strong>Action:</strong> {{ action }}</p>
+      <p><strong>From:</strong> {{ from_email }}</p>
+      <p><strong>Subject:</strong> {{ subject }}</p>
+      <p><strong>Number of messages:</strong> {{ num_messages }}</p>
+      <p><strong>Sent on:</strong> {{ email_sent_datetime }}</p>
+      <p><strong>Used filter?</strong> {{ filter_present }}</p>
+    {% elif log_type == 'action_email_notify' %}
+      <p><strong>To:</strong> {{ user.email }}</p>
+      <p><strong>Workflow:</strong> {{ workflow.name }}</p>
+    {% elif log_type == 'action_email_notify' %}
       <p><strong>From:</strong> {{ from_email }}</p>
       <p><strong>To:</strong> {{ to_email|join:", " }}</p>
       <p><strong>Subject:</strong> {{ subject }}</p>
       <p><strong>Body:</strong></p>
       <div style="border: solid 1px black;">{{ body|safe }}</div>
     {% elif log_type == 'action_served_execute' %}
-      <p><strong>Not implemented yet</strong></p>
+      <p><strong>Workflow id,name:</strong> {{ workflow.id}}, {{ workflow.name}}</p>
+      <p><strong>Action id,name:</strong> {{ action_id }}, {{ action_name}}</p>
     {% elif log_type == 'condition_create' or log_type == 'condition_update' or log_type == 'condition_delete' or log_type == 'filter_create' or log_type == 'filter_update' or log_type == 'filter_delete'%}
       <p><strong>Condition id:</strong> {{ id }}</p>
       <p><strong>Condition name:</strong> {{ name }}</p>
@@ -61,6 +74,32 @@
         <p><strong>Selected rows:</strong> {{ selected_rows }}</p>
       {% endif %}
       <p><strong>Formula:</strong> {{ formula }}</p>
+    {% elif log_type == 'matrixrow_update' or log_type == 'matrixrow_create' %}
+      <p><strong>Workflow id:</strong> {{ id }}</p>
+      <p><strong>Workflow name:</strong> {{ name }}</p>
+      <p><strong>New values</strong>:</p>
+      <ul>
+        {% for item in new_values %}
+          <li>{{ item.0 }}: {{ item.1 }}</li>
+        {% endfor %}
+      </ul>
+    {% elif log_type == 'column_add' %}
+      <p><strong>Workflow id</strong>: {{ id }}</p>
+      <p><strong>Workflow name:</strong> {{ name }}</p>
+      <p><strong>Column added:</strong> {{ column_name }}</p>
+      <p><strong>Column type:</strong> {{ column_type }}</p>
+    {% elif log_type == 'column_rename' %}
+      <p><strong>Workflow id</strong>: {{ id }}</p>
+      <p><strong>Workflow name:</strong> {{ name }}</p>
+      <p><strong>Column renamed: </strong> from {{ column_name }} to {{ new_name }}</p>
+    {% elif log_type == 'column_delete' %}
+      <p><strong>Workflow id</strong>: {{ id }}</p>
+      <p><strong>Workflow name:</strong> {{ name }}</p>
+      <p><strong>Column deleted:</strong> {{ column_name }}</p>
+    {% elif log_type == 'action_serve_toggled' %}
+      <p><strong>Action id</strong>: {{ id }}</p>
+      <p><strong>Action name:</strong> {{ name }}</p>
+      <p><strong>URL available:</strong> {{ serve_enabled }}</p>
     {% endif %}
   </div>
   <div class="modal-footer" style="text-align: center;">

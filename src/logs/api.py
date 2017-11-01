@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 
-from ontask.permissions import IsOwner
+from ontask.permissions import IsOwner, UserIsInstructor
 from .models import Log
 from .serializers import LogSerializer
 
 
-class LogAPIList(generics.ListAPIView):
+class LogAPIList(UserIsInstructor, generics.ListAPIView):
     """
     Get a list of the available workflows and allow creation
     """
@@ -25,4 +25,3 @@ class LogAPIList(generics.ListAPIView):
             return Log.objects.all()
 
         return Log.objects.filter(user=self.request.user)
-

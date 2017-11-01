@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 
-from ontask.permissions import IsOwner
+from ontask.permissions import IsOwner, UserIsInstructor
 from .models import Workflow
 from .serializers import WorkflowSerializer
 
 
-class WorkflowAPIListCreate(generics.ListCreateAPIView):
+class WorkflowAPIListCreate(UserIsInstructor, generics.ListCreateAPIView):
     """
     Get a list of the available workflows and allow creation
     """
@@ -34,8 +34,8 @@ class WorkflowAPIListCreate(generics.ListCreateAPIView):
             serializer.save(user=self.request.user)
 
 
-class WorkflowAPIRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-
+class WorkflowAPIRetrieveUpdateDestroy(UserIsInstructor,
+                                       generics.RetrieveUpdateDestroyAPIView):
     queryset = None  # Needs to be overwritten
     serializer_class = WorkflowSerializer
     permission_classes = (IsAuthenticated, DjangoModelPermissions, IsOwner)

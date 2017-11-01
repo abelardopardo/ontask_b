@@ -5,35 +5,56 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 
+{% block extrahead %}
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+{% endblock extrahead %}
+
 {% block scripts %}
   <script src="{% static 'logs/js/logs.js' %}"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+        $('#log-table').DataTable({
+          processing: true,
+          serverSide: true,
+          ajax: {
+            url: "{% url 'logs:show_ss' %}",
+            type: 'POST',
+          },
+          ordering: false,
+          language: {
+              "emptyTable": "No logs recorded for this workflow."
+          },
+          searchDelay: 500,
+        });
+    });
+  </script>
 {% endblock %}
 
 {% block title %}{{ block.super }}Logs{% endblock %}
 
 {% block container %}
 <div align="center" class="container">
-  <h1 class="page-header">Logs for workflow {{ workflow.name }}</h1>
+  <h1 class="page-header">Logs</h1>
 
   <div class="container" id="csv-download">
-    <a href="{% url 'logs:export' workflow.id %}" download
-            class="btn btn-primary btn-sm js-logs-download">
-      <span class="glyphicon glyphicon-download-alt"></span> CSV Download
-    </a>
+    <p>
+      <a href="{% url 'logs:export' workflow.id %}" download
+              class="btn btn-primary btn-sm js-logs-download">
+        <span class="glyphicon glyphicon-download-alt"></span> CSV Download
+      </a>
+    </p>
   </div>
-  {% if filter %}
-    <form action="" method="get">
-      {% crispy filter.form  %}
-      <button type="submit" class="btn btn-primary">
-        <span class="glyphicon glyphicon-filter"> Filter</span>
-      </button>
-    </form>
-  {% endif %}
-  {% if table %}
-    {% render_table table %}
-  {% else %}
-    <p style="text-align: center;"><strong>{{ error_msg }}</strong></p>
-  {% endif %}
+  <table class="table display dataTable no-footer" id="log-table">
+    <thead>
+      <tr>
+        {% for cname in column_names %}
+          <th>{{ cname }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+  </table>
 
   <div class="modal fade" id="modal-item">
     <div class="modal-dialog">

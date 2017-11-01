@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block scripts %}
+  <script>location.href="{% url 'workflow:export' %}?id={{ id }}";</script>
+{% endblock scripts %}
+
+{% block title %}Workflow export done{% endblock %}
+
+{% block container %}
+  <div class="container" style="margin-top:50px;">
+    <h1 class="page-header text-center">Workflow export</h1>
+
+    <p class="text-center">Workflow export done!</p>
+  </div>
+{% endblock container %}

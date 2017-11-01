@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 
-import json
 from .models import Log
 
 log_types = {
@@ -15,15 +14,22 @@ log_types = {
     'workflow_attribute_create': 'New attribute in workflow',
     'workflow_attribute_update': 'Attributes updated in workflow',
     'workflow_attribute_delete': 'Attribute deleted',
+    'column_add': 'Column added',
+    'column_rename': 'Column renamed',
+    'column_delete': 'Column deleted',
     'action_create': 'Action created',
     'action_update': 'Action updated',
     'action_delete': 'Action deleted',
     'action_email_sent': 'Emails sent',
     'action_email_notify': 'Notification email sent',
+    'action_email_read': 'Email read',
+    'action_serve_toggled': 'Action URL toggled',
     'action_served_execute': 'Action served',
     'condition_create': 'Condition created',
     'condition_update': 'Condition updated',
     'condition_delete': 'Condition deleted',
+    'matrixrow_update': 'Matrix row updated',
+    'matrixrow_create': 'Matrix row created',
     'filter_create': 'Filter created',
     'filter_update': 'Filter updated',
     'filter_delete': 'Filter deleted',
@@ -31,7 +37,6 @@ log_types = {
 
 
 def put(user, name, workflow, payload):
-
     if name not in log_types.keys():
         raise Exception('Event', name, 'not allowed.')
 
@@ -39,5 +44,5 @@ def put(user, name, workflow, payload):
     event.user = user
     event.name = name
     event.workflow = workflow
-    event.payload = json.dumps(payload)
+    event.set_payload(payload)
     event.save()

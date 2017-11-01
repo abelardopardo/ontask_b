@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 
 from django.conf import settings
 from django.db import models
@@ -41,8 +41,6 @@ NOTIFICATION_SUBJECT = getattr(settings,
 NOTIFICATION_SENDER = getattr(settings,
                               'EMAIL_ACTION_NOTIFICATION_SENDER',
                               'ontask@ontasklearning.org')
-
-PIXEL_URL = getattr(settings, 'EMAIL_ACTION_PIXEL_URL', 'site/img/p.png')
 
 if 'siteprefs' in settings.INSTALLED_APPS:
     # Respect those users who doesn't have siteprefs installed.

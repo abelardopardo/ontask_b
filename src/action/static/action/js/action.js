@@ -4,18 +4,21 @@ var loadConditionForm = function () {
       url: btn.attr("data-url"),
       type: 'get',
       dataType: 'json',
-      data: {"dst": btn.attr("data-dst")},
+      data: {'action_content': $("#id_content").summernote('code')},
       beforeSend: function() {
         $("#modal-item").modal("show");
       },
       success: function(data) {
         $("#modal-item .modal-content").html(data.html_form);
-        $('input#id_formula').hide();
-        id_formula_value = $('input#id_formula').val();
-        if (id_formula_value != "") {
-          options['rules'] = JSON.parse(id_formula_value);
+        $('#id_formula').hide();
+        id_formula_value = $('#id_formula').val();
+        if (id_formula_value != "null" && id_formula_value != "{}") {
+          qbuilder_options['rules'] = JSON.parse(id_formula_value);
         }
-        $('#builder').queryBuilder(options);
+        $('#builder').queryBuilder(qbuilder_options);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        location.reload();
       }
     });
 }
@@ -27,32 +30,29 @@ var saveConditionForm = function () {
       return false;
     }
     f_text = JSON.stringify(formula, undefined, 2);
-    $('input#id_formula').val(f_text);
-    payload = form.serialize();
+    $('#id_formula').val(f_text);
+    // $('#id_formula').val(formula);
     $.ajax({
       url: form.attr("action"),
-      data: payload,
+      data: form.serialize(),
       type: form.attr("method"),
       dataType: 'json',
       success: function (data) {
         if (data.form_is_valid) {
-          if (data.dst == 'refresh') {
-            $("#item-table tbody").html(data.html_item_list);
-            $("#modal-item").modal("hide");
-          }
-          else {
-            location.href = data.html_redirect;
-          }
+          location.href = data.html_redirect;
         }
         else {
           $("#modal-item .modal-content").html(data.html_form);
-          $('input#id_formula').hide();
-          id_formula_value = $('input#id_formula').val();
-          if (id_formula_value != "") {
-            options['rules'] = JSON.parse(id_formula_value);
+          $('#id_formula').hide();
+          id_formula_value = $('#id_formula').val();
+          if (id_formula_value != "null" && id_formula_value != {}) {
+            qbuilder_options['rules'] = JSON.parse(id_formula_value);
           }
-          $('#builder').queryBuilder(options);
+          $('#builder').queryBuilder(qbuilder_options);
         }
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        location.reload();
       }
     });
     return false;
@@ -60,9 +60,15 @@ var saveConditionForm = function () {
 
 var insertConditionInContent = function() {
   var btn = $(this);
+  var range = $("#id_content").summernote('createRange');
+  condition_text = 'YOUR TEXT HERE';
+  range_text = range.toString();
+  if (range_text != '') {
+    condition_text = range_text;
+  }
   insert_text = "{% if " + btn.attr('data-name') +
-      " %}YOUR TEXT HERE{% endif %}";
-  tinyMCE.activeEditor.execCommand('mceInsertContent', false, insert_text);
+      " %}" + condition_text + "{% endif %}";
+  $('#id_content').summernote('editor.insertText', insert_text);
 };
 
 var insertAttributeInContent = function() {
@@ -71,8 +77,7 @@ var insertAttributeInContent = function() {
     return;
   }
   insert_text = "{{ " + val + " }}";
-  tinyMCE.activeEditor.execCommand('mceInsertContent', false, insert_text);
-  $(this).val("");
+  $('#id_content').summernote('editor.insertText', insert_text);
 }
 
 $(function () {
@@ -81,7 +86,7 @@ $(function () {
   $("#modal-item").on("submit", ".js-action-create-form", saveForm);
 
   // Update Action
-  // $("#action-table").on("click", ".js-update-action", loadForm);
+  $("#item-table").on("click", ".js-action-update", loadForm);
   $("#modal-item").on("submit", ".js-action-update-form", saveForm);
 
   // Delete Action
@@ -120,9 +125,35 @@ $(function () {
   $("#attribute-names").on("change",
                            "#select-attribute-name",
                            insertAttributeInContent);
+  $("#attribute-names").on("change",
+                           "#select-column-name",
+                           insertAttributeInContent);
 
   // Preview
   $("#html-editor").on("click", ".js-action-preview", loadForm);
   $(".modal-content").on("click", ".js-action-preview-nxt", loadForm);
   $(".modal-content").on("click", ".js-action-preview-prv", loadForm);
+
+  // Show URL
+  $("#item-table").on("click", ".js-action-showurl", loadForm);
 });
+
+$(document).ready(function() {
+    if (document.getElementById("item-table") != null) {
+        // Required for DataTables
+        $('#item-table').DataTable({
+            "language": {
+                "emptyTable": "There are no actions for this workflow."
+            },
+            "columnDefs": [
+                {"orderable": false, "targets": 3},
+                {"searchable": false, "targets": 3},
+            ],
+        });
+    }
+    if (document.getElementById("id_content") != null) {
+      initSummernote();
+    }
+});
+
+

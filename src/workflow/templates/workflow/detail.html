@@ -1,69 +1,52 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load django_tables2 %}
 {% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block extrahead %}
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+{% endblock extrahead %}
 
 {% block scripts %}
   <script src="{% static 'workflow/js/workflow.js' %}"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 {% endblock %}
 
 {% block title %}{{ block.super }}{{ workflow.name }}{% endblock %}
 
 {% block container %}
-<div align="center" class="container">
+<div align="center" class="container-fluid">
   <h1 class="page-header">Workflow Details</h1>
 
-  <div style="display: inline-block;" id="workflow-table">
-    {% include 'workflow/includes/workflow_detail_buttons.html' %}
-    <p>Name: {{ workflow.name }}</p>
-    <p class="help-block">Description: {{ workflow.description_text }}</p>
-    <p class="help-block">Created: {{ workflow.created }}</p>
-    {% if table_info %}
-      <p class="help-block">{{ table_info.num_rows }} rows, {{ table_info.num_cols }} columns</p>
+  {% if workflow %}
+    <div style="display: inline-block;" id="workflow-table">
+      {% include 'workflow/includes/workflow_detail_buttons.html' %}
+      <p>Name: {{ workflow.name }}</p>
+      <p class="help-block">Description: {{ workflow.description_text }}</p>
+      <p class="help-block">Last modified: {{ workflow.modified }}</p>
+      {% if table_info %}
+        <p class="help-block">{{ table_info.num_rows }} rows, {{ table_info.num_cols }} columns (<mark>{{ num_key_columns }} Key columns</mark>)</p>
+        {% render_table table_info.table_data %}
+      {% else %}
+        <p>The workflow does not have data.</p>
+        <p>Go to <a href="{% url 'dataops:list' %}">DataOps</a> to upload data</p>
+      {% endif %}
+      {% include 'workflow/includes/workflow_detail_buttons.html' %}
+    </div>
 
-      <table class="table table-bordered" id="workflow-detail">
-        <thead>
-          <tr>
-            <th class="text-center">#</th>
-            <th class="text-center">Colum </th>
-            <th class="text-center">Type</th>
-            <th class="text-center">Key?</th>
-            <th class="text-center">Operations</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in table_info.column_info %}
-            <tr>
-              <td class="text-center">{{ forloop.counter }}</td>
-              <td class="text-center">{{ item.0 }}</td>
-              <td class="text-center">{{ item.1 }}</td>
-              <td class="text-center">{% if item.2 %}Yes{% endif %}</td>
-              <td>
-                <!--
-                <button type="button" class="btn btn-sm btn-danger">
-                  <span class="glyphicon glyphicon-remove"></span>
-                </button> -->
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-      <p class="label-warning">The workflow does not have any data.</p>
-      <p>Go to <a href="{% url 'dataops:list' %}">DataOps</a> to upload data</p>
-    {% endif %}
-    {% include 'workflow/includes/workflow_detail_buttons.html' %}
-  </div>
-
-  <div class="modal fade" id="modal-item">
-    <div class="modal-dialog">
-      <div class="modal-content">
+    <div class="modal fade" id="modal-item">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
       </div>
     </div>
-  </div>
-
+  {% else %}
+    Go to <a href="{% url 'workflow:index' %}">your list of workflows</a>
+  {% endif %}
 </div>
-
 {% endblock container %}
 
 

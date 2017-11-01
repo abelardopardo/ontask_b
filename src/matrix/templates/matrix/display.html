@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block extrahead %}
+ {% comment %}
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+  {% endcomment %}
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+{% endblock extrahead %}
+
+{% block scripts %}
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script src="{% static 'matrix/js/matrix.js' %}"></script>
+  <script type="text/javascript">
+    if (document.getElementById("matrix-data") != null) {
+        // Required for DataTables
+        $(document).ready(function() {
+            $('#matrix-data').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                  url: "{% url 'matrix:display_ss' %}",
+                  type: 'POST',
+                },
+                columns: [
+                  {% for cname in column_names %}
+                    { "data": "{{ cname }}" },
+                  {% endfor %}
+                ],
+                "order": [1],
+                "columnDefs": [
+                    {"orderable": false, "targets": 0},
+                    {"searchable": false, "targets": 0},
+                ]
+            });
+        });
+    }
+  </script>
+{% endblock %}
+
+{% block title %}{{ block.super }}Matrix{% endblock %}
+
+{% block container %}
+  <div id="matrix-content" align="center" class="container-fluid"
+       style="padding-top:2ex;">
+    <a href="{% url 'dataops:rowcreate' %}" class="btn btn-sm btn-primary">
+      <span class="glyphicon glyphicon-plus"></span> Add row
+    </a>
+    <button type="button"
+            class="btn btn-primary btn-sm js-workflow-column-add"
+            data-url="{% url 'workflow:column_add' %}">
+      <span class="glyphicon glyphicon-plus"></span> New column
+    </button>
+    <table class="table display dataTable no-footer" id="matrix-data">
+      <thead>
+        <tr>
+          {% for cname in column_names %}
+            <th>{{ cname }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+    </table>
+
+    <div class="modal fade" id="modal-item">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock container %}

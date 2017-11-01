@@ -1,49 +1,34 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 
 import json
 
 from django import forms
-from django.template.defaultfilters import filesizeformat
-from django.utils.translation import ugettext_lazy as _
 
-import ontask
-from . import settings
+import ontask.ontask_prefs
+from ontask.forms import RestrictedFileField
 
 
-class RestrictedFileField(forms.FileField):
+# Form to select columns
+class SelectColumnForm(forms.Form):
+    def __init__(self, *args, **kargs):
+        self.unique_columns = kargs.pop('unique_columns')
 
-    def __init__(self, *args, **kwargs):
-        self.content_types = kwargs.pop('content_types', None)
-        self.max_upload_size = kwargs.pop('max_upload_size', None)
-        if not self.max_upload_size:
-            self.max_upload_size = str(settings.MAX_UPLOAD_SIZE)
-        super(RestrictedFileField, self).__init__(*args, **kwargs)
+        super(SelectColumnForm, self).__init__(*args, **kargs)
 
-    def clean(self, *args, **kwargs):
-        data = super(RestrictedFileField, self).clean(*args, **kwargs)
-        try:
-            if data.content_type in self.content_types:
-                if data.size > self.max_upload_size:
-                    raise forms.ValidationError(
-                        _('File size must be under %s. Current file size is'
-                          ' %s.')
-                        % (filesizeformat(self.max_upload_size),
-                           filesizeformat(data.size)))
-            else:
-                raise forms.ValidationError(
-                    _('File type (%s) is not supported.') % data.content_type)
-        except AttributeError:
-            pass
-
-        return data
+        # Create as many fields as the number of columns
+        for i in range(len(self.unique_columns)):
+            self.fields['upload_%s' % i] = forms.BooleanField(
+                label='',
+                required=False,
+            )
 
 
 # Step 1 of the CSV upload
 class UploadFileForm(forms.Form):
     file = RestrictedFileField(
-        max_upload_size=str(settings.MAX_UPLOAD_SIZE),
-        content_types=json.loads(str(settings.CONTENT_TYPES)),
+        max_upload_size=str(ontask.ontask_prefs.MAX_UPLOAD_SIZE),
+        content_types=json.loads(str(ontask.ontask_prefs.CONTENT_TYPES)),
         allow_empty_file=False,
         label="",
         help_text='File in CSV format (typically produced by a statistics'
@@ -51,20 +36,13 @@ class UploadFileForm(forms.Form):
 
 
 # Step 2 of the CSV upload
-class SelectColumnForm(forms.Form):
-
+class SelectColumnUploadForm(SelectColumnForm):
     def __init__(self, *args, **kargs):
 
-        self.unique_columns = kargs.pop('unique_columns')
+        super(SelectColumnUploadForm, self).__init__(*args, **kargs)
 
-        super(SelectColumnForm, self).__init__(*args, **kargs)
-
-        # Create as many fields as twice the number of columns
+        # Create as new_name fields
         for i in range(len(self.unique_columns)):
-            self.fields['upload_%s' % i] = forms.BooleanField(
-                label='',
-                required=False,
-            )
             self.fields['new_name_%s' % i] = forms.CharField(
                 label='',
                 strip=True,
@@ -72,7 +50,7 @@ class SelectColumnForm(forms.Form):
             )
 
     def clean(self):
-        cleaned_data = super(SelectColumnForm, self).clean()
+        cleaned_data = super(SelectColumnUploadForm, self).clean()
 
         upload_list = [cleaned_data.get('upload_%s' % i, False)
                        for i in range(len(self.unique_columns))]
@@ -101,15 +79,14 @@ class SelectColumnForm(forms.Form):
         if illegal_var_idx is not None:
             self.add_error(
                 'new_name_%s' % illegal_var_idx[0],
-                'Column names must start with letter or _ followed by letters,'
-                'numbers or _. '
+                'Column names must start with a letter followed by '
+                'letters, numbers or _.'
                 'Value {0} is not allowed'.format(illegal_var_idx[1])
             )
 
 
 # Step 3 of the CSV upload: select unique keys to merge
 class SelectUniqueKeysForm(forms.Form):
-
     how_merge_choices = [('left', 'only the keys in the matrix'),
                          ('right', 'only the new keys'),
                          ('outer', 'the union of the matrix and new keys '
@@ -150,7 +127,6 @@ class SelectUniqueKeysForm(forms.Form):
     # columns will be renamed."""
 
     def __init__(self, *args, **kargs):
-
         # Get the dst choices
         dst_choices = [(x, x) for x in kargs.pop('dst_keys')]
         dst_selected_key = kargs.pop('dst_selected_key')
@@ -216,105 +192,89 @@ class SelectUniqueKeysForm(forms.Form):
 
 # Form to allow value selection through unique keys in a workflow
 class RowFilterForm(forms.Form):
-
     def __init__(self, *args, **kargs):
 
         # Store the instance
         self.workflow = kargs.pop('workflow')
 
         # Get the unique keys names and types
-        col_names = json.loads(self.workflow.column_names)
-        col_types = json.loads(self.workflow.column_types)
-        col_unique =json.loads(self.workflow.column_unique)
+        columns = self.workflow.columns.all()
 
-        self.key_names = [n for x, n in enumerate(col_names) if col_unique[x]]
-        self.key_types = [n for x, n in enumerate(col_types) if col_unique[x]]
+        self.key_names = [x.name for x in columns if x.is_key]
+        self.key_types = [x.data_type for x in columns if x.is_key]
 
         super(RowFilterForm, self).__init__(*args, **kargs)
 
-        for name, type in zip(self.key_names, self.key_types):
-            if type == 'string':
+        for name, field_type in zip(self.key_names, self.key_types):
+            if field_type == 'string':
                 self.fields[name] = forms.CharField(initial='',
                                                     label=name,
                                                     required=False)
-            elif type == 'integer':
+            elif field_type == 'integer':
                 self.fields[name] = forms.IntegerField(label=name,
                                                        required=False)
-            elif type == 'double':
+            elif field_type == 'double':
                 self.fields[name] = forms.FloatField(label=name,
                                                      required=False)
-            elif type == 'boolean':
+            elif field_type == 'boolean':
                 self.fields[name] = forms.BooleanField(required=False,
                                                        label=name)
-            elif type == 'datetime':
+            elif field_type == 'datetime':
                 self.fields[name] = forms.DateTimeField(required=False,
                                                         label=name)
             else:
-                raise Exception('Unable to process datatype', type)
+                raise Exception('Unable to process datatype', field_type)
 
 
-# Form to allow value selection through unique keys in a workflow
-class RowUpdateForm(forms.Form):
-
+# Form to enter values in a row
+class RowForm(forms.Form):
     def __init__(self, *args, **kargs):
 
         # Store the instance
         self.workflow = kargs.pop('workflow', None)
-        self.row_initial_values = kargs.pop('initial_values', None)
+        self.initial_values = kargs.pop('initial_values', None)
 
-        super(RowUpdateForm, self).__init__(*args, **kargs)
+        super(RowForm, self).__init__(*args, **kargs)
 
         if not self.workflow:
             return
 
-        # Get the unique keys names and types
-        self.col_names = json.loads(self.workflow.column_names)
-        self.col_types = json.loads(self.workflow.column_types)
-        self.col_unique = json.loads(self.workflow.column_unique)
+        # Get the columns
+        self.columns = self.workflow.get_columns()
 
-        # Create the zipped list to handle 4 values per item. Let the unique
-        # keys on top.
-        four_vals = zip(self.col_names,
-                        self.col_types,
-                        self.row_initial_values,
-                        self.col_unique)
-        for name, type, initial, unique in sorted(four_vals,
-                                                  key=lambda x: x[3],
-                                                  reverse=True):
-            if type == 'string':
-                self.fields[name] = forms.CharField(initial=initial,
-                                                    label=name,
-                                                    required=False)
-            elif type == 'integer':
-                self.fields[name] = forms.IntegerField(initial=initial,
-                                                       label=name,
-                                                       required=False)
-            elif type == 'double':
-                self.fields[name] = forms.FloatField(initial=initial,
-                                                     label=name,
-                                                     required=False)
-            elif type == 'boolean':
-                self.fields[name] = forms.BooleanField(initial=initial,
-                                                       required=False,
-                                                       label=name)
-            elif type == 'datetime':
-                self.fields[name] = forms.DateTimeField(initial=initial,
-                                                        required=False,
-                                                        label=name)
+        # If no initial values have been given, replicate a list of Nones
+        if not self.initial_values:
+            self.initial_values = [None] * len(self.columns)
+
+        for idx, column in enumerate(self.columns):
+            if column.data_type == 'string':
+                self.fields[column.name] = forms.CharField(
+                    initial=self.initial_values[idx],
+                    label=column.name,
+                    required=False)
+            elif column.data_type == 'integer':
+                self.fields[column.name] = forms.IntegerField(
+                    initial=self.initial_values[idx],
+                    label=column.name,
+                    required=False)
+            elif column.data_type == 'double':
+                self.fields[column.name] = forms.FloatField(
+                    initial=self.initial_values[idx],
+                    label=column.name,
+                    required=False)
+            elif column.data_type == 'boolean':
+                self.fields[column.name] = forms.BooleanField(
+                    initial=self.initial_values[idx],
+                    required=False,
+                    label=column.name)
+            elif column.data_type == 'datetime':
+                self.fields[column.name] = forms.DateTimeField(
+                    initial=self.initial_values[idx],
+                    required=False,
+                    label=column.name)
             else:
-                raise Exception('Unable to process datatype', type)
+                raise Exception('Unable to process datatype',
+                                column.data_type)
 
-    # def clean(self):
-    #     data = super(RowUpdateForm, self).clean()
-    #
-    #     # Check that primary keys were not modified
-    #     changed_keys = [n for x, n in enumerate(self.col_names)
-    #                     if self.fields[n].has_changed() and self.col_unique[x]]
-    #
-    #     if changed_keys != []:
-    #         raise forms.ValidationError(
-    #             'Unique column is not allowed to be modified'
-    #         )
-    #
-    #     return data
-
+            if column.is_key and self.initial_values[idx]:
+                self.fields[column.name].widget.attrs['readonly'] = 'readonly'

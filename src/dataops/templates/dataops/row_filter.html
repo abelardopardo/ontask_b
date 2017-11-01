@@ -17,30 +17,45 @@
 
   <p>Workflow {{ workflow.name }}</p>
   {% if form %}
-    <div class="container">
-      <form action="{% url 'dataops:rowfilter' %}" method="post">
+    <div class="container" style="margin-bottom: 2ex;">
+      <form action="" method="post">
         {% csrf_token %}
         {{ form|crispy }}
         <button type="submit" name="submit" value="submit"
                 class="btn btn-primary">
-          <span class="glyphicon glyphicon-search"> Search</span>
+          <span class="glyphicon glyphicon-search"></span> Search
         </button>
       </form>
     </div>
-  {% else %}
-    <p><strong>No data available for this workflow</strong></p>
   {% endif %}
 
-  {% if form and row_form %}
+  {% if row_form %}
     <div class="container">
-      <form action="{% url 'dataops:rowfilter' %}" method="post">
+      <form action="" method="post">
         {% csrf_token %}
-        {{ row_form|crispy }}
+        {% if cancel_url %}
+          <button type="button" class="btn btn-default"
+          onclick="location.href='{{ cancel_url }}'">Cancel</button>
+        {% endif %}
         <button type="submit" name="submit" value="update"
-                class="btn btn-primary">Update
+                class="btn btn-primary">
+          <span class="glyphicon glyphicon-ok"></span> Update
+        </button>
+        {{ row_form|crispy }}
+        {% if cancel_url %}
+          <button type="button" class="btn btn-default"
+          onclick="location.href='{{ cancel_url }}'">Cancel</button>
+        {% endif %}
+        <button type="submit" name="submit" value="update"
+                class="btn btn-primary">
+          <span class="glyphicon glyphicon-ok"></span> Update
         </button>
       </form>
     </div>
+  {% endif %}
+
+  {% if not form and not row_form %}
+    <p><strong>No data available for this workflow</strong></p>
   {% endif %}
 </div>
 {% endblock container %}

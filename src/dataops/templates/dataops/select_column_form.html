@@ -22,7 +22,7 @@
           <th class="text-center">Is Unique</th>
           <th class="text-center">
             Load<br/>
-            <input type="checkbox" id="checkAll"></input>
+            <input type="checkbox" id="checkAll"/>
           </th>
           <th class="text-center">Name</th>
           <th class="text-center">Rename</th>
@@ -42,10 +42,10 @@
                </div>
             </td>
             <td class="text-center" style="vertical-align: middle;{% if item.1 %}background-color: #c4e3f3 !important;{% endif %}">{{ item.2 }}</td>
-            <td class="text-center"style="vertical-align: middle;{% if item.1 %}background-color: #c4e3f3 !important;{% endif %}">
+            <td class="text-center" style="vertical-align: middle;{% if item.1 %}background-color: #c4e3f3 !important;{% endif %}">
               <input type="text" class="form-control"
                      id="new_name_{{ forloop.counter }}"
-                     value="{{ item.2 }}">
+                     value="{{ item.2 }}"/>
             </td>
           </tr>
         {% endfor %}

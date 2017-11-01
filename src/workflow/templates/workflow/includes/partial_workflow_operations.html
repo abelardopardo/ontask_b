@@ -1,12 +1,8 @@
-<button type="button"
-        class="btn btn-primary btn-sm js-workflow-update"
-        data-url="{% url 'workflow:update' id %}"
-        data-dst="refresh" style="margin-bottom:1ex;">
-  <span class="glyphicon glyphicon-pencil"></span> Rename
-</button>
+<a href="{% url 'workflow:detail' id %}"
+        class="btn btn-primary btn-sm align-middle">
+  <span class="glyphicon glyphicon-folder-open"></span> Open</a>
 <button type="button"
         class="btn btn-danger btn-sm js-workflow-delete"
-        data-url="{% url 'workflow:delete' id %}"
-        data-dst="refresh" style="margin-bottom:1ex;">
-<span class="glyphicon glyphicon-trash"></span> Delete
+        data-url="{% url 'workflow:delete' id %}">
+  <span class="glyphicon glyphicon-trash"></span>
 </button>

@@ -5,26 +5,36 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 
+{% block extrahead %}
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+{% endblock extrahead %}
+
 {% block scripts %}
   <script src="{% static 'action/js/action.js' %}"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 {% endblock %}
 
-{% block title %}{{ block.super }}Your Actions{% endblock %}
+{% block title %}{{ block.super }}Actions{% endblock %}
 
 {% block container %}
 <div align="center" class="container">
-  <h1 class="page-header">Actions for workflow {{ request.session.ontask_workflow_name }}</h1>
+  {% if table %}
+    <h1 class="page-header">Actions</h1>
+  {% endif %}
 
   <p>
     <button type="button" class="btn btn-primary js-create-action"
             data-url="{% url 'action:create' %}"
-            data-dst="refresh" data-toggle="tooltip" title="Add a new action">
+            data-toggle="tooltip" title="Add a new action">
       <span class="glyphicon glyphicon-plus"></span>
         New Action
     </button>
   </p>
 
-  {% render_table table %}
+  {% if table %}
+    {% render_table table %}
+  {% endif %}
 
   <div class="modal fade" id="modal-item">
     <div class="modal-dialog">

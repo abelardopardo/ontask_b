@@ -1,27 +1,27 @@
-<div class="container-fluid" id="condition-set" style="padding: 1ex;">
-  <h4 class="text-center">Conditions</h4>
-  <div style="padding:1ex;">
-    <button type="button" class="btn btn-primary js-condition-create{% if not has_data %} disabled{% endif %}"
+<div class="container-fluid" id="condition-set" style="padding-bottom: 0.5ex;">
+  <h4 class="text-center"
+     style="border-bottom:solid 1px black"><strong>Conditions</strong>
+    <button type="button" class="btn btn-sm btn-primary js-condition-create{% if not has_data %} disabled{% endif %}"
             data-url="{% url 'action:create_condition' action.id %}"
-            data-dst="refresh">
-      <span class="glyphicon glyphicon-plus"></span> New Condition</button>
-  </div>
+            style="margin-bottom: 0.5ex;">
+      <span class="glyphicon glyphicon-plus"></span> New</button></h4>
   <div class="conditions">
     {% for condition in conditions %}
       <div class="condition-btn">
         <button type="button" class="btn btn-primary btn-sm js-condition-edit"
-                data-url="{% url 'action:edit_condition' condition.id %}"
-                data-dst="refresh">Condition {{ condition.name }}</button>
+                data-url="{% url 'action:edit_condition' condition.id %}">
+          {{ condition.name }}</button>
         <button type="button" class="btn btn-warning btn-sm js-condition-insert"
                 data-name="{{ condition.name }}">
           <span class="glyphicon glyphicon-arrow-down"></span>
         </button>
         <button type="button" class="btn btn-danger btn-sm js-condition-delete"
-                data-url="{% url 'action:delete_condition' condition.id %}"
-                data-dst="refresh">
+                data-url="{% url 'action:delete_condition' condition.id %}">
           <span class="glyphicon glyphicon-trash"></span>
         </button>
       </div>
+    {% empty %}
+      <p class="text-center">There are no conditions yet</p>
     {% endfor %}
   </div>
 </div>

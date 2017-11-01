@@ -1,16 +1,17 @@
 var loadForm = function () {
     var btn = $(this);
-    console.log('loading form: ' + btn.attr("data-url"));
     $.ajax({
       url: btn.attr("data-url"),
       type: 'get',
       dataType: 'json',
-      data: {"dst": btn.attr("data-dst")},
       beforeSend: function() {
         $("#modal-item").modal("show");
       },
       success: function(data) {
         $("#modal-item .modal-content").html(data.html_form);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        location.reload();
       }
     });
 
@@ -24,18 +25,14 @@ var saveForm = function () {
       dataType: 'json',
       success: function (data) {
         if (data.form_is_valid) {
-          if (data.dst == 'refresh') {
-            /* $("#item-table tbody").html(data.html_item_list); */
-            $("#item-table").html(data.html_item_list);
-            $("#modal-item").modal("hide");
-          }
-          else {
-            location.href = data.html_redirect;
-          }
+          location.href = data.html_redirect;
         }
         else {
           $("#modal-item .modal-content").html(data.html_form);
         }
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        location.reload();
       }
     });
     return false;

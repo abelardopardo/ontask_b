@@ -1,19 +1,16 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 
 from django import forms
-
-from tinymce.widgets import TinyMCE
-
+from django_summernote.widgets import SummernoteInplaceWidget
 
 from .models import Action, Condition
 
 
 class ActionForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('workflow_user', None)
-        self.workflow = kwargs.pop('action_workflow', None)
+        self.user = kwargs.pop(str('workflow_user'), None)
+        self.workflow = kwargs.pop(str('action_workflow'), None)
         super(ActionForm, self).__init__(*args, **kwargs)
 
     class Meta:
@@ -22,12 +19,14 @@ class ActionForm(forms.ModelForm):
 
 
 class EditActionForm(forms.ModelForm):
-
-    # content = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 50}))
-
+    """
+    Main class to edit an action. The main element is the text editor (
+    currently using summernote).
+    """
     content = forms.CharField(
-        widget=TinyMCE(),
-        initial='{% comment %} Write your conditional text in here {% comment %}',
+        widget=SummernoteInplaceWidget(),
+        initial='{% comment %} Write your conditional ' +
+                'text in here {% comment %}',
         label='')
 
     class Meta:
@@ -35,14 +34,36 @@ class EditActionForm(forms.ModelForm):
         fields = ('content',)
 
 
-class ConditionForm(forms.ModelForm):
-
+class FilterForm(forms.ModelForm):
+    """
+    Form to read information about a filter. The required property of the
+    formula field is set to False because it is enforced in the server.
+    """
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('workflow_user', None)
-        super(ConditionForm, self).__init__(*args, **kwargs)
+        super(FilterForm, self).__init__(*args, **kwargs)
 
         # Required enforced in the server (not in the browser)
         self.fields['formula'].required = False
+
+    class Meta:
+        model = Condition
+        fields = ('name', 'description_text', 'formula')
+
+
+class ConditionForm(FilterForm):
+    """
+    Form to read information about a condition. The same as the filter but we
+    need to enforce that the name is a valid variable name
+    """
+
+    def __init__(self, *args, **kwargs):
+
+        super(ConditionForm, self).__init__(*args, **kwargs)
+
+        # Remember the condition name to perform content substitution
+        self.old_name = None,
+        if hasattr(self, 'instance'):
+            self.old_name = self.instance.name
 
     def clean(self):
         data = super(ConditionForm, self).clean()
@@ -54,15 +75,10 @@ class ConditionForm(forms.ModelForm):
             )
             return data
 
-        # if data['name'] in self.keys:
-        #     self.add_error(
-        #         'key',
-        #         'Name has to be different from the existing ones.')
-        #     return data
-        #
         return data
 
+
+class EnableURLForm(forms.ModelForm):
     class Meta:
-        model = Condition
-        fields = ('name', 'description_text', 'formula')
-        # widgets = {'formula': forms.HiddenInput()}
+        model = Action
+        fields = ('serve_enabled',)

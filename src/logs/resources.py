@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 
+from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponse
 from import_export import resources
 
+from ontask.permissions import is_instructor
 from .models import Log
 
 
@@ -13,6 +15,7 @@ class LogResource(resources.ModelResource):
         fields = ('id', 'created', 'name', 'payload',)
 
 
+@user_passes_test(is_instructor)
 def export(request, pk):
     """
 
@@ -25,10 +28,7 @@ def export(request, pk):
     log_resources = LogResource()
 
     # Select the dataset to dump
-    logs = Log.objects.filter(
-        user=request.user,
-        workflow__id=request.session.get('ontask_workflow_id', -1)
-    )
+    logs = Log.objects.filter(user=request.user, workflow__id=pk)
 
     if len(logs) == 0:
         # No records found!!

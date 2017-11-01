@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block scripts %}
+  <script src="{% static 'dataops/js/dataops.js' %}"></script>
+{% endblock %}
+
+{% block title %}{{ block.super }}Create row{% endblock %}
+
+{% block container %}
+<div align="center" class="container">
+  <h1 class="page-header">Update row</h1>
+
+  <p>Workflow {{ workflow.name }}</p>
+  <div class="container">
+    <form action="" method="post">
+      {% csrf_token %}
+      {% if cancel_url %}
+        <button type="button" class="btn btn-default"
+        onclick="location.href='{{ cancel_url }}'">Cancel</button>
+      {% endif %}
+      <button type="submit" name="submit" value="update"
+              class="btn btn-primary">
+        <span class="glyphicon glyphicon-ok"></span> Create
+      </button>
+      {{ form|crispy }}
+      {% if cancel_url %}
+        <button type="button" class="btn btn-default"
+        onclick="location.href='{{ cancel_url }}'">Cancel</button>
+      {% endif %}
+      <button type="submit" name="submit" value="update"
+              class="btn btn-primary">
+        <span class="glyphicon glyphicon-ok"></span> Create
+      </button>
+    </form>
+  </div>
+  {% if not form %}
+    <p><strong>No data available for this workflow</strong></p>
+  {% endif %}
+</div>
+{% endblock container %}

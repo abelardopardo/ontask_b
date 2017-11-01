@@ -1,6 +1,5 @@
 <form method="post" action="{% url 'action:delete' action.id %}" class="js-action-delete-form">
   {% csrf_token %}
-  <input type="hidden" name="dst" value="{{ dst }}"/>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
@@ -12,7 +11,8 @@
   </div>
   <div class="modal-footer" style="text-align: center;">
     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-    <button type="submit" class="btn btn-danger">Delete action</button>
+    <button type="submit" class="btn btn-danger">
+      <span class="glyphicon glyphicon-trash"></span> Delete action</button>
   </div>
 </form>
 

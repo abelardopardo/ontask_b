@@ -1,8 +1,23 @@
+<a href="{% url 'action:edit' id %}"
+        class="btn btn-primary btn-sm align-middle">
+  <span class="glyphicon glyphicon-folder-open"></span> Open</a>
+<button type="button"
+        class="btn btn-primary btn-sm js-action-update align-middle"
+        data-url="{% url 'action:update' id %}">
+    <span class="glyphicon glyphicon-pencil"></span> Rename
+</button>
+<button type="button"
+        class="btn btn-{% if serve_enabled %}success{% else %}danger{% endif %} btn-sm js-action-showurl"
+        data-url="{% url 'action:showurl' id %}"
+        data-toggle="tooltip" title="URL to access the personalised text">
+  <span class="glyphicon glyphicon-link"></span> URL ({% if serve_enabled %}On{% else %}Off{% endif %})
+</button>
 <a href="{% url 'email_action:index' id %}"
         class="btn btn-primary btn-sm">
-  <span class="glyphicon glyphicon-envelope"> Send email</span></a>
+  <span class="glyphicon glyphicon-envelope"></span> Send email</a>
 <button type="button"
         class="btn btn-danger btn-sm js-action-delete"
         data-url="{% url 'action:delete' id %}"
-        data-dst="refresh" data-toggle="tooltip" title="Delete">
-  <span class="glyphicon glyphicon-trash"></span> Delete</button>
+        data-toggle="tooltip" title="Delete">
+  <span class="glyphicon glyphicon-trash"></span> Delete
+</button>

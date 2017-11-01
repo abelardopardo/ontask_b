@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 
 from django.contrib import admin
 
-from .models import Workflow
+from .models import Workflow, Column
 
 
 class WorkflowAdmin(admin.ModelAdmin):
@@ -11,14 +11,23 @@ class WorkflowAdmin(admin.ModelAdmin):
                     'name',
                     'description_text',
                     'created',
+                    'modified',
                     'attributes',
                     'nrows',
                     'ncols',
-                    'column_names',
-                    'column_types',
-                    'column_unique',
                     'query_builder_ops',
-                    'data_frame_table_name')
+                    'data_frame_table_name',
+                    'session_key')
+
+
+class ColumnAdmin(admin.ModelAdmin):
+    list_display = ('id',
+                    'name',
+                    'data_type',
+                    'is_key',
+                    'categories',
+                    'workflow')
 
 
 admin.site.register(Workflow, WorkflowAdmin)
+admin.site.register(Column, ColumnAdmin)

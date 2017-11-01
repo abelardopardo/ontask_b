@@ -10,4 +10,11 @@ django-widget-tweaks
 django-formtools
 django-siteprefs
 pandas
-django-tinymce
+django-tables2
+django-summernote
+django-import-export
+django-filter
+djangorestframework
+markdown
+sqlalchemy
+validate_email

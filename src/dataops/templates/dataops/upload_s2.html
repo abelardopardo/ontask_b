@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block scripts %}
+  <script src="{% static 'dataops/js/dataops.js' %}"></script>
+{% endblock %}
+
+{% block title %}{{ block.super }}Upload/Merge CSV{% endblock %}
+
+{% block container %}
+<div align="center" class="container">
+  <h1 class="page-header">Step 2: Select Columns</h1>
+
+  <form method="POST" action="">
+    {% csrf_token %}
+    {% include 'dataops/includes/csvupload_buttons.html' %}
+    {% if form.errors %}
+      {% for field in form %}
+        {% for error in field.errors %}
+          <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+          </div>
+        {% endfor %}
+      {% endfor %}
+      {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+          <strong>{{ error|escape }}</strong>
+        </div>
+      {% endfor %}
+    {% endif %}
+    <table class="table table-bordered" id="workflow-table"
+           style="display: table-cell;">
+      <thead>
+        <tr>
+          <th class="text-center" style="vertical-align:middle;">Unique</th>
+          <th class="text-center" style="vertical-align:middle;">Type</th>
+          <th class="text-center" style="vertical-align:middle;">
+            Load<br/>
+            <input type="checkbox" id="checkAll"/>
+          </th>
+          <th class="text-center" style="vertical-align:middle;">Name</th>
+          <th class="text-center" style="vertical-align:middle;">Rename to</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in df_info %}
+          <tr {% if item.1 %}class="success"{% endif %}>
+            <td class="text-center"
+                style="vertical-align: middle;">
+              {% if item.1 %}YES{% endif %}
+            </td>
+
+            <td class="text-center"
+                style="vertical-align: middle;">{{ item.0 }}</td>
+
+            <td class="text-center" style="vertical-align: middle;">
+              <div class="checkbox">
+                <label><input type="checkbox"
+                              name="upload_{{ forloop.counter0 }}"
+                              value="on"
+                {% if item.4 %}checked{% endif %}></label>
+               </div>
+            </td>
+
+            <td class="text-center" style="vertical-align: middle;">{{ item.2 }}</td>
+
+            <td class="text-center" style="vertical-align: middle;">
+              <input type="text" class="form-control"
+                     name="new_name_{{ forloop.counter0 }}"
+                     value="{{ item.3 }}">
+            </td>
+
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% include 'dataops/includes/csvupload_buttons.html' %}
+  </form>
+</div>
+{% endblock container %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block scripts %}
+  <script src="{% static 'workflow/js/workflow.js' %}"></script>
+{% endblock %}
+
+{% block title %}{{ block.super }}Export Workflows{% endblock %}
+
+{% block container %}
+  <div align="center" class="container">
+    <h1 class="page-header">Export Workflow</h1>
+
+      <form action="{% url 'workflow:export_ask' %}" method="post"
+            enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-body">
+          <p>Workflow name: {{ name }}</p>
+          <p>Number of rows: {{ nrows }}</p>
+          <p>Number of columns: {{ ncols }}</p>
+          <p>Number of actions: {{ nactions }}</p>
+          <p>Total number of conditions: {{ nconditions }}´</p>
+          {{ form|crispy }}
+        </div>
+        <div class="modal-footer" style="text-align: center;">
+          <button type="button" class="btn btn-default"
+          onclick="location.href='{% url 'workflow:index' %}'">Cancel</button>
+          <button class="btn btn-primary btn-space"
+                  type="Submit" name="Submit" value="Submit">
+            <span class="glyphicon glyphicon-export"></span> Export</button>
+        </div>
+      </form>
+  </div>
+{% endblock %}
+
+
+
