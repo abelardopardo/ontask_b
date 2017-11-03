@@ -45,23 +45,6 @@ class MatrixOps(UserIsInstructor, APIView):
 
                 # Detect date/time columns
                 df = ops.detect_datetime_columns(df)
-
-                # Strip white space from all string columns and try to convert
-                # to datetime just in case
-                for x in list(df.columns):
-                    if df[x].dtype.name == 'object':
-                        # Column is a string!
-                        df[x] = df[x].str.strip()
-
-                        # Perform the datetime conversion. If something goes
-                        # wrong the exception is absorbed.
-                        try:
-                            series = pd.to_datetime(df[x],
-                                                    infer_datetime_format=True)
-                            # Datetime conversion worked! Update the data_frame
-                            df[x] = series
-                        except ValueError:
-                            pass
             except Exception:
                 # Something went wrong with the translation to dataframe
                 raise Http404
@@ -156,6 +139,10 @@ class MatrixMerge(UserIsInstructor, APIView):
                                    'does not contain a unique key.')
 
             right_on = serializer.validated_data['right_on']
+            if right_on not in list(src_df.columns):
+                raise APIException('column ' + right_on +
+                                   ' not found in data frame')
+
             if not ops.is_unique_column(src_df[right_on]):
                 raise APIException('column' + right_on +
                                    'does not contain a unique key.')
@@ -208,9 +195,9 @@ class MatrixMerge(UserIsInstructor, APIView):
             # Ready to perform the MERGE
             try:
                 ops.perform_dataframe_upload_merge(pk,
-                                                           dst_df,
-                                                           src_df,
-                                                           merge_info)
+                                                   dst_df,
+                                                   src_df,
+                                                   merge_info)
             except Exception:
                 raise APIException('Unable to perform merge operation')
 

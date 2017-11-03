@@ -1,23 +1,21 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
-import numpy as np
 import pandas as pd
 from django.conf import settings
 
 from action.models import Condition
 from dataops import formula_evaluation
-
 from dataops.pandas_db import (
     create_table_name,
     create_upload_table_name,
-    delete_upload_table,
     store_table,
     df_column_types_rename,
     load_table,
     get_table_data,
     is_matrix_in_db,
-    get_table_queryset)
+    get_table_queryset,
+    pandas_datatype_names)
 from workflow.models import Workflow, Column
 
 
@@ -58,7 +56,7 @@ def load_upload_from_db(pk):
 def store_table_in_db(data_frame, pk, table_name, temporary=False):
     """
     Update or create a table in the DB with the data in the data frame. It
-    also updates the fields column_names, column_types and column_unique
+    also updates the corresponding column information
 
     :param data_frame: Data frame to dump to DB
     :param pk: Corresponding primary key of the workflow
@@ -76,73 +74,68 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
     if settings.DEBUG:
         print('Storing table ', table_name)
 
-    # Get the workflow and the columns assigned to it
-    workflow = Workflow.objects.get(pk=pk)
-    columns = Column.objects.filter(workflow__id=pk)
+    # get column names and types
+    df_column_names = map(clean_column_name, list(data_frame.columns))
+    df_column_types = df_column_types_rename(data_frame)
 
-    # Manage the connection between columns in the DB and in the DF
-    if not columns:
-        # If there are no columns, automatically detect the unique ones
-        column_names = map(clean_column_name, list(data_frame.columns))
+    # if the data frame is temporary, the procedure is much simpler
+    if temporary:
+        # Get the if the columns have unique values per row
         column_unique = are_unique_columns(data_frame)
 
-        # Reorder the columns so that unique keys are at the top
-        new_col_order = [(a, b)
-                         for b, a in sorted(zip(column_unique, column_names),
-                                            key=lambda x: (-x[0], x[1]))]
+        # Store the table in the DB
+        store_table(data_frame, table_name)
 
-        # Get the new column names cleaned and ordered
-        column_names = [x for x, _ in new_col_order]
-        column_unique = [y for _, y in new_col_order]
-    else:
-        columns = workflow.columns.all()
-        column_names = [x.name for x in columns]
-        column_unique = [x.is_key for x in columns]
+        # Return a list with three list with information about the
+        # data frame that will be needed in the next steps
+        return [df_column_names, df_column_types, column_unique]
+
+    # We are modifying an existing DF
+
+    # Get the workflow and its columns
+    workflow = Workflow.objects.get(id=pk)
+    wf_columns = Column.objects.filter(workflow__id=pk)
+
+    # Loop over the columns in the data frame and reconcile the column info
+    # with the column objects attached to the WF
+    has_new_columns = False
+    for cname in df_column_names:
+        # See if this is a new column
+        wf_column = next((x for x in wf_columns if x.name == cname), None)
+        if not wf_column:
+            # This column is new
+            has_new_columns = True
+
+            # Create a valid name if needed
+            clean_name = clean_column_name(cname)
+            if clean_name != cname:
+                # Rename the column in the df
+                data_frame.rename(columns={cname, clean_name}, inplace=True)
+
+            Column.objects.create(
+                name=clean_name,
+                workflow=workflow,
+                data_type=pandas_datatype_names[
+                    data_frame[clean_name].dtype.name],
+                is_key=is_unique_column(data_frame[clean_name]))
+
+    # Get now the new set of columns with names
+    wf_column_names = Column.objects.filter(
+        workflow__id=pk).values_list('name', flat=True)
 
     # Reorder the columns in the data frame
-    data_frame = data_frame[column_names]
+    data_frame = data_frame[list(wf_column_names)]
 
     # Store the table in the DB
     store_table(data_frame, table_name)
 
-    # Get the column data types
-    column_types = df_column_types_rename(data_frame)
-
-    # Distinguish between a matrix that is about to be uploaded/merged and
-    # one that is already attached to a workflow.
-    if temporary:
-        # Return a list with three list with information about the
-        # data frame that will be needed in the next steps
-        return [column_names, column_types, column_unique]
-
-    # At this point, we are storing the regular data frame (not a temporary
-    # upload one)
-
-    # Update workflow fields and save
-    workflow.nrows = data_frame.shape[0]
-    workflow.ncols = data_frame.shape[1]
-    workflow.set_query_builder_ops()
-    workflow.data_frame_table_name = table_name
-    workflow.save()
-
-    # Loop over the columns in the data frame and make sure the info is
-    # consistent with the DB column objects
-    for idx, cname in enumerate(list(data_frame.columns)):
-        # Get the column object with the name, if it exists
-        cobject = next((x for x in columns if x.name == cname), None)
-
-        if cobject:
-            # Column exists, so update its content
-            cobject.data_type = column_types[idx]
-            cobject.is_key = column_unique[idx]
-            cobject.save()
-        else:
-            # Column does not exist, so create a new one
-            Column.objects.create(
-                name=column_names[idx],
-                workflow=workflow,
-                data_type=column_types[idx],
-                is_key=column_unique[idx])
+    if has_new_columns:
+        # Update workflow fields and save
+        workflow.nrows = data_frame.shape[0]
+        workflow.ncols = data_frame.shape[1]
+        workflow.set_query_builder_ops()
+        workflow.data_frame_table_name = table_name
+        workflow.save()
 
     return None
 
@@ -289,9 +282,6 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
 
     # Bring the data frame back to the database
     store_dataframe_in_db(new_df, pk)
-
-    # Nuke the temporary table
-    delete_upload_table(pk)
 
     return None  # Error message?
 

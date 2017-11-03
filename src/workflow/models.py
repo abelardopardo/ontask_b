@@ -190,7 +190,7 @@ class Column(models.Model):
         max_length=512,
         blank=False,
         null=False,
-        choices=[(x, x) for _, x in pandas_db.pandas_datatype_names],
+        choices=[(x, x) for _, x in pandas_db.pandas_datatype_names.items()],
         verbose_name='Type of data to store in the column')
 
     # Boolean stating if the column is a unique key

@@ -35,9 +35,10 @@ class WorkflowSerializer(serializers.ModelSerializer):
     def create(self, validated_data, **kwargs):
         attributes = validated_data['attributes'] or {}
         if not isinstance(attributes, dict):
-            raise APIException('Attributes must be a dictionary (str, str)')
+            raise APIException('Attributes must be a dictionary ' +
+                               ' of (string, string) pairs.')
 
-        if any([not isinstance(k, str) or not isinstance(v, str)
+        if any([not isinstance(k, basestring) or not isinstance(v, basestring)
                 for k, v in attributes.items()]):
             raise APIException('Attributes must be a dictionary (str, str)')
 
@@ -47,7 +48,7 @@ class WorkflowSerializer(serializers.ModelSerializer):
             description_text=validated_data['description_text'],
             nrows=0,
             ncols=0,
-            attributes=validated_data['attributes']
+            attributes=attributes
         )
 
         try:
@@ -59,7 +60,7 @@ class WorkflowSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Workflow
-        fields = ('name', 'description_text', 'attributes')
+        fields = ('id', 'name', 'description_text', 'attributes')
 
 
 class WorkflowExportSerializer(serializers.ModelSerializer):
@@ -74,6 +75,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             nrows=0,
             ncols=0,
             attributes=validated_data['attributes'],
+            query_builder_ops=validated_data['query_builder_ops']
         )
         workflow_obj.save()
 

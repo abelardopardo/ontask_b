@@ -152,6 +152,9 @@ def upload_s2(request):
                                        data_frame,
                                        upload_data)
 
+    # Nuke the temporary table
+    pandas_db.delete_upload_table(workflow.id)
+
     # Log the event
     col_info = workflow.get_column_info()
     logs.ops.put(request.user,
@@ -385,6 +388,9 @@ def upload_s4(request):
 
     autorename_column_names: Automatically modified column names
 
+    override_columns_names: Names of dst columns that will be overridden in
+    merge
+
     :param request: Web request
     :return:
     """
@@ -412,6 +418,7 @@ def upload_s4(request):
 
     # Create the strings to show in the table for each of the rows explaining
     # what is going to be the effect of the merge operation over them.
+    override_columns_names = set([])
     for idx, (x, y, z) in enumerate(zip(initial_column_names,
                                         rename_column_names,
                                         upload_data['columns_to_upload'])):
@@ -465,10 +472,14 @@ def upload_s4(request):
 
         if final_name in dst_column_names:
             suffix = ' (Override' + suffix + ')'
+            override_columns_names.add(final_name)
         else:
             suffix = ' (New' + suffix + ')'
 
         info.append((final_name + suffix, True, x))
+
+    # Store the value in the request object.
+    upload_data['override_columns_names'] = list(override_columns_names)
 
     if request.method != 'POST':
         request.session['upload_data'] = upload_data
@@ -493,6 +504,9 @@ def upload_s4(request):
                                                 dst_df,
                                                 src_df,
                                                 upload_data)
+
+    # Nuke the temporary table
+    pandas_db.delete_upload_table(workflow.id)
 
     col_info = workflow.get_column_info()
     if status:

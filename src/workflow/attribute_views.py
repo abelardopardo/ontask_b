@@ -38,8 +38,8 @@ def attributes(request):
             old_keys = wf_attributes.keys()
             condition_names = [x.name
                                for x in Condition.objects.filter(
-                    action__workflow=workflow,
-                    is_filter=False)]
+                                action__workflow=workflow,
+                                is_filter=False)]
 
             # Loop over all the keys in the form
             column_names = workflow.get_column_names()
@@ -149,7 +149,7 @@ def attribute_create(request):
                 return JsonResponse(data)
 
             # proceed with updating the attributes.
-            wf_attributes = workflow.get_attributes()
+            wf_attributes = workflow.attributes
             wf_attributes[form.cleaned_data['key']] = \
                 form.cleaned_data['value']
 

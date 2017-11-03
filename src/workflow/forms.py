@@ -106,10 +106,6 @@ class ColumnBasicForm(forms.ModelForm):
         self.fields['raw_categories'].initial = \
             ', '.join([str(x) for x in self.instance.get_categories()])
 
-    # def clean_raw_categories(self):
-    #     result = []
-    #     data = self.cleaned_data.get('raw_categories', '')
-
     def clean(self):
         data = super(ColumnBasicForm, self).clean()
 
@@ -192,21 +188,6 @@ class ColumnAddForm(ColumnBasicForm):
                 return data
 
         return data
-
-    class Meta:
-        model = Column
-        fields = ('name', 'data_type', 'raw_categories')
-
-
-class ColumnAddForm(ColumnBasicForm):
-
-    # initial value
-    initial_value = forms.CharField(
-        max_length=512,
-        strip=True,
-        required=False,
-        label='Value to assign to all cells in the column'
-    )
 
     class Meta:
         model = Column

@@ -39,13 +39,14 @@ query_count_rows = 'SELECT count(*) from "{0}"'
 
 logger = logging.getLogger(__name__)
 
-pandas_datatype_names = [
-    ('object', 'string'),
-    ('int64', 'integer'),
-    ('float64', 'double'),
-    ('bool', 'boolean'),
-    ('datetime64[ns]', 'datetime')
-]
+# Translation between pandas data type names, and those handled in ontask
+pandas_datatype_names = {
+    'object': 'string',
+    'int64': 'integer',
+    'float64': 'double',
+    'bool': 'boolean',
+    'datetime64[ns]': 'datetime'
+}
 
 
 def is_matrix_in_db(table_name):
@@ -133,7 +134,7 @@ def delete_upload_table(pk):
 
 def df_column_types_rename(df):
     result = [df[x].dtype.name for x in list(df.columns)]
-    for tname, ntname in pandas_datatype_names:
+    for tname, ntname in pandas_datatype_names.items():
         result[:] = [x if x != tname else ntname for x in result]
 
     return result

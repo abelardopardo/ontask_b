@@ -30,4 +30,4 @@ class DataFrameMergeSerializer(serializers.Serializer):
 
     right_on = serializers.CharField(required=True, initial='')
 
-    dup_column = serializers.CharField(required=True, initial='rename')
+    dup_column = serializers.CharField(required=False, initial='rename')
