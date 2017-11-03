@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 from rest_framework import serializers
+from rest_framework.exceptions import APIException
 
 from action.serializers import ActionSerializer, ActionSerializerDeep
 from dataops import ops, pandas_db
@@ -30,35 +31,42 @@ class ColumnSerializer(serializers.ModelSerializer):
 
 
 class WorkflowSerializer(serializers.ModelSerializer):
-    columns = ColumnSerializer(many=True)
 
     def create(self, validated_data, **kwargs):
+        attributes = validated_data['attributes'] or {}
+        if not isinstance(attributes, dict):
+            raise APIException('Attributes must be a dictionary (str, str)')
+
+        if any([not isinstance(k, str) or not isinstance(v, str)
+                for k, v in attributes.items()]):
+            raise APIException('Attributes must be a dictionary (str, str)')
+
         workflow_obj = Workflow(
-            user=self.context['user'],
-            name=self.context['name'],
+            user=self.context['request'].user,
+            name=validated_data['name'],
             description_text=validated_data['description_text'],
             nrows=0,
             ncols=0,
-            attributes=validated_data['attributes'],
-            query_builder_ops=validated_data['query_builder_ops']
+            attributes=validated_data['attributes']
         )
-        workflow_obj.save()
 
-        # Create the columns
-        ColumnSerializer(data=validated_data['columns'],
-                         context={'workflow': workflow_obj})
+        try:
+            workflow_obj.save()
+        except Exception:
+            raise APIException('Workflow could not be created.')
 
         return workflow_obj
 
     class Meta:
         model = Workflow
-        fields = ('id', 'name', 'description_text', 'columns')
+        fields = ('name', 'description_text', 'attributes')
 
 
 class WorkflowExportSerializer(serializers.ModelSerializer):
     actions = ActionSerializer(many=True, required=False)
 
     def create(self, validated_data, **kwargs):
+
         workflow_obj = Workflow(
             user=self.context['user'],
             name=self.context['name'],
@@ -66,7 +74,6 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             nrows=0,
             ncols=0,
             attributes=validated_data['attributes'],
-            query_builder_ops=validated_data['query_builder_ops']
         )
         workflow_obj.save()
 

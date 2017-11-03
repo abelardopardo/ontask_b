@@ -21,10 +21,10 @@
           data-url="{% url 'workflow:flush' workflow.id %}">
     <span class="glyphicon glyphicon-floppy-remove"></span> Flush Data
   </button>
-  <button type="button"
-          class="btn btn-danger btn-sm js-workflow-delete"
-          data-url="{% url 'workflow:delete' workflow.id %}">
-    <span class="glyphicon glyphicon-trash"></span> Delete
-  </button>
 {% endif %}
+<button type="button"
+        class="btn btn-danger btn-sm js-workflow-delete"
+        data-url="{% url 'workflow:delete' workflow.id %}">
+  <span class="glyphicon glyphicon-trash"></span> Delete
+</button>
 

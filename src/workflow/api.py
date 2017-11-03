@@ -27,11 +27,7 @@ class WorkflowAPIListCreate(UserIsInstructor, generics.ListCreateAPIView):
         return Workflow.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        if self.request.user.is_superuser:
-            # Superuser is allowed to create workflows for any user
-            serializer.save()
-        else:
-            serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user)
 
 
 class WorkflowAPIRetrieveUpdateDestroy(UserIsInstructor,

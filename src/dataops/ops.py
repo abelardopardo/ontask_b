@@ -350,3 +350,28 @@ def rename_df_column(df, workflow, old_name, new_name):
             cond.formula, old_name, new_name)
 
     return df.rename(columns={old_name: new_name})
+
+
+def detect_datetime_columns(data_frame):
+    """
+    Given a data frame traverse the columns and those that have type "string"
+    try to see if it is of type datetime. If so, apply the translation.
+    :param df:
+    :return:
+    """
+    # Strip white space from all string columns and try to convert to
+    # datetime just in case
+    for x in list(data_frame.columns):
+        if data_frame[x].dtype.name == 'object':
+            # Column is a string!
+            data_frame[x] = data_frame[x].str.strip()
+
+            # Try the datetime conversion
+            try:
+                series = pd.to_datetime(data_frame[x],
+                                        infer_datetime_format=True)
+                # Datetime conversion worked! Update the data_frame
+                data_frame[x] = series
+            except ValueError:
+                pass
+    return data_frame
