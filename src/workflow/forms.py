@@ -169,7 +169,7 @@ class ColumnAddForm(ColumnBasicForm):
     )
 
     def clean(self):
-        data = super(ColumnBasicForm, self).clean()
+        data = super(ColumnAddForm, self).clean()
 
         # Try to convert the initial value ot the right type
         initial_value = data['initial_value']
