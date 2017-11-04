@@ -270,9 +270,6 @@ class Column(models.Model):
         else:
             raise ValueError('Unsupported type ' + str(data_type))
 
-        if not newval:
-            raise ValueError('Incorrect value ' + str(value))
-
         return newval
 
     @staticmethod
