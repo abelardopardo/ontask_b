@@ -18,3 +18,4 @@ djangorestframework
 markdown
 sqlalchemy
 validate_email
+django-jquery
