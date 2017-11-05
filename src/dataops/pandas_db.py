@@ -18,22 +18,6 @@ SITE_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 table_prefix = '__ONTASK_WORKFLOW_TABLE_{0}'
 table_upload_prefix = '__ONTASK_WORKFLOW_TABLE_UPLOAD_{0}'
 
-# DB engine
-user = settings.DATABASES['default']['USER']
-password = settings.DATABASES['default']['PASSWORD']
-database_name = settings.DATABASES['default']['NAME']
-
-database_url = \
-    'postgresql://{user}:{password}@localhost:5432/{database_name}'.format(
-        user=user,
-        password=password,
-        database_name=database_name,
-    )
-engine = create_engine(database_url, echo=False)
-
-if settings.DEBUG:
-    print('Creating engine with ', database_url)
-
 # Query to count the number of rows in a table
 query_count_rows = 'SELECT count(*) from "{0}"'
 
@@ -47,6 +31,30 @@ pandas_datatype_names = {
     'bool': 'boolean',
     'datetime64[ns]': 'datetime'
 }
+
+
+# DB Engine to use with Pandas (required by to_sql, from_sql
+engine = None
+
+
+def create_db_engine():
+    """
+    Function that creates the engine object to connect to the database. The
+    object is required by the pandas functions to_sql and from_sql
+
+    :return: Nothing. Set the global var to the connection
+    """
+    # DB engine
+    database_url = \
+        'postgresql://{user}:{password}@localhost:5432/{database_name}'.format(
+            user=settings.DATABASES['default']['USER'],
+            password=settings.DATABASES['default']['PASSWORD'],
+            database_name=settings.DATABASES['default']['NAME'],
+        )
+    engine = create_engine(database_url, echo=False)
+
+    if settings.DEBUG:
+        print('Creating engine with ', database_url)
 
 
 def is_matrix_in_db(table_name):
