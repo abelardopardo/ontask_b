@@ -200,7 +200,7 @@ class ColumnRenameForm(ColumnBasicForm):
 
         super(ColumnRenameForm, self).__init__(*args, **kwargs)
 
-        self.fields['data_type'].widget.attrs['readonly'] = 'readonly'
+        self.fields['data_type'].disabled = True
 
     def clean(self):
 
