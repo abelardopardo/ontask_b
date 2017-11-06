@@ -56,6 +56,8 @@ def create_db_engine():
     if settings.DEBUG:
         print('Creating engine with ', database_url)
 
+    return engine
+
 
 def is_matrix_in_db(table_name):
     cursor = connection.cursor()

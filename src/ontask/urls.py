@@ -66,5 +66,5 @@ handler404 = 'ontask.views.ontask_handler404'
 handler500 = 'ontask.views.ontask_handler500'
 
 # Create the DB engine with SQLAlchemy (once!)
-pandas_db.create_db_engine()
+pandas_db.engine = pandas_db.create_db_engine()
 
