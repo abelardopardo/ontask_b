@@ -136,6 +136,7 @@ class ColumnBasicForm(forms.ModelForm):
 
         # Categories must be valid types
         if 'raw_categories' in self.changed_data:
+            # Condition 1: Values must be valid for the type of the column
             category_values = [x.strip()
                                for x in data['raw_categories'].split(',')]
             try:
@@ -149,6 +150,17 @@ class ColumnBasicForm(forms.ModelForm):
                 )
                 return data
 
+            # Condition 2: The values in the dataframe column must be in
+            # these categories
+            if not all([x in valid_values
+                        for x in self.data_frame[data['name']]
+                        if x and not pd.isnull(x)]):
+                self.add_error(
+                    'raw_categories',
+                    'Current column values are different from allowed ones.'
+                )
+                return data
+
             self.instance.set_categories(valid_values)
 
         return data
@@ -159,7 +171,6 @@ class ColumnBasicForm(forms.ModelForm):
 
 
 class ColumnAddForm(ColumnBasicForm):
-
     # initial value
     initial_value = forms.CharField(
         max_length=512,
@@ -229,19 +240,7 @@ class ColumnRenameForm(ColumnBasicForm):
                 )
                 return data
 
-        # Categories must be valid types
-        if 'raw_categories' in self.changed_data:
-            # Check if the existing values in the column comply with the
-            # proposed categories
-            valid_values = self.instance.get_categories()
-            if not all([x in valid_values
-                        for x in self.data_frame[data['name']]
-                        if x and not pd.isnull(x)]):
-                self.add_error(
-                    'raw_categories',
-                    'Current column values are different from allowed ones.'
-                )
-                return data
+        return data
 
     class Meta:
         model = Column
