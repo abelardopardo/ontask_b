@@ -119,13 +119,14 @@ def column_edit(request, pk):
         if form.is_valid():
             if form.changed_data:
                 # Some field changed value, so save the result, but
-                # no commit as there are additional operations.
+                # no commit as we need to propagate the info to the df
                 column = form.save(commit=False)
 
                 # Get the data frame from the form (should be
                 # loaded)
                 df = form.data_frame
 
+                # If there is a new name, rename the data frame columns
                 if 'name' in form.changed_data:
                     # Rename the column in the data frame
                     df = ops.rename_df_column(df,
@@ -135,6 +136,12 @@ def column_edit(request, pk):
 
                 # Save the column information
                 form.save()
+
+                # If there is new "raw_categories", rebuild the
+                # query_builder_ops
+                if 'raw_categories' in form.changed_data:
+                    workflow.set_query_builder_ops()
+                    workflow.save()
 
                 # And save the DF in the DB
                 ops.store_dataframe_in_db(df, workflow.id)

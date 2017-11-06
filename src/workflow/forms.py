@@ -136,30 +136,34 @@ class ColumnBasicForm(forms.ModelForm):
 
         # Categories must be valid types
         if 'raw_categories' in self.changed_data:
-            # Condition 1: Values must be valid for the type of the column
-            category_values = [x.strip()
-                               for x in data['raw_categories'].split(',')]
-            try:
-                valid_values = Column.validate_column_values(
-                    data['data_type'],
-                    category_values)
-            except ValueError:
-                self.add_error(
-                    'raw_categories',
-                    'Incorrect list of values'
-                )
-                return data
+            if data['raw_categories']:
+                # Condition 1: Values must be valid for the type of the column
+                category_values = [x.strip()
+                                   for x in data['raw_categories'].split(',')]
+                try:
+                    valid_values = Column.validate_column_values(
+                        data['data_type'],
+                        category_values)
+                except ValueError:
+                    self.add_error(
+                        'raw_categories',
+                        'Incorrect list of values'
+                    )
+                    return data
 
-            # Condition 2: The values in the dataframe column must be in
-            # these categories
-            if not all([x in valid_values
-                        for x in self.data_frame[data['name']]
-                        if x and not pd.isnull(x)]):
-                self.add_error(
-                    'raw_categories',
-                    'Current column values are different from allowed ones.'
-                )
-                return data
+                # Condition 2: The values in the dataframe column must be in
+                # these categories
+                if not all([x in valid_values
+                            for x in self.data_frame[data['name']]
+                            if x and not pd.isnull(x)]):
+                    self.add_error(
+                        'raw_categories',
+                        'The values in the column are not compatible with ' +
+                        'these ones.'
+                    )
+                    return data
+            else:
+                valid_values = []
 
             self.instance.set_categories(valid_values)
 
