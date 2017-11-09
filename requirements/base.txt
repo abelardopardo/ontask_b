@@ -19,3 +19,5 @@ markdown
 sqlalchemy
 validate_email
 django-jquery
+coreapi
+pygments
