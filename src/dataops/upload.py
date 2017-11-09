@@ -92,7 +92,7 @@ def upload_s2(request):
         request.session['upload_data'] = upload_data
         context = {'form': form,
                    'df_info': df_info,
-                   'prev_step': reverse('dataops:csvupload1'),
+                   'prev_step': reverse('dataops:csvupload1'),  # FIX
                    'wid': workflow.id}
 
         if not ops.workflow_id_has_matrix(workflow.id):
@@ -106,7 +106,7 @@ def upload_s2(request):
     if not form.is_valid():
         context = {'form': form,
                    'wid': workflow.id,
-                   'prev_step': reverse('dataops:csvupload1'),
+                   'prev_step': reverse('dataops:csvupload1'), # FIX
                    'df_info': df_info}
         if not ops.workflow_id_has_matrix(workflow.id):
             # If it is an upload, not a merge, set next step to finish
@@ -147,10 +147,18 @@ def upload_s2(request):
             {'message': 'Exception while retrieving the data frame'})
 
     # Update the data frame
-    ops.perform_dataframe_upload_merge(workflow.id,
-                                       existing_df,
-                                       data_frame,
-                                       upload_data)
+    status = ops.perform_dataframe_upload_merge(workflow.id,
+                                                existing_df,
+                                                data_frame,
+                                                upload_data)
+
+    if status:
+        # Something went wrong. Flag it and reload
+        context = {'form': form,
+                   'wid': workflow.id,
+                   'prev_step': reverse('dataops:csvupload1'),  # FIX
+                   'df_info': df_info}
+        return render(request, 'dataops/upload_s2.html', context)
 
     # Nuke the temporary table
     pandas_db.delete_upload_table(workflow.id)
@@ -267,13 +275,13 @@ def upload_s3(request):
     # renamed and not unique
     rename_column_names = upload_data['rename_column_names']
     are_overlap_cols = (
-        # DST Column names that are not Keys
-        (set(dst_column_names) - set(dst_is_unique_column)) &
-        # SRC Column names that are renamed, selected and not unique
-        set([x for x, y, z in zip(rename_column_names,
-                                  columns_to_upload,
-                                  src_is_unique_column)
-             if y and not z])) != set([])
+                           # DST Column names that are not Keys
+                           (set(dst_column_names) - set(dst_is_unique_column)) &
+                           # SRC Column names that are renamed, selected and not unique
+                           set([x for x, y, z in zip(rename_column_names,
+                                                     columns_to_upload,
+                                                     src_is_unique_column)
+                                if y and not z])) != set([])
 
     # Bind the form with the received data (remember unique columns and
     # preselected keys.)'
@@ -336,7 +344,7 @@ def upload_s3(request):
                 i += 1
                 new_name = col + '_{0}'.format(i)
                 if new_name not in rename_column_names and \
-                        new_name not in dst_column_names:
+                                new_name not in dst_column_names:
                     break
             # Record the new created name in the resulting list
             autorename_column_names[idx] = new_name
@@ -399,18 +407,78 @@ def upload_s4(request):
     if not workflow:
         return redirect('workflow:index')
 
-    # Get the dictionary to store information about the upload
-    # is stored in the session.
+    # Get the dictionary containing the information about the upload
     upload_data = request.session.get('upload_data', None)
     if not upload_data:
         # If there is no object, someone is trying to jump directly here.
         return redirect('dataops:list')
 
+    # Check the type of request that is being processed
+    if request.method == 'POST':
+        # We are processing a POST request
+
+        # Get the dataframes to merge
+        try:
+            dst_df = pandas_db.load_from_db(workflow.id)
+            src_df = ops.load_upload_from_db(workflow.id)
+        except Exception:
+            return render(request,
+                          'error.html',
+                          {'message': 'Exception while loading data frame'})
+
+        # Performing the merge
+        status = ops.perform_dataframe_upload_merge(workflow.id,
+                                                    dst_df,
+                                                    src_df,
+                                                    upload_data)
+
+        # Nuke the temporary table
+        pandas_db.delete_upload_table(workflow.id)
+
+        col_info = workflow.get_column_info()
+        if status:
+            logs.ops.put(request.user,
+                         'workflow_data_failedmerge',
+                         workflow,
+                         {'id': workflow.id,
+                          'name': workflow.name,
+                          'num_rows': workflow.nrows,
+                          'num_cols': workflow.ncols,
+                          'column_names': col_info[0],
+                          'column_types': col_info[1],
+                          'column_unique': col_info[2],
+                          'error_msg': status})
+
+            messages.error(request, 'Merge operation failed.'),
+            return render(request, 'dataops/upload_s4.html',
+                          {'prev_step': reverse('dataops:upload_s3'),
+                           'next_name': 'Finish'})
+
+        # Log the event
+        logs.ops.put(request.user,
+                     'workflow_data_merge',
+                     workflow,
+                     {'id': workflow.id,
+                      'name': workflow.name,
+                      'num_rows': workflow.nrows,
+                      'num_cols': workflow.ncols,
+                      'column_names': col_info[0],
+                      'column_types': col_info[1],
+                      'column_unique': col_info[2]})
+
+        # Remove the csvupload from the session object
+        request.session.pop('upload_data', None)
+
+        return redirect('dataops:list')
+
+    # We are processing a GET request
+
     # Create the information to include in the final report table
     dst_column_names = upload_data['dst_column_names']
     src_selected_key = upload_data['src_selected_key']
+
     # Triplets to show in the page (dst column, Boolean saying there is some
-    # change, and the message on the src colummn
+    # change, and the message on the src column
     autorename_column_names = upload_data['autorename_column_names']
     rename_column_names = upload_data['rename_column_names']
     info = []
@@ -478,68 +546,11 @@ def upload_s4(request):
 
         info.append((final_name + suffix, True, x))
 
-    # Store the value in the request object.
+    # Store the value in the request object and update
     upload_data['override_columns_names'] = list(override_columns_names)
+    request.session['upload_data'] = upload_data
 
-    if request.method != 'POST':
-        request.session['upload_data'] = upload_data
-        return render(request, 'dataops/upload_s4.html',
-                      {'prev_step': reverse('dataops:upload_s3'),
-                       'info': info,
-                       'next_name': 'Finish'})
-
-    # We are processing a POST request
-
-    # Get the dataframes to merge
-    try:
-        dst_df = pandas_db.load_from_db(workflow.id)
-        src_df = ops.load_upload_from_db(workflow.id)
-    except Exception:
-        return render(request,
-                      'error.html',
-                      {'message': 'Exception while loading data frame'})
-
-    # Performing the merge
-    status = ops.perform_dataframe_upload_merge(workflow.id,
-                                                dst_df,
-                                                src_df,
-                                                upload_data)
-
-    # Nuke the temporary table
-    pandas_db.delete_upload_table(workflow.id)
-
-    col_info = workflow.get_column_info()
-    if status:
-        logs.ops.put(request.user,
-                     'workflow_data_failedmerge',
-                     workflow,
-                     {'id': workflow.id,
-                      'name': workflow.name,
-                      'num_rows': workflow.nrows,
-                      'num_cols': workflow.ncols,
-                      'column_names': col_info[0],
-                      'column_types': col_info[1],
-                      'column_unique': col_info[2],
-                      'error_msg': status})
-
-        messages.error(request, 'Merge operation failed.'),
-        return render(request, 'dataops/upload_s4.html',
-                      {'prev_step': reverse('dataops:upload_s3'),
-                       'next_name': 'Finish'})
-
-    # Log the event
-    logs.ops.put(request.user,
-                 'workflow_data_merge',
-                 workflow,
-                 {'id': workflow.id,
-                  'name': workflow.name,
-                  'num_rows': workflow.nrows,
-                  'num_cols': workflow.ncols,
-                  'column_names': col_info[0],
-                  'column_types': col_info[1],
-                  'column_unique': col_info[2]})
-
-    # Remove the csvupload from the session object
-    request.session.pop('upload_data', None)
-
-    return redirect('dataops:list')
+    return render(request, 'dataops/upload_s4.html',
+                  {'prev_step': reverse('dataops:upload_s3'),
+                   'info': info,
+                   'next_name': 'Finish'})

@@ -6,6 +6,7 @@ from django.conf.urls import include
 from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
+from rest_framework.documentation import include_docs_urls
 
 import accounts.urls
 import action.urls
@@ -21,6 +22,8 @@ urlpatterns = [
     url(r'^$', views.HomePage.as_view(), name='home'),
 
     url(r'^entry$', views.entry, name='entry'),
+
+    url(r'^about/$', views.AboutPage.as_view(), name='about'),
 
     url(r'^users/', include(profiles.urls, namespace='profiles')),
 
@@ -46,7 +49,12 @@ urlpatterns = [
     url(r'^tobedone/', views.ToBeDone.as_view(), name='tobedone'),
 
     url(r'^api-auth/',
-        include('rest_framework.urls', namespace='rest_framework'))
+        include('rest_framework.urls', namespace='rest_framework')),
+
+    url(r'^docs/',
+        include_docs_urls(
+            title='OnTask API',
+            description=api_description)),
 
 ]
 
@@ -67,4 +75,3 @@ handler500 = 'ontask.views.ontask_handler500'
 
 # Create the DB engine with SQLAlchemy (once!)
 pandas_db.engine = pandas_db.create_db_engine()
-

@@ -2,21 +2,24 @@
 from __future__ import unicode_literals, print_function
 
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 
+from ontask.permissions import UserIsInstructor
 from ontask.permissions import IsOwner, UserIsInstructor
 from .models import Workflow
 from .serializers import WorkflowSerializer
 
 
-class WorkflowAPIListCreate(UserIsInstructor, generics.ListCreateAPIView):
+class WorkflowAPIListCreate(generics.ListCreateAPIView, UserIsInstructor):
     """
-    Get a list of the available workflows and allow creation
+    get:
+    Return a list of available workflows
+
+    post:
+    Create a new workflow given name, description and attributes
     """
 
     queryset = None  # Needs to be overwritten
     serializer_class = WorkflowSerializer
-    permission_classes = (IsAuthenticated, DjangoModelPermissions, IsOwner)
 
     # Filter the workflows only for the current user.
     def get_queryset(self):
@@ -30,11 +33,24 @@ class WorkflowAPIListCreate(UserIsInstructor, generics.ListCreateAPIView):
         serializer.save(user=self.request.user)
 
 
-class WorkflowAPIRetrieveUpdateDestroy(UserIsInstructor,
-                                       generics.RetrieveUpdateDestroyAPIView):
+class WorkflowAPIRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView,
+                                       UserIsInstructor):
+    """
+    get:
+    Returns the information stored for the workflow
+
+    put:
+    Modifies the workflow with the information included in the request (all
+    fields are overwritten)
+
+    patch:
+    Update only the given fields in the workshop (the rest remain unchanged)
+
+    delete:
+    Delete the workflow
+    """
     queryset = None  # Needs to be overwritten
     serializer_class = WorkflowSerializer
-    permission_classes = (IsAuthenticated, DjangoModelPermissions, IsOwner)
 
     # Filter the workflows only for the current user.
     def get_queryset(self):

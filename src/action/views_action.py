@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function
 import django_tables2 as tables
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.fields.related import OneToOneRel
 from django.http import Http404
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -14,6 +15,7 @@ from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django.views import generic
 from django.views.decorators.http import require_http_methods
+from django.db.models import Q
 
 import logs.ops
 from action.evaluate import evaluate_row
@@ -284,8 +286,7 @@ def action_index(request):
         return redirect('workflow:index')
 
     # Get the actions
-    actions = Action.objects.filter(workflow__user=request.user,
-                                    workflow__id=workflow.id)
+    actions = Action.objects.filter(workflow__id=workflow.id)
 
     # Context to render the template
     context = {}

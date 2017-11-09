@@ -154,7 +154,7 @@ def evaluate_row(action, row_idx):
                                                 cond_filter,
                                                 row_idx)
     else:
-        row_values = pandas_db.get_table_row_by_key(workflow.id,
+        row_values = pandas_db.get_table_row_by_key(workflow,
                                                     cond_filter,
                                                     row_idx)
     if row_values is None:

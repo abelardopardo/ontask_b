@@ -17,7 +17,8 @@ from ontask.permissions import is_instructor, UserIsInstructor
 from .forms import (WorkflowForm)
 from .models import Workflow, Column
 from .ops import (get_workflow,
-                  unlock_workflow_by_id)
+                  unlock_workflow_by_id,
+                  detach_dataframe)
 
 
 class OperationsColumn(tables.Column):
@@ -124,23 +125,14 @@ class WorkflowDetailTable(tables.Table):
         verbose_name=str('Key?')
     )
 
-    operations = OperationsColumn(
-        attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name='Operations',
-        orderable=False,
-        template_file='workflow/includes/workflow_column_operations.html',
-        get_operation_id=lambda x: x['id']
-    )
+
 
     class Meta:
-        fields = ('column_name', 'column_type', 'is_key', 'operations')
-
-        sequence = ('column_name', 'column_type', 'is_key', 'operations')
-
         attrs = {
             'class':
                 'table table-striped table-bordered table-hover cell-border',
-            'id': 'column-table'
+            'id': 'column-table',
+            'th': {'class': 'dt-body-center'}
         }
 
         row_attrs = {
@@ -181,17 +173,15 @@ def save_workflow_form(request, form, template_name, is_new):
 
                 # Log event
                 if is_new:
-                    logs.ops.put(request.user,
-                                 'workflow_create',
-                                 workflow_item,
-                                 {'id': workflow_item.id,
-                                  'name': workflow_item.name})
+                    log_type = 'workflow_create'
                 else:
-                    logs.ops.put(request.user,
-                                 'workflow_update',
-                                 workflow_item,
-                                 {'id': workflow_item.id,
-                                  'name': workflow_item.name})
+                    log_type = 'workflow_update'
+
+                logs.ops.put(request.user,
+                             'workflow_update',
+                             workflow_item,
+                             {'id': workflow_item.id,
+                              'name': workflow_item.name})
 
                 # Ok, here we can say that the form is done.
                 data['form_is_valid'] = True
@@ -293,6 +283,11 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
             workflow__id=wflow_id,
             is_key=True
         ).count()
+
+        # Safety check for consistency (only in development)
+        if settings.DEBUG:
+            assert pandas_db.check_wf_df(self.object)
+
         return context
 
 
@@ -348,24 +343,7 @@ def flush(request, pk):
 
     if request.method == 'POST':
         # Delete the table
-        pandas_db.delete_table(workflow.id)
-
-        # Delete number of rows and columns
-        workflow.nrows = 0
-        workflow.ncols = 0
-        workflow.n_filterd_rows = -1
-
-        # Delete the column_names, column_types and column_unique
-        Column.objects.filter(workflow__id=workflow.id).delete()
-
-        # Delete the info for QueryBuilder
-        workflow.set_query_builder_ops()
-
-        # Table name
-        workflow.data_frame_table_name = ''
-
-        # Save the workflow with the new fields.
-        workflow.save()
+        detach_dataframe(workflow)
 
         # Log the event
         logs.ops.put(request.user,

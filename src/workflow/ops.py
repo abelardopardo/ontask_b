@@ -85,7 +85,7 @@ def get_workflow(request, wid=None):
     # Step 1: Get the workflow that is being accessed
     try:
         # If there is no wid given, take it from the session. Search for
-        # workflow that must be owned by the user.
+        # workflow that is either owned by the user or shared with her.
         if not wid:
             wid = request.session['ontask_workflow_id']
 
@@ -97,6 +97,32 @@ def get_workflow(request, wid=None):
         return None
 
     return workflow
+
+def detach_dataframe(workflow):
+    """
+    Given a workflow object, delete its dataframe
+    :param workflow:
+    :return: Nothing, the workflow object is updated
+    """
+    pandas_db.delete_table(workflow.id)
+
+    # Delete number of rows and columns
+    workflow.nrows = 0
+    workflow.ncols = 0
+    workflow.n_filterd_rows = -1
+    workflow.save()
+
+    # Delete the column_names, column_types and column_unique
+    Column.objects.filter(workflow__id=workflow.id).delete()
+
+    # Delete the info for QueryBuilder
+    workflow.set_query_builder_ops()
+
+    # Table name
+    workflow.data_frame_table_name = ''
+
+    # Save the workflow with the new fields.
+    workflow.save()
 
 
 def do_import_workflow(user, name, file_item, include_data_cond):

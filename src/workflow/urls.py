@@ -57,10 +57,11 @@ urlpatterns = [
 
     # API
 
-    url(r'^workflows/$', api.WorkflowAPIListCreate.as_view()),
+    url(r'^workflows/$', api.WorkflowAPIListCreate.as_view(),
+        name='api_workflows'),
 
     url(r'^(?P<pk>\d+)/rud/$',
-        api.WorkflowAPIRetrieveUpdateDestroy.as_view()),
+        api.WorkflowAPIRetrieveUpdateDestroy.as_view(), name='api_rud'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

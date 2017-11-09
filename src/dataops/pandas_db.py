@@ -15,8 +15,9 @@ from dataops.formula_evaluation import evaluate_node_sql
 
 SITE_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
-table_prefix = '__ONTASK_WORKFLOW_TABLE_{0}'
-table_upload_prefix = '__ONTASK_WORKFLOW_TABLE_UPLOAD_{0}'
+table_prefix = '__ONTASK_WORKFLOW_TABLE_'
+df_table_prefix = table_prefix + '{0}'
+upload_table_prefix = table_prefix + 'UPLOAD_{0}'
 
 # Query to count the number of rows in a table
 query_count_rows = 'SELECT count(*) from "{0}"'
@@ -42,7 +43,7 @@ def create_db_engine():
     Function that creates the engine object to connect to the database. The
     object is required by the pandas functions to_sql and from_sql
 
-    :return: Nothing. Set the global var to the connection
+    :return: the engine
     """
     # DB engine
     database_url = \
@@ -59,6 +60,15 @@ def create_db_engine():
     return engine
 
 
+def destroy_db_engine(db_engine):
+    """
+    Method that disposes of the given engine (to guarantee there are no
+    connections available
+    :param db_engine: Engine to destroy
+    :return: Nothing
+    """
+    db_engine.dispose()
+
 def is_matrix_in_db(table_name):
     cursor = connection.cursor()
     table_list = \
@@ -72,7 +82,7 @@ def create_table_name(pk):
     :param pk: Primary Key of a workflow
     :return: The unique table name to use to store a workflow data frame
     """
-    return table_prefix.format(pk)
+    return df_table_prefix.format(pk)
 
 
 def create_upload_table_name(pk):
@@ -81,10 +91,15 @@ def create_upload_table_name(pk):
     :param pk: Primary key of a workflow
     :return: The unique table to use to upload a new data frame
     """
-    return table_upload_prefix.format(pk)
+    return upload_table_prefix.format(pk)
 
 
 def load_from_db(pk):
+    """
+    Load the data frame stored for the workflow with the pk
+    :param pk:
+    :return: data frame
+    """
     return load_table(create_table_name(pk))
 
 

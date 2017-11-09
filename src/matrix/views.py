@@ -19,6 +19,7 @@ from workflow.ops import get_workflow
 
 @user_passes_test(is_instructor)
 def display(request):
+    # TODO: https://editor.datatables.net/examples/inline-editing/simple
     workflow = get_workflow(request)
     if not workflow:
         return redirect('workflow:index')

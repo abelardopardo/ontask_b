@@ -24,7 +24,11 @@ class DataFrameSerializer(serializers.Serializer):
 class DataFrameMergeSerializer(serializers.Serializer):
     src_df = DataFrameSerializer()
 
-    how = serializers.CharField(required=True, initial='')
+    how = serializers.CharField(
+        required=True,
+        initial='',
+        help_text='One of the following values: inner, outer, left or right'
+    )
 
     left_on = serializers.CharField(required=True, initial='')
 

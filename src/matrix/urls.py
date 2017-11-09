@@ -10,9 +10,9 @@ from . import views
 app_name = 'matrix'
 
 urlpatterns = [
-    url(r'^(?P<pk>\d+)/ops/$', api.MatrixOps.as_view()),
+    url(r'^(?P<pk>\d+)/ops/$', api.MatrixOps.as_view(), name="api_ops"),
 
-    url(r'^(?P<pk>\d+)/merge/$', api.MatrixMerge.as_view()),
+    url(r'^(?P<pk>\d+)/merge/$', api.MatrixMerge.as_view(), name="api_merge"),
 
     url(r'^display/$', views.display, name="display"),
 

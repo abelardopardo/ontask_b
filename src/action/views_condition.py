@@ -406,12 +406,6 @@ def edit_condition(request, pk):
         condition.action.content = action_content
         condition.action.save()
 
-    # If the request has the 'action_content', update the action
-    action_content = request.GET.get('action_content', None)
-    if action_content:
-        condition.action.content = action_content
-        condition.action.save()
-
     form = ConditionForm(request.POST or None, instance=condition)
 
     # Render the form with the Condition information
@@ -430,6 +424,9 @@ def delete_condition(request, pk):
     :param pk:
     :return:
     """
+    # AJAX result
+    data = {}
+
     # Get the condition
     try:
         condition = Condition.objects.get(

@@ -137,11 +137,9 @@ def column_edit(request, pk):
                 # Save the column information
                 form.save()
 
-                # If there is new "raw_categories", rebuild the
-                # query_builder_ops
-                if 'raw_categories' in form.changed_data:
-                    workflow.set_query_builder_ops()
-                    workflow.save()
+                # Changes in column require rebuiding the query_builder_ops
+                workflow.set_query_builder_ops()
+                workflow.save()
 
                 # And save the DF in the DB
                 ops.store_dataframe_in_db(df, workflow.id)

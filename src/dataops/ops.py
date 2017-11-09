@@ -280,10 +280,42 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
     except Exception, e:
         return 'Merge operation failed. Exception: ' + e.message
 
-    # Bring the data frame back to the database
+    # If the merge produced a data frame with no rows, flag it as an error to
+    # prevent loosing data when there is a mistake in the key column
+    if new_df.shape[0] == 0:
+        return 'Merge operation produced a result with no rows'
+
+    # For each column, if it is overriden, remove it, if not, check that the
+    # new column is consistent with data_type, and allowed values,
+    # and recheck its unique key status
+    for col in Workflow.objects.get(pk=pk).columns.all():
+        # If column is overriden, remove it
+        if col.name in merge_info['override_columns_names']:
+            col.delete()
+            continue
+
+        # New values in this column should be compatible with the current
+        # column properties.
+        # Condition 1: Data type
+        if pandas_datatype_names[new_df[col.name].dtype.name] != col.data_type:
+            return 'New values in column ' + col.name + ' are not of type ' \
+                    + col.data_type
+
+        # Condition 2: If there are categories, the new values should be
+        # compatible with them.
+        if col.categories and not all([x in col.categories
+                                       for x in new_df[col.name]]):
+            return 'New values in column ' + col.name + ' are not within ' \
+                    + 'the categories ' + ', '.join(col.categories)
+
+        # Condition 3:
+        col.is_key = is_unique_column(new_df[col.name])
+
+    # Store the result back in the DB
     store_dataframe_in_db(new_df, pk)
 
-    return None  # Error message?
+    # Operation was correct, no need to flag anything
+    return None
 
 
 def data_frame_add_empty_column(df, column_name, column_type, initial_value):

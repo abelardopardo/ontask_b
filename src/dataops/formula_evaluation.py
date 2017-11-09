@@ -47,7 +47,7 @@ def rename_variable(formula, old_name, new_name):
     # Loop over the changes and apply them to this node
     if formula['id'] != old_name:
         # No need to rename this formula
-        return
+        return formula
 
     formula['id'] = new_name
     formula['field'] = new_name

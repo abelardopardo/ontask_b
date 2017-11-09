@@ -2,8 +2,8 @@
 from __future__ import unicode_literals, print_function
 
 import json
-import pandas as pd
 
+import pandas as pd
 from django import forms
 
 from dataops import pandas_db, ops
@@ -152,10 +152,11 @@ class ColumnBasicForm(forms.ModelForm):
                     return data
 
                 # Condition 2: The values in the dataframe column must be in
-                # these categories
-                if not all([x in valid_values
-                            for x in self.data_frame[data['name']]
-                            if x and not pd.isnull(x)]):
+                # these categories (only if the column is being edited, though
+                if self.instance.name and \
+                        not all([x in valid_values
+                                for x in self.data_frame[self.instance.name]
+                                if x and not pd.isnull(x)]):
                     self.add_error(
                         'raw_categories',
                         'The values in the column are not compatible with ' +

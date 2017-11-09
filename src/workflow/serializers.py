@@ -33,7 +33,7 @@ class ColumnSerializer(serializers.ModelSerializer):
 class WorkflowSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, **kwargs):
-        attributes = validated_data['attributes'] or {}
+        attributes = validated_data.get('attributes', {})
         if not isinstance(attributes, dict):
             raise APIException('Attributes must be a dictionary ' +
                                ' of (string, string) pairs.')
@@ -45,7 +45,7 @@ class WorkflowSerializer(serializers.ModelSerializer):
         workflow_obj = Workflow(
             user=self.context['request'].user,
             name=validated_data['name'],
-            description_text=validated_data['description_text'],
+            description_text=validated_data.get('description_text', ''),
             nrows=0,
             ncols=0,
             attributes=attributes
@@ -67,7 +67,6 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
     actions = ActionSerializer(many=True, required=False)
 
     def create(self, validated_data, **kwargs):
-
         workflow_obj = Workflow(
             user=self.context['user'],
             name=self.context['name'],
