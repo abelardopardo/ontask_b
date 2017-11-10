@@ -633,5 +633,14 @@ def serve(request):
     if action_content is None:
         raise Http404
 
+    # Log the event
+    logs.ops.put(
+        request.user,
+        'action_served_execute',
+        workflow=action.workflow,
+        payload={'action': action.name,
+                 'action_id': action.id}
+    )
+
     # Respond the whole thing
     return HttpResponse(action_content)

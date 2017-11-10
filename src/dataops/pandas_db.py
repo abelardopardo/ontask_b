@@ -471,3 +471,44 @@ def num_rows_by_name(table_name, cond_filter=None):
     cursor = connection.cursor()
     cursor.execute(query, fields)
     return cursor.fetchone()[0]
+
+
+def check_wf_df(workflow):
+    """
+    Check the consistency between the information stored in the workflow
+    and the structure of the underlying dataframe
+
+    :param workflow: Workflow object
+    :return: Boolean stating the result of the check. True: Correct.
+    """
+    # Get the df
+    df = load_from_db(workflow.id)
+
+    # Set values in case there is no df
+    if df is not None:
+        dfnrows = df.shape[0]
+        dfncols = df.shape[1]
+        df_col_names = list(df.columns)
+    else:
+        dfnrows = 0
+        dfncols = 0
+        df_col_names = []
+
+    # Check 1: Number of rows and columns
+    if workflow.nrows != dfnrows:
+        return False
+    if workflow.ncols != dfncols:
+        return False
+
+    # Identical sets of columns
+    wf_cols = workflow.columns.all()
+    if [x.name for x in wf_cols] != df_col_names:
+        return False
+
+    # Identical data types
+    for n1, n2 in zip(wf_cols, df_col_names):
+        if n1.data_type != pandas_datatype_names[df[n2].dtype.name]:
+            return False
+
+    return True
+

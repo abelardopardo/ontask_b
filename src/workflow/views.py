@@ -9,6 +9,7 @@ from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django.views import generic
+from django.conf import settings
 
 import logs.ops
 from action.models import Condition
