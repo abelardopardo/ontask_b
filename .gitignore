@@ -63,6 +63,9 @@ Desktop.ini
 # Project settings
 /site/
 
+# Kdiff3 remains
+*.orig
+
 /logs
 
 migrations
