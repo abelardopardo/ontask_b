@@ -5,13 +5,9 @@
 
 - Support for SQLite3. Now using only postgresql
 
-- Workflow sharing. Need to be redone with sessions handled by memcache
-
-- Email tracking is not done yet.
-
-- Plugins are rolled back
-
 - Token authentication
+
+- Major overhaul of code to polish bugs in all packages.
 
 ## 1.0.2 2017-10-22
 
