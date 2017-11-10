@@ -16,7 +16,14 @@ import logs.urls
 import matrix.urls
 import profiles.urls
 import workflow.urls
+from dataops import pandas_db
 from . import views
+
+api_description = """
+The Ontask API offers functionality to manipulate workflows, 
+matrices and logs. The operations provide CRUD operations over 
+these objects.
+"""
 
 urlpatterns = [
     url(r'^$', views.HomePage.as_view(), name='home'),

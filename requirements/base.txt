@@ -21,3 +21,5 @@ validate_email
 django-jquery
 coreapi
 pygments
+tzlocal
+psycopg2

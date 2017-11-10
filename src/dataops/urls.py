@@ -6,7 +6,6 @@ from django.conf.urls import url
 import dataops.upload
 from . import views
 from . import csvupload
-from . import plugin_manager
 
 app_name = 'dataops'
 
@@ -15,8 +14,6 @@ urlpatterns = [
     url(r'^$', views.dataops, name="list"),
 
     url(r'^uploadmerge/$', views.uploadmerge, name="uploadmerge"),
-
-    url(r'^transform/$', views.transform, name="transform"),
 
     url(r'^rowfilter/$', views.row_filter, name="rowfilter"),
 
