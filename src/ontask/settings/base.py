@@ -118,6 +118,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleWare',
 )
 
 AUTHENTICATION_BACKENDS = [
@@ -128,6 +129,9 @@ AUTHENTICATION_BACKENDS = [
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 1800  # set just 30 mins
 SESSION_SAVE_EVERY_REQUEST = True  # Needed to make sure timeout above works
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
