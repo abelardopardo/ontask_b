@@ -53,6 +53,12 @@
 	  <strong>Bio</strong>: {{ show_user.profile.bio }}
 	</div>
       </div>
+        <div class="panel-default panel-body">
+            <strong>API Auth token</strong> {{ user.auth_token }}
+          <a href="{% url 'profiles:reset_token' %}"
+             class="btn btn-sm btn-info">{% if user.auth_token %}Reset{% else %}Create{% endif %}
+          </a>
+        </div>
     </div>
   </div>
 </div>

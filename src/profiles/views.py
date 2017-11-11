@@ -2,7 +2,9 @@ from __future__ import unicode_literals
 from django.views import generic
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import LoginRequiredMixin
+from rest_framework.authtoken.models import Token
 from . import forms
 from . import models
 
@@ -58,3 +60,28 @@ class EditProfile(LoginRequiredMixin, generic.TemplateView):
         profile.save()
         messages.success(request, "Profile details saved!")
         return redirect("profiles:show_self")
+
+
+def reset_token(request):
+    """
+    Function to reset the authentication token for a user. If it exists,
+    it is deleted first.
+    :param request:
+    :return:
+    """
+    tk = None
+    try:
+        # Get the token to see if it exists
+        tk = Token.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        pass
+
+    if tk:
+        # Delete it if detected.
+        Token.objects.get(user=request.user).delete()
+
+    # Create the new one
+    Token.objects.create(user=request.user)
+
+    # Go back to showing the profile
+    return redirect('profiles:show_self')

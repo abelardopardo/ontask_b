@@ -95,6 +95,7 @@ INSTALLED_APPS = (
     'django_tables2',
     'import_export',
     'rest_framework',
+    'rest_framework.authtoken',
     'django_summernote',
     'jquery',
 
