@@ -129,10 +129,6 @@
     <!-- Site footer -->
     {% block footer %}
       <div class="container-fluid">
-        <img src="{{ MEDIA_URL }}/project_consortium.gif"
-             alt="OnTask Logo Set" style="width:100%;"/>
-      </div>
-      <div class="container-fluid">
         <div class="footer">
           <div class="row" id="base_footer">
             <div class="col-lg-6 div1">
@@ -141,6 +137,10 @@
             <div class="col-lg-6 div2 text-right">
               Version: {% ontask_version %}
             </div>
+          </div>
+          <div class="container-fluid">
+            <img src="{{ MEDIA_URL }}/project_consortium.gif"
+                 alt="OnTask Logo Set" style="width:100%;"/>
           </div>
         </div>
       </div>
