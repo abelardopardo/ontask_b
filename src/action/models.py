@@ -37,7 +37,7 @@ class Action(models.Model):
 
     # Text to be personalised.
     content = models.TextField(
-        default='{% comment %} Your action content here{% endcomment %}',
+        default='{% comment %}Your action content here{% endcomment %}',
         null=False,
         blank=True)
 
