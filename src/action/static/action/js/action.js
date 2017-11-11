@@ -1,63 +1,3 @@
-var loadConditionForm = function () {
-    var btn = $(this);
-    $.ajax({
-      url: btn.attr("data-url"),
-      type: 'get',
-      dataType: 'json',
-      data: {'action_content': $("#id_content").summernote('code')},
-      beforeSend: function() {
-        $("#modal-item").modal("show");
-      },
-      success: function(data) {
-        $("#modal-item .modal-content").html(data.html_form);
-        $('#id_formula').hide();
-        id_formula_value = $('#id_formula').val();
-        if (id_formula_value != "null" && id_formula_value != "{}") {
-          qbuilder_options['rules'] = JSON.parse(id_formula_value);
-        }
-        $('#builder').queryBuilder(qbuilder_options);
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        location.reload();
-      }
-    });
-}
-
-var saveConditionForm = function () {
-    var form = $(this);
-    formula = $('#builder').queryBuilder('getRules');
-    if (formula == null || !formula['valid']) {
-      return false;
-    }
-    f_text = JSON.stringify(formula, undefined, 2);
-    $('#id_formula').val(f_text);
-    // $('#id_formula').val(formula);
-    $.ajax({
-      url: form.attr("action"),
-      data: form.serialize(),
-      type: form.attr("method"),
-      dataType: 'json',
-      success: function (data) {
-        if (data.form_is_valid) {
-          location.href = data.html_redirect;
-        }
-        else {
-          $("#modal-item .modal-content").html(data.html_form);
-          $('#id_formula').hide();
-          id_formula_value = $('#id_formula').val();
-          if (id_formula_value != "null" && id_formula_value != {}) {
-            qbuilder_options['rules'] = JSON.parse(id_formula_value);
-          }
-          $('#builder').queryBuilder(qbuilder_options);
-        }
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        location.reload();
-      }
-    });
-    return false;
-};
-
 var insertConditionInContent = function() {
   var btn = $(this);
   var range = $("#id_content").summernote('createRange');
@@ -94,24 +34,24 @@ $(function () {
   $("#modal-item").on("submit", ".js-action-delete-form", saveForm);
 
   // Create filter
-  $("#filter-set").on("click", ".js-filter-create", loadConditionForm);
-  $("#modal-item").on("submit", ".js-filter-create-form", saveConditionForm);
+  $("#filter-set").on("click", ".js-filter-create", loadForm);
+  $("#modal-item").on("submit", ".js-filter-create-form", saveForm);
 
   // Edit Filter
-  $("#filter-set").on("click", ".js-filter-edit", loadConditionForm);
-  $("#modal-item").on("submit", ".js-filter-edit-form", saveConditionForm);
+  $("#filter-set").on("click", ".js-filter-edit", loadForm);
+  $("#modal-item").on("submit", ".js-filter-edit-form", saveForm);
 
   // Delete Filter
   $("#filter-set").on("click", ".js-filter-delete", loadForm);
   $("#modal-item").on("submit", ".js-filter-delete-form", saveForm);
 
   // Create Condition
-  $("#condition-set").on("click", ".js-condition-create", loadConditionForm);
-  $("#modal-item").on("submit", ".js-condition-create-form", saveConditionForm);
+  $("#condition-set").on("click", ".js-condition-create", loadForm);
+  $("#modal-item").on("submit", ".js-condition-create-form", saveForm);
 
   // Edit Condition
-  $("#condition-set").on("click", ".js-condition-edit", loadConditionForm);
-  $("#modal-item").on("submit", ".js-condition-edit-form", saveConditionForm);
+  $("#condition-set").on("click", ".js-condition-edit", loadForm);
+  $("#modal-item").on("submit", ".js-condition-edit-form", saveForm);
 
   // Delete Condition
   $("#condition-set").on("click", ".js-condition-delete", loadForm);

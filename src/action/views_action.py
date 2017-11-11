@@ -231,6 +231,12 @@ def preview_response(request, pk, template, prelude=None):
         data['html_redirect'] = reverse('workflow:index')
         return JsonResponse(data)
 
+    # If the request has the 'action_content' field, update the action
+    action_content = request.GET.get('action_content', None)
+    if action_content:
+        action.content = action_content
+        action.save()
+
     # Get the index parameter or zero if anything goes wrong
     try:
         idx = int(request.GET.get('idx', 1))
