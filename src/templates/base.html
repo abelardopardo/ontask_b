@@ -128,19 +128,21 @@
 
     <!-- Site footer -->
     {% block footer %}
-      <!-- Some social button for contact will do -->
-      <a name="contact"></a>
       <div class="container-fluid">
-            <div class="footer">
-        <div class="row" id="base_footer">
-          <div class="col-lg-6 div1">
-              <p>&copy; OnTask Project {% now 'Y' %}</p>
-          </div>
-          <div class="col-lg-6 div2 text-right">
-            Version: {% ontask_version %}
+        <img src="{{ MEDIA_URL }}/project_consortium.gif"
+             alt="OnTask Logo Set" style="width:100%;"/>
+      </div>
+      <div class="container-fluid">
+        <div class="footer">
+          <div class="row" id="base_footer">
+            <div class="col-lg-6 div1">
+                <p>&copy; OnTask Project {% now 'Y' %}</p>
+            </div>
+            <div class="col-lg-6 div2 text-right">
+              Version: {% ontask_version %}
+            </div>
           </div>
         </div>
-            </div>
       </div>
     {% endblock %}
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>
