@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 import django_tables2 as tables
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import JsonResponse
@@ -9,7 +10,6 @@ from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django.views import generic
-from django.conf import settings
 
 import logs.ops
 from action.models import Condition
@@ -62,14 +62,6 @@ class WorkflowTable(tables.Table):
 
     )
 
-    operations = OperationsColumn(
-        attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name='Operations',
-        orderable=False,
-        template_file='workflow/includes/partial_workflow_operations.html',
-        get_operation_id=lambda x: x.id
-    )
-
     def __init__(self, data, *args, **kwargs):
         table_id = kwargs.pop('id')
 
@@ -97,8 +89,7 @@ class WorkflowTable(tables.Table):
 
         fields = ('name', 'description_text', 'nrows_cols', 'modified')
 
-        sequence = ('name', 'description_text', 'nrows_cols', 'modified',
-                    'operations')
+        sequence = ('name', 'description_text', 'nrows_cols', 'modified')
 
         exclude = ('user', 'attributes', 'nrows', 'ncols', 'column_names',
                    'column_types', 'column_unique', 'query_builder_ops',
@@ -125,8 +116,6 @@ class WorkflowDetailTable(tables.Table):
         attrs={'td': {'class': 'dt-body-center'}},
         verbose_name=str('Key?')
     )
-
-
 
     class Meta:
         attrs = {
@@ -275,7 +264,15 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
         if table_info is not None:
             table = WorkflowDetailTable(
                 table_info['table'],
-                orderable=False)
+                orderable=False,
+                extra_columns=[('operations', OperationsColumn(
+                    attrs={'td': {'class': 'dt-body-center'}},
+                    verbose_name='Operations',
+                    orderable=False,
+                    template_file=
+                    'workflow/includes/workflow_column_operations.html',
+                    get_operation_id=lambda x: x['id']
+                ))])
             table_info['table_data'] = table
             context['table_info'] = table_info
 
