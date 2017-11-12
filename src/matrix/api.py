@@ -15,7 +15,7 @@ from workflow.models import Workflow
 from workflow.ops import is_locked, detach_dataframe
 
 
-class MatrixOps(APIView, UserIsInstructor):
+class MatrixOps(APIView):
     """
     get:
     Get all the data in the matrix corresponding to the workflow (no matter
@@ -34,6 +34,7 @@ class MatrixOps(APIView, UserIsInstructor):
     """
 
     serializer_class = DataFrameSerializer
+    permission_classes = (UserIsInstructor,)
 
     def get_object(self, pk, **kwargs):
         user = kwargs['user']
@@ -98,7 +99,7 @@ class MatrixOps(APIView, UserIsInstructor):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class MatrixMerge(APIView, UserIsInstructor):
+class MatrixMerge(APIView):
     """
     get:
     Retrieves the data frame attached to the workflow and returns it labeled
@@ -109,6 +110,7 @@ class MatrixMerge(APIView, UserIsInstructor):
     """
 
     serializer_class = DataFrameMergeSerializer
+    permission_classes = (UserIsInstructor,)
 
     def get_object(self, pk, **kwargs):
         user = kwargs['user']

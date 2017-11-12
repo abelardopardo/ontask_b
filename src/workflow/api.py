@@ -9,7 +9,7 @@ from .models import Workflow
 from .serializers import WorkflowSerializer
 
 
-class WorkflowAPIListCreate(generics.ListCreateAPIView, UserIsInstructor):
+class WorkflowAPIListCreate(generics.ListCreateAPIView):
     """
     get:
     Return a list of available workflows
@@ -20,6 +20,7 @@ class WorkflowAPIListCreate(generics.ListCreateAPIView, UserIsInstructor):
 
     queryset = None  # Needs to be overwritten
     serializer_class = WorkflowSerializer
+    permission_classes = (UserIsInstructor,)
 
     # Filter the workflows only for the current user.
     def get_queryset(self):
@@ -33,8 +34,7 @@ class WorkflowAPIListCreate(generics.ListCreateAPIView, UserIsInstructor):
         serializer.save(user=self.request.user)
 
 
-class WorkflowAPIRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView,
-                                       UserIsInstructor):
+class WorkflowAPIRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     """
     get:
     Returns the information stored for the workflow
@@ -51,6 +51,7 @@ class WorkflowAPIRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView,
     """
     queryset = None  # Needs to be overwritten
     serializer_class = WorkflowSerializer
+    permission_classes = (UserIsInstructor,)
 
     # Filter the workflows only for the current user.
     def get_queryset(self):

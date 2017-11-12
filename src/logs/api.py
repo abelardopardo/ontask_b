@@ -9,14 +9,14 @@ from .models import Log
 from .serializers import LogSerializer
 
 
-class LogAPIList(UserIsInstructor, generics.ListAPIView):
+class LogAPIList(generics.ListAPIView):
     """
     Get a list of the available workflows and allow creation
     """
 
     queryset = None  # Needs to be overwritten
     serializer_class = LogSerializer
-    permission_classes = (IsAuthenticated, DjangoModelPermissions, IsOwner)
+    permission_classes = (UserIsInstructor,)
 
     # Filter the workflows only for the current user.
     def get_queryset(self):

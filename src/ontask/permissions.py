@@ -26,7 +26,7 @@ def is_instructor(user):
         user.groups.filter(name='instructor').exists()
 
 
-class UserIsInstructor(UserPassesTestMixin):
+class UserIsInstructor(UserPassesTestMixin, permissions.BasePermission):
     """
     @DynamicAttrs
     Class to use in the Views so that only users that are instructors are
@@ -34,4 +34,11 @@ class UserIsInstructor(UserPassesTestMixin):
     """
 
     def test_func(self):
-        return self.request.user.groups.filter(name='instructor').exists()
+        return is_instructor(self.request.user)
+
+    def has_permission(self, request, view):
+        return is_instructor(request.user)
+
+    def has_object_permission(self, request, view, obj):
+        del view, obj
+        return is_instructor(request.user)

@@ -4,6 +4,8 @@
 
 - Fixed bug to remember step 1 in csv upload. 
 
+- Fixed bug to require authenticated access to the API only to instructors
+
 ## 1.1.0 
 
 ### Removed
