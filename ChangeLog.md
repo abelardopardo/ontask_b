@@ -1,3 +1,8 @@
+## 1.1.1
+
+### Changed
+
+- Fixed bug to remember step 1 in csv upload. 
 
 ## 1.1.0 
 
