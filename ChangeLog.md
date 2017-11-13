@@ -1,5 +1,10 @@
 ## 1.1.1
 
+### Added
+
+- Workflows are now shared among users (with some operations reserverd only
+  for the owner)
+  
 ### Changed
 
 - Fixed bug to remember step 1 in csv upload. 
