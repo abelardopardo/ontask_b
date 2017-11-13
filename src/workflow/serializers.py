@@ -99,7 +99,8 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
                    'modified',
                    'nrows',
                    'ncols',
-                   'session_key')
+                   'session_key',
+                   'shared')
 
 
 class WorkflowExportCompleteSerializer(WorkflowExportSerializer):
@@ -159,7 +160,8 @@ class WorkflowExportCompleteSerializer(WorkflowExportSerializer):
                    'user',
                    'created',
                    'modified',
-                   'session_key')
+                   'session_key',
+                   'shared')
 
 # from workflow.models import Workflow
 # from workflow.serializers import WorkflowSerializer, WorkflowSerializerM

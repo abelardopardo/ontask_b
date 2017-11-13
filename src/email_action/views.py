@@ -3,6 +3,7 @@ from __future__ import unicode_literals, print_function
 
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from django.shortcuts import redirect, reverse, render
 
 from action.models import Action
@@ -25,8 +26,9 @@ def request_data(request, pk):
 
     # Get the action attached to this request
     try:
-      action = Action.objects.get(pk=pk,
-                                  workflow__user=request.user)
+        action = Action.objects.filter(
+            Q(workflow__user=request.user) |
+            Q(workflow__shared=request.user)).distinct().get(pk=pk)
     except ObjectDoesNotExist:
         return reverse('workflow:index')
 

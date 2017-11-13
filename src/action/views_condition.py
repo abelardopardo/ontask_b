@@ -201,10 +201,10 @@ class FilterCreateView(UserIsInstructor, generic.TemplateView):
     def get(self, request, *args, **kwargs):
         # Get the action that is being used
         try:
-            action = Action.objects.get(
-                pk=kwargs['pk'],
-                workflow__user=request.user
-            )
+            action = Action.objects.filter(
+                Q(workflow__user=request.user) |
+                Q(workflow__shared=request.user)
+            ).distinct().get(pk=kwargs['pk'])
         except (KeyError, ObjectDoesNotExist):
             return redirect('workflow:index')
 
@@ -220,10 +220,10 @@ class FilterCreateView(UserIsInstructor, generic.TemplateView):
         del args
         # Get the action that is being used
         try:
-            action = Action.objects.get(
-                pk=kwargs['pk'],
-                workflow__user=request.user
-            )
+            action = Action.objects.filter(
+                Q(workflow__user=request.user) |
+                Q(workflow__shared=request.user)
+            ).distinct().get(pk=kwargs['pk'])
         except (KeyError, ObjectDoesNotExist):
             return redirect('workflow:index')
 
@@ -246,11 +246,11 @@ def edit_filter(request, pk):
     """
     # Get the filter
     try:
-        cond_filter = Condition.objects.get(
-            pk=pk,
-            action__workflow__user=request.user,
+        cond_filter = Condition.objects.filter(
+            Q(action__workflow__user=request.user) |
+            Q(action__workflow__shared=request.user),
             is_filter=True
-        )
+        ).distinct().get(pk=pk)
     except (KeyError, ObjectDoesNotExist):
         return redirect('workflow:index')
 
@@ -341,10 +341,10 @@ class ConditionCreateView(UserIsInstructor, generic.TemplateView):
     def get(self, request, *args, **kwargs):
         # Get the action that is being used
         try:
-            action = Action.objects.get(
-                pk=kwargs['pk'],
-                workflow__user=request.user
-            )
+            action = Action.objects.filter(
+                Q(workflow__user=request.user) |
+                Q(workflow__shared=request.user)
+            ).distinct().get(pk=kwargs['pk'])
         except (KeyError, ObjectDoesNotExist):
             return redirect('workflow:index')
 
@@ -360,10 +360,10 @@ class ConditionCreateView(UserIsInstructor, generic.TemplateView):
         del args
         # Get the action that is being used
         try:
-            action = Action.objects.get(
-                pk=kwargs['pk'],
-                workflow__user=request.user
-            )
+            action = Action.objects.filter(
+                Q(workflow__user=request.user) |
+                Q(workflow__shared=request.user)
+            ).distinct().get(pk=kwargs['pk'])
         except (KeyError, ObjectDoesNotExist):
             return redirect('workflow:index')
 
@@ -387,11 +387,11 @@ def edit_condition(request, pk):
     """
     # Get the condition
     try:
-        condition = Condition.objects.get(
-            pk=pk,
-            action__workflow__user=request.user,
+        condition = Condition.objects.filter(
+            Q(action__workflow__user=request.user) |
+            Q(action__workflow__shared=request.user),
             is_filter=False
-        )
+        ).distinct().get(pk=pk)
     except (KeyError, ObjectDoesNotExist):
         data = {}
         data['form_is_valid'] = True
@@ -421,11 +421,11 @@ def delete_condition(request, pk):
 
     # Get the condition
     try:
-        condition = Condition.objects.get(
-            pk=pk,
-            action__workflow__user=request.user,
+        condition = Condition.objects.filter(
+            Q(action__workflow__user=request.user) |
+            Q(action__workflow__shared=request.user),
             is_filter=False
-        )
+        ).distinct().get(pk=pk)
     except (KeyError, ObjectDoesNotExist):
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('workflow:index')

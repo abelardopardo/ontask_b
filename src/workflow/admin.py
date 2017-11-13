@@ -19,6 +19,8 @@ class WorkflowAdmin(admin.ModelAdmin):
                     'data_frame_table_name',
                     'session_key')
 
+    filter_horizontal = ('shared',)
+
 
 class ColumnAdmin(admin.ModelAdmin):
     list_display = ('id',

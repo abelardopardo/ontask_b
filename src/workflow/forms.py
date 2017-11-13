@@ -5,6 +5,8 @@ import json
 
 import pandas as pd
 from django import forms
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 
 from dataops import pandas_db, ops
 from ontask import is_legal_var_name
@@ -281,3 +283,19 @@ class WorkflowExportRequestForm(forms.Form):
         label='Include data and conditions in export?',
         initial=True,
         required=False)
+
+
+class SharedForm(forms.Form):
+    user_email = forms.CharField(max_length=1024,
+                                 strip=True,
+                                 label='User email')
+
+    def clean(self):
+        data = super(SharedForm, self).clean()
+
+        try:
+            get_user_model().objects.get(email=data['user_email'])
+        except ObjectDoesNotExist:
+            self.add_error('user_email', 'User not found')
+
+        return data

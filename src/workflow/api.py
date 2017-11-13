@@ -2,9 +2,9 @@
 from __future__ import unicode_literals, print_function
 
 from rest_framework import generics
+from django.db.models import Q
 
 from ontask.permissions import UserIsInstructor
-from ontask.permissions import IsOwner, UserIsInstructor
 from .models import Workflow
 from .serializers import WorkflowSerializer
 
@@ -28,10 +28,16 @@ class WorkflowAPIListCreate(generics.ListCreateAPIView):
         if self.request.user.is_superuser:
             return Workflow.objects.all()
 
-        return Workflow.objects.filter(user=self.request.user)
+        return Workflow.objects.filter(
+            Q(user=self.request.user) | Q(shared=self.request.user)
+        )
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        if self.request.user.is_superuser:
+            # Superuser is allowed to create workflows for any user
+            serializer.save()
+        else:
+            serializer.save(user=self.request.user)
 
 
 class WorkflowAPIRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
@@ -59,11 +65,15 @@ class WorkflowAPIRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         if self.request.user.is_superuser:
             return Workflow.objects.all()
 
-        return Workflow.objects.filter(user=self.request.user)
+        return Workflow.objects.filter(
+            Q(user=self.request.user) | Q(shared=self.request.user)
+        )
 
     def perform_create(self, serializer):
         if self.request.user.is_superuser:
             # Superuser is allowed to create workflows for any user
             serializer.save()
         else:
-            serializer.save(user=self.request.user)
+            serializer.save(
+            Q(user=self.request.user) | Q(shared=self.request.user)
+        )

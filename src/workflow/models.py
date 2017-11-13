@@ -65,6 +65,11 @@ class Workflow(models.Model):
                                    null=False,
                                    blank=True)
 
+    # Workflows shared among users. One workflow can be shared with many
+    # users, and many users can have this workflow as available to them.
+    shared = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                    related_name='shared_workflows')
+
     def get_columns(self):
         """
         Function to access the Columns

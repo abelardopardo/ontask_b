@@ -4,7 +4,7 @@ from __future__ import unicode_literals, print_function
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from . import attribute_views, column_views, import_export_views
+from . import attribute_views, column_views, import_export_views, share_views
 from . import views, api
 
 app_name = 'workflow'
@@ -42,6 +42,18 @@ urlpatterns = [
     url(r'^attribute_delete/$',
         attribute_views.attribute_delete,
         name='attribute_delete'),
+
+    # Sharing
+
+    url(r'^share/$', share_views.share, name='share'),
+
+    url(r'^share_create/$',
+        share_views.share_create,
+        name='share_create'),
+
+    url(r'^share_delete/$',
+        share_views.share_delete,
+        name='share_delete'),
 
     # Column manipulation
 

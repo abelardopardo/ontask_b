@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.db.models import Q
 
 from dataops import pandas_db, ops
 from matrix.serializers import DataFrameSerializer, DataFrameMergeSerializer
@@ -42,7 +43,10 @@ class MatrixOps(APIView):
             if user.is_superuser:
                 workflow = Workflow.objects.get(pk=pk)
             else:
-                workflow = Workflow.objects.get(pk=pk, user=user)
+                workflow = Workflow.objects.filter(
+                    Q(user=self.request.user) |
+                    Q(shared__id=self.request.user.id)
+                ).distinct().get(id=pk)
         except Workflow.DoesNotExist:
             raise APIException('Incorrect object')
 
@@ -118,7 +122,10 @@ class MatrixMerge(APIView):
             if user.is_superuser:
                 workflow = Workflow.objects.get(pk=pk)
             else:
-                workflow = Workflow.objects.get(pk=pk, user=user)
+                workflow = Workflow.objects.filter(
+                    Q(user=self.request.user) |
+                    Q(shared__id=self.request.user.id)
+                ).distinct().get(id=pk)
         except Workflow.DoesNotExist:
             raise APIException('Incorrect object')
 

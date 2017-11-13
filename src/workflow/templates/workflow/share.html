@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load django_tables2 %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+{% block scripts %}
+  <script src="{% static 'workflow/js/workflow.js' %}"></script>
+{% endblock %}
+
+{% block title %}{{ block.super }}{{ workflow.name }}{% endblock %}
+
+{% block container %}
+<div align="center" class="container">
+  <h1 class="page-header">Users with access to this workflow</h1>
+
+  <div style="display: inline-block;" id="workflow-shared">
+    <a href="{% url 'workflow:detail' workflow.id %}"
+       class="btn btn-primary btn-sm">
+      <span class="glyphicon glyphicon-ok"></span> Close</button>
+    </a>
+    <button type="button"
+            class="btn btn-primary btn-sm js-share-create"
+            data-url="{% url 'workflow:share_create' %}">
+      <span class="glyphicon glyphicon-plus"></span> Add user
+    </button>
+    {% render_table table %}
+  </div>
+  <div class="modal fade" id="modal-item">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock container %}

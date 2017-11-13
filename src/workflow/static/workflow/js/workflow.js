@@ -3,10 +3,6 @@ if (document.getElementById("item-table") != null) {
     $(document).ready(function() {
         $('#item-table').DataTable({
             "order": [[0, "asc"]],
-            "columnDefs": [
-                {"orderable": false, "targets": 4},
-                {"searchable": false, "targets": 4},
-            ],
             "language": {
                 "emptyTable": "No workflows available."
             }
@@ -44,6 +40,14 @@ $(function () {
   // Delete attribute
   $("#attribute-table").on("click", ".js-attribute-delete", loadForm)
   $("#modal-item").on("submit", ".js-attribute-delete-form", saveForm)
+
+  // Add Share
+  $("#workflow-shared").on("click", ".js-share-create", loadForm);
+  $("#modal-item").on("submit", ".js-share-create-form", saveForm)
+
+  // Delete share
+  $("#share-table").on("click", ".js-share-delete", loadForm)
+  $("#modal-item").on("submit", ".js-share-delete-form", saveForm)
 
   // Column Add
   $("#workflow-table").on("click", ".js-workflow-column-add", loadForm);

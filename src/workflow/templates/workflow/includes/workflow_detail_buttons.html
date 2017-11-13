@@ -6,25 +6,30 @@
 <a href="{% url 'workflow:attributes' %}" class="btn btn-primary btn-sm">
   <span class="glyphicon glyphicon-list"></span> Attributes
 </a>
+{% if request.user == workflow.user %}
+<a href="{% url 'workflow:share' %}" class="btn btn-primary btn-sm">
+  <span class="glyphicon glyphicon-share"></span> Share
+</a>
+{% endif %}
 <a href="{% url 'workflow:export_ask' workflow.id %}"
    class="btn btn-primary btn-sm">
   <span class="glyphicon glyphicon-export"></span> Export
 </a>
-<button type="button"
-        class="btn btn-primary btn-sm js-workflow-update align-middle"
-        data-url="{% url 'workflow:update' workflow.id %}">
-    <span class="glyphicon glyphicon-pencil"></span> Rename
-</button>
-{% if table_info %}
+{% if request.user == workflow.user %}
+  <button type="button"
+          class="btn btn-primary btn-sm js-workflow-update align-middle"
+          data-url="{% url 'workflow:update' workflow.id %}">
+      <span class="glyphicon glyphicon-pencil"></span> Rename
+  </button>
   <button type="button"
           class="btn btn-danger btn-sm js-workflow-flush"
           data-url="{% url 'workflow:flush' workflow.id %}">
     <span class="glyphicon glyphicon-floppy-remove"></span> Flush Data
   </button>
+  <button type="button"
+          class="btn btn-danger btn-sm js-workflow-delete"
+          data-url="{% url 'workflow:delete' workflow.id %}">
+    <span class="glyphicon glyphicon-trash"></span> Delete
+  </button>
 {% endif %}
-<button type="button"
-        class="btn btn-danger btn-sm js-workflow-delete"
-        data-url="{% url 'workflow:delete' workflow.id %}">
-  <span class="glyphicon glyphicon-trash"></span> Delete
-</button>
 

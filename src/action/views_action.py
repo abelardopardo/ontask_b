@@ -369,8 +369,9 @@ def delete_action(request, pk):
 
     # Get the appropriate action object
     try:
-        action = Action.objects.get(pk=pk,
-                                    workflow__user=request.user)
+        action = Action.objects.filter(
+            Q(workflow__user=request.user) |
+            Q(workflow__shared=request.user)).distinct().get(pk=pk)
     except (KeyError, ObjectDoesNotExist):
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('workflow:index')
@@ -419,8 +420,9 @@ def edit_action(request, pk):
 
     # Get the action and create the form
     try:
-        action = Action.objects.get(pk=pk,
-                                    workflow=workflow)
+        action = Action.objects.filter(
+            Q(workflow__user=request.user) |
+            Q(workflow__shared=request.user)).distinct().get(pk=pk)
     except ObjectDoesNotExist:
         return redirect('action:index')
 
@@ -531,7 +533,9 @@ def showurl(request, pk):
 
     # Get the action object
     try:
-        action = Action.objects.get(pk=pk, workflow__user=request.user)
+        action = Action.objects.filter(
+            Q(workflow__user=request.user) |
+            Q(workflow__shared=request.user)).distinct().get(pk=pk)
     except Action.DoesNotExist:
         return redirect(reverse('workflow:index'))
 

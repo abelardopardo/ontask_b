@@ -2,15 +2,15 @@
 from __future__ import unicode_literals, print_function
 
 import django_tables2 as tables
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django.views import generic
-
+from django.conf import settings
 import logs.ops
 from action.models import Condition
 from dataops import ops, pandas_db
@@ -133,6 +133,32 @@ class WorkflowDetailTable(tables.Table):
                      'upload some data.'
 
 
+class WorkflowShareTable(tables.Table):
+    email = tables.Column(
+        attrs={'td': {'class': 'dt-body-center'}},
+        verbose_name=str('User')
+    )
+
+    operations = OperationsColumn(
+        attrs={'td': {'class': 'dt-body-center'}},
+        verbose_name='',
+        orderable=False,
+        template_file='workflow/includes/partial_share_operations.html',
+        get_operation_id=lambda x: x['email']
+    )
+
+    class Meta:
+        fields = ('email', 'id')
+
+        sequence = ('email', 'operations')
+
+        attrs = {
+            'class': 'table display',
+            'id': 'share-table',
+            'th': {'class': 'dt-body-center'}
+        }
+
+
 def save_workflow_form(request, form, template_name, is_new):
     # Ajax response
     data = dict()
@@ -193,7 +219,9 @@ def workflow_index(request):
     request.session.pop('ontask_workflow_name', None)
 
     # Get the available workflows
-    workflows = Workflow.objects.filter(user=request.user)
+    workflows = Workflow.objects.filter(
+        Q(user=request.user) | Q(shared=request.user)
+    ).distinct()
 
     # We include the table only if it is not empty.
     context = {}
@@ -259,20 +287,26 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
         if not wflow_id:
             return context
 
+        is_owner = self.object.user == self.request.user
+
         # Get the table information (if it exist)
         table_info = ops.workflow_table_info(self.object)
-        if table_info is not None:
-            table = WorkflowDetailTable(
-                table_info['table'],
-                orderable=False,
-                extra_columns=[('operations', OperationsColumn(
+        if table_info:
+            ops_column = []
+            if is_owner:
+                ops_column = [('operations', OperationsColumn(
                     attrs={'td': {'class': 'dt-body-center'}},
                     verbose_name='Operations',
                     orderable=False,
                     template_file=
                     'workflow/includes/workflow_column_operations.html',
                     get_operation_id=lambda x: x['id']
-                ))])
+                ))]
+
+            table = WorkflowDetailTable(
+                table_info['table'],
+                orderable=False,
+                extra_columns=ops_column)
             table_info['table_data'] = table
             context['table_info'] = table_info
 

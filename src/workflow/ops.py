@@ -6,14 +6,16 @@ import gzip
 
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from django.http import HttpResponse
 from django.utils import timezone
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
-from .models import Workflow
+from .models import Workflow, Column
 from .serializers import (WorkflowExportSerializer,
                           WorkflowExportCompleteSerializer)
+from dataops import pandas_db
 
 
 def lock_workflow(request, workflow):
@@ -78,8 +80,9 @@ def get_workflow(request, wid=None):
     Function that gets the workflow that the user (in the current request) is
     using.
     :param request: HTTP request object
-    :param wid: Workflow id to get.
-    :return: Worflow object or None (if error)
+    :param wid: Workflow id to get. If not given, taken from the request
+    session
+    :return: Workflow object or None (if error)
     """
 
     # Step 1: Get the workflow that is being accessed
@@ -90,13 +93,45 @@ def get_workflow(request, wid=None):
             wid = request.session['ontask_workflow_id']
 
         workflow = Workflow.objects.filter(
-            user=request.user, id=wid
-        ).distinct().get()
+            Q(user=request.user) | Q(shared__id=request.user.id)
+        ).distinct().get(id=wid)
     except (KeyError, ObjectDoesNotExist):
         # No workflow or value set in the session, flag error.
         return None
 
+    # Step 2: If the workflow is locked by this user, return correct result
+    if request.session.session_key == workflow.session_key:
+        return workflow
+
+    # Step 3: If the workflow is unlocked, lock and return
+    if not workflow.session_key:
+        # Workflow is unlocked. Proceed to lock
+        lock_workflow(request, workflow)
+        return workflow
+
+    # Step 4: The workflow is locked by another user. See if the session
+    # still exists
+    try:
+        session = Session.objects.get(session_key=workflow.session_key)
+    except Session.DoesNotExist:
+        # An exception means that the session stored as locking the
+        # workflow is no longer in the session table, so the user can access
+        # the workflow
+        lock_workflow(request, workflow)
+        return workflow
+
+    # Step 5: The workflow is locked by by an existing session. See if the
+    # session is valid
+    if session.expire_date >= timezone.now():
+        # The session currently locking the workflow
+        # has an expire date in the future from now. So, no access is granted.
+        return None
+
+    # The workflow is locked by a session that has expired. Take the workflow
+    # and lock it with the current session.
+    lock_workflow(request, workflow)
     return workflow
+
 
 def detach_dataframe(workflow):
     """
