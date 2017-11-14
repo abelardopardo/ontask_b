@@ -14,6 +14,8 @@ log_types = {
     'workflow_attribute_create': 'New attribute in workflow',
     'workflow_attribute_update': 'Attributes updated in workflow',
     'workflow_attribute_delete': 'Attribute deleted',
+    'workflow_share_add': 'User share added',
+    'workflow_share_delete': 'User share deleted',
     'column_add': 'Column added',
     'column_rename': 'Column renamed',
     'column_delete': 'Column deleted',
