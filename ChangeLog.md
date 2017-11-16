@@ -4,6 +4,9 @@
 
 - User search for sharing is now case insensitive.
 
+- Conditions in actions appear now in the order in which they have been 
+  modified
+   
 ## 1.1.2
 
 ### Changed

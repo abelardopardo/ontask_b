@@ -25,8 +25,6 @@ class EditActionForm(forms.ModelForm):
     """
     content = forms.CharField(
         widget=SummernoteInplaceWidget(),
-        initial='{% comment %} Write your conditional ' +
-                'text in here {% comment %}',
         label='')
 
     class Meta:

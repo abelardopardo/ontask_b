@@ -77,6 +77,10 @@ class Condition(models.Model):
     # Field to denote if this condition is the filter of an action
     is_filter = models.BooleanField(default=False)
 
+    created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
+
+    modified = models.DateTimeField(auto_now=True, null=False)
+
     def __str__(self):
         return self.name
 

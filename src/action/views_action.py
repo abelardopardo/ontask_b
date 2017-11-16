@@ -440,7 +440,8 @@ def edit_action(request, pk):
                                   '(action: {0})'.format(action.id)})
 
     # Conditions to show in the page as well.
-    conditions = Condition.objects.filter(action=action, is_filter=False)
+    conditions = Condition.objects.filter(
+        action=action, is_filter=False).order_by('modified')
 
     # Boolean to find out if there is a matrix attached to this workflow
     has_data = ops.workflow_has_matrix(action.workflow)
