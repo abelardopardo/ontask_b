@@ -203,7 +203,7 @@ div.conditions {
 div.condition-btn {
     padding: 0.5ex;
     background-color: darkgray;
-    margin: 0 0.25ex 0 0.25ex;
+    margin: 0.25ex 0.25ex 0.25ex 0.25ex;
 }
 /* Tweaks for JQuery QueryBuilder
 
