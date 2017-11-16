@@ -3,7 +3,7 @@ from __future__ import unicode_literals, print_function
 
 import re
 
-__version__ = 'B.1.1.1'
+__version__ = 'B.1.1.2'
 
 # Variable name regexp
 # identifier ::=  (letter|"_") (letter | digit | "_")*

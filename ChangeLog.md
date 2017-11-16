@@ -1,3 +1,13 @@
+## 1.1.2
+
+### Changed
+
+- Handling the data frames in the import/export process using pickle to
+  make sure the structure survives the process. Going to JSON nukes data
+  types and NaNs are not properly handled.
+  
+- Added some additional events in the logs
+
 ## 1.1.1
 
 ### Added
