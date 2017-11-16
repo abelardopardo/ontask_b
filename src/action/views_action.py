@@ -441,7 +441,7 @@ def edit_action(request, pk):
 
     # Conditions to show in the page as well.
     conditions = Condition.objects.filter(
-        action=action, is_filter=False).order_by('modified')
+        action=action, is_filter=False).order_by('created')
 
     # Boolean to find out if there is a matrix attached to this workflow
     has_data = ops.workflow_has_matrix(action.workflow)
