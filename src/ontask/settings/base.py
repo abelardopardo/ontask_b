@@ -346,6 +346,7 @@ SUMMERNOTE_CONFIG = {
         'theme': 'base16-dark',
         'mode': 'htmlmixed',
         'lineNumbers': 'true',
+        'lineWrapping': 'true',
     },
     'lazy': True,
 }
