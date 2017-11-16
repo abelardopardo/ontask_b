@@ -140,7 +140,8 @@ class WorkflowExportCompleteSerializer(WorkflowExportSerializer):
             action_data.save()
 
         # Load the data frame
-        if validated_data.get('data_frame', None):
+        df = validated_data.get('data_frame', None)
+        if df is not None:
             df_data = DataFrameSerializer(data=validated_data['data_frame'])
             if df_data.is_valid():
                 data_frame = df_data.save()
