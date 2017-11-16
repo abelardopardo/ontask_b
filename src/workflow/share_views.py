@@ -53,9 +53,7 @@ def share_create(request):
     if request.method == 'POST':
         if form.is_valid():
             # proceed with the update
-            user = get_user_model().objects.get(
-                email=form.cleaned_data['user_email'])
-            workflow.shared.add(user)
+            workflow.shared.add(form.user_obj)
             workflow.save()
 
             # Log the event
@@ -64,7 +62,7 @@ def share_create(request):
                          workflow,
                          {'id': workflow.id,
                           'name': workflow.name,
-                          'user_email': user.email})
+                          'user_email': form.user_obj.email})
 
             data['form_is_valid'] = True
             data['html_redirect'] = reverse('workflow:share')

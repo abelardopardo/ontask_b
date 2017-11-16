@@ -1,3 +1,9 @@
+## 1.1.3
+
+### Changed
+
+- User search for sharing is now case insensitive.
+
 ## 1.1.2
 
 ### Changed

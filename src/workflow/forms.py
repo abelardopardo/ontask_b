@@ -294,7 +294,9 @@ class SharedForm(forms.Form):
         data = super(SharedForm, self).clean()
 
         try:
-            get_user_model().objects.get(email=data['user_email'])
+            self.user_obj = get_user_model().objects.get(
+                email__iexact=data['user_email']
+            )
         except ObjectDoesNotExist:
             self.add_error('user_email', 'User not found')
 
