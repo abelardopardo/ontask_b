@@ -10,7 +10,7 @@
       <div class="condition-btn">
         <button type="button" class="btn btn-primary btn-sm js-condition-edit"
                 data-url="{% url 'action:edit_condition' condition.id %}">
-          {{ condition.name }}</button>
+          <span class="glyphicon glyphicon-pencil"></span> {{ condition.name }}</button>
         <button type="button" class="btn btn-warning btn-sm js-condition-insert"
                 data-name="{{ condition.name }}">
           <span class="glyphicon glyphicon-arrow-down"></span>
