@@ -15,7 +15,7 @@ from ontask.permissions import is_instructor
 from .forms import (ColumnRenameForm,
                     ColumnAddForm)
 from .models import Column
-from .ops import get_workflow
+from .ops import get_workflow, workflow_delete_column
 
 
 @user_passes_test(is_instructor)
@@ -225,26 +225,8 @@ def column_delete(request, pk):
     context['cond_to_delete'] = cond_to_delete
 
     if request.method == 'POST':
-        # Drop the column from the DB table storing the data frame
-        pandas_db.df_drop_column(workflow.id, column.name)
-
-        # Delete the column
-        column.delete()
-
-        # Update the information in the workflow
-        workflow.ncols = workflow.ncols - 1
-        workflow.save()
-
-        # If a column disappears, the conditions that contain that variable
-        # are removed..
-        for condition in cond_to_delete:
-            # Formula has the name of the deleted column.
-            # Solution 1: Nuke (Very easy)
-            # Solution 2: Mark as invalid and enhance the edit condition form
-            #  to handle renaming the fields in a formula (Complex)
-            #
-            # Solution 1 chosen.
-            condition.delete()
+        # Proceed deleting the column
+        workflow_delete_column(workflow, column.name, cond_to_delete)
 
         # Log the event
         logs.ops.put(request.user,

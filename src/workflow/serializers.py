@@ -142,7 +142,9 @@ class WorkflowExportCompleteSerializer(WorkflowExportSerializer):
         # Load the data frame
         df = validated_data.get('data_frame', None)
         if df is not None:
-            df_data = DataFrameSerializer(data=validated_data['data_frame'])
+            df_data = DataFrameSerializer(
+                data=validated_data['data_frame']
+            )
             if df_data.is_valid():
                 data_frame = df_data.save()
                 ops.store_dataframe_in_db(data_frame, workflow_obj.id)

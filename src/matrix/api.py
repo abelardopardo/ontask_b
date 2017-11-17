@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from django.db.models import Q
 
 from dataops import pandas_db, ops
-from matrix.serializers import DataFrameSerializer, DataFrameMergeSerializer
+from matrix.serializers import DataFrameMergeSerializer, DataFrameSerializer
 from ontask.permissions import UserIsInstructor
 from workflow.models import Workflow
 from workflow.ops import is_locked, detach_dataframe
@@ -62,7 +62,7 @@ class MatrixOps(APIView):
         serializer = DataFrameSerializer(data=request.data)
         if serializer.is_valid():
             try:
-                df = pd.DataFrame(serializer.validated_data)
+                df = pd.DataFrame(serializer.validated_data['data_frame'])
 
                 # Detect date/time columns
                 df = ops.detect_datetime_columns(df)
@@ -81,7 +81,9 @@ class MatrixOps(APIView):
     def get(self, request, pk, format=None):
         # Try to retrieve the wflow to check for permissions
         self.get_object(pk, user=self.request.user)
-        serializer = DataFrameSerializer(pandas_db.load_from_db(pk))
+        serializer = DataFrameSerializer(
+            {'data_frame': pandas_db.load_from_db(pk)}
+        )
         return Response(serializer.data)
 
     # Create
@@ -160,11 +162,7 @@ class MatrixMerge(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
         # Operation has been accepted by the serializer
-        try:
-            src_df = pd.DataFrame(serializer.validated_data['src_df'])
-        except Exception:
-            # Something went wrong with the translation to dataframe
-            raise APIException('Unable to load workflow matrix')
+        src_df = serializer.validated_data['src_df']
 
         # Check that the parameters are correct
         how = serializer.validated_data['how']
@@ -241,7 +239,7 @@ class MatrixMerge(APIView):
             raise APIException('Unable to perform merge operation')
 
         if merge_result:
-            # Somthing went wrong, raise the exception
+            # Something went wrong, raise the exception
             raise APIException(merge_result)
 
         # Merge went through.

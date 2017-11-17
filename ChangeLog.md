@@ -6,6 +6,10 @@
 
 - Conditions in actions appear now in the order in which they have been 
   modified
+
+- Action raw text is now shown with line wrapping
+
+- Revamped serializers for API and import/export to preserve NaN in data frames.
    
 ## 1.1.2
 

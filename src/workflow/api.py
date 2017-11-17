@@ -30,7 +30,7 @@ class WorkflowAPIListCreate(generics.ListCreateAPIView):
 
         return Workflow.objects.filter(
             Q(user=self.request.user) | Q(shared=self.request.user)
-        )
+        ).distinct()
 
     def perform_create(self, serializer):
         if self.request.user.is_superuser:
@@ -67,7 +67,7 @@ class WorkflowAPIRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         return Workflow.objects.filter(
             Q(user=self.request.user) | Q(shared=self.request.user)
-        )
+        ).distinct()
 
     def perform_create(self, serializer):
         if self.request.user.is_superuser:
@@ -75,5 +75,5 @@ class WorkflowAPIRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             serializer.save()
         else:
             serializer.save(
-            Q(user=self.request.user) | Q(shared=self.request.user)
-        )
+                Q(user=self.request.user) | Q(shared=self.request.user)
+            )

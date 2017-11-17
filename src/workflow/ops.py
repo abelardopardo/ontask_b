@@ -15,7 +15,8 @@ from rest_framework.renderers import JSONRenderer
 from .models import Workflow, Column
 from .serializers import (WorkflowExportSerializer,
                           WorkflowExportCompleteSerializer)
-from dataops import pandas_db
+from dataops import formula_evaluation, pandas_db
+from action.models import Condition
 
 
 def lock_workflow(request, workflow):
@@ -226,3 +227,46 @@ def do_export_workflow(workflow, include_data_cond):
     response['Content-Length'] = str(len(compressed_content))
 
     return response
+
+
+def workflow_delete_column(workflow, column, cond_to_delete=None):
+    """
+    Given a workflow and a column, removes it from the workflow (and the
+    corresponding data frame
+    :param workflow: Workflow object
+    :param column: Column object to delete
+    :param cond_to_delete: List of conditions to delete after removing the
+    column
+    :return: Nothing. Effect reflected in the database
+    """
+
+    # Drop the column from the DB table storing the data frame
+    pandas_db.df_drop_column(workflow.id, column.name)
+
+    # Delete the column
+    column.delete()
+
+    # Update the information in the workflow
+    workflow.ncols = workflow.ncols - 1
+    workflow.save()
+
+    if not cond_to_delete:
+        # The conditions to delete are not given, so calculate them
+        # Get the conditions/actions attached to this workflow
+        cond_to_delete = [x for x in Condition.objects.filter(
+            action__workflow=workflow)
+                          if formula_evaluation.has_variable(x.formula,
+                                                             column.name)]
+
+    # If a column disappears, the conditions that contain that variable
+    # are removed..
+    for condition in cond_to_delete:
+        # Formula has the name of the deleted column.
+        # Solution 1: Nuke (Very easy)
+        # Solution 2: Mark as invalid and enhance the edit condition form
+        #  to handle renaming the fields in a formula (Complex)
+        #
+        # Solution 1 chosen.
+        condition.delete()
+
+    return
