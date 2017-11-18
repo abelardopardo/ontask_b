@@ -10,6 +10,8 @@
 - Action raw text is now shown with line wrapping
 
 - Revamped serializers for API and import/export to preserve NaN in data frames.
+
+- Locked workflow now shows the user (email) locking it.
    
 ## 1.1.2
 
