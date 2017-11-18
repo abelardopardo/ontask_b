@@ -226,7 +226,7 @@ def column_delete(request, pk):
 
     if request.method == 'POST':
         # Proceed deleting the column
-        workflow_delete_column(workflow, column.name, cond_to_delete)
+        workflow_delete_column(workflow, column, cond_to_delete)
 
         # Log the event
         logs.ops.put(request.user,
