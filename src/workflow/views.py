@@ -19,6 +19,7 @@ from .forms import (WorkflowForm)
 from .models import Workflow, Column
 from .ops import (get_workflow,
                   unlock_workflow_by_id,
+                  get_user_locked_workflow,
                   detach_dataframe)
 
 
@@ -261,14 +262,15 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
     context_object_name = 'workflow'
 
     def get_object(self, queryset=None):
-        obj = super(WorkflowDetailView, self).get_object(queryset=queryset)
+        old_obj = super(WorkflowDetailView, self).get_object(queryset=queryset)
 
         # Check if the workflow is locked
-        obj = get_workflow(self.request, obj.id)
+        obj = get_workflow(self.request, old_obj.id)
         if not obj:
+            user = get_user_locked_workflow(old_obj)
             messages.error(
                 self.request,
-                'The workflow is being modified by another user.')
+                'The workflow is being modified by user ' + user.email)
             return None
 
         # Remember the current workflow

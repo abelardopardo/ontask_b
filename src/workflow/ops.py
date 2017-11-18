@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function
 import cStringIO
 import gzip
 
+from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
@@ -12,6 +13,8 @@ from django.utils import timezone
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
+from action.models import Condition
+from dataops import formula_evaluation, pandas_db
 from .models import Workflow, Column
 from .serializers import (WorkflowExportSerializer,
                           WorkflowExportCompleteSerializer)
@@ -121,7 +124,7 @@ def get_workflow(request, wid=None):
         lock_workflow(request, workflow)
         return workflow
 
-    # Step 5: The workflow is locked by by an existing session. See if the
+    # Step 5: The workflow is locked by an existing session. See if the
     # session is valid
     if session.expire_date >= timezone.now():
         # The session currently locking the workflow
@@ -132,6 +135,18 @@ def get_workflow(request, wid=None):
     # and lock it with the current session.
     lock_workflow(request, workflow)
     return workflow
+
+
+def get_user_locked_workflow(workflow):
+    """
+    Given a workflow that is supposed to be locked, it returns the user that
+    is locking it.
+    :param workflow:
+    :return:
+    """
+    session = Session.objects.get(session_key=workflow.session_key)
+    session_data = session.get_decoded()
+    return get_user_model().objects.get(id=session_data.get('_auth_user_id'))
 
 
 def detach_dataframe(workflow):
