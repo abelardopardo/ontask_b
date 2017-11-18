@@ -30,9 +30,11 @@
                   { "data": "Unique" },
                   { "data": "Operations" },
                 ],
-                "order": [1],
+                "order": [[2, 'desc']],
                 "columnDefs": [
-                    {"className": "dt-center", "targets": "_all"}
+                    {"className": "dt-center", "targets": "_all"},
+                    {"orderable": false, "targets": 3},
+                    {"searchable": false, "targets": 3},
                 ],
                 "createdRow": function(row, data, dataIndex) {
                     if (data['Unique'] == '<span class="true">✔</span>') {

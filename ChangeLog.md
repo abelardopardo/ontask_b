@@ -12,6 +12,9 @@
 - Revamped serializers for API and import/export to preserve NaN in data frames.
 
 - Locked workflow now shows the user (email) locking it.
+
+- Column table in workflow detail is now redered with DataTables (paging,
+  search capacicy)
    
 ## 1.1.2
 
