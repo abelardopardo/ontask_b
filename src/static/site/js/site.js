@@ -1,10 +1,8 @@
 var loadForm = function () {
     var btn = $(this);
     if (document.getElementById("id_content") != null) {
-      console.log('setting content');
       data = {'action_content': $("#id_content").summernote('code')};
     } else {
-      console.log('not setting content');
       data = {};
     }
     $.ajax({
