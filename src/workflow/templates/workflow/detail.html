@@ -13,6 +13,36 @@
   <script src="{% static 'workflow/js/workflow.js' %}"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script type="text/javascript">
+    if (document.getElementById("column-table") != null) {
+        // Required for DataTables
+        $(document).ready(function() {
+            $('#column-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                  url: "{% url 'workflow:column_ss' workflow.id %}",
+                  type: 'POST',
+                },
+                columns: [
+                  { "data": "Name" },
+                  { "data": "Type" },
+                  { "data": "Unique" },
+                  { "data": "Operations" },
+                ],
+                "order": [1],
+                "columnDefs": [
+                    {"className": "dt-center", "targets": "_all"}
+                ],
+                "createdRow": function(row, data, dataIndex) {
+                    if (data['Unique'] == '<span class="true">✔</span>') {
+                      $(row).addClass('success');
+                    }
+                }
+              });
+        });
+    }
+  </script>
 {% endblock %}
 
 {% block title %}{{ block.super }}{{ workflow.name }}{% endblock %}
@@ -29,12 +59,21 @@
       <p class="help-block">Last modified: {{ workflow.modified }}</p>
       {% if table_info %}
         <p class="help-block">{{ table_info.num_rows }} rows, {{ table_info.num_cols }} columns (<mark>{{ num_key_columns }} Key columns</mark>)</p>
-        {% render_table table_info.table_data %}
+        <table class="table display dataTable no-footer table-bordered"
+               id="column-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Unique</th>
+              <th>Operations</th>
+            </tr>
+          </thead>
+        </table>
       {% else %}
         <p>The workflow does not have data.</p>
         <p>Go to <a href="{% url 'dataops:list' %}">DataOps</a> to upload data</p>
       {% endif %}
-      {% include 'workflow/includes/workflow_detail_buttons.html' %}
     </div>
 
     <div class="modal fade" id="modal-item">

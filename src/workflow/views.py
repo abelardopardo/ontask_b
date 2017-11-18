@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+from collections import OrderedDict
+
 import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -21,6 +23,8 @@ from .ops import (get_workflow,
                   unlock_workflow_by_id,
                   get_user_locked_workflow,
                   detach_dataframe)
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 
 class OperationsColumn(tables.Column):
@@ -450,4 +454,77 @@ def delete(request, pk):
             render_to_string('workflow/includes/partial_workflow_delete.html',
                              {'workflow': workflow},
                              request=request)
+    return JsonResponse(data)
+
+
+@user_passes_test(is_instructor)
+@csrf_exempt
+@require_http_methods(['POST'])
+def column_ss(request, pk):
+    """
+    Given the workflow id and the request, return to DataTable the proper
+    list of columns to be rendered.
+    :param request: Http request received from DataTable
+    :param pk: Workflow id
+    :return: Data to visualize in the table
+    """
+    workflow = get_workflow(request)
+    if not workflow:
+        return JsonResponse({'error': 'Incorrect request. Unlable to process'})
+
+    # If there is no DF, there are no columns to show, this should be
+    # detected before this is executed
+    if not ops.workflow_id_has_matrix(workflow.id):
+        return JsonResponse({'error': 'There is no data in the workflow'})
+
+    # Check that the GET parameter are correctly given
+    try:
+        draw = int(request.POST.get('draw', None))
+        start = int(request.POST.get('start', None))
+        length = int(request.POST.get('length', None))
+        order_col = request.POST.get('order[0][column]', None)
+        order_dir = request.POST.get('order[0][dir]', 'asc')
+    except ValueError:
+        return JsonResponse({'error': 'Incorrect request. Unable to process'})
+
+    # Get the column information from the request and the rest of values.
+    search_value = request.POST.get('search[value]', None)
+
+    # Get the initial set
+    qs = workflow.columns.all()
+
+    # Creating the result
+    final_qs = []
+    num_items = 0
+    for col in qs:
+        if search_value and col.name.find(search_value) == -1:
+            # If a search value has been given, check if it is part of the
+            # name, if not, skip
+            continue
+        ops_string = render_to_string(
+            'workflow/includes/workflow_column_operations.html',
+            {'id': col.id}
+        )
+
+        final_qs.append(OrderedDict(
+            [('Name', col.name),
+             ('Type', col.data_type),
+             ('Unique',
+              '<span class="true">✔</span>' if col.is_key \
+              else '<span class="true">✘</span>'),
+             ('Operations', ops_string)]
+        ))
+
+        num_items += 1
+        if num_items == length:
+            break
+
+    # Result to return as Ajax response
+    data = {
+        'draw': draw,
+        'recordsTotal': len(qs),
+        'recordsFiltered': len(qs),
+        'data': final_qs
+    }
+
     return JsonResponse(data)

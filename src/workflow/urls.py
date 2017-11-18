@@ -23,6 +23,9 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/detail/$', views.WorkflowDetailView.as_view(),
         name='detail'),
 
+    # Column table manipulation
+    url(r'^(?P<pk>\d+)/column_ss/$', views.column_ss, name='column_ss'),
+
     # Import Export
 
     url(r'^export_ask/$', import_export_views.export_ask, name='export_ask'),

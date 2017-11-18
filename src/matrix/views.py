@@ -40,7 +40,6 @@ def display(request):
 @csrf_exempt
 @require_http_methods(['POST'])
 def display_ss(request):
-    # TODO: Test when there is a column added through send_email
     workflow = get_workflow(request)
     if not workflow:
         return JsonResponse({'error': 'Incorrect request. Unable to process'})
@@ -86,11 +85,11 @@ def display_ss(request):
     final_qs = []
     num_items = 0
     for row in qs:
-        if search_value:
+        if search_value and not any([search_value in str(x) for x in row]):
             # If a search value is given, check if it is part of the row,
             # if not skip.
-            if not any([search_value in str(x) for x in row]):
-                continue
+            continue
+
         ops_string = render_to_string(
             'matrix/includes/partial_matrix_ops.html',
             {'edit_url':
