@@ -493,6 +493,7 @@ def column_ss(request, pk):
     # Get the initial set
     qs = workflow.columns.all()
     recordsTotal = len(qs)
+    recordsFiltered = recordsTotal
 
     # Reorder if required
     if order_col:
@@ -501,18 +502,17 @@ def column_ss(request, pk):
             col_name = '-' + col_name
         qs = qs.order_by(col_name)
 
+    if search_value:
+        qs = qs.filter(Q(name__contains=search_value) |
+                       Q(data_type__contains=search_value))
+        recordsFiltered = len(qs)
+
     # Use only those elements starting at certain point
     qs = qs[start:]
 
     # Creating the result
     final_qs = []
-    num_items = 0
     for col in qs:
-        if search_value and col.name.find(search_value) == -1 \
-                 and col.data_type.find(search_value) == -1:
-            # If a search value has been given, check if it is part of the
-            # name, if not, skip
-            continue
         ops_string = render_to_string(
             'workflow/includes/workflow_column_operations.html',
             {'id': col.id}
@@ -527,15 +527,14 @@ def column_ss(request, pk):
              ('Operations', ops_string)]
         ))
 
-        num_items += 1
-        if num_items == length:
+        if len(final_qs) == length:
             break
 
     # Result to return as Ajax response
     data = {
         'draw': draw,
         'recordsTotal': recordsTotal,
-        'recordsFiltered': len(qs),
+        'recordsFiltered': recordsFiltered,
         'data': final_qs
     }
 

@@ -15,6 +15,9 @@
 
 - Column table in workflow detail is now redered with DataTables (paging,
   search capacicy)
+  
+- Fixed search functionality in matrix view to search all fields (despite data
+  type)
    
 ## 1.1.2
 

@@ -362,7 +362,7 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names=None):
 
 
 def search_table_rows(workflow_id,
-                      cv_pairs=None,
+                      cv_tuples=None,
                       any_join=True,
                       order_col=None,
                       order_asc=True,
@@ -374,7 +374,8 @@ def search_table_rows(workflow_id,
     given)
 
     :param workflow_id: workflow object to get to the matrix
-    :param cv_pairs: A column, value pair to search the value in the column
+    :param cv_tuples: A column, value, type tuple to search the value in the
+    column
     :param any_join: Boolean encoding if values should be combined with OR (or
     AND)
     :param order_col: Order results by this column
@@ -393,10 +394,19 @@ def search_table_rows(workflow_id,
     query += ' FROM "{0}"'.format(create_table_name(workflow_id))
 
     fields = []
-    if cv_pairs:
-        # Create the second part of the query setting column LIKE '%value%'
-        likes = ['("{0}" LIKE %s)'.format(c) for c, _ in cv_pairs]
-        fields = ['%' + v + '%' for _, v in cv_pairs]
+    likes = []
+    fields = []
+    if cv_tuples:
+        for name, value, data_type in cv_tuples:
+            if data_type == 'string':
+                mod_name = '("{0}" LIKE %s)'.format(name)
+            else:
+                mod_name = '(CAST("{0}" AS TEXT) LIKE %s)'.format(name)
+
+            # Create the second part of the query setting column LIKE '%value%'
+            likes.append(mod_name)
+            fields.append('%' + value + '%')
+
         query += ' WHERE '
 
         # Combine the search subqueries

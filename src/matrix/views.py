@@ -74,16 +74,19 @@ def display_ss(request):
                               if c.is_key), None)
 
     # Get the query set
+    cv_tuples = []
+    if search_value:
+        cv_tuples = [(c.name, search_value, c.data_type) for c in columns]
+
     qs = pandas_db.search_table_rows(
         workflow.id,
-        [],
+        cv_tuples,
         True,
         order_col,
         order_dir == 'asc')[start:]
 
     # Post processing + adding operation columns and performing the search
     final_qs = []
-    num_items = 0
     for row in qs:
         if search_value and not any([search_value in str(x) for x in row]):
             # If a search value is given, check if it is part of the row,
@@ -101,8 +104,7 @@ def display_ss(request):
         )
         final_qs.append(OrderedDict([('Ops', ops_string)] +
                                     list(zip(column_names, row))))
-        num_items += 1
-        if num_items == length:
+        if len(final_qs) == length:
             # We reached the number or requested elements, abandon.
             break
 
