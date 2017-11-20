@@ -13,6 +13,9 @@ from dataops import pandas_db
 
 class Workflow(models.Model):
     """
+    Model for a workflow, that is, a matrix, set of column descriptions and
+    all the information regarding the actions, conditions and such. This is
+    the main object in the relational model.
     """
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL,

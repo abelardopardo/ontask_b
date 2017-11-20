@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function
 from collections import OrderedDict
 
 import django_tables2 as tables
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
@@ -12,7 +13,9 @@ from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django.views import generic
-from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+
 import logs.ops
 from action.models import Condition
 from dataops import ops, pandas_db
@@ -23,8 +26,6 @@ from .ops import (get_workflow,
                   unlock_workflow_by_id,
                   get_user_locked_workflow,
                   detach_dataframe)
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
 
 
 class OperationsColumn(tables.Column):
@@ -104,38 +105,6 @@ class WorkflowTable(tables.Table):
             'class': 'table display',
             'id': 'item-table'
         }
-
-
-class WorkflowDetailTable(tables.Table):
-    column_name = tables.Column(
-        attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name=str('Column')
-    )
-
-    column_type = tables.Column(
-        attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name=str('Type')
-    )
-
-    is_key = tables.BooleanColumn(
-        attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name=str('Key?')
-    )
-
-    class Meta:
-        attrs = {
-            'class':
-                'table table-striped table-bordered table-hover cell-border',
-            'id': 'column-table',
-            'th': {'class': 'dt-body-center'}
-        }
-
-        row_attrs = {
-            'class': lambda record: 'success' if record['is_key'] else ''
-        }
-
-        empty_text = 'No data in the workflow. Go to the Dataops section to ' \
-                     'upload some data.'
 
 
 class WorkflowShareTable(tables.Table):
@@ -289,36 +258,19 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
         context = super(WorkflowDetailView, self).get_context_data(**kwargs)
 
-        wflow_id = self.request.session.get('ontask_workflow_id', None)
-        if not wflow_id:
+        workflow_id = self.request.session.get('ontask_workflow_id', None)
+        if not workflow_id:
             return context
 
-        is_owner = self.object.user == self.request.user
-
         # Get the table information (if it exist)
-        table_info = ops.workflow_table_info(self.object)
-        if table_info:
-            ops_column = []
-            if is_owner:
-                ops_column = [('operations', OperationsColumn(
-                    attrs={'td': {'class': 'dt-body-center'}},
-                    verbose_name='Operations',
-                    orderable=False,
-                    template_file=
-                    'workflow/includes/workflow_column_operations.html',
-                    get_operation_id=lambda x: x['id']
-                ))]
-
-            table = WorkflowDetailTable(
-                table_info['table'],
-                orderable=False,
-                extra_columns=ops_column)
-            table_info['table_data'] = table
-            context['table_info'] = table_info
+        context['table_info'] = None
+        if ops.workflow_id_has_matrix(self.object.id):
+            context['table_info'] = {'num_rows': self.object.nrows,
+                                     'num_cols': self.object.ncols}
 
         # put the number of key columns in the workflow
         context['num_key_columns'] = Column.objects.filter(
-            workflow__id=wflow_id,
+            workflow__id=workflow_id,
             is_key=True
         ).count()
 
@@ -331,6 +283,12 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
 @user_passes_test(is_instructor)
 def update(request, pk):
+    """
+
+    :param request:
+    :param pk:
+    :return:
+    """
     workflow = get_workflow(request, pk)
     if not workflow:
         return redirect('workflow:index')
@@ -497,7 +455,7 @@ def column_ss(request, pk):
 
     # Reorder if required
     if order_col:
-        col_name = ['name', 'data_type' , 'is_key'][int(order_col)]
+        col_name = ['name', 'data_type', 'is_key'][int(order_col)]
         if order_dir == 'desc':
             col_name = '-' + col_name
         qs = qs.order_by(col_name)
@@ -523,7 +481,7 @@ def column_ss(request, pk):
              ('Type', col.data_type),
              ('Unique',
               '<span class="true">✔</span>' if col.is_key \
-              else '<span class="true">✘</span>'),
+                  else '<span class="true">✘</span>'),
              ('Operations', ops_string)]
         ))
 

@@ -57,10 +57,9 @@ def find_ilegal_var(lvar):
 
 
 class OntaskException(Exception):
+    def __init__(self, msg, value):
+        self.msg = msg
+        self.value = value
 
-        def __init__(self, msg, value):
-            self.msg = msg
-            self.value = value
-
-        def __str__(self):
-            return repr(self.value)
+    def __str__(self):
+        return repr(self.value)

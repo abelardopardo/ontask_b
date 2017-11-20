@@ -209,33 +209,6 @@ def get_queryset_by_workflow_id(workflow_id):
     return get_table_queryset(create_table_name(workflow_id))
 
 
-def workflow_table_info(workflow):
-    """
-
-    :param workflow: Workflow object from which to return the column info
-    :return: dict with num_rows, num_columns and table dict with column names
-    """
-    # result to return
-    table_info = None
-
-    # Check if the workflow has a table
-    if workflow_id_has_matrix(workflow.id):
-
-        # start populating the result with Rows and columns
-        table_info = {'num_rows': workflow.nrows, 'num_cols': workflow.ncols}
-
-        # Columns are packed in tuples to be processed by template loop
-        table_info['table'] = [
-            {'id': col.id,
-             'column_name': col.name,
-             'column_type': col.data_type,
-             'is_key': col.is_key}
-            for col in workflow.columns.all()
-        ]
-
-    return table_info
-
-
 def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
     """
     It either stores a data frame in the db (dst_df is None), or merges

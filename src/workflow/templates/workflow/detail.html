@@ -10,41 +10,43 @@
 {% endblock extrahead %}
 
 {% block scripts %}
-  <script src="{% static 'workflow/js/workflow.js' %}"></script>
-  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
-  <script type="text/javascript">
-    if (document.getElementById("column-table") != null) {
-        // Required for DataTables
-        $(document).ready(function() {
-            $('#column-table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                  url: "{% url 'workflow:column_ss' workflow.id %}",
-                  type: 'POST',
-                },
-                columns: [
-                  { "data": "Name" },
-                  { "data": "Type" },
-                  { "data": "Unique" },
-                  { "data": "Operations" },
-                ],
-                "order": [[2, 'desc']],
-                "columnDefs": [
-                    {"className": "dt-center", "targets": "_all"},
-                    {"orderable": false, "targets": 3},
-                    {"searchable": false, "targets": 3},
-                ],
-                "createdRow": function(row, data, dataIndex) {
-                    if (data['Unique'] == '<span class="true">✔</span>') {
-                      $(row).addClass('success');
-                    }
-                }
-              });
-        });
-    }
-  </script>
+  {% if workflow %}
+    <script src="{% static 'workflow/js/workflow.js' %}"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript">
+      if (document.getElementById("column-table") != null) {
+          // Required for DataTables
+          $(document).ready(function() {
+              $('#column-table').DataTable({
+                  processing: true,
+                  serverSide: true,
+                  ajax: {
+                    url: "{% url 'workflow:column_ss' workflow.id %}",
+                    type: 'POST',
+                  },
+                  columns: [
+                    { "data": "Name" },
+                    { "data": "Type" },
+                    { "data": "Unique" },
+                    { "data": "Operations" },
+                  ],
+                  "order": [[2, 'desc']],
+                  "columnDefs": [
+                      {"className": "dt-center", "targets": "_all"},
+                      {"orderable": false, "targets": 3},
+                      {"searchable": false, "targets": 3},
+                  ],
+                  "createdRow": function(row, data, dataIndex) {
+                      if (data['Unique'] == '<span class="true">✔</span>') {
+                        $(row).addClass('success');
+                      }
+                  }
+                });
+          });
+      }
+    </script>
+  {% endif %}
 {% endblock %}
 
 {% block title %}{{ block.super }}{{ workflow.name }}{% endblock %}

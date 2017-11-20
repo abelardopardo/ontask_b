@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block extrahead %}
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+{% endblock extrahead %}
+
+{% block scripts %}
+  <script src="{% static 'dataops/js/dataops.js' %}"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script type="text/javascript">
+    if (document.getElementById("rowview-table") != null) {
+        // Required for DataTables
+        $(document).ready(function() {
+            $('#rowview-table').DataTable({
+                processing: true,
+                // serverSide: true,
+                // ajax: {
+                //   url: " url 'workflow:column_ss' workflow.id ",
+                //   type: 'POST',
+                // },
+                columns: [
+                  { "data": "Name" },
+                  { "data": "Description" },
+                  { "data": "Modified" },
+                  { "data": "Operations" },
+                ],
+                "order": [[0, 'desc']],
+                "columnDefs": [
+                    {"className": "dt-center", "targets": "_all"},
+                    {"orderable": false, "targets": 3},
+                    {"searchable": false, "targets": 3},
+                ],
+              });
+        });
+    }
+  </script>
+{% endblock %}
+
+{% block title %}{{ block.super }}Row views{% endblock %}
+
+{% block container %}
+<div align="center" class="container-fluid">
+  <h1 class="page-header">Row Views</h1>
+
+  <p>
+    <a class="btn btn-primary" href="{% url 'dataops:rowview_new' %}">
+      <span class="glyphicon glyphicon-plus"></span>
+        New View
+    </a>
+  </p>
+
+  <div align="center" class="container-fluid">
+    {% if table %}
+      {% render_table table %}
+      <div class="modal fade" id="modal-item">
+        <div class="modal-dialog">
+          <div class="modal-content">
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock container %}

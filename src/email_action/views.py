@@ -30,7 +30,7 @@ def request_data(request, pk):
             Q(workflow__user=request.user) |
             Q(workflow__shared=request.user)).distinct().get(pk=pk)
     except ObjectDoesNotExist:
-        return reverse('workflow:index')
+        return redirect('workflow:index')
 
     workflow = get_workflow(request, action.workflow.id)
     if not workflow:

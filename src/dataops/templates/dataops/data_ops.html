@@ -5,11 +5,11 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 
-{% block title %}{{ block.super }}{{ workflow.name }}{% endblock %}
+{% block title %}{{ block.super }}Dataops{% endblock %}
 
 {% block container %}
-<div align="center" class="container">
-  <h1 class="page-header">Upload/Merge: {{ request.session.ontask_workflow_name }}</h1>
+<div align="center" class="container-fluid">
+  <h1 class="page-header">Upload/Merge</h1>
 
   <div align="center" class="container">
     <table class="table-condensed table-bordered" id="dataops-table">
@@ -23,24 +23,24 @@
         <tr>
           <td class="text-center">
             <a href="{% url 'dataops:csvupload1' %}" class="btn btn-primary">
-              <span class="glyphicon glyphicon-plus"></span> Update/Merge CSV
+              <span class="glyphicon glyphicon-plus"></span> CSV Update/Merge
             </a>
           </td>
           <td style="vertical-align:middle">
             Upload data contained in a CSV file (typically saved using a spreadsheet or other data manipulation package).<br/>
-            If the matrix is empty, the data will be simply loaded detecting those columns that seem to have values that are unique for every row.<br/>
-            If your matrix already has data, it will ask you to match one column in your matrix with unique values, with another one with unique values from the file that is uploaded.
+            If the matrix is empty, the data will be simply loaded detecting those columns that have unique values for every row.<br/>
+            If the matrix already has data, the operation will ask you to match one column in your matrix with unique values, with another one with unique values from the file that is uploaded so that the columns can be merged with the
+            existing data.
           </td>
         </tr>
-
         <tr>
           <td class="text-center">
-            <a href="{% url 'dataops:rowfilter' %}" class="btn btn-primary">
-              <span class="glyphicon glyphicon-plus"></span> Row data entry
+            <a href="{% url 'dataops:rowview_list' %}" class="btn btn-primary">
+              <span class="glyphicon glyphicon-plus"></span> Manual data entry
             </a>
           </td>
           <td style="vertical-align:middle">
-            Upload data for a single row of the workflow (non empty) data structure.
+            Enter or upload data one row at a time.
           </td>
         </tr>
       </tbody>

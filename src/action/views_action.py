@@ -4,7 +4,7 @@ from __future__ import unicode_literals, print_function
 import django_tables2 as tables
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.fields.related import OneToOneRel
+from django.db.models import Q
 from django.http import Http404
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -15,7 +15,6 @@ from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django.views import generic
 from django.views.decorators.http import require_http_methods
-from django.db.models import Q
 
 import logs.ops
 from action.evaluate import evaluate_row
@@ -39,15 +38,14 @@ class OperationsColumn(tables.Column):
     empty_values = []
 
     def __init__(self, *args, **kwargs):
+        self.template_file = kwargs.pop('template_file')
         super(OperationsColumn, self).__init__(*args, **kwargs)
         self.attrs = {'th': {'style': 'text-align:center;'},
                       'td': {'style': 'text-align:center;'}}
         self.orderable = False
 
     def render(self, record):
-        return render_to_string(
-            'action/includes/partial_action_operations.html',
-            {'id': record.id, 'serve_enabled': record.serve_enabled})
+        return render_to_string(self.template_file, {'id': record.id})
 
 
 class ActionTable(tables.Table):
@@ -75,6 +73,7 @@ class ActionTable(tables.Table):
     operations = OperationsColumn(
         attrs={'td': {'class': 'dt-body-center'}},
         verbose_name='Operations',
+        template_file='action/includes/partial_action_operations.html',
         orderable=False
     )
 

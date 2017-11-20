@@ -43,7 +43,7 @@ def upload_s2(request):
     """
     workflow = get_workflow(request)
     if not workflow:
-        return reverse('workflow:index')
+        return redirect('workflow:index')
 
     # Get the dictionary to store information about the upload
     # is stored in the session.
@@ -84,7 +84,7 @@ def upload_s2(request):
 
     # Bind the form with the received data (remember unique columns)
     form = SelectColumnUploadForm(request.POST or None,
-                                  unique_columns=src_is_unique_column)
+                                  columns=src_is_unique_column)
 
     # Process the initial loading of the form and return
     if request.method != 'POST':

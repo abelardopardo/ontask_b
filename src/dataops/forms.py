@@ -8,20 +8,46 @@ from django import forms
 import ontask.ontask_prefs
 from ontask.forms import RestrictedFileField
 
+from .models import RowView
 
 # Form to select columns
 class SelectColumnForm(forms.Form):
+
     def __init__(self, *args, **kargs):
-        self.unique_columns = kargs.pop('unique_columns')
+        """
+        Kargs contain: columns: list of column objects, put_labels: boolean
+        stating if the labels should be included in the form
+        :param args:
+        :param kargs:
+        """
+        # List of columns to process
+        self.columns = kargs.pop('columns', [])
+
+        # Should the labels be included?
+        self.put_labels = kargs.pop('put_labels', False)
 
         super(SelectColumnForm, self).__init__(*args, **kargs)
 
-        # Create as many fields as the number of columns
-        for i in range(len(self.unique_columns)):
+        # Create as many fields as the given columns
+        for i, c in enumerate(self.columns):
+            # Include the labels if requested
+            if self.put_labels:
+                label = c.name
+            else:
+                label = ''
+
             self.fields['upload_%s' % i] = forms.BooleanField(
-                label='',
+                label=label,
                 required=False,
             )
+
+
+# RowView manipulation form
+class RowViewForm(forms.ModelForm):
+
+    class Meta:
+        model = RowView
+        fields = ('name', 'description_text')
 
 
 # Step 1 of the CSV upload
@@ -42,7 +68,7 @@ class SelectColumnUploadForm(SelectColumnForm):
         super(SelectColumnUploadForm, self).__init__(*args, **kargs)
 
         # Create as new_name fields
-        for i in range(len(self.unique_columns)):
+        for i in range(len(self.columns)):
             self.fields['new_name_%s' % i] = forms.CharField(
                 label='',
                 strip=True,
@@ -53,17 +79,17 @@ class SelectColumnUploadForm(SelectColumnForm):
         cleaned_data = super(SelectColumnUploadForm, self).clean()
 
         upload_list = [cleaned_data.get('upload_%s' % i, False)
-                       for i in range(len(self.unique_columns))]
+                       for i in range(len(self.columns))]
 
         # Check if at least a unique column has been selected
-        both_lists = zip(upload_list, self.unique_columns)
+        both_lists = zip(upload_list, self.columns)
         if not any([a and b for a, b in both_lists]):
             raise forms.ValidationError('No unique column specified',
                                         code='invalid')
 
         # Get list of new names
         new_names = [cleaned_data.get('new_name_%s' % i)
-                     for i in range(len(self.unique_columns))]
+                     for i in range(len(self.columns))]
 
         # Check that there are no spaces in the names of the selected columns
         has_space = any([' ' in new_names[i]
