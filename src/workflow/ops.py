@@ -18,8 +18,6 @@ from dataops import formula_evaluation, pandas_db
 from .models import Workflow, Column
 from .serializers import (WorkflowExportSerializer,
                           WorkflowExportCompleteSerializer)
-from dataops import formula_evaluation, pandas_db
-from action.models import Condition
 
 
 def lock_workflow(request, workflow):
@@ -103,7 +101,8 @@ def get_workflow(request, wid=None):
         # No workflow or value set in the session, flag error.
         return None
 
-    # Step 2: If the workflow is locked by this user, return correct result
+    # Step 2: If the workflow is locked by this user session, return correct
+    # result
     if request.session.session_key == workflow.session_key:
         return workflow
 
@@ -113,7 +112,13 @@ def get_workflow(request, wid=None):
         lock_workflow(request, workflow)
         return workflow
 
-    # Step 4: The workflow is locked by another user. See if the session
+    # Step 4: If the workflow is locked, check if it is an old session by
+    # this user!
+    if get_user_locked_workflow(workflow) == request.user:
+        lock_workflow(request, workflow)
+        return workflow
+
+    # Step 5: The workflow is locked by another user. See if the session
     # still exists
     try:
         session = Session.objects.get(session_key=workflow.session_key)
@@ -124,7 +129,7 @@ def get_workflow(request, wid=None):
         lock_workflow(request, workflow)
         return workflow
 
-    # Step 5: The workflow is locked by an existing session. See if the
+    # Step 6: The workflow is locked by an existing session. See if the
     # session is valid
     if session.expire_date >= timezone.now():
         # The session currently locking the workflow
