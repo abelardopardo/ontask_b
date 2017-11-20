@@ -248,9 +248,8 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
         # Remember the current workflow
         self.request.session['ontask_workflow_id'] = obj.id
-        # Store the current session to lock the workflow
-        obj.session_key = self.request.session.session_key
-        obj.save()
+
+        # Store the current workflow
         self.request.session['ontask_workflow_name'] = obj.name
         return obj
 
