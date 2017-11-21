@@ -18,6 +18,9 @@
   
 - Fixed search functionality in matrix view to search all fields (despite data
   type)
+  
+- First version implementing row views (manual data entry). Just CRUD. No
+  more functionality.
    
 ## 1.1.2
 

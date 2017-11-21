@@ -129,13 +129,12 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
     # Store the table in the DB
     store_table(data_frame, table_name)
 
-    if has_new_columns:
-        # Update workflow fields and save
-        workflow.nrows = data_frame.shape[0]
-        workflow.ncols = data_frame.shape[1]
-        workflow.set_query_builder_ops()
-        workflow.data_frame_table_name = table_name
-        workflow.save()
+    # Update workflow fields and save
+    workflow.nrows = data_frame.shape[0]
+    workflow.ncols = data_frame.shape[1]
+    workflow.set_query_builder_ops()
+    workflow.data_frame_table_name = table_name
+    workflow.save()
 
     return None
 
@@ -242,7 +241,6 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
     dst_df.drop(merge_info['override_columns_names'],
                 inplace=True,
                 axis=1)
-
     # Step 4. Perform the merge
     try:
         new_df = pd.merge(dst_df,
