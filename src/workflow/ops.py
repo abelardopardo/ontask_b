@@ -112,20 +112,26 @@ def get_workflow(request, wid=None):
         lock_workflow(request, workflow)
         return workflow
 
-    # Step 4: If the workflow is locked, check if it is an old session by
-    # this user!
-    if get_user_locked_workflow(workflow) == request.user:
-        lock_workflow(request, workflow)
-        return workflow
-
-    # Step 5: The workflow is locked by another user. See if the session
-    # still exists
+    # Step 4: The workflow is locked. See if the session locking it is
+    # still valid
     try:
         session = Session.objects.get(session_key=workflow.session_key)
     except Session.DoesNotExist:
         # An exception means that the session stored as locking the
         # workflow is no longer in the session table, so the user can access
         # the workflow
+        lock_workflow(request, workflow)
+        return workflow
+
+    # Get the owner of the session locking the workflow
+    owner = get_user_model().objects.get(
+        id=session.get_decoded().get('_auth_user_id')
+    )
+
+    # Step 5: The workflow is locked by a session that is valid. See if the
+    # session locking it happens to be from the same user (a previous session
+    # that has not been properly closed)
+    if owner == request.user:
         lock_workflow(request, workflow)
         return workflow
 
