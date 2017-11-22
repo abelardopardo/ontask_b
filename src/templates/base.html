@@ -44,7 +44,9 @@
         <a class="navbar-brand" href="{% url 'entry' %}">
           {% block navbar-brand %}
             <img src="{% static 'site/img/logo.png' %}" alt="logo">
+          {% comment %}
             {% include "_brandname.html" %}
+          {% endcomment %}
           {% endblock %}
         </a>
       </div>
@@ -115,6 +117,12 @@
     {% block splash %}
     {% endblock splash %}
     
+    {% if request.session.ontask_workflow_name %}
+    <div id="wflow-name" class="text-center alert alert-info">
+      {{ request.session.ontask_workflow_name }}
+    </div>
+    {% endif %}
+
     {% block container %}
     <div class="container">
 

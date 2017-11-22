@@ -60,6 +60,8 @@ def row_filter(request):
                 where_value = None
                 log_payload = []
                 # Create the SET name = value part of the query
+                # TODO: Fix because row_form does not have col_names or
+                # col_unique
                 for name, is_unique in zip(row_form.col_names,
                                            row_form.col_unique):
                     value = row_form.cleaned_data[name]
