@@ -36,6 +36,8 @@ urlpatterns = [
 
     url(r'^admin/', include(admin.site.urls)),
 
+    # url(r'^trck/', views.trck, name='trck'),
+
     url(r'^', include(accounts.urls, namespace='accounts')),
 
     url(r'^workflow/', include(workflow.urls, namespace='workflow')),
