@@ -102,7 +102,7 @@ class WorkflowTable(tables.Table):
                    'data_frame_table_name')
 
         attrs = {
-            'class': 'table display',
+            'class': 'table display table-bordered',
             'id': 'item-table'
         }
 

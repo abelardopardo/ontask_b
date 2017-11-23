@@ -4,6 +4,11 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 
+{% block extrahead %}
+  <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
+  {{ form.media }}
+{% endblock extrahead %}
+
 {% block scripts %}
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
   <script src="{% static 'action/js/action.js' %}"></script>
@@ -21,11 +26,6 @@
 {% endblock %}
 
 {% block title %}{{ block.super }}Edit action{% endblock %}
-
-{% block extrahead %}
-  <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
-  {{ form.media }}
-{% endblock extrahead %}
 
 {% block container %}
   <div align="center" class="container-fluid">

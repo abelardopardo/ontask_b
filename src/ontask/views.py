@@ -31,6 +31,8 @@ class ToBeDone(UserIsInstructor, generic.TemplateView):
 @login_required
 def entry(request):
     return redirect('workflow:index')
+
+
 def ontask_handler400(request):
     return render(request, '400.html', {})
 

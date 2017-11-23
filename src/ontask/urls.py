@@ -55,10 +55,11 @@ urlpatterns = [
 
     url(r'^tobedone/', views.ToBeDone.as_view(), name='tobedone'),
 
+    # API AUTH and DOC
     url(r'^api-auth/',
         include('rest_framework.urls', namespace='rest_framework')),
 
-    url(r'^docs/',
+    url(r'^apidoc/',
         include_docs_urls(
             title='OnTask API',
             description=api_description)),

@@ -98,7 +98,7 @@ class ActionTable(tables.Table):
         exclude = ('n_selected_rows', 'content', 'serve_enabled')
 
         attrs = {
-            'class': 'table display',
+            'class': 'table display table-bordered',
             'id': 'item-table'
         }
 

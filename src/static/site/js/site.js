@@ -1,3 +1,23 @@
+var set_qbuilder = function (element_id, qbuilder_options) {
+    $(element_id).hide();
+    id_formula_value = $(element_id).val();
+    if (id_formula_value != "null" && id_formula_value != "{}") {
+      qbuilder_options['rules'] = JSON.parse(id_formula_value);
+    }
+    $('#builder').queryBuilder(qbuilder_options);
+};
+var insert_query = function () {
+    console.log('hi');
+    if (document.getElementById("id_filter") != null) {
+      formula = $('#builder').queryBuilder('getRules');
+      if (formula == null || !formula['valid']) {
+        return false;
+      }
+      f_text = JSON.stringify(formula, undefined, 2);
+      $('#id_filter').val(f_text);
+    }
+    return true;
+}
 var loadForm = function () {
     var btn = $(this);
     if (document.getElementById("id_content") != null) {
@@ -16,12 +36,7 @@ var loadForm = function () {
       success: function(data) {
         $("#modal-item .modal-content").html(data.html_form);
         if (document.getElementById("id_formula") != null) {
-          $('#id_formula').hide();
-          id_formula_value = $('#id_formula').val();
-          if (id_formula_value != "null" && id_formula_value != "{}") {
-            qbuilder_options['rules'] = JSON.parse(id_formula_value);
-          }
-          $('#builder').queryBuilder(qbuilder_options);
+          set_qbuilder('#id_formula', qbuilder_options);
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -51,12 +66,7 @@ var saveForm = function () {
         else {
           $("#modal-item .modal-content").html(data.html_form);
           if (document.getElementById("id_formula") != null) {
-            $('#id_formula').hide();
-            id_formula_value = $('#id_formula').val();
-            if (id_formula_value != "null" && id_formula_value != {}) {
-              qbuilder_options['rules'] = JSON.parse(id_formula_value);
-            }
-            $('#builder').queryBuilder(qbuilder_options);
+            set_qbuilder('#id_formula', qbuilder_options);
           }
         }
       },
@@ -82,3 +92,4 @@ $(window).scroll(function () {
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
 });
+
