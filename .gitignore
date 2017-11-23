@@ -11,6 +11,7 @@ pip-delete-this-directory.txt
 
 # Sphinx docs:
 _build
+/src/static/html
 
 # SQLite3 database files:
 *.db
