@@ -19,4 +19,4 @@ workflows as shown in the following figure.
 The screen shows three operations: creating a new workflow (providing only
 name and description), importing a workflow previously exported from the
 platform, or simply open a workflow to work with it. You may use the same
-workflow as shown in the figure importing  the :download:`ELON3509 workflow <../../initial_workflow.json>`.
+workflow as shown in the figure importing  the :download:`ELON3509 workflow <../../initial_workflow.gz>`.
