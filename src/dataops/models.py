@@ -3,6 +3,7 @@ from __future__ import unicode_literals, print_function
 
 from django.db import models
 from django.shortcuts import redirect
+from django.contrib.postgres.fields import JSONField
 
 from workflow.models import Workflow, Column
 
@@ -32,6 +33,10 @@ class RowView(models.Model):
     columns = models.ManyToManyField(Column,
                                      related_name='rowview',
                                      blank=False)
+
+    filter = JSONField(default=dict,
+                       blank=True, null=True,
+                       help_text='Preselect rows satisfying this condition')
 
     def __unicode__(self):
         return self.name

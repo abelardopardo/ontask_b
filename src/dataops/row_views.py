@@ -2,23 +2,23 @@
 from __future__ import unicode_literals, print_function
 
 import django_tables2 as tables
+from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.urlresolvers import reverse_lazy
+from django.db import IntegrityError
+from django.http import JsonResponse
 from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django.views import generic
-from django.contrib.auth.decorators import user_passes_test
-from django.db import IntegrityError
-from django.http import JsonResponse
 
-
+import logs.ops
+from dataops.forms import field_prefix
 from ontask.permissions import is_instructor, UserIsInstructor
 from workflow.ops import get_workflow
-from .forms import RowViewForm
+from . import pandas_db
+from .forms import RowViewForm, RowViewDataSearchForm, RowViewDataEntryForm
 from .models import RowView
-
-field_prefix = '___ontask___upload_'
 
 
 class OperationsColumn(tables.Column):
@@ -61,7 +61,8 @@ class RowViewTable(tables.Table):
     def render_name(self, record):
         return format_html(
             """<a href="{0}">{1}</a>""".format(
-                reverse('dataops:rowview_edit', kwargs={'pk': record.id}),
+                reverse('dataops:rowview_dataentry',
+                        kwargs={'pk': record.id}),
                 record.name
             )
         )
@@ -130,6 +131,12 @@ def save_rowview_data(request, rowview_id, template_name):
     if not workflow:
         return redirect('workflow:index')
 
+    if workflow.nrows == 0:
+        messages.error(request,
+                       'Workflow has no data. '
+                       'Go to Dataops to upload data.')
+        return redirect(reverse('dataops:rowview_list'))
+
     # Get the list of columns from the workflow
     columns = workflow.columns.all()
 
@@ -147,13 +154,9 @@ def save_rowview_data(request, rowview_id, template_name):
 
     # Create a list with either column name if selected or None
     if request.method == 'POST':
-        # It is a post so
-        selected = [request.POST.get(field_prefix + '%s' % idx) is not None
-                    for idx in range(len(columns))]
         selected = [None if request.POST.get(field_prefix + '%s' % idx) is None
                     else c for idx, c in enumerate(columns)]
     elif rowview_id:
-
         selected = [x if x in rowview.columns.all() else None for x in columns]
     else:
         selected = [None] * len(columns)
@@ -166,6 +169,7 @@ def save_rowview_data(request, rowview_id, template_name):
                          selected[idx] is not None)
                         for idx, c in enumerate(columns)],
            'field_prefix': field_prefix,
+           'query_builder_ops': workflow.get_query_builder_ops_as_str(),
            'form': form,
            }
 
@@ -288,152 +292,109 @@ def rowview_delete(request, pk):
 
     return JsonResponse(data)
 
-# class RowViewCreate(UserIsInstructor, generic.CreateView):
-#     model = RowView
-#     template_name = 'dataops/rowview_form.html'
-#     form_class = RowViewForm
-#
-#     def get_context_data(self, **kwargs):
-#
-#         selected = [self.request.POST.get(field_prefix + '%s' % idx) is not None
-#                     for idx in range(len(self.workflow.columns.all()))]
-#
-#         return {'col_info':
-#                     create_column_info(self.request,
-#                                        self.workflow,
-#                                        selected),
-#                 'form': self.get_form(),
-#                 'field_prefix': field_prefix}
-#
-#     def get(self, request, *args, **kwargs):
-#         """
-#         Respond to the get request for the form to create a view
-#         :param request: Contains the workflow being used
-#         :param args: None
-#         :param kwargs: None
-#         :return: render the page
-#         """
-#
-#         # Check if the workflow is locked
-#         self.workflow = get_workflow(self.request)
-#         if not self.workflow:
-#             return redirect('workflow:index')
-#
-#         return render(self.request, self.template_name, self.get_context_data())
-#
-#     def post(self, request, *args, **kwargs):
-#
-#         # Check if the workflow is locked
-#         self.workflow = get_workflow(self.request)
-#         if not self.workflow:
-#             return redirect('workflow:index')
-#
-#         # Bind the form and access the data field and the context
-#         form = RowViewForm(request.POST)
-#         ctx = self.get_context_data()
-#
-#         if not form.is_valid():
-#             return render(self.request, self.template_name, ctx)
-#
-#         # Valid POST request
-#
-#         # Step 1: Make sure the name is correct
-#         if RowView.objects.filter(name=request.POST.get('name')).exists():
-#             form.add_error(
-#                 'name',
-#                 'There is already a view with this name'
-#             )
-#             ctx['form'] = form
-#             return render(self.request, self.template_name, ctx)
-#
-#         # Get the information about the selected columns
-#         columns = self.workflow.columns.all()
-#         selection = [c for idx, c in enumerate(columns)
-#                      if request.POST.get((self.field_prefix + '%s') % idx)]
-#
-#         # Step 2: Make sure there is at least a unique column
-#         if not selection:
-#             form.add_error(
-#                 None,
-#                 'There must be at least one unique column in the view'
-#             )
-#             ctx['form'] = form
-#             return render(self.request, self.template_name, ctx)
-#
-#         # Step 3: There must be at least on key column
-#         if not next((x for x in selection if x.is_key), None):
-#             form.add_error(
-#                 None,
-#                 'There must be at least one unique column in the view'
-#             )
-#             ctx['form'] = form
-#             return render(self.request, self.template_name, ctx)
-#
-#         # Save the element and populate the right columns
-#         rowview = form.save(commit=False)
-#         rowview.workflow = self.workflow
-#         rowview.save()
-#         for c in selection:
-#             rowview.columns.add(c)
-#         rowview.save()
-#         return redirect(reverse('dataops:rowview_list'))
-#
-#
-# class RowViewUpdate(UserIsInstructor, generic.UpdateView):
-#     model = RowView
-#     template_name = 'dataops/rowview_form.html'
-#     form_class = RowViewForm
-#
-#     def get(self, request, *args, **kwargs):
-#         """
-#         Respond to the get request for the form to create a view
-#         :param request: Contains the workflow being used
-#         :param args: None
-#         :param kwargs: None
-#         :return: render the page
-#         """
-#
-#         # Check if the workflow is locked
-#         self.workflow = get_workflow(self.request)
-#         if not self.workflow:
-#             return redirect('workflow:index')
-#
-#         try:
-#             rowview = RowView.objects.get(pk=kwargs['pk'])
-#         except ObjectDoesNotExist:
-#             return redirect('workflow:index')
-#
-#         form = RowViewForm(None, instance=rowview)
-#
-#         selected = [x in rowview.columns.all()
-#                     for x in self.workflow.columns.all()]
-#
-#         return render(self.request,
-#                       self.template_name,
-#                       {'col_info': create_column_info(self.request,
-#                                                       self.workflow,
-#                                                       selected),
-#                        'form': form,
-#                        'field_prefix': field_prefix})
-#
-#     def post(self, request, *args, **kwargs):
-#         # Check if the workflow is locked
-#         self.workflow = get_workflow(self.request)
-#         if not self.workflow:
-#             return redirect('workflow:index')
-#
-#         try:
-#             rowview = RowView.objects.get(pk=kwargs['pk'])
-#         except ObjectDoesNotExist:
-#             return redirect('workflow:index')
-#
-#         form = RowViewForm(None, instance=rowview)
-#
-#         selected = [x in rowview.columns.all()
-#                     for x in self.workflow.columns.all()]
-#
-#
-#
-# class RowViewDelete(UserIsInstructor, generic.DeleteView):
-#     model = RowView
-#     success_url = reverse_lazy('dataops:rowview_list')
+
+@user_passes_test(is_instructor)
+def rowview_dataentry(request, pk):
+    # Get the workflow object
+    workflow = get_workflow(request)
+    if not workflow:
+        return redirect('workflow:index')
+
+    # Get the rowview from the PK
+    try:
+        rowview = RowView.objects.get(pk=pk,
+                                      workflow=workflow)
+    except ObjectDoesNotExist:
+        return redirect('dataops:rowview_list')
+    columns = rowview.columns.all()
+
+    # Add to context for rendering the title
+    context = {'workflow': workflow,
+               'cancel_url': reverse('dataops:rowview_list')}
+
+    # If the workflow does not have any rows, there is no point on doing this.
+    if workflow.nrows == 0:
+        messages.error(request,
+                       'Workflow has no data. '
+                       'Go to Dataops to upload data.')
+        return redirect(reverse('dataops:rowview_list'))
+
+    form = RowViewDataSearchForm(data=request.POST or None, columns=columns)
+
+    # This form is always rendered, so it is included in the context anyway
+    context['form'] = form
+
+    if request.method != 'POST':
+        return render(request, 'dataops/row_filter.html', context)
+
+    if request.POST.get('submit') == 'update':
+        # This is the case in which the row is updated
+        row_form = RowViewDataEntryForm(request.POST, columns=columns)
+        if row_form.is_valid() and row_form.has_changed():
+            # Update content in the DB
+            set_fields = []
+            set_values = []
+            where_field = None
+            where_value = None
+            log_payload = []
+            # Create the SET name = value part of the query
+            for idx, column in enumerate(columns):
+                value = row_form.cleaned_data[field_prefix + '%s' % idx]
+                if column.is_key:
+                    if not where_field:
+                        # Remember one unique key for selecting the row
+                        where_field = column.name
+                        where_value = value
+                    continue
+
+                set_fields.append(column.name)
+                set_values.append(value)
+                log_payload.append((column.name, value))
+
+            pandas_db.update_row(workflow.id,
+                                 set_fields,
+                                 set_values,
+                                 [where_field],
+                                 [where_value])
+
+            # Log the event
+            logs.ops.put(request.user,
+                         'matrixrow_update',
+                         workflow,
+                         {'id': workflow.id,
+                          'name': workflow.name,
+                          'new_values': log_payload})
+
+            # Change is done.
+    else:
+        if form.is_valid():
+            # Request is a POST of the SEARCH (first form)
+            where_field = []
+            where_value = []
+            for idx, col in enumerate(form.key_cols):
+                value = form.cleaned_data[field_prefix + '%s' % idx]
+                if value:
+                    # Remember the value of the key
+                    where_field = col.name
+                    where_value = value
+                    break
+
+            # Get the row from the matrix
+            rows = pandas_db.execute_select_on_table(workflow.id,
+                                                     [where_field],
+                                                     [where_value])
+
+            if len(rows) == 1:
+                # A single row has been selected. Create and pre-populate
+                # the update form
+                vals = [rows[0][idx]
+                        for idx, c in enumerate(workflow.columns.all())
+                        if c in columns]
+                row_form = RowViewDataEntryForm(None,
+                                                columns=columns,
+                                                initial_values=vals)
+                context['row_form'] = row_form
+            else:
+                form.add_error(None, 'No data found with the given keys')
+
+    return render(request, 'dataops/row_filter.html', context)

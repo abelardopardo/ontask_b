@@ -26,6 +26,9 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/rowview_delete/$', row_views.rowview_delete,
         name="rowview_delete"),
 
+    url(r'^(?P<pk>\d+)/rowview_dattaentry/$', row_views.rowview_dataentry,
+        name="rowview_dataentry"),
+
     # Manual Data Entry
     url(r'^rowfilter/$', views.row_filter, name="rowfilter"),
 

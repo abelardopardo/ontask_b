@@ -7,12 +7,69 @@ from django import forms
 
 import ontask.ontask_prefs
 from ontask.forms import RestrictedFileField
-
 from .models import RowView
+
+# Field prefix to use in forms to avoid using column names (they are given by
+# the user and may pose a problem (injection bugs)
+field_prefix = '___ontask___upload_'
+
+
+def column_to_field(col, initial=None, required=False):
+    """
+    Function that given the description of a column it generates the
+    appropriate field to be included in a form
+    :param col: Column object to use as the basis to create the field
+    :param initial: Initial value for the field
+    :param required: flag to generate the field
+    :return: Field object
+    """
+
+    if col.categories:
+        # Column has a finite set of prefixed values
+        choices = [(x, x) for x in col.categories]
+        initial = next((v for x, v in enumerate(choices) if v[0] == initial),
+                       ('', '---'))
+
+        return forms.ChoiceField(choices,
+                                 required=required,
+                                 initial=initial,
+                                 label=col.name)
+
+    # Column is open value
+    if col.data_type == 'string':
+        if not initial:
+            initial = ''
+        if not col.categories:
+            # The field does not have any categories
+            return forms.CharField(initial=initial,
+                                   label=col.name,
+                                   required=required)
+
+    elif col.data_type == 'integer':
+        return forms.IntegerField(initial=initial,
+                                  label=col.name,
+                                  required=required)
+
+    elif col.data_type == 'double':
+        return forms.FloatField(initial=initial,
+                                label=col.name,
+                                required=required)
+
+    elif col.data_type == 'boolean':
+        return forms.BooleanField(initial=initial,
+                                  label=col.name,
+                                  required=required)
+
+    elif col.data_type == 'datetime':
+        return forms.DateTimeField(initial=initial,
+                                   label=col.name,
+                                   required=required)
+    else:
+        raise Exception('Unable to process datatype', col.data_type)
+
 
 # Form to select columns
 class SelectColumnForm(forms.Form):
-
     def __init__(self, *args, **kargs):
         """
         Kargs contain: columns: list of column objects, put_labels: boolean
@@ -44,10 +101,20 @@ class SelectColumnForm(forms.Form):
 
 # RowView manipulation form
 class RowViewForm(forms.ModelForm):
+    """
+    Form to read information about a rowview. The required property of the
+    filter field is set to False because it is enforced in the server.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super(RowViewForm, self).__init__(*args, **kwargs)
+
+        # Required enforced in the server (not in the browser)
+        self.fields['filter'].required = False
 
     class Meta:
         model = RowView
-        fields = ('name', 'description_text')
+        fields = ('name', 'description_text', 'filter')
 
 
 # Step 1 of the CSV upload
@@ -216,6 +283,46 @@ class SelectUniqueKeysForm(forms.Form):
                                   help_text=self.merge_help)
 
 
+# Form to allow value selection through unique keys in a rowview
+class RowViewDataSearchForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+
+        # Store the columns
+        self.columns = kwargs.pop('columns')
+
+        # Get the unique keys names and types
+        self.key_cols = [x for x in self.columns if x.is_key]
+
+        # Call the super constructor
+        super(RowViewDataSearchForm, self).__init__(*args, **kwargs)
+
+        for idx, col in enumerate(self.key_cols):
+            self.fields[field_prefix + '%s' % idx] = column_to_field(col)
+
+
+# Form to enter values in a row
+class RowViewDataEntryForm(forms.Form):
+    def __init__(self, *args, **kargs):
+
+        # Store the instance
+        self.columns = kargs.pop('columns', None)
+        self.initial_values = kargs.pop('initial_values', None)
+
+        super(RowViewDataEntryForm, self).__init__(*args, **kargs)
+
+        # If no initial values have been given, replicate a list of Nones
+        if not self.initial_values:
+            self.initial_values = [None] * len(self.columns)
+
+        for idx, column in enumerate(self.columns):
+            self.fields[field_prefix + '%s' % idx] = \
+                column_to_field(column, self.initial_values[idx])
+
+            if column.is_key and self.initial_values[idx]:
+                self.fields[field_prefix + '%s' % idx].widget.attrs[
+                    'readonly'] = 'readonly'
+
+
 # Form to allow value selection through unique keys in a workflow
 class RowFilterForm(forms.Form):
     def __init__(self, *args, **kargs):
@@ -273,34 +380,8 @@ class RowForm(forms.Form):
             self.initial_values = [None] * len(self.columns)
 
         for idx, column in enumerate(self.columns):
-            if column.data_type == 'string':
-                self.fields[column.name] = forms.CharField(
-                    initial=self.initial_values[idx],
-                    label=column.name,
-                    required=False)
-            elif column.data_type == 'integer':
-                self.fields[column.name] = forms.IntegerField(
-                    initial=self.initial_values[idx],
-                    label=column.name,
-                    required=False)
-            elif column.data_type == 'double':
-                self.fields[column.name] = forms.FloatField(
-                    initial=self.initial_values[idx],
-                    label=column.name,
-                    required=False)
-            elif column.data_type == 'boolean':
-                self.fields[column.name] = forms.BooleanField(
-                    initial=self.initial_values[idx],
-                    required=False,
-                    label=column.name)
-            elif column.data_type == 'datetime':
-                self.fields[column.name] = forms.DateTimeField(
-                    initial=self.initial_values[idx],
-                    required=False,
-                    label=column.name)
-            else:
-                raise Exception('Unable to process datatype',
-                                column.data_type)
+            self.fields[field_prefix + '%s' % idx] = \
+                column_to_field(column, self.initial_values[idx])
 
             if column.is_key and self.initial_values[idx]:
                 self.fields[column.name].widget.attrs['readonly'] = 'readonly'
