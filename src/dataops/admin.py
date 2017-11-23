@@ -9,6 +9,7 @@ from .models import RowView
 class RowViewAdmin(admin.ModelAdmin):
     list_display = ('id',
                     'name',
-                    'description_text')
+                    'description_text',
+                    'filter')
 
 admin.site.register(RowView, RowViewAdmin)

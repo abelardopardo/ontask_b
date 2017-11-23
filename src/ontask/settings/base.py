@@ -22,6 +22,7 @@ BASE_DIR = dirname(dirname(dirname(__file__)))
 STATICFILES_DIRS = [join(BASE_DIR, 'static')]
 MEDIA_ROOT = join(BASE_DIR, 'media')
 MEDIA_URL = "/media/"
+ONTASK_HELP_URL = "html/index.html"
 
 # Project root folder
 PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
@@ -47,6 +48,7 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.template.context_processors.request',
                 'django.contrib.messages.context_processors.messages',
+                'ontask.context_processors.conf_to_context',
             ],
             'libraries': {
                 'settings': 'ontask.templatetags.settings',

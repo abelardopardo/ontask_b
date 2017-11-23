@@ -83,6 +83,10 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
           {% block navbar-right %}
+            <a href="{% static ONTASK_HELP_URL %}" class="btn btn-info"
+                    data-toggle="tooltip"
+                    data-placement="bottom" title="Go to the manual!">
+              <span class="glyphicon glyphicon-book"></span></a>
             {% if user.is_authenticated %}
               {% if user.is_staff %}
                 <li><a href="{% url 'admin:index' %}">Admin</a></li>
@@ -125,13 +129,11 @@
 
     {% block container %}
     <div class="container">
-
       <div class="starter-template">
         <h1>To Be Done</h1>
         <p class="lead">This functionality has not been implemented yet.</p>
       </div>
-
-    </div><!-- /.container -->
+    </div>
     {% endblock container %}
 
     <!-- Site footer -->

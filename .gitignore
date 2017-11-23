@@ -10,7 +10,7 @@ pip-delete-this-directory.txt
 *.egg*
 
 # Sphinx docs:
-build
+_build
 
 # SQLite3 database files:
 *.db
