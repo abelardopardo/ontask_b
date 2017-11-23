@@ -18,7 +18,7 @@ ALLOWED_HOSTS = [socket.getfqdn()]
 
 # Additional middleware introduced by debug toolbar
 MIDDLEWARE_CLASSES += (
-   'django.middleware.security.SecurityMiddleware')
+   'django.middleware.security.SecurityMiddleware',)
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
