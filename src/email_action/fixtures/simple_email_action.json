@@ -1,0 +1,1730 @@
+[
+{
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+        "name": "instructor",
+        "permissions": []
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+        "name": "ainstructor",
+        "permissions": []
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 3,
+    "fields": {
+        "name": "idesigner",
+        "permissions": []
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 4,
+    "fields": {
+        "name": "aidesigner",
+        "permissions": []
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 5,
+    "fields": {
+        "name": "student",
+        "permissions": []
+    }
+},
+{
+    "model": "sites.site",
+    "pk": 1,
+    "fields": {
+        "domain": "example.com",
+        "name": "example.com"
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$n34q6KM9uw3J$KqTx4Bc8X1mwZVRZjnTdUfrZ5xC0jN6JYlQ6sWY2yU4=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student1@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:54.681Z",
+        "name": "",
+        "groups": [
+            [
+                "student"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$1dlrxKGpgqOn$+REnnduyx2hgZpqX1q3mhVd6ZDIHTFFT3DvJmsnIfkc=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student2@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:54.718Z",
+        "name": "",
+        "groups": [
+            [
+                "student"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$rEMeS0qfZTG9$gNWXj6QMIroMR2q1q2PHDUjWYFxckP3U0y/FNSqbUYQ=",
+        "last_login": "2017-11-04T05:33:07.802Z",
+        "is_superuser": false,
+        "email": "instructor1@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:54.755Z",
+        "name": "",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$46jLVZSRXzsz$yMjjEvf3RV/cqewzfD3DgE6K6v8Vl8zlFIkazalmLwo=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "instructor2@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:54.797Z",
+        "name": "",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$0ReTsxa1X4e3$8rU3YEnKnSPSzcQToiLSoUWHHa/47Y0ooXb3/lWGsqw=",
+        "last_login": "2017-11-04T05:34:00.513Z",
+        "is_superuser": false,
+        "email": "ainstructor1@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:54.842Z",
+        "name": "",
+        "groups": [
+            [
+                "ainstructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 6,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$Iha3zjN1yT0C$4UCn675ps9GJ6n0ZX2zz39+kyNH8GSraI2ro1gVcy2g=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "ainstructor2@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:54.884Z",
+        "name": "",
+        "groups": [
+            [
+                "ainstructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 7,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$W4iOQiWpAkYL$JPhTL5CT8EAO3K8mFAI0FSzrU5oOc+UjuMbVFlM+WNo=",
+        "last_login": "2017-11-07T01:24:10.015Z",
+        "is_superuser": false,
+        "email": "idesigner1@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:54.926Z",
+        "name": "",
+        "groups": [
+            [
+                "idesigner"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 8,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$dx0WImNuuA6F$M+UcZ3wVCf2c8U50thQQRAiSPbOvJSycHBa1NU00wMw=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "idesigner2@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:54.966Z",
+        "name": "",
+        "groups": [
+            [
+                "idesigner"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 9,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$kq3aJWuTXYLz$TquGH/auppPSIFyPLoyBxRE7P2fJmccAQtYhv3F+Xec=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "aidesigner1@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:55.006Z",
+        "name": "",
+        "groups": [
+            [
+                "aidesigner"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 10,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$APNp57FOFoiE$ldjo87XU3PNr8jigrPDIcmim7kS7BJJH7kW4RzIVD18=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "aideisgner2@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:55.047Z",
+        "name": "",
+        "groups": [
+            [
+                "aidesigner"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 11,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$iFdns1aqcJM0$5+m3cVcvTRtdpuAMlQ/M0xlxm9P+ZRpXjsDSBR11w3Y=",
+        "last_login": "2017-11-06T05:02:24.430Z",
+        "is_superuser": true,
+        "email": "superuser@bogus.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:55.086Z",
+        "name": "Super User",
+        "groups": [
+            [
+                "instructor"
+            ],
+            [
+                "ainstructor"
+            ],
+            [
+                "idesigner"
+            ],
+            [
+                "aidesigner"
+            ],
+            [
+                "student"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 12,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$xaq4GGi9jBBR$936kiJwkHGvAEMiNC/OiI2+fMf+KbK717SwcO27qfhA=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student3@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-08T01:29:29.586Z",
+        "name": "Student Three",
+        "groups": [
+            [
+                "student"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 13,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$5MDktkvDiQ9E$N9bAnPNMpNuikSUGQRuDPucJytnTzEVaju7/J4rITwc=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "aidesigner2@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-08T01:29:29.667Z",
+        "name": "Aidesigner Two",
+        "groups": [
+            [
+                "aidesigner"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 1,
+    "fields": {
+        "app": "dataops",
+        "name": "plugin_directory",
+        "text": "/Users/abelardopardo/ontask_C/src/../site/plugins"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 2,
+    "fields": {
+        "app": "email_action",
+        "name": "email_host",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 3,
+    "fields": {
+        "app": "email_action",
+        "name": "email_port",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 4,
+    "fields": {
+        "app": "email_action",
+        "name": "email_host_user",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 5,
+    "fields": {
+        "app": "email_action",
+        "name": "email_host_password",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 6,
+    "fields": {
+        "app": "email_action",
+        "name": "email_use_tls",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 7,
+    "fields": {
+        "app": "email_action",
+        "name": "email_use_ssl",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 8,
+    "fields": {
+        "app": "email_action",
+        "name": "notification_template",
+        "text": "\n<html>\n<head/>\n<body>\n<p>Dear {{ user.name }}</p>\n\n<p>This message is to inform you that on {{ email_sent_datetime }} a total of \n{{ num_messages }} emails were sent after the user {{ user.email }} executed \nthe action with name  \"{{ action.name }}\".</p> \n\n{% if filter_present %}\n<p>The action had a filter that reduced the number of messages from \n{{ num_rows }} to {{ num_selected }}.</p> \n{% else %}\n<p>All the data rows stored in the workflow were used.</p>\n{% endif %}\n\nRegards.\nThe OnTask Support Team\n</body>\n</html>\n"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 9,
+    "fields": {
+        "app": "email_action",
+        "name": "notification_subject",
+        "text": "OnTask: Action executed"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 10,
+    "fields": {
+        "app": "email_action",
+        "name": "notification_sender",
+        "text": "ontask@ontasklearning.org"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 11,
+    "fields": {
+        "app": "logs",
+        "name": "max_list_size",
+        "text": "200"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "14f8be6e4d00fb2ae933e488ebdd3e9f84105495",
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-08T01:29:29.740Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "20fb9d72b11396b4cecfbbd87fb8dd9d905e3a73",
+    "fields": {
+        "user": [
+            "aideisgner2@bogus.com"
+        ],
+        "created": "2017-11-08T01:29:29.738Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "3cf0d7f92c7f0050eee19dfd9371df75d76f101a",
+    "fields": {
+        "user": [
+            "idesigner2@bogus.com"
+        ],
+        "created": "2017-11-08T01:29:29.741Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "5d890aab0f2d4190351106043ed5ed0dbfb15359",
+    "fields": {
+        "user": [
+            "superuser@bogus.com"
+        ],
+        "created": "2017-11-08T01:29:29.744Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "69f58269d85662c4a0ae7150823b6ef850dcecbd",
+    "fields": {
+        "user": [
+            "student3@bogus.com"
+        ],
+        "created": "2017-11-08T01:29:29.744Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "8c3048b3bc0a28009628297209c45efdcced0808",
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-11-08T01:29:29.741Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "a7cffaeb56732ccfd0707e0bef0bfc302832d9b1",
+    "fields": {
+        "user": [
+            "instructor2@bogus.com"
+        ],
+        "created": "2017-11-08T01:29:29.742Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "ba0e3c844bea750a41838969ccfd08c9922c23a3",
+    "fields": {
+        "user": [
+            "ainstructor1@bogus.com"
+        ],
+        "created": "2017-11-08T01:29:29.739Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "bccb4360e4232e0de9bddb390e8ac91fa0b4056a",
+    "fields": {
+        "user": [
+            "aidesigner2@bogus.com"
+        ],
+        "created": "2017-11-08T01:29:29.743Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "bf3069552c2a2ead160ecb2734c6262af99a96e2",
+    "fields": {
+        "user": [
+            "student1@bogus.com"
+        ],
+        "created": "2017-11-08T01:29:29.742Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "cb107288fea41070c4534b1053c3a35f3370053e",
+    "fields": {
+        "user": [
+            "aidesigner1@bogus.com"
+        ],
+        "created": "2017-11-08T01:29:29.738Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "cf22064a4a103202e7e2c5d1fd214abcadd71504",
+    "fields": {
+        "user": [
+            "ainstructor2@bogus.com"
+        ],
+        "created": "2017-11-08T01:29:29.739Z"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "e8197c046bb9e341d7f173b28e2283a06fcbfe3b",
+    "fields": {
+        "user": [
+            "student2@bogus.com"
+        ],
+        "created": "2017-11-08T01:29:29.743Z"
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 10,
+    "fields": {
+        "slug": "3776b8ea-cbd4-4aab-8a70-494783f846ad",
+        "picture": "",
+        "bio": null,
+        "email_verified": false,
+        "level": 0
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 9,
+    "fields": {
+        "slug": "bdbe4470-8a73-414d-b275-685164f220c6",
+        "picture": "",
+        "bio": null,
+        "email_verified": false,
+        "level": 0
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 5,
+    "fields": {
+        "slug": "72f9a2b0-9b1f-4645-bc04-9325e8acc27d",
+        "picture": "",
+        "bio": null,
+        "email_verified": false,
+        "level": 0
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 6,
+    "fields": {
+        "slug": "d10eef1a-ec45-4aa6-8eaa-ca24c76068bc",
+        "picture": "",
+        "bio": null,
+        "email_verified": false,
+        "level": 0
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 7,
+    "fields": {
+        "slug": "58299c5f-a3b8-4d83-ae96-893661d266a5",
+        "picture": "",
+        "bio": null,
+        "email_verified": false,
+        "level": 0
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 8,
+    "fields": {
+        "slug": "5037472b-81e3-4e76-906c-32d7cf148c43",
+        "picture": "",
+        "bio": null,
+        "email_verified": false,
+        "level": 0
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 3,
+    "fields": {
+        "slug": "1d012d44-3e00-45d6-9731-a08f705fc64f",
+        "picture": "",
+        "bio": null,
+        "email_verified": false,
+        "level": 0
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 4,
+    "fields": {
+        "slug": "b796849b-7af2-4b00-bfd9-41ac89f878f3",
+        "picture": "",
+        "bio": null,
+        "email_verified": false,
+        "level": 0
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 1,
+    "fields": {
+        "slug": "d08dfd91-baec-4802-bb90-903ebc6e4812",
+        "picture": "",
+        "bio": null,
+        "email_verified": false,
+        "level": 0
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 2,
+    "fields": {
+        "slug": "94108abd-a6c2-45ef-8230-4e09f870b9eb",
+        "picture": "",
+        "bio": null,
+        "email_verified": false,
+        "level": 0
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 13,
+    "fields": {
+        "slug": "08c8e939-50ed-4a95-ae3d-59a1ce8de76d",
+        "picture": "",
+        "bio": null,
+        "email_verified": false,
+        "level": 0
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 12,
+    "fields": {
+        "slug": "d8641eaf-aa99-408c-919f-fbae17dbbb8c",
+        "picture": "",
+        "bio": null,
+        "email_verified": false,
+        "level": 0
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 11,
+    "fields": {
+        "slug": "f1efa3e0-8b8f-432d-80bf-5c3542f00897",
+        "picture": "",
+        "bio": null,
+        "email_verified": false,
+        "level": 0
+    }
+},
+{
+    "model": "workflow.workflow",
+    "pk": 5,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "name": "wflow1",
+        "description_text": "description text for workflow 1",
+        "created": "2017-11-06T05:30:28.050Z",
+        "modified": "2017-11-07T02:56:28.611Z",
+        "nrows": 3,
+        "ncols": 8,
+        "attributes": {},
+        "query_builder_ops": [
+            {
+                "validation": {
+                    "step": "any"
+                },
+                "type": "double",
+                "id": "age"
+            },
+            {
+                "type": "string",
+                "id": "email"
+            },
+            {
+                "type": "integer",
+                "id": "sid"
+            },
+            {
+                "type": "string",
+                "id": "another"
+            },
+            {
+                "type": "string",
+                "id": "name"
+            },
+            {
+                "type": "string",
+                "id": "one"
+            },
+            {
+                "values": {
+                    "1": "Yes",
+                    "0": "No"
+                },
+                "input": "radio",
+                "operators": [
+                    "equal"
+                ],
+                "type": "boolean",
+                "id": "registered"
+            },
+            {
+                "type": "datetime",
+                "id": "when"
+            }
+        ],
+        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_5",
+        "session_key": "",
+        "shared": []
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 260,
+    "fields": {
+        "name": "sid",
+        "workflow": 5,
+        "data_type": "integer",
+        "is_key": true,
+        "categories": []
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 261,
+    "fields": {
+        "name": "name",
+        "workflow": 5,
+        "data_type": "string",
+        "is_key": false,
+        "categories": []
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 262,
+    "fields": {
+        "name": "email",
+        "workflow": 5,
+        "data_type": "string",
+        "is_key": true,
+        "categories": []
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 263,
+    "fields": {
+        "name": "age",
+        "workflow": 5,
+        "data_type": "double",
+        "is_key": true,
+        "categories": []
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 264,
+    "fields": {
+        "name": "registered",
+        "workflow": 5,
+        "data_type": "boolean",
+        "is_key": false,
+        "categories": []
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 265,
+    "fields": {
+        "name": "when",
+        "workflow": 5,
+        "data_type": "datetime",
+        "is_key": false,
+        "categories": []
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 266,
+    "fields": {
+        "name": "one",
+        "workflow": 5,
+        "data_type": "string",
+        "is_key": false,
+        "categories": []
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 267,
+    "fields": {
+        "name": "another",
+        "workflow": 5,
+        "data_type": "string",
+        "is_key": false,
+        "categories": []
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 268,
+    "fields": {
+        "name": "EmailRead_1",
+        "workflow": 5,
+        "data_type": "integer",
+        "is_key": false,
+        "categories": []
+    }
+},
+{
+    "model": "dataops.pluginregistry",
+    "pk": 1,
+    "fields": {
+        "filename": "sample",
+        "modified": "2017-11-04T07:27:43.406Z",
+        "name": "Sample plugin",
+        "description_txt": "Description of the sample plugin",
+        "num_column_input_from": 1,
+        "num_column_input_to": 5
+    }
+},
+{
+    "model": "action.action",
+    "pk": 2,
+    "fields": {
+        "workflow": 5,
+        "name": "simple action",
+        "description_text": "action description text",
+        "created": "2017-11-06T22:15:41.165Z",
+        "modified": "2017-11-07T02:56:02.865Z",
+        "n_selected_rows": -1,
+        "content": "<p>{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}</p>",
+        "serve_enabled": false
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 6,
+    "fields": {
+        "action": 2,
+        "name": "c1",
+        "description_text": "b",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "12.1",
+                    "field": "age",
+                    "operator": "less_or_equal",
+                    "input": "number",
+                    "type": "double",
+                    "id": "age"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-11-20T10:49:53.383Z",
+        "modified": "2017-11-20T10:49:53.383Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 7,
+    "fields": {
+        "action": 2,
+        "name": "c2",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "12.1",
+                    "field": "age",
+                    "operator": "greater",
+                    "input": "number",
+                    "type": "double",
+                    "id": "age"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-11-20T10:49:53.383Z",
+        "modified": "2017-11-20T10:49:53.383Z"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 206,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T05:30:28.053Z",
+        "name": "workflow_update",
+        "workflow": 5,
+        "payload": "{\"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 207,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T05:30:48.120Z",
+        "name": "workflow_data_upload",
+        "workflow": 5,
+        "payload": "{\"column_names\": [\"age\", \"email\", \"sid\", \"name\", \"registered\", \"when\"], \"name\": \"wflow1\", \"column_types\": [\"double\", \"string\", \"integer\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, false, false, false], \"id\": 5}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 208,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T05:31:10.469Z",
+        "name": "workflow_data_merge",
+        "workflow": 5,
+        "payload": "{\"column_names\": [\"age\", \"email\", \"sid\", \"another\", \"name\", \"one\", \"registered\", \"when\"], \"name\": \"wflow1\", \"column_types\": [\"double\", \"string\", \"integer\", \"string\", \"string\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 6, \"num_rows\": 3, \"column_unique\": [true, true, true, false, false, false, false, false], \"id\": 5}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 209,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T05:56:19.796Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"age\", \"column_name\": \"age\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 210,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T10:43:06.455Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"age\", \"column_name\": \"age\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 211,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T21:18:04.740Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 212,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T21:18:40.740Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 213,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T21:32:23.308Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 214,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T21:32:33.569Z",
+        "name": "action_create",
+        "workflow": 5,
+        "payload": "{\"workflow_id\": 5, \"id\": 1, \"workflow_name\": \"wflow1\", \"name\": \"xxx\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 215,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T21:32:46.118Z",
+        "name": "action_update",
+        "workflow": 5,
+        "payload": "{\"content\": \"{% comment %}Your action content here{% endcomment %}\", \"workflow_id\": 5, \"id\": 1, \"workflow_name\": \"wflow1\", \"name\": \"xxx\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 216,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T21:38:42.213Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 217,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T21:38:50.928Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 218,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T21:39:45.964Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 219,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T21:41:25.198Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 220,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T21:47:10.835Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 221,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T21:47:46.332Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 222,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T21:55:47.115Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 223,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T21:57:12.453Z",
+        "name": "action_update",
+        "workflow": 5,
+        "payload": "{\"content\": \"{% comment %}Your action content here{% endcomment %}\", \"workflow_id\": 5, \"id\": 1, \"workflow_name\": \"wflow1\", \"name\": \"xxx\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 224,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T21:57:28.915Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 225,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T21:59:25.610Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 226,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T22:02:03.063Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 227,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T22:02:58.191Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 228,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T22:03:20.490Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 229,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T22:03:42.478Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 230,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T22:12:04.810Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another2\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 231,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T22:12:54.027Z",
+        "name": "action_delete",
+        "workflow": 5,
+        "payload": "{\"workflow_name\": \"wflow1\", \"id\": 1, \"workflow_id\": 5, \"name\": \"xxx\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 232,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T22:15:41.169Z",
+        "name": "action_create",
+        "workflow": 5,
+        "payload": "{\"workflow_id\": 5, \"id\": 2, \"workflow_name\": \"wflow1\", \"name\": \"aaa\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 233,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T22:33:03.256Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another2\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 234,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T22:41:44.474Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another2\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 235,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T22:45:53.405Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another222\", \"column_name\": \"another2\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 236,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T23:00:20.710Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another222\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 237,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T23:06:04.120Z",
+        "name": "column_rename",
+        "workflow": 5,
+        "payload": "{\"new_name\": \"another\", \"column_name\": \"another\", \"id\": 5, \"name\": \"wflow1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 238,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T23:08:40.788Z",
+        "name": "action_update",
+        "workflow": 5,
+        "payload": "{\"workflow_id\": 5, \"id\": 2, \"workflow_name\": \"wflow1\", \"name\": \"simple action\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 239,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T23:08:47.201Z",
+        "name": "action_update",
+        "workflow": 5,
+        "payload": "{\"content\": \"{% comment %}Your action content here{% endcomment %}\", \"workflow_id\": 5, \"id\": 2, \"workflow_name\": \"wflow1\", \"name\": \"simple action\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 240,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T23:22:37.988Z",
+        "name": "condition_create",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": -1, \"formula\": [\"(\\\"age\\\" = %s)\", [\"1.0\"]], \"id\": 1, \"name\": \"c1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 241,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T23:23:01.469Z",
+        "name": "condition_delete",
+        "workflow": 5,
+        "payload": "{\"formula\": \"(\\\"age\\\" = %s)\", \"formula_fields\": [\"1.0\"], \"id\": 1, \"name\": \"c1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 242,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T23:29:16.106Z",
+        "name": "filter_create",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": 2, \"formula\": [\"(\\\"age\\\" <= %s)\", [\"12.1\"]], \"id\": 2, \"name\": \"aaa\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 243,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T23:33:54.757Z",
+        "name": "filter_update",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": 2, \"formula\": [\"(\\\"age\\\" <= %s)\", [\"12.1\"]], \"id\": 2, \"name\": \"aaa\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 244,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T23:33:54.804Z",
+        "name": "filter_update",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": 2, \"formula\": [\"(\\\"age\\\" <= %s)\", [\"12.1\"]], \"id\": 2, \"name\": \"aaa\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 245,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T23:39:22.459Z",
+        "name": "filter_delete",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": 2, \"formula\": \"(\\\"age\\\" <= %s)\", \"formula_fields\": [\"12.1\"], \"id\": 2, \"name\": \"aaa\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 246,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T23:39:36.317Z",
+        "name": "filter_create",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": 2, \"formula\": [\"(\\\"age\\\" <= %s)\", [\"12.1\"]], \"id\": 3, \"name\": \"fname\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 247,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T23:42:23.438Z",
+        "name": "filter_delete",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": 2, \"formula\": \"(\\\"age\\\" <= %s)\", \"formula_fields\": [\"12.1\"], \"id\": 3, \"name\": \"fname\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 248,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T23:43:39.090Z",
+        "name": "filter_create",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": 2, \"formula\": [\"(\\\"age\\\" <= %s)\", [\"12.1\"]], \"id\": 4, \"name\": \"fname\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 249,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T23:47:44.727Z",
+        "name": "filter_update",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": 1, \"formula\": [\"(\\\"age\\\" <= %s) AND (\\\"when\\\" <= %s)\", [\"12.1\", \"2017-10-11T00:32:44\"]], \"id\": 4, \"name\": \"fname\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 250,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T23:51:52.663Z",
+        "name": "filter_update",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": 2, \"formula\": [\"(\\\"age\\\" <= %s)\", [\"12.1\"]], \"id\": 4, \"name\": \"fname\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 251,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-06T23:53:57.006Z",
+        "name": "filter_update",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": 1, \"formula\": [\"(\\\"age\\\" <= %s) AND (\\\"when\\\" <= %s)\", [\"12.1\", \"2017-10-11T00:32:44\"]], \"id\": 4, \"name\": \"fname\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 252,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-07T00:04:46.833Z",
+        "name": "filter_delete",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": 1, \"formula\": \"(\\\"age\\\" <= %s) AND (\\\"when\\\" <= %s)\", \"formula_fields\": [\"12.1\", \"2017-10-11T00:32:44\"], \"id\": 4, \"name\": \"fname\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 253,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-07T00:21:16.665Z",
+        "name": "filter_create",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": 1, \"formula\": [\"(\\\"age\\\" = %s)\", [\"12.1\"]], \"id\": 5, \"name\": \"a\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 254,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-07T01:28:20.682Z",
+        "name": "condition_create",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": 1, \"formula\": [\"(\\\"age\\\" <= %s)\", [\"12.1\"]], \"id\": 6, \"name\": \"a\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 255,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-07T01:35:36.022Z",
+        "name": "condition_create",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": 1, \"formula\": [\"(\\\"age\\\" > %s)\", [\"12.1\"]], \"id\": 7, \"name\": \"c2\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 256,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-07T01:36:20.364Z",
+        "name": "action_update",
+        "workflow": 5,
+        "payload": "{\"content\": \"<p>{% comment %}Your action content here{% endcomment %}{% if c2 %}Low age{% endif %}{% if a %}High age{% endif %}</p>\", \"workflow_id\": 5, \"id\": 2, \"workflow_name\": \"wflow1\", \"name\": \"simple action\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 257,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-07T01:36:31.753Z",
+        "name": "filter_delete",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": 1, \"formula\": \"(\\\"age\\\" = %s)\", \"formula_fields\": [\"12.1\"], \"id\": 5, \"name\": \"a\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 258,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-07T01:47:40.006Z",
+        "name": "action_update",
+        "workflow": 5,
+        "payload": "{\"content\": \"<p>{% comment %}Your action content here{% endcomment %}{% if c2 %}Low age{% endif %}{% if a %}High age{% endif %}</p>\", \"workflow_id\": 5, \"id\": 2, \"workflow_name\": \"wflow1\", \"name\": \"simple action\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 259,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-07T02:16:00.183Z",
+        "name": "action_update",
+        "workflow": 5,
+        "payload": "{\"content\": \"<p>{% comment %}Your action content here{% endcomment %}{% if c2 %}Low age{% endif %}{% if a %}High age{% endif %}</p>\", \"workflow_id\": 5, \"id\": 2, \"workflow_name\": \"wflow1\", \"name\": \"simple action\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 260,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-07T02:48:21.941Z",
+        "name": "action_email_sent",
+        "workflow": 5,
+        "payload": "{\"body\": \"<p>High age</p><img src=\\\"https://example.com//trck/?v=eyJhY3Rpb24iOjIsInRvIjoic3R1ZGVudDFAYm9ndXMuY29tIiwiY29sdW1uX2RzdCI6IkVtYWlsUmVhZF8xIiwic2VuZGVyIjoiaWRlc2lnbmVyMUBib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCJ9:1eBtw5:MwH1axNDQq9HpgcP6jRvp7cAFmI\\\" alt=\\\"\\\" \\n                    style=\\\"position:absolute; visibility:hidden\\\"/>\", \"to_email\": [\"student1@bogus.com\"], \"email_sent_datetime\": \"2017-11-07 13:48:21.940473+11:00\", \"from_email\": \"idesigner1@bogus.com\", \"user\": 7, \"action\": 2, \"subject\": \"xxx\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 261,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-07T02:48:21.968Z",
+        "name": "action_email_sent",
+        "workflow": 5,
+        "payload": "{\"body\": \"<p>High age</p><img src=\\\"https://example.com//trck/?v=eyJhY3Rpb24iOjIsInRvIjoic3R1ZGVudDJAYm9ndXMuY29tIiwiY29sdW1uX2RzdCI6IkVtYWlsUmVhZF8xIiwic2VuZGVyIjoiaWRlc2lnbmVyMUBib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCJ9:1eBtw5:FFS1EXjdgJjc37ZVOcW22aIegR4\\\" alt=\\\"\\\" \\n                    style=\\\"position:absolute; visibility:hidden\\\"/>\", \"to_email\": [\"student2@bogus.com\"], \"email_sent_datetime\": \"2017-11-07 13:48:21.940473+11:00\", \"from_email\": \"idesigner1@bogus.com\", \"user\": 7, \"action\": 2, \"subject\": \"xxx\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 262,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-07T02:48:21.981Z",
+        "name": "action_email_sent",
+        "workflow": 5,
+        "payload": "{\"body\": \"<p>Low age</p><img src=\\\"https://example.com//trck/?v=eyJhY3Rpb24iOjIsInRvIjoic3R1ZGVudDNAYm9ndXMuY29tIiwiY29sdW1uX2RzdCI6IkVtYWlsUmVhZF8xIiwic2VuZGVyIjoiaWRlc2lnbmVyMUBib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCJ9:1eBtw5:V0KhNWbcY3YPTfJXRagPaeJae4M\\\" alt=\\\"\\\" \\n                    style=\\\"position:absolute; visibility:hidden\\\"/>\", \"to_email\": [\"student3@bogus.com\"], \"email_sent_datetime\": \"2017-11-07 13:48:21.940473+11:00\", \"from_email\": \"idesigner1@bogus.com\", \"user\": 7, \"action\": 2, \"subject\": \"xxx\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 263,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-07T02:48:21.994Z",
+        "name": "action_email_sent",
+        "workflow": 5,
+        "payload": "{\"num_rows\": 3, \"num_messages\": 3, \"email_sent_datetime\": \"2017-11-07 13:48:21.940473+11:00\", \"user\": 7, \"action\": \"simple action\", \"filter_present\": false, \"from_email\": \"idesigner1@bogus.com\", \"subject\": \"xxx\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 264,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-07T02:55:27.533Z",
+        "name": "condition_update",
+        "workflow": 5,
+        "payload": "{\"selected_rows\": -1, \"formula\": [\"(\\\"age\\\" <= %s)\", [\"12.1\"]], \"id\": 6, \"name\": \"c1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 265,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-07T02:55:56.525Z",
+        "name": "action_update",
+        "workflow": 5,
+        "payload": "{\"content\": \"<p>{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}</p>\", \"workflow_id\": 5, \"id\": 2, \"workflow_name\": \"wflow1\", \"name\": \"simple action\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 266,
+    "fields": {
+        "user": [
+            "idesigner1@bogus.com"
+        ],
+        "created": "2017-11-07T02:56:02.854Z",
+        "name": "action_update",
+        "workflow": 5,
+        "payload": "{\"content\": \"<p>{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}</p>\", \"workflow_id\": 5, \"id\": 2, \"workflow_name\": \"wflow1\", \"name\": \"simple action\"}"
+    }
+}
+]

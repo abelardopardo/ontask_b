@@ -22,6 +22,13 @@ class HasVariableTest(TestCase):
          u'input': u'text', u'type': u'string', u'id': u'ANOTHER'}],
                 u'valid': True, u'condition': u'AND'}
 
+    formula3 = {u'not': False, u'rules': [
+        {u'value': u'df', u'field': u'UOS_Code_b', u'operator': u'equal',
+         u'input': u'text', u'type': u'string', u'id': u'UOS_Code_b'},
+        {u'value': u'v2', u'field': u'ANOTHER', u'operator': u'equal',
+         u'input': u'text', u'type': u'string', u'id': u'ANOTHER'}],
+                u'valid': True, u'condition': u'AND'}
+
     def compare(self, f1, f2):
 
         if 'condition' in f1 and 'condition' not in f2:
@@ -39,26 +46,15 @@ class HasVariableTest(TestCase):
         # Dictionaries should have the same items (identically)
         return f1 == f2
 
-    def test_has_variable_true(self):
-
-        self.assertTrue(formula_evaluation.has_variable(
-            self.formula1, 'UOS_Code_a'
-        ))
-
-    def test_has_variable_false(self):
-
-        self.assertFalse(formula_evaluation.has_variable(
-            self.formula1, 'equal'
-        ))
-
     def test_rename_variable_true(self):
 
         self.assertTrue(self.compare(self.formula1, self.formula2))
 
         f3 = formula_evaluation.rename_variable(self.formula1,
-                                                [('UOS_Code_a', 'UOS_Code_b')])
+                                                'UOS_Code_a',
+                                                'UOS_Code_b')
 
-        self.assertFalse(self.compare(self.formula2, f3))
+        self.assertTrue(self.compare(self.formula3, f3))
 
     def test_evaluate_formula(self):
 

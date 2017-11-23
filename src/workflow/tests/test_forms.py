@@ -1,26 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
-from django.contrib.auth import get_user_model
-from django.test import TestCase
 from django.urls import reverse
 
+import test
 from workflow.forms import WorkflowForm
 
 
-class SetupClass(TestCase):
-    def setUp(self):
-        self.user = get_user_model().objects.create_user(
-            email="user1@bogus.com",
-            password="user1",
-            is_superuser=False,
-            name='User1 User1',
-            is_active=True,
-            is_staff=True)
-        self.user.save()
-
-
-class WorkflowFormTest(TestCase):
+class WorkflowFormTest(test.OntaskTestCase):
     # Valid data
     def test_workflow_valid(self):
         form = WorkflowForm(data={'name': 'workflow1',
@@ -42,15 +29,3 @@ class WorkflowFormTest(TestCase):
 
         self.assertTrue(form.is_valid())
         self.assertTrue(form.cleaned_data['name'] == name.strip())
-
-
-class WorkflowTestCreateView(SetupClass):
-    def test_home_view(self):
-        user_login = self.client.login(email='user1@bogus.com',
-                                       password='user1')
-        self.assertTrue(user_login)
-
-        response = self.client.get(reverse('workflow:index'))
-
-        # Should redirect to a page with the profile (it is not staff).
-        self.assertEqual(response.status_code, 302)
