@@ -9,9 +9,12 @@
 {% block title %}Workflow export done{% endblock %}
 
 {% block container %}
-  <div class="container" style="margin-top:50px;">
+  <div class="container-fluid" style="margin-top:50px;text-align:center;">
     <h1 class="page-header text-center">Workflow export</h1>
 
     <p class="text-center">Workflow export done!</p>
+    <button type="button" class="btn btn-default"
+      onclick="location.href='{% url 'workflow:detail' wid %}'">Back
+    </button>
   </div>
 {% endblock container %}

@@ -17,6 +17,11 @@ if "celery" in sys.argv[0]:
 INSTALLED_APPS += (
     'debug_toolbar',)
 
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda r: False,  # disables it
+    # '...
+}
+
 # Additional middleware introduced by debug toolbar
 MIDDLEWARE_CLASSES += (
     'debug_toolbar.middleware.DebugToolbarMiddleware',)
