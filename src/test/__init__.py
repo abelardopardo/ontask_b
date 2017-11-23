@@ -27,12 +27,6 @@ user_info = [
     ('Student Three', 'student3@bogus.com', [group_names[0]], False),
     ('Instructor One', 'instructor1@bogus.com', [group_names[1]], False),
     ('Instructor Two', 'instructor2@bogus.com', [group_names[1]], False),
-    ('Ainstructor One', 'ainstructor1@bogus.com', [group_names[2]], False),
-    ('Ainstructor Two', 'ainstructor2@bogus.com', [group_names[2]], False),
-    ('Idesigner One', 'idesigner1@bogus.com', [group_names[3]], False),
-    ('Idesigner Two', 'idesigner2@bogus.com', [group_names[3]], False),
-    ('Aidesigner One', 'aidesigner1@bogus.com', [group_names[4]], False),
-    ('Aidesigner Two', 'aidesigner2@bogus.com', [group_names[4]], False),
     ('Super User', 'superuser@bogus.com', group_names, True)]
 
 boguspwd = 'boguspwd'

@@ -39,7 +39,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
     # Test operations with the filter
     def test_action_01_filter(self):
         # Login
-        self.login('idesigner1@bogus.com')
+        self.login('instructor1@bogus.com')
 
         self.open(reverse('workflow:index'))
 
@@ -190,7 +190,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
     # Test operations with the conditions and the email preview
     def test_action_02_condition(self):
         # Login
-        self.login('idesigner1@bogus.com')
+        self.login('instructor1@bogus.com')
 
         self.open(reverse('workflow:index'))
 
@@ -368,7 +368,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
     # Test send_email operation
     def test_action_03_send_email(self):
         # Login
-        self.login('idesigner1@bogus.com')
+        self.login('instructor1@bogus.com')
 
         self.open(reverse('workflow:index'))
 
@@ -441,7 +441,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
 
     def test_action_04_save_action_with_buttons(self):
         # Login
-        self.login('idesigner1@bogus.com')
+        self.login('instructor1@bogus.com')
 
         self.open(reverse('workflow:index'))
 

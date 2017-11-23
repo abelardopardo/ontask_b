@@ -14,7 +14,7 @@ class WorkflowApiCreate(test.OntaskApiTestCase):
     def setUp(self):
         super(WorkflowApiCreate, self).setUp()
         # Get the token for authentication and set credentials in client
-        token = Token.objects.get(user__email='idesigner1@bogus.com')
+        token = Token.objects.get(user__email='instructor1@bogus.com')
         auth = 'Token ' + token.key
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 

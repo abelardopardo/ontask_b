@@ -16,6 +16,10 @@ TEMPLATE_DEBUG = False
 # ALLOWED_HOSTS = ["ontask.com"]
 ALLOWED_HOSTS = [socket.getfqdn()]
 
+# Additional middleware introduced by debug toolbar
+MIDDLEWARE_CLASSES += (
+   'django.middleware.security.SecurityMiddleware')
+
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_HSTS_SECONDS = 31536000

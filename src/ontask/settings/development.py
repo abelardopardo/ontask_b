@@ -8,6 +8,9 @@ import logging.config
 DEBUG = True
 TEMPLATES[0]['OPTIONS'].update({'debug': True})
 
+# Define STATIC_ROOT for the collectstatic command
+STATIC_ROOT = join(BASE_DIR, '..', 'site', 'static')
+
 # Turn off debug while imported by Celery with a workaround
 # See http://stackoverflow.com/a/4806384
 if "celery" in sys.argv[0]:

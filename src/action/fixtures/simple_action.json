@@ -262,15 +262,6 @@
 },
 {
     "model": "siteprefs.preference",
-    "pk": 1,
-    "fields": {
-        "app": "dataops",
-        "name": "plugin_directory",
-        "text": "/Users/abelardopardo/ontask_C/src/../site/plugins"
-    }
-},
-{
-    "model": "siteprefs.preference",
     "pk": 2,
     "fields": {
         "app": "email_action",
@@ -366,8 +357,7 @@
         "slug": "3776b8ea-cbd4-4aab-8a70-494783f846ad",
         "picture": "",
         "bio": null,
-        "email_verified": false,
-        "level": 0
+        "email_verified": false
     }
 },
 {
@@ -377,8 +367,7 @@
         "slug": "7ca4994e-34a6-40a2-b584-18d7a7f8e4a9",
         "picture": "",
         "bio": null,
-        "email_verified": false,
-        "level": 0
+        "email_verified": false
     }
 },
 {
@@ -388,8 +377,7 @@
         "slug": "4f5b0f2a-d4c2-4d22-82ed-1481510571a5",
         "picture": "",
         "bio": null,
-        "email_verified": false,
-        "level": 2
+        "email_verified": false
     }
 },
 {
@@ -399,8 +387,7 @@
         "slug": "bddb639d-f3f0-464b-8da0-35a29df20d99",
         "picture": "",
         "bio": null,
-        "email_verified": false,
-        "level": 0
+        "email_verified": false
     }
 },
 {
@@ -410,8 +397,7 @@
         "slug": "18e838fb-f8d9-4f0c-b979-fa8d0cbc9d14",
         "picture": "",
         "bio": null,
-        "email_verified": false,
-        "level": 3
+        "email_verified": false
     }
 },
 {
@@ -421,8 +407,7 @@
         "slug": "ece37e9a-ef20-4c12-8a4b-cab668564e14",
         "picture": "",
         "bio": null,
-        "email_verified": false,
-        "level": 0
+        "email_verified": false
     }
 },
 {
@@ -432,8 +417,7 @@
         "slug": "74432d3f-044b-43b2-9ae7-c7456ce4e09e",
         "picture": "",
         "bio": null,
-        "email_verified": false,
-        "level": 1
+        "email_verified": false
     }
 },
 {
@@ -443,8 +427,7 @@
         "slug": "fcfcf019-3d1c-4e28-905d-cfd774011fb0",
         "picture": "",
         "bio": null,
-        "email_verified": false,
-        "level": 0
+        "email_verified": false
     }
 },
 {
@@ -454,8 +437,7 @@
         "slug": "5dd3f343-8d73-4720-af1c-c79a4e05d1f9",
         "picture": "",
         "bio": null,
-        "email_verified": false,
-        "level": 0
+        "email_verified": false
     }
 },
 {
@@ -465,8 +447,7 @@
         "slug": "710f3cc1-4460-42c6-9703-62d07df185da",
         "picture": "",
         "bio": null,
-        "email_verified": false,
-        "level": 0
+        "email_verified": false
     }
 },
 {
@@ -476,8 +457,7 @@
         "slug": "859d0e9a-0d1e-4bb5-85af-5bcd9008d5f0",
         "picture": "",
         "bio": null,
-        "email_verified": false,
-        "level": 5
+        "email_verified": false
     }
 },
 {
@@ -485,7 +465,7 @@
     "pk": 5,
     "fields": {
         "user": [
-            "idesigner1@bogus.com"
+            "instructor1@bogus.com"
         ],
         "name": "wflow1",
         "description_text": "description text for workflow 1",
@@ -630,18 +610,6 @@
         "data_type": "string",
         "is_key": false,
         "categories": []
-    }
-},
-{
-    "model": "dataops.pluginregistry",
-    "pk": 1,
-    "fields": {
-        "filename": "sample",
-        "modified": "2017-11-04T07:27:43.406Z",
-        "name": "Sample plugin",
-        "description_txt": "Description of the sample plugin",
-        "num_column_input_from": 1,
-        "num_column_input_to": 5
     }
 },
 {

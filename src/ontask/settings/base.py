@@ -121,13 +121,29 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.RemoteUserBackend',
     'django.contrib.auth.backends.ModelBackend'
 ]
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "TIMEOUT": 1800,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "ontask"
+    }
+}
+# Cache time to live is 15 minutes
+CACHE_TTL = 60 * 30
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+SESSION_CACHE_ALIAS = "default"
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 1800  # set just 30 mins
@@ -215,14 +231,6 @@ THUMBNAIL_EXTENSION = 'png'     # Or any extn for your thumbnails
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 SITE_ID = 1
-
-#
-# Auxiliary variables
-#
-if DATABASES['default']['ENGINE'].find('postgresql') != -1:
-    DATABASE_TYPE = 'postgresql'
-elif DATABASES['default']['ENGINE'].find('sqlite') != -1:
-    DATABASE_TYPE = 'sqlite'
 
 # SUMMERNOTE_CONFIG = {
 #     # Using SummernoteWidget - iframe mode

@@ -23,9 +23,6 @@ class WorkflowInitial(test.OntaskLiveTestCase):
     def test_00_home_view(self):
         for uemail, ucode in [('student1@bogus.com', 302),
                               ('instructor1@bogus.com', 200),
-                              ('ainstructor1@bogus.com', 200),
-                              ('idesigner1@bogus.com', 200),
-                              ('aidesigner1@bogus.com', 200),
                               ('superuser@bogus.com', 200)]:
             user_login = self.client.login(email=uemail,
                                            password=test.boguspwd)
@@ -45,7 +42,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         """
 
         # Login
-        self.login('idesigner1@bogus.com')
+        self.login('instructor1@bogus.com')
 
         self.open(reverse('workflow:index'))
 
@@ -359,7 +356,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
         ]
 
         # Login
-        self.login('idesigner1@bogus.com')
+        self.login('instructor1@bogus.com')
 
         self.open(reverse('workflow:index'))
 
@@ -493,7 +490,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
         action_desc = 'action description text'
 
         # Login
-        self.login('idesigner1@bogus.com')
+        self.login('instructor1@bogus.com')
 
         self.open(reverse('workflow:index'))
 
@@ -628,7 +625,7 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         action_desc = 'action description text'
 
         # Login
-        self.login('idesigner1@bogus.com')
+        self.login('instructor1@bogus.com')
 
         self.open(reverse('workflow:index'))
 

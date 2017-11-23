@@ -5,6 +5,7 @@ import logging
 import os.path
 from collections import OrderedDict
 from itertools import izip
+import subprocess
 
 import pandas as pd
 from django.conf import settings
@@ -32,7 +33,6 @@ pandas_datatype_names = {
     'bool': 'boolean',
     'datetime64[ns]': 'datetime'
 }
-
 
 # DB Engine to use with Pandas (required by to_sql, from_sql
 engine = None
@@ -68,6 +68,40 @@ def destroy_db_engine(db_engine):
     :return: Nothing
     """
     db_engine.dispose()
+
+
+def pg_restore_table(filename):
+    """
+    Function that given a file produced with a pg_dump, it uploads its
+    content to the existing database
+
+    :param filename: File in pg_dump format to restore
+    :return:
+    """
+    process = subprocess.Popen(['psql',
+                                '-d',
+                                settings.DATABASES['default']['NAME'],
+                                '-q',
+                                '-f',
+                                filename])
+    process.wait()
+
+
+def delete_all_tables():
+    """
+    Delete all tables related to existing workflows
+    :return:
+    """
+
+    cursor = connection.cursor()
+    table_list = \
+        connection.introspection.get_table_list(cursor)
+    for tinfo in table_list:
+        if not tinfo.name.startswith(table_prefix):
+            continue
+        cursor.execute('DROP TABLE "{0}";'.format(tinfo.name))
+
+    return
 
 def is_matrix_in_db(table_name):
     cursor = connection.cursor()
