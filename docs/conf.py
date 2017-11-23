@@ -50,7 +50,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'OnTask'
-copyright = u'2017, Abelardo Pardo'
+copyright = u'Content Licensed under Creative Commons BY 3.0'
 author = u'Abelardo Pardo'
 
 # The version info for the project you're documenting, acts as replacement for

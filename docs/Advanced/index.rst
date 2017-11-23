@@ -1,6 +1,9 @@
-======================
-Advanced Use of OnTask
-======================
+.. _advanced_features:
 
-- API
+=================
+Advanced Features
+=================
+
+The API
+-------
 

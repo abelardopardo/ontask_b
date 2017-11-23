@@ -7,12 +7,13 @@ Welcome to OnTask's documentation!
 ==================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
    Introduction/index
    Install/index
    Using/index
+   Tutorial/index
    Advanced/index
    Changelog
 
