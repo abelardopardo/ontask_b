@@ -14,14 +14,22 @@
 - Locked workflow now shows the user (email) locking it.
 
 - Column table in workflow detail is now redered with DataTables (paging,
-  search capacicy)
+  search capacity)
   
 - Fixed search functionality in matrix view to search all fields (despite data
   type)
   
 - First version implementing row views (manual data entry). Just CRUD. No
-  more functionality.
-   
+  more functionality (still outside import/export)
+  
+- Added testing rig
+
+- Added skeleton for documentation!
+
+### Fixed
+
+- A few bugs in import/export to guarantee isomorphism of the two
+
 ## 1.1.2
 
 ### Changed
