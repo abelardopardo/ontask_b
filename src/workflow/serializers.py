@@ -6,7 +6,7 @@ from rest_framework.exceptions import APIException
 
 from action.serializers import ActionSerializer, ActionSerializerDeep
 from dataops import ops, pandas_db
-from matrix.serializers import DataFrameSerializer
+from matrix.serializers import DataFrameField
 from .models import Workflow, Column
 
 
@@ -31,7 +31,6 @@ class ColumnSerializer(serializers.ModelSerializer):
 
 
 class WorkflowSerializer(serializers.ModelSerializer):
-
     def create(self, validated_data, **kwargs):
         attributes = validated_data.get('attributes', {})
         if not isinstance(attributes, dict):
@@ -104,10 +103,11 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
 
 
 class WorkflowExportCompleteSerializer(WorkflowExportSerializer):
-    actions = ActionSerializerDeep(many=True, required=False)
 
-    data_frame = DataFrameSerializer(required=False,
-                                     allow_null=True)
+    data_frame = DataFrameField(
+        help_text='This field must be the Base64 encoded '
+                  'result of pandas.to_pickle() function'
+    )
 
     def create(self, validated_data, **kwargs):
 
@@ -140,17 +140,11 @@ class WorkflowExportCompleteSerializer(WorkflowExportSerializer):
             action_data.save()
 
         # Load the data frame
-        df = validated_data.get('data_frame', None)
-        if df is not None:
-            df_data = DataFrameSerializer(
-                data=validated_data['data_frame']
-            )
-            if df_data.is_valid():
-                data_frame = df_data.save()
-                ops.store_dataframe_in_db(data_frame, workflow_obj.id)
-                workflow_obj.data_frame_table_name = \
-                    pandas_db.create_table_name(workflow_obj.pk)
-                workflow_obj.save()
+        data_frame = validated_data.get('data_frame', None)
+        ops.store_dataframe_in_db(data_frame, workflow_obj.id)
+        workflow_obj.data_frame_table_name = \
+            pandas_db.create_table_name(workflow_obj.pk)
+        workflow_obj.save()
 
         return workflow_obj
 
