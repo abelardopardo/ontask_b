@@ -63,7 +63,8 @@ class WorkflowSerializer(serializers.ModelSerializer):
 
 
 class WorkflowExportSerializer(serializers.ModelSerializer):
-    actions = ActionSerializer(many=True, required=False)
+
+    actions = ActionSerializerDeep(many=True, required=False)
 
     def create(self, validated_data, **kwargs):
         workflow_obj = Workflow(

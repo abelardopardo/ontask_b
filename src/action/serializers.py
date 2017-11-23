@@ -27,6 +27,7 @@ class ConditionSerializer(serializers.ModelSerializer):
 
 
 class ActionSerializer(serializers.ModelSerializer):
+
     def create(self, validated_data, **kwargs):
         # Bypass create to insert the reference to the workflow (in context)
         action_obj = Action(
