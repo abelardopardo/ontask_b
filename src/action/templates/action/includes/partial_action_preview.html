@@ -5,12 +5,8 @@
     </button>
     <h4 class="modal-title">Action Preview {{ index }}</h4>
   </div>
-  <div class="modal-body"
-       style="text-align: left; border: solid 1px black;margin: 0 2ex 0 2ex;">
-    {{ action_content }}
-  </div>
-  <div class="modal-footer" style="text-align: center;">
-    <button type="button"
+  <div class="modal-body align-center">
+      <button type="button"
             class="btn btn-info js-action-preview-prv"
             data-url="{% url 'action:preview' action.id %}?idx={{ prv }}">
       <span class="glyphicon glyphicon-chevron-left"></span>
@@ -20,6 +16,10 @@
             data-url="{% url 'action:preview' action.id %}?idx={{ nxt }}">
       <span class="glyphicon glyphicon-chevron-right"></span>
     </button>
+  </div>
+  <div class="modal-body"
+       style="text-align: left; border: solid 1px black;margin: 0 2ex 0 2ex;">
+    {{ action_content }}
   </div>
 </div>
 
