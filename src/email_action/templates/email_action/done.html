@@ -4,7 +4,7 @@
 
 {% block scripts %}
   {% if download %}
-    <script>location.href="{% url 'workflow:export' %}";</script>
+    <script>location.href="{% url 'workflow:export' %}?id=true";</script>
   {% endif %}
 {% endblock scripts %}
 
