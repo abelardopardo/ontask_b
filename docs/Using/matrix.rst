@@ -13,4 +13,5 @@ This functionality of the application is basically to provide some basic visuali
    :align: center
    :width: 100%
 
-As in the case of :ref:`<columns>`, the table is shown broken into pages (you may choose the number of entries per page in the upper left side of the table) and allows to search for values. The icons in the left side of each row allow you to edit any of the values or delete a row entirely. If the *Add row* operation is selected a form with one field per column is shown. The values entered in this form will be checked to verify that the unique key property of the columns is preserved.
+As in the case of :ref:`the columns<columns>`, the table is shown broken into
+pages (you may choose the number of entries per page in the upper left side of the table) and allows to search for values. The icons in the left side of each row allow you to edit any of the values or delete a row entirely. If the *Add row* operation is selected a form with one field per column is shown. The values entered in this form will be checked to verify that the unique key property of the columns is preserved.

@@ -26,6 +26,8 @@ The screen includes three operations:
 
 1. Create a new workflow: Clicking in the *New Workflow* button will ask you for the name and description of the element.
 
+.. _workflow_import:
+
 2. Importing a file containing a previously exported workflow. Clicking in the *Import* button will ask you for the new for the new workflow, the file and will let you choose to import only the data, or the data and the actions as shown in the following figure
 
    .. figure:: images/Ontask____Import_Workflows.png

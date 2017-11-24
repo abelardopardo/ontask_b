@@ -20,6 +20,8 @@ Add a new column
   .. figure:: images/Ontask____add_column.png
      :align: center
 
+.. _details_attributes:
+
 Attributes
   This is simply a dictionary of pairs ``(name, value)`` so that whena ``name`` appears in a personalised text, it is replaced by the ``value``. The main use of these attributes is when a value has to appear in various locations and you may want to change all its occurrences. For example, the instructor name could be included as one of the attributes so that if it changes, modifying the attribute is the only required step.
 
@@ -40,7 +42,7 @@ Export
   .. figure:: images/Ontask____Export.png
      :align: center
 
-  The menu offers you the possibility of exporting only the data, or the data **and** the :ref:`action <actions>` in the workflow.
+  The menu offers you the possibility of exporting only the data, or the data **and** the :ref:`action <action>` in the workflow.
 
 Rename
   This functionality allows to change either the name or the description of the workflow.

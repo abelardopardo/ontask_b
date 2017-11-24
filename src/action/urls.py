@@ -24,6 +24,9 @@ urlpatterns = [
 
     url(r'^(?P<pk>\d+)/showurl/$', views_action.showurl, name='showurl'),
 
+    #
+    # Serve the personalised content
+    #
     url(r'^serve/$', views_action.serve, name='serve'),
 
     #
