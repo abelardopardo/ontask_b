@@ -45,7 +45,10 @@ class OperationsColumn(tables.Column):
         self.orderable = False
 
     def render(self, record):
-        return render_to_string(self.template_file, {'id': record.id})
+        return render_to_string(
+            self.template_file,
+            {'id': record.id,
+             'serve_enabled': record.serve_enabled})
 
 
 class ActionTable(tables.Table):
