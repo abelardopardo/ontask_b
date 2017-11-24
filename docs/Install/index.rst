@@ -167,7 +167,7 @@ no space between variable names and the equal sign)::
 #. If at some point during the following steps you want to reset
    the content of the database, run the commands ``dropdb`` and ``createdb``
 
-#. Execute the following commands to prepare the database initialization::
+#. Execute the following commands from the ``src`` folder to prepare the database initialization::
 
      python manage.py makemigrations profiles accounts workflow dataops
      python manage.py makemigrations matrix action email_action logs
@@ -184,7 +184,7 @@ no space between variable names and the equal sign)::
 
      python manage.py loaddata ontask/initial_data.json
 
-#. Go to the ```src`` folder and execute the command to create a superuser
+#. Execute the command to create a superuser
    account in OnTask::
 
      python manage.py createsuperuser
@@ -192,7 +192,19 @@ no space between variable names and the equal sign)::
    Remember the data that you enter in this step so that
    you use it when you enter OnTask with your browser.
 
-#. Go to the folder ``src`` of the project and execute the following
+#. Go to the ``docs`` folder to generate the documentation. Make sure this folder contains the sub-folders with name ``_static`` and ``_templates``. Execute the command::
+
+     make html
+
+   The documentation is produced by the ``sphinx-doc`` application and generates the directory ``_build``. The documentation for the platform is in the folder ``_build/html``.
+
+#. Copy the entire ``html`` folder (inside ``_build``) over to the ``src/static`` folder (in Unix ``cp -r _build/html ../src/static``).
+
+#. From the ``src`` folder execute the following command to collect and install the static content::
+
+     python manage.py collectstatic
+
+#. Execute the following
    command to check the status of the platform::
 
      python manage.py check --deploy

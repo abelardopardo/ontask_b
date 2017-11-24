@@ -47,7 +47,7 @@ for further processing.
 
 A workflow in OnTask contains a single matrix and a set of actions. This
 container is conceived to manage the data and actions related to a learning
-experience.
+experience. You may use the workflow shown in the documentation importing  the :download:`ELON3509 workflow <../../initial_workflow.gz>`.
 
 The following sections offer a more in-depth description of all these elements
 as well as examples with real scenarios.

@@ -8,3 +8,7 @@ Workflow Details
 
 
 
+.. _details_sharing:
+
+Sharing a workflow
+******************
