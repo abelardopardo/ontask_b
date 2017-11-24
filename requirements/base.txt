@@ -25,3 +25,4 @@ pygments
 tzlocal
 psycopg2
 sphinx
+pytz
