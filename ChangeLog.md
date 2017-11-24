@@ -1,4 +1,20 @@
-## 1.1.3
+## 1.2.1
+
+### Changed
+
+- Cosmetic changes in the import screen and the email notification
+
+- Changed the mass email send to occur only if the host has been specified
+
+- Documentation now includes how to install static resources
+
+- Logs now show the payload (the whole db access)
+
+### Fixed
+
+- Bug not showing the status of the action URL.
+
+## 1.2.0
 
 ### Changed
 
