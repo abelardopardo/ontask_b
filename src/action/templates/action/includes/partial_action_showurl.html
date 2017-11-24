@@ -11,21 +11,17 @@
       <h4 class="modal-title">URL to access the personalised content</h4>
     </div>
     <div class="modal-body">
-      <p class="lead">This URL will serve the content personaslised for each user.</p>
+      <p class="lead">This URL will serve the content personalised for each user.</p>
       <pre>{{ url_text }}</pre>
       {{ form|crispy }}
       <p class="text-left">Access to this URL is protected by authentication,
-        and the data used to render the content will be selected based on
-         the value of the column with name <strong>email</strong>. To use other
-        columns, include the following additional parameters:</p>
-      <ul class="text-left">
-        <li><code>&uatn=[COLUMN NAME]</code>: Column to check (must be a unique
-          key column, different values for each row). This column name
-          <strong>must be an attribute of the user record in the
-          platform</strong>. </li>
-        <li><code>&uatv=[COLUMN VALUE]</code>: Column value to use for the
-          check.</li>
-      </ul>
+        and the data used to render the content assumes that the user
+        <strong>email</strong> is in a column named <strong>email</strong>.
+        To use a different column, include the following additional parameter:
+      </p>
+      <p><code>&uatn=[COLUMN NAME]</code></p>
+      <p>where <code>[COLUMN NAME]</code> has to be replace with the name of
+      the column to use instead of <strong>email</strong>.</p>
     </div>
     <div class="modal-footer" style="text-align: center;">
       <button type="submit" class="btn btn-primary">

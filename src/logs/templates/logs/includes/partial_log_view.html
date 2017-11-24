@@ -6,6 +6,14 @@
     <h4 class="modal-title">{{ op_name }}</h4>
   </div>
   <div class="modal-body" style="text-align: left; border: solid 1px black;margin: 0 2ex 0 2ex;">
+    <ul>
+      <li>Log type: {{ op_name }}</li>
+      <li>Workflow: {{ workflow.name }}</li>
+      <li>Payload:
+        <pre>{{ json_pretty }}</pre>
+      </li>
+    </ul>
+    {% comment %}
     {% if log_type == 'workflow_create' or log_type == 'workflow_update' or log_type == 'workflow_delete' or log_type == 'workflow_data_flush' %}
       <p><strong>Workflow id:</strong> {{ id }}</p>
       <p>Workflow name: {{ name }}</p>
@@ -101,6 +109,7 @@
       <p><strong>Action name:</strong> {{ name }}</p>
       <p><strong>URL available:</strong> {{ serve_enabled }}</p>
     {% endif %}
+    {% endcomment %}
   </div>
   <div class="modal-footer" style="text-align: center;">
     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

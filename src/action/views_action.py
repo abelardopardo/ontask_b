@@ -581,20 +581,17 @@ def showurl(request, pk):
 def serve(request):
     """
     View to serve the rendering of an action in a workflow for a given user.
-     The request accepts the following parameters:
+    - aid: Action id (must be numeric)
 
-     - wid: Workflow id (must be numeric)
+    - uatn: User attribute name. The attribute to check for authentication.
+      By default this will be "email".
 
-     - aid: Action id (must be numeric)
+    - uatv: User attribute value. The value to check with respect to the
+      previous attribute. The default is the user attached to the request.
 
-     - uatn: User attribute name. The attribute to check for authentication.
-       By default this will be "email".
+    If the two last parameters are given, the authentication is done as:
 
-     - uatv: User attribute value. The value to check with respect to the
-       previous attribute. The default is the user attached to the request.
-       If no other parameter is given, the authentication is done as:
-
-         user_record[user_attribute_name] == user_attribute_value
+    user_record[user_attribute_name] == user_attribute_value
 
     :param request:
     :return:
@@ -605,7 +602,6 @@ def serve(request):
         raise Http404
 
     # Get the parameters
-    user_attribute_value = request.GET.get('uatv', request.user.email)
     user_attribute_name = request.GET.get('uatn', 'email')
     action_id = request.GET.get('aid', None)
 
@@ -623,24 +619,9 @@ def serve(request):
     if not action.serve_enabled:
         raise Http404
 
-    # Get the user record to check for authentication
-    user_instance = request.user
-
-    try:
-        # Verify that the user instance has the requested attribute
-        user_instance._meta.get_field(user_attribute_name)
-        # Verify that the user instance has the right attribute value
-        existing_value = getattr(user_instance, user_attribute_name)
-    except Exception:
-        raise Http404
-
-    if existing_value != user_attribute_value:
-        # If the given value is different from the existing one, out.
-        raise Http404
-
     # Successful request. User_instance has the record used for verification
     action_content = evaluate_row(action, (user_attribute_name,
-                                           user_attribute_value))
+                                           request.user.email))
 
     # If the action content is empty, forget about it
     if action_content is None:

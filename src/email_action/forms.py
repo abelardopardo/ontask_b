@@ -11,7 +11,7 @@ class EmailActionForm(forms.Form):
                               label='Email subject')
 
     email_column = forms.ChoiceField(
-        label='Column to use for target email address (mandatory)',
+        label='Column to use for target email address',
         required=True
     )
 

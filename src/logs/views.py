@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
-import pytz
+import json
 
-from django.conf import settings as ontask_settings
 import django_tables2 as tables
+import pytz
+from django.conf import settings as ontask_settings
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import F
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
@@ -14,7 +16,6 @@ from django.utils.html import format_html
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django_tables2 import A
-from django.db.models import Q
 
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
@@ -121,10 +122,11 @@ def show_ss(request):
     if search_value:
         qs = Log.objects.filter(
             Q(user__email__contains=search_value) |
-            Q(name__contains=search_value),
+            Q(name__contains=search_value) |
+            Q(payload__contains=search_value),
             workflow__id=workflow.id,
         ).distinct().order_by(F('created').desc()).values_list(
-            'id', 'created', 'user__email', 'name')
+            'id', 'created', 'user__email', 'name', 'payload')
     else:
         qs = Log.objects.filter(
             workflow__id=workflow.id
@@ -170,6 +172,10 @@ def view_log_list(request, pk):
     context['log_type'] = log_item.name
     context['op_name'] = log_types[log_item.name]
     context['workflow'] = log_item.workflow
+    # TODO: Change the model to include directly a JSON object, not this.
+    context['json_pretty'] = json.dumps(json.loads(log_item.payload),
+                                        sort_keys=True,
+                                        indent=4)
 
     # Render the template and return as JSON response
     data['html_form'] = render_to_string(
