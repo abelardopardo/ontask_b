@@ -48,12 +48,14 @@ def send_messages(user,
     for msg_body, msg_subject, msg_to in result:
         msgs.append((msg_subject, msg_body, from_email, [msg_to]))
 
-    # Mass mail!
-    try:
-        send_mass_mail(msgs, fail_silently=False)
-    except Exception, e:
-        # Something went wrong, notify above
-        return e.message
+    # Mass email only if there is any value in the localhost (allow empty
+    # localhost to be used by an instance with no  email capabitilies)
+    if settings.EMAIL_HOST:
+        try:
+            send_mass_mail(msgs, fail_silently=False)
+        except Exception, e:
+            # Something went wrong, notify above
+            return e.message
 
     # Log the events (one per email)
     now = datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
