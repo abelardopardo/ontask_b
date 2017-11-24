@@ -62,7 +62,8 @@
       <p class="help-block">Description: {{ workflow.description_text }}</p>
       <p class="help-block">Last modified: {{ workflow.modified }}</p>
       {% if table_info %}
-        <p class="help-block">{{ table_info.num_rows }} rows, {{ table_info.num_cols }} columns (<mark>{{ num_key_columns }} Key columns</mark>)</p>
+        <p class="help-block">{{ table_info.num_rows }} rows, {{ table_info.num_cols }} columns (<mark>{{ num_key_columns }} Key columns</mark>), {{ table_info.num_actions }} actions, {{ table_info.num_attributes }}
+        attributes.</p>
         <table class="table display dataTable no-footer table-bordered"
                id="column-table">
           <thead>
