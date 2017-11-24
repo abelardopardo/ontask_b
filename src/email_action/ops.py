@@ -50,7 +50,7 @@ def send_messages(user,
 
     # Mass email only if there is any value in the localhost (allow empty
     # localhost to be used by an instance with no  email capabitilies)
-    if settings.EMAIL_HOST:
+    if str(getattr(settings, 'EMAIL_HOST')):
         try:
             send_mass_mail(msgs, fail_silently=False)
         except Exception, e:
