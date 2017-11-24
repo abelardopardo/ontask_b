@@ -38,4 +38,10 @@ The screen includes three operations:
       :align: center
       :width: 100%
 
-Once you open a workflow, it is locked and no other user can manipulate it (see :ref:`sharing a workflow <details_sharing>`.
+Once you open a workflow, it is locked and no other user can manipulate it (see :ref:`sharing a workflow <details_sharing>`). If access a workflow and another user is currently working with it, the platform will not allow you to see the data and will instead tell you who is holding the lock.
+
+   .. figure:: images/Ontask____locked.png
+      :align: center
+      :width: 100%
+
+The operations to manage a workflow all become visible once you select it by clicking on its name.
