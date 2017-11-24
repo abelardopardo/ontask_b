@@ -264,8 +264,11 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
         # Get the table information (if it exist)
         context['table_info'] = None
         if ops.workflow_id_has_matrix(self.object.id):
-            context['table_info'] = {'num_rows': self.object.nrows,
-                                     'num_cols': self.object.ncols}
+            context['table_info'] = {
+                'num_rows': self.object.nrows,
+                'num_cols': self.object.ncols,
+                'num_actions': self.object.actions.all().count(),
+                'num_attributes': len(self.object.attributes)}
 
         # put the number of key columns in the workflow
         context['num_key_columns'] = Column.objects.filter(

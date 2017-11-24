@@ -31,8 +31,10 @@ def export_ask(request, format=None):
         'name': workflow.name,
         'nrows': workflow.nrows,
         'ncols': workflow.ncols,
-        'nactions': len(Action.objects.filter(workflow=workflow)),
-        'nconditions': len(Condition.objects.filter(action__workflow=workflow))
+        'nactions': Action.objects.filter(workflow=workflow).count(),
+        'nconditions':
+            Condition.objects.filter(action__workflow=workflow).count(),
+        'wid': workflow.id
     }
 
     if request.method == 'POST':
@@ -40,8 +42,7 @@ def export_ask(request, format=None):
             return render(
                 request,
                 'workflow/export_done.html',
-                {'id': form.cleaned_data['include_data_and_cond'],
-                 'wid': workflow.id})
+                {'id': form.cleaned_data['include_data_and_cond']})
 
     # GET request, simply render the form
     return render(request, 'workflow/export.html', context)

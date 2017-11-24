@@ -53,7 +53,7 @@ def send_messages(user,
     if str(getattr(settings, 'EMAIL_HOST')):
         try:
             send_mass_mail(msgs, fail_silently=False)
-        except Exception, e:
+        except Exception as e:
             # Something went wrong, notify above
             return e.message
 
@@ -108,7 +108,7 @@ def send_messages(user,
                   msg,
                   str(getattr(settings, 'NOTIFICATION_SENDER')),
                   [user.email])
-    except Exception, e:
+    except Exception as e:
         return 'An error occurred when sending your notification: ' + e.message
 
     # Log the event
