@@ -18,6 +18,7 @@ var insertAttributeInContent = function() {
   }
   insert_text = "{{ " + val + " }}";
   $('#id_content').summernote('editor.insertText', insert_text);
+  $(this).val(this.defaultSelected);
 }
 
 $(function () {
@@ -65,6 +66,7 @@ $(function () {
   $("#attribute-names").on("change",
                            "#select-attribute-name",
                            insertAttributeInContent);
+  // Insert attribute column in content
   $("#attribute-names").on("change",
                            "#select-column-name",
                            insertAttributeInContent);
