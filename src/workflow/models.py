@@ -187,6 +187,10 @@ class Column(models.Model):
                             blank=False,
                             verbose_name='Column name')
 
+    description_text = models.CharField(max_length=2048,
+                                        default='',
+                                        blank=True)
+
     workflow = models.ForeignKey(Workflow,
                                  db_index=True,
                                  null=False,
