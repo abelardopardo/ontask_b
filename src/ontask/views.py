@@ -33,6 +33,71 @@ def entry(request):
     return redirect('workflow:index')
 
 
+# No permissions in this URL as it is supposed to be wide open to track email
+#  reads.
+def trck(request):
+    """
+    Receive a request with a token from email read tracking
+    :param request: Request object
+    :return: Reflects in the DB the reception and (optionally) in the data 
+    matrix of the workflow
+    """
+    if request.method != 'GET':
+        raise Http404
+
+    # Detected attempt to track event
+    track_id = request.GET.get('v', None)
+    if not track_id:
+        raise Http404
+
+    # If the track_id is not correctly signed, out.
+    try:
+        track_id = signing.loads(track_id)
+    except signing.BadSignature:
+        raise Http404
+
+    # The request is legit and the value has been verified. Track_id has now
+    # the dictionary with the information included in the tracking
+
+    # Get the objects related to the ping
+    try:
+        user = get_user_model().objects.get(email=track_id['sender'])
+        action = Action.objects.get(pk=track_id['action'])
+    except Exception:
+        raise Http404
+
+    # If the track comes with column_dst, the event needs to be reflected
+    # back in the data frame
+    column_dst = track_id.get('column_dst', '')
+
+    if column_dst:
+        # Load the dataframe
+        data_frame = pandas_db.load_from_db(action.workflow.id)
+
+        # Extract the relevant fields from the track_id
+        column_to = track_id['column_to']
+        msg_to = track_id['to']
+        track_col_name = track_id['column_dst']
+        # New val in DF: df.loc[df['a']==1,'b'] = VAL
+        data_frame.loc[data_frame[column_to] == msg_to, track_col_name] += 1
+
+        # Save DF
+        ops.store_dataframe_in_db(data_frame, action.workflow.id)
+
+    # Record the event
+    logs.ops.put(
+        user,
+        'action_email_read',
+        action.workflow,
+        {'to': track_id['to'],  # The destination of the email
+         'email_column': track_id['column_to'],  # The column used to get the
+         'column_dst': column_dst
+         }
+    )
+
+    return HttpResponse(settings.PIXEL, content_type='image/png')
+
+
 def ontask_handler400(request):
     return render(request, '400.html', {})
 
