@@ -55,7 +55,7 @@ The :ref:`third part <advanced_features>` covers some more advanced functionalit
 Research
 --------
 
-There are several platforms that implement similar functionality or follow a similar approach (see for example `SRES <http://sres.io>`. The common thread among them is the positive impact that personalised communication may have when supporting learners. There are a few scientific publications that document the ideas and processes that inspired the creation of OnTask:
+There are several platforms that implement similar functionality or follow a similar approach (see for example `SRES <http://sres.io>`_. The common thread among them is the positive impact that personalised communication may have when supporting learners. There are a few scientific publications that document the ideas and processes that inspired the creation of OnTask:
 
 - Liu, D. Y.-T., Taylor, C. E., Bridgeman, A. J., Bartimote-Aufflick, K., & Pardo, A. (2016). Empowering instructors through customizable collection and analyses of actionable information Workshop on Learning Analytics for Curriculum and Program Quality Improvement (pp. 3). Edinburgh, UK.
 
