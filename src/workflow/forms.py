@@ -174,7 +174,7 @@ class ColumnBasicForm(forms.ModelForm):
 
     class Meta:
         model = Column
-        fields = ('name', 'data_type', 'raw_categories')
+        fields = ['name', 'description_text', 'data_type', 'raw_categories']
 
 
 class ColumnAddForm(ColumnBasicForm):
@@ -209,7 +209,7 @@ class ColumnAddForm(ColumnBasicForm):
 
     class Meta:
         model = Column
-        fields = ('name', 'data_type')
+        fields = ('name', 'description_text', 'data_type')
 
 
 class ColumnRenameForm(ColumnBasicForm):
@@ -251,7 +251,7 @@ class ColumnRenameForm(ColumnBasicForm):
 
     class Meta:
         model = Column
-        fields = ('name', 'data_type', 'is_key')
+        fields = ('name', 'description_text', 'data_type', 'is_key')
 
 
 class WorkflowImportForm(forms.Form):
