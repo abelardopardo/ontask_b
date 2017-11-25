@@ -155,9 +155,13 @@ class WorkflowInitial(test.OntaskLiveTestCase):
 
         # Goto Details list
         self.selenium.find_element_by_link_text('Details').click()
+        # Wait for the details page
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
                                              'Workflow Details')
+        )
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
         )
 
         # First column must be: age, double
@@ -389,10 +393,13 @@ class WorkflowModify(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']/div/div/form/div/button[@type='submit']"
         ).click()
-        with self.wait_for_page_load(timeout=10):
-            self.selenium.find_element_by_link_text('Details')
+        # FLAKY
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'success'))
+            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+                                             'Workflow Details')
+        )
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
         )
 
         # Third column must be age, double
@@ -725,6 +732,9 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
                                              'Workflow Details')
+        )
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
         )
 
         # Check that the attributes are properly stored in the workflow

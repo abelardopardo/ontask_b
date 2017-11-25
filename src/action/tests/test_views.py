@@ -114,10 +114,10 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']/div/div/form/div/button[2]"
         ).click()
-        # Wait for page to refresh (FLAKY)
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'js-filter-edit')
+        # MODAL WAITING
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
             )
         )
 
@@ -175,9 +175,14 @@ class ActionActionEdit(test.OntaskLiveTestCase):
             "//div[@id='modal-item']/div/div/form/div/button[2]"
         ).click()
         # Wait for page to refresh
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'js-filter-edit')
+        # WebDriverWait(self.selenium, 10).until(
+        #     EC.element_to_be_clickable(
+        #         (By.CLASS_NAME, 'js-filter-edit')
+        #     )
+        # )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
             )
         )
 
@@ -382,7 +387,12 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         wf_link = self.selenium.find_element_by_link_text(self.wflow_name)
         wf_link.click()
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'wflow-name')))
+            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+                                             'Workflow Details')
+        )
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
+        )
 
         # Goto the action page
         self.selenium.find_element_by_link_text('Actions').click()
