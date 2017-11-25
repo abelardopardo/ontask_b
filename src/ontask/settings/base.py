@@ -101,6 +101,7 @@ INSTALLED_APPS = (
     'django_summernote',
     'jquery',
 
+    'core.apps.CoreConfig',
     'profiles.apps.ProfileConfig',
     'accounts',
     'workflow.apps.WorkflowConfig',
