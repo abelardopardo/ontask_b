@@ -280,7 +280,7 @@ class WorkflowImportForm(forms.Form):
 class WorkflowExportRequestForm(forms.Form):
     # Include data and conditions?
     include_data_and_cond = forms.BooleanField(
-        label='Include data and conditions in export?',
+        label='Include also actions in export?',
         initial=True,
         required=False)
 
