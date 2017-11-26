@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.shortcuts import redirect
-from django.contrib.postgres.fields import JSONField
 
 from workflow.models import Workflow, Column
 
@@ -42,8 +42,15 @@ class RowView(models.Model):
         return self.name
 
     def get_absolute_url(self):
+        """
+        Absolute url once there is success updating the element
+        :return:
+        """
         return redirect('dataops:rowview_edit', kwargs={'pk': self.pk})
 
     class Meta:
+        """
+        Define the unique requirement and the ordering of the elements
+        """
         unique_together = ('name', 'workflow')
         ordering = ('name',)
