@@ -10,10 +10,17 @@ from . import views
 app_name = 'matrix'
 
 urlpatterns = [
+
+    #
+    # API
+    #
     url(r'^(?P<pk>\d+)/ops/$', api.MatrixOps.as_view(), name="api_ops"),
 
     url(r'^(?P<pk>\d+)/merge/$', api.MatrixMerge.as_view(), name="api_merge"),
 
+    #
+    # Display
+    #
     url(r'^display/$', views.display, name="display"),
 
     url(r'^display_ss/$', views.display_ss, name="display_ss"),
