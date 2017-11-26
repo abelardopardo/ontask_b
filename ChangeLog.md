@@ -1,5 +1,9 @@
 ## 1.2.1
 
+### Added
+
+- Email tracking available. Creates an extra column in the matrix.
+
 ### Changed
 
 - Cosmetic changes in the import screen and the email notification
