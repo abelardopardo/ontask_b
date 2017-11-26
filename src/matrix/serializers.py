@@ -26,6 +26,16 @@ def string_to_df(value):
     return result
 
 
+class DataFrameSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        # GET
+        return instance
+
+    def to_internal_value(self, data):
+        # POST / PUT (and then GET to refresh)
+        return data
+
+
 class DataFrameField(serializers.Field):
 
     def to_representation(self, instance):
@@ -40,7 +50,7 @@ class DataFrameField(serializers.Field):
         return result
 
 
-class DataFrameSerializer(serializers.Serializer):
+class DataFramePandasSerializer(serializers.Serializer):
 
     data_frame = DataFrameField(
         help_text='This field must be the Base64 encoded '
@@ -48,12 +58,7 @@ class DataFrameSerializer(serializers.Serializer):
     )
 
 
-class DataFrameMergeSerializer(serializers.Serializer):
-
-    src_df = DataFrameField(
-        help_text='This field must be the Base64 encoded '
-                  'result of pandas.to_pickle() function'
-    )
+class DataFrameBasicMergeSerializer(serializers.Serializer):
 
     how = serializers.CharField(
         required=True,
@@ -76,3 +81,18 @@ class DataFrameMergeSerializer(serializers.Serializer):
         required=False,
         initial='rename',
         help_text='One of the two values: rename (default), or override')
+
+
+class DataFrameJSONMergeSerializer(serializers.Serializer):
+
+    src_df = DataFrameSerializer()
+
+
+class DataFramePandasMergeSerializer(serializers.Serializer):
+
+    src_df = DataFrameField(
+        help_text='This field must be the Base64 encoded '
+                  'result of pandas.to_pickle() function'
+    )
+
+

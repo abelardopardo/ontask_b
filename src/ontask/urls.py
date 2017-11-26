@@ -64,7 +64,9 @@ urlpatterns = [
     url(r'^apidoc/',
         include_docs_urls(
             title='OnTask API',
-            description=api_description)),
+            description=api_description,
+            public = False),
+        ),
 
 ]
 

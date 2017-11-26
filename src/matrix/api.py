@@ -2,39 +2,34 @@
 from __future__ import unicode_literals, print_function
 
 import pandas as pd
+from django.db.models import Q
 from django.http import Http404
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.db.models import Q
 
 from dataops import pandas_db, ops
-from matrix.serializers import DataFrameMergeSerializer, DataFrameSerializer
+from matrix.serializers import (
+    DataFramePandasMergeSerializer,
+    DataFramePandasSerializer,
+    DataFrameSerializer,
+    DataFrameJSONMergeSerializer)
 from ontask.permissions import UserIsInstructor
 from workflow.models import Workflow
 from workflow.ops import is_locked, detach_dataframe
 
 
-class MatrixOps(APIView):
+class MatrixBasicOps(APIView):
     """
-    get:
-    Get all the data in the matrix corresponding to the workflow (no matter
-    how big). If the workflow has no data, an empty {} is returned.
-
-    post:
-    Upload a new matrix to a workflow without. If there is a matrix already, the
-    operation will be rejected (consider deleting the matrix first or use PUT)
-
-    put:
-    Replace the matrix currently in the workflow with the one given
-
-    delete:
-    Flush the data frame from the workflow. The workflow object remains, just
-    the data frame is deleted.
+    Basic class to implement the matrix API operations so that we can provide
+    two versions, one handling data frames in JSON format, and the other one
+    using the pickle format in Pandas to preserve NaN and NaT and maintain
+    column data types between exchanges.
     """
 
-    serializer_class = DataFrameSerializer
+    # The serializer class needs to be overwritten by the subclasses.
+    serializer_class = None
     permission_classes = (UserIsInstructor,)
 
     def get_object(self, pk, **kwargs):
@@ -58,8 +53,7 @@ class MatrixOps(APIView):
     def override(self, request, pk, format=None):
         # Try to retrieve the wflow to check for permissions
         self.get_object(pk, user=self.request.user)
-
-        serializer = DataFrameSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             try:
                 df = pd.DataFrame(serializer.validated_data['data_frame'])
@@ -81,7 +75,7 @@ class MatrixOps(APIView):
     def get(self, request, pk, format=None):
         # Try to retrieve the wflow to check for permissions
         self.get_object(pk, user=self.request.user)
-        serializer = DataFrameSerializer(
+        serializer = self.serializer_class(
             {'data_frame': pandas_db.load_from_db(pk)}
         )
         return Response(serializer.data)
@@ -105,8 +99,86 @@ class MatrixOps(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class MatrixMerge(APIView):
+class MatrixJSONOps(MatrixBasicOps):
     """
+    get:
+    Get all the data in the matrix corresponding to the workflow (no matter
+    how big). If the workflow has no data, an empty {} is returned.
+
+    post:
+    Upload a new matrix to a workflow without. If there is a matrix already, the
+    operation will be rejected (consider deleting the matrix first or use PUT)
+
+    put:
+    Replace the matrix currently in the workflow with the one given
+
+    delete:
+    Flush the data frame from the workflow. The workflow object remains, just
+    the data frame is deleted.
+    """
+
+    serializer_class = DataFrameSerializer
+
+
+class MatrixPandasOps(MatrixBasicOps):
+    """
+    This API is provided because OnTask stores the matrix internally as a
+    Pandas data frame. When using conventional API transactions using JSON
+    strings, it is possible to loose information because JSON cannot handle
+    NaN or NaT (specific values for Pandas data frames).
+
+    For example, if a column has boolean values and a NaN and it is
+    transformed to JSON and transmitted, the NaN will be encoded as an empty
+    string, and the column will no longer contain booleans but strings.
+    Similar situations ocurr with integers, dates, etc.
+
+    Use this API when you require to have a consisten handling of NaN and NaT.
+
+    The code to handle the Base64 encoded data in Python is:
+
+    1) From Pandas dataframe to base64 encoded string:
+
+    import StringIO
+    import base64
+    import pandas
+
+    out_file = StringIO.StringIO()
+    pandas.to_pickle(data_frame, out_file)
+    result = base64.b64encode(out_file.getvalue())
+
+    2) From base64 encoded string to pandas dataframe
+
+    import StringIO
+    import base64
+    import pandas
+
+    output = StringIO.StringIO()
+    output.write(base64.b64decode(encoded_dataframe))
+    result = pandas.read_pickle(output)
+
+    These are the methods made available by the API
+
+    get:
+    Get all the data in the matrix corresponding to the workflow (no matter
+    how big) as a Base64 encoded string of the binary data frame. If the
+    workflow has no data, an empty {} is returned.
+
+    post:
+    Upload a new matrix (Base64 encoded of a binary data frame) to a workflow
+    without. If there is a matrix already, the operation will be rejected
+    (consider deleting the matrix first or use PUT)
+
+    put:
+    Replace the matrix currently in the workflow with the one given Base64
+    encoded string of the binary representation of a pandas data frame.
+    """
+
+    serializer_class = DataFramePandasSerializer
+
+
+class MatrixBasicMerge(APIView):
+    """
+    These are basic merge methods to be invoked by the subclasses
     get:
     Retrieves the data frame attached to the workflow and returns it labeled
     as "src_df"
@@ -115,7 +187,7 @@ class MatrixMerge(APIView):
     Request to merge a given data frame with the one attached to the workflow.
     """
 
-    serializer_class = DataFrameMergeSerializer
+    serializer_class = None
     permission_classes = (UserIsInstructor,)
 
     def get_object(self, pk, **kwargs):
@@ -140,7 +212,7 @@ class MatrixMerge(APIView):
     def get(self, request, pk, format=None):
         # Try to retrieve the wflow to check for permissions
         self.get_object(pk, user=self.request.user)
-        serializer = DataFrameMergeSerializer(
+        serializer = self.serializer_class(
             {'src_df': pandas_db.load_from_db(pk),
              'how': '',
              'left_on': '',
@@ -156,7 +228,7 @@ class MatrixMerge(APIView):
         # Get the dst_df
         dst_df = pandas_db.load_from_db(pk)
 
-        serializer = DataFrameMergeSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
@@ -245,3 +317,75 @@ class MatrixMerge(APIView):
         # Merge went through.
         return Response(serializer.data,
                         status=status.HTTP_201_CREATED)
+
+
+class MatrixJSONMerge(MatrixBasicMerge):
+    """
+    get:
+    Retrieves the data frame attached to the workflow and returns it labeled
+    as "src_df"
+
+    post:
+    Request to merge a given data frame with the one attached to the workflow.
+    """
+
+    serializer_class = DataFrameJSONMergeSerializer
+
+
+class MatrixPandasMerge(MatrixBasicMerge):
+    """
+    This API is provided because OnTask stores the matrix internally as a
+    Pandas data frame. When using conventional API transactions using JSON
+    strings, it is possible to loose information because JSON cannot handle
+    NaN or NaT (specific values for Pandas data frames).
+
+    For example, if a column has boolean values and a NaN and it is
+    transformed to JSON and transmitted, the NaN will be encoded as an empty
+    string, and the column will no longer contain booleans but strings.
+    Similar situations ocurr with integers, dates, etc.
+
+    Use this API when you require to have a consisten handling of NaN and NaT.
+
+    The code to handle the Base64 encoded data in Python is:
+
+    <ol>
+    <li>From Pandas dataframe to base64 encoded string:
+
+    <pre>
+    import StringIO
+    import base64
+    import pandas
+
+    out_file = StringIO.StringIO()
+    pandas.to_pickle(data_frame, out_file)
+    result = base64.b64encode(out_file.getvalue())
+    </pre>
+
+    </li>
+    <li>From base64 encoded string to pandas dataframe
+
+    <pre>
+    import StringIO
+    import base64
+    import pandas
+
+    output = StringIO.StringIO()
+    output.write(base64.b64decode(encoded_dataframe))
+    result = pandas.read_pickle(output)
+    </pre>
+    </li>
+    </ol>
+
+    These are the methods made available by the API
+
+    get:
+    Retrieves the data frame attached to the workflow and returns it labeled
+    as "src_df" as a Base64 encoded pandas pickled dataa frame.
+
+    post:
+    Request to merge a pandas data frame given as a Base64 encoded pickled
+    string with the one attached to the workflow.
+    """
+
+    # To be overwritten by the subclass
+    serializer_class = DataFramePandasMergeSerializer

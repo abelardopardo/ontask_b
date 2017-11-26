@@ -14,9 +14,17 @@ urlpatterns = [
     #
     # API
     #
-    url(r'^(?P<pk>\d+)/ops/$', api.MatrixOps.as_view(), name="api_ops"),
+    # JSON
+    url(r'^(?P<pk>\d+)/ops/$', api.MatrixJSONOps.as_view(), name="api_ops"),
 
-    url(r'^(?P<pk>\d+)/merge/$', api.MatrixMerge.as_view(), name="api_merge"),
+    url(r'^(?P<pk>\d+)/merge/$', api.MatrixJSONMerge.as_view(),
+        name="api_merge"),
+
+    # PANDAS
+    url(r'^(?P<pk>\d+)/pops/$', api.MatrixPandasOps.as_view(), name="api_pops"),
+
+    url(r'^(?P<pk>\d+)/pmerge/$', api.MatrixPandasMerge.as_view(),
+        name="api_pmerge"),
 
     #
     # Display
