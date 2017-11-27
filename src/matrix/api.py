@@ -13,7 +13,7 @@ from dataops import pandas_db, ops
 from matrix.serializers import (
     DataFramePandasMergeSerializer,
     DataFramePandasSerializer,
-    DataFrameSerializer,
+    DataFrameJSONSerializer,
     DataFrameJSONMergeSerializer)
 from ontask.permissions import UserIsInstructor
 from workflow.models import Workflow
@@ -55,18 +55,11 @@ class MatrixBasicOps(APIView):
         self.get_object(pk, user=self.request.user)
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            try:
-                df = pd.DataFrame(serializer.validated_data['data_frame'])
-
-                # Detect date/time columns
-                df = ops.detect_datetime_columns(df)
-            except Exception:
-                # Something went wrong with the translation to dataframe
-                raise Http404
+            df = serializer.validated_data['data_frame']
 
             ops.store_dataframe_in_db(df, pk)
 
-            return Response(serializer.data,
+            return Response(None,
                             status=status.HTTP_201_CREATED)
         return Response(serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
@@ -117,7 +110,7 @@ class MatrixJSONOps(MatrixBasicOps):
     the data frame is deleted.
     """
 
-    serializer_class = DataFrameSerializer
+    serializer_class = DataFrameJSONSerializer
 
 
 class MatrixPandasOps(MatrixBasicOps):
@@ -181,7 +174,7 @@ class MatrixBasicMerge(APIView):
     These are basic merge methods to be invoked by the subclasses
     get:
     Retrieves the data frame attached to the workflow and returns it labeled
-    as "src_df"
+    as "data_frame"
 
     post:
     Request to merge a given data frame with the one attached to the workflow.
@@ -233,9 +226,6 @@ class MatrixBasicMerge(APIView):
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
 
-        # Operation has been accepted by the serializer
-        src_df = serializer.validated_data['src_df']
-
         # Check that the parameters are correct
         how = serializer.validated_data['how']
         if how == '' or how not in ['left', 'right', 'outer', 'inner']:
@@ -246,6 +236,9 @@ class MatrixBasicMerge(APIView):
         if not ops.is_unique_column(dst_df[left_on]):
             raise APIException('column' + left_on +
                                'does not contain a unique key.')
+
+        # Operation has been accepted by the serializer
+        src_df = serializer.validated_data['src_df']
 
         right_on = serializer.validated_data['right_on']
         if right_on not in list(src_df.columns):
@@ -323,7 +316,7 @@ class MatrixJSONMerge(MatrixBasicMerge):
     """
     get:
     Retrieves the data frame attached to the workflow and returns it labeled
-    as "src_df"
+    as "data_frame"
 
     post:
     Request to merge a given data frame with the one attached to the workflow.

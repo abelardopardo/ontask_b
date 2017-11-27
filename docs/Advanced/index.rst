@@ -20,3 +20,23 @@ The API is documented online through the url suffix ``apidoc``. The page
 contains the description of every entry point available with the required
 parameters.
 
+When manipulating the elements in the matrix there are two versions of the
+basic operations (create a matrix, update a matrix, merge).
+
+1. Pandas Version. This version handles the encoding of data frames using the
+   pandas pickle encoding. This encoding has the advantage that maintains the
+   elements of the dataframe intact. In other words, when the data frame is
+   decoded from the pandas pickle format back to a regular dataframe, the same
+   initial dataframe is obtained.
+
+2. JSON Versoin. This version encodes the dataframes in JSON. The problem
+   with this format is that values such as NaN and NaT (not a time) are not
+   allowed by JSON, and they are substituted by empty strings. This change
+   may have significant effects on the dataframe, specially on the types of
+   the columns. If there is a dataframe with a column of type datetime and
+   with any element with value NaT and it is first extracted through the JSON
+   interface, and then uploaded again, the NaT value is transformed into an
+   empty string, and Pandas will no longer recognise that column as
+   datetime, but instead it will render the column of type string. This my
+   have also an effect on how rules and actions are evaluated.
+

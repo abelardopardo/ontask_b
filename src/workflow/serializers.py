@@ -6,7 +6,7 @@ from rest_framework.exceptions import APIException
 
 from action.serializers import ActionSerializer, ActionSerializerDeep
 from dataops import ops, pandas_db
-from matrix.serializers import DataFrameField
+from matrix.serializers import DataFramePandasField
 from .models import Workflow, Column
 
 
@@ -105,7 +105,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
 
 class WorkflowExportCompleteSerializer(WorkflowExportSerializer):
 
-    data_frame = DataFrameField(
+    data_frame = DataFramePandasField(
         help_text='This field must be the Base64 encoded '
                   'result of pandas.to_pickle() function'
     )

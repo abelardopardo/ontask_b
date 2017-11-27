@@ -8,14 +8,25 @@ import json
 import pandas as pd
 from rest_framework import serializers
 
+from dataops import ops
+
 
 def df_to_string(df):
+    """
+    :param df: Pandas dataframe
+    :return: Base64 encoded string of its pickled representation
+    """
     out_file = StringIO.StringIO()
     pd.to_pickle(df, out_file)
     return base64.b64encode(out_file.getvalue())
 
 
 def string_to_df(value):
+    """
+    :param value: Base64 encoded string containing a pickled representation
+    of a pandas dataframe
+    :return: The encoded dataframe
+    """
     output = StringIO.StringIO()
     output.write(base64.b64decode(value))
     try:
@@ -26,18 +37,32 @@ def string_to_df(value):
     return result
 
 
-class DataFrameSerializer(serializers.Serializer):
+class DataFrameJSONField(serializers.Field):
     def to_representation(self, instance):
         # GET
-        return instance
+        # Return the to_json result using Pandas. This function though is
+        # destructive with respect to NaN and NaT.
+        return json.loads(instance.to_json(date_format='iso'))
 
     def to_internal_value(self, data):
         # POST / PUT (and then GET to refresh)
-        return data
+        try:
+            df = pd.DataFrame(data)
+            # Detect date/time columns
+            df = ops.detect_datetime_columns(df)
+        except Exception as e:
+            raise serializers.ValidationError(e)
+
+        return df
 
 
-class DataFrameField(serializers.Field):
+class DataFrameJSONSerializer(serializers.Serializer):
+    data_frame = DataFrameJSONField(
+        help_text='JSON string encoding a pandas data frame'
+    )
 
+
+class DataFramePandasField(serializers.Field):
     def to_representation(self, instance):
         # GET
         return df_to_string(instance)
@@ -51,15 +76,13 @@ class DataFrameField(serializers.Field):
 
 
 class DataFramePandasSerializer(serializers.Serializer):
-
-    data_frame = DataFrameField(
+    data_frame = DataFramePandasField(
         help_text='This field must be the Base64 encoded '
                   'result of the pandas.to_pickle() function'
     )
 
 
 class DataFrameBasicMergeSerializer(serializers.Serializer):
-
     how = serializers.CharField(
         required=True,
         initial='',
@@ -83,16 +106,15 @@ class DataFrameBasicMergeSerializer(serializers.Serializer):
         help_text='One of the two values: rename (default), or override')
 
 
-class DataFrameJSONMergeSerializer(serializers.Serializer):
-
-    src_df = DataFrameSerializer()
-
-
-class DataFramePandasMergeSerializer(serializers.Serializer):
-
-    src_df = DataFrameField(
-        help_text='This field must be the Base64 encoded '
-                  'result of pandas.to_pickle() function'
+class DataFrameJSONMergeSerializer(DataFrameBasicMergeSerializer):
+    src_df = DataFrameJSONField(
+        help_text='This field must be the JSON string encoding a pandas data '
+                  'frame'
     )
 
 
+class DataFramePandasMergeSerializer(DataFrameBasicMergeSerializer):
+    src_df = DataFramePandasField(
+        help_text='This field must be the Base64 encoded '
+                  'result of pandas.to_pickle() function'
+    )

@@ -14,6 +14,11 @@
 
 - Logs now show the payload (the whole db access)
 
+- API to manipulate matrices now offers two versions: JSON and Pandas Pickle.
+  The first one is sensitive to NaN, whereas the second maintains the data 
+  frame intact (encodes NaN and NaT). The latter is recommended whenever 
+  possible.
+
 ### Fixed
 
 - Bug not showing the status of the action URL.
