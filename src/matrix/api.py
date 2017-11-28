@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
-import pandas as pd
 from django.db.models import Q
-from django.http import Http404
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
