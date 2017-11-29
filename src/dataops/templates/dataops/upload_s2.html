@@ -35,27 +35,19 @@
            style="display: table-cell;">
       <thead>
         <tr>
-          <th class="text-center" style="vertical-align:middle;">Unique</th>
-          <th class="text-center" style="vertical-align:middle;">Type</th>
           <th class="text-center" style="vertical-align:middle;">
             Load<br/>
             <input type="checkbox" id="checkAll"/>
           </th>
           <th class="text-center" style="vertical-align:middle;">Name</th>
           <th class="text-center" style="vertical-align:middle;">Rename to</th>
+          <th class="text-center" style="vertical-align:middle;">Type</th>
+          <th class="text-center" style="vertical-align:middle;">Unique</th>
         </tr>
       </thead>
       <tbody>
         {% for item in df_info %}
           <tr {% if item.1 %}class="success"{% endif %}>
-            <td class="text-center"
-                style="vertical-align: middle;">
-              {% if item.1 %}YES{% endif %}
-            </td>
-
-            <td class="text-center"
-                style="vertical-align: middle;">{{ item.0 }}</td>
-
             <td class="text-center" style="vertical-align: middle;">
               <div class="checkbox">
                 <label><input type="checkbox"
@@ -72,6 +64,14 @@
                      name="new_name_{{ forloop.counter0 }}"
                      value="{{ item.3 }}">
             </td>
+
+            <td class="text-center"
+                style="vertical-align: middle;">
+              {% if item.1 %}YES{% endif %}
+            </td>
+
+            <td class="text-center"
+                style="vertical-align: middle;">{{ item.0 }}</td>
 
           </tr>
         {% endfor %}
