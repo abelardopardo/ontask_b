@@ -380,8 +380,9 @@ class RowForm(forms.Form):
             self.initial_values = [None] * len(self.columns)
 
         for idx, column in enumerate(self.columns):
-            self.fields[field_prefix + '%s' % idx] = \
+            field_name = field_prefix + '%s' % idx
+            self.fields[field_name] = \
                 column_to_field(column, self.initial_values[idx])
 
             if column.is_key and self.initial_values[idx]:
-                self.fields[field_prefix + '%s' % idx].widget.attrs['readonly'] = 'readonly'
+                self.fields[field_name].widget.attrs['readonly'] = 'readonly'
