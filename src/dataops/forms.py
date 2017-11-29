@@ -384,4 +384,4 @@ class RowForm(forms.Form):
                 column_to_field(column, self.initial_values[idx])
 
             if column.is_key and self.initial_values[idx]:
-                self.fields[column.name].widget.attrs['readonly'] = 'readonly'
+                self.fields[field_prefix + '%s' % idx].widget.attrs['readonly'] = 'readonly'
