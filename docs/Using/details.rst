@@ -14,6 +14,8 @@ After selecting a workflow to manage, the *details* page appears with a lot of i
 
 The top of the page now includes links to additional menus with operations to perform over the workflow (some of them will be available depending on your user profile). Under the top bar the application shows the name of the workflow selected for manipulation. Under the title *Workflow Details* there are buttons (available depending on your profile and ownership of the workflow) that offer the following operations:
 
+.. _details_add_column:
+
 Add a new column
   Opens a dialog to create a new column in the matrix. It requires the name, type of column, a comma separated list of allowed values (optional) and a value to assign to all cells in the column (optional).
 
@@ -36,6 +38,8 @@ Share
   .. figure:: images/Ontask____share.png
      :align: center
 
+.. _details_export:
+
 Export
   This functionality allows you to take a snapshot (or a picture) of the content of the workflow and store it in a file for your records.
 
@@ -44,11 +48,15 @@ Export
 
   The menu offers you the possibility of exporting only the data, or the data **and** the :ref:`action <action>` in the workflow.
 
+.. _details_rename:
+
 Rename
   This functionality allows to change either the name or the description of the workflow.
 
   .. figure:: images/Ontask____updatewflow.png
      :align: center
+
+.. _details_flush_data:
 
 Flush data
   This operation deletes all the data attached to the workflow, but preserves the workflow structure (that is, the name and the description only).
@@ -57,6 +65,8 @@ Flush data
      :align: center
 
   Given the destructive nature of this operation the platform requires you to confirm this step.
+
+.. _details_delete:
 
 Delete
   Operation similar to the previous one, but now the whole workflow is deleted and therefore un-selected. If executed, the platform will go back to the list of workflows as this one is no longer available for operations.
