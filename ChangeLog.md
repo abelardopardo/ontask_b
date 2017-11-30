@@ -8,6 +8,8 @@
 
 - Fixed bug preventing the edition of columns
 
+- Fixed bug when rendering the export done page.
+
 ## 1.2.1
 
 ### Added
