@@ -1,3 +1,13 @@
+## 1.2.2
+
+### Added
+
+- Additional material in the tutorial (still unfinished)
+
+### Changed
+
+- Fixed bug preventing the edition of columns
+
 ## 1.2.1
 
 ### Added
