@@ -150,103 +150,132 @@ Once the data has been uploaded, click in the *Matrix* link at the top of the sc
    .. figure:: ../Ontask_screens/18_matrix_initial.png
       :align: center
 
-FIX FIX FIX
-
-#. The area at the bottom of the screen allows to filter values in the columns to do some basic data exploration as shown in the following figure.
+There is a search box at the top of the table to browse the content of the
+matrix.
 
    .. figure:: ../Ontask_screens/19_matrix_search_column.png
       :align: center
 
-#. The matrix can also contain *custom attributes* that are simply pairs of (name, value) that can be needed when writing the emails. Click in the item *Custom Attributes* at the top of the screen and then *Add Attribute* as shown in the following figure:
+Workflow Operations
+-------------------
 
-   .. figure:: ../Ontask_screens/20_matrix_custom_attributes_initial.png
-      :align: center
+There are several operations available at the details page.
 
-#. Enter the name *Course Coordinator* and a value in the text boxes. Finish the insertion by clicking in the *Submit* button.
+Attributes
+^^^^^^^^^^
 
-   .. figure:: ../Ontask_screens/21_matrix_custom_attribute_add.png
-      :align: center
+If you click again in the *Details* link at the top of the screen you will
+see again the page with the workflow details, but this time it will include
+the information about the columns just loaded.
 
-#. We are now ready to proceed to the third stage (creating the rules) by clicking in the **Rules** item in the menu on the left side of the screen.
+You can define a set of *attributes* in the workflow. This is simply a set of
+pairs *name, value* that you can use to have a single place where a value is
+defined and then reused in several other locations. For example, the name of
+the course is probably going to appear in various communications with the
+learners. If you define the attribute *Course_name* with that value, you can
+then refer to the attribute and it will be replaced by its value.
 
-   .. figure:: ../Ontask_screens/22_rule_initial.png
-      :align: center
-      :width: 40%
+.. figure:: ../Ontask_screens/20_matrix_custom_attributes_initial.png
+   :align: center
+   :width: 50%
 
-   The new rule needs a name and a description to help you manage several of them within the workflow.
+Share
+^^^^^
 
-   .. figure:: ../Ontask_screens/23_rule_create.png
-      :align: center
-      :width: 40%
+You may share a workflow with other instructors in the platform. The *Share*
+button will allow you to add/remove other users to this list.
 
-   Once the rule has been created, edit its content by clicking in the *Edit* item.
+.. figure:: ../Ontask_screens/21_workflow_share.png
+   :align: center
+   :width: 50%
 
-   .. figure:: ../Ontask_screens/24_rule_operations.png
-      :align: center
-      :width: 40%
+Remember that whenever you open a workflow, it becomes unavailable for the other users with whom it is being shared.
 
-#. The following screen is one of the most complex in the tool. It allows you to write an email with special fields in it, and a set of conditions to control those fields. The first step is simply to write the opening of an email, and then insert the name of the student. You can do this by (1) placing the cursor in the appropriate location in the message, (2) selecting the column value you want to insert, in this case *GivenName*, and (3) clicking in the button *Insert Data Field* as shown in the following figure.
+Export
+^^^^^^
 
-   .. figure:: ../Ontask_screens/25_rule_insert_data_field.png
-      :align: center
+This functionality allows you to take all the information included in a
+workflow and export it. The functionality offers the option of including in
+the export only the data, or the data and the actions.
 
-   These steps insert the string ``{{GivenName}}`` in the email window which is simply a *place holder* that will be replaced by the actual value of that field for the student when the email is sent.
+.. figure:: ../Ontask_screens/22_workflow_export.png
+   :align: center
+   :width: 50%
 
-#. The next step is to create a condition. Click in the button *Add Condition* and a widget will appear to create a boolean condition. The condition first needs a name at the top (to be able to refer to it within the message) and then an expression that is either True or False. In the following figure the condition is::
+Rename
+^^^^^^
 
-     Q01 is equal to 0 AND Q02 is equal to 0
+Use this function to change the name and description of the workflow
 
-   Click in the button *+ ADD RULE* to add the clauses and select the appropriate field name and values. Once the expression is created, click in the *Verify Condition* button and see how it appears in the pull down menu on the right side of the screen as shown in the following figure.
+Flush Data
+^^^^^^^^^^
 
-   .. figure:: ../Ontask_screens/26_rule_condition_edit.png
-      :align: center
+This function deletes the data associated with the workflow. It maintains the
+set of attributes and the actions, but it removes the conditions and filters
+from all the actions.
 
-#. Once the condition has been inserted (and verified), we can use it in the email area. Write a sentence in the email notifying the student that it follows some comments about their midterm exam. Once the cursor is placed after that sentence, select the condition you just introduced in the right side of the screen in the pull down menu and then click in the button *Insert Condition*. You will see the following *place holder* string appear in the screen::
+Delete
+^^^^^^
 
-     {{Failed topic 1: True} : : { Insert condition text here }}
+This function deletes completely the workflow from the platform.
 
-   The text ``Insert condition text here`` is for you to replace with the appropriate text that will appear in the message if the given condition is equal to True (or False if you select it in the menu above). The following figure shows the result of these operations.
+Actions
+-------
 
-   .. figure:: ../Ontask_screens/27_rule_insert_condition_inemail.png
-      :align: center
+Click in the *Actions* link at the top of the screen. The next screen shows
+the list of actions that are part of the workflow, and if there is none, you
+will only see the button to crate a new one.
 
-#. In a way similar to the name of the student, you may insert any of the *Custom Attributes* you defined for the matrix. For example, you may write the end salutation of the message and then select the course coordinator in the upper menu next to the button *Insert Custom Attribute* and click to insert it in the text as shown in the following figure.
+.. figure:: ../Ontask_screens/22_rule_initial.png
+   :align: center
 
-   .. figure:: ../Ontask_screens/28_rule_insert_attribute.png
-      :align: center
+Click on the button to create a new action and provide a name and a
+description.
 
+.. figure:: ../Ontask_screens/23_action_create.png
+   :align: center
+   :width: 40%
 
-   As in the previous cases, the string ``{{Custon-Course Coordinator}}`` is a place holder that will be replaced by the name of the course coordinator.
+The next screen is the *action editor*. The functions are divided into three areas. The one at the top allows you to specify a condition to select or filter a subset of students. The second contains the conditions to be used in the personalised text. The third is a HTML text editor with the content to personalise.
 
-#. Now try to add a more complex expression detecting of the student failed either Q01 or Q02 (that is, if either of them is equal to zero, but not both!). Do not forget to provide a name for the condition and to click in the ``Verify Condition`` button when done. Once you created the condition, and repeating the steps previously described, insert another text in the email that appears only if this new condition is True. The result of these steps should be something similar to what is shown in the following figure:
+.. figure:: ../Ontask_screens/24_action_edit.png
+   :align: center
 
-   .. figure:: ../Ontask_screens/29_rule_insert_complex_condition.png
-      :align: center
+Place the cursor in the text area and start the text with a salutation, then select the name of a column from the pull-down menu right above the text editor and select the column *GivenName*. The string ``{{ GivenName}} `` appears in the text area. This notation is to instruct the next steps to replace the value among double curly braces with the name of each student.
 
+Click now in the button *New* in the condition area. A form appears to
+introduce the name, description and formula. The formula may contain any
+combination of Boolean operators with respect to the column values. For
+example, the condition::
 
-   You can add a third rule to capture the case in which both Q01 and Q02 are equal to 1. This way you cover all possibilities and all students receive the message with personalised text.
+  Q01 is equal to 0 AND Q02 is equal to 0
 
-#. Once you have the message with the finished text and the right conditions, you can save the rule as shown in the following figure.
+can be encoded in the formula widget as shown in the following figure
 
-   .. figure:: ../Ontask_screens/31_rule_save.png
-      :align: center
+.. figure:: ../Ontask_screens/25_action_condition_edit.png
+   :align: center
 
-#. The next step is to test the rule and see if the message is correctly built for each student. You may click in the ``Test`` button at the top of the rule screen as shown in the following figure.
+We can now use this condition to control the appearance of text in the text
+area. Write a sentence that you would like to appear, select it and then
+click in the arrow button in the condition.
 
-   .. figure:: ../Ontask_screens/32_rule_test.png
-      :align: center
+.. figure:: ../Ontask_screens/26_action_condition_insert.png
+   :align: center
 
-#. To see the effect of this test, you need to go back to the rules page (click in the menu item **Rues** in the left side of the screen), and then click to see the summary as shown in the following figure.
+The text area is then surrounded by two marks::
 
-   .. figure:: ../Ontask_screens/33_rule_summary.png
-      :align: center
-      :width: 40%
+  {% if Topic_1_incorrect %}You need to review Topic 1{% endif %}
 
-#. Once you see the list of students and messages, you can click in the button with name ``Show`` to see the actual text that was created for that student.
+This is the encoding to instruct the processing step to check the value of
+the condition ``Topic_1_incorrect`` and include the surrounded text only if
+the condition is true.
 
-   .. figure:: ../Ontask_screens/34_rule_summary_show.png
-      :align: center
+You may also insert any attributes attached to the workflow. The attribute
+name will be replaced by its value when processing the text.
 
-#. Create a new rule in which the email is not sensitive to the results of the questions in the midterm, but to the activity in the forum.
+You can add additional conditions and use them to control the appearance of
+additional blocks of text.
 
-#. Share your new message with your peers.
+.. figure:: ../Ontask_screens/27_action_condition_complex.png
+   :align: center
+

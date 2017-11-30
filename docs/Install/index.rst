@@ -179,10 +179,12 @@ no space between variable names and the equal sign)::
    A few messages should appear on the screen related to the initalizaton
    of the database.
 
-#. Execute the following command to upload to the platform an initial user
-   group::
+#. Execute the following command to upload to the platform some initial data
+structures::
 
-     python manage.py loaddata ontask/initial_data.json
+     python manage.py runscript -v1 --traceback initial_data
+
+   The command should run without any error or exception.
 
 #. Execute the command to create a superuser
    account in OnTask::
@@ -218,6 +220,8 @@ no space between variable names and the equal sign)::
 
    If there are no errors, the message on the screen should say that your
    server is running and available in the URL 127.0.0.1:8000
+
+#. If OnTask is going to be accessed through a web server like Apache or Nginx, stop the application and configure the web server accordingly.
 
 The Administration Pages
 ------------------------

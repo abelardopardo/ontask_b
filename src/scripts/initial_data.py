@@ -15,9 +15,11 @@ def run(*script_args):
     """
 
     # Create the instructor group if it does not exist
+    print('Step 1: Creating instructor group')
     if not Group.objects.filter(name='instructor').exists():
         group = Group(name='instructor')
         group.save()
     else:
         group = Group.objects.get(name='instructor')
+    print('Done')
 
