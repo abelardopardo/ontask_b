@@ -139,7 +139,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
 
         # Change the name of one of the columns
         input_email = self.selenium.find_element_by_xpath(
-            "//table[@id='workflow-table']/tbody/tr[3]/td[5]/input"
+            "//table[@id='workflow-table']/tbody/tr[3]/td[3]/input"
         )
         input_email.clear()
         input_email.send_keys('email')
@@ -255,7 +255,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
 
         # Change the name of sid2 to sid
         input_email = self.selenium.find_element_by_xpath(
-            "//table[@id='workflow-table']/tbody/tr[3]/td[5]/input"
+            "//table[@id='workflow-table']/tbody/tr[3]/td[3]/input"
         )
         input_email.clear()
         input_email.send_keys('sid')
@@ -393,13 +393,14 @@ class WorkflowModify(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']/div/div/form/div/button[@type='submit']"
         ).click()
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
         # FLAKY
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
-                                             'Workflow Details')
-        )
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
+            EC.presence_of_element_located((By.CLASS_NAME, 'success'))
         )
 
         # Third column must be age, double
