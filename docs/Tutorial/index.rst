@@ -267,9 +267,3 @@ the condition is true.
 You may also insert any attributes attached to the workflow. The attribute
 name will be replaced by its value when processing the text.
 
-You can add additional conditions and use them to control the appearance of
-additional blocks of text.
-
-.. figure:: ../Ontask_screens/27_action_condition_complex.png
-   :align: center
-

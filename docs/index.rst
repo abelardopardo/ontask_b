@@ -16,11 +16,5 @@ OnTask's documentation
    Using/index
    Tutorial/index
    Advanced/index
-   Changelog
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+`Changelog <https://github.com/abelardopardo/ontask_b/blob/master/ChangeLog.md>`_
