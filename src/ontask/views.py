@@ -40,7 +40,7 @@ def trck(request):
     Receive a request with a token from email read tracking
     :param request: Request object
     :return: Reflects in the DB the reception and (optionally) in the data 
-    matrix of the workflow
+    table of the workflow
     """
     if request.method != 'GET':
         raise Http404

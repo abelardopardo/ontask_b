@@ -431,8 +431,8 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         # There should be a message on that page
         self.assertIn('Emails successfully sent', self.selenium.page_source)
 
-        # Go to the matrix page
-        self.open(reverse('matrix:display'))
+        # Go to the table page
+        self.open(reverse('table:display'))
         # Wait for
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(

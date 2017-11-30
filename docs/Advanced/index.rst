@@ -20,8 +20,8 @@ The API is documented online through the url suffix ``apidoc``. The page
 contains the description of every entry point available with the required
 parameters.
 
-When manipulating the elements in the matrix there are two versions of the
-basic operations (create a matrix, update a matrix, merge).
+When manipulating the elements in the table there are two versions of the
+basic operations (create a table, update a table, merge).
 
 1. Pandas Version. This version handles the encoding of data frames using the
    pandas pickle encoding. This encoding has the advantage that maintains the

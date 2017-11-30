@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from dataops import pandas_db, ops
-from matrix.serializers import (
+from table.serializers import (
     DataFramePandasMergeSerializer,
     DataFramePandasSerializer,
     DataFrameJSONSerializer,
@@ -18,9 +18,9 @@ from workflow.models import Workflow
 from workflow.ops import is_locked, detach_dataframe
 
 
-class MatrixBasicOps(APIView):
+class TableBasicOps(APIView):
     """
-    Basic class to implement the matrix API operations so that we can provide
+    Basic class to implement the table API operations so that we can provide
     two versions, one handling data frames in JSON format, and the other one
     using the pickle format in Pandas to preserve NaN and NaT and maintain
     column data types between exchanges.
@@ -73,10 +73,10 @@ class MatrixBasicOps(APIView):
 
     # Create
     def post(self, request, pk, format=None):
-        # If there is a matrix in the workflow, ignore the request
+        # If there is a table in the workflow, ignore the request
         if pandas_db.load_from_db(pk) is not None:
             raise APIException('Post request requires workflow without '
-                               'a matrix')
+                               'a table')
         return self.override(request, pk, format)
 
     # Update
@@ -90,18 +90,18 @@ class MatrixBasicOps(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class MatrixJSONOps(MatrixBasicOps):
+class TableJSONOps(TableBasicOps):
     """
     get:
-    Get all the data in the matrix corresponding to the workflow (no matter
+    Get all the data in the table corresponding to the workflow (no matter
     how big). If the workflow has no data, an empty {} is returned.
 
     post:
-    Upload a new matrix to a workflow without. If there is a matrix already, the
-    operation will be rejected (consider deleting the matrix first or use PUT)
+    Upload a new table to a workflow without. If there is a table already, the
+    operation will be rejected (consider deleting the table first or use PUT)
 
     put:
-    Replace the matrix currently in the workflow with the one given
+    Replace the table currently in the workflow with the one given
 
     delete:
     Flush the data frame from the workflow. The workflow object remains, just
@@ -111,9 +111,9 @@ class MatrixJSONOps(MatrixBasicOps):
     serializer_class = DataFrameJSONSerializer
 
 
-class MatrixPandasOps(MatrixBasicOps):
+class TablePandasOps(TableBasicOps):
     """
-    This API is provided because OnTask stores the matrix internally as a
+    This API is provided because OnTask stores the table internally as a
     Pandas data frame. When using conventional API transactions using JSON
     strings, it is possible to loose information because JSON cannot handle
     NaN or NaT (specific values for Pandas data frames).
@@ -150,24 +150,24 @@ class MatrixPandasOps(MatrixBasicOps):
     These are the methods made available by the API
 
     get:
-    Get all the data in the matrix corresponding to the workflow (no matter
+    Get all the data in the table corresponding to the workflow (no matter
     how big) as a Base64 encoded string of the binary data frame. If the
     workflow has no data, an empty {} is returned.
 
     post:
-    Upload a new matrix (Base64 encoded of a binary data frame) to a workflow
-    without. If there is a matrix already, the operation will be rejected
-    (consider deleting the matrix first or use PUT)
+    Upload a new table (Base64 encoded of a binary data frame) to a workflow
+    without. If there is a table already, the operation will be rejected
+    (consider deleting the table first or use PUT)
 
     put:
-    Replace the matrix currently in the workflow with the one given Base64
+    Replace the table currently in the workflow with the one given Base64
     encoded string of the binary representation of a pandas data frame.
     """
 
     serializer_class = DataFramePandasSerializer
 
 
-class MatrixBasicMerge(APIView):
+class TableBasicMerge(APIView):
     """
     These are basic merge methods to be invoked by the subclasses
     get:
@@ -310,7 +310,7 @@ class MatrixBasicMerge(APIView):
                         status=status.HTTP_201_CREATED)
 
 
-class MatrixJSONMerge(MatrixBasicMerge):
+class TableJSONMerge(TableBasicMerge):
     """
     get:
     Retrieves the data frame attached to the workflow and returns it labeled
@@ -323,9 +323,9 @@ class MatrixJSONMerge(MatrixBasicMerge):
     serializer_class = DataFrameJSONMergeSerializer
 
 
-class MatrixPandasMerge(MatrixBasicMerge):
+class TablePandasMerge(TableBasicMerge):
     """
-    This API is provided because OnTask stores the matrix internally as a
+    This API is provided because OnTask stores the table internally as a
     Pandas data frame. When using conventional API transactions using JSON
     strings, it is possible to loose information because JSON cannot handle
     NaN or NaT (specific values for Pandas data frames).

@@ -103,7 +103,7 @@ def delete_all_tables():
 
     return
 
-def is_matrix_in_db(table_name):
+def is_table_in_db(table_name):
     cursor = connection.cursor()
     table_list = \
         connection.introspection.get_table_list(cursor)
@@ -315,16 +315,16 @@ def query_to_dicts(query_string, *query_args):
 def update_row(pk, set_fields, set_values, where_fields, where_values):
     """
     Given a primary key, pairs (set_field, set_value), and pairs (where_field,
-    where_value), it updates the row in the matrix selected with the
+    where_value), it updates the row in the table selected with the
     list of (where field = where value) with the values in the assignments in
     the list of (set_fields, set_values)
 
     :param pk: Primary key to detect workflow
     :param set_fields: List of field names to be updated
     :param set_values: List of values to update the fields of the previous list
-    :param where_fields: List of fields used to filter the row in the matrix
+    :param where_fields: List of fields used to filter the row in the table
     :param where_values: List of values of the previous fields to filter the row
-    :return: The matrix in the workflow pointed by PK is modified.
+    :return: The table in the workflow pointed by PK is modified.
     """
 
     # First part of the query with the table name
@@ -348,7 +348,7 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names=None):
     """
     Select the set of elements after filtering and with the key=value pair
 
-    :param workflow: workflow object to get to the matrix
+    :param workflow: workflow object to get to the table
     :param cond_filter: Condition object to filter the data (or None)
     :param kv_pair: A key=value pair to identify the row. Key is suppose to
            be unique.
@@ -407,7 +407,7 @@ def search_table_rows(workflow_id,
     any is false, and the result is ordered by the given column and type (if
     given)
 
-    :param workflow_id: workflow object to get to the matrix
+    :param workflow_id: workflow object to get to the table
     :param cv_tuples: A column, value, type tuple to search the value in the
     column
     :param any_join: Boolean encoding if values should be combined with OR (or
@@ -465,13 +465,13 @@ def search_table_rows(workflow_id,
 
 def delete_table_row_by_key(workflow_id, kv_pair):
     """
-    Delete the row in the matrix attached to a workflow with the given key,
+    Delete the row in the table attached to a workflow with the given key,
     value pairs
 
-    :param workflow_id: workflow object to get to the matrix
+    :param workflow_id: workflow object to get to the table
     :param kv_pair: A key=value pair to identify the row. Key is suppose to
            be unique.
-    :return: Drops that row from the matrix in the DB
+    :return: Drops that row from the table in the DB
     """
 
     # Create the query

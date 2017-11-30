@@ -1,15 +1,15 @@
-.. _matrix:
+.. _table:
 
-The Matrix
-----------
+The Table
+---------
 
    "You're here because you know something. What you know you can't explain,
    but you feel it"
    -- Morpheus, The Matrix
 
-This functionality of the application is basically to provide some basic visualisation of the values stored in the workflow. Due to the potential large size of this matrix in either number of rows or columns, the functionality is reduded simply to browse values, search, create/update/delete a row, or add a new column.
+This functionality of the application is basically to provide some basic visualisation of the values stored in the workflow. Due to the potential large size of this table in either number of rows or columns, the functionality is reduded simply to browse values, search, create/update/delete a row, or add a new column.
 
-.. figure:: images/Ontask____Matrix.png
+.. figure:: images/Ontask____Table.png
    :align: center
    :width: 100%
 

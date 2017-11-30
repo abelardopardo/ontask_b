@@ -7,7 +7,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from . import api
 from . import views
 
-app_name = 'matrix'
+app_name = 'table'
 
 urlpatterns = [
 
@@ -15,15 +15,15 @@ urlpatterns = [
     # API
     #
     # JSON
-    url(r'^(?P<pk>\d+)/ops/$', api.MatrixJSONOps.as_view(), name="api_ops"),
+    url(r'^(?P<pk>\d+)/ops/$', api.TableJSONOps.as_view(), name="api_ops"),
 
-    url(r'^(?P<pk>\d+)/merge/$', api.MatrixJSONMerge.as_view(),
+    url(r'^(?P<pk>\d+)/merge/$', api.TableJSONMerge.as_view(),
         name="api_merge"),
 
     # PANDAS
-    url(r'^(?P<pk>\d+)/pops/$', api.MatrixPandasOps.as_view(), name="api_pops"),
+    url(r'^(?P<pk>\d+)/pops/$', api.TablePandasOps.as_view(), name="api_pops"),
 
-    url(r'^(?P<pk>\d+)/pmerge/$', api.MatrixPandasMerge.as_view(),
+    url(r'^(?P<pk>\d+)/pmerge/$', api.TablePandasMerge.as_view(),
         name="api_pmerge"),
 
     #

@@ -359,7 +359,7 @@ def rowview_dataentry(request, pk):
 
             # Log the event
             logs.ops.put(request.user,
-                         'matrixrow_update',
+                         'tablerow_update',
                          workflow,
                          {'id': workflow.id,
                           'name': workflow.name,
@@ -379,7 +379,7 @@ def rowview_dataentry(request, pk):
                     where_value = value
                     break
 
-            # Get the row from the matrix
+            # Get the row from the table
             rows = pandas_db.execute_select_on_table(workflow.id,
                                                      [where_field],
                                                      [where_value])

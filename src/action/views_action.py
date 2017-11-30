@@ -445,8 +445,8 @@ def edit_action(request, pk):
     conditions = Condition.objects.filter(
         action=action, is_filter=False).order_by('created')
 
-    # Boolean to find out if there is a matrix attached to this workflow
-    has_data = ops.workflow_has_matrix(action.workflow)
+    # Boolean to find out if there is a table attached to this workflow
+    has_data = ops.workflow_has_table(action.workflow)
 
     # Get the total number of rows in DF and those selected by filter.
     total_rows = workflow.nrows

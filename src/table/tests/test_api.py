@@ -11,20 +11,20 @@ from rest_framework.authtoken.models import Token
 
 import test
 from dataops import pandas_db, ops
-from matrix import serializers
+from table import serializers
 from workflow.models import Workflow, Column
 from workflow.ops import workflow_delete_column
 
-class MatrixApiBase(test.OntaskApiTestCase):
-    fixtures = ['simple_matrix']
+class TableApiBase(test.OntaskApiTestCase):
+    fixtures = ['simple_table']
     filename = os.path.join(
         settings.PROJECT_PATH,
-        'matrix',
+        'table',
         'fixtures',
-        'simple_matrix_df.sql'
+        'simple_table_df.sql'
     )
 
-    new_matrix = {
+    new_table = {
         "email": ["student4@bogus.com",
                   "student5@bogus.com",
                   "student6@bogus.com"
@@ -52,7 +52,7 @@ class MatrixApiBase(test.OntaskApiTestCase):
     }
 
     def setUp(self):
-        super(MatrixApiBase, self).setUp()
+        super(TableApiBase, self).setUp()
         # Get the token for authentication and set credentials in client
         token = Token.objects.get(user__email='instructor1@bogus.com')
         auth = 'Token ' + token.key
@@ -61,17 +61,17 @@ class MatrixApiBase(test.OntaskApiTestCase):
 
     def tearDown(self):
         pandas_db.delete_all_tables()
-        super(MatrixApiBase, self).tearDown()
+        super(TableApiBase, self).tearDown()
 
 
-class MatrixApiCreate(MatrixApiBase):
-    # Getting the matrix attached to the workflow
-    def test_matrix_JSON_get(self):
+class TableApiCreate(TableApiBase):
+    # Getting the table attached to the workflow
+    def test_table_JSON_get(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
-        response = self.client.get(reverse('matrix:api_ops',
+        response = self.client.get(reverse('table:api_ops',
                                            kwargs={'pk': workflow.id}))
 
         # Transform the response into a data frame
@@ -82,15 +82,15 @@ class MatrixApiCreate(MatrixApiBase):
         df = pandas_db.load_from_db(workflow.id)
 
         # Compare both elements
-        self.compare_matrices(r_df, df)
+        self.compare_tables(r_df, df)
 
-    # Getting the matrix attached to the workflow
-    def test_matrix_pandas_get(self):
+    # Getting the table attached to the workflow
+    def test_table_pandas_get(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
-        response = self.client.get(reverse('matrix:api_pops',
+        response = self.client.get(reverse('table:api_pops',
                                            kwargs={'pk': workflow.id}))
 
         # Transform the response into a data frame
@@ -100,41 +100,41 @@ class MatrixApiCreate(MatrixApiBase):
         df = pandas_db.load_from_db(workflow.id)
 
         # Compare both elements
-        self.compare_matrices(r_df, df)
+        self.compare_tables(r_df, df)
 
-    def test_matrix_try_JSON_overwrite(self):
-        # Upload a matrix and try to overwrite an existing one (should fail)
-
-        # Get the only workflow in the fixture
-        workflow = Workflow.objects.all()[0]
-
-        # Override the matrix
-        response = self.client.post(reverse('matrix:api_ops',
-                                            kwargs={'pk': workflow.id}),
-                                    self.new_matrix,
-                                    format='json')
-
-        # Check that the right message is returned
-        self.assertIn('Post request requires workflow without a matrix',
-                      response.data['detail'])
-
-    def test_matrix_try_pandas_overwrite(self):
-        # Upload a matrix and try to overwrite an existing one (should fail)
+    def test_table_try_JSON_overwrite(self):
+        # Upload a table and try to overwrite an existing one (should fail)
 
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
-        # Override the matrix
-        response = self.client.post(reverse('matrix:api_pops',
+        # Override the table
+        response = self.client.post(reverse('table:api_ops',
                                             kwargs={'pk': workflow.id}),
-                                    self.new_matrix,
+                                    self.new_table,
                                     format='json')
 
         # Check that the right message is returned
-        self.assertIn('Post request requires workflow without a matrix',
+        self.assertIn('Post request requires workflow without a table',
                       response.data['detail'])
 
-    def test_matrix_json_create(self):
+    def test_table_try_pandas_overwrite(self):
+        # Upload a table and try to overwrite an existing one (should fail)
+
+        # Get the only workflow in the fixture
+        workflow = Workflow.objects.all()[0]
+
+        # Override the table
+        response = self.client.post(reverse('table:api_pops',
+                                            kwargs={'pk': workflow.id}),
+                                    self.new_table,
+                                    format='json')
+
+        # Check that the right message is returned
+        self.assertIn('Post request requires workflow without a table',
+                      response.data['detail'])
+
+    def test_table_json_create(self):
         # Create a second workflow
         response = self.client.post(reverse('workflow:api_workflows'),
                                     {'name': test.wflow_name + '2',
@@ -144,28 +144,28 @@ class MatrixApiCreate(MatrixApiBase):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.get(pk=response.data['id'])
 
-        # Upload the matrix
+        # Upload the table
         response = self.client.post(
-            reverse('matrix:api_ops',
+            reverse('table:api_ops',
                     kwargs={'pk': workflow.id}),
-            {'data_frame': self.new_matrix},
+            {'data_frame': self.new_table},
             format='json')
 
         # Load the df from the db
         df = pandas_db.load_from_db(workflow.id)
-        # Transform new matrix into data frame
-        r_df = pd.DataFrame(self.new_matrix)
+        # Transform new table into data frame
+        r_df = pd.DataFrame(self.new_table)
         r_df = ops.detect_datetime_columns(r_df)
 
         # Compare both elements
-        self.compare_matrices(r_df, df)
+        self.compare_tables(r_df, df)
 
         # Refresh wflow (has been updated) and check that the rest of the
         # information is correct
         workflow = Workflow.objects.get(pk=workflow.id)
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
-    def test_matrix_pandas_create(self):
+    def test_table_pandas_create(self):
         # Create a second workflow
         response = self.client.post(reverse('workflow:api_workflows'),
                                     {'name': test.wflow_name + '2',
@@ -175,13 +175,13 @@ class MatrixApiCreate(MatrixApiBase):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.get(pk=response.data['id'])
 
-        # Transform new matrix into a data frame
-        r_df = pd.DataFrame(self.new_matrix)
+        # Transform new table into a data frame
+        r_df = pd.DataFrame(self.new_table)
         r_df = ops.detect_datetime_columns(r_df)
 
-        # Upload the matrix
+        # Upload the table
         response = self.client.post(
-            reverse('matrix:api_pops',
+            reverse('table:api_pops',
                     kwargs={'pk': workflow.id}),
             {'data_frame': serializers.df_to_string(r_df)},
             format='json')
@@ -190,50 +190,50 @@ class MatrixApiCreate(MatrixApiBase):
         df = pandas_db.load_from_db(workflow.id)
 
         # Compare both elements
-        self.compare_matrices(r_df, df)
+        self.compare_tables(r_df, df)
 
         # Refresh wflow (has been updated) and check that the rest of the
         # information is correct
         workflow = Workflow.objects.get(pk=workflow.id)
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
-    def test_matrix_JSON_update(self):
+    def test_table_JSON_update(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
-        # Transform new matrix into string
-        r_df = pd.DataFrame(self.new_matrix)
+        # Transform new table into string
+        r_df = pd.DataFrame(self.new_table)
         r_df = ops.detect_datetime_columns(r_df)
 
-        # Upload a new matrix
+        # Upload a new table
         response = self.client.put(
-            reverse('matrix:api_ops',
+            reverse('table:api_ops',
                     kwargs={'pk': workflow.id}),
-            {'data_frame': self.new_matrix},
+            {'data_frame': self.new_table},
             format='json')
 
         # Load the df from the db
         df = pandas_db.load_from_db(workflow.id)
 
         # Compare both elements
-        self.compare_matrices(r_df, df)
+        self.compare_tables(r_df, df)
 
         # Refresh wflow (has been updated) and check that the rest of the
         # information is correct
         workflow = Workflow.objects.get(pk=workflow.id)
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
-    def test_matrix_pandas_update(self):
+    def test_table_pandas_update(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
-        # Transform new matrix into string
-        r_df = pd.DataFrame(self.new_matrix)
+        # Transform new table into string
+        r_df = pd.DataFrame(self.new_table)
         r_df = ops.detect_datetime_columns(r_df)
 
-        # Upload a new matrix
+        # Upload a new table
         response = self.client.put(
-            reverse('matrix:api_pops',
+            reverse('table:api_pops',
                     kwargs={'pk': workflow.id}),
             {'data_frame': serializers.df_to_string(r_df)},
             format='json')
@@ -242,48 +242,48 @@ class MatrixApiCreate(MatrixApiBase):
         df = pandas_db.load_from_db(workflow.id)
 
         # Compare both elements
-        self.compare_matrices(r_df, df)
+        self.compare_tables(r_df, df)
 
         # Refresh wflow (has been updated) and check that the rest of the
         # information is correct
         workflow = Workflow.objects.get(pk=workflow.id)
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
-    def test_matrix_JSON_flush(self):
+    def test_table_JSON_flush(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
-        # Flush the data in the matrix
-        response = self.client.delete(reverse('matrix:api_ops',
+        # Flush the data in the table
+        response = self.client.delete(reverse('table:api_ops',
                                               kwargs={'pk': workflow.id}))
 
         workflow = Workflow.objects.all()[0]
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
-    def test_matrix_pandas_flush(self):
+    def test_table_pandas_flush(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
-        # Flush the data in the matrix
-        response = self.client.delete(reverse('matrix:api_pops',
+        # Flush the data in the table
+        response = self.client.delete(reverse('table:api_pops',
                                               kwargs={'pk': workflow.id}))
 
         workflow = Workflow.objects.all()[0]
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
 
-class MatrixApiMerge(MatrixApiBase):
+class TableApiMerge(TableApiBase):
 
-    # Getting the matrix through the merge API
-    def test_matrix_pandas_JSON_get(self):
+    # Getting the table through the merge API
+    def test_table_pandas_JSON_get(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
-        response = self.client.get(reverse('matrix:api_merge',
+        response = self.client.get(reverse('table:api_merge',
                                            kwargs={'pk': workflow.id}))
 
-        # Transform new matrix into string
+        # Transform new table into string
         r_df = pd.DataFrame(response.data['src_df'])
         r_df = ops.detect_datetime_columns(r_df)
 
@@ -291,39 +291,39 @@ class MatrixApiMerge(MatrixApiBase):
         df = pandas_db.load_from_db(workflow.id)
 
         # Compare both elements and check wf df consistency
-        self.compare_matrices(r_df, df)
+        self.compare_tables(r_df, df)
         workflow = Workflow.objects.all()[0]
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
-    def test_matrix_pandas_merge_get(self):
+    def test_table_pandas_merge_get(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
-        response = self.client.get(reverse('matrix:api_pmerge',
+        response = self.client.get(reverse('table:api_pmerge',
                                            kwargs={'pk': workflow.id}))
 
-        # Transform new matrix into string
+        # Transform new table into string
         r_df = serializers.string_to_df(response.data['src_df'])
 
         # Load the df from the db
         df = pandas_db.load_from_db(workflow.id)
 
         # Compare both elements and check wf df consistency
-        self.compare_matrices(r_df, df)
+        self.compare_tables(r_df, df)
         workflow = Workflow.objects.all()[0]
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
     # Merge and create an empty dataset
-    def test_matrix_JSON_merge_to_empty(self):
+    def test_table_JSON_merge_to_empty(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
         response = self.client.put(
-            reverse('matrix:api_merge', kwargs={'pk': workflow.id}),
+            reverse('table:api_merge', kwargs={'pk': workflow.id}),
             {
-                "src_df": self.new_matrix,
+                "src_df": self.new_table,
                 "how": "inner",
                 "left_on": "sid",
                 "right_on": "sid",
@@ -338,16 +338,16 @@ class MatrixApiMerge(MatrixApiBase):
         workflow = Workflow.objects.all()[0]
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
-    def test_matrix_pandas_merge_to_empty(self):
+    def test_table_pandas_merge_to_empty(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
-        # Transform new matrix into string
-        r_df = pd.DataFrame(self.new_matrix)
+        # Transform new table into string
+        r_df = pd.DataFrame(self.new_table)
 
         # Get the data through the API
         response = self.client.put(
-            reverse('matrix:api_pmerge', kwargs={'pk': workflow.id}),
+            reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
             {
                 "src_df": serializers.df_to_string(r_df),
                 "how": "inner",
@@ -365,13 +365,13 @@ class MatrixApiMerge(MatrixApiBase):
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
     # Merge with inner values
-    def test_matrix_JSON_merge_to_inner(self):
+    def test_table_JSON_merge_to_inner(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
         response = self.client.put(
-            reverse('matrix:api_merge', kwargs={'pk': workflow.id}),
+            reverse('table:api_merge', kwargs={'pk': workflow.id}),
             {
                 "src_df": self.src_df,
                 "how": "inner",
@@ -390,16 +390,16 @@ class MatrixApiMerge(MatrixApiBase):
         # Check for df/wf consistency
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
-    def test_matrix_pandas_merge_to_inner(self):
+    def test_table_pandas_merge_to_inner(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
-        # Transform new matrix into string
+        # Transform new table into string
         r_df = pd.DataFrame(self.src_df)
 
         # Get the data through the API
         response = self.client.put(
-            reverse('matrix:api_pmerge', kwargs={'pk': workflow.id}),
+            reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
             {
                 "src_df": serializers.df_to_string(r_df),
                 "how": "inner",
@@ -419,13 +419,13 @@ class MatrixApiMerge(MatrixApiBase):
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
     # Merge with outer values
-    def test_matrix_JSON_merge_to_outer(self):
+    def test_table_JSON_merge_to_outer(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
         response = self.client.put(
-            reverse('matrix:api_merge', kwargs={'pk': workflow.id}),
+            reverse('table:api_merge', kwargs={'pk': workflow.id}),
             {
                 "src_df": self.src_df,
                 "how": "outer",
@@ -448,16 +448,16 @@ class MatrixApiMerge(MatrixApiBase):
         # Check for df/wf consistency
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
-    def test_matrix_pandas_merge_to_outer(self):
+    def test_table_pandas_merge_to_outer(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
-        # Transform new matrix into string
+        # Transform new table into string
         r_df = pd.DataFrame(self.src_df)
 
         # Get the data through the API
         response = self.client.put(
-            reverse('matrix:api_pmerge', kwargs={'pk': workflow.id}),
+            reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
             {
                 "src_df": serializers.df_to_string(r_df),
                 "how": "outer",
@@ -481,13 +481,13 @@ class MatrixApiMerge(MatrixApiBase):
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
     # Merge with left values
-    def test_matrix_JSON_merge_to_left(self):
+    def test_table_JSON_merge_to_left(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
         response = self.client.put(
-            reverse('matrix:api_merge', kwargs={'pk': workflow.id}),
+            reverse('table:api_merge', kwargs={'pk': workflow.id}),
             {
                 "src_df": self.src_df,
                 "how": "left",
@@ -510,16 +510,16 @@ class MatrixApiMerge(MatrixApiBase):
         # Check for df/wf consistency
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
-    def test_matrix_pandas_merge_to_left(self):
+    def test_table_pandas_merge_to_left(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
-        # Transform new matrix into string
+        # Transform new table into string
         r_df = pd.DataFrame(self.src_df)
 
         # Get the data through the API
         response = self.client.put(
-            reverse('matrix:api_pmerge', kwargs={'pk': workflow.id}),
+            reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
             {
                 "src_df": serializers.df_to_string(r_df),
                 "how": "left",
@@ -543,7 +543,7 @@ class MatrixApiMerge(MatrixApiBase):
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
     # Merge with outer values but producing NaN everywhere
-    def test_matrix_JSON_merge_to_outer_NaN(self):
+    def test_table_JSON_merge_to_outer_NaN(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
@@ -556,7 +556,7 @@ class MatrixApiMerge(MatrixApiBase):
             )
         )
 
-        # Transform new matrix into string
+        # Transform new table into string
         r_df = pd.DataFrame(self.src_df2)
 
         # Load the df from the db
@@ -565,7 +565,7 @@ class MatrixApiMerge(MatrixApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('matrix:api_merge', kwargs={'pk': workflow.id}),
+            reverse('table:api_merge', kwargs={'pk': workflow.id}),
             {
                 "src_df": self.src_df2,
                 "how": "outer",
@@ -586,12 +586,12 @@ class MatrixApiMerge(MatrixApiBase):
         df = pandas_db.load_from_db(workflow.id)
 
         # Compare both elements and check wf df consistency
-        self.compare_matrices(df, new_df)
+        self.compare_tables(df, new_df)
 
         # Check for df/wf consistency
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
-    def test_matrix_pandas_merge_to_outer_NaN(self):
+    def test_table_pandas_merge_to_outer_NaN(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
@@ -604,7 +604,7 @@ class MatrixApiMerge(MatrixApiBase):
             )
         )
 
-        # Transform new matrix into string
+        # Transform new table into string
         r_df = pd.DataFrame(self.src_df2)
 
         # Load the df from the db
@@ -613,7 +613,7 @@ class MatrixApiMerge(MatrixApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('matrix:api_pmerge', kwargs={'pk': workflow.id}),
+            reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
             {
                 "src_df": serializers.df_to_string(r_df),
                 "how": "outer",
@@ -634,7 +634,7 @@ class MatrixApiMerge(MatrixApiBase):
         df = pandas_db.load_from_db(workflow.id)
 
         # Compare both elements and check wf df consistency
-        self.compare_matrices(df, new_df)
+        self.compare_tables(df, new_df)
 
         # Check for df/wf consistency
         self.assertTrue(pandas_db.check_wf_df(workflow))

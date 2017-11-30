@@ -6,7 +6,7 @@ from rest_framework.exceptions import APIException
 
 from action.serializers import ActionSerializer, ActionSerializerDeep
 from dataops import ops, pandas_db
-from matrix.serializers import DataFramePandasField
+from table.serializers import DataFramePandasField
 from .models import Workflow, Column
 
 

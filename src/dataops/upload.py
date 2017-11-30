@@ -95,7 +95,7 @@ def upload_s2(request):
                    'prev_step': reverse(upload_data['step_1']),
                    'wid': workflow.id}
 
-        if not ops.workflow_id_has_matrix(workflow.id):
+        if not ops.workflow_id_has_table(workflow.id):
             # It is an upload, not a merge, set the next step to finish
             context['next_name'] = 'Finish'
         return render(request, 'dataops/upload_s2.html', context)
@@ -108,7 +108,7 @@ def upload_s2(request):
                    'wid': workflow.id,
                    'prev_step': reverse(upload_data['step_1']),
                    'df_info': df_info}
-        if not ops.workflow_id_has_matrix(workflow.id):
+        if not ops.workflow_id_has_table(workflow.id):
             # If it is an upload, not a merge, set next step to finish
             context['next_name'] = 'Finish'
         return render(request, 'dataops/upload_s2.html', context)

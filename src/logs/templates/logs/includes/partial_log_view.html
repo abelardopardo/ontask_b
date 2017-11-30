@@ -82,7 +82,7 @@
         <p><strong>Selected rows:</strong> {{ selected_rows }}</p>
       {% endif %}
       <p><strong>Formula:</strong> {{ formula }}</p>
-    {% elif log_type == 'matrixrow_update' or log_type == 'matrixrow_create' %}
+    {% elif log_type == 'tablerow_update' or log_type == 'tablerow_create' %}
       <p><strong>Workflow id:</strong> {{ id }}</p>
       <p><strong>Workflow name:</strong> {{ name }}</p>
       <p><strong>New values</strong>:</p>

@@ -41,15 +41,15 @@ Let's now go back to the screen to edit an action. The area has four components
 
 The filter
   The top area contains a *filter*. This element is an expression used to
-  decide which matrix rows will be selected and used with this condition.
+  decide which table rows will be selected and used with this condition.
 
   .. figure:: images/Ontask____Edit_action_filterpart.png
      :align: center
      :width: 100%
 
-  The line below the button to edit the expression states how many matrix
+  The line below the button to edit the expression states how many table
   rows satisfy the filter condition (and therefore are selected). In
-  practice, this is as if you dropped from the matrix some of the rows (it is
+  practice, this is as if you dropped from the table some of the rows (it is
   just that they are ignored, not dropped.
 
 The conditions
@@ -81,7 +81,7 @@ The preview/save buttons
   The *Save* button saves the content of the text editor, the *Save & Close*
   saves the content of the text editor and returns to the list of actions,
   and the *Preview* button shows how the text is rendered for every row in
-  the matrix.
+  the table.
 
 Using column values, attributes and conditions in an action
 ***********************************************************
@@ -160,7 +160,7 @@ The column with the email address
 
 Send summary message
   If you select this option OnTask will send you an email with the summary of
-  this operation (number of rows in the matrix that were selected by the
+  this operation (number of rows in the table that were selected by the
   filter, number of emails sent, date/time of the operation, etc.
 
 Snapshot of the workflow

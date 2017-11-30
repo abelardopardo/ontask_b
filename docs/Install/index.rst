@@ -170,7 +170,7 @@ no space between variable names and the equal sign)::
 #. Execute the following commands from the ``src`` folder to prepare the database initialization::
 
      python manage.py makemigrations profiles accounts workflow dataops
-     python manage.py makemigrations matrix action email_action logs
+     python manage.py makemigrations table action email_action logs
 
 #. Execute the following command to create the database internal structure::
 

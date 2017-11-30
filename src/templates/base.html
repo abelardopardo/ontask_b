@@ -63,9 +63,9 @@
                   href="{{ dataops_url }}">Dataops</a>
               </li>
 
-              {% url 'matrix:display' as matrix_display %}
-              <li {% if request.path == matrix_display %}class="active"{% endif %}><a
-                  href="{% url 'matrix:display' %}">Matrix</a>
+              {% url 'table:display' as table_display %}
+              <li {% if request.path == table_display %}class="active"{% endif %}><a
+                  href="{% url 'table:display' %}">Table</a>
               </li>
 
               {% url 'action:index' as actions_url %}

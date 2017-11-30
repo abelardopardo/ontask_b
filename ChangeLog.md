@@ -14,7 +14,7 @@
 
 ### Added
 
-- Email tracking available. Creates an extra column in the matrix.
+- Email tracking available. Creates an extra column in the table.
 
 ### Changed
 
@@ -53,7 +53,7 @@
 - Column table in workflow detail is now redered with DataTables (paging,
   search capacity)
   
-- Fixed search functionality in matrix view to search all fields (despite data
+- Fixed search functionality in table view to search all fields (despite data
   type)
   
 - First version implementing row views (manual data entry). Just CRUD. No
@@ -105,7 +105,7 @@
 - Shared workflows now have restricted operations. Delete, flush, rename are
   only allowed to owners.
   
-- Columns can now also be added from the matrix screen.
+- Columns can now also be added from the table screen.
 
 - Send email now checks for correctness of email addresses (basic check)
   

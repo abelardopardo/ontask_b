@@ -13,7 +13,7 @@ from dataops.pandas_db import (
     df_column_types_rename,
     load_table,
     get_table_data,
-    is_matrix_in_db,
+    is_table_in_db,
     get_table_queryset,
     pandas_datatype_names)
 from workflow.models import Workflow, Column
@@ -192,12 +192,12 @@ def get_table_row_by_index(workflow, cond_filter, idx):
     return dict(zip(workflow.get_column_names(), data[idx - 1]))
 
 
-def workflow_has_matrix(workflow_item):
-    return is_matrix_in_db(create_table_name(workflow_item.id))
+def workflow_has_table(workflow_item):
+    return is_table_in_db(create_table_name(workflow_item.id))
 
 
-def workflow_id_has_matrix(workflow_id):
-    return is_matrix_in_db(create_table_name(workflow_id))
+def workflow_id_has_table(workflow_id):
+    return is_table_in_db(create_table_name(workflow_id))
 
 
 def get_queryset_by_workflow(workflow_item):

@@ -85,7 +85,7 @@ def row_filter(request):
 
             # Log the event
             logs.ops.put(request.user,
-                         'matrixrow_update',
+                         'tablerow_update',
                          workflow,
                          {'id': workflow.id,
                           'name': workflow.name,
@@ -105,7 +105,7 @@ def row_filter(request):
                     where_value = value
                     break
 
-            # Get the row from the matrix
+            # Get the row from the table
             rows = pandas_db.execute_select_on_table(workflow.id,
                                                      [where_field],
                                                      [where_value])
@@ -126,7 +126,7 @@ def row_filter(request):
 @user_passes_test(is_instructor)
 def row_update(request):
     """
-    Receives a POST request to update a row in the data matrix
+    Receives a POST request to update a row in the data table
     :param request: Request object with all the data.
     :return:
     """
@@ -148,9 +148,9 @@ def row_update(request):
     if not update_key or not update_val:
         # Malformed request
         return render(request, 'error.html',
-                      {'message': 'Unable to update matrix row'})
+                      {'message': 'Unable to update table row'})
 
-    # Get the rows from the matrix
+    # Get the rows from the table
     rows = pandas_db.execute_select_on_table(workflow.id,
                                              [update_key],
                                              [update_val])
@@ -166,7 +166,7 @@ def row_update(request):
                       'dataops/row_filter.html',
                       {'workflow': workflow,
                        'row_form': row_form,
-                       'cancel_url': reverse('matrix:display')})
+                       'cancel_url': reverse('table:display')})
 
     # This is A POST request
 
@@ -209,19 +209,19 @@ def row_update(request):
 
     # Log the event
     logs.ops.put(request.user,
-                 'matrixrow_update',
+                 'tablerow_update',
                  workflow,
                  {'id': workflow.id,
                   'name': workflow.name,
                   'new_values': log_payload})
 
-    return redirect('matrix:display')
+    return redirect('table:display')
 
 
 @user_passes_test(is_instructor)
 def row_create(request):
     """
-    Receives a POST request to create a new row in the data matrix
+    Receives a POST request to create a new row in the data table
     :param request: Request object with all the data.
     :return:
     """
@@ -268,7 +268,7 @@ def row_create(request):
                                   'dataops/row_create.html',
                                   {'workflow': workflow,
                                    'form': form,
-                                   'cancel_url': reverse('matrix:display')})
+                                   'cancel_url': reverse('table:display')})
 
             # Restore the dataframe to the DB
             ops.store_dataframe_in_db(df, workflow.id)
@@ -276,17 +276,17 @@ def row_create(request):
             # Log the event
             log_payload = zip(column_names, row_vals)
             logs.ops.put(request.user,
-                         'matrixrow_create',
+                         'tablerow_create',
                          workflow,
                          {'id': workflow.id,
                           'name': workflow.name,
                           'new_values': log_payload})
 
-            # Done. Back to the matrix view
-            return redirect('matrix:display')
+            # Done. Back to the table view
+            return redirect('table:display')
 
     return render(request,
                   'dataops/row_create.html',
                   {'workflow': workflow,
                    'form': form,
-                   'cancel_url': reverse('matrix:display')})
+                   'cancel_url': reverse('table:display')})

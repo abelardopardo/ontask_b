@@ -205,7 +205,7 @@ no space between variable names and the equal sign):
 
    ```bash
      python manage.py makemigrations profiles accounts workflow dataops
-     python manage.py makemigrations matrix action email_action logs
+     python manage.py makemigrations table action email_action logs
    ```
 
 11. Execute the following command to create the database internal structure:

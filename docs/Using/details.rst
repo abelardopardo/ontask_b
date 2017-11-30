@@ -17,7 +17,7 @@ The top of the page now includes links to additional menus with operations to pe
 .. _details_add_column:
 
 Add a new column
-  Opens a dialog to create a new column in the matrix. It requires the name, type of column, a comma separated list of allowed values (optional) and a value to assign to all cells in the column (optional).
+  Opens a dialog to create a new column in the table. It requires the name, type of column, a comma separated list of allowed values (optional) and a value to assign to all cells in the column (optional).
 
   .. figure:: images/Ontask____add_column.png
      :align: center
@@ -83,7 +83,7 @@ Under the buttons to carry out these workflow operations the platform shows a su
 The Columns
 ***********
 
-The data in a workflow is stored in a structure called *a matrix* that is made of rows and colums (similar to a spreadsheet). The information about the columns is included in a table in the workflow details page.
+The data in a workflow is stored in a structure called *a table* that is made of rows and colums (similar to a spreadsheet). The information about the columns is included in a table in the workflow details page.
 
 .. figure:: images/Ontask____columns.png
    :align: center
@@ -96,4 +96,4 @@ Edit
   .. figure:: images/Ontask____columnedit.png
      :align: center
 
-  As you can see in this example, the matrix has an unusually large number of columns. The search box at the top of the table allows you to search the column names and types.
+  As you can see in this example, the table has an unusually large number of columns. The search box at the top of the table allows you to search the column names and types.

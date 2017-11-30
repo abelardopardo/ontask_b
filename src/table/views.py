@@ -25,15 +25,15 @@ def display(request):
         return redirect('workflow:index')
 
     # If there is not DF, go to workflow details.
-    if not ops.workflow_id_has_matrix(workflow.id):
+    if not ops.workflow_id_has_table(workflow.id):
         return render(request,
-                      'matrix/display.html',
+                      'table/display.html',
                       {})
 
     # Create the context with the column names
     context = {'column_names': ['Ops'] + workflow.get_column_names()}
 
-    return render(request, 'matrix/display.html', context)
+    return render(request, 'table/display.html', context)
 
 
 @user_passes_test(is_instructor)
@@ -45,8 +45,8 @@ def display_ss(request):
         return JsonResponse({'error': 'Incorrect request. Unable to process'})
 
     # If there is not DF, go to workflow details.
-    if not ops.workflow_id_has_matrix(workflow.id):
-        return JsonResponse({'error': 'There is no data in the matrix'})
+    if not ops.workflow_id_has_table(workflow.id):
+        return JsonResponse({'error': 'There is no data in the table'})
 
     # Check that the GET parameter are correctly given
     try:
@@ -94,7 +94,7 @@ def display_ss(request):
             continue
 
         ops_string = render_to_string(
-            'matrix/includes/partial_matrix_ops.html',
+            'table/includes/partial_table_ops.html',
             {'edit_url':
              reverse('dataops:rowupdate') +
              '?update_key={0}&update_val={1}'.format(key_name,
@@ -139,11 +139,11 @@ def row_delete(request):
 
     # Process the confirmed response
     if request.method == 'POST':
-        # The response will require going to the matrix display anyway
+        # The response will require going to the table display anyway
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('matrix:display')
+        data['html_redirect'] = reverse('table:display')
 
-        # if there is no key or value, flag the message and return to matrix
+        # if there is no key or value, flag the message and return to table
         # view
         if not key or not value:
             messages.error(request,
@@ -161,7 +161,7 @@ def row_delete(request):
 
     # Render the page
     data['html_form'] = render_to_string(
-        'matrix/includes/partial_row_delete.html',
+        'table/includes/partial_row_delete.html',
         {'delete_key': '?key={0}&value={1}'.format(key, value)},
         request=request
     )

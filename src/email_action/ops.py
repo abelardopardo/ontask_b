@@ -115,7 +115,7 @@ def send_messages(user,
         action.workflow.ncols += 1
         action.workflow.save()
 
-        # Initial value in the data frame and store the matrix
+        # Initial value in the data frame and store the table
         data_frame[track_col_name] = 0
         ops.store_dataframe_in_db(data_frame, action.workflow.id)
 

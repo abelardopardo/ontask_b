@@ -171,7 +171,7 @@ def column_edit(request, pk):
 @user_passes_test(is_instructor)
 def column_delete(request, pk):
     """
-    Delete a column in the matrix attached to a workflow
+    Delete a column in the table attached to a workflow
     :param request: HTTP request
     :param pk: ID of the column to delete. The workflow element is taken
      from the session.

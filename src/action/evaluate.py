@@ -64,20 +64,20 @@ def evaluate_action(action, extra_string, column_name):
     except ObjectDoesNotExist:
         cond_filter = None
 
-    # Step 3: Get the matrix data
+    # Step 3: Get the table data
     result = []
-    data_matrix = pandas_db.get_table_data(workflow.id, cond_filter)
+    data_table = pandas_db.get_table_data(workflow.id, cond_filter)
 
     # Check if the values in the email column are correct emails
     try:
-        correct_emails = all([validate_email(x[col_idx]) for x in data_matrix])
+        correct_emails = all([validate_email(x[col_idx]) for x in data_table])
         if not correct_emails:
                 # column has incorrect email addresses
                 return 'The column with email addresses has incorrect values.'
     except TypeError:
         return 'The column with email addresses has incorrect values'
 
-    for row in data_matrix:
+    for row in data_table:
 
         # Get the dict(col_name, value)
         row_values = dict(zip(col_names, row))

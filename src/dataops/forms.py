@@ -180,37 +180,37 @@ class SelectColumnUploadForm(SelectColumnForm):
 
 # Step 3 of the CSV upload: select unique keys to merge
 class SelectUniqueKeysForm(forms.Form):
-    how_merge_choices = [('left', 'only the keys in the matrix'),
+    how_merge_choices = [('left', 'only the keys in the table'),
                          ('right', 'only the new keys'),
-                         ('outer', 'the union of the matrix and new keys '
+                         ('outer', 'the union of the table and new keys '
                                    '(outer)'),
-                         ('inner', 'the intersection of the matrix and new'
+                         ('inner', 'the intersection of the table and new'
                                    ' keys (inner)')]
 
     how_dup_columns_choices = [('override', 'override columns with new data'),
                                ('rename', 'be renamed and become new columns.')]
 
-    dst_help = """This column is in the existing matrix and has values that 
+    dst_help = """This column is in the existing table and has values that 
     are unique for each row. This is one of the columns that will be used 
     to explore the upcoming data and match the rows."""
 
     src_help = """This column is in the table you are about to merge with 
-    the matrix. It has a value that is unique for each row. It is suppose to
-     have the same values as the Unique Column in Matrix. These two columns
+    the table. It has a value that is unique for each row. It is suppose to
+     have the same values as the Unique Column in Table. These two columns
     will be used to match the rows to merge the data with the existing
-    matrix."""
+    table."""
 
-    merge_help = """How the keys in the matrix and the file are used for the 
-    merge: 1) If only the keys from the matrix are used, any row in the file 
-    with a key value not in the matrix is removed (default). 2) If only the 
-    keys from the file are used, any row in the matrix with a key value not 
+    merge_help = """How the keys in the table and the file are used for the 
+    merge: 1) If only the keys from the table are used, any row in the file 
+    with a key value not in the table is removed (default). 2) If only the 
+    keys from the file are used, any row in the table with a key value not 
     in the file is removed. 3) If the union of keys is used, no row is 
     removed, but some rows will have empty values. 4) If the intersection of 
-    the keys is used, only those rows with keys in both the matrix and the 
+    the keys is used, only those rows with keys in both the table and the 
     file will be updated, the rest will be deleted."""
 
     how_dup_columns_help = """The new data has columns with names identical 
-    to those that are already part of the matrix. You may choose to override
+    to those that are already part of the table. You may choose to override
     them with the new data, or rename the new data and add them as new 
     columns."""
 
@@ -253,7 +253,7 @@ class SelectUniqueKeysForm(forms.Form):
             forms.ChoiceField(initial=dst_choice_initial,
                               choices=dst_choices,
                               required=True,
-                              label='Unique Key Column in Matrix',
+                              label='Unique Key Column in Table',
                               help_text=self.dst_help)
 
         self.fields['src_key'] = \

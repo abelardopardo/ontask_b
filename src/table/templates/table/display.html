@@ -15,16 +15,16 @@
 {% block scripts %}
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
-  <script src="{% static 'matrix/js/matrix.js' %}"></script>
+  <script src="{% static 'table/js/table.js' %}"></script>
   <script type="text/javascript">
-    if (document.getElementById("matrix-data") != null) {
+    if (document.getElementById("table-data") != null) {
         // Required for DataTables
         $(document).ready(function() {
-            $('#matrix-data').DataTable({
+            $('#table-data').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                  url: "{% url 'matrix:display_ss' %}",
+                  url: "{% url 'table:display_ss' %}",
                   type: 'POST',
                 },
                 columns: [
@@ -44,10 +44,10 @@
   </script>
 {% endblock %}
 
-{% block title %}{{ block.super }}Matrix{% endblock %}
+{% block title %}{{ block.super }}Table{% endblock %}
 
 {% block container %}
-  <div id="matrix-content" align="center" class="container-fluid"
+  <div id="table-content" align="center" class="container-fluid"
        style="padding-top:2ex;">
     <a href="{% url 'dataops:rowcreate' %}" class="btn btn-sm btn-primary">
       <span class="glyphicon glyphicon-plus"></span> Add row
@@ -58,7 +58,7 @@
       <span class="glyphicon glyphicon-plus"></span> New column
     </button>
     <table class="table display dataTable no-footer cell-border table-bordered"
-           id="matrix-data">
+           id="table-data">
       <thead>
         <tr>
           {% for cname in column_names %}

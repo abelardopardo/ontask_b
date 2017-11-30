@@ -263,7 +263,7 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
         # Get the table information (if it exist)
         context['table_info'] = None
-        if ops.workflow_id_has_matrix(self.object.id):
+        if ops.workflow_id_has_table(self.object.id):
             context['table_info'] = {
                 'num_rows': self.object.nrows,
                 'num_cols': self.object.ncols,
@@ -434,7 +434,7 @@ def column_ss(request, pk):
 
     # If there is no DF, there are no columns to show, this should be
     # detected before this is executed
-    if not ops.workflow_id_has_matrix(workflow.id):
+    if not ops.workflow_id_has_table(workflow.id):
         return JsonResponse({'error': 'There is no data in the workflow'})
 
     # Check that the GET parameter are correctly given

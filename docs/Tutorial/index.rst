@@ -9,9 +9,9 @@ Before you start the tutorial make sure you have an account in an OnTask instanc
 Remember the three central concepts in OnTask:
 
 Workflow
-  A container with the data (matrix), a set of procedures to manipulate columns, data upload and a set of actions. This container is typically associated with a course, but it could also model an entire institutional degree.
+  A container with the data (table), a set of procedures to manipulate columns, data upload and a set of actions. This container is typically associated with a course, but it could also model an entire institutional degree.
 
-Matrix
+Table
   A two-dimensional structure in which each row represents a learner, and each column a learner attribute such as the score in an assessment, class attendance, number of interventions in the discussion forum, engagement with videos, etc.
 
 Actions
@@ -25,10 +25,10 @@ The following figure represents the high level view of the tool.
 The process to create a personalised text is divided into four stages:
 
 Upload the data
-  We will use a :download:`CSV file with the learners data <../Dataset/learner_information.csv>` about several activities in a course. In this first stage you will upload the data into a matrix and identify certain special columns (those that provide a unique reference to a learner such as the learner ID)
+  We will use a :download:`CSV file with the learners data <../Dataset/learner_information.csv>` about several activities in a course. In this first stage you will upload the data into a table and identify certain special columns (those that provide a unique reference to a learner such as the learner ID)
 
-Review the data matrix
-  In this stage you will explore the values in the matrix.
+Review the data table
+  In this stage you will explore the values in the table.
 
 Create an action
   In this stage you will create an action with various conditions that will be applied to the text of a personalised email message.
@@ -83,8 +83,8 @@ Details
   Is the current page with information about the columns, data types,
   number of actions, etc.
 
-Matrix
-  Operations to visualise and manipulate the matrix (search for values,
+Table
+  Operations to visualise and manipulate the table (search for values,
   add a row, add a column)
 
 Actions
@@ -129,7 +129,7 @@ it is a *key column* (there are no repeated values in all the rows).
 .. figure:: ../Ontask_screens/06_data_csvupload_student_list.png
    :align: center
 
-The *key* columns are highlighted because a workflow must have at least one column of this type in its matrix. Select all the column (clicking in the top element labeled *load*) and click on the *Finish* button, and then back to the
+The *key* columns are highlighted because a workflow must have at least one column of this type in its table. Select all the column (clicking in the top element labeled *load*) and click on the *Finish* button, and then back to the
 *Details* page to see the summary of the information in the workflow.
 
 You can now see the information about the columns present in the workflow as
@@ -142,12 +142,12 @@ For each column you can change its name, description, type and key
 attributes, or delete it from the workflow (icons in the left most column of
 the table).
 
-Browsing the matrix
--------------------
+Browsing the table
+------------------
 
-Once the data has been uploaded, click in the *Matrix* link at the top of the screen. The following screen shows the values stored in the matrix
+Once the data has been uploaded, click in the *Table* link at the top of the screen. The following screen shows the values stored in the table
 
-   .. figure:: ../Ontask_screens/18_matrix_initial.png
+   .. figure:: ../Ontask_screens/18_table_initial.png
       :align: center
 
 Workflow Operations
@@ -169,7 +169,7 @@ the course is probably going to appear in various communications with the
 learners. If you define the attribute *Course_name* with that value, you can
 then refer to the attribute and it will be replaced by its value.
 
-.. figure:: ../Ontask_screens/20_matrix_custom_attributes_initial.png
+.. figure:: ../Ontask_screens/20_table_custom_attributes_initial.png
    :align: center
    :width: 50%
 

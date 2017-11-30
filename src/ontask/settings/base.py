@@ -106,7 +106,7 @@ INSTALLED_APPS = (
     'accounts',
     'workflow.apps.WorkflowConfig',
     'dataops.apps.DataopsConfig',
-    'matrix.apps.MatrixConfig',
+    'table.apps.TableConfig',
     'action.apps.ActionConfig',
     'email_action.apps.EmailActionConfig',
     'logs.apps.LogsConfig',

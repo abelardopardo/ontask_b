@@ -101,7 +101,7 @@ class OntaskApiTestCase(APITransactionTestCase):
         self.assertEqual(set(jattr.items()),
                          set(dattr.items()))
 
-    def compare_matrices(self, m1, m2):
+    def compare_tables(self, m1, m2):
         """
         Compares two pandas data frames
         :param m1: Pandas data frame

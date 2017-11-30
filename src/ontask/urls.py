@@ -13,7 +13,7 @@ import action.urls
 import dataops.urls
 import email_action.urls
 import logs.urls
-import matrix.urls
+import table.urls
 import profiles.urls
 import workflow.urls
 from dataops import pandas_db
@@ -46,7 +46,7 @@ urlpatterns = [
 
     url(r'^action/', include(action.urls, namespace='action')),
 
-    url(r'^matrix/', include(matrix.urls, namespace='matrix')),
+    url(r'^table/', include(table.urls, namespace='table')),
 
     url(r'^email_action/', include(email_action.urls,
                                    namespace='email_action')),
