@@ -25,7 +25,7 @@ The following figure represents the high level view of the tool.
 The process to create a personalised text is divided into four stages:
 
 Upload the data
-  We will use a :download:`CSV file with the learners data <../Dataset/learner_information.csv>`about several activities in a course. In this first stage you will upload the data into a matrix and identify certain special columns (those that provide a unique reference to a learner such as the learner ID)
+  We will use a :download:`CSV file with the learners data <../Dataset/learner_information.csv>` about several activities in a course. In this first stage you will upload the data into a matrix and identify certain special columns (those that provide a unique reference to a learner such as the learner ID)
 
 Review the data matrix
   In this stage you will explore the values in the matrix.
@@ -44,7 +44,7 @@ Create a new workflow
 Log into the tool and click in the tool icon on the top left corner of the screen. If you have an instructor account, you will see the button to create a new workflow as shown in the following figure.
 
 .. figure:: ../Ontask_screens/01_home_create_workflow.png
-:align: center
+   :align: center
 
 The icon in the top right corner next to your profile image is a link to the OnTask documentation. Click in the button to create a new workflow and enter its name and a description.
 
@@ -124,10 +124,10 @@ The next screen asks you to choose a file to upload the data.
 Choose the file :download:`learner_information.csv <../Dataset/learner_information.csv>` and proceed to the next step. The next screen shows a table with the
 name of the detected columns, the type (also automatically detected), a
 pre-filled field with the column name (in case you want to change it), and if
- it is a *key column* (there are no repeated values in all the rows).
+it is a *key column* (there are no repeated values in all the rows).
 
-   .. figure:: ../Ontask_screens/06_data_csvupload_student_list.png
-      :align: center
+.. figure:: ../Ontask_screens/06_data_csvupload_student_list.png
+   :align: center
 
 The *key* columns are highlighted because a workflow must have at least one column of this type in its matrix. Select all the column (clicking in the top element labeled *load*) and click on the *Finish* button, and then back to the
 *Details* page to see the summary of the information in the workflow.
@@ -148,12 +148,6 @@ Browsing the matrix
 Once the data has been uploaded, click in the *Matrix* link at the top of the screen. The following screen shows the values stored in the matrix
 
    .. figure:: ../Ontask_screens/18_matrix_initial.png
-      :align: center
-
-There is a search box at the top of the table to browse the content of the
-matrix.
-
-   .. figure:: ../Ontask_screens/19_matrix_search_column.png
       :align: center
 
 Workflow Operations
@@ -241,7 +235,7 @@ The next screen is the *action editor*. The functions are divided into three are
 .. figure:: ../Ontask_screens/24_action_edit.png
    :align: center
 
-Place the cursor in the text area and start the text with a salutation, then select the name of a column from the pull-down menu right above the text editor and select the column *GivenName*. The string ``{{ GivenName}} `` appears in the text area. This notation is to instruct the next steps to replace the value among double curly braces with the name of each student.
+Place the cursor in the text area and start the text with a salutation, then select the name of a column from the pull-down menu right above the text editor and select the column *GivenName*. The string `{{ GivenName}}` appears in the text area. This notation is to instruct the next steps to replace the value among double curly braces with the name of each student.
 
 Click now in the button *New* in the condition area. A form appears to
 introduce the name, description and formula. The formula may contain any
