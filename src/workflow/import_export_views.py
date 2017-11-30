@@ -42,7 +42,8 @@ def export_ask(request, format=None):
             return render(
                 request,
                 'workflow/export_done.html',
-                {'id': form.cleaned_data['include_data_and_cond']})
+                {'id': form.cleaned_data['include_data_and_cond'],
+                 'wid': workflow.id})
 
     # GET request, simply render the form
     return render(request, 'workflow/export.html', context)
