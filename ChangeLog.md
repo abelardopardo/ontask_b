@@ -1,3 +1,11 @@
+## 1.3.0
+
+### Changed
+
+- Matrix is out. Table is in. Thanks Marion
+
+- Home text next to the icon (confussing otherwise)
+
 ## 1.2.2
 
 ### Added
