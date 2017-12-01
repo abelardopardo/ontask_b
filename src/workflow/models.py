@@ -51,6 +51,7 @@ class Workflow(models.Model):
     attributes = JSONField(default=dict,
                            blank=True,
                            null=True)
+
     query_builder_ops = JSONField(default=dict,
                                   blank=True,
                                   null=True)
