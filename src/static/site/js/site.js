@@ -7,7 +7,6 @@ var set_qbuilder = function (element_id, qbuilder_options) {
     $('#builder').queryBuilder(qbuilder_options);
 };
 var insert_query = function () {
-    console.log('hi');
     if (document.getElementById("id_filter") != null) {
       formula = $('#builder').queryBuilder('getRules');
       if (formula == null || !formula['valid']) {
@@ -20,6 +19,9 @@ var insert_query = function () {
 }
 var loadForm = function () {
     var btn = $(this);
+    if ($(this).is('[class*="disabled"]')) {
+      return;
+    }
     if (document.getElementById("id_content") != null) {
       data = {'action_content': $("#id_content").summernote('code')};
     } else {
