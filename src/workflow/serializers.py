@@ -74,7 +74,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             nrows=0,
             ncols=0,
             attributes=validated_data['attributes'],
-            query_builder_ops=validated_data['query_builder_ops']
+            query_builder_ops=validated_data.get('query_builder_ops', {})
         )
         workflow_obj.save()
 
@@ -97,6 +97,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
                    'user',
                    'created',
                    'modified',
+                   'query_builder_ops',
                    'data_frame_table_name',
                    'nrows',
                    'ncols',
@@ -121,8 +122,8 @@ class WorkflowExportCompleteSerializer(WorkflowExportSerializer):
             nrows=validated_data.get('nrows', 0),
             ncols=validated_data.get('ncols', 0),
             attributes=validated_data['attributes'],
-            query_builder_ops=validated_data['query_builder_ops']
-        )
+            query_builder_ops=validated_data.get('query_builder_ops', {})
+            )
         workflow_obj.save()
 
         # Create the columns
