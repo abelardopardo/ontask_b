@@ -44,8 +44,7 @@ class ActionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Action
-        fields = ('name', 'description_text', 'n_selected_rows',
-                  'content')
+        fields = ('name', 'description_text', 'n_selected_rows', 'content')
 
 
 class ActionSerializerDeep(ActionSerializer):

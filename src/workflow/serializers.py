@@ -97,6 +97,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
                    'user',
                    'created',
                    'modified',
+                   'data_frame_table_name',
                    'nrows',
                    'ncols',
                    'session_key',
@@ -106,6 +107,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
 class WorkflowExportCompleteSerializer(WorkflowExportSerializer):
 
     data_frame = DataFramePandasField(
+        required=False,
         help_text='This field must be the Base64 encoded '
                   'result of pandas.to_pickle() function'
     )
@@ -142,9 +144,10 @@ class WorkflowExportCompleteSerializer(WorkflowExportSerializer):
 
         # Load the data frame
         data_frame = validated_data.get('data_frame', None)
-        ops.store_dataframe_in_db(data_frame, workflow_obj.id)
-        workflow_obj.data_frame_table_name = \
-            pandas_db.create_table_name(workflow_obj.pk)
+        if data_frame is not None:
+            ops.store_dataframe_in_db(data_frame, workflow_obj.id)
+            workflow_obj.data_frame_table_name = \
+                pandas_db.create_table_name(workflow_obj.pk)
         workflow_obj.save()
 
         return workflow_obj
@@ -157,6 +160,7 @@ class WorkflowExportCompleteSerializer(WorkflowExportSerializer):
                    'name',
                    'user',
                    'created',
+                   'data_frame_table_name',
                    'modified',
                    'session_key',
                    'shared')
