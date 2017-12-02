@@ -6,6 +6,13 @@
 
 - Home text next to the icon (confussing otherwise)
 
+- Fixed bug when importing a workflow without data frame and requesting to
+  upload it.
+
+- Fixed bug when editing actions in a workflow without data. Conditions and 
+  filters were incorrectly allowed to edit.
+  
+  
 ## 1.2.2
 
 ### Added

@@ -71,7 +71,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
         # Get the subset of actions specified in the context
         action_list = self.context.get('selected_actions', None)
         if action_list:
-            query_set = workflow.actions.filter()
+            query_set = workflow.actions.filter(name__in=action_list)
         else:
             query_set = workflow.actions.all()
 
