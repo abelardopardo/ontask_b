@@ -48,6 +48,7 @@ class ActionSerializer(serializers.ModelSerializer):
 
 
 class ActionSerializerDeep(ActionSerializer):
+
     conditions = ConditionSerializer(required=False, many=True)
 
     def create(self, validated_data, **kwargs):
