@@ -64,7 +64,24 @@ class WorkflowSerializer(serializers.ModelSerializer):
 
 class WorkflowExportSerializer(serializers.ModelSerializer):
 
-    actions = ActionSerializerDeep(many=True, required=False)
+    # actions = ActionSerializerDeep(many=True, required=False)
+    actions = serializers.SerializerMethodField('get_filtered_actions')
+
+    def get_filtered_actions(self, workflow):
+        # Get the subset of actions specified in the context
+        action_list = self.context.get('selected_actions', None)
+        if action_list:
+            query_set = workflow.actions.filter()
+        else:
+            query_set = workflow.actions.all()
+
+        # Serialize the content and return data
+        serializer = ActionSerializerDeep(
+            instance=query_set,
+            many=True,
+            required=False)
+
+        return serializer.data
 
     def create(self, validated_data, **kwargs):
         workflow_obj = Workflow(

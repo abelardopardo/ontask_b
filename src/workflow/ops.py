@@ -221,7 +221,7 @@ def do_import_workflow(user, name, file_item, include_data_cond):
     return None
 
 
-def do_export_workflow(workflow, include_data_cond):
+def do_export_workflow(workflow, include_data_cond, selected_actions=None):
     """
     Proceed with the workflow export.
     :param workflow: Workflow record to export
@@ -229,12 +229,15 @@ def do_export_workflow(workflow, include_data_cond):
     be included.
     :return: Page that shows a confirmation message and starts the download
     """
+    # Create the context object for the serializer
+    context = {'selected_actions': selected_actions}
+
     # Get the info to send from the serializer
     include_data = include_data_cond.lower() == 'true'
     if include_data:
-        serializer = WorkflowExportCompleteSerializer(workflow)
+        serializer = WorkflowExportCompleteSerializer(workflow, context=context)
     else:
-        serializer = WorkflowExportSerializer(workflow)
+        serializer = WorkflowExportSerializer(workflow, context=context)
 
     to_send = JSONRenderer().render(serializer.data)
 
