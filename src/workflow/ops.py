@@ -17,7 +17,8 @@ from action.models import Condition
 from dataops import formula_evaluation, pandas_db
 from .models import Workflow, Column
 from .serializers import (WorkflowExportSerializer,
-                          WorkflowExportCompleteSerializer)
+                          WorkflowCompleteSerializer,
+                          WorkflowImportSerializer)
 
 
 def lock_workflow(request, workflow):
@@ -201,22 +202,21 @@ def do_import_workflow(user, name, file_item, include_data_cond):
 
     data_in = gzip.GzipFile(fileobj=file_item)
     data = JSONParser().parse(data_in)
-    if include_data_cond:
-        workflow_data = WorkflowExportCompleteSerializer(
-            data=data,
-            context={'user': user, 'name': name}
-        )
-    else:
-        workflow_data = WorkflowExportSerializer(
-            data=data,
-            context={'user': user, 'name': name}
-        )
+    # Serialize content
+    workflow_data = WorkflowImportSerializer(
+        data=data,
+        context={'user': user,
+                 'name': name,
+                 'include_data_cond': include_data_cond}
+    )
 
     # If anything went wrong, return the string to show to the form.
     if not workflow_data.is_valid():
         return workflow_data.errors
 
+    # Save the new workflow
     workflow_data.save(user=user, name=name)
+
     # Success
     return None
 
@@ -229,13 +229,17 @@ def do_export_workflow(workflow, include_data_cond, selected_actions=None):
     be included.
     :return: Page that shows a confirmation message and starts the download
     """
+
+    # Detect if the Export should have the data included or not
+    include_data = include_data_cond.lower() == 'true'
+
     # Create the context object for the serializer
-    context = {'selected_actions': selected_actions}
+    context = {'selected_actions': selected_actions,
+               'include_data': include_data}
 
     # Get the info to send from the serializer
-    include_data = include_data_cond.lower() == 'true'
     if include_data:
-        serializer = WorkflowExportCompleteSerializer(workflow, context=context)
+        serializer = WorkflowCompleteSerializer(workflow, context=context)
     else:
         serializer = WorkflowExportSerializer(workflow, context=context)
 

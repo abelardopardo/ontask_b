@@ -24,7 +24,9 @@ def export_ask(request, format=None):
     if not workflow:
         return redirect('workflow:index')
 
-    form = WorkflowExportRequestForm(request.POST or None)
+    form = WorkflowExportRequestForm(request.POST or None,
+                                     actions=workflow.actions.all(),
+                                     put_labels=True)
 
     context = {
         'form': form,
@@ -32,17 +34,20 @@ def export_ask(request, format=None):
         'nrows': workflow.nrows,
         'ncols': workflow.ncols,
         'nactions': Action.objects.filter(workflow=workflow).count(),
-        'nconditions':
-            Condition.objects.filter(action__workflow=workflow).count(),
         'wid': workflow.id
     }
 
     if request.method == 'POST':
         if form.is_valid():
+            to_include = \
+                [str(form.cleaned_data['include_table'])]
+            for idx, a in enumerate(Action.objects.filter(workflow=workflow)):
+                if form.cleaned_data['select_%s' % idx]:
+                    to_include.append(str(a.id))
             return render(
                 request,
                 'workflow/export_done.html',
-                {'id': form.cleaned_data['include_data_and_cond'],
+                {'include': ','.join(to_include),
                  'wid': workflow.id})
 
     # GET request, simply render the form
@@ -51,13 +56,31 @@ def export_ask(request, format=None):
 
 @user_passes_test(is_instructor)
 @require_http_methods(['GET'])
-def export(request, format=None):
+def export(request):
+    """
+    This request receives a parameter include with a comma separated list. The
+    first value is a boolean stating if the data has to be included. The
+    remaining elements are the ids of the actions to include
+    :param request:
+    :return:
+    """
+
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
         return redirect('workflow:index')
 
-    response = do_export_workflow(workflow, request.GET.get('id', 'False'))
+    # Get the string encoding which elements to include in the export. Take
+    # the first one, and then process the remaining ones as ids
+    include = request.GET.get('include', 'False').split(',')
+
+    # Get the list of action ids
+    try:
+        action_ids = [int(x) for x in include[1:]]
+    except ValueError:
+        return redirect('workflow:index')
+
+    response = do_export_workflow(workflow, include[0], action_ids)
 
     return response
 
@@ -101,7 +124,7 @@ def import_workflow(request):
                 request.user,
                 form.cleaned_data['name'],
                 request.FILES['file'],
-                form.cleaned_data['include_data_and_cond'])
+                form.cleaned_data['include_table'])
             # If something went wrong, push it to the top of the page
             if status:
                 messages.error(

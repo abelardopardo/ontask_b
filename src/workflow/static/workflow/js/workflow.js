@@ -16,6 +16,10 @@ if (document.getElementById("item-table") != null) {
 }
 
 $(function () {
+  $('#checkAll').click(function () {
+       $('input:checkbox').prop('checked', this.checked);
+  });
+
   // Create Workflow
   $(".js-create-workflow").click(loadForm);
   $("#modal-item").on("submit", ".js-workflow-create-form", saveForm);

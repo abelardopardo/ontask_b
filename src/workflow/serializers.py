@@ -63,23 +63,36 @@ class WorkflowSerializer(serializers.ModelSerializer):
 
 
 class WorkflowExportSerializer(serializers.ModelSerializer):
-
-    # actions = ActionSerializerDeep(many=True, required=False)
+    """
+    This serializer is use to export Workflows and select a subset of
+    actions. Since the SerializerMethodField used for the selection is a
+    read_only field, the import is managed by a regular serializer (see
+    WorkflowImportSerializer)
+    """
     actions = serializers.SerializerMethodField('get_filtered_actions')
 
     def get_filtered_actions(self, workflow):
         # Get the subset of actions specified in the context
         action_list = self.context.get('selected_actions', None)
         if action_list:
-            query_set = workflow.actions.filter(name__in=action_list)
+            query_set = workflow.actions.filter(id__in=action_list)
         else:
             query_set = workflow.actions.all()
 
+        # Serialize the actions depending on the value of include_data
+        include_data = self.context.get('include_data', False)
+
         # Serialize the content and return data
-        serializer = ActionSerializerDeep(
-            instance=query_set,
-            many=True,
-            required=False)
+        if include_data:
+            serializer = ActionSerializerDeep(
+                instance=query_set,
+                many=True,
+                required=False)
+        else:
+            serializer = ActionSerializer(
+                instance=query_set,
+                many=True,
+                required=False)
 
         return serializer.data
 
@@ -107,22 +120,16 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Workflow
-        # These fields should not be exported, and they are irrelevant outside
-        # of the platform.
-        exclude = ('id',
-                   'name',
-                   'user',
-                   'created',
-                   'modified',
-                   'query_builder_ops',
-                   'data_frame_table_name',
-                   'nrows',
-                   'ncols',
-                   'session_key',
-                   'shared')
+        fields = ('description_text', 'attributes', 'query_builder_ops',
+                  'actions')
 
 
-class WorkflowExportCompleteSerializer(WorkflowExportSerializer):
+class WorkflowCompleteSerializer(WorkflowExportSerializer):
+    """
+    This serializer inherits from WorkflowExportSerializer and includes an
+    extra field to take care of the pandas data frame. It serves both for
+    import and export.
+    """
 
     data_frame = DataFramePandasField(
         required=False,
@@ -136,8 +143,8 @@ class WorkflowExportCompleteSerializer(WorkflowExportSerializer):
             user=self.context['user'],
             name=self.context['name'],
             description_text=validated_data['description_text'],
-            nrows=validated_data.get('nrows', 0),
-            ncols=validated_data.get('ncols', 0),
+            nrows=0,
+            ncols=0,
             attributes=validated_data['attributes'],
             query_builder_ops=validated_data.get('query_builder_ops', {})
             )
@@ -162,26 +169,28 @@ class WorkflowExportCompleteSerializer(WorkflowExportSerializer):
 
         # Load the data frame
         data_frame = validated_data.get('data_frame', None)
-        if data_frame is not None:
+        if data_frame is not None and self.context.get('include_data_cond'):
             ops.store_dataframe_in_db(data_frame, workflow_obj.id)
             workflow_obj.data_frame_table_name = \
                 pandas_db.create_table_name(workflow_obj.pk)
-        workflow_obj.save()
+            workflow_obj.save()
 
         return workflow_obj
 
     class Meta:
         model = Workflow
-        # These fields should not be exported, and they are irrelevant outside
-        # of the platform.
-        exclude = ('id',
-                   'name',
-                   'user',
-                   'created',
-                   'data_frame_table_name',
-                   'modified',
-                   'session_key',
-                   'shared')
+        fields = ('description_text', 'nrows', 'ncols', 'attributes',
+                  'query_builder_ops', 'data_frame', 'actions')
+
+
+class WorkflowImportSerializer(WorkflowCompleteSerializer):
+    """
+    This serializer simply overwrites the actions field to make it writeable.
+    The rest of the functionality is identical to the WorkflowCompleteSerializer
+    """
+
+    actions = ActionSerializerDeep(many=True, required=False)
+
 
 # from workflow.models import Workflow
 # from workflow.serializers import WorkflowSerializer, WorkflowSerializerM

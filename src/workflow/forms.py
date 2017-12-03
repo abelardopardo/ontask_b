@@ -271,18 +271,68 @@ class WorkflowImportForm(forms.Form):
         help_text='File containing a previously exported workflow')
 
     # Include data and actions?
-    include_data_and_cond = forms.BooleanField(
-        label='Include data and conditions within actions (if available)?',
+    include_table = forms.BooleanField(
+        label='Include table (if available)?',
         initial=True,
         required=False)
 
 
 class WorkflowExportRequestForm(forms.Form):
+
     # Include data and conditions?
-    include_data_and_cond = forms.BooleanField(
-        label='Include also data and conditions in export?',
+    include_table = forms.BooleanField(
+        label='Table with data',
+        label_suffix='',
         initial=True,
-        required=False)
+        required=False,
+        help_text="(Without the table, all conditions in the actions will be "
+                  "removed)")
+
+    def __init__(self, *args, **kargs):
+        """
+        Kargs contain: actions: list of action objects, put_labels: boolean
+        stating if the labels should be included in the form
+        :param args:
+        :param kargs:
+        """
+        # List of columns to process and prefix
+        self.actions = kargs.pop('actions', [])
+        self.prefix = kargs.pop('prefix', 'select_')
+
+        # Should the labels be included?
+        self.put_labels = kargs.pop('put_labels', False)
+
+        super(WorkflowExportRequestForm, self).__init__(*args, **kargs)
+
+        # Create as many fields as the given columns
+        for i, a in enumerate(self.actions):
+            # Include the labels if requested
+            if self.put_labels:
+                label = a.name
+            else:
+                label = ''
+
+            self.fields[self.prefix + '%s' % i] = forms.BooleanField(
+                label=label,
+                label_suffix='',
+                required=False,
+            )
+
+    def clean(self):
+
+        data = super(WorkflowExportRequestForm, self).clean()
+
+        marks = [data.get('include_table')]
+        for idx in range(len(self.actions)):
+            marks.append(data.get(self.prefix + '%s' % idx))
+
+        if not any(marks):
+            self.add_error(
+                None,
+                'You have to select at least one element to export'
+            )
+
+        return data
 
 
 class SharedForm(forms.Form):

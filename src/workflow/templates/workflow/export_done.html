@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block scripts %}
-  <script>location.href="{% url 'workflow:export' %}?id={{ id }}";</script>
+  <script>location.href="{% url 'workflow:export' %}?include={{ include }}";</script>
 {% endblock scripts %}
 
 {% block title %}Workflow export done{% endblock %}
