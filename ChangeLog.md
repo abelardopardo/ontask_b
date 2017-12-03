@@ -4,15 +4,23 @@
 
 - Matrix is out. Table is in. Thanks Marion
 
-- Home text next to the icon (confussing otherwise)
-
 - Fixed bug when importing a workflow without data frame and requesting to
   upload it.
 
 - Fixed bug when editing actions in a workflow without data. Conditions and 
   filters were incorrectly allowed to edit.
+
+- Polished how columns in CSV file upload are managed (internally)  
+
+### Added
+
+- New export functionality lets you choose which elements to include (table and
+  actions)
   
-  
+- Home text next to the icon (confussing otherwise)
+
+- Test for import/export functionality
+
 ## 1.2.2
 
 ### Added
