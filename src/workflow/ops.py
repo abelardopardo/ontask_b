@@ -188,7 +188,7 @@ def detach_dataframe(workflow):
     workflow.save()
 
 
-def do_import_workflow(user, name, file_item, include_data_cond):
+def do_import_workflow(user, name, file_item, include_table):
     """
     Receives a name and a file item (submitted through a form) and creates
     the structure of workflow, conditions, actions and data table.
@@ -196,7 +196,7 @@ def do_import_workflow(user, name, file_item, include_data_cond):
     :param user: User record to use for the import (own all created items)
     :param name: Workflow name (it has been checked that it does not exist)
     :param file_item: File item obtained through a form
-    :param include_data_cond: Boolean encoding if data and cond are loaded
+    :param include_table: Boolean encoding if data and cond are loaded
     :return:
     """
 
@@ -207,7 +207,7 @@ def do_import_workflow(user, name, file_item, include_data_cond):
         data=data,
         context={'user': user,
                  'name': name,
-                 'include_data_cond': include_data_cond}
+                 'include_table': include_table}
     )
 
     # If anything went wrong, return the string to show to the form.
@@ -231,14 +231,14 @@ def do_export_workflow(workflow, include_data_cond, selected_actions=None):
     """
 
     # Detect if the Export should have the data included or not
-    include_data = include_data_cond.lower() == 'true'
+    include_table = include_data_cond.lower() == 'true'
 
     # Create the context object for the serializer
     context = {'selected_actions': selected_actions,
-               'include_data': include_data}
+               'include_table': include_table}
 
     # Get the info to send from the serializer
-    if include_data:
+    if include_table:
         serializer = WorkflowCompleteSerializer(workflow, context=context)
     else:
         serializer = WorkflowExportSerializer(workflow, context=context)

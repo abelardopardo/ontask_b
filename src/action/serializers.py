@@ -34,7 +34,7 @@ class ActionSerializer(serializers.ModelSerializer):
             workflow=self.context['workflow'],
             name=validated_data['name'],
             description_text=validated_data['description_text'],
-            n_selected_rows=validated_data['n_selected_rows'],
+            n_selected_rows=0,
             content=validated_data['content']
         )
 
@@ -44,7 +44,7 @@ class ActionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Action
-        fields = ('name', 'description_text', 'n_selected_rows', 'content')
+        fields = ('name', 'description_text', 'content')
 
 
 class ActionSerializerDeep(ActionSerializer):
