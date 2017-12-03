@@ -70,6 +70,7 @@ def column_to_field(col, initial=None, required=False):
 
 # Form to select columns
 class SelectColumnForm(forms.Form):
+
     def __init__(self, *args, **kargs):
         """
         Kargs contain: columns: list of column objects, put_labels: boolean
@@ -77,8 +78,9 @@ class SelectColumnForm(forms.Form):
         :param args:
         :param kargs:
         """
-        # List of columns to process
+        # List of columns to process and prefix
         self.columns = kargs.pop('columns', [])
+        self.prefix = kargs.pop('prefix', 'upload_')
 
         # Should the labels be included?
         self.put_labels = kargs.pop('put_labels', False)
@@ -93,7 +95,7 @@ class SelectColumnForm(forms.Form):
             else:
                 label = ''
 
-            self.fields['upload_%s' % i] = forms.BooleanField(
+            self.fields[self.prefix + '_%s' % i] = forms.BooleanField(
                 label=label,
                 required=False,
             )
@@ -130,6 +132,7 @@ class UploadFileForm(forms.Form):
 
 # Step 2 of the CSV upload
 class SelectColumnUploadForm(SelectColumnForm):
+
     def __init__(self, *args, **kargs):
 
         super(SelectColumnUploadForm, self).__init__(*args, **kargs)
