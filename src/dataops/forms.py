@@ -68,39 +68,6 @@ def column_to_field(col, initial=None, required=False):
         raise Exception('Unable to process datatype', col.data_type)
 
 
-# Form to select columns
-class SelectColumnForm(forms.Form):
-
-    def __init__(self, *args, **kargs):
-        """
-        Kargs contain: columns: list of column objects, put_labels: boolean
-        stating if the labels should be included in the form
-        :param args:
-        :param kargs:
-        """
-        # List of columns to process and prefix
-        self.columns = kargs.pop('columns', [])
-        self.prefix = kargs.pop('prefix', 'upload_')
-
-        # Should the labels be included?
-        self.put_labels = kargs.pop('put_labels', False)
-
-        super(SelectColumnForm, self).__init__(*args, **kargs)
-
-        # Create as many fields as the given columns
-        for i, c in enumerate(self.columns):
-            # Include the labels if requested
-            if self.put_labels:
-                label = c.name
-            else:
-                label = ''
-
-            self.fields[self.prefix + '_%s' % i] = forms.BooleanField(
-                label=label,
-                required=False,
-            )
-
-
 # RowView manipulation form
 class RowViewForm(forms.ModelForm):
     """
@@ -130,16 +97,34 @@ class UploadFileForm(forms.Form):
                   ' package or Excel)')
 
 
-# Step 2 of the CSV upload
-class SelectColumnUploadForm(SelectColumnForm):
+# Form to select columns
+class SelectColumnUploadForm(forms.Form):
 
     def __init__(self, *args, **kargs):
+        """
+        Kargs contain:
+          column_names: list with names of the columns to upload,
+          is_key: list stating if the corresponding column is key
+        :param args:
+        :param kargs:
+        """
+
+        # Names of the columns to process and Boolean stating if they are key
+        self.column_names = kargs.pop('column_names')
+        self.is_key = kargs.pop('is_key')
 
         super(SelectColumnUploadForm, self).__init__(*args, **kargs)
 
-        # Create as new_name fields
-        for i in range(len(self.columns)):
-            self.fields['new_name_%s' % i] = forms.CharField(
+        # Create as many fields as the given columns
+        for idx, c in enumerate(self.column_names):
+
+            self.fields['upload_%s' % idx] = forms.BooleanField(
+                label='',
+                required=False,
+            )
+
+            self.fields['new_name_%s' % idx] = forms.CharField(
+                initial=c,
                 label='',
                 strip=True,
                 required=False
@@ -149,17 +134,17 @@ class SelectColumnUploadForm(SelectColumnForm):
         cleaned_data = super(SelectColumnUploadForm, self).clean()
 
         upload_list = [cleaned_data.get('upload_%s' % i, False)
-                       for i in range(len(self.columns))]
+                       for i in range(len(self.column_names))]
 
         # Check if at least a unique column has been selected
-        both_lists = zip(upload_list, self.columns)
+        both_lists = zip(upload_list, self.is_key)
         if not any([a and b for a, b in both_lists]):
             raise forms.ValidationError('No unique column specified',
                                         code='invalid')
 
         # Get list of new names
         new_names = [cleaned_data.get('new_name_%s' % i)
-                     for i in range(len(self.columns))]
+                     for i in range(len(self.column_names))]
 
         # Check that there are no spaces in the names of the selected columns
         has_space = any([' ' in new_names[i]

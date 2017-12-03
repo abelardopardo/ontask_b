@@ -26,7 +26,7 @@ def csvupload1(request):
 
     column_types: List of column types as detected by pandas
 
-    src_is_unique_column: Boolean list with src columns that are unique
+    src_is_key_column: Boolean list with src columns that are unique
 
     step_1: URL name of the first step
 
@@ -86,7 +86,7 @@ def csvupload1(request):
                     data_frame[x] = series
                 except ValueError:
                     pass
-    except Exception, e:
+    except Exception as e:
         form.add_error('file',
                        'File could not be processed ({0})'.format(e.message))
         return render(request,
@@ -107,8 +107,8 @@ def csvupload1(request):
 
     # If the data frame does not have any unique key, it is not useful (no
     # way to uniquely identify rows). There must be at least one.
-    src_is_unique_column = ops.are_unique_columns(data_frame)
-    if not any(src_is_unique_column):
+    src_is_key_column = ops.are_unique_columns(data_frame)
+    if not any(src_is_key_column):
         form.add_error(
             'file',
             'The data has no column with unique values per row. '
@@ -121,7 +121,7 @@ def csvupload1(request):
     try:
         # Get frame info with three lists: names, types and is_key
         frame_info = ops.store_upload_dataframe_in_db(data_frame, workflow.id)
-    except Exception, e:
+    except Exception as e:
         form.add_error(
             'file',
             'Sorry. This file cannot be processed.'
@@ -139,7 +139,7 @@ def csvupload1(request):
     # upload_data dictionary
     upload_data['initial_column_names'] = frame_info[0]
     upload_data['column_types'] = frame_info[1]
-    upload_data['src_is_unique_column'] = frame_info[2]
+    upload_data['src_is_key_column'] = frame_info[2]
     upload_data['step_1'] = 'dataops:csvupload1'
 
     return redirect('dataops:upload_s2')

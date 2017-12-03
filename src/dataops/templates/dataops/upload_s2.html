@@ -3,7 +3,6 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-
 {% block scripts %}
   <script src="{% static 'dataops/js/dataops.js' %}"></script>
 {% endblock %}
@@ -47,31 +46,24 @@
       </thead>
       <tbody>
         {% for item in df_info %}
-          <tr {% if item.1 %}class="success"{% endif %}>
+          <tr {% if item.4 %}class="success"{% endif %}>
             <td class="text-center" style="vertical-align: middle;">
-              <div class="checkbox">
-                <label><input type="checkbox"
-                              name="upload_{{ forloop.counter0 }}"
-                              value="on"
-                {% if item.4 %}checked{% endif %}></label>
-               </div>
+              {% render_field item.0 %}
             </td>
 
-            <td class="text-center" style="vertical-align: middle;">{{ item.2 }}</td>
+            <td class="text-center" style="vertical-align: middle;">{{ item.1 }}</td>
 
             <td class="text-center" style="vertical-align: middle;">
-              <input type="text" class="form-control"
-                     name="new_name_{{ forloop.counter0 }}"
-                     value="{{ item.3 }}">
+              {% render_field item.2 %}
             </td>
+
+            <td class="text-center"
+                style="vertical-align: middle;">{{ item.3 }}</td>
 
             <td class="text-center"
                 style="vertical-align: middle;">
-              {% if item.1 %}YES{% endif %}
+              {% if item.4 %}YES{% endif %}
             </td>
-
-            <td class="text-center"
-                style="vertical-align: middle;">{{ item.0 }}</td>
 
           </tr>
         {% endfor %}

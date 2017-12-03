@@ -26,7 +26,7 @@ def upload_s2(request):
 
     column_types: List of column types as detected by pandas
 
-    src_is_unique_column: Boolean list with src columns that are unique
+    src_is_key_column: Boolean list with src columns that are unique
 
     step_1: URL name of the first step
 
@@ -57,7 +57,7 @@ def upload_s2(request):
     try:
         initial_columns = upload_data.get('initial_column_names')
         column_types = upload_data.get('column_types')
-        src_is_unique_column = upload_data.get('src_is_unique_column')
+        src_is_key_column = upload_data.get('src_is_key_column')
     except KeyError:
         # The page has been invoked out of order
         return redirect(upload_data.get('step_1', 'dataops:list'))
@@ -74,17 +74,23 @@ def upload_s2(request):
         columns_to_upload = [False] * len(initial_columns)
         upload_data['columns_to_upload'] = columns_to_upload
 
+    # Bind the form with the received data (remember unique columns)
+    form = SelectColumnUploadForm(
+        request.POST or None,
+        column_names=rename_column_names,
+        is_key=src_is_key_column
+    )
+
+    load_fields = [f for f in form if f.name.startswith('upload_')]
+    newname_fields = [f for f in form if f.name.startswith('new_name_')]
+
     # Create one of the context elements for the form. Pack the lists so that
     # they can be iterated in the template
-    df_info = [list(i) for i in zip(column_types,
-                                    src_is_unique_column,
+    df_info = [list(i) for i in zip(load_fields,
                                     initial_columns,
-                                    rename_column_names,
-                                    columns_to_upload)]
-
-    # Bind the form with the received data (remember unique columns)
-    form = SelectColumnUploadForm(request.POST or None,
-                                  columns=src_is_unique_column)
+                                    newname_fields,
+                                    column_types,
+                                    src_is_key_column)]
 
     # Process the initial loading of the form and return
     if request.method != 'POST':
@@ -199,7 +205,7 @@ def upload_s3(request):
 
     column_types: List of column types as detected by pandas
 
-    src_is_unique_column: Boolean list with src columns that are unique
+    src_is_key_column: Boolean list with src columns that are unique
 
     step_1: URL name of the first step
 
@@ -265,9 +271,9 @@ def upload_s3(request):
     # merge (source)
     columns_to_upload = upload_data['columns_to_upload']
     src_column_names = upload_data['rename_column_names']
-    src_is_unique_column = upload_data['src_is_unique_column']
+    src_is_key_column = upload_data['src_is_key_column']
     src_unique_col_names = [v for x, v in enumerate(src_column_names)
-                            if src_is_unique_column[x] and columns_to_upload[x]]
+                            if src_is_key_column[x] and columns_to_upload[x]]
 
     # Calculate the names of columns that overlap between the two data
     # frames. It is the intersection of the column names that are not key in
@@ -280,7 +286,7 @@ def upload_s3(request):
                            # SRC Column names that are renamed, selected and not unique
                            set([x for x, y, z in zip(rename_column_names,
                                                      columns_to_upload,
-                                                     src_is_unique_column)
+                                                     src_is_key_column)
                                 if y and not z])) != set([])
 
     # Bind the form with the received data (remember unique columns and
@@ -370,7 +376,7 @@ def upload_s4(request):
 
     column_types: List of column types as detected by pandas
 
-    src_is_unique_column: Boolean list with src columns that are unique
+    src_is_key_column: Boolean list with src columns that are unique
 
     step_1: URL name of the first step
 

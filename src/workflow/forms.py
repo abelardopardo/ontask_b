@@ -295,9 +295,9 @@ class WorkflowExportRequestForm(forms.Form):
         :param args:
         :param kargs:
         """
-        # List of columns to process and prefix
+        # List of columns to process and a field prefix
         self.actions = kargs.pop('actions', [])
-        self.prefix = kargs.pop('prefix', 'select_')
+        self.field_prefix = kargs.pop('field_prefix', 'select_')
 
         # Should the labels be included?
         self.put_labels = kargs.pop('put_labels', False)
@@ -312,7 +312,7 @@ class WorkflowExportRequestForm(forms.Form):
             else:
                 label = ''
 
-            self.fields[self.prefix + '%s' % i] = forms.BooleanField(
+            self.fields[self.field_prefix + '%s' % i] = forms.BooleanField(
                 label=label,
                 label_suffix='',
                 required=False,
@@ -324,7 +324,7 @@ class WorkflowExportRequestForm(forms.Form):
 
         marks = [data.get('include_table')]
         for idx in range(len(self.actions)):
-            marks.append(data.get(self.prefix + '%s' % idx))
+            marks.append(data.get(self.field_prefix + '%s' % idx))
 
         if not any(marks):
             self.add_error(
