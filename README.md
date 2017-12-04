@@ -113,7 +113,7 @@ interpreter and you can execute the python intepreter.
 #### Download, install and configure OnTask
 
 
-1. Download or clone a copy of[OnTask](https://github.com/abelardopardo/ontask_b).
+1. Download or clone a copy of [OnTask](https://github.com/abelardopardo/ontask_b).
 
 2. Using a command interpreter, go to the OnTask folder and locate a folder
    inside it with name `requirements`. Verify that the `requirements`
