@@ -26,3 +26,5 @@ tzlocal
 psycopg2
 sphinx
 pytz
+oauth2
+ims_lti_py

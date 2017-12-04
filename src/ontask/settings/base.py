@@ -100,6 +100,7 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
     'django_summernote',
     'jquery',
+    'django_auth_lti',
 
     'core.apps.CoreConfig',
     'profiles.apps.ProfileConfig',
@@ -123,12 +124,19 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
+    'django_auth_lti.middleware_patched.MultiLTILaunchAuthMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = [
+    'django_auth_lti.backends.LTIAuthBackend',
     'django.contrib.auth.backends.RemoteUserBackend',
     'django.contrib.auth.backends.ModelBackend'
 ]
+
+LTI_OAUTH_CREDENTIALS = {
+    'test': 'secret',
+    'test2': 'reallysecret'
+}
 
 CACHES = {
     "default": {
