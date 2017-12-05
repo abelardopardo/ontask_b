@@ -245,7 +245,9 @@ def row_create(request):
             # Create the query to update the row
             columns = workflow.get_columns()
             column_names = [c.name for c in columns]
-            row_vals = [form.cleaned_data[c.name] for c in columns]
+            field_name = field_prefix + '%s'
+            row_vals = [form.cleaned_data[field_name % idx]
+                        for idx in range(len(columns))]
 
             # Load the existing df from the db
             df = pandas_db.load_from_db(workflow.id)
