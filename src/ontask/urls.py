@@ -30,6 +30,10 @@ urlpatterns = [
 
     url(r'^entry$', views.entry, name='entry'),
 
+    url(r'^lti_entry$', views.lti_entry, name='lti_entry'),
+
+    url(r'^not_authorized$', views.HomePage.as_view(), name='not_authorized'),
+
     url(r'^about/$', views.AboutPage.as_view(), name='about'),
 
     url(r'^users/', include(profiles.urls, namespace='profiles')),
