@@ -8,6 +8,9 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import generic
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django_auth_lti.decorators import lti_role_required
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 import logs.ops
 from action.models import Action
@@ -30,6 +33,13 @@ class ToBeDone(UserIsInstructor, generic.TemplateView):
 
 @login_required
 def entry(request):
+    return redirect('workflow:index')
+
+
+@csrf_exempt
+@xframe_options_exempt
+@lti_role_required(['Instructor', 'Student'])
+def lti_entry(request):
     return redirect('workflow:index')
 
 
