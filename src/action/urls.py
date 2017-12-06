@@ -29,7 +29,7 @@ urlpatterns = [
     #
     # Serve the personalised content
     #
-    url(r'^serve/$', views_action.serve, name='serve'),
+    url(r'^(?P<action_id>\d+)/serve/$', views_action.serve, name='serve'),
 
     #
     # FILTERS

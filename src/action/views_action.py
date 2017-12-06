@@ -559,7 +559,7 @@ def showurl(request, pk):
         return redirect(reverse('action:index'))
 
     # Create the text for the action
-    url_text = reverse('action:serve') + '?aid={0}'.format(action.pk)
+    url_text = reverse('action:serve', kwargs={'action_id': action.pk})
 
     # Render the page with the abolute URI
     data['html_form'] = render_to_string(
@@ -577,10 +577,9 @@ def showurl(request, pk):
 @csrf_exempt
 @xframe_options_exempt
 @lti_role_required(['Instructor', 'Student'])
-def serve(request):
+def serve(request, action_id):
     """
     View to serve the rendering of an action in a workflow for a given user.
-    - aid: Action id (must be numeric)
 
     - uatn: User attribute name. The attribute to check for authentication.
       By default this will be "email".
@@ -593,18 +592,16 @@ def serve(request):
     user_record[user_attribute_name] == user_attribute_value
 
     :param request:
+    :param action_id: Action ID to use
     :return:
     """
 
-    # Get the parameter dict
+    # Make sure it is a GET request
     if request.method == 'POST':
-        params = request.POST
-    else:
-        params = request.GET
+        raise Http404
 
     # Get the parameters
-    user_attribute_name = params.get('uatn', 'email')
-    action_id = params.get('aid', None)
+    user_attribute_name = request.GET.get('uatn', 'email')
 
     # If the id is not numeric, return 404
     if not action_id.isnumeric():
