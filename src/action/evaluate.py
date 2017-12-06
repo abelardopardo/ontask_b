@@ -2,7 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.template import Context, Template
+from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
 from validate_email import validate_email
 
@@ -54,7 +54,7 @@ def evaluate_action(action, extra_string, column_name):
         # Create a template for the extra string
         try:
             extra_template = Template(extra_string)
-        except Exception, e:
+        except Exception as e:
             return 'Syntax error detected in the subject. ' + e.message
 
     # Step 2: Get the row of data from the DB
@@ -134,7 +134,7 @@ def evaluate_row(action, row_idx):
                    workflow, etc.
     :param row_idx: Either an integer (row index), or a pair key=value to
            filter
-    :return:
+    :return: None to flag an error
     """
 
     # Step 1: Get the workflow to access the data. No need to check for
@@ -176,7 +176,7 @@ def evaluate_row(action, row_idx):
                     condition.formula,
                     row_values
                 )
-        except OntaskException, e:
+        except OntaskException as e:
             condition_anomalies.append(e.value)
 
     # If any of the variables was incorrectly evaluated, we replace the
@@ -192,7 +192,11 @@ def evaluate_row(action, row_idx):
 
     # Step 5: run the template with the given context
     # First create the template with the string stored in the action
-    template = Template(action.content)
+    try:
+        template = Template(action.content)
+    except TemplateSyntaxError as e:
+        return render_to_string('action/syntax_error.html',
+                                {'msg': e.message})
 
     # Render the text
     return template.render(Context(context))
