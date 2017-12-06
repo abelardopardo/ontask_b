@@ -5,12 +5,9 @@ import django_tables2 as tables
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from django.http import Http404
-from django.http import HttpResponse
-from django.http import JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, reverse, render
-from django.template import Context
-from django.template import Template
+from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django.views import generic
@@ -474,7 +471,7 @@ def edit_action(request, pk):
             # instead of Django.
             try:
                 Template(content).render(Context({}))
-            except Exception, e:
+            except Exception as e:
                 # Pass the django exception to the form (fingers crossed)
                 form.add_error(None, e.message)
                 return render(request, 'action/edit.html', context)
