@@ -39,8 +39,7 @@ def export_ask(request, format=None):
 
     if request.method == 'POST':
         if form.is_valid():
-            to_include = \
-                [str(form.cleaned_data['include_table'])]
+            to_include = [str(int(form.cleaned_data['include_table']))]
             for idx, a in enumerate(Action.objects.filter(workflow=workflow)):
                 if form.cleaned_data['select_%s' % idx]:
                     to_include.append(str(a.id))
@@ -56,12 +55,15 @@ def export_ask(request, format=None):
 
 @user_passes_test(is_instructor)
 @require_http_methods(['GET'])
-def export(request):
+def export(request, data):
     """
     This request receives a parameter include with a comma separated list. The
-    first value is a boolean stating if the data has to be included. The
+    first value is a 0/1 stating if the data has to be included. The
     remaining elements are the ids of the actions to include
     :param request:
+    :param data: Comma separated list of integers: First one is include: 0
+    (do not include) or 1 include data and conditions, followed by the ids of
+    the actions to include
     :return:
     """
 
@@ -70,9 +72,10 @@ def export(request):
     if not workflow:
         return redirect('workflow:index')
 
-    # Get the string encoding which elements to include in the export. Take
+    # Get the param encoding which elements to include in the export.
+    # Take
     # the first one, and then process the remaining ones as ids
-    include = request.GET.get('include', 'False').split(',')
+    include = [int(x) for x in data.split(',')]
 
     # Get the list of action ids
     try:
@@ -80,7 +83,7 @@ def export(request):
     except ValueError:
         return redirect('workflow:index')
 
-    response = do_export_workflow(workflow, include[0], action_ids)
+    response = do_export_workflow(workflow, bool(include[0]), action_ids)
 
     return response
 

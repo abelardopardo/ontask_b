@@ -30,7 +30,9 @@ urlpatterns = [
 
     url(r'^export_ask/$', import_export_views.export_ask, name='export_ask'),
 
-    url(r'^export/$', import_export_views.export, name='export'),
+    url(r'^(?P<data>\d+(,\d+)*)/export/$',
+        import_export_views.export,
+        name='export'),
 
     url(r'^import/$', import_export_views.import_workflow, name='import'),
 
@@ -42,7 +44,7 @@ urlpatterns = [
         attribute_views.attribute_create,
         name='attribute_create'),
 
-    url(r'^attribute_delete/$',
+    url(r'^(?P<pk>\d+)/attribute_delete/$',
         attribute_views.attribute_delete,
         name='attribute_delete'),
 
@@ -54,7 +56,7 @@ urlpatterns = [
         share_views.share_create,
         name='share_create'),
 
-    url(r'^share_delete/$',
+    url(r'^(?P<pk>\d+)/share_delete/$',
         share_views.share_delete,
         name='share_delete'),
 

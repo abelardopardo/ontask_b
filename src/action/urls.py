@@ -20,7 +20,9 @@ urlpatterns = [
 
     url(r'^(?P<pk>\d+)/delete/$', views_action.delete_action, name='delete'),
 
-    url(r'^(?P<pk>\d+)/preview/$', views_action.preview, name='preview'),
+    url(r'^(?P<pk>\d+)/(?P<idx>\d+)/preview/$',
+        views_action.preview,
+        name='preview'),
 
     url(r'^(?P<pk>\d+)/showurl/$', views_action.showurl, name='showurl'),
 

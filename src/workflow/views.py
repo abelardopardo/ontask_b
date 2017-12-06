@@ -118,7 +118,7 @@ class WorkflowShareTable(tables.Table):
         verbose_name='',
         orderable=False,
         template_file='workflow/includes/partial_share_operations.html',
-        get_operation_id=lambda x: x['email']
+        get_operation_id=lambda x: x['id']
     )
 
     class Meta:

@@ -11,5 +11,5 @@ urlpatterns = [
 
     url(r'^(?P<pk>\d+)$', views.request_data, name="index"),
 
-    url(r'^(?P<pk>\d+)/preview/$', views.preview, name='preview'),
+    url(r'^(?P<pk>\d+)/(?P<idx>\d+)/preview/$', views.preview, name='preview'),
 ]

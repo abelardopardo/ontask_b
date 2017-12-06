@@ -65,7 +65,7 @@
           <div style="margin: 1ex 0 1ex 0;">
             <button type="button" class="btn btn-info js-action-preview"
                     style="margin-right:2ex;"
-                    data-url="{% url 'action:preview' action.id %}?idx=1">
+                    data-url="{% url 'action:preview' action.id 1 %}">
               <span class="glyphicon glyphicon-eye-open"></span> Preview
             </button>
             <button type="submit" name="Submit" value="Save"
