@@ -263,14 +263,14 @@ Authentication
 
 OnTask comes with three default authentication mechanisms (and are used in
 the following order): LTI, ``REMOTE_USER``
- and basic authentication.
+and basic authentication.
 
 `IMS Learning Tools Interoperability (IMS-LTI) <http://www.imsglobal.org/activity/learning-tools-interoperability>`__
   LTI is a standard developed by the IMS Global Leanring Consortium to
   integrate multiple tools within a learning environment. In LTI terms,
   OnTask is configured to behave as a *tool provider* and assumes a *tool
   consumer* such as a Learning Management System to invoke its functionality.
-   Any URL in OnTask can be give nto the LTI consumer as the point of access.
+  Any URL in OnTask can be give nto the LTI consumer as the point of access.
 
   Ontask only provides two points of access for LTI requests coming from the
   consumer. One is the url with suffix ``/lti_entry`` and the second is the
