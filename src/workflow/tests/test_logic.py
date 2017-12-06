@@ -58,7 +58,7 @@ class WorkflowImportExport(test.OntaskTestCase):
         workflow = Workflow.objects.get(id=50)
 
         # Export data only
-        response = do_export_workflow(workflow, "False")
+        response = do_export_workflow(workflow, False)
 
         self.assertEqual(response.get('Content-Encoding'),
                          'application/gzip')

@@ -23,9 +23,9 @@ But as with many other applications, OnTask requires a set of additional
 applications for its execution:
 
 - Python 2.7.13 (or later)
-- Django (version 1.11.3 or later)
+- Django (version 1.11 or later)
 - Additional django modules (included in the requirements/base.txt) file
-- Redis (version 4.0.2 or later)
+- Redis (version 4.0 or later)
 - PostgreSQL (version 9.5 or later)
 
 Some of these requirements are (hopefully) properly handled by
@@ -126,14 +126,11 @@ Using the same plain text editor create a file with name ``local.env``
 in the folder ``src/ontask/settings`` with the following content (note there is
 no space between variable names and the equal sign)::
 
-   DEBUG=True
    TIME_ZONE='[YOUR LOCAL PYTHON TIME ZONE]'
    # syntax: DATABASE_URL=postgres://username:password@127.0.0.1:5432/database
    DATABASE_URL=postgres://[PSQLUSERNAME]:[PSQLPWD]@127.0.0.1:5432/ontask
    SECRET_KEY=
-
-#. If you want to run a production instance, in the first line of the file
-   change the word *True* by *False* (disables debugging information)
+   LTI_OAUTH_CREDENTIALS=key1=secret1,key2=secret2
 
 #. Open a command interpreter and execute the following python command::
 
@@ -142,7 +139,7 @@ no space between variable names and the equal sign)::
    Replace ``[YOUR LOCAL PYTHON TIME ZONE]`` in the ``local.env`` file by the
    description of your time zone produced by the previous command.
 
-#. Modify the fourth line (starting with ``DATABASE_URL=`` and change the
+#. Modify the line starting with ``DATABASE_URL=`` and change the
    field ``[PSQLUSERNAME]`` with the name of the Postgresql user created in the
    previous step (the one that could access the ontask database and run
    queries). If you decided to use a different name for the database, adjust
@@ -159,6 +156,11 @@ no space between variable names and the equal sign)::
 
      SECRET_KEY=4o93jf0572094jv...
 
+
+#. Modify the line starting with ``LTI_OAUTH_CREDENTIALS`` and include a
+comma-sepparated list of pairs key=secret for LTI authentication. See the
+section  :ref:`authentication` for more details about this type of
+authentication.
 
 #. Create a new folder with name ``logs`` in the OnTask top folder (next to
    the ``requirements`` folder). This folder **is different** from the folder
@@ -254,23 +256,55 @@ apache or similar) to make it available to a community of users. The
 instructions to make such deployment are beyond the scope of this manual but
 they are available for users to consult.
 
+.. _authentication:
+
 Authentication
 --------------
 
-OnTask comes with two default authentication mechanisms: ``REMOTE_USER`` and
-basic authentication. The `first method uses the variable REMOTE_USER <https://docs.djangoproject.com/en/1.11/howto/auth-remote-user/#authentication-using-remote-user>`__ that is assumed to be defined by an external application. This
-method is ideal for environments in which users are already authenticated and
-are redirected to the OnTask pages (for example, using SAML). If OnTask
-receives a request from a non-existent through this channel, it automatically
-and transparently creates a new user in the platform with the user name
-stored in the ``REMOTE_USER`` variable.
+OnTask comes with three default authentication mechanisms (and are used in
+the following order): LTI, ``REMOTE_USER``
+ and basic authentication.
 
-If such variable is not set in the environment, OnTask resorts to
-conventional authentication requiring email and password. These credentials
-are stored in the internal database managed by OnTask. With these two
-mechanisms, you may have two communities of users, those that are
-authenticated externally (and access the platform directly), and those that
-are authenticaticated with the credentials stored in OnTask.
+`IMS Learning Tools Interoperability (IMS-LTI) <http://www.imsglobal.org/activity/learning-tools-interoperability>`__
+  LTI is a standard developed by the IMS Global Leanring Consortium to
+  integrate multiple tools within a learning environment. In LTI terms,
+  OnTask is configured to behave as a *tool provider* and assumes a *tool
+  consumer* such as a Learning Management System to invoke its functionality.
+   Any URL in OnTask can be give nto the LTI consumer as the point of access.
+
+  Ontask only provides two points of access for LTI requests coming from the
+  consumer. One is the url with suffix ``/lti_entry`` and the second is the
+  URL provided by the actions to serve the personalised content (accessible
+  through the ``Actions`` menu.
+
+  To allow LTI access you need:
+
+  1) A tool consumer that can be configured to connect with OnTask. This type
+     of configuration is beyond the scope of this manual.
+
+  2) A set of pairs key,value in OnTask to be given to the tool consumers so
+  that together with the URL, they are ready to send the requests. The
+  key/value pairs are specified in the file ``local.env`` in the folder
+  ``src/ontask/settings`` together with other local configuration variables.
+  For example::
+
+    LTI_OAUTH_CREDENTIALS=key1=secret1,key2=secret2
+
+  If you change the values of these variables, you need to restart the server
+  so that the new credentials are in effect.
+
+  This authentication has only basic functionality and it is assumed to be
+  used only for learners (not for instructors).
+
+``REMOTE_USER``
+  The second method uses `the variable REMOTE_USER <https://docs.djangoproject.com/en/1.11/howto/auth-remote-user/#authentication-using-remote-user>`__ that is assumed to be defined by an external application. This method is ideal for environments in which users are already authenticated and are redirected to the OnTask pages (for example, using SAML). If OnTask receives a request from a non-existent user through this channel, it automatically and transparently creates a new user in the platform with the user name stored in the ``REMOTE_USER`` variable. OnTask relies on emails as the username differentiator, so if you plan to use this authentication method make sure the value of ``REMOTE_USER`` is the email.
+
+Basic authentication
+  If the variable ``REMOTE_USER`` is not set in the internal environment of
+  Django where the web requests are served, OnTask resorts to conventional
+  authentication requiring email and password. These credentials
+  are stored in the internal database managed by OnTask.
 
 There are other possibilities to handle user authentication (LDAP, AD, etc.)
-but they require ad-hoc customizations of the tool.
+but they require ad-hoc customizations in the tool and are not provided as
+out-of-the-box solutions.

@@ -58,7 +58,7 @@ TEMPLATES = [
 ]
 
 # Use 12factor inspired environment variables or from a file
-env = environ.Env()
+env = environ.Env(LTI_OAUTH_CREDENTIALS=(dict, {}))
 
 # Ideally move env file should be outside the git repo
 # i.e. BASE_DIR.parent.parent
@@ -133,10 +133,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
 
-LTI_OAUTH_CREDENTIALS = {
-    'test': 'secret',
-    'test2': 'reallysecret'
-}
+LTI_OAUTH_CREDENTIALS = env('LTI_OAUTH_CREDENTIALS')
 
 CACHES = {
     "default": {
@@ -180,16 +177,6 @@ REST_FRAMEWORK = {
         'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 100
 }
-
-# PANDAS_RENDERERS = [
-#     "rest_pandas.renderers.PandasJSONRenderer",
-#     "rest_pandas.renderers.PandasCSVRenderer",
-#     "rest_pandas.renderers.PandasTextRenderer",
-#     "rest_pandas.renderers.PandasExcelRenderer",
-#     "rest_pandas.renderers.PandasOldExcelRenderer",
-#     "rest_pandas.renderers.PandasPNGRenderer",
-#     "rest_pandas.renderers.PandasSVGRenderer",
-# ]
 
 ROOT_URLCONF = 'ontask.urls'
 
@@ -240,117 +227,6 @@ THUMBNAIL_EXTENSION = 'png'     # Or any extn for your thumbnails
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 SITE_ID = 1
-
-# SUMMERNOTE_CONFIG = {
-#     # Using SummernoteWidget - iframe mode
-#     'iframe': False,  # or set False to use SummernoteInplaceWidget - no iframe
-#     # mode
-#
-#     # Using Summernote Air-mode
-#     'airMode': False,
-#
-#     # Use native HTML tags (`<b>`, `<i>`, ...) instead of style attributes
-#     # (Firefox, Chrome only)
-#     'styleWithTags': True,
-#
-#     # Set text direction : 'left to right' is default.
-#     'direction': 'ltr',
-#
-#     # Change editor size
-#     # 'width': '100%',
-#     # 'height': '480',
-#
-#     # Use proper language setting automatically (default)
-#     'lang': None,
-#
-#     # Customize toolbar buttons
-#     # 'toolbar': [
-#     #     ['style', ['style']],
-#     #     ['style', ['bold', 'italic', 'underline', 'clear']],
-#     #     ['para', ['ul', 'ol', 'height']],
-#     #     ['insert', ['link']],
-#     # ],
-#
-#     # Need authentication while uploading attachments.
-#     'attachment_require_authentication': True,
-#
-#     # Set `upload_to` function for attachments.
-#     # 'attachment_upload_to': my_custom_upload_to_func(),
-#
-#     # Set custom storage class for attachments.
-#     # attachment_storage_class': 'my.custom.storage.class.name',
-#
-#     # Set custom model for attachments (default: 'django_summernote.Attachment')
-#     # 'attachment_model': 'my.custom.attachment.model', # must inherit
-#                                 # 'django_summernote.AbstractAttachment'
-#
-#     # Set common css/js media files
-#     # 'base_css': (
-#     #     '//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css',
-#     # ),
-#     # 'base_js': (
-#     #     '//code.jquery.com/jquery-1.9.1.min.js',
-#     #     '//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js',
-#     # ),
-#     'default_css': (
-#         os.path.join(STATIC_URL, 'django_summernote/summernote.css'),
-#         os.path.join(STATIC_URL, 'django_summernote/django_summernote.css'),
-#     ),
-#     'default_js': (
-#         os.path.join(STATIC_URL,
-#                      'django_summernote/jquery.ui.widget.js'),
-#         os.path.join(STATIC_URL,
-#                      'django_summernote/jquery.iframe-transport.js'),
-#         os.path.join(STATIC_URL,
-#                      'django_summernote/jquery.fileupload.js'),
-#         os.path.join(STATIC_URL,
-#                      'django_summernote/summernote.min.js'),
-#     ),
-#
-#     # You can also add custom css/js for SummernoteInplaceWidget.
-#     # !!! Be sure to put {{ form.media }} in template before initiate
-#     # summernote.
-#     'css_for_inplace': (
-#     ),
-#     'js_for_inplace': (
-#     ),
-#
-#     # You can disable file upload feature.
-#     'disable_upload': False,
-#
-#     # Codemirror as codeview
-#     # If any codemirror settings are defined, it will include codemirror files
-#     # automatically.
-#     'css': {
-#         '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/theme/monokai.min.css',
-#     },
-#     'codemirror': {
-#         'mode': 'htmlmixed',
-#         'lineNumbers': 'true',
-#
-#         # You have to include theme file in 'css' or 'css_for_inplace' before
-#         # using it.
-#         'theme': 'monokai',
-#     },
-#
-#     # Lazy initialize
-#     # If you want to initialize summernote at the bottom of page, set this as
-#     # True and call `initSummernote()` on your page.
-#     'lazy': True,
-#
-#     # To use external plugins,
-#     # Include them within `css` and `js`.
-#     # 'js': {
-#     #     '/some_static_folder/summernote-ext-print.js',
-#     #     '//somewhere_in_internet/summernote-plugin-name.js',
-#     # },
-#     # # You can also add custom settings in `summernote` section.
-#     # 'summernote': {
-#     #     'print': {
-#     #         'stylesheetUrl': '/some_static_folder/printable.css',
-#     #     },
-#     # }
-# }
 
 SUMMERNOTE_CONFIG = {
     'width': '100%',

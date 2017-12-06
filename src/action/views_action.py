@@ -596,12 +596,14 @@ def serve(request, action_id):
     :return:
     """
 
-    # Make sure it is a GET request
+    # Get the param dicts
     if request.method == 'POST':
-        raise Http404
+        params = request.POST
+    else:
+        params = request.GET
 
     # Get the parameters
-    user_attribute_name = request.GET.get('uatn', 'email')
+    user_attribute_name = params.get('uatn', 'email')
 
     # If the id is not numeric, return 404
     if not action_id.isnumeric():
