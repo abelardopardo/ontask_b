@@ -2,7 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 import django_tables2 as tables
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.http import Http404, HttpResponse, JsonResponse
@@ -11,11 +11,13 @@ from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django.views import generic
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.clickjacking import xframe_options_exempt
+from django.views.decorators.csrf import csrf_exempt
 
 import logs.ops
 from action.evaluate import evaluate_row
 from dataops import ops
+from django_auth_lti.decorators import lti_role_required
 from ontask.permissions import is_instructor, UserIsInstructor
 from workflow.ops import get_workflow
 from .forms import ActionForm, EditActionForm, EnableURLForm
@@ -572,8 +574,9 @@ def showurl(request, pk):
 
 # This method only requires the user to be authenticated since it is conceived
 #  to serve content that is not only for instructors.
-@login_required
-@require_http_methods(['GET'])
+@csrf_exempt
+@xframe_options_exempt
+@lti_role_required(['Instructor', 'Student'])
 def serve(request):
     """
     View to serve the rendering of an action in a workflow for a given user.
@@ -593,13 +596,15 @@ def serve(request):
     :return:
     """
 
-    # Make sure it is a GET request
+    # Get the parameter dict
     if request.method == 'POST':
-        raise Http404
+        params = request.POST
+    else:
+        params = request.GET
 
     # Get the parameters
-    user_attribute_name = request.GET.get('uatn', 'email')
-    action_id = request.GET.get('aid', None)
+    user_attribute_name = params.get('uatn', 'email')
+    action_id = params.get('aid', None)
 
     # If the id is not numeric, return 404
     if not action_id.isnumeric():
