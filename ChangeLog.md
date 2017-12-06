@@ -1,3 +1,11 @@
+## 1.3.1
+
+### Changed
+
+- Removed the use of query strings in URLs. All parameters are now path of the
+  path
+  
+
 ## 1.3.0
 
 ### Changed
