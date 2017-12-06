@@ -178,19 +178,30 @@ def attribute_create(request):
 
 
 @user_passes_test(is_instructor)
-def attribute_delete(request):
+def attribute_delete(request, pk):
+    """
+    Request to delete an attribute attached to the workflow
+    :param request: Request object
+    :param pk: number of the attribute with respect to the sorted list of items.
+    :return:
+    """
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
         return redirect('workflow:index')
 
+    # JSON answer
     data = dict()
     data['form_is_valid'] = False
-    key = request.GET.get('key', None)
 
-    if request.method == 'POST' and key is not None:
+    # Get the key
+    wf_attributes = workflow.attributes
+    key = sorted(wf_attributes.keys())[int(pk) / 2]
 
-        wf_attributes = workflow.attributes
+    if request.method == 'POST':
+        # Pop the attribute
+        # Hack, the pk has to be divided by two because it names the elements
+        # in itesm (key and value).
         val = wf_attributes.pop(key, None)
         workflow.attributes = wf_attributes
 
@@ -206,12 +217,10 @@ def attribute_delete(request):
 
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('workflow:attributes')
-    else:
-        key = request.GET['key']
 
     data['html_form'] = render_to_string(
         'workflow/includes/partial_attribute_delete.html',
-        {'key': key},
+        {'pk': pk, 'key': key},
         request=request)
 
     return JsonResponse(data)

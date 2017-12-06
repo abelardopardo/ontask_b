@@ -336,9 +336,23 @@ class WorkflowExportRequestForm(forms.Form):
 
 
 class SharedForm(forms.Form):
+    """
+    Form to ask for a user email to add to those sharing the workflow. The
+    form uses two parameters:
+    :param user: The user making the request (to detect self-sharing)
+    :param workflow: The workflow to share (to detect users already in the
+     list)
+    """
     user_email = forms.CharField(max_length=1024,
                                  strip=True,
                                  label='User email')
+
+    def __init__(self, *args, **kwargs):
+
+        self.request_user = kwargs.pop('user', None)
+        self.workflow = kwargs.pop('workflow')
+
+        super(SharedForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         data = super(SharedForm, self).clean()
@@ -349,5 +363,17 @@ class SharedForm(forms.Form):
             )
         except ObjectDoesNotExist:
             self.add_error('user_email', 'User not found')
+
+        if self.user_obj == self.request_user:
+            self.add_error(
+                'user_email',
+                "You don't need to add yourself to the share list"
+            )
+
+        if self.user_obj in self.workflow.shared.all():
+            self.add_error(
+                'user_email',
+                "User already in the list"
+            )
 
         return data

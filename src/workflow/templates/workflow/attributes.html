@@ -39,7 +39,7 @@
                 {% if forloop.counter0|divisibleby:2 %}
                   <button type="button"
                           class="btn btn-danger btn-xs js-attribute-delete"
-                          data-url="{% url 'workflow:attribute_delete' %}?key={{ field.name }}">
+                          data-url="{% url 'workflow:attribute_delete' forloop.counter0 %}">
                   <span class="glyphicon glyphicon-trash"></span>
                   </button>
                 {% endif %}

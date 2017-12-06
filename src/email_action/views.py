@@ -84,7 +84,7 @@ def request_data(request, pk):
 
 
 @user_passes_test(is_instructor)
-def preview(request, pk):
+def preview(request, pk, idx):
     """
     HTML request and the primary key of an action to preview one of its
     instances. The request must provide and additional parameter idx to
@@ -92,12 +92,14 @@ def preview(request, pk):
 
     :param request: HTML request object
     :param pk: Primary key of the an action for which to do the preview
+    :param idx: Index of the element to preview
     :return:
     """
 
     return preview_response(
         request,
         pk,
+        idx,
         'email_action/includes/partial_email_preview.html',
         'THE SUBJECT WILL BE INSERTED HERE')
 

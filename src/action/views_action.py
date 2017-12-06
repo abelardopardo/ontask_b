@@ -202,7 +202,7 @@ def save_action_form(request, form, template_name):
     return JsonResponse(data)
 
 
-def preview_response(request, pk, template, prelude=None):
+def preview_response(request, pk, idx, template, prelude=None):
     """
     HTML request and the primary key of an action to preview one of its
     instances. The request must provide and additional parameter idx to
@@ -239,11 +239,8 @@ def preview_response(request, pk, template, prelude=None):
         action.content = action_content
         action.save()
 
-    # Get the index parameter or zero if anything goes wrong
-    try:
-        idx = int(request.GET.get('idx', 1))
-    except (KeyError, ValueError):
-        idx = 1
+    # Turn the parameter into an integer
+    idx = int(idx)
 
     # Get the total number of items
     n_items = action.n_selected_rows
@@ -505,7 +502,7 @@ def edit_action(request, pk):
 
 
 @user_passes_test(is_instructor)
-def preview(request, pk):
+def preview(request, pk, idx):
     """
     HTML request and the primary key of an action to preview one of its
     instances. The request must provide and additional parameter idx to
@@ -513,11 +510,13 @@ def preview(request, pk):
 
     :param request: HTML request object
     :param pk: Primary key of the an action for which to do the preview
+    :param idx: Index of the element to preview (from the queryset)
     :return:
     """
 
     return preview_response(request,
                             pk,
+                            idx,
                             'action/includes/partial_action_preview.html')
 
 

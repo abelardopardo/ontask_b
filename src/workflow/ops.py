@@ -221,17 +221,18 @@ def do_import_workflow(user, name, file_item, include_table):
     return None
 
 
-def do_export_workflow(workflow, include_data_cond, selected_actions=None):
+def do_export_workflow(workflow, include_table, selected_actions=None):
     """
     Proceed with the workflow export.
     :param workflow: Workflow record to export
-    :param include_data_cond: Boolean encoding if data and conditions should
+    :param include_table: Boolean encoding if data and conditions should
     be included.
     :return: Page that shows a confirmation message and starts the download
     """
 
-    # Detect if the Export should have the data included or not
-    include_table = include_data_cond.lower() == 'true'
+    # If the set of actions is empty, include all of them
+    if not selected_actions:
+        selected_actions = workflow.actions.all()
 
     # Create the context object for the serializer
     context = {'selected_actions': selected_actions,

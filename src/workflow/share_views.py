@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import user_passes_test
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
@@ -31,7 +32,9 @@ def share(request):
         return redirect('workflow:detail', workflow.id)
 
     # Show the table
-    table = WorkflowShareTable(workflow.shared.values('email', 'id'))
+    table = WorkflowShareTable(
+        workflow.shared.values('email', 'id').order_by('email')
+    )
     context = {'table': table,
                'workflow': workflow}
     return render(request, 'workflow/share.html', context)
@@ -48,10 +51,13 @@ def share_create(request):
     data['form_is_valid'] = False
 
     # Create the form object with the form_fields just computed
-    form = SharedForm(request.POST or None)
+    form = SharedForm(request.POST or None,
+                      user=request.user,
+                      workflow=workflow)
 
     if request.method == 'POST':
         if form.is_valid():
+
             # proceed with the update
             workflow.shared.add(form.user_obj)
             workflow.save()
@@ -77,18 +83,22 @@ def share_create(request):
 
 
 @user_passes_test(is_instructor)
-def share_delete(request):
+def share_delete(request, pk):
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
         return redirect('workflow:index')
 
+    # If the user does not exist, go back to home page
+    try:
+        user = get_user_model().objects.get(id=pk)
+    except ObjectDoesNotExist:
+        return redirect('workflow:index')
+
     data = dict()
     data['form_is_valid'] = False
-    uemail = request.GET.get('uemail', None)
 
-    if request.method == 'POST' and uemail is not None:
-        user = get_user_model().objects.get(email=uemail)
+    if request.method == 'POST':
         workflow.shared.remove(user)
         workflow.save()
 
@@ -105,7 +115,7 @@ def share_delete(request):
 
     data['html_form'] = render_to_string(
         'workflow/includes/partial_share_delete.html',
-        {'uemail': uemail},
+        {'uid': pk, 'uemail': user.email},
         request=request)
 
     return JsonResponse(data)
