@@ -1,0 +1,8 @@
+{% load static %}
+
+<script>
+    window.globals = {
+        RESOURCE_LINK_ID: '{{ request.LTI.resource_link_id }}'
+    };
+</script>
+<script src="{% static 'django_auth_lti/js/resource_link_id.js' %}"></script>

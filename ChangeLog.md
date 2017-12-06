@@ -1,10 +1,14 @@
-## 1.3.1
+## 1.4.0
 
 ### Changed
 
 - Removed the use of query strings in URLs. All parameters are now path of the
   path
-  
+
+### Added
+
+- Support for LTI authentication (using the django-auth-lti package). More 
+information in the installation instructions.
 
 ## 1.3.0
 
