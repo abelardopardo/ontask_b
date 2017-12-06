@@ -72,8 +72,8 @@ def evaluate_action(action, extra_string, column_name):
     try:
         correct_emails = all([validate_email(x[col_idx]) for x in data_table])
         if not correct_emails:
-                # column has incorrect email addresses
-                return 'The column with email addresses has incorrect values.'
+            # column has incorrect email addresses
+            return 'The column with email addresses has incorrect values.'
     except TypeError:
         return 'The column with email addresses has incorrect values'
 

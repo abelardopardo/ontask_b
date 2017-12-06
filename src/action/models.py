@@ -86,4 +86,4 @@ class Condition(models.Model):
 
     class Meta:
         unique_together = ('action', 'name', 'is_filter')
-        ordering = ('created', )
+        ordering = ('created',)
