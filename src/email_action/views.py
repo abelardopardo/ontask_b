@@ -4,7 +4,7 @@ from __future__ import unicode_literals, print_function
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from django.shortcuts import redirect, reverse, render
+from django.shortcuts import redirect, render
 
 from action.models import Action
 from action.views_action import preview_response

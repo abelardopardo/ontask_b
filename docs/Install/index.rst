@@ -283,15 +283,15 @@ and basic authentication.
      of configuration is beyond the scope of this manual.
 
   2) A set of pairs key,value in OnTask to be given to the tool consumers so
-  that together with the URL, they are ready to send the requests. The
-  key/value pairs are specified in the file ``local.env`` in the folder
-  ``src/ontask/settings`` together with other local configuration variables.
-  For example::
+     that together with the URL, they are ready to send the requests. The
+     key/value pairs are specified in the file ``local.env`` in the folder
+     ``src/ontask/settings`` together with other local configuration variables.
+     For example::
 
-    LTI_OAUTH_CREDENTIALS=key1=secret1,key2=secret2
+       LTI_OAUTH_CREDENTIALS=key1=secret1,key2=secret2
 
-  If you change the values of these variables, you need to restart the server
-  so that the new credentials are in effect.
+     If you change the values of this variable, you need to restart the server
+     so that the new credentials are in effect.
 
   This authentication has only basic functionality and it is assumed to be
   used only for learners (not for instructors).
