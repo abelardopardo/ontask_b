@@ -25,10 +25,16 @@
 
   <p>
     <button type="button" class="btn btn-primary js-create-action"
-            data-url="{% url 'action:create' %}"
+            data-url="{% url 'action:create' 0 %}"
             data-toggle="tooltip" title="Add a new action">
       <span class="glyphicon glyphicon-plus"></span>
-        New Action
+        New Action In
+    </button>
+    <button type="button" class="btn btn-primary js-create-action"
+            data-url="{% url 'action:create' 1 %}"
+            data-toggle="tooltip" title="Add a new action out">
+      <span class="glyphicon glyphicon-plus"></span>
+        New Action Out
     </button>
   </p>
 

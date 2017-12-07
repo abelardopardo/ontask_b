@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block extrahead %}
+ {% comment %}
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+  {% endcomment %}
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+{% endblock extrahead %}
+
+{% block scripts %}
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script src="{% static 'table/js/table.js' %}"></script>
+  <script type="text/javascript">
+    if (document.getElementById("table-data") != null) {
+        // Required for DataTables
+        $(document).ready(function() {
+            $('#table-data').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                  url: "{% url 'action:run_ss' action.id %}",
+                  type: 'POST',
+                },
+                columns: [
+                  {% for c in columns %}
+                    { "data": "{{ c.name }}" },
+                  {% endfor %}
+                ],
+                "order": [0],
+                "columnDefs": [
+                    {"className": "dt-center", "targets": "_all"}
+                ]
+            });
+        });
+    }
+  </script>
+{% endblock %}
+
+{% block title %}{{ block.super }}Run Action In{% endblock %}
+
+{% block container %}
+  <div id="table-content" align="center" class="container"
+       style="padding-top:2ex;">
+    <h4 class="page-header"><strong>{{ action.name }}</strong></h4>
+    <p class="help-block">{{ action.description_text }}</p>
+    <table class="table display dataTable no-footer cell-border table-bordered"
+           id="table-data">
+      <thead>
+        <tr>
+          {% for c in columns %}
+            <th>{{ c.name }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+    </table>
+    <button type="button" class="btn btn-primary" style="margin-right:2ex;"
+            onclick="location.href='{% url 'action:index' %}'">
+      <span class="glyphicon glyphicon-triangle-left"></span> Back
+    </button>
+    <div class="modal fade" id="modal-item">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock container %}

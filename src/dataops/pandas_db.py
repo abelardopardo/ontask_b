@@ -400,7 +400,8 @@ def search_table_rows(workflow_id,
                       any_join=True,
                       order_col=None,
                       order_asc=True,
-                      column_names=None):
+                      column_names=None,
+                      pre_filter=None):
     """
     Select rows where for every (column, value) pair, column contains value (
     as in LIKE %value%, these are combined with OR if any is TRUE, or AND if
@@ -415,6 +416,8 @@ def search_table_rows(workflow_id,
     :param order_col: Order results by this column
     :param order_asd: Order results in ascending values (or descending)
     :param column_names: Optional list of column names to select
+    :param pre_filter: Optional filter condition to pre filter the query set.
+           the query is built with these terms as requirement AND the cv_tuples.
     :return: The resulting query set
     """
 
@@ -427,10 +430,19 @@ def search_table_rows(workflow_id,
     # Add the table
     query += ' FROM "{0}"'.format(create_table_name(workflow_id))
 
+    # Build the query so far appending the filter and/or the cv_tuples
     fields = []
-    likes = []
-    fields = []
+    if pre_filter or cv_tuples:
+        query += ' WHERE '
+
+    # Add to the query the suffix derived from the filter
+    if pre_filter:
+        filter_txt, filter_fields = evaluate_node_sql(pre_filter)
+        query += filter_txt
+        fields.extend(filter_fields)
+
     if cv_tuples:
+        likes = []
         for name, value, data_type in cv_tuples:
             if data_type == 'string':
                 mod_name = '("{0}" LIKE %s)'.format(name)
@@ -441,13 +453,16 @@ def search_table_rows(workflow_id,
             likes.append(mod_name)
             fields.append('%' + value + '%')
 
-        query += ' WHERE '
+        # If there is a pre-filter, the suffix needs to be "AND" with the ones
+        # just calculated
+        if pre_filter:
+            query += ' AND '
 
         # Combine the search subqueries
         if any_join:
-            query += ' OR '.join(likes)
+            query += '(' + ' OR '.join(likes) + ')'
         else:
-            query += ' AND '.join(likes)
+            query += '(' + ' AND '.join(likes) + ')'
 
     # Add the order if needed
     if order_col:

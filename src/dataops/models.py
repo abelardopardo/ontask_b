@@ -38,9 +38,6 @@ class RowView(models.Model):
                        blank=True, null=True,
                        help_text='Preselect rows satisfying this condition')
 
-    def __unicode__(self):
-        return self.name
-
     def get_absolute_url(self):
         """
         Absolute url once there is success updating the element
@@ -54,3 +51,7 @@ class RowView(models.Model):
         """
         unique_together = ('name', 'workflow')
         ordering = ('name',)
+
+    def __unicode__(self):
+        return self.name
+

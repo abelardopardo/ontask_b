@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block extrahead %}
+  <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
+  {{ form.media }}
+{% endblock extrahead %}
+
+{% block scripts %}
+  <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
+  <script src="{% static 'action/js/action.js' %}"></script>
+  <script type="text/javascript">
+    var qbuilder_options = {
+      plugins: ['bt-tooltip-errors', 'not-group'],
+      operators: ['equal', 'not_equal', 'less', 'less_or_equal',
+                  'greater', 'greater_or_equal', 'between', 'not_between',
+                  'begins_with', 'not_begins_with', 'contains', 'not_contains',
+                  'ends_with', 'not_ends_with'],
+      allow_empty: true,
+      filters: {{ query_builder_ops|safe }},
+    };
+    if (document.getElementById('id_filter') != null) {
+      window.onload = set_qbuilder('#id_filter', qbuilder_options);
+    }
+  </script>
+{% endblock %}
+
+{% block title %}{{ block.super }}Edit action in{% endblock %}
+
+{% block container %}
+<div align="center" class="container-fluid">
+  <h1 class="page-header">Action In: <strong>{{ action.name }}</strong></h1>
+  <form method="POST" action="" onsubmit="insert_query()">
+    {% csrf_token %}
+    {% if form.errors %}
+      {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+          <strong>{{ error|escape }}</strong>
+        </div>
+      {% endfor %}
+    {% endif %}
+    {% render_field form.filter class="form-control" %}
+    <h4>Filter to restrict input to some rows</h4>
+    <div id="builder" class="container"></div>
+    <h4>Columns to include in the action</h4>
+    <table class="table table-bordered" id="column-table" style="display: table-cell;">
+      <thead>
+        <tr>
+          <th class="text-center" style="vertical-align:middle;">
+            Load<br/>
+            <input type="checkbox" id="checkAll"/>
+          </th>
+          <th class="text-center" style="vertical-align:middle;">Name</th>
+          <th class="text-center" style="vertical-align:middle;">Type</th>
+          <th class="text-center" style="vertical-align:middle;">Unique</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in col_info %}
+          <tr {% if item.1.is_key %}class="success"{% endif %}>
+            <td class="text-center" style="vertical-align: middle;">{% render_field item.0 %}</td>
+            <td class="text-center" style="vertical-align: middle;">{{ item.1.name }}</td>
+            <td class="text-center" style="vertical-align: middle;">{{ item.1.data_type }}</td>
+            <td class="text-center" style="vertical-align: middle;">
+              <span class="true">{% if item.1.is_key %}✔{% else %}✘{% endif %}</span>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="text-center" style="margin-bottom:1.5ex;margin-top:1.5ex">
+      <button type="button" class="btn btn-default"
+      onclick="location.href='{% url 'action:index' %}'">Cancel</button>
+      <button class="btn btn-primary btn-space"  style="margin-right:2ex;"
+              type="Submit" name="Submit" value="Submit">
+        <span class="glyphicon glyphicon-triangle-right"></span> Save</button>
+    </div>
+  </form>
+</div>
+{% endblock container %}

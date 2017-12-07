@@ -211,16 +211,16 @@ def evaluate_node_sql(node):
 
         # Now combine
         if node['condition'] == 'AND':
-            result = '(' + \
-                     ') AND ('.join([x for x, _ in sub_pairs]) + ')'
+            result = '((' + \
+                     ') AND ('.join([x for x, _ in sub_pairs]) + '))'
         else:
-            result = '(' + \
-                     ') OR ('.join([x for x, _ in sub_pairs]) + ')'
+            result = '((' + \
+                     ') OR ('.join([x for x, _ in sub_pairs]) + '))'
         result_fields = \
             list(itertools.chain.from_iterable([x for _, x in sub_pairs]))
 
         if node.pop('not', False):
-            result = 'NOT (' + result + ')'
+            result = '(NOT (' + result + '))'
 
         return result, result_fields
 

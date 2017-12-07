@@ -47,24 +47,11 @@
       <tbody>
         {% for item in df_info %}
           <tr {% if item.4 %}class="success"{% endif %}>
-            <td class="text-center" style="vertical-align: middle;">
-              {% render_field item.0 %}
-            </td>
-
+            <td class="text-center" style="vertical-align: middle;">{% render_field item.0 %}</td>
             <td class="text-center" style="vertical-align: middle;">{{ item.1 }}</td>
-
-            <td class="text-center" style="vertical-align: middle;">
-              {% render_field item.2 %}
-            </td>
-
-            <td class="text-center"
-                style="vertical-align: middle;">{{ item.3 }}</td>
-
-            <td class="text-center"
-                style="vertical-align: middle;">
-              {% if item.4 %}YES{% endif %}
-            </td>
-
+            <td class="text-center" style="vertical-align: middle;">{% render_field item.2 %}</td>
+            <td class="text-center" style="vertical-align: middle;">{{ item.3 }}</td>
+            <td class="text-center"style="vertical-align: middle;">{% if item.4 %}YES{% endif %}</td>
           </tr>
         {% endfor %}
       </tbody>

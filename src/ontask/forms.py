@@ -34,3 +34,57 @@ class RestrictedFileField(forms.FileField):
             pass
 
         return data
+
+
+def column_to_field(col, initial=None, required=False):
+    """
+    Function that given the description of a column it generates the
+    appropriate field to be included in a form
+    :param col: Column object to use as the basis to create the field
+    :param initial: Initial value for the field
+    :param required: flag to generate the field
+    :return: Field object
+    """
+
+    if col.categories:
+        # Column has a finite set of prefixed values
+        choices = [(x, x) for x in col.categories]
+        initial = next((v for x, v in enumerate(choices) if v[0] == initial),
+                       ('', '---'))
+
+        return forms.ChoiceField(choices,
+                                 required=required,
+                                 initial=initial,
+                                 label=col.name)
+
+    # Column is open value
+    if col.data_type == 'string':
+        if not initial:
+            initial = ''
+        if not col.categories:
+            # The field does not have any categories
+            return forms.CharField(initial=initial,
+                                   label=col.name,
+                                   required=required)
+
+    elif col.data_type == 'integer':
+        return forms.IntegerField(initial=initial,
+                                  label=col.name,
+                                  required=required)
+
+    elif col.data_type == 'double':
+        return forms.FloatField(initial=initial,
+                                label=col.name,
+                                required=required)
+
+    elif col.data_type == 'boolean':
+        return forms.BooleanField(initial=initial,
+                                  label=col.name,
+                                  required=required)
+
+    elif col.data_type == 'datetime':
+        return forms.DateTimeField(initial=initial,
+                                   label=col.name,
+                                   required=required)
+    else:
+        raise Exception('Unable to process datatype', col.data_type)

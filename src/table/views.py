@@ -83,16 +83,15 @@ def display_ss(request):
         cv_tuples,
         True,
         order_col,
-        order_dir == 'asc')[start:]
+        order_dir == 'asc',
+        None
+    )[start:]
 
     # Post processing + adding operation columns and performing the search
     final_qs = []
+    items = 0  # For counting the number of elements in the result
     for row in qs:
-        if search_value and not any([search_value in str(x) for x in row]):
-            # If a search value is given, check if it is part of the row,
-            # if not skip.
-            continue
-
+        items += 1
         ops_string = render_to_string(
             'table/includes/partial_table_ops.html',
             {'edit_url':
@@ -102,9 +101,10 @@ def display_ss(request):
              'delete_key': '?key={0}&value={1}'.format(key_name, row[key_idx]),
              }
         )
-        final_qs.append(OrderedDict([('Ops', ops_string)] +
-                                    list(zip(column_names, row))))
-        if len(final_qs) == length:
+        final_qs.append(OrderedDict(
+            [('Ops', ops_string)] + zip(column_names, row))
+        )
+        if items == length:
             # We reached the number or requested elements, abandon.
             break
 

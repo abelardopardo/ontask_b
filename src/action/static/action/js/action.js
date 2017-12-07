@@ -22,6 +22,10 @@ var insertAttributeInContent = function() {
 }
 
 $(function () {
+  $('#checkAll').click(function () {    
+       $('input:checkbox').prop('checked', this.checked);    
+   });
+
   // Create Action
   $(".js-create-action").click(loadForm);
   $("#modal-item").on("submit", ".js-action-create-form", saveForm);

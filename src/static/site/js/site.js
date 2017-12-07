@@ -1,5 +1,4 @@
 var set_qbuilder = function (element_id, qbuilder_options) {
-    $(element_id).hide();
     id_formula_value = $(element_id).val();
     if (id_formula_value != "null" && id_formula_value != "{}") {
       qbuilder_options['rules'] = JSON.parse(id_formula_value);

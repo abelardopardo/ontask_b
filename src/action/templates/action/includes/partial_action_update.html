@@ -1,4 +1,5 @@
-<form method="post" action="{% url 'action:update' form.instance.pk %}" class="js-action-update-form">
+<form method="post" action="{% url 'action:update' form.instance.pk is_out %}"
+      class="js-action-update-form">
   {% csrf_token %}
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" arial-label="Close">

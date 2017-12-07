@@ -6,66 +6,12 @@ import json
 from django import forms
 
 import ontask.ontask_prefs
-from ontask.forms import RestrictedFileField
+from ontask.forms import RestrictedFileField, column_to_field
 from .models import RowView
 
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)
 field_prefix = '___ontask___upload_'
-
-
-def column_to_field(col, initial=None, required=False):
-    """
-    Function that given the description of a column it generates the
-    appropriate field to be included in a form
-    :param col: Column object to use as the basis to create the field
-    :param initial: Initial value for the field
-    :param required: flag to generate the field
-    :return: Field object
-    """
-
-    if col.categories:
-        # Column has a finite set of prefixed values
-        choices = [(x, x) for x in col.categories]
-        initial = next((v for x, v in enumerate(choices) if v[0] == initial),
-                       ('', '---'))
-
-        return forms.ChoiceField(choices,
-                                 required=required,
-                                 initial=initial,
-                                 label=col.name)
-
-    # Column is open value
-    if col.data_type == 'string':
-        if not initial:
-            initial = ''
-        if not col.categories:
-            # The field does not have any categories
-            return forms.CharField(initial=initial,
-                                   label=col.name,
-                                   required=required)
-
-    elif col.data_type == 'integer':
-        return forms.IntegerField(initial=initial,
-                                  label=col.name,
-                                  required=required)
-
-    elif col.data_type == 'double':
-        return forms.FloatField(initial=initial,
-                                label=col.name,
-                                required=required)
-
-    elif col.data_type == 'boolean':
-        return forms.BooleanField(initial=initial,
-                                  label=col.name,
-                                  required=required)
-
-    elif col.data_type == 'datetime':
-        return forms.DateTimeField(initial=initial,
-                                   label=col.name,
-                                   required=required)
-    else:
-        raise Exception('Unable to process datatype', col.data_type)
 
 
 # RowView manipulation form
@@ -97,7 +43,7 @@ class UploadFileForm(forms.Form):
                   ' package or Excel)')
 
 
-# Form to select columns
+# Form to select columns to upload and rename
 class SelectColumnUploadForm(forms.Form):
 
     def __init__(self, *args, **kargs):

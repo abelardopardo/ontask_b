@@ -4,7 +4,7 @@ from __future__ import unicode_literals, print_function
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 
-from workflow.models import Workflow
+from workflow.models import Workflow, Column
 
 
 class Action(models.Model):
@@ -35,11 +35,11 @@ class Action(models.Model):
         name='n_selected_rows',
         blank=True)
 
-    # Text to be personalised.
-    content = models.TextField(
-        default='{% comment %}Your action content here{% endcomment %}',
-        null=False,
-        blank=True)
+    # If the action is to provide information to learners
+    is_out = models.BooleanField(default=True,
+                                 verbose_name='Action is provide information',
+                                 null=False,
+                                 blank=False)
 
     # Boolean that enables the URL to be visible ot the outside.
     serve_enabled = models.BooleanField(default=False,
@@ -47,11 +47,34 @@ class Action(models.Model):
                                         null=False,
                                         blank=False)
 
+    #
+    # Field for action OUT
+    #
+    # Text to be personalised for action OUT
+    content = models.TextField(
+        default='{% comment %}Your action content here{% endcomment %}',
+        null=False,
+        blank=True)
+
+    #
+    # Fields for action IN
+    #
+    # Set of columns for the personalised action IN (subset of the matrix
+    # columns
+    columns = models.ManyToManyField(Column,
+                                    related_name='actions_in')
+
+    # Filter to select a subset of rows for action IN
+    filter = JSONField(default=dict,
+                       blank=True, null=True,
+                       help_text='Preselect rows satisfying this condition')
+
     def __str__(self):
         return self.name
 
     class Meta:
         unique_together = ('name', 'workflow')
+        ordering = ('name',)
 
 
 class Condition(models.Model):
