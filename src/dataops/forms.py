@@ -7,29 +7,10 @@ from django import forms
 
 import ontask.ontask_prefs
 from ontask.forms import RestrictedFileField, column_to_field
-from .models import RowView
 
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)
 field_prefix = '___ontask___upload_'
-
-
-# RowView manipulation form
-class RowViewForm(forms.ModelForm):
-    """
-    Form to read information about a rowview. The required property of the
-    filter field is set to False because it is enforced in the server.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(RowViewForm, self).__init__(*args, **kwargs)
-
-        # Required enforced in the server (not in the browser)
-        self.fields['filter'].required = False
-
-    class Meta:
-        model = RowView
-        fields = ('name', 'description_text', 'filter')
 
 
 # Step 1 of the CSV upload
@@ -63,7 +44,6 @@ class SelectColumnUploadForm(forms.Form):
 
         # Create as many fields as the given columns
         for idx, c in enumerate(self.column_names):
-
             self.fields['upload_%s' % idx] = forms.BooleanField(
                 label='',
                 required=False,
@@ -215,46 +195,6 @@ class SelectUniqueKeysForm(forms.Form):
                                   label='Columns with already existing names'
                                         ' will',
                                   help_text=self.merge_help)
-
-
-# Form to allow value selection through unique keys in a rowview
-class RowViewDataSearchForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-
-        # Store the columns
-        self.columns = kwargs.pop('columns')
-
-        # Get the unique keys names and types
-        self.key_cols = [x for x in self.columns if x.is_key]
-
-        # Call the super constructor
-        super(RowViewDataSearchForm, self).__init__(*args, **kwargs)
-
-        for idx, col in enumerate(self.key_cols):
-            self.fields[field_prefix + '%s' % idx] = column_to_field(col)
-
-
-# Form to enter values in a row
-class RowViewDataEntryForm(forms.Form):
-    def __init__(self, *args, **kargs):
-
-        # Store the instance
-        self.columns = kargs.pop('columns', None)
-        self.initial_values = kargs.pop('initial_values', None)
-
-        super(RowViewDataEntryForm, self).__init__(*args, **kargs)
-
-        # If no initial values have been given, replicate a list of Nones
-        if not self.initial_values:
-            self.initial_values = [None] * len(self.columns)
-
-        for idx, column in enumerate(self.columns):
-            self.fields[field_prefix + '%s' % idx] = \
-                column_to_field(column, self.initial_values[idx])
-
-            if column.is_key and self.initial_values[idx]:
-                self.fields[field_prefix + '%s' % idx].widget.attrs[
-                    'readonly'] = 'readonly'
 
 
 # Form to allow value selection through unique keys in a workflow

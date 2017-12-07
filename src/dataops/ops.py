@@ -349,7 +349,7 @@ def detect_datetime_columns(data_frame):
     """
     Given a data frame traverse the columns and those that have type "string"
     try to see if it is of type datetime. If so, apply the translation.
-    :param df:
+    :param data_frame: Pandas dataframe to detect datetime columns
     :return:
     """
     # Strip white space from all string columns and try to convert to

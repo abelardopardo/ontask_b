@@ -506,6 +506,7 @@ def preview_response(request, pk, idx, template, prelude=None):
 
     :param request: HTML request object
     :param pk: Primary key of the an action for which to do the preview
+    :param idx: Index of the reponse to preview
     :param template: Path to the template to use for the render.
     :param prelude: Optional text to include at the top of the rencering
     :return:
@@ -790,6 +791,7 @@ def run_ss(request, pk):
     Serve the AJAX requests to show the elements in the table that satisfy
     the filter and between the given limits.
     :param request:
+    :param pk: action id being run
     :return:
     """
 

@@ -34,8 +34,8 @@ def lock_workflow(request, workflow):
 
 def unlock_workflow_by_id(wid):
     """
-    Removes the session_key from the workflow
-    :param workflow:
+    Removes the session_key from the workflow with given id
+    :param wid: Workflow id
     :return:
     """
     try:
@@ -227,6 +227,7 @@ def do_export_workflow(workflow, include_table, selected_actions=None):
     :param workflow: Workflow record to export
     :param include_table: Boolean encoding if data and conditions should
     be included.
+    :param selected_actions: A subset of actions to export
     :return: Page that shows a confirmation message and starts the download
     """
 

@@ -62,7 +62,7 @@ class Action(models.Model):
     # Set of columns for the personalised action IN (subset of the matrix
     # columns
     columns = models.ManyToManyField(Column,
-                                    related_name='actions_in')
+                                     related_name='actions_in')
 
     # Filter to select a subset of rows for action IN
     filter = JSONField(default=dict,
@@ -109,4 +109,4 @@ class Condition(models.Model):
 
     class Meta:
         unique_together = ('action', 'name', 'is_filter')
-        ordering = ('created', )
+        ordering = ('created',)

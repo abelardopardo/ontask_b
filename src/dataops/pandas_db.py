@@ -414,7 +414,7 @@ def search_table_rows(workflow_id,
     :param any_join: Boolean encoding if values should be combined with OR (or
     AND)
     :param order_col: Order results by this column
-    :param order_asd: Order results in ascending values (or descending)
+    :param order_asc: Order results in ascending values (or descending)
     :param column_names: Optional list of column names to select
     :param pre_filter: Optional filter condition to pre filter the query set.
            the query is built with these terms as requirement AND the cv_tuples.

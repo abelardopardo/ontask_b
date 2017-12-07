@@ -101,7 +101,9 @@ class ColumnBasicForm(forms.ModelForm):
         label='Comma separated list of allowed values')
 
     def __init__(self, *args, **kwargs):
+
         self.workflow = kwargs.pop('workflow', None)
+        self.data_frame = None
 
         super(ColumnBasicForm, self).__init__(*args, **kwargs)
 
@@ -128,7 +130,7 @@ class ColumnBasicForm(forms.ModelForm):
             # Check that the name is not present already
             if next((c for c in self.workflow.columns.all()
                      if c.id != self.instance.id and
-                                     c.name == data['name']), None):
+                         c.name == data['name']), None):
                 # New column name collides with existing one
                 self.add_error(
                     'name',
@@ -191,6 +193,7 @@ class ColumnAddForm(ColumnBasicForm):
 
         # Try to convert the initial value ot the right type
         initial_value = data['initial_value']
+
         self.initial_valid_value = None
         if initial_value:
             try:
@@ -351,6 +354,7 @@ class SharedForm(forms.Form):
 
         self.request_user = kwargs.pop('user', None)
         self.workflow = kwargs.pop('workflow')
+        self.user_obj = None
 
         super(SharedForm, self).__init__(*args, **kwargs)
 

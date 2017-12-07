@@ -393,10 +393,8 @@ def edit_condition(request, pk):
             is_filter=False
         ).distinct().get(pk=pk)
     except (KeyError, ObjectDoesNotExist):
-        data = {}
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
-        return JsonResponse(data)
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('workflow:index')})
 
     form = ConditionForm(request.POST or None, instance=condition)
 

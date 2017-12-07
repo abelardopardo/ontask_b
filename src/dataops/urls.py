@@ -4,7 +4,7 @@ from __future__ import unicode_literals, print_function
 from django.conf.urls import url
 
 import dataops.upload
-from . import views, row_views
+from . import views
 from . import csvupload
 
 app_name = 'dataops'
@@ -15,23 +15,7 @@ urlpatterns = [
 
     url(r'^uploadmerge/$', views.uploadmerge, name="uploadmerge"),
 
-    # Row Views
-    url(r'^rowview_list/$', row_views.RowViewList.as_view(), name="rowview_list"),
-
-    url(r'^rowview_new/$', row_views.rowview_create, name="rowview_new"),
-
-    url(r'^(?P<pk>\d+)/rowview_edit/$', row_views.rowview_update,
-        name="rowview_edit"),
-
-    url(r'^(?P<pk>\d+)/rowview_delete/$', row_views.rowview_delete,
-        name="rowview_delete"),
-
-    url(r'^(?P<pk>\d+)/rowview_dattaentry/$', row_views.rowview_dataentry,
-        name="rowview_dataentry"),
-
     # Manual Data Entry
-    url(r'^rowfilter/$', views.row_filter, name="rowfilter"),
-
     url(r'^rowupdate/$', views.row_update, name="rowupdate"),
 
     url(r'^rowcreate/$', views.row_create, name="rowcreate"),

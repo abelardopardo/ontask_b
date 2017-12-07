@@ -280,14 +280,15 @@ def upload_s3(request):
     # the existing data frame and those in the source DF that are selected,
     # renamed and not unique
     rename_column_names = upload_data['rename_column_names']
-    are_overlap_cols = (
-                           # DST Column names that are not Keys
-                           (set(dst_column_names) - set(dst_is_unique_column)) &
-                           # SRC Column names that are renamed, selected and not unique
-                           set([x for x, y, z in zip(rename_column_names,
-                                                     columns_to_upload,
-                                                     src_is_key_column)
-                                if y and not z])) != set([])
+    are_overlap_cols = (  # DST Column names that are not Keys
+                               (set(dst_column_names) - set(
+                                   dst_is_unique_column)) &
+                               # SRC Column names that are renamed, selected and not
+                               #  unique
+                               set([x for x, y, z in zip(rename_column_names,
+                                                         columns_to_upload,
+                                                         src_is_key_column)
+                                    if y and not z])) != set([])
 
     # Bind the form with the received data (remember unique columns and
     # preselected keys.)'
@@ -350,7 +351,7 @@ def upload_s3(request):
                 i += 1
                 new_name = col + '_{0}'.format(i)
                 if new_name not in rename_column_names and \
-                                new_name not in dst_column_names:
+                        new_name not in dst_column_names:
                     break
             # Record the new created name in the resulting list
             autorename_column_names[idx] = new_name
@@ -539,7 +540,7 @@ def upload_s4(request):
         else:
             # Check if there was autorename
             if autorename_column_names and \
-                            autorename_column_names[idx] != x:
+                    autorename_column_names[idx] != x:
                 final_name = \
                     autorename_column_names[idx]
                 suffix = ', Automatically renamed'
