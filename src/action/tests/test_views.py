@@ -60,7 +60,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.assertIn('New Action', self.selenium.page_source)
 
         # click in the action page
-        self.selenium.find_element_by_link_text('simple action').click()
+        self.selenium.find_element_by_link_text('Edit').click()
         # Wait for the action page
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -222,7 +222,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.assertIn('New Action', self.selenium.page_source)
 
         # click in the action page
-        self.selenium.find_element_by_link_text('simple action').click()
+        self.selenium.find_element_by_link_text('Edit').click()
         # Wait for the action page
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -399,7 +399,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.assertIn('New Action', self.selenium.page_source)
 
         # Click in the page to send email
-        self.selenium.find_element_by_link_text('Send email').click()
+        self.selenium.find_element_by_link_text('Email').click()
 
         # Set the subject of the email
         self.selenium.find_element_by_id('id_subject').send_keys('Subject TXT')
@@ -472,7 +472,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.assertIn('New Action', self.selenium.page_source)
 
         # click in the action page
-        self.selenium.find_element_by_link_text('simple action').click()
+        self.selenium.find_element_by_link_text('Edit').click()
         # Wait for the action page
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
