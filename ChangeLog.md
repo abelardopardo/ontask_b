@@ -1,3 +1,18 @@
+## 2.0.0
+
+- Included new functionality to allow easy data entry. Data entry can be done
+  as "Action In" (as opposed to Action Out for sending information). With 
+  this functionality, instructors can easily enter information by hand, or 
+  even collect the information from the students.
+  
+- Clone workflow button now availabe as part of the details operations
+
+- [PENDING] Clone workflow/action/condition
+
+- [PENDING] Write the documentation for the new actions. Video? Gifs?
+
+- [PENDING] Edit values directly in the matrix through AJAX
+  
 ## 1.4.0
 
 ### Changed

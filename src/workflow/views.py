@@ -15,12 +15,14 @@ from django.utils.html import format_html
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.db import IntegrityError
 
+import action
 import logs.ops
 from action.models import Condition
 from dataops import ops, pandas_db
 from ontask.permissions import is_instructor, UserIsInstructor
-from .forms import (WorkflowForm)
+from .forms import (WorkflowForm, WorkflowCloneForm)
 from .models import Workflow, Column
 from .ops import (get_workflow,
                   unlock_workflow_by_id,
@@ -498,4 +500,75 @@ def column_ss(request, pk):
         'data': final_qs
     }
 
+    return JsonResponse(data)
+
+
+@user_passes_test(is_instructor)
+def clone(request, pk):
+
+    # Get the current workflow
+    workflow = get_workflow(request, pk)
+    if not workflow:
+        return redirect('workflow:index')
+
+    # Ajax response
+    data = dict()
+
+    # The form is false (thus needs to be rendered again, until proven
+    # otherwise
+    data['form_is_valid'] = False
+
+    form = WorkflowCloneForm(request.POST or None)
+
+    if request.method == 'POST' and form.is_valid():
+        workflow.id = None
+        workflow.name = form.cleaned_data['name']
+        try:
+            workflow.save()
+        except IntegrityError:
+            form.add_error(
+                None,
+                'There is already a workflow with this name'
+            )
+            context = {'form': form,
+                       'workflow': workflow}
+            data['html_form'] = render_to_string(
+                'workflow/includes/partial_workflow_clone.html',
+                context,
+                request=request)
+            return JsonResponse(data)
+
+        # Handle the duplicate and the initial object
+        workflow_new = workflow
+        workflow = get_workflow(request, pk)
+
+        # Clone the data frame
+        data_frame = pandas_db.load_from_db(workflow.pk)
+        ops.store_dataframe_in_db(data_frame, workflow_new.id)
+
+        # Clone actions
+        action.ops.clone([a for a in workflow.actions.all()], workflow_new)
+
+        # Done!
+        workflow_new.save()
+
+        # Log event
+        logs.ops.put(request.user,
+                     'workflow_clone',
+                     workflow_new,
+                     {'id_old': workflow_new.id,
+                      'id_new': workflow.id,
+                      'name_old': workflow_new.name,
+                      'name_new': workflow.name})
+
+        # Ok, here we can say that the form is done.
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('workflow:index')
+
+    context = {'form': form,
+               'workflow': workflow}
+    data['html_form'] = render_to_string(
+        'workflow/includes/partial_workflow_clone.html',
+         context,
+         request=request)
     return JsonResponse(data)

@@ -14,6 +14,8 @@ urlpatterns = [
 
     url(r'^create/$', views.WorkflowCreateView.as_view(), name='create'),
 
+    url(r'^(?P<pk>\d+)/clone/$', views.clone, name='clone'),
+
     url(r'^(?P<pk>\d+)/update/$', views.update, name='update'),
 
     url(r'^(?P<pk>\d+)/delete/$', views.delete, name='delete'),

@@ -3,6 +3,8 @@ from __future__ import unicode_literals, print_function
 
 from collections import OrderedDict
 
+from action.ops import serve_action_in, serve_action_out
+
 try:
     import urlparse
     from urllib import urlencode
@@ -12,10 +14,10 @@ except:  # For Python 3
 
 import django_tables2 as tables
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from django.http import Http404, HttpResponse, JsonResponse
+from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, reverse, render
 from django.template import Context, Template
 from django.template.loader import render_to_string
@@ -27,7 +29,6 @@ from django.views.decorators.http import require_http_methods
 import logs.ops
 from action.evaluate import evaluate_row
 from dataops import ops, pandas_db
-from django_auth_lti.decorators import lti_role_required
 from ontask.permissions import UserIsInstructor, is_instructor
 from workflow.ops import get_workflow
 from .forms import (
@@ -35,7 +36,6 @@ from .forms import (
     EditActionOutForm,
     EnableURLForm,
     EditActionInForm,
-    EnterActionIn,
     field_prefix
 )
 from .models import Action, Condition
@@ -926,132 +926,5 @@ def run_row(request, pk):
     user_attribute_name = request.GET.get('uatn', 'email')
 
     return serve_action_in(request, action, user_attribute_name, True)
-
-
-def serve_action_in(request, action, user_attribute_name, is_inst):
-    """
-    Function that given a request, and an action IN, it performs the lookup
-     and data input of values.
-    :param request: HTTP request
-    :param action:  Action In
-    :param user_attribute_name: The column name used to check for email
-    :param is_inst: Boolean stating if the user is instructor
-    :return:
-    """
-
-    # Get the attribute value
-    if is_inst:
-        user_attribute_value = request.GET.get('uatv', None)
-    else:
-        user_attribute_value = request.user.email
-
-    # Get the columns attached to the action
-    columns = action.columns.all()
-
-    # Get the row values. User_instance has the record used for verification
-    row_pairs = pandas_db.get_table_row_by_key(
-        action.workflow,
-        None,
-        (user_attribute_name, user_attribute_value),
-        [c.name for c in columns]
-    )
-
-    # If the data has not been found, flag
-    if not row_pairs:
-        if not is_inst:
-            return render(request, '404.html', {})
-
-        messages.error(request,
-                       'Data not found in the table')
-        return redirect(reverse('action:run', kwargs={'pk': action.id }))
-
-    # Bind the form with the existing data
-    form = EnterActionIn(request.POST or None,
-                         columns=columns,
-                         values=row_pairs.values())
-    # Create the context
-    context = {'form': form, 'action': action}
-
-    if request.method == 'GET' or not form.is_valid():
-        return render(request, 'action/run_row.html', context)
-
-    # Correct POST request!
-    if not form.has_changed():
-        if not is_inst:
-            return render(request, 'thanks.html', {})
-
-        return redirect(reverse('action:run', kwargs={'pk': action.id}))
-
-    # Post with different data. # Update content in the DB
-    set_fields = []
-    set_values = []
-    where_field = None
-    where_value = None
-    log_payload = []
-    # Create the SET name = value part of the query
-    for idx, column in enumerate(columns):
-        value = form.cleaned_data[field_prefix + '%s' % idx]
-        if column.is_key:
-            if not where_field:
-                # Remember one unique key for selecting the row
-                where_field = column.name
-                where_value = value
-            continue
-
-        set_fields.append(column.name)
-        set_values.append(value)
-        log_payload.append((column.name, value))
-
-    pandas_db.update_row(action.workflow.id,
-                         set_fields,
-                         set_values,
-                         [where_field],
-                         [where_value])
-
-    # Log the event
-    logs.ops.put(request.user,
-                 'tablerow_update',
-                 action.workflow,
-                 {'id': action.workflow.id,
-                  'name': action.workflow.name,
-                  'new_values': log_payload})
-
-    # If not instructor, just thank the user!
-    if not is_inst:
-        return render(request, 'thanks.html', {})
-
-    # Back to running the action
-    return redirect(reverse('action:run', kwargs={'pk': action.id}))
-
-
-def serve_action_out(user, action, user_attribute_name):
-    """
-    Function that given a user and an Action Out
-    searches for the appropriate data in the table with the given
-    attribute name equal to the user email and returns the HTTP response.
-    :param user: User object making the request
-    :param action: Action to execute (action out)
-    :param user_attribute_name: Column to check for email
-    :return:
-    """
-    # User_instance has the record used for verification
-    action_content = evaluate_row(action, (user_attribute_name,
-                                           user.email))
-
-    # If the action content is empty, forget about it
-    if action_content is None:
-        raise Http404
-
-    # Log the event
-    logs.ops.put(
-        user,
-        'action_served_execute',
-        workflow=action.workflow,
-        payload={'action': action.name,
-                 'action_id': action.id}
-    )
-
-    # Respond the whole thing
-    return HttpResponse(action_content)
 
 
