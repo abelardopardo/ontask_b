@@ -7,7 +7,7 @@
   
 - Clone functionality for workflows, actions and conditions. 
 
-- Write the documentation for the new actions. Video? Gifs?
+- Write the documentation for the new actions.
 
 ## 1.4.0
 
