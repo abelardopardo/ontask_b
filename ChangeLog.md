@@ -4,6 +4,9 @@
 
 - Edit columns from the table display
 
+- Columns now have an active from-to window with a datetime. If they are 
+  inactive, they are ignored when running Actions In
+  
 ## 2.0.0
 
 ### Added
