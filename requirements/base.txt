@@ -28,3 +28,4 @@ Sphinx==1.6.3
 pytz==2017.3
 oauth2==1.9.0.post1
 ims-lti-py==0.6
+django-datetime-widget==0.9.3

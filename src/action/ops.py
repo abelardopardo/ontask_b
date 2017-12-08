@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+import datetime
+import pytz
+from django.conf import settings
 from django.contrib import messages
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
@@ -30,8 +33,8 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
     else:
         user_attribute_value = request.user.email
 
-    # Get the columns attached to the action
-    columns = action.columns.all()
+    # Get the active columns attached to the action
+    columns = [c for c in action.columns.all() if c.is_active]
 
     # Get the row values. User_instance has the record used for verification
     row_pairs = pandas_db.get_table_row_by_key(

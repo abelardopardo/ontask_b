@@ -3,7 +3,8 @@ from __future__ import unicode_literals, print_function
 
 from collections import OrderedDict
 
-from django.db import IntegrityError
+import datetime
+import pytz
 
 try:
     import urlparse
@@ -25,6 +26,7 @@ from django.views import generic
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.conf import settings
 
 import logs.ops
 from action.evaluate import evaluate_row
@@ -778,10 +780,12 @@ def run(request, pk):
     if action.is_out:
         return redirect('action:index')
 
+    # Get the active columns attached to the action
+    columns = [c for c in action.columns.all() if c.is_active]
+
     return render(request,
                   'action/run.html',
-                  {'columns': action.columns.all(),
-                   'action': action})
+                  {'columns': columns, 'action': action})
 
 
 @user_passes_test(is_instructor)
@@ -972,6 +976,7 @@ def clone(request, pk):
     messages.success(request,
                      'Action successfully cloned.')
     return redirect(reverse('action:index'))
+
 
 @login_required
 def thanks(request):

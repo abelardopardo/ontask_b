@@ -4,15 +4,21 @@ from __future__ import unicode_literals, print_function
 import json
 
 import pandas as pd
+from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 
 from dataops import pandas_db, ops
-from ontask import is_legal_var_name
-from ontask import ontask_prefs
+from ontask import is_legal_var_name, ontask_prefs
 from ontask.forms import RestrictedFileField
 from .models import Workflow, Column
+
+# Options for the datetime picker used in column forms
+dateTimeOptions = {
+    'weekStart': 1,  # Start week on Monday
+    'minuteStep': 5,  # Minute step
+}
 
 
 class WorkflowForm(forms.ModelForm):
@@ -130,7 +136,7 @@ class ColumnBasicForm(forms.ModelForm):
             # Check that the name is not present already
             if next((c for c in self.workflow.columns.all()
                      if c.id != self.instance.id and
-                         c.name == data['name']), None):
+                        c.name == data['name']), None):
                 # New column name collides with existing one
                 self.add_error(
                     'name',
@@ -159,8 +165,8 @@ class ColumnBasicForm(forms.ModelForm):
                 # these categories (only if the column is being edited, though
                 if self.instance.name and \
                         not all([x in valid_values
-                                for x in self.data_frame[self.instance.name]
-                                if x and not pd.isnull(x)]):
+                                 for x in self.data_frame[self.instance.name]
+                                 if x and not pd.isnull(x)]):
                     self.add_error(
                         'raw_categories',
                         'The values in the column are not compatible with ' +
@@ -172,11 +178,34 @@ class ColumnBasicForm(forms.ModelForm):
 
             self.instance.set_categories(valid_values)
 
+        # Check the datetimes. One needs to be after the other
+        a_from = self.cleaned_data['active_from']
+        a_to = self.cleaned_data['active_to']
+        if a_from and a_to and a_from >= a_to:
+            self.add_error(
+                'active_from',
+                'Incorrect date/time window'
+            )
+            self.add_error(
+                'active_to',
+                'Incorrect date/time window'
+            )
+
         return data
 
     class Meta:
         model = Column
-        fields = ['name', 'description_text', 'data_type', 'raw_categories']
+        fields = ['name', 'description_text', 'data_type', 'raw_categories',
+                  'active_from', 'active_to']
+
+        widgets = {
+            'active_from': DateTimeWidget(options=dateTimeOptions,
+                                          usel10n=True,
+                                          bootstrap_version=3),
+            'active_to': DateTimeWidget(options=dateTimeOptions,
+                                        usel10n=True,
+                                        bootstrap_version=3)
+        }
 
 
 class ColumnAddForm(ColumnBasicForm):
@@ -212,7 +241,17 @@ class ColumnAddForm(ColumnBasicForm):
 
     class Meta:
         model = Column
-        fields = ('name', 'description_text', 'data_type')
+        fields = ['name', 'description_text', 'data_type', 'active_from',
+                  'active_to']
+
+        widgets = {
+            'active_from': DateTimeWidget(options=dateTimeOptions,
+                                          usel10n=True,
+                                          bootstrap_version=3),
+            'active_to': DateTimeWidget(options=dateTimeOptions,
+                                        usel10n=True,
+                                        bootstrap_version=3)
+        }
 
 
 class ColumnRenameForm(ColumnBasicForm):
@@ -254,7 +293,17 @@ class ColumnRenameForm(ColumnBasicForm):
 
     class Meta:
         model = Column
-        fields = ('name', 'description_text', 'data_type', 'is_key')
+        fields = ['name', 'description_text', 'data_type', 'is_key',
+                  'active_from', 'active_to']
+
+        widgets = {
+            'active_from': DateTimeWidget(options=dateTimeOptions,
+                                          usel10n=True,
+                                          bootstrap_version=3),
+            'active_to': DateTimeWidget(  # options=dateTimeOptions,
+                usel10n=True,
+                bootstrap_version=3)
+        }
 
 
 class WorkflowImportForm(forms.Form):
@@ -281,7 +330,6 @@ class WorkflowImportForm(forms.Form):
 
 
 class WorkflowExportRequestForm(forms.Form):
-
     # Include data and conditions?
     include_table = forms.BooleanField(
         label='Table with data',

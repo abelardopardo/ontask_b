@@ -6,13 +6,12 @@
 {% load widget_tweaks %}
 
 {% block extrahead %}
- {% comment %}
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
-  {% endcomment %}
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 
 {% block scripts %}
+  <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
   <script src="{% static 'table/js/table.js' %}{% otv %}"></script>
@@ -76,7 +75,14 @@
         <tr>
           <th>Ops</th>
           {% for col in columns %}
-            <th>{{ col.data_type }}</th>
+            <th>
+              {{ col.data_type }} <br/>
+              {% if col.is_active %}
+              <font color="green">Active</font>
+              {% else %}
+              <font color="red">Inactive</font>
+              {% endif %}
+            </th>
           {% endfor %}
         </tr>
       </thead>

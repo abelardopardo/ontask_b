@@ -101,6 +101,7 @@ INSTALLED_APPS = (
     'django_summernote',
     'jquery',
     'django_auth_lti',
+    'datetimewidget',
 
     'core.apps.CoreConfig',
     'profiles.apps.ProfileConfig',
@@ -125,6 +126,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
+    'django.middleware.locale.LocaleMiddleware'
 )
 
 AUTHENTICATION_BACKENDS = [
