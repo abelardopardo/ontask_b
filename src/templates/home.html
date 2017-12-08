@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load settings %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 
@@ -86,6 +86,6 @@
 {% endblock container %}
 
 {% block scripts %}
-<script src="{% static 'site/js/site.js' %}"></script>
+<script src="{% static 'site/js/site.js' %}{% otv %}"></script>
 {% endblock scripts %}
 

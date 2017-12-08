@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-
+{% load settings %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 
 {% block scripts %}
-  <script src="{% static 'email_action/js/email_action.js' %}"></script>
+  <script src="{% static 'email_action/js/email_action.js' %}{% otv %}"></script>
 {% endblock scripts %}
 
 {% block title %}{{ block.super }}Email action{% endblock %}

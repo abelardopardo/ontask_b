@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-
+{% load settings %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 
 {% block scripts %}
-  <script src="{% static 'dataops/js/dataops.js' %}"></script>
+  <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
 {% endblock %}
 
 {% block title %}{{ block.super }}Select Columns ot Upload/Merge{% endblock %}

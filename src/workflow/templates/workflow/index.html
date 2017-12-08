@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load settings %}
 {% load static %}
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
@@ -10,7 +10,7 @@
 {% endblock extrahead %}
 
 {% block scripts %}
-  <script src="{% static 'workflow/js/workflow.js' %}"></script>
+  <script src="{% static 'workflow/js/workflow.js' %}{% otv %}"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 {% endblock %}

@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-
+{% load settings %}
 {% load static %}
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 
 {% block scripts %}
-  <script src="{% static 'action/js/action.js' %}"></script>
+  <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
 {% endblock %}
 
 {% block title %}{{ block.super }}Enter Data{% endblock %}

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load settings %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
@@ -11,7 +11,7 @@
 
 {% block scripts %}
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
-  <script src="{% static 'action/js/action.js' %}"></script>
+  <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
   <script type="text/javascript">
     var qbuilder_options = {
       plugins: ['bt-tooltip-errors', 'not-group'],

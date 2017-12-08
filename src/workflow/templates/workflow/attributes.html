@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-
+{% load settings %}
 {% load static %}
 {% load widget_tweaks %}
 {% load crispy_forms_tags %}
 
 {% block scripts %}
-  <script src="{% static 'workflow/js/workflow.js' %}"></script>
+  <script src="{% static 'workflow/js/workflow.js' %}{% otv %}"></script>
 {% endblock %}
 
 {% block title %}{{ block.super }}{{ workflow.name }}{% endblock %}

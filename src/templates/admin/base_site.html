@@ -1,4 +1,5 @@
 {% extends "admin/base.html" %}
+{% load settings %}
 {% load i18n %}{% load admin_static bootstrapped_goodies_tags %}
 
 {% block title %}{% include "_brandname.html" %} Admin{% endblock %}
@@ -12,6 +13,6 @@
 {% endblock %}
 
 {% block extrahead %}{{ block.super }}
-  <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
+  <link href="{% static 'site/css/main.css' %}{% otv %}" rel="stylesheet">
 {% endblock %}
 
