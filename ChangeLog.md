@@ -7,10 +7,8 @@
   
 - Clone functionality for workflows, actions and conditions. 
 
-- [PENDING] Write the documentation for the new actions. Video? Gifs?
+- Write the documentation for the new actions. Video? Gifs?
 
-- [PENDING] Edit values directly in the matrix through AJAX
-  
 ## 1.4.0
 
 ### Changed
