@@ -54,8 +54,14 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
     form = EnterActionIn(request.POST or None,
                          columns=columns,
                          values=row_pairs.values())
+
+    if is_inst:
+        cancel_url = reverse('action:run', kwargs={'pk': action.id})
+    else:
+        cancel_url = reverse('action:thanks')
+
     # Create the context
-    context = {'form': form, 'action': action}
+    context = {'form': form, 'action': action, 'cancel_url': cancel_url}
 
     if request.method == 'GET' or not form.is_valid():
         return render(request, 'action/run_row.html', context)
@@ -63,7 +69,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
     # Correct POST request!
     if not form.has_changed():
         if not is_inst:
-            return render(request, 'thanks.html', {})
+            return redirect(reverse('action:thanks'))
 
         return redirect(reverse('action:run', kwargs={'pk': action.id}))
 

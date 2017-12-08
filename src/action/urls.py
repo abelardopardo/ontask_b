@@ -49,6 +49,9 @@ urlpatterns = [
     # learner!!
     url(r'^(?P<pk>\d+)/run_row/$', views_action.run_row, name='run_row'),
 
+    # Say thanks
+    url(r'thanks/$', views_action.thanks, name='thanks'),
+
     # Preview content of the action out
     url(r'^(?P<pk>\d+)/(?P<idx>\d+)/preview/$',
         views_action.preview,

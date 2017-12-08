@@ -238,7 +238,8 @@ td.dt-body-center {
     }
 
 #table-data td,
-#item-table td,
+#workflow-table td,
+#action-table td,
 #log-table td {
     vertical-align: middle;
 }

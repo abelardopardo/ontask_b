@@ -13,6 +13,22 @@
   <script src="{% static 'action/js/action.js' %}"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      if (document.getElementById("action-table") != null) {
+        // Required for DataTables
+        $('#action-table').DataTable({
+            "language": {
+                "emptyTable": "There are no actions for this workflow."
+            },
+            "columnDefs": [
+                {"orderable": false, "targets": 4},
+                {"searchable": false, "targets": 4},
+            ],
+        });
+      }
+    });
+  </script>
 {% endblock %}
 
 {% block title %}{{ block.super }}Actions{% endblock %}

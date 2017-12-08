@@ -19,11 +19,17 @@
   <div class="container-fluid">
     <form action="" method="post">
       {% csrf_token %}
+      <a type="button" class="btn btn-defaul"
+         href="{{ cancel_url }}"> Cancel
+      </a>
       <button type="submit" name="submit" value="update"
               class="btn btn-primary">
         <span class="glyphicon glyphicon-ok"></span> Update
       </button>
       {{ form|crispy }}
+      <a type="button" class="btn btn-defaul"
+         href="{{ cancel_url }}"> Cancel
+      </a>
       <button type="submit" name="submit" value="update"
               class="btn btn-primary">
         <span class="glyphicon glyphicon-ok"></span> Update

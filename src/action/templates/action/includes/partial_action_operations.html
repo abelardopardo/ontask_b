@@ -13,6 +13,12 @@
    data-toggle="tooltip" title="Create an exact duplicate">
   <span class="glyphicon glyphicon-duplicate"></span> Clone
 </a>
+<button type="button"
+        class="btn btn-{% if serve_enabled %}success{% else %}danger{% endif %} btn-sm js-action-showurl"
+        data-url="{% url 'action:showurl' id %}"
+        data-toggle="tooltip" title="URL to access the personalised text">
+  <span class="glyphicon glyphicon-link"></span> URL ({% if serve_enabled %}On{% else %}Off{% endif %})
+</button>
 {% if is_out %}
   <a href="{% url 'email_action:index' id %}"
      class="btn btn-primary btn-sm"
@@ -24,12 +30,6 @@
           data-toggle="tooltip" title="Input data manually">
     <span class="glyphicon glyphicon-off"></span> Run</a>
 {% endif %}
-<button type="button"
-        class="btn btn-{% if serve_enabled %}success{% else %}danger{% endif %} btn-sm js-action-showurl"
-        data-url="{% url 'action:showurl' id %}"
-        data-toggle="tooltip" title="URL to access the personalised text">
-  <span class="glyphicon glyphicon-link"></span> URL ({% if serve_enabled %}On{% else %}Off{% endif %})
-</button>
 <button type="button"
         class="btn btn-danger btn-sm js-action-delete"
         data-url="{% url 'action:delete' id %}"

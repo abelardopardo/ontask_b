@@ -2,13 +2,11 @@
 from __future__ import unicode_literals, print_function
 
 import os
-import time
 
 from django.conf import settings
 from django.shortcuts import reverse
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait
 
 import test
 from dataops import pandas_db
@@ -747,3 +745,194 @@ class ActionActionEdit(test.OntaskLiveTestCase):
 
         # End of session
         self.logout()
+
+
+class ActionActionRun(test.OntaskLiveTestCase):
+    fixtures = ['simple_workflow_two_actions']
+    filename = os.path.join(
+        settings.PROJECT_PATH,
+        'action',
+        'fixtures',
+        'simple_workflow_two_actions.sql'
+    )
+
+    wflow_name = 'wflow2'
+    wflow_desc = 'Simple workflow structure with two type of actions'
+    wflow_empty = 'The workflow does not have data'
+
+    def setUp(self):
+        super(ActionActionRun, self).setUp()
+        pandas_db.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        pandas_db.delete_all_tables()
+        super(ActionActionRun, self).tearDown()
+
+    # Test operations with the filter
+    def test_action_01_data_entry(self):
+        # Login
+        self.login('instructor1@bogus.com')
+
+        self.open(reverse('workflow:index'))
+
+        # GO TO THE WORKFLOW PAGE
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('Ontask :: Workflows'))
+        self.assertIn('New Workflow', self.selenium.page_source)
+        self.assertIn('Import', self.selenium.page_source)
+
+        # Open the workflow
+        wf_link = self.selenium.find_element_by_link_text(self.wflow_name)
+        wf_link.click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'wflow-name')))
+
+        # Goto the action page
+        self.selenium.find_element_by_link_text('Actions').click()
+        self.assertIn('New Action', self.selenium.page_source)
+
+        # Create a new action
+        self.selenium.find_element_by_xpath(
+            "//body/div/p/button[1]"
+        ).click()
+        # Wait for page to introduce name
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, 'id_name')
+            )
+        )
+
+        self.selenium.find_element_by_id('id_name').send_keys(
+            'new action in'
+        )
+        desc = self.selenium.find_element_by_id('id_description_text')
+        desc.send_keys('small description')
+        desc.send_keys(Keys.RETURN)
+        # Wait for workflows page
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.LINK_TEXT, test.wflow_name)
+            )
+        )
+
+        # End of session
+        self.logout()
+
+
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoAlertPresentException
+import time
+
+
+class ActionActionInCreate(test.OntaskLiveTestCase):
+    fixtures = ['simple_workflow_two_actions']
+    filename = os.path.join(
+        settings.PROJECT_PATH,
+        'action',
+        'fixtures',
+        'simple_workflow_two_actions.sql'
+    )
+
+    wflow_name = 'wflow2'
+    wflow_desc = 'Simple workflow structure with two type of actions'
+    wflow_empty = 'The workflow does not have data'
+
+    def setUp(self):
+        super(ActionActionInCreate, self).setUp()
+        pandas_db.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        pandas_db.delete_all_tables()
+        super(ActionActionInCreate, self).tearDown()
+
+    # Test operations with the filter
+    def test_action_01_data_entry(self):
+        # Login
+        self.login('instructor1@bogus.com')
+
+        self.open(reverse('workflow:index'))
+
+        # Select the workflow
+        self.selenium.find_element_by_link_text("wflow2").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
+        )
+
+        # Open the actions page
+        self.selenium.find_element_by_link_text("Actions").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
+        )
+
+        self.selenium.find_element_by_xpath(
+            "(//button[@type='button'])[2]"
+        ).click()
+
+        self.selenium.find_element_by_id("id_name").click()
+
+        self.selenium.find_element_by_id("id_name").clear()
+
+        self.selenium.find_element_by_id("id_name").send_keys("new action in")
+
+        self.selenium.find_element_by_xpath("//button[@type='submit']").click()
+
+        self.selenium.find_element_by_name("builder_rule_0_filter").click()
+
+        Select(self.selenium.find_element_by_name(
+            "builder_rule_0_filter")).select_by_visible_text("registered")
+
+        self.selenium.find_element_by_name("builder_rule_0_value_0").click()
+
+        self.selenium.find_element_by_id("id____ontask___select_1").click()
+
+        self.selenium.find_element_by_id("id____ontask___select_4").click()
+
+        self.selenium.find_element_by_xpath(
+            "(//button[@name='Submit'])[2]").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'js-action-showurl'))
+        )
+
+        self.selenium.find_element_by_xpath(
+            "//table[@id='action-table']/tbody/tr[3]/td[5]/a[3]").click()
+
+        self.selenium.find_element_by_link_text("student2@bogus.com").click()
+
+        self.selenium.find_element_by_id("id____ontask___select_1").click()
+
+        self.selenium.find_element_by_xpath(
+            "(//button[@name='submit'])[2]"
+        ).click()
+
+        self.selenium.find_element_by_xpath(
+            "(//button[@type='button'])[2]"
+        ).click()
+
+    def is_element_present(self, how, what):
+        try:
+            self.selenium.find_element(by=how, value=what)
+        except NoSuchElementException as e:
+            return False
+        return True
+
+    def is_alert_present(self):
+        try:
+            self.selenium.switch_to_alert()
+        except NoAlertPresentException as e:
+            return False
+        return True
+
+    def close_alert_and_get_its_text(self):
+        try:
+            alert = self.selenium.switch_to_alert()
+            alert_text = alert.text
+            if self.accept_next_alert:
+                alert.accept()
+            else:
+                alert.dismiss()
+            return alert_text
+        finally:
+            self.accept_next_alert = True

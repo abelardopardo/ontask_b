@@ -211,11 +211,19 @@ def do_import_workflow(user, name, file_item, include_table):
     )
 
     # If anything went wrong, return the string to show to the form.
-    if not workflow_data.is_valid():
-        return workflow_data.errors
+    try:
+        if not workflow_data.is_valid():
+            return 'Unable to import the workflow'
+    except TypeError as e:
+        return 'Unable to import workflow (Exception: ' + e.message + ')'
 
     # Save the new workflow
-    workflow_data.save(user=user, name=name)
+    workflow = workflow_data.save(user=user, name=name)
+
+    if not pandas_db.check_wf_df(workflow):
+        # Something went wrong.
+        workflow.delete()
+        return 'Workflow data with incorrect structure.'
 
     # Success
     return None

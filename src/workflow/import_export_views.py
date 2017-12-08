@@ -130,10 +130,7 @@ def import_workflow(request):
                 form.cleaned_data['include_table'])
             # If something went wrong, push it to the top of the page
             if status:
-                messages.error(
-                    request,
-                    status.items()[0][1][0] + ' (' + status.items()[0][0] + ')'
-                )
+                messages.error(request, status)
 
             # Go back to the list of workflows
             return redirect('workflow:index')

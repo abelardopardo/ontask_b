@@ -1,7 +1,7 @@
 // Required for DataTables
-if (document.getElementById("item-table") != null) {
+if (document.getElementById("workflow-table") != null) {
     $(document).ready(function() {
-        $('#item-table').DataTable({
+        $('#workflow-table').DataTable({
             "order": [[0, "asc"]],
             "language": {
                 "emptyTable": "No workflows available."
@@ -25,7 +25,6 @@ $(function () {
   $("#modal-item").on("submit", ".js-workflow-create-form", saveForm);
 
   // Delete Workflow
-  $("#item-table").on("click", ".js-workflow-delete", loadForm);
   $("#workflow-table").on("click", ".js-workflow-delete", loadForm);
   $("#modal-item").on("submit", ".js-workflow-delete-form", saveForm);
 

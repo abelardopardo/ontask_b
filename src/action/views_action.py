@@ -14,7 +14,7 @@ except:  # For Python 3
 
 import django_tables2 as tables
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.http import Http404, JsonResponse
@@ -122,7 +122,7 @@ class ActionTable(tables.Table):
 
         attrs = {
             'class': 'table display table-bordered',
-            'id': 'item-table'
+            'id': 'action-table'
         }
 
         row_attrs = {
@@ -972,3 +972,12 @@ def clone(request, pk):
     messages.success(request,
                      'Action successfully cloned.')
     return redirect(reverse('action:index'))
+
+@login_required
+def thanks(request):
+    """
+    A page simply saying thanks
+    :param request:
+    :return:
+    """
+    return render(request, 'thanks.html', {})

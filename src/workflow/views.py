@@ -105,7 +105,7 @@ class WorkflowTable(tables.Table):
 
         attrs = {
             'class': 'table display table-bordered',
-            'id': 'item-table'
+            'id': 'workflow-table'
         }
 
 
@@ -203,7 +203,7 @@ def workflow_index(request):
     context = {}
     if len(workflows) > 0:
         context['table'] = WorkflowTable(workflows,
-                                         id='item-table',
+                                         id='workflow-table',
                                          orderable=False)
 
     return render(request, 'workflow/index.html', context)
@@ -288,11 +288,12 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 @user_passes_test(is_instructor)
 def update(request, pk):
     """
-
-    :param request:
-    :param pk:
-    :return:
+    Update the workflow information (name, description)
+    :param request: Request object
+    :param pk: Workflow ID
+    :return: JSON response
     """
+
     workflow = get_workflow(request, pk)
     if not workflow:
         return redirect('workflow:index')
