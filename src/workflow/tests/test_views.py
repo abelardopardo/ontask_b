@@ -214,7 +214,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
 
         # Number of key columns
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-table']/p[@class='help-block']/mark").text,
+            "//div[@id='workflow-area']/p[@class='help-block']/mark").text,
                          '3 Key columns')
 
         # Goto Dataops list
@@ -324,7 +324,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
 
         # Number of key columns
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-table']/p[@class='help-block']/mark").text,
+            "//div[@id='workflow-area']/p[@class='help-block']/mark").text,
                          '3 Key columns')
         # End of session
         self.logout()

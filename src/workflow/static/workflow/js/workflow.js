@@ -25,15 +25,15 @@ $(function () {
   $("#modal-item").on("submit", ".js-workflow-create-form", saveForm);
 
   // Delete Workflow
-  $("#workflow-table").on("click", ".js-workflow-delete", loadForm);
+  $("#workflow-area").on("click", ".js-workflow-delete", loadForm);
   $("#modal-item").on("submit", ".js-workflow-delete-form", saveForm);
 
   // Update Workflow
-  $("#workflow-table").on("click", ".js-workflow-update", loadForm);
+  $("#workflow-area").on("click", ".js-workflow-update", loadForm);
   $("#modal-item").on("submit", ".js-workflow-update-form", saveForm);
 
   // Flush workflow in detail view
-  $("#workflow-table").on("click", ".js-workflow-flush", loadForm);
+  $("#workflow-area").on("click", ".js-workflow-flush", loadForm);
   $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm)
 
   // Add attribute
@@ -53,7 +53,7 @@ $(function () {
   $("#modal-item").on("submit", ".js-share-delete-form", saveForm)
 
   // Column Add
-  $("#workflow-table").on("click", ".js-workflow-column-add", loadForm);
+  $("#workflow-area").on("click", ".js-workflow-column-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-column-add-form", saveForm);
 
   // Column Edit
