@@ -1,5 +1,17 @@
 # OnTask: Personalised feedback at scale
 
+---
+** NEW VERSION (2017-12-08) **
+
+Version 2.0.0 has been released:
+
+- Support for LTI
+
+- Actions to enter data manually
+
+- Clone operation for workflow, actions and conditions
+---
+
 Welcome to OnTask, the platform offering teachers and educational designers
 the capacity to use data to personalise the experience for the learners.
 
