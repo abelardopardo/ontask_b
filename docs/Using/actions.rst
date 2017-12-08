@@ -125,7 +125,7 @@ The preview/save buttons
   the table.
 
 Using column values, attributes and conditions in an Action Out
-***************************************************************
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The purpose of this page is to allow you to create a text in the editor that
 may include three types of elements that are personalised for each row: an
@@ -163,7 +163,7 @@ should be ignored. The following figure illustrates this process.
      :width: 100%
 
 Previewing the content of an Action Out
-***************************************
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Once a text is created, you need to verify that all the elements are properly
 visualised for each of the rows. This is the purpose of the ``Preview``
@@ -174,7 +174,7 @@ button at the bottom of the page.
      :width: 100%
 
 Sending personalised emails
-***************************
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You now have created an action and verified its content using the
 *Preview* button. Go back to the *Actions* screen (showing the table with
@@ -213,7 +213,7 @@ Snapshot of the workflow
   operation was executed.
 
 Making personalised content available to learners
-*************************************************
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Sending a personalised email is just one of various possible actions to do
 with a personalised text. Another one is to make the content available

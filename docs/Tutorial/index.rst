@@ -156,7 +156,7 @@ Workflow Operations
 There are several operations available at the details page.
 
 Attributes
-^^^^^^^^^^
+**********
 
 If you click again in the *Details* link at the top of the screen you will
 see again the page with the workflow details, but this time it will include
@@ -174,7 +174,7 @@ then refer to the attribute and it will be replaced by its value.
    :width: 50%
 
 Share
-^^^^^
+*****
 
 You may share a workflow with other instructors in the platform. The *Share*
 button will allow you to add/remove other users to this list.
@@ -186,7 +186,7 @@ button will allow you to add/remove other users to this list.
 Remember that whenever you open a workflow, it becomes unavailable for the other users with whom it is being shared.
 
 Export
-^^^^^^
+******
 
 This functionality allows you to take all the information included in a
 workflow and export it. The functionality offers the option of including in
@@ -196,20 +196,25 @@ the export only the data, or the data and the actions.
    :align: center
    :width: 50%
 
+Clone
+*****
+
+This button creates a clone of the workflow with the a name containing the prefix "*Copy of*". Once the operation is executed, the workflow is available in the home screen (link in the upper left corner of the screen).
+
 Rename
-^^^^^^
+******
 
 Use this function to change the name and description of the workflow
 
 Flush Data
-^^^^^^^^^^
+**********
 
 This function deletes the data associated with the workflow. It maintains the
 set of attributes and the actions, but it removes the conditions and filters
 from all the actions.
 
 Delete
-^^^^^^
+******
 
 This function deletes completely the workflow from the platform.
 
@@ -218,12 +223,15 @@ Actions
 
 Click in the *Actions* link at the top of the screen. The next screen shows
 the list of actions that are part of the workflow, and if there is none, you
-will only see the button to crate a new one.
+will only see the buttons to crate a new ones.
 
 .. figure:: ../Ontask_screens/22_rule_initial.png
    :align: center
 
-Click on the button to create a new action and provide a name and a
+Actions Out
+***********
+
+Click on the button to create a new *Action Out* and provide a name and a
 description.
 
 .. figure:: ../Ontask_screens/23_action_create.png
@@ -258,7 +266,7 @@ click in the arrow button in the condition.
 
 The text area is then surrounded by two marks::
 
-  {% if Topic_1_incorrect %}You need to review Topic 1{% endif %}
+  {% if Todo_review_T1 %}You need to review Topic 1{% endif %}
 
 This is the encoding to instruct the processing step to check the value of
 the condition ``Topic_1_incorrect`` and include the surrounded text only if
@@ -267,3 +275,7 @@ the condition is true.
 You may also insert any attributes attached to the workflow. The attribute
 name will be replaced by its value when processing the text.
 
+Actions In
+**********
+
+To be written.
