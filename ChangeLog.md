@@ -1,5 +1,7 @@
 ## 2.0.0
 
+### Added
+
 - Included new functionality to allow easy data entry. Data entry can be done
   as "Action In" (as opposed to Action Out for sending information). With 
   this functionality, instructors can easily enter information by hand, or 
