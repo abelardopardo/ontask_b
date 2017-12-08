@@ -5,9 +5,7 @@
   this functionality, instructors can easily enter information by hand, or 
   even collect the information from the students.
   
-- Clone workflow button now availabe as part of the details operations
-
-- [PENDING] Clone Action/Condition
+- Clone functionality for workflows, actions and conditions. 
 
 - [PENDING] Write the documentation for the new actions. Video? Gifs?
 

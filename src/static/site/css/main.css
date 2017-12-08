@@ -238,6 +238,7 @@ td.dt-body-center {
     }
 
 #table-data td,
+#actioninrun-data td,
 #workflow-table td,
 #action-table td,
 #log-table td {

@@ -7,19 +7,60 @@ The Actions
     vision"
     -- Dalai Lama
 
-This is perhaps the most important functionality of the platform. It allows edit a resource (in a format close to HTML) and mark certain elements with conditions that will control its appearance in the final view. Think of an *action* as a resource (item, message, tip, comment) you would give learners during a experience. You may have several of these items prepared to be used at different points during the expeience. As a consequence, a workflow may contain an arbitrary number of these actions. The *action* page simply shows a table with the actions contained in the workflow.
+This is the most important functionality of the platform. Actions are exchange of information with the learners. There are two types: actions in, and actions out. A workflow contains an arbitrary number of these actions. The *action* page shows a table with the actions in the selected workflow.
 
 .. figure:: images/Ontask____Actions.png
    :align: center
    :width: 100%
 
-Similarly to the case of the workflow, each action is identified by a name (unique) and an optional description. There are also various operations supported for each action (right most column in the table shown in the previous figure). Also, and following the same structure than the workflow, you may open an action to manipulate it by clicking on its name. The action is manipulated with the screen shown in the following figure
+Similarly to the case of the workflow, each action is identified by a name (unique) and an optional description. There are several operations supported for each action (right most column in the table shown in the previous figure).
+
+Actions In
+**********
+
+These actions allow you either instructors or students to introduce information in the table stored in a workflow. When providing information, you typicially are interested in a subset of the rows (some of the learners) and a subset of the columns (some of the factors). For example, you would like to check if a group of students is attending one face-to-face session, or if a group of students is engaging in a project discussion.
+
+These actions are edited using the screen shown in the following figure:
+
+.. figure:: images/Ontask____Edit_action_in.png
+   :align: center
+   :width: 100%
+
+The page has two elements. The first one is a filter to restrict the rows in the table considered for data entry. You create a condition, and those rows that satisfy it are then prepared for data entry. The second part of the screen is to select those columns that you want to include in the data entry form. You must select at leaset a *Unique* column (shown with green background) and a non-unique column.
+
+Once an *Action In* has been selected, there are two operations available represented by the buttons with labels *Run* and *URL*. The *Run* operation is intended for the instructors to enter the data for a set of learners. After clicking the link the platform shows a table with the data about the learners. The table has a search box in the upper left corner to quickly find a person as ilustrated in the next figure.
+
+.. figure:: images/Ontask____Run_Action_In.png
+   :align: center
+   :width: 100%
+
+An instructor may click in the link available in the right column and it is offered the possibility of modifying the information in the pre-selected columns for that learner.
+
+.. figure:: images/Ontask____Enter_Data.png
+   :align: center
+   :width: 100%
+
+After entering the information the platform refreshes the list of students for which the data entry is still allowed.
+
+The second operation available for *Actions In* is to make available the URL to learners so that they individually enter the information themselves. If you go back to the table showing all the actions and click in the icon with label *URL* you are given the choice to enable/disable a specific URL for the students to access the data entry screen.
+
+.. figure:: images/Ontask____ActionsIn_URL.png
+   :align: center
+   :width: 80%
+
+You then may send or make available this URL and, after authentication, students will be able to enter the information requested and the values are automatically stored in the right row and column in the table.
+
+These actions offer an ideal procedure to collect information about any aspect of a course in a way that is centralized and available for further processing. The power of these actions is complemented when combined with *Actions Out*, in which personalized content is made available to the learners.
+
+Actions Out
+***********
+These actions allow to create a resource (in a format close to HTML) and mark certain elements with conditions that will control its appearance in the final view. Think of these *actions out* as a resource (item, message, tip, comment) you would give learners during a experience. You may have several of these items prepared to be used at different points during the expeience. The action is manipulated with the screen shown in the following figure
 
 .. figure:: images/Ontask____Edit_action1.png
    :align: center
    :width: 100%
 
-Before describing in detail the structure of this screen let's digress for a second and explore the concept of *condition*. A condition in OnTask is basically a Boolean expression (or if you prefer, an expression that when evaluated will return either **True** or **False**. These expressions are commonly used in other applications such as spreadsheets or programming languages. The following image shows an example of this condition.
+Before describing in detail the structure of this screen let's digress for a second and explore the concept of *condition*. A condition in OnTask is  a Boolean expression, or if you prefer, an expression that when evaluated will return either **True** or **False**. These expressions are commonly used in other applications such as spreadsheets or programming languages. The following image shows an example of this condition.
 
 .. figure:: images/Ontask____Edit_action_filter.png
    :align: center
@@ -83,8 +124,8 @@ The preview/save buttons
   and the *Preview* button shows how the text is rendered for every row in
   the table.
 
-Using column values, attributes and conditions in an action
-***********************************************************
+Using column values, attributes and conditions in an Action Out
+***************************************************************
 
 The purpose of this page is to allow you to create a text in the editor that
 may include three types of elements that are personalised for each row: an
@@ -121,8 +162,8 @@ should be ignored. The following figure illustrates this process.
      :align: center
      :width: 100%
 
-Previewing the content of an action
-***********************************
+Previewing the content of an Action Out
+***************************************
 
 Once a text is created, you need to verify that all the elements are properly
 visualised for each of the rows. This is the purpose of the ``Preview``
@@ -171,8 +212,8 @@ Snapshot of the workflow
   In this new workflow you can check the values and messages at the time the
   operation was executed.
 
-Offering personalised content to learners
-*****************************************
+Making personalised content available to learners
+*************************************************
 
 Sending a personalised email is just one of various possible actions to do
 with a personalised text. Another one is to make the content available

@@ -17,10 +17,10 @@
   <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
   <script src="{% static 'table/js/table.js' %}"></script>
   <script type="text/javascript">
-    if (document.getElementById("table-data") != null) {
+    if (document.getElementById("actioninrun-data") != null) {
         // Required for DataTables
         $(document).ready(function() {
-            $('#table-data').DataTable({
+            $('#actioninrun-data').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -50,7 +50,7 @@
     <h4 class="page-header"><strong>{{ action.name }}</strong></h4>
     <p class="help-block">{{ action.description_text }}</p>
     <table class="table display dataTable no-footer cell-border table-bordered"
-           id="table-data">
+           id="actioninrun-data">
       <thead>
         <tr>
           {% for c in columns %}
