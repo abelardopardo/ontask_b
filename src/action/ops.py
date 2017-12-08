@@ -140,6 +140,24 @@ def serve_action_out(user, action, user_attribute_name):
     return HttpResponse(action_content)
 
 
+def clone_condition(condition, new_action=None, new_name=None):
+    """
+    Function to clone a condition and change action and/or name
+    :param condition: Condition to clone
+    :param new_action: New action to point
+    :param new_name: New name
+    :return: New condition
+    """
+
+    condition.id = None
+    if new_action:
+        condition.action = new_action
+    if new_name:
+        condition.name = new_name
+    condition.save()
+
+    return condition
+
 
 def clone_conditions(conditions, new_action):
     """
@@ -153,12 +171,55 @@ def clone_conditions(conditions, new_action):
     # Iterate over the conditions and clone them (no recursive call needed as
     # there are no other objects pointing to them
     for condition in conditions:
-        condition.id = None
-        condition.action = new_action
-        condition.save()
+        clone_condition(condition, new_action)
 
 
-def clone(actions, new_workflow):
+def clone_action(action, new_workflow=None, new_name=None):
+    """
+    Function that given an action clones it and changes workflow and name
+    :param action: Object to clone
+    :param new_workflow: New workflow object to point
+    :param new_name: New name
+    :return: Cloned object
+    """
+
+    # Store the old object id before squashing it
+    old_id = action.id
+
+    # Clone
+    action.id = None
+
+    # Update some of the fields
+    if new_name:
+        action.name = new_name
+    if new_workflow:
+        action.workflow = new_workflow
+
+    # Update
+    action.save()
+
+    # Get back the old action
+    old_action = Action.objects.get(id=old_id)
+
+    # Clone the columns field (in case of an action in).
+    if not action.is_out:
+        column_names = [c.name for c in old_action.columns.all()]
+        action.columns.clear()
+        action.columns.add(
+            *list(action.workflow.columns.filter(
+                name__in=column_names
+            )))
+
+    # Clone the conditions
+    clone_conditions(old_action.conditions.all(), action)
+
+    # Update
+    action.save()
+
+    return action
+
+
+def clone_actions(actions, new_workflow):
     """
     Function that given a set of actions, clones its content and attaches
     them to a new workflow
@@ -169,23 +230,4 @@ def clone(actions, new_workflow):
 
     # Iterate over the actions and clone each of them
     for action in actions:
-        old_id = action.id
-        action.id = None
-        action.workflow = new_workflow
-        action.save()
-
-        # Get back the old action
-        old_action = Action.objects.get(id=old_id)
-
-        # Get the list of column names and transform them to the new columns
-        column_names = [c.name for c in old_action.columns.all()]
-
-        action.columns.clear()  # This is a ManyToMany relation
-
-        # Loop over the column names in the relation and get them from the
-        # workflow to connect back to the action.
-        for cname in column_names:
-            action.columns.add(action.workflow.columns.get(name=cname))
-
-        # Clone all the conditions pointing to this action
-        clone_conditions(old_action.conditions.all(), action)
+        clone_action(action, new_workflow)

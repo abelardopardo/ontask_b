@@ -3,7 +3,7 @@ from __future__ import unicode_literals, print_function
 
 from collections import OrderedDict
 
-from action.ops import serve_action_in, serve_action_out
+from django.db import IntegrityError
 
 try:
     import urlparse
@@ -38,6 +38,7 @@ from .forms import (
     EditActionInForm,
     field_prefix
 )
+from action.ops import serve_action_in, serve_action_out, clone_action
 from .models import Action, Condition
 
 
@@ -75,29 +76,29 @@ class ActionTable(tables.Table):
     """
 
     name = tables.Column(
-        attrs={'td': {'class': 'dt-body-center'}},
+        attrs={'td': {'class': 'dt-center'}},
         verbose_name=str('Name')
     )
 
     is_out = tables.Column(
-        attrs={'td': {'class': 'dt-body-center'}},
+        attrs={'td': {'class': 'dt-center'}},
         verbose_name=str('Type')
 
     )
 
     description_text = tables.Column(
-        attrs={'td': {'class': 'dt-body-center'}},
+        attrs={'td': {'class': 'dt-center'}},
         verbose_name=str('Description')
     )
 
     modified = tables.DateTimeColumn(
-        attrs={'td': {'class': 'dt-body-center'}},
+        attrs={'td': {'class': 'dt-center'}},
         verbose_name='Modified'
 
     )
 
     operations = OperationsColumn(
-        attrs={'td': {'class': 'dt-body-center'}},
+        attrs={'td': {'class': 'dt-center'}},
         verbose_name='Operations',
         template_file='action/includes/partial_action_operations.html',
         orderable=False
@@ -928,3 +929,46 @@ def run_row(request, pk):
     return serve_action_in(request, action, user_attribute_name, True)
 
 
+@user_passes_test(is_instructor)
+def clone(request, pk):
+    """
+    View to clone an action
+    :param request: Request object
+    :param pk: id of the action to clone
+    :return:
+    """
+
+    # Get the current workflow
+    workflow = get_workflow(request)
+    if not workflow:
+        return redirect('workflow:index')
+
+    # Get the action
+    try:
+        action = Action.objects.filter(
+            Q(workflow__user=request.user) |
+            Q(workflow__shared=request.user)).distinct().get(pk=pk)
+    except ObjectDoesNotExist:
+        return redirect('action:index')
+
+    # Get the new name appending as many times as needed the 'Copy of '
+    new_name = 'Copy of ' + action.name
+    while Action.objects.filter(name=new_name,
+                                workflow=workflow).exists():
+        new_name = 'Copy of ' + new_name
+
+    old_id = action.id
+    old_name = action.name
+    action = clone_action(action, new_workflow=None, new_name=new_name)
+
+    # Log event
+    logs.ops.put(request.user,
+                 'action_clone',
+                 workflow,
+                 {'id_old': old_id,
+                  'id_new': action.id,
+                  'name_old': old_name,
+                  'name_new': action.name})
+    messages.success(request,
+                     'Action successfully cloned.')
+    return redirect(reverse('action:index'))

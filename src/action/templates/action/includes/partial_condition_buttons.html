@@ -3,20 +3,29 @@
      style="border-bottom:solid 1px black"><strong>Conditions</strong>
     <button type="button" class="btn btn-sm btn-primary js-condition-create{% if not has_data %} disabled{% endif %}"
             data-url="{% url 'action:create_condition' action.id %}"
-            style="margin-bottom: 0.5ex;">
+            style="margin-bottom: 0.5ex;"
+            data-toggle="tooltip" title="Create a new condition">
       <span class="glyphicon glyphicon-plus"></span> New</button></h4>
   <div class="conditions">
     {% for condition in conditions %}
       <div class="condition-btn">
         <button type="button" class="btn btn-primary btn-sm js-condition-edit"
-                data-url="{% url 'action:edit_condition' condition.id %}">
+                data-url="{% url 'action:edit_condition' condition.id %}"
+           data-toggle="tooltip" title="Edit">
           <span class="glyphicon glyphicon-pencil"></span> {{ condition.name }}</button>
         <button type="button" class="btn btn-warning btn-sm js-condition-insert"
-                data-name="{{ condition.name }}">
+                data-name="{{ condition.name }}"
+           data-toggle="tooltip" title="Insert surrounding text">
           <span class="glyphicon glyphicon-arrow-down"></span>
         </button>
+        <a href="{% url 'action:clone_condition' condition.id %}"
+           class="btn btn-primary btn-sm"
+           data-toggle="tooltip" title="Clone">
+          <span class="glyphicon glyphicon-duplicate"></span>
+        </a>
         <button type="button" class="btn btn-danger btn-sm js-condition-delete"
-                data-url="{% url 'action:delete_condition' condition.id %}">
+                data-url="{% url 'action:delete_condition' condition.id %}"
+           data-toggle="tooltip" title="Delete">
           <span class="glyphicon glyphicon-trash"></span>
         </button>
       </div>

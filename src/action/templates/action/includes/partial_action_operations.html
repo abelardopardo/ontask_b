@@ -1,18 +1,27 @@
 <a href="{% if is_out %}{% url 'action:edit_out' id %}{% else %}{% url 'action:edit_in' id %}{% endif %}"
-   class="btn btn-primary btn-sm align-middle">
+   class="btn btn-primary btn-sm align-middle"
+     data-toggle="tooltip" title="Edit conditions, filter, etc.">
   <span class="glyphicon glyphicon-folder-open"></span> Edit</a>
 <button type="button"
         class="btn btn-primary btn-sm js-action-update align-middle"
-        data-url="{% url 'action:update' id is_out %}">
+        data-url="{% url 'action:update' id is_out %}"
+        data-toggle="tooltip" title="Change name and description">
     <span class="glyphicon glyphicon-pencil"></span> Rename
 </button>
+<a href="{% url 'action:clone' id %}"
+   class="btn btn-primary btn-sm"
+   data-toggle="tooltip" title="Create an exact duplicate">
+  <span class="glyphicon glyphicon-duplicate"></span> Clone
+</a>
 {% if is_out %}
   <a href="{% url 'email_action:index' id %}"
-          class="btn btn-primary btn-sm">
+     class="btn btn-primary btn-sm"
+     data-toggle="tooltip" title="Send email">
     <span class="glyphicon glyphicon-envelope"></span> Email</a>
 {% else %}
   <a href="{% url 'action:run' id %}"
-          class="btn btn-primary btn-sm">
+          class="btn btn-primary btn-sm"
+          data-toggle="tooltip" title="Input data manually">
     <span class="glyphicon glyphicon-off"></span> Run</a>
 {% endif %}
 <button type="button"
@@ -24,5 +33,5 @@
 <button type="button"
         class="btn btn-danger btn-sm js-action-delete"
         data-url="{% url 'action:delete' id %}"
-        data-toggle="tooltip" title="Delete">
+        data-toggle="tooltip" title="Delete the action">
   <span class="glyphicon glyphicon-trash"></span></button>

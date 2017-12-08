@@ -7,7 +7,7 @@
   
 - Clone workflow button now availabe as part of the details operations
 
-- [PENDING] Clone workflow/action/condition
+- [PENDING] Clone Action/Condition
 
 - [PENDING] Write the documentation for the new actions. Video? Gifs?
 

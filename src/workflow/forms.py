@@ -15,18 +15,7 @@ from ontask.forms import RestrictedFileField
 from .models import Workflow, Column
 
 
-class WorkflowCloneForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('workflow_user', None)
-        super(forms.ModelForm, self).__init__(*args, **kwargs)
-
-    class Meta:
-        model = Workflow
-        fields = ('name',)
-
-
-class WorkflowForm(WorkflowCloneForm):
+class WorkflowForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('workflow_user', None)
         super(WorkflowForm, self).__init__(*args, **kwargs)

@@ -89,7 +89,7 @@ interpreter and you can execute the python intepreter.
 Download, install and configure OnTask
 **************************************
 
-1. Download or clone a copy of `OnTask <https://github
+1. Download or clone_actions a copy of `OnTask <https://github
 .com/abelardopardo/ontask_b>`_.
 
 #. Using a command interpreter, go to the OnTask folder and locate a folder

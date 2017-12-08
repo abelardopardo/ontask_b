@@ -33,6 +33,9 @@ urlpatterns = [
         views_action.ActionUpdateView.as_view(),
         name='update'),
 
+    # Clone the action
+    url(r'^(?P<pk>\d+)/clone/$', views_action.clone, name='clone'),
+
     # Nuke the action
     url(r'^(?P<pk>\d+)/delete/$', views_action.delete_action, name='delete'),
 
@@ -89,5 +92,9 @@ urlpatterns = [
         views_condition.delete_condition,
         name='delete_condition'),
 
+    # Clone the condition
+    url(r'^(?P<pk>\d+)/clone_condition/$',
+        views_condition.clone,
+        name='clone_condition'),
 
 ]

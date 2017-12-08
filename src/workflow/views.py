@@ -7,6 +7,7 @@ import django_tables2 as tables
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
+from django.db import IntegrityError
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse, render
@@ -15,14 +16,13 @@ from django.utils.html import format_html
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.db import IntegrityError
 
 import action
 import logs.ops
 from action.models import Condition
 from dataops import ops, pandas_db
 from ontask.permissions import is_instructor, UserIsInstructor
-from .forms import (WorkflowForm, WorkflowCloneForm)
+from .forms import WorkflowForm
 from .models import Workflow, Column
 from .ops import (get_workflow,
                   unlock_workflow_by_id,
@@ -143,41 +143,41 @@ def save_workflow_form(request, form, template_name, is_new):
     # otherwise
     data['form_is_valid'] = False
 
-    if request.method == 'POST':
-        if form.is_valid():
-            workflow_item = form.save(commit=False)
-            # Verify that that workflow does comply with the combined unique
-            if is_new and Workflow.objects.filter(
-                    user=request.user, name=workflow_item.name).exists():
-                form.add_error('name',
-                               'A workflow with that name already exists')
-                data['html_redirect'] = reverse('workflow:index')
-            else:
+    if request.method == 'POST' and form.is_valid():
+        # Correct form submitted
 
-                # Correct workflow
-                workflow_item.user = request.user
-                workflow_item.nrows = 0
-                workflow_item.ncols = 0
-                workflow_item.session_key = request.session.session_key
-                is_new = form.instance.pk is None
-                # Save the workflow
-                workflow_item.save()
+        if not form.instance.id:
+            # This is a new instance!
+            form.instance.user = request.user
+            form.instance.nrows = 0
+            form.instance.ncols = 0
+            form.instance.session_key = request.session.session_key
+            log_type = 'workflow_create'
+        else:
+            log_type = 'workflow_update'
 
-                # Log event
-                if is_new:
-                    log_type = 'workflow_create'
-                else:
-                    log_type = 'workflow_update'
+        # Save the instance
+        try:
+            workflow_item = form.save()
+        except IntegrityError as e:
+            form.add_error('name',
+                           'A workflow with that name already exists')
+            context = {'form': form}
+            data['html_form'] = render_to_string(template_name,
+                                                 context,
+                                                 request=request)
+            return JsonResponse(data)
 
-                logs.ops.put(request.user,
-                             'workflow_update',
-                             workflow_item,
-                             {'id': workflow_item.id,
-                              'name': workflow_item.name})
+        # Log event
+        logs.ops.put(request.user,
+                     log_type,
+                     workflow_item,
+                     {'id': workflow_item.id,
+                      'name': workflow_item.name})
 
-                # Ok, here we can say that the form is done.
-                data['form_is_valid'] = True
-                data['html_redirect'] = reverse('workflow:index')
+        # Here we can say that the form is done.
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('workflow:index')
 
     context = {'form': form}
     data['html_form'] = render_to_string(template_name,
@@ -505,70 +505,48 @@ def column_ss(request, pk):
 
 @user_passes_test(is_instructor)
 def clone(request, pk):
-
     # Get the current workflow
     workflow = get_workflow(request, pk)
     if not workflow:
         return redirect('workflow:index')
 
-    # Ajax response
-    data = dict()
+    # Get the new name appending as many times as needed the 'Copy of '
+    new_name = 'Copy of ' + workflow.name
+    while Workflow.objects.filter(name=new_name).exists():
+        new_name = 'Copy of ' + new_name
 
-    # The form is false (thus needs to be rendered again, until proven
-    # otherwise
-    data['form_is_valid'] = False
+    workflow.id = None
+    workflow.name = new_name
+    try:
+        workflow.save()
+    except IntegrityError:
+        messages.error(request,
+                       'Unable to clone workflow')
+        return redirect(reverse('workflow:details', kwargs={'pk': workflow.id}))
 
-    form = WorkflowCloneForm(request.POST or None)
+    # Get the initial object back
+    workflow_new = workflow
+    workflow = get_workflow(request, pk)
 
-    if request.method == 'POST' and form.is_valid():
-        workflow.id = None
-        workflow.name = form.cleaned_data['name']
-        try:
-            workflow.save()
-        except IntegrityError:
-            form.add_error(
-                None,
-                'There is already a workflow with this name'
-            )
-            context = {'form': form,
-                       'workflow': workflow}
-            data['html_form'] = render_to_string(
-                'workflow/includes/partial_workflow_clone.html',
-                context,
-                request=request)
-            return JsonResponse(data)
+    # Clone the data frame
+    data_frame = pandas_db.load_from_db(workflow.pk)
+    ops.store_dataframe_in_db(data_frame, workflow_new.id)
 
-        # Handle the duplicate and the initial object
-        workflow_new = workflow
-        workflow = get_workflow(request, pk)
+    # Clone actions
+    action.ops.clone_actions([a for a in workflow.actions.all()], workflow_new)
 
-        # Clone the data frame
-        data_frame = pandas_db.load_from_db(workflow.pk)
-        ops.store_dataframe_in_db(data_frame, workflow_new.id)
+    # Done!
+    workflow_new.save()
 
-        # Clone actions
-        action.ops.clone([a for a in workflow.actions.all()], workflow_new)
+    # Log event
+    logs.ops.put(request.user,
+                 'workflow_clone',
+                 workflow_new,
+                 {'id_old': workflow_new.id,
+                  'id_new': workflow.id,
+                  'name_old': workflow_new.name,
+                  'name_new': workflow.name})
 
-        # Done!
-        workflow_new.save()
-
-        # Log event
-        logs.ops.put(request.user,
-                     'workflow_clone',
-                     workflow_new,
-                     {'id_old': workflow_new.id,
-                      'id_new': workflow.id,
-                      'name_old': workflow_new.name,
-                      'name_new': workflow.name})
-
-        # Ok, here we can say that the form is done.
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
-
-    context = {'form': form,
-               'workflow': workflow}
-    data['html_form'] = render_to_string(
-        'workflow/includes/partial_workflow_clone.html',
-         context,
-         request=request)
-    return JsonResponse(data)
+    messages.success(request,
+                     'Workflow successfully cloned.')
+    return redirect(reverse('workflow:detail', kwargs={'pk': workflow.id}))

@@ -57,7 +57,6 @@
   {% if workflow %}
     <div style="display: inline-block;" id="workflow-table">
       {% include 'workflow/includes/workflow_detail_buttons.html' %}
-      <p>Name: {{ workflow.name }}</p>
       <p class="help-block">Description: {{ workflow.description_text }}</p>
       <p class="help-block">Last modified: {{ workflow.modified }}</p>
       {% if table_info %}
