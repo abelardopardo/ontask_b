@@ -31,7 +31,7 @@ def display(request):
                       {})
 
     # Create the context with the column names
-    context = {'column_names': ['Ops'] + workflow.get_column_names()}
+    context = {'columns': workflow.columns.all()}
 
     return render(request, 'table/display.html', context)
 

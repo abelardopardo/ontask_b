@@ -62,7 +62,12 @@ var saveForm = function () {
       dataType: 'json',
       success: function (data) {
         if (data.form_is_valid) {
-          location.href = data.html_redirect;
+          if (data.html_redirect == "") {
+            // If there is no redirect, simply refresh
+            window.location.reload(true);
+          } else {
+            location.href = data.html_redirect;
+          }
         }
         else {
           $("#modal-item .modal-content").html(data.html_form);

@@ -28,8 +28,9 @@
                   type: 'POST',
                 },
                 columns: [
-                  {% for cname in column_names %}
-                    { "data": "{{ cname }}" },
+                  { "data": "Ops"},
+                  {% for col in columns %}
+                    { "data": "{{ col.name }}" },
                   {% endfor %}
                 ],
                 "order": [1],
@@ -61,8 +62,21 @@
            id="table-data">
       <thead>
         <tr>
-          {% for cname in column_names %}
-            <th>{{ cname }}</th>
+          <th></th>
+          {% for col in columns %}
+            <th class="text-center">
+              <button type="button"
+                      class="btn btn-sm js-workflow-column-edit"
+                      data-url="{% url 'workflow:column_edit' col.id %}">
+                {{ col.name }}
+              </button>
+            </th>
+          {% endfor %}
+        </tr>
+        <tr>
+          <th>Ops</th>
+          {% for col in columns %}
+            <th>{{ col.data_type }}</th>
           {% endfor %}
         </tr>
       </thead>

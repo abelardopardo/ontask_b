@@ -1,3 +1,9 @@
+## 2.0.1
+
+### Added
+
+- Edit columns from the table display
+
 ## 2.0.0
 
 ### Added
