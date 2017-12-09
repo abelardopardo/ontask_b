@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django_summernote.widgets import SummernoteInplaceWidget
 
 from .models import Action, Condition
-from ontask.forms import column_to_field
+from ontask.forms import column_to_field, dateTimeOptions
 
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)
@@ -101,7 +102,9 @@ class EnterActionIn(forms.Form):
 
         for idx, column in enumerate(self.columns):
             self.fields[field_prefix + '%s' % idx] = \
-                column_to_field(column, self.values[idx])
+                column_to_field(column,
+                                self.values[idx],
+                                label=column.description_text)
 
             if column.is_key:
                 self.fields[field_prefix + '%s' % idx].widget.attrs[
@@ -158,6 +161,34 @@ class ConditionForm(FilterForm):
 
 
 class EnableURLForm(forms.ModelForm):
+
+    def clean(self):
+        data = super(EnableURLForm, self).clean()
+
+        # Check the datetimes. One needs to be after the other
+        a_from = self.cleaned_data['active_from']
+        a_to = self.cleaned_data['active_to']
+        if a_from and a_to and a_from >= a_to:
+            self.add_error(
+                'active_from',
+                'Incorrect date/time window'
+            )
+            self.add_error(
+                'active_to',
+                'Incorrect date/time window'
+            )
+
+        return data
+
     class Meta:
         model = Action
-        fields = ('serve_enabled',)
+        fields = ('serve_enabled', 'active_from', 'active_to')
+
+        widgets = {
+            'active_from': DateTimeWidget(options=dateTimeOptions,
+                                          usel10n=True,
+                                          bootstrap_version=3),
+            'active_to': DateTimeWidget(options=dateTimeOptions,
+                                        usel10n=True,
+                                        bootstrap_version=3)
+        }

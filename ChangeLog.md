@@ -1,4 +1,4 @@
-## 2.0.1
+## 2.1.0
 
 ### Added
 
@@ -6,6 +6,13 @@
 
 - Columns now have an active from-to window with a datetime. If they are 
   inactive, they are ignored when running Actions In
+  
+- URL for actions in/out now have an additional date/time window.
+
+- Columns in the workflow can now be cloned (duplicating values)
+
+- The availability of the URL for actions can also now be controlled with a 
+  time window (active from - to)
   
 ## 2.0.0
 

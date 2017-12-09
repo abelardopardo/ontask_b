@@ -11,14 +11,11 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from dataops import pandas_db, ops
 from ontask import is_legal_var_name, ontask_prefs
-from ontask.forms import RestrictedFileField
+from ontask.forms import RestrictedFileField, dateTimeOptions
 from .models import Workflow, Column
 
+
 # Options for the datetime picker used in column forms
-dateTimeOptions = {
-    'weekStart': 1,  # Start week on Monday
-    'minuteStep': 5,  # Minute step
-}
 
 
 class WorkflowForm(forms.ModelForm):
@@ -300,9 +297,9 @@ class ColumnRenameForm(ColumnBasicForm):
             'active_from': DateTimeWidget(options=dateTimeOptions,
                                           usel10n=True,
                                           bootstrap_version=3),
-            'active_to': DateTimeWidget(  # options=dateTimeOptions,
-                usel10n=True,
-                bootstrap_version=3)
+            'active_to': DateTimeWidget(options=dateTimeOptions,
+                                        usel10n=True,
+                                        bootstrap_version=3)
         }
 
 

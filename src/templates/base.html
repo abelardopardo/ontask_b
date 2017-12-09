@@ -38,10 +38,8 @@
         </button>
         <a class="navbar-brand" href="{% url 'entry' %}">
           {% block navbar-brand %}
-            <img src="{% static 'site/img/logo.png' %}" alt="logo">Home
-          {% comment %}
-            {% include "_brandname.html" %}
-          {% endcomment %}
+            <img src="{% static 'site/img/logo.png' %}" alt="logo">
+            <span class="glyphicon glyphicon-home"></span>
           {% endblock %}
         </a>
       </div>

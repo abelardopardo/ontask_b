@@ -608,6 +608,7 @@ def showurl(request, pk):
 
     # AJAX result
     data = {}
+    data['form_is_valid'] = False
 
     # Get the action object
     try:
@@ -615,7 +616,9 @@ def showurl(request, pk):
             Q(workflow__user=request.user) |
             Q(workflow__shared=request.user)).distinct().get(pk=pk)
     except Action.DoesNotExist:
-        return redirect(reverse('workflow:index'))
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('workflow:index')
+        return JsonResponse(data)
 
     form = EnableURLForm(request.POST or None, instance=action)
 
@@ -633,7 +636,9 @@ def showurl(request, pk):
                  'name': action.name,
                  'serve_enabled': action.serve_enabled})
 
-        return redirect(reverse('action:index'))
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('action:index')
+        return JsonResponse(data)
 
     # Create the text for the action
     url_text = reverse('action:serve', kwargs={'action_id': action.pk})
@@ -689,6 +694,10 @@ def serve(request, action_id):
 
     # If it is not enabled, reject the request
     if not action.serve_enabled:
+        raise Http404
+
+    # If it is enabled but not active (date/time)
+    if not action.is_active:
         raise Http404
 
     if action.is_out:

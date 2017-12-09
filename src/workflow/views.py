@@ -484,7 +484,7 @@ def column_ss(request, pk):
         final_qs.append(OrderedDict(
             [('Name', col.name),
              ('Type', col.data_type),
-             ('Unique',
+             ('Key?',
               '<span class="true">✔</span>' if col.is_key \
                   else '<span class="true">✘</span>'),
              ('Operations', ops_string)]

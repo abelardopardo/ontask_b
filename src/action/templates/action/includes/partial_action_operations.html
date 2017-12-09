@@ -1,16 +1,13 @@
 <a href="{% if is_out %}{% url 'action:edit_out' id %}{% else %}{% url 'action:edit_in' id %}{% endif %}"
-   class="btn btn-primary btn-sm align-middle"
-     data-toggle="tooltip" title="Edit conditions, filter, etc.">
+   class="btn btn-primary btn-sm align-middle">
   <span class="glyphicon glyphicon-folder-open"></span> Edit</a>
 <button type="button"
         class="btn btn-primary btn-sm js-action-update align-middle"
-        data-url="{% url 'action:update' id is_out %}"
-        data-toggle="tooltip" title="Change name and description">
+        data-url="{% url 'action:update' id is_out %}">
     <span class="glyphicon glyphicon-pencil"></span> Rename
 </button>
 <a href="{% url 'action:clone' id %}"
-   class="btn btn-primary btn-sm"
-   data-toggle="tooltip" title="Create an exact duplicate">
+   class="btn btn-primary btn-sm">
   <span class="glyphicon glyphicon-duplicate"></span> Clone
 </a>
 <button type="button"
@@ -21,8 +18,7 @@
 </button>
 {% if is_out %}
   <a href="{% url 'email_action:index' id %}"
-     class="btn btn-primary btn-sm"
-     data-toggle="tooltip" title="Send email">
+     class="btn btn-primary btn-sm">
     <span class="glyphicon glyphicon-envelope"></span> Email</a>
 {% else %}
   <a href="{% url 'action:run' id %}"

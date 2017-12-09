@@ -4,31 +4,17 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-
+{% block extrahead %}
+  <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
+  <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+{% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
 {% endblock %}
-
 {% block title %}{{ block.super }}Row filter{% endblock %}
-
 {% block container %}
 <div align="center" class="container">
   <h1 class="page-header">Update row</h1>
-
-  <p>Workflow {{ workflow.name }}</p>
-  {% if form %}
-    <div class="container" style="margin-bottom: 2ex;">
-      <form action="" method="post">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit" name="submit" value="submit"
-                class="btn btn-primary">
-          <span class="glyphicon glyphicon-search"></span> Search
-        </button>
-      </form>
-    </div>
-  {% endif %}
-
   {% if row_form %}
     <div class="container">
       <form action="" method="post">
@@ -52,9 +38,7 @@
         </button>
       </form>
     </div>
-  {% endif %}
-
-  {% if not form and not row_form %}
+  {% else %}
     <p><strong>No data available for this workflow</strong></p>
   {% endif %}
 </div>

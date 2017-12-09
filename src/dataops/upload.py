@@ -11,7 +11,7 @@ from dataops import ops, pandas_db
 from ontask import slugify
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
-from .forms import SelectColumnUploadForm, SelectUniqueKeysForm
+from .forms import SelectColumnUploadForm, SelectKeysForm
 
 
 @user_passes_test(is_instructor)
@@ -223,9 +223,9 @@ def upload_s3(request):
 
     dst_unique_col_names: List with the column names that are unique
 
-    dst_selected_key: Unique column name selected in DST
+    dst_selected_key: Key column name selected in DST
 
-    src_selected_key: Unique column name selected in SRC
+    src_selected_key: Key column name selected in SRC
 
     how_merge: How to merge. One of {left, right, outter, inner}
 
@@ -292,7 +292,7 @@ def upload_s3(request):
 
     # Bind the form with the received data (remember unique columns and
     # preselected keys.)'
-    form = SelectUniqueKeysForm(
+    form = SelectKeysForm(
         request.POST or None,
         dst_keys=dst_unique_col_names,
         src_keys=src_unique_col_names,
@@ -393,9 +393,9 @@ def upload_s4(request):
 
     dst_unique_col_names: List with the column names that are unique
 
-    dst_selected_key: Unique column name selected in DST
+    dst_selected_key: Key column name selected in DST
 
-    src_selected_key: Unique column name selected in SRC
+    src_selected_key: Key column name selected in SRC
 
     how_merge: How to merge. One of {left, right, outter, inner}
 

@@ -74,6 +74,10 @@ urlpatterns = [
         column_views.column_edit,
         name='column_edit'),
 
+    url(r'^(?P<pk>\d+)/column_clone/$',
+        column_views.column_clone,
+        name='column_clone'),
+
     # API
 
     url(r'^workflows/$', api.WorkflowAPIListCreate.as_view(),

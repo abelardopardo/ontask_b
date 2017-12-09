@@ -15,7 +15,7 @@ from ontask.permissions import is_instructor
 from .forms import (ColumnRenameForm,
                     ColumnAddForm)
 from .models import Column
-from .ops import get_workflow, workflow_delete_column
+from .ops import get_workflow, workflow_delete_column, clone_column
 
 
 @user_passes_test(is_instructor)
@@ -248,3 +248,77 @@ def column_delete(request, pk):
         request=request)
 
     return JsonResponse(data)
+
+
+@user_passes_test(is_instructor)
+def column_clone(request, pk):
+    """
+    Clone a column in the table attached to a workflow
+    :param request: HTTP request
+    :param pk: ID of the column to clone. The workflow element is taken
+     from the session.
+    :return: Render the clone column form
+    """
+
+    # JSON response, context and default values
+    data = dict()  # JSON response
+
+    # Get the workflow element
+    workflow = get_workflow(request)
+    if not workflow:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('workflow:index')
+        return JsonResponse(data)
+
+    data['form_is_valid'] = False
+    context = {'pk': pk}  # For rendering
+
+    # Get the column
+    try:
+        column = Column.objects.get(pk=pk, workflow=workflow)
+    except ObjectDoesNotExist:
+        # The column is not there. Redirect to workflow detail
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('workflow:detail',
+                                        kwargs={'pk': workflow.id})
+        return JsonResponse(data)
+
+    # Get the name of the column to clone
+    context['cname'] = column.name
+
+    if request.method == 'GET':
+        data['html_form'] = render_to_string(
+            'workflow/includes/partial_column_clone.html',
+            context,
+            request=request)
+
+        return JsonResponse(data)
+
+    # POST REQUEST
+
+    # Get the new name appending as many times as needed the 'Copy of '
+    new_name = 'Copy_of_' + column.name
+    while Column.objects.filter(name=new_name,
+                                workflow=column.workflow).exists():
+        new_name = 'Copy_of_' + new_name
+
+    # Proceed to clone the column
+    column = clone_column(column, None, new_name)
+
+    # Log the event
+    logs.ops.put(request.user,
+                 'column_clone',
+                 workflow,
+                 {'id': workflow.id,
+                  'name': workflow.name,
+                  'new_column_name': column.name})
+
+    data['form_is_valid'] = True
+    data['html_redirect'] = reverse('workflow:detail',
+                                    kwargs={'pk': workflow.id})
+
+    return JsonResponse(data)
+
+
+
+

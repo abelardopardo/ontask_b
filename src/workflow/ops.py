@@ -14,7 +14,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
 from action.models import Condition
-from dataops import formula_evaluation, pandas_db
+from dataops import formula_evaluation, pandas_db, ops
 from .models import Workflow, Column
 from .serializers import (WorkflowExportSerializer,
                           WorkflowCompleteSerializer,
@@ -313,3 +313,35 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
         condition.delete()
 
     return
+
+def clone_column(column, new_workflow=None, new_name=None):
+    """
+    Function that given a column clones it and changes workflow and name
+    :param column: Object to clone
+    :param new_workflow: New workflow object to point
+    :param new_name: New name
+    :return: Cloned object
+    """
+    # Store the old object name before squashing it
+    old_id = column.id
+    old_name = column.name
+
+    # Clone
+    column.id = None
+
+    # Update some of the fields
+    if new_name:
+        column.name = new_name
+    if new_workflow:
+        column.workflow = new_workflow
+
+    # Update
+    column.save()
+
+    # Add the column to the table and update it.
+    data_frame = pandas_db.load_from_db(column.workflow.id)
+    data_frame[new_name] = data_frame[old_name]
+    ops.store_dataframe_in_db(data_frame, column.workflow.id)
+
+    return column
+

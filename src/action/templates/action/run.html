@@ -4,14 +4,12 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-
 {% block extrahead %}
  {% comment %}
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
   {% endcomment %}
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 {% endblock extrahead %}
-
 {% block scripts %}
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
@@ -41,13 +39,16 @@
     }
   </script>
 {% endblock %}
-
 {% block title %}{{ block.super }}Run Action In{% endblock %}
-
 {% block container %}
   <div id="table-content" align="center" class="container"
        style="padding-top:2ex;">
-    <h4 class="page-header"><strong>{{ action.name }}</strong></h4>
+    <h4 class="page-header">
+      <strong>{{ action.name }}</strong>
+      <a href="{% url 'action:edit_in' action.id %}"
+         class="btn btn-primary btn-sm align-middle">
+      <span class="glyphicon glyphicon-folder-open"></span> Edit</a>
+    </h4>
     <p class="help-block">{{ action.description_text }}</p>
     <table class="table display dataTable no-footer cell-border table-bordered"
            id="actioninrun-data">

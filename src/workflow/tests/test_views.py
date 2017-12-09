@@ -268,7 +268,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.CLASS_NAME, 'page-header'),
-                'Step 3: Select Unique Keys to Merge')
+                'Step 3: Select Keys to Merge')
         )
 
         # Select SID in the first key

@@ -82,6 +82,7 @@ $(function () {
 
   // Show URL
   $("#action-table").on("click", ".js-action-showurl", loadForm);
+  $("#modal-item").on("submit", ".js-action-showurl-form", saveForm);
 });
 
 

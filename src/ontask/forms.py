@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.template.defaultfilters import filesizeformat
 from django.utils.translation import ugettext_lazy as _
 
 import ontask.ontask_prefs
+
+dateTimeOptions = {
+    'weekStart': 1,  # Start week on Monday
+    'minuteStep': 5,  # Minute step
+}
 
 
 class RestrictedFileField(forms.FileField):
@@ -36,15 +42,20 @@ class RestrictedFileField(forms.FileField):
         return data
 
 
-def column_to_field(col, initial=None, required=False):
+def column_to_field(col, initial=None, required=False, label=None):
     """
     Function that given the description of a column it generates the
     appropriate field to be included in a form
     :param col: Column object to use as the basis to create the field
     :param initial: Initial value for the field
-    :param required: flag to generate the field
+    :param required: flag to generate the field with the required attribute
+    :param label: Value to overwrite the label attribute
     :return: Field object
     """
+
+    # If no label is given, take the column name
+    if not label:
+        label = col.name
 
     if col.categories:
         # Column has a finite set of prefixed values
@@ -55,7 +66,7 @@ def column_to_field(col, initial=None, required=False):
         return forms.ChoiceField(choices,
                                  required=required,
                                  initial=initial,
-                                 label=col.name)
+                                 label=label)
 
     # Column is open value
     if col.data_type == 'string':
@@ -64,27 +75,33 @@ def column_to_field(col, initial=None, required=False):
         if not col.categories:
             # The field does not have any categories
             return forms.CharField(initial=initial,
-                                   label=col.name,
+                                   label=label,
                                    required=required)
 
     elif col.data_type == 'integer':
         return forms.IntegerField(initial=initial,
-                                  label=col.name,
+                                  label=label,
                                   required=required)
 
     elif col.data_type == 'double':
         return forms.FloatField(initial=initial,
-                                label=col.name,
+                                label=label,
                                 required=required)
 
     elif col.data_type == 'boolean':
         return forms.BooleanField(initial=initial,
-                                  label=col.name,
+                                  label=label,
                                   required=required)
 
     elif col.data_type == 'datetime':
-        return forms.DateTimeField(initial=initial,
-                                   label=col.name,
-                                   required=required)
+        return forms.DateTimeField(
+            initial=initial,
+            label=label,
+            required=required,
+            widget=DateTimeWidget(options=dateTimeOptions,
+                                  usel10n=True,
+                                  bootstrap_version=3),
+        )
     else:
-        raise Exception('Unable to process datatype', col.data_type)
+        raise Exception('Unable to process datatype ', col.data_type)
+

@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+import datetime
+import pytz
+from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 
@@ -47,6 +50,21 @@ class Action(models.Model):
                                         null=False,
                                         blank=False)
 
+    # Validity window for URL availability
+    active_from = models.DateTimeField(
+        'Action available from',
+        blank=True,
+        null=True,
+        default=None,
+    )
+
+    active_to = models.DateTimeField(
+        'Action available until',
+        blank=True,
+        null=True,
+        default=None
+    )
+
     #
     # Field for action OUT
     #
@@ -71,6 +89,17 @@ class Action(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def is_active(self):
+        """
+        Function to ask if an action is active: the current time is within the
+        interval defined by active_from - active_to.
+        :return: Boolean encoding the active status
+        """
+        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
+        return not ((self.active_from and now < self.active_from) or
+                    (self.active_to and self.active_to < now))
 
     class Meta:
         unique_together = ('name', 'workflow')

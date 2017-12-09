@@ -252,7 +252,7 @@ td.dt-body-center {
 
 /* Wflow name */
 #wflow-name.alert {
-    padding: 1ex;
+    padding: 0.5ex;
 }
 
 mark {
