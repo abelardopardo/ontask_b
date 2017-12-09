@@ -51,24 +51,25 @@
           {% block navbar-left %}
             {% if request.session.ontask_workflow_id %}
               {% url 'workflow:detail' request.session.ontask_workflow_id as workflow_url %}
-              <li {% if request.path == workflow_url %}class="active"{% endif %}><a
+              <li {% if '/workflow/' in request.path %}class="active"{% endif %}><a
                   href="{{ workflow_url }}">Details</a></li>
               {% url 'dataops:list' as dataops_url %}
-              <li {% if request.path == dataops_url %}class="active"{% endif %}><a
+              <li {% if '/dataops/' in request.path %}class="active"{% endif %}><a
                   href="{{ dataops_url }}">Dataops</a>
               </li>
 
               {% url 'table:display' as table_display %}
-              <li {% if request.path == table_display %}class="active"{% endif %}><a
+              <li {% if '/table/' in request.path %}class="active"{% endif %}><a
                   href="{% url 'table:display' %}">Table</a>
               </li>
 
               {% url 'action:index' as actions_url %}
-              <li {% if request.path == actions_url %}class="active"{% endif %}><a
+              <li {% if '/action/' in request.path %}class="active"{% endif %}><a
                   href="{{ actions_url }}">Actions</a></li>
 
-              <li class="{% if not request.session.ontask_workflow_id %}disabled{% endif %}"><a
-                  href="{% url 'logs:show' %}">Logs</a>
+              {% url 'logs:show' as logs_url %}
+              <li {% if '/logs/' in request.path %}class="active"{% endif %}><a
+                  href="{{ logs_url }}">Logs</a>
               </li>
             {% else %}
               <li><a href="https://ontasklearning.org">About</a></li>
