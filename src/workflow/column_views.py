@@ -30,6 +30,14 @@ def column_add(request):
         data['html_redirect'] = reverse('workflow:index')
         return JsonResponse(data)
 
+    if workflow.nrows == 0:
+        data['form_is_valid'] = True
+        data['html_redirect'] = ''
+        messages.error(
+            request,
+            'Cannot add column to a workflow without data')
+        return JsonResponse(data)
+
     # Form to read/process data
     form = ColumnAddForm(request.POST or None, workflow=workflow)
 
