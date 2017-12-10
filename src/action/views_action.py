@@ -864,12 +864,12 @@ def run_ss(request, pk):
         order_dir == 'asc',
         [cn for cn in column_names],  # Column names in the action
         action.filter  # Filter in the action
-    )[start:]
+    )
 
     # Post processing + adding operations
     final_qs = []
     items = 0
-    for row in qs:
+    for row in qs[start:start + length]:
         items += 1
 
         # Render the first element (the key) as the link to the page to update

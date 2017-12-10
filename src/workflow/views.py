@@ -470,12 +470,9 @@ def column_ss(request, pk):
                        Q(data_type__contains=search_value))
         recordsFiltered = len(qs)
 
-    # Use only those elements starting at certain point
-    qs = qs[start:]
-
     # Creating the result
     final_qs = []
-    for col in qs:
+    for col in qs[start:start + length]:
         ops_string = render_to_string(
             'workflow/includes/workflow_column_operations.html',
             {'id': col.id}
