@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load settings %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block extrahead %}
+  <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
+  <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+{% endblock extrahead %}
+{% block scripts %}
+  <script src="{% static 'email_action/js/email_action.js' %}{% otv %}"></script>
+{% endblock scripts %}
+{% block title %}{{ block.super }}Email action{% endblock %}
+{% block container %}
+<div align="center" class="container" id="email-schedule-send">
+  <h1 class="page-header">Schedule email send</h1>
+
+  <div class="container">
+    <form action="" method="post">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <div style="margin: 1ex 0 1ex 0;">
+        <a type="button" class="btn btn-default"
+           href="{% url 'action:index' %}" style="margin-right:2ex;"> Cancel
+        </a>
+        <button type="Submit" name="Submit" value="Send"
+                style="margin-right:2ex;"
+                class="btn btn-success">Schedule</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock container %}

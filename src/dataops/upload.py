@@ -456,10 +456,9 @@ def upload_s4(request):
                           'column_unique': col_info[2],
                           'error_msg': status})
 
-            messages.error(request, 'Merge operation failed.'),
-            return render(request, 'dataops/upload_s4.html',
-                          {'prev_step': reverse('dataops:upload_s3'),
-                           'next_name': 'Finish'})
+            messages.error(request,
+                           'Merge operation failed. (' + status + ')'),
+            return redirect(reverse('dataops:list'))
 
         # Log the event
         logs.ops.put(request.user,

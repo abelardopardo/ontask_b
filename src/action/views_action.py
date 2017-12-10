@@ -658,6 +658,7 @@ def showurl(request, pk):
 #  to serve content that is not only for instructors.
 @csrf_exempt
 @xframe_options_exempt
+@login_required
 def serve(request, action_id):
     """
     View to serve the rendering of an action in a workflow for a given user.

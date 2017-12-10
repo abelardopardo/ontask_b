@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+import datetime
+import pytz
+from datetimewidget.widgets import DateTimeWidget
 from django import forms
+from django.conf import settings
 
 
-class EmailActionForm(forms.Form):
+class EmailActionBasicForm(forms.Form):
     subject = forms.CharField(max_length=1024,
                               strip=True,
                               required=True,
@@ -30,21 +34,13 @@ class EmailActionForm(forms.Form):
         initial=False,
         required=False,
         label="Add a column reflecting the email tracking?",
-        help_text="A value True means the email was opened."
-    )
-
-    export_wf = forms.BooleanField(
-        initial=False,
-        required=False,
-        label="Download a snapshot of the current state of the workflow?",
-        help_text="A zip file useful to review the emails sent."
+        help_text="Times the email was opened."
     )
 
     def __init__(self, *args, **kargs):
-
         self.column_names = kargs.pop('column_names')
 
-        super(EmailActionForm, self).__init__(*args, **kargs)
+        super(EmailActionBasicForm, self).__init__(*args, **kargs)
 
         # Try to guess if there is an "email" column
         initial_choice = next((x for x in self.column_names
@@ -60,8 +56,7 @@ class EmailActionForm(forms.Form):
             [(x, x) for x in self.column_names]
 
     def clean(self):
-
-        data = super(EmailActionForm, self).clean()
+        data = super(EmailActionBasicForm, self).clean()
 
         if data['add_column'] and not data['track_read']:
             self.add_error(
@@ -71,3 +66,37 @@ class EmailActionForm(forms.Form):
 
     class Meta:
         widgets = {'subject': forms.TextInput(attrs={'size': 256})}
+
+
+class EmailActionForm(EmailActionBasicForm):
+    export_wf = forms.BooleanField(
+        initial=False,
+        required=False,
+        label="Download a snapshot of the current state of the workflow?",
+        help_text="A zip file useful to review the emails sent."
+    )
+
+
+class EmailScheduleSendForm(EmailActionBasicForm):
+    when = forms.DateTimeField(
+        label='Time to send the emails',
+        required=True,
+        widget=DateTimeWidget(
+            options={'weekStart': 1, 'minuteStep': 15},
+            usel10n=True,
+            bootstrap_version=3),
+    )
+
+    def clean(self):
+        data = super(EmailScheduleSendForm, self).clean()
+
+        # Check the datetime is in the future
+        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
+        when_data = self.cleaned_data.get('when', None)
+        if when_data and when_data <= now:
+            self.add_error(
+                'when',
+                'Date/time must be in the future'
+            )
+
+        return data

@@ -11,9 +11,11 @@
 
 - Columns in the workflow can now be cloned (duplicating values)
 
-- The availability of the URL for actions can also now be controlled with a 
-  time window (active from - to)
-  
+### Changed
+
+- Fixed bug showing wrong number of (filtered) entries in AJAX generated 
+  tables.
+
 ## 2.0.0
 
 ### Added

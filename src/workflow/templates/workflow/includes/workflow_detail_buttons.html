@@ -1,8 +1,10 @@
-<button type="button"
-        class="btn btn-primary btn-sm js-workflow-column-add"
-        data-url="{% url 'workflow:column_add' %}">
-  <span class="glyphicon glyphicon-plus"></span> New column
-</button>
+{% if workflow.nrows != 0 %}
+  <button type="button"
+          class="btn btn-primary btn-sm js-workflow-column-add"
+          data-url="{% url 'workflow:column_add' %}">
+    <span class="glyphicon glyphicon-plus"></span> New column
+  </button>
+{% endif %}
 <a href="{% url 'workflow:attributes' %}" class="btn btn-primary btn-sm">
   <span class="glyphicon glyphicon-list"></span> Attributes
 </a>
