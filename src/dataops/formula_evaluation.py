@@ -209,6 +209,10 @@ def evaluate_node_sql(node):
         sub_pairs = \
             [evaluate_node_sql(x) for x in node['rules']]
 
+        if not sub_pairs:
+            # Nothing has been returned, so it is an empty query
+            return '', []
+
         # Now combine
         if node['condition'] == 'AND':
             result = '((' + \
