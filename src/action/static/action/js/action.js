@@ -38,6 +38,10 @@ $(function () {
   $("#action-table").on("click", ".js-action-delete", loadForm);
   $("#modal-item").on("submit", ".js-action-delete-form", saveForm);
 
+  // Clone Action
+  $("#action-table").on("click", ".js-action-clone", loadForm);
+  $("#modal-item").on("submit", ".js-action-clone-form", saveForm);
+
   // Create filter
   $("#filter-set").on("click", ".js-filter-create", loadForm);
   $("#modal-item").on("submit", ".js-filter-create-form", saveForm);

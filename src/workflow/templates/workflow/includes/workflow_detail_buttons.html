@@ -17,11 +17,12 @@
    class="btn btn-primary btn-sm">
   <span class="glyphicon glyphicon-export"></span> Export
 </a>
-<a href="{% url 'workflow:clone' workflow.id %}"
-   class="btn btn-primary btn-sm">
-  <span class="glyphicon glyphicon-duplicate"></span> Clone
-</a>
 {% if request.user == workflow.user %}
+  <button type="button"
+     class="btn btn-primary btn-sm js-workflow-clone align-middle"
+          data-url="{% url 'workflow:clone' workflow.id %}">
+    <span class="glyphicon glyphicon-duplicate"></span> Clone
+  </button>
   <button type="button"
           class="btn btn-primary btn-sm js-workflow-update align-middle"
           data-url="{% url 'workflow:update' workflow.id %}">

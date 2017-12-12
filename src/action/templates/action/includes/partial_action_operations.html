@@ -6,10 +6,11 @@
         data-url="{% url 'action:update' id is_out %}">
     <span class="glyphicon glyphicon-pencil"></span> Rename
 </button>
-<a href="{% url 'action:clone' id %}"
-   class="btn btn-primary btn-sm">
+<button type="button"
+        class="btn btn-primary btn-sm js-action-clone align-middle"
+        data-url="{% url 'action:clone' id %}">
   <span class="glyphicon glyphicon-duplicate"></span> Clone
-</a>
+</button>
 <button type="button"
         class="btn btn-{% if serve_enabled %}success{% else %}danger{% endif %} btn-sm js-action-showurl"
         data-url="{% url 'action:showurl' id %}"

@@ -274,9 +274,9 @@ def column_clone(request, pk):
     # Get the workflow element
     workflow = get_workflow(request)
     if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
-        return JsonResponse(data)
+            data['form_is_valid'] = True
+            data['html_redirect'] = reverse('workflow:index')
+            return JsonResponse(data)
 
     data['form_is_valid'] = False
     context = {'pk': pk}  # For rendering
