@@ -1,12 +1,11 @@
 from __future__ import unicode_literals
-from django.core.urlresolvers import reverse_lazy
-from django.views import generic
-from django.contrib.auth import get_user_model
-from django.contrib import auth
-from django.contrib import messages
+
 from authtools import views as authviews
 from braces import views as bracesviews
-from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.core.urlresolvers import reverse_lazy
+
 from . import forms
 
 User = get_user_model()
@@ -29,6 +28,8 @@ class LoginView(bracesviews.AnonymousRequiredMixin,
 
 class LogoutView(authviews.LogoutView):
     url = reverse_lazy('home')
+
+
 #
 #
 # class SignUpView(bracesviews.AnonymousRequiredMixin,

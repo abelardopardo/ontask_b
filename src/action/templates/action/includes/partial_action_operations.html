@@ -17,9 +17,14 @@
   <span class="glyphicon glyphicon-link"></span> URL ({% if serve_enabled %}On{% else %}Off{% endif %})
 </button>
 {% if is_out %}
-  <a href="{% url 'email_action:index' id %}"
+  <a href="{% url 'action:send_email' id %}"
      class="btn btn-primary btn-sm">
     <span class="glyphicon glyphicon-envelope"></span> Email</a>
+  {% comment %}
+  <a href="{% url 'action:schedule_email' id %}"
+     class="btn btn-primary btn-sm">
+    <span class="glyphicon glyphicon-calendar"></span> Schedule</a>
+  {% endcomment %}
 {% else %}
   <a href="{% url 'action:run' id %}"
           class="btn btn-primary btn-sm"
