@@ -11,6 +11,8 @@
 
 - Columns in the workflow can now be cloned (duplicating values)
 
+- New app to schedule execution of actions (not fully implemented yet)
+
 ### Changed
 
 - Fixed bug showing wrong number of (filtered) entries in AJAX generated 
