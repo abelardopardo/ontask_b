@@ -18,6 +18,8 @@
 - Fixed bug showing wrong number of (filtered) entries in AJAX generated 
   tables.
 
+- Refined the process to clone workflows, columns, actions, conditions.
+
 ## 2.0.0
 
 ### Added
