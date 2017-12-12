@@ -8,7 +8,7 @@ from django.shortcuts import redirect, render
 
 from action.models import Action
 from action.views_action import preview_response
-from email_action.ops import send_messages
+from action.ops import send_messages
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
 from .forms import EmailActionForm, EmailScheduleSendForm
@@ -66,7 +66,7 @@ def request_data(request, pk):
 
                 # Successful processing.
                 return render(request,
-                              'email_action/done.html',
+                              'action/email_done.html',
                               context)
 
     # Get the number of rows from the action
@@ -77,7 +77,7 @@ def request_data(request, pk):
 
     # Render the form
     return render(request,
-                  'email_action/request_data.html',
+                  'action/request_email_data.html',
                   {'action': action,
                    'num_msgs': num_msgs,
                    'form': form})
@@ -110,14 +110,13 @@ def schedule_email(request, pk):
                                  column_names=workflow.get_column_names())
 
     # Process the POST
-    if request.method == 'POST':
-        if form.is_valid():
-            pass
+    if request.method == 'POST' and form.is_valid():
+        pass
 
 
     # Render the form
     return render(request,
-                  'email_action/schedule_email.html',
+                  'action/schedule_email.html',
                   {'action': action,
                    'form': form})
 
@@ -139,7 +138,7 @@ def preview(request, pk, idx):
         request,
         pk,
         idx,
-        'email_action/includes/partial_email_preview.html',
+        'action/includes/partial_email_preview.html',
         'THE SUBJECT WILL BE INSERTED HERE')
 
     # This function is redundant, but I thought I could include here the

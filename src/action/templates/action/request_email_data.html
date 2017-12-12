@@ -4,7 +4,7 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block scripts %}
-  <script src="{% static 'email_action/js/email_action.js' %}{% otv %}"></script>
+  <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
 {% endblock scripts %}
 {% block title %}{{ block.super }}Email action{% endblock %}
 {% block container %}
@@ -22,7 +22,7 @@
           </a>
           <button type="button" class="btn btn-primary js-email-preview"
                   style="margin-right:2ex;"
-                  data-url="{% url 'email_action:preview' action.id 1 %}">
+                  data-url="{% url 'action:email_preview' action.id 1 %}">
             <span class="glyphicon glyphicon-eye-open"></span> Preview
           </button>
           <button type="Submit" name="Submit" value="Send"
@@ -36,5 +36,12 @@
         filter</a></p>
     {% endif %}
   </div>
+    <div class="modal fade" id="modal-item">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+
 </div>
 {% endblock container %}

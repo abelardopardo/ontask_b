@@ -110,9 +110,8 @@ INSTALLED_APPS = (
     'dataops.apps.DataopsConfig',
     'table.apps.TableConfig',
     'action.apps.ActionConfig',
-    'email_action.apps.EmailActionConfig',
     'logs.apps.LogsConfig',
-
+    'scheduler.apps.SchedulerConfig',
 )
 
 MIDDLEWARE_CLASSES = (

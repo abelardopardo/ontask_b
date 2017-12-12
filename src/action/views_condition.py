@@ -312,7 +312,7 @@ def delete_filter(request, pk):
 
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('action:edit_out',
-                                        args=[cond_filter.action.id])
+                                        kwargs={'pk': cond_filter.action.id})
         return JsonResponse(data)
 
     # If the request has the 'action_content', update the action
@@ -449,7 +449,7 @@ def delete_condition(request, pk):
         condition.delete()
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('action:edit_out',
-                                        args=[condition.action.id])
+                                        kwargs={'pk': condition.action.id})
         return JsonResponse(data)
 
     # If the request has the 'action_content', update the action
@@ -510,4 +510,5 @@ def clone(request, pk):
 
     messages.success(request,
                      'Action successfully cloned.')
-    return redirect(reverse('action:edit_out', kwargs={'pk': condition.action}))
+    return redirect(reverse('action:edit_out',
+                            kwargs={'pk': condition.action.id}))

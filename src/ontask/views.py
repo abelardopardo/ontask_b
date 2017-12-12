@@ -15,7 +15,7 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 import logs.ops
 from action.models import Action
 from dataops import pandas_db, ops
-from email_action import settings
+from action import settings
 from ontask.permissions import UserIsInstructor
 
 

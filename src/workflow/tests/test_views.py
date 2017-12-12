@@ -48,7 +48,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
 
         # GO TO THE WORKFLOW PAGE
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('Ontask :: Workflows'))
+            EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
         self.assertIn('Import', self.selenium.page_source)
 
@@ -104,7 +104,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         # Goto Dataops list
         self.open(reverse('dataops:list'))
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('Ontask :: Dataops')
+            EC.title_is('OnTask :: Dataops')
         )
         # Click in the upload/Merge link
         upload = self.selenium.find_element_by_xpath(
@@ -114,7 +114,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         # Goto Upload/Merge CSV
         upload.click()
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('Ontask :: Upload/Merge CSV')
+            EC.title_is('OnTask :: Upload/Merge CSV')
         )
 
         # Set the file name
@@ -150,7 +150,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         ).click()
         # Wait for the upload/merge
         WebDriverWait(self.selenium, 20).until(
-            EC.title_is('Ontask :: Dataops')
+            EC.title_is('OnTask :: Dataops')
         )
 
         # Goto Details list
@@ -220,7 +220,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         # Goto Dataops list
         self.open(reverse('dataops:list'))
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('Ontask :: Dataops')
+            EC.title_is('OnTask :: Dataops')
         )
         # Click in the upload/Merge link
         upload = self.selenium.find_element_by_xpath(
@@ -230,7 +230,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         # Goto Upload/Merge CSV
         upload.click()
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('Ontask :: Upload/Merge CSV')
+            EC.title_is('OnTask :: Upload/Merge CSV')
         )
 
         # Set the file name
@@ -293,7 +293,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         ).click()
         # Wait for the upload/merge
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('Ontask :: Dataops')
+            EC.title_is('OnTask :: Dataops')
         )
 
         # Goto Dataops list
@@ -366,7 +366,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
 
         # GO TO THE WORKFLOW PAGE
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('Ontask :: Workflows'))
+            EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
         self.assertIn('Import', self.selenium.page_source)
 
@@ -504,7 +504,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
 
         # GO TO THE WORKFLOW PAGE
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('Ontask :: Workflows'))
+            EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
         self.assertIn('Import', self.selenium.page_source)
 
@@ -639,7 +639,7 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
 
         # GO TO THE WORKFLOW PAGE
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('Ontask :: Workflows'))
+            EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
         self.assertIn('Import', self.selenium.page_source)
 

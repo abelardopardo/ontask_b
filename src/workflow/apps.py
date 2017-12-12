@@ -6,4 +6,4 @@ from django.apps import AppConfig
 
 class WorkflowConfig(AppConfig):
     name = 'workflow'
-    verbose_name = 'Workflow Management'
+    verbose_name = 'Workflows'

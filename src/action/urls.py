@@ -3,7 +3,7 @@ from __future__ import unicode_literals, print_function
 
 from django.conf.urls import url
 
-from . import views_action, views_condition
+from . import views_action, views_condition, views_email
 
 app_name = 'action'
 
@@ -99,5 +99,23 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/clone_condition/$',
         views_condition.clone,
         name='clone_condition'),
+
+    #
+    # Email
+    #
+    # Request data to send email
+    url(r'^(?P<pk>\d+)/send_email/$',
+        views_email.request_data,
+        name="send_email"),
+
+    # Preview emails
+    url(r'^(?P<pk>\d+)/(?P<idx>\d+)/email_preview/$',
+        views_email.preview,
+        name='email_preview'),
+
+    # Schedule email
+    url(r'^(?P<pk>\d+)/schedule_email/$',
+        views_email.schedule_email,
+        name="schedule_email"),
 
 ]
