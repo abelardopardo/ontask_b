@@ -166,7 +166,7 @@ def row_create(request):
             for ucol in [c for c in columns if c.is_key]:
                 if not ops.is_unique_column(df[ucol.name]):
                     form.add_error(
-                        ucol.name,
+                        None,
                         'Value in column ' + ucol.name + ' is in another row.' +
                         ' It must be different to maintain Key property'
                     )
