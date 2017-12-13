@@ -48,6 +48,10 @@ Install and Configure Redis
 
 2. Test that it executes properly
 
+For OnTask you only need executing in the machine. If you use the default
+settings, there are not additional changes required in OnTask (the code is
+alrady using this application internally).
+
 Install and Configure PostgreSQL
 ********************************
 
@@ -89,8 +93,7 @@ interpreter and you can execute the python intepreter.
 Download, install and configure OnTask
 **************************************
 
-1. Download or clone_actions a copy of `OnTask <https://github
-.com/abelardopardo/ontask_b>`_.
+1. Download or clone_actions a copy of `OnTask <https://github.com/abelardopardo/ontask_b>`_.
 
 #. Using a command interpreter, go to the OnTask folder and locate a folder
    inside it with name ``requirements``. Verify that the ``requirements``
@@ -158,9 +161,9 @@ no space between variable names and the equal sign)::
 
 
 #. Modify the line starting with ``LTI_OAUTH_CREDENTIALS`` and include a
-comma-sepparated list of pairs key=secret for LTI authentication. See the
-section  :ref:`authentication` for more details about this type of
-authentication.
+   comma-sepparated list of pairs key=secret for LTI authentication. See the
+   section  :ref:`authentication` for more details about this type of
+   authentication.
 
 #. Create a new folder with name ``logs`` in the OnTask top folder (next to
    the ``requirements`` folder). This folder **is different** from the folder
@@ -169,10 +172,11 @@ authentication.
 #. If at some point during the following steps you want to reset
    the content of the database, run the commands ``dropdb`` and ``createdb``
 
-#. Execute the following commands from the ``src`` folder to prepare the database initialization::
+#. Execute the following commands from the ``src`` folder to prepare the
+   database initialization::
 
      python manage.py makemigrations profiles accounts workflow dataops
-     python manage.py makemigrations table action email_action logs
+     python manage.py makemigrations table action logs
 
 #. Execute the following command to create the database internal structure::
 
@@ -182,7 +186,7 @@ authentication.
    of the database.
 
 #. Execute the following command to upload to the platform some initial data
-structures::
+   structures::
 
      python manage.py runscript -v1 --traceback initial_data
 
@@ -196,25 +200,33 @@ structures::
    Remember the data that you enter in this step so that
    you use it when you enter OnTask with your browser.
 
-#. Go to the ``docs`` folder to generate the documentation. Make sure this folder contains the sub-folders with name ``_static`` and ``_templates``. Execute the command::
+#. Go to the ``docs`` folder to generate the documentation. Make sure this
+   folder contains the sub-folders with name ``_static`` and ``_templates``.
+   Execute the command::
 
      make html
 
-   The documentation is produced by the ``sphinx-doc`` application and generates the directory ``_build``. The documentation for the platform is in the folder ``_build/html``.
+   The documentation is produced by the ``sphinx-doc`` application and
+   generates the directory ``_build``. The documentation for the platform is in
+   the folder ``_build/html``.
 
-#. Copy the entire ``html`` folder (inside ``_build``) over to the ``src/static`` folder (in Unix ``cp -r _build/html ../src/static``).
+#. Copy the entire ``html`` folder (inside ``_build``) over to the
+   ``src/static`` folder (in Unix ``cp -r _build/html ../src/static``).
 
-#. From the ``src`` folder execute the following command to collect and install the static content::
+#. From the ``src`` folder execute the following command to collect and install
+   the static content::
 
      python manage.py collectstatic
 
-#. Execute the following
+#. If you are running a production instance, execute the following
    command to check the status of the platform::
 
      python manage.py check --deploy
 
-   The command should print just one warning about the
-   configuration variable X_FRAME_OPTIONS.
+   The command should print just one warning about the configuration variable
+   X_FRAME_OPTIONS. If you are running a development instance, you will get
+   various additional warning that are derived most of them from running the
+   instance without HTTPS.
 
 #. Execute the following command to start the OnTask server::
 
@@ -223,7 +235,8 @@ structures::
    If there are no errors, the message on the screen should say that your
    server is running and available in the URL 127.0.0.1:8000
 
-#. If OnTask is going to be accessed through a web server like Apache or Nginx, stop the application and configure the web server accordingly.
+#. If OnTask is going to be accessed through a web server like Apache or Nginx,
+   stop the application and configure the web server accordingly.
 
 The Administration Pages
 ------------------------
@@ -265,7 +278,7 @@ OnTask comes with three default authentication mechanisms (and are used in
 the following order): LTI, ``REMOTE_USER``
 and basic authentication.
 
-`IMS Learning Tools Interoperability (IMS-LTI) <http://www.imsglobal.org/activity/learning-tools-interoperability>`__
+- `IMS Learning Tools Interoperability (IMS-LTI) <http://www.imsglobal.org/activity/learning-tools-interoperability>`__.
   LTI is a standard developed by the IMS Global Leanring Consortium to
   integrate multiple tools within a learning environment. In LTI terms,
   OnTask is configured to behave as a *tool provider* and assumes a *tool
@@ -296,10 +309,18 @@ and basic authentication.
   This authentication has only basic functionality and it is assumed to be
   used only for learners (not for instructors).
 
-``REMOTE_USER``
-  The second method uses `the variable REMOTE_USER <https://docs.djangoproject.com/en/1.11/howto/auth-remote-user/#authentication-using-remote-user>`__ that is assumed to be defined by an external application. This method is ideal for environments in which users are already authenticated and are redirected to the OnTask pages (for example, using SAML). If OnTask receives a request from a non-existent user through this channel, it automatically and transparently creates a new user in the platform with the user name stored in the ``REMOTE_USER`` variable. OnTask relies on emails as the username differentiator, so if you plan to use this authentication method make sure the value of ``REMOTE_USER`` is the email.
+- ``REMOTE_USER``.
+  The second method uses `the variable REMOTE_USER <https://docs.djangoproject.com/en/1.11/howto/auth-remote-user/#authentication-using-remote-user>`__ that is
+  assumed to be defined by an external application. This method is ideal for
+  environments in which users are already authenticated and are redirected to
+  the OnTask pages (for example, using SAML). If OnTask receives a request
+  from a non-existent user through this channel, it automatically and
+  transparently creates a new user in the platform with the user name stored
+  in the ``REMOTE_USER`` variable. OnTask relies on emails as the username
+  differentiator, so if you plan to use this authentication method make sure
+  the value of ``REMOTE_USER`` is the email.
 
-Basic authentication
+- Basic authentication.
   If the variable ``REMOTE_USER`` is not set in the internal environment of
   Django where the web requests are served, OnTask resorts to conventional
   authentication requiring email and password. These credentials
