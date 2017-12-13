@@ -1,4 +1,10 @@
-## 2.1.0
+## 2.1.1
+
+### Changed
+
+- Fixed bug when creating API token and session expired.
+
+## 2.1.0 (2017-12-13)
 
 ### Added
 
