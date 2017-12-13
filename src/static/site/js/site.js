@@ -35,6 +35,15 @@ var loadForm = function () {
         $("#modal-item").modal("show");
       },
       success: function(data) {
+        if (data.form_is_valid) {
+          if (data.html_redirect == "") {
+            // If there is no redirect, simply refresh
+            window.location.reload(true);
+          } else {
+            location.href = data.html_redirect;
+          }
+          return;
+        }
         $("#modal-item .modal-content").html(data.html_form);
         if (document.getElementById("id_formula") != null) {
           set_qbuilder('#id_formula', qbuilder_options);
@@ -62,6 +71,7 @@ var saveForm = function () {
       dataType: 'json',
       success: function (data) {
         if (data.form_is_valid) {
+          $("#modal-item .modal-content").html("");
           if (data.html_redirect == "") {
             // If there is no redirect, simply refresh
             window.location.reload(true);

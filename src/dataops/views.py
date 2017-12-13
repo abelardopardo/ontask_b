@@ -275,7 +275,7 @@ def row_update(request):
 
     # If there is no unique key, something went wrong.
     if not unique_field:
-        raise Exception('Unique key not found when updating row')
+        raise Exception('Key value not found when updating row')
 
     pandas_db.update_row(workflow.id,
                          set_fields,

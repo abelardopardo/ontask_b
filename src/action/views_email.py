@@ -8,10 +8,10 @@ from django.shortcuts import redirect, render
 
 from action.models import Action
 from action.views_action import preview_response
-from email_action.ops import send_messages
+from action.ops import send_messages
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
-from .forms import EmailActionForm
+from .forms import EmailActionForm, EmailScheduleSendForm
 
 
 @user_passes_test(is_instructor)
@@ -66,7 +66,7 @@ def request_data(request, pk):
 
                 # Successful processing.
                 return render(request,
-                              'email_action/done.html',
+                              'action/email_done.html',
                               context)
 
     # Get the number of rows from the action
@@ -77,9 +77,47 @@ def request_data(request, pk):
 
     # Render the form
     return render(request,
-                  'email_action/request_data.html',
+                  'action/request_email_data.html',
                   {'action': action,
                    'num_msgs': num_msgs,
+                   'form': form})
+
+
+@user_passes_test(is_instructor)
+def schedule_email(request, pk):
+    """
+    Request data to send emails. Form asking for subject line, email column,
+    etc.
+    :param request: HTTP request (GET)
+    :param pk: Action key
+    :return:
+    """
+
+    # Get the action attached to this request
+    try:
+        action = Action.objects.filter(
+            Q(workflow__user=request.user) |
+            Q(workflow__shared=request.user)).distinct().get(pk=pk)
+    except ObjectDoesNotExist:
+        return redirect('workflow:index')
+
+    workflow = get_workflow(request, action.workflow.id)
+    if not workflow:
+        return redirect('workflow:index')
+
+    # Create the form to ask for the email subject and other information
+    form = EmailScheduleSendForm(request.POST or None,
+                                 column_names=workflow.get_column_names())
+
+    # Process the POST
+    if request.method == 'POST' and form.is_valid():
+        pass
+
+
+    # Render the form
+    return render(request,
+                  'action/schedule_email.html',
+                  {'action': action,
                    'form': form})
 
 
@@ -100,7 +138,7 @@ def preview(request, pk, idx):
         request,
         pk,
         idx,
-        'email_action/includes/partial_email_preview.html',
+        'action/includes/partial_email_preview.html',
         'THE SUBJECT WILL BE INSERTED HERE')
 
     # This function is redundant, but I thought I could include here the

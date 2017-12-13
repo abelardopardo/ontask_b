@@ -3,31 +3,26 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-
 {% block scripts %}
-  <script src="{% static 'email_action/js/email_action.js' %}{% otv %}"></script>
+  <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
 {% endblock scripts %}
-
 {% block title %}{{ block.super }}Email action{% endblock %}
-
 {% block container %}
 <div align="center" class="container" id="email-action-request-data">
   <h1 class="page-header">Send emails</h1>
-
   <div class="container" style="max-width: 500px;">
     {% if num_msgs > 0 %}
       <p>{{ num_msgs }} Emails will be sent.</p>
-
       <form action="" method="post">
         {% csrf_token %}
         {{ form|crispy }}
         <div style="margin: 1ex 0 1ex 0;">
-          <a type="button" class="btn btn-defaul"
-             href="{% url 'action:index' %}"> Cancel
+          <a type="button" class="btn btn-default"
+             href="{% url 'action:index' %}" style="margin-right:2ex;"> Cancel
           </a>
           <button type="button" class="btn btn-primary js-email-preview"
                   style="margin-right:2ex;"
-                  data-url="{% url 'email_action:preview' action.id 1 %}">
+                  data-url="{% url 'action:email_preview' action.id 1 %}">
             <span class="glyphicon glyphicon-eye-open"></span> Preview
           </button>
           <button type="Submit" name="Submit" value="Send"
@@ -41,8 +36,7 @@
         filter</a></p>
     {% endif %}
   </div>
-
-  <div class="modal fade" id="modal-item">
+    <div class="modal fade" id="modal-item">
     <div class="modal-dialog">
       <div class="modal-content">
       </div>
@@ -50,5 +44,4 @@
   </div>
 
 </div>
-
 {% endblock container %}

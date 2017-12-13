@@ -85,12 +85,12 @@ def display_ss(request):
         order_col,
         order_dir == 'asc',
         None
-    )[start:]
+    )
 
     # Post processing + adding operation columns and performing the search
     final_qs = []
     items = 0  # For counting the number of elements in the result
-    for row in qs:
+    for row in qs[start:start + length]:
         items += 1
         ops_string = render_to_string(
             'table/includes/partial_table_ops.html',

@@ -6,4 +6,4 @@ from django.apps import AppConfig
 
 class LogsConfig(AppConfig):
     name = 'logs'
-    verbose_name = 'Event Log Management'
+    verbose_name = 'Event Logs'

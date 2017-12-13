@@ -3,8 +3,7 @@
      style="border-bottom:solid 1px black"><strong>Conditions</strong>
     <button type="button" class="btn btn-sm btn-primary js-condition-create{% if not has_data %} disabled{% endif %}"
             data-url="{% url 'action:create_condition' action.id %}"
-            style="margin-bottom: 0.5ex;"
-            data-toggle="tooltip" title="Create a new condition">
+            style="margin-bottom: 0.5ex;">
       <span class="glyphicon glyphicon-plus"></span> New</button></h4>
   <div class="conditions">
     {% for condition in conditions %}

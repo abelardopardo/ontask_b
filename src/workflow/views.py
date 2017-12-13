@@ -470,12 +470,9 @@ def column_ss(request, pk):
                        Q(data_type__contains=search_value))
         recordsFiltered = len(qs)
 
-    # Use only those elements starting at certain point
-    qs = qs[start:]
-
     # Creating the result
     final_qs = []
-    for col in qs:
+    for col in qs[start:start + length]:
         ops_string = render_to_string(
             'workflow/includes/workflow_column_operations.html',
             {'id': col.id}
@@ -484,7 +481,7 @@ def column_ss(request, pk):
         final_qs.append(OrderedDict(
             [('Name', col.name),
              ('Type', col.data_type),
-             ('Unique',
+             ('Key?',
               '<span class="true">✔</span>' if col.is_key \
                   else '<span class="true">✘</span>'),
              ('Operations', ops_string)]
@@ -506,10 +503,37 @@ def column_ss(request, pk):
 
 @user_passes_test(is_instructor)
 def clone(request, pk):
+    """
+    AJAX view to clone a workflow
+    :param request: HTTP request
+    :param pk: Workflow id
+    :return: JSON data
+    """
+
+    # JSON response
+    data = dict()
+
     # Get the current workflow
     workflow = get_workflow(request, pk)
     if not workflow:
-        return redirect('workflow:index')
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('workflow:index')
+        return JsonResponse(data)
+
+    # Initial data in the context
+    data['form_is_valid'] = False
+    context = {'pk': pk,
+               'name': workflow.name}
+
+    if request.method == 'GET':
+        data['html_form'] = render_to_string(
+            'workflow/includes/partial_workflow_clone.html',
+            context,
+            request=request
+        )
+        return JsonResponse(data)
+
+    # POST REQUEST
 
     # Get the new name appending as many times as needed the 'Copy of '
     new_name = 'Copy of ' + workflow.name
@@ -521,9 +545,11 @@ def clone(request, pk):
     try:
         workflow.save()
     except IntegrityError:
-        messages.error(request,
-                       'Unable to clone workflow')
-        return redirect(reverse('workflow:details', kwargs={'pk': workflow.id}))
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('workflow:details',
+                                        kwargs={'pk': workflow.id})
+        messages.error(request, 'Unable to clone workflow')
+        return JsonResponse(data)
 
     # Get the initial object back
     workflow_new = workflow
@@ -550,4 +576,7 @@ def clone(request, pk):
 
     messages.success(request,
                      'Workflow successfully cloned.')
-    return redirect(reverse('workflow:detail', kwargs={'pk': workflow.id}))
+    data['form_is_valid'] = True
+    data['html_redirect'] = ""  # Reload page
+
+    return JsonResponse(data)

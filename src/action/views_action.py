@@ -3,9 +3,6 @@ from __future__ import unicode_literals, print_function
 
 from collections import OrderedDict
 
-import datetime
-import pytz
-
 try:
     import urlparse
     from urllib import urlencode
@@ -26,7 +23,6 @@ from django.views import generic
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.conf import settings
 
 import logs.ops
 from action.evaluate import evaluate_row
@@ -608,6 +604,7 @@ def showurl(request, pk):
 
     # AJAX result
     data = {}
+    data['form_is_valid'] = False
 
     # Get the action object
     try:
@@ -615,7 +612,9 @@ def showurl(request, pk):
             Q(workflow__user=request.user) |
             Q(workflow__shared=request.user)).distinct().get(pk=pk)
     except Action.DoesNotExist:
-        return redirect(reverse('workflow:index'))
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('workflow:index')
+        return JsonResponse(data)
 
     form = EnableURLForm(request.POST or None, instance=action)
 
@@ -633,7 +632,9 @@ def showurl(request, pk):
                  'name': action.name,
                  'serve_enabled': action.serve_enabled})
 
-        return redirect(reverse('action:index'))
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('action:index')
+        return JsonResponse(data)
 
     # Create the text for the action
     url_text = reverse('action:serve', kwargs={'action_id': action.pk})
@@ -653,6 +654,7 @@ def showurl(request, pk):
 #  to serve content that is not only for instructors.
 @csrf_exempt
 @xframe_options_exempt
+@login_required
 def serve(request, action_id):
     """
     View to serve the rendering of an action in a workflow for a given user.
@@ -689,6 +691,10 @@ def serve(request, action_id):
 
     # If it is not enabled, reject the request
     if not action.serve_enabled:
+        raise Http404
+
+    # If it is enabled but not active (date/time)
+    if not action.is_active:
         raise Http404
 
     if action.is_out:
@@ -855,12 +861,12 @@ def run_ss(request, pk):
         order_dir == 'asc',
         [cn for cn in column_names],  # Column names in the action
         action.filter  # Filter in the action
-    )[start:]
+    )
 
     # Post processing + adding operations
     final_qs = []
     items = 0
-    for row in qs:
+    for row in qs[start:start + length]:
         items += 1
 
         # Render the first element (the key) as the link to the page to update
@@ -942,10 +948,19 @@ def clone(request, pk):
     :return:
     """
 
+    # JSON response
+    data = dict()
+
     # Get the current workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('workflow:index')
+        return JsonResponse(data)
+
+    # Initial data in the context
+    data['form_is_valid'] = False
+    context = {'pk': pk}  # For rendering
 
     # Get the action
     try:
@@ -953,7 +968,21 @@ def clone(request, pk):
             Q(workflow__user=request.user) |
             Q(workflow__shared=request.user)).distinct().get(pk=pk)
     except ObjectDoesNotExist:
-        return redirect('action:index')
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('action:index')
+        return JsonResponse(data)
+
+    # Get the name of the action to clone
+    context['name'] = action.name
+
+    if request.method == 'GET':
+        data['html_form'] = render_to_string(
+            'action/includes/partial_action_clone.html',
+            context,
+            request=request)
+        return JsonResponse(data)
+
+    # POST REQUEST!
 
     # Get the new name appending as many times as needed the 'Copy of '
     new_name = 'Copy of ' + action.name
@@ -973,8 +1002,12 @@ def clone(request, pk):
                   'id_new': action.id,
                   'name_old': old_name,
                   'name_new': action.name})
+    data['form_is_valid'] = True
+    data['html_redirect'] = reverse('action:index')
+
     messages.success(request,
                      'Action successfully cloned.')
+
     return redirect(reverse('action:index'))
 
 

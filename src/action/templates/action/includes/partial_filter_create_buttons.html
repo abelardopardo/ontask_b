@@ -15,8 +15,7 @@
       <button type="button"
               class="btn btn-primary js-filter-create{% if not has_data %} disabled{% endif %}"
               data-url="{% url 'action:create_filter' action.id %}"
-              data-type="filter"
-              data-toggle="tooltip" title="Create a filter">
+              data-type="filter">
         <span class="glyphicon glyphicon-plus"></span> Add Filter</button>
     {% endif %}</h4>
     {% if filter_condition %}

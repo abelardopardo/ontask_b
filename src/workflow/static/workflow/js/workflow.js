@@ -32,6 +32,10 @@ $(function () {
   $("#workflow-area").on("click", ".js-workflow-update", loadForm);
   $("#modal-item").on("submit", ".js-workflow-update-form", saveForm);
 
+  // Clone workflow
+  $("#workflow-area").on("click", ".js-workflow-clone", loadForm);
+  $("#modal-item").on("submit", ".js-workflow-clone-form", saveForm)
+
   // Flush workflow in detail view
   $("#workflow-area").on("click", ".js-workflow-flush", loadForm);
   $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm)
@@ -63,5 +67,9 @@ $(function () {
   // Delete column
   $("#column-table").on("click", ".js-column-delete", loadForm)
   $("#modal-item").on("submit", ".js-column-delete-form", saveForm)
+
+  // Delete column
+  $("#column-table").on("click", ".js-column-clone", loadForm)
+  $("#modal-item").on("submit", ".js-column-clone-form", saveForm)
 });
 

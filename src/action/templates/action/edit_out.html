@@ -3,12 +3,10 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-
 {% block extrahead %}
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
   {{ form.media }}
 {% endblock extrahead %}
-
 {% block scripts %}
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
@@ -68,19 +66,16 @@
           <div style="margin: 1ex 0 1ex 0;">
             <button type="button" class="btn btn-info js-action-preview"
                     style="margin-right:2ex;"
-                    data-url="{% url 'action:preview' action.id 1 %}"
-                    data-toggle="tooltip" title="Preview text for each row">
+                    data-url="{% url 'action:preview' action.id 1 %}">
               <span class="glyphicon glyphicon-eye-open"></span> Preview
             </button>
             <button type="submit" name="Submit" value="Save"
                     style="margin-right:2ex;"
-                    class="btn btn-primary"
-                    data-toggle="tooltip" title="Save and remain in this page">
+                    class="btn btn-primary">
               <span class="glyphicon glyphicon-floppy-disk"></span> Save
             </button>
             <button type="submit" name="Submit" value="Save-and-close"
-                    class="btn btn-primary"
-                    data-toggle="tooltip" title="Save and back to action index">
+                    class="btn btn-primary">
               <span class="glyphicon glyphicon-ok"></span> Save &
               Close</button>
           </div>

@@ -38,6 +38,10 @@ $(function () {
   $("#action-table").on("click", ".js-action-delete", loadForm);
   $("#modal-item").on("submit", ".js-action-delete-form", saveForm);
 
+  // Clone Action
+  $("#action-table").on("click", ".js-action-clone", loadForm);
+  $("#modal-item").on("submit", ".js-action-clone-form", saveForm);
+
   // Create filter
   $("#filter-set").on("click", ".js-filter-create", loadForm);
   $("#modal-item").on("submit", ".js-filter-create-form", saveForm);
@@ -77,11 +81,13 @@ $(function () {
 
   // Preview
   $("#html-editor").on("click", ".js-action-preview", loadForm);
+  $("#email-action-request-data").on("click", ".js-email-preview", loadForm);
   $(".modal-content").on("click", ".js-action-preview-nxt", loadForm);
   $(".modal-content").on("click", ".js-action-preview-prv", loadForm);
 
   // Show URL
   $("#action-table").on("click", ".js-action-showurl", loadForm);
+  $("#modal-item").on("submit", ".js-action-showurl-form", saveForm);
 });
 
 

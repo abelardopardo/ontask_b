@@ -1,18 +1,16 @@
 <a href="{% if is_out %}{% url 'action:edit_out' id %}{% else %}{% url 'action:edit_in' id %}{% endif %}"
-   class="btn btn-primary btn-sm align-middle"
-     data-toggle="tooltip" title="Edit conditions, filter, etc.">
+   class="btn btn-primary btn-sm align-middle">
   <span class="glyphicon glyphicon-folder-open"></span> Edit</a>
 <button type="button"
         class="btn btn-primary btn-sm js-action-update align-middle"
-        data-url="{% url 'action:update' id is_out %}"
-        data-toggle="tooltip" title="Change name and description">
+        data-url="{% url 'action:update' id is_out %}">
     <span class="glyphicon glyphicon-pencil"></span> Rename
 </button>
-<a href="{% url 'action:clone' id %}"
-   class="btn btn-primary btn-sm"
-   data-toggle="tooltip" title="Create an exact duplicate">
+<button type="button"
+        class="btn btn-primary btn-sm js-action-clone align-middle"
+        data-url="{% url 'action:clone' id %}">
   <span class="glyphicon glyphicon-duplicate"></span> Clone
-</a>
+</button>
 <button type="button"
         class="btn btn-{% if serve_enabled %}success{% else %}danger{% endif %} btn-sm js-action-showurl"
         data-url="{% url 'action:showurl' id %}"
@@ -20,10 +18,14 @@
   <span class="glyphicon glyphicon-link"></span> URL ({% if serve_enabled %}On{% else %}Off{% endif %})
 </button>
 {% if is_out %}
-  <a href="{% url 'email_action:index' id %}"
-     class="btn btn-primary btn-sm"
-     data-toggle="tooltip" title="Send email">
+  <a href="{% url 'action:send_email' id %}"
+     class="btn btn-primary btn-sm">
     <span class="glyphicon glyphicon-envelope"></span> Email</a>
+  {% comment %}
+  <a href="{% url 'action:schedule_email' id %}"
+     class="btn btn-primary btn-sm">
+    <span class="glyphicon glyphicon-calendar"></span> Schedule</a>
+  {% endcomment %}
 {% else %}
   <a href="{% url 'action:run' id %}"
           class="btn btn-primary btn-sm"

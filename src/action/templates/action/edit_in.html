@@ -3,12 +3,10 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-
 {% block extrahead %}
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
   {{ form.media }}
 {% endblock extrahead %}
-
 {% block scripts %}
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
@@ -21,19 +19,18 @@
                   'ends_with', 'not_ends_with'],
       allow_empty: true,
       filters: {{ query_builder_ops|safe }},
+      rules: [],
     };
     if (document.getElementById('id_filter') != null) {
       window.onload = set_qbuilder('#id_filter', qbuilder_options);
     }
   </script>
 {% endblock %}
-
 {% block title %}{{ block.super }}Edit action in{% endblock %}
-
 {% block container %}
 <div align="center" class="container-fluid">
   <h1 class="page-header">Action In: <strong>{{ action.name }}</strong></h1>
-  <form method="POST" action="" onsubmit="insert_query()">
+  <form method="POST" action="" onsubmit="return insert_query()">
     {% include 'action/includes/partial_edit_in_buttons.html' %}
     {% csrf_token %}
     {% if form.errors %}
@@ -56,7 +53,7 @@
           </th>
           <th class="text-center" style="vertical-align:middle;">Name</th>
           <th class="text-center" style="vertical-align:middle;">Type</th>
-          <th class="text-center" style="vertical-align:middle;">Unique</th>
+          <th class="text-center" style="vertical-align:middle;">Key?</th>
         </tr>
       </thead>
       <tbody>

@@ -1,4 +1,4 @@
-## 2.0.1
+## 2.1.0
 
 ### Added
 
@@ -7,6 +7,19 @@
 - Columns now have an active from-to window with a datetime. If they are 
   inactive, they are ignored when running Actions In
   
+- URL for actions in/out now have an additional date/time window.
+
+- Columns in the workflow can now be cloned (duplicating values)
+
+- New app to schedule execution of actions (not fully implemented yet)
+
+### Changed
+
+- Fixed bug showing wrong number of (filtered) entries in AJAX generated 
+  tables.
+
+- Refined the process to clone workflows, columns, actions, conditions.
+
 ## 2.0.0
 
 ### Added

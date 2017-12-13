@@ -1,11 +1,17 @@
 <button type="button"
-        class="btn btn-primary btn-xm js-workflow-column-edit"
+        class="btn btn-primary btn-sm js-workflow-column-edit"
         data-url="{% url 'workflow:column_edit' id %}"
         data-toggle="tooltip" title="Edit column properties">
   <span class="glyphicon glyphicon-pencil"></span>
 </button>
 <button type="button"
-        class="btn btn-danger btn-xm js-column-delete"
-        data-url="{% url 'workflow:column_delete' id %}">
+        class="btn btn-primary btn-sm js-workflow-update align-middle"
+        data-url="{% url 'workflow:column_clone' id %}">
+    <span class="glyphicon glyphicon-duplicate"></span>
+</button>
+<button type="button"
+        class="btn btn-danger btn-sm js-column-delete"
+        data-url="{% url 'workflow:column_delete' id %}"
+        data-toggle="tooltip" title="Delete column">
   <span class="glyphicon glyphicon-trash"></span>
 </button>

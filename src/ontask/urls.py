@@ -11,7 +11,6 @@ from rest_framework.documentation import include_docs_urls
 import accounts.urls
 import action.urls
 import dataops.urls
-import email_action.urls
 import logs.urls
 import table.urls
 import profiles.urls
@@ -51,9 +50,6 @@ urlpatterns = [
     url(r'^action/', include(action.urls, namespace='action')),
 
     url(r'^table/', include(table.urls, namespace='table')),
-
-    url(r'^email_action/', include(email_action.urls,
-                                   namespace='email_action')),
 
     url(r'^logs/', include(logs.urls, namespace='logs')),
 

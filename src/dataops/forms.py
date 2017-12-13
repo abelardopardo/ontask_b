@@ -128,7 +128,7 @@ class SelectColumnUploadForm(forms.Form):
 
 
 # Step 3 of the CSV upload: select unique keys to merge
-class SelectUniqueKeysForm(forms.Form):
+class SelectKeysForm(forms.Form):
     how_merge_choices = [('left', 'only the keys in the table'),
                          ('right', 'only the new keys'),
                          ('outer', 'the union of the table and new keys '
@@ -145,7 +145,7 @@ class SelectUniqueKeysForm(forms.Form):
 
     src_help = """This column is in the table you are about to merge with 
     the table. It has a value that is unique for each row. It is suppose to
-     have the same values as the Unique Column in Table. These two columns
+     have the same values as the Key Column in Table. These two columns
     will be used to match the rows to merge the data with the existing
     table."""
 
@@ -196,20 +196,20 @@ class SelectUniqueKeysForm(forms.Form):
         are_overlap_cols = kargs.pop('are_overlap_cols')
         how_dup_columns = kargs.pop('how_dup_columns')
 
-        super(SelectUniqueKeysForm, self).__init__(*args, **kargs)
+        super(SelectKeysForm, self).__init__(*args, **kargs)
 
         self.fields['dst_key'] = \
             forms.ChoiceField(initial=dst_choice_initial,
                               choices=dst_choices,
                               required=True,
-                              label='Unique Key Column in Table',
+                              label='Key Column in Table',
                               help_text=self.dst_help)
 
         self.fields['src_key'] = \
             forms.ChoiceField(initial=src_choice_initial,
                               choices=src_choices,
                               required=True,
-                              label='Unique Key Column in CSV',
+                              label='Key Column in CSV',
                               help_text=self.src_help)
 
         self.fields['how_merge'] = \

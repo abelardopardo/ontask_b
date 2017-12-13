@@ -46,7 +46,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
 
         # GO TO THE WORKFLOW PAGE
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('Ontask :: Workflows'))
+            EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
         self.assertIn('Import', self.selenium.page_source)
 
@@ -202,7 +202,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
 
         # GO TO THE WORKFLOW PAGE
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('Ontask :: Workflows'))
+            EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
         self.assertIn('Import', self.selenium.page_source)
 
@@ -380,7 +380,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
 
         # GO TO THE WORKFLOW PAGE
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('Ontask :: Workflows'))
+            EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
         self.assertIn('Import', self.selenium.page_source)
 
@@ -458,7 +458,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
 
         # GO TO THE WORKFLOW PAGE
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('Ontask :: Workflows'))
+            EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
         self.assertIn('Import', self.selenium.page_source)
 
@@ -824,6 +824,9 @@ class ActionActionInCreate(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath("//button[@type='submit']").click()
 
         # Introducting the information in the action editor
+        self.selenium.find_element_by_xpath(
+            "//dl[@id='builder_group_0']/dt/div[1]/button[1]"
+        ).click()
         self.selenium.find_element_by_name("builder_rule_0_filter").click()
         Select(self.selenium.find_element_by_name(
             "builder_rule_0_filter")).select_by_visible_text("registered")

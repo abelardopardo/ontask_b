@@ -16,7 +16,7 @@ class EmailActionTracking(test.OntaskTestCase):
     fixtures = ['simple_email_action']
     filename = os.path.join(
         settings.PROJECT_PATH,
-        'email_action',
+        'action',
         'fixtures',
         'simple_email_action_df.sql'
     )

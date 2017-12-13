@@ -430,19 +430,16 @@ def search_table_rows(workflow_id,
     # Add the table
     query += ' FROM "{0}"'.format(create_table_name(workflow_id))
 
-    # Build the query so far appending the filter and/or the cv_tuples
-    fields = []
-    if pre_filter or cv_tuples:
-        query += ' WHERE '
 
-    # Add to the query the suffix derived from the filter
+    # Calculate the first suffix to add to the query
+    filter_txt = ''
+    filter_fields = []
     if pre_filter:
         filter_txt, filter_fields = evaluate_node_sql(pre_filter)
-        query += filter_txt
-        fields.extend(filter_fields)
 
     if cv_tuples:
         likes = []
+        tuple_fields = []
         for name, value, data_type in cv_tuples:
             if data_type == 'string':
                 mod_name = '("{0}" LIKE %s)'.format(name)
@@ -451,18 +448,32 @@ def search_table_rows(workflow_id,
 
             # Create the second part of the query setting column LIKE '%value%'
             likes.append(mod_name)
-            fields.append('%' + value + '%')
-
-        # If there is a pre-filter, the suffix needs to be "AND" with the ones
-        # just calculated
-        if pre_filter:
-            query += ' AND '
+            tuple_fields.append('%' + value + '%')
 
         # Combine the search subqueries
         if any_join:
-            query += '(' + ' OR '.join(likes) + ')'
+            tuple_txt = '(' + ' OR '.join(likes) + ')'
         else:
-            query += '(' + ' AND '.join(likes) + ')'
+            tuple_txt = '(' + ' AND '.join(likes) + ')'
+
+    # Build the query so far appending the filter and/or the cv_tuples
+    if filter_txt or cv_tuples:
+        query += ' WHERE '
+
+    fields = []
+    # If there has been a suffix from the filter, add it.
+    if filter_txt and filter_fields:
+        query += filter_txt
+        fields.extend(filter_fields)
+
+    # If there is a pre-filter, the suffix needs to be "AND" with the ones
+    # just calculated
+    if filter_txt and cv_tuples:
+        query += ' AND '
+
+    if cv_tuples:
+        query += tuple_txt
+        fields.extend(tuple_fields)
 
     # Add the order if needed
     if order_col:

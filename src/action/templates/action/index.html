@@ -4,12 +4,12 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-
 {% block extrahead %}
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
 {% endblock extrahead %}
-
 {% block scripts %}
+  <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
@@ -41,14 +41,12 @@
 
   <p>
     <button type="button" class="btn btn-primary js-create-action"
-            data-url="{% url 'action:create' 0 %}"
-            data-toggle="tooltip" title="Add a new action">
+            data-url="{% url 'action:create' 0 %}">
       <span class="glyphicon glyphicon-plus"></span>
         New Action In
     </button>
     <button type="button" class="btn btn-primary js-create-action"
-            data-url="{% url 'action:create' 1 %}"
-            data-toggle="tooltip" title="Add a new action out">
+            data-url="{% url 'action:create' 1 %}">
       <span class="glyphicon glyphicon-plus"></span>
         New Action Out
     </button>
