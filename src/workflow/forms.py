@@ -309,32 +309,17 @@ class WorkflowImportForm(forms.Form):
         max_length=512,
         strip=True,
         required=True,
-        label='Workflow name',
-        help_text='If false only the action text will be included')
+        label='Name')
 
     file = RestrictedFileField(
         max_upload_size=str(ontask_prefs.MAX_UPLOAD_SIZE),
         content_types=json.loads(str(ontask_prefs.CONTENT_TYPES)),
         allow_empty_file=False,
-        label="",
+        label="File",
         help_text='File containing a previously exported workflow')
-
-    # Include data and actions?
-    include_table = forms.BooleanField(
-        label='Include table (if available)?',
-        initial=True,
-        required=False)
 
 
 class WorkflowExportRequestForm(forms.Form):
-    # Include data and conditions?
-    include_table = forms.BooleanField(
-        label='Table with data',
-        label_suffix='',
-        initial=True,
-        required=False,
-        help_text="(Without the table, all conditions in the actions will be "
-                  "removed)")
 
     def __init__(self, *args, **kargs):
         """
@@ -365,22 +350,6 @@ class WorkflowExportRequestForm(forms.Form):
                 label_suffix='',
                 required=False,
             )
-
-    def clean(self):
-
-        data = super(WorkflowExportRequestForm, self).clean()
-
-        marks = [data.get('include_table')]
-        for idx in range(len(self.actions)):
-            marks.append(data.get(self.field_prefix + '%s' % idx))
-
-        if not any(marks):
-            self.add_error(
-                None,
-                'You have to select at least one element to export'
-            )
-
-        return data
 
 
 class SharedForm(forms.Form):
