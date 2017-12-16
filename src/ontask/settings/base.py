@@ -103,9 +103,9 @@ INSTALLED_APPS = (
     'django_auth_lti',
     'datetimewidget',
 
+    'accounts',
     'core.apps.CoreConfig',
     'profiles.apps.ProfileConfig',
-    'accounts',
     'workflow.apps.WorkflowConfig',
     'dataops.apps.DataopsConfig',
     'table.apps.TableConfig',
@@ -248,7 +248,7 @@ SUMMERNOTE_CONFIG = {
 }
 
 # Extra configuration options
-DATAOPS_CONTENT_TYPES = '["text/csv", "application/json", "application/gzip", "application/x-gzip"]'
+DATAOPS_CONTENT_TYPES = '["text/csv", "application/json", "application/gzip", "application/x-gzip", "application/vnd.ms-excel"]'
 DATAOPS_MAX_UPLOAD_SIZE = 209715200  # 200 MB
 
 # Email configuration

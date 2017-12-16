@@ -32,7 +32,7 @@ urlpatterns = [
 
     url(r'^export_ask/$', import_export_views.export_ask, name='export_ask'),
 
-    url(r'^(?P<data>\d+(,\d+)*)/export/$',
+    url(r'^(?P<data>(\d+(,\d+)*)?)/export/$',
         import_export_views.export,
         name='export'),
 

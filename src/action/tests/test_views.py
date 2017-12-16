@@ -842,7 +842,7 @@ class ActionActionInCreate(test.OntaskLiveTestCase):
 
         # Run the action
         self.selenium.find_element_by_xpath(
-            "//table[@id='action-table']/tbody/tr[3]/td[5]/a[3]").click()
+            "//table[@id='action-table']/tbody/tr[3]/td[5]/a[2]").click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.LINK_TEXT, "student2@bogus.com")

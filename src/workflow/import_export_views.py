@@ -39,7 +39,7 @@ def export_ask(request, format=None):
 
     if request.method == 'POST':
         if form.is_valid():
-            to_include = [str(int(form.cleaned_data['include_table']))]
+            to_include = []
             for idx, a in enumerate(Action.objects.filter(workflow=workflow)):
                 if form.cleaned_data['select_%s' % idx]:
                     to_include.append(str(a.id))
@@ -73,17 +73,15 @@ def export(request, data):
         return redirect('workflow:index')
 
     # Get the param encoding which elements to include in the export.
-    # Take
-    # the first one, and then process the remaining ones as ids
-    include = [int(x) for x in data.split(',')]
+    action_ids = []
+    if data and data != '':
+        # Data has at least one integer
+        try:
+            action_ids = [int(x) for x in data.split(',')]
+        except ValueError:
+            return redirect('workflow:index')
 
-    # Get the list of action ids
-    try:
-        action_ids = [int(x) for x in include[1:]]
-    except ValueError:
-        return redirect('workflow:index')
-
-    response = do_export_workflow(workflow, bool(include[0]), action_ids)
+    response = do_export_workflow(workflow, action_ids)
 
     return response
 
@@ -101,38 +99,30 @@ def import_workflow(request):
 
     context = {'form': form}
 
-    if request.method == 'POST':
-        if form.is_valid():
+    # If a get request or the form is not valid, render the page.
+    if request.method == 'GET' or not form.is_valid():
+        return render(request, 'workflow/import.html', context)
 
-            new_wf_name = form.cleaned_data['name']
-            try:
-                Workflow.objects.get(
-                    user=request.user,
-                    name=new_wf_name
-                )
-                # If the previous query went through, return error
-                form.add_error(None, 'A workflow with this name already exists')
 
-                return render(request, 'workflow/import.html', context)
-            except ObjectDoesNotExist:
-                pass
+    new_wf_name = form.cleaned_data['name']
+    if Workflow.objects.filter(user=request.user, name=new_wf_name).exists():
+        # There is a workflow with this name. Return error.
+        form.add_error(None, 'A workflow with this name already exists')
+        return render(request, 'workflow/import.html', context)
 
-            # Process the reception of the file
-            if not form.is_multipart():
-                form.add_error(None, 'Incorrect request type (not multipart)')
-                return render(request, 'workflow/import.html', context)
+    # Process the reception of the file
+    if not form.is_multipart():
+        form.add_error(None, 'Incorrect form request (it is not multipart)')
+        return render(request, 'workflow/import.html', context)
 
-            # UPLOAD THE FILE!
-            status = do_import_workflow(
-                request.user,
-                form.cleaned_data['name'],
-                request.FILES['file'],
-                form.cleaned_data['include_table'])
-            # If something went wrong, push it to the top of the page
-            if status:
-                messages.error(request, status)
+    # UPLOAD THE FILE!
+    status = do_import_workflow(request.user,
+                                form.cleaned_data['name'],
+                                request.FILES['file'])
 
-            # Go back to the list of workflows
-            return redirect('workflow:index')
+    # If something went wrong, show at to the top of the page
+    if status:
+        messages.error(request, status)
 
-    return render(request, 'workflow/import.html', context)
+    # Go back to the list of workflows
+    return redirect('workflow:index')

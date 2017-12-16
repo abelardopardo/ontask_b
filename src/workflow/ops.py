@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
-import cStringIO
 import gzip
 
+import cStringIO
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
@@ -16,9 +16,8 @@ from rest_framework.renderers import JSONRenderer
 from action.models import Condition
 from dataops import formula_evaluation, pandas_db, ops
 from .models import Workflow, Column
-from .serializers import (WorkflowExportSerializer,
-                          WorkflowCompleteSerializer,
-                          WorkflowImportSerializer)
+from .serializers import (WorkflowExportSerializer, WorkflowImportSerializer)
+from rest_framework import serializers
 
 
 def lock_workflow(request, workflow):
@@ -188,7 +187,7 @@ def detach_dataframe(workflow):
     workflow.save()
 
 
-def do_import_workflow(user, name, file_item, include_table):
+def do_import_workflow(user, name, file_item):
     """
     Receives a name and a file item (submitted through a form) and creates
     the structure of workflow, conditions, actions and data table.
@@ -196,7 +195,6 @@ def do_import_workflow(user, name, file_item, include_table):
     :param user: User record to use for the import (own all created items)
     :param name: Workflow name (it has been checked that it does not exist)
     :param file_item: File item obtained through a form
-    :param include_table: Boolean encoding if data and cond are loaded
     :return:
     """
 
@@ -205,20 +203,22 @@ def do_import_workflow(user, name, file_item, include_table):
     # Serialize content
     workflow_data = WorkflowImportSerializer(
         data=data,
-        context={'user': user,
-                 'name': name,
-                 'include_table': include_table}
+        context={'user': user, 'name': name}
     )
 
     # If anything went wrong, return the string to show to the form.
+    workflow = None
     try:
         if not workflow_data.is_valid():
-            return 'Unable to import the workflow'
-    except TypeError as e:
-        return 'Unable to import workflow (Exception: ' + e.message + ')'
+            return 'Unable to import the workflow' + ' (' + \
+                   workflow_data.errors + ')'
 
-    # Save the new workflow
-    workflow = workflow_data.save(user=user, name=name)
+        # Save the new workflow
+        workflow = workflow_data.save(user=user, name=name)
+    except (TypeError, NotImplementedError) as e:
+        return 'Unable to import workflow (Exception: ' + e.message + ')'
+    except serializers.ValidationError as e:
+        return 'Unable to import workflow due to a validation error'
 
     if not pandas_db.check_wf_df(workflow):
         # Something went wrong.
@@ -229,30 +229,20 @@ def do_import_workflow(user, name, file_item, include_table):
     return None
 
 
-def do_export_workflow(workflow, include_table, selected_actions=None):
+def do_export_workflow(workflow, selected_actions=None):
     """
     Proceed with the workflow export.
     :param workflow: Workflow record to export
-    :param include_table: Boolean encoding if data and conditions should
     be included.
     :param selected_actions: A subset of actions to export
     :return: Page that shows a confirmation message and starts the download
     """
 
-    # If the set of actions is empty, include all of them
-    if not selected_actions:
-        selected_actions = workflow.actions.all()
-
     # Create the context object for the serializer
-    context = {'selected_actions': selected_actions,
-               'include_table': include_table}
+    context = {'selected_actions': selected_actions}
 
     # Get the info to send from the serializer
-    if include_table:
-        serializer = WorkflowCompleteSerializer(workflow, context=context)
-    else:
-        serializer = WorkflowExportSerializer(workflow, context=context)
-
+    serializer = WorkflowExportSerializer(workflow, context=context)
     to_send = JSONRenderer().render(serializer.data)
 
     # Get the in-memory file to compress
@@ -314,6 +304,7 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
 
     return
 
+
 def clone_column(column, new_workflow=None, new_name=None):
     """
     Function that given a column clones it and changes workflow and name
@@ -344,4 +335,3 @@ def clone_column(column, new_workflow=None, new_name=None):
     ops.store_dataframe_in_db(data_frame, column.workflow.id)
 
     return column
-

@@ -4,13 +4,14 @@ from __future__ import unicode_literals, print_function
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
-from action.serializers import ActionSerializer, ActionSerializerDeep
+from action.serializers import ActionSerializer
 from dataops import ops, pandas_db
 from table.serializers import DataFramePandasField
 from .models import Workflow, Column
 
 
 class ColumnSerializer(serializers.ModelSerializer):
+
     def create(self, validated_data, **kwargs):
         # Create the object, but point to the given workflow
         column_obj = Column(
@@ -27,10 +28,11 @@ class ColumnSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Column
-        exclude = ('workflow', 'id')
+        exclude = ('id', 'workflow')
 
 
-class WorkflowSerializer(serializers.ModelSerializer):
+class WorkflowListSerializer(serializers.ModelSerializer):
+
     def create(self, validated_data, **kwargs):
         attributes = validated_data.get('attributes', {})
         if not isinstance(attributes, dict):
@@ -64,49 +66,13 @@ class WorkflowSerializer(serializers.ModelSerializer):
 
 class WorkflowExportSerializer(serializers.ModelSerializer):
     """
-    This serializer is use to export Workflows and select a subset of
+    This serializer is use to export Workflows selecting a subset of
     actions. Since the SerializerMethodField used for the selection is a
-    read_only field, the import is managed by a regular serializer (see
-    WorkflowImportSerializer)
+    read_only field, the import is managed by a different serializer that
+    uses a regular one for the action field (see WorkflowImportSerializer)
     """
+
     actions = serializers.SerializerMethodField('get_filtered_actions')
-
-    def get_filtered_actions(self, workflow):
-        # Get the subset of actions specified in the context
-        action_list = self.context.get('selected_actions', None)
-        if action_list:
-            query_set = workflow.actions.filter(id__in=action_list)
-        else:
-            query_set = workflow.actions.all()
-
-        # Serialize the actions depending on the value of include_table
-        include_table = self.context.get('include_table', False)
-
-        # Serialize the content and return data
-        if include_table:
-            serializer = ActionSerializerDeep(
-                instance=query_set,
-                many=True,
-                required=False)
-        else:
-            serializer = ActionSerializer(
-                instance=query_set,
-                many=True,
-                required=False)
-
-        return serializer.data
-
-    class Meta:
-        model = Workflow
-        fields = ('description_text', 'attributes', 'actions')
-
-
-class WorkflowCompleteSerializer(WorkflowExportSerializer):
-    """
-    This serializer inherits from WorkflowExportSerializer and includes an
-    extra field to take care of the pandas data frame. It serves both for
-    import and export.
-    """
 
     data_frame = DataFramePandasField(
         required=False,
@@ -115,6 +81,25 @@ class WorkflowCompleteSerializer(WorkflowExportSerializer):
     )
 
     columns = ColumnSerializer(many=True, required=False)
+
+    def get_filtered_actions(self, workflow):
+        # Get the subset of actions specified in the context
+        action_list = self.context.get('selected_actions', [])
+        if not action_list:
+            # No action needs to be included, no need to call the action
+            # serializer
+            return []
+
+        # Execute the query set
+        query_set = workflow.actions.filter(id__in=action_list)
+
+        # Serialize the content and return data
+        serializer = ActionSerializer(
+            instance=query_set,
+            many=True,
+            required=False)
+
+        return serializer.data
 
     def create(self, validated_data, **kwargs):
 
@@ -126,39 +111,36 @@ class WorkflowCompleteSerializer(WorkflowExportSerializer):
             ncols=0,
             attributes=validated_data['attributes'],
             query_builder_ops=validated_data.get('query_builder_ops', {})
-            )
+        )
         workflow_obj.save()
 
-        # If the table is included
-        if self.context.get('include_table'):
-            # Create the columns
-            column_data = ColumnSerializer(
-                data=validated_data.get('columns', []),
-                many=True,
-                context={'workflow': workflow_obj})
-            # And save its content
-            if column_data.is_valid():
-                column_data.save()
+        # Create the columns
+        column_data = ColumnSerializer(
+            data=validated_data.get('columns', []),
+            many=True,
+            context={'workflow': workflow_obj})
+        # And save its content
+        if column_data.is_valid():
+            column_data.save()
+        else:
+            workflow_obj.delete()
+            return None
 
         # Create the actions pointing to the workflow
-        if self.context.get('include_table'):
-            action_data = ActionSerializerDeep(
-                data=validated_data.get('actions', []),
-                many=True,
-                context={'workflow': workflow_obj}
-            )
-        else:
-            action_data = ActionSerializer(
-                data=validated_data.get('actions', []),
-                many=True,
-                context={'workflow': workflow_obj}
-            )
+        action_data = ActionSerializer(
+            data=validated_data.get('actions', []),
+            many=True,
+            context={'workflow': workflow_obj}
+        )
         if action_data.is_valid():
             action_data.save()
+        else:
+            workflow_obj.delete()
+            return None
 
         # Load the data frame
         data_frame = validated_data.get('data_frame', None)
-        if data_frame is not None and self.context.get('include_table'):
+        if data_frame is not None:
             ops.store_dataframe_in_db(data_frame, workflow_obj.id)
 
             # Reconcile now the information in workflow and columns with the
@@ -175,35 +157,17 @@ class WorkflowCompleteSerializer(WorkflowExportSerializer):
 
     class Meta:
         model = Workflow
-        fields = ('description_text', 'nrows', 'ncols', 'attributes',
-                  'query_builder_ops', 'columns', 'data_frame', 'actions')
+        # fields = ('description_text', 'nrows', 'ncols', 'attributes',
+        #           'query_builder_ops', 'columns', 'data_frame', 'actions')
+
+        exclude = ('id', 'user', 'created', 'modified', 'data_frame_table_name',
+                   'session_key', 'shared')
 
 
-class WorkflowImportSerializer(WorkflowCompleteSerializer):
+class WorkflowImportSerializer(WorkflowExportSerializer):
     """
     This serializer simply overwrites the actions field to make it writeable.
-    The rest of the functionality is identical to the WorkflowCompleteSerializer
+    The rest of the functionality is identical to the WorkflowExportSerializer
     """
 
-    actions = ActionSerializerDeep(many=True, required=False)
-
-
-# from workflow.models import Workflow
-# from workflow.serializers import WorkflowSerializer, WorkflowSerializerM
-# from rest_framework.renderers import JSONRenderer
-# from rest_framework.parsers import JSONParser
-# from django.utils.six import BytesIO
-#
-# w1 = Workflow.objects.all()[0]
-# w2 = Workflow.objects.all()[1]
-# s1 = WorkflowSerializer(w1)
-# s2 = WorkflowSerializer(w2)
-# s3 = WorkflowSerializer([w1, w2], many=True)
-
-# w1 = WorkflowExportSerializer(Workflow.objects.get(pk=34))
-# json = JSONRenderer().render(w1.data)
-# stream = BytesIO(json)
-# data = JSONParser().parse(stream)
-# w2 = WorkflowExportSerializer(data=data)
-# w2.is_valid()
-# w2.validated_data
+    actions = ActionSerializer(many=True, required=False)

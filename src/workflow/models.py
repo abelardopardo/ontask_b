@@ -177,6 +177,9 @@ class Workflow(models.Model):
     def __str__(self):
         return self.name
 
+    def __unicode__(self):
+        return self.name
+
     class Meta:
         unique_together = ('user', 'name')
 
@@ -343,6 +346,9 @@ class Column(models.Model):
                     (self.active_to and self.active_to < now))
 
     def __str__(self):
+        return self.name
+
+    def __unicode__(self):
         return self.name
 
     class Meta:

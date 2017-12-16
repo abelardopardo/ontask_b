@@ -1,4 +1,6 @@
 from __future__ import unicode_literals
+
+from django.contrib.auth.decorators import login_required
 from django.views import generic
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
@@ -62,6 +64,7 @@ class EditProfile(LoginRequiredMixin, generic.TemplateView):
         return redirect("profiles:show_self")
 
 
+@login_required
 def reset_token(request):
     """
     Function to reset the authentication token for a user. If it exists,
