@@ -96,7 +96,7 @@
     "pk": 1,
     "fields": {
         "password": "pbkdf2_sha256$36000$JMX4YPJ3ahxr$Q8DJ+BINVcLXRb9zofOscibKccnux1f4gTWp3TNvPCk=",
-        "last_login": "2017-12-01T04:23:07.200Z",
+        "last_login": "2017-12-12T00:32:07.306Z",
         "is_superuser": true,
         "email": "superuser@bogus.com",
         "is_staff": true,
@@ -116,13 +116,13 @@
     "pk": 2,
     "fields": {
         "password": "pbkdf2_sha256$36000$yyR4qJnt4C68$u5UIYoLDOo5z7pJ9LEQ5xE/Wg3nw/cyIzKoh4tkP4ZQ=",
-        "last_login": "2017-11-12T19:45:37.159Z",
+        "last_login": "2017-12-07T04:52:28.393Z",
         "is_superuser": false,
         "email": "student1@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-12T19:44:27.631Z",
-        "name": "",
+        "name": "student1@bogus.com",
         "groups": [],
         "user_permissions": []
     }
@@ -132,13 +132,13 @@
     "pk": 3,
     "fields": {
         "password": "pbkdf2_sha256$36000$udn5nz4eFAvU$hj5La0k48upa6trsCv9TOb2LFOM6Iad3gv5Z8r2OtZ8=",
-        "last_login": null,
+        "last_login": "2017-12-06T02:59:02.719Z",
         "is_superuser": false,
         "email": "student2@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-12T19:44:33.927Z",
-        "name": "",
+        "name": "student2@bogus.com",
         "groups": [],
         "user_permissions": []
     }
@@ -148,7 +148,7 @@
     "pk": 4,
     "fields": {
         "password": "pbkdf2_sha256$36000$7IWHqHRmEqHJ$MACKzkY9ez1AP8w+m6vBWJDgnBB63qiZ8ltnHRgp9DA=",
-        "last_login": "2017-12-03T04:10:53.441Z",
+        "last_login": "2017-12-16T00:55:45.202Z",
         "is_superuser": false,
         "email": "instructor1@bogus.com",
         "is_staff": false,
@@ -205,17 +205,857 @@
 },
 {
     "model": "authtools.user",
-    "pk": 9,
+    "pk": 27,
     "fields": {
-        "password": "boguspwd",
-        "last_login": null,
+        "password": "",
+        "last_login": "2017-12-06T02:37:16.364Z",
         "is_superuser": false,
-        "email": "student3@bogus.com",
+        "email": "user@example.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2017-11-13T10:44:13.819Z",
-        "name": "",
+        "date_joined": "2017-12-06T02:35:24.733Z",
+        "name": "user",
         "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 112,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$zUk5EnpWlmQ7$/czWavsNktCPdefbdRl2zgc+g6rM7ZIPnCwdmAt9FBQ=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "savadovasabina@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.108Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 113,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$vO3XIgSfotAH$elE8nC2Jlni9uX4JxovPtFxFXdkVL+gixM/lZv7mqrc=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "elaine.farrow@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.141Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 114,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$2YSTsxR5sQdg$x6dLnMRMeztPR22a5wbsLzUVf0ruVxNyBSMRe930AZo=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "nigel.goddard@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.151Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 115,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$3XIBtIhgcu8F$soiI4WMIhhOYDWUdT7EntDz1p3BzjJf6bmhKM7r6AnA=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "madhus333@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.162Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 116,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$rcT3DHnirYPm$uWIJkQW9Qe0TuJNJ4YEReyTeqmuof3dRx+AUXiXzhko=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "robert.sharples@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.173Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 117,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$pxtgVQop7QLp$jyEQ59ccCcFlLN5FZUyRXZKxzs3i+y7wOlbzGf0rJAI=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "adam.carter@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.187Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 118,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$3n4rglqlFWEu$DD7uJDT5WQ8Pb6QC5slO96hApixSYfo/d04h1U9v5OY=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "cinzia.pusceddu@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.216Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 119,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$GyGoUpMBWX0s$WdhFk1STH4MWG36ChSl9Y4x/pf6l2g1VKywe4Z98gDw=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "nikola.popovic@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.226Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 120,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$lydaQU2bvMBF$SjNLwiOgElhSdl+QeDoeue+fa9IX7VIHHTiUsGA6Y6c=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "h.mcqueen@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.237Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 121,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$F4tDK9raLXmz$akdUWJMW07UVVHjIyXfep/bV5nPZ0Yvj0ZtulswojwQ=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "sbsdirectorofteaching@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.265Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 122,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$DO2oM6w3ps0Q$djmffMVdvMI8i0sDOWbn5l58d8dp1k4jwLjDwq8EWK8=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "n.margaritella@sms.ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.286Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 123,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$e3uve51fzVQl$5F66ftn3wVObdK5nj+E/03VL4hhH3b8PJGhUFt3JDeY=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "ahibertjr@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.307Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 124,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$dyxnTQfWR6sf$mU+XAHSwPlZ6BB0ryPlqOt3zy8p4GmfZpdv7xJaMEu4=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "tom.macintyre@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.336Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 125,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$xz6jKAiNv1rt$+QYyHTd1CqykvDy7+KtAOhuGViHnNCp4hPphRMyLU24=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "sgwater@inf.ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.346Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 126,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$VK22ifIKufAI$4fkDz+X55lop520tWvHorWcQAY7HjSEpORS+rNsABYI=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "tom.booth@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.356Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 127,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$y1ey38OaGvas$D261qYoze/HXkVMG2a9M8r7Mov+bSOvAgfw0bwTcCh0=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "corinne.baulcomb@sruc.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.387Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 128,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$KQOQyEnKM3JB$xhGg3WBkdEOTig4evTgjbykiI3v1w90zn9uwla/cT7U=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "paula.novo@sruc.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.402Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 129,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$4oYXTRkygmxZ$nHNKJ4y6ocLTL/hukBdu3SoitP95eKStLNr6pOaYK98=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "holly.linklater@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.424Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 130,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$qD2e3QT50pVd$vyZQZ6m+qwzj7Z1S8NBU0yZpel57C64la4MFG37YOn4=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "vanessa.mather@sccs.org.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.440Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 131,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$s0zO6eAaG5KR$fAWq/aoVrMRZHGwlbt7Oq7eE/6AVAIeY9/8nIHfN5qI=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "susan.rhind@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.454Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 132,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$odUmi57xgkFz$sPBzPXSN8tEEtx0thnjP1AaktOzMy80FRAojFebulBc=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "n.uzir@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.465Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 133,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$4Y02x9AxJekU$gpehi+SnYUrcCGsIHzYFWwhFSrFVE9tV0hJpwSzWbWY=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "anlisu1004@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.487Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 134,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$OTcAQzD7kQkG$zNofisWhjoGeXL/kget96WqIg+b5dD20o2WZDUKCSs8=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "w.matcha@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.503Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 135,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$WHtmKYyzDXiR$G919eTE9deSaDzxe9xbtSQ+SHHwB5nof0aJRebOf7T8=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "f.broz@hw.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.512Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 136,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$64ER7D7BtACK$+VNeB8MDXgXe1g/gUoF0DRttg8/s5VxcbU/jhbfH3OA=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "p.warner@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.522Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 137,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$qDxEQlWFO4uy$2dd9HvSutHY0zZ0s97hX/CcS5sFhlvxgMHP9WUESB8I=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "sofiashan2013@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.561Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 138,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$544I1P1ay9BT$Fx/V4yU3ELhS0+puY2Z9NfSJqF98+gwa0Qk/322Kl+U=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "theyoungone78@yahoo.co.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.590Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 139,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$nyDTROegxAwp$DzMX6HrrMaEtqVzV5AjBQvv/qwtpaXek8V+UhvoRIGo=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "charlotte.kemp@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.601Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 140,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$8sUbsBc5N0kr$S+Ri6FRpr/bHMbjDlburyZABCCsEVvyZmPCIy9bbZIU=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "alison.christine@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.623Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 141,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$w0kOX3e1X3nR$BpEYzNK9kXcUaYKUJ7AYprCcTd9LZETH19F//ezbh0Y=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "brendan.hill@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.641Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 142,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$eqpZylXqLyLD$qwo6qBH/EXXboyGw6bc4oUkD5VkoClmiAmHd9+wbMJU=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "e.serafin@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.654Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 143,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$0ht6FzZh0PBg$g+zMMJVB/sYPughMtMpUlsscogOlMiBNOSLfoGjYfog=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "eli.appleby-donald@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.666Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 144,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$zdlMBjrHLkkb$awqof94IZbaukoNMo4tak39LtXjMlBnnSfIgt2/4Z6M=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "a.burford@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.689Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 145,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$v04XTHSzkXqS$g7SCTDTNffOKrL6AXPrl4yFZ6TKxNpAllACNXU8X7E4=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "s1514119@sms.ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.717Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 146,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$8o0TYURlNJaV$5SRwx0NnOncfCf3iojKunE0Ge60dNUnpmAPqfuu8uUA=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "p.devine@lancaster.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.727Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 147,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$H6xT1C0aUbG8$J5V1Zkmteczj60vhPE2h0hB6hdDXarNKRNhayxDVM/o=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "stuart.nicol@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.737Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 148,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$cETBaOcDMzbD$WRl438NteS9H9FsQj0kZCvPzZhjSGANSuswO14Mhr7c=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "anne-marie.scott@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.750Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 149,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$o0DGBtb1Y9ZX$3OP7JLnAOahfiuQIKWjJ5E49bzzdpIEEo6nEMcEQSAk=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "tanya.hawkes@saschina.org",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.771Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 150,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$l0WumLNZeCfw$lscJlQXd3GwRwCEKSwSS5sQ3sdaIdF9Sk3Xi0VArlwI=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "p.docherty@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.792Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 151,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$S7YfbAPbZIPl$zxqUFxBOiyuUJ6XMjRP5iL/NvVMtqZ2msDmPuRjTxDQ=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "hicindy0820@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.802Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 152,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$O2qd6WYE5qEx$nEM7/TWrpckXGqDzwmVMe10jtyO7e8uMd2XhSbg0oZ4=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "dragan.gasevic@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.813Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 153,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$BnzY4enXPAWS$96xbWHxlOT04lh4JjJHW4RAN5vna01ASZiCkCDvOIa0=",
+        "last_login": "2017-12-11T08:33:34.673Z",
+        "is_superuser": false,
+        "email": "abelardo.pardo@sydney.edu.au",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.823Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
         "user_permissions": []
     }
 },
@@ -337,6 +1177,96 @@
     }
 },
 {
+    "model": "siteprefs.preference",
+    "pk": 14,
+    "fields": {
+        "app": "dataops",
+        "name": "plugin_directory",
+        "text": "/Users/abelardopardo/ontask_B/src/plugins"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 15,
+    "fields": {
+        "app": "action",
+        "name": "email_host",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 16,
+    "fields": {
+        "app": "action",
+        "name": "email_port",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 17,
+    "fields": {
+        "app": "action",
+        "name": "email_host_user",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 18,
+    "fields": {
+        "app": "action",
+        "name": "email_host_password",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 19,
+    "fields": {
+        "app": "action",
+        "name": "email_use_tls",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 20,
+    "fields": {
+        "app": "action",
+        "name": "email_use_ssl",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 21,
+    "fields": {
+        "app": "action",
+        "name": "notification_template",
+        "text": "\n<html>\n<head/>\n<body>\n<p>Dear {{ user.name }}</p>\n\n<p>This message is to inform you that on {{ email_sent_datetime }} a total of \n{{ num_messages }} emails were sent after the user {{ user.email }} executed \nthe action with name  \"{{ action.name }}\".</p> \n\n{% if filter_present %}\n<p>The action had a filter that reduced the number of messages from \n{{ num_rows }} to {{ num_selected }}.</p> \n{% else %}\n<p>All the data rows stored in the workflow were used.</p>\n{% endif %}\n\nRegards.\nThe OnTask Support Team\n</body>\n</html>\n"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 22,
+    "fields": {
+        "app": "action",
+        "name": "notification_subject",
+        "text": "OnTask: Action executed"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 23,
+    "fields": {
+        "app": "action",
+        "name": "notification_sender",
+        "text": "ontask@ontasklearning.org"
+    }
+},
+{
     "model": "authtoken.token",
     "pk": "c5eac9be0365a24aca40633f7ebb3556d66a7a1d",
     "fields": {
@@ -371,36 +1301,6 @@
         "name": "download.jpeg",
         "file": "django-summernote/2017-11-15/5aa534cf-1bcd-47ed-b9a8-2e1c9a8707bd.jpeg",
         "uploaded": "2017-11-15T05:52:38.966Z"
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 2,
-    "fields": {
-        "slug": "467cdea6-686d-45bc-ad95-a073f7241f07",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 3,
-    "fields": {
-        "slug": "7196ba08-9652-47f9-8f1f-dbc4ee33fa35",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 9,
-    "fields": {
-        "slug": "f85b1b04-3d1b-4e3d-92d7-60e449c6ceeb",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
     }
 },
 {
@@ -444,21 +1344,471 @@
     }
 },
 {
+    "model": "profiles.profile",
+    "pk": 144,
+    "fields": {
+        "slug": "1156229d-9827-4cc3-a896-328f59bc056f",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 153,
+    "fields": {
+        "slug": "42062341-0034-4ee0-b198-70a58f3a39f4",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 117,
+    "fields": {
+        "slug": "60ff6c3b-a3cc-4316-bd33-e5489cda0c54",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 123,
+    "fields": {
+        "slug": "5392dde7-7ca1-44b2-87ae-11fd2af6c6e8",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 140,
+    "fields": {
+        "slug": "8f7bc38e-314d-4619-b905-8a684aa17eaf",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 133,
+    "fields": {
+        "slug": "6aa6ef96-0675-4b65-bb9f-a4afa2845f86",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 148,
+    "fields": {
+        "slug": "294e8620-fb5a-4251-b978-234fc409f74d",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 141,
+    "fields": {
+        "slug": "c684d7e5-db23-4fcd-b190-c7aafbe56d72",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 139,
+    "fields": {
+        "slug": "33d0e8a4-c831-4f5f-b855-2044b230bac5",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 118,
+    "fields": {
+        "slug": "c245e4af-d8c4-4528-9e44-84ab11d72893",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 127,
+    "fields": {
+        "slug": "beef9a75-79b6-4024-9d95-693c179d50c6",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 152,
+    "fields": {
+        "slug": "b3515f3c-59de-4138-bb04-42e6d4fff94e",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 142,
+    "fields": {
+        "slug": "7b80a536-266c-4fab-9e4a-3c332ea95452",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 113,
+    "fields": {
+        "slug": "45b3a10a-e7ab-4101-9c86-3d760dcf4234",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 143,
+    "fields": {
+        "slug": "e43ab7fa-dd23-4108-a80a-9ad0c7a4829f",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 135,
+    "fields": {
+        "slug": "17661731-d95b-4200-970d-74d7ddf3679a",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 120,
+    "fields": {
+        "slug": "735da101-968d-4579-995d-e162cdaf41e4",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 151,
+    "fields": {
+        "slug": "8fc6cb8d-719b-47b0-8e5e-774e5e4096a5",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 129,
+    "fields": {
+        "slug": "7982e24f-45c7-4d5a-be39-d5809218357f",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 115,
+    "fields": {
+        "slug": "65add62b-a837-40f1-b034-8f60e6e5e897",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 122,
+    "fields": {
+        "slug": "e2faf7e0-657f-45ec-adf9-407043b21f6d",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 132,
+    "fields": {
+        "slug": "fb4580b2-c43f-4607-8944-ea37fab1036a",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 114,
+    "fields": {
+        "slug": "df83c7ce-e7a6-48fa-97eb-40827f678f97",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 119,
+    "fields": {
+        "slug": "23bbccdf-deee-432c-8db2-12529c39193f",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 146,
+    "fields": {
+        "slug": "e34ca980-e97e-482c-b7da-36f3c83f8f19",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 150,
+    "fields": {
+        "slug": "790eff40-6526-4bf1-b362-4a271c18963c",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 136,
+    "fields": {
+        "slug": "2da51270-7130-4130-867c-c73c21596103",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 128,
+    "fields": {
+        "slug": "b89fbeec-8f58-491c-a9e3-76c0895d694f",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 116,
+    "fields": {
+        "slug": "4263474e-1fab-4165-a8da-2937c671db7e",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 145,
+    "fields": {
+        "slug": "9e91ea39-4390-40b0-a5a6-a2b7b88c6a20",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 112,
+    "fields": {
+        "slug": "7d5dc5ea-4296-4eed-9872-c5daf57abf5d",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 121,
+    "fields": {
+        "slug": "cffa2143-ee5a-4f52-919c-5fc1688b511f",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 125,
+    "fields": {
+        "slug": "f2877a2a-1b5a-4dde-9dad-c17c3e8c9bd8",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 137,
+    "fields": {
+        "slug": "41218f3a-394d-4cb5-81f9-a028953182ee",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 147,
+    "fields": {
+        "slug": "3cd7454d-7f34-4acc-823f-b28a2e12c254",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 131,
+    "fields": {
+        "slug": "c31d8aa4-8d06-4611-9997-ee8cd0489076",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 149,
+    "fields": {
+        "slug": "30b1b1e5-12c2-45ee-99e9-9e4028182a45",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 138,
+    "fields": {
+        "slug": "223d34da-1005-4764-86ac-9d7bb83e4baf",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 126,
+    "fields": {
+        "slug": "14375d87-4d51-4005-95ec-4784a5841b2d",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 124,
+    "fields": {
+        "slug": "444e2aaa-70bc-4a63-bf91-6ec990539c61",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 130,
+    "fields": {
+        "slug": "8bc493db-cc39-4262-b691-42109a951d0f",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 134,
+    "fields": {
+        "slug": "f3088b67-88db-44c1-bc64-38e6bcc386a2",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 2,
+    "fields": {
+        "slug": "467cdea6-686d-45bc-ad95-a073f7241f07",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 3,
+    "fields": {
+        "slug": "7196ba08-9652-47f9-8f1f-dbc4ee33fa35",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 27,
+    "fields": {
+        "slug": "66816e31-b582-401e-94e0-702d101a5413",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
     "model": "workflow.workflow",
-    "pk": 50,
+    "pk": 140,
     "fields": {
         "user": [
             "instructor1@bogus.com"
         ],
-        "name": "wflow1",
-        "description_text": "",
-        "created": "2017-12-03T01:40:35.791Z",
-        "modified": "2017-12-03T06:39:56.180Z",
-        "nrows": 3,
-        "ncols": 6,
+        "name": "ELON5839",
+        "description_text": "Course on Entrepreneurship Literacy for Online Networking",
+        "created": "2017-12-16T00:59:11.863Z",
+        "modified": "2017-12-16T03:07:50.242Z",
+        "nrows": 12,
+        "ncols": 28,
         "attributes": {
-            "name2": "value2",
-            "name1": "value1"
+            "Coordinator_name": "Sarah Coordinating",
+            "Course_name": "ELON5839"
         },
         "query_builder_ops": [
             {
@@ -474,11 +1824,75 @@
                     "step": "any"
                 },
                 "type": "double",
-                "id": "age"
+                "id": "WAM"
+            },
+            {
+                "type": "integer",
+                "id": "credits"
+            },
+            {
+                "validation": {
+                    "step": "any"
+                },
+                "type": "double",
+                "id": "days_online"
+            },
+            {
+                "values": [
+                    "",
+                    "Concept 1",
+                    "Concept 2",
+                    "Concept 3",
+                    "Concept 4"
+                ],
+                "input": "select",
+                "operators": [
+                    "equal",
+                    "not_equal"
+                ],
+                "type": "string",
+                "id": "difficult_week01"
+            },
+            {
+                "values": [
+                    "",
+                    "Concept 1",
+                    "Concept 2",
+                    "Concept 3",
+                    "Concept 4"
+                ],
+                "input": "select",
+                "operators": [
+                    "equal",
+                    "not_equal"
+                ],
+                "type": "string",
+                "id": "difficult_week02"
             },
             {
                 "type": "string",
-                "id": "name"
+                "id": "first_name"
+            },
+            {
+                "type": "datetime",
+                "id": "first_session"
+            },
+            {
+                "values": [
+                    "male",
+                    "female"
+                ],
+                "input": "select",
+                "operators": [
+                    "equal",
+                    "not_equal"
+                ],
+                "type": "string",
+                "id": "gender"
+            },
+            {
+                "type": "string",
+                "id": "group"
             },
             {
                 "values": {
@@ -490,471 +1904,3536 @@
                     "equal"
                 ],
                 "type": "boolean",
-                "id": "registered"
+                "id": "induction"
             },
             {
-                "type": "datetime",
-                "id": "when"
+                "type": "string",
+                "id": "last_name"
+            },
+            {
+                "validation": {
+                    "step": "any"
+                },
+                "type": "double",
+                "id": "mt_total"
+            },
+            {
+                "type": "integer",
+                "id": "q01"
+            },
+            {
+                "type": "integer",
+                "id": "q02"
+            },
+            {
+                "type": "integer",
+                "id": "q03"
+            },
+            {
+                "type": "integer",
+                "id": "q04"
+            },
+            {
+                "type": "integer",
+                "id": "q05"
+            },
+            {
+                "type": "integer",
+                "id": "q06"
+            },
+            {
+                "type": "integer",
+                "id": "q07"
+            },
+            {
+                "type": "integer",
+                "id": "q08"
+            },
+            {
+                "type": "integer",
+                "id": "q09"
+            },
+            {
+                "type": "integer",
+                "id": "q10"
+            },
+            {
+                "values": {
+                    "1": "Yes",
+                    "0": "No"
+                },
+                "input": "radio",
+                "operators": [
+                    "equal"
+                ],
+                "type": "boolean",
+                "id": "took_mt"
+            },
+            {
+                "type": "integer",
+                "id": "video_1"
+            },
+            {
+                "type": "integer",
+                "id": "video_2"
+            },
+            {
+                "type": "integer",
+                "id": "video_3"
             }
         ],
-        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_50",
+        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_140",
         "session_key": "",
         "shared": []
     }
 },
 {
     "model": "workflow.column",
-    "pk": 1081,
+    "pk": 4663,
     "fields": {
         "name": "sid",
         "description_text": "",
-        "workflow": 50,
+        "workflow": 140,
         "data_type": "integer",
         "is_key": true,
-        "categories": []
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
     "model": "workflow.column",
-    "pk": 1082,
-    "fields": {
-        "name": "name",
-        "description_text": "",
-        "workflow": 50,
-        "data_type": "string",
-        "is_key": false,
-        "categories": []
-    }
-},
-{
-    "model": "workflow.column",
-    "pk": 1083,
+    "pk": 4664,
     "fields": {
         "name": "email",
         "description_text": "",
-        "workflow": 50,
+        "workflow": 140,
         "data_type": "string",
         "is_key": true,
-        "categories": []
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
     "model": "workflow.column",
-    "pk": 1084,
+    "pk": 4665,
     "fields": {
-        "name": "registered",
+        "name": "last_name",
         "description_text": "",
-        "workflow": 50,
-        "data_type": "boolean",
+        "workflow": 140,
+        "data_type": "string",
         "is_key": false,
-        "categories": []
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
     "model": "workflow.column",
-    "pk": 1085,
+    "pk": 4666,
     "fields": {
-        "name": "when",
+        "name": "first_name",
         "description_text": "",
-        "workflow": 50,
-        "data_type": "datetime",
+        "workflow": 140,
+        "data_type": "string",
         "is_key": false,
-        "categories": []
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
     "model": "workflow.column",
-    "pk": 1086,
+    "pk": 4667,
     "fields": {
-        "name": "age",
+        "name": "gender",
         "description_text": "",
-        "workflow": 50,
+        "workflow": 140,
+        "data_type": "string",
+        "is_key": false,
+        "categories": [
+            "male",
+            "female"
+        ],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4668,
+    "fields": {
+        "name": "group",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "string",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4669,
+    "fields": {
+        "name": "credits",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "integer",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4670,
+    "fields": {
+        "name": "WAM",
+        "description_text": "",
+        "workflow": 140,
         "data_type": "double",
         "is_key": false,
-        "categories": []
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4671,
+    "fields": {
+        "name": "induction",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "boolean",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4672,
+    "fields": {
+        "name": "first_session",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "datetime",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4673,
+    "fields": {
+        "name": "difficult_week01",
+        "description_text": "Which concept did you find most difficult this week?",
+        "workflow": 140,
+        "data_type": "string",
+        "is_key": false,
+        "categories": [
+            "",
+            "Concept 1",
+            "Concept 2",
+            "Concept 3",
+            "Concept 4"
+        ],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4674,
+    "fields": {
+        "name": "difficult_week02",
+        "description_text": "Which concept did you find most difficult this week?",
+        "workflow": 140,
+        "data_type": "string",
+        "is_key": false,
+        "categories": [
+            "",
+            "Concept 1",
+            "Concept 2",
+            "Concept 3",
+            "Concept 4"
+        ],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4676,
+    "fields": {
+        "name": "q01",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "integer",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4677,
+    "fields": {
+        "name": "q02",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "integer",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4678,
+    "fields": {
+        "name": "q03",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "integer",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4679,
+    "fields": {
+        "name": "q04",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "integer",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4680,
+    "fields": {
+        "name": "q05",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "integer",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4681,
+    "fields": {
+        "name": "q06",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "integer",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4682,
+    "fields": {
+        "name": "q07",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "integer",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4683,
+    "fields": {
+        "name": "q08",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "integer",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4684,
+    "fields": {
+        "name": "q09",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "integer",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4685,
+    "fields": {
+        "name": "q10",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "integer",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4686,
+    "fields": {
+        "name": "mt_total",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "double",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4688,
+    "fields": {
+        "name": "took_mt",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "boolean",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4689,
+    "fields": {
+        "name": "days_online",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "double",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4690,
+    "fields": {
+        "name": "video_1",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "integer",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4691,
+    "fields": {
+        "name": "video_2",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "integer",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4693,
+    "fields": {
+        "name": "video_3",
+        "description_text": "",
+        "workflow": 140,
+        "data_type": "integer",
+        "is_key": false,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
     "model": "action.action",
-    "pk": 128,
+    "pk": 307,
     "fields": {
-        "workflow": 50,
-        "name": "action1",
-        "description_text": "",
-        "created": "2017-12-03T05:11:28.539Z",
-        "modified": "2017-12-03T05:11:57.043Z",
-        "n_selected_rows": 0,
-        "content": "{% comment %}Your action content here{% endcomment %}",
-        "serve_enabled": false
+        "workflow": 140,
+        "name": "Midterm scores",
+        "description_text": "Comment the midterm scores divided by topic",
+        "created": "2017-12-16T01:33:35.442Z",
+        "modified": "2017-12-16T01:49:41.394Z",
+        "n_selected_rows": 10,
+        "is_out": true,
+        "serve_enabled": false,
+        "active_from": null,
+        "active_to": null,
+        "content": "<p>Dear&nbsp;{{ first_name }}</p><p>Here are the comments about your answers to the midterm exam (ordered by topic).</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Chemistry and Molecules of Life</h4><p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p><p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p><p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Cell function and structure</h4><p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p><p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p><p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Nutrition, Metabolism &amp; Enzymes</h4><p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p><p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p><p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\"><span style=\"color: inherit; font-family: inherit;\">Cell Division</span></h4><p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p><p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p><p>{% if T4_HIGH %}Good work with this block!{% endif %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">DNA Structure and Replication</h4><p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p><p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p><p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p><p>Your total score for the midterm is&nbsp;{{ mt_total }}.</p><p>Kind regards</p><p>{{ Coordinator_name }}</p><p>{{ course_name }}</p><div><br></div>",
+        "filter": {},
+        "columns": []
     }
 },
 {
     "model": "action.action",
-    "pk": 129,
+    "pk": 308,
     "fields": {
-        "workflow": 50,
-        "name": "action2",
-        "description_text": "",
-        "created": "2017-12-03T05:12:01.834Z",
-        "modified": "2017-12-03T05:12:28.334Z",
-        "n_selected_rows": 0,
+        "workflow": 140,
+        "name": "Reminder to post in the forum",
+        "description_text": "Message to remind those students that haven't visited the forum to do so.",
+        "created": "2017-12-16T01:52:24.867Z",
+        "modified": "2017-12-16T01:55:11.369Z",
+        "n_selected_rows": 2,
+        "is_out": true,
+        "serve_enabled": false,
+        "active_from": null,
+        "active_to": null,
+        "content": "<p>Dear&nbsp;{{ first_name }}</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>{{ Coordinator_name }}</p><p>{{ Course_name }}</p>",
+        "filter": {},
+        "columns": []
+    }
+},
+{
+    "model": "action.action",
+    "pk": 309,
+    "fields": {
+        "workflow": 140,
+        "name": "Comment lecture preparation activities",
+        "description_text": "A message commenting on the videos they watched.",
+        "created": "2017-12-16T01:58:13.398Z",
+        "modified": "2017-12-16T02:09:47.947Z",
+        "n_selected_rows": 10,
+        "is_out": true,
+        "serve_enabled": false,
+        "active_from": null,
+        "active_to": null,
+        "content": "<p>Dear&nbsp;{{ first_name }}</p><p>Here are some comments about the preparation videos for this week.</p><p style=\"\">{% if No_Video_1 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Genes and Proteins Activity</h4><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">This video explains the role of the genes to synthesise proteins in the cell. It is very important to see the connection between the proteins and the rest of processes occurring in the cell.</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{% endif %}</p><p>{% if No_Video_2 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">STEM Cells</h4><p>This video show how stem cells are a fundamental building block of how cellular organisms evolve. There are very valuable descriptions in this video about the mechanisms that are involved in this specialisation.</p><p>{% endif %}</p><p>{% if No_Video_3 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Immune System</h4><p>This video contains an overview of the systems that protect the cell from infections. It is highly relevant to understand the rest of concepts such as for example, the way proteins are synthesized.&nbsp;</p><p>{% endif %}</p><p>Regards<br></p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Coordinator_name }}</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Course_name }}<br></p>",
+        "filter": {},
+        "columns": []
+    }
+},
+{
+    "model": "action.action",
+    "pk": 310,
+    "fields": {
+        "workflow": 140,
+        "name": "Badges",
+        "description_text": "A badge reflecting the activity with respect to the videos",
+        "created": "2017-12-16T02:12:55.006Z",
+        "modified": "2017-12-16T02:32:57.507Z",
+        "n_selected_rows": -1,
+        "is_out": true,
+        "serve_enabled": true,
+        "active_from": null,
+        "active_to": null,
+        "content": "<h1 style=\"text-align: center;\">Video Activity Badges</h1><p style=\"text-align: center;\">{% if Three_videos %}<img style=\"width: 128px;\" src=\"https://findicons.com/icon/download/134633/gold_medal/128/png\">{% endif %}</p><p style=\"text-align: center;\">{% if Two_videos %}<img style=\"width: 128px;\" src=\"https://findicons.com/icon/download/134646/silver_medal/128/png\">{% endif %}</p><p style=\"text-align: center;\">{% if One_video %}<img style=\"width: 128px;\" src=\"https://findicons.com/icon/download/134637/bronze_medal/128/png\">{% endif %}</p><p style=\"text-align: center;\">{% if No_videos %}Work in progress{% endif %}</p>",
+        "filter": {},
+        "columns": []
+    }
+},
+{
+    "model": "action.action",
+    "pk": 311,
+    "fields": {
+        "workflow": 140,
+        "name": "Difficult topics Week 1",
+        "description_text": "Feedback about today's lecture",
+        "created": "2017-12-16T02:25:39.324Z",
+        "modified": "2017-12-16T02:38:42.659Z",
+        "n_selected_rows": -1,
+        "is_out": false,
+        "serve_enabled": true,
+        "active_from": null,
+        "active_to": null,
         "content": "{% comment %}Your action content here{% endcomment %}",
-        "serve_enabled": false
+        "filter": {
+            "not": false,
+            "rules": [],
+            "valid": true,
+            "condition": "AND"
+        },
+        "columns": [
+            4664,
+            4673
+        ]
+    }
+},
+{
+    "model": "action.action",
+    "pk": 312,
+    "fields": {
+        "workflow": 140,
+        "name": "Difficult topics Week 2",
+        "description_text": "Feedback about today's lecture",
+        "created": "2017-12-16T02:26:17.641Z",
+        "modified": "2017-12-16T02:38:50.054Z",
+        "n_selected_rows": -1,
+        "is_out": false,
+        "serve_enabled": true,
+        "active_from": null,
+        "active_to": null,
+        "content": "{% comment %}Your action content here{% endcomment %}",
+        "filter": {
+            "not": false,
+            "rules": [],
+            "valid": true,
+            "condition": "AND"
+        },
+        "columns": [
+            4664,
+            4674
+        ]
+    }
+},
+{
+    "model": "action.action",
+    "pk": 314,
+    "fields": {
+        "workflow": 140,
+        "name": "Additional resources",
+        "description_text": "List of additional resources depending on the value given in the difficult topic",
+        "created": "2017-12-16T02:34:08.882Z",
+        "modified": "2017-12-16T02:38:32.206Z",
+        "n_selected_rows": -1,
+        "is_out": true,
+        "serve_enabled": false,
+        "active_from": null,
+        "active_to": null,
+        "content": "<h3>Additional resources to review concepts</h3><p>{% if Concept_1 %}</p><ul><li><a href=\"https://www.ontasklearning.org\" target=\"_blank\">Resource 1 for concept 1</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 2 for concept 1</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 3 for concept 1</a></li></ul><p>{% endif %}</p><p>{% if Concept_2 %}</p><ul><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 1 for concept 2</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 2 for concept 2</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 3 for concept 2</a></li></ul><p>{% endif %}</p><div><p>{% if Concept_3 %}</p><ul><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 1 for concept 3</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 2 for concept 3</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 3 for concept 3</a></li></ul><p>{% endif %}</p></div><div><br></div>",
+        "filter": {},
+        "columns": []
     }
 },
 {
     "model": "action.condition",
-    "pk": 533,
+    "pk": 1110,
     "fields": {
-        "action": 128,
-        "name": "the_action_filter",
-        "description_text": "",
+        "action": 307,
+        "name": "Students that took the midterm",
+        "description_text": "Consider only those students that took the midterm examination.",
         "formula": {
             "not": false,
             "rules": [
                 {
-                    "value": "16",
-                    "field": "age",
+                    "value": "1",
+                    "field": "took_mt",
                     "operator": "equal",
-                    "input": "number",
-                    "type": "double",
-                    "id": "age"
+                    "input": "radio",
+                    "type": "boolean",
+                    "id": "took_mt"
                 }
             ],
             "valid": true,
             "condition": "AND"
         },
         "is_filter": true,
-        "created": "2017-12-03T05:11:41.993Z",
-        "modified": "2017-12-03T05:11:41.993Z"
+        "created": "2017-12-16T01:39:41.366Z",
+        "modified": "2017-12-16T01:39:41.366Z"
     }
 },
 {
     "model": "action.condition",
-    "pk": 534,
+    "pk": 1111,
     "fields": {
-        "action": 128,
-        "name": "cond1",
-        "description_text": "",
+        "action": 307,
+        "name": "T1_LOW",
+        "description_text": "Low score in topic 1",
         "formula": {
             "not": false,
             "rules": [
                 {
-                    "value": "12",
-                    "field": "age",
-                    "operator": "greater",
+                    "value": "0",
+                    "field": "q01",
+                    "operator": "equal",
                     "input": "number",
-                    "type": "double",
-                    "id": "age"
+                    "type": "integer",
+                    "id": "q01"
+                },
+                {
+                    "value": "0",
+                    "field": "q02",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q02"
                 }
             ],
             "valid": true,
             "condition": "AND"
         },
         "is_filter": false,
-        "created": "2017-12-03T05:11:53.519Z",
-        "modified": "2017-12-03T05:11:53.519Z"
+        "created": "2017-12-16T01:40:33.797Z",
+        "modified": "2017-12-16T01:40:33.797Z"
     }
 },
 {
     "model": "action.condition",
-    "pk": 535,
+    "pk": 1112,
     "fields": {
-        "action": 129,
-        "name": "filter2",
-        "description_text": "",
+        "action": 307,
+        "name": "T2_LOW",
+        "description_text": "Low score in topic 2",
         "formula": {
             "not": false,
             "rules": [
                 {
-                    "value": "57",
-                    "field": "age",
+                    "value": "0",
+                    "field": "q03",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q03"
+                },
+                {
+                    "value": "0",
+                    "field": "q04",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q04"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T01:40:37.025Z",
+        "modified": "2017-12-16T01:40:55.387Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1113,
+    "fields": {
+        "action": 307,
+        "name": "T3_LOW",
+        "description_text": "Low score in topic 3",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "0",
+                    "field": "q05",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q05"
+                },
+                {
+                    "value": "0",
+                    "field": "q06",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q06"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T01:40:58.552Z",
+        "modified": "2017-12-16T01:41:19.302Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1114,
+    "fields": {
+        "action": 307,
+        "name": "T4_LOW",
+        "description_text": "Low score in topic 4",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "0",
+                    "field": "q07",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q07"
+                },
+                {
+                    "value": "0",
+                    "field": "q08",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q08"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T01:41:21.289Z",
+        "modified": "2017-12-16T01:41:36.750Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1115,
+    "fields": {
+        "action": 307,
+        "name": "T5_LOW",
+        "description_text": "Low score in topic 5",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "0",
+                    "field": "q09",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q09"
+                },
+                {
+                    "value": "0",
+                    "field": "q10",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q10"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T01:41:39.042Z",
+        "modified": "2017-12-16T01:41:59.954Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1116,
+    "fields": {
+        "action": 307,
+        "name": "T1_MID",
+        "description_text": "One answer was correctly answered for topic 1",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "value": "0",
+                            "field": "q01",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q01"
+                        },
+                        {
+                            "value": "1",
+                            "field": "q02",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q02"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "value": "1",
+                            "field": "q01",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q01"
+                        },
+                        {
+                            "value": "0",
+                            "field": "q02",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q02"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T01:43:04.280Z",
+        "modified": "2017-12-16T01:48:46.832Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1117,
+    "fields": {
+        "action": 307,
+        "name": "T2_MID",
+        "description_text": "One answer was correctly answered for topic 2",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "value": "0",
+                            "field": "q03",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q03"
+                        },
+                        {
+                            "value": "1",
+                            "field": "q04",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q04"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "value": "1",
+                            "field": "q03",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q03"
+                        },
+                        {
+                            "value": "0",
+                            "field": "q04",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q04"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T01:43:12.224Z",
+        "modified": "2017-12-16T01:48:59.614Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1118,
+    "fields": {
+        "action": 307,
+        "name": "T3_MID",
+        "description_text": "One answer was correctly answered for topic 3",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "value": "0",
+                            "field": "q05",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q05"
+                        },
+                        {
+                            "value": "1",
+                            "field": "q06",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q06"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "value": "1",
+                            "field": "q05",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q05"
+                        },
+                        {
+                            "value": "0",
+                            "field": "q06",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q06"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T01:43:50.547Z",
+        "modified": "2017-12-16T01:49:05.491Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1119,
+    "fields": {
+        "action": 307,
+        "name": "T4_MID",
+        "description_text": "One answer was correctly answered for topic 4",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "value": "0",
+                            "field": "q07",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q07"
+                        },
+                        {
+                            "value": "1",
+                            "field": "q08",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q08"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "value": "1",
+                            "field": "q07",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q07"
+                        },
+                        {
+                            "value": "0",
+                            "field": "q08",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q08"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T01:44:25.439Z",
+        "modified": "2017-12-16T01:49:10.759Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1120,
+    "fields": {
+        "action": 307,
+        "name": "T5_MID",
+        "description_text": "One answer was correctly answered for topic 5",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "value": "0",
+                            "field": "q09",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q09"
+                        },
+                        {
+                            "value": "1",
+                            "field": "q10",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q10"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "value": "1",
+                            "field": "q09",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q09"
+                        },
+                        {
+                            "value": "0",
+                            "field": "q10",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "q10"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T01:44:54.358Z",
+        "modified": "2017-12-16T01:49:16.121Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1121,
+    "fields": {
+        "action": 307,
+        "name": "T1_HIGH",
+        "description_text": "High score in topic 1",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "1",
+                    "field": "q01",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q01"
+                },
+                {
+                    "value": "1",
+                    "field": "q02",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q02"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T01:45:33.862Z",
+        "modified": "2017-12-16T01:45:50.185Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1122,
+    "fields": {
+        "action": 307,
+        "name": "T2_HIGH",
+        "description_text": "High score in topic 2",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "1",
+                    "field": "q03",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q03"
+                },
+                {
+                    "value": "1",
+                    "field": "q04",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q04"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T01:45:52.186Z",
+        "modified": "2017-12-16T01:46:03.727Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1123,
+    "fields": {
+        "action": 307,
+        "name": "T3_HIGH",
+        "description_text": "High score in topic 3",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "1",
+                    "field": "q05",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q05"
+                },
+                {
+                    "value": "1",
+                    "field": "q06",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q06"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T01:46:06.726Z",
+        "modified": "2017-12-16T01:46:25.641Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1124,
+    "fields": {
+        "action": 307,
+        "name": "T4_HIGH",
+        "description_text": "High score in topic 4",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "1",
+                    "field": "q07",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q07"
+                },
+                {
+                    "value": "1",
+                    "field": "q08",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q08"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T01:46:26.894Z",
+        "modified": "2017-12-16T01:46:44.254Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1125,
+    "fields": {
+        "action": 307,
+        "name": "T5_HIGH",
+        "description_text": "High score in topic 5",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "1",
+                    "field": "q09",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q09"
+                },
+                {
+                    "value": "1",
+                    "field": "q10",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "q10"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T01:46:46.225Z",
+        "modified": "2017-12-16T01:47:00.358Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1126,
+    "fields": {
+        "action": 308,
+        "name": "Students with days_online = 0",
+        "description_text": "These are the students that haven't connected to the discussion forum yet.",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "0",
+                    "field": "days_online",
                     "operator": "equal",
                     "input": "number",
                     "type": "double",
-                    "id": "age"
+                    "id": "days_online"
                 }
             ],
             "valid": true,
             "condition": "AND"
         },
         "is_filter": true,
-        "created": "2017-12-03T05:12:15.400Z",
-        "modified": "2017-12-03T05:12:15.400Z"
+        "created": "2017-12-16T01:52:59.574Z",
+        "modified": "2017-12-16T01:52:59.574Z"
     }
 },
 {
     "model": "action.condition",
-    "pk": 536,
+    "pk": 1127,
     "fields": {
-        "action": 129,
-        "name": "cond1",
+        "action": 309,
+        "name": "Only those with one video missing",
         "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "value": "1",
+                    "field": "video_1",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "video_1"
+                },
+                {
+                    "value": "1",
+                    "field": "video_2",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "video_2"
+                },
+                {
+                    "value": "1",
+                    "field": "video_3",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "video_3"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": true,
+        "created": "2017-12-16T01:59:31.493Z",
+        "modified": "2017-12-16T02:02:06.098Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1128,
+    "fields": {
+        "action": 309,
+        "name": "No_Video_1",
+        "description_text": "Didn't watch Video 1",
         "formula": {
             "not": false,
             "rules": [
                 {
-                    "value": "12",
-                    "field": "age",
+                    "value": "0",
+                    "field": "video_1",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
-                    "id": "age"
+                    "type": "integer",
+                    "id": "video_1"
                 }
             ],
             "valid": true,
             "condition": "AND"
         },
         "is_filter": false,
-        "created": "2017-12-03T05:12:26.062Z",
-        "modified": "2017-12-03T05:12:26.062Z"
+        "created": "2017-12-16T02:03:15.633Z",
+        "modified": "2017-12-16T02:03:15.633Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1129,
+    "fields": {
+        "action": 309,
+        "name": "No_Video_2",
+        "description_text": "Didn't watch Video 2",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "0",
+                    "field": "video_2",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "video_2"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T02:03:17.354Z",
+        "modified": "2017-12-16T02:03:31.600Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1130,
+    "fields": {
+        "action": 309,
+        "name": "No_Video_3",
+        "description_text": "Didn't watch Video 3",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "0",
+                    "field": "video_3",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "video_3"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T02:03:37.666Z",
+        "modified": "2017-12-16T02:03:50.963Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1131,
+    "fields": {
+        "action": 310,
+        "name": "No_videos",
+        "description_text": "No video activity",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "0",
+                    "field": "video_1",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "video_1"
+                },
+                {
+                    "value": "0",
+                    "field": "video_2",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "video_2"
+                },
+                {
+                    "value": "0",
+                    "field": "video_3",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "video_3"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T02:13:41.327Z",
+        "modified": "2017-12-16T02:13:41.327Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1132,
+    "fields": {
+        "action": 310,
+        "name": "One_video",
+        "description_text": "Activity detected in only one video",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "value": "1",
+                            "field": "video_1",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_1"
+                        },
+                        {
+                            "value": "0",
+                            "field": "video_2",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_2"
+                        },
+                        {
+                            "value": "0",
+                            "field": "video_3",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_3"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "value": "0",
+                            "field": "video_1",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_1"
+                        },
+                        {
+                            "value": "1",
+                            "field": "video_2",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_2"
+                        },
+                        {
+                            "value": "0",
+                            "field": "video_3",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_3"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "value": "0",
+                            "field": "video_1",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_1"
+                        },
+                        {
+                            "value": "0",
+                            "field": "video_2",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_2"
+                        },
+                        {
+                            "value": "1",
+                            "field": "video_3",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_3"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T02:13:44.160Z",
+        "modified": "2017-12-16T02:15:21.797Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1133,
+    "fields": {
+        "action": 310,
+        "name": "Two_videos",
+        "description_text": "Activity detected in two videos",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "value": "1",
+                            "field": "video_1",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_1"
+                        },
+                        {
+                            "value": "1",
+                            "field": "video_2",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_2"
+                        },
+                        {
+                            "value": "0",
+                            "field": "video_3",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_3"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "value": "1",
+                            "field": "video_1",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_1"
+                        },
+                        {
+                            "value": "0",
+                            "field": "video_2",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_2"
+                        },
+                        {
+                            "value": "1",
+                            "field": "video_3",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_3"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "value": "0",
+                            "field": "video_1",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_1"
+                        },
+                        {
+                            "value": "1",
+                            "field": "video_2",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_2"
+                        },
+                        {
+                            "value": "1",
+                            "field": "video_3",
+                            "operator": "equal",
+                            "input": "number",
+                            "type": "integer",
+                            "id": "video_3"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T02:15:24.327Z",
+        "modified": "2017-12-16T02:23:55.235Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1135,
+    "fields": {
+        "action": 310,
+        "name": "Three_videos",
+        "description_text": "All three videos were watched",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "1",
+                    "field": "video_1",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "video_1"
+                },
+                {
+                    "value": "1",
+                    "field": "video_2",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "video_2"
+                },
+                {
+                    "value": "1",
+                    "field": "video_3",
+                    "operator": "equal",
+                    "input": "number",
+                    "type": "integer",
+                    "id": "video_3"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T02:16:30.820Z",
+        "modified": "2017-12-16T02:16:48.139Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1138,
+    "fields": {
+        "action": 314,
+        "name": "Concept_1",
+        "description_text": "Resources for Concept 1",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "Concept 1",
+                    "field": "difficult_week01",
+                    "operator": "equal",
+                    "input": "select",
+                    "type": "string",
+                    "id": "difficult_week01"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T02:34:27.524Z",
+        "modified": "2017-12-16T02:34:27.524Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1139,
+    "fields": {
+        "action": 314,
+        "name": "Concept_2",
+        "description_text": "Resources for Concept 2",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "Concept 2",
+                    "field": "difficult_week01",
+                    "operator": "equal",
+                    "input": "select",
+                    "type": "string",
+                    "id": "difficult_week01"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T02:34:30.221Z",
+        "modified": "2017-12-16T02:34:40.514Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1140,
+    "fields": {
+        "action": 314,
+        "name": "Concept_3",
+        "description_text": "Resources for Concept 3",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "Concept 3",
+                    "field": "difficult_week01",
+                    "operator": "equal",
+                    "input": "select",
+                    "type": "string",
+                    "id": "difficult_week01"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T02:34:42.034Z",
+        "modified": "2017-12-16T02:34:52.299Z"
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1141,
+    "fields": {
+        "action": 314,
+        "name": "Concept_4",
+        "description_text": "Resources for Concept 4",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "value": "Concept 4",
+                    "field": "difficult_week01",
+                    "operator": "equal",
+                    "input": "select",
+                    "type": "string",
+                    "id": "difficult_week01"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "is_filter": false,
+        "created": "2017-12-16T02:35:02.866Z",
+        "modified": "2017-12-16T02:35:13.202Z"
     }
 },
 {
     "model": "logs.log",
-    "pk": 1284,
+    "pk": 1726,
     "fields": {
         "user": [
             "instructor1@bogus.com"
         ],
-        "created": "2017-12-03T01:40:35.795Z",
-        "name": "workflow_update",
-        "workflow": 50,
-        "payload": "{\"id\": 50, \"name\": \"simple\"}"
+        "created": "2017-12-16T00:59:11.868Z",
+        "name": "workflow_create",
+        "workflow": 140,
+        "payload": "{\"id\": 140, \"name\": \"ELON5839\"}"
     }
 },
 {
     "model": "logs.log",
-    "pk": 1285,
+    "pk": 1727,
     "fields": {
         "user": [
             "instructor1@bogus.com"
         ],
-        "created": "2017-12-03T01:41:01.238Z",
-        "name": "workflow_update",
-        "workflow": 50,
-        "payload": "{\"id\": 50, \"name\": \"wflow1\"}"
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1286,
-    "fields": {
-        "user": [
-            "instructor1@bogus.com"
-        ],
-        "created": "2017-12-03T05:02:44.482Z",
+        "created": "2017-12-16T01:13:19.128Z",
         "name": "workflow_data_upload",
-        "workflow": 50,
-        "payload": "{\"column_names\": [\"age\", \"email\", \"sid\", \"name\", \"registered\", \"when\"], \"name\": \"wflow1\", \"column_types\": [\"double\", \"string\", \"integer\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, false, false, false], \"id\": 50}"
+        "workflow": 140,
+        "payload": "{\"column_names\": [\"email\", \"first_name\", \"last_name\", \"sid\", \"Credits\", \"First_Session\", \"Gender\", \"Group\", \"Induction\", \"Initial\", \"WAM\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"string\", \"string\", \"integer\", \"integer\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"double\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, true, false, false, false, false, false, false, false], \"id\": 140}"
     }
 },
 {
     "model": "logs.log",
-    "pk": 1287,
+    "pk": 1728,
     "fields": {
         "user": [
             "instructor1@bogus.com"
         ],
-        "created": "2017-12-03T05:04:01.064Z",
-        "name": "workflow_data_flush",
-        "workflow": 50,
-        "payload": "{\"id\": 50, \"name\": \"wflow1\"}"
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1288,
-    "fields": {
-        "user": [
-            "instructor1@bogus.com"
-        ],
-        "created": "2017-12-03T05:04:57.402Z",
-        "name": "workflow_data_upload",
-        "workflow": 50,
-        "payload": "{\"column_names\": [\"email\", \"sid\", \"name\"], \"name\": \"wflow1\", \"column_types\": [\"string\", \"integer\", \"string\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, false], \"id\": 50}"
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1289,
-    "fields": {
-        "user": [
-            "instructor1@bogus.com"
-        ],
-        "created": "2017-12-03T05:05:38.082Z",
-        "name": "workflow_data_merge",
-        "workflow": 50,
-        "payload": "{\"column_names\": [\"email\", \"sid\", \"name\", \"registered\", \"when\"], \"name\": \"wflow1\", \"column_types\": [\"string\", \"integer\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 3, \"num_rows\": 3, \"column_unique\": [true, true, false, false, false], \"id\": 50}"
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1290,
-    "fields": {
-        "user": [
-            "instructor1@bogus.com"
-        ],
-        "created": "2017-12-03T05:06:12.852Z",
-        "name": "workflow_data_merge",
-        "workflow": 50,
-        "payload": "{\"column_names\": [\"age\", \"email\", \"sid\", \"name\", \"registered\", \"when\"], \"name\": \"wflow1\", \"column_types\": [\"double\", \"string\", \"integer\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 5, \"num_rows\": 3, \"column_unique\": [true, true, true, false, false, false], \"id\": 50}"
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1291,
-    "fields": {
-        "user": [
-            "instructor1@bogus.com"
-        ],
-        "created": "2017-12-03T05:06:24.362Z",
+        "created": "2017-12-16T01:13:34.740Z",
         "name": "column_rename",
-        "workflow": 50,
-        "payload": "{\"new_name\": \"age\", \"column_name\": \"age\", \"id\": 50, \"name\": \"wflow1\"}"
+        "workflow": 140,
+        "payload": "{\"new_name\": \"last_name\", \"column_name\": \"last_name\", \"id\": 140, \"name\": \"ELON5839\"}"
     }
 },
 {
     "model": "logs.log",
-    "pk": 1292,
+    "pk": 1729,
     "fields": {
         "user": [
             "instructor1@bogus.com"
         ],
-        "created": "2017-12-03T05:11:28.543Z",
+        "created": "2017-12-16T01:13:39.063Z",
+        "name": "column_rename",
+        "workflow": 140,
+        "payload": "{\"new_name\": \"first_name\", \"column_name\": \"first_name\", \"id\": 140, \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1730,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:14:02.068Z",
+        "name": "workflow_data_flush",
+        "workflow": 140,
+        "payload": "{\"id\": 140, \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1731,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:15:07.819Z",
+        "name": "workflow_data_upload",
+        "workflow": 140,
+        "payload": "{\"column_names\": [\"email\", \"first_name\", \"last_name\", \"sid\", \"Credits\", \"First_Session\", \"Gender\", \"Group\", \"Induction\", \"WAM\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"string\", \"string\", \"integer\", \"integer\", \"datetime\", \"string\", \"string\", \"boolean\", \"double\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, true, false, false, false, false, false, false], \"id\": 140}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1732,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:15:16.096Z",
+        "name": "column_rename",
+        "workflow": 140,
+        "payload": "{\"new_name\": \"first_name\", \"column_name\": \"first_name\", \"id\": 140, \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1733,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:15:20.712Z",
+        "name": "column_rename",
+        "workflow": 140,
+        "payload": "{\"new_name\": \"last_name\", \"column_name\": \"last_name\", \"id\": 140, \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1734,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:15:33.354Z",
+        "name": "column_rename",
+        "workflow": 140,
+        "payload": "{\"new_name\": \"Gender\", \"column_name\": \"Gender\", \"id\": 140, \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1735,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:16:12.152Z",
+        "name": "column_rename",
+        "workflow": 140,
+        "payload": "{\"new_name\": \"credits\", \"column_name\": \"Credits\", \"id\": 140, \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1736,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:16:19.776Z",
+        "name": "column_rename",
+        "workflow": 140,
+        "payload": "{\"new_name\": \"first_session\", \"column_name\": \"First_Session\", \"id\": 140, \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1737,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:16:26.002Z",
+        "name": "column_rename",
+        "workflow": 140,
+        "payload": "{\"new_name\": \"gender\", \"column_name\": \"Gender\", \"id\": 140, \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1738,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:16:31.282Z",
+        "name": "column_rename",
+        "workflow": 140,
+        "payload": "{\"new_name\": \"group\", \"column_name\": \"Group\", \"id\": 140, \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1739,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:16:38.018Z",
+        "name": "column_rename",
+        "workflow": 140,
+        "payload": "{\"new_name\": \"induction\", \"column_name\": \"Induction\", \"id\": 140, \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1740,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:18:07.327Z",
+        "name": "column_add",
+        "workflow": 140,
+        "payload": "{\"column_name\": \"Difficult_Week01\", \"id\": 140, \"column_type\": \"string\", \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1741,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:18:32.753Z",
+        "name": "column_add",
+        "workflow": 140,
+        "payload": "{\"column_name\": \"Difficult_Week02\", \"id\": 140, \"column_type\": \"string\", \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1742,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:18:46.538Z",
+        "name": "column_rename",
+        "workflow": 140,
+        "payload": "{\"new_name\": \"difficult_week01\", \"column_name\": \"Difficult_Week01\", \"id\": 140, \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1743,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:18:54.229Z",
+        "name": "column_rename",
+        "workflow": 140,
+        "payload": "{\"new_name\": \"difficult_week02\", \"column_name\": \"Difficult_Week02\", \"id\": 140, \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1744,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:33:35.446Z",
         "name": "action_create",
-        "workflow": 50,
-        "payload": "{\"workflow_id\": 50, \"id\": 128, \"workflow_name\": \"wflow1\", \"name\": \"action1\"}"
+        "workflow": 140,
+        "payload": "{\"workflow_id\": 140, \"id\": 307, \"workflow_name\": \"ELON5839\", \"name\": \"Midterm scores\"}"
     }
 },
 {
     "model": "logs.log",
-    "pk": 1293,
+    "pk": 1745,
     "fields": {
         "user": [
             "instructor1@bogus.com"
         ],
-        "created": "2017-12-03T05:11:42.001Z",
-        "name": "filter_create",
-        "workflow": 50,
-        "payload": "{\"selected_rows\": 0, \"formula\": [\"(\\\"age\\\" = %s)\", [\"16.0\"]], \"id\": 533, \"name\": \"the_action_filter\"}"
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1294,
-    "fields": {
-        "user": [
-            "instructor1@bogus.com"
-        ],
-        "created": "2017-12-03T05:11:53.527Z",
-        "name": "condition_create",
-        "workflow": 50,
-        "payload": "{\"selected_rows\": 0, \"formula\": [\"(\\\"age\\\" > %s)\", [\"12.0\"]], \"id\": 534, \"name\": \"cond1\"}"
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1295,
-    "fields": {
-        "user": [
-            "instructor1@bogus.com"
-        ],
-        "created": "2017-12-03T05:11:57.041Z",
+        "created": "2017-12-16T01:33:51.682Z",
         "name": "action_update",
-        "workflow": 50,
-        "payload": "{\"content\": \"{% comment %}Your action content here{% endcomment %}\", \"workflow_id\": 50, \"id\": 128, \"workflow_name\": \"wflow1\", \"name\": \"action1\"}"
+        "workflow": 140,
+        "payload": "{\"content\": \"<p>Dear&nbsp;{{ GivenName }}</p><p>Here are the comments about your answers to the midterm exam (ordered by topic).</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">Chemistry and Molecules of Life</h4><p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p><p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p><p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">Cell function and structure</h4><p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p><p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p><p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">Nutrition, Metabolism &amp; Enzymes</h4><p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p><p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p><p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\"><span style=\\\"color: inherit; font-family: inherit;\\\">Cell Division</span></h4><p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p><p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p><p>{% if T4_HIGH %}Good work with this block!{% endif %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">DNA Structure and Replication</h4><p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p><p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p><p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p><p>Your total score for the midterm is&nbsp;{{ Total }}.</p><p>Kind regards</p><p>{{ Coordinator_name }}</p><p>{{ course_name }}</p><div><br></div>\", \"workflow_id\": 140, \"id\": 307, \"workflow_name\": \"ELON5839\", \"name\": \"Midterm scores\"}"
     }
 },
 {
     "model": "logs.log",
-    "pk": 1296,
+    "pk": 1746,
     "fields": {
         "user": [
             "instructor1@bogus.com"
         ],
-        "created": "2017-12-03T05:12:01.841Z",
+        "created": "2017-12-16T01:34:41.324Z",
+        "name": "workflow_data_merge",
+        "workflow": 140,
+        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"integer\", \"double\", \"integer\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"double\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 12, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1747,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:35:07.067Z",
+        "name": "column_delete",
+        "workflow": 140,
+        "payload": "{\"column_name\": \"took_mt\", \"id\": 140, \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1748,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:36:20.789Z",
+        "name": "workflow_data_merge",
+        "workflow": 140,
+        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"integer\", \"double\", \"integer\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"double\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"boolean\"], \"num_cols\": 23, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1749,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:37:07.481Z",
+        "name": "filter_create",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 7, \"formula\": [\"((\\\"took_mt\\\" = %s))\", [\"1\"]], \"id\": 1109, \"name\": \"Only students that sat the exam\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1750,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:38:06.713Z",
+        "name": "column_delete",
+        "workflow": 140,
+        "payload": "{\"column_name\": \"took_mt\", \"id\": 140, \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1751,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:39:08.911Z",
+        "name": "workflow_data_merge",
+        "workflow": 140,
+        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"integer\", \"double\", \"integer\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"double\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"boolean\"], \"num_cols\": 23, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1752,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:39:41.374Z",
+        "name": "filter_create",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"took_mt\\\" = %s))\", [\"1\"]], \"id\": 1110, \"name\": \"Students that took the midterm\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1753,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:39:49.465Z",
+        "name": "action_update",
+        "workflow": 140,
+        "payload": "{\"content\": \"<p>Dear&nbsp;{{ GivenName }}</p><p>Here are the comments about your answers to the midterm exam (ordered by topic).</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">Chemistry and Molecules of Life</h4><p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p><p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p><p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">Cell function and structure</h4><p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p><p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p><p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">Nutrition, Metabolism &amp; Enzymes</h4><p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p><p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p><p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\"><span style=\\\"color: inherit; font-family: inherit;\\\">Cell Division</span></h4><p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p><p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p><p>{% if T4_HIGH %}Good work with this block!{% endif %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">DNA Structure and Replication</h4><p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p><p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p><p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p><p>Your total score for the midterm is&nbsp;{{ Total }}.</p><p>Kind regards</p><p>{{ Coordinator_name }}</p><p>{{ course_name }}</p><div><br></div>\", \"workflow_id\": 140, \"id\": 307, \"workflow_name\": \"ELON5839\", \"name\": \"Midterm scores\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1754,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:40:33.802Z",
+        "name": "condition_create",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"q01\\\" = %s) AND (\\\"q02\\\" = %s))\", [\"0\", \"0\"]], \"id\": 1111, \"name\": \"T1_LOW\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1755,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:40:37.030Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"T1_LOW\", \"name_new\": \"Copy of T1_LOW\", \"id_new\": 1112, \"id_old\": 1111}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1756,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:40:55.393Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"q03\\\" = %s) AND (\\\"q04\\\" = %s))\", [\"0\", \"0\"]], \"id\": 1112, \"name\": \"T2_LOW\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1757,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:40:58.559Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"T2_LOW\", \"name_new\": \"Copy of T2_LOW\", \"id_new\": 1113, \"id_old\": 1112}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1758,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:41:19.307Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"q05\\\" = %s) AND (\\\"q06\\\" = %s))\", [\"0\", \"0\"]], \"id\": 1113, \"name\": \"T3_LOW\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1759,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:41:21.295Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"T3_LOW\", \"name_new\": \"Copy of T3_LOW\", \"id_new\": 1114, \"id_old\": 1113}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1760,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:41:36.756Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"q07\\\" = %s) AND (\\\"q08\\\" = %s))\", [\"0\", \"0\"]], \"id\": 1114, \"name\": \"T4_LOW\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1761,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:41:39.048Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"T4_LOW\", \"name_new\": \"Copy of T4_LOW\", \"id_new\": 1115, \"id_old\": 1114}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1762,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:41:59.959Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"q09\\\" = %s) AND (\\\"q10\\\" = %s))\", [\"0\", \"0\"]], \"id\": 1115, \"name\": \"T5_LOW\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1763,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:43:04.289Z",
+        "name": "condition_create",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((((\\\"q01\\\" = %s) AND (\\\"q02\\\" = %s))) OR (((\\\"q01\\\" = %s) AND (\\\"q02\\\" = %s))))\", [\"0\", \"1\", \"1\", \"-26\"]], \"id\": 1116, \"name\": \"T1_MID\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1764,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:43:12.228Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"T1_MID\", \"name_new\": \"Copy of T1_MID\", \"id_new\": 1117, \"id_old\": 1116}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1765,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:43:39.292Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((((\\\"q03\\\" = %s) AND (\\\"q04\\\" = %s))) OR (((\\\"q03\\\" = %s) AND (\\\"q04\\\" = %s))))\", [\"0\", \"1\", \"-5\", \"0\"]], \"id\": 1117, \"name\": \"T2_MID\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1766,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:43:48.050Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((((\\\"q01\\\" = %s) AND (\\\"q02\\\" = %s))) OR (((\\\"q01\\\" = %s) AND (\\\"q02\\\" = %s))))\", [\"0\", \"1\", \"1\", \"-26\"]], \"id\": 1116, \"name\": \"T1_MID\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1767,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:43:50.553Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"T2_MID\", \"name_new\": \"Copy of T2_MID\", \"id_new\": 1118, \"id_old\": 1117}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1768,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:44:17.917Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((((\\\"q05\\\" = %s) AND (\\\"q06\\\" = %s))) OR (((\\\"q05\\\" = %s) AND (\\\"q06\\\" = %s))))\", [\"0\", \"1\", \"1\", \"0\"]], \"id\": 1118, \"name\": \"T3_MID\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1769,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:44:25.445Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"T3_MID\", \"name_new\": \"Copy of T3_MID\", \"id_new\": 1119, \"id_old\": 1118}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1770,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:44:51.317Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((((\\\"q07\\\" = %s) AND (\\\"q08\\\" = %s))) OR (((\\\"q07\\\" = %s) AND (\\\"q08\\\" = %s))))\", [\"0\", \"1\", \"1\", \"0\"]], \"id\": 1119, \"name\": \"T4_MID\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1771,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:44:54.364Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"T4_MID\", \"name_new\": \"Copy of T4_MID\", \"id_new\": 1120, \"id_old\": 1119}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1772,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:45:26.528Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((((\\\"q09\\\" = %s) AND (\\\"q10\\\" = %s))) OR (((\\\"q09\\\" = %s) AND (\\\"q10\\\" = %s))))\", [\"0\", \"1\", \"1\", \"0\"]], \"id\": 1120, \"name\": \"T5_MID\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1773,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:45:33.869Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"T1_LOW\", \"name_new\": \"Copy of T1_LOW\", \"id_new\": 1121, \"id_old\": 1111}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1774,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:45:50.189Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"q01\\\" = %s) AND (\\\"q02\\\" = %s))\", [\"1\", \"1\"]], \"id\": 1121, \"name\": \"T1_HIGH\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1775,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:45:52.193Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"T1_HIGH\", \"name_new\": \"Copy of T1_HIGH\", \"id_new\": 1122, \"id_old\": 1121}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1776,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:46:03.732Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"q03\\\" = %s) AND (\\\"q04\\\" = %s))\", [\"1\", \"1\"]], \"id\": 1122, \"name\": \"T2_HIGH\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1777,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:46:06.732Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"T2_HIGH\", \"name_new\": \"Copy of T2_HIGH\", \"id_new\": 1123, \"id_old\": 1122}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1778,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:46:21.540Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"q05\\\" = %s) AND (\\\"q06\\\" = %s))\", [\"1\", \"1\"]], \"id\": 1123, \"name\": \"T3_HIGH\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1779,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:46:25.649Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"q05\\\" = %s) AND (\\\"q06\\\" = %s))\", [\"1\", \"1\"]], \"id\": 1123, \"name\": \"T3_HIGH\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1780,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:46:26.900Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"T3_HIGH\", \"name_new\": \"Copy of T3_HIGH\", \"id_new\": 1124, \"id_old\": 1123}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1781,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:46:39.588Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"q07\\\" = %s) AND (\\\"q08\\\" = %s))\", [\"1\", \"1\"]], \"id\": 1124, \"name\": \"T4_HIGH\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1782,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:46:44.261Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"q07\\\" = %s) AND (\\\"q08\\\" = %s))\", [\"1\", \"1\"]], \"id\": 1124, \"name\": \"T4_HIGH\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1783,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:46:46.231Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"T4_HIGH\", \"name_new\": \"Copy of T4_HIGH\", \"id_new\": 1125, \"id_old\": 1124}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1784,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:47:00.362Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"q09\\\" = %s) AND (\\\"q10\\\" = %s))\", [\"1\", \"1\"]], \"id\": 1125, \"name\": \"T5_HIGH\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1785,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:47:05.027Z",
+        "name": "action_update",
+        "workflow": 140,
+        "payload": "{\"content\": \"<p>Dear&nbsp;{{ GivenName }}</p><p>Here are the comments about your answers to the midterm exam (ordered by topic).</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">Chemistry and Molecules of Life</h4><p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p><p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p><p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">Cell function and structure</h4><p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p><p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p><p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">Nutrition, Metabolism &amp; Enzymes</h4><p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p><p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p><p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\"><span style=\\\"color: inherit; font-family: inherit;\\\">Cell Division</span></h4><p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p><p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p><p>{% if T4_HIGH %}Good work with this block!{% endif %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">DNA Structure and Replication</h4><p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p><p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p><p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p><p>Your total score for the midterm is&nbsp;{{ Total }}.</p><p>Kind regards</p><p>{{ Coordinator_name }}</p><p>{{ course_name }}</p><div><br></div>\", \"workflow_id\": 140, \"id\": 307, \"workflow_name\": \"ELON5839\", \"name\": \"Midterm scores\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1786,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:48:46.839Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((((\\\"q01\\\" = %s) AND (\\\"q02\\\" = %s))) OR (((\\\"q01\\\" = %s) AND (\\\"q02\\\" = %s))))\", [\"0\", \"1\", \"1\", \"0\"]], \"id\": 1116, \"name\": \"T1_MID\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1787,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:48:59.621Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((((\\\"q03\\\" = %s) AND (\\\"q04\\\" = %s))) OR (((\\\"q03\\\" = %s) AND (\\\"q04\\\" = %s))))\", [\"0\", \"1\", \"1\", \"0\"]], \"id\": 1117, \"name\": \"T2_MID\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1788,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:49:05.497Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((((\\\"q05\\\" = %s) AND (\\\"q06\\\" = %s))) OR (((\\\"q05\\\" = %s) AND (\\\"q06\\\" = %s))))\", [\"0\", \"1\", \"1\", \"0\"]], \"id\": 1118, \"name\": \"T3_MID\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1789,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:49:10.766Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((((\\\"q07\\\" = %s) AND (\\\"q08\\\" = %s))) OR (((\\\"q07\\\" = %s) AND (\\\"q08\\\" = %s))))\", [\"0\", \"1\", \"1\", \"0\"]], \"id\": 1119, \"name\": \"T4_MID\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1790,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:49:16.127Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((((\\\"q09\\\" = %s) AND (\\\"q10\\\" = %s))) OR (((\\\"q09\\\" = %s) AND (\\\"q10\\\" = %s))))\", [\"0\", \"1\", \"1\", \"0\"]], \"id\": 1120, \"name\": \"T5_MID\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1791,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:49:41.391Z",
+        "name": "action_update",
+        "workflow": 140,
+        "payload": "{\"content\": \"<p>Dear&nbsp;{{ first_name }}</p><p>Here are the comments about your answers to the midterm exam (ordered by topic).</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">Chemistry and Molecules of Life</h4><p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p><p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p><p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">Cell function and structure</h4><p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p><p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p><p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">Nutrition, Metabolism &amp; Enzymes</h4><p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p><p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p><p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\"><span style=\\\"color: inherit; font-family: inherit;\\\">Cell Division</span></h4><p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p><p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p><p>{% if T4_HIGH %}Good work with this block!{% endif %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">DNA Structure and Replication</h4><p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p><p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p><p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p><p>Your total score for the midterm is&nbsp;{{ mt_total }}.</p><p>Kind regards</p><p>{{ Coordinator_name }}</p><p>{{ course_name }}</p><div><br></div>\", \"workflow_id\": 140, \"id\": 307, \"workflow_name\": \"ELON5839\", \"name\": \"Midterm scores\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1792,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:51:43.190Z",
+        "name": "workflow_data_merge",
+        "workflow": 140,
+        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"days_online\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"integer\", \"double\", \"integer\", \"double\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"double\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"boolean\"], \"num_cols\": 24, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1793,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:52:24.871Z",
         "name": "action_create",
-        "workflow": 50,
-        "payload": "{\"workflow_id\": 50, \"id\": 129, \"workflow_name\": \"wflow1\", \"name\": \"action2\"}"
+        "workflow": 140,
+        "payload": "{\"workflow_id\": 140, \"id\": 308, \"workflow_name\": \"ELON5839\", \"name\": \"Reminder to post in the forum\"}"
     }
 },
 {
     "model": "logs.log",
-    "pk": 1297,
+    "pk": 1794,
     "fields": {
         "user": [
             "instructor1@bogus.com"
         ],
-        "created": "2017-12-03T05:12:15.410Z",
+        "created": "2017-12-16T01:52:59.585Z",
         "name": "filter_create",
-        "workflow": 50,
-        "payload": "{\"selected_rows\": 0, \"formula\": [\"(\\\"age\\\" = %s)\", [\"57.0\"]], \"id\": 535, \"name\": \"filter2\"}"
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 2, \"formula\": [\"((\\\"days_online\\\" = %s))\", [\"0.0\"]], \"id\": 1126, \"name\": \"Students with days_online = 0\"}"
     }
 },
 {
     "model": "logs.log",
-    "pk": 1298,
+    "pk": 1795,
     "fields": {
         "user": [
             "instructor1@bogus.com"
         ],
-        "created": "2017-12-03T05:12:26.068Z",
-        "name": "condition_create",
-        "workflow": 50,
-        "payload": "{\"selected_rows\": 0, \"formula\": [\"(\\\"age\\\" = %s)\", [\"12.0\"]], \"id\": 536, \"name\": \"cond1\"}"
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1299,
-    "fields": {
-        "user": [
-            "instructor1@bogus.com"
-        ],
-        "created": "2017-12-03T05:12:28.325Z",
+        "created": "2017-12-16T01:53:33.549Z",
         "name": "action_update",
-        "workflow": 50,
-        "payload": "{\"content\": \"{% comment %}Your action content here{% endcomment %}\", \"workflow_id\": 50, \"id\": 129, \"workflow_name\": \"wflow1\", \"name\": \"action2\"}"
+        "workflow": 140,
+        "payload": "{\"content\": \"<p>Dear&nbsp;{{ first_name }}</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>{{ Coordinator_name }}</p><p>{{ course_name }}</p>\", \"workflow_id\": 140, \"id\": 308, \"workflow_name\": \"ELON5839\", \"name\": \"Reminder to post in the forum\"}"
     }
 },
 {
     "model": "logs.log",
-    "pk": 1302,
+    "pk": 1796,
     "fields": {
         "user": [
             "instructor1@bogus.com"
         ],
-        "created": "2017-12-03T06:03:35.124Z",
+        "created": "2017-12-16T01:54:00.879Z",
         "name": "workflow_attribute_create",
-        "workflow": 50,
-        "payload": "{\"attr_key\": \"name1\", \"attr_val\": \"value1\", \"id\": 50, \"name\": \"wflow1\"}"
+        "workflow": 140,
+        "payload": "{\"attr_key\": \"Coordinator_name\", \"attr_val\": \"Sarah Coordinating\", \"id\": 140, \"name\": \"ELON5839\"}"
     }
 },
 {
     "model": "logs.log",
-    "pk": 1303,
+    "pk": 1797,
     "fields": {
         "user": [
             "instructor1@bogus.com"
         ],
-        "created": "2017-12-03T06:03:41.315Z",
+        "created": "2017-12-16T01:54:30.356Z",
         "name": "workflow_attribute_create",
-        "workflow": 50,
-        "payload": "{\"attr_key\": \"name2\", \"attr_val\": \"value2\", \"id\": 50, \"name\": \"wflow1\"}"
+        "workflow": 140,
+        "payload": "{\"attr_key\": \"Course_name\", \"attr_val\": \"ELON5639\", \"id\": 140, \"name\": \"ELON5839\"}"
     }
 },
 {
     "model": "logs.log",
-    "pk": 1304,
+    "pk": 1798,
     "fields": {
         "user": [
             "instructor1@bogus.com"
         ],
-        "created": "2017-12-03T06:03:43.145Z",
+        "created": "2017-12-16T01:54:36.091Z",
         "name": "workflow_attribute_update",
-        "workflow": 50,
-        "payload": "{\"attr\": {\"name2\": \"value2\", \"name1\": \"value1\"}, \"id\": 50, \"name\": \"wflow1\"}"
+        "workflow": 140,
+        "payload": "{\"attr\": {\"Coordinator_name\": \"Sarah Coordinating\", \"Course_name\": \"ELON5639\"}, \"id\": 140, \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1799,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:54:40.131Z",
+        "name": "workflow_attribute_update",
+        "workflow": 140,
+        "payload": "{\"attr\": {\"Coordinator_name\": \"Sarah Coordinating\", \"Course_name\": \"ELON5839\"}, \"id\": 140, \"name\": \"ELON5839\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1800,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:55:11.365Z",
+        "name": "action_update",
+        "workflow": 140,
+        "payload": "{\"content\": \"<p>Dear&nbsp;{{ first_name }}</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>{{ Coordinator_name }}</p><p>{{ Course_name }}</p>\", \"workflow_id\": 140, \"id\": 308, \"workflow_name\": \"ELON5839\", \"name\": \"Reminder to post in the forum\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1801,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:57:34.098Z",
+        "name": "workflow_data_merge",
+        "workflow": 140,
+        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"days_online\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\", \"video_1\", \"video_2\", \"video_3\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"integer\", \"double\", \"integer\", \"double\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"double\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"boolean\", \"integer\", \"integer\", \"double\"], \"num_cols\": 25, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1802,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:58:13.402Z",
+        "name": "action_create",
+        "workflow": 140,
+        "payload": "{\"workflow_id\": 140, \"id\": 309, \"workflow_name\": \"ELON5839\", \"name\": \"Comment lecture preparation activities\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1803,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T01:59:31.502Z",
+        "name": "filter_create",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 9, \"formula\": [\"((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))\", [\"1\", \"1\", \"1.0\"]], \"id\": 1127, \"name\": \"Only those with one video missing\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1804,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:00:49.362Z",
+        "name": "action_update",
+        "workflow": 140,
+        "payload": "{\"content\": \"{% comment %}Your action content here{% endcomment %}\", \"workflow_id\": 140, \"id\": 309, \"workflow_name\": \"ELON5839\", \"name\": \"Comment lecture preparation activities\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1805,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:01:17.664Z",
+        "name": "workflow_data_merge",
+        "workflow": 140,
+        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"days_online\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\", \"video_1\", \"video_2\", \"video_3\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"integer\", \"double\", \"integer\", \"double\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"double\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"boolean\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 28, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1806,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:02:06.108Z",
+        "name": "filter_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))\", [\"1\", \"1\", \"1\"]], \"id\": 1127, \"name\": \"Only those with one video missing\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1807,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:03:15.639Z",
+        "name": "condition_create",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"video_1\\\" = %s))\", [\"0\"]], \"id\": 1128, \"name\": \"No_Video_1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1808,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:03:17.360Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"No_Video_1\", \"name_new\": \"Copy of No_Video_1\", \"id_new\": 1129, \"id_old\": 1128}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1809,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:03:31.606Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"video_2\\\" = %s))\", [\"0\"]], \"id\": 1129, \"name\": \"No_Video_2\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1810,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:03:37.672Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"No_Video_2\", \"name_new\": \"Copy of No_Video_2\", \"id_new\": 1130, \"id_old\": 1129}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1811,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:03:50.968Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 10, \"formula\": [\"((\\\"video_3\\\" = %s))\", [\"0\"]], \"id\": 1130, \"name\": \"No_Video_3\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1812,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:09:47.943Z",
+        "name": "action_update",
+        "workflow": 140,
+        "payload": "{\"content\": \"<p>Dear&nbsp;{{ first_name }}</p><p>Here are some comments about the preparation videos for this week.</p><p style=\\\"\\\">{% if No_Video_1 %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">Genes and Proteins Activity</h4><p style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">This video explains the role of the genes to synthesise proteins in the cell. It is very important to see the connection between the proteins and the rest of processes occurring in the cell.</p><p style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">{% endif %}</p><p>{% if No_Video_2 %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">STEM Cells</h4><p>This video show how stem cells are a fundamental building block of how cellular organisms evolve. There are very valuable descriptions in this video about the mechanisms that are involved in this specialisation.</p><p>{% endif %}</p><p>{% if No_Video_3 %}</p><h4 style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">Immune System</h4><p>This video contains an overview of the systems that protect the cell from infections. It is highly relevant to understand the rest of concepts such as for example, the way proteins are synthesized.&nbsp;</p><p>{% endif %}</p><p>Regards<br></p><p style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">{{ Coordinator_name }}</p><p style=\\\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\\\">{{ Course_name }}<br></p>\", \"workflow_id\": 140, \"id\": 309, \"workflow_name\": \"ELON5839\", \"name\": \"Comment lecture preparation activities\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1813,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:12:55.014Z",
+        "name": "action_create",
+        "workflow": 140,
+        "payload": "{\"workflow_id\": 140, \"id\": 310, \"workflow_name\": \"ELON5839\", \"name\": \"Badges\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1814,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:13:41.333Z",
+        "name": "condition_create",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": -1, \"formula\": [\"((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))\", [\"0\", \"0\", \"0\"]], \"id\": 1131, \"name\": \"No_videos\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1815,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:13:44.166Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"No_videos\", \"name_new\": \"Copy of No_videos\", \"id_new\": 1132, \"id_old\": 1131}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1816,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:15:21.802Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": -1, \"formula\": [\"((((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))) OR (((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))) OR (((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))))\", [\"1\", \"0\", \"0\", \"0\", \"1\", \"0\", \"0\", \"0\", \"1\"]], \"id\": 1132, \"name\": \"One_video\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1817,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:15:24.334Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"One_video\", \"name_new\": \"Copy of One_video\", \"id_new\": 1133, \"id_old\": 1132}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1818,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:16:01.107Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": -1, \"formula\": [\"((((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))) OR (((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))) OR (((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))))\", [\"1\", \"1\", \"0\", \"1\", \"0\", \"1\", \"0\", \"1\", \"1\"]], \"id\": 1133, \"name\": \"Two_videos\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1819,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:16:04.601Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"Two_videos\", \"name_new\": \"Copy of Two_videos\", \"id_new\": 1134, \"id_old\": 1133}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1820,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:16:28.850Z",
+        "name": "condition_delete",
+        "workflow": 140,
+        "payload": "{\"formula\": \"((((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))) OR (((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))) OR (((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))))\", \"formula_fields\": [\"1\", \"1\", \"0\", \"1\", \"0\", \"1\", \"0\", \"1\", \"1\"], \"id\": 1134, \"name\": \"Copy of Two_videos\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1821,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:16:30.825Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"No_videos\", \"name_new\": \"Copy of No_videos\", \"id_new\": 1135, \"id_old\": 1131}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1822,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:16:48.143Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": -1, \"formula\": [\"((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))\", [\"1\", \"1\", \"1\"]], \"id\": 1135, \"name\": \"Three_videos\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1823,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:19:15.774Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"Three_videos\", \"name_new\": \"Copy of Three_videos\", \"id_new\": 1136, \"id_old\": 1135}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1824,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:19:49.284Z",
+        "name": "condition_delete",
+        "workflow": 140,
+        "payload": "{\"formula\": \"((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))\", \"formula_fields\": [\"1\", \"1\", \"1\"], \"id\": 1136, \"name\": \"Copy of Three_videos\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1825,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:22:55.451Z",
+        "name": "action_update",
+        "workflow": 140,
+        "payload": "{\"content\": \"<h1 style=\\\"text-align: center;\\\">Video Activity Badges</h1><p style=\\\"text-align: center;\\\">{% if Three_videos %}<img style=\\\"width: 128px;\\\" src=\\\"https://findicons.com/icon/download/134633/gold_medal/128/png\\\">{% endif %}</p><p style=\\\"text-align: center;\\\">{% if Two_videos %}<img style=\\\"width: 128px;\\\" src=\\\"https://findicons.com/icon/download/134646/silver_medal/128/png\\\">{% endif %}</p><p style=\\\"text-align: center;\\\">{% if One_videos %}<img style=\\\"width: 128px;\\\" src=\\\"https://findicons.com/icon/download/134637/bronze_medal/128/png\\\">{% endif %}</p><p style=\\\"text-align: center;\\\">{% if No_videos %}Work in progress{% endif %}</p>\", \"workflow_id\": 140, \"id\": 310, \"workflow_name\": \"ELON5839\", \"name\": \"Badges\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1826,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:23:55.243Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": -1, \"formula\": [\"((((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))) OR (((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))) OR (((\\\"video_1\\\" = %s) AND (\\\"video_2\\\" = %s) AND (\\\"video_3\\\" = %s))))\", [\"1\", \"1\", \"0\", \"1\", \"0\", \"1\", \"0\", \"1\", \"1\"]], \"id\": 1133, \"name\": \"Two_videos\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1827,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:24:26.150Z",
+        "name": "action_update",
+        "workflow": 140,
+        "payload": "{\"content\": \"<h1 style=\\\"text-align: center;\\\">Video Activity Badges</h1><p style=\\\"text-align: center;\\\">{% if Three_videos %}<img style=\\\"width: 128px;\\\" src=\\\"https://findicons.com/icon/download/134633/gold_medal/128/png\\\">{% endif %}</p><p style=\\\"text-align: center;\\\">{% if Two_videos %}<img style=\\\"width: 128px;\\\" src=\\\"https://findicons.com/icon/download/134646/silver_medal/128/png\\\">{% endif %}</p><p style=\\\"text-align: center;\\\">{% if One_video %}<img style=\\\"width: 128px;\\\" src=\\\"https://findicons.com/icon/download/134637/bronze_medal/128/png\\\">{% endif %}</p><p style=\\\"text-align: center;\\\">{% if No_videos %}Work in progress{% endif %}</p>\", \"workflow_id\": 140, \"id\": 310, \"workflow_name\": \"ELON5839\", \"name\": \"Badges\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1828,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:25:39.328Z",
+        "name": "action_create",
+        "workflow": 140,
+        "payload": "{\"workflow_id\": 140, \"id\": 311, \"workflow_name\": \"ELON5839\", \"name\": \"Difficult topics Week 1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1829,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:26:17.668Z",
+        "name": "action_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"Difficult topics Week 1\", \"name_new\": \"Copy of Difficult topics Week 1\", \"id_new\": 312, \"id_old\": 311}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1830,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:26:31.691Z",
+        "name": "action_update",
+        "workflow": 140,
+        "payload": "{\"workflow_id\": 140, \"id\": 312, \"workflow_name\": \"ELON5839\", \"name\": \"Difficult topics Week 2\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1831,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:32:00.511Z",
+        "name": "action_update",
+        "workflow": 140,
+        "payload": "{\"content\": \"<h1 style=\\\"text-align: center;\\\">Video Activity Badges</h1><p style=\\\"text-align: center;\\\">{% if Three_videos %}<img style=\\\"width: 128px;\\\" src=\\\"https://findicons.com/icon/download/134633/gold_medal/128/png\\\">{% endif %}</p><p style=\\\"text-align: center;\\\">{% if Two_videos %}<img style=\\\"width: 128px;\\\" src=\\\"https://findicons.com/icon/download/134646/silver_medal/128/png\\\">{% endif %}</p><p style=\\\"text-align: center;\\\">{% if One_video %}<img style=\\\"width: 128px;\\\" src=\\\"https://findicons.com/icon/download/134637/bronze_medal/128/png\\\">{% endif %}</p><p style=\\\"text-align: center;\\\">{% if No_videos %}Work in progress{% endif %}</p>\", \"workflow_id\": 140, \"id\": 310, \"workflow_name\": \"ELON5839\", \"name\": \"Badges\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1832,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:32:05.624Z",
+        "name": "action_create",
+        "workflow": 140,
+        "payload": "{\"workflow_id\": 140, \"id\": 313, \"workflow_name\": \"ELON5839\", \"name\": \"sss\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1833,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:32:44.329Z",
+        "name": "filter_delete",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": -1, \"formula\": \"((\\\"last_name\\\" == ''))\", \"formula_fields\": [], \"id\": 1137, \"name\": \"sss\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1834,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:32:51.586Z",
+        "name": "action_delete",
+        "workflow": 140,
+        "payload": "{\"workflow_name\": \"ELON5839\", \"id\": 313, \"workflow_id\": 140, \"name\": \"sss\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1835,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:32:57.515Z",
+        "name": "action_serve_toggled",
+        "workflow": 140,
+        "payload": "{\"serve_enabled\": true, \"id\": 310, \"name\": \"Badges\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1836,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:34:08.886Z",
+        "name": "action_create",
+        "workflow": 140,
+        "payload": "{\"workflow_id\": 140, \"id\": 314, \"workflow_name\": \"ELON5839\", \"name\": \"Additional resources\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1837,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:34:27.531Z",
+        "name": "condition_create",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": -1, \"formula\": [\"((\\\"difficult_week01\\\" = %s))\", [\"Concept 1\"]], \"id\": 1138, \"name\": \"Concept_1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1838,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:34:30.226Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"Concept_1\", \"name_new\": \"Copy of Concept_1\", \"id_new\": 1139, \"id_old\": 1138}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1839,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:34:40.519Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": -1, \"formula\": [\"((\\\"difficult_week01\\\" = %s))\", [\"Concept 2\"]], \"id\": 1139, \"name\": \"Concept_2\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1840,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:34:42.041Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"Concept_2\", \"name_new\": \"Copy of Concept_2\", \"id_new\": 1140, \"id_old\": 1139}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1841,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:34:52.304Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": -1, \"formula\": [\"((\\\"difficult_week01\\\" = %s))\", [\"Concept 3\"]], \"id\": 1140, \"name\": \"Concept_3\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1842,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:35:02.873Z",
+        "name": "condition_clone",
+        "workflow": 140,
+        "payload": "{\"name_old\": \"Concept_3\", \"name_new\": \"Copy of Concept_3\", \"id_new\": 1141, \"id_old\": 1140}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1843,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:35:13.206Z",
+        "name": "condition_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": -1, \"formula\": [\"((\\\"difficult_week01\\\" = %s))\", [\"Concept 4\"]], \"id\": 1141, \"name\": \"Concept_4\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1844,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:38:32.202Z",
+        "name": "action_update",
+        "workflow": 140,
+        "payload": "{\"content\": \"<h3>Additional resources to review concepts</h3><p>{% if Concept_1 %}</p><ul><li><a href=\\\"https://www.ontasklearning.org\\\" target=\\\"_blank\\\">Resource 1 for concept 1</a></li><li><a href=\\\"https://www.ontasklearning.org/\\\" target=\\\"_blank\\\">Resource 2 for concept 1</a></li><li><a href=\\\"https://www.ontasklearning.org/\\\" target=\\\"_blank\\\">Resource 3 for concept 1</a></li></ul><p>{% endif %}</p><p>{% if Concept_2 %}</p><ul><li><a href=\\\"https://www.ontasklearning.org/\\\" target=\\\"_blank\\\">Resource 1 for concept 2</a></li><li><a href=\\\"https://www.ontasklearning.org/\\\" target=\\\"_blank\\\">Resource 2 for concept 2</a></li><li><a href=\\\"https://www.ontasklearning.org/\\\" target=\\\"_blank\\\">Resource 3 for concept 2</a></li></ul><p>{% endif %}</p><div><p>{% if Concept_3 %}</p><ul><li><a href=\\\"https://www.ontasklearning.org/\\\" target=\\\"_blank\\\">Resource 1 for concept 3</a></li><li><a href=\\\"https://www.ontasklearning.org/\\\" target=\\\"_blank\\\">Resource 2 for concept 3</a></li><li><a href=\\\"https://www.ontasklearning.org/\\\" target=\\\"_blank\\\">Resource 3 for concept 3</a></li></ul><p>{% endif %}</p></div><div><br></div>\", \"workflow_id\": 140, \"id\": 314, \"workflow_name\": \"ELON5839\", \"name\": \"Additional resources\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1845,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:38:42.671Z",
+        "name": "action_serve_toggled",
+        "workflow": 140,
+        "payload": "{\"serve_enabled\": true, \"id\": 311, \"name\": \"Difficult topics Week 1\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1846,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:38:50.061Z",
+        "name": "action_serve_toggled",
+        "workflow": 140,
+        "payload": "{\"serve_enabled\": true, \"id\": 312, \"name\": \"Difficult topics Week 2\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1850,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:49:33.554Z",
+        "name": "action_create",
+        "workflow": 140,
+        "payload": "{\"workflow_id\": 140, \"id\": 322, \"workflow_name\": \"ELON5839\", \"name\": \"ccc\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1851,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:56:05.879Z",
+        "name": "filter_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 0, \"formula\": [\"((\\\"email\\\" = ''))\", []], \"id\": 1171, \"name\": \"ddd\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1852,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T02:56:10.765Z",
+        "name": "filter_update",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 12, \"formula\": [\"((\\\"email\\\" != ''))\", []], \"id\": 1171, \"name\": \"ddd\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1853,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T03:07:37.767Z",
+        "name": "filter_delete",
+        "workflow": 140,
+        "payload": "{\"selected_rows\": 12, \"formula\": \"((\\\"email\\\" != ''))\", \"formula_fields\": [], \"id\": 1171, \"name\": \"ddd\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1854,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-16T03:07:46.315Z",
+        "name": "action_delete",
+        "workflow": 140,
+        "payload": "{\"workflow_name\": \"ELON5839\", \"id\": 322, \"workflow_id\": 140, \"name\": \"ccc\"}"
     }
 }
 ]
