@@ -61,7 +61,7 @@ class WorkflowListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Workflow
-        fields = ('id', 'name', 'description_text')
+        fields = ('id', 'name', 'description_text', 'attributes')
 
 
 class WorkflowExportSerializer(serializers.ModelSerializer):
@@ -85,6 +85,12 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
     def get_filtered_actions(self, workflow):
         # Get the subset of actions specified in the context
         action_list = self.context.get('selected_actions', [])
+        if not action_list:
+            # No action needs to be included, no need to call the action
+            # serializer
+            return []
+
+        # Execute the query set
         query_set = workflow.actions.filter(id__in=action_list)
 
         # Serialize the content and return data

@@ -416,14 +416,13 @@ class WorkflowModify(test.OntaskLiveTestCase):
             # ADD A NEW COLUMN
             WebDriverWait(self.selenium, 10).until(
                 EC.element_to_be_clickable(
-                    (By.CLASS_NAME, 'js-workflow-column-add'))
+                    (By.CLASS_NAME, 'js-workflow-column-edit'))
             )
             self.selenium.find_element_by_class_name(
                 'js-workflow-column-add').click()
             WebDriverWait(self.selenium, 10).until(
-                EC.text_to_be_present_in_element(
-                    (By.CLASS_NAME, 'modal-title'),
-                    'Add column'
+                EC.element_to_be_clickable(
+                    (By.ID, 'id_name')
                 )
             )
             # Set the fields
@@ -466,7 +465,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
         for cname, ctype, _, _ in new_cols:
             row_prefix = "//table[@id='column-table']/tbody/tr[6]/td[4]"
             self.selenium.find_element_by_xpath(
-                row_prefix + "/button[2]"
+                row_prefix + "/button[3]"
             ).click()
             WebDriverWait(self.selenium, 10).until(
                 EC.text_to_be_present_in_element(
@@ -575,14 +574,15 @@ class WorkflowModify(test.OntaskLiveTestCase):
         # Wait for workflows page
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, "//div[@id='filter-set']/h4/button")
+                (By.XPATH, "//div[@id='builder']/dl/dt/div/button")
             )
         )
 
-        # Click in the add filter button
+        # Click in the add rule button (the filter is initially empty)
         self.selenium.find_element_by_xpath(
-            "//div[@id='filter-set']/h4/button"
+            "//div[@id='builder']/dl/dt/div/button"
         ).click()
+
         # Select the another2 column (with new name
         select = Select(self.selenium.find_element_by_name(
             'builder_rule_0_filter'))

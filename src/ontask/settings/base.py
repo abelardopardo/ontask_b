@@ -103,9 +103,9 @@ INSTALLED_APPS = (
     'django_auth_lti',
     'datetimewidget',
 
+    'accounts',
     'core.apps.CoreConfig',
     'profiles.apps.ProfileConfig',
-    'accounts',
     'workflow.apps.WorkflowConfig',
     'dataops.apps.DataopsConfig',
     'table.apps.TableConfig',
