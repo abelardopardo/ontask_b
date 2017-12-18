@@ -78,10 +78,10 @@ LOGGING = {
             'handlers': ['proj_log_file'],
             'level': 'DEBUG',
         },
-    'django.request': {
-        'handlers': ['proj_log_file'],
-        'level': 'ERROR',
-        'propagate': True,
+        'django.request': {
+            'handlers': ['proj_log_file'],
+            'level': 'ERROR',
+            'propagate': True,
         },
     }
 }
