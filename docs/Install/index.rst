@@ -176,7 +176,7 @@ no space between variable names and the equal sign)::
    database initialization::
 
      python manage.py makemigrations profiles accounts workflow dataops
-     python manage.py makemigrations table action logs
+     python manage.py makemigrations table action logs scheduler
 
 #. Execute the following command to create the database internal structure::
 
@@ -355,7 +355,7 @@ environment with the following content::
 
   0,15,30,45 * * * * python ${ONTASK_PROJECT}/src/manage.py runscript scheduler_script -v3 --traceback --script-args="-d" > [CRONTAB LOG] 2>&1
 
-Modify the previous scripts with the following information:
+Modify the previous script with the following information:
 
 - In the first line change the email address by an address to receive the
   notifications produced by ``crontab``. The server running the application

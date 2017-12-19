@@ -3,13 +3,15 @@
 ---
 ** NEW VERSION (2017-12-08) **
 
-Version 2.0.0 has been released:
+Version 2.1.1 has been released:
 
 - Support for LTI
 
 - Actions to enter data manually
 
 - Clone operation for workflow, actions and conditions
+
+- Time-based scheduler for actions
 ---
 
 Welcome to OnTask, the platform offering teachers and educational designers
@@ -222,7 +224,7 @@ no space between variable names and the equal sign):
 
    ```
    python manage.py makemigrations profiles accounts workflow dataops
-   python manage.py makemigrations table action logs
+   python manage.py makemigrations table action logs scheduler
    ```
 
 8. Execute the following command to create the database internal structure:
@@ -374,6 +376,57 @@ out-of-the-box solutions.
 
 #### Scheduling tasks
 
+OnTask allows to program certain tasks to execute at some point in the
+future. This functionality is implemented using a combination of persistent
+storage (the database), and a time-based job scheduler external to the tool.
+Time-based job schedulers are present in most operating systems (`cron`
+in Unix/Linux, or `at` in Windows). OnTask provides the functionality to
+describe the task to execute and assing a date and time. Additionally, the
+tool has a script that checks the date/time, selects the appropriate task,
+and executes it. These instructions describe the configuration assuming an
+underlying Linux/Unix architecture using `crontab`.
+
+Create a *crontab* file for the user running the server in your production
+environment with the following content:
+
+```
+MAILTO="[ADMIN EMAIL ADDRESS]"
+PATH=/usr/local/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+SHELL=/bin/bash
+ONTASK_PROJECT=[PATH TO ONTASK PROJECT ROOT]
+  
+0,15,30,45 * * * * python ${ONTASK_PROJECT}/src/manage.py runscript scheduler_script -v3 --traceback --script-args="-d" > [CRONTAB LOG] 2>&1
+```
+
+Modify the previous script with the following information:
+
+- In the first line change the email address by an address to receive the
+  notifications produced by `crontab`. The server running the application
+  needs to have the capacity to send emails.
+
+- Make sure the variable `PATH` contains the path to execute `python`.
+
+- Define the variable `SHELL` to point to the shell to use to execute
+  `python`.
+
+- Change the value of the variable `ONTASK_PROJECT` to point to the root
+  of OnTask (the folder containing the source code).
+
+- In the last line replace `[CRONTAB LOG]` with a file to capture the
+  output that the screen would write to a regular terminal. We recommend
+  this file to be in a temporary directory.
+
+The script `scheduler_scrip` has been configured to print messages through
+a logger that writes the messages to the file `script.log` in the `logs`
+folder.
+
+The remaining parameter to adjust is the frequency in which the script
+`scheduler_script` runs. In the example above, the script executes every
+15 minutes (at minutes 0, 15, 30 and 45 minutes in the hour). Adjust this
+frequency to suit your needs. Once adjusted, go to the admin menu in OnTask,
+open the section with name *Core Configuration*, click in the preferences
+and adjust the value of the *Minute interval to program scheduled tasks* and
+match it (in minutes) to the interval reflected in the crontab.
 
 ## Contributing
 
