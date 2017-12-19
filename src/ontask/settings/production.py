@@ -67,6 +67,18 @@ LOGGING = {
             'filename': join(LOGFILE_ROOT, 'project.log'),
             'formatter': 'verbose'
         },
+        'script_log_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': join(LOGFILE_ROOT, 'script.log'),
+            'formatter': 'verbose'
+        },
+        'scheduler_log_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': join(LOGFILE_ROOT, 'scheduler.log'),
+            'formatter': 'verbose'
+        },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
@@ -82,6 +94,16 @@ LOGGING = {
             'handlers': ['proj_log_file'],
             'level': 'ERROR',
             'propagate': True,
+        },
+        'scripts': {
+            'handlers': ['script_log_file'],
+            'propagate': True,
+            'level': 'DEBUG',
+        },
+        'scripts.scheduler': {
+            'handlers': ['scheduler_log_file'],
+            'propagate': True,
+            'level': 'DEBUG',
         },
     }
 }
