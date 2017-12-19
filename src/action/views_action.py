@@ -3,6 +3,8 @@ from __future__ import unicode_literals, print_function
 
 from collections import OrderedDict
 
+from ontask.tables import OperationsColumn
+
 try:
     import urlparse
     from urllib import urlencode
@@ -43,30 +45,6 @@ from .models import Action, Condition
 #
 # Classes for Table rendering
 #
-
-class OperationsColumn(tables.Column):
-    """
-    This class is to render a column in which various buttons are shown for
-     different operations (open, rename, export, URL, send emails, etc)
-    """
-
-    empty_values = []
-
-    def __init__(self, *args, **kwargs):
-        self.template_file = kwargs.pop('template_file')
-        super(OperationsColumn, self).__init__(*args, **kwargs)
-        self.attrs = {'th': {'style': 'text-align:center;'},
-                      'td': {'style': 'text-align:left;'}}
-        self.orderable = False
-
-    def render(self, record):
-        return render_to_string(
-            self.template_file,
-            {'id': record.id,
-             'is_out': int(record.is_out),
-             'serve_enabled': record.serve_enabled})
-
-
 class ActionTable(tables.Table):
     """
     Table to render the list of actions per workflow. The Operations column is
@@ -96,10 +74,12 @@ class ActionTable(tables.Table):
     )
 
     operations = OperationsColumn(
-        attrs={'td': {'class': 'dt-center'}},
+        attrs={'td': {'style': 'text-align:left;'}},
         verbose_name='Operations',
         template_file='action/includes/partial_action_operations.html',
-        orderable=False
+        template_context=lambda record: {'id': record.id,
+                                         'is_out': int(record.is_out),
+                                         'serve_enabled': record.serve_enabled}
     )
 
     def render_is_out(self, record):
