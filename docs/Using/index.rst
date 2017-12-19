@@ -61,4 +61,5 @@ as well as examples with real scenarios.
    dataops
    table
    actions
+   scheduler
    logs

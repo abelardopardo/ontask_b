@@ -9,4 +9,4 @@ the navibation bar at the top of the screen.
 
 .. figure:: images/Ontask____Logs.png
 
-You may review the events and download them as a CSV file.ion
+You may review the events and download them as a CSV file.

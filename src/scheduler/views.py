@@ -81,6 +81,11 @@ class ScheduleEmailActionTable(tables.Table):
         template_context=lambda record: {'id': record.id}
     )
 
+    message = tables.Column(
+        attrs={'td': {'class': 'dt-center'}},
+        verbose_name=str('Execution message'),
+    )
+
     def render_action(self, record):
         return format_html(
             '<a href="{0}">{1}</a>'.format(
@@ -95,11 +100,19 @@ class ScheduleEmailActionTable(tables.Table):
 
         fields = ('action', 'created', 'execute', 'status', 'subject',
                   'email_column', 'send_confirmation', 'track_read',
-                  'add_column', 'operations')
+                  'add_column', 'operations', 'message')
 
-        sequence = ('action', 'created', 'execute', 'status', 'subject',
-                    'email_column', 'send_confirmation', 'track_read',
-                    'add_column', 'operations')
+        sequence = ('operations',
+                    'action',
+                    'created',
+                    'execute',
+                    'status',
+                    'subject',
+                    'email_column',
+                    'send_confirmation',
+                    'track_read',
+                    'add_column',
+                    'message')
 
         attrs = {
             'class': 'table display table-bordered',
@@ -201,7 +214,10 @@ def index(request):
         return redirect('workflow:index')
 
     # Get the actions
-    s_items = ScheduledEmailAction.objects.filter(action__workflow=workflow.id)
+    s_items = ScheduledEmailAction.objects.filter(
+        action__workflow=workflow.id,
+        deleted=False
+    )
 
     return render(
         request,
@@ -238,6 +254,7 @@ def email_create(request, pk):
         action=action,
         type='email_send',
         status=0,  # Pending
+        deleted=False
     )
     if qs:
         if settings.DEBUG:
@@ -266,6 +283,7 @@ def edit_email(request, pk):
         s_item = ScheduledEmailAction.objects.filter(
             action__workflow=workflow,
             type='email_send',
+            deleted=False,
         ).get(pk=pk)
     except ObjectDoesNotExist:
         return redirect('workflow:index')
@@ -291,7 +309,9 @@ def delete_email(request, pk):
     # Get the appropriate scheduled action
     try:
         s_item = ScheduledEmailAction.objects.filter(
-            action__workflow__user=request.user).distinct().get(pk=pk)
+            action__workflow__user=request.user,
+            deleted=False,
+        ).distinct().get(pk=pk)
     except (KeyError, ObjectDoesNotExist):
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('scheduler:index')
@@ -312,7 +332,8 @@ def delete_email(request, pk):
                       'add_column': s_item.add_column})
 
         # Perform the delete operation
-        s_item.delete()
+        s_item.deleted = True
+        s_item.save()
 
         # In this case, the form is valid anyway
         data['form_is_valid'] = True

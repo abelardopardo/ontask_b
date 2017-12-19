@@ -33,6 +33,12 @@ class ScheduledAction(models.Model):
     # Time of creation
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
+    # Boolean saying of this entry is deleted
+    deleted = models.BooleanField(
+        default=False,
+        null=False,
+        blank=False)
+
     # Time of execution
     execute = models.DateTimeField(
         null=False,
