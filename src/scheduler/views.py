@@ -203,12 +203,11 @@ def index(request):
     # Get the actions
     s_items = ScheduledEmailAction.objects.filter(action__workflow=workflow.id)
 
-    # Context to render the template
-    context = {}
-
-    context['table'] = ScheduleEmailActionTable(s_items, orderable=False)
-
-    return render(request, 'scheduler/index.html', context)
+    return render(
+        request,
+        'scheduler/index.html',
+        {'table': ScheduleEmailActionTable(s_items, orderable=False)}
+    )
 
 
 @user_passes_test(is_instructor)

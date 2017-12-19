@@ -583,8 +583,7 @@ def showurl(request, pk):
     """
 
     # AJAX result
-    data = {}
-    data['form_is_valid'] = False
+    data = {'form_is_valid': False}
 
     # Get the action object
     try:

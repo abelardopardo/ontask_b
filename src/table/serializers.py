@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
-import StringIO
+from io import StringIO
 import base64
 import json
 
