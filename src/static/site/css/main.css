@@ -241,7 +241,8 @@ td.dt-body-center {
 #actioninrun-data td,
 #workflow-table td,
 #action-table td,
-#log-table td {
+#log-table td,
+#scheduler-table td {
     vertical-align: middle;
 }
 
