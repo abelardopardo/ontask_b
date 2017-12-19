@@ -15,6 +15,7 @@ import logs.urls
 import table.urls
 import profiles.urls
 import workflow.urls
+import scheduler.urls
 from dataops import pandas_db
 from . import views
 
@@ -50,6 +51,8 @@ urlpatterns = [
     url(r'^action/', include(action.urls, namespace='action')),
 
     url(r'^table/', include(table.urls, namespace='table')),
+
+    url(r'^scheduler/', include(scheduler.urls, namespace='scheduler')),
 
     url(r'^logs/', include(logs.urls, namespace='logs')),
 

@@ -218,8 +218,8 @@ Making personalised content available to learners
 Sending a personalised email is just one of various possible actions to do
 with a personalised text. Another one is to make the content available
 through a URL that can then be given to the learners. OnTask offers this
-possibility through the button labeled ``URL`` followed by either the word ``
-(Off)`` or ``(On)``.
+possibility through the button labeled ``URL`` followed by either the word
+``(Off)`` or ``(On)``.
 
 .. figure:: images/Ontask____ActionsOperations.png
    :align: center

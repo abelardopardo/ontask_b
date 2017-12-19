@@ -63,6 +63,10 @@ def column_to_field(col, initial=None, required=False, label=None):
         initial = next((v for x, v in enumerate(choices) if v[0] == initial),
                        ('', '---'))
 
+        # If the column is of type string, allow always the empty value
+        if col.data_type == 'string':
+            choices.insert(0, ('', '---'))
+
         return forms.ChoiceField(choices,
                                  required=required,
                                  initial=initial,

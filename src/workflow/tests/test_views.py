@@ -784,3 +784,165 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
 
         # End of session
         self.logout()
+
+
+class WorkflowShare(test.OntaskLiveTestCase):
+    fixtures = ['simple_workflow']
+    filename = os.path.join(
+        settings.PROJECT_PATH,
+        'workflow',
+        'fixtures',
+        'simple_workflow_df.sql'
+    )
+
+    def setUp(self):
+        super(WorkflowShare, self).setUp()
+        pandas_db.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        pandas_db.delete_all_tables()
+        super(WorkflowShare, self).tearDown()
+
+    def test_workflow_share(self):
+        # Login
+        self.login('instructor1@bogus.com')
+
+        self.open(reverse('workflow:index'))
+
+        # GO TO THE WORKFLOW PAGE
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('OnTask :: Workflows'))
+        self.assertIn('New Workflow', self.selenium.page_source)
+        self.assertIn('Import', self.selenium.page_source)
+
+        # Open the workflow
+        wf_link = self.selenium.find_element_by_link_text(test.wflow_name)
+        wf_link.click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'wflow-name')))
+
+        # Click on the share
+        self.selenium.find_element_by_link_text('Share').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'js-share-create')))
+
+        # Click in the add user button
+        self.selenium.find_element_by_class_name('js-share-create').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.CLASS_NAME, 'modal-title'),
+                'Select user to allow access to the workflow'))
+
+        # Fill out the form
+        self.selenium.find_element_by_id('id_user_email').send_keys(
+            'instructor2@bogus.com')
+
+        # Click in the share  button
+        self.selenium.find_element_by_xpath(
+            "//div[@class='modal-footer']/button[2]"
+        ).click()
+        # MODAL WAITING
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
+
+        # Value now should be in the table
+        self.assertEqual(
+            self.selenium.find_element_by_xpath(
+                "//table[@id='share-table']/tbody/tr/td[1]").text,
+                'instructor2@bogus.com'
+        )
+
+        # Click in the create share dialog again
+        self.selenium.find_element_by_class_name('js-share-create').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.CLASS_NAME, 'modal-title'),
+                'Select user to allow access to the workflow'))
+
+        # Fill out the form
+        self.selenium.find_element_by_id('id_user_email').send_keys(
+            'superuser@bogus.com')
+
+        # Click in the button to add the user
+        self.selenium.find_element_by_xpath(
+            "//div[@class='modal-footer']/button[2]"
+        ).click()
+        # MODAL WAITING
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
+
+        # Value now should be in the table
+        self.assertEqual(
+            self.selenium.find_element_by_xpath(
+                "//table[@id='share-table']/tbody/tr/td[1]").text,
+                'instructor2@bogus.com'
+        )
+
+        # Click in the save and close
+        self.selenium.find_element_by_xpath(
+            "//div[@id='workflow-shared']/a"
+        ).click()
+        # Wait for the details page
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+                                             'Workflow Details')
+        )
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
+        )
+
+        # Check that the shared users are properly stored in the workflow
+        workflow = Workflow.objects.all()[0]
+        self.assertEqual(workflow.shared.all().count(), 2)
+        users = workflow.shared.all().values_list('email', flat=True)
+        self.assertTrue('instructor2@bogus.com' in users)
+        self.assertTrue('superuser@bogus.com' in users)
+
+        # Go back to the share page
+        self.selenium.find_element_by_link_text('Share').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'js-share-create')))
+
+        # click the delete button in the second row
+        self.selenium.find_element_by_xpath(
+            "//table[@id='share-table']/tbody/tr[2]/td[2]/button"
+        ).click()
+        # Wait for the delete confirmation frame
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),
+                                             'Confirm user deletion')
+        )
+        # Click in the delete confirm button
+        self.selenium.find_element_by_xpath(
+            "//div[@class='modal-footer']/button[2]"
+        ).click()
+        # MODAL WAITING
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
+
+        # There should only be a single element
+        self.assertEqual(
+            len(self.selenium.find_elements_by_xpath(
+                "//table[@id='share-table']/tbody/tr"
+            )),
+            1
+        )
+        # Check that the shared users are properly stored in the workflow
+        workflow = Workflow.objects.all()[0]
+        self.assertEqual(workflow.shared.all().count(), 1)
+        users = workflow.shared.all().values_list('email', flat=True)
+        self.assertTrue('instructor2@bogus.com' in users)
+
+        # End of session
+        self.logout()

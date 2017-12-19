@@ -214,13 +214,15 @@ class ColumnAddForm(ColumnBasicForm):
         label='Value to assign to all cells in the column'
     )
 
+    def __init__(self, *args, **kwargs):
+        super(ColumnAddForm, self).__init__(*args, **kwargs)
+        self.initial_valid_value = None
+
     def clean(self):
         data = super(ColumnAddForm, self).clean()
 
         # Try to convert the initial value ot the right type
         initial_value = data['initial_value']
-
-        self.initial_valid_value = None
         if initial_value:
             try:
                 self.initial_valid_value = Column.validate_column_value(

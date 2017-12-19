@@ -132,14 +132,11 @@ def csvupload1(request):
 
     # Dictionary to populate gradually throughout the sequence of steps. It
     # is stored in the session.
-    upload_data = {}
-    request.session['upload_data'] = upload_data
-
-    # Store the information about the temporary data frame in the
-    # upload_data dictionary
-    upload_data['initial_column_names'] = frame_info[0]
-    upload_data['column_types'] = frame_info[1]
-    upload_data['src_is_key_column'] = frame_info[2]
-    upload_data['step_1'] = 'dataops:csvupload1'
+    request.session['upload_data'] = {
+        'initial_column_names': frame_info[0],
+        'column_types': frame_info[1],
+        'src_is_key_column': frame_info[2],
+        'step_1': 'dataops:csvupload1'
+    }
 
     return redirect('dataops:upload_s2')

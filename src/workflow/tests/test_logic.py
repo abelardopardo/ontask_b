@@ -8,9 +8,9 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 import test
 from dataops import pandas_db
@@ -29,7 +29,7 @@ class WorkflowImportExport(test.OntaskTestCase):
 
     def test_export(self):
         # Get the only workflow
-        workflow = Workflow.objects.get(id=50)
+        workflow = Workflow.objects.get(name='wflow1')
 
         # Export data only
         response = do_export_workflow(workflow,

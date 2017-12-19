@@ -223,7 +223,7 @@ class EmailActionBasicForm(forms.Form):
     add_column = forms.BooleanField(
         initial=False,
         required=False,
-        label="Add a column reflecting the email tracking?",
+        label="Add column to track email reading?",
         help_text="Number of times the email was opened."
     )
 
@@ -265,28 +265,3 @@ class EmailActionForm(EmailActionBasicForm):
         label="Download a snapshot of the current state of the workflow?",
         help_text="A zip file useful to review the emails sent."
     )
-
-
-class EmailScheduleSendForm(EmailActionBasicForm):
-    when = forms.DateTimeField(
-        label='Time to send the emails',
-        required=True,
-        widget=DateTimeWidget(
-            options={'weekStart': 1, 'minuteStep': 15},
-            usel10n=True,
-            bootstrap_version=3),
-    )
-
-    def clean(self):
-        data = super(EmailScheduleSendForm, self).clean()
-
-        # Check the datetime is in the future
-        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-        when_data = self.cleaned_data.get('when', None)
-        if when_data and when_data <= now:
-            self.add_error(
-                'when',
-                'Date/time must be in the future'
-            )
-
-        return data

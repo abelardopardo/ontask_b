@@ -14,14 +14,14 @@
 {% block container %}
 <div align="center" class="container" id="email-schedule-send">
   <h1 class="page-header">Schedule email send</h1>
-
   <div class="container">
+    <p>Time now is {{ now }}</p>
     <form action="" method="post">
       {% csrf_token %}
       {{ form|crispy }}
       <div style="margin: 1ex 0 1ex 0;">
         <a type="button" class="btn btn-default"
-           href="{% url 'action:index' %}" style="margin-right:2ex;"> Cancel
+           href="{% url 'scheduler:index' %}" style="margin-right:2ex;"> Cancel
         </a>
         <button type="Submit" name="Submit" value="Send"
                 style="margin-right:2ex;"

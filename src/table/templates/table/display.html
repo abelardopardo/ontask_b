@@ -49,45 +49,49 @@
 {% block container %}
   <div id="table-content" align="center" class="container-fluid"
        style="padding-top:2ex;">
-    <a href="{% url 'dataops:rowcreate' %}" class="btn btn-sm btn-primary">
-      <span class="glyphicon glyphicon-plus"></span> Add row
-    </a>
-    <button type="button"
-            class="btn btn-primary btn-sm js-workflow-column-add"
-            data-url="{% url 'workflow:column_add' %}">
-      <span class="glyphicon glyphicon-plus"></span> New column
-    </button>
-    <table class="table display dataTable no-footer cell-border table-bordered"
-           id="table-data">
-      <thead>
-        <tr>
-          <th></th>
-          {% for col in columns %}
-            <th class="text-center">
-              <button type="button"
-                      class="btn btn-sm btn-default js-workflow-column-edit"
-                      data-url="{% url 'workflow:column_edit' col.id %}">
-                {{ col.name }}
-              </button>
-            </th>
-          {% endfor %}
-        </tr>
-        <tr>
-          <th>Ops</th>
-          {% for col in columns %}
-            <th>
-              {{ col.data_type }} <br/>
-              {% if col.is_active %}
-              <font color="green">Active</font>
-              {% else %}
-              <font color="red">Inactive</font>
-              {% endif %}
-            </th>
-          {% endfor %}
-        </tr>
-      </thead>
-    </table>
-
+    {% if columns %}
+      <a href="{% url 'dataops:rowcreate' %}" class="btn btn-sm btn-primary">
+        <span class="glyphicon glyphicon-plus"></span> Add row
+      </a>
+      <button type="button"
+              class="btn btn-primary btn-sm js-workflow-column-add"
+              data-url="{% url 'workflow:column_add' %}">
+        <span class="glyphicon glyphicon-plus"></span> New column
+      </button>
+      <table class="table display dataTable no-footer cell-border table-bordered"
+             id="table-data">
+        <thead>
+          <tr>
+            <th></th>
+            {% for col in columns %}
+              <th class="text-center">
+                <button type="button"
+                        class="btn btn-sm btn-default js-workflow-column-edit"
+                        data-url="{% url 'workflow:column_edit' col.id %}">
+                  {{ col.name }}
+                </button>
+              </th>
+            {% endfor %}
+          </tr>
+          <tr>
+            <th>Ops</th>
+            {% for col in columns %}
+              <th>
+                {{ col.data_type }} <br/>
+                {% if col.is_active %}
+                <font color="green">Active</font>
+                {% else %}
+                <font color="red">Inactive</font>
+                {% endif %}
+              </th>
+            {% endfor %}
+          </tr>
+        </thead>
+      </table>
+    {% else %}
+      <p>The workflow does not have data.</p>
+      <p>Go to <a href="{% url 'dataops:list' %}">DataOps</a> to upload data</p>
+     {% endif %}
     <div class="modal fade" id="modal-item">
       <div class="modal-dialog">
         <div class="modal-content">

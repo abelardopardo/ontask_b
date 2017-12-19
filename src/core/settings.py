@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db import models
 
 HELP_URL = getattr(settings, 'ONTASK_HELP_URL', '')
+MINUTE_STEP = getattr(settings, 'SCHEDULER_MINUTE_STEP', 15)
 
 if 'siteprefs' in settings.INSTALLED_APPS:
     # Respect those users who doesn't have siteprefs installed.
@@ -18,4 +19,9 @@ if 'siteprefs' in settings.INSTALLED_APPS:
                           'static area',
              static=False,
              field=models.CharField(max_length=256, blank=True)),
+
+        pref(MINUTE_STEP,
+             verbose_name='Minute interval to program scheduled tasks',
+             static=False,
+             field=models.IntegerField(max_length=256, blank=True)),
     )

@@ -22,28 +22,13 @@ import logs.ops
 from action.models import Condition
 from dataops import ops, pandas_db
 from ontask.permissions import is_instructor, UserIsInstructor
+from ontask.tables import OperationsColumn
 from .forms import WorkflowForm
 from .models import Workflow, Column
 from .ops import (get_workflow,
                   unlock_workflow_by_id,
                   get_user_locked_workflow,
                   detach_dataframe)
-
-
-class OperationsColumn(tables.Column):
-    empty_values = []
-
-    def __init__(self, *args, **kwargs):
-        self.template_file = kwargs.pop('template_file')
-        self.get_operation_id = kwargs.pop('get_operation_id')
-
-        super(OperationsColumn, self).__init__(*args, **kwargs)
-        self.attrs = {'td': {'class': 'dt-body-center'}}
-        self.orderable = False
-
-    def render(self, record, table):
-        return render_to_string(self.template_file,
-                                {'id': self.get_operation_id(record)})
 
 
 class WorkflowTable(tables.Table):
@@ -120,7 +105,7 @@ class WorkflowShareTable(tables.Table):
         verbose_name='',
         orderable=False,
         template_file='workflow/includes/partial_share_operations.html',
-        get_operation_id=lambda x: x['id']
+        template_context=lambda x: {'id': x['id']}
     )
 
     class Meta:

@@ -3,7 +3,7 @@ from __future__ import unicode_literals, print_function
 
 import gzip
 
-import cStringIO
+from io import BytesIO
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
@@ -246,7 +246,7 @@ def do_export_workflow(workflow, selected_actions=None):
     to_send = JSONRenderer().render(serializer.data)
 
     # Get the in-memory file to compress
-    zbuf = cStringIO.StringIO()
+    zbuf = BytesIO()
     zfile = gzip.GzipFile(mode='wb', compresslevel=6, fileobj=zbuf)
     zfile.write(to_send)
     zfile.close()

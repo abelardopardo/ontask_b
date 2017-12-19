@@ -39,6 +39,10 @@ log_types = {
     'filter_create': 'Filter created',
     'filter_update': 'Filter updated',
     'filter_delete': 'Filter deleted',
+    'schedule_email_create': 'Created scheduled email action',
+    'schedule_email_edit': 'Edit scheduled email action',
+    'schedule_email_delete': 'Delete scheduled email action',
+    'schedule_email_execute': 'Execute scheduled email action',
 }
 
 

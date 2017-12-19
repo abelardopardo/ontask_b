@@ -1,3 +1,5 @@
+mock
+environ
 Django==1.11.3
 django-environ==0.4.3
 django-braces==1.11.0
