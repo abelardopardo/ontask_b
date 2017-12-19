@@ -113,9 +113,4 @@ urlpatterns = [
         views_email.preview,
         name='email_preview'),
 
-    # Schedule email
-    url(r'^(?P<pk>\d+)/schedule_email/$',
-        views_email.schedule_email,
-        name="schedule_email"),
-
 ]
