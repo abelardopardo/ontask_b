@@ -1,0 +1,33 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, print_function
+
+import django_tables2 as tables
+from django.template.loader import render_to_string
+
+
+class OperationsColumn(tables.Column):
+    empty_values = []
+
+    def __init__(self, *args, **kwargs):
+        self.template_file = kwargs.pop('template_file')
+        self.template_context = kwargs.pop('template_context')
+
+        super(OperationsColumn, self).__init__(*args, **kwargs)
+        # self.attrs = {'th': {'style': 'text-align:center;'},
+        #               'td': {'style': 'text-align:left;'}}
+        # self.attrs = {'td': {'class': 'dt-body-center'}}
+
+    def render(self, record, table):
+        return render_to_string(self.template_file,
+                                self.template_context(record))
+
+
+class BooleanColumn(tables.Column):
+
+    def __init__(self, *args, **kwargs):
+        self.get_field = kwargs.pop('get_field')
+        super(BooleanColumn, self).__init__(*args, **kwargs)
+        # self.attrs = {'td': {'class': 'dt-body-center'}}
+
+    def render(self, record, table):
+        return '✔' if self.get_field(record) else '✘'
