@@ -8,9 +8,9 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 import test
 from dataops import pandas_db
@@ -29,10 +29,11 @@ class WorkflowImportExport(test.OntaskTestCase):
 
     def test_export(self):
         # Get the only workflow
-        workflow = Workflow.objects.get(id=50)
+        workflow = Workflow.objects.get(name='wflow1')
 
         # Export data only
-        response = do_export_workflow(workflow, "True")
+        response = do_export_workflow(workflow,
+                                      workflow.actions.all())
 
         self.assertEqual(response.get('Content-Encoding'),
                          'application/gzip')
@@ -52,30 +53,6 @@ class WorkflowImportExport(test.OntaskTestCase):
                          data['ncols'])
         self.assertEqual(workflow.attributes, data['attributes'])
         self.assertEqual(workflow.query_builder_ops, data['query_builder_ops'])
-
-    def test_export_no_table(self):
-        # Get the only workflow
-        workflow = Workflow.objects.get(id=50)
-
-        # Export data only
-        response = do_export_workflow(workflow, False)
-
-        self.assertEqual(response.get('Content-Encoding'),
-                         'application/gzip')
-        self.assertEqual(response.get('Content-Disposition'),
-                         'attachment; filename="ontask_workflow.gz"')
-
-        # Process the file
-        data_in = gzip.GzipFile(fileobj=BytesIO(response.content))
-        data = JSONParser().parse(data_in)
-
-        # Compare the data with the current workflow
-        self.assertEqual(workflow.actions.all().count(),
-                         len(data['actions']))
-        self.assertEqual(data.get('nrows', 0), 0)
-        self.assertEqual(data.get('ncols', 0), 0)
-        self.assertEqual(workflow.attributes, data['attributes'])
-        self.assertEqual(data.get('query_builder_ops', {}), {})
 
 
 class WorkflowImport(test.OntaskLiveTestCase):
@@ -180,81 +157,3 @@ class WorkflowImport(test.OntaskLiveTestCase):
 
         # Close the db_engine
         pandas_db.destroy_db_engine(pandas_db.engine)
-
-    def test_import_only_action(self):
-
-        # Login and wait for the table of workflows
-        self.login('instructor1@bogus.com')
-
-        self.open(reverse('workflow:index'))
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//body/div/p/a"),
-                'Import')
-        )
-
-        # Click in the import button and wait
-        self.selenium.find_element_by_link_text('Import').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
-                                             'Import Workflow')
-        )
-
-        # Set the workflow name and file
-        wname = self.selenium.find_element_by_id('id_name')
-        wname.send_keys('newwf')
-        wfile = self.selenium.find_element_by_id('id_file')
-        wfile.send_keys(os.path.join(settings.BASE_DIR,
-                                     'workflow',
-                                     'fixtures',
-                                     'ontask_workflow.gz'))
-
-        # Click the Include Table button to unselect it
-        checkbox = self.selenium.find_element_by_id('id_include_table').click()
-
-        # Click in the submit
-        self.selenium.find_element_by_xpath(
-            "//button[@type='Submit']"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//table['workflow-table']/tbody/tr/td/a"),
-                'newwf')
-        )
-
-        # Check elements in workflow and in newwf
-        w1 = Workflow.objects.get(name=test.wflow_name)
-        w2 = Workflow.objects.get(name='newwf')
-
-        # Equal descriptions
-        self.assertEqual(w1.description_text,
-                         w2.description_text)
-
-        # Zero number of columns
-        self.assertEqual(w2.columns.all().count(), 0)
-
-        # Identical attributes
-        self.assertEqual(w1.attributes, w2.attributes)
-
-        # Zero number of rows and columns
-        self.assertEqual(w2.nrows, 0)
-        self.assertEqual(w2.ncols, 0)
-
-        # Equal number of actions
-        self.assertEqual(w1.actions.all().count(),
-                         w2.actions.all().count())
-
-        # Equal names and content in the conditions
-        for x, y in zip(w1.actions.all(), w2.actions.all()):
-            self.assertEqual(x.name, y.name)
-            self.assertEqual(x.description_text, y.description_text)
-            self.assertEqual(x.content, y.content)
-            self.assertEqual(y.conditions.all().count(), 0)
-
-        # End of session
-        self.logout()
-
-        # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
-
-

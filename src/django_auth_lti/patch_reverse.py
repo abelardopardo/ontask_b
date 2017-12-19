@@ -1,7 +1,13 @@
 """
 Monkey-patch django's reverse function to add resource_link_id to all URLs.
 """
-from urlparse import urlparse, urlunparse, parse_qs
+try:
+    import urlparse
+    from urllib import urlencode
+except:  # For Python 3
+    import urllib.parse as urlparse
+    from urllib.parse import urlencode
+
 from urllib import urlencode
 
 from django.core import urlresolvers
@@ -30,11 +36,11 @@ def reverse(*args, **kwargs):
     if not exclude_resource_link_id:
         # Append resource_link_id query param if exclude_resource_link_id kwarg
         # was not passed or is False
-        parsed = urlparse(url)
-        query = parse_qs(parsed.query)
+        parsed = urlparse.urlparse(url)
+        query = urlparse.parse_qs(parsed.query)
         if 'resource_link_id' not in query.keys():
             query['resource_link_id'] = request.LTI.get('resource_link_id')
-            url = urlunparse(
+            url = urlparse.urlunparse(
                 (parsed.scheme, parsed.netloc, parsed.path, parsed.params,
                  urlencode(query), parsed.fragment)
             )

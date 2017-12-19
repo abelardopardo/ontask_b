@@ -21,11 +21,9 @@
   <a href="{% url 'action:send_email' id %}"
      class="btn btn-primary btn-sm">
     <span class="glyphicon glyphicon-envelope"></span> Email</a>
-  {% comment %}
-  <a href="{% url 'action:schedule_email' id %}"
+  <a href="{% url 'scheduler:create_email' id %}"
      class="btn btn-primary btn-sm">
     <span class="glyphicon glyphicon-calendar"></span> Schedule</a>
-  {% endcomment %}
 {% else %}
   <a href="{% url 'action:run' id %}"
           class="btn btn-primary btn-sm"

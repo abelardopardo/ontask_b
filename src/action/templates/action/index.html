@@ -30,15 +30,10 @@
     });
   </script>
 {% endblock %}
-
 {% block title %}{{ block.super }}Actions{% endblock %}
-
 {% block container %}
 <div align="center" class="container">
-  {% if table %}
-    <h1 class="page-header">Actions</h1>
-  {% endif %}
-
+  <h1 class="page-header">Actions</h1>
   <p>
     <button type="button" class="btn btn-primary js-create-action"
             data-url="{% url 'action:create' 0 %}">

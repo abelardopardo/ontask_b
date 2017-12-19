@@ -2,12 +2,11 @@
 from __future__ import unicode_literals, print_function
 
 import os
-import time
 
+import time
 from django.conf import settings
 from django.shortcuts import reverse
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait, Select
 
@@ -842,7 +841,7 @@ class ActionActionInCreate(test.OntaskLiveTestCase):
 
         # Run the action
         self.selenium.find_element_by_xpath(
-            "//table[@id='action-table']/tbody/tr[3]/td[5]/a[3]").click()
+            "//table[@id='action-table']/tbody/tr[3]/td[5]/a[2]").click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.LINK_TEXT, "student2@bogus.com")

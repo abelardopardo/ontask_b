@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load settings %}
+{% load static %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block extrahead %}
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+{% endblock extrahead %}
+{% block scripts %}
+  <script src="{% static 'scheduler/js/scheduler.js' %}{% otv %}"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      if (document.getElementById("scheduler-table") != null) {
+        $('#scheduler-table').DataTable({
+          "language": {
+            "emptyTable": "There are not scheduled operations in this workflow"
+          },
+          "columnDefs": [
+              {"className": "dt-center", "targets": "_all"},
+              {"orderable": false, "targets": 9},
+              {"searchable": false, "targets": 9},
+          ],
+        });
+      }
+    });
+  </script>
+{% endblock %}
+{% block title %}{{ block.super }}Scheduled operations{% endblock %}
+{% block container %}
+<div align="center" class="container-fluid">
+  <h1 class="page-header">Scheduled Operations</h1>
+  {% render_table table %}
+  <div class="modal fade" id="modal-item">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock container %}
+
+
+
+

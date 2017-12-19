@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Email action scheduled{% endblock %}
+
+{% block container %}
+  <div class="container-fluid" style="margin-top:50px;text-align:center;">
+    <h1 class="page-header text-center">Email scheduled for execution</h1>
+
+    <p class="text-center">The action will execute in {{ tdelta }}</p>
+    <button type="button" class="btn btn-default"
+      onclick="location.href='{% url 'scheduler:index' %}'">Back
+    </button>
+    <a href="{% url 'scheduler:edit_email' s_item.id %}"
+       class="btn btn-primary btn-sm align-middle">
+    <span class="glyphicon glyphicon-pencil"></span> Edit</a>
+  </div>
+{% endblock container %}

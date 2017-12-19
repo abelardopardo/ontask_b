@@ -248,7 +248,7 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
                           how=merge_info['how_merge'],
                           left_on=merge_info['dst_selected_key'],
                           right_on=merge_info['src_selected_key'])
-    except Exception, e:
+    except Exception as e:
         return 'Merge operation failed. Exception: ' + e.message
 
     # If the merge produced a data frame with no rows, flag it as an error to

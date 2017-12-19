@@ -6,7 +6,7 @@ from django.db.models import Q
 
 from ontask.permissions import UserIsInstructor
 from .models import Workflow
-from .serializers import WorkflowSerializer
+from .serializers import WorkflowListSerializer
 
 
 class WorkflowAPIListCreate(generics.ListCreateAPIView):
@@ -19,7 +19,7 @@ class WorkflowAPIListCreate(generics.ListCreateAPIView):
     """
 
     queryset = None  # Needs to be overwritten
-    serializer_class = WorkflowSerializer
+    serializer_class = WorkflowListSerializer
     permission_classes = (UserIsInstructor,)
 
     # Filter the workflows only for the current user.
@@ -56,7 +56,7 @@ class WorkflowAPIRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     Delete the workflow
     """
     queryset = None  # Needs to be overwritten
-    serializer_class = WorkflowSerializer
+    serializer_class = WorkflowListSerializer
     permission_classes = (UserIsInstructor,)
 
     # Filter the workflows only for the current user.

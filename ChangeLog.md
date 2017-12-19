@@ -1,4 +1,12 @@
-## 2.1.0
+## 2.1.1
+
+### Changed
+
+- Fixed bug when creating API token and session expired.
+
+- Fixed bug preventing excel CSV files to be uploaded.
+
+## 2.1.0 (2017-12-13)
 
 ### Added
 
@@ -19,6 +27,13 @@
   tables.
 
 - Refined the process to clone workflows, columns, actions, conditions.
+
+- Fixed but on import/export of actions
+
+- Workflows can no longer be exported without the data. It does not make 
+  sense because the presence of the data frame defines the columns and those 
+  columns are used in all the actions. A workflow without the data would be 
+  reduced only to the text in the action out. 
 
 ## 2.0.0
 

@@ -287,7 +287,7 @@ def evaluate_node_sql(node):
         result_fields = ["%" + node['value']]
 
     elif operator == 'is_empty' and node['type'] == 'string':
-        result = '"{0}"'.format(varname) + " == ''"
+        result = '"{0}"'.format(varname) + " = ''"
 
     elif operator == 'is_not_empty' and node['type'] == 'string':
         result = '"{0}"'.format(varname) + " != ''"
