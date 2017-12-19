@@ -66,6 +66,10 @@
               <li {% if '/action/' in request.path %}class="active"{% endif %}><a
                   href="{{ actions_url }}">Actions</a></li>
 
+              {% url 'scheduler:index' as scheduler_url %}
+              <li {% if '/scheduler/' in request.path %}class="active"{% endif %}><a
+                  href="{{ scheduler_url }}">Scheduler</a></li>
+
               {% url 'logs:show' as logs_url %}
               <li {% if '/logs/' in request.path %}class="active"{% endif %}><a
                   href="{{ logs_url }}">Logs</a>
