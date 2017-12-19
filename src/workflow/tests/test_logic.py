@@ -29,7 +29,7 @@ class WorkflowImportExport(test.OntaskTestCase):
 
     def test_export(self):
         # Get the only workflow
-        workflow = Workflow.objects.get(id=50)
+        workflow = Workflow.objects.get(name='wflow1')
 
         # Export data only
         response = do_export_workflow(workflow,
