@@ -316,7 +316,6 @@ they are available for users to consult.
 
 #### Authentication
 
-
 OnTask comes with three default authentication mechanisms (and are used in
 the following order): LTI, `REMOTE_USER`
 and basic authentication.
@@ -372,6 +371,9 @@ and basic authentication.
 There are other possibilities to handle user authentication (LDAP, AD, etc.)
 but they require ad-hoc customizations in the tool and are not provided as
 out-of-the-box solutions.
+
+#### Scheduling tasks
+
 
 ## Contributing
 
