@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+"""
+"""
 from __future__ import unicode_literals, print_function
 
 import re
@@ -8,6 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
 from validate_email import validate_email
+from django.utils.html import escape
 
 import dataops.formula_evaluation
 from action.models import Condition
@@ -135,7 +138,8 @@ def render_template(template_text, context_dict):
         template_text)
 
     # Step 3. Apply the translation process to the context keys
-    new_context = dict([(translate(x), y) for x, y in context_dict.items()])
+    new_context = dict([(translate(escape(x)), y)
+                        for x, y in context_dict.items()])
 
     # If the number of elements in the two dictionaries is different, we have
     #  a case of collision in the translation. Need to stop immediately.

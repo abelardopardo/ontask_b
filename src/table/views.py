@@ -8,11 +8,11 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
+from django.utils.html import escape
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from dataops import ops
-from dataops import pandas_db
+from dataops import ops, pandas_db
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
 
@@ -95,15 +95,19 @@ def display_ss(request):
         ops_string = render_to_string(
             'table/includes/partial_table_ops.html',
             {'edit_url':
-             reverse('dataops:rowupdate') +
-             '?update_key={0}&update_val={1}'.format(key_name,
-                                                     row[key_idx]),
+                 reverse('dataops:rowupdate') +
+                 '?update_key={0}&update_val={1}'.format(key_name,
+                                                         row[key_idx]),
              'delete_key': '?key={0}&value={1}'.format(key_name, row[key_idx]),
              }
         )
-        final_qs.append(OrderedDict(
-            [('Ops', ops_string)] + zip(column_names, row))
+        final_qs.append(
+            OrderedDict(
+                [('Ops', ops_string)] + zip([escape(x) for x in column_names],
+                                            row)
+            )
         )
+
         if items == length:
             # We reached the number or requested elements, abandon.
             break

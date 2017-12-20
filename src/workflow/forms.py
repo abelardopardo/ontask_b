@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 
 from dataops import pandas_db, ops
-from ontask import ontask_prefs
+from ontask import ontask_prefs, is_legal_column_name
 from ontask.forms import RestrictedFileField, dateTimeOptions
 from .models import Workflow, Column
 
@@ -80,12 +80,13 @@ class AttributeItemForm(forms.Form):
     def clean(self):
         data = super(AttributeItemForm, self).clean()
 
-        if ' ' in data['key'] or '-' in data['key']:
-            self.add_error(
-                'key',
-                'Attribute names can only have letters, numbers and _'
-            )
-            return data
+        # FIX FIX FIX providing a valid Attribute value (TO BE DECIDED)
+        # if ' ' in data['key'] or '-' in data['key']:
+        #     self.add_error(
+        #         'key',
+        #         'Attribute names can only have letters, numbers and _'
+        #     )
+        #     return data
 
         if data['key'] in self.keys:
             self.add_error(
@@ -122,6 +123,12 @@ class ColumnBasicForm(forms.ModelForm):
 
         # Column name must be a legal variable name
         if 'name' in self.changed_data:
+            # Name os legal
+            msg = is_legal_column_name(data['name'])
+            if msg:
+                self.add_error('name', msg)
+                return data
+
             # Check that the name is not present already
             if next((c for c in self.workflow.columns.all()
                      if c.id != self.instance.id and
@@ -226,7 +233,6 @@ class ColumnAddForm(ColumnBasicForm):
                     'initial_value',
                     'Incorrect initial value'
                 )
-                return data
 
         return data
 

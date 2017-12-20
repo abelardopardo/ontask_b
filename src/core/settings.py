@@ -23,5 +23,5 @@ if 'siteprefs' in settings.INSTALLED_APPS:
         pref(MINUTE_STEP,
              verbose_name='Minute interval to program scheduled tasks',
              static=False,
-             field=models.IntegerField(max_length=256, blank=True)),
+             field=models.IntegerField(blank=True)),
     )

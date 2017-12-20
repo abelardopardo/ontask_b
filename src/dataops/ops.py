@@ -4,7 +4,7 @@ from __future__ import unicode_literals, print_function
 import pandas as pd
 from django.conf import settings
 
-from action.models import Condition
+from action.models import Condition, Action
 from dataops import formula_evaluation
 from dataops.pandas_db import (
     create_table_name,
@@ -35,9 +35,7 @@ def clean_column_name(val):
     :param val:
     :return: New val
     """
-
-    newval = val.replace('(', '[')
-    return newval.replace(')', ']')
+    return val.replace('(', '[').replace(')', ']').replace('%', 'PCT')
 
 
 def are_unique_columns(data_frame):
@@ -67,7 +65,7 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
              - column names
              - column types
              - column is unique
-             If temporary = False, return None. All this infor is stored in
+             If temporary = False, return None. All this info is stored in
              the workflow
     """
 
@@ -75,7 +73,7 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
         print('Storing table ', table_name)
 
     # get column names and types
-    df_column_names = map(clean_column_name, list(data_frame.columns))
+    df_column_names = list(data_frame.columns)
     df_column_types = df_column_types_rename(data_frame)
 
     # if the data frame is temporary, the procedure is much simpler
@@ -98,14 +96,10 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
 
     # Loop over the columns in the data frame and reconcile the column info
     # with the column objects attached to the WF
-    has_new_columns = False
     for cname in df_column_names:
         # See if this is a new column
         wf_column = next((x for x in wf_columns if x.name == cname), None)
         if not wf_column:
-            # This column is new
-            has_new_columns = True
-
             # Create a valid name if needed
             clean_name = clean_column_name(cname)
             if clean_name != cname:
@@ -341,6 +335,11 @@ def rename_df_column(df, workflow, old_name, new_name):
     for cond in conditions:
         cond.formula = formula_evaluation.rename_variable(
             cond.formula, old_name, new_name)
+
+    # Rename the appearances of the variable in all action out texts
+    actions = Action.objects.filter(workflow=workflow, is_out=True)
+    for action_item in actions:
+        action_item.rename_variable(old_name, new_name)
 
     return df.rename(columns={old_name: new_name})
 

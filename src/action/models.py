@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+import re
+
 import datetime
 import pytz
 from django.conf import settings
@@ -100,6 +102,24 @@ class Action(models.Model):
         now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
         return not ((self.active_from and now < self.active_from) or
                     (self.active_to and self.active_to < now))
+
+    def rename_variable(self, old_name, new_name):
+        """
+        Function that renames a variable present in the action content
+        :param old_name: Old name of the variable
+        :param new_name: New name of the variable
+        :return: Updates the current object
+        """
+
+        var_use_re = re.compile('{{ (?P<varname>.+?) \}\}')
+        new_text = var_use_re.sub(
+            lambda m: '{{ ' + \
+                      (new_name if m.group('varname') == old_name
+                               else m.group('varname')) + ' }}',
+            self.content
+        )
+        self.content = new_text
+        self.save()
 
     class Meta:
         unique_together = ('name', 'workflow')
