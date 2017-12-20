@@ -11,7 +11,6 @@ from django.urls import reverse
 import logs.ops
 from action.models import Condition
 from dataops import ops, formula_evaluation, pandas_db
-from dataops.ops import clean_column_name
 from ontask.permissions import is_instructor
 from .forms import (ColumnRenameForm,
                     ColumnAddForm)
@@ -60,7 +59,6 @@ def column_add(request):
 
     # Fill in the remaining fields in the column
     column.workflow = workflow
-    column.name = clean_column_name(column.name)
     column.is_key = False
     column.save()
 
@@ -140,9 +138,6 @@ def column_edit(request, pk):
         # no commit as we need to propagate the info to the df
         column = form.save(commit=False)
 
-        # Make sure the name is transformed into a correct one
-        column.name = clean_column_name(column.name)
-
         # Get the data frame from the form (should be
         # loaded)
         df = form.data_frame
@@ -183,7 +178,6 @@ def column_edit(request, pk):
 
     # Done processing the correct POST request
     return JsonResponse(data)
-
 
 
 @user_passes_test(is_instructor)

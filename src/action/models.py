@@ -8,6 +8,7 @@ import pytz
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.utils.html import escape
 
 from workflow.models import Workflow, Column
 
@@ -112,10 +113,13 @@ class Action(models.Model):
         """
 
         var_use_re = re.compile('{{ (?P<varname>.+?) \}\}')
+        for x in var_use_re.finditer(self.content):
+            print(x.group('varname'))
+
         new_text = var_use_re.sub(
             lambda m: '{{ ' + \
-                      (new_name if m.group('varname') == old_name
-                               else m.group('varname')) + ' }}',
+                      (new_name if m.group('varname') == escape(old_name)
+                                else m.group('varname')) + ' }}',
             self.content
         )
         self.content = new_text

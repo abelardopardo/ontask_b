@@ -64,6 +64,17 @@ def is_legal_column_name(val):
     return None
 
 
+def clean_column_name(val):
+    """
+    Function to transform column names and remove characters that are
+    problematic with pandas <-> SQL (such as parenthesis) and others.
+    :param val:
+    :return: New val
+    """
+
+    return val.replace('(', '[').replace(')', ']').replace('%', 'PCT')
+
+
 class OntaskException(Exception):
     def __init__(self, msg, value):
         self.msg = msg
@@ -71,4 +82,5 @@ class OntaskException(Exception):
 
     def __str__(self):
         return repr(self.value)
+
 

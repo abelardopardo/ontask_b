@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function
 import pandas as pd
 from django.conf import settings
 
+from ontask import clean_column_name
 from action.models import Condition, Action
 from dataops import formula_evaluation
 from dataops.pandas_db import (
@@ -26,16 +27,6 @@ def is_unique_column(df_column):
     :return: Boolean encoding if the column has unique values
     """
     return len(df_column.unique()) == len(df_column)
-
-
-def clean_column_name(val):
-    """
-    Function to transform column names and remove characters that are
-    problematic with pandas <-> SQL (such as parenthesis)
-    :param val:
-    :return: New val
-    """
-    return val.replace('(', '[').replace(')', ']').replace('%', 'PCT')
 
 
 def are_unique_columns(data_frame):

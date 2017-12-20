@@ -19,7 +19,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, reverse, render
-from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.views import generic
 from django.views.decorators.clickjacking import xframe_options_exempt
