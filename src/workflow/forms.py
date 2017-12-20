@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 
 from dataops import pandas_db, ops
-from ontask import is_legal_var_name, ontask_prefs
+from ontask import ontask_prefs
 from ontask.forms import RestrictedFileField, dateTimeOptions
 from .models import Workflow, Column
 
@@ -122,14 +122,6 @@ class ColumnBasicForm(forms.ModelForm):
 
         # Column name must be a legal variable name
         if 'name' in self.changed_data:
-            if not is_legal_var_name(data['name']):
-                self.add_error(
-                    'name',
-                    'Column name must start with a letter or _ '
-                    'followed by letters, numbers or _'
-                )
-                return data
-
             # Check that the name is not present already
             if next((c for c in self.workflow.columns.all()
                      if c.id != self.instance.id and

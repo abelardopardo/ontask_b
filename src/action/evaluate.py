@@ -349,9 +349,9 @@ def run(*script_args):
     --{{ [\] }}--
     --{{ ^_` }}--
     --{{ {|}~ }}--
-    --{{ is this for real }}--
-    --{{ OT_ The tricky one }}--
-    --{{ OT_The tricky one 2 }}--
+    --{{ this one has spaces }}--
+    --{{ OT_ The prefix }}--
+    --{{ OT_The prefix 2 }}--
     """
     context = {
         'one': 1,
@@ -367,10 +367,10 @@ def run(*script_args):
         '[\]': 'var10',
         '^_`': 'var11',
         '{|}~': 'var12',
-        'is this for real': 'This IS for real',
-        'OT_ The tricky one': 'Tricky one solved.',
-        'OT_The tricky one 2': 'Tricky 2 solved as well',
-        'The tricky one 2': 'This should NOT appear. ERROR',
+        'this one has spaces': 'The spaces are not a problem',
+        'OT_ The prefix': 'Prefix solved.',
+        'OT_The prefix 2': 'Prefix 2 solved',
+        'The prefix 2': 'This should NOT appear. ERROR',
     }
 
     print(render_template(template, context))
