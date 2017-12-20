@@ -11,7 +11,7 @@ __version__ = 'B.2.1.1'
 # lowercase  ::=  "a"..."z"
 # uppercase  ::=  "A"..."Z"
 # digit      ::=  "0"..."9"
-var_names_re = re.compile('^[a-zA-Z]\w*$')
+var_names_re = re.compile('^[a-zA-Z]\w*$', re.IGNORECASE | re.UNICODE)
 
 
 def slugify(val):
@@ -63,3 +63,4 @@ class OntaskException(Exception):
 
     def __str__(self):
         return repr(self.value)
+

@@ -27,7 +27,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 import logs.ops
-from action.evaluate import evaluate_row
+from action.evaluate import evaluate_row, render_template
 from dataops import ops, pandas_db
 from ontask.permissions import UserIsInstructor, is_instructor
 from workflow.ops import get_workflow
@@ -352,7 +352,7 @@ def edit_action_out(request, pk):
             # This seems to be only possible if dealing directly with Jinja2
             # instead of Django.
             try:
-                Template(content).render(Context({}))
+                render_template(content, {})
             except Exception as e:
                 # Pass the django exception to the form (fingers crossed)
                 form.add_error(None, e.message)
