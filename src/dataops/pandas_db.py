@@ -52,7 +52,7 @@ def create_db_engine():
             password=settings.DATABASES['default']['PASSWORD'],
             database_name=settings.DATABASES['default']['NAME'],
         )
-    engine = create_engine(database_url, echo=False)
+    engine = create_engine(database_url, echo=False, paramstyle='format')
 
     if settings.DEBUG:
         print('Creating engine with ', database_url)
@@ -161,7 +161,10 @@ def store_table(data_frame, table_name):
     """
 
     # We ovewrite the content and do not create an index
-    data_frame.to_sql(table_name, engine, if_exists='replace', index=False)
+    data_frame.to_sql(table_name,
+                      engine,
+                      if_exists='replace',
+                      index=False)
 
     return
 
