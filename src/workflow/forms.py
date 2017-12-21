@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 
 from dataops import pandas_db, ops
-from ontask import is_legal_var_name, ontask_prefs
+from ontask import ontask_prefs, is_legal_name
 from ontask.forms import RestrictedFileField, dateTimeOptions
 from .models import Workflow, Column
 
@@ -80,17 +80,17 @@ class AttributeItemForm(forms.Form):
     def clean(self):
         data = super(AttributeItemForm, self).clean()
 
-        if ' ' in data['key'] or '-' in data['key']:
-            self.add_error(
-                'key',
-                'Attribute names can only have letters, numbers and _'
-            )
+        # FIX FIX FIX providing a valid Attribute value (TO BE DECIDED)
+        # Name is legal
+        msg = is_legal_name(data['key'])
+        if msg:
+            self.add_error('key', msg)
             return data
 
         if data['key'] in self.keys:
             self.add_error(
                 'key',
-                'Name has to be different from the existing ones.')
+                'Name has to be different from all existing ones.')
             return data
 
         return data
@@ -122,12 +122,10 @@ class ColumnBasicForm(forms.ModelForm):
 
         # Column name must be a legal variable name
         if 'name' in self.changed_data:
-            if not is_legal_var_name(data['name']):
-                self.add_error(
-                    'name',
-                    'Column name must start with a letter or _ '
-                    'followed by letters, numbers or _'
-                )
+            # Name is legal
+            msg = is_legal_name(data['name'])
+            if msg:
+                self.add_error('name', msg)
                 return data
 
             # Check that the name is not present already
@@ -234,7 +232,6 @@ class ColumnAddForm(ColumnBasicForm):
                     'initial_value',
                     'Incorrect initial value'
                 )
-                return data
 
         return data
 

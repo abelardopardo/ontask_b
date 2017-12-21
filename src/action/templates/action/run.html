@@ -25,11 +25,6 @@
                   url: "{% url 'action:run_ss' action.id %}",
                   type: 'POST',
                 },
-                columns: [
-                  {% for c in columns %}
-                    { "data": "{{ c.name }}" },
-                  {% endfor %}
-                ],
                 "order": [0],
                 "columnDefs": [
                     {"className": "dt-center", "targets": "_all"}

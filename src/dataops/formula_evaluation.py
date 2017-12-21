@@ -5,7 +5,7 @@ import itertools
 
 from django.utils.dateparse import parse_datetime
 
-from ontask import OntaskException
+from ontask import OntaskException, fix_pctg_in_name
 
 
 def has_variable(formula, variable):
@@ -228,8 +228,9 @@ def evaluate_node_sql(node):
 
         return result, result_fields
 
-    # Get the variable name
-    varname = node['field']
+    # Get the variable name and duplicate the symbol % in case it is part of
+    # the variable name (escape needed for SQL processing)
+    varname = fix_pctg_in_name(node['field'])
 
     # Get the operator
     operator = node['operator']
@@ -266,7 +267,7 @@ def evaluate_node_sql(node):
         result = '"{0}"'.format(varname) + ' LIKE %s'
         result_fields = [node['value'] + "%"]
 
-    elif operator == 'not_begin_with' and node['type'] == 'string':
+    elif operator == 'not_begins_with' and node['type'] == 'string':
         result = '"{0}"'.format(varname) + ' NOT LIKE %s'
         result_fields = [node['value'] + "%"]
 

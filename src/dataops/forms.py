@@ -107,25 +107,6 @@ class SelectColumnUploadForm(forms.Form):
         new_names = [cleaned_data.get('new_name_%s' % i)
                      for i in range(len(self.column_names))]
 
-        # Check that there are no spaces in the names of the selected columns
-        has_space = any([' ' in new_names[i]
-                         for i, n in enumerate(upload_list) if n])
-        if has_space:
-            raise forms.ValidationError(
-                'No spaces allowed in column names.',
-                code='invalid')
-
-        # Get the first illegal key name
-        illegal_var_idx = ontask.find_ilegal_var(
-            [n for x, n in enumerate(new_names) if upload_list[x]])
-        if illegal_var_idx is not None:
-            self.add_error(
-                'new_name_%s' % illegal_var_idx[0],
-                'Column names must start with a letter followed by '
-                'letters, numbers or _.'
-                'Value {0} is not allowed'.format(illegal_var_idx[1])
-            )
-
 
 # Step 3 of the CSV upload: select unique keys to merge
 class SelectKeysForm(forms.Form):

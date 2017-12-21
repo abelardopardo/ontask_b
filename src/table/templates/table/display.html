@@ -26,12 +26,6 @@
                   url: "{% url 'table:display_ss' %}",
                   type: 'POST',
                 },
-                columns: [
-                  { "data": "Ops"},
-                  {% for col in columns %}
-                    { "data": "{{ col.name }}" },
-                  {% endfor %}
-                ],
                 "order": [1],
                 "columnDefs": [
                     {"orderable": false, "targets": 0},

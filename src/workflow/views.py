@@ -463,14 +463,13 @@ def column_ss(request, pk):
             {'id': col.id}
         )
 
-        final_qs.append(OrderedDict(
-            [('Name', col.name),
-             ('Type', col.data_type),
-             ('Key?',
-              '<span class="true">✔</span>' if col.is_key \
-                  else '<span class="true">✘</span>'),
-             ('Operations', ops_string)]
-        ))
+        final_qs.append([
+            col.name,
+            col.data_type,
+            '<span class="true">✔</span>' if col.is_key \
+                  else '<span class="true">✘</span>',
+            ops_string
+        ])
 
         if len(final_qs) == length:
             break

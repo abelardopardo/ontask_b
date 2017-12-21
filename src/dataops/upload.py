@@ -8,7 +8,6 @@ from django.urls import reverse
 
 import logs.ops
 from dataops import ops, pandas_db
-from ontask import slugify
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
 from .forms import SelectColumnUploadForm, SelectKeysForm
@@ -65,8 +64,8 @@ def upload_s2(request):
     # Get or create the list with the renamed column names
     rename_column_names = upload_data.get('rename_column_names', None)
     if rename_column_names is None:
-        rename_column_names = [slugify(x) for x in initial_columns]
-        upload_data['rename_column_names'] = rename_column_names
+        rename_column_names = initial_columns
+        upload_data['rename_column_names'] = initial_columns
 
     # Get or create list of booleans identifying columns to be uploaded
     columns_to_upload = upload_data.get('columns_to_upload', None)
