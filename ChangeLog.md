@@ -3,8 +3,8 @@
 ### Changed
 
 - Removed the restriction of using only column, attribute and condition names
-  starting with a letter followed by a letter, digit or '_'. There is no 
-  restriction now.
+  starting with a letter followed by a letter, digit or '_'. The only 
+  restriction is that the names cannot contain the characters " and '.
    
 ## 2.1.1 (2017-12-19)
 
