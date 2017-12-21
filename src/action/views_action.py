@@ -835,9 +835,9 @@ def run_ss(request, pk):
         workflow.id,
         cv_tuples,
         True,
-        order_col,
+        order_col.name,
         order_dir == 'asc',
-        [cn for cn in column_names],  # Column names in the action
+        column_names,  # Column names in the action
         action.filter  # Filter in the action
     )
 
@@ -859,8 +859,7 @@ def run_ss(request, pk):
         )
 
         # Add the row for rendering
-        final_qs.append(OrderedDict(zip(column_names,
-                                        [link_item] + list(row)[1:])))
+        final_qs.append([link_item] + list(row)[1:])
 
         if items == length:
             # We reached the number or requested elements, abandon loop

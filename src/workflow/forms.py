@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 
 from dataops import pandas_db, ops
-from ontask import ontask_prefs, is_legal_column_name
+from ontask import ontask_prefs, is_legal_name
 from ontask.forms import RestrictedFileField, dateTimeOptions
 from .models import Workflow, Column
 
@@ -81,17 +81,16 @@ class AttributeItemForm(forms.Form):
         data = super(AttributeItemForm, self).clean()
 
         # FIX FIX FIX providing a valid Attribute value (TO BE DECIDED)
-        # if ' ' in data['key'] or '-' in data['key']:
-        #     self.add_error(
-        #         'key',
-        #         'Attribute names can only have letters, numbers and _'
-        #     )
-        #     return data
+        # Name is legal
+        msg = is_legal_name(data['key'])
+        if msg:
+            self.add_error('key', msg)
+            return data
 
         if data['key'] in self.keys:
             self.add_error(
                 'key',
-                'Name has to be different from the existing ones.')
+                'Name has to be different from all existing ones.')
             return data
 
         return data
@@ -123,8 +122,8 @@ class ColumnBasicForm(forms.ModelForm):
 
         # Column name must be a legal variable name
         if 'name' in self.changed_data:
-            # Name os legal
-            msg = is_legal_column_name(data['name'])
+            # Name is legal
+            msg = is_legal_name(data['name'])
             if msg:
                 self.add_error('name', msg)
                 return data

@@ -5,74 +5,40 @@ import re
 
 __version__ = 'B.2.1.1'
 
-# Variable name regexp
-# identifier ::=  (letter|"_") (letter | digit | "_")*
-# letter     ::=  lowercase | uppercase
-# lowercase  ::=  "a"..."z"
-# uppercase  ::=  "A"..."Z"
-# digit      ::=  "0"..."9"
-var_names_re = re.compile('^[a-zA-Z]\w*$')
-
-
-def is_legal_var_name(val):
+def is_legal_name(val):
     """
-    Function that returns if the parameter is a legal python variable
-    :param val: variable name to chec,
-    :return: Boolean stating if val is a legal python name
-    """
-    return var_names_re.match(val)
-
-def is_legal_column_name(val):
-    """
-    Function to check if a string is a valid column name
+    Function to check if a string is a valid column name, attribute name or
+    condition name.
 
     These are the characters that have been found to be problematic with
-    column names and the responsibles for these anomalies:
+    these names and the responsibles for these anomalies:
 
-    - ()%: In column names. pandas.to_sql. Breaks down because they are used in
-       the internal translation into SQL queries.
-
-    - \. DataTables displaying the column names in the "Tables" screen.
-
-    - " Provokes a db error when updating the data base (probably fixable)
+    - " Provokes a db error when handling the templates due to the encoding
+      produced by the text editor.
 
     - ' String delimiter, python messes around with it and it is too complex to
-        handle.
+        handle all possible cases and translations.
+
+    In principle, arbitrary combinations of the following symbols should be
+    handle by OnTask::
+
+      !#$%&()*+,-./:;<=>?@[\]^_`{|}~
 
     :param val: String with the column name
     :return: String with a message suggesting changes, or None if string correct
 
     """
 
-    if '(' in val or ')' in val:
-        return 'Replace () for [] in the name.'
-
-    if '%' in val:
-        return 'The symbol % cannot be used as column name.'
-
-    if '.' in val:
-        return 'The dot cannot be used in the column name.'
-
-    if '\\' in val:
-        return 'The symbol "\\" cannot be used in the column name.'
+    if "'" in val:
+        return "The symbol ' cannot be used in the column name."
 
     if '"' in val:
         return 'The symbol " cannot be used in the column name.'
 
-    if "'" in val:
-        return "The symbol ' cannot be used in the column name."
     return None
 
-
-def clean_column_name(val):
-    """
-    Function to transform column names and remove characters that are
-    problematic with pandas <-> SQL (such as parenthesis) and others.
-    :param val:
-    :return: New val
-    """
-
-    return val.replace('(', '[').replace(')', ']').replace('%', 'PCT')
+def fix_pctg_in_name(val):
+    return val.replace('%', '%%')
 
 
 class OntaskException(Exception):

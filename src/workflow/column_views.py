@@ -163,8 +163,6 @@ def column_edit(request, pk):
         ops.store_dataframe_in_db(df, workflow.id)
 
     data['form_is_valid'] = True
-    # data['html_redirect'] = reverse('workflow:detail',
-    #                                 kwargs={'pk': workflow.id})
     data['html_redirect'] = ''
 
     # Log the event

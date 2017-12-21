@@ -12,6 +12,9 @@ from django.utils.html import escape
 
 from workflow.models import Workflow, Column
 
+# Regular expression to detect the use of a variable in a django template
+var_use_re = re.compile('{{ (?P<varname>.+?) \}\}')
+
 
 class Action(models.Model):
     """
@@ -112,20 +115,20 @@ class Action(models.Model):
         :return: Updates the current object
         """
 
-        var_use_re = re.compile('{{ (?P<varname>.+?) \}\}')
-        for x in var_use_re.finditer(self.content):
-            print(x.group('varname'))
-
         new_text = var_use_re.sub(
-            lambda m: '{{ ' + \
+            lambda m: '{{ ' +
                       (new_name if m.group('varname') == escape(old_name)
-                                else m.group('varname')) + ' }}',
+                       else m.group('varname')) + ' }}',
             self.content
         )
         self.content = new_text
         self.save()
 
     class Meta:
+        """
+        Define the criteria of uniqueness with name in workflow and order by
+        name
+        """
         unique_together = ('name', 'workflow')
         ordering = ('name',)
 
@@ -161,5 +164,10 @@ class Condition(models.Model):
         return self.name
 
     class Meta:
+        """
+        The unique criteria here is within the action, the name and being a
+        filter. We may choose to name a filter and a condition with the same
+        name (no need to restrict it)
+        """
         unique_together = ('action', 'name', 'is_filter')
         ordering = ('created',)

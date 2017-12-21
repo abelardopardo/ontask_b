@@ -64,6 +64,7 @@ def upload_s2(request):
     # Get or create the list with the renamed column names
     rename_column_names = upload_data.get('rename_column_names', None)
     if rename_column_names is None:
+        rename_column_names = initial_columns
         upload_data['rename_column_names'] = initial_columns
 
     # Get or create list of booleans identifying columns to be uploaded

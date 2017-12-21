@@ -25,12 +25,6 @@
                     url: "{% url 'workflow:column_ss' workflow.id %}",
                     type: 'POST',
                   },
-                  columns: [
-                    { "data": "Name" },
-                    { "data": "Type" },
-                    { "data": "Key?" },
-                    { "data": "Operations" },
-                  ],
                   "order": [],
                   "columnDefs": [
                       {"className": "dt-center", "targets": "_all"},
@@ -38,7 +32,7 @@
                       {"searchable": false, "targets": 3},
                   ],
                   "createdRow": function(row, data, dataIndex) {
-                      if (data['Key?'] == '<span class="true">✔</span>') {
+                      if (data[2] == '<span class="true">✔</span>') {
                         $(row).addClass('success');
                       }
                   }

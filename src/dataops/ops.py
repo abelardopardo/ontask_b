@@ -4,7 +4,6 @@ from __future__ import unicode_literals, print_function
 import pandas as pd
 from django.conf import settings
 
-from ontask import clean_column_name
 from action.models import Condition, Action
 from dataops import formula_evaluation
 from dataops.pandas_db import (
@@ -90,19 +89,17 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
     for cname in df_column_names:
         # See if this is a new column
         wf_column = next((x for x in wf_columns if x.name == cname), None)
-        if not wf_column:
-            # Create a valid name if needed
-            clean_name = clean_column_name(cname)
-            if clean_name != cname:
-                # Rename the column in the df
-                data_frame.rename(columns={cname, clean_name}, inplace=True)
+        if wf_column:
+            # If column already exists in wf_columns, no need to do anything
+            continue
 
-            Column.objects.create(
-                name=clean_name,
-                workflow=workflow,
-                data_type=pandas_datatype_names[
-                    data_frame[clean_name].dtype.name],
-                is_key=is_unique_column(data_frame[clean_name]))
+        # Create the new column
+        Column.objects.create(
+            name=cname,
+            workflow=workflow,
+            data_type=pandas_datatype_names[
+                data_frame[cname].dtype.name],
+            is_key=is_unique_column(data_frame[cname]))
 
     # Get now the new set of columns with names
     wf_column_names = Column.objects.filter(
@@ -255,14 +252,14 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
         # Condition 1: Data type
         if pandas_datatype_names[new_df[col.name].dtype.name] != col.data_type:
             return 'New values in column ' + col.name + ' are not of type ' \
-                    + col.data_type
+                   + col.data_type
 
         # Condition 2: If there are categories, the new values should be
         # compatible with them.
         if col.categories and not all([x in col.categories
                                        for x in new_df[col.name]]):
             return 'New values in column ' + col.name + ' are not within ' \
-                    + 'the categories ' + ', '.join(col.categories)
+                   + 'the categories ' + ', '.join(col.categories)
 
         # Condition 3:
         col.is_key = is_unique_column(new_df[col.name])

@@ -9,6 +9,7 @@ from django import forms
 from django.conf import settings
 from django_summernote.widgets import SummernoteInplaceWidget
 
+from ontask import is_legal_name
 from .models import Action, Condition
 from ontask.forms import column_to_field, dateTimeOptions
 
@@ -35,7 +36,8 @@ class EditActionOutForm(forms.ModelForm):
     """
     content = forms.CharField(
         widget=SummernoteInplaceWidget(),
-        label='')
+        label='',
+        required=False)
 
     class Meta:
         model = Action
@@ -154,11 +156,9 @@ class ConditionForm(FilterForm):
     def clean(self):
         data = super(ConditionForm, self).clean()
 
-        if ' ' in data['name'] or '-' in data['name']:
-            self.add_error(
-                'name',
-                'Condition names can only have letters, numbers and _'
-            )
+        msg = is_legal_name(data['name'])
+        if msg:
+            self.add_error('name', msg)
             return data
 
         return data

@@ -357,6 +357,9 @@ def run(*script_args):
     --{{ OT_ The prefix }}--
     --{{ OT_The prefix 2 }}--
     """
+
+    template = u'<p>Hi&nbsp;{{ !"#$%&amp;()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~ }}</p>'
+
     context = {
         'one': 1,
         'var1': True,
@@ -376,7 +379,11 @@ def run(*script_args):
         'OT_The prefix 2': 'Prefix 2 solved',
         'The prefix 2': 'This should NOT appear. ERROR',
     }
+    context = {
+        u'!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~': u'Carmelo Coton',
+    }
 
+    print(escape(context.items()[0][0]))
     print(render_template(template, context))
 
 
