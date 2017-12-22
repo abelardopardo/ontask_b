@@ -663,7 +663,7 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.CLASS_NAME, 'modal-title'),
-                'Create a new attribute'))
+                'Create attribute'))
 
         # Fill out the form
         self.selenium.find_element_by_id('id_key').send_keys('key1')
@@ -696,7 +696,7 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.CLASS_NAME, 'modal-title'),
-                'Create a new attribute'))
+                'Create attribute'))
 
         # Fill out the form
         self.selenium.find_element_by_id('id_key').send_keys('key2')
