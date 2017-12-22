@@ -1,4 +1,12 @@
-## 2.1.1
+## 2.2.0 (2017-12-23)
+
+### Changed
+
+- Removed the restriction of using only column, attribute and condition names
+  starting with a letter followed by a letter, digit or '_'. The only 
+  restriction is that the names cannot contain the characters " and '.
+   
+## 2.1.1 (2017-12-19)
 
 ### Changed
 

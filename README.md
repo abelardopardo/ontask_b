@@ -1,9 +1,10 @@
 # OnTask: Personalised feedback at scale
 
 ---
-** NEW VERSION (2017-12-08) **
 
-Version 2.1.1 has been released:
+** NEW VERSION (2017-12-23) **
+
+Version 2.2.0 has been released:
 
 - Support for LTI
 
@@ -12,6 +13,7 @@ Version 2.1.1 has been released:
 - Clone operation for workflow, actions and conditions
 
 - Time-based scheduler for actions
+
 ---
 
 Welcome to OnTask, the platform offering teachers and educational designers
@@ -66,7 +68,7 @@ applications for its execution:
 
 - Python 2.7.13 (or later)
 - Django (version 1.11 or later)
-- Additional django modules (included in the requirements/base.txt) file
+- Additional Django modules (included in the requirements/base.txt) file
 - Redis (version 4.0 or later)
 - PostgreSQL (version 9.5 or later)
 
@@ -82,12 +84,16 @@ production web server capable of serving pages using the HTTPS protocol.
 
 #### Install and Configure Redis
 
+Django requires Redis to execute as a daemon in the same machine to cache 
+information about the sessions. You do not need to make any adjustments in 
+the code for this tool, simply have the server running in the background.
 
 1. Download and install [redis](https://redis.io/).
 
    Follow the instructions to configure it to be used by Django.
 
-2. Test that it executes properly
+2. Test that it is executing properly in the background (use the ``ping`` 
+   command in the command line interface.
 
 For OnTask you only need executing in the machine. If you use the default
 settings, there are not additional changes required in OnTask (the code is
@@ -120,7 +126,7 @@ already using this application internally).
 
 
 In the following sections we assume that you can open a command line
-interpreter and you can execute the python intepreter.
+interpreter and you can execute the python interpreter.
 
 1. Install [python](https://www.python.org/)
 
@@ -128,7 +134,7 @@ interpreter and you can execute the python intepreter.
    using the command line interpreter.
 
 3. Install [pip](https://pip.pypa.io/en/stable/) (the package may be called
-   `python-pip`). This tool will be used by both python and django to install
+   `python-pip`). This tool will be used by both Python and Django to install
    numerous libraries that are required to execute OnTask.
 
 #### Download, install and configure OnTask
@@ -149,19 +155,19 @@ interpreter and you can execute the python intepreter.
    `pip install -r requirements/production.txt`
 
    Alternatively, if you plan to run a development instance of OnTask then
-   execute the commmand:
+   execute the command:
 
    `pip install -r requirements/development.txt`
 
    This command traverses a list of libraries and modules and installs them as
    part of the python libraries in the system. These modules include Django,
-   Django Rest Framework, django braces, etc.
+   Django Rest Framework, Django braces, etc.
 
 At this point you have the major modules in place. The next steps include the
 configuration of the Django environment to run OnTask.
 
 If you plan to install a production instance of OnTask, using a plain text
-editor (nano, vim, emacs or similar) in a command line interpreter, open the
+editor (nano, vim, Emacs or similar) in a command line interpreter, open the
 file `manage.py` in the `src` folder of the project. Modify line 14
 replacing the value `"ontask.settings.development"` by
 `"ontask.settings.production"`. Save and close the file.
@@ -208,7 +214,7 @@ no space between variable names and the equal sign):
 
 
 4. Modify the line starting with `LTI_OAUTH_CREDENTIALS` and include a
-   comma-sepparated list of pairs key=secret for LTI authentication. See the
+   comma-separated list of pairs key=secret for LTI authentication. See the
    section  :ref:`authentication` for more details about this type of
    authentication.
 
@@ -231,7 +237,7 @@ no space between variable names and the equal sign):
 
    `python manage.py migrate`
 
-   A few messages should appear on the screen related to the initalizaton
+   A few messages should appear on the screen related to the initialization
    of the database.
 
 9. Execute the following command to upload to the platform some initial data
@@ -323,14 +329,14 @@ the following order): LTI, `REMOTE_USER`
 and basic authentication.
 
 - [IMS Learning Tools Interoperability (IMS-LTI)](http://www.imsglobal.org/activity/learning-tools-interoperability)
-  LTI is a standard developed by the IMS Global Leanring Consortium to
+  LTI is a standard developed by the IMS Global Learning Consortium to
   integrate multiple tools within a learning environment. In LTI terms,
   OnTask is configured to behave as a *tool provider* and assumes a *tool
   consumer* such as a Learning Management System to invoke its functionality.
   Any URL in OnTask can be give nto the LTI consumer as the point of access.
 
   Ontask only provides two points of access for LTI requests coming from the
-  consumer. One is the url with suffix `/lti_entry` and the second is the
+  consumer. One is the URL with suffix `/lti_entry` and the second is the
   URL provided by the actions to serve the personalised content (accessible
   through the `Actions` menu.
 
@@ -360,7 +366,7 @@ and basic authentication.
   the OnTask pages (for example, using SAML). If OnTask receives a request
   from a non-existent user through this channel, it automatically and
   transparently creates a new user in the platform with the user name stored
-  in the `REMOTE_USER` variable. OnTask relies on emails as the username
+  in the `REMOTE_USER` variable. OnTask relies on emails as the user name
   differentiator, so if you plan to use this authentication method make sure
   the value of `REMOTE_USER` is the email.
 
@@ -381,7 +387,7 @@ future. This functionality is implemented using a combination of persistent
 storage (the database), and a time-based job scheduler external to the tool.
 Time-based job schedulers are present in most operating systems (`cron`
 in Unix/Linux, or `at` in Windows). OnTask provides the functionality to
-describe the task to execute and assing a date and time. Additionally, the
+describe the task to execute and assign it a date and time. Additionally, the
 tool has a script that checks the date/time, selects the appropriate task,
 and executes it. These instructions describe the configuration assuming an
 underlying Linux/Unix architecture using `crontab`.
@@ -423,10 +429,10 @@ folder.
 The remaining parameter to adjust is the frequency in which the script
 `scheduler_script` runs. In the example above, the script executes every
 15 minutes (at minutes 0, 15, 30 and 45 minutes in the hour). Adjust this
-frequency to suit your needs. Once adjusted, go to the admin menu in OnTask,
-open the section with name *Core Configuration*, click in the preferences
-and adjust the value of the *Minute interval to program scheduled tasks* and
-match it (in minutes) to the interval reflected in the crontab.
+frequency to suit your needs. Once adjusted, go to the administration menu in 
+OnTask, open the section with name *Core Configuration*, click in the 
+preferences and adjust the value of the *Minute interval to program scheduled 
+tasks* and match it (in minutes) to the interval reflected in the crontab.
 
 ## Contributing
 

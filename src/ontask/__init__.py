@@ -1,62 +1,59 @@
 # -*- coding: utf-8 -*-
+"""
+Basic functions and definitions used all over the platform.
+"""
 from __future__ import unicode_literals, print_function
 
-import re
-
-__version__ = 'B.2.1.1'
-
-# Variable name regexp
-# identifier ::=  (letter|"_") (letter | digit | "_")*
-# letter     ::=  lowercase | uppercase
-# lowercase  ::=  "a"..."z"
-# uppercase  ::=  "A"..."Z"
-# digit      ::=  "0"..."9"
-var_names_re = re.compile('^[a-zA-Z]\w*$')
+__version__ = 'B.2.2.0'
 
 
-def slugify(val):
+def is_legal_name(val):
     """
-    Replace all spaces to underscores to facilitate column name manipulation
-    :param val: String
-    :return: another string with ' ' replaced by '_'
-    """
-    return val.strip().replace(' ', '_')
+    Function to check if a string is a valid column name, attribute name or
+    condition name.
 
+    These are the characters that have been found to be problematic with
+    these names and the responsible for these anomalies:
 
-def is_legal_var_name(val):
-    """
-    Function that returns if the parameter is a legal python variable
-    :param val: variable name to chec,
-    :return: Boolean stating if val is a legal python name
-    """
-    return var_names_re.match(val)
+    - " Provokes a db error when handling the templates due to the encoding
+      produced by the text editor.
 
+    - ' String delimiter, python messes around with it and it is too complex to
+        handle all possible cases and translations.
 
-def are_legal_vars(lvar):
-    """
-    Function to check if a set of variable names are all legal
-    :param lvar: List of variable names
-    :return: Boolean stating if all of them are legal variable names
-    """
-    return all([var_names_re.match(z) for z in lvar])
+    In principle, arbitrary combinations of the following symbols should be
+    handle by OnTask::
 
+      !#$%&()*+,-./:;<=>?@[\]^_`{|}~
 
-def find_ilegal_var(lvar):
-    """
-    Function to find an ilegal variable name in a list
-    :param lvar: List of variable names
-    :return: A pair with the first ilegal variable name and its index or None
-    """
-    for idx, var in enumerate(lvar):
-        if not var_names_re.match(var):
-            # found one that does not match
-            return idx, var
+    :param val: String with the column name
+    :return: String with a message suggesting changes, or None if string correct
 
-    # All of them match
+    """
+
+    if "'" in val:
+        return "The symbol ' cannot be used in the column name."
+
+    if '"' in val:
+        return 'The symbol " cannot be used in the column name.'
+
     return None
 
 
+def fix_pctg_in_name(val):
+    """
+    Function that escapes a value for SQL processing (replacing % by double %%)
+    :param val: Value to escape
+    :return: Escaped value
+    """
+    return val.replace('%', '%%')
+
+
 class OntaskException(Exception):
+    """
+    Generic class in OnTask for our own exception
+    """
+
     def __init__(self, msg, value):
         self.msg = msg
         self.value = value

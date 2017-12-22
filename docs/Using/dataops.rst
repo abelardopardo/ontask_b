@@ -8,7 +8,7 @@ Data Operations
 
 
 
-This section describes one of the most advanced functionality of the platorm, how to upload data into the table. It may be the case that this task is already done, or it is done automatically before you use the workflow. If this is the case, you may skip this section.
+This section describes one of the most advanced functionality of the platform, how to upload data into the table. It may be the case that this task is already done, or it is done automatically before you use the workflow. If this is the case, you may skip this section.
 
 The data operations page offers various options to upload data to the table. It follows a brief description of each one of them with a discussion of the *merge* operation
 
@@ -31,7 +31,7 @@ Merge Operation
 
 .. sidebar:: Merge a.k.a "Join"
 
-   Merging is actualy quite common in databases and is known as a *join* operation. There are several variants of join operations depending how the differences between the key columns are handled. These same variants exist when combining columns in data frames (or a table).
+   Merging is quite common in databases and is known as a *join* operation. There are several variants of join operations depending how the differences between the key columns are handled. These same variants exist when combining columns in data frames (or a table).
 
 A merge operation is needed when you want to *merge* a set of columns with an **already existing table**. This operation is very common in data science contexts. One of the problems is to specify how the values in the columns are *matched* with respect to the ones already existing in the table. In other words, each new column has a set of values, but they need to be ordered in the right way so that the information is matched appropriately for every row. The solution for this problem is to include in both the existing table and the new data being merge a **unique or key column**. These two columns are used to compare the values, identify the matching row, and make sure the right rows are merged.
 
@@ -42,27 +42,27 @@ When uploading a CSV file in a workflow that already contains data, the platform
 
 However, the difference with this step is that the columns selected will be *merged* with the existing ones using a given unique column. If no such column is selected the application will not proceed with the merge. As in the case of an initial CSV upload, you main change the names of the columns.
 
-The next step is the most delicate one in a merge. Ir requires you to identify the unique columns in both the existing data table and the one being uploaded, the criteria to merge the rows, and how to deal when column names collide. We discuss each of these parameters in more detail.
+The next step is the most delicate one in a merge. It requires you to identify the unique columns in both the existing data table and the one being uploaded, the criteria to merge the rows, and how to deal when column names collide. We discuss each of these parameters in more detail.
 
 .. figure:: images/Ontask____Merge2.png
    :align: center
    :width: 100%
 
-You have to select the pair of unique columns from those in the already existing data and those in the new data about to be merge. These colums are the only choices in the form.
+You have to select the pair of unique columns from those in the already existing data and those in the new data about to be merge. These columns are the only choices in the form.
 
 The criteria to merge the rows offers four options:
 
 Inner
-  It will store only the rows for which values in both unique columns are present. Or in other words, any row for which there is no value in either of the key colums **will be dropped**.
+  It will store only the rows for which values in both unique columns are present. Or in other words, any row for which there is no value in either of the key columns **will be dropped**.
 
 Outer
-  The rows that have only one value in one of the key columns will be considered. You have to be carefull with this option because it may produce columns that are no longer unique as a result.
+  The rows that have only one value in one of the key columns will be considered. You have to be careful with this option because it may produce columns that are no longer unique as a result.
 
 Left
-  Only the rows with a value in the existing table will be considered, the rest will be dropeed.
+  Only the rows with a value in the existing table will be considered, the rest will be dropped.
 
 Right
-  Only the rows with a value in the table being uploaded will be considered, the rest will be dropeed.
+  Only the rows with a value in the table being uploaded will be considered, the rest will be dropped.
 
 You have to take extra care when performing this operation as it may destroy part of the existing data. In the extreme case, if you try to merge a table with a key column with no values in common with the existing key and you select the *inner* method, you may end up with an empty table. After selecting these parameters the platform will show you what it will happen with the various columns involved.
 

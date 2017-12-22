@@ -7,7 +7,7 @@ The Table
    but you feel it"
    -- Morpheus, The Matrix
 
-This functionality of the application is basically to provide some basic visualisation of the values stored in the workflow. Due to the potential large size of this table in either number of rows or columns, the functionality is reduded simply to browse values, search, create/update/delete a row, or add a new column.
+This functionality of the application is basically to provide some basic visualisation of the values stored in the workflow. Due to the potential large size of this table in either number of rows or columns, the functionality is reduced simply to browse values, search, create/update/delete a row, or add a new column.
 
 .. figure:: images/Ontask____Table.png
    :align: center

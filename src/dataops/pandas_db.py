@@ -3,16 +3,17 @@ from __future__ import unicode_literals, print_function
 
 import logging
 import os.path
-from collections import OrderedDict
-from itertools import izip
 import subprocess
+from collections import OrderedDict
 
 import pandas as pd
 from django.conf import settings
 from django.db import connection
+from itertools import izip
 from sqlalchemy import create_engine
 
 from dataops.formula_evaluation import evaluate_node_sql
+from ontask import fix_pctg_in_name
 
 SITE_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
@@ -52,7 +53,7 @@ def create_db_engine():
             password=settings.DATABASES['default']['PASSWORD'],
             database_name=settings.DATABASES['default']['NAME'],
         )
-    engine = create_engine(database_url, echo=False)
+    engine = create_engine(database_url, echo=False, paramstyle='format')
 
     if settings.DEBUG:
         print('Creating engine with ', database_url)
@@ -161,7 +162,10 @@ def store_table(data_frame, table_name):
     """
 
     # We ovewrite the content and do not create an index
-    data_frame.to_sql(table_name, engine, if_exists='replace', index=False)
+    data_frame.to_sql(table_name,
+                      engine,
+                      if_exists='replace',
+                      index=False)
 
     return
 
@@ -228,8 +232,9 @@ def get_table_data(pk, cond_filter, column_names=None):
 
     # Create the query
     if column_names:
+        safe_column_names = [fix_pctg_in_name(x) for x in column_names]
         query = 'SELECT "{0}" from "{1}"'.format(
-            '", "'.join(column_names),
+            '", "'.join(safe_column_names),
             create_table_name(pk)
         )
     else:
@@ -263,7 +268,8 @@ def execute_select_on_table(pk, fields, values, column_names=None):
 
     # Create the query
     if column_names:
-        query = 'SELECT "{0}"'.format(','.join(column_names))
+        safe_column_names = [fix_pctg_in_name(x) for x in column_names]
+        query = 'SELECT "{0}"'.format(','.join(safe_column_names))
     else:
         query = 'SELECT *'
 
@@ -274,7 +280,8 @@ def execute_select_on_table(pk, fields, values, column_names=None):
     cursor = connection.cursor()
     if fields:
         query += ' WHERE ' + \
-                 ', '.join(['"{0}" = %s'.format(x) for x in fields])
+                 ' AND '.join(['"{0}" = %s'.format(fix_pctg_in_name(x))
+                               for x in fields])
         cursor.execute(query, values)
     else:
         # Execute the query
@@ -330,10 +337,11 @@ def update_row(pk, set_fields, set_values, where_fields, where_values):
     # First part of the query with the table name
     query = 'UPDATE "{0}"'.format(create_table_name(pk))
     # Add the SET field = value clauses
-    query += ' SET ' + ', '.join(['"{0}" = %s'.format(x) for x in set_fields])
+    query += ' SET ' + ', '.join(['"{0}" = %s'.format(fix_pctg_in_name(x))
+                                  for x in set_fields])
     # And finally add the WHERE clause
-    query += ' WHERE ' + ', '.join(['"{0}" = %s'.format(x)
-                                    for x in where_fields])
+    query += ' WHERE ' + ' AND '.join(['"{0}" = %s'.format(fix_pctg_in_name(x))
+                                       for x in where_fields])
 
     # Concatenate the values as parameters to the query
     parameters = set_values + where_values
@@ -359,7 +367,8 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names=None):
 
     # Create the query
     if column_names:
-        query = 'SELECT "{0}"'.format('", "'.join(column_names))
+        safe_column_names = [fix_pctg_in_name(x) for x in column_names]
+        query = 'SELECT "{0}"'.format('", "'.join(safe_column_names))
     else:
         query = 'SELECT *'
 
@@ -367,7 +376,7 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names=None):
     query += ' FROM "{0}"'.format(create_table_name(workflow.id))
 
     # Create the second part of the query setting key=value
-    query += ' WHERE ("{0}" = %s)'.format(kv_pair[0])
+    query += ' WHERE ("{0}" = %s)'.format(fix_pctg_in_name(kv_pair[0]))
     fields = [kv_pair[1]]
 
     # See if the action has a filter or not
@@ -398,7 +407,7 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names=None):
 def search_table_rows(workflow_id,
                       cv_tuples=None,
                       any_join=True,
-                      order_col=None,
+                      order_col_name=None,
                       order_asc=True,
                       column_names=None,
                       pre_filter=None):
@@ -413,7 +422,7 @@ def search_table_rows(workflow_id,
     column
     :param any_join: Boolean encoding if values should be combined with OR (or
     AND)
-    :param order_col: Order results by this column
+    :param order_col_name: Order results by this column
     :param order_asc: Order results in ascending values (or descending)
     :param column_names: Optional list of column names to select
     :param pre_filter: Optional filter condition to pre filter the query set.
@@ -423,7 +432,8 @@ def search_table_rows(workflow_id,
 
     # Create the query
     if column_names:
-        query = 'SELECT "{0}"'.format('", "'.join(column_names))
+        safe_column_names = [fix_pctg_in_name(x) for x in column_names]
+        query = 'SELECT "{0}"'.format('", "'.join(safe_column_names))
     else:
         query = 'SELECT *'
 
@@ -441,6 +451,8 @@ def search_table_rows(workflow_id,
         likes = []
         tuple_fields = []
         for name, value, data_type in cv_tuples:
+            # Make sure we escape the name
+            name = fix_pctg_in_name(name)
             if data_type == 'string':
                 mod_name = '("{0}" LIKE %s)'.format(name)
             else:
@@ -476,8 +488,8 @@ def search_table_rows(workflow_id,
         fields.extend(tuple_fields)
 
     # Add the order if needed
-    if order_col:
-        query += ' ORDER BY "{0}"'.format(order_col)
+    if order_col_name:
+        query += ' ORDER BY "{0}"'.format(fix_pctg_in_name(order_col_name))
     if not order_asc:
         query += ' DESC'
 
@@ -504,7 +516,7 @@ def delete_table_row_by_key(workflow_id, kv_pair):
     query = 'DELETE FROM "{0}"'.format(create_table_name(workflow_id))
 
     # Create the second part of the query setting key=value
-    query += ' WHERE ("{0}" = %s)'.format(kv_pair[0])
+    query += ' WHERE ("{0}" = %s)'.format(fix_pctg_in_name(kv_pair[0]))
     fields = [kv_pair[1]]
 
     # Execute the query

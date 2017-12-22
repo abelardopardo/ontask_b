@@ -16,7 +16,7 @@ that OnTask should facilitate the connection with already existing data
 sources so that it can combine data sets and create a comprehensive view of
 how a learning experience is evolving.
 
-The API is documented online through the url suffix ``apidoc``. The page
+The API is documented online through the URL suffix ``apidoc``. The page
 contains the description of every entry point available with the required
 parameters.
 
@@ -29,7 +29,7 @@ basic operations (create a table, update a table, merge).
    decoded from the pandas pickle format back to a regular dataframe, the same
    initial dataframe is obtained.
 
-2. JSON Versoin. This version encodes the dataframes in JSON. The problem
+2. JSON Version. This version encodes the dataframes in JSON. The problem
    with this format is that values such as NaN and NaT (not a time) are not
    allowed by JSON, and they are substituted by empty strings. This change
    may have significant effects on the dataframe, specially on the types of

@@ -25,7 +25,7 @@ of the audience.
 In parallel wih this increase in complexity, learning platforms now generate
 a wealth of data when activities are mediated by technology. This
 data can be collected and used to help instructors and designers provide a
-truly personalised experience. Why is this not hapenning in current
+truly personalised experience. Why is this not happening in current
 platforms? Because the connection between this data and learner support
 actions is challenging to implement. This is the focus of OnTask:
 provide instructors and designers with a platform to connect data emerging

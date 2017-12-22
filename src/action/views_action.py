@@ -19,7 +19,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, reverse, render
-from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.views import generic
 from django.views.decorators.clickjacking import xframe_options_exempt
@@ -27,7 +26,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 import logs.ops
-from action.evaluate import evaluate_row
+from action.evaluate import evaluate_row, render_template
 from dataops import ops, pandas_db
 from ontask.permissions import UserIsInstructor, is_instructor
 from workflow.ops import get_workflow
@@ -352,7 +351,7 @@ def edit_action_out(request, pk):
             # This seems to be only possible if dealing directly with Jinja2
             # instead of Django.
             try:
-                Template(content).render(Context({}))
+                render_template(content, {})
             except Exception as e:
                 # Pass the django exception to the form (fingers crossed)
                 form.add_error(None, e.message)
@@ -836,9 +835,9 @@ def run_ss(request, pk):
         workflow.id,
         cv_tuples,
         True,
-        order_col,
+        order_col.name,
         order_dir == 'asc',
-        [cn for cn in column_names],  # Column names in the action
+        column_names,  # Column names in the action
         action.filter  # Filter in the action
     )
 
@@ -860,8 +859,7 @@ def run_ss(request, pk):
         )
 
         # Add the row for rendering
-        final_qs.append(OrderedDict(zip(column_names,
-                                        [link_item] + list(row)[1:])))
+        final_qs.append([link_item] + list(row)[1:])
 
         if items == length:
             # We reached the number or requested elements, abandon loop

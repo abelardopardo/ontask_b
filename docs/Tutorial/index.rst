@@ -129,11 +129,11 @@ it is a *key column* (there are no repeated values in all the rows).
 .. figure:: ../Ontask_screens/06_data_csvupload_student_list.png
    :align: center
 
-The *key* columns are highlighted because a workflow must have at least one column of this type in its table. Select all the column (clicking in the top element labeled *load*) and click on the *Finish* button, and then back to the
+The *key* columns are highlighted because a workflow must have at least one column of this type in its table. Select all the column (clicking in the top element labelled *load*) and click on the *Finish* button, and then back to the
 *Details* page to see the summary of the information in the workflow.
 
 You can now see the information about the columns present in the workflow as
-shown in the follogin figure
+shown in the following figure
 
 .. figure:: ../Ontask_screens/07_data_view_student_external.png
    :align: center

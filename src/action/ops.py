@@ -10,11 +10,11 @@ from django.core import signing
 from django.core.mail import send_mass_mail, send_mail
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
-from django.template import Template, Context
+from django.template import TemplateSyntaxError
 from django.urls import reverse
 
 import logs.ops
-from action.evaluate import evaluate_row, evaluate_action
+from action.evaluate import evaluate_row, evaluate_action, render_template
 from action.forms import EnterActionIn, field_prefix
 from action.models import Action
 from dataops import pandas_db, ops
@@ -390,17 +390,10 @@ def send_messages(user,
         'num_rows': action.workflow.nrows}
 
     # Create template and render with context
-    template = Template(settings.NOTIFICATION_TEMPLATE)
-    msg = template.render(Context(context))
-
-    # Send email out
     try:
-        send_mail(str(getattr(settings, 'NOTIFICATION_SUBJECT')),
-                  msg,
-                  str(getattr(settings, 'NOTIFICATION_SENDER')),
-                  [user.email])
-    except Exception as e:
-        return 'An error occurred when sending your notification: ' + e.message
+        msg = render_template(settings.NOTIFICATION_TEMPLATE, context)
+    except TemplateSyntaxError as e:
+        return 'Syntax error detected in OnTask notification template.'
 
     # Log the event
     logs.ops.put(
@@ -416,5 +409,14 @@ def send_messages(user,
          'body': msg,
          'from_email': str(getattr(settings, 'NOTIFICATION_SENDER')),
          'to_email': [user.email]})
+
+    # Send email out
+    try:
+        send_mail(str(getattr(settings, 'NOTIFICATION_SUBJECT')),
+                  msg,
+                  str(getattr(settings, 'NOTIFICATION_SENDER')),
+                  [user.email])
+    except Exception as e:
+        return 'An error occurred when sending your notification: ' + e.message
 
     return None
