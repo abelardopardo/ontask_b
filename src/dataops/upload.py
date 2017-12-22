@@ -64,8 +64,8 @@ def upload_s2(request):
     # Get or create the list with the renamed column names
     rename_column_names = upload_data.get('rename_column_names', None)
     if rename_column_names is None:
-        rename_column_names = initial_columns
-        upload_data['rename_column_names'] = initial_columns
+        rename_column_names = initial_columns[:]
+        upload_data['rename_column_names'] = rename_column_names
 
     # Get or create list of booleans identifying columns to be uploaded
     columns_to_upload = upload_data.get('columns_to_upload', None)
@@ -120,13 +120,11 @@ def upload_s2(request):
 
     # Form is valid
 
-    # We need to modify df_info with the information received in the post
+    # We need to modify upload_data with the information received in the post
     for i in range(len(initial_columns)):
         new_name = form.cleaned_data['new_name_%s' % i]
-        df_info[i][3] = new_name
         upload_data['rename_column_names'][i] = new_name
         upload = form.cleaned_data['upload_%s' % i]
-        df_info[i][4] = upload
         upload_data['columns_to_upload'][i] = upload
 
     # Update the dictionary with the session information

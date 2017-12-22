@@ -164,6 +164,25 @@ class OntaskLiveTestCase(LiveServerTestCase):
     def logout(self):
         self.open(reverse('accounts:logout'))
 
+    def wait_close_modal_refresh_table(self, table_id):
+        """
+        Function used  to wait for a modal window to close and for a table
+        with certain ID to appear again as a consequence of the browser's
+        response.
+        :param table_id: Id of the table being refreshed
+        :return:
+        """
+        # Close modal (wail until the modal-open element disappears)
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
+        # Wait for the table to be refreshed
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, table_id))
+        )
+
     @contextmanager
     def wait_for_page_load(self, timeout=30):
         # Hack taken from
