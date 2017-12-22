@@ -34,7 +34,7 @@ The screen includes three operations:
       :align: center
       :width: 100%
 
-3. Open a workflow to work on it. This is perhaps the most common initial step. Once you open or *enter* a worklow, all the operations are applied to that context. The platform will remind you in which workflow you are working by inserting its name right under the top navigation bar as shown in the following figure.
+3. Open a workflow to work on it. This is perhaps the most common initial step. Once you open or *enter* a workflow, all the operations are applied to that context. The platform will remind you in which workflow you are working by inserting its name right under the top navigation bar as shown in the following figure.
 
    .. figure:: images/Ontask____ELON3509.png
       :align: center

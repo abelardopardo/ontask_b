@@ -24,7 +24,7 @@ the following operations:
 .. _details_add_column:
 
 Add a new column
-  Opens a dialog to create a new column in the table. It requires the name,
+  Opens a dialogue to create a new column in the table. It requires the name,
   type of column, a comma separated list of allowed values (optional) and a
   value to assign to all cells in the column (optional).
 
@@ -34,7 +34,7 @@ Add a new column
 .. _details_attributes:
 
 Attributes
-  This is simply a dictionary of pairs ``(name, value)`` so that whena ``name``
+  This is simply a dictionary of pairs ``(name, value)`` so that when a ``name``
   appears in a personalised text, it is replaced by the ``value``. The main use
   of these attributes is when a value has to appear in various locations and
   you may want to change all its occurrences. For example, the instructor name
@@ -97,7 +97,7 @@ Flush data
 
 Delete
   Operation similar to the previous one, but now the whole workflow is deleted
-  and therefore un-selected. If executed, the platform will go back to the list
+  and therefore unselected. If executed, the platform will go back to the list
   of workflows as this one is no longer available for operations.
 
   .. figure:: images/Ontask____wflowdelete.png
@@ -115,23 +115,22 @@ The Columns
 ***********
 
 The data in a workflow is stored in a structure called *a table* that is made
-of rows and colums (similar to a spreadsheet). The information about the
+of rows and columns (similar to a spreadsheet). The information about the
 columns is included in a table in the workflow details page.
 
 .. figure:: images/Ontask____columns.png
    :align: center
 
-Each column as a name (has to start with a character and can only have `_`,
-letters and numbers), a type (one of integer, string, double, boolean or
-datatime), a field stating if the values of that column are uniques for the
-rows, and two operations. When a column is marked as *Unique*, it means that
-all the values it contains are different and unique for each row. Think of a
-column containing a passport number. Such number is different for every person.
-There could be several columns with this property. The application detects
-automatically this property in a column. You may edit and change this properly
-as long as the values are the adequate ones (they satisfy the uniqueness
-property if you try mark a column as unique. The operations avaiable over
-columns are:
+Each column has a name (cannot contain the quotes *'* or *"*), a type (one of
+integer, string, double, boolean or datetime), a field stating if the values
+of that column are unique for the rows, and two operations. When a column is
+marked as *Unique*, it means that all the values it contains are different and
+unique for each row. Think of a column containing a passport number. Such
+number is different for every person. There could be several columns with this
+property. The application detects automatically this property in a column. You
+may edit and change this properly as long as the values are the adequate ones
+(they satisfy the uniqueness property if you try mark a column as unique. The
+operations available over columns are:
 
 Edit
   It allows you to change the name, type, unique and values allowed in the
@@ -147,7 +146,7 @@ Edit
   This validity is used when executing *action in* tasks.
 
 Clone
-  Clones the column in the workflow chaning its name adding the prefix *Copy
+  Clones the column in the workflow changing its name adding the prefix *Copy
   of* to the name.
 
 Delete
