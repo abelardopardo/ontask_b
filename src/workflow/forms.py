@@ -80,7 +80,6 @@ class AttributeItemForm(forms.Form):
     def clean(self):
         data = super(AttributeItemForm, self).clean()
 
-        # FIX FIX FIX providing a valid Attribute value (TO BE DECIDED)
         # Name is legal
         msg = is_legal_name(data['key'])
         if msg:

@@ -49,8 +49,9 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         # Open the workflow
         wf_link = self.selenium.find_element_by_link_text('sss')
         wf_link.click()
+        # Wait for the table to be refreshed
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'success'))
+            EC.presence_of_element_located((By.ID, 'column-table_previous'))
         )
 
         # Edit the name column
@@ -58,9 +59,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
             "//table[@id='column-table']/tbody/tr[4]/td[4]/button/span"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.ID, 'id_name')
-            )
+            EC.visibility_of_element_located((By.ID, 'id_name'))
         )
 
         # Replace name by symbols
@@ -105,17 +104,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Save the new column
         self.selenium.find_element_by_xpath("//button[@type='submit']").click()
-        # Wait for the modal to close
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for page to refresh
-        # FLAKY
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'success'))
-        )
+        self.wait_close_modal_refresh_table('column-table_previous')
 
         # Click in the attributes section
         self.selenium.find_element_by_xpath(
@@ -130,18 +119,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
             "(//button[@type='button'])[3]").click()
         self.selenium.find_element_by_xpath(
             "(//button[@type='submit'])[3]").click()
-        # Wait for modal to close
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for page to refresh
-        # FLAKY
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME,
-                                            'js-attribute-create'))
-        )
+        self.wait_close_modal_refresh_table('attribute-table')
 
         # Add a new attribute and insert key (symbols) and value
         self.selenium.find_element_by_xpath(
@@ -369,15 +347,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Save column information
         self.selenium.find_element_by_xpath("//button[@type='submit']").click()
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for page to refresh
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'column-table_previous'))
-        )
+        self.wait_close_modal_refresh_table('column-table_previous')
 
         # Select the age column and click in the edit button
         self.selenium.find_element_by_xpath(
@@ -390,15 +360,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Save column information
         self.selenium.find_element_by_xpath("//button[@type='submit']").click()
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for page to refresh
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'column-table_previous'))
-        )
+        self.wait_close_modal_refresh_table('column-table_previous')
 
         # Go to the table link
         self.selenium.find_element_by_link_text("Table").click()
@@ -427,17 +389,10 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         # Set the correct values for an action-in
         self.selenium.find_element_by_id("id____ontask___select_3").click()
         self.selenium.find_element_by_id("id____ontask___select_0").click()
-        self.selenium.find_element_by_xpath("(//button[@name='Submit'])[2]").click()
-        # Web for the modal to close
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for page to refresh
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'action-table_previous'))
-        )
+        self.selenium.find_element_by_xpath(
+            "(//button[@name='Submit'])[2]"
+        ).click()
+        self.wait_close_modal_refresh_table('action-table_previous')
 
         # Click in the run link
         self.selenium.find_element_by_link_text("Run").click()

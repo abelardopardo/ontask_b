@@ -120,8 +120,8 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         # Set the file name
         self.selenium.find_element_by_id('id_file').send_keys(
             os.path.join(settings.PROJECT_PATH,
-                         '..',
-                         'test_data',
+                         'workflow',
+                         'fixtures',
                          'simple.csv')
         )
 
@@ -236,8 +236,8 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         # Set the file name
         self.selenium.find_element_by_id('id_file').send_keys(
             os.path.join(settings.PROJECT_PATH,
-                         '..',
-                         'test_data',
+                         'workflow',
+                         'fixtures',
                          'simple2.csv')
         )
 
@@ -393,15 +393,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']/div/div/form/div/button[@type='submit']"
         ).click()
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # FLAKY
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'success'))
-        )
+        self.wait_close_modal_refresh_table('column-table_previous')
 
         # Third column must be age, double
         self.assertEqual(self.selenium.find_element_by_xpath(
@@ -421,9 +413,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
             self.selenium.find_element_by_class_name(
                 'js-workflow-column-add').click()
             WebDriverWait(self.selenium, 10).until(
-                EC.element_to_be_clickable(
-                    (By.ID, 'id_name')
-                )
+                EC.element_to_be_clickable((By.ID, 'id_name'))
             )
             # Set the fields
             self.selenium.find_element_by_id('id_name').send_keys(cname)
@@ -441,9 +431,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
             self.selenium.find_element_by_xpath(
                 "//div[@id='modal-item']/div/div/form/div[@class='modal-footer']/button[@type='submit']"
             ).click()
-            WebDriverWait(self.selenium, 10).until(
-                EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
-            )
+            self.wait_close_modal_refresh_table('column-table_previous')
             pandas_db.check_wf_df(Workflow.objects.get(pk=1))
 
         # CHECK THAT THE COLUMNS HAVE BEEN CREATED (starting in the sixth)
@@ -531,19 +519,12 @@ class WorkflowModify(test.OntaskLiveTestCase):
             'id_raw_categories'
         )
         raw_cat.send_keys(categories)
-        # Click in the rename button
+
+        # Click the rename button
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']/div/div/form/div/button[@type='submit']"
         ).click()
-        # MODAL WAITING
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'success'))
-        )
+        self.wait_close_modal_refresh_table('column-table_previous')
 
         # Fourth column must now have name another2
         self.assertEqual(self.selenium.find_element_by_xpath(
@@ -669,7 +650,7 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         self.selenium.find_element_by_id('id_key').send_keys('key1')
         self.selenium.find_element_by_id('id_value').send_keys('value1')
 
-        # Click in the create atribute button
+        # Click in the create attribute button
         self.selenium.find_element_by_xpath(
             "//div[@class='modal-footer']/button[2]"
         ).click()
@@ -702,7 +683,7 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         self.selenium.find_element_by_id('id_key').send_keys('key2')
         self.selenium.find_element_by_id('id_value').send_keys('value2')
 
-        # Click in the create atribute button
+        # Click in the create attribute button
         self.selenium.find_element_by_xpath(
             "//div[@class='modal-footer']/button[2]"
         ).click()
@@ -838,7 +819,7 @@ class WorkflowShare(test.OntaskLiveTestCase):
         self.selenium.find_element_by_id('id_user_email').send_keys(
             'instructor2@bogus.com')
 
-        # Click in the share  button
+        # Click in the share button
         self.selenium.find_element_by_xpath(
             "//div[@class='modal-footer']/button[2]"
         ).click()
