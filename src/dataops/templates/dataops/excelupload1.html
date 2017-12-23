@@ -7,11 +7,12 @@
   <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
 {% endblock %}
 
-{% block title %}{{ block.super }}Upload/Merge CSV{% endblock %}
+{% block title %}{{ block.super }}Upload/Merge Excel{% endblock %}
 
 {% block container %}
 <div align="center" class="container">
-  <h1 class="page-header">Step 1: Select CSV File</h1>
+  <h1 class="page-header">Step 1: Select Excel File</h1>
+
   <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form|crispy }}
