@@ -14,7 +14,7 @@ field_prefix = '___ontask___upload_'
 
 
 # Step 1 of the CSV upload
-class UploadFileForm(forms.Form):
+class UploadCSVFileForm(forms.Form):
     """
     Form to read a csv file. It also allows to specify the number of lines to
     skip at the top and the bottom of the file. This functionality is offered
@@ -49,7 +49,7 @@ class UploadFileForm(forms.Form):
         :return: The cleaned data
         """
 
-        data = super(UploadFileForm, self).clean(*args, **kwargs)
+        data = super(UploadCSVFileForm, self).clean(*args, **kwargs)
 
         if data['skip_lines_at_top'] < 0:
             self.add_error(
@@ -65,6 +65,25 @@ class UploadFileForm(forms.Form):
 
         return data
 
+
+# Step 1 of the CSV upload
+class UploadExcelFileForm(forms.Form):
+    """
+    Form to read an Excel file.
+    """
+    file = RestrictedFileField(
+        max_upload_size=str(ontask.ontask_prefs.MAX_UPLOAD_SIZE),
+        content_types=[
+            'application/vnd.ms-excel',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ],
+        allow_empty_file=False,
+        label="",
+        help_text='File in Excel format (.xls or .xlsx)')
+
+    sheet = forms.CharField(max_length=512,
+                            required=True,
+                            initial='Sheet 1')
 
 # Form to select columns to upload and rename
 class SelectColumnUploadForm(forms.Form):

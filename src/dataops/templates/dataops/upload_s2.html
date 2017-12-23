@@ -15,7 +15,7 @@
 
   <form method="POST" action="">
     {% csrf_token %}
-    {% include 'dataops/includes/csvupload_buttons.html' %}
+    {% include 'dataops/includes/upload_buttons.html' %}
     {% if form.errors %}
       {% for field in form %}
         {% for error in field.errors %}
@@ -56,7 +56,7 @@
         {% endfor %}
       </tbody>
     </table>
-    {% include 'dataops/includes/csvupload_buttons.html' %}
+    {% include 'dataops/includes/upload_buttons.html' %}
   </form>
 </div>
 {% endblock container %}

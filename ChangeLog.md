@@ -1,3 +1,12 @@
+## 2.2.1
+
+### Added
+
+- Read CSV functionality now allows to specify number of lines at the top and
+  bottom of the file to skip.
+  
+- Read Excel functionality in DataOps
+  
 ## 2.2.0 (2017-12-23)
 
 ### Changed

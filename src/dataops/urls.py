@@ -5,7 +5,7 @@ from django.conf.urls import url
 
 import dataops.upload
 from . import views
-from . import csvupload
+from . import csvupload, excelupload
 
 app_name = 'dataops'
 
@@ -22,6 +22,9 @@ urlpatterns = [
 
     # CSV Update/Merge
     url(r'^csvupload1/$', csvupload.csvupload1, name='csvupload1'),
+
+    # Excel Update/Merge
+    url(r'^excelupload1/$', excelupload.excelupload1, name='excelupload1'),
 
     # Update/Merge
     url(r'^upload_s2/$', dataops.upload.upload_s2, name='upload_s2'),
