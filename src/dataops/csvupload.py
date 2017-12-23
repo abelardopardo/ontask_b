@@ -61,15 +61,21 @@ def csvupload1(request):
 
     # If not valid, this is probably because the file submitted was too big
     if not form.is_valid():
-        return render(request, 'error.html',
-                      {'messages': form['file'].errors})
+        return render(request, 'dataops/csvupload1.html',
+                      {'form': form,
+                       'wid': workflow.id,
+                       'prev_step': reverse('dataops:list')})
 
     # Process CSV file using pandas read_csv
     try:
-        data_frame = pd.read_csv(request.FILES['file'],
-                                 index_col=False,
-                                 infer_datetime_format=True,
-                                 quotechar='"')
+        data_frame = pd.read_csv(
+            request.FILES['file'],
+            index_col=False,
+            infer_datetime_format=True,
+            quotechar='"',
+            skiprows=form.cleaned_data['skip_lines_at_top'],
+            skipfooter=form.cleaned_data['skip_lines_at_bottom'],
+        )
 
         # Strip white space from all string columns and try to convert to
         # datetime just in case

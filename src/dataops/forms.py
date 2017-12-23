@@ -15,6 +15,11 @@ field_prefix = '___ontask___upload_'
 
 # Step 1 of the CSV upload
 class UploadFileForm(forms.Form):
+    """
+    Form to read a csv file. It also allows to specify the number of lines to
+    skip at the top and the bottom of the file. This functionality is offered
+    by the underlyng function read_csv in Pandas
+    """
     file = RestrictedFileField(
         max_upload_size=str(ontask.ontask_prefs.MAX_UPLOAD_SIZE),
         content_types=json.loads(str(ontask.ontask_prefs.CONTENT_TYPES)),
@@ -22,6 +27,43 @@ class UploadFileForm(forms.Form):
         label="",
         help_text='File in CSV format (typically produced by a statistics'
                   ' package or Excel)')
+
+    skip_lines_at_top = forms.IntegerField(
+        label='Lines to skip at the top',
+        help_text="Number of lines to skip at the top when reading the file",
+        initial=0,
+        required=False
+    )
+
+    skip_lines_at_bottom = forms.IntegerField(
+        label='Lines to skip at the bottom',
+        help_text="Number of lines to skip at the bottom when reading the "
+                  "file",
+        initial=0,
+        required=False
+    )
+
+    def clean(self, *args, **kwargs):
+        """
+        Function to check that the integers are positive.
+        :return: The cleaned data
+        """
+
+        data = super(UploadFileForm, self).clean(*args, **kwargs)
+
+        if data['skip_lines_at_top'] < 0:
+            self.add_error(
+                'skip_lines_at_top',
+                'This number has to be zero or positive'
+            )
+
+        if data['skip_lines_at_bottom'] < 0:
+            self.add_error(
+                'skip_lines_at_bottom',
+                'This number has to be zero or positive'
+            )
+
+        return data
 
 
 # Form to select columns to upload and rename
