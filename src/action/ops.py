@@ -7,11 +7,12 @@ from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.core import signing
-from django.core.mail import send_mass_mail, send_mail
+from django.core.mail import send_mass_mail, EmailMultiAlternatives
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.template import TemplateSyntaxError
 from django.urls import reverse
+from django.utils.html import strip_tags
 
 import logs.ops
 from action.evaluate import evaluate_row, evaluate_action, render_template
@@ -387,13 +388,15 @@ def send_messages(user,
         'num_messages': len(msgs),
         'email_sent_datetime': now,
         'filter_present': action.n_selected_rows != -1,
-        'num_rows': action.workflow.nrows}
+        'num_rows': action.workflow.nrows,
+        'num_selected': action.n_selected_rows}
 
     # Create template and render with context
     try:
-        msg = render_template(
+        html_content = render_template(
             str(getattr(settings, 'NOTIFICATION_TEMPLATE')),
             context)
+        text_content = strip_tags(html_content)
     except TemplateSyntaxError as e:
         return 'Syntax error detected in OnTask notification template.'
 
@@ -414,10 +417,13 @@ def send_messages(user,
 
     # Send email out
     try:
-        send_mail(str(getattr(settings, 'NOTIFICATION_SUBJECT')),
-                  msg,
-                  str(getattr(settings, 'NOTIFICATION_SENDER')),
-                  [user.email])
+        msg = EmailMultiAlternatives(
+            str(getattr(settings, 'NOTIFICATION_SUBJECT')),
+            msg,
+            str(getattr(settings, 'NOTIFICATION_SENDER')),
+            [user.email])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
     except Exception as e:
         return 'An error occurred when sending your notification: ' + e.message
 
