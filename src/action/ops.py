@@ -391,7 +391,9 @@ def send_messages(user,
 
     # Create template and render with context
     try:
-        msg = render_template(settings.NOTIFICATION_TEMPLATE, context)
+        msg = render_template(
+            str(getattr(settings, 'NOTIFICATION_TEMPLATE')),
+            context)
     except TemplateSyntaxError as e:
         return 'Syntax error detected in OnTask notification template.'
 
