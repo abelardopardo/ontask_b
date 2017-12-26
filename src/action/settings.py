@@ -60,7 +60,7 @@ if 'siteprefs' in settings.INSTALLED_APPS:
                   field=models.CharField(max_length=256, blank=True)),
 
              pref(EMAIL_PORT,
-                  verbose_name='Host name of the SMTP server',
+                  verbose_name='Port of the SMTP server',
                   static=False,
                   field=models.CharField(max_length=256, blank=True)),
 
