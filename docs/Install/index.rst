@@ -354,7 +354,7 @@ Create a *crontab* file for the user running the server in your production
 environment with the following content::
 
   MAILTO="[ADMIN EMAIL ADDRESS]"
-  PATH=/usr/local/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+  PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
   SHELL=/bin/bash
   ONTASK_PROJECT=[PATH TO ONTASK PROJECT ROOT]
 
