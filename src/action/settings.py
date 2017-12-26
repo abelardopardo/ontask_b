@@ -45,7 +45,7 @@ NOTIFICATION_SENDER = getattr(settings,
 PIXEL = getattr(settings, 'EMAIL_ACTION_PIXEL', None)
 
 if 'siteprefs' in settings.INSTALLED_APPS:
-    # Respect those users who doesn't have siteprefs installed.
+    # Respect those users who don't have siteprefs installed.
     from siteprefs.toolbox import patch_locals, register_prefs, pref, \
         pref_group
 
