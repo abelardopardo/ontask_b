@@ -4,18 +4,32 @@
 OnTask Tutorial
 ***************
 
-Before you start the tutorial make sure you have an account in an OnTask instance and you have instructor privileges (create workflows, actions, etc). Also, download the file :download:`learner_information.csv <../Dataset/learner_information.csv>` that contains a synthetic data set with information about learners, participation in a discussion forum, engagement with activities, and some additional features.
+Before you start the tutorial make sure you have an account in an OnTask
+instance and you have instructor privileges (create workflows, actions, etc).
+Also, download the file :download:`learner_information.csv
+<../Dataset/learner_information.csv>` that contains a synthetic data set
+with information about learners, participation in a discussion forum,
+engagement with activities, and some additional features.
 
 Remember the three central concepts in OnTask:
 
 Workflow
-  A container with the data (table), a set of procedures to manipulate columns, data upload and a set of actions. This container is typically associated with a course, but it could also model an entire institutional degree.
+  A container with the data (table), a set of procedures to manipulate
+  columns, data upload and a set of actions. This container is typically
+  associated with a course, but it could also model an entire institutional
+  degree.
 
 Table
-  A two-dimensional structure in which each row represents a learner, and each column a learner attribute such as the score in an assessment, class attendance, number of interventions in the discussion forum, engagement with videos, etc.
+  A two-dimensional structure in which each row represents a learner, and
+  each column a learner attribute such as the score in an assessment, class
+  attendance, number of interventions in the discussion forum, engagement with
+  videos, etc.
 
 Actions
-  An action is a HTML resource of which certain parts that are included or excluded based on a set of **conditions** created with the learner attributes (for example, number of interventions in the forum is larger than five, and number of times a video was watched is larger than 2).
+  An action is a HTML resource of which certain parts that are included
+  or excluded based on a set of **conditions** created with the learner
+  attributes   (for example, number of interventions in the forum is larger than
+  five, and number of times a video was watched is larger than 2).
 
 The following figure represents the high level view of the tool.
 
@@ -25,13 +39,18 @@ The following figure represents the high level view of the tool.
 The process to create a personalised text is divided into four stages:
 
 Upload the data
-  We will use a :download:`CSV file with the learners data <../Dataset/learner_information.csv>` about several activities in a course. In this first stage you will upload the data into a table and identify certain special columns (those that provide a unique reference to a learner such as the learner ID)
+  We will use a :download:`CSV file with the learners data
+  <../Dataset/learner_information.csv>` about several activities in a course. In
+  this first stage you will upload the data into a table and identify certain
+  special columns (those that provide a unique reference to a learner such as
+  the learner ID)
 
 Review the data table
   In this stage you will explore the values in the table.
 
 Create an action
-  In this stage you will create an action with various conditions that will be applied to the text of a personalised email message.
+  In this stage you will create an action with various conditions that will be
+  applied to the text of a personalised email message.
 
 Review the messages
   And finally you will review the appearance of these messages for different

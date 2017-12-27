@@ -343,7 +343,7 @@ Email Configuration
 OnTask relies on the functionality included in Django to send emails from the
 application. The configuration parameters are defined in the file ``base.py``
 and are: ``EMAIL_HOST``, ``EMAIL_PORT``, ``EMAIL_HOST_USER``,
-``EMAIL_HOST_PASSWORD``, ``EMAIL_USE_TLS`` and ``EMAIL_USE_SSL`.
+``EMAIL_HOST_PASSWORD``, ``EMAIL_USE_TLS`` and ``EMAIL_USE_SSL``.
 
 Set theses variables in the configuration file to the appropriate values
 before starting the application.
