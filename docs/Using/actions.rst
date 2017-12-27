@@ -1,7 +1,7 @@
 .. _action:
 
 The Actions
------------
+===========
 
     "In order to carry a positive action we must develop here a positive
     vision"
@@ -21,7 +21,7 @@ Similarly to the case of the workflow, each action is identified by a name
 for each action (right most column in the table shown in the previous figure).
 
 Actions In
-**********
+----------
 
 These actions allow you either instructors or students to introduce
 information in the table stored in a workflow. When providing information, you
@@ -82,7 +82,10 @@ in a way that is centralized and available for further processing. The power
 of these actions is complemented when combined with *Actions Out*, in which
 personalized content is made available to the learners.
 
-Actions Out *********** These actions allow to create a resource (in a format
+Actions Out
+-----------
+
+These actions allow to create a resource (in a format
 close to HTML) and mark certain elements with conditions that will control its
 appearance in the final view. Think of these *actions out* as a resource
 (item, message, tip, comment) you would give learners during a experience. You

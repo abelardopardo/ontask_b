@@ -11,12 +11,14 @@ from django.urls import reverse
 from dataops import ops, pandas_db
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
-from .forms import UploadCSVFileForm
+from .forms import UploadSQLForm
 
 
 @user_passes_test(is_instructor)
-def csvupload1(request):
+def sqlupload1(request):
     """
+    Step 1 of the whole process to read data into the platform.
+
     The four step process will populate the following dictionary with name
     upload_data (divided by steps in which they are set
 
@@ -40,45 +42,47 @@ def csvupload1(request):
         return redirect('workflow:index')
 
     # Bind the form with the received data
-    form = UploadCSVFileForm(request.POST or None, request.FILES or None)
+    form = UploadSQLForm(request.POST or None)
 
     # Process the initial loading of the form
     if request.method != 'POST':
         return render(request, 'dataops/upload1.html',
                       {'form': form,
                        'wid': workflow.id,
-                       'dtype': 'CSV',
-                       'dtype_select': 'CSV file',
+                       'dtype': 'SQL',
+                       'dtype_select': 'SQL connection parameters',
                        'prev_step': reverse('dataops:list')})
-
-    # Process the reception of the file
-    if not form.is_multipart():
-        msg = "CSV upload form is not multiform"
-        context = {'message': msg}
-
-        meta = request.META.get('HTTP_REFERER', None)
-        if meta:
-            context['meta'] = meta
-        return render(request, 'critical_error.html', context=context)
 
     # If not valid, this is probably because the file submitted was too big
     if not form.is_valid():
         return render(request, 'dataops/upload1.html',
                       {'form': form,
                        'wid': workflow.id,
-                       'dtype': 'CSV',
-                       'dtype_select': 'CSV file',
+                       'dtype': 'SQL',
+                       'dtype_select': 'SQL connection parameters',
                        'prev_step': reverse('dataops:list')})
 
-    # Process CSV file using pandas read_csv
+    # Create a connection to the DB and process SQL file using pandas read_sql
+    engine = None
     try:
-        data_frame = pd.read_csv(
-            request.FILES['file'],
-            index_col=False,
-            infer_datetime_format=True,
-            quotechar='"',
-            skiprows=form.cleaned_data['skip_lines_at_top'],
-            skipfooter=form.cleaned_data['skip_lines_at_bottom'],
+        driver = form.cleaned_data.get('driver', '')
+        if driver:
+            driver = '+' + driver
+
+        # Create the engine
+        engine = pandas_db.create_db_engine(
+            form.cleaned_data['dialect'],
+            driver,
+            form.cleaned_data['dbusername'],
+            form.cleaned_data['dbpassword'],
+            form.cleaned_data['host'],
+            form.cleaned_data['dbname']
+        )
+
+        # Read the data_frame
+        data_frame = pd.read_sql(
+            form.cleaned_data['query'],
+            engine
         )
 
         # Strip white space from all string columns and try to convert to
@@ -97,13 +101,16 @@ def csvupload1(request):
                 except ValueError:
                     pass
     except Exception as e:
-        form.add_error('file',
-                       'File could not be processed ({0})'.format(e.message))
+        form.add_error(None,
+                       'Operation not finished: {0}'.format(e.message))
+        # Get rid of the DB connection
+        if engine:
+            engine.dispose()
         return render(request,
                       'dataops/upload1.html',
                       {'form': form,
-                       'dtype': 'CSV',
-                       'dtype_select': 'CSV file',
+                       'dtype': 'SQL',
+                       'dtype_select': 'SQL connection parameters',
                        'prev_step': reverse('dataops:list')})
 
     # If the frame has repeated column names, it will not be processed.
@@ -113,10 +120,13 @@ def csvupload1(request):
             'file',
             'The file has duplicated column names (' +
             ','.join(dup) + ').')
+        # Get rid of the DB connection
+        if engine:
+            engine.dispose()
         return render(request, 'dataops/upload1.html',
                       {'form': form,
-                       'dtype': 'CSV',
-                       'dtype_select': 'CSV file',
+                       'dtype': 'SQL',
+                       'dtype_select': 'SQL connection parameters',
                        'prev_step': reverse('dataops:list')})
 
     # If the data frame does not have any unique key, it is not useful (no
@@ -127,10 +137,13 @@ def csvupload1(request):
             'file',
             'The data has no column with unique values per row. '
             'At least one column must have unique values.')
+        # Get rid of the DB connection
+        if engine:
+            engine.dispose()
         return render(request, 'dataops/upload1.html',
                       {'form': form,
-                       'dtype': 'CSV',
-                       'dtype_select': 'CSV file',
+                       'dtype': 'SQL',
+                       'dtype_select': 'SQL connection parameters',
                        'prev_step': reverse('dataops:list')})
 
     # Store the data frame in the DB.
@@ -138,14 +151,17 @@ def csvupload1(request):
         # Get frame info with three lists: names, types and is_key
         frame_info = ops.store_upload_dataframe_in_db(data_frame, workflow.id)
     except Exception as e:
+        # Get rid of the DB connection
+        if engine:
+            engine.dispose()
         form.add_error(
             'file',
-            'Sorry. This file cannot be processed.'
+            'The data cannot be stored in the database ('+ e.message + ')'
         )
         return render(request, 'dataops/upload1.html',
                       {'form': form,
-                       'dtype': 'CSV',
-                       'dtype_select': 'CSV file',
+                       'dtype': 'SQL',
+                       'dtype_select': 'SQL connection parameters',
                        'prev_step': reverse('dataops:list')})
 
     # Dictionary to populate gradually throughout the sequence of steps. It
@@ -154,7 +170,7 @@ def csvupload1(request):
         'initial_column_names': frame_info[0],
         'column_types': frame_info[1],
         'src_is_key_column': frame_info[2],
-        'step_1': 'dataops:csvupload1'
+        'step_1': 'dataops:sqlupload1'
     }
 
     return redirect('dataops:upload_s2')

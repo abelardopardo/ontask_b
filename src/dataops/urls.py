@@ -5,7 +5,7 @@ from django.conf.urls import url
 
 import dataops.upload
 from . import views
-from . import csvupload
+from . import csvupload, excelupload, sqlupload
 from . import plugin_manager
 
 app_name = 'dataops'
@@ -23,10 +23,16 @@ urlpatterns = [
 
     url(r'^rowcreate/$', views.row_create, name="rowcreate"),
 
-    # CSV Update/Merge
+    # CSV Upload/Merge
     url(r'^csvupload1/$', csvupload.csvupload1, name='csvupload1'),
 
-    # Update/Merge
+    # Excel Upload/Merge
+    url(r'^excelupload1/$', excelupload.excelupload1, name='excelupload1'),
+
+    # Excel Upload/Merge
+    url(r'^sqlupload1/$', sqlupload.sqlupload1, name='sqlupload1'),
+
+    # Upload/Merge
     url(r'^upload_s2/$', dataops.upload.upload_s2, name='upload_s2'),
 
     url(r'^upload_s3/$', dataops.upload.upload_s3, name='upload_s3'),

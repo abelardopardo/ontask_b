@@ -16,7 +16,7 @@
 
   <form method="POST" action="">
     {% csrf_token %}
-    {% include 'dataops/includes/csvupload_buttons.html' %}
+    {% include 'dataops/includes/upload_buttons.html' %}
   </form>
 
   <div align="center" class="container" style="display:inline-block;">
@@ -47,7 +47,7 @@
   </div>
   <form method="POST" action="">
     {% csrf_token %}
-    {% include 'dataops/includes/csvupload_buttons.html' %}
+    {% include 'dataops/includes/upload_buttons.html' %}
   </form>
 </div>
 {% endblock container %}

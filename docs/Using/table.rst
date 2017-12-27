@@ -1,7 +1,7 @@
 .. _table:
 
 The Table
----------
+=========
 
    "You're here because you know something. What you know you can't explain,
    but you feel it"

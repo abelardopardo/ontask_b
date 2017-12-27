@@ -332,6 +332,130 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         # Close the db_engine
         pandas_db.destroy_db_engine(pandas_db.engine)
 
+    def test_02_workflow_create_upload_with_prelude(self):
+        """
+        Create a workflow, upload data and merge
+        :return:
+        """
+
+        # Login
+        self.login('instructor1@bogus.com')
+
+        self.open(reverse('workflow:index'))
+
+        # GO TO THE WORKFLOW PAGE
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('OnTask :: Workflows'))
+        self.assertIn('New Workflow', self.selenium.page_source)
+        self.assertIn('Import', self.selenium.page_source)
+
+        # Create the workflow if not present
+        if test.wflow_desc not in self.selenium.page_source:
+            self.selenium.find_element_by_class_name(
+                'js-create-workflow').click()
+            WebDriverWait(self.selenium, 10).until(
+                EC.presence_of_element_located((By.ID, 'id_name')))
+
+            self.selenium.find_element_by_id('id_name').send_keys(
+                test.wflow_name
+            )
+            desc = self.selenium.find_element_by_id('id_description_text')
+            desc.send_keys(test.wflow_desc)
+            desc.send_keys(Keys.RETURN)
+            # Wait for workflows page
+            WebDriverWait(self.selenium, 10).until(
+                EC.element_to_be_clickable(
+                    (By.LINK_TEXT, test.wflow_name)
+                )
+            )
+
+        # Verify that the workflow is now part of the catalog
+        self.assertIn(test.wflow_name, self.selenium.page_source)
+        self.assertIn(test.wflow_desc, self.selenium.page_source)
+
+        # Open the workflow
+        wf_link = self.selenium.find_element_by_link_text(test.wflow_name)
+        wf_link.click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'wflow-name')))
+
+        if test.wflow_empty not in self.selenium.page_source:
+            # The workflow has data. Proceed to flush
+            flush = self.selenium.find_element_by_class_name(
+                'js-workflow-flush'
+            )
+            flush.click()
+            WebDriverWait(self.selenium, 10).until(
+                EC.text_to_be_present_in_element(
+                    (By.CLASS_NAME, 'lead'), test.wflow_name))
+            go_flush = self.selenium.find_element_by_xpath(
+                "//button[@type='submit']"
+            )
+            # CONFIRM
+            go_flush.click()
+            # Wait for the flush to occur
+            WebDriverWait(self.selenium, 10).until(
+                EC.text_to_be_present_in_element(
+                    (By.ID, 'wflow-empty'), test.wflow_empty))
+
+        # Goto Dataops list
+        self.open(reverse('dataops:list'))
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('OnTask :: Dataops')
+        )
+        # Click in the upload/Merge link
+        upload = self.selenium.find_element_by_xpath(
+            "//tbody/tr/td/a[1]"
+        )
+
+        # Goto Upload/Merge CSV
+        upload.click()
+
+        # Set the file name
+        self.selenium.find_element_by_id('id_file').send_keys(
+            os.path.join(settings.PROJECT_PATH,
+                         'workflow',
+                         'fixtures',
+                         'csv_with_prelude_postlude.csv')
+        )
+        # Set the prelude to 6 lines and postlude to 3
+        self.selenium.find_element_by_id('id_skip_lines_at_top').clear()
+        self.selenium.find_element_by_id('id_skip_lines_at_top').send_keys('6')
+        self.selenium.find_element_by_id('id_skip_lines_at_bottom').clear()
+        self.selenium.find_element_by_id(
+            'id_skip_lines_at_bottom'
+        ).send_keys('3')
+
+        # Click on the NEXT button
+        self.selenium.find_element_by_xpath(
+            "//button[@name='Submit']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+                                             'Step 2: Select Columns')
+        )
+
+        # Select all the columns
+        self.selenium.find_element_by_id('checkAll').click()
+
+        # Click on the FINISH button
+        self.selenium.find_element_by_xpath(
+            "//button[@name='Submit']"
+        ).click()
+        # Wait for the upload/merge
+        WebDriverWait(self.selenium, 20).until(
+            EC.title_is('OnTask :: Dataops')
+        )
+
+        # Check that the number of rows is the correct one in the only
+        # workflow available
+        wf = Workflow.objects.all()[0]
+        self.assertEqual(wf.nrows, 3)
+        self.assertEqual(wf.ncols, 6)
+
+        # End of session
+        self.logout()
+
 
 class WorkflowModify(test.OntaskLiveTestCase):
     fixtures = ['simple_workflow']

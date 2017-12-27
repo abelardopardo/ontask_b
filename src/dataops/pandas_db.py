@@ -39,19 +39,29 @@ pandas_datatype_names = {
 engine = None
 
 
-def create_db_engine():
+def create_db_engine(dialect, driver, username, password, host, dbname):
     """
     Function that creates the engine object to connect to the database. The
     object is required by the pandas functions to_sql and from_sql
 
+    :param dialect: Dialect for the engine (oracle, mysql, postgresql, etc)
+    :param driver: DBAPI driver (psycopg2, ...)
+    :param username: Username to connect with the database
+    :param password: Password to connect with the database
+    :param host: Host to connect with the database
+    :param dbname: database name
     :return: the engine
     """
+
     # DB engine
     database_url = \
-        'postgresql://{user}:{password}@localhost:5432/{database_name}'.format(
-            user=settings.DATABASES['default']['USER'],
-            password=settings.DATABASES['default']['PASSWORD'],
-            database_name=settings.DATABASES['default']['NAME'],
+        '{dialect}{driver}://{user}:{password}@{host}/{database_name}'.format(
+            dialect=dialect,
+            driver=driver,
+            user=username,
+            password=password,
+            host=host,
+            database_name=dbname,
         )
     engine = create_engine(database_url, echo=False, paramstyle='format')
 
@@ -106,9 +116,11 @@ def delete_all_tables():
 
 def is_table_in_db(table_name):
     cursor = connection.cursor()
-    table_list = \
-        connection.introspection.get_table_list(cursor)
-    return table_name in [x.name for x in table_list]
+    return next(
+        (True for x in connection.introspection.get_table_list(cursor)
+         if x.name == table_name),
+        False
+    )
 
 
 def create_table_name(pk):

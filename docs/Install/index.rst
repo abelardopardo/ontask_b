@@ -1,8 +1,8 @@
 .. _install:
 
-====================
+********************
 Installation process
-====================
+********************
 
 OnTask is a Web application that manages data about learners to provide them
 with personalised support. For this reason, it is recommended an installation
@@ -14,7 +14,7 @@ the pages. The application requires exchanging with your browser sensitive
 information about your session, so the information should be encrypted.
 
 Requirements
-------------
+============
 
 OnTask has been developed as a `Django <https://www.djangoproject.com/>`_
 application. Django is a high-level, python-based web framework that supports
@@ -34,13 +34,13 @@ Python through its package index application `pip <https://pypi.python
 
 
 Installing the required tools
------------------------------
+=============================
 
 The following installation steps assume that you are deploying OnTask in a
 production web server capable of serving pages using the HTTPS protocol.
 
 Install and Configure Redis
-***************************
+---------------------------
 
 Django requires Redis to execute as a daemon in the same machine to cache
 information about the sessions. You do not need to make any adjustments in
@@ -58,7 +58,7 @@ settings, there are not additional changes required in OnTask (the code is
 already using this application internally).
 
 Install and Configure PostgreSQL
-********************************
+--------------------------------
 
 1. Download and install `postgresql <https://www.postgresql.org/>`_.
 
@@ -81,7 +81,7 @@ Install and Configure PostgreSQL
    options.
 
 Install Python
-**************
+--------------
 
 In the following sections we assume that you can open a command line
 interpreter and you can execute the python interpreter.
@@ -96,7 +96,7 @@ interpreter and you can execute the python interpreter.
    numerous libraries that are required to execute OnTask.
 
 Download, install and configure OnTask
-**************************************
+--------------------------------------
 
 1. Download or clone_actions a copy of `OnTask <https://github.com/abelardopardo/ontask_b>`_.
 
@@ -244,7 +244,7 @@ no space between variable names and the equal sign)::
    stop the application and configure the web server accordingly.
 
 The Administration Pages
-------------------------
+========================
 
 As many applications developed using Django, OnTask takes full advantage of
 the administration pages offered by the framework. The account created with
@@ -267,7 +267,7 @@ Once the instance is running, visit these pages and configure the platform to
 your needs.
 
 Production Deployment
----------------------
+=====================
 
 Once OnTask is executing normally, you may configure a web server (nginx,
 apache or similar) to make it available to a community of users. The
@@ -277,7 +277,7 @@ they are available for users to consult.
 .. _authentication:
 
 Authentication
---------------
+==============
 
 OnTask comes with three default authentication mechanisms (and are used in
 the following order): LTI, ``REMOTE_USER``
@@ -335,10 +335,23 @@ There are other possibilities to handle user authentication (LDAP, AD, etc.)
 but they require ad-hoc customizations in the tool and are not provided as
 out-of-the-box solutions.
 
+.. _email_config:
+
+Email Configuration
+===================
+
+OnTask relies on the functionality included in Django to send emails from the
+application. The configuration parameters are defined in the file ``base.py``
+and are: ``EMAIL_HOST``, ``EMAIL_PORT``, ``EMAIL_HOST_USER``,
+``EMAIL_HOST_PASSWORD``, ``EMAIL_USE_TLS`` and ``EMAIL_USE_SSL`.
+
+Set theses variables in the configuration file to the appropriate values
+before starting the application.
+
 .. _scheduling_tasks:
 
 Scheduling tasks
-----------------
+================
 
 OnTask allows to program certain tasks to execute at some point in the
 future. This functionality is implemented using a combination of persistent
@@ -354,7 +367,7 @@ Create a *crontab* file for the user running the server in your production
 environment with the following content::
 
   MAILTO="[ADMIN EMAIL ADDRESS]"
-  PATH=/usr/local/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+  PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
   SHELL=/bin/bash
   ONTASK_PROJECT=[PATH TO ONTASK PROJECT ROOT]
 

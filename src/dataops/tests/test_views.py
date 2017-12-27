@@ -13,6 +13,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 import test
 from dataops import pandas_db
+from workflow.models import Workflow
 
 
 class DataopsSymbols(test.OntaskLiveTestCase):
@@ -474,6 +475,96 @@ class DataopsSymbols(test.OntaskLiveTestCase):
                       self.selenium.page_source)
         self.assertIn('<td class=" dt-center">16</td>',
                       self.selenium.page_source)
+
+        # End of session
+        self.logout()
+
+
+class DataopsExcelUpload(test.OntaskLiveTestCase):
+    fixtures = ['empty_wflow.json']
+
+    def test_01_excelupload(self):
+        # Login
+        self.login('instructor1@bogus.com')
+
+        self.open(reverse('workflow:index'))
+
+        # GO TO THE WORKFLOW PAGE
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('OnTask :: Workflows'))
+        self.assertIn('New Workflow', self.selenium.page_source)
+        self.assertIn('Import', self.selenium.page_source)
+
+        # Open the workflow
+        wf_link = self.selenium.find_element_by_link_text('wflow1')
+        wf_link.click()
+
+        self.selenium.find_element_by_link_text("Dataops").click()
+        self.selenium.find_element_by_link_text("Excel Upload/Merge").click()
+        self.selenium.find_element_by_id("id_file").send_keys(
+            os.path.join(settings.PROJECT_PATH,
+                         'dataops',
+                         'fixtures',
+                         'excel_upload.xlsx')
+        )
+        self.selenium.find_element_by_id("id_sheet").click()
+        self.selenium.find_element_by_id("id_sheet").clear()
+        self.selenium.find_element_by_id("id_sheet").send_keys("results")
+        self.selenium.find_element_by_name("Submit").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, 'checkAll'))
+        )
+        self.selenium.find_element_by_id("checkAll").click()
+        self.selenium.find_element_by_name("Submit").click()
+
+        # The number of rows must be 29
+        wflow = Workflow.objects.all()[0]
+        self.assertEqual(wflow.nrows, 29)
+        self.assertEqual(wflow.ncols, 14)
+
+        # End of session
+        self.logout()
+
+    def test_02_excelupload(self):
+        # Login
+        self.login('instructor1@bogus.com')
+
+        self.open(reverse('workflow:index'))
+
+        # GO TO THE WORKFLOW PAGE
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('OnTask :: Workflows'))
+        self.assertIn('New Workflow', self.selenium.page_source)
+        self.assertIn('Import', self.selenium.page_source)
+
+        # Open the workflow
+        wf_link = self.selenium.find_element_by_link_text('wflow1')
+        wf_link.click()
+
+        self.selenium.find_element_by_link_text("Dataops").click()
+        self.selenium.find_element_by_link_text("Excel Upload/Merge").click()
+        self.selenium.find_element_by_id("id_file").send_keys(
+            os.path.join(settings.PROJECT_PATH,
+                         'dataops',
+                         'fixtures',
+                         'excel_upload.xlsx')
+        )
+        self.selenium.find_element_by_id("id_sheet").click()
+        self.selenium.find_element_by_id("id_sheet").clear()
+        self.selenium.find_element_by_id("id_sheet").send_keys("second sheet")
+        self.selenium.find_element_by_name("Submit").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, 'checkAll'))
+        )
+        self.selenium.find_element_by_id("checkAll").click()
+        self.selenium.find_element_by_name("Submit").click()
+
+        # The number of rows must be 19
+        wflow = Workflow.objects.all()[0]
+        self.assertEqual(wflow.nrows, 19)
+        self.assertEqual(wflow.ncols, 14)
 
         # End of session
         self.logout()

@@ -74,8 +74,14 @@ def dataops(request):
     if not workflow:
         return redirect('workflow:index')
 
+    # Make sure there is no upload table in the db for this workflow
+    if ops.workflow_has_upload_table(workflow):
+        pandas_db.delete_upload_table(workflow.id)
+
     # Traverse the plugin folder and refresh the db content.
     refresh_plugin_data(request, workflow)
+        pandas_db.delete_upload_table(workflow.id)
+
 
     table = PluginRegistryTable(PluginRegistry.objects.all(), orderable=False)
     # RequestConfig(request, paginate={'per_page': 15}).configure(table)

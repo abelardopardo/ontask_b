@@ -11,12 +11,14 @@ from django.urls import reverse
 from dataops import ops, pandas_db
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
-from .forms import UploadCSVFileForm
+from .forms import UploadExcelFileForm
 
 
 @user_passes_test(is_instructor)
-def csvupload1(request):
+def excelupload1(request):
     """
+    Step 1 of the whole process to read data into the platform.
+
     The four step process will populate the following dictionary with name
     upload_data (divided by steps in which they are set
 
@@ -40,20 +42,20 @@ def csvupload1(request):
         return redirect('workflow:index')
 
     # Bind the form with the received data
-    form = UploadCSVFileForm(request.POST or None, request.FILES or None)
+    form = UploadExcelFileForm(request.POST or None, request.FILES or None)
 
     # Process the initial loading of the form
     if request.method != 'POST':
         return render(request, 'dataops/upload1.html',
                       {'form': form,
                        'wid': workflow.id,
-                       'dtype': 'CSV',
-                       'dtype_select': 'CSV file',
+                       'dtype': 'Excel',
+                       'dtype_select': 'Excel file',
                        'prev_step': reverse('dataops:list')})
 
     # Process the reception of the file
     if not form.is_multipart():
-        msg = "CSV upload form is not multiform"
+        msg = "Excel upload form is not multiform"
         context = {'message': msg}
 
         meta = request.META.get('HTTP_REFERER', None)
@@ -66,19 +68,18 @@ def csvupload1(request):
         return render(request, 'dataops/upload1.html',
                       {'form': form,
                        'wid': workflow.id,
-                       'dtype': 'CSV',
-                       'dtype_select': 'CSV file',
+                       'dtype': 'Excel',
+                       'dtype_select': 'Excel file',
                        'prev_step': reverse('dataops:list')})
 
-    # Process CSV file using pandas read_csv
+    # Process Excel file using pandas read_excel
     try:
-        data_frame = pd.read_csv(
+        data_frame = pd.read_excel(
             request.FILES['file'],
+            sheetname=form.cleaned_data['sheet'],
             index_col=False,
             infer_datetime_format=True,
             quotechar='"',
-            skiprows=form.cleaned_data['skip_lines_at_top'],
-            skipfooter=form.cleaned_data['skip_lines_at_bottom'],
         )
 
         # Strip white space from all string columns and try to convert to
@@ -102,8 +103,8 @@ def csvupload1(request):
         return render(request,
                       'dataops/upload1.html',
                       {'form': form,
-                       'dtype': 'CSV',
-                       'dtype_select': 'CSV file',
+                       'dtype': 'Excel',
+                       'dtype_select': 'Excel file',
                        'prev_step': reverse('dataops:list')})
 
     # If the frame has repeated column names, it will not be processed.
@@ -115,8 +116,8 @@ def csvupload1(request):
             ','.join(dup) + ').')
         return render(request, 'dataops/upload1.html',
                       {'form': form,
-                       'dtype': 'CSV',
-                       'dtype_select': 'CSV file',
+                       'dtype': 'Excel',
+                       'dtype_select': 'Excel file',
                        'prev_step': reverse('dataops:list')})
 
     # If the data frame does not have any unique key, it is not useful (no
@@ -129,8 +130,8 @@ def csvupload1(request):
             'At least one column must have unique values.')
         return render(request, 'dataops/upload1.html',
                       {'form': form,
-                       'dtype': 'CSV',
-                       'dtype_select': 'CSV file',
+                       'dtype': 'Excel',
+                       'dtype_select': 'Excel file',
                        'prev_step': reverse('dataops:list')})
 
     # Store the data frame in the DB.
@@ -144,8 +145,8 @@ def csvupload1(request):
         )
         return render(request, 'dataops/upload1.html',
                       {'form': form,
-                       'dtype': 'CSV',
-                       'dtype_select': 'CSV file',
+                       'dtype': 'Excel',
+                       'dtype_select': 'Excel file',
                        'prev_step': reverse('dataops:list')})
 
     # Dictionary to populate gradually throughout the sequence of steps. It
@@ -154,7 +155,7 @@ def csvupload1(request):
         'initial_column_names': frame_info[0],
         'column_types': frame_info[1],
         'src_is_key_column': frame_info[2],
-        'step_1': 'dataops:csvupload1'
+        'step_1': 'dataops:excelupload1'
     }
 
     return redirect('dataops:upload_s2')

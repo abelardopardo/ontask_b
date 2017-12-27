@@ -182,6 +182,12 @@ def workflow_id_has_table(workflow_id):
     return is_table_in_db(create_table_name(workflow_id))
 
 
+def workflow_has_upload_table(workflow_item):
+    return is_table_in_db(
+        create_upload_table_name(workflow_item.id)
+    )
+
+
 def get_queryset_by_workflow(workflow_item):
     return get_table_queryset(create_table_name(workflow_item.id))
 

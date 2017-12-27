@@ -6,17 +6,17 @@
 {% block scripts %}
   <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
 {% endblock %}
-
-{% block title %}{{ block.super }}Upload/Merge CSV{% endblock %}
-
+{% block title %}{{ block.super }}Upload/Merge {{ dtype }}{% endblock %}
 {% block container %}
 <div align="center" class="container">
-  <h1 class="page-header">Step 1: Select CSV File</h1>
+  <h1 class="page-header">Step 1: Select {{ dtype_select }}</h1>
 
   <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {% include 'dataops/includes/csvupload_buttons.html' %}
+    <div class="input-group input-group-lg">
     {{ form|crispy }}
+    {% include 'dataops/includes/upload_buttons.html' %}
+    </div>
   </form>
 </div>
 

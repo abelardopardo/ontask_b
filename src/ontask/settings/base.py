@@ -251,35 +251,36 @@ SUMMERNOTE_CONFIG = {
 DATAOPS_CONTENT_TYPES = '["text/csv", "application/json", "application/gzip", "application/x-gzip", "application/vnd.ms-excel"]'
 DATAOPS_MAX_UPLOAD_SIZE = 209715200  # 200 MB
 
-# Email configuration
-EMAIL_ACTION_EMAIL_HOST = ''
-EMAIL_ACTION_EMAIL_PORT = ''
-EMAIL_ACTION_EMAIL_HOST_USER = ''
-EMAIL_ACTION_EMAIL_HOST_PASSWORD = ''
-EMAIL_ACTION_EMAIL_USE_TLS = ''
-EMAIL_ACTION_EMAIL_USE_SSL = ''
+# Email sever configuration
+EMAIL_HOST = ''
+EMAIL_PORT = ''
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = ''
+EMAIL_USE_SSL = ''
+
+# Additional email related variables
 EMAIL_ACTION_NOTIFICATION_TEMPLATE = """
 <html>
 <head/>
 <body>
 <p>Dear {{ user.name }}</p>
 
-<p>This message is to inform you that on {{ email_sent_datetime }} a total of 
-{{ num_messages }} emails were sent after the user {{ user.email }} executed 
-the action with name  "{{ action.name }}".</p> 
+<p>This message is to inform you that on {{ email_sent_datetime }}  
+{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent 
+resulting from the execution of the action with name "{{ action.name }}".</p> 
 
 {% if filter_present %}
 <p>The action had a filter that reduced the number of messages from 
 {{ num_rows }} to {{ num_selected }}.</p> 
 {% else %}
-<p>All the data rows stored in the workflow were used.</p>
+<p>All the data rows stored in the workflow table were used.</p>
 {% endif %}
 
 Regards.
 The OnTask Support Team
-</body>
-</html>
-"""
+</body></html>"""
+
 EMAIL_ACTION_NOTIFICATION_SUBJECT = "OnTask: Action executed"
 EMAIL_ACTION_NOTIFICATION_SENDER = 'ontask@ontasklearning.org'
 EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII='
