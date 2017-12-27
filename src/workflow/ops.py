@@ -18,7 +18,7 @@ from dataops import formula_evaluation, pandas_db, ops
 from .models import Workflow, Column
 from .serializers import (WorkflowExportSerializer, WorkflowImportSerializer)
 from rest_framework import serializers
-
+import logs.ops
 
 def lock_workflow(request, workflow):
     """
@@ -226,6 +226,12 @@ def do_import_workflow(user, name, file_item):
         return 'Workflow data with incorrect structure.'
 
     # Success
+    # Log the event
+    logs.ops.put(user,
+                 'workflow_import',
+                 workflow,
+                 {'id': workflow.id,
+                  'name': workflow.name})
     return None
 
 
