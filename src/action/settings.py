@@ -20,8 +20,8 @@ NOTIFICATION_TEMPLATE = \
 <p>Dear {{ user.name }}</p>
 
 <p>This message is to inform you that on {{ email_sent_datetime }}  
-{{ num_messages }} email{% if num_messages > 1 }}s{% endif %} were sent 
-resulting from the execution of the action with name  "{{ action.name }}".</p> 
+{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent 
+resulting from the execution of the action with name "{{ action.name }}".</p> 
 
 {% if filter_present %}
 <p>The action had a filter that reduced the number of messages from 
@@ -32,7 +32,7 @@ resulting from the execution of the action with name  "{{ action.name }}".</p>
 
 Regards.
 The OnTask Support Team
-</body></hrml>""")
+</body></html>""")
 
 NOTIFICATION_SUBJECT = getattr(settings,
                                'EMAIL_ACTION_NOTIFICATION_SUBJECT',
