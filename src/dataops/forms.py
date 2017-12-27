@@ -85,6 +85,67 @@ class UploadExcelFileForm(forms.Form):
                             required=True,
                             initial='Sheet 1')
 
+
+# Step 1 of the CSV upload
+class UploadSQLForm(forms.Form):
+    """
+    Form to read data from SQL. We collect information to create a Database URI
+    to be used by SQLAlchemy:
+
+    dialect[+driver]://user:password@host/dbname[?key=value..]
+    """
+
+    dialect = forms.CharField(
+        label='Dialect',
+        max_length=512,
+        required=True,
+        initial='',
+        help_text='Database type (mysql, oracle, postgresql, etc.'
+    )
+
+    driver = forms.CharField(
+        label='Driver',
+        max_length=512,
+        required=False,
+        initial='',
+        help_text='Name of the driver implementing the DBAPI'
+    )
+
+    dbusername = forms.CharField(
+        max_length=512,
+        label="Database user name",
+        required=False,
+        initial='',
+        help_text='User name to connect'
+    )
+
+    dbpassword = forms.CharField(
+        label='Database password',
+        required=False,
+        widget=forms.PasswordInput
+    )
+
+    host = forms.CharField(
+        label='Host',
+        max_length=512,
+        required=True,
+        help_text='Host to connect (include port if needed)'
+    )
+
+    dbname = forms.CharField(
+        label='Database name',
+        max_length=512,
+        required=True,
+        help_text='Name of the database'
+    )
+
+    query = forms.CharField(
+        label='Query',
+        required=True,
+        widget=forms.Textarea,
+        help_text='SQL query or table name to read'
+    )
+
 # Form to select columns to upload and rename
 class SelectColumnUploadForm(forms.Form):
 

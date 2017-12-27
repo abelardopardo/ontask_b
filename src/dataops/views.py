@@ -19,6 +19,10 @@ def dataops(request):
     if not workflow:
         return redirect('workflow:index')
 
+    # Make sure there is no upload table in the db for this workflow
+    if ops.workflow_has_upload_table(workflow):
+        pandas_db.delete_upload_table(workflow.id)
+
     return render(request, 'dataops/data_ops.html', {})
 
 

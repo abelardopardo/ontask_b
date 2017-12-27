@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from dataops import ops
+from dataops import ops, pandas_db
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
 from .forms import UploadCSVFileForm
@@ -48,6 +48,7 @@ def csvupload1(request):
                       {'form': form,
                        'wid': workflow.id,
                        'dtype': 'CSV',
+                       'dtype_select': 'CSV file',
                        'prev_step': reverse('dataops:list')})
 
     # Process the reception of the file
@@ -66,6 +67,7 @@ def csvupload1(request):
                       {'form': form,
                        'wid': workflow.id,
                        'dtype': 'CSV',
+                       'dtype_select': 'CSV file',
                        'prev_step': reverse('dataops:list')})
 
     # Process CSV file using pandas read_csv
@@ -101,6 +103,7 @@ def csvupload1(request):
                       'dataops/upload1.html',
                       {'form': form,
                        'dtype': 'CSV',
+                       'dtype_select': 'CSV file',
                        'prev_step': reverse('dataops:list')})
 
     # If the frame has repeated column names, it will not be processed.
@@ -113,6 +116,7 @@ def csvupload1(request):
         return render(request, 'dataops/upload1.html',
                       {'form': form,
                        'dtype': 'CSV',
+                       'dtype_select': 'CSV file',
                        'prev_step': reverse('dataops:list')})
 
     # If the data frame does not have any unique key, it is not useful (no
@@ -126,6 +130,7 @@ def csvupload1(request):
         return render(request, 'dataops/upload1.html',
                       {'form': form,
                        'dtype': 'CSV',
+                       'dtype_select': 'CSV file',
                        'prev_step': reverse('dataops:list')})
 
     # Store the data frame in the DB.
@@ -140,6 +145,7 @@ def csvupload1(request):
         return render(request, 'dataops/upload1.html',
                       {'form': form,
                        'dtype': 'CSV',
+                       'dtype_select': 'CSV file',
                        'prev_step': reverse('dataops:list')})
 
     # Dictionary to populate gradually throughout the sequence of steps. It
