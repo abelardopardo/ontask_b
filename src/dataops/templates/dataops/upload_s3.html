@@ -3,24 +3,21 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-
 {% block scripts %}
   <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
 {% endblock %}
-
 {% block title %}{{ block.super }}Upload/Merge CSV{% endblock %}
-
 {% block container %}
-  <div align="center" class="container">
-    <h1 class="page-header">Step 3: Select Keys to Merge</h1>
+<div align="center" class="container">
+  <h1 class="page-header">Step 3: Select Keys to Merge</h1>
 
-    <div align="center" class="container" style="display:inline-block;">
-      <form method="POST" action="">
-        {% csrf_token %}
-        {% include 'dataops/includes/upload_buttons.html' %}
-        {{ form|crispy }}
-        {% include 'dataops/includes/upload_buttons.html' %}
-      </form>
+  <form method="POST" action="">
+    {% csrf_token %}
+    <div class="input-group input-group-lg">
+      {% include 'dataops/includes/upload_buttons.html' %}
+      {{ form|crispy }}
+      {% include 'dataops/includes/upload_buttons.html' %}
     </div>
-  </div>
+  </form>
+</div>
 {% endblock container %}

@@ -500,7 +500,7 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
         wf_link.click()
 
         self.selenium.find_element_by_link_text("Dataops").click()
-        self.selenium.find_element_by_link_text("Excel Update/Merge").click()
+        self.selenium.find_element_by_link_text("Excel Upload/Merge").click()
         self.selenium.find_element_by_id("id_file").send_keys(
             os.path.join(settings.PROJECT_PATH,
                          'dataops',
@@ -543,7 +543,7 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
         wf_link.click()
 
         self.selenium.find_element_by_link_text("Dataops").click()
-        self.selenium.find_element_by_link_text("Excel Update/Merge").click()
+        self.selenium.find_element_by_link_text("Excel Upload/Merge").click()
         self.selenium.find_element_by_id("id_file").send_keys(
             os.path.join(settings.PROJECT_PATH,
                          'dataops',
