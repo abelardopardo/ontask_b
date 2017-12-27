@@ -1,6 +1,6 @@
-==============
+**************
 What is OnTask
-==============
+**************
 
 Welcome to OnTask, the platform offering instructors and educational designers
 the capacity to use data to personalise the learners experience.
@@ -53,7 +53,7 @@ The :ref:`second part <using>` explains how to use OnTask in the context of a le
 The :ref:`third part <advanced_features>` covers some more advanced functionalities such an application programming interface (API) that allows other platforms to upload data to OnTask.
 
 Research
---------
+========
 
 There are several platforms that implement similar functionality or follow a similar approach (see for example `SRES <http://sres.io>`_. The common thread among them is the positive impact that personalised communication may have when supporting learners. There are a few scientific publications that document the ideas and processes that inspired the creation of OnTask:
 
@@ -64,6 +64,6 @@ There are several platforms that implement similar functionality or follow a sim
 - Pardo, A., Jovanović, J., Dawson, S., Gašević, D., & Mirriahi, N. (In press). Using Learning Analytics to Scale the Provision of Personalised Feedback. British Journal of Educational Technology. doi:10.1111/bjet.12592
 
 License
--------
+=======
 
 The OnTask software is open source and available under the MIT License.
