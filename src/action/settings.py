@@ -4,12 +4,6 @@ from __future__ import unicode_literals, print_function
 from django.conf import settings
 from django.db import models
 
-EMAIL_HOST = getattr(settings, 'EMAIL_ACTION_EMAIL_HOST', '')
-EMAIL_PORT = getattr(settings, 'EMAIL_ACTION_EMAIL_PORT', '')
-EMAIL_HOST_USER = getattr(settings, 'EMAIL_ACTION_EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = getattr(settings, 'EMAIL_ACTION_EMAIL_HOST_PASSWORD', '')
-EMAIL_USE_TLS = getattr(settings, 'EMAIL_ACTION_EMAIL_USE_TLS', '')
-EMAIL_USE_SSL = getattr(settings, 'EMAIL_ACTION_EMAIL_USE_SSL', '')
 NOTIFICATION_TEMPLATE = \
     getattr(settings,
             'EMAIL_ACTION_NOTIFICATION_TEMPLATE',
@@ -52,41 +46,6 @@ if 'siteprefs' in settings.INSTALLED_APPS:
     patch_locals()  # That's bootstrap.
 
     register_prefs(
-        pref_group(
-            'SMTP Email Server Configuration',
-            (pref(EMAIL_HOST,
-                  verbose_name='Host name of the SMTP server',
-                  static=False,
-                  field=models.CharField(max_length=256, blank=True)),
-
-             pref(EMAIL_PORT,
-                  verbose_name='Port of the SMTP server',
-                  static=False,
-                  field=models.CharField(max_length=256, blank=True)),
-
-             pref(EMAIL_HOST_USER,
-                  verbose_name='Username',
-                  static=False,
-                  field=models.CharField(max_length=256, blank=True)),
-
-             pref(EMAIL_HOST_PASSWORD,
-                  verbose_name='Password',
-                  static=False,
-                  field=models.CharField(max_length=256, blank=True)),
-
-             pref(EMAIL_USE_TLS,
-                  verbose_name='Use TLS?',
-                  static=False,
-                  field=models.CharField(max_length=256, blank=True)),
-
-             pref(EMAIL_USE_SSL,
-                  verbose_name='Use SSL?',
-                  static=False,
-                  field=models.CharField(max_length=256, blank=True)),
-             ),
-            static=False
-        ),
-
         pref_group(
             'Notification Emails',
             (pref(NOTIFICATION_TEMPLATE,
