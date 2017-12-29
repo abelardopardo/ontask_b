@@ -1,8 +1,8 @@
 .. _install:
 
-====================
+********************
 Installation process
-====================
+********************
 
 OnTask is a Web application that manages data about learners to provide them
 with personalised support. For this reason, it is recommended an installation
@@ -14,7 +14,7 @@ the pages. The application requires exchanging with your browser sensitive
 information about your session, so the information should be encrypted.
 
 Requirements
-------------
+============
 
 OnTask has been developed as a `Django <https://www.djangoproject.com/>`_
 application. Django is a high-level, python-based web framework that supports
@@ -34,13 +34,13 @@ Python through its package index application `pip <https://pypi.python
 
 
 Installing the required tools
------------------------------
+=============================
 
 The following installation steps assume that you are deploying OnTask in a
 production web server capable of serving pages using the HTTPS protocol.
 
 Install and Configure Redis
-***************************
+---------------------------
 
 Django requires Redis to execute as a daemon in the same machine to cache
 information about the sessions. You do not need to make any adjustments in
@@ -58,7 +58,7 @@ settings, there are not additional changes required in OnTask (the code is
 already using this application internally).
 
 Install and Configure PostgreSQL
-********************************
+--------------------------------
 
 1. Download and install `postgresql <https://www.postgresql.org/>`_.
 
@@ -81,7 +81,7 @@ Install and Configure PostgreSQL
    options.
 
 Install Python
-**************
+--------------
 
 In the following sections we assume that you can open a command line
 interpreter and you can execute the python interpreter.
@@ -96,7 +96,7 @@ interpreter and you can execute the python interpreter.
    numerous libraries that are required to execute OnTask.
 
 Download, install and configure OnTask
-**************************************
+--------------------------------------
 
 1. Download or clone_actions a copy of `OnTask <https://github.com/abelardopardo/ontask_b>`_.
 
@@ -244,7 +244,7 @@ no space between variable names and the equal sign)::
    stop the application and configure the web server accordingly.
 
 The Administration Pages
-------------------------
+========================
 
 As many applications developed using Django, OnTask takes full advantage of
 the administration pages offered by the framework. The account created with
@@ -267,7 +267,7 @@ Once the instance is running, visit these pages and configure the platform to
 your needs.
 
 Production Deployment
----------------------
+=====================
 
 Once OnTask is executing normally, you may configure a web server (nginx,
 apache or similar) to make it available to a community of users. The
@@ -277,18 +277,19 @@ they are available for users to consult.
 .. _authentication:
 
 Authentication
---------------
+==============
 
-OnTask comes with three default authentication mechanisms (and are used in
-the following order): LTI, ``REMOTE_USER``
-and basic authentication.
+OnTask comes with the following authentication mechanisms: IMS-LTI,
+``REMOTE_USER`` variable, basic authentication, and LDAP. The first three
+(IMS-LTI, ``REMOTE_USER`` and basic authentication) are enabled by default and used in that order whenever an unauthenticated request is received. It follows a brief description of how to configure them.
 
-- `IMS Learning Tools Interoperability (IMS-LTI) <http://www.imsglobal.org/activity/learning-tools-interoperability>`__.
-  LTI is a standard developed by the IMS Global Learning Consortium to
-  integrate multiple tools within a learning environment. In LTI terms,
-  OnTask is configured to behave as a *tool provider* and assumes a *tool
-  consumer* such as a Learning Management System to invoke its functionality.
-  Any URL in OnTask can be give nto the LTI consumer as the point of access.
+- `IMS Learning Tools Interoperability (IMS-LTI)
+  <http://www.imsglobal.org/activity/learning-tools-interoperability>`__. LTI
+  is a standard developed by the IMS Global Learning Consortium to integrate
+  multiple tools within a learning environment. In LTI terms, OnTask is
+  configured to behave as a *tool provider* and assumes a *tool consumer* such
+  as a Learning Management System to invoke its functionality. Any URL in
+  OnTask can be give nto the LTI consumer as the point of access.
 
   Ontask only provides two points of access for LTI requests coming from the
   consumer. One is the URL with suffix ``/lti_entry`` and the second is the
@@ -314,31 +315,82 @@ and basic authentication.
   This authentication has only basic functionality and it is assumed to be
   used only for learners (not for instructors).
 
-- ``REMOTE_USER``.
-  The second method uses `the variable REMOTE_USER <https://docs.djangoproject.com/en/1.11/howto/auth-remote-user/#authentication-using-remote-user>`__ that is
-  assumed to be defined by an external application. This method is ideal for
-  environments in which users are already authenticated and are redirected to
-  the OnTask pages (for example, using SAML). If OnTask receives a request
-  from a non-existent user through this channel, it automatically and
-  transparently creates a new user in the platform with the user name stored
-  in the ``REMOTE_USER`` variable. OnTask relies on emails as the user name
+- ``REMOTE_USER``. The second method uses `the variable REMOTE_USER
+  <https://docs.djangoproject.com/en/1.11/howto/auth-remote-user/#authentication-using-remote-user>`__
+  that is assumed to be defined by an external application. This method is
+  ideal for environments in which users are already authenticated and are
+  redirected to the OnTask pages (for example, using SAML). If OnTask receives
+  a request from a non-existent user through this channel, it automatically and
+  transparently creates a new user in the platform with the user name stored in
+  the ``REMOTE_USER`` variable. OnTask relies on emails as the user name
   differentiator, so if you plan to use this authentication method make sure
   the value of ``REMOTE_USER`` is the email.
 
-- Basic authentication.
-  If the variable ``REMOTE_USER`` is not set in the internal environment of
-  Django where the web requests are served, OnTask resorts to conventional
-  authentication requiring email and password. These credentials
-  are stored in the internal database managed by OnTask.
+- Basic authentication. If the variable ``REMOTE_USER`` is not set in the
+  internal environment of Django where the web requests are served, OnTask
+  resorts to conventional authentication requiring email and password. These
+  credentials are stored in the internal database managed by OnTask.
 
-There are other possibilities to handle user authentication (LDAP, AD, etc.)
-but they require ad-hoc customizations in the tool and are not provided as
-out-of-the-box solutions.
+LDAP Authentication
+-------------------
+
+OnTask may also be configured to use LDAP to authenticate users. This is done
+through the external package `django-auth-ldap
+<https://bitbucket.org/illocution/django-auth-ldap>`__. In its current version,
+this authentication mode cannot be combined with the previous ones (this
+requires some non-trivial code changes). The following instructions describe
+the basic configuration to enable LDAP authentication. For more details check
+the `documentation of the django-auth-ldap module
+<https://django-auth-ldap.readthedocs.io/en/latest/>`__.
+
+- Stop OnTask (if it is running)
+
+- Edit the configuration file ``local.env`` and define the following two
+  variables::
+
+    AUTH_LDAP_SERVER_URI=[uri pointing to your ldap server]
+    AUTH_LDAP_PASSWORD=[Password to connect to the server]
+
+- Edit the  file ``src/ontask/settings/base.py`` and uncomment the lines that
+  import the ``ldap`` library (``import ldap``) and the lines that import three
+  methods from the ``django_auth_ldap.config`` module (``LDAPSearch``,
+  ``GroupOfNamesType`` and ``LDAPGroupQuery``)
+
+- Locate the section in the file ``src/ontask/settings/base.py`` that contains
+  the variables to configure *LDAP AUTHENTICATION*.
+
+- Uncomment the ones needed for your configuration. Make sure all the
+  information is included to connect to the server, perform the binding, search, and if needed, assign fields to user and group attributes.
+
+- Locate the variable ``AUTHENTICATION_BACKENDS`` in the same file.
+
+- Comment the lines referring to the back-ends ``LTIAuthBackend`` and
+  ``RemoteUserBackend``.
+
+- Uncomment the line referring to ``LDAPBackend``.
+
+- Make sure the LDAP server contains the data about the users in the right
+  format
+
+- Start the OnTask server.
+
+.. _email_config:
+
+Email Configuration
+===================
+
+OnTask relies on the functionality included in Django to send emails from the
+application. The configuration parameters are defined in the file ``base.py``
+and are: ``EMAIL_HOST``, ``EMAIL_PORT``, ``EMAIL_HOST_USER``,
+``EMAIL_HOST_PASSWORD``, ``EMAIL_USE_TLS`` and ``EMAIL_USE_SSL``.
+
+Set theses variables in the configuration file to the appropriate values
+before starting the application.
 
 .. _scheduling_tasks:
 
 Scheduling tasks
-----------------
+================
 
 OnTask allows to program certain tasks to execute at some point in the
 future. This functionality is implemented using a combination of persistent
@@ -354,7 +406,7 @@ Create a *crontab* file for the user running the server in your production
 environment with the following content::
 
   MAILTO="[ADMIN EMAIL ADDRESS]"
-  PATH=/usr/local/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+  PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
   SHELL=/bin/bash
   ONTASK_PROJECT=[PATH TO ONTASK PROJECT ROOT]
 

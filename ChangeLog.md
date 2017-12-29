@@ -1,3 +1,21 @@
+## 2.3.0
+
+### Added
+
+- Support for LDAP integration through django-auth-ldap
+
+- Read CSV now allows to specify number of lines at the top and
+  bottom of the file to skip.
+  
+- Read Excel files into Table
+
+- Read SQL queries into Table giving the parameters to connect to a DB.
+
+### Changed
+
+- Fixed various glicthes when sending confirmation emails and HTML email
+  formatting 
+  
 ## 2.2.0 (2017-12-23)
 
 ### Changed

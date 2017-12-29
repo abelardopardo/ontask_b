@@ -1,7 +1,7 @@
 .. _details:
 
 Workflow Details
-----------------
+================
 
     "The details are not the details. They make the design"
     -- Charles Eames
@@ -112,7 +112,7 @@ summary of the information contained in the workflow.
 .. _columns:
 
 The Columns
-***********
+-----------
 
 The data in a workflow is stored in a structure called *a table* that is made
 of rows and columns (similar to a spreadsheet). The information about the

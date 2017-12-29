@@ -1,7 +1,7 @@
 .. _scheduler:
 
 The Scheduler
--------------
+=============
 
    "I have no regular schedule. I get up whenever I can."
    -- Jimmy Wales

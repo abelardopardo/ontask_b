@@ -6,15 +6,16 @@ import pytz
 from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.sites.models import Site
-from django.core import signing
-from django.core.mail import send_mass_mail, send_mail
+from django.core import signing, mail
+from django.core.mail import send_mass_mail, send_mail, EmailMultiAlternatives
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
-from django.template import TemplateSyntaxError
+from django.template import Context, Template, TemplateSyntaxError
 from django.urls import reverse
+from django.utils.html import strip_tags
 
 import logs.ops
-from action.evaluate import evaluate_row, evaluate_action, render_template
+from action.evaluate import evaluate_row, evaluate_action
 from action.forms import EnterActionIn, field_prefix
 from action.models import Action
 from dataops import pandas_db, ops
@@ -319,12 +320,22 @@ def send_messages(user,
         else:
             track_str = ''
 
-        msgs.append((msg_subject, msg_body + track_str, from_email, [msg_to]))
+        # Get the plain text content and bundle it together with the HTML in
+        # a message to be added to the list.
+        text_content = strip_tags(msg_body)
+        msg = EmailMultiAlternatives(
+            msg_subject,
+            text_content,
+            from_email,
+            [msg_to])
+        msg.attach_alternative(msg_body + track_str, "text/html")
+        msgs.append(msg)
 
     # Mass mail!
-    if str(getattr(settings, 'EMAIL_HOST')):
+    if str(getattr(ontask_settings, 'EMAIL_HOST')):
         try:
-            send_mass_mail(msgs, fail_silently=False)
+            connection = mail.get_connection()
+            connection.send_messages(msgs)
         except Exception as e:
             # Something went wrong, notify above
             return e.message
@@ -356,10 +367,10 @@ def send_messages(user,
         'email_sent_datetime': str(now),
     }
     for msg in msgs:
-        context['subject'] = msg[0]
-        context['body'] = msg[1]
-        context['from_email'] = msg[2]
-        context['to_email'] = msg[3]
+        context['subject'] = msg.subject
+        context['body'] = msg.body
+        context['from_email'] = msg.from_email
+        context['to_email'] = msg.to[0]
         logs.ops.put(user, 'action_email_sent', action.workflow, context)
 
     # Log the event
@@ -387,13 +398,18 @@ def send_messages(user,
         'num_messages': len(msgs),
         'email_sent_datetime': now,
         'filter_present': action.n_selected_rows != -1,
-        'num_rows': action.workflow.nrows}
+        'num_rows': action.workflow.nrows,
+        'num_selected': action.n_selected_rows}
 
     # Create template and render with context
     try:
-        msg = render_template(settings.NOTIFICATION_TEMPLATE, context)
+        html_content = Template(
+            str(getattr(settings, 'NOTIFICATION_TEMPLATE'))
+        ).render(Context(context))
+        text_content = strip_tags(html_content)
     except TemplateSyntaxError as e:
-        return 'Syntax error detected in OnTask notification template.'
+        return 'Syntax error detected in OnTask notification template (' + \
+               e.message + ')'
 
     # Log the event
     logs.ops.put(
@@ -406,16 +422,18 @@ def send_messages(user,
          'filter_present': action.n_selected_rows != -1,
          'num_rows': action.workflow.nrows,
          'subject': str(getattr(settings, 'NOTIFICATION_SUBJECT')),
-         'body': msg,
+         'body': msg.body,
          'from_email': str(getattr(settings, 'NOTIFICATION_SENDER')),
          'to_email': [user.email]})
 
     # Send email out
     try:
-        send_mail(str(getattr(settings, 'NOTIFICATION_SUBJECT')),
-                  msg,
-                  str(getattr(settings, 'NOTIFICATION_SENDER')),
-                  [user.email])
+        send_mail(
+            str(getattr(settings, 'NOTIFICATION_SUBJECT')),
+            text_content,
+            str(getattr(settings, 'NOTIFICATION_SENDER')),
+            [user.email],
+            html_message=html_content)
     except Exception as e:
         return 'An error occurred when sending your notification: ' + e.message
 

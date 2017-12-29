@@ -15,19 +15,21 @@
       <p>{{ num_msgs }} Emails will be sent.</p>
       <form action="" method="post">
         {% csrf_token %}
-        {{ form|crispy }}
-        <div style="margin: 1ex 0 1ex 0;">
-          <a type="button" class="btn btn-default"
-             href="{% url 'action:index' %}" style="margin-right:2ex;"> Cancel
-          </a>
-          <button type="button" class="btn btn-primary js-email-preview"
-                  style="margin-right:2ex;"
-                  data-url="{% url 'action:email_preview' action.id 1 %}">
-            <span class="glyphicon glyphicon-eye-open"></span> Preview
-          </button>
-          <button type="Submit" name="Submit" value="Send"
-                  style="margin-right:2ex;"
-                  class="btn btn-success">Send</button>
+        <div class="input-group input-group-lg">
+          {{ form|crispy }}
+          <div style="margin: 1ex 0 1ex 0;">
+            <a type="button" class="btn btn-default"
+               href="{% url 'action:index' %}" style="margin-right:2ex;"> Cancel
+            </a>
+            <button type="button" class="btn btn-primary js-email-preview"
+                    style="margin-right:2ex;"
+                    data-url="{% url 'action:email_preview' action.id 1 %}">
+              <span class="glyphicon glyphicon-eye-open"></span> Preview
+            </button>
+            <button type="Submit" name="Submit" value="Send"
+                    style="margin-right:2ex;"
+                    class="btn btn-success">Send</button>
+          </div>
         </div>
       </form>
     {% else %}

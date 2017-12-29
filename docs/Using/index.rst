@@ -1,8 +1,8 @@
 .. _using:
 
-==============
+**************
 Using the tool
-==============
+**************
 
 In a nutshell, the idea of OnTask is to help instructors and designers to
 use data available about a what is happening in a learning experience to

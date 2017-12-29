@@ -14,7 +14,12 @@ field_prefix = '___ontask___upload_'
 
 
 # Step 1 of the CSV upload
-class UploadFileForm(forms.Form):
+class UploadCSVFileForm(forms.Form):
+    """
+    Form to read a csv file. It also allows to specify the number of lines to
+    skip at the top and the bottom of the file. This functionality is offered
+    by the underlyng function read_csv in Pandas
+    """
     file = RestrictedFileField(
         max_upload_size=str(ontask.ontask_prefs.MAX_UPLOAD_SIZE),
         content_types=json.loads(str(ontask.ontask_prefs.CONTENT_TYPES)),
@@ -23,6 +28,134 @@ class UploadFileForm(forms.Form):
         help_text='File in CSV format (typically produced by a statistics'
                   ' package or Excel)')
 
+    skip_lines_at_top = forms.IntegerField(
+        label='Lines to skip at the top',
+        help_text="Number of lines to skip at the top when reading the file",
+        initial=0,
+        required=False
+    )
+
+    skip_lines_at_bottom = forms.IntegerField(
+        label='Lines to skip at the bottom',
+        help_text="Number of lines to skip at the bottom when reading the "
+                  "file",
+        initial=0,
+        required=False
+    )
+
+    def clean(self, *args, **kwargs):
+        """
+        Function to check that the integers are positive.
+        :return: The cleaned data
+        """
+
+        data = super(UploadCSVFileForm, self).clean(*args, **kwargs)
+
+        if data['skip_lines_at_top'] < 0:
+            self.add_error(
+                'skip_lines_at_top',
+                'This number has to be zero or positive'
+            )
+
+        if data['skip_lines_at_bottom'] < 0:
+            self.add_error(
+                'skip_lines_at_bottom',
+                'This number has to be zero or positive'
+            )
+
+        return data
+
+
+# Step 1 of the CSV upload
+class UploadExcelFileForm(forms.Form):
+    """
+    Form to read an Excel file.
+    """
+    file = RestrictedFileField(
+        max_upload_size=str(ontask.ontask_prefs.MAX_UPLOAD_SIZE),
+        content_types=[
+            'application/vnd.ms-excel',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ],
+        allow_empty_file=False,
+        label="",
+        help_text='File in Excel format (.xls or .xlsx)')
+
+    sheet = forms.CharField(max_length=512,
+                            required=True,
+                            initial='Sheet 1')
+
+
+# Step 1 of the CSV upload
+class UploadSQLForm(forms.Form):
+    """
+    Form to read data from SQL. We collect information to create a Database URI
+    to be used by SQLAlchemy:
+
+    dialect[+driver]://user:password@host/dbname[?key=value..]
+    """
+
+    dialect = forms.CharField(
+        label='Dialect',
+        max_length=512,
+        required=True,
+        initial='',
+        help_text='Database type (mysql, oracle, postgresql, etc.'
+    )
+
+    driver = forms.CharField(
+        label='Driver',
+        max_length=512,
+        required=False,
+        initial='',
+        help_text='Name of the driver implementing the DBAPI'
+    )
+
+    dbusername = forms.CharField(
+        max_length=512,
+        label="Database user name",
+        required=False,
+        initial='',
+        help_text='User name to connect'
+    )
+
+    dbpassword = forms.CharField(
+        label='Database password',
+        required=False,
+        widget=forms.PasswordInput
+    )
+
+    host = forms.CharField(
+        label='Host',
+        max_length=512,
+        required=True,
+        help_text='Host to connect (include port if needed)'
+    )
+
+    dbname = forms.CharField(
+        label='Database name',
+        max_length=512,
+        required=True,
+        help_text='Name of the database'
+    )
+
+    query = forms.CharField(
+        label='Query',
+        required=True,
+        widget=forms.Textarea,
+        help_text='SQL query or table name to read'
+    )
+
+    def clean(self):
+        data = super(UploadSQLForm, self).clean()
+
+        if 'localhost' in data['host'] or '127.0.0' in data['host']:
+            self.add_error(
+                'host',
+                'Given host value is not accepted for security reasons.'
+            )
+
+        return data
 
 # Form to select columns to upload and rename
 class SelectColumnUploadForm(forms.Form):
@@ -85,15 +218,10 @@ class SelectKeysForm(forms.Form):
     how_dup_columns_choices = [('override', 'override columns with new data'),
                                ('rename', 'be renamed and become new columns.')]
 
-    dst_help = """This column is in the existing table and has values that 
-    are unique for each row. This is one of the columns that will be used 
-    to explore the upcoming data and match the rows."""
+    dst_help = """Key column in the existing table to match with the new 
+    data."""
 
-    src_help = """This column is in the table you are about to merge with 
-    the table. It has a value that is unique for each row. It is suppose to
-     have the same values as the Key Column in Table. These two columns
-    will be used to match the rows to merge the data with the existing
-    table."""
+    src_help = """Key column in the new table to match with the existing data."""
 
     merge_help = """How the keys in the table and the file are used for the 
     merge: 1) If only the keys from the table are used, any row in the file 
@@ -108,11 +236,6 @@ class SelectKeysForm(forms.Form):
     to those that are already part of the table. You may choose to override
     them with the new data, or rename the new data and add them as new 
     columns."""
-
-    # common_help = """The data that is being loaded has column names that
-    # are the same as the ones already existing. If you choose override, the
-    # new columns will replace the old ones. If you choose rename, the new
-    # columns will be renamed."""
 
     def __init__(self, *args, **kargs):
         # Get the dst choices

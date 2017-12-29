@@ -9,7 +9,7 @@ DEBUG = True
 TEMPLATES[0]['OPTIONS'].update({'debug': True})
 
 # Define STATIC_ROOT for the collectstatic command
-STATIC_ROOT = join(BASE_DIR, '..', 'site', 'static')
+STATIC_ROOT = join(BASE_DIR(), '..', 'site', 'static')
 
 # Turn off debug while imported by Celery with a workaround
 # See http://stackoverflow.com/a/4806384
@@ -24,6 +24,13 @@ DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda r: False,  # disables it
     # '...
 }
+
+if DEBUG:
+    print('BASE_DIR: ' + BASE_DIR())
+    print('STATICFILES_DIRS: ' + ', '.join(STATICFILES_DIRS))
+    print('MEDIA_ROOT: ' + MEDIA_ROOT)
+    print('MEDIA_URL: ' + MEDIA_URL )
+    print('ONTASK_HELP_URL: ' + ONTASK_HELP_URL)
 
 # Additional middleware introduced by debug toolbar
 MIDDLEWARE_CLASSES += (
@@ -42,7 +49,7 @@ INTERNAL_IPS = [
 ]
 
 # Log everything to the logs directory at the top
-LOGFILE_ROOT = join(dirname(BASE_DIR), 'logs')
+LOGFILE_ROOT = join(BASE_DIR(), 'logs')
 
 # Reset logging
 # (see http://www.caktusgroup.com/blog/2015/01/27/Django-Logging-Configuration-logging_config-default-settings-logger/)

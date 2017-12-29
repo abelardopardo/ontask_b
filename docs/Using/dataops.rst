@@ -1,7 +1,7 @@
 .. _dataops:
 
 Data Operations
----------------
+===============
 
     "May be stories are are just data without a soul"
     -- Brené Brown
@@ -13,7 +13,7 @@ This section describes one of the most advanced functionality of the platform, h
 The data operations page offers various options to upload data to the table. It follows a brief description of each one of them with a discussion of the *merge* operation
 
 CSV Files
-*********
+---------
 
 CSV or "comma separated value" files are plain text files in which the first line contains a comma-separated list of column names, and every subsequent line contains the values of these columns for each row. It is a popular format to exchange data that can be represented as a table, and it is for this reason that OnTask allows to upload data in this format.
 
@@ -27,7 +27,7 @@ For each column detected in the file, the table includes if it has been detected
 Once you selected these values, a new workflow is created with the data from the CSV file.
 
 Merge Operation
-***************
+---------------
 
 .. sidebar:: Merge a.k.a "Join"
 

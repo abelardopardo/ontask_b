@@ -16,13 +16,12 @@
       <form action="{% url 'workflow:import' %}" method="post"
             enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="modal-body">
+        <div class="input-group input-group-lg">
           {{ form|crispy }}
-        </div>
-        <div class="modal-footer" style="text-align: center;">
           <button type="button" class="btn btn-default"
+                  style="margin-right:2ex;"
           onclick="location.href='{% url 'workflow:index' %}'">Cancel</button>
-          <button class="btn btn-primary btn-space"  style="margin-right:2ex;"
+          <button class="btn btn-primary btn-space"
                   type="Submit" name="Submit" value="Submit">
             <span class="glyphicon glyphicon-import"></span> Import</button>
         </div>

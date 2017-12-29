@@ -1,0 +1,4 @@
+sid,name,eamil,age,registered,when
+1,Carmelo Coton,student1@bogus.com,12.0,True,2017-10-11T11:33:44.000+11:00
+2,Carmelo Coton,student2@bogus.com,12.1,False,2017-10-11T11:32:44.000+11:00
+3,Carmelo Coton2,student3@bogus.com,13.2,True,2017-10-11T11:32:44.000+11:00
