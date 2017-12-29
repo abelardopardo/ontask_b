@@ -18,7 +18,7 @@ from workflow.models import Workflow
 class ActionActionEdit(test.OntaskLiveTestCase):
     fixtures = ['simple_action']
     filename = os.path.join(
-        settings.PROJECT_PATH,
+        settings.BASE_DIR(),
         'action',
         'fixtures',
         'simple_action_df.sql'
@@ -752,7 +752,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
 class ActionActionRun(test.OntaskLiveTestCase):
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
-        settings.PROJECT_PATH,
+        settings.BASE_DIR(),
         'action',
         'fixtures',
         'simple_workflow_two_actions.sql'
@@ -774,7 +774,7 @@ class ActionActionRun(test.OntaskLiveTestCase):
 class ActionActionInCreate(test.OntaskLiveTestCase):
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
-        settings.PROJECT_PATH,
+        settings.BASE_DIR(),
         'action',
         'fixtures',
         'simple_workflow_two_actions.sql'

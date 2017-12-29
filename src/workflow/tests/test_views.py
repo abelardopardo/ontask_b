@@ -119,7 +119,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
 
         # Set the file name
         self.selenium.find_element_by_id('id_file').send_keys(
-            os.path.join(settings.PROJECT_PATH,
+            os.path.join(settings.BASE_DIR(),
                          'workflow',
                          'fixtures',
                          'simple.csv')
@@ -235,7 +235,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
 
         # Set the file name
         self.selenium.find_element_by_id('id_file').send_keys(
-            os.path.join(settings.PROJECT_PATH,
+            os.path.join(settings.BASE_DIR(),
                          'workflow',
                          'fixtures',
                          'simple2.csv')
@@ -413,7 +413,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
 
         # Set the file name
         self.selenium.find_element_by_id('id_file').send_keys(
-            os.path.join(settings.PROJECT_PATH,
+            os.path.join(settings.BASE_DIR(),
                          'workflow',
                          'fixtures',
                          'csv_with_prelude_postlude.csv')
@@ -460,7 +460,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
 class WorkflowModify(test.OntaskLiveTestCase):
     fixtures = ['simple_workflow']
     filename = os.path.join(
-        settings.PROJECT_PATH,
+        settings.BASE_DIR(),
         'workflow',
         'fixtures',
         'simple_workflow_df.sql'
@@ -718,7 +718,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
 class WorkflowAttribute(test.OntaskLiveTestCase):
     fixtures = ['simple_workflow']
     filename = os.path.join(
-        settings.PROJECT_PATH,
+        settings.BASE_DIR(),
         'workflow',
         'fixtures',
         'simple_workflow_df.sql'
@@ -894,7 +894,7 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
 class WorkflowShare(test.OntaskLiveTestCase):
     fixtures = ['simple_workflow']
     filename = os.path.join(
-        settings.PROJECT_PATH,
+        settings.BASE_DIR(),
         'workflow',
         'fixtures',
         'simple_workflow_df.sql'

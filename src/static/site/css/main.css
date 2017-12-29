@@ -278,3 +278,7 @@ a.btn {
 }
 
 th.dt-center, td.dt-center { text-align: center; }
+
+table#attribute-table {
+    margin-top: 20px;
+}

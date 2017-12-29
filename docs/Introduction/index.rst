@@ -41,27 +41,49 @@ high level structure of the platform.
    :align: center
    :width: 100%
 
-The rest of the document is divided into three blocks. The :ref:`first block
+The rest of the document is divided into blocks. The :ref:`first block
 <install>` covers the technical details to download, install and configure
 the tool. It requires technological expertise and access to the adequate
 computing facilities (a virtual machine, a server, or similar). The main
 audience of this part is system administrators and advanced users that want
 to use the tool within their institution or for their own use.
 
-The :ref:`second part <using>` explains how to use OnTask in the context of a learning experience, how to load data, manipulate the table and create the personalised actions. The audience for this part is teachers and designers that need to personalise the interactions they have with learners in a platform offering some data sources.
+The :ref:`second part <using>` explains how to use OnTask in the context of a
+learning experience, how to load data, manipulate the table and create the
+personalised actions. The audience for this part is teachers and designers that
+need to personalise the interactions they have with learners in a platform
+offering some data sources.
 
-The :ref:`third part <advanced_features>` covers some more advanced functionalities such an application programming interface (API) that allows other platforms to upload data to OnTask.
+The :ref:`third part <tutorial>` contains a step by step tutorial on how to
+use OnTask from the instructor's point of view.
+
+The :ref:`fourth part <advanced_features>` covers some more advanced
+functionalities such an application programming interface (API) that allows
+other platforms to upload data to OnTask.
 
 Research
 ========
 
-There are several platforms that implement similar functionality or follow a similar approach (see for example `SRES <http://sres.io>`_. The common thread among them is the positive impact that personalised communication may have when supporting learners. There are a few scientific publications that document the ideas and processes that inspired the creation of OnTask:
+There are several platforms that implement similar functionality or follow a
+similar approach (see for example `SRES <http://sres.io>`_. The common thread
+among them is the positive impact that personalised communication may have when
+supporting learners. There are a few scientific publications that document the
+ideas and processes that inspired the creation of OnTask:
 
-- Liu, D. Y.-T., Taylor, C. E., Bridgeman, A. J., Bartimote-Aufflick, K., & Pardo, A. (2016). Empowering instructors through customizable collection and analyses of actionable information Workshop on Learning Analytics for Curriculum and Program Quality Improvement (pp. 3). Edinburgh, UK.
+- Liu, D. Y.-T., Taylor, C. E., Bridgeman, A. J., Bartimote-Aufflick, K., &
+  Pardo, A. (2016). Empowering instructors through customizable collection and
+  analyses of actionable information Workshop on Learning Analytics for
+  Curriculum and Program Quality Improvement (pp. 3). Edinburgh, UK.
 
-- Liu, D. Y. T., Bartimote-Aufflick, K., Pardo, A., & Bridgeman, A. J. (2017). Data-driven Personalization of Student Learning Support in Higher Education. In A. Peña-Ayala (Ed.), Learning analytics: Fundaments, applications, and trends: A view of the current state of the art: Springer.  doi:10.1007/978-3-319-52977-6_5
+- Liu, D. Y. T., Bartimote-Aufflick, K., Pardo, A., & Bridgeman, A. J. (2017).
+  Data-driven Personalization of Student Learning Support in Higher Education.
+  In A. Peña-Ayala (Ed.), Learning analytics: Fundaments, applications, and
+  trends: A view of the current state of the art: Springer.
+  doi:10.1007/978-3-319-52977-6_5
 
-- Pardo, A., Jovanović, J., Dawson, S., Gašević, D., & Mirriahi, N. (In press). Using Learning Analytics to Scale the Provision of Personalised Feedback. British Journal of Educational Technology. doi:10.1111/bjet.12592
+- Pardo, A., Jovanović, J., Dawson, S., Gašević, D., & Mirriahi, N. (In press).
+  Using Learning Analytics to Scale the Provision of Personalised Feedback.
+  British Journal of Educational Technology. doi:10.1111/bjet.12592
 
 License
 =======

@@ -21,7 +21,7 @@ from workflow.ops import do_export_workflow
 class WorkflowImportExport(test.OntaskTestCase):
     fixtures = ['simple_workflow_export']
     filename = os.path.join(
-        settings.PROJECT_PATH,
+        settings.BASE_DIR(),
         'workflow',
         'fixtures',
         'simple_workflow_export_df.sql'
@@ -58,7 +58,7 @@ class WorkflowImportExport(test.OntaskTestCase):
 class WorkflowImport(test.OntaskLiveTestCase):
     fixtures = ['simple_workflow_export']
     filename = os.path.join(
-        settings.PROJECT_PATH,
+        settings.BASE_DIR(),
         'workflow',
         'fixtures',
         'simple_workflow_export_df.sql'

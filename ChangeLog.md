@@ -9,6 +9,8 @@
 
 - Read SQL queries into Table giving the parameters to connect to a DB.
 
+- Support for LDAP integration through diango-auth-ldap
+
 ### Changed
 
 - Fixed various glicthes when sending confirmation emails and HTML email

@@ -12,27 +12,41 @@ from __future__ import unicode_literals
 
 import environ
 import os
+# import ldap
 
 from django.core.urlresolvers import reverse_lazy
 from os.path import dirname, join, exists
 from django.contrib import messages
+# from django_auth_ldap.config import (
+#     LDAPSearch,
+#     GroupOfNamesType,
+#     LDAPGroupQuery
+# )
 
-# Build paths inside the project like this: join(BASE_DIR, "directory")
-BASE_DIR = dirname(dirname(dirname(__file__)))
-STATICFILES_DIRS = [join(BASE_DIR, 'static')]
-MEDIA_ROOT = join(BASE_DIR, 'media')
+# Use 12factor inspired environment variables or from a file and define defaults
+env = environ.Env(
+    DEBUG=False,
+    LTI_OAUTH_CREDENTIALS=(dict, {})
+)
+
+# Ideally move env file should be outside the git repo
+# i.e. BASE_DIR.parent.parent
+env_file = join(dirname(__file__), 'local.env')
+if exists(env_file):
+    environ.Env.read_env(str(env_file))
+
+# Build paths inside the project like this: join(BASE_DIR(), "directory")
+BASE_DIR = environ.Path(__file__) - 3
+STATICFILES_DIRS = [join(BASE_DIR(), 'static')]
+MEDIA_ROOT = join(BASE_DIR(), 'media')
 MEDIA_URL = "/media/"
 ONTASK_HELP_URL = "html/index.html"
 
-# Project root folder
-PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
-
-# Use Django templates using the new Django 1.8 TEMPLATES settings
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            join(BASE_DIR, 'templates'),
+            join(BASE_DIR(), 'templates'),
             # insert more TEMPLATE_DIRS here
         ],
         'APP_DIRS': True,
@@ -56,18 +70,6 @@ TEMPLATES = [
         },
     },
 ]
-
-# Use 12factor inspired environment variables or from a file
-env = environ.Env(LTI_OAUTH_CREDENTIALS=(dict, {}))
-
-# Ideally move env file should be outside the git repo
-# i.e. BASE_DIR.parent.parent
-env_file = join(dirname(__file__), 'local.env')
-if exists(env_file):
-    environ.Env.read_env(str(env_file))
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # Raises ImproperlyConfigured exception if SECRET_KEY not in os.environ
@@ -128,13 +130,55 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware'
 )
 
+#
+# LDAP AUTHENTICATION
+#
+# Variables taken from local.env
+# AUTH_LDAP_SERVER_URI = env('AUTH_LDAP_SERVER_URI')
+# AUTH_LDAP_BIND_PASSWORD = env('AUTH_LDAP_BIND_PASSWORD')
+
+# Additional configuration variables (read django-auth-ldap documentation)
+# AUTH_LDAP_CONNECTION_OPTIONS = {
+# }
+# AUTH_LDAP_BIND_DN = "cn=admin,dc=bogus,dc=com"
+# AUTH_LDAP_USER_SEARCH = LDAPSearch(
+#     "ou=people,dc=bogus,dc=com",
+#     ldap.SCOPE_SUBTREE,
+#     "(uid=%(user)s)")
+# AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=people,dc=bogus,dc=com"
+# AUTH_LDAP_START_TLS = True
+# AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=groups,dc=example,dc=com",
+#     ldap.SCOPE_SUBTREE, "(objectClass=groupOfNames)"
+# )
+# AUTH_LDAP_GROUP_TYPE = GroupOfNamesType()
+# AUTH_LDAP_REQUIRE_GROUP = "cn=enabled,ou=groups,dc=example,dc=com"
+# AUTH_LDAP_DENY_GROUP = "cn=disabled,ou=groups,dc=example,dc=com"
+# AUTH_LDAP_USER_ATTR_MAP = {"first_name": "givenName", "last_name": "sn"}
+# AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+#     "is_active": "cn=active,ou=groups,dc=example,dc=com",
+#     "is_staff": (
+#         LDAPGroupQuery("cn=staff,ou=groups,dc=example,dc=com") |
+#         LDAPGroupQuery("cn=admin,ou=groups,dc=example,dc=com")
+#     ),
+#     "is_superuser": "cn=superuser,ou=groups,dc=example,dc=com"
+# }
+# AUTH_LDAP_ALWAYS_UPDATE_USER = True
+# AUTH_LDAP_FIND_GROUP_PERMS = True
+# AUTH_LDAP_CACHE_GROUPS = True
+# AUTH_LDAP_GROUP_CACHE_TIMEOUT = 300
+
+
+#
+# LTI Authentication
+#
+LTI_OAUTH_CREDENTIALS = env('LTI_OAUTH_CREDENTIALS')
+
 AUTHENTICATION_BACKENDS = [
     'django_auth_lti.backends.LTIAuthBackend',
     'django.contrib.auth.backends.RemoteUserBackend',
+    # 'django_auth_ldap.backend.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend'
 ]
-
-LTI_OAUTH_CREDENTIALS = env('LTI_OAUTH_CREDENTIALS')
 
 CACHES = {
     "default": {
@@ -142,11 +186,12 @@ CACHES = {
         "LOCATION": "redis://127.0.0.1:6379/1",
         "TIMEOUT": 1800,
         "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "KEY_PREFIX": "ontask"
         },
-        "KEY_PREFIX": "ontask"
     }
 }
+
 # Cache time to live is 15 minutes
 CACHE_TTL = 60 * 30
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
