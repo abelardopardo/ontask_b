@@ -5,7 +5,7 @@ from django.conf.urls import url
 
 import dataops.upload
 from . import views
-from . import csvupload, excelupload, sqlupload
+from . import csvupload, excelupload
 from . import plugin_manager
 
 app_name = 'dataops'
