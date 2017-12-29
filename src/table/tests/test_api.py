@@ -18,7 +18,7 @@ from workflow.ops import workflow_delete_column
 class TableApiBase(test.OntaskApiTestCase):
     fixtures = ['simple_table']
     filename = os.path.join(
-        settings.PROJECT_PATH,
+        settings.BASE_DIR(),
         'table',
         'fixtures',
         'simple_table_df.sql'

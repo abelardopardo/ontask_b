@@ -545,7 +545,7 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
         self.selenium.find_element_by_link_text("Dataops").click()
         self.selenium.find_element_by_link_text("Excel Upload/Merge").click()
         self.selenium.find_element_by_id("id_file").send_keys(
-            os.path.join(settings.PROJECT_PATH,
+            os.path.join(settings.BASE_DIR(),
                          'dataops',
                          'fixtures',
                          'excel_upload.xlsx')
@@ -560,6 +560,10 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
         )
         self.selenium.find_element_by_id("checkAll").click()
         self.selenium.find_element_by_name("Submit").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.LINK_TEXT, 'Excel Upload/Merge'))
+        )
 
         # The number of rows must be 19
         wflow = Workflow.objects.all()[0]
