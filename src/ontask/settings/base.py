@@ -42,6 +42,9 @@ MEDIA_ROOT = join(BASE_DIR(), 'media')
 MEDIA_URL = "/media/"
 ONTASK_HELP_URL = "html/index.html"
 
+# Project root folder (needed somewhere in Django
+PROJECT_PATH = BASE_DIR()
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
