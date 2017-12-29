@@ -42,7 +42,6 @@ MEDIA_ROOT = join(BASE_DIR(), 'media')
 MEDIA_URL = "/media/"
 ONTASK_HELP_URL = "html/index.html"
 
-# Use Django templates using the new Django 1.8 TEMPLATES settings
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

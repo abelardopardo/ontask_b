@@ -351,6 +351,11 @@ the `documentation of the django-auth-ldap module
     AUTH_LDAP_SERVER_URI=[uri pointing to your ldap server]
     AUTH_LDAP_PASSWORD=[Password to connect to the server]
 
+- Edit the  file ``src/ontask/settings/base.py`` and uncomment the lines that
+  import the ``ldap`` library (``import ldap``) and the lines that import three
+  methods from the ``django_auth_ldap.config`` module (``LDAPSearch``,
+  ``GroupOfNamesType`` and ``LDAPGroupQuery``)
+
 - Locate the section in the file ``src/ontask/settings/base.py`` that contains
   the variables to configure *LDAP AUTHENTICATION*.
 
@@ -365,7 +370,9 @@ the `documentation of the django-auth-ldap module
 - Uncomment the line referring to ``LDAPBackend``.
 
 - Make sure the LDAP server contains the data about the users in the right
-  format and tart the server.
+  format
+
+- Start the OnTask server.
 
 .. _email_config:
 
