@@ -29,9 +29,6 @@ urlpatterns = [
     # Excel Upload/Merge
     url(r'^excelupload1/$', excelupload.excelupload1, name='excelupload1'),
 
-    # Excel Upload/Merge
-    url(r'^sqlupload1/$', sqlupload.sqlupload1, name='sqlupload1'),
-
     # Upload/Merge
     url(r'^upload_s2/$', dataops.upload.upload_s2, name='upload_s2'),
 

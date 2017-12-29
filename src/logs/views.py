@@ -119,19 +119,25 @@ def show_ss(request):
     search_value = request.POST.get('search[value]', None)
 
     # Get the logs
+    qs = Log.objects.filter(
+        workflow__id=workflow.id
+    )
+    recordsTotal = qs.count()
+
     if search_value:
-        qs = Log.objects.filter(
+        # Refine the log
+        qs = qs.filter(
             Q(user__email__contains=search_value) |
             Q(name__contains=search_value) |
             Q(payload__contains=search_value),
             workflow__id=workflow.id,
-        ).distinct().order_by(F('created').desc()).values_list(
-            'id', 'created', 'user__email', 'name', 'payload')
-    else:
-        qs = Log.objects.filter(
-            workflow__id=workflow.id
-        ).order_by(F('created').desc()).values_list(
-            'id', 'created', 'user__email', 'name')
+        ).distinct()
+
+    # Order and select values
+    qs = qs.order_by(F('created').desc()).values_list(
+            'id', 'created', 'user__email', 'name'
+    )
+    recordsFiltered = qs.count()
 
     final_qs = []
     for item in qs[start:start + length]:
@@ -152,8 +158,8 @@ def show_ss(request):
     # Result to return as AJAX response
     data = {
         'draw': draw,
-        'recordsTotal': Log.objects.all().count(),
-        'recordsFiltered': len(qs),
+        'recordsTotal': recordsTotal,
+        'recordsFiltered': recordsFiltered,
         'data': final_qs
     }
     # Render the page with the table
