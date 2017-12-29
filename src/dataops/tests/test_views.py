@@ -19,7 +19,7 @@ from workflow.models import Workflow
 class DataopsSymbols(test.OntaskLiveTestCase):
     fixtures = ['wflow_symbols']
     filename = os.path.join(
-        settings.PROJECT_PATH,
+        settings.BASE_DIR(),
         'dataops',
         'fixtures',
         'wflow_symbols_df.sql'
@@ -502,7 +502,7 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
         self.selenium.find_element_by_link_text("Dataops").click()
         self.selenium.find_element_by_link_text("Excel Upload/Merge").click()
         self.selenium.find_element_by_id("id_file").send_keys(
-            os.path.join(settings.PROJECT_PATH,
+            os.path.join(settings.BASE_DIR(),
                          'dataops',
                          'fixtures',
                          'excel_upload.xlsx')
