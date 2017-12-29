@@ -345,6 +345,15 @@ the `documentation of the django-auth-ldap module
 
 - Stop OnTask (if it is running)
 
+- Make sure your server has installed the development files for OpenLDAP. In
+  Debian/Ubuntu, the required packages are::
+
+    libsasl2-dev python-dev libldap2-dev libssl-dev
+
+  In RedHat/CentOS::
+
+    python-devel openldap-devel
+
 - Edit the configuration file ``local.env`` and define the following two
   variables::
 
