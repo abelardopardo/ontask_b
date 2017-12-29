@@ -146,6 +146,17 @@ class UploadSQLForm(forms.Form):
         help_text='SQL query or table name to read'
     )
 
+    def clean(self):
+        data = super(UploadSQLForm, self).clean()
+
+        if 'localhost' in data['host'] or '127.0.0' in data['host']:
+            self.add_error(
+                'host',
+                'Given host value is not accepted for security reasons.'
+            )
+
+        return data
+
 # Form to select columns to upload and rename
 class SelectColumnUploadForm(forms.Form):
 
@@ -207,15 +218,10 @@ class SelectKeysForm(forms.Form):
     how_dup_columns_choices = [('override', 'override columns with new data'),
                                ('rename', 'be renamed and become new columns.')]
 
-    dst_help = """This column is in the existing table and has values that 
-    are unique for each row. This is one of the columns that will be used 
-    to explore the upcoming data and match the rows."""
+    dst_help = """Key column in the existing table to match with the new 
+    data."""
 
-    src_help = """This column is in the table you are about to merge with 
-    the table. It has a value that is unique for each row. It is suppose to
-     have the same values as the Key Column in Table. These two columns
-    will be used to match the rows to merge the data with the existing
-    table."""
+    src_help = """Key column in the new table to match with the existing data."""
 
     merge_help = """How the keys in the table and the file are used for the 
     merge: 1) If only the keys from the table are used, any row in the file 
@@ -230,11 +236,6 @@ class SelectKeysForm(forms.Form):
     to those that are already part of the table. You may choose to override
     them with the new data, or rename the new data and add them as new 
     columns."""
-
-    # common_help = """The data that is being loaded has column names that
-    # are the same as the ones already existing. If you choose override, the
-    # new columns will replace the old ones. If you choose rename, the new
-    # columns will be renamed."""
 
     def __init__(self, *args, **kargs):
         # Get the dst choices

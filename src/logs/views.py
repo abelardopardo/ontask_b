@@ -126,7 +126,7 @@ def show_ss(request):
 
     if search_value:
         # Refine the log
-        qs = Log.objects.filter(
+        qs = qs.filter(
             Q(user__email__contains=search_value) |
             Q(name__contains=search_value) |
             Q(payload__contains=search_value),
