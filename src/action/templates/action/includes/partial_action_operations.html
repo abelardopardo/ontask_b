@@ -1,37 +1,64 @@
-<a href="{% if is_out %}{% url 'action:edit_out' id %}{% else %}{% url 'action:edit_in' id %}{% endif %}"
-   class="btn btn-primary btn-sm align-middle">
-  <span class="glyphicon glyphicon-folder-open"></span> Edit</a>
-<button type="button"
-        class="btn btn-primary btn-sm js-action-update align-middle"
-        data-url="{% url 'action:update' id is_out %}">
-    <span class="glyphicon glyphicon-pencil"></span> Rename
-</button>
-<button type="button"
-        class="btn btn-primary btn-sm js-action-clone align-middle"
-        data-url="{% url 'action:clone' id %}">
-  <span class="glyphicon glyphicon-duplicate"></span> Clone
-</button>
-<button type="button"
-        class="btn btn-{% if serve_enabled %}success{% else %}danger{% endif %} btn-sm js-action-showurl"
-        data-url="{% url 'action:showurl' id %}"
-        data-toggle="tooltip" title="URL to access the personalised text">
-  <span class="glyphicon glyphicon-link"></span> URL ({% if serve_enabled %}On{% else %}Off{% endif %})
-</button>
-{% if is_out %}
-  <a href="{% url 'action:send_email' id %}"
-     class="btn btn-primary btn-sm">
-    <span class="glyphicon glyphicon-envelope"></span> Email</a>
-  <a href="{% url 'scheduler:create_email' id %}"
-     class="btn btn-primary btn-sm">
-    <span class="glyphicon glyphicon-calendar"></span> Schedule</a>
-{% else %}
-  <a href="{% url 'action:run' id %}"
-          class="btn btn-primary btn-sm"
-          data-toggle="tooltip" title="Input data manually">
-    <span class="glyphicon glyphicon-off"></span> Run</a>
-{% endif %}
-<button type="button"
-        class="btn btn-danger btn-sm js-action-delete"
-        data-url="{% url 'action:delete' id %}"
-        data-toggle="tooltip" title="Delete the action">
-  <span class="glyphicon glyphicon-trash"></span></button>
+<div class="dropdown">
+  <a href="{% if is_out %}{% url 'action:edit_out' id %}{% else %}{% url 'action:edit_in' id %}{% endif %}"
+     class="btn btn-primary btn-sm align-middle"
+        data-toggle="tooltip" title="Edit the text, conditions and filter">
+    <span class="glyphicon glyphicon-folder-open"></span> Edit</a>
+  <button type="button"
+          class="btn btn-{% if serve_enabled %}success{% else %}danger{% endif %} btn-sm js-action-showurl"
+          data-url="{% url 'action:showurl' id %}"
+          data-toggle="tooltip"
+          {% if is_out %}
+            title="URL for learners to access the personalised text"
+          {% else %}
+            title="URL for learners to introduce data"
+          {% endif %}
+          >
+    <span class="glyphicon glyphicon-link"></span> URL ({% if serve_enabled %}On{% else %}Off{% endif %})
+  </button>
+  {% if is_out %}
+    <a href="{% url 'action:send_email' id %}"
+       class="btn btn-primary btn-sm"
+        data-toggle="tooltip" title="Send personalised emails">
+      <span class="glyphicon glyphicon-envelope"></span> Email</a>
+  {% else %}
+    <a href="{% url 'action:run' id %}"
+            class="btn btn-primary btn-sm"
+            data-toggle="tooltip" title="Input data manually">
+      <span class="glyphicon glyphicon-off"></span> Run</a>
+  {% endif %}
+  <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+          data-toggle="dropdown"> More <span class="caret"></span>
+  </button>
+  <ul role="menu" class="dropdown-menu">
+    {% if is_out %}
+      <a href="{% url 'scheduler:create_email' id %}"
+         class="btn btn-default btn-sm"
+              data-toggle="tooltip"
+         title="Schedule the execution of the action">
+        <span class="glyphicon glyphicon-calendar"></span> Schedule</a>
+    {% endif %}
+    <li>
+      <button type="button"
+              class="btn btn-default btn-sm js-action-update align-middle"
+              data-url="{% url 'action:update' id is_out %}"
+              data-toggle="tooltip" title="Change name and/or description">
+          <span class="glyphicon glyphicon-pencil"></span> Rename
+      </button>
+    </li>
+    <li>
+      <button type="button"
+              class="btn btn-default btn-sm js-action-clone align-middle"
+              data-url="{% url 'action:clone' id %}"
+              data-toggle="tooltip" title="Create an identical action">
+        <span class="glyphicon glyphicon-duplicate"></span> Clone
+      </button>
+    </li>
+    <li>
+      <button type="button"
+              class="btn btn-default btn-sm js-action-delete"
+              data-url="{% url 'action:delete' id %}"
+              data-toggle="tooltip" title="Delete the action">
+        <span class="glyphicon glyphicon-trash"></span> Delete</button>
+    </li>
+  </ul>
+</div>

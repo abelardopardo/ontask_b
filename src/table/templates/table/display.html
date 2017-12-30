@@ -31,7 +31,11 @@
                     {"orderable": false, "targets": 0},
                     {"searchable": false, "targets": 0},
                     {"className": "dt-center", "targets": "_all"}
-                ]
+                ],
+                "drawCallback": function(settings) {
+                   // Needed to enable tooltips in ajax produced content
+                   $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+                },
             });
         });
     }
@@ -44,12 +48,16 @@
   <div id="table-content" align="center" class="container-fluid"
        style="padding-top:2ex;">
     {% if columns %}
-      <a href="{% url 'dataops:rowcreate' %}" class="btn btn-sm btn-primary">
+      <a href="{% url 'dataops:rowcreate' %}" class="btn btn-sm btn-primary"
+              data-toggle="tooltip"
+              title="Add an extra row to the table">
         <span class="glyphicon glyphicon-plus"></span> Add row
       </a>
       <button type="button"
               class="btn btn-primary btn-sm js-workflow-column-add"
-              data-url="{% url 'workflow:column_add' %}">
+              data-url="{% url 'workflow:column_add' %}"
+              data-toggle="tooltip"
+              title="Add an extra column to the table">
         <span class="glyphicon glyphicon-plus"></span> New column
       </button>
       <table class="table display dataTable no-footer cell-border table-bordered"
@@ -61,7 +69,9 @@
               <th class="text-center">
                 <button type="button"
                         class="btn btn-sm btn-default js-workflow-column-edit"
-                        data-url="{% url 'workflow:column_edit' col.id %}">
+                        data-url="{% url 'workflow:column_edit' col.id %}"
+                        data-toggle="tooltip"
+                        title="Click here to edit column name, description, etc">
                   {{ col.name }}
                 </button>
               </th>

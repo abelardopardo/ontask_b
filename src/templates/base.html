@@ -57,6 +57,20 @@
                   href="{{ dataops_url }}">Dataops</a>
               </li>
 
+              {% comment %}
+              {% url 'dataops:list' as dataops_url %}
+              <li class="dropdown" {% if request.path == dataops_url %}class="active"{% endif %}>
+                <a class="dropdown-toggle" data-toggle="dropdown" href="{{ dataops_url }}">Dataops
+                  <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{% url 'dataops:uploadmerge' %}">File Upload
+                      /Merge</a></li>
+                  <li><a href="{% url 'dataops:transform' %}">Transform</a></li>
+                </ul>
+              </li>
+              {% endcomment %}
+
+
               {% url 'table:display' as table_display %}
               <li {% if '/table/' in request.path %}class="active"{% endif %}><a
                   href="{% url 'table:display' %}">Table</a>

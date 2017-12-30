@@ -64,13 +64,13 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         # Wait for the action page
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, "//div[@id='filter-set']/h4/button")
+                (By.XPATH, "//div[@id='filter-set']/h4/div/button")
             )
         )
 
         # Click in the add filter button
         self.selenium.find_element_by_xpath(
-            "//div[@id='filter-set']/h4/button"
+            "//div[@id='filter-set']/h4/div/button"
         ).click()
         # Wait for the form to appear
         WebDriverWait(self.selenium, 10).until(
@@ -226,7 +226,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         # Wait for the action page
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, "//div[@id='filter-set']/h4/button")
+                (By.XPATH, "//div[@id='filter-set']/h4/div/button")
             )
         )
 
@@ -476,7 +476,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         # Wait for the action page
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, "//div[@id='filter-set']/h4/button")
+                (By.XPATH, "//div[@id='filter-set']/h4/div/button")
             )
         )
 
@@ -495,7 +495,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
 
         # Create filter. Click in the add filter button
         self.selenium.find_element_by_xpath(
-            "//div[@id='filter-set']/h4/button"
+            "//div[@id='filter-set']/h4/div/button"
         ).click()
         # Wait for the form to appear
         WebDriverWait(self.selenium, 10).until(
@@ -589,7 +589,10 @@ class ActionActionEdit(test.OntaskLiveTestCase):
             """$('#id_content').summernote('editor.insertText', "mark3");"""
         )
 
-        # Click in the delete filter button
+        # Click in the more ops and then the delete filter button
+        self.selenium.find_element_by_xpath(
+            "//div[@id='filter-set']/h4/div/button[2]"
+        ).click()
         self.selenium.find_element_by_class_name('js-filter-delete').click()
         # Wait for the screen to delete the filter
         WebDriverWait(self.selenium, 10).until(
@@ -718,6 +721,9 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         )
 
         # Click in the delete condition button
+        self.selenium.find_element_by_xpath(
+            "//div[@id='condition-set']/div/div/button[2]"
+        ).click()
         self.selenium.find_element_by_class_name('js-condition-delete').click()
         # Wait for the screen to delete the condition
         WebDriverWait(self.selenium, 10).until(
@@ -840,8 +846,7 @@ class ActionActionInCreate(test.OntaskLiveTestCase):
         )
 
         # Run the action
-        self.selenium.find_element_by_xpath(
-            "//table[@id='action-table']/tbody/tr[3]/td[5]/a[2]").click()
+        self.selenium.find_element_by_link_text('Run').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.LINK_TEXT, "student2@bogus.com")

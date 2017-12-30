@@ -754,7 +754,10 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'wflow-name')))
 
-        # Click on the attributes
+        # Click on the more-ops and then attributes button
+        self.selenium.find_element_by_xpath(
+            "//div[@id='workflow-area']/div/button[2]"
+        ).click()
         self.selenium.find_element_by_link_text('Attributes').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
@@ -850,6 +853,9 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         self.assertEqual(workflow.attributes['newkey2'], 'newvalue2')
 
         # Go back to the attribute page
+        self.selenium.find_element_by_xpath(
+            "//div[@id='workflow-area']/div/button[2]"
+        ).click()
         self.selenium.find_element_by_link_text('Attributes').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
@@ -927,6 +933,9 @@ class WorkflowShare(test.OntaskLiveTestCase):
             EC.presence_of_element_located((By.ID, 'wflow-name')))
 
         # Click on the share
+        self.selenium.find_element_by_xpath(
+            "//div[@id='workflow-area']/div/button[2]"
+        ).click()
         self.selenium.find_element_by_link_text('Share').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
@@ -1011,6 +1020,9 @@ class WorkflowShare(test.OntaskLiveTestCase):
         self.assertTrue('superuser@bogus.com' in users)
 
         # Go back to the share page
+        self.selenium.find_element_by_xpath(
+            "//div[@id='workflow-area']/div/button[2]"
+        ).click()
         self.selenium.find_element_by_link_text('Share').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(

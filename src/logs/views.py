@@ -145,9 +145,9 @@ def show_ss(request):
             item[1].astimezone(pytz.timezone(ontask_settings.TIME_ZONE)),
             item[2],
             item[3],
-            """
-            <button type="submit" class="btn btn-primary btn-sm js-log-view"
-                    data-url="{0}">
+            """<button type="submit" class="btn btn-primary btn-sm js-log-view"
+                    data-url="{0}"
+                    data-toggle="tooltip" title="View the content of this log">
               <span class="glyphicon glyphicon-eye-open"></span> View
             </button>
             """.format(reverse('logs:view', kwargs={'pk': item[0]}))]

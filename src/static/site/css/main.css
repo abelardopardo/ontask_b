@@ -202,8 +202,6 @@ div.conditions {
 
 div.condition-btn {
     padding: 0.5ex;
-    background-color: darkgray;
-    margin: 0.25ex 0.25ex 0.25ex 0.25ex;
 }
 /* Tweaks for JQuery QueryBuilder
 
@@ -281,4 +279,22 @@ th.dt-center, td.dt-center { text-align: center; }
 
 table#attribute-table {
     margin-top: 20px;
+}
+
+#workflow-area .dropdown-menu {
+  left: 70%;
+  right: auto;
+  text-align: center;
+  transform: translate(-50%, 0);
+}
+
+#filter-set .dropdown-menu {
+  left: 50%;
+  right: auto;
+  text-align: center;
+  transform: translate(-50%, 0);
+}
+
+.dropdown-menu .btn {
+    width:100%;
 }

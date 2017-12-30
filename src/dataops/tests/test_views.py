@@ -70,11 +70,15 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Click in the submit/save button
         self.selenium.find_element_by_xpath("//button[@type='submit']").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME,
+                                        'js-workflow-column-add'))
+        )
 
         # Click in the New Column button
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[2]"
-        ).click()
+        self.selenium.find_element_by_class_name(
+            'js-workflow-column-add'
+         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
@@ -109,8 +113,9 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Click in the attributes section
         self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-area']/a[1]"
+            "//div[@id='workflow-area']/div/button[2]"
         ).click()
+        self.selenium.find_element_by_link_text('Attributes').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME, 'js-attribute-create'))
         )
@@ -220,7 +225,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Edit the action out
         self.selenium.find_element_by_xpath(
-            "//table[@id='action-table']/tbody/tr[2]/td[5]/a").click()
+            "//table[@id='action-table']/tbody/tr[2]/td[5]/div/a").click()
 
         # Insert attribute
         self.selenium.find_element_by_id("select-attribute-name").click()

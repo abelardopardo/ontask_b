@@ -6,26 +6,46 @@
       <span class="glyphicon glyphicon-plus"></span> New</button></h4>
   <div class="conditions">
     {% for condition in conditions %}
-      <div class="condition-btn">
-        <button type="button" class="btn btn-primary btn-sm js-condition-edit"
+      <div class="condition-btn btn-group">
+        <button type="button"
+                class="btn btn-primary btn-sm js-condition-edit"
                 data-url="{% url 'action:edit_condition' condition.id %}"
-           data-toggle="tooltip" title="Edit">
-          <span class="glyphicon glyphicon-pencil"></span> {{ condition.name }}</button>
-        <button type="button" class="btn btn-warning btn-sm js-condition-insert"
-                data-name="{{ condition.name }}"
-           data-toggle="tooltip" title="Insert surrounding text">
-          <span class="glyphicon glyphicon-arrow-down"></span>
+                data-toggle="tooltip"
+                title="Edit name, description and formula">{{ condition.name }}
         </button>
-        <a href="{% url 'action:clone_condition' condition.id %}"
-           class="btn btn-primary btn-sm"
-           data-toggle="tooltip" title="Clone">
-          <span class="glyphicon glyphicon-duplicate"></span>
-        </a>
-        <button type="button" class="btn btn-danger btn-sm js-condition-delete"
-                data-url="{% url 'action:delete_condition' condition.id %}"
-           data-toggle="tooltip" title="Delete">
-          <span class="glyphicon glyphicon-trash"></span>
+        <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+          <span class="caret"></span>
+          <span class="sr-only">Toggle Dropdown</span>
         </button>
+        <ul role="menu" class="dropdown-menu">
+          <li>
+            <button type="button"
+                    class="btn btn-default btn-sm js-condition-insert"
+                    data-name="{{ condition.name }}"
+                    data-toggle="tooltip"
+                    title="Surround selected text with condition">
+              <span class="glyphicon glyphicon-arrow-down"></span> Insert in
+              text
+            </button>
+          </li>
+          <li>
+            <a href="{% url 'action:clone_condition' condition.id %}"
+               class="btn btn-default btn-sm"
+               data-toggle="tooltip" title="Create an exact copy of this condition">
+              <span class="glyphicon glyphicon-duplicate"></span> Clone
+            </a>
+          </li>
+          <li>
+            <button type="button"
+                    class="btn btn-default btn-sm js-condition-delete"
+                    data-url="{% url 'action:delete_condition' condition.id %}"
+                    data-toggle="tooltip" title="Delete the condition">
+              <span class="glyphicon glyphicon-trash"></span> Delete
+            </button>
+          </li>
+        </ul>
       </div>
     {% empty %}
       <p class="text-center">There are no conditions yet</p>

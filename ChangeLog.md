@@ -1,3 +1,18 @@
+## 2.3.1
+
+### Added
+
+### Changed
+
+- Removed django-auth-ldap from requirements. Instructions mention the need to
+  install it if needed.
+  
+- [TODO] Simplified operation menus
+
+- [TODO] New transformation column?
+
+- [TODO] Filter in the table view?
+  
 ## 2.3.0 (2017-12-30)
 
 ### Added

@@ -30,6 +30,10 @@
               "emptyTable": "No logs recorded for this workflow."
           },
           searchDelay: 500,
+          "drawCallback": function(settings) {
+             // Needed to enable tooltips in ajax produced content
+             $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+          },
         });
     });
   </script>
@@ -44,7 +48,9 @@
   <div class="container" id="csv-download">
     <p>
       <a href="{% url 'logs:export' workflow.id %}" download
-              class="btn btn-primary btn-sm js-logs-download">
+         class="btn btn-primary btn-sm js-logs-download"
+         data-toggle="tooltip"
+         title="Download a CSV file contining these logs">
         <span class="glyphicon glyphicon-download-alt"></span> CSV Download
       </a>
     </p>
