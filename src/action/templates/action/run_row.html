@@ -26,7 +26,9 @@
               class="btn btn-primary">
         <span class="glyphicon glyphicon-ok"></span> Update
       </button>
-      {{ form|crispy }}
+      <div class="input-group input-group-lg">
+        {{ form|crispy }}
+      </div>
       <a type="button" class="btn btn-default"
          href="{{ cancel_url }}"> Cancel
       </a>
