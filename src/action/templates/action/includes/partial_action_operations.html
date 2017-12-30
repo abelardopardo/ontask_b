@@ -4,7 +4,7 @@
         data-toggle="tooltip" title="Edit the text, conditions and filter">
     <span class="glyphicon glyphicon-folder-open"></span> Edit</a>
   <button type="button"
-          class="btn btn-{% if serve_enabled %}success{% else %}danger{% endif %} btn-sm js-action-showurl"
+          class="btn btn-primary btn-sm js-action-showurl"
           data-url="{% url 'action:showurl' id %}"
           data-toggle="tooltip"
           {% if is_out %}
@@ -13,7 +13,8 @@
             title="URL for learners to introduce data"
           {% endif %}
           >
-    <span class="glyphicon glyphicon-link"></span> URL ({% if serve_enabled %}On{% else %}Off{% endif %})
+    <span class="glyphicon glyphicon-link"></span> URL
+    <span class="badge">{% if serve_enabled %}On{% else %}Off{% endif %}</span>
   </button>
   {% if is_out %}
     <a href="{% url 'action:send_email' id %}"
