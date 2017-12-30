@@ -353,6 +353,7 @@ the `documentation of the django-auth-ldap module
   In RedHat/CentOS::
 
     python-devel openldap-devel
+- Install the module ``django-auth-ldap``
 
 - Edit the configuration file ``local.env`` and define the following two
   variables::
