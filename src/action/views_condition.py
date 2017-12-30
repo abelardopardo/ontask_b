@@ -81,6 +81,7 @@ def save_condition_form(request,
             data['form_is_valid'] = True
             data['html_redirect'] = reverse('action:edit_out',
                                             kwargs={'pk': action.id})
+            return JsonResponse(data)
 
         log_type = 'filter'
     else:
@@ -170,7 +171,7 @@ def save_condition_form(request,
     action.save()
 
     # Log the event
-    formula = evaluate_node_sql(condition.formula)
+    formula, _ = evaluate_node_sql(condition.formula)
     if is_new:
         log_type += '_create'
     else:
