@@ -531,7 +531,11 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
         # End of session
         self.logout()
 
-    def test_02_excelupload(self):
+
+class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
+    fixtures = ['empty_wflow.json']
+
+    def test_01_excelupload_sheet(self):
         # Login
         self.login('instructor1@bogus.com')
 
