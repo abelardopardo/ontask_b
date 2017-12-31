@@ -208,15 +208,17 @@ def evaluate_action(action, extra_string, column_name):
 
         # Step 3: Evaluate all the conditions
         condition_eval = {}
-        for condition in Condition.objects.filter(action__id=action.id):
-            if condition.is_filter:
+        for condition in Condition.objects.filter(
+                action__id=action.id
+        ).values('is_filter', 'formula', 'name'):
+            if condition['is_filter']:
                 # Filter can be skipped in this stage
                 continue
 
             # Evaluate the condition
-            condition_eval[condition.name] = \
+            condition_eval[condition['name']] = \
                 dataops.formula_evaluation.evaluate_top_node(
-                    condition.formula,
+                    condition['formula'],
                     row_values
                 )
 
@@ -295,16 +297,18 @@ def evaluate_row(action, row_idx):
     # Step 3: Evaluate all the conditions
     condition_eval = {}
     condition_anomalies = []
-    for condition in Condition.objects.filter(action__id=action.id):
-        if condition.is_filter:
+    for condition in Condition.objects.filter(
+            action__id=action.id
+    ).values('name', 'is_filter', 'formula'):
+        if condition['is_filter']:
             # Filter can be skipped in this stage
             continue
 
         # Evaluate the condition
         try:
-            condition_eval[condition.name] = \
+            condition_eval[condition['name']] = \
                 dataops.formula_evaluation.evaluate_top_node(
-                    condition.formula,
+                    condition['formula'],
                     row_values
                 )
         except OntaskException as e:

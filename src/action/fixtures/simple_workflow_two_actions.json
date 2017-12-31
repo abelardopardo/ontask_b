@@ -236,6 +236,846 @@
     }
 },
 {
+    "model": "authtools.user",
+    "pk": 112,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$zUk5EnpWlmQ7$/czWavsNktCPdefbdRl2zgc+g6rM7ZIPnCwdmAt9FBQ=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "savadovasabina@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.108Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 113,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$vO3XIgSfotAH$elE8nC2Jlni9uX4JxovPtFxFXdkVL+gixM/lZv7mqrc=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "elaine.farrow@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.141Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 114,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$2YSTsxR5sQdg$x6dLnMRMeztPR22a5wbsLzUVf0ruVxNyBSMRe930AZo=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "nigel.goddard@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.151Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 115,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$3XIBtIhgcu8F$soiI4WMIhhOYDWUdT7EntDz1p3BzjJf6bmhKM7r6AnA=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "madhus333@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.162Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 116,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$rcT3DHnirYPm$uWIJkQW9Qe0TuJNJ4YEReyTeqmuof3dRx+AUXiXzhko=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "robert.sharples@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.173Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 117,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$pxtgVQop7QLp$jyEQ59ccCcFlLN5FZUyRXZKxzs3i+y7wOlbzGf0rJAI=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "adam.carter@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.187Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 118,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$3n4rglqlFWEu$DD7uJDT5WQ8Pb6QC5slO96hApixSYfo/d04h1U9v5OY=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "cinzia.pusceddu@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.216Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 119,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$GyGoUpMBWX0s$WdhFk1STH4MWG36ChSl9Y4x/pf6l2g1VKywe4Z98gDw=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "nikola.popovic@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.226Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 120,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$lydaQU2bvMBF$SjNLwiOgElhSdl+QeDoeue+fa9IX7VIHHTiUsGA6Y6c=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "h.mcqueen@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.237Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 121,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$F4tDK9raLXmz$akdUWJMW07UVVHjIyXfep/bV5nPZ0Yvj0ZtulswojwQ=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "sbsdirectorofteaching@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.265Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 122,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$DO2oM6w3ps0Q$djmffMVdvMI8i0sDOWbn5l58d8dp1k4jwLjDwq8EWK8=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "n.margaritella@sms.ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.286Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 123,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$e3uve51fzVQl$5F66ftn3wVObdK5nj+E/03VL4hhH3b8PJGhUFt3JDeY=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "ahibertjr@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.307Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 124,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$dyxnTQfWR6sf$mU+XAHSwPlZ6BB0ryPlqOt3zy8p4GmfZpdv7xJaMEu4=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "tom.macintyre@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.336Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 125,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$xz6jKAiNv1rt$+QYyHTd1CqykvDy7+KtAOhuGViHnNCp4hPphRMyLU24=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "sgwater@inf.ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.346Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 126,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$VK22ifIKufAI$4fkDz+X55lop520tWvHorWcQAY7HjSEpORS+rNsABYI=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "tom.booth@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.356Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 127,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$y1ey38OaGvas$D261qYoze/HXkVMG2a9M8r7Mov+bSOvAgfw0bwTcCh0=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "corinne.baulcomb@sruc.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.387Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 128,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$KQOQyEnKM3JB$xhGg3WBkdEOTig4evTgjbykiI3v1w90zn9uwla/cT7U=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "paula.novo@sruc.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.402Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 129,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$4oYXTRkygmxZ$nHNKJ4y6ocLTL/hukBdu3SoitP95eKStLNr6pOaYK98=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "holly.linklater@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.424Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 130,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$qD2e3QT50pVd$vyZQZ6m+qwzj7Z1S8NBU0yZpel57C64la4MFG37YOn4=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "vanessa.mather@sccs.org.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.440Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 131,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$s0zO6eAaG5KR$fAWq/aoVrMRZHGwlbt7Oq7eE/6AVAIeY9/8nIHfN5qI=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "susan.rhind@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.454Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 132,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$odUmi57xgkFz$sPBzPXSN8tEEtx0thnjP1AaktOzMy80FRAojFebulBc=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "n.uzir@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.465Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 133,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$4Y02x9AxJekU$gpehi+SnYUrcCGsIHzYFWwhFSrFVE9tV0hJpwSzWbWY=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "anlisu1004@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.487Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 134,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$OTcAQzD7kQkG$zNofisWhjoGeXL/kget96WqIg+b5dD20o2WZDUKCSs8=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "w.matcha@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.503Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 135,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$WHtmKYyzDXiR$G919eTE9deSaDzxe9xbtSQ+SHHwB5nof0aJRebOf7T8=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "f.broz@hw.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.512Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 136,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$64ER7D7BtACK$+VNeB8MDXgXe1g/gUoF0DRttg8/s5VxcbU/jhbfH3OA=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "p.warner@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.522Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 137,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$qDxEQlWFO4uy$2dd9HvSutHY0zZ0s97hX/CcS5sFhlvxgMHP9WUESB8I=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "sofiashan2013@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.561Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 138,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$544I1P1ay9BT$Fx/V4yU3ELhS0+puY2Z9NfSJqF98+gwa0Qk/322Kl+U=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "theyoungone78@yahoo.co.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.590Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 139,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$nyDTROegxAwp$DzMX6HrrMaEtqVzV5AjBQvv/qwtpaXek8V+UhvoRIGo=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "charlotte.kemp@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.601Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 140,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$8sUbsBc5N0kr$S+Ri6FRpr/bHMbjDlburyZABCCsEVvyZmPCIy9bbZIU=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "alison.christine@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.623Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 141,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$w0kOX3e1X3nR$BpEYzNK9kXcUaYKUJ7AYprCcTd9LZETH19F//ezbh0Y=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "brendan.hill@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.641Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 142,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$eqpZylXqLyLD$qwo6qBH/EXXboyGw6bc4oUkD5VkoClmiAmHd9+wbMJU=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "e.serafin@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.654Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 143,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$0ht6FzZh0PBg$g+zMMJVB/sYPughMtMpUlsscogOlMiBNOSLfoGjYfog=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "eli.appleby-donald@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.666Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 144,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$zdlMBjrHLkkb$awqof94IZbaukoNMo4tak39LtXjMlBnnSfIgt2/4Z6M=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "a.burford@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.689Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 145,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$v04XTHSzkXqS$g7SCTDTNffOKrL6AXPrl4yFZ6TKxNpAllACNXU8X7E4=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "s1514119@sms.ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.717Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 146,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$8o0TYURlNJaV$5SRwx0NnOncfCf3iojKunE0Ge60dNUnpmAPqfuu8uUA=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "p.devine@lancaster.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.727Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 147,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$H6xT1C0aUbG8$J5V1Zkmteczj60vhPE2h0hB6hdDXarNKRNhayxDVM/o=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "stuart.nicol@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.737Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 148,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$cETBaOcDMzbD$WRl438NteS9H9FsQj0kZCvPzZhjSGANSuswO14Mhr7c=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "anne-marie.scott@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.750Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 149,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$o0DGBtb1Y9ZX$3OP7JLnAOahfiuQIKWjJ5E49bzzdpIEEo6nEMcEQSAk=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "tanya.hawkes@saschina.org",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.771Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 150,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$l0WumLNZeCfw$lscJlQXd3GwRwCEKSwSS5sQ3sdaIdF9Sk3Xi0VArlwI=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "p.docherty@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.792Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 151,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$S7YfbAPbZIPl$zxqUFxBOiyuUJ6XMjRP5iL/NvVMtqZ2msDmPuRjTxDQ=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "hicindy0820@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.802Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 152,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$O2qd6WYE5qEx$nEM7/TWrpckXGqDzwmVMe10jtyO7e8uMd2XhSbg0oZ4=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "dragan.gasevic@ed.ac.uk",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.813Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 153,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$BnzY4enXPAWS$96xbWHxlOT04lh4JjJHW4RAN5vna01ASZiCkCDvOIa0=",
+        "last_login": "2017-12-11T08:33:34.673Z",
+        "is_superuser": false,
+        "email": "abelardo.pardo@sydney.edu.au",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-11T08:29:57.823Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
     "model": "siteprefs.preference",
     "pk": 1,
     "fields": {
@@ -353,6 +1193,105 @@
     }
 },
 {
+    "model": "siteprefs.preference",
+    "pk": 14,
+    "fields": {
+        "app": "dataops",
+        "name": "plugin_directory",
+        "text": "/Users/abelardopardo/ontask_B/src/plugins"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 15,
+    "fields": {
+        "app": "action",
+        "name": "email_host",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 16,
+    "fields": {
+        "app": "action",
+        "name": "email_port",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 17,
+    "fields": {
+        "app": "action",
+        "name": "email_host_user",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 18,
+    "fields": {
+        "app": "action",
+        "name": "email_host_password",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 19,
+    "fields": {
+        "app": "action",
+        "name": "email_use_tls",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 20,
+    "fields": {
+        "app": "action",
+        "name": "email_use_ssl",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 21,
+    "fields": {
+        "app": "action",
+        "name": "notification_template",
+        "text": "<html>\r\n<head/>\r\n<body>\r\n<p>Dear {{ user.name }}</p>\r\n\r\n<p>This message is to inform you that on {{ email_sent_datetime }}  \r\n{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent \r\nresulting from the execution of the action with name \"{{ action.name }}\".</p> \r\n\r\n{% if filter_present %}\r\n<p>The action had a filter that reduced the number of messages from \r\n{{ num_rows }} to {{ num_selected }}.</p> \r\n{% else %}\r\n<p>All the data rows stored in the workflow table were used.</p>\r\n{% endif %}\r\n\r\nRegards.\r\nThe OnTask Support Team\r\n</body></html>"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 22,
+    "fields": {
+        "app": "action",
+        "name": "notification_subject",
+        "text": "OnTask: Action executed"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 23,
+    "fields": {
+        "app": "action",
+        "name": "notification_sender",
+        "text": "ontask@ontasklearning.org"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 24,
+    "fields": {
+        "app": "core",
+        "name": "minute_step",
+        "text": "15"
+    }
+},
+{
     "model": "authtoken.token",
     "pk": "c5eac9be0365a24aca40633f7ebb3556d66a7a1d",
     "fields": {
@@ -441,6 +1380,426 @@
 },
 {
     "model": "profiles.profile",
+    "pk": 144,
+    "fields": {
+        "slug": "1156229d-9827-4cc3-a896-328f59bc056f",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 153,
+    "fields": {
+        "slug": "42062341-0034-4ee0-b198-70a58f3a39f4",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 117,
+    "fields": {
+        "slug": "60ff6c3b-a3cc-4316-bd33-e5489cda0c54",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 123,
+    "fields": {
+        "slug": "5392dde7-7ca1-44b2-87ae-11fd2af6c6e8",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 140,
+    "fields": {
+        "slug": "8f7bc38e-314d-4619-b905-8a684aa17eaf",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 133,
+    "fields": {
+        "slug": "6aa6ef96-0675-4b65-bb9f-a4afa2845f86",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 148,
+    "fields": {
+        "slug": "294e8620-fb5a-4251-b978-234fc409f74d",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 141,
+    "fields": {
+        "slug": "c684d7e5-db23-4fcd-b190-c7aafbe56d72",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 139,
+    "fields": {
+        "slug": "33d0e8a4-c831-4f5f-b855-2044b230bac5",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 118,
+    "fields": {
+        "slug": "c245e4af-d8c4-4528-9e44-84ab11d72893",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 127,
+    "fields": {
+        "slug": "beef9a75-79b6-4024-9d95-693c179d50c6",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 152,
+    "fields": {
+        "slug": "b3515f3c-59de-4138-bb04-42e6d4fff94e",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 142,
+    "fields": {
+        "slug": "7b80a536-266c-4fab-9e4a-3c332ea95452",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 113,
+    "fields": {
+        "slug": "45b3a10a-e7ab-4101-9c86-3d760dcf4234",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 143,
+    "fields": {
+        "slug": "e43ab7fa-dd23-4108-a80a-9ad0c7a4829f",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 135,
+    "fields": {
+        "slug": "17661731-d95b-4200-970d-74d7ddf3679a",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 120,
+    "fields": {
+        "slug": "735da101-968d-4579-995d-e162cdaf41e4",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 151,
+    "fields": {
+        "slug": "8fc6cb8d-719b-47b0-8e5e-774e5e4096a5",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 129,
+    "fields": {
+        "slug": "7982e24f-45c7-4d5a-be39-d5809218357f",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 115,
+    "fields": {
+        "slug": "65add62b-a837-40f1-b034-8f60e6e5e897",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 122,
+    "fields": {
+        "slug": "e2faf7e0-657f-45ec-adf9-407043b21f6d",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 132,
+    "fields": {
+        "slug": "fb4580b2-c43f-4607-8944-ea37fab1036a",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 114,
+    "fields": {
+        "slug": "df83c7ce-e7a6-48fa-97eb-40827f678f97",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 119,
+    "fields": {
+        "slug": "23bbccdf-deee-432c-8db2-12529c39193f",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 146,
+    "fields": {
+        "slug": "e34ca980-e97e-482c-b7da-36f3c83f8f19",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 150,
+    "fields": {
+        "slug": "790eff40-6526-4bf1-b362-4a271c18963c",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 136,
+    "fields": {
+        "slug": "2da51270-7130-4130-867c-c73c21596103",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 128,
+    "fields": {
+        "slug": "b89fbeec-8f58-491c-a9e3-76c0895d694f",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 116,
+    "fields": {
+        "slug": "4263474e-1fab-4165-a8da-2937c671db7e",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 145,
+    "fields": {
+        "slug": "9e91ea39-4390-40b0-a5a6-a2b7b88c6a20",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 112,
+    "fields": {
+        "slug": "7d5dc5ea-4296-4eed-9872-c5daf57abf5d",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 121,
+    "fields": {
+        "slug": "cffa2143-ee5a-4f52-919c-5fc1688b511f",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 125,
+    "fields": {
+        "slug": "f2877a2a-1b5a-4dde-9dad-c17c3e8c9bd8",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 137,
+    "fields": {
+        "slug": "41218f3a-394d-4cb5-81f9-a028953182ee",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 147,
+    "fields": {
+        "slug": "3cd7454d-7f34-4acc-823f-b28a2e12c254",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 131,
+    "fields": {
+        "slug": "c31d8aa4-8d06-4611-9997-ee8cd0489076",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 149,
+    "fields": {
+        "slug": "30b1b1e5-12c2-45ee-99e9-9e4028182a45",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 138,
+    "fields": {
+        "slug": "223d34da-1005-4764-86ac-9d7bb83e4baf",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 126,
+    "fields": {
+        "slug": "14375d87-4d51-4005-95ec-4784a5841b2d",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 124,
+    "fields": {
+        "slug": "444e2aaa-70bc-4a63-bf91-6ec990539c61",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 130,
+    "fields": {
+        "slug": "8bc493db-cc39-4262-b691-42109a951d0f",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 134,
+    "fields": {
+        "slug": "f3088b67-88db-44c1-bc64-38e6bcc386a2",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
     "pk": 2,
     "fields": {
         "slug": "467cdea6-686d-45bc-ad95-a073f7241f07",
@@ -479,10 +1838,12 @@
         "name": "wflow2",
         "description_text": "Simple workflow structure with two type of actions",
         "created": "2017-12-08T01:25:32.160Z",
-        "modified": "2017-12-08T01:45:36.458Z",
+        "modified": "2017-12-31T02:33:15.096Z",
         "nrows": 3,
         "ncols": 6,
-        "attributes": {},
+        "attributes": {
+            "attribute name": "attribute value"
+        },
         "query_builder_ops": [
             {
                 "validation": {
@@ -521,7 +1882,7 @@
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_108",
-        "session_key": "",
+        "session_key": "fkozmzu50459dx5zplt2xfty2yypfylr",
         "shared": []
     }
 },
@@ -534,7 +1895,9 @@
         "workflow": 108,
         "data_type": "integer",
         "is_key": true,
-        "categories": []
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
@@ -546,7 +1909,9 @@
         "workflow": 108,
         "data_type": "string",
         "is_key": false,
-        "categories": []
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
@@ -558,7 +1923,9 @@
         "workflow": 108,
         "data_type": "string",
         "is_key": true,
-        "categories": []
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
@@ -570,7 +1937,9 @@
         "workflow": 108,
         "data_type": "double",
         "is_key": true,
-        "categories": []
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
@@ -582,7 +1951,9 @@
         "workflow": 108,
         "data_type": "boolean",
         "is_key": false,
-        "categories": []
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
@@ -594,7 +1965,9 @@
         "workflow": 108,
         "data_type": "datetime",
         "is_key": false,
-        "categories": []
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
@@ -605,11 +1978,13 @@
         "name": "Detecting age",
         "description_text": "",
         "created": "2017-12-08T01:29:40.524Z",
-        "modified": "2017-12-08T01:34:46.122Z",
+        "modified": "2017-12-31T02:33:50.166Z",
         "n_selected_rows": 2,
         "is_out": true,
         "serve_enabled": false,
-        "content": "<p>Hi {{ name }}</p><p><br></p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>",
+        "active_from": null,
+        "active_to": null,
+        "content": "<p>Hi {{ name }}</p><p>ATT:&nbsp;{{ attribute name }}</p><p>COL:&nbsp;{{ registered }}</p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>",
         "filter": {},
         "columns": []
     }
@@ -626,6 +2001,8 @@
         "n_selected_rows": -1,
         "is_out": false,
         "serve_enabled": false,
+        "active_from": null,
+        "active_to": null,
         "content": "{% comment %}Your action content here{% endcomment %}",
         "filter": {
             "not": false,
@@ -882,6 +2259,45 @@
         "name": "action_create",
         "workflow": 108,
         "payload": "{\"workflow_id\": 108, \"id\": 254, \"workflow_name\": \"wflow2\", \"name\": \"Check registration\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1464,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-31T02:33:12.655Z",
+        "name": "workflow_attribute_create",
+        "workflow": 108,
+        "payload": "{\"attr_key\": \"attribute name\", \"attr_val\": \"attribute value\", \"id\": 108, \"name\": \"wflow2\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1465,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-31T02:33:15.092Z",
+        "name": "workflow_attribute_update",
+        "workflow": 108,
+        "payload": "{\"attr\": {\"attribute name\": \"attribute value\"}, \"id\": 108, \"name\": \"wflow2\"}"
+    }
+},
+{
+    "model": "logs.log",
+    "pk": 1466,
+    "fields": {
+        "user": [
+            "instructor1@bogus.com"
+        ],
+        "created": "2017-12-31T02:33:50.162Z",
+        "name": "action_update",
+        "workflow": 108,
+        "payload": "{\"content\": \"<p>Hi {{ name }}</p><p>ATT:&nbsp;{{ attribute name }}</p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>\", \"workflow_id\": 108, \"id\": 253, \"workflow_name\": \"wflow2\", \"name\": \"Detecting age\"}"
     }
 }
 ]

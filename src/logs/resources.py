@@ -30,7 +30,7 @@ def export(request, pk):
     # Select the dataset to dump
     logs = Log.objects.filter(user=request.user, workflow__id=pk)
 
-    if len(logs) == 0:
+    if logs.count() == 0:
         # No records found!!
         pass
 

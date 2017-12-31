@@ -85,7 +85,7 @@ def save_condition_form(request,
 
         log_type = 'filter'
     else:
-        # Verify that the condition name does not exist yet
+        # Verify that the condition name does not exist yet (Uniqueness FIX)
         qs = Condition.objects.filter(
             name=form.cleaned_data['name'],
             action=action,

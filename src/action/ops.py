@@ -219,7 +219,7 @@ def clone_action(action, new_workflow=None, new_name=None):
 
     # Clone the columns field (in case of an action in).
     if not action.is_out:
-        column_names = [c.name for c in old_action.columns.all()]
+        column_names = old_action.columns.all().values_list('name', flat=True)
         action.columns.clear()
         action.columns.add(
             *list(action.workflow.columns.filter(

@@ -40,9 +40,13 @@ def export_ask(request, format=None):
     if request.method == 'POST':
         if form.is_valid():
             to_include = []
-            for idx, a in enumerate(Action.objects.filter(workflow=workflow)):
+            for idx, a_id in enumerate(
+                    Action.objects.filter(
+                        workflow=workflow
+                    ).values_list("id", flat=True)
+            ):
                 if form.cleaned_data['select_%s' % idx]:
-                    to_include.append(str(a.id))
+                    to_include.append(str(a_id))
             return render(
                 request,
                 'workflow/export_done.html',

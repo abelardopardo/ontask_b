@@ -36,10 +36,10 @@ def attributes(request):
             # Check that the attribute names are different from column and
             # condition names.
             old_keys = wf_attributes.keys()
-            condition_names = [x.name
-                               for x in Condition.objects.filter(
-                                action__workflow=workflow,
-                                is_filter=False)]
+            condition_names = Condition.objects.filter(
+                action__workflow=workflow,
+                is_filter=False
+            ).values_list('name', flat=True)
 
             # Loop over all the keys in the form
             column_names = workflow.get_column_names()
@@ -135,8 +135,10 @@ def attribute_create(request):
                 return JsonResponse(data)
 
             # Check if there is a condition with that name
-            conditions = Condition.objects.filter(action__workflow=workflow)
-            if attr_name in [x.name for x in conditions]:
+            cond_names = Condition.objects.filter(
+                action__workflow=workflow
+            ).values_list('name', flat=True)
+            if attr_name in cond_names:
                 form.add_error(
                     'key',
                     'There is a condition already with this name.'

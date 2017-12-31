@@ -66,16 +66,16 @@ class WorkflowTable(tables.Table):
     def render_name(self, record):
         return format_html(
             """<a href="{0}">{1}</a>""".format(
-                reverse('workflow:detail', kwargs={'pk': record.id}),
-                record.name
+                reverse('workflow:detail', kwargs={'pk': record['id']}),
+                record['name']
             )
         )
 
     def render_nrows_cols(self, record):
-        if record.nrows == 0 and record.ncols == 0:
+        if record['nrows'] == 0 and record['ncols'] == 0:
             return "No data"
 
-        return format_html("{0}/{1}".format(record.nrows, record.ncols))
+        return format_html("{0}/{1}".format(record['nrows'], record['ncols']))
 
     class Meta:
         model = Workflow
@@ -182,11 +182,18 @@ def workflow_index(request):
     # Get the available workflows
     workflows = Workflow.objects.filter(
         Q(user=request.user) | Q(shared=request.user)
-    ).distinct()
+    ).distinct().values(
+        'id',
+        'name',
+        'description_text',
+        'nrows',
+        'ncols',
+        'modified'
+    )
 
     # We include the table only if it is not empty.
     context = {}
-    if len(workflows) > 0:
+    if workflows.count() > 0:
         context['table'] = WorkflowTable(workflows,
                                          id='workflow-table',
                                          orderable=False)
