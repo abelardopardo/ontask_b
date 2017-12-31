@@ -332,8 +332,8 @@ def rename_df_column(df, workflow, old_name, new_name):
             cond.formula, old_name, new_name)
         cond.save()
 
-    # Rename the appearances of the variable in all action out texts
-    actions = Action.objects.filter(workflow=workflow, is_out=True)
+    # Rename the appearances of the variable in all actions
+    actions = Action.objects.filter(workflow=workflow)
     for action_item in actions:
         action_item.rename_variable(old_name, new_name)
 
