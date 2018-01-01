@@ -32,28 +32,14 @@ from .ops import (get_workflow,
 
 
 class WorkflowTable(tables.Table):
-    name = tables.Column(
-        attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name=str('Name')
-    )
-
-    description_text = tables.Column(
-        attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name=str('Description')
-    )
-
+    name = tables.Column(verbose_name=str('Name'))
+    description_text = tables.Column(verbose_name=str('Description'))
     nrows_cols = tables.Column(
         empty_values=[],
-        attrs={'td': {'class': 'dt-body-center'}},
         verbose_name=str('Rows/Columns'),
         default='No data'
     )
-
-    modified = tables.DateTimeColumn(
-        attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name='Last modified'
-
-    )
+    modified = tables.DateTimeColumn(verbose_name='Last modified')
 
     def __init__(self, data, *args, **kwargs):
         table_id = kwargs.pop('id')
@@ -120,13 +106,9 @@ class WorkflowShareTable(tables.Table):
         }
 
 
-def save_workflow_form(request, form, template_name, is_new):
-    # Ajax response
-    data = dict()
-
-    # The form is false (thus needs to be rendered again, until proven
-    # otherwise
-    data['form_is_valid'] = False
+def save_workflow_form(request, form, template_name):
+    # Ajax response. Form is not valid until proven otherwise
+    data = {'form_is_valid': False}
 
     if request.method == 'POST' and form.is_valid():
         # Correct form submitted
@@ -212,12 +194,12 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
     def get(self, request, *args, **kwargs):
         del args
         form = self.form_class()
-        return save_workflow_form(request, form, self.template_name, True)
+        return save_workflow_form(request, form, self.template_name)
 
     def post(self, request, *args, **kwargs):
         del args
         form = self.form_class(request.POST)
-        return save_workflow_form(request, form, self.template_name, True)
+        return save_workflow_form(request, form, self.template_name)
 
 
 class WorkflowDetailView(UserIsInstructor, generic.DetailView):
@@ -297,8 +279,7 @@ def update(request, pk):
         return save_workflow_form(
             request,
             form,
-            'workflow/includes/partial_workflow_update.html',
-            False)
+            'workflow/includes/partial_workflow_update.html')
 
     # If the user does not own the workflow, notify error and go back to
     # index

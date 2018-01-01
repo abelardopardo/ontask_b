@@ -122,10 +122,23 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Delete the existing one and confirm deletion
         self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[3]").click()
+            "//table[@id='attribute-table']/tbody/tr/td[3]/button[2]"
+        ).click()
+        # Wait for the delete confirmation frame
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),
+                                             'Confirm attribute deletion')
+        )
+        # Click in the delete confirm button
         self.selenium.find_element_by_xpath(
-            "(//button[@type='submit'])[3]").click()
-        self.wait_close_modal_refresh_table('attribute-table')
+            "//div[@class='modal-footer']/button[2]"
+        ).click()
+        # MODAL WAITING
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
 
         # Add a new attribute and insert key (symbols) and value
         self.selenium.find_element_by_xpath(
@@ -146,8 +159,9 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Submit new attribute
         self.selenium.find_element_by_xpath(
-            "(//button[@type='submit'])[3]").click()
-        # Wait for modal to close
+            "//div[@class='modal-footer']/button[2]"
+        ).click()
+        # MODAL WAITING
         WebDriverWait(self.selenium, 10).until_not(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'modal-open')
@@ -155,8 +169,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         )
 
         # Save and close the attribute page
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='submit'])[2]").click()
+        self.selenium.find_element_by_link_text('Back').click()
 
         # Click in the TABLE link
         self.selenium.find_element_by_link_text("Table").click()

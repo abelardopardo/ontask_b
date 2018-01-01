@@ -723,7 +723,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
 
         # Click in the delete condition button
         self.selenium.find_element_by_xpath(
-            "//div[@id='condition-set']/h4/div/button[2]"
+            "//div[@id='condition-set']/div/div/button[2]"
         ).click()
         self.selenium.find_element_by_class_name('js-condition-delete').click()
         # Wait for the screen to delete the condition
@@ -960,14 +960,31 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
         self.selenium.find_element_by_link_text("Attributes").click()
 
         # Change the name of the attribute and submit
-        self.selenium.find_element_by_id("id_attribute name").click()
-        self.selenium.find_element_by_id("id_attribute name").clear()
-        self.selenium.find_element_by_id(
-            "id_attribute name"
-        ).send_keys("attribute name new")
         self.selenium.find_element_by_xpath(
-            "(//button[@type='submit'])[2]"
+            "//table[@id='attribute-table']/tbody/tr[1]/td[3]/button[1]"
         ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.CLASS_NAME, 'modal-title'),
+                'Edit attribute'))
+        self.selenium.find_element_by_id('id_key').clear()
+        self.selenium.find_element_by_id('id_key').send_keys(
+            'attribute name new'
+        )
+        self.selenium.find_element_by_id('id_value').clear()
+        self.selenium.find_element_by_id('id_value').send_keys(
+            'attribute value'
+        )
+        # Submit
+        self.selenium.find_element_by_xpath(
+            "//div[@class='modal-footer']/button[2]"
+        ).click()
+        # MODAL WAITING
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
 
         # Go to the actions and select the edit button of the action out
         self.selenium.find_element_by_link_text("Actions").click()

@@ -406,10 +406,10 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         # Click in the upload/Merge link
         upload = self.selenium.find_element_by_xpath(
             "//tbody/tr/td/a[1]"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.ID, 'id_file'))
         )
-
-        # Goto Upload/Merge CSV
-        upload.click()
 
         # Set the file name
         self.selenium.find_element_by_id('id_file').send_keys(
@@ -790,12 +790,15 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
 
         # Values now should be in the table
         self.assertEqual(
-            self.selenium.find_element_by_id('id_key1').get_attribute('value'),
+            self.selenium.find_element_by_xpath(
+                "//table[@id='attribute-table']/tbody/tr/td[1]"
+            ).text,
             'key1'
         )
         self.assertEqual(
-            self.selenium.find_element_by_id(
-                'id_key1__value').get_attribute('value'),
+            self.selenium.find_element_by_xpath(
+                "//table[@id='attribute-table']/tbody/tr/td[2]"
+            ).text,
             'value1'
         )
 
@@ -822,21 +825,41 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         )
 
         # Values now should be in the table
-        key2 = self.selenium.find_element_by_id('id_key2')
-        value2 = self.selenium.find_element_by_id('id_key2__value')
-        self.assertEqual(key2.get_attribute('value'), 'key2')
-        self.assertEqual(value2.get_attribute('value'), 'value2')
+        key2 = self.selenium.find_element_by_xpath(
+             "//table[@id='attribute-table']/tbody/tr[2]/td[1]"
+            )
+        value2 = self.selenium.find_element_by_xpath(
+             "//table[@id='attribute-table']/tbody/tr[2]/td[2]"
+            )
+        self.assertEqual(key2.text, 'key2')
+        self.assertEqual(value2.text, 'value2')
 
         # Rename second attribute
-        key2.clear()
-        key2.send_keys('newkey2')
-        value2.clear()
-        value2.send_keys('newvalue2')
+        self.selenium.find_element_by_xpath(
+            "//table[@id='attribute-table']/tbody/tr[2]/td[3]/button[1]"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.CLASS_NAME, 'modal-title'),
+                'Edit attribute'))
+        self.selenium.find_element_by_id('id_key').clear()
+        self.selenium.find_element_by_id('id_key').send_keys('newkey2')
+        self.selenium.find_element_by_id('id_value').clear()
+        self.selenium.find_element_by_id('id_value').send_keys('newvalue2')
+
+        # Click in the submit button
+        self.selenium.find_element_by_xpath(
+            "//div[@class='modal-footer']/button[2]"
+        ).click()
+        # MODAL WAITING
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
 
         # Click in the save and close
-        self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-attributes']/form/button[@type='submit']"
-        ).click()
+        self.selenium.find_element_by_link_text('Back').click()
         # Wait for the details page
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
@@ -863,7 +886,7 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
 
         # click the delete button in the second row
         self.selenium.find_element_by_xpath(
-            "//table[@id='attribute-table']/tbody/tr[2]/td[1]/button[1]"
+            "//table[@id='attribute-table']/tbody/tr[2]/td[3]/button[2]"
         ).click()
         # Wait for the delete confirmation frame
         WebDriverWait(self.selenium, 10).until(

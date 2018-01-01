@@ -18,13 +18,14 @@
       if (document.getElementById("action-table") != null) {
         // Required for DataTables
         $('#action-table').DataTable({
-            "language": {
-                "emptyTable": "There are no actions for this workflow."
-            },
-            "columnDefs": [
-                {"orderable": false, "targets": 4},
-                {"searchable": false, "targets": 4},
-            ],
+          "language": {
+            "emptyTable": "There are no actions for this workflow."
+          },
+          "columnDefs": [
+            {"className": "dt-center", "targets": "_all"},
+            {"orderable": false, "targets": 4},
+            {"searchable": false, "targets": 4},
+          ],
         });
       }
     });

@@ -46,6 +46,10 @@ urlpatterns = [
         attribute_views.attribute_create,
         name='attribute_create'),
 
+    url(r'^(?P<pk>\d+)/attribute_edit/$',
+        attribute_views.attribute_edit,
+        name='attribute_edit'),
+
     url(r'^(?P<pk>\d+)/attribute_delete/$',
         attribute_views.attribute_delete,
         name='attribute_delete'),

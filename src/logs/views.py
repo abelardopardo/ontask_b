@@ -7,8 +7,7 @@ import django_tables2 as tables
 import pytz
 from django.conf import settings as ontask_settings
 from django.contrib.auth.decorators import user_passes_test
-from django.db.models import F
-from django.db.models import Q
+from django.db.models import F, Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
@@ -27,31 +26,13 @@ class LogTable(tables.Table):
     # Needs to be in the table to be used as URL parameter
     id = tables.Column(visible=False)
 
-    created = tables.DateTimeColumn(
-        attrs={'td': {'class': 'dt-body-center'}},
-        orderable=False,
-        verbose_name='Date/Time',
-        format=str('r'),
-        short=True)
-
-    user = tables.EmailColumn(
-        attrs={'td': {'class': 'dt-body-center'}},
-        orderable=False,
-        accessor=A('user.email')
-    )
-
-    name = tables.Column(
-        attrs={'td': {'class': 'dt-body-center'}},
-        orderable=False,
-        verbose_name=str('Event type')
-    )
-
-    operations = tables.Column(
-        empty_values=[],
-        attrs={'td': {'class': 'dt-body-center'}},
-        orderable=False,
-        verbose_name=str('Additional data')
-    )
+    created = tables.DateTimeColumn(verbose_name='Date/Time',
+                                    format=str('r'),
+                                    short=True)
+    user = tables.EmailColumn(accessor=A('user.email'))
+    name = tables.Column(verbose_name=str('Event type'))
+    operations = tables.Column(empty_values=[],
+                               verbose_name=str('Additional data'))
 
     def __init__(self, data, *args, **kwargs):
         super(LogTable, self).__init__(data, *args, **kwargs)
@@ -76,7 +57,7 @@ class LogTable(tables.Table):
         exclude = ('id', 'workflow', 'payload')
 
         attrs = {
-            'class': 'table display',
+            'class': 'table display table-bordered',
             'id': 'log-table'
         }
 
@@ -135,7 +116,7 @@ def show_ss(request):
 
     # Order and select values
     qs = qs.order_by(F('created').desc()).values_list(
-            'id', 'created', 'user__email', 'name'
+        'id', 'created', 'user__email', 'name'
     )
     recordsFiltered = qs.count()
 

@@ -75,7 +75,14 @@ class AttributeItemForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.keys = kwargs.pop('keys')
+
+        key = kwargs.pop('key', '')
+        value = kwargs.pop('value', '')
+
         super(AttributeItemForm, self).__init__(*args, **kwargs)
+
+        self.fields['key'].initial = key
+        self.fields['value'].initial = value
 
     def clean(self):
         data = super(AttributeItemForm, self).clean()
