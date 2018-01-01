@@ -1,8 +1,10 @@
-<button type="submit" class="btn btn-primary btn-sm">
-  <span class="glyphicon glyphicon-ok"></span> Save & Close</button>
-<button type="button"
-        class="btn btn-primary btn-sm js-attribute-create"
-        data-url="{% url 'workflow:attribute_create' %}">
-  <span class="glyphicon glyphicon-plus"></span> New Attribute
-</button>
-
+<div style="margin-bottom: 2ex;">
+  <a href="{% url 'workflow:detail' wid %}"
+       class="btn btn-default btn-sm align-middle"> Back</a>
+  <button type="button"
+          class="btn btn-primary btn-sm js-attribute-create"
+          data-url="{% url 'workflow:attribute_create' %}"
+          data-toggle="tooltip" title="Add a new name/value pair">
+    <span class="glyphicon glyphicon-plus"></span> New Attribute
+  </button>
+</div>

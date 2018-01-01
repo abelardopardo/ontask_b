@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
-from collections import OrderedDict
-
 from ontask.tables import OperationsColumn
 
 try:
@@ -76,13 +74,15 @@ class ActionTable(tables.Table):
         attrs={'td': {'style': 'text-align:left;'}},
         verbose_name='Operations',
         template_file='action/includes/partial_action_operations.html',
-        template_context=lambda record: {'id': record.id,
-                                         'is_out': int(record.is_out),
-                                         'serve_enabled': record.serve_enabled}
+        template_context=lambda record: {
+            'id': record['id'],
+            'is_out': int(record['is_out']),
+            'serve_enabled': record['serve_enabled']
+        }
     )
 
     def render_is_out(self, record):
-        if record.is_out:
+        if record['is_out']:
             return "OUT"
         else:
             return "IN"
@@ -104,7 +104,7 @@ class ActionTable(tables.Table):
 
         row_attrs = {
             'style': 'text-align:center;',
-            'class': lambda record: 'success' if record.is_out else ''
+            'class': lambda record: 'success' if record['is_out'] else ''
         }
 
 
@@ -213,13 +213,19 @@ def action_index(request):
         return redirect('workflow:index')
 
     # Get the actions
-    actions = Action.objects.filter(workflow__id=workflow.id)
+    actions = Action.objects.filter(
+        workflow__id=workflow.id).values('id',
+                                         'name',
+                                         'description_text',
+                                         'is_out',
+                                         'modified',
+                                         'serve_enabled')
 
     # Context to render the template
     context = {}
 
     # Build the table only if there is anything to show (prevent empty table)
-    if len(actions) > 0:
+    if actions.count() > 0:
         context['table'] = ActionTable(actions, orderable=False)
 
     return render(request, 'action/index.html', context)
@@ -308,7 +314,9 @@ def edit_action_out(request, pk):
 
     # See if the action has a filter or not
     try:
-        filter_condition = Condition.objects.get(action=action, is_filter=True)
+        filter_condition = Condition.objects.get(
+            action=action, is_filter=True
+        )
     except Condition.DoesNotExist:
         filter_condition = None
     except Condition.MultipleObjectsReturned:
@@ -318,7 +326,8 @@ def edit_action_out(request, pk):
 
     # Conditions to show in the page as well.
     conditions = Condition.objects.filter(
-        action=action, is_filter=False).order_by('created')
+        action=action, is_filter=False
+    ).order_by('created').values('id', 'name')
 
     # Boolean to find out if there is a table attached to this workflow
     has_data = ops.workflow_has_table(action.workflow)

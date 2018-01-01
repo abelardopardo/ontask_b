@@ -35,7 +35,11 @@
                       if (data[2] == '<span class="true">✔</span>') {
                         $(row).addClass('success');
                       }
-                  }
+                  },
+                  "drawCallback": function(settings) {
+                     // Needed to enable tooltips in ajax produced content
+                     $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+                  },
                 });
           });
       }
@@ -44,7 +48,7 @@
 {% endblock %}
 {% block title %}{{ block.super }}{{ workflow.name }}{% endblock %}
 {% block container %}
-<div align="center" class="container-fluid">
+<div class="container-fluid text-center">
   <h1 class="page-header">Workflow Details</h1>
   {% if workflow %}
     <div style="display: inline-block;" id="workflow-area">

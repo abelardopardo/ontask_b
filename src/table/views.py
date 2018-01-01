@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
-from collections import OrderedDict
+import json
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
-from django.utils.html import escape
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
@@ -31,7 +30,10 @@ def display(request):
                       {})
 
     # Create the context with the column names
-    context = {'columns': workflow.columns.all()}
+    context = {
+        'columns': workflow.columns.all(),
+        'query_builder_ops': workflow.get_query_builder_ops_as_str(),
+    }
 
     return render(request, 'table/display.html', context)
 
@@ -55,6 +57,7 @@ def display_ss(request):
         length = int(request.POST.get('length', None))
         order_col_name = request.POST.get('order[0][column]', None)
         order_dir = request.POST.get('order[0][dir]', 'asc')
+        extra_search = request.POST.get('extra_search', None)
     except ValueError:
         return JsonResponse({'error': 'Incorrect request. Unable to process'})
 
@@ -74,10 +77,12 @@ def display_ss(request):
     key_name, key_idx = next(((c.name, idx) for idx, c in enumerate(columns)
                               if c.is_key), None)
 
-    # Get the query set
+    # Get the filters to apply when fetching the query set
     cv_tuples = []
     if search_value:
-        cv_tuples = [(c.name, search_value, c.data_type) for c in columns]
+        cv_tuples.extend(
+            [(c.name, search_value, c.data_type) for c in columns]
+        )
 
     qs = pandas_db.search_table_rows(
         workflow.id,
@@ -85,7 +90,8 @@ def display_ss(request):
         True,
         order_col_name,
         order_dir == 'asc',
-        None
+        None,
+        json.loads(extra_search)
     )
 
     # Post processing + adding operation columns and performing the search

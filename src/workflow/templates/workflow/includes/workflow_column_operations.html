@@ -1,12 +1,14 @@
 <button type="button"
         class="btn btn-primary btn-sm js-workflow-column-edit"
         data-url="{% url 'workflow:column_edit' id %}"
-        data-toggle="tooltip" title="Edit column properties">
+        data-toggle="tooltip"
+        title="Edit column name, description, type, values, etc.">
   <span class="glyphicon glyphicon-pencil"></span>
 </button>
 <button type="button"
         class="btn btn-primary btn-sm js-workflow-clone align-middle"
-        data-url="{% url 'workflow:column_clone' id %}">
+        data-url="{% url 'workflow:column_clone' id %}"
+        data-toggle="tooltip" title="Create an exact duplicate of this column">
     <span class="glyphicon glyphicon-duplicate"></span>
 </button>
 <button type="button"

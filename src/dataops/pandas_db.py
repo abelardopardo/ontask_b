@@ -275,7 +275,7 @@ def execute_select_on_table(pk, fields, values, column_names=None):
     :param fields: List of fields to add to the WHERE clause
     :param values: parameters to match the previous fields
     :param column_names: optional list of columns to select
-    :return: ([(list of column names,values)], QuerySet with the data rows)
+    :return: QuerySet with the data rows
     """
 
     # Create the query

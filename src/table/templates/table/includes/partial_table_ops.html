@@ -1,8 +1,10 @@
-<a class="btn btn-primary btn-sm" href="{{ edit_url }}">
+<a class="btn btn-primary btn-sm" href="{{ edit_url }}"
+   data-toggle="tooltip" title="Edit the data in this row">
   <span class="glyphicon glyphicon-pencil"></span>
 </a>
 <button type="button"
         class="btn btn-danger btn-sm js-row-delete"
-        data-url="{% url 'table:row_delete' %}{{ delete_key }}">
+        data-url="{% url 'table:row_delete' %}{{ delete_key }}"
+        data-toggle="tooltip" title="Delete this row in the table">
   <span class="glyphicon glyphicon-trash"></span>
 </button>

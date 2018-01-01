@@ -82,15 +82,16 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
 
     # Get the workflow and its columns
     workflow = Workflow.objects.get(id=pk)
-    wf_columns = Column.objects.filter(workflow__id=pk)
+    wf_col_names = Column.objects.filter(
+        workflow__id=pk
+    ).values_list("name", flat=True)
 
     # Loop over the columns in the data frame and reconcile the column info
     # with the column objects attached to the WF
     for cname in df_column_names:
         # See if this is a new column
-        wf_column = next((x for x in wf_columns if x.name == cname), None)
-        if wf_column:
-            # If column already exists in wf_columns, no need to do anything
+        if cname in wf_col_names:
+            # If column already exists in wf_col_names, no need to do anything
             continue
 
         # Create the new column
@@ -329,9 +330,10 @@ def rename_df_column(df, workflow, old_name, new_name):
     for cond in conditions:
         cond.formula = formula_evaluation.rename_variable(
             cond.formula, old_name, new_name)
+        cond.save()
 
-    # Rename the appearances of the variable in all action out texts
-    actions = Action.objects.filter(workflow=workflow, is_out=True)
+    # Rename the appearances of the variable in all actions
+    actions = Action.objects.filter(workflow=workflow)
     for action_item in actions:
         action_item.rename_variable(old_name, new_name)
 

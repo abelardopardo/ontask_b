@@ -10,6 +10,7 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.html import escape
 
+from dataops import formula_evaluation
 from workflow.models import Workflow, Column
 
 # Regular expression to detect the use of a variable in a django template
@@ -115,13 +116,20 @@ class Action(models.Model):
         :return: Updates the current object
         """
 
-        new_text = var_use_re.sub(
-            lambda m: '{{ ' +
-                      (new_name if m.group('varname') == escape(old_name)
-                       else m.group('varname')) + ' }}',
-            self.content
-        )
-        self.content = new_text
+        if self.is_out:
+            # Action out: Need to change name appearances in content
+            new_text = var_use_re.sub(
+                lambda m: '{{ ' +
+                          (new_name if m.group('varname') == escape(old_name)
+                           else m.group('varname')) + ' }}',
+                self.content
+            )
+            self.content = new_text
+        else:
+            # Action in: Need to change name appearances in filter
+            self.filter = formula_evaluation.rename_variable(
+                self.filter, old_name, new_name)
+
         self.save()
 
     class Meta:

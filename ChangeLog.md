@@ -1,3 +1,22 @@
+## 2.3.1
+
+### Added
+
+- Filter in the table view using filtering widget
+  
+### Changed
+
+- Removed django-auth-ldap from requirements. Instructions mention the need to
+  install it if needed.
+  
+- Simplified operation menus. Less options visible and more tucked under 
+  dropdown buttons. 
+ 
+- Improved rendering of the action in form for data input from the learners.
+
+- Reimplemented attribute manipulation screen to make it similar in 
+  functionality to the rest
+  
 ## 2.3.0 (2017-12-30)
 
 ### Added

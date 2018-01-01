@@ -66,16 +66,22 @@
           <div style="margin: 1ex 0 1ex 0;">
             <button type="button" class="btn btn-info js-action-preview"
                     style="margin-right:2ex;"
-                    data-url="{% url 'action:preview' action.id 1 %}">
+                    data-url="{% url 'action:preview' action.id 1 %}"
+                    data-toggle="tooltip"
+                    title="Preview the text evaluated for each table row">
               <span class="glyphicon glyphicon-eye-open"></span> Preview
             </button>
             <button type="submit" name="Submit" value="Save"
                     style="margin-right:2ex;"
-                    class="btn btn-primary">
+                    class="btn btn-primary"
+                    data-toggle="tooltip"
+                    title="Save the text and remain in this page">
               <span class="glyphicon glyphicon-floppy-disk"></span> Save
             </button>
             <button type="submit" name="Submit" value="Save-and-close"
-                    class="btn btn-primary">
+                    class="btn btn-primary"
+                    data-toggle="tooltip"
+                    title="Save and go back to the table with all actions">
               <span class="glyphicon glyphicon-ok"></span> Save &
               Close</button>
           </div>
