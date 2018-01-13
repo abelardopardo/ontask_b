@@ -22,8 +22,8 @@ a rich set of functionalities typically required in applications like OnTask.
 But as with many other applications, OnTask requires a set of additional
 applications for its execution:
 
-- Python 2.7.13 (or later)
-- Django (version 1.11 or later)
+- Python 2.7
+- Django (version 1.11)
 - Additional Django modules (included in the requirements/base.txt) file
 - Redis (version 4.0 or later)
 - PostgreSQL (version 9.5 or later)
