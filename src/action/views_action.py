@@ -407,31 +407,22 @@ def edit_action_in(request, pk):
                        'Go to Dataops to upload data.')
         return redirect(reverse('action:index'))
 
-    # Get the action
+    # Get the action and the columns
     try:
         action = Action.objects.filter(
             Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
+            Q(workflow__shared=request.user)
+        ).distinct().prefetch_related('columns').get(pk=pk)
     except ObjectDoesNotExist:
         return redirect('action:index')
 
-    # Get the list of all columns from the workflow
-    all_columns = workflow.columns.all()
-    selected_columns = [c in action.columns.all()
-                        for c in all_columns]
-
     # Create the form
-    form = EditActionInForm(request.POST or None,
-                            columns=workflow.columns.all(),
-                            selected=selected_columns,
+    form = EditActionInForm(data=request.POST or None,
+                            workflow=workflow,
                             instance=action)
 
-    # Create the context info. Col info is to render the table and contains
-    # pairs of (form field, column object)
-    select_col_fields = [f for f in form
-                         if f.name.startswith(field_prefix)]
-    ctx = {'col_info': zip(select_col_fields, all_columns),
-           'action': action,
+    # Create the context info.
+    ctx = {'action': action,
            'query_builder_ops': workflow.get_query_builder_ops_as_str(),
            'form': form, }
 
@@ -441,45 +432,8 @@ def edit_action_in(request, pk):
 
     # Valid POST request
 
-    # There must be at least a key and a non-key columns
-    is_there_key = False
-    is_there_nonkey = False
-    for idx, c in enumerate(all_columns):
-        # Check for the two conditions
-        if c.is_key and form.cleaned_data[field_prefix + '%s' % idx]:
-            is_there_key = True
-        if not c.is_key and form.cleaned_data[field_prefix + '%s' % idx]:
-            is_there_nonkey = True
-
-    # Step 1: Make sure there is at least a unique column
-    if not is_there_key:
-        form.add_error(
-            None,
-            'There must be at least one unique column in the view'
-        )
-        ctx['form'] = form
-        return render(request, 'action/edit_in.html', ctx)
-
-    # Step 2: There must be at least on key column
-    if not is_there_nonkey:
-        form.add_error(
-            None,
-            'There must be at least one non-unique column in the view'
-        )
-        ctx['form'] = form
-        return render(request, 'action/edit_in.html', ctx)
-
     # Save the element and populate the right columns
-    action = form.save(commit=False)
-
-    # Update set of columns (flush first)
-    action.columns.clear()
-    for idx, c in enumerate(all_columns):
-        if not form.cleaned_data[field_prefix + '%s' % idx]:
-            # Skip the columns that have not been selected
-            continue
-        action.columns.add(c)
-    action.save()
+    form.save()
 
     # Finish processing
     return redirect(reverse('action:index'))
