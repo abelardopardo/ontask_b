@@ -21,7 +21,7 @@ INSTALLED_APPS += (
     'debug_toolbar',)
 
 DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': lambda r: False,  # disables it
+    'SHOW_TOOLBAR_CALLBACK': lambda r: True,  # enables it
     # '...
 }
 
