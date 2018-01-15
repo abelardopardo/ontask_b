@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
-import datetime
-import pytz
-
 from datetimewidget.widgets import DateTimeWidget
 from django import forms
-from django.conf import settings
+from django.forms.widgets import SelectMultiple
 from django_summernote.widgets import SummernoteInplaceWidget
 
 from ontask import is_legal_name
-from .models import Action, Condition
 from ontask.forms import column_to_field, dateTimeOptions
+from .models import Action, Condition
 
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)
@@ -47,16 +44,19 @@ class EditActionOutForm(forms.ModelForm):
 # Form to select a subset of the columns
 class EditActionInForm(forms.ModelForm):
     """
-    Main class to edit an action in . The main element is the text editor (
-    currently using summernote).
+    Main class to edit an action in. Two elements appear in the form. The
+    filter expression to select a subset of rows from the table, and a widget
+    to select multiple columns.
     """
 
-    def __init__(self, *args, **kwargs):
+    # Columns to to select
+    columns = forms.ModelMultipleChoiceField(queryset=None, required=False)
 
-        self.columns = kwargs.pop('columns', [])
-        self.selected = kwargs.pop('selected', [])
+    def __init__(self, data, *args, **kwargs):
+        # Get the workflow to access the columns
+        workflow = kwargs.pop('workflow', None)
 
-        super(EditActionInForm, self).__init__(*args, **kwargs)
+        super(EditActionInForm, self).__init__(data, *args, **kwargs)
 
         # Required enforced in the server (not in the browser)
         self.fields['filter'].required = False
@@ -64,31 +64,29 @@ class EditActionInForm(forms.ModelForm):
         # Filter should be hidden.
         self.fields['filter'].widget = forms.HiddenInput()
 
-        # Create as many fields as the given columns
-        for idx in range(len(self.columns)):
-
-            self.fields[field_prefix + '%s' % idx] = forms.BooleanField(
-                initial=self.selected[idx],
-                label='',
-                required=False,
-            )
+        # The queryset for the columns must be extracted from the workflow
+        self.fields['columns'].queryset = workflow.columns.all()
 
     def clean(self):
-        cleaned_data = super(EditActionInForm, self).clean()
+        data = super(EditActionInForm, self).clean()
 
-        selected_list = [
-            cleaned_data.get(field_prefix + '%s' % i, False)
-            for i in range(len(self.columns))
-        ]
+        # Check if there is at least one key column
+        if not any([a.is_key for a in data['columns']]):
+            self.add_error(
+                None,
+               'There must be at least one unique column in the view')
 
-        # Check if at least a unique column has been selected
-        both_lists = zip(selected_list, self.columns)
-        if not any([a and b.is_key for a, b in both_lists]):
-            self.add_error(None, 'No key column specified',)
+        # Check if there is at least one non-key column
+        if not any([not a.is_key for a in data['columns']]):
+            self.add_error(
+                None,
+                'There must be at least one non-unique column in the view')
+
+        return data
 
     class Meta:
         model = Action
-        fields = ('filter',)
+        fields = ('filter', 'columns')
 
 
 # Form to enter values in a row
@@ -124,6 +122,7 @@ class FilterForm(forms.ModelForm):
     Form to read information about a filter. The required property of the
     formula field is set to False because it is enforced in the server.
     """
+
     def __init__(self, *args, **kwargs):
         super(FilterForm, self).__init__(*args, **kwargs)
 
