@@ -241,19 +241,9 @@ class ColumnAddForm(ColumnBasicForm):
 
         return data
 
-    class Meta:
-        model = Column
+    class Meta(ColumnBasicForm.Meta):
         fields = ['name', 'description_text', 'data_type', 'active_from',
                   'active_to']
-
-        widgets = {
-            'active_from': DateTimeWidget(options=dateTimeOptions,
-                                          usel10n=True,
-                                          bootstrap_version=3),
-            'active_to': DateTimeWidget(options=dateTimeOptions,
-                                        usel10n=True,
-                                        bootstrap_version=3)
-        }
 
 
 class ColumnRenameForm(ColumnBasicForm):
@@ -293,19 +283,80 @@ class ColumnRenameForm(ColumnBasicForm):
 
         return data
 
-    class Meta:
-        model = Column
+    class Meta(ColumnBasicForm.Meta):
         fields = ['name', 'description_text', 'data_type', 'is_key',
                   'active_from', 'active_to']
 
-        widgets = {
-            'active_from': DateTimeWidget(options=dateTimeOptions,
-                                          usel10n=True,
-                                          bootstrap_version=3),
-            'active_to': DateTimeWidget(options=dateTimeOptions,
-                                        usel10n=True,
-                                        bootstrap_version=3)
-        }
+
+class FormulaColumnAddForm(forms.ModelForm):
+    # Columns to combine
+    columns = forms.MultipleChoiceField([],
+                                        required=False,
+                                        label='Columns to combine*')
+
+    # Type of operation
+    op_type = forms.ChoiceField(
+        required=True,
+        label='Operation')
+
+    def __init__(self, data, *args, **kwargs):
+        # Operands for the new derived column
+        self.operands = kwargs.pop('operands')
+        # Workflow columns
+        self.wf_columns = kwargs.pop('columns')
+
+        super(FormulaColumnAddForm, self).__init__(data, *args, **kwargs)
+
+        # Populate the column choices
+        self.fields['columns'].choices = [
+            (idx, c.name) for idx, c in enumerate(self.wf_columns)
+        ]
+
+        # Populate the operand choices
+        self.fields['op_type'].choices = [('', '---')] \
+                                         + [(a, b) for a, b, _ in self.operands]
+
+
+    def clean(self):
+        data = super(FormulaColumnAddForm, self).clean()
+
+        # If there are no columns given, return
+        column_idx_str = data.get('columns')
+        if not column_idx_str:
+            self.add_error(
+                None,
+                'You need to select the columns to combine'
+            )
+            return data
+
+        # Get the list of columns selected in the form
+        self.selected_columns = [self.wf_columns[int(idx)]
+                                 for idx in column_idx_str]
+
+        # Get the set of data types in the selected columns
+        result_type = set([x.data_type for x in self.selected_columns])
+
+        # Get the operand
+        operand = next((x for x in self.operands if x[0] == data['op_type']),
+                       None)
+
+        # The data type of the operand must be contained in the set of allowed
+        if not result_type.issubset(set(operand[2])):
+            self.add_error(
+                None,
+                'Incorrect data type for the selected operand'
+            )
+            return data
+
+        return data
+
+    class Meta(ColumnBasicForm.Meta):
+        fields = ['name',
+                  'description_text',
+                  'op_type',
+                  'columns',
+                  'active_from',
+                  'active_to']
 
 
 class WorkflowImportForm(forms.Form):

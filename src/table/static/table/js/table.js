@@ -1,6 +1,5 @@
 var table_filter = '{}';
 var table_data;
-
 var loadFilter = function() {
     if (table_filter != "null" && table_filter != "{}") {
       qbuilder_options['rules'] = JSON.parse(table_filter);
@@ -8,7 +7,6 @@ var loadFilter = function() {
     $('#builder').queryBuilder(qbuilder_options);
     $("#modal-item").modal('show');
 }
-
 var saveFilter = function() {
     var div_content = $(this);
     formula = $('#builder').queryBuilder('getRules', {'skip_empty': true});
@@ -25,11 +23,15 @@ var saveFilter = function() {
       $('#badge_text').text('on');
     }
 }
-
 $(function () {
   // Column Add
   $("#table-content").on("click", ".js-workflow-column-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-column-add-form", saveForm);
+
+  // Derived column add
+  $("#table-content").on("click", ".js-workflow-formula-column-add", loadForm);
+  $("#modal-item").on("submit", ".js-workflow-formula-column-add-form",
+  saveForm);
 
   // Column Edit
   $("#table-data").on("click", ".js-workflow-column-edit", loadForm);

@@ -8,12 +8,14 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
   <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
+  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
+  <script src="{% static 'site/js/sol.js' %}"></script>
   <script src="{% static 'table/js/table.js' %}{% otv %}"></script>
   <script type="text/javascript">
     if (document.getElementById("table-data") != null) {
@@ -58,25 +60,34 @@
   <div id="table-content" align="center" class="container-fluid"
        style="padding-top:2ex;">
     {% if columns %}
-      <a href="{% url 'dataops:rowcreate' %}" class="btn btn-sm btn-primary"
-              data-toggle="tooltip"
-              title="Add an extra row to the table">
-        <span class="glyphicon glyphicon-plus"></span> Add row
-      </a>
-      <button type="button"
-              class="btn btn-primary btn-sm js-workflow-column-add"
-              data-url="{% url 'workflow:column_add' %}"
-              data-toggle="tooltip"
-              title="Add an extra column to the table">
-        <span class="glyphicon glyphicon-plus"></span> New column
-      </button>
-      <button type="button"
-              class="btn btn-primary btn-sm js-table-filter-edit"
-              data-toggle="tooltip"
-              title="Filter the rows in the table">
-        <span class="glyphicon glyphicon-plus"></span> Filter
-        <span id="badge_text" class="badge">off</span>
-      </button>
+      <div style="padding-bottom: 2ex;">
+        <a href="{% url 'dataops:rowcreate' %}"
+           class="btn btn-sm btn-primary"
+           data-toggle="tooltip"
+           title="Add an extra row to the table">
+          <span class="glyphicon glyphicon-plus"></span> Add row
+        </a>
+        <button type="button"
+                class="btn btn-primary btn-sm js-workflow-column-add"
+                data-url="{% url 'workflow:column_add' %}"
+                data-toggle="tooltip"
+                title="Add an extra column to the table">
+          <span class="glyphicon glyphicon-plus"></span> Add column
+        </button>
+        <button type="button"
+                class="btn btn-primary btn-sm js-workflow-formula-column-add"
+                data-url="{% url 'workflow:formula_column_add' %}"
+                data-toggle="tooltip" title="Add a new derived column to the table">
+          <span class="glyphicon glyphicon-plus"></span> Add derived column
+        </button>
+        <button type="button"
+                class="btn btn-primary btn-sm js-table-filter-edit"
+                data-toggle="tooltip"
+                title="Filter the information shown in the table">
+          <span class="glyphicon glyphicon-plus"></span> Filter
+          <span id="badge_text" class="badge">off</span>
+        </button>
+      </div>
       <table class="table display dataTable no-footer cell-border table-bordered"
              id="table-data">
         <thead>

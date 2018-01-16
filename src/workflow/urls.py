@@ -70,6 +70,10 @@ urlpatterns = [
 
     url(r'^column_add/$', column_views.column_add, name='column_add'),
 
+    url(r'^formula_column_add/$',
+        column_views.formula_column_add,
+        name='formula_column_add'),
+
     url(r'^(?P<pk>\d+)/column_delete/$',
         column_views.column_delete,
         name='column_delete'),

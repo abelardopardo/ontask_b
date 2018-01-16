@@ -44,6 +44,11 @@ $(function () {
   $("#workflow-area").on("click", ".js-workflow-column-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-column-add-form", saveForm);
 
+  // Derived column add
+  $("#workflow-area").on("click", ".js-workflow-formula-column-add", loadForm);
+  $("#modal-item").on("submit", ".js-workflow-formula-column-add-form",
+  saveForm);
+
   // Column Edit
   $("#column-table").on("click", ".js-workflow-column-edit", loadForm);
   $("#modal-item").on("submit", ".js-workflow-column-edit-form", saveForm);

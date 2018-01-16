@@ -3,6 +3,15 @@
 ### Added
 
 - Filter in the table view using filtering widget
+
+- Take a set of already existing columns and combine them to create a new 
+  column using the following operations:
+  - sum (addition)
+  - avg (average)
+  - max (maximum value)
+  - min (minimum value)
+  - up (two columns, second has largest value than first)
+  - down (two columns, second has smaller value than first)
   
 ### Changed
 

@@ -5,7 +5,17 @@ var set_qbuilder = function (element_id, qbuilder_options) {
     }
     $('#builder').queryBuilder(qbuilder_options);
 };
-var insert_query = function () {
+var set_column_select = function() {
+  $('#id_columns').searchableOptionList({
+    maxHeight: '250px',
+    showSelectAll: true,
+    texts: {
+      searchplaceholder: 'Click here to search for columns',
+      noItemsAvailable: 'No columns found',
+    }
+  });
+ }
+var insert_fields = function (the_form) {
     if (document.getElementById("id_filter") != null) {
       formula = $('#builder').queryBuilder('getRules');
       if (formula == null || !formula['valid']) {
@@ -48,6 +58,9 @@ var loadForm = function () {
         if (document.getElementById("id_formula") != null) {
           set_qbuilder('#id_formula', qbuilder_options);
         }
+        if (document.getElementById("id_columns") != null) {
+          set_column_select();
+        }
       },
       error: function(jqXHR, textStatus, errorThrown) {
         location.reload();
@@ -83,6 +96,9 @@ var saveForm = function () {
           $("#modal-item .modal-content").html(data.html_form);
           if (document.getElementById("id_formula") != null) {
             set_qbuilder('#id_formula', qbuilder_options);
+          }
+          if (document.getElementById("id_columns") != null) {
+            set_column_select();
           }
         }
       },

@@ -181,7 +181,7 @@ no space between variable names and the equal sign)::
    database initialization::
 
      python manage.py makemigrations profiles accounts workflow dataops
-     python manage.py makemigrations table action logs scheduler
+     python manage.py makemigrations table action logs scheduler table
 
 #. Execute the following command to create the database internal structure::
 

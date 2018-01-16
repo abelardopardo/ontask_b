@@ -27,10 +27,7 @@
       window.onload = set_qbuilder('#id_filter', qbuilder_options);
     }
     if (document.getElementById("id_columns") != null) {
-      var sol_object = $('#id_columns').searchableOptionList({
-        maxHeight: '250px',
-        showSelectAll: true
-      });
+      set_column_select();
     }
   </script>
 {% endblock %}
@@ -52,7 +49,7 @@
     <h4>Filter to restrict input to some rows</h4>
     <div id="builder" class="container"></div>
     <h4>Select the columns in the action</h4>
-    {% render_field form.columns %}
+    {% render_field form.columns class="form-control" %}
     {% include 'action/includes/partial_edit_in_buttons.html' %}
   </form>
 </div>

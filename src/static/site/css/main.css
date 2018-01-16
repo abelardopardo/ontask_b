@@ -298,3 +298,7 @@ table#attribute-table {
 .dropdown-menu .btn {
     width:100%;
 }
+
+div.sol-container {
+    display: table;
+}
