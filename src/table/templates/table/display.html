@@ -25,11 +25,8 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                  url: "{% url 'table:display_ss' %}",
+                  url: "{{ ajax_url }}",
                   type: 'POST',
-                  "data": function (d) {
-                    d.extra_search = table_filter;
-                  }
                 },
                 "order": [1],
                 "columnDefs": [
@@ -52,6 +49,7 @@
                   'ends_with', 'not_ends_with', 'is_empty', 'is_not_empty'],
       allow_empty: true,
       filters: {{ query_builder_ops|safe }},
+      rules: [],
     };
   </script>
 {% endblock %}
@@ -59,6 +57,9 @@
 {% block container %}
   <div id="table-content" align="center" class="container-fluid"
        style="padding-top:2ex;">
+    {% if view %}
+      <h4>Table view <strong>{{ view.name }}</strong></h4>
+    {% endif %}
     {% if columns %}
       <div style="padding-bottom: 2ex;">
         <a href="{% url 'dataops:rowcreate' %}"
@@ -71,22 +72,49 @@
                 class="btn btn-primary btn-sm js-workflow-column-add"
                 data-url="{% url 'workflow:column_add' %}"
                 data-toggle="tooltip"
-                title="Add an extra column to the table">
+                title="Add a column to the table">
           <span class="glyphicon glyphicon-plus"></span> Add column
         </button>
         <button type="button"
                 class="btn btn-primary btn-sm js-workflow-formula-column-add"
                 data-url="{% url 'workflow:formula_column_add' %}"
-                data-toggle="tooltip" title="Add a new derived column to the table">
+                data-toggle="tooltip"
+                title="Add a column operating with the current values">
           <span class="glyphicon glyphicon-plus"></span> Add derived column
         </button>
-        <button type="button"
-                class="btn btn-primary btn-sm js-table-filter-edit"
-                data-toggle="tooltip"
-                title="Filter the information shown in the table">
-          <span class="glyphicon glyphicon-plus"></span> Filter
-          <span id="badge_text" class="badge">off</span>
-        </button>
+        <div class="dropdown btn-group">
+          <a href="{% url 'table:view_index' %}"
+             class="btn btn-primary btn-sm"
+             data-toggle="tooltip"
+             title="Views available for this table">
+            <span class="glyphicon glyphicon-eye-open"></span> Views
+          </a>
+          {% if views %}
+            <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                    data-toggle="dropdown"><span class="caret"></span>
+            </button>
+            <ul role="menu" class="dropdown-menu">
+            {% for v in views %}
+              <li>
+                <a href="{% url 'table:display_view' v.id %}"
+                   class="btn btn-default btn-sm">{{ v.name }}</a>
+              </li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+        {% if view %}
+          <button type="button"
+                  class="btn btn-primary btn-sm js-view-edit align-middle"
+                  data-url="{% url 'table:view_edit' view.id %}"
+                  data-toggle="tooltip" title="Change elements in view">
+            <span class="glyphicon glyphicon-pencil"></span> Edit view
+          </button>
+          <button type="button" class="btn btn-sm btn-default" style="margin-right:2ex;"
+                  onclick="location.href='{% url 'table:display' %}'">
+            Full table
+          </button>
+        {% endif %}
       </div>
       <table class="table display dataTable no-footer cell-border table-bordered"
              id="table-data">
@@ -99,8 +127,8 @@
                         class="btn btn-sm btn-default js-workflow-column-edit"
                         data-url="{% url 'workflow:column_edit' col.id %}"
                         data-toggle="tooltip"
-                        title="Click here to edit column name, description, etc">
-                  {{ col.name }}
+                        title="Edit column name, description, etc">
+                  <span class="glyphicon glyphicon-pencil"></span> {{ col.name }}
                 </button>
               </th>
             {% endfor %}
@@ -123,28 +151,11 @@
     {% else %}
       <p>The workflow does not have data.</p>
       <p>Go to <a href="{% url 'dataops:list' %}">DataOps</a> to upload data</p>
-     {% endif %}
-    <div class="modal fade" id="modal-item">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"
-                    arial-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            <h4 class="modal-title">Edit filter</h4>
-          </div>
-          <div class="modal-body">
-            <div id="builder"></div>
-          </div>
-          <div class="modal-footer" style="text-align: center;">
-            <button type="button" class="btn btn-default"
-                    data-dismiss="modal">Close</button>
-            <button type="submit"
-                    class="btn btn-primary js-table-filter-edit-form">
-              <span class="glyphicon glyphicon-ok"></span> Set filter</button>
-          </div>
-        </div>
+    {% endif %}
+  </div>
+  <div class="modal fade" id="modal-item">
+    <div class="modal-dialog">
+      <div class="modal-content">
       </div>
     </div>
   </div>

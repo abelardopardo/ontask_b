@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+"""
+File with auxiliary operations needed to handle the actions, namely:
+functions to process request when receiving a "serve" action, cloning
+operations when cloning conditions and actions, and sending messages.
+"""
 from __future__ import unicode_literals, print_function
 
 import datetime
@@ -7,7 +12,7 @@ from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.core import signing, mail
-from django.core.mail import send_mass_mail, send_mail, EmailMultiAlternatives
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.template import Context, Template, TemplateSyntaxError
@@ -422,7 +427,7 @@ def send_messages(user,
          'filter_present': action.n_selected_rows != -1,
          'num_rows': action.workflow.nrows,
          'subject': str(getattr(settings, 'NOTIFICATION_SUBJECT')),
-         'body': msg.body,
+         'body': text_content,
          'from_email': str(getattr(settings, 'NOTIFICATION_SENDER')),
          'to_email': [user.email]})
 

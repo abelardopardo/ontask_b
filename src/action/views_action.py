@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
-from ontask.tables import OperationsColumn
-
 try:
     import urlparse
     from urllib import urlencode
@@ -27,13 +25,13 @@ import logs.ops
 from action.evaluate import evaluate_row, render_template
 from dataops import ops, pandas_db
 from ontask.permissions import UserIsInstructor, is_instructor
+from ontask.tables import OperationsColumn
 from workflow.ops import get_workflow
 from .forms import (
     ActionForm,
     EditActionOutForm,
     EnableURLForm,
-    EditActionInForm,
-    field_prefix
+    EditActionInForm
 )
 from action.ops import serve_action_in, serve_action_out, clone_action
 from .models import Action, Condition
@@ -48,30 +46,15 @@ class ActionTable(tables.Table):
      taken from another class to centralise the customisation.
     """
 
-    name = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('Name')
-    )
+    name = tables.Column(verbose_name=str('Name'))
 
-    is_out = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('Type')
+    is_out = tables.Column(verbose_name=str('Type'))
 
-    )
+    description_text = tables.Column(verbose_name=str('Description'))
 
-    description_text = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('Description')
-    )
-
-    modified = tables.DateTimeColumn(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name='Modified'
-
-    )
+    modified = tables.DateTimeColumn(verbose_name='Modified')
 
     operations = OperationsColumn(
-        attrs={'td': {'style': 'text-align:left;'}},
         verbose_name='Operations',
         template_file='action/includes/partial_action_operations.html',
         template_context=lambda record: {

@@ -57,7 +57,7 @@ $(function () {
   $("#column-table").on("click", ".js-column-delete", loadForm)
   $("#modal-item").on("submit", ".js-column-delete-form", saveForm)
 
-  // Delete column
+  // Clone column
   $("#column-table").on("click", ".js-column-clone", loadForm)
   $("#modal-item").on("submit", ".js-column-clone-form", saveForm)
 });

@@ -7,12 +7,19 @@
 - Take a set of already existing columns and combine them to create a new 
   column using the following operations:
   - sum (addition)
-  - avg (average)
+  - prod (product)
   - max (maximum value)
   - min (minimum value)
-  - up (two columns, second has largest value than first)
-  - down (two columns, second has smaller value than first)
-  
+  - mean
+  - median
+  - mode
+  - std (standard deviation)
+  - all (boolean conjunction)
+  - any (boolean disjunction
+
+- Create and manage a set of "Views" to display the table. A view is a condition
+  to filter rows, and a subset of columns to display. 
+
 ### Changed
 
 - Removed django-auth-ldap from requirements. Instructions mention the need to

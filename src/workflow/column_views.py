@@ -455,7 +455,8 @@ def column_clone(request, pk):
     # POST REQUEST
 
     # Get the new name appending as many times as needed the 'Copy of '
-    new_name = 'Copy_of_' + column.name
+    old_name = column.name
+    new_name = 'Copy_of_' + old_name
     while Column.objects.filter(name=new_name,
                                 workflow=column.workflow).exists():
         new_name = 'Copy_of_' + new_name
@@ -469,6 +470,7 @@ def column_clone(request, pk):
                  workflow,
                  {'id': workflow.id,
                   'name': workflow.name,
+                  'old_column_name': old_name,
                   'new_column_name': column.name})
 
     data['form_is_valid'] = True

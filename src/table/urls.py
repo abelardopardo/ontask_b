@@ -33,7 +33,35 @@ urlpatterns = [
 
     url(r'^display_ss/$', views.display_ss, name="display_ss"),
 
-    url(r'^row_delete/$', views.row_delete, name="row_delete")
+    url(r'^(?P<pk>\d+)/display_view/$',
+        views.display_view,
+        name="display_view"),
+
+    url(r'^(?P<pk>\d+)/display_view_ss/$',
+        views.display_view_ss,
+        name="display_view_ss"),
+
+    url(r'^row_delete/$', views.row_delete, name="row_delete"),
+
+    #
+    # Views
+    #
+    url(r'^view_index/$', views.view_index, name="view_index"),
+
+    url(r'view_add/$', views.view_add, name="view_add"),
+
+    url(r'^(?P<pk>\d+)/view_edit/$',
+        views.view_edit,
+        name="view_edit"),
+
+    url(r'^(?P<pk>\d+)/view_clone/$',
+        views.view_clone,
+        name="view_clone"),
+
+    url(r'^(?P<pk>\d+)/view_delete/$',
+        views.view_delete,
+        name="view_delete"),
+
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
