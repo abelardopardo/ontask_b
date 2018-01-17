@@ -2,10 +2,8 @@
 
 ### Added
 
-- Filter in the table view using filtering widget
-
 - Take a set of already existing columns and combine them to create a new 
-  column using the following operations:
+  one using the following operations:
   - sum (addition)
   - prod (product)
   - max (maximum value)
@@ -17,8 +15,10 @@
   - all (boolean conjunction)
   - any (boolean disjunction
 
-- Create and manage a set of "Views" to display the table. A view is a condition
-  to filter rows, and a subset of columns to display. 
+- The table now can be viewed selecting a "View" which is a set of colums and 
+  a formula to filter rows. A workflow can have an arbitrary number of views.
+  They are available in the Table section and can be created, edited, deleted
+  and cloned.  
 
 ### Changed
 

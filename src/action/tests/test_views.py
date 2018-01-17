@@ -815,8 +815,21 @@ class ActionActionInCreate(test.OntaskLiveTestCase):
         Select(self.selenium.find_element_by_name(
             "builder_rule_0_filter")).select_by_visible_text("registered")
         self.selenium.find_element_by_name("builder_rule_0_value_0").click()
-        self.selenium.find_element_by_id("id____ontask___select_1").click()
-        self.selenium.find_element_by_id("id____ontask___select_4").click()
+
+        self.selenium.find_element_by_css_selector(
+            "div.sol-input-container > input[type=\"text\"]"
+        ).click()
+        self.selenium.find_element_by_name("columns").click()
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='columns'])[2]"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='columns'])[5]"
+        ).click()
+        self.selenium.find_element_by_css_selector(
+            "div.container-fluid"
+        ).click()
+
         # Submit the action
         self.selenium.find_element_by_xpath(
             "(//button[@name='Submit'])[2]").click()
@@ -955,7 +968,7 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
 
         # Click in the more ops button and then attribute
         self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[3]"
+            "(//button[@type='button'])[4]"
         ).click()
         self.selenium.find_element_by_link_text("Attributes").click()
 

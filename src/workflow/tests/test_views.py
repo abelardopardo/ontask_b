@@ -756,7 +756,7 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
 
         # Click on the more-ops and then attributes button
         self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-area']/div/button[2]"
+            "//div[@id='workflow-area']/div/button[3]"
         ).click()
         self.selenium.find_element_by_link_text('Attributes').click()
         WebDriverWait(self.selenium, 10).until(
@@ -877,7 +877,7 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
 
         # Go back to the attribute page
         self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-area']/div/button[2]"
+            "//div[@id='workflow-area']/div/button[3]"
         ).click()
         self.selenium.find_element_by_link_text('Attributes').click()
         WebDriverWait(self.selenium, 10).until(
@@ -957,7 +957,7 @@ class WorkflowShare(test.OntaskLiveTestCase):
 
         # Click on the share
         self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-area']/div/button[2]"
+            "//div[@id='workflow-area']/div/button[3]"
         ).click()
         self.selenium.find_element_by_link_text('Share').click()
         WebDriverWait(self.selenium, 10).until(
@@ -1044,7 +1044,7 @@ class WorkflowShare(test.OntaskLiveTestCase):
 
         # Go back to the share page
         self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-area']/div/button[2]"
+            "//div[@id='workflow-area']/div/button[3]"
         ).click()
         self.selenium.find_element_by_link_text('Share').click()
         WebDriverWait(self.selenium, 10).until(

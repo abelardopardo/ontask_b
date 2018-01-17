@@ -32,7 +32,6 @@ formula_column_operands = [
     ('min', 'min: Minimum of the selected columns', ['integer', 'double']),
     ('mean', 'mean: Mean of the selected columns', ['integer', 'double']),
     ('median', 'median: Median of the selected columns', ['integer', 'double']),
-    ('mode', 'mode: Mode of the selected columns', ['integer', 'double']),
     ('std', 'std: Standard deviation over the selected columns',
      ['integer', 'double']),
     ('all', 'all: True when all elements in selected columns are true',
@@ -189,8 +188,6 @@ def formula_column_add(request):
             df[column.name] = df[cnames].mean(axis=1)
         elif operation == 'median':
             df[column.name] = df[cnames].median(axis=1)
-        elif operation == 'mode':
-            df[column.name] = df[cnames].mode(axis=1)
         elif operation == 'std':
             df[column.name] = df[cnames].std(axis=1)
         elif operation == 'all':

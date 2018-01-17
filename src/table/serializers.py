@@ -8,7 +8,9 @@ import json
 import pandas as pd
 from rest_framework import serializers
 
+from action.serializers import ColumnNameSerializer
 from dataops import ops
+from .models import View
 
 
 def df_to_string(df):
@@ -118,3 +120,44 @@ class DataFramePandasMergeSerializer(DataFrameBasicMergeSerializer):
         help_text='This field must be the Base64 encoded '
                   'result of pandas.to_pickle() function'
     )
+
+
+class ViewSerializer(serializers.ModelSerializer):
+
+    # This serializer only includes the column name (the structure is
+    # serialized as part of the workflow
+    columns = ColumnNameSerializer(required=False, many=True)
+
+    def create(self, validated_data, **kwargs):
+        view_obj = View(
+            workflow=self.context['workflow'],
+            name=validated_data['name'],
+            description_text=validated_data['description_text'],
+            formula=validated_data['formula']
+        )
+        view_obj.save()
+
+        # Load the columns in the view
+        columns = ColumnNameSerializer(
+            data=validated_data.get('columns'),
+            many=True,
+            required=False,
+        )
+        if columns.is_valid():
+            for citem in columns.data:
+                column = view_obj.workflow.columns.get(name=citem['name'])
+                view_obj.columns.add(column)
+            view_obj.save()
+        else:
+            view_obj.delete()
+            return None
+
+        return view_obj
+
+    class Meta:
+        model = View
+
+        exclude = ('id',
+                   'workflow',
+                   'created',
+                   'modified')

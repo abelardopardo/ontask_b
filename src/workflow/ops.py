@@ -252,8 +252,7 @@ def do_import_workflow(user, name, file_item):
 def do_export_workflow(workflow, selected_actions=None):
     """
     Proceed with the workflow export.
-    :param workflow: Workflow record to export
-    be included.
+    :param workflow: Workflow record to export be included.
     :param selected_actions: A subset of actions to export
     :return: Page that shows a confirmation message and starts the download
     """
@@ -321,6 +320,12 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
         #
         # Solution 1 chosen.
         condition.delete()
+
+    # If a column disappears, the views that contain only that column need to
+    # disappear as well as they are no longer relevant.
+    for view in workflow.views.all():
+        if view.columns.all().count() == 0:
+            view.delete()
 
     return
 
