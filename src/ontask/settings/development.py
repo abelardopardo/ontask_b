@@ -46,10 +46,11 @@ THUMBNAIL_DEBUG = True
 INTERNAL_IPS = [
     '127.0.0.1',
     '0.0.0.1',
+    'localhost',
 ]
 
 # Log everything to the logs directory at the top
-LOGFILE_ROOT = join(BASE_DIR(), 'logs')
+LOGFILE_ROOT = join(BASE_DIR(), '..', 'logs')
 
 # Reset logging
 # (see http://www.caktusgroup.com/blog/2015/01/27/Django-Logging-Configuration-logging_config-default-settings-logger/)
