@@ -20,10 +20,12 @@ if "celery" in sys.argv[0]:
 INSTALLED_APPS += (
     'debug_toolbar',)
 
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': lambda r: True,  # enables it
-    # '...
-}
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
+if not TESTING:
+    DEBUG_TOOLBAR_CONFIG = {
+        'SHOW_TOOLBAR_CALLBACK': lambda r: True,  # enables it
+        # '...
+    }
 
 if DEBUG:
     print('BASE_DIR: ' + BASE_DIR())
