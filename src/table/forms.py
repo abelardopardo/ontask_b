@@ -34,6 +34,12 @@ class ViewAddForm(forms.ModelForm):
                 'The view needs at least one column to show'
             )
 
+        if not next((x for x in data['columns'] if x.is_key), None):
+            self.add_error(
+                None,
+                'There needs to be at least one key column'
+            )
+
         return data
 
     class Meta:

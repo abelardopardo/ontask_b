@@ -48,15 +48,14 @@
 <div id="view-content" align="center" class="container-fluid">
   <h1 class="page-header">Table Views</h1>
   <p>
+    <button type="button" class="btn btn-sm btn-default"
+            onclick="location.href='{% url 'table:display' %}'">Back
+    </button>
     <button type="button" class="btn btn-sm btn-primary js-view-add"
             data-url="{% url 'table:view_add' %}"
             data-toggle="tooltip"
             title="New view for the table">
       <span class="glyphicon glyphicon-plus"></span> Add View
-    </button>
-    <button type="button" class="btn btn-sm btn-default" style="margin-right:2ex;"
-            onclick="location.href='{% url 'table:display' %}'">
-      <span class="glyphicon glyphicon-triangle-left"></span> Back
     </button>
   </p>
 
