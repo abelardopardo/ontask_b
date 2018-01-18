@@ -1,0 +1,378 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>OnTask Tutorial &#8212; OnTask 1.1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Advanced Features" href="../Advanced/index.html" />
+    <link rel="prev" title="The Logs" href="../Using/logs.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ontask-tutorial">
+<span id="tutorial"></span><h1>OnTask Tutorial<a class="headerlink" href="#ontask-tutorial" title="Permalink to this headline">¶</a></h1>
+<p>Before you start the tutorial make sure you have an account in an OnTask
+instance and you have instructor privileges (create workflows, actions, etc).
+Also, download the file <a class="reference download internal" href="../_downloads/learner_information.csv" download=""><code class="xref download docutils literal"><span class="pre">learner_information.csv</span></code></a> that contains a synthetic data set
+with information about learners, participation in a discussion forum,
+engagement with activities, and some additional features.</p>
+<p>Remember the three central concepts in OnTask:</p>
+<dl class="docutils">
+<dt>Workflow</dt>
+<dd>A container with the data (table), a set of procedures to manipulate
+columns, data upload and a set of actions. This container is typically
+associated with a course, but it could also model an entire institutional
+degree.</dd>
+<dt>Table</dt>
+<dd>A two-dimensional structure in which each row represents a learner, and
+each column a learner attribute such as the score in an assessment, class
+attendance, number of interventions in the discussion forum, engagement with
+videos, etc.</dd>
+<dt>Actions</dt>
+<dd>An action is a HTML resource of which certain parts that are included
+or excluded based on a set of <strong>conditions</strong> created with the learner
+attributes   (for example, number of interventions in the forum is larger than
+five, and number of times a video was watched is larger than 2).</dd>
+</dl>
+<p>The following figure represents the high level view of the tool.</p>
+<div class="figure align-center">
+<img alt="../_images/drawing.png" src="../_images/drawing.png" />
+</div>
+<p>The process to create a personalised text is divided into four stages:</p>
+<dl class="docutils">
+<dt>Upload the data</dt>
+<dd>We will use a <a class="reference download internal" href="../_downloads/learner_information.csv" download=""><code class="xref download docutils literal"><span class="pre">CSV</span> <span class="pre">file</span> <span class="pre">with</span> <span class="pre">the</span> <span class="pre">learners</span> <span class="pre">data</span></code></a> about several activities in a course. In
+this first stage you will upload the data into a table and identify certain
+special columns (those that provide a unique reference to a learner such as
+the learner ID)</dd>
+<dt>Review the data table</dt>
+<dd>In this stage you will explore the values in the table.</dd>
+<dt>Create an action</dt>
+<dd>In this stage you will create an action with various conditions that will be
+applied to the text of a personalised email message.</dd>
+<dt>Review the messages</dt>
+<dd>And finally you will review the appearance of these messages for different
+learners.</dd>
+</dl>
+<p>The following steps describe the required operations in each of these stages.</p>
+<div class="section" id="create-a-new-workflow">
+<h2>Create a new workflow<a class="headerlink" href="#create-a-new-workflow" title="Permalink to this headline">¶</a></h2>
+<p>Log into the tool and click in the tool icon on the top left corner of the screen. If you have an instructor account, you will see the button to create a new workflow as shown in the following figure.</p>
+<div class="figure align-center">
+<img alt="../_images/01_home_create_workflow.png" src="../_images/01_home_create_workflow.png" />
+</div>
+<p>The icon in the top right corner next to your profile image is a link to the OnTask documentation. Click in the button to create a new workflow and enter its name and a description.</p>
+<div class="figure align-center">
+<img alt="../_images/02_new_workflow_name.png" src="../_images/02_new_workflow_name.png" />
+</div>
+<p>Once you created the workflow the platform shows the list of all the
+workflows available.</p>
+<div class="figure align-center">
+<img alt="../_images/02_b_workflow_table.png" src="../_images/02_b_workflow_table.png" />
+</div>
+<p>The first step is to select or <em>open</em> a workflow by clicking on the name to
+manipulate it. Once this operation is done, the access to the element is
+blocked for any other users (in case the workflow is being shared) to
+prevent two users changing the data or the actions simultaneously. The following screens will show the name of the selected workflow at the top. If you want to select another workflow to manipulate, you simply click in the OnTask icon at the top left corner of the screen to go back to the initial table.</p>
+</div>
+<div class="section" id="open-a-workflow">
+<h2>Open a workflow<a class="headerlink" href="#open-a-workflow" title="Permalink to this headline">¶</a></h2>
+<p>When you open a workflow, a page with its details is shown like the one in
+the following figure</p>
+<div class="figure align-center">
+<img alt="../_images/03_data_initial.png" src="../_images/03_data_initial.png" />
+</div>
+<p>You can see the icon on the top right corner that links to the initial
+page, and the icon in the top left corner that links to the documentation.
+So far the page only shows the description of the workflow and the last
+time it was modified because no data has been uploaded.</p>
+<p>The top of the screen now shows the sections offering different operations
+over the workflow:</p>
+<dl class="docutils">
+<dt>Details</dt>
+<dd>Is the current page with information about the columns, data types,
+number of actions, etc.</dd>
+<dt>Table</dt>
+<dd>Operations to visualise and manipulate the table (search for values,
+add a row, add a column)</dd>
+<dt>Actions</dt>
+<dd>Operations to create the actions and conditions.</dd>
+<dt>Logs</dt>
+<dd>A table showing the history of operations performed on this workflow</dd>
+</dl>
+<p>The buttons immediately under title <em>Workflow Details</em> show some of the
+operations available at this point:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../Using/details.html#details-add-column"><span class="std std-ref">New column</span></a></li>
+<li><a class="reference internal" href="../Using/details.html#details-attributes"><span class="std std-ref">Attributes</span></a></li>
+<li><a class="reference internal" href="../Using/details.html#details-sharing"><span class="std std-ref">Share</span></a></li>
+<li><a class="reference internal" href="../Using/details.html#details-export"><span class="std std-ref">Export</span></a></li>
+<li><a class="reference internal" href="../Using/details.html#details-rename"><span class="std std-ref">Rename</span></a></li>
+<li><a class="reference internal" href="../Using/details.html#details-rename"><span class="std std-ref">Delete</span></a></li>
+</ul>
+</div>
+<div class="section" id="data-upload">
+<h2>Data Upload<a class="headerlink" href="#data-upload" title="Permalink to this headline">¶</a></h2>
+<p>We now upload the data included in the file <a class="reference download internal" href="../_downloads/learner_information.csv" download=""><code class="xref download docutils literal"><span class="pre">learner_information.csv</span></code></a>. Click in the <em>Dataops</em> menu, and then in the option to <em>CSV Update/Merge</em> as shown in the following figure</p>
+<div class="figure align-center">
+<img alt="../_images/05_data_csvupload_initial.png" src="../_images/05_data_csvupload_initial.png" />
+</div>
+<p>The next screen asks you to choose a file to upload the data.</p>
+<div class="figure align-center">
+<img alt="../_images/05_b_data_csvupload_initial.png" src="../_images/05_b_data_csvupload_initial.png" />
+</div>
+<p>Choose the file <a class="reference download internal" href="../_downloads/learner_information.csv" download=""><code class="xref download docutils literal"><span class="pre">learner_information.csv</span></code></a> and proceed to the next step. The next screen shows a table with the
+name of the detected columns, the type (also automatically detected), a
+pre-filled field with the column name (in case you want to change it), and if
+it is a <em>key column</em> (there are no repeated values in all the rows).</p>
+<div class="figure align-center">
+<img alt="../_images/06_data_csvupload_student_list.png" src="../_images/06_data_csvupload_student_list.png" />
+</div>
+<p>The <em>key</em> columns are highlighted because a workflow must have at least one column of this type in its table. Select all the column (clicking in the top element labelled <em>load</em>) and click on the <em>Finish</em> button, and then back to the
+<em>Details</em> page to see the summary of the information in the workflow.</p>
+<p>You can now see the information about the columns present in the workflow as
+shown in the following figure</p>
+<div class="figure align-center">
+<img alt="../_images/07_data_view_student_external.png" src="../_images/07_data_view_student_external.png" />
+</div>
+<p>For each column you can change its name, description, type and key
+attributes, or delete it from the workflow (icons in the left most column of
+the table).</p>
+</div>
+<div class="section" id="browsing-the-table">
+<h2>Browsing the table<a class="headerlink" href="#browsing-the-table" title="Permalink to this headline">¶</a></h2>
+<p>Once the data has been uploaded, click in the <em>Table</em> link at the top of the screen. The following screen shows the values stored in the table</p>
+<blockquote>
+<div><div class="figure align-center">
+<img alt="../_images/18_table_initial.png" src="../_images/18_table_initial.png" />
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="workflow-operations">
+<h2>Workflow Operations<a class="headerlink" href="#workflow-operations" title="Permalink to this headline">¶</a></h2>
+<p>There are several operations available at the details page.</p>
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<p>If you click again in the <em>Details</em> link at the top of the screen you will
+see again the page with the workflow details, but this time it will include
+the information about the columns just loaded.</p>
+<p>You can define a set of <em>attributes</em> in the workflow. This is simply a set of
+pairs <em>name, value</em> that you can use to have a single place where a value is
+defined and then reused in several other locations. For example, the name of
+the course is probably going to appear in various communications with the
+learners. If you define the attribute <em>Course_name</em> with that value, you can
+then refer to the attribute and it will be replaced by its value.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/20_table_custom_attributes_initial.png"><img alt="../_images/20_table_custom_attributes_initial.png" src="../_images/20_table_custom_attributes_initial.png" style="width: 50%;" /></a>
+</div>
+</div>
+<div class="section" id="share">
+<h3>Share<a class="headerlink" href="#share" title="Permalink to this headline">¶</a></h3>
+<p>You may share a workflow with other instructors in the platform. The <em>Share</em>
+button will allow you to add/remove other users to this list.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/21_workflow_share.png"><img alt="../_images/21_workflow_share.png" src="../_images/21_workflow_share.png" style="width: 50%;" /></a>
+</div>
+<p>Remember that whenever you open a workflow, it becomes unavailable for the other users with whom it is being shared.</p>
+</div>
+<div class="section" id="export">
+<h3>Export<a class="headerlink" href="#export" title="Permalink to this headline">¶</a></h3>
+<p>This functionality allows you to take all the information included in a
+workflow and export it. The functionality offers the option of including in
+the export only the data, or the data and the actions.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/22_workflow_export.png"><img alt="../_images/22_workflow_export.png" src="../_images/22_workflow_export.png" style="width: 50%;" /></a>
+</div>
+</div>
+<div class="section" id="clone">
+<h3>Clone<a class="headerlink" href="#clone" title="Permalink to this headline">¶</a></h3>
+<p>This button creates a clone of the workflow with the a name containing the prefix “<em>Copy of</em>”. Once the operation is executed, the workflow is available in the home screen (link in the upper left corner of the screen).</p>
+</div>
+<div class="section" id="rename">
+<h3>Rename<a class="headerlink" href="#rename" title="Permalink to this headline">¶</a></h3>
+<p>Use this function to change the name and description of the workflow</p>
+</div>
+<div class="section" id="flush-data">
+<h3>Flush Data<a class="headerlink" href="#flush-data" title="Permalink to this headline">¶</a></h3>
+<p>This function deletes the data associated with the workflow. It maintains the
+set of attributes and the actions, but it removes the conditions and filters
+from all the actions.</p>
+</div>
+<div class="section" id="delete">
+<h3>Delete<a class="headerlink" href="#delete" title="Permalink to this headline">¶</a></h3>
+<p>This function deletes completely the workflow from the platform.</p>
+</div>
+</div>
+<div class="section" id="actions">
+<h2>Actions<a class="headerlink" href="#actions" title="Permalink to this headline">¶</a></h2>
+<p>Click in the <em>Actions</em> link at the top of the screen. The next screen shows
+the list of actions that are part of the workflow, and if there is none, you
+will only see the buttons to crate a new ones.</p>
+<div class="figure align-center">
+<img alt="../_images/22_rule_initial.png" src="../_images/22_rule_initial.png" />
+</div>
+<div class="section" id="actions-out">
+<h3>Actions Out<a class="headerlink" href="#actions-out" title="Permalink to this headline">¶</a></h3>
+<p>Click on the button to create a new <em>Action Out</em> and provide a name and a
+description.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/23_action_create.png"><img alt="../_images/23_action_create.png" src="../_images/23_action_create.png" style="width: 40%;" /></a>
+</div>
+<p>The next screen is the <em>action editor</em>. The functions are divided into three areas. The one at the top allows you to specify a condition to select or filter a subset of students. The second contains the conditions to be used in the personalised text. The third is a HTML text editor with the content to personalise.</p>
+<div class="figure align-center">
+<img alt="../_images/24_action_edit.png" src="../_images/24_action_edit.png" />
+</div>
+<p>Place the cursor in the text area and start the text with a salutation, then select the name of a column from the pull-down menu right above the text editor and select the column <em>GivenName</em>. The string <cite>{{ GivenName}}</cite> appears in the text area. This notation is to instruct the next steps to replace the value among double curly braces with the name of each student.</p>
+<p>Click now in the button <em>New</em> in the condition area. A form appears to
+introduce the name, description and formula. The formula may contain any
+combination of Boolean operators with respect to the column values. For
+example, the condition:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Q01</span> <span class="ow">is</span> <span class="n">equal</span> <span class="n">to</span> <span class="mi">0</span> <span class="n">AND</span> <span class="n">Q02</span> <span class="ow">is</span> <span class="n">equal</span> <span class="n">to</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>can be encoded in the formula widget as shown in the following figure</p>
+<div class="figure align-center">
+<img alt="../_images/25_action_condition_edit.png" src="../_images/25_action_condition_edit.png" />
+</div>
+<p>We can now use this condition to control the appearance of text in the text
+area. Write a sentence that you would like to appear, select it and then
+click in the arrow button in the condition.</p>
+<div class="figure align-center">
+<img alt="../_images/26_action_condition_insert.png" src="../_images/26_action_condition_insert.png" />
+</div>
+<p>The text area is then surrounded by two marks:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">Todo_review_T1</span> <span class="o">%</span><span class="p">}</span><span class="n">You</span> <span class="n">need</span> <span class="n">to</span> <span class="n">review</span> <span class="n">Topic</span> <span class="mi">1</span><span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>This is the encoding to instruct the processing step to check the value of
+the condition <code class="docutils literal"><span class="pre">Topic_1_incorrect</span></code> and include the surrounded text only if
+the condition is true.</p>
+<p>You may also insert any attributes attached to the workflow. The attribute
+name will be replaced by its value when processing the text.</p>
+</div>
+<div class="section" id="actions-in">
+<h3>Actions In<a class="headerlink" href="#actions-in" title="Permalink to this headline">¶</a></h3>
+<p>To be written.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">OnTask</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction/index.html">What is OnTask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Install/index.html">Installation process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Using/index.html">Using the tool</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">OnTask Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#create-a-new-workflow">Create a new workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#open-a-workflow">Open a workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-upload">Data Upload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#browsing-the-table">Browsing the table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#workflow-operations">Workflow Operations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#attributes">Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#share">Share</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#export">Export</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#clone">Clone</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rename">Rename</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flush-data">Flush Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#delete">Delete</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#actions">Actions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#actions-out">Actions Out</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#actions-in">Actions In</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Advanced/index.html">Advanced Features</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../Using/logs.html" title="previous chapter">The Logs</a></li>
+      <li>Next: <a href="../Advanced/index.html" title="next chapter">Advanced Features</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Content Licensed under Creative Commons BY 3.0.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/Tutorial/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
