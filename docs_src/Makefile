@@ -20,4 +20,4 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 copy_to_docs:
-	rsync -arvzh --delete ../html/ ../docs/
+	rsync -arvzh --delete $(BUILDDIR)/html/ ../docs/
