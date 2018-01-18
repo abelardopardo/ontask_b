@@ -682,6 +682,12 @@ class TableViews(test.OntaskLiveTestCase):
         self.selenium.find_element_by_css_selector(
             "button.btn.btn-sm.btn-default"
         ).click()
+        # Wait for the table to first deleted
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//div[@id='table-content']/h4"),
+                'Table view')
+        )
         # Wait for the table to be refreshed
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'table-data_previous'))

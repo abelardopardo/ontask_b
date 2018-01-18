@@ -535,7 +535,11 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
 
 class DataopsExcelUpload(test.OntaskLiveTestCase):
-    fixtures = ['empty_wflow.json']
+    fixtures = ['empty_wflow']
+
+    def tearDown(self):
+        pandas_db.delete_all_tables()
+        super(DataopsExcelUpload, self).tearDown()
 
     def test_01_excelupload(self):
         # Login
@@ -582,7 +586,11 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
 
 
 class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
-    fixtures = ['empty_wflow.json']
+    fixtures = ['empty_wflow']
+
+    def tearDown(self):
+        pandas_db.delete_all_tables()
+        super(DataopsExcelUploadSheet, self).tearDown()
 
     def test_01_excelupload_sheet(self):
         # Login
@@ -618,7 +626,7 @@ class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
         )
         self.selenium.find_element_by_id("checkAll").click()
         self.selenium.find_element_by_name("Submit").click()
-        WebDriverWait(self.selenium, 20).until(
+        WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.LINK_TEXT, 'Excel Upload/Merge'))
         )
