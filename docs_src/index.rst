@@ -4,9 +4,9 @@
    contain the root `toctree` directive.
    Use: # * = - ^ " as heading hierarchy
 
-######################
-OnTask's documentation
-######################
+############################################
+OnTask documentation (Ver. |ontask_version|)
+############################################
 
 .. toctree::
    :maxdepth: 3
