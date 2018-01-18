@@ -83,3 +83,7 @@ mynotes.txt
 # Documentation
 /html
 /doctrees
+
+# Sublime annotations
+*.sublime-project
+*.sublime-workspace
