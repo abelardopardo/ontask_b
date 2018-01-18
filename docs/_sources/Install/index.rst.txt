@@ -238,7 +238,21 @@ no space between variable names and the equal sign)::
      python manage.py runserver
 
    If there are no errors, the message on the screen should say that your
-   server is running and available in the URL 127.0.0.1:8000
+   server is running in the url 127.0.0.1:800. However, if you open your
+   browser in that URL, an error will be shown. This error is normal and it
+   is because the production version requires the pages to be served through
+   SSL with a valid certificate in a conventional server.
+
+   If you want to use the server through the the URL 127.0.0.1:8000 you have
+   to edit the file ``manage.py`` and change these three lines to look like::
+
+         os.environ.setdefault("DJANGO_SETTINGS_MODULE",
+                          "ontask.settings.production")
+         #                 "ontask.settings.development")
+
+   and then execute the following command from the ``src`` folder::
+
+     pip install -r requirements/development.txt
 
 #. If OnTask is going to be accessed through a web server like Apache or Nginx,
    stop the application and configure the web server accordingly.
