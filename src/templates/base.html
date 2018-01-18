@@ -130,14 +130,12 @@
         {% endfor %}
       {% endif %}
     {% endblock %}
-
     {% block splash %}
     {% endblock splash %}
-    
-    {% if request.session.ontask_workflow_name %}
-    <div id="wflow-name" class="text-center alert alert-info">
-      {{ request.session.ontask_workflow_name }}
-    </div>
+    {% if request.session.ontask_workflow_name and request.path != '/' %}
+      <div id="wflow-name" class="text-center alert alert-info">
+        {{ request.session.ontask_workflow_name }}
+      </div>
     {% endif %}
 
     {% block container %}
