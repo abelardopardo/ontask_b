@@ -6,8 +6,7 @@ SPHINXOPTS    =
 SPHINXBUILD   = python -msphinx
 SPHINXPROJ    = OnTask
 SOURCEDIR     = .
-# BUILDDIR      = _build
-BUILDDIR	      = ..
+BUILDDIR      = _build
 
 # Put it first so that "make" without argument is like "make help".
 help:
