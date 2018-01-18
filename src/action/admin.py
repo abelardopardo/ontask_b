@@ -8,10 +8,11 @@ from .models import Action, Condition
 
 class ActionAdmin(admin.ModelAdmin):
     list_display = ('id',
-                    'name',
                     'workflow',
+                    'name',
                     'description_text',
                     'created',
+                    'modified',
                     'n_selected_rows',
                     'content',
                     'serve_enabled'

@@ -7,8 +7,7 @@ import django_tables2 as tables
 import pytz
 from django.conf import settings as ontask_settings
 from django.contrib.auth.decorators import user_passes_test
-from django.db.models import F
-from django.db.models import Q
+from django.db.models import F, Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
@@ -21,64 +20,6 @@ from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
 from .models import Log
 from .ops import log_types
-
-
-class LogTable(tables.Table):
-    # Needs to be in the table to be used as URL parameter
-    id = tables.Column(visible=False)
-
-    created = tables.DateTimeColumn(
-        attrs={'td': {'class': 'dt-body-center'}},
-        orderable=False,
-        verbose_name='Date/Time',
-        format=str('r'),
-        short=True)
-
-    user = tables.EmailColumn(
-        attrs={'td': {'class': 'dt-body-center'}},
-        orderable=False,
-        accessor=A('user.email')
-    )
-
-    name = tables.Column(
-        attrs={'td': {'class': 'dt-body-center'}},
-        orderable=False,
-        verbose_name=str('Event type')
-    )
-
-    operations = tables.Column(
-        empty_values=[],
-        attrs={'td': {'class': 'dt-body-center'}},
-        orderable=False,
-        verbose_name=str('Additional data')
-    )
-
-    def __init__(self, data, *args, **kwargs):
-        super(LogTable, self).__init__(data, *args, **kwargs)
-
-    def render_operations(self, record):
-        return format_html(
-            """
-            <button type="submit" class="btn btn-primary btn-sm js-log-view"
-                    data-url="{0}">
-              <span class="glyphicon glyphicon-eye-open"></span> View
-            </button>
-            """.format(reverse('logs:view', kwargs={'pk': record.id}))
-        )
-
-    class Meta:
-        model = Log
-
-        fields = ('created', 'user', 'name', 'operations')
-
-        sequence = ('created', 'user', 'name', 'operations')
-
-        exclude = ('id', 'workflow', 'payload')
-
-        attrs = {
-            'class': 'table display',
-            'id': 'log-table'
-        }
 
 
 @user_passes_test(is_instructor)
@@ -135,7 +76,7 @@ def show_ss(request):
 
     # Order and select values
     qs = qs.order_by(F('created').desc()).values_list(
-            'id', 'created', 'user__email', 'name'
+        'id', 'created', 'user__email', 'name'
     )
     recordsFiltered = qs.count()
 
@@ -145,9 +86,9 @@ def show_ss(request):
             item[1].astimezone(pytz.timezone(ontask_settings.TIME_ZONE)),
             item[2],
             item[3],
-            """
-            <button type="submit" class="btn btn-primary btn-sm js-log-view"
-                    data-url="{0}">
+            """<button type="submit" class="btn btn-primary btn-sm js-log-view"
+                    data-url="{0}"
+                    data-toggle="tooltip" title="View the content of this log">
               <span class="glyphicon glyphicon-eye-open"></span> View
             </button>
             """.format(reverse('logs:view', kwargs={'pk': item[0]}))]

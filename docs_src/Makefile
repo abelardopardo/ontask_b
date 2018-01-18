@@ -6,7 +6,8 @@ SPHINXOPTS    =
 SPHINXBUILD   = python -msphinx
 SPHINXPROJ    = OnTask
 SOURCEDIR     = .
-BUILDDIR      = _build
+# BUILDDIR      = _build
+BUILDDIR	      = ..
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -18,3 +19,6 @@ help:
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+copy_to_docs:
+	rsync -arvzh --delete ../html/ ../docs/

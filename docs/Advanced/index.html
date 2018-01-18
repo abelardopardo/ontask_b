@@ -1,0 +1,146 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Advanced Features &#8212; OnTask 1.1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="OnTask Tutorial" href="../Tutorial/index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="advanced-features">
+<span id="id1"></span><h1>Advanced Features<a class="headerlink" href="#advanced-features" title="Permalink to this headline">¶</a></h1>
+<p>OnTask is built in <a class="reference external" href="https://www.python.org/">Python</a> using the web framework <a class="reference external" href="https://www.djangoproject.com/">Django</a> in combination with some additional libraries such as <a class="reference external" href="http://www.django-rest-framework.org/">Django REST Framework</a>, <a class="reference external" href="https://pandas.pydata.org/">Pandas</a>, etc. The application is available as <a class="reference external" href="https://github.com/abelardopardo/ontask_b">open source</a> with <a class="reference external" href="https://github.com/abelardopardo/ontask_b/blob/master/LICENSE">MIT License</a>. This means that the advanced users can get a copy of the source code and modify it to suite their needs using the already existing models and functions.</p>
+<div class="section" id="the-api-application-programming-interface">
+<h2>The API (Application Programming Interface)<a class="headerlink" href="#the-api-application-programming-interface" title="Permalink to this headline">¶</a></h2>
+<p>OnTask is a platform that facilitates the connection between data and the
+provision of personalised learner support actions. The higher the quality of
+the data the higher number of possible effective support actions. This means
+that OnTask should facilitate the connection with already existing data
+sources so that it can combine data sets and create a comprehensive view of
+how a learning experience is evolving.</p>
+<p>The API is documented online through the URL suffix <code class="docutils literal"><span class="pre">apidoc</span></code>. The page
+contains the description of every entry point available with the required
+parameters.</p>
+<p>When manipulating the elements in the table there are two versions of the
+basic operations (create a table, update a table, merge).</p>
+<ol class="arabic simple">
+<li>Pandas Version. This version handles the encoding of data frames using the
+pandas pickle encoding. This encoding has the advantage that maintains the
+elements of the dataframe intact. In other words, when the data frame is
+decoded from the pandas pickle format back to a regular dataframe, the same
+initial dataframe is obtained.</li>
+<li>JSON Version. This version encodes the dataframes in JSON. The problem
+with this format is that values such as NaN and NaT (not a time) are not
+allowed by JSON, and they are substituted by empty strings. This change
+may have significant effects on the dataframe, specially on the types of
+the columns. If there is a dataframe with a column of type datetime and
+with any element with value NaT and it is first extracted through the JSON
+interface, and then uploaded again, the NaT value is transformed into an
+empty string, and Pandas will no longer recognise that column as
+datetime, but instead it will render the column of type string. This my
+have also an effect on how rules and actions are evaluated.</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">OnTask</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction/index.html">What is OnTask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Install/index.html">Installation process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Using/index.html">Using the tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorial/index.html">OnTask Tutorial</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Advanced Features</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-api-application-programming-interface">The API (Application Programming Interface)</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../Tutorial/index.html" title="previous chapter">OnTask Tutorial</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Content Licensed under Creative Commons BY 3.0.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/Advanced/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

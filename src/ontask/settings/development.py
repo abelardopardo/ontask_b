@@ -20,10 +20,12 @@ if "celery" in sys.argv[0]:
 INSTALLED_APPS += (
     'debug_toolbar',)
 
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': lambda r: False,  # disables it
-    # '...
-}
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
+if not TESTING:
+    DEBUG_TOOLBAR_CONFIG = {
+        'SHOW_TOOLBAR_CALLBACK': lambda r: True,  # enables it
+        # '...
+    }
 
 if DEBUG:
     print('BASE_DIR: ' + BASE_DIR())
@@ -46,10 +48,11 @@ THUMBNAIL_DEBUG = True
 INTERNAL_IPS = [
     '127.0.0.1',
     '0.0.0.1',
+    'localhost',
 ]
 
 # Log everything to the logs directory at the top
-LOGFILE_ROOT = join(BASE_DIR(), 'logs')
+LOGFILE_ROOT = join(BASE_DIR(), '..', 'logs')
 
 # Reset logging
 # (see http://www.caktusgroup.com/blog/2015/01/27/Django-Logging-Configuration-logging_config-default-settings-logger/)

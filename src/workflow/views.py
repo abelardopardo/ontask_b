@@ -32,28 +32,17 @@ from .ops import (get_workflow,
 
 
 class WorkflowTable(tables.Table):
-    name = tables.Column(
-        attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name=str('Name')
-    )
-
+    name = tables.Column(verbose_name=str('Name'))
     description_text = tables.Column(
-        attrs={'td': {'class': 'dt-body-center'}},
+        empty_values=[],
         verbose_name=str('Description')
     )
-
     nrows_cols = tables.Column(
         empty_values=[],
-        attrs={'td': {'class': 'dt-body-center'}},
         verbose_name=str('Rows/Columns'),
         default='No data'
     )
-
-    modified = tables.DateTimeColumn(
-        attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name='Last modified'
-
-    )
+    modified = tables.DateTimeColumn(verbose_name='Last modified')
 
     def __init__(self, data, *args, **kwargs):
         table_id = kwargs.pop('id')
@@ -66,16 +55,16 @@ class WorkflowTable(tables.Table):
     def render_name(self, record):
         return format_html(
             """<a href="{0}">{1}</a>""".format(
-                reverse('workflow:detail', kwargs={'pk': record.id}),
-                record.name
+                reverse('workflow:detail', kwargs={'pk': record['id']}),
+                record['name']
             )
         )
 
     def render_nrows_cols(self, record):
-        if record.nrows == 0 and record.ncols == 0:
+        if record['nrows'] == 0 and record['ncols'] == 0:
             return "No data"
 
-        return format_html("{0}/{1}".format(record.nrows, record.ncols))
+        return format_html("{0}/{1}".format(record['nrows'], record['ncols']))
 
     class Meta:
         model = Workflow
@@ -120,54 +109,52 @@ class WorkflowShareTable(tables.Table):
         }
 
 
-def save_workflow_form(request, form, template_name, is_new):
-    # Ajax response
-    data = dict()
+def save_workflow_form(request, form, template_name):
+    # Ajax response. Form is not valid until proven otherwise
+    data = {'form_is_valid': False}
 
-    # The form is false (thus needs to be rendered again, until proven
-    # otherwise
-    data['form_is_valid'] = False
+    if request.method == 'GET' or not form.is_valid():
+        context = {'form': form}
+        data['html_form'] = render_to_string(template_name,
+                                             context,
+                                             request=request)
+        return JsonResponse(data)
 
-    if request.method == 'POST' and form.is_valid():
-        # Correct form submitted
+    # Correct form submitted
 
-        if not form.instance.id:
-            # This is a new instance!
-            form.instance.user = request.user
-            form.instance.nrows = 0
-            form.instance.ncols = 0
-            form.instance.session_key = request.session.session_key
-            log_type = 'workflow_create'
-        else:
-            log_type = 'workflow_update'
+    if not form.instance.id:
+        # This is a new instance!
+        form.instance.user = request.user
+        form.instance.nrows = 0
+        form.instance.ncols = 0
+        form.instance.session_key = request.session.session_key
+        log_type = 'workflow_create'
+    else:
+        log_type = 'workflow_update'
 
-        # Save the instance
-        try:
-            workflow_item = form.save()
-        except IntegrityError as e:
-            form.add_error('name',
-                           'A workflow with that name already exists')
-            context = {'form': form}
-            data['html_form'] = render_to_string(template_name,
-                                                 context,
-                                                 request=request)
-            return JsonResponse(data)
+    # Save the instance
+    try:
+        workflow_item = form.save()
+    except IntegrityError as e:
+        form.add_error('name',
+                       'A workflow with that name already exists')
+        context = {'form': form}
+        data['html_form'] = render_to_string(template_name,
+                                             context,
+                                             request=request)
+        return JsonResponse(data)
 
-        # Log event
-        logs.ops.put(request.user,
-                     log_type,
-                     workflow_item,
-                     {'id': workflow_item.id,
-                      'name': workflow_item.name})
+    # Log event
+    logs.ops.put(request.user,
+                 log_type,
+                 workflow_item,
+                 {'id': workflow_item.id,
+                  'name': workflow_item.name})
 
-        # Here we can say that the form is done.
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+    # Here we can say that the form processing is done.
+    data['form_is_valid'] = True
+    data['html_redirect'] = reverse('workflow:index')
 
-    context = {'form': form}
-    data['html_form'] = render_to_string(template_name,
-                                         context,
-                                         request=request)
     return JsonResponse(data)
 
 
@@ -182,11 +169,18 @@ def workflow_index(request):
     # Get the available workflows
     workflows = Workflow.objects.filter(
         Q(user=request.user) | Q(shared=request.user)
-    ).distinct()
+    ).distinct().values(
+        'id',
+        'name',
+        'description_text',
+        'nrows',
+        'ncols',
+        'modified'
+    )
 
     # We include the table only if it is not empty.
     context = {}
-    if len(workflows) > 0:
+    if workflows.count() > 0:
         context['table'] = WorkflowTable(workflows,
                                          id='workflow-table',
                                          orderable=False)
@@ -205,12 +199,12 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
     def get(self, request, *args, **kwargs):
         del args
         form = self.form_class()
-        return save_workflow_form(request, form, self.template_name, True)
+        return save_workflow_form(request, form, self.template_name)
 
     def post(self, request, *args, **kwargs):
         del args
         form = self.form_class(request.POST)
-        return save_workflow_form(request, form, self.template_name, True)
+        return save_workflow_form(request, form, self.template_name)
 
 
 class WorkflowDetailView(UserIsInstructor, generic.DetailView):
@@ -290,8 +284,7 @@ def update(request, pk):
         return save_workflow_form(
             request,
             form,
-            'workflow/includes/partial_workflow_update.html',
-            False)
+            'workflow/includes/partial_workflow_update.html')
 
     # If the user does not own the workflow, notify error and go back to
     # index

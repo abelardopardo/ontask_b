@@ -46,6 +46,10 @@ urlpatterns = [
         attribute_views.attribute_create,
         name='attribute_create'),
 
+    url(r'^(?P<pk>\d+)/attribute_edit/$',
+        attribute_views.attribute_edit,
+        name='attribute_edit'),
+
     url(r'^(?P<pk>\d+)/attribute_delete/$',
         attribute_views.attribute_delete,
         name='attribute_delete'),
@@ -65,6 +69,10 @@ urlpatterns = [
     # Column manipulation
 
     url(r'^column_add/$', column_views.column_add, name='column_add'),
+
+    url(r'^formula_column_add/$',
+        column_views.formula_column_add,
+        name='formula_column_add'),
 
     url(r'^(?P<pk>\d+)/column_delete/$',
         column_views.column_delete,

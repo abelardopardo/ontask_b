@@ -17,11 +17,6 @@
             enctype="multipart/form-data">
         {% csrf_token %}
         <div class="modal-body">
-          <p>Workflow name: {{ name }}</p>
-          <p>Number of rows/columns: {{ nrows }}/{{ ncols }}</p>
-          <p>Number of actions: {{ nactions }}</p>
-          <p>Select the actions to include in the export:</p>
-
           {% if form.errors %}
             {% for error in form.non_field_errors %}
               <div class="alert alert-danger">
@@ -29,7 +24,12 @@
               </div>
             {% endfor %}
           {% endif %}
-          <table class="table display dataTable table-bordered">
+          <p>Workflow name: {{ name }}</p>
+          <p>Number of rows/columns: {{ nrows }}/{{ ncols }}</p>
+          <p>Number of actions: {{ nactions }}</p>
+          {% if nactions > 0 %}
+            <p>Select the actions to include in the export:</p>
+            <table class="table display dataTable table-bordered">
             <thead>
               <tr>
                 <th class="text-center">Action</th>
@@ -56,6 +56,7 @@
               {% endfor %}
             </tbody>
           </table>
+          {% endif %}
         </div>
         <div class="modal-footer" style="text-align: center;">
           <button type="button" class="btn btn-default"

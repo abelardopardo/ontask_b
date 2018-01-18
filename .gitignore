@@ -79,3 +79,11 @@ mynotes.txt
 /My_material
 
 /test_data/
+
+# Documentation
+/html
+/doctrees
+
+# Sublime annotations
+*.sublime-project
+*.sublime-workspace

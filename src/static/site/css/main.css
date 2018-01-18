@@ -202,8 +202,6 @@ div.conditions {
 
 div.condition-btn {
     padding: 0.5ex;
-    background-color: darkgray;
-    margin: 0.25ex 0.25ex 0.25ex 0.25ex;
 }
 /* Tweaks for JQuery QueryBuilder
 
@@ -242,7 +240,8 @@ td.dt-body-center {
 #workflow-table td,
 #action-table td,
 #log-table td,
-#scheduler-table td {
+#scheduler-table td,
+#view-table td {
     vertical-align: middle;
 }
 
@@ -281,4 +280,26 @@ th.dt-center, td.dt-center { text-align: center; }
 
 table#attribute-table {
     margin-top: 20px;
+}
+
+#workflow-area .dropdown-menu {
+  left: 70%;
+  right: auto;
+  text-align: center;
+  transform: translate(-50%, 0);
+}
+
+#filter-set .dropdown-menu {
+  left: 50%;
+  right: auto;
+  text-align: center;
+  transform: translate(-50%, 0);
+}
+
+.dropdown-menu .btn {
+    width:100%;
+}
+
+div.sol-container {
+    display: table;
 }

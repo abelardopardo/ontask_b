@@ -38,6 +38,10 @@ def rename_variable(formula, old_name, new_name):
     :return: The new modified formula.
     """
 
+    # Trivial case of an empty formula
+    if not formula:
+        return formula
+
     if 'condition' in formula:
         # Recursive call
         formula['rules'] = [rename_variable(x, old_name, new_name)
@@ -199,10 +203,10 @@ def evaluate_node(node, given_variables):
 
 def evaluate_node_sql(node):
     """
-    Given a node representing a query, and a dictionary with (name, values),
-    translates the expression into a SQL query.
+    Given a node representing a query filter
+    translates the expression into a SQL filter expression.
     :param node: Node representing the expression
-    :return: String with the query and list of fields to replace
+    :return: String with the filter and list of fields to replace
     """
     if 'condition' in node:
         # Node is a condition, get the values of the sub-clauses

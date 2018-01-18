@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
-from collections import OrderedDict
-
-from ontask.tables import OperationsColumn
-
 try:
     import urlparse
     from urllib import urlencode
@@ -29,13 +25,13 @@ import logs.ops
 from action.evaluate import evaluate_row, render_template
 from dataops import ops, pandas_db
 from ontask.permissions import UserIsInstructor, is_instructor
+from ontask.tables import OperationsColumn
 from workflow.ops import get_workflow
 from .forms import (
     ActionForm,
     EditActionOutForm,
     EnableURLForm,
-    EditActionInForm,
-    field_prefix
+    EditActionInForm
 )
 from action.ops import serve_action_in, serve_action_out, clone_action
 from .models import Action, Condition
@@ -50,39 +46,26 @@ class ActionTable(tables.Table):
      taken from another class to centralise the customisation.
     """
 
-    name = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('Name')
-    )
+    name = tables.Column(verbose_name=str('Name'))
 
-    is_out = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('Type')
+    is_out = tables.Column(verbose_name=str('Type'))
 
-    )
+    description_text = tables.Column(verbose_name=str('Description'))
 
-    description_text = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('Description')
-    )
-
-    modified = tables.DateTimeColumn(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name='Modified'
-
-    )
+    modified = tables.DateTimeColumn(verbose_name='Modified')
 
     operations = OperationsColumn(
-        attrs={'td': {'style': 'text-align:left;'}},
         verbose_name='Operations',
         template_file='action/includes/partial_action_operations.html',
-        template_context=lambda record: {'id': record.id,
-                                         'is_out': int(record.is_out),
-                                         'serve_enabled': record.serve_enabled}
+        template_context=lambda record: {
+            'id': record['id'],
+            'is_out': int(record['is_out']),
+            'serve_enabled': record['serve_enabled']
+        }
     )
 
     def render_is_out(self, record):
-        if record.is_out:
+        if record['is_out']:
             return "OUT"
         else:
             return "IN"
@@ -104,7 +87,7 @@ class ActionTable(tables.Table):
 
         row_attrs = {
             'style': 'text-align:center;',
-            'class': lambda record: 'success' if record.is_out else ''
+            'class': lambda record: 'success' if record['is_out'] else ''
         }
 
 
@@ -213,13 +196,19 @@ def action_index(request):
         return redirect('workflow:index')
 
     # Get the actions
-    actions = Action.objects.filter(workflow__id=workflow.id)
+    actions = Action.objects.filter(
+        workflow__id=workflow.id).values('id',
+                                         'name',
+                                         'description_text',
+                                         'is_out',
+                                         'modified',
+                                         'serve_enabled')
 
     # Context to render the template
     context = {}
 
     # Build the table only if there is anything to show (prevent empty table)
-    if len(actions) > 0:
+    if actions.count() > 0:
         context['table'] = ActionTable(actions, orderable=False)
 
     return render(request, 'action/index.html', context)
@@ -308,7 +297,9 @@ def edit_action_out(request, pk):
 
     # See if the action has a filter or not
     try:
-        filter_condition = Condition.objects.get(action=action, is_filter=True)
+        filter_condition = Condition.objects.get(
+            action=action, is_filter=True
+        )
     except Condition.DoesNotExist:
         filter_condition = None
     except Condition.MultipleObjectsReturned:
@@ -318,7 +309,8 @@ def edit_action_out(request, pk):
 
     # Conditions to show in the page as well.
     conditions = Condition.objects.filter(
-        action=action, is_filter=False).order_by('created')
+        action=action, is_filter=False
+    ).order_by('created').values('id', 'name')
 
     # Boolean to find out if there is a table attached to this workflow
     has_data = ops.workflow_has_table(action.workflow)
@@ -398,31 +390,22 @@ def edit_action_in(request, pk):
                        'Go to Dataops to upload data.')
         return redirect(reverse('action:index'))
 
-    # Get the action
+    # Get the action and the columns
     try:
         action = Action.objects.filter(
             Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
+            Q(workflow__shared=request.user)
+        ).distinct().prefetch_related('columns').get(pk=pk)
     except ObjectDoesNotExist:
         return redirect('action:index')
 
-    # Get the list of all columns from the workflow
-    all_columns = workflow.columns.all()
-    selected_columns = [c in action.columns.all()
-                        for c in all_columns]
-
     # Create the form
-    form = EditActionInForm(request.POST or None,
-                            columns=workflow.columns.all(),
-                            selected=selected_columns,
+    form = EditActionInForm(data=request.POST or None,
+                            workflow=workflow,
                             instance=action)
 
-    # Create the context info. Col info is to render the table and contains
-    # pairs of (form field, column object)
-    select_col_fields = [f for f in form
-                         if f.name.startswith(field_prefix)]
-    ctx = {'col_info': zip(select_col_fields, all_columns),
-           'action': action,
+    # Create the context info.
+    ctx = {'action': action,
            'query_builder_ops': workflow.get_query_builder_ops_as_str(),
            'form': form, }
 
@@ -432,45 +415,8 @@ def edit_action_in(request, pk):
 
     # Valid POST request
 
-    # There must be at least a key and a non-key columns
-    is_there_key = False
-    is_there_nonkey = False
-    for idx, c in enumerate(all_columns):
-        # Check for the two conditions
-        if c.is_key and form.cleaned_data[field_prefix + '%s' % idx]:
-            is_there_key = True
-        if not c.is_key and form.cleaned_data[field_prefix + '%s' % idx]:
-            is_there_nonkey = True
-
-    # Step 1: Make sure there is at least a unique column
-    if not is_there_key:
-        form.add_error(
-            None,
-            'There must be at least one unique column in the view'
-        )
-        ctx['form'] = form
-        return render(request, 'action/edit_in.html', ctx)
-
-    # Step 2: There must be at least on key column
-    if not is_there_nonkey:
-        form.add_error(
-            None,
-            'There must be at least one non-unique column in the view'
-        )
-        ctx['form'] = form
-        return render(request, 'action/edit_in.html', ctx)
-
     # Save the element and populate the right columns
-    action = form.save(commit=False)
-
-    # Update set of columns (flush first)
-    action.columns.clear()
-    for idx, c in enumerate(all_columns):
-        if not form.cleaned_data[field_prefix + '%s' % idx]:
-            # Skip the columns that have not been selected
-            continue
-        action.columns.add(c)
-    action.save()
+    form.save()
 
     # Finish processing
     return redirect(reverse('action:index'))

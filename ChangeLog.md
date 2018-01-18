@@ -1,3 +1,41 @@
+## 2.4.0 (2018-12-18)
+
+### Added
+
+- Take a set of already existing columns and combine them to create a new 
+  one using the following operations:
+  - sum (addition)
+  - prod (product)
+  - max (maximum value)
+  - min (minimum value)
+  - mean
+  - median
+  - mode
+  - std (standard deviation)
+  - all (boolean conjunction)
+  - any (boolean disjunction)
+
+- The table now can be viewed selecting a "View" which is a set of colums and 
+  a formula to filter rows. A workflow can have an arbitrary number of views.
+  They are available in the Table section and can be created, edited, deleted
+  and cloned.  
+  
+- Documentation now available in [OnTask documentation in Github.io]
+(https://abelardopardo.github.io/ontask_b)
+
+### Changed
+
+- Removed django-auth-ldap from requirements. Instructions mention the need to
+  install it if needed.
+  
+- Simplified operation menus. Less options visible and more tucked under 
+  dropdown buttons. 
+ 
+- Improved rendering of the action in form for data input from the learners.
+
+- Reimplemented attribute manipulation screen to make it similar in 
+  functionality to the rest
+  
 ## 2.3.0 (2017-12-30)
 
 ### Added

@@ -77,13 +77,15 @@ def is_locked(workflow):
     return session.expire_date < timezone.now()
 
 
-def get_workflow(request, wid=None):
+def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
     """
     Function that gets the workflow that the user (in the current request) is
     using.
     :param request: HTTP request object
     :param wid: Workflow id to get. If not given, taken from the request
     session
+    :param select_related: Field to add as select_related query filter
+    :param prefetch_related: Field to add as prefetch_related query filter
     :return: Workflow object or None (if error)
     """
 
@@ -94,9 +96,21 @@ def get_workflow(request, wid=None):
         if not wid:
             wid = request.session['ontask_workflow_id']
 
+        # Initial query set with the distinct filter
         workflow = Workflow.objects.filter(
             Q(user=request.user) | Q(shared__id=request.user.id)
-        ).distinct().get(id=wid)
+        ).distinct()
+
+        # Apply select if given
+        if select_related:
+            workflow = workflow.select_related(select_related)
+
+        # Apply prefetch if given
+        if prefetch_related:
+            workflow = workflow.prefetch_related(prefetch_related)
+
+        # Final filter
+        workflow = workflow.get(id=wid)
     except (KeyError, ObjectDoesNotExist):
         # No workflow or value set in the session, flag error.
         return None
@@ -238,8 +252,7 @@ def do_import_workflow(user, name, file_item):
 def do_export_workflow(workflow, selected_actions=None):
     """
     Proceed with the workflow export.
-    :param workflow: Workflow record to export
-    be included.
+    :param workflow: Workflow record to export be included.
     :param selected_actions: A subset of actions to export
     :return: Page that shows a confirmation message and starts the download
     """
@@ -307,6 +320,12 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
         #
         # Solution 1 chosen.
         condition.delete()
+
+    # If a column disappears, the views that contain only that column need to
+    # disappear as well as they are no longer relevant.
+    for view in workflow.views.all():
+        if view.columns.all().count() == 0:
+            view.delete()
 
     return
 

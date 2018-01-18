@@ -4,19 +4,30 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-
 {% block extrahead %}
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 {% endblock extrahead %}
-
 {% block scripts %}
   <script src="{% static 'workflow/js/workflow.js' %}{% otv %}"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script type="text/javascript">
+    if (document.getElementById("workflow-table") != null) {
+        $(document).ready(function() {
+            $('#workflow-table').DataTable({
+                "order": [[0, "asc"]],
+                "language": {
+                    "emptyTable": "No workflows available."
+                },
+                "columnDefs": [
+                        {"className": "dt-center", "targets": "_all"}
+                ],
+            });
+        });
+    }
+  </script>
 {% endblock %}
-
 {% block title %}{{ block.super }}Workflows{% endblock %}
-
 {% block container %}
   <div align="center" class="container">
     {% if table %}
@@ -24,14 +35,17 @@
     {% else %}
       <h1 class="page-header">Create a workflow</h1>
     {% endif %}
-
     <p>
       <button type="button" class="btn btn-primary js-create-workflow"
-              data-url="{% url 'workflow:create' %}">
+              data-url="{% url 'workflow:create' %}"
+                data-toggle="tooltip"
+                title="Provide name and description for a new workflow">
         <span class="glyphicon glyphicon-plus"></span>
           New Workflow
       </button>
-      <a href="{% url 'workflow:import' %}" class="btn btn-primary">
+      <a href="{% url 'workflow:import' %}" class="btn btn-primary"
+                data-toggle="tooltip"
+                title="Import a previously exported OnTask workflow">
         <span class="glyphicon glyphicon-import"></span> Import
       </a>
     </p>

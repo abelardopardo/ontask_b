@@ -1,20 +1,3 @@
-// Required for DataTables
-if (document.getElementById("workflow-table") != null) {
-    $(document).ready(function() {
-        $('#workflow-table').DataTable({
-            "order": [[0, "asc"]],
-            "language": {
-                "emptyTable": "No workflows available."
-            }
-        });
-        $('#column-table').DataTable({
-            "language": {
-                "emptyTable": "No columns available."
-            }
-        });
-    });
-}
-
 $(function () {
   $('#checkAll').click(function () {
        $('input:checkbox').prop('checked', this.checked);
@@ -40,8 +23,9 @@ $(function () {
   $("#workflow-area").on("click", ".js-workflow-flush", loadForm);
   $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm)
 
-  // Add attribute
+  // Add/Edit attribute
   $("#workflow-attributes").on("click", ".js-attribute-create", loadForm);
+  $("#workflow-attributes").on("click", ".js-attribute-edit", loadForm);
   $("#modal-item").on("submit", ".js-attribute-create-form", saveForm)
 
   // Delete attribute
@@ -60,6 +44,11 @@ $(function () {
   $("#workflow-area").on("click", ".js-workflow-column-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-column-add-form", saveForm);
 
+  // Derived column add
+  $("#workflow-area").on("click", ".js-workflow-formula-column-add", loadForm);
+  $("#modal-item").on("submit", ".js-workflow-formula-column-add-form",
+  saveForm);
+
   // Column Edit
   $("#column-table").on("click", ".js-workflow-column-edit", loadForm);
   $("#modal-item").on("submit", ".js-workflow-column-edit-form", saveForm);
@@ -68,7 +57,7 @@ $(function () {
   $("#column-table").on("click", ".js-column-delete", loadForm)
   $("#modal-item").on("submit", ".js-column-delete-form", saveForm)
 
-  // Delete column
+  // Clone column
   $("#column-table").on("click", ".js-column-clone", loadForm)
   $("#modal-item").on("submit", ".js-column-clone-form", saveForm)
 });

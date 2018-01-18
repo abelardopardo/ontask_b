@@ -22,8 +22,8 @@ a rich set of functionalities typically required in applications like OnTask.
 But as with many other applications, OnTask requires a set of additional
 applications for its execution:
 
-- Python 2.7.13 (or later)
-- Django (version 1.11 or later)
+- Python 2.7
+- Django (version 1.11)
 - Additional Django modules (included in the requirements/base.txt) file
 - Redis (version 4.0 or later)
 - PostgreSQL (version 9.5 or later)
@@ -181,7 +181,7 @@ no space between variable names and the equal sign)::
    database initialization::
 
      python manage.py makemigrations profiles accounts workflow dataops
-     python manage.py makemigrations table action logs scheduler
+     python manage.py makemigrations table action logs scheduler table
 
 #. Execute the following command to create the database internal structure::
 
@@ -353,6 +353,7 @@ the `documentation of the django-auth-ldap module
   In RedHat/CentOS::
 
     python-devel openldap-devel
+- Install the module ``django-auth-ldap``
 
 - Edit the configuration file ``local.env`` and define the following two
   variables::

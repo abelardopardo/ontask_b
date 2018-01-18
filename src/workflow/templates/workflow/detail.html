@@ -7,10 +7,12 @@
 {% block extrahead %}
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
   <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
+  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
   {% if workflow %}
     <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+    <script src="{% static 'site/js/sol.js' %}"></script>
     <script src="{% static 'workflow/js/workflow.js' %}{% otv %}"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
@@ -35,7 +37,11 @@
                       if (data[2] == '<span class="true">✔</span>') {
                         $(row).addClass('success');
                       }
-                  }
+                  },
+                  "drawCallback": function(settings) {
+                     // Needed to enable tooltips in ajax produced content
+                     $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+                  },
                 });
           });
       }
@@ -44,7 +50,7 @@
 {% endblock %}
 {% block title %}{{ block.super }}{{ workflow.name }}{% endblock %}
 {% block container %}
-<div align="center" class="container-fluid">
+<div class="container-fluid text-center">
   <h1 class="page-header">Workflow Details</h1>
   {% if workflow %}
     <div style="display: inline-block;" id="workflow-area">

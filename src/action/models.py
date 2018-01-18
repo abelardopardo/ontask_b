@@ -10,6 +10,7 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.html import escape
 
+from dataops import formula_evaluation
 from workflow.models import Workflow, Column
 
 # Regular expression to detect the use of a variable in a django template
@@ -21,18 +22,16 @@ class Action(models.Model):
     @DynamicAttrs
     """
 
-    workflow = models.ForeignKey(Workflow,
-                                 db_index=True,
-                                 on_delete=models.CASCADE,
-                                 null=False,
-                                 blank=False,
-                                 related_name='actions')
+    workflow = models.ForeignKey(
+        Workflow,
+        db_index=True,
+        null=False,
+        blank=False,
+        related_name='actions')
 
     name = models.CharField(max_length=256, blank=False)
 
-    description_text = models.CharField(max_length=512,
-                                        default='',
-                                        blank=True)
+    description_text = models.CharField(max_length=512, default='', blank=True)
 
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
@@ -45,16 +44,18 @@ class Action(models.Model):
         blank=True)
 
     # If the action is to provide information to learners
-    is_out = models.BooleanField(default=True,
-                                 verbose_name='Action is provide information',
-                                 null=False,
-                                 blank=False)
+    is_out = models.BooleanField(
+        default=True,
+        verbose_name='Action is provide information',
+        null=False,
+        blank=False)
 
     # Boolean that enables the URL to be visible ot the outside.
-    serve_enabled = models.BooleanField(default=False,
-                                        verbose_name='URL available to users?',
-                                        null=False,
-                                        blank=False)
+    serve_enabled = models.BooleanField(
+        default=False,
+        verbose_name='URL available to users?',
+        null=False,
+        blank=False)
 
     # Validity window for URL availability
     active_from = models.DateTimeField(
@@ -85,8 +86,7 @@ class Action(models.Model):
     #
     # Set of columns for the personalised action IN (subset of the matrix
     # columns
-    columns = models.ManyToManyField(Column,
-                                     related_name='actions_in')
+    columns = models.ManyToManyField(Column, related_name='actions_in')
 
     # Filter to select a subset of rows for action IN
     filter = JSONField(default=dict,
@@ -115,13 +115,20 @@ class Action(models.Model):
         :return: Updates the current object
         """
 
-        new_text = var_use_re.sub(
-            lambda m: '{{ ' +
-                      (new_name if m.group('varname') == escape(old_name)
-                       else m.group('varname')) + ' }}',
-            self.content
-        )
-        self.content = new_text
+        if self.is_out:
+            # Action out: Need to change name appearances in content
+            new_text = var_use_re.sub(
+                lambda m: '{{ ' +
+                          (new_name if m.group('varname') == escape(old_name)
+                          else m.group('varname')) + ' }}',
+                self.content
+            )
+            self.content = new_text
+        else:
+            # Action in: Need to change name appearances in filter
+            self.filter = formula_evaluation.rename_variable(
+                self.filter, old_name, new_name)
+
         self.save()
 
     class Meta:
@@ -147,9 +154,7 @@ class Condition(models.Model):
 
     name = models.CharField(max_length=256, blank=False)
 
-    description_text = models.CharField(max_length=512,
-                                        default='',
-                                        blank=True)
+    description_text = models.CharField(max_length=512, default='', blank=True)
 
     formula = JSONField(default=dict, blank=True, null=True)
 

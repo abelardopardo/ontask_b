@@ -5,10 +5,12 @@
 {% load widget_tweaks %}
 {% block extrahead %}
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
+  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
   {{ form.media }}
 {% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
+  <script src="{% static 'site/js/sol.js' %}"></script>
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
   <script type="text/javascript">
     var qbuilder_options = {
@@ -24,13 +26,16 @@
     if (document.getElementById('id_filter') != null) {
       window.onload = set_qbuilder('#id_filter', qbuilder_options);
     }
+    if (document.getElementById("id_columns") != null) {
+      set_column_select();
+    }
   </script>
 {% endblock %}
 {% block title %}{{ block.super }}Edit action in{% endblock %}
 {% block container %}
 <div align="center" class="container-fluid">
   <h1 class="page-header">Action In: <strong>{{ action.name }}</strong></h1>
-  <form method="POST" action="" onsubmit="return insert_query()">
+  <form method="POST" action="" onsubmit="return insert_fields(this)">
     {% include 'action/includes/partial_edit_in_buttons.html' %}
     {% csrf_token %}
     {% if form.errors %}
@@ -43,32 +48,8 @@
     {% render_field form.filter class="form-control" %}
     <h4>Filter to restrict input to some rows</h4>
     <div id="builder" class="container"></div>
-    <h4>Columns to include in the action</h4>
-    <table class="table table-bordered" id="column-table" style="display: table-cell;">
-      <thead>
-        <tr>
-          <th class="text-center" style="vertical-align:middle;">
-            Load<br/>
-            <input type="checkbox" id="checkAll"/>
-          </th>
-          <th class="text-center" style="vertical-align:middle;">Name</th>
-          <th class="text-center" style="vertical-align:middle;">Type</th>
-          <th class="text-center" style="vertical-align:middle;">Key?</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in col_info %}
-          <tr {% if item.1.is_key %}class="success"{% endif %}>
-            <td class="text-center" style="vertical-align: middle;">{% render_field item.0 %}</td>
-            <td class="text-center" style="vertical-align: middle;">{{ item.1.name }}</td>
-            <td class="text-center" style="vertical-align: middle;">{{ item.1.data_type }}</td>
-            <td class="text-center" style="vertical-align: middle;">
-              <span class="true">{% if item.1.is_key %}✔{% else %}✘{% endif %}</span>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <h4>Select the columns in the action</h4>
+    {% render_field form.columns class="form-control" %}
     {% include 'action/includes/partial_edit_in_buttons.html' %}
   </form>
 </div>

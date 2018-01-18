@@ -4,26 +4,28 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-
 {% block extrahead %}
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
   <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
+  <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
+  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
-
 {% block scripts %}
   <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
+  <script src="{% static 'site/js/sol.js' %}"></script>
   <script src="{% static 'table/js/table.js' %}{% otv %}"></script>
   <script type="text/javascript">
     if (document.getElementById("table-data") != null) {
         // Required for DataTables
         $(document).ready(function() {
-            $('#table-data').DataTable({
+            table_data = $('#table-data').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                  url: "{% url 'table:display_ss' %}",
+                  url: "{{ ajax_url }}",
                   type: 'POST',
                 },
                 "order": [1],
@@ -31,27 +33,89 @@
                     {"orderable": false, "targets": 0},
                     {"searchable": false, "targets": 0},
                     {"className": "dt-center", "targets": "_all"}
-                ]
+                ],
+                "drawCallback": function(settings) {
+                   // Needed to enable tooltips in ajax produced content
+                   $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+                },
             });
         });
     }
+    var qbuilder_options = {
+      plugins: ['bt-tooltip-errors', 'not-group'],
+      operators: ['equal', 'not_equal', 'less', 'less_or_equal',
+                  'greater', 'greater_or_equal', 'between', 'not_between',
+                  'begins_with', 'not_begins_with', 'contains', 'not_contains',
+                  'ends_with', 'not_ends_with', 'is_empty', 'is_not_empty'],
+      allow_empty: true,
+      filters: {{ query_builder_ops|safe }},
+      rules: [],
+    };
   </script>
 {% endblock %}
-
 {% block title %}{{ block.super }}Table{% endblock %}
-
 {% block container %}
   <div id="table-content" align="center" class="container-fluid"
        style="padding-top:2ex;">
+    {% if view %}
+      <h4>Table view <strong>{{ view.name }}</strong></h4>
+    {% endif %}
     {% if columns %}
-      <a href="{% url 'dataops:rowcreate' %}" class="btn btn-sm btn-primary">
-        <span class="glyphicon glyphicon-plus"></span> Add row
-      </a>
-      <button type="button"
-              class="btn btn-primary btn-sm js-workflow-column-add"
-              data-url="{% url 'workflow:column_add' %}">
-        <span class="glyphicon glyphicon-plus"></span> New column
-      </button>
+      <div style="padding-bottom: 2ex;">
+        <a href="{% url 'dataops:rowcreate' %}"
+           class="btn btn-sm btn-primary"
+           data-toggle="tooltip"
+           title="Add an extra row to the table">
+          <span class="glyphicon glyphicon-plus"></span> Add row
+        </a>
+        <button type="button"
+                class="btn btn-primary btn-sm js-workflow-column-add"
+                data-url="{% url 'workflow:column_add' %}"
+                data-toggle="tooltip"
+                title="Add a column to the table">
+          <span class="glyphicon glyphicon-plus"></span> Add column
+        </button>
+        <button type="button"
+                class="btn btn-primary btn-sm js-workflow-formula-column-add"
+                data-url="{% url 'workflow:formula_column_add' %}"
+                data-toggle="tooltip"
+                title="Add a column operating with the current values">
+          <span class="glyphicon glyphicon-plus"></span> Add derived column
+        </button>
+        <div class="dropdown btn-group">
+          <a href="{% url 'table:view_index' %}"
+             class="btn btn-primary btn-sm"
+             data-toggle="tooltip"
+             title="Views available for this table">
+            <span class="glyphicon glyphicon-eye-open"></span> Views
+          </a>
+          {% if views %}
+            <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                    data-toggle="dropdown"><span class="caret"></span>
+            </button>
+            <ul role="menu" class="dropdown-menu">
+            {% for v in views %}
+              <li>
+                <a href="{% url 'table:display_view' v.id %}"
+                   class="btn btn-default btn-sm">{{ v.name }}</a>
+              </li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+        {% if view %}
+          <button type="button"
+                  class="btn btn-primary btn-sm js-view-edit align-middle"
+                  data-url="{% url 'table:view_edit' view.id %}"
+                  data-toggle="tooltip" title="Change elements in view">
+            <span class="glyphicon glyphicon-pencil"></span> Edit view
+          </button>
+          <button type="button" class="btn btn-sm btn-default" style="margin-right:2ex;"
+                  onclick="location.href='{% url 'table:display' %}'">
+            Full table
+          </button>
+        {% endif %}
+      </div>
       <table class="table display dataTable no-footer cell-border table-bordered"
              id="table-data">
         <thead>
@@ -61,8 +125,10 @@
               <th class="text-center">
                 <button type="button"
                         class="btn btn-sm btn-default js-workflow-column-edit"
-                        data-url="{% url 'workflow:column_edit' col.id %}">
-                  {{ col.name }}
+                        data-url="{% url 'workflow:column_edit' col.id %}"
+                        data-toggle="tooltip"
+                        title="Edit column name, description, etc">
+                  <span class="glyphicon glyphicon-pencil"></span> {{ col.name }}
                 </button>
               </th>
             {% endfor %}
@@ -85,11 +151,11 @@
     {% else %}
       <p>The workflow does not have data.</p>
       <p>Go to <a href="{% url 'dataops:list' %}">DataOps</a> to upload data</p>
-     {% endif %}
-    <div class="modal fade" id="modal-item">
-      <div class="modal-dialog">
-        <div class="modal-content">
-        </div>
+    {% endif %}
+  </div>
+  <div class="modal fade" id="modal-item">
+    <div class="modal-dialog">
+      <div class="modal-content">
       </div>
     </div>
   </div>
