@@ -16,6 +16,7 @@ from dataops.pandas_db import (
     is_table_in_db,
     get_table_queryset,
     pandas_datatype_names)
+from table.models import View
 from workflow.models import Workflow, Column
 
 
@@ -333,9 +334,17 @@ def rename_df_column(df, workflow, old_name, new_name):
         cond.save()
 
     # Rename the appearances of the variable in all actions
-    actions = Action.objects.filter(workflow=workflow)
-    for action_item in actions:
+    for action_item in Action.objects.filter(workflow=workflow):
         action_item.rename_variable(old_name, new_name)
+
+    # Rename the appearances of the variable in the formulas in the views
+    for view in View.objects.filter(workflow=workflow):
+        view.formula = formula_evaluation.rename_variable(
+            view.formula,
+            old_name,
+            new_name
+        )
+        view.save()
 
     return df.rename(columns={old_name: new_name})
 

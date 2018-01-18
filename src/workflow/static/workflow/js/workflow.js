@@ -44,6 +44,11 @@ $(function () {
   $("#workflow-area").on("click", ".js-workflow-column-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-column-add-form", saveForm);
 
+  // Derived column add
+  $("#workflow-area").on("click", ".js-workflow-formula-column-add", loadForm);
+  $("#modal-item").on("submit", ".js-workflow-formula-column-add-form",
+  saveForm);
+
   // Column Edit
   $("#column-table").on("click", ".js-workflow-column-edit", loadForm);
   $("#modal-item").on("submit", ".js-workflow-column-edit-form", saveForm);
@@ -52,7 +57,7 @@ $(function () {
   $("#column-table").on("click", ".js-column-delete", loadForm)
   $("#modal-item").on("submit", ".js-column-delete-form", saveForm)
 
-  // Delete column
+  // Clone column
   $("#column-table").on("click", ".js-column-clone", loadForm)
   $("#modal-item").on("submit", ".js-column-clone-form", saveForm)
 });

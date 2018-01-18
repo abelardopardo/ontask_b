@@ -70,9 +70,15 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Click in the submit/save button
         self.selenium.find_element_by_xpath("//button[@type='submit']").click()
+        # MODAL WAITING
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
+        # Wait for the table to be refreshed
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME,
-                                        'js-workflow-column-add'))
+            EC.presence_of_element_located((By.ID, 'column-table_previous'))
         )
 
         # Click in the New Column button
@@ -113,7 +119,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Click in the attributes section
         self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-area']/div/button[2]"
+            "//div[@id='workflow-area']/div/button[3]"
         ).click()
         self.selenium.find_element_by_link_text('Attributes').click()
         WebDriverWait(self.selenium, 10).until(
@@ -189,9 +195,22 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.selenium.find_element_by_link_text("Edit").click()
 
         # Set the right columns to process
-        self.selenium.find_element_by_id("id____ontask___select_3").click()
-        self.selenium.find_element_by_id("id____ontask___select_4").click()
-        self.selenium.find_element_by_id("id____ontask___select_1").click()
+        self.selenium.find_element_by_css_selector(
+            "div.sol-input-container > input[type=\"text\"]"
+        ).click()
+        # self.selenium.find_element_by_name("columns").click()
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='columns'])[2]"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='columns'])[4]"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='columns'])[5]"
+        ).click()
+        self.selenium.find_element_by_css_selector(
+            "div.container-fluid"
+        ).click()
 
         # Submit the new action in
         self.selenium.find_element_by_xpath(
@@ -359,6 +378,12 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[1]/td[4]/button/span"
         ).click()
+        # Wait for the form to create the derived column
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
+                'Edit column')
+        )
 
         # Append symbols to the name
         self.selenium.find_element_by_id("id_name").click()
@@ -406,8 +431,19 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.selenium.find_element_by_link_text("Edit").click()
 
         # Set the correct values for an action-in
-        self.selenium.find_element_by_id("id____ontask___select_3").click()
-        self.selenium.find_element_by_id("id____ontask___select_0").click()
+        self.selenium.find_element_by_css_selector(
+            "div.sol-input-container > input[type=\"text\"]"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='columns'])[4]"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='columns'])[1]"
+        ).click()
+        self.selenium.find_element_by_css_selector(
+            "div.sol-current-selection"
+        ).click()
+
         self.selenium.find_element_by_xpath(
             "(//button[@name='Submit'])[2]"
         ).click()
@@ -499,7 +535,11 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
 
 class DataopsExcelUpload(test.OntaskLiveTestCase):
-    fixtures = ['empty_wflow.json']
+    fixtures = ['empty_wflow']
+
+    def tearDown(self):
+        pandas_db.delete_all_tables()
+        super(DataopsExcelUpload, self).tearDown()
 
     def test_01_excelupload(self):
         # Login
@@ -546,7 +586,11 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
 
 
 class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
-    fixtures = ['empty_wflow.json']
+    fixtures = ['empty_wflow']
+
+    def tearDown(self):
+        pandas_db.delete_all_tables()
+        super(DataopsExcelUploadSheet, self).tearDown()
 
     def test_01_excelupload_sheet(self):
         # Login

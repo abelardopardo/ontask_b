@@ -33,7 +33,10 @@ from .ops import (get_workflow,
 
 class WorkflowTable(tables.Table):
     name = tables.Column(verbose_name=str('Name'))
-    description_text = tables.Column(verbose_name=str('Description'))
+    description_text = tables.Column(
+        empty_values=[],
+        verbose_name=str('Description')
+    )
     nrows_cols = tables.Column(
         empty_values=[],
         verbose_name=str('Rows/Columns'),
@@ -110,46 +113,48 @@ def save_workflow_form(request, form, template_name):
     # Ajax response. Form is not valid until proven otherwise
     data = {'form_is_valid': False}
 
-    if request.method == 'POST' and form.is_valid():
-        # Correct form submitted
+    if request.method == 'GET' or not form.is_valid():
+        context = {'form': form}
+        data['html_form'] = render_to_string(template_name,
+                                             context,
+                                             request=request)
+        return JsonResponse(data)
 
-        if not form.instance.id:
-            # This is a new instance!
-            form.instance.user = request.user
-            form.instance.nrows = 0
-            form.instance.ncols = 0
-            form.instance.session_key = request.session.session_key
-            log_type = 'workflow_create'
-        else:
-            log_type = 'workflow_update'
+    # Correct form submitted
 
-        # Save the instance
-        try:
-            workflow_item = form.save()
-        except IntegrityError as e:
-            form.add_error('name',
-                           'A workflow with that name already exists')
-            context = {'form': form}
-            data['html_form'] = render_to_string(template_name,
-                                                 context,
-                                                 request=request)
-            return JsonResponse(data)
+    if not form.instance.id:
+        # This is a new instance!
+        form.instance.user = request.user
+        form.instance.nrows = 0
+        form.instance.ncols = 0
+        form.instance.session_key = request.session.session_key
+        log_type = 'workflow_create'
+    else:
+        log_type = 'workflow_update'
 
-        # Log event
-        logs.ops.put(request.user,
-                     log_type,
-                     workflow_item,
-                     {'id': workflow_item.id,
-                      'name': workflow_item.name})
+    # Save the instance
+    try:
+        workflow_item = form.save()
+    except IntegrityError as e:
+        form.add_error('name',
+                       'A workflow with that name already exists')
+        context = {'form': form}
+        data['html_form'] = render_to_string(template_name,
+                                             context,
+                                             request=request)
+        return JsonResponse(data)
 
-        # Here we can say that the form is done.
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+    # Log event
+    logs.ops.put(request.user,
+                 log_type,
+                 workflow_item,
+                 {'id': workflow_item.id,
+                  'name': workflow_item.name})
 
-    context = {'form': form}
-    data['html_form'] = render_to_string(template_name,
-                                         context,
-                                         request=request)
+    # Here we can say that the form processing is done.
+    data['form_is_valid'] = True
+    data['html_redirect'] = reverse('workflow:index')
+
     return JsonResponse(data)
 
 

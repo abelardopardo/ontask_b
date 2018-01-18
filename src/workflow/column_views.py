@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -13,9 +14,31 @@ from action.models import Condition
 from dataops import ops, formula_evaluation, pandas_db
 from ontask.permissions import is_instructor
 from .forms import (ColumnRenameForm,
-                    ColumnAddForm)
+                    ColumnAddForm,
+                    FormulaColumnAddForm)
 from .models import Column
 from .ops import get_workflow, workflow_delete_column, clone_column
+
+# These are the column operands offered through the GUI. They have immediate
+# translations onto Pandas operators over dataframes.
+# Each tuple has:
+# - Pandas operation name
+# - Textual description
+# - List of data types that are allowed (for data type checking)
+formula_column_operands = [
+    ('sum', 'sum: Sum selected columns', ['integer', 'double']),
+    ('prod', 'prod: Product of the selected columns', ['integer', 'double']),
+    ('max', 'max: Maximum of the selected columns', ['integer', 'double']),
+    ('min', 'min: Minimum of the selected columns', ['integer', 'double']),
+    ('mean', 'mean: Mean of the selected columns', ['integer', 'double']),
+    ('median', 'median: Median of the selected columns', ['integer', 'double']),
+    ('std', 'std: Standard deviation over the selected columns',
+     ['integer', 'double']),
+    ('all', 'all: True when all elements in selected columns are true',
+     ['boolean']),
+    ('any', 'any: True when any element in selected columns is true',
+     ['boolean']),
+]
 
 
 @user_passes_test(is_instructor)
@@ -86,6 +109,129 @@ def column_add(request):
     data['form_is_valid'] = True
     data['html_redirect'] = reverse('workflow:detail',
                                     kwargs={'pk': workflow.id})
+    return JsonResponse(data)
+
+
+@user_passes_test(is_instructor)
+def formula_column_add(request):
+    # Data to send as JSON response, in principle, assume form is not valid
+    data = {'form_is_valid': False}
+
+    # Get the workflow element
+    workflow = get_workflow(request)
+    if not workflow:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('workflow:index')
+        return JsonResponse(data)
+
+    if workflow.nrows == 0:
+        data['form_is_valid'] = True
+        data['html_redirect'] = ''
+        messages.error(
+            request,
+            'Cannot add column to a workflow without data')
+        return JsonResponse(data)
+
+    # Form to read/process data
+    form = FormulaColumnAddForm(
+        data=request.POST or None,
+        operands=formula_column_operands,
+        columns=workflow.columns.all()
+    )
+
+    # If a GET or incorrect request, render the form again
+    if request.method == 'GET' or not form.is_valid():
+        data['html_form'] = render_to_string(
+            'workflow/includes/partial_formula_column_add.html',
+            {'form': form},
+            request=request
+        )
+
+        return JsonResponse(data)
+
+    # Processing now a valid POST request
+
+    # Save the column object attached to the form and add additional fields
+    column = form.save(commit=False)
+    column.workflow = workflow
+    column.is_key = False
+
+    # Save the instance
+    try:
+        column = form.save()
+    except IntegrityError as e:
+        form.add_error('name',
+                       'A column with that name already exists')
+        data['html_form'] = render_to_string(
+            'workflow/includes/partial_formula_column_add.html',
+            {'form': form},
+            request=request
+        )
+        return JsonResponse(data)
+
+    # Update the data frame
+    df = pandas_db.load_from_db(workflow.id)
+
+    try:
+        # Add the column with the appropriate computation
+        operation = form.cleaned_data['op_type']
+        cnames = [c.name for c in form.selected_columns]
+        if operation == 'sum':
+            df[column.name] = df[cnames].sum(axis=1)
+        elif operation == 'prod':
+            df[column.name] = df[cnames].prod(axis=1)
+        elif operation == 'max':
+            df[column.name] = df[cnames].max(axis=1)
+        elif operation == 'min':
+            df[column.name] = df[cnames].min(axis=1)
+        elif operation == 'mean':
+            df[column.name] = df[cnames].mean(axis=1)
+        elif operation == 'median':
+            df[column.name] = df[cnames].median(axis=1)
+        elif operation == 'std':
+            df[column.name] = df[cnames].std(axis=1)
+        elif operation == 'all':
+            df[column.name] = df[cnames].all(axis=1)
+        elif operation == 'any':
+            df[column.name] = df[cnames].any(axis=1)
+        else:
+            raise Exception('Operand ' + operation + ' not implemented')
+    except Exception as e:
+        # Something went wrong in pandas, we need to remove the column
+        column.delete()
+
+        # Notify in the form
+        form.add_error(
+            None,
+            'Unable to perform the requested operation ' + '(' + e.message + ')'
+        )
+        data['html_form'] = render_to_string(
+            'workflow/includes/partial_formula_column_add.html',
+            {'form': form},
+            request=request
+        )
+        return JsonResponse(data)
+
+    # Populate the column type
+    column.data_type = \
+        pandas_db.pandas_datatype_names[df[column.name].dtype.name]
+    column.save()
+
+    # Store the df to DB
+    ops.store_dataframe_in_db(df, workflow.id)
+
+    # Log the event
+    logs.ops.put(request.user,
+                 'column_add',
+                 workflow,
+                 {'id': workflow.id,
+                  'name': workflow.name,
+                  'column_name': column.name,
+                  'column_type': column.data_type})
+
+    # The form has been successfully processed
+    data['form_is_valid'] = True
+    data['html_redirect'] = ''  # Refresh the page
     return JsonResponse(data)
 
 
@@ -306,7 +452,8 @@ def column_clone(request, pk):
     # POST REQUEST
 
     # Get the new name appending as many times as needed the 'Copy of '
-    new_name = 'Copy_of_' + column.name
+    old_name = column.name
+    new_name = 'Copy_of_' + old_name
     while Column.objects.filter(name=new_name,
                                 workflow=column.workflow).exists():
         new_name = 'Copy_of_' + new_name
@@ -320,6 +467,7 @@ def column_clone(request, pk):
                  workflow,
                  {'id': workflow.id,
                   'name': workflow.name,
+                  'old_column_name': old_name,
                   'new_column_name': column.name})
 
     data['form_is_valid'] = True

@@ -22,46 +22,6 @@ from .models import Log
 from .ops import log_types
 
 
-class LogTable(tables.Table):
-    # Needs to be in the table to be used as URL parameter
-    id = tables.Column(visible=False)
-
-    created = tables.DateTimeColumn(verbose_name='Date/Time',
-                                    format=str('r'),
-                                    short=True)
-    user = tables.EmailColumn(accessor=A('user.email'))
-    name = tables.Column(verbose_name=str('Event type'))
-    operations = tables.Column(empty_values=[],
-                               verbose_name=str('Additional data'))
-
-    def __init__(self, data, *args, **kwargs):
-        super(LogTable, self).__init__(data, *args, **kwargs)
-
-    def render_operations(self, record):
-        return format_html(
-            """
-            <button type="submit" class="btn btn-primary btn-sm js-log-view"
-                    data-url="{0}">
-              <span class="glyphicon glyphicon-eye-open"></span> View
-            </button>
-            """.format(reverse('logs:view', kwargs={'pk': record.id}))
-        )
-
-    class Meta:
-        model = Log
-
-        fields = ('created', 'user', 'name', 'operations')
-
-        sequence = ('created', 'user', 'name', 'operations')
-
-        exclude = ('id', 'workflow', 'payload')
-
-        attrs = {
-            'class': 'table display table-bordered',
-            'id': 'log-table'
-        }
-
-
 @user_passes_test(is_instructor)
 def show(request):
     # Try to get workflow and if not present, go to home page

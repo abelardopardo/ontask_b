@@ -4,7 +4,13 @@
             class="btn btn-primary btn-sm js-workflow-column-add"
             data-url="{% url 'workflow:column_add' %}"
             data-toggle="tooltip" title="Add a new column to the table">
-      <span class="glyphicon glyphicon-plus"></span> New column
+      <span class="glyphicon glyphicon-plus"></span> Add column
+    </button>
+    <button type="button"
+            class="btn btn-primary btn-sm js-workflow-formula-column-add"
+            data-url="{% url 'workflow:formula_column_add' %}"
+            data-toggle="tooltip" title="Add a new derived column to the table">
+      <span class="glyphicon glyphicon-plus"></span> Add derived column
     </button>
   {% endif %}
   <button class="btn btn-primary btn-sm dropdown-toggle" type="button"

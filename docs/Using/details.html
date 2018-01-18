@@ -1,0 +1,266 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Workflow Details &#8212; OnTask 1.1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Data Operations" href="dataops.html" />
+    <link rel="prev" title="The Workflow" href="workflow.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="workflow-details">
+<span id="details"></span><h1>Workflow Details<a class="headerlink" href="#workflow-details" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div>“The details are not the details. They make the design”
+– Charles Eames</div></blockquote>
+<p>After selecting a workflow to manage, the <em>details</em> page appears with a lot of
+information about operations, structure of the data, information about the
+columns, etc. The top of the screen contains the information shown in the
+following figure.</p>
+<div class="figure align-center">
+<img alt="../_images/Ontask____details.png" src="../_images/Ontask____details.png" />
+</div>
+<p>The top of the page now includes links to additional menus with operations to
+perform over the workflow (some of them will be available depending on your
+user profile). Under the top bar the application shows the name of the workflow
+selected for manipulation. Under the title <em>Workflow Details</em> there are buttons
+(available depending on your profile and ownership of the workflow) that offer
+the following operations:</p>
+<dl class="docutils" id="details-add-column">
+<dt>Add a new column</dt>
+<dd><p class="first">Opens a dialogue to create a new column in the table. It requires the name,
+type of column, a comma separated list of allowed values (optional) and a
+value to assign to all cells in the column (optional).</p>
+<div class="last figure align-center">
+<img alt="../_images/Ontask____add_column.png" src="../_images/Ontask____add_column.png" />
+</div>
+</dd>
+</dl>
+<dl class="docutils" id="details-attributes">
+<dt>Attributes</dt>
+<dd><p class="first">This is simply a dictionary of pairs <code class="docutils literal"><span class="pre">(name,</span> <span class="pre">value)</span></code> so that when a <code class="docutils literal"><span class="pre">name</span></code>
+appears in a personalised text, it is replaced by the <code class="docutils literal"><span class="pre">value</span></code>. The main use
+of these attributes is when a value has to appear in various locations and
+you may want to change all its occurrences. For example, the instructor name
+could be included as one of the attributes so that if it changes, modifying
+the attribute is the only required step.</p>
+<div class="last figure align-center">
+<img alt="../_images/Ontask____attributes.png" src="../_images/Ontask____attributes.png" />
+</div>
+</dd>
+</dl>
+<dl class="docutils" id="details-sharing">
+<dt>Share</dt>
+<dd><p class="first">A screen to make the workflow accessible to other users. You are supposed to
+know the user identification (there is no search functionality available).</p>
+<div class="last figure align-center">
+<img alt="../_images/Ontask____share.png" src="../_images/Ontask____share.png" />
+</div>
+</dd>
+</dl>
+<dl class="docutils" id="details-export">
+<dt>Export</dt>
+<dd><p class="first">This functionality allows you to take a snapshot (or a picture) of the content
+of the workflow and store it in a file for your records. You may select which
+actions are included in the exported file</p>
+<div class="figure align-center">
+<img alt="../_images/Ontask____Export.png" src="../_images/Ontask____Export.png" />
+</div>
+<p class="last">The menu offers you the possibility of exporting only the data, or the data
+<strong>and</strong> the <a class="reference internal" href="actions.html#action"><span class="std std-ref">action</span></a> in the workflow.</p>
+</dd>
+</dl>
+<dl class="docutils" id="details-clone">
+<dt>Clone</dt>
+<dd>This function creates a new workflow in the platform by duplicating the data,
+actions and conditions of the current workflow.</dd>
+</dl>
+<dl class="docutils" id="details-rename">
+<dt>Rename</dt>
+<dd><p class="first">This functionality allows to change either the name or the description of the
+workflow.</p>
+<div class="last figure align-center">
+<img alt="../_images/Ontask____updatewflow.png" src="../_images/Ontask____updatewflow.png" />
+</div>
+</dd>
+</dl>
+<dl class="docutils" id="details-flush-data">
+<dt>Flush data</dt>
+<dd><p class="first">This operation deletes all the data attached to the workflow, but preserves
+the workflow structure (that is, the name and the description only).</p>
+<div class="figure align-center">
+<img alt="../_images/Ontask____flushdata.png" src="../_images/Ontask____flushdata.png" />
+</div>
+<p class="last">Given the destructive nature of this operation the platform requires you to
+confirm this step.</p>
+</dd>
+</dl>
+<dl class="docutils" id="details-delete">
+<dt>Delete</dt>
+<dd><p class="first">Operation similar to the previous one, but now the whole workflow is deleted
+and therefore unselected. If executed, the platform will go back to the list
+of workflows as this one is no longer available for operations.</p>
+<div class="figure align-center">
+<img alt="../_images/Ontask____wflowdelete.png" src="../_images/Ontask____wflowdelete.png" />
+</div>
+<p class="last">As in the previous case, the platform asks for confirmation before carrying
+out the delete operation.</p>
+</dd>
+</dl>
+<p>Under the buttons to carry out these workflow operations the platform shows a
+summary of the information contained in the workflow.</p>
+<div class="section" id="the-columns">
+<span id="columns"></span><h2>The Columns<a class="headerlink" href="#the-columns" title="Permalink to this headline">¶</a></h2>
+<p>The data in a workflow is stored in a structure called <em>a table</em> that is made
+of rows and columns (similar to a spreadsheet). The information about the
+columns is included in a table in the workflow details page.</p>
+<div class="figure align-center">
+<img alt="../_images/Ontask____columns.png" src="../_images/Ontask____columns.png" />
+</div>
+<p>Each column has a name (cannot contain the quotes <em>‘</em> or <em>“</em>), a type (one of
+integer, string, double, boolean or datetime), a field stating if the values
+of that column are unique for the rows, and two operations. When a column is
+marked as <em>Unique</em>, it means that all the values it contains are different and
+unique for each row. Think of a column containing a passport number. Such
+number is different for every person. There could be several columns with this
+property. The application detects automatically this property in a column. You
+may edit and change this properly as long as the values are the adequate ones
+(they satisfy the uniqueness property if you try mark a column as unique. The
+operations available over columns are:</p>
+<dl class="docutils">
+<dt>Edit</dt>
+<dd><p class="first">It allows you to change the name, type, unique and values allowed in the
+column. If you are changing the column type, the application will check if
+the existing values are valid. If not, the change will not be allowed.
+Similarly, if the <em>Unique</em> property is selected, the application checks the
+values to make sure this property is satisfied.</p>
+<div class="figure align-center">
+<img alt="../_images/Ontask____columnedit.png" src="../_images/Ontask____columnedit.png" />
+</div>
+<p class="last">The column may also have a <em>validity window</em> defined by two date/times.
+This validity is used when executing <em>action in</em> tasks.</p>
+</dd>
+<dt>Clone</dt>
+<dd>Clones the column in the workflow changing its name adding the prefix <em>Copy
+of</em> to the name.</dd>
+<dt>Delete</dt>
+<dd>Deletes the column from the workflow. If there are conditions inside
+<em>actions out</em> that use this column, those conditions will be removed from
+the action.</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">OnTask</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction/index.html">What is OnTask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Install/index.html">Installation process</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Using the tool</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="workflow.html">The Workflow</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Workflow Details</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-columns">The Columns</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dataops.html">Data Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="table.html">The Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.html">The Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scheduler.html">The Scheduler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logs.html">The Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorial/index.html">OnTask Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Advanced/index.html">Advanced Features</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Using the tool</a><ul>
+      <li>Previous: <a href="workflow.html" title="previous chapter">The Workflow</a></li>
+      <li>Next: <a href="dataops.html" title="next chapter">Data Operations</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Content Licensed under Creative Commons BY 3.0.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/Using/details.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,185 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Using the tool &#8212; OnTask 1.1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The Workflow" href="workflow.html" />
+    <link rel="prev" title="Installation process" href="../Install/index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="using-the-tool">
+<span id="using"></span><h1>Using the tool<a class="headerlink" href="#using-the-tool" title="Permalink to this headline">¶</a></h1>
+<p>In a nutshell, the idea of OnTask is to help instructors and designers to
+use data available about a what is happening in a learning experience to
+design and deploy personalised learner support actions. This last term,
+<em>personalised support actions</em> is purposefully vague to include any action
+that is given to learners in different form depending on some personal
+conditions. The following figures illustrates an example of how OnTask can
+help instructors and learners.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/ontask_workflow.png"><img alt="../_images/ontask_workflow.png" src="../_images/ontask_workflow.png" style="width: 100%;" /></a>
+</div>
+<p>Imagine a learning experience in which you want to provide personalised
+messages to the learners in three instances. In the first week, you want to
+send a welcome message and change slightly the text based on the type of
+background. The second week you want to send some comments and suggestions
+about the participation in the forum but the text will depend on the measures
+of engagement obtained from the platform. Finally, you want to send a third
+personalised message depending on the level of engagement with the videos in
+the course. The main idea of these messages is that you want to change some
+portions based on the information available in the table.</p>
+<p>The main entity in the platform is called a <a class="reference internal" href="workflow.html#workflow"><span class="std std-ref">*workflow*</span></a> and
+represents a set of data capturing procedures, a table with current data,
+and a set of actions. The usual steps require first to populate the table
+with data extracted from the learning environment. In the figure we assume
+three data sources: the class list (basic information about the learners),
+data about participation in an online discussion forum, and data about
+resource usage.</p>
+<p>These three sources are combined and stored in the second entity in OnTask:
+the table. Think of the table as a conventional excel sheet storing the
+information about the learners (one learner per row and a set of features
+about each learner as columns).</p>
+<p>The third entity in OnTask is the <em>action</em> that is basically a text with
+elements that can be changed and adapted to each learner depending on the
+values of the features included in the table. This text can be included in
+an email, made available through a web page, or forwarded to another system
+for further processing.</p>
+<p>A workflow in OnTask contains a single table and a set of actions. This
+container is conceived to manage the data and actions related to a learning
+experience. You may use the workflow shown in the documentation importing  the <a class="reference download internal" href="../_downloads/initial_workflow.gz" download=""><code class="xref download docutils literal"><span class="pre">ELON3509</span> <span class="pre">workflow</span></code></a>.</p>
+<p>The following sections offer a more in-depth description of all these elements
+as well as examples with real scenarios.</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">More detail information about the following elements:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">The Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="details.html">Workflow Details</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="details.html#the-columns">The Columns</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dataops.html">Data Operations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dataops.html#csv-files">CSV Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataops.html#merge-operation">Merge Operation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="table.html">The Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="actions.html">The Actions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="actions.html#actions-in">Actions In</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.html#actions-out">Actions Out</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scheduler.html">The Scheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logs.html">The Logs</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">OnTask</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction/index.html">What is OnTask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Install/index.html">Installation process</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using the tool</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="workflow.html">The Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="details.html">Workflow Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataops.html">Data Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="table.html">The Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.html">The Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scheduler.html">The Scheduler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logs.html">The Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorial/index.html">OnTask Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Advanced/index.html">Advanced Features</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../Install/index.html" title="previous chapter">Installation process</a></li>
+      <li>Next: <a href="workflow.html" title="next chapter">The Workflow</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Content Licensed under Creative Commons BY 3.0.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/Using/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

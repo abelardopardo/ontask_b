@@ -95,15 +95,6 @@ class ActionSerializer(serializers.ModelSerializer):
     # To get both Actions and Conditions
     class Meta:
         model = Action
-        # fields = ('name',
-        #           'description_text',
-        #           'n_selected_rows',
-        #           'content',
-        #           'conditions',
-        #           'is_out',
-        #           # 'columns',
-        #           'filter',
-        #           'conditions')
 
         exclude = ('id',
                    'workflow',

@@ -6,7 +6,7 @@ from rest_framework.exceptions import APIException
 
 from action.serializers import ActionSerializer
 from dataops import ops, pandas_db
-from table.serializers import DataFramePandasField
+from table.serializers import DataFramePandasField, ViewSerializer
 from .models import Workflow, Column
 
 
@@ -82,6 +82,8 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
 
     columns = ColumnSerializer(many=True, required=False)
 
+    views = ViewSerializer(many=True, required=False)
+
     def get_filtered_actions(self, workflow):
         # Get the subset of actions specified in the context
         action_list = self.context.get('selected_actions', [])
@@ -134,6 +136,18 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
         )
         if action_data.is_valid():
             action_data.save()
+        else:
+            workflow_obj.delete()
+            return None
+
+        # Create the views pointing to the workflow
+        view_data = ViewSerializer(
+            data=validated_data.get('views', []),
+            many=True,
+            context={'workflow': workflow_obj}
+        )
+        if view_data.is_valid():
+            view_data.save()
         else:
             workflow_obj.delete()
             return None

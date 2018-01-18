@@ -38,6 +38,10 @@ def rename_variable(formula, old_name, new_name):
     :return: The new modified formula.
     """
 
+    # Trivial case of an empty formula
+    if not formula:
+        return formula
+
     if 'condition' in formula:
         # Recursive call
         formula['rules'] = [rename_variable(x, old_name, new_name)

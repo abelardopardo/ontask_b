@@ -1,0 +1,176 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Data Operations &#8212; OnTask 1.1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The Table" href="table.html" />
+    <link rel="prev" title="Workflow Details" href="details.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="data-operations">
+<span id="dataops"></span><h1>Data Operations<a class="headerlink" href="#data-operations" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div>“May be stories are are just data without a soul”
+– Brené Brown</div></blockquote>
+<p>This section describes one of the most advanced functionality of the platform, how to upload data into the table. It may be the case that this task is already done, or it is done automatically before you use the workflow. If this is the case, you may skip this section.</p>
+<p>The data operations page offers various options to upload data to the table. It follows a brief description of each one of them with a discussion of the <em>merge</em> operation</p>
+<div class="section" id="csv-files">
+<h2>CSV Files<a class="headerlink" href="#csv-files" title="Permalink to this headline">¶</a></h2>
+<p>CSV or “comma separated value” files are plain text files in which the first line contains a comma-separated list of column names, and every subsequent line contains the values of these columns for each row. It is a popular format to exchange data that can be represented as a table, and it is for this reason that OnTask allows to upload data in this format.</p>
+<p>The functionality assumes that you have such file available in your computer and provides a form to upload it to the platform. Upon uploading, OnTask does a preliminary processing of the data and shows a table with the columns detected in the file and a set of options.</p>
+<div class="figure align-center">
+<img alt="../_images/Ontask____Upload_Merge_CSV.png" src="../_images/Ontask____Upload_Merge_CSV.png" />
+</div>
+<p>For each column detected in the file, the table includes if it has been detected to be unique, its automatically detected type, a box to select, the name, and an alternative name (to allow column renaming). This step is to allow you to select those columns that are relevant and discard the rest. The platform requires you to choose <strong>at least</strong> one column with unique values.</p>
+<p>Once you selected these values, a new workflow is created with the data from the CSV file.</p>
+</div>
+<div class="section" id="merge-operation">
+<h2>Merge Operation<a class="headerlink" href="#merge-operation" title="Permalink to this headline">¶</a></h2>
+<div class="sidebar">
+<p class="first sidebar-title">Merge a.k.a “Join”</p>
+<p class="last">Merging is quite common in databases and is known as a <em>join</em> operation. There are several variants of join operations depending how the differences between the key columns are handled. These same variants exist when combining columns in data frames (or a table).</p>
+</div>
+<p>A merge operation is needed when you want to <em>merge</em> a set of columns with an <strong>already existing table</strong>. This operation is very common in data science contexts. One of the problems is to specify how the values in the columns are <em>matched</em> with respect to the ones already existing in the table. In other words, each new column has a set of values, but they need to be ordered in the right way so that the information is matched appropriately for every row. The solution for this problem is to include in both the existing table and the new data being merge a <strong>unique or key column</strong>. These two columns are used to compare the values, identify the matching row, and make sure the right rows are merged.</p>
+<p>When uploading a CSV file in a workflow that already contains data, the platform automatically detects it and executes a <em>merge</em> operation. The first step is very similar to a regular update and requires you to select the columns that will be considered for the merge.</p>
+<div class="figure align-center">
+<img alt="../_images/Ontask____Merge.png" src="../_images/Ontask____Merge.png" />
+</div>
+<p>However, the difference with this step is that the columns selected will be <em>merged</em> with the existing ones using a given unique column. If no such column is selected the application will not proceed with the merge. As in the case of an initial CSV upload, you main change the names of the columns.</p>
+<p>The next step is the most delicate one in a merge. It requires you to identify the unique columns in both the existing data table and the one being uploaded, the criteria to merge the rows, and how to deal when column names collide. We discuss each of these parameters in more detail.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/Ontask____Merge2.png"><img alt="../_images/Ontask____Merge2.png" src="../_images/Ontask____Merge2.png" style="width: 100%;" /></a>
+</div>
+<p>You have to select the pair of unique columns from those in the already existing data and those in the new data about to be merge. These columns are the only choices in the form.</p>
+<p>The criteria to merge the rows offers four options:</p>
+<dl class="docutils">
+<dt>Inner</dt>
+<dd>It will store only the rows for which values in both unique columns are present. Or in other words, any row for which there is no value in either of the key columns <strong>will be dropped</strong>.</dd>
+<dt>Outer</dt>
+<dd>The rows that have only one value in one of the key columns will be considered. You have to be careful with this option because it may produce columns that are no longer unique as a result.</dd>
+<dt>Left</dt>
+<dd>Only the rows with a value in the existing table will be considered, the rest will be dropped.</dd>
+<dt>Right</dt>
+<dd>Only the rows with a value in the table being uploaded will be considered, the rest will be dropped.</dd>
+</dl>
+<p>You have to take extra care when performing this operation as it may destroy part of the existing data. In the extreme case, if you try to merge a table with a key column with no values in common with the existing key and you select the <em>inner</em> method, you may end up with an empty table. After selecting these parameters the platform will show you what it will happen with the various columns involved.</p>
+<div class="figure align-center">
+<img alt="../_images/Ontask____Merge3.png" src="../_images/Ontask____Merge3.png" />
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">OnTask</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction/index.html">What is OnTask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Install/index.html">Installation process</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Using the tool</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="workflow.html">The Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="details.html">Workflow Details</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Data Operations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#csv-files">CSV Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#merge-operation">Merge Operation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="table.html">The Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.html">The Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scheduler.html">The Scheduler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logs.html">The Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorial/index.html">OnTask Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Advanced/index.html">Advanced Features</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Using the tool</a><ul>
+      <li>Previous: <a href="details.html" title="previous chapter">Workflow Details</a></li>
+      <li>Next: <a href="table.html" title="next chapter">The Table</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Content Licensed under Creative Commons BY 3.0.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/Using/dataops.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
