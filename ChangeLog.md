@@ -13,12 +13,15 @@
   - mode
   - std (standard deviation)
   - all (boolean conjunction)
-  - any (boolean disjunction
+  - any (boolean disjunction)
 
 - The table now can be viewed selecting a "View" which is a set of colums and 
   a formula to filter rows. A workflow can have an arbitrary number of views.
   They are available in the Table section and can be created, edited, deleted
   and cloned.  
+  
+- Documentation now available in [OnTask documentation in Github.io]
+(https://abelardopardo.github.io/ontask_b)
 
 ### Changed
 
