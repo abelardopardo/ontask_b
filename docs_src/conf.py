@@ -16,10 +16,10 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
-
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../src'))
+import ontask
 
 # -- General configuration ------------------------------------------------
 
@@ -49,7 +49,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'OnTask'
+project = u'OnTask (' + ontask.__version__ + ')'
 copyright = u'Content Licensed under Creative Commons BY 3.0'
 author = u'Abelardo Pardo'
 
@@ -170,6 +170,10 @@ texinfo_documents = [
      author, 'OnTask', 'One line description of project.',
      'Miscellaneous'),
 ]
+
+# -- Additional Options --------------------------------------------------
+
+rst_prolog = '.. |ontask_version| replace:: %s\n' % ontask.__version__
 
 def setup(app):
     app.add_stylesheet('css/custom.css')  # may also be an URL
