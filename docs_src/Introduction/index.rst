@@ -65,7 +65,9 @@ Research
 ========
 
 There are several platforms that implement similar functionality or follow a
-similar approach (see for example `SRES <http://sres.io>`_. The common thread
+similar approach. OnTask has been implemented with numerous ideas initially
+present in the Student Relationship Engagement System `SRES<http://sres
+.io>`_) and subsequent versions. The common idea
 among them is the positive impact that personalised communication may have when
 supporting learners. There are a few scientific publications that document the
 ideas and processes that inspired the creation of OnTask:
