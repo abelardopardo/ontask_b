@@ -273,7 +273,21 @@ instance without HTTPS.</p>
 </pre></div>
 </div>
 <p>If there are no errors, the message on the screen should say that your
-server is running and available in the URL 127.0.0.1:8000</p>
+server is running in the url 127.0.0.1:800. However, if you open your
+browser in that URL, an error will be shown. This error is normal and it
+is because the production version requires the pages to be served through
+SSL with a valid certificate in a conventional server.</p>
+<p>If you want to use the server through the the URL 127.0.0.1:8000 you have
+to edit the file <code class="docutils literal"><span class="pre">manage.py</span></code> and change these three lines to look like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;DJANGO_SETTINGS_MODULE&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;ontask.settings.production&quot;</span><span class="p">)</span>
+<span class="c1">#                 &quot;ontask.settings.development&quot;)</span>
+</pre></div>
+</div>
+<p>and then execute the following command from the <code class="docutils literal"><span class="pre">src</span></code> folder:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">/</span><span class="n">development</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
 </li>
 <li><p class="first">If OnTask is going to be accessed through a web server like Apache or Nginx,
 stop the application and configure the web server accordingly.</p>

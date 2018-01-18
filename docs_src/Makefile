@@ -21,3 +21,4 @@ help:
 
 copy_to_docs:
 	rsync -arvzh --delete $(BUILDDIR)/html/ ../docs/
+	rsync -arvzh --delete $(BUILDDIR)/html ../src/static
