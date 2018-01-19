@@ -62,26 +62,39 @@
     {% endif %}
     {% if columns %}
       <div style="padding-bottom: 2ex;">
-        <a href="{% url 'dataops:rowcreate' %}"
-           class="btn btn-sm btn-primary"
-           data-toggle="tooltip"
-           title="Add an extra row to the table">
-          <span class="glyphicon glyphicon-plus"></span> Add row
-        </a>
-        <button type="button"
-                class="btn btn-primary btn-sm js-workflow-column-add"
-                data-url="{% url 'workflow:column_add' %}"
-                data-toggle="tooltip"
-                title="Add a column to the table">
-          <span class="glyphicon glyphicon-plus"></span> Add column
-        </button>
-        <button type="button"
-                class="btn btn-primary btn-sm js-workflow-formula-column-add"
-                data-url="{% url 'workflow:formula_column_add' %}"
-                data-toggle="tooltip"
-                title="Add a column operating with the current values">
-          <span class="glyphicon glyphicon-plus"></span> Add derived column
-        </button>
+        <div class="dropdown" style="display:inline;">
+          <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                  data-toggle="dropdown">Add <span class="caret"></span>
+          </button>
+          <ul role="menu" class="dropdown-menu">
+            <li>
+              <a href="{% url 'dataops:rowcreate' %}"
+                 class="btn btn-sm btn-defult"
+                 data-toggle="tooltip"
+                 title="Add an extra row to the table">
+                <span class="glyphicon glyphicon-plus"></span> Add row
+              </a>
+            </li>
+            <li>
+              <button type="button"
+                      class="btn btn-default btn-sm js-workflow-column-add"
+                      data-url="{% url 'workflow:column_add' %}"
+                      data-toggle="tooltip"
+                      title="Add a column to the table">
+                <span class="glyphicon glyphicon-plus"></span> Add column
+              </button>
+            </li>
+            <li>
+              <button type="button"
+                      class="btn btn-default btn-sm js-workflow-formula-column-add"
+                      data-url="{% url 'workflow:formula_column_add' %}"
+                      data-toggle="tooltip"
+                      title="Add a column operating with the current values">
+                <span class="glyphicon glyphicon-plus"></span> Add derived column
+              </button>
+            </li>
+          </ul>
+        </div>
         <div class="dropdown btn-group">
           <a href="{% url 'table:view_index' %}"
              class="btn btn-primary btn-sm"
@@ -120,21 +133,48 @@
              id="table-data">
         <thead>
           <tr>
-            <th></th>
+            <th rowspan="2"></th>
             {% for col in columns %}
               <th class="text-center">
-                <button type="button"
-                        class="btn btn-sm btn-default js-workflow-column-edit"
-                        data-url="{% url 'workflow:column_edit' col.id %}"
-                        data-toggle="tooltip"
-                        title="Edit column name, description, etc">
-                  <span class="glyphicon glyphicon-pencil"></span> {{ col.name }}
-                </button>
+                <div class="dropdown">
+                  <button class="btn btn-primary btn-sm dropdown-toggle"
+                          type="button"
+                          data-toggle="dropdown">{{ col.name }}
+                    <span class="caret"></span>
+                  </button>
+                  <ul role="menu" class="dropdown-menu">
+                    {% comment %}
+                    <li>
+                      <a href="{% url 'action:edit_out' col.id %}"
+                         class="btn btn-default btn-sm align-middle"
+                            data-toggle="tooltip" title="Statistics about this column">
+                        <span class="glyphicon glyphicon-stats"></span> Stats
+                      </a>
+                    </li>
+                    {% endcomment %}
+                    <li>
+                      <button type="button"
+                              class="btn btn-sm btn-default js-workflow-column-edit"
+                              data-url="{% url 'workflow:column_edit' col.id %}"
+                              data-toggle="tooltip"
+                              title="Edit column name, description, etc">
+                        <span class="glyphicon glyphicon-pencil"></span> Edit
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button"
+                              class="btn btn-default btn-sm js-column-delete"
+                              data-url="{% url 'workflow:column_delete' col.id %}"
+                              data-toggle="tooltip" title="Delete column">
+                        <span class="glyphicon glyphicon-trash"></span> Delete
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </th>
             {% endfor %}
           </tr>
           <tr>
-            <th>Ops</th>
             {% for col in columns %}
               <th>
                 {{ col.data_type }} <br/>
