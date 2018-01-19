@@ -1,3 +1,19 @@
+## 2.5.0
+
+### Added
+
+- Visualisations
+
+  1) For each column in the table
+  
+  2) For each row in the table 
+  
+  3) For subsets of the matrix and certain types of visualisations (tentative)
+  
+### Changed
+
+### Fixed 
+  
 ## 2.4.0 (2018-12-18)
 
 ### Added
