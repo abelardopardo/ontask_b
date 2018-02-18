@@ -12,6 +12,9 @@ Current Version: 2.5.0 ([documentation](http://ontask-version-b.readthedocs.io/e
 
 - Integrated annotation capture mechanism (similar to a survey engine)
 
+- Visualization of columns (population measures) and individuals with
+  respect to the population
+
 - Email tracking integrated in data table
 
 - Workflows shareable with other users (for teams of instructors)
