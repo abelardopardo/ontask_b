@@ -1,6 +1,6 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 2.4.0 ([documentation](https://abelardopardo.github.io/ontask_b))
+Current Version: 2.5.0 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
 ## OnTask in a nutshell
 
