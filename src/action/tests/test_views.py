@@ -436,9 +436,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.open(reverse('table:display'))
         # Wait for
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'js-workflow-column-add')
-            )
+            EC.presence_of_element_located((By.ID, 'table-data_previous'))
         )
 
         # There should be a column for the email tracking
@@ -944,7 +942,10 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
 
         # Click the button to rename the "registered" column
         self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[5]/td[4]/button/span"
+            "//table[@id='column-table']/tbody/tr[5]/td[4]/div/button"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "//table[@id='column-table']/tbody/tr[5]/td[4]/div/ul/li[1]/button"
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
