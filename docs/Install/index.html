@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Installation process &#8212; OnTask 1.1.0 documentation</title>
+    <title>Installation process &#8212; OnTask (B.2.5.0) 1.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
@@ -278,16 +278,23 @@ browser in that URL, an error will be shown. This error is normal and it
 is because the production version requires the pages to be served through
 SSL with a valid certificate in a conventional server.</p>
 <p>If you want to use the server through the the URL 127.0.0.1:8000 you have
-to edit the file <code class="docutils literal"><span class="pre">manage.py</span></code> and change these three lines to look like:</p>
+to perform two more steps. First, edit the file <code class="docutils literal"><span class="pre">manage.py</span></code> and change
+these three lines to look like:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;DJANGO_SETTINGS_MODULE&quot;</span><span class="p">,</span>
                  <span class="s2">&quot;ontask.settings.production&quot;</span><span class="p">)</span>
 <span class="c1">#                 &quot;ontask.settings.development&quot;)</span>
 </pre></div>
 </div>
-<p>and then execute the following command from the <code class="docutils literal"><span class="pre">src</span></code> folder:</p>
+<p>Second, execute the following command from the <code class="docutils literal"><span class="pre">src</span></code> folder:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">/</span><span class="n">development</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
+<p>Now, the command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">runserver</span>
+</pre></div>
+</div>
+<p>will start the server in the URL 127.0.0.1:8000 and you should be able to
+access it normally with the browser.</p>
 </li>
 <li><p class="first">If OnTask is going to be accessed through a web server like Apache or Nginx,
 stop the application and configure the web server accordingly.</p>
@@ -492,7 +499,7 @@ tasks</em> and match it (in minutes) to the interval reflected in the crontab.</
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">OnTask</a></h1>
+<h1 class="logo"><a href="../index.html">OnTask (B.2.5.0)</a></h1>
 
 
 

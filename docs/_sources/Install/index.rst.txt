@@ -244,15 +244,23 @@ no space between variable names and the equal sign)::
    SSL with a valid certificate in a conventional server.
 
    If you want to use the server through the the URL 127.0.0.1:8000 you have
-   to edit the file ``manage.py`` and change these three lines to look like::
+   to perform two more steps. First, edit the file ``manage.py`` and change
+   these three lines to look like::
 
          os.environ.setdefault("DJANGO_SETTINGS_MODULE",
                           "ontask.settings.production")
          #                 "ontask.settings.development")
 
-   and then execute the following command from the ``src`` folder::
+   Second, execute the following command from the ``src`` folder::
 
      pip install -r requirements/development.txt
+
+   Now, the command::
+
+     python manage.py runserver
+
+   will start the server in the URL 127.0.0.1:8000 and you should be able to
+   access it normally with the browser.
 
 #. If OnTask is going to be accessed through a web server like Apache or Nginx,
    stop the application and configure the web server accordingly.
@@ -367,6 +375,7 @@ the `documentation of the django-auth-ldap module
   In RedHat/CentOS::
 
     python-devel openldap-devel
+
 - Install the module ``django-auth-ldap``
 
 - Edit the configuration file ``local.env`` and define the following two
