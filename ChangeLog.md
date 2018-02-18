@@ -1,4 +1,4 @@
-## 2.5.0
+## 2.5.0 (2018-02-18)
 
 ### Added
 
@@ -25,7 +25,7 @@
 
 - Bug when filtering columns and obtaining a row in the table
   
-## 2.4.0 (2018-12-18)
+## 2.4.0 (2017-12-18)
 
 ### Added
 
