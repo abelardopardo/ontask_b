@@ -140,6 +140,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
         fp = webdriver.FirefoxProfile()
         fp.set_preference("dom.file.createInChild", True)
         cls.selenium = webdriver.Firefox(firefox_profile=fp)
+        cls.selenium.set_window_size(2880, 1800)
         # cls.selenium.implicitly_wait(30)
 
     @classmethod

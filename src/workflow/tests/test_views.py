@@ -5,6 +5,7 @@ import os
 
 from django.conf import settings
 from django.shortcuts import reverse
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
@@ -503,8 +504,10 @@ class WorkflowModify(test.OntaskLiveTestCase):
 
         # Edit the age column
         self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[1]/td[4]/button[1]"
+            "//table[@id='column-table']/tbody/tr[1]/td[4]/div/button[1]"
         ).click()
+        self.selenium.find_element_by_class_name(
+            'js-workflow-column-edit').click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),
                                              'Edit column')
@@ -532,7 +535,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
             # ADD A NEW COLUMN
             WebDriverWait(self.selenium, 10).until(
                 EC.element_to_be_clickable(
-                    (By.CLASS_NAME, 'js-workflow-column-edit'))
+                    (By.CLASS_NAME, 'js-workflow-column-add'))
             )
             self.selenium.find_element_by_class_name(
                 'js-workflow-column-add').click()
@@ -577,7 +580,10 @@ class WorkflowModify(test.OntaskLiveTestCase):
         for cname, ctype, _, _ in new_cols:
             row_prefix = "//table[@id='column-table']/tbody/tr[6]/td[4]"
             self.selenium.find_element_by_xpath(
-                row_prefix + "/button[3]"
+                row_prefix + "/div/button[1]"
+            ).click()
+            self.selenium.find_element_by_xpath(
+                row_prefix + "/div/ul/li[3]/button"
             ).click()
             WebDriverWait(self.selenium, 10).until(
                 EC.text_to_be_present_in_element(
@@ -628,9 +634,12 @@ class WorkflowModify(test.OntaskLiveTestCase):
             EC.presence_of_element_located((By.CLASS_NAME, 'success'))
         )
 
-        # Edit the another column
+        # Edit the other column
         self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[4]/button[1]"
+            "//table[@id='column-table']/tbody/tr[4]/td[4]/div/button[1]"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "//table[@id='column-table']/tbody/tr[4]/td[4]/div/ul/li[1]/button"
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),

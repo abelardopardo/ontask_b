@@ -1,19 +1,38 @@
-<button type="button"
-        class="btn btn-primary btn-sm js-workflow-column-edit"
-        data-url="{% url 'workflow:column_edit' id %}"
-        data-toggle="tooltip"
-        title="Edit column name, description, type, values, etc.">
-  <span class="glyphicon glyphicon-pencil"></span>
-</button>
-<button type="button"
-        class="btn btn-primary btn-sm js-workflow-clone align-middle"
-        data-url="{% url 'workflow:column_clone' id %}"
-        data-toggle="tooltip" title="Create an exact duplicate of this column">
-    <span class="glyphicon glyphicon-duplicate"></span>
-</button>
-<button type="button"
-        class="btn btn-danger btn-sm js-column-delete"
-        data-url="{% url 'workflow:column_delete' id %}"
-        data-toggle="tooltip" title="Delete column">
-  <span class="glyphicon glyphicon-trash"></span>
-</button>
+<div class="dropdown">
+  {% if not is_key %}
+    <a href="{% url 'table:stat_column' id %}"
+       class="btn btn-primary btn-sm align-middle"
+          data-toggle="tooltip" title="Statistics about this column">
+      <span class="glyphicon glyphicon-stats"></span> Stats</a>
+  {% endif %}
+  <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+          data-toggle="dropdown"> Ops <span class="caret"></span>
+  </button>
+  <ul role="menu" class="dropdown-menu">
+    <li>
+      <button type="button"
+              class="btn btn-default btn-sm js-workflow-column-edit"
+              data-url="{% url 'workflow:column_edit' id %}"
+              data-toggle="tooltip"
+              title="Edit column name, description, type, values, etc.">
+        <span class="glyphicon glyphicon-pencil"></span> Edit
+      </button>
+    </li>
+    <li>
+      <button type="button"
+              class="btn btn-default btn-sm js-workflow-clone align-middle"
+              data-url="{% url 'workflow:column_clone' id %}"
+              data-toggle="tooltip" title="Create an exact duplicate of this column">
+          <span class="glyphicon glyphicon-duplicate"></span> Clone
+      </button>
+    </li>
+    <li>
+      <button type="button"
+              class="btn btn-default btn-sm js-column-delete"
+              data-url="{% url 'workflow:column_delete' id %}"
+              data-toggle="tooltip" title="Delete column">
+        <span class="glyphicon glyphicon-trash"></span> Delete
+      </button>
+    </li>
+  </ul>
+</div>

@@ -32,11 +32,13 @@
   </button>
   <ul role="menu" class="dropdown-menu">
     {% if is_out %}
-      <a href="{% url 'scheduler:create_email' id %}"
-         class="btn btn-default btn-sm"
-              data-toggle="tooltip"
-         title="Schedule the execution of the action">
-        <span class="glyphicon glyphicon-calendar"></span> Schedule</a>
+      <li>
+        <a href="{% url 'scheduler:create_email' id %}"
+           class="btn btn-default btn-sm"
+           data-toggle="tooltip"
+           title="Schedule the execution of the action">
+          <span class="glyphicon glyphicon-calendar"></span> Schedule</a>
+      </li>
     {% endif %}
     <li>
       <button type="button"

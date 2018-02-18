@@ -1,10 +1,28 @@
-<a class="btn btn-primary btn-sm" href="{{ edit_url }}"
-   data-toggle="tooltip" title="Edit the data in this row">
-  <span class="glyphicon glyphicon-pencil"></span>
-</a>
-<button type="button"
-        class="btn btn-danger btn-sm js-row-delete"
-        data-url="{% url 'table:row_delete' %}{{ delete_key }}"
-        data-toggle="tooltip" title="Delete this row">
-  <span class="glyphicon glyphicon-trash"></span>
-</button>
+<div class="dropdown">
+  <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+          data-toggle="dropdown"> Ops <span class="caret"></span>
+  </button>
+  <ul role="menu" class="dropdown-menu">
+    <li>
+      <a href="{{ stat_url }}"
+         class="btn btn-default btn-sm align-middle"
+            data-toggle="tooltip" title="Statistics about this column">
+        <span class="glyphicon glyphicon-stats"></span> Stats
+      </a>
+    </li>
+    <li>
+      <a class="btn btn-default btn-sm" href="{{ edit_url }}"
+         data-toggle="tooltip" title="Edit the data in this row">
+        <span class="glyphicon glyphicon-pencil"></span> Edit
+      </a>
+    </li>
+    <li>
+      <button type="button"
+              class="btn btn-default btn-sm js-row-delete"
+              data-url="{% url 'table:row_delete' %}{{ delete_key }}"
+              data-toggle="tooltip" title="Delete this row">
+        <span class="glyphicon glyphicon-trash"></span> Delete
+      </button>
+    </li>
+  </ul>
+</div>

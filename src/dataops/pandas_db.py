@@ -152,6 +152,20 @@ def load_from_db(pk):
 
 def load_table(table_name):
     """
+    Load a data frame from the SQL DB.
+
+    FUTURE WORK:
+    Consider to store the dataframes in Redis to reduce load/store time.
+    The trick is to use a compressed format:
+
+    SET: redisConn.set("key", df.to_msgpack(compress='zlib'))
+    GET: pd.read_msgpack(redisConn.get("key"))
+
+    Need to agree on a sensible item name that does not collide with anything
+    else and a policy to detect a cached dataframe and remove it when the data
+    changes (difficult to detect? Perhaps df_new.equals(df_current))
+
+    If feasible, a write-through system could be easily implemented.
 
     :param table_name: Table name to read from the db in to data frame
     :return: data_frame or None if it does not exist.
@@ -280,8 +294,9 @@ def execute_select_on_table(pk, fields, values, column_names=None):
 
     # Create the query
     if column_names:
-        safe_column_names = [fix_pctg_in_name(x) for x in column_names]
-        query = 'SELECT "{0}"'.format(','.join(safe_column_names))
+        safe_column_names = ['"' + fix_pctg_in_name(x) + '"'
+                             for x in column_names]
+        query = 'SELECT {0}'.format(','.join(safe_column_names))
     else:
         query = 'SELECT *'
 
@@ -414,6 +429,62 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names=None):
 
     # ZIP the values to create a dictionary
     return OrderedDict(zip(workflow.get_column_names(), qs))
+
+def get_column_stats_from_df(df_column):
+
+    """
+    Given a data frame with a single column, return a set of statistics
+    depending on its type.
+
+    :param df_column: data frame with a single column
+    :return: A dictionary with keys depending on the type of column
+      {'min': minimum value (integer, double an datetime),
+       'q1': Q1 value (0.25) (integer, double),
+       'mean': mean value (integer, double),
+       'median': median value (integer, double),
+       'mean': mean value (integer, double),
+       'q3': Q3 value (0.75) (integer, double),
+       'max': maximum value (integer, double an datetime),
+       'std': standard deviation (integer, double),
+       'mode': (integer, double, string, datetime, Boolean,
+       'counts': (integer, double, string, datetime, Boolean',
+    """
+    # Dictionary to return
+    result = {
+        'min': 0,
+        'q1': 0,
+        'mean': 0,
+        'median': 0,
+        'q3': 0,
+        'max': 0,
+        'std': 0,
+        'mode': None,
+        'counts': {},
+    }
+
+    data_type = pandas_datatype_names[df_column.dtype.name]
+
+    if data_type == 'integer' or data_type == 'double':
+        quantiles = df_column.quantile([0, .25, .5, .75, 1])
+        result['min'] = '{0:g}'.format(quantiles[0])
+        result['q1'] = '{0:g}'.format(quantiles[.25])
+        result['mean'] = '{0:g}'.format(df_column.mean())
+        result['median'] = '{0:g}'.format(quantiles[.5])
+        result['q3'] = '{0:g}'.format(quantiles[.75])
+        result['max'] = '{0:g}'.format(quantiles[1])
+        result['std'] = '{0:g}'.format(df_column.std())
+
+    result['counts'] = df_column.value_counts().to_dict()
+    result['mode'] = df_column.mode()[0]
+
+    return result
+
+
+def get_column_stats(workflow, column, cond_filter=None):
+    # Get the dataframe
+    df = load_from_db(workflow.id)
+
+    return get_column_stats_from_df(df[column.name])
 
 
 def search_table_rows(workflow_id,

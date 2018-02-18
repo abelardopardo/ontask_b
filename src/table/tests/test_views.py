@@ -679,8 +679,8 @@ class TableViews(test.OntaskLiveTestCase):
             self.selenium.page_source)
 
         # Go back to the full table
-        self.selenium.find_element_by_css_selector(
-            "button.btn.btn-sm.btn-default"
+        self.selenium.find_element_by_xpath(
+            "//div[@id='table-content']/div[1]/button[2]"
         ).click()
         # Wait for the table to first deleted
         WebDriverWait(self.selenium, 10).until_not(
