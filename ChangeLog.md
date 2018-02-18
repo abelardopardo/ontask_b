@@ -1,3 +1,30 @@
+## 2.5.0
+
+### Added
+
+- Visualisations
+
+  1) For each column in the table
+  
+  2) For each row in the table 
+  
+  3) For subsets of the matrix and certain types of visualisations (tentative)
+  
+  These visualizations are implemented using the open-source javascript 
+  library plot.ly/javascript
+  
+### Changed
+
+- Folded some of the operations into a pull/down menu to simplify interface
+
+- Rebranded the import button in the workflows page to make sure it says 
+  "Workflow" and users do not think it is the link to upload data (which is 
+  the first step)
+   
+### Fixed 
+
+- Bug when filtering columns and obtaining a row in the table
+  
 ## 2.4.0 (2018-12-18)
 
 ### Added

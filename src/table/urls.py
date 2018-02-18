@@ -5,7 +5,7 @@ from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from . import api
-from . import views
+from . import views, stat_views
 
 app_name = 'table'
 
@@ -61,6 +61,19 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/view_delete/$',
         views.view_delete,
         name="view_delete"),
+
+    #
+    # Stats
+    #
+    url(r'^stat_row/$', stat_views.stat_row, name="stat_row"),
+
+    url(r'^(?P<pk>\d+)/stat_row_view/$',
+        stat_views.stat_row_view,
+        name="stat_row_view"),
+
+    url(r'^(?P<pk>\d+)/stat_column/$',
+        stat_views.stat_column,
+        name="stat_column"),
 
 ]
 

@@ -57,7 +57,10 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Edit the name column
         self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[4]/button/span"
+            "//table[@id='column-table']/tbody/tr[4]/td[4]/div/button"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "//table[@id='column-table']/tbody/tr[4]/td[4]/div/ul/li[1]/button"
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located((By.ID, 'id_name'))
@@ -376,7 +379,10 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Select the email column and click in the edit button
         self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[1]/td[4]/button/span"
+            "//table[@id='column-table']/tbody/tr[1]/td[4]/div/button"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "//table[@id='column-table']/tbody/tr[1]/td[4]/div/ul/li[1]/button"
         ).click()
         # Wait for the form to create the derived column
         WebDriverWait(self.selenium, 10).until(
@@ -395,7 +401,10 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Select the age column and click in the edit button
         self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[3]/td[4]/button/span"
+            "//table[@id='column-table']/tbody/tr[3]/td[4]/div/button"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "//table[@id='column-table']/tbody/tr[3]/td[4]/div/ul/li[1]/button"
         ).click()
 
         # Append symbols to the name
