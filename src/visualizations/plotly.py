@@ -95,8 +95,8 @@ class PlotlyBoxPlot(PlotlyHandler):
             self.layout['annotations'][0]['text'] = \
                 self.format_dict.get('individual_text', 'Your value')
 
-            # Redefine the layout
-            self.format_dict['layout'] = json.dumps(self.layout)
+        # Redefine the layout
+        self.format_dict['layout'] = json.dumps(self.layout)
 
         self.format_dict['data'] = json.dumps(data)
 
@@ -160,19 +160,19 @@ class PlotlyColumnHistogram(PlotlyHandler):
         # layout to the rendering.
         if self.format_dict.get('individual_value', None) is not None:
             ival = self.format_dict['individual_value']
-        if column_dtype == 'boolean' or column_dtype == 'datetime':
-            ival = str(ival)
+            if column_dtype == 'boolean' or column_dtype == 'datetime':
+                ival = str(ival)
 
-        self.layout['annotations'] = [{
-            'bgcolor': 'white',
-            'x': ival,
-            'ax': 0,
-            'axref': 'pixel',
-            'y': 0,
-            'yref': 'paper',
-            'yshift': 'bottom',
-            'text': self.format_dict.get('individual_text', 'Your value')
-        }]
+            self.layout['annotations'] = [{
+                'bgcolor': 'white',
+                'x': ival,
+                'ax': 0,
+                'axref': 'pixel',
+                'y': 0,
+                'yref': 'paper',
+                'yshift': 'bottom',
+                'text': self.format_dict.get('individual_text', 'Your value')
+            }]
 
         self.format_dict['layout'] = json.dumps(self.layout)
 
