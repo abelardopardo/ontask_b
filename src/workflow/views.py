@@ -453,7 +453,7 @@ def column_ss(request, pk):
     for col in qs[start:start + length]:
         ops_string = render_to_string(
             'workflow/includes/workflow_column_operations.html',
-            {'id': col.id}
+            {'id': col.id, 'is_key': col.is_key}
         )
 
         final_qs.append([

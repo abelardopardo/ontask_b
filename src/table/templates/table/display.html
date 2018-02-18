@@ -143,15 +143,16 @@
                     <span class="caret"></span>
                   </button>
                   <ul role="menu" class="dropdown-menu">
-                    {% comment %}
-                    <li>
-                      <a href="{% url 'action:edit_out' col.id %}"
-                         class="btn btn-default btn-sm align-middle"
-                            data-toggle="tooltip" title="Statistics about this column">
-                        <span class="glyphicon glyphicon-stats"></span> Stats
-                      </a>
-                    </li>
-                    {% endcomment %}
+                    {% if not col.is_key %}
+                      <li>
+                        <a href="{% url 'table:stat_column' col.id %}"
+                           class="btn btn-default btn-sm align-middle"
+                           data-toggle="tooltip"
+                           title="Stats and visualizations about this column">
+                          <span class="glyphicon glyphicon-stats"></span> Stats
+                        </a>
+                      </li>
+                    {% endif %}
                     <li>
                       <button type="button"
                               class="btn btn-sm btn-default js-workflow-column-edit"

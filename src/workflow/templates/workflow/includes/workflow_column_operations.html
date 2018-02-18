@@ -1,12 +1,12 @@
 <div class="dropdown">
-  {% comment %}
-  <a href="{% url 'action:edit_out' id %}"
-     class="btn btn-primary btn-sm align-middle"
-        data-toggle="tooltip" title="Statistics about this column">
-    <span class="glyphicon glyphicon-stats"></span></a>
-  {% endcomment %}
+  {% if not is_key %}
+    <a href="{% url 'table:stat_column' id %}"
+       class="btn btn-primary btn-sm align-middle"
+          data-toggle="tooltip" title="Statistics about this column">
+      <span class="glyphicon glyphicon-stats"></span> Stats</a>
+  {% endif %}
   <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-          data-toggle="dropdown"> More <span class="caret"></span>
+          data-toggle="dropdown"> Ops <span class="caret"></span>
   </button>
   <ul role="menu" class="dropdown-menu">
     <li>

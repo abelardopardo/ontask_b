@@ -4,13 +4,11 @@
   </button>
   <ul role="menu" class="dropdown-menu">
     <li>
-      {% comment %}
-      <a href="{% url 'action:edit_out' stat_url %}"
+      <a href="{{ stat_url }}"
          class="btn btn-default btn-sm align-middle"
             data-toggle="tooltip" title="Statistics about this column">
         <span class="glyphicon glyphicon-stats"></span> Stats
       </a>
-      {% endcomment %}
     </li>
     <li>
       <a class="btn btn-default btn-sm" href="{{ edit_url }}"

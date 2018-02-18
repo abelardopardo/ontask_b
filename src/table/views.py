@@ -142,7 +142,8 @@ def render_table_display_page(request, workflow, view, columns, ajax_url):
     return render(request, 'table/display.html', context)
 
 
-def render_table_display_data(request, workflow, columns, formula):
+def render_table_display_data(request, workflow, columns, formula,
+                              view_id=None):
     """
     Render the appropriate subset of the data table. Use the search string
      provided in the UI + the filter (if applicable) taken from a view.
@@ -150,6 +151,7 @@ def render_table_display_data(request, workflow, columns, formula):
     :param workflow: workflow object
     :param columns: Subset of columns to consider
     :param formula: Expression to filter rows
+    :param view_id: ID of the view restricting the display (if any)
     :return:
     """
 
@@ -200,15 +202,21 @@ def render_table_display_data(request, workflow, columns, formula):
     items = 0  # For counting the number of elements in the result
     for row in qs[start:start + length]:
         items += 1
+        if view_id:
+            stat_url = reverse('table:stat_row_view', kwargs={'pk': view_id})
+        else:
+            stat_url = reverse('table:stat_row')
+
         ops_string = render_to_string(
             'table/includes/partial_table_ops.html',
-            {'edit_url':
-             reverse('dataops:rowupdate') +
-             '?update_key={0}&update_val={1}'.format(key_name,
-                                                     row[key_idx]),
+            {'stat_url': stat_url +
+                 '?key={0}&val={1}'.format(key_name, row[key_idx]),
+             'edit_url': reverse('dataops:rowupdate') +
+                 '?update_key={0}&update_val={1}'.format(key_name,
+                                                         row[key_idx]),
              'delete_key': '?key={0}&value={1}'.format(key_name,
                                                        row[key_idx]),
-             }
+             'view_id': view_id}
         )
         # Create the list of elements to display and add it ot the final QS
         final_qs.append([ops_string] + list(row))
@@ -330,7 +338,8 @@ def display_view_ss(request, pk):
         request,
         workflow,
         view.columns.all(),
-        view.formula
+        view.formula,
+        view.id
     )
 
 
