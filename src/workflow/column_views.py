@@ -393,8 +393,14 @@ def column_delete(request, pk):
                       'column_name': column.name})
 
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:detail',
-                                        kwargs={'pk': workflow.id})
+
+        # There are various points of return
+        from_url = request.META['HTTP_REFERER']
+        if from_url.endswith(reverse('table:display')):
+            data['html_redirect'] = reverse('table:display')
+        else:
+            data['html_redirect'] = reverse('workflow:detail',
+                                            kwargs={'pk': workflow.id})
         return JsonResponse(data)
 
     data['html_form'] = render_to_string(
