@@ -9,8 +9,12 @@ $(function () {
   saveForm);
 
   // Column Edit
-  $("#table-data").on("click", ".js-workflow-column-edit", loadForm);
-  $("#modal-item").on("submit", ".js-workflow-column-edit-form", saveForm);
+  $("#table-data").on("click", ".js-column-edit", loadForm);
+  $("#modal-item").on("submit", ".js-column-edit-form", saveForm);
+
+  // Delete column
+  $("#table-data").on("click", ".js-column-delete", loadForm)
+  $("#modal-item").on("submit", ".js-column-delete-form", saveForm)
 
   // Row delete
   $("#table-content").on("click", ".js-row-delete", loadForm);

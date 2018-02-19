@@ -51,7 +51,7 @@ $(function () {
 
   // Column Edit
   $("#column-table").on("click", ".js-workflow-column-edit", loadForm);
-  $("#modal-item").on("submit", ".js-workflow-column-edit-form", saveForm);
+  $("#modal-item").on("submit", ".js-column-edit-form", saveForm);
 
   // Delete column
   $("#column-table").on("click", ".js-column-delete", loadForm)
