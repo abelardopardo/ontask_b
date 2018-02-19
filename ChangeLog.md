@@ -1,3 +1,15 @@
+## 2.5.1
+
+### Added
+
+### Changed
+
+- Column delete now returns to previous screen (table or workflow detail)
+
+### Fixed
+
+- Bug preventing columns to be deleted from the table view.
+
 ## 2.5.0 (2018-02-18)
 
 ### Added
