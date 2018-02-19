@@ -69,6 +69,7 @@ TEMPLATES = [
             ],
             'libraries': {
                 'settings': 'ontask.templatetags.settings',
+                'vis_include': 'visualizations.templatetags.vis_include',
             }
         },
     },
