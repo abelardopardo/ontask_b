@@ -19,7 +19,7 @@ Suppose now that you :download:`do have the class listing in an excel sheet <sce
 
    #. The page says that there is no data uploaded yet, and to upload it you need to click in the *Dataops* link either at the bottom of the text or at the context menu at the top.
 
-   #. A new page titled *Upload/Merge* appears. Select the option *CSV Upload/Merge* and follow the instructions to upload the CSV file (select all the columns to upload)
+   #. A new page titled *Upload/Merge* appears. Select the option *CSV Upload/Merge* and follow the instructions to upload the :download:`CSV file <scenario_01_data.csv>` (select all the columns to upload)
 
    #. Click the *Details* page to see a summary of the elements in the workflow: 500 rows, 10 columns, 4 actions and 0 attributes. All the steps up to here can be done by :download:`importing the given workflow file <scenario_01_wflow.gz>`.
 
