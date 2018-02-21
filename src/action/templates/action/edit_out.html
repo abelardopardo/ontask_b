@@ -4,11 +4,15 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block extrahead %}
-  <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
+  <link href="{% static 'site/css/query-builder.default.min.css' %}"
+        rel="stylesheet">
   {{ form.media }}
+  {% for script_src in vis_scripts %}
+    <script src="{{ script_src|safe }}"></script>
+  {% endfor %}
 {% endblock extrahead %}
 {% block scripts %}
-  <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
+  <script src="{% static 'site/js/query-builder.standalone.min.js' %}"></script>
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
   <script type="text/javascript">
     var qbuilder_options = {
