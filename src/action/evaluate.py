@@ -18,6 +18,11 @@ from dataops import pandas_db, ops
 from ontask import OntaskException
 from workflow.models import Workflow
 
+# Variable name to store the workflow ID in the context used to render a
+# template
+action_context_var = 'ONTASK_ACTION_CONTEXT_VARIABLE___'
+viz_number_context_var = 'ONTASK_VIZ_NUMBER_CONTEXT_VARIABLE___'
+
 def make_xlat(*args, **kwds):
     """
     Auxuliary function to define a translator that applies multiple character
@@ -69,6 +74,15 @@ def translate(varname):
     :return: New variable name starting with a letter followed only by
              letter, digit or _
     """
+
+    # If the variable name is surrounded by quotes, we leave it untouched!
+    # because it represents a literal
+    if varname.startswith("'") and varname.endswith("'"):
+        return varname
+
+    if varname.startswith('"') and varname.endswith('"'):
+        return varname
+
     # If the variable name starts with a non-letter or the prefix used to
     # force letter start, add a prefix.
     if not varname[0] in string.letters or varname.startswith('OT_'):
@@ -78,7 +92,7 @@ def translate(varname):
     return tr_item(varname)
 
 
-def render_template(template_text, context_dict):
+def render_template(template_text, context_dict, action=None):
     """
     Given a template text and a context, performs the rendering of the
     template using the django template mechanism but with an additional
@@ -88,7 +102,7 @@ def render_template(template_text, context_dict):
     In OnTask, the variable names are: column names, attribute names,
     or condition names. It is too restrictive to propagate the restrictions
     imposed by Jinja variables all the way to these three components. To
-    shield this from the users, there is a preliminary step in which those
+    hide this from the users, there is a preliminary step in which those
     variables in the template and keys in the context that do not comply with
     the syntax restriction are renamed to compliant names.
 
@@ -121,17 +135,22 @@ def render_template(template_text, context_dict):
 
     :param template_text: Text in the template to be rendered
     :param context_dict: Dictionary used by Jinja to evaluate the template
+    :param action: Action object to insert in the context in case it is
+    needed by any other custom template.
     :return: The rendered template
     """
 
     # Regular expression detecting the use of a variable, or the
-    # presence of a "{% if variable %} construct in a string (template)
+    # presence of a "{% MACRONAME variable %} construct in a string (template)
     var_use_re = re.compile(
-        '(?P<markup_pre>{({|% if) )(?P<varname>.+?)(?P<markup_post> [%\}]\})')
+        '(?P<markup_pre>{({|%\s+[^\s+])\s+)' + \
+        '(?P<varname>.+?)' + \
+        '(?P<markup_post>\s+[%\}]\})'
+    )
 
     # Steps 1 and 2. Apply the tranlation process to all variables that
     # appear in the the template text
-    new_template_text = var_use_re.sub(
+    new_template_text = '{% load vis_include %}' + var_use_re.sub(
         lambda m: m.group('markup_pre') + \
                   translate(m.group('varname')) + \
                   m.group('markup_post'),
@@ -144,6 +163,14 @@ def render_template(template_text, context_dict):
     # If the number of elements in the two dictionaries is different, we have
     #  a case of collision in the translation. Need to stop immediately.
     assert len(context_dict) == len(new_context)
+
+    if action_context_var in new_context:
+        raise Exception('Name {0} is reserved.'.format(action_context_var))
+    new_context[action_context_var] = action
+
+    if viz_number_context_var in new_context:
+        raise Exception('Name {0} is reserved.'.format(viz_number_context_var))
+    new_context[viz_number_context_var] = 0
 
     # Step 4. Return the redering of the new elements
     return Template(new_template_text).render(Context(new_context))
@@ -190,18 +217,19 @@ def evaluate_action(action, extra_string, column_name):
 
     # Step 3: Get the table data
     result = []
-    data_table = pandas_db.get_table_data(workflow.id, cond_filter)
+    data_frame = pandas_db.get_subframe(workflow.id, cond_filter)
 
     # Check if the values in the email column are correct emails
     try:
-        correct_emails = all([validate_email(x[col_idx]) for x in data_table])
+        correct_emails = all([validate_email(x)
+                              for x in data_frame[column_name]])
         if not correct_emails:
             # column has incorrect email addresses
             return 'The column with email addresses has incorrect values.'
     except TypeError:
         return 'The column with email addresses has incorrect values'
 
-    for row in data_table:
+    for _, row in data_frame.iterrows():
 
         # Get the dict(col_name, value)
         row_values = dict(zip(col_names, row))
@@ -230,7 +258,9 @@ def evaluate_action(action, extra_string, column_name):
         # Step 5: run the template with the given context
         # Render the text and append to result
         try:
-            partial_result = [render_template(action.content, context)]
+            partial_result = [render_template(action.content,
+                                              context,
+                                              action)]
         except Exception as e:
             return 'Syntax error detected in the action text. ' + e.message
 
@@ -328,7 +358,7 @@ def evaluate_row(action, row_idx):
     # Step 5: run the template with the given context
     # First create the template with the string stored in the action
     try:
-        result = render_template(action.content, context)
+        result = render_template(action.content, context, action)
     except TemplateSyntaxError as e:
         return render_to_string('action/syntax_error.html',
                                 {'msg': e.message})
@@ -336,12 +366,14 @@ def evaluate_row(action, row_idx):
     # Render the text
     return result
 
+
 def run(*script_args):
     """
     Script for testing purposes
     :param script_args:
     :return:
     """
+    del script_args
 
     template = """
     hi --{{ one }}--
