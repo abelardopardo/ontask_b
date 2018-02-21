@@ -245,6 +245,20 @@ def df_drop_column(pk, column_name):
     cursor.execute(query)
 
 
+def get_subframe(pk, cond_filter, column_names=None):
+    """
+    Execute a select query to extract a subset of the dataframe and turn the
+     resulting query set into a data frame.
+    :param pk: Workflow primary key
+    :param cond_filter: Condition object to filter the data (or None)
+    :param column_names: [list of column names], QuerySet with the data rows
+    :return:
+    """
+    return pd.DataFrame.from_records(get_table_data(pk,
+                                                    cond_filter,
+                                                    column_names))
+
+
 def get_table_data(pk, cond_filter, column_names=None):
     """
     Execute a select query in the database with an optional filter obtained
