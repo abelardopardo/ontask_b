@@ -42,6 +42,7 @@ var loadForm = function () {
       dataType: 'json',
       data: data,
       beforeSend: function() {
+        $(".modal-body").html("");
         $("#modal-item").modal("show");
       },
       success: function(data) {
@@ -84,7 +85,6 @@ var saveForm = function () {
       dataType: 'json',
       success: function (data) {
         if (data.form_is_valid) {
-          $("#modal-item .modal-content").html("");
           if (data.html_redirect == "") {
             // If there is no redirect, simply refresh
             window.location.reload(true);
