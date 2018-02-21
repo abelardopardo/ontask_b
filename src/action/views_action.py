@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+from visualizations.plotly import PlotlyHandler
+
 try:
     import urlparse
     from urllib import urlencode
@@ -329,7 +331,9 @@ def edit_action_out(request, pk):
                'selected_rows': selected_rows,
                'has_data': has_data,
                'total_rows': total_rows,
-               'form': form}
+               'form': form,
+               'vis_scripts': PlotlyHandler.get_engine_scripts()
+               }
 
     # Processing the request after receiving the text from the editor
     if request.method == 'POST':
@@ -343,7 +347,7 @@ def edit_action_out(request, pk):
             # This seems to be only possible if dealing directly with Jinja2
             # instead of Django.
             try:
-                render_template(content, {})
+                render_template(content, {}, action)
             except Exception as e:
                 # Pass the django exception to the form (fingers crossed)
                 form.add_error(None, e.message)
