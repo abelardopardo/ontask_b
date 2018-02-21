@@ -23,8 +23,8 @@ INSTALLED_APPS += (
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 if not TESTING:
     DEBUG_TOOLBAR_CONFIG = {
-        # 'SHOW_TOOLBAR_CALLBACK': lambda r: True,  # enables it
-        'SHOW_TOOLBAR_CALLBACK': lambda r: False,  # disables it
+        'SHOW_TOOLBAR_CALLBACK': lambda r: True,  # enables it
+        # 'SHOW_TOOLBAR_CALLBACK': lambda r: False,  # disables it
         # '...
     }
 
