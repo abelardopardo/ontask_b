@@ -16,8 +16,8 @@ from visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
 from workflow.models import Column
 from workflow.ops import get_workflow
 
-def get_column_visualisations(column, data_frame, vis_scripts,
-                              id='', single_val=None, context={}):
+def get_column_visualisations(column, col_data, vis_scripts,
+                              id='', single_val=None, context=None):
     """
     Given a column object and a dataframe, create the visualisations for
     this column. The list vis_scripts is modified to include the scripts to
@@ -25,7 +25,7 @@ def get_column_visualisations(column, data_frame, vis_scripts,
     the visualisation is marked (place individual value in population
     measure.
     :param column: Column element to visualize
-    :param data_frame: Data frame with all the data
+    :param col_data: Data in the column (extracted from the data frame)
     :param id: String to use to label the visualization
     :param vis_scripts: Collection of visualisation scripts needed in HTML
     :param single_val: Mark a specific value (or None)
@@ -36,6 +36,10 @@ def get_column_visualisations(column, data_frame, vis_scripts,
     # Result to return
     visualizations = []
 
+    # Initialize the context properly
+    if context is None:
+        context = {}
+
     # Create V1 if data type is integer or real
     if column.data_type == 'integer' or column.data_type == 'double':
 
@@ -45,7 +49,7 @@ def get_column_visualisations(column, data_frame, vis_scripts,
 
         if single_val is not None:
             context['individual_value'] = single_val
-        v1 = PlotlyBoxPlot(data=data_frame[[column.name]],
+        v1 = PlotlyBoxPlot(data=col_data,
                            context=context)
         v1.get_engine_scripts(vis_scripts)
         visualizations.append(v1)
@@ -57,7 +61,7 @@ def get_column_visualisations(column, data_frame, vis_scripts,
 
     if single_val is not None:
         context['individual_value'] = single_val
-    v2 = PlotlyColumnHistogram(data=data_frame[[column.name]],
+    v2 = PlotlyColumnHistogram(data=col_data,
                                context=context)
     v2.get_engine_scripts(vis_scripts)
     visualizations.append(v2)
@@ -126,7 +130,7 @@ def get_row_visualisations(request, view_id=None):
 
         v = get_column_visualisations(
             column,
-            df,
+            df[[column.name]],
             vis_scripts = vis_scripts,
             id='column_{}'.format(idx),
             single_val=row[idx],
@@ -174,7 +178,9 @@ def stat_column(request, pk):
     stat_data = pandas_db.get_column_stats_from_df(df[column.name])
 
     vis_scripts = []
-    visualizations = get_column_visualisations(column, df, vis_scripts)
+    visualizations = get_column_visualisations(column,
+                                               df[[column.name]],
+                                               vis_scripts)
 
     return render(request,
                   'table/stat_column.html',
