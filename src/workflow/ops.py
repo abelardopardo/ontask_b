@@ -212,8 +212,12 @@ def do_import_workflow(user, name, file_item):
     :return:
     """
 
-    data_in = gzip.GzipFile(fileobj=file_item)
-    data = JSONParser().parse(data_in)
+    try:
+        data_in = gzip.GzipFile(fileobj=file_item)
+        data = JSONParser().parse(data_in)
+    except IOError:
+        return 'Incorrect file. Expecting a GZIP file (exported workflow).'
+
     # Serialize content
     workflow_data = WorkflowImportSerializer(
         data=data,
