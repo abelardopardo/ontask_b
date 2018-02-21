@@ -18,10 +18,8 @@ class PlotlyHandler(VisHandler):
     head_scripts = ["https://cdn.plot.ly/plotly-latest.min.js"]
 
     html_skel = """<div id="{id}" style="{style}"></div>
-        <script>
-        Plotly.newPlot('{id}', {data}, {layout},
-        {{displaylogo: false}});
-        </script>"""
+        <script>console.log("done2");Plotly.newPlot('{id}', {data}, {layout},
+        {{displaylogo: false}});</script>"""
 
     def __init__(self, data, *args, **kwargs):
 
@@ -33,12 +31,16 @@ class PlotlyHandler(VisHandler):
 
         self.layout = {'margin': {'l': 35, 'r': 35, 't': 35, 'b': 35}}
 
-    def get_engine_scripts(self, current):
+    @staticmethod
+    def get_engine_scripts(current=None):
         """
         Return the HTML HEAD snippet including whatever <scripts> are required
         :return: String to include in HEAD
         """
-        for script in self.head_scripts:
+        if current is None:
+            return PlotlyHandler.head_scripts
+
+        for script in PlotlyHandler.head_scripts:
             if script not in current:
                 current.append(script)
         return current
