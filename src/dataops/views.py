@@ -184,7 +184,7 @@ def row_create(request):
             ops.store_dataframe_in_db(df, workflow.id)
 
             # Log the event
-            log_payload = zip(column_names, row_vals)
+            log_payload = zip(column_names, [str(x) for x in row_vals])
             logs.ops.put(request.user,
                          'tablerow_create',
                          workflow,
