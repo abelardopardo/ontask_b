@@ -18,7 +18,8 @@ class PlotlyHandler(VisHandler):
     head_scripts = ["https://cdn.plot.ly/plotly-latest.min.js"]
 
     html_skel = """<div id="{id}" style="{style}"></div>
-        <script>console.log("done2");Plotly.newPlot('{id}', {data}, {layout},
+        <script>Plotly.newPlot('{id}', {data}, 
+        {layout},
         {{displaylogo: false}});</script>"""
 
     def __init__(self, data, *args, **kwargs):
