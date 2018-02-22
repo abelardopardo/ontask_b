@@ -39,7 +39,7 @@ def vis_html_content(context, column_name):
     # errors, we may not have the data of an individual, so we have to relax
     # this restriction.
     ivalue = context.get(tr_item(column_name), None)
-    if ivalue:
+    if ivalue is not None:
         viz_ctx['individual_value'] = ivalue
 
     # Get the condition filter
@@ -57,11 +57,18 @@ def vis_html_content(context, column_name):
     viz = PlotlyColumnHistogram(data=df,
                                 context=viz_ctx)
 
+    prefix = ''
+    if viz_number == 0:
+        prefix = ''.join([
+            '<script src="{0}"></script>'.format(x)
+            for x in PlotlyColumnHistogram.get_engine_scripts()
+        ])
+
     # Update viz number
     context[viz_number_context_var] = viz_number + 1
 
     # Return the rendering of the viz marked as safe
-    return mark_safe(viz.render())
+    return mark_safe(prefix + viz.render())
 
 
 # Register the tag in the library.
