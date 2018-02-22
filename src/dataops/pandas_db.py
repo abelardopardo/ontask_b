@@ -5,11 +5,11 @@ import logging
 import os.path
 import subprocess
 from collections import OrderedDict
+from itertools import izip
 
 import pandas as pd
 from django.conf import settings
 from django.db import connection
-from itertools import izip
 from sqlalchemy import create_engine
 
 from dataops.formula_evaluation import evaluate_node_sql
@@ -113,6 +113,7 @@ def delete_all_tables():
         cursor.execute('DROP TABLE "{0}";'.format(tinfo.name))
 
     return
+
 
 def is_table_in_db(table_name):
     cursor = connection.cursor()
@@ -254,12 +255,17 @@ def get_subframe(pk, cond_filter, column_names=None):
     :param column_names: [list of column names], QuerySet with the data rows
     :return:
     """
-    return pd.DataFrame.from_records(get_table_data(pk,
-                                                    cond_filter,
-                                                    column_names))
+    # Get the cursor
+    cursor = get_table_cursor(pk, cond_filter, column_names)
+
+    # Create the DataFrame and set the column names
+    result = pd.DataFrame.from_records(cursor.fetchall(), coerce_float=True)
+    result.columns = [c.name for c in cursor.description]
+
+    return result
 
 
-def get_table_data(pk, cond_filter, column_names=None):
+def get_table_cursor(pk, cond_filter, column_names=None):
     """
     Execute a select query in the database with an optional filter obtained
     from the jquery QueryBuilder.
@@ -290,7 +296,14 @@ def get_table_data(pk, cond_filter, column_names=None):
     cursor = connection.cursor()
     cursor.execute(query, fields)
 
-    # Get the data
+    return cursor
+
+
+def get_table_data(pk, cond_filter, column_names=None):
+    # Get first the cursor
+    cursor = get_table_cursor(pk, cond_filter, column_names)
+
+    # Return the data
     return cursor.fetchall()
 
 
@@ -444,8 +457,8 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names=None):
     # ZIP the values to create a dictionary
     return OrderedDict(zip(workflow.get_column_names(), qs))
 
-def get_column_stats_from_df(df_column):
 
+def get_column_stats_from_df(df_column):
     """
     Given a data frame with a single column, return a set of statistics
     depending on its type.
@@ -536,7 +549,6 @@ def search_table_rows(workflow_id,
 
     # Add the table
     query += ' FROM "{0}"'.format(create_table_name(workflow_id))
-
 
     # Calculate the first suffix to add to the query
     filter_txt = ''
@@ -690,4 +702,3 @@ def check_wf_df(workflow):
             return False
 
     return True
-
