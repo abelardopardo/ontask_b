@@ -305,6 +305,12 @@ def send_messages(user,
             if track_col_name not in data_frame.columns:
                 break
 
+    # Update the number of filtered rows if the action has a filter (table
+    # might have changed)
+    if action.n_selected_rows != len(result):
+        action.n_selected_rows = len(result)
+        action.save()
+
     # Everything seemed to work to create the messages.
     msgs = []
     for msg_body, msg_subject, msg_to in result:
