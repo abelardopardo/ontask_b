@@ -16,6 +16,7 @@ from django.core.mail import send_mail, EmailMultiAlternatives
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.template import Context, Template, TemplateSyntaxError
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import strip_tags
 
@@ -144,21 +145,25 @@ def serve_action_out(user, action, user_attribute_name):
     action_content = evaluate_row(action, (user_attribute_name,
                                            user.email))
 
+    payload = {'action': action.name,
+               'action_id': action.id}
+
     # If the action content is empty, forget about it
+    response = action_content
     if action_content is None:
-        raise Http404
+        response = render_to_string('action/action_unavailable.html', {})
+        payload['error'] = 'Action not enabled for user ' + user.email
 
     # Log the event
     logs.ops.put(
         user,
         'action_served_execute',
         workflow=action.workflow,
-        payload={'action': action.name,
-                 'action_id': action.id}
+        payload=payload
     )
 
     # Respond the whole thing
-    return HttpResponse(action_content)
+    return HttpResponse(response)
 
 
 def clone_condition(condition, new_action=None, new_name=None):
