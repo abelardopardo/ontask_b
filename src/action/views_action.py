@@ -319,7 +319,9 @@ def edit_action_out(request, pk):
 
     # Get the total number of rows in DF and those selected by filter.
     total_rows = workflow.nrows
-    selected_rows = action.n_selected_rows
+    if filter_condition:
+        action.n_selected_rows = \
+            pandas_db.num_rows(action.workflow.id, filter_condition.formula)
 
     # Context to render the form
     context = {'filter_condition': filter_condition,
@@ -328,7 +330,7 @@ def edit_action_out(request, pk):
                'query_builder_ops': workflow.get_query_builder_ops_as_str(),
                'attribute_names': [x for x in workflow.attributes.keys()],
                'column_names': workflow.get_column_names(),
-               'selected_rows': selected_rows,
+               'selected_rows': action.n_selected_rows,
                'has_data': has_data,
                'total_rows': total_rows,
                'form': form,
@@ -770,10 +772,6 @@ def run_ss(request, pk):
     # See if an order column has been given.
     if order_col:
         order_col = columns[int(order_col)]
-
-    # Find the first key column
-    key_name = column_names[0]
-    key_idx = 0
 
     # Get the search pairs of field, value
     cv_tuples = []
