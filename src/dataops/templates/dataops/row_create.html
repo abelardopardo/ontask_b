@@ -11,10 +11,10 @@
 {% block scripts %}
   <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
 {% endblock %}
-{% block title %}{{ block.super }}Create row{% endblock %}
+{% block title %}{{ block.super }}Add row{% endblock %}
 {% block container %}
 <div align="center" class="container">
-  <h1 class="page-header">Update row</h1>
+  <h1 class="page-header">Add row</h1>
   <p>Workflow {{ workflow.name }}</p>
   <div class="container">
     <form action="" method="post">
@@ -25,16 +25,18 @@
       {% endif %}
       <button type="submit" name="submit" value="update"
               class="btn btn-primary">
-        <span class="glyphicon glyphicon-ok"></span> Create
+        <span class="glyphicon glyphicon-ok"></span> Add
       </button>
-      {{ form|crispy }}
+      <div class="input-group input-group-lg">
+        {{ form|crispy }}
+      </div>
       {% if cancel_url %}
         <button type="button" class="btn btn-default"
         onclick="location.href='{{ cancel_url }}'">Cancel</button>
       {% endif %}
       <button type="submit" name="submit" value="update"
               class="btn btn-primary">
-        <span class="glyphicon glyphicon-ok"></span> Create
+        <span class="glyphicon glyphicon-ok"></span> Add
       </button>
     </form>
   </div>

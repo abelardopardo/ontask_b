@@ -384,6 +384,10 @@ def delete(request, pk):
                      {'id': workflow.id,
                       'name': workflow.name})
 
+        # And drop the table
+        if pandas_db.is_wf_table_in_db(workflow):
+            pandas_db.delete_table(pk)
+
         # Perform the delete operation
         workflow.delete()
 

@@ -337,8 +337,10 @@ class RowFilterForm(forms.Form):
                 raise Exception('Unable to process datatype', field_type)
 
 
-# Form to enter values in a row
 class RowForm(forms.Form):
+    """
+    Form to enter values for a table row
+    """
     def __init__(self, *args, **kargs):
 
         # Store the instance
@@ -362,5 +364,11 @@ class RowForm(forms.Form):
             self.fields[field_name] = \
                 column_to_field(column, self.initial_values[idx])
 
-            if column.is_key and self.initial_values[idx]:
-                self.fields[field_name].widget.attrs['readonly'] = 'readonly'
+            if column.is_key:
+                if self.initial_values[idx]:
+                    self.fields[field_name].widget.attrs['readonly'] = \
+                        'readonly'
+                else:
+                    self.fields[field_name].required = True
+            elif column.data_type == 'integer':
+                self.fields[field_name].required = True

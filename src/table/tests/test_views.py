@@ -44,7 +44,7 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
-        self.assertIn('Import', self.selenium.page_source)
+        self.assertIn('Import Workflow', self.selenium.page_source)
 
         # Open the workflow
         wf_link = self.selenium.find_element_by_link_text(self.wflow_name)
@@ -534,7 +534,7 @@ class TableViews(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
-        self.assertIn('Import', self.selenium.page_source)
+        self.assertIn('Import Workflow', self.selenium.page_source)
 
         # Open the workflow
         wf_link = self.selenium.find_element_by_link_text(self.wflow_name)
@@ -738,6 +738,131 @@ class TableViews(test.OntaskLiveTestCase):
         self.assertIn(
             'Showing 1 to 10 of 13 entries (filtered from 100 total entries)',
             self.selenium.page_source)
+
+        # End of session
+        self.logout()
+
+
+class TableInsertRow(test.OntaskLiveTestCase):
+    fixtures = ['derived_column']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'table',
+        'fixtures',
+        'derived_column_df.sql'
+    )
+
+    wflow_name = 'combine columns'
+
+    def setUp(self):
+        super(TableInsertRow, self).setUp()
+        pandas_db.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        pandas_db.delete_all_tables()
+        super(TableInsertRow, self).tearDown()
+
+    # Test operations with all derived columns
+    def test_table_insert_row(self):
+        # Login
+        self.login('instructor1@bogus.com')
+
+        self.open(reverse('workflow:index'))
+
+        # GO TO THE WORKFLOW PAGE
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('OnTask :: Workflows'))
+        self.assertIn('New Workflow', self.selenium.page_source)
+        self.assertIn('Import Workflow', self.selenium.page_source)
+
+        # Open the workflow
+        wf_link = self.selenium.find_element_by_link_text(self.wflow_name)
+        wf_link.click()
+        # Wait for the table to be refreshed
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'column-table_previous'))
+        )
+
+        # Go to the table page
+        wf_link = self.selenium.find_element_by_link_text('Table')
+        wf_link.click()
+        # Wait for the table to be refreshed
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'table-data_previous'))
+        )
+
+        # Click on the add button
+        self.selenium.find_element_by_xpath(
+            "//div[@id='table-content']/div/div/button[1]"
+        ).click()
+        self.selenium.find_element_by_link_text('Add row').click()
+
+        # Fill out the fields in the form
+        for x in range(0,10):
+            keyelem = self.selenium.find_element_by_id(
+                'id____ontask___upload_{0}'.format(x)
+            )
+            keyelem.clear()
+            keyelem.send_keys(str(x))
+
+        # Set c91 to true
+        c91 = self.selenium.find_element_by_id('id____ontask___upload_10')
+        self.assertFalse(c91.is_selected())
+        c91.click()
+        # Click on the Submit button
+        self.selenium.find_element_by_xpath(
+            "//form/button[@type='submit']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, 'alert-danger'))
+        )
+
+        # Incorrect primary key introduced (repeated value)
+        self.assertIn('It must be different to maintain Key property',
+                      self.selenium.page_source)
+
+        # Introduce a valid primary key
+        keyelem = self.selenium.find_element_by_id(
+            'id____ontask___upload_0'
+        )
+        keyelem.clear()
+        keyelem.send_keys('100')
+        # Click on the Submit button
+        self.selenium.find_element_by_xpath(
+            "//form/button[@type='submit']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'table-data_previous'))
+        )
+
+        # Go to page 11 of the table
+        self.selenium.find_element_by_link_text('11').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element((By.CLASS_NAME, 'sorting_1'),
+                                             '100')
+        )
+
+        # Click in the Ops -> delete button -> Delete row
+        self.selenium.find_element_by_xpath(
+            "//tbody/tr/td/div/button[1]"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "//tbody/tr/td/div/ul/li[3]/button"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.CLASS_NAME, 'modal-title'),
+                'Confirm row deletion')
+        )
+        self.selenium.find_element_by_xpath(
+            "//div[@id='modal-item']//button[@type='submit']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.ID, 'table-data_info'),
+                '1 to 10 of 100 entries'
+            )
+        )
 
         # End of session
         self.logout()

@@ -45,7 +45,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
-        self.assertIn('Import', self.selenium.page_source)
+        self.assertIn('Import Workflow', self.selenium.page_source)
 
         # Open the workflow
         wf_link = self.selenium.find_element_by_link_text('sss')
@@ -368,7 +368,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
-        self.assertIn('Import', self.selenium.page_source)
+        self.assertIn('Import Workflow', self.selenium.page_source)
 
         # Open the workflow
         wf_link = self.selenium.find_element_by_link_text('sss')
@@ -560,7 +560,7 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
-        self.assertIn('Import', self.selenium.page_source)
+        self.assertIn('Import Workflow', self.selenium.page_source)
 
         # Open the workflow
         wf_link = self.selenium.find_element_by_link_text('wflow1')
@@ -611,7 +611,7 @@ class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
-        self.assertIn('Import', self.selenium.page_source)
+        self.assertIn('Import Workflow', self.selenium.page_source)
 
         # Open the workflow
         wf_link = self.selenium.find_element_by_link_text('wflow1')
