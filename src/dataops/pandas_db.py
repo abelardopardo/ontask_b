@@ -124,6 +124,10 @@ def is_table_in_db(table_name):
     )
 
 
+def is_wf_table_in_db(workflow):
+    return is_table_in_db(create_table_name(workflow.id))
+
+
 def create_table_name(pk):
     """
 
