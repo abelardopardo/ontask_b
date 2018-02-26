@@ -72,8 +72,9 @@
           </thead>
         </table>
       {% else %}
-        <p>The workflow does not have data.</p>
-        <p>Go to <a href="{% url 'dataops:list' %}">DataOps</a> to upload data</p>
+        <p><strong>The workflow does not have data.</strong></p>
+        <h4>Go to <a href="{% url 'dataops:list' %}">DataOps</a> to upload
+          data</h4>
       {% endif %}
     </div>
     <div class="modal fade" id="modal-item">
