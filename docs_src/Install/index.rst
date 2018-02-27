@@ -418,7 +418,7 @@ and are: ``EMAIL_HOST``, ``EMAIL_PORT``, ``EMAIL_HOST_USER``,
 ``EMAIL_HOST_PASSWORD``, ``EMAIL_USE_TLS`` and ``EMAIL_USE_SSL``.
 
 Set theses variables in the configuration file to the appropriate values
-before starting the application.
+before starting the application. Make sure the server is running **in production mode**. The development mode is configured to **not send** emails but show their content in the console instead.
 
 .. _scheduling_tasks:
 
