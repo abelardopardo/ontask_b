@@ -54,6 +54,11 @@
   <h1 class="page-header">Workflow Details</h1>
   {% if workflow %}
     <div style="display: inline-block;" id="workflow-area">
+      {% if not table_info %}
+        <p><strong>The workflow does not have data.</strong></p>
+        <h4>Go to <a href="{% url 'dataops:list' %}">DataOps</a> to upload
+          data</h4>
+      {% endif %}
       {% include 'workflow/includes/workflow_detail_buttons.html' %}
       <p class="help-block">Description: {{ workflow.description_text }}</p>
       <p class="help-block">Last modified: {{ workflow.modified }}</p>
@@ -71,10 +76,6 @@
             </tr>
           </thead>
         </table>
-      {% else %}
-        <p><strong>The workflow does not have data.</strong></p>
-        <h4>Go to <a href="{% url 'dataops:list' %}">DataOps</a> to upload
-          data</h4>
       {% endif %}
     </div>
     <div class="modal fade" id="modal-item">
