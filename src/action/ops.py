@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.core import signing, mail
 from django.core.mail import send_mail, EmailMultiAlternatives
-from django.http import Http404, HttpResponse
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
