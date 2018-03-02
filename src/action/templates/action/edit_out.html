@@ -43,26 +43,35 @@
       <div id="html-editor">
         <h4 class="text-center">Content</h4>
         <div id="attribute-names" style="margin-bottom:1ex;">
+          <div style="display: table-cell; padding-right: 1ex;">Insert:</div>
           {% if attribute_names %}
             <div style="display: table-cell; padding-right: 1ex;">
-              Insert attribute:
                 <select id="select-attribute-name">
-                  <option value="">-----</option>
+                  <option value="">- Attribute -</option>
                   {% for attr in attribute_names %}
                     <option value="{{ attr }}">{{ attr }}</option>
                   {% endfor %}
                 </select>
             </div>
           {% endif %}
-          <div style="display: table-cell;">
-            Insert column value:
+          <div style="display: table-cell; padding-right: 1ex;">
               <select id="select-column-name">
-                <option value="">-----</option>
+                <option value="">- Column Value -</option>
                 {% for colname in column_names %}
                   <option value="{{ colname }}">{{ colname }}</option>
                 {% endfor %}
               </select>
           </div>
+          {% comment %}
+          <div style="display: table-cell;">
+              <select id="select-visualization">
+                <option value="">- Visualization -</option>
+                {% for colname in column_names %}
+                  <option value="{{ colname }}">{{ colname }}</option>
+                {% endfor %}
+              </select>
+          </div>
+          {% endcomment %}
         </div>
         <form action="" enctype="multipart/form-data" method="POST">
           {% csrf_token %}
