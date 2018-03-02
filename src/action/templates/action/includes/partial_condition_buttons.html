@@ -31,6 +31,15 @@
             </button>
           </li>
           <li>
+            <button type="button"
+                    class="btn btn-default btn-sm js-condition-edit"
+                    data-url="{% url 'action:edit_condition' condition.id %}"
+                    data-toggle="tooltip"
+                    title="Edit name, description and formula">
+              <span class="glyphicon glyphicon-pencil"></span> Edit
+            </button>
+          </li>
+          <li>
             <a href="{% url 'action:clone_condition' condition.id %}"
                class="btn btn-default btn-sm"
                data-toggle="tooltip" title="Create an exact copy of this condition">

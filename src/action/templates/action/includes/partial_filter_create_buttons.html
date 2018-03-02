@@ -20,6 +20,16 @@
         <ul role="menu" class="dropdown-menu">
           <li>
             <button type="button"
+                    class="btn btn-sm btn-default js-filter-edit"
+                    data-url="{% url 'action:edit_filter' filter_condition.id %}"
+                    data-type="filter"
+                    data-toggle="tooltip"
+                    title="Edit name, description and formula">
+              <span class="glyphicon glyphicon-pencil"></span> Edit
+            </button>
+          </li>
+          <li>
+            <button type="button"
                     class="btn btn-sm btn-default js-filter-delete"
                     data-url="{% url 'action:delete_filter' filter_condition.id %}"
                     data-toggle="tooltip" title="Delete the filter">
