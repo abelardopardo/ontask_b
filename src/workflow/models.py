@@ -233,6 +233,12 @@ class Column(models.Model):
                                  null=False,
                                  blank=False)
 
+    # Boolean stating if the column is included in the visualizations
+    in_viz = models.BooleanField(default=True,
+                                 verbose_name='Include in visualization',
+                                 null=False,
+                                 blank=False)
+
     # Storing a JSON element with a list of categorical values to use for
     #  this column [val, val, val]
     categories = JSONField(
