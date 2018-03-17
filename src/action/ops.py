@@ -327,7 +327,7 @@ def send_messages(user,
             }
 
             track_str = \
-                """<img src="https://{0}/{1}?v={2}" alt="" 
+                """<img src="https://{0}{1}?v={2}" alt="" 
                     style="position:absolute; visibility:hidden"/>""".format(
                     Site.objects.get_current().domain,
                     reverse('trck'),
