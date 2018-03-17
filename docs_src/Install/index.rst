@@ -420,6 +420,18 @@ and are: ``EMAIL_HOST``, ``EMAIL_PORT``, ``EMAIL_HOST_USER``,
 Set theses variables in the configuration file to the appropriate values
 before starting the application. Make sure the server is running **in production mode**. The development mode is configured to **not send** emails but show their content in the console instead.
 
+Tracking Email Reads
+--------------------
+
+If OnTask is deployed using Shibboleth, all URLs are likely to be configured to go through the authentication layer. This configuration prevents OnTask from receiving the email read confirmations. In this case, the web server needs to be configured so that the Shibboleth authentication is removed for the url ``trck`` (the one receiving the email read tracking). In Apache, this can be achieved by the following directive::
+
+  <Location /trck>
+    Require all granted
+  </Location>
+
+If OnTask is not served from the root of your web server, make sure you include the absolute URL to ``trck``. For example, if OnTask is available through the URL ``my.server.com/somesuffix/ontask``, then the URL to use in the previous configuration is ``my.server.com/somesuffix/ontask/trck``.
+
+
 .. _scheduling_tasks:
 
 Scheduling tasks
