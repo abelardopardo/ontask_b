@@ -348,6 +348,8 @@ OnTask comes with the following authentication mechanisms: IMS-LTI,
   differentiator, so if you plan to use this authentication method make sure
   the value of ``REMOTE_USER`` is the email.
 
+  Additionally, this mode of authentication will be enforced in all requests reaching OnTask. However, this configuration prevents the recording of email reads. Read the section :ref:`email_config` to configure the server to allow such functionality to be properly configured.
+
 - Basic authentication. If the variable ``REMOTE_USER`` is not set in the
   internal environment of Django where the web requests are served, OnTask
   resorts to conventional authentication requiring email and password. These
@@ -423,7 +425,7 @@ before starting the application. Make sure the server is running **in production
 Tracking Email Reads
 --------------------
 
-If OnTask is deployed using Shibboleth, all URLs are likely to be configured to go through the authentication layer. This configuration prevents OnTask from receiving the email read confirmations. In this case, the web server needs to be configured so that the Shibboleth authentication is removed for the url ``trck`` (the one receiving the email read tracking). In Apache, this can be achieved by the following directive::
+If OnTask is deployed using SAML, all URLs are likely to be configured to go through the authentication layer. This configuration prevents OnTask from receiving the email read confirmations. In this case, the web server needs to be configured so that the SAML authentication is removed for the url ``trck`` (the one receiving the email read tracking). In Apache, this can be achieved by the following directive::
 
   <Location /trck>
     Require all granted
