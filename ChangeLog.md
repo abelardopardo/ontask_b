@@ -2,6 +2,8 @@
 
 ### Added
 
+- Documentation on how to open the URL in OnTask to track email reading when using SAML authentication (Apache configuration)
+
 ### Changed
 
 - Column delete now returns to previous screen (table or workflow detail)
