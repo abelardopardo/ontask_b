@@ -303,3 +303,8 @@ table#attribute-table {
 div.sol-container {
     display: table;
 }
+
+.modal-body p,
+.modal-body div {
+    word-wrap: break-word;
+}
