@@ -31,8 +31,8 @@ var loadForm = function () {
     if ($(this).is('[class*="disabled"]')) {
       return;
     }
-    if (document.getElementById("id_content") != null) {
-      data = {'action_content': $("#id_content").summernote('code')};
+    if (document.getElementById("id_subject") != null) {
+      data = {'subject_content': $("#id_subject").val()};
     } else {
       data = {};
     }
@@ -48,7 +48,6 @@ var loadForm = function () {
       success: function(data) {
         if (data.form_is_valid) {
           if (data.html_redirect == "") {
-            // If there is no redirect, simply refresh
             window.location.reload(true);
           } else {
             location.href = data.html_redirect;
@@ -78,15 +77,19 @@ var saveForm = function () {
       f_text = JSON.stringify(formula, undefined, 2);
       $('#id_formula').val(f_text);
     }
+    var data = form.serializeArray();
+    if (document.getElementById("id_content") != null) {
+      data.push({'name': 'action_content',
+                 'value': $("#id_content").summernote('code')});
+    }
     $.ajax({
       url: form.attr("action"),
-      data: form.serialize(),
+      data: data,
       type: form.attr("method"),
       dataType: 'json',
       success: function (data) {
         if (data.form_is_valid) {
           if (data.html_redirect == "") {
-            // If there is no redirect, simply refresh
             window.location.reload(true);
           } else {
             location.href = data.html_redirect;

@@ -23,6 +23,11 @@ urlpatterns = [
         views_action.edit_action_out,
         name='edit_out'),
 
+    # Save action out content
+    url(r'^(?P<pk>\d+)/action_out_save_content/$',
+        views_action.action_out_save_content,
+        name='action_out_save_content'),
+
     # Edit action In
     url(r'^(?P<pk>\d+)/edit_in/$',
         views_action.edit_action_in,

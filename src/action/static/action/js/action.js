@@ -21,6 +21,46 @@ var insertAttributeInContent = function() {
   $(this).val(this.defaultSelected);
 }
 
+var loadFormPost = function () {
+    $.ajax({
+      url: $(this).attr("data-url"),
+      data: [{'name': 'action_content',
+              'value': $("#id_content").summernote('code')}],
+      type: 'post',
+      dataType: 'json',
+      beforeSend: function() {
+        $(".modal-body").html("");
+        $("#modal-item").modal("show");
+      },
+      success: function(data) {
+        if (data.form_is_valid) {
+          if (data.html_redirect == "") {
+            window.location.reload(true);
+          } else {
+            location.href = data.html_redirect;
+          }
+          return;
+        }
+        $("#modal-item .modal-content").html(data.html_form);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        location.reload();
+      }
+    });
+}
+var saveActionText = function() {
+    $.ajax({
+      url: $(this).attr("data-url"),
+      data: [{'name': 'action_content',
+              'value': $("#id_content").summernote('code')}],
+      type: 'post',
+      dataType: 'json',
+      error: function(jqXHR, textStatus, errorThrown) {
+        location.reload();
+      },
+    });
+    return true;
+}
 $(function () {
   $('#checkAll').click(function () {    
        $('input:checkbox').prop('checked', this.checked);    
@@ -30,7 +70,7 @@ $(function () {
   $(".js-create-action").click(loadForm);
   $("#modal-item").on("submit", ".js-action-create-form", saveForm);
 
-  // Update Action
+  // Edit Action
   $("#action-table").on("click", ".js-action-update", loadForm);
   $("#modal-item").on("submit", ".js-action-update-form", saveForm);
 
@@ -62,6 +102,9 @@ $(function () {
   $("#condition-set").on("click", ".js-condition-edit", loadForm);
   $("#modal-item").on("submit", ".js-condition-edit-form", saveForm);
 
+  // Clone Condition
+  $("#condition-set").on("click", ".js-condition-clone", saveActionText);
+
   // Delete Condition
   $("#condition-set").on("click", ".js-condition-delete", loadForm);
   $("#modal-item").on("submit", ".js-condition-delete-form", saveForm);
@@ -80,7 +123,7 @@ $(function () {
                            insertAttributeInContent);
 
   // Preview
-  $("#html-editor").on("click", ".js-action-preview", loadForm);
+  $("#html-editor").on("click", ".js-action-preview", loadFormPost);
   $("#email-action-request-data").on("click", ".js-email-preview", loadForm);
   $(".modal-content").on("click", ".js-action-preview-nxt", loadForm);
   $(".modal-content").on("click", ".js-action-preview-prv", loadForm);

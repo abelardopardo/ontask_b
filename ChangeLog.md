@@ -8,9 +8,13 @@
 
 - Column delete now returns to previous screen (table or workflow detail)
 
+- Email preview now uses the subject text provided in the form.
+
 ### Fixed
 
 - Bug preventing columns to be deleted from the table view.
+
+- Bug limiting the length of the action text when using preview.
 
 ## 2.5.0 (2018-02-18)
 

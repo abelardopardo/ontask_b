@@ -41,8 +41,10 @@
           </li>
           <li>
             <a href="{% url 'action:clone_condition' condition.id %}"
-               class="btn btn-default btn-sm"
-               data-toggle="tooltip" title="Create an exact copy of this condition">
+               class="btn btn-default btn-sm js-condition-clone"
+               data-url="{% url 'action:action_out_save_content' action.id %}"
+               data-toggle="tooltip"
+               title="Create an exact copy of this condition">
               <span class="glyphicon glyphicon-duplicate"></span> Clone
             </a>
           </li>

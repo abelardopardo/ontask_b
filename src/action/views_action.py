@@ -272,6 +272,42 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
 
 
 @user_passes_test(is_instructor)
+@csrf_exempt
+def action_out_save_content(request, pk):
+    """
+
+    :param request: HTTP request (POST)
+    :param pk: Action ID
+    :return: Nothing, changes reflected in the DB
+    """
+
+    # Try to get the workflow first
+    workflow = get_workflow(request)
+    if not workflow:
+        return JsonResponse({})
+
+    # Get the action
+    try:
+        action = Action.objects.filter(
+            Q(workflow__user=request.user) |
+            Q(workflow__shared=request.user)).distinct().get(pk=pk)
+    except ObjectDoesNotExist:
+        return JsonResponse({})
+
+    # Wrong type of action.
+    if not action.is_out:
+        return JsonResponse({})
+
+    # If the request has the 'action_content', update the action
+    action_content = request.POST.get('action_content', None)
+    if action_content:
+        action.content = action_content
+        action.save()
+
+    return JsonResponse({})
+
+
+@user_passes_test(is_instructor)
 def edit_action_out(request, pk):
     """
     View to handle the AJAX form to edit an action (editor, conditions,
@@ -460,8 +496,8 @@ def preview_response(request, pk, idx, template, prelude=None):
         data['html_redirect'] = reverse('workflow:index')
         return JsonResponse(data)
 
-    # If the request has the 'action_content' field, update the action
-    action_content = request.GET.get('action_content', None)
+    # If the request has the 'action_content', update the action
+    action_content = request.POST.get('action_content', None)
     if action_content:
         action.content = action_content
         action.save()
@@ -504,12 +540,15 @@ def preview_response(request, pk, idx, template, prelude=None):
     return JsonResponse(data)
 
 
+@csrf_exempt
 @user_passes_test(is_instructor)
 def preview(request, pk, idx):
     """
     HTML request and the primary key of an action to preview one of its
     instances. The request must provide and additional parameter idx to
-    denote which instance to show.
+    denote which instance to show. The request must be POST because it may
+    include the current text in the action (with changes) and it needs to be
+    updated in the database.
 
     :param request: HTML request object
     :param pk: Primary key of the an action for which to do the preview

@@ -60,16 +60,16 @@ def save_condition_form(request,
     # If the method is GET or the form is not valid, re-render the page.
     if request.method == 'GET' or not form.is_valid():
 
-        # If the request has the 'action_content' field, update the action
-        action_content = request.GET.get('action_content', None)
-        if action_content:
-            action.content = action_content
-            action.save()
-
         data['html_form'] = render_to_string(template_name,
                                              context,
                                              request=request)
         return JsonResponse(data)
+
+    # If the request has the 'action_content' field, update the action
+    action_content = request.POST.get('action_content', None)
+    if action_content:
+        action.content = action_content
+        action.save()
 
     if is_filter:
         # Process the filter form
@@ -292,6 +292,13 @@ def delete_filter(request, pk):
 
     # Treat the two types of requests
     if request.method == 'POST':
+
+        # If the request has 'action_content', update the action
+        action_content = request.POST.get('action_content', None)
+        if action_content:
+            cond_filter.action.content = action_content
+            cond_filter.action.save()
+
         # Log the event
         formula, fields = evaluate_node_sql(cond_filter.formula)
         logs.ops.put(request.user,
@@ -315,12 +322,6 @@ def delete_filter(request, pk):
         data['html_redirect'] = reverse('action:edit_out',
                                         kwargs={'pk': cond_filter.action.id})
         return JsonResponse(data)
-
-    # If the request has the 'action_content', update the action
-    action_content = request.GET.get('action_content', None)
-    if action_content:
-        cond_filter.action.content = action_content
-        cond_filter.action.save()
 
     data['html_form'] = \
         render_to_string('action/includes/partial_filter_delete.html',
@@ -437,6 +438,12 @@ def delete_condition(request, pk):
 
     # Treat the two types of requests
     if request.method == 'POST':
+        # If the request has the 'action_content', update the action
+        action_content = request.POST.get('action_content', None)
+        if action_content:
+            condition.action.content = action_content
+            condition.action.save()
+
         formula, fields = evaluate_node_sql(condition.formula)
         logs.ops.put(request.user,
                      'condition_delete',
@@ -452,12 +459,6 @@ def delete_condition(request, pk):
         data['html_redirect'] = reverse('action:edit_out',
                                         kwargs={'pk': condition.action.id})
         return JsonResponse(data)
-
-    # If the request has the 'action_content', update the action
-    action_content = request.GET.get('action_content', None)
-    if action_content:
-        condition.action.content = action_content
-        condition.action.save()
 
     data['html_form'] = \
         render_to_string('action/includes/partial_condition_delete.html',
