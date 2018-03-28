@@ -96,12 +96,14 @@ def preview(request, pk, idx):
     :return:
     """
 
+    subject_content = request.GET.get('subject_content',
+                                      'THE SUBJECT WILL BE INSERTED HERE')
     return preview_response(
         request,
         pk,
         idx,
         'action/includes/partial_email_preview.html',
-        'THE SUBJECT WILL BE INSERTED HERE')
+        subject_content)
 
     # This function is redundant, but I thought I could include here the
     # subject, but it is too soon in the workflow and it is still unsubmitted.
