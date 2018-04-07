@@ -1849,7 +1849,7 @@
                 "validation": {
                     "step": "any"
                 },
-                "type": "double",
+                "type": "number",
                 "id": "age"
             },
             {
@@ -1857,7 +1857,7 @@
                 "id": "email"
             },
             {
-                "type": "integer",
+                "type": "number",
                 "id": "sid"
             },
             {
@@ -1893,7 +1893,7 @@
         "name": "sid",
         "description_text": "",
         "workflow": 108,
-        "data_type": "integer",
+        "data_type": "number",
         "is_key": true,
         "categories": [],
         "active_from": null,
@@ -1935,7 +1935,7 @@
         "name": "age",
         "description_text": "",
         "workflow": 108,
-        "data_type": "double",
+        "data_type": "number",
         "is_key": true,
         "categories": [],
         "active_from": null,
@@ -2040,7 +2040,7 @@
                     "field": "age",
                     "operator": "greater",
                     "input": "number",
-                    "type": "double",
+                    "type": "number",
                     "id": "age"
                 }
             ],
@@ -2102,7 +2102,7 @@
         "created": "2017-12-08T01:28:52.686Z",
         "name": "workflow_data_upload",
         "workflow": 108,
-        "payload": "{\"column_names\": [\"age\", \"eamil\", \"sid\", \"name\", \"registered\", \"when\"], \"name\": \"wflow2\", \"column_types\": [\"double\", \"string\", \"integer\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, false, false, false], \"id\": 108}"
+        "payload": "{\"column_names\": [\"age\", \"eamil\", \"sid\", \"name\", \"registered\", \"when\"], \"name\": \"wflow2\", \"column_types\": [\"number\", \"string\", \"number\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, false, false, false], \"id\": 108}"
     }
 },
 {

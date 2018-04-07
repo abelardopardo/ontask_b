@@ -298,9 +298,7 @@ def data_frame_add_empty_column(df, column_name, column_type, initial_value):
         # Choose the right numpy type
         if column_type == 'string':
             initial_value = ''
-        elif column_type == 'integer':
-            initial_value = 0
-        elif column_type == 'double':
+        elif column_type == 'number':
             initial_value = 0.0
         elif column_type == 'boolean':
             initial_value = False

@@ -1845,7 +1845,7 @@
         "created": "2017-12-23T05:25:13.728Z",
         "name": "workflow_data_upload",
         "workflow": 152,
-        "payload": "{\"column_names\": [\"SID\", \"Contributions\", \"Contributions 2\", \"Contributions 3\", \"Contributions 4\", \"Contributions 5\", \"Days online\", \"Days online 2\", \"Days online 3\", \"Days online 4\", \"Days online 5\", \"GivenName\", \"Questions\", \"Questions 2\", \"Questions 3\", \"Questions 4\", \"Questions 5\", \"Surname\", \"Views\", \"Views 2\", \"Views 3\", \"Views 4\", \"Views 5\", \"email\"], \"name\": \"fff\", \"column_types\": [\"string\", \"double\", \"double\", \"double\", \"double\", \"double\", \"double\", \"double\", \"double\", \"double\", \"double\", \"string\", \"double\", \"double\", \"double\", \"double\", \"double\", \"string\", \"double\", \"double\", \"double\", \"double\", \"double\", \"string\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 152}"
+        "payload": "{\"column_names\": [\"SID\", \"Contributions\", \"Contributions 2\", \"Contributions 3\", \"Contributions 4\", \"Contributions 5\", \"Days online\", \"Days online 2\", \"Days online 3\", \"Days online 4\", \"Days online 5\", \"GivenName\", \"Questions\", \"Questions 2\", \"Questions 3\", \"Questions 4\", \"Questions 5\", \"Surname\", \"Views\", \"Views 2\", \"Views 3\", \"Views 4\", \"Views 5\", \"email\"], \"name\": \"fff\", \"column_types\": [\"string\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"string\", \"number\", \"number\", \"number\", \"number\", \"number\", \"string\", \"number\", \"number\", \"number\", \"number\", \"number\", \"string\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 152}"
     }
 },
 {
@@ -1871,7 +1871,7 @@
         "created": "2017-12-23T05:26:12.252Z",
         "name": "workflow_data_upload",
         "workflow": 152,
-        "payload": "{\"column_names\": [\"SID\", \"email\", \"Contributions\", \"Contributions 2\", \"Contributions 3\", \"Contributions 4\", \"Contributions 5\", \"Days online\", \"Days online 2\", \"Days online 3\", \"Days online 4\", \"Days online 5\", \"GivenName\", \"Questions\", \"Questions 2\", \"Questions 3\", \"Questions 4\", \"Questions 5\", \"Surname\", \"Views\", \"Views 2\", \"Views 3\", \"Views 4\", \"Views 5\"], \"name\": \"fff\", \"column_types\": [\"integer\", \"string\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"string\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"string\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 152}"
+        "payload": "{\"column_names\": [\"SID\", \"email\", \"Contributions\", \"Contributions 2\", \"Contributions 3\", \"Contributions 4\", \"Contributions 5\", \"Days online\", \"Days online 2\", \"Days online 3\", \"Days online 4\", \"Days online 5\", \"GivenName\", \"Questions\", \"Questions 2\", \"Questions 3\", \"Questions 4\", \"Questions 5\", \"Surname\", \"Views\", \"Views 2\", \"Views 3\", \"Views 4\", \"Views 5\"], \"name\": \"fff\", \"column_types\": [\"number\", \"string\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"string\", \"number\", \"number\", \"number\", \"number\", \"number\", \"string\", \"number\", \"number\", \"number\", \"number\", \"number\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 152}"
     }
 },
 {
@@ -1897,7 +1897,7 @@
         "created": "2017-12-23T05:34:54.753Z",
         "name": "workflow_data_upload",
         "workflow": 152,
-        "payload": "{\"column_names\": [\"age\", \"eamil\", \"registered\", \"sid\", \"when\", \"name\"], \"name\": \"fff\", \"column_types\": [\"double\", \"string\", \"boolean\", \"integer\", \"datetime\", \"string\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, true, true, false], \"id\": 152}"
+        "payload": "{\"column_names\": [\"age\", \"eamil\", \"registered\", \"sid\", \"when\", \"name\"], \"name\": \"fff\", \"column_types\": [\"number\", \"string\", \"boolean\", \"number\", \"datetime\", \"string\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, true, true, false], \"id\": 152}"
     }
 },
 {
@@ -1923,7 +1923,7 @@
         "created": "2017-12-23T05:37:38.204Z",
         "name": "workflow_data_upload",
         "workflow": 152,
-        "payload": "{\"column_names\": [\"age\", \"eamil\", \"sid\", \"name\", \"registered\", \"when\"], \"name\": \"fff\", \"column_types\": [\"double\", \"string\", \"integer\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, false, false, false], \"id\": 152}"
+        "payload": "{\"column_names\": [\"age\", \"eamil\", \"sid\", \"name\", \"registered\", \"when\"], \"name\": \"fff\", \"column_types\": [\"number\", \"string\", \"number\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, false, false, false], \"id\": 152}"
     }
 },
 {
@@ -1962,7 +1962,7 @@
         "created": "2017-12-23T07:02:49.678Z",
         "name": "workflow_data_upload",
         "workflow": 152,
-        "payload": "{\"column_names\": [\"SID\", \"First Name\", \"Last Name\", \"Q01\", \"Q02\", \"Q03\", \"Q04\", \"Q05\", \"Q06\", \"Q07\", \"Q08\", \"Q09\", \"Q10\", \"Total\"], \"name\": \"fff\", \"column_types\": [\"integer\", \"string\", \"string\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 152}"
+        "payload": "{\"column_names\": [\"SID\", \"First Name\", \"Last Name\", \"Q01\", \"Q02\", \"Q03\", \"Q04\", \"Q05\", \"Q06\", \"Q07\", \"Q08\", \"Q09\", \"Q10\", \"Total\"], \"name\": \"fff\", \"column_types\": [\"number\", \"string\", \"string\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 152}"
     }
 },
 {
@@ -1988,7 +1988,7 @@
         "created": "2017-12-23T07:03:22.167Z",
         "name": "workflow_data_upload",
         "workflow": 152,
-        "payload": "{\"column_names\": [\"Last Name\", \"SID\", \"First Name\", \"Q01\", \"Q02\", \"Q03\", \"Q04\", \"Q05\", \"Q06\", \"Q07\", \"Q08\", \"Q09\", \"Q10\", \"Total\"], \"name\": \"fff\", \"column_types\": [\"string\", \"integer\", \"string\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 152}"
+        "payload": "{\"column_names\": [\"Last Name\", \"SID\", \"First Name\", \"Q01\", \"Q02\", \"Q03\", \"Q04\", \"Q05\", \"Q06\", \"Q07\", \"Q08\", \"Q09\", \"Q10\", \"Total\"], \"name\": \"fff\", \"column_types\": [\"string\", \"number\", \"string\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 152}"
     }
 },
 {

@@ -128,7 +128,7 @@ class Workflow(models.Model):
 
         Example:
 
-        [{id: 'FIELD1', type: 'string'}, {id: 'FIELD2', type: 'integer'}]
+        [{id: 'FIELD1', type: 'string'}, {id: 'FIELD2', type: 'number'}]
         """
 
         result = []
@@ -145,8 +145,8 @@ class Workflow(models.Model):
                 continue
 
             # Remaining cases
-            if column.data_type == 'double':
-                # Double field needs validation field to bypass browser forcing
+            if column.data_type == 'number':
+                # Number field needs validation field to bypass browser forcing
                 # integer
                 item['validation'] = {'step': 'any'}
 
@@ -314,9 +314,7 @@ class Column(models.Model):
         # Check the different data types
         if data_type == 'string':
             newval = str(value)
-        elif data_type == 'integer':
-            newval = int(value)
-        elif data_type == 'double':
+        elif data_type == 'number':
             newval = float(value)
         elif data_type == 'boolean':
             newval = value.lower() == 'true' or value == 1

@@ -29,8 +29,9 @@ logger = logging.getLogger(__name__)
 # Translation between pandas data type names, and those handled in ontask
 pandas_datatype_names = {
     'object': 'string',
-    'int64': 'integer',
-    'float64': 'double',
+    # 'int64': 'integer',
+    # 'float64': 'double',
+    'float64': 'number',
     'bool': 'boolean',
     'datetime64[ns]': 'datetime'
 }
@@ -469,16 +470,16 @@ def get_column_stats_from_df(df_column):
 
     :param df_column: data frame with a single column
     :return: A dictionary with keys depending on the type of column
-      {'min': minimum value (integer, double an datetime),
-       'q1': Q1 value (0.25) (integer, double),
-       'mean': mean value (integer, double),
-       'median': median value (integer, double),
-       'mean': mean value (integer, double),
-       'q3': Q3 value (0.75) (integer, double),
-       'max': maximum value (integer, double an datetime),
-       'std': standard deviation (integer, double),
-       'mode': (integer, double, string, datetime, Boolean,
-       'counts': (integer, double, string, datetime, Boolean',
+      {'min': minimum value (number and datetime),
+       'q1': Q1 value (0.25) (number),
+       'mean': mean value (number),
+       'median': median value (number),
+       'mean': mean value (number),
+       'q3': Q3 value (0.75) (number),
+       'max': maximum value (number and datetime),
+       'std': standard deviation (number),
+       'mode': (number, string, datetime, Boolean,
+       'counts': (number, string, datetime, Boolean',
     """
     # Dictionary to return
     result = {
@@ -495,7 +496,7 @@ def get_column_stats_from_df(df_column):
 
     data_type = pandas_datatype_names[df_column.dtype.name]
 
-    if data_type == 'integer' or data_type == 'double':
+    if data_type == 'number':
         quantiles = df_column.quantile([0, .25, .5, .75, 1])
         result['min'] = '{0:g}'.format(quantiles[0])
         result['q1'] = '{0:g}'.format(quantiles[.25])

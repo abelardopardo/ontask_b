@@ -1824,14 +1824,14 @@
                 "id": "email"
             },
             {
-                "type": "integer",
+                "type": "number",
                 "id": "sid"
             },
             {
                 "validation": {
                     "step": "any"
                 },
-                "type": "double",
+                "type": "number",
                 "id": "age"
             },
             {
@@ -1867,7 +1867,7 @@
         "name": "sid",
         "description_text": "",
         "workflow": 149,
-        "data_type": "integer",
+        "data_type": "number",
         "is_key": true,
         "categories": [],
         "active_from": null,
@@ -1909,7 +1909,7 @@
         "name": "age",
         "description_text": "",
         "workflow": 149,
-        "data_type": "double",
+        "data_type": "number",
         "is_key": false,
         "categories": [],
         "active_from": null,

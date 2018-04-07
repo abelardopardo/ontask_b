@@ -40,8 +40,8 @@ def get_column_visualisations(column, col_data, vis_scripts,
     if context is None:
         context = {}
 
-    # Create V1 if data type is integer or real
-    if column.data_type == 'integer' or column.data_type == 'double':
+    # Create V1 if data type is number
+    if column.data_type == 'number':
 
         # Propagate the id if given
         if id:
@@ -152,9 +152,9 @@ def stat_column(request, pk):
     """
     Render the page with stats and visualizations for the given column
     The page includes the following visualizations:
-      First row: quartile information (only for integer and double)
-      V1. Box plot. Only for columns of type integer and double.
-      V2. Histogram. For columns of type integer, double, string, boolean
+      First row: quartile information (only for numbers)
+      V1. Box plot. Only for columns of type number.
+      V2. Histogram. For columns of type number, string, boolean
 
     :param request: HTTP request
     :param pk: primary key of the column

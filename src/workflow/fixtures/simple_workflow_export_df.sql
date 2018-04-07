@@ -26,9 +26,9 @@ SET default_with_oids = false;
 
 CREATE TABLE "__ONTASK_WORKFLOW_TABLE_140" (
     email text,
-    sid bigint,
+    sid double precision,
     "WAM" double precision,
-    credits bigint,
+    credits double precision,
     days_online double precision,
     difficult_week01 text,
     difficult_week02 text,
@@ -39,20 +39,20 @@ CREATE TABLE "__ONTASK_WORKFLOW_TABLE_140" (
     induction boolean,
     last_name text,
     mt_total double precision,
-    q01 bigint,
-    q02 bigint,
-    q03 bigint,
-    q04 bigint,
-    q05 bigint,
-    q06 bigint,
-    q07 bigint,
-    q08 bigint,
-    q09 bigint,
-    q10 bigint,
+    q01 double precision,
+    q02 double precision,
+    q03 double precision,
+    q04 double precision,
+    q05 double precision,
+    q06 double precision,
+    q07 double precision,
+    q08 double precision,
+    q09 double precision,
+    q10 double precision,
     took_mt boolean,
-    video_1 bigint,
-    video_2 bigint,
-    video_3 bigint
+    video_1 double precision,
+    video_2 double precision,
+    video_3 double precision
 );
 
 

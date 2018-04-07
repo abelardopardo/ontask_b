@@ -121,7 +121,7 @@ class TablePandasOps(TableBasicOps):
     For example, if a column has boolean values and a NaN and it is
     transformed to JSON and transmitted, the NaN will be encoded as an empty
     string, and the column will no longer contain booleans but strings.
-    Similar situations ocurr with integers, dates, etc.
+    Similar situations occur with numbers, dates, etc.
 
     Use this API when you require to have a consisten handling of NaN and NaT.
 
@@ -333,7 +333,7 @@ class TablePandasMerge(TableBasicMerge):
     For example, if a column has boolean values and a NaN and it is
     transformed to JSON and transmitted, the NaN will be encoded as an empty
     string, and the column will no longer contain booleans but strings.
-    Similar situations ocurr with integers, dates, etc.
+    Similar situations ocurr with numbers, dates, etc.
 
     Use this API when you require to have a consisten handling of NaN and NaT.
 

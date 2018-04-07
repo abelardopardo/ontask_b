@@ -25,16 +25,16 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE "__ONTASK_WORKFLOW_TABLE_112" (
-    c0 bigint,
-    c1 bigint,
-    c2 bigint,
-    c3 bigint,
-    c4 bigint,
-    c5 bigint,
-    c6 bigint,
-    c7 bigint,
-    c8 bigint,
-    c9 bigint,
+    c0 double precision,
+    c1 double precision,
+    c2 double precision,
+    c3 double precision,
+    c4 double precision,
+    c5 double precision,
+    c6 double precision,
+    c7 double precision,
+    c8 double precision,
+    c9 double precision,
     c91 boolean,
     c92 boolean
 );

@@ -165,29 +165,29 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
         )
 
-        # First column must be: age, double
+        # First column must be: age, number
         self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[1]/td[1]").text,
-                         'age')
+            'age')
         self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[1]/td[2]").text,
-                         'double')
+            'number')
 
         # Second column must be email string
         self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[2]/td[1]").text,
-                         'email')
+            'email')
         self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[2]/td[2]").text,
                          'string')
 
-        # Third column must be sid integer
+        # Third column must be sid number
         self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[3]/td[1]").text,
                          'sid')
         self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[3]/td[2]").text,
-                         'integer')
+                         'number')
 
         # Fourth column must be name string
         self.assertEqual(self.selenium.find_element_by_xpath(
@@ -479,8 +479,8 @@ class WorkflowModify(test.OntaskLiveTestCase):
         new_cols = [
             ('newc1', 'string', 'male,female', ''),
             ('newc2', 'boolean', '', 'True'),
-            ('newc3', 'integer', '0, 10, 20, 30', '0'),
-            ('newc4', 'double', '0, 0.5, 1, 1.5, 2', '0'),
+            ('newc3', 'number', '0, 10, 20, 30', '0'),
+            ('newc4', 'number', '0, 0.5, 1, 1.5, 2', '0'),
             ('newc5', 'datetime', '', '2017-10-11 00:00:00.000+11:00'),
         ]
 
@@ -522,13 +522,13 @@ class WorkflowModify(test.OntaskLiveTestCase):
         ).click()
         self.wait_close_modal_refresh_table('column-table_previous')
 
-        # Third column must be age, double
+        # Third column must be age, number
         self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[3]/td[1]").text,
                          'age')
         self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[3]/td[2]").text,
-                         'double')
+                         'number')
 
         # ADD COLUMNS
         for cname, ctype, clist, cinit in new_cols:
@@ -567,13 +567,13 @@ class WorkflowModify(test.OntaskLiveTestCase):
             row_path1 = "//table[@id='column-table']/tbody/tr[{0}]/td[1]"
             row_path2 = "//table[@id='column-table']/tbody/tr[{0}]/td[2]"
 
-            # Third column must be age, double
+            # Third column must be age, number
             self.assertEqual(self.selenium.find_element_by_xpath(
                 row_path1.format(idx)).text,
-                             cname)
+                cname)
             self.assertEqual(self.selenium.find_element_by_xpath(
                 row_path2.format(idx)).text,
-                             ctype)
+                ctype)
             idx += 1
 
         # DELETE THE COLUMNS
