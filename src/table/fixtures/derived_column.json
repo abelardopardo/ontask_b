@@ -1844,47 +1844,47 @@
         "attributes": {},
         "query_builder_ops": [
             {
-                "type": "number",
+                "type": "double",
                 "id": "aaa"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "c0"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "c1"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "c2"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "c3"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "c4"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "c5"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "c6"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "c7"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "c8"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "c9"
             },
             {

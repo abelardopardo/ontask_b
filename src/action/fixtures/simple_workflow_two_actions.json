@@ -1849,7 +1849,7 @@
                 "validation": {
                     "step": "any"
                 },
-                "type": "number",
+                "type": "double",
                 "id": "age"
             },
             {
@@ -1857,7 +1857,7 @@
                 "id": "email"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "sid"
             },
             {
@@ -2040,7 +2040,7 @@
                     "field": "age",
                     "operator": "greater",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "age"
                 }
             ],

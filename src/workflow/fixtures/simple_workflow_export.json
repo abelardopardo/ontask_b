@@ -1816,25 +1816,25 @@
                 "id": "email"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "sid"
             },
             {
                 "validation": {
                     "step": "any"
                 },
-                "type": "number",
+                "type": "double",
                 "id": "WAM"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "credits"
             },
             {
                 "validation": {
                     "step": "any"
                 },
-                "type": "number",
+                "type": "double",
                 "id": "days_online"
             },
             {
@@ -1914,47 +1914,47 @@
                 "validation": {
                     "step": "any"
                 },
-                "type": "number",
+                "type": "double",
                 "id": "mt_total"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "q01"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "q02"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "q03"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "q04"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "q05"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "q06"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "q07"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "q08"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "q09"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "q10"
             },
             {
@@ -1970,15 +1970,15 @@
                 "id": "took_mt"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "video_1"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "video_2"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "video_3"
             }
         ],
@@ -2585,7 +2585,7 @@
                     "field": "q01",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q01"
                 },
                 {
@@ -2593,7 +2593,7 @@
                     "field": "q02",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q02"
                 }
             ],
@@ -2620,7 +2620,7 @@
                     "field": "q03",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q03"
                 },
                 {
@@ -2628,7 +2628,7 @@
                     "field": "q04",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q04"
                 }
             ],
@@ -2655,7 +2655,7 @@
                     "field": "q05",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q05"
                 },
                 {
@@ -2663,7 +2663,7 @@
                     "field": "q06",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q06"
                 }
             ],
@@ -2690,7 +2690,7 @@
                     "field": "q07",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q07"
                 },
                 {
@@ -2698,7 +2698,7 @@
                     "field": "q08",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q08"
                 }
             ],
@@ -2725,7 +2725,7 @@
                     "field": "q09",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q09"
                 },
                 {
@@ -2733,7 +2733,7 @@
                     "field": "q10",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q10"
                 }
             ],
@@ -2763,7 +2763,7 @@
                             "field": "q01",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q01"
                         },
                         {
@@ -2771,7 +2771,7 @@
                             "field": "q02",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q02"
                         }
                     ],
@@ -2785,7 +2785,7 @@
                             "field": "q01",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q01"
                         },
                         {
@@ -2793,7 +2793,7 @@
                             "field": "q02",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q02"
                         }
                     ],
@@ -2826,7 +2826,7 @@
                             "field": "q03",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q03"
                         },
                         {
@@ -2834,7 +2834,7 @@
                             "field": "q04",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q04"
                         }
                     ],
@@ -2848,7 +2848,7 @@
                             "field": "q03",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q03"
                         },
                         {
@@ -2856,7 +2856,7 @@
                             "field": "q04",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q04"
                         }
                     ],
@@ -2889,7 +2889,7 @@
                             "field": "q05",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q05"
                         },
                         {
@@ -2897,7 +2897,7 @@
                             "field": "q06",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q06"
                         }
                     ],
@@ -2911,7 +2911,7 @@
                             "field": "q05",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q05"
                         },
                         {
@@ -2919,7 +2919,7 @@
                             "field": "q06",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q06"
                         }
                     ],
@@ -2952,7 +2952,7 @@
                             "field": "q07",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q07"
                         },
                         {
@@ -2960,7 +2960,7 @@
                             "field": "q08",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q08"
                         }
                     ],
@@ -2974,7 +2974,7 @@
                             "field": "q07",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q07"
                         },
                         {
@@ -2982,7 +2982,7 @@
                             "field": "q08",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q08"
                         }
                     ],
@@ -3015,7 +3015,7 @@
                             "field": "q09",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q09"
                         },
                         {
@@ -3023,7 +3023,7 @@
                             "field": "q10",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q10"
                         }
                     ],
@@ -3037,7 +3037,7 @@
                             "field": "q09",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q09"
                         },
                         {
@@ -3045,7 +3045,7 @@
                             "field": "q10",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "q10"
                         }
                     ],
@@ -3075,7 +3075,7 @@
                     "field": "q01",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q01"
                 },
                 {
@@ -3083,7 +3083,7 @@
                     "field": "q02",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q02"
                 }
             ],
@@ -3110,7 +3110,7 @@
                     "field": "q03",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q03"
                 },
                 {
@@ -3118,7 +3118,7 @@
                     "field": "q04",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q04"
                 }
             ],
@@ -3145,7 +3145,7 @@
                     "field": "q05",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q05"
                 },
                 {
@@ -3153,7 +3153,7 @@
                     "field": "q06",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q06"
                 }
             ],
@@ -3180,7 +3180,7 @@
                     "field": "q07",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q07"
                 },
                 {
@@ -3188,7 +3188,7 @@
                     "field": "q08",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q08"
                 }
             ],
@@ -3215,7 +3215,7 @@
                     "field": "q09",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q09"
                 },
                 {
@@ -3223,7 +3223,7 @@
                     "field": "q10",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "q10"
                 }
             ],
@@ -3250,7 +3250,7 @@
                     "field": "days_online",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "days_online"
                 }
             ],
@@ -3277,7 +3277,7 @@
                     "field": "video_1",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "video_1"
                 },
                 {
@@ -3285,7 +3285,7 @@
                     "field": "video_2",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "video_2"
                 },
                 {
@@ -3293,7 +3293,7 @@
                     "field": "video_3",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "video_3"
                 }
             ],
@@ -3320,7 +3320,7 @@
                     "field": "video_1",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "video_1"
                 }
             ],
@@ -3347,7 +3347,7 @@
                     "field": "video_2",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "video_2"
                 }
             ],
@@ -3374,7 +3374,7 @@
                     "field": "video_3",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "video_3"
                 }
             ],
@@ -3401,7 +3401,7 @@
                     "field": "video_1",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "video_1"
                 },
                 {
@@ -3409,7 +3409,7 @@
                     "field": "video_2",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "video_2"
                 },
                 {
@@ -3417,7 +3417,7 @@
                     "field": "video_3",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "video_3"
                 }
             ],
@@ -3447,7 +3447,7 @@
                             "field": "video_1",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_1"
                         },
                         {
@@ -3455,7 +3455,7 @@
                             "field": "video_2",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_2"
                         },
                         {
@@ -3463,7 +3463,7 @@
                             "field": "video_3",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_3"
                         }
                     ],
@@ -3477,7 +3477,7 @@
                             "field": "video_1",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_1"
                         },
                         {
@@ -3485,7 +3485,7 @@
                             "field": "video_2",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_2"
                         },
                         {
@@ -3493,7 +3493,7 @@
                             "field": "video_3",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_3"
                         }
                     ],
@@ -3507,7 +3507,7 @@
                             "field": "video_1",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_1"
                         },
                         {
@@ -3515,7 +3515,7 @@
                             "field": "video_2",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_2"
                         },
                         {
@@ -3523,7 +3523,7 @@
                             "field": "video_3",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_3"
                         }
                     ],
@@ -3556,7 +3556,7 @@
                             "field": "video_1",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_1"
                         },
                         {
@@ -3564,7 +3564,7 @@
                             "field": "video_2",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_2"
                         },
                         {
@@ -3572,7 +3572,7 @@
                             "field": "video_3",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_3"
                         }
                     ],
@@ -3586,7 +3586,7 @@
                             "field": "video_1",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_1"
                         },
                         {
@@ -3594,7 +3594,7 @@
                             "field": "video_2",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_2"
                         },
                         {
@@ -3602,7 +3602,7 @@
                             "field": "video_3",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_3"
                         }
                     ],
@@ -3616,7 +3616,7 @@
                             "field": "video_1",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_1"
                         },
                         {
@@ -3624,7 +3624,7 @@
                             "field": "video_2",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_2"
                         },
                         {
@@ -3632,7 +3632,7 @@
                             "field": "video_3",
                             "operator": "equal",
                             "input": "number",
-                            "type": "number",
+                            "type": "double",
                             "id": "video_3"
                         }
                     ],
@@ -3662,7 +3662,7 @@
                     "field": "video_1",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "video_1"
                 },
                 {
@@ -3670,7 +3670,7 @@
                     "field": "video_2",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "video_2"
                 },
                 {
@@ -3678,7 +3678,7 @@
                     "field": "video_3",
                     "operator": "equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "video_3"
                 }
             ],

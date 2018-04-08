@@ -688,7 +688,7 @@
                 "validation": {
                     "step": "any"
                 },
-                "type": "number",
+                "type": "double",
                 "id": "age"
             },
             {
@@ -696,7 +696,7 @@
                 "id": "email"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "sid"
             },
             {
@@ -861,7 +861,7 @@
                     "field": "age",
                     "operator": "less_or_equal",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "age"
                 }
             ],
@@ -888,7 +888,7 @@
                     "field": "age",
                     "operator": "greater",
                     "input": "number",
-                    "type": "number",
+                    "type": "double",
                     "id": "age"
                 }
             ],

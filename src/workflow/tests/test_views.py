@@ -593,6 +593,12 @@ class WorkflowModify(test.OntaskLiveTestCase):
             self.selenium.find_element_by_xpath(
                 "//div[@id='modal-item']//button[@type='submit']"
             ).click()
+            # Wait for the modal to close
+            WebDriverWait(self.selenium, 10).until_not(
+                EC.presence_of_element_located(
+                    (By.CLASS_NAME, 'modal-open')
+                )
+            )
             # Wait for the details page
             WebDriverWait(self.selenium, 10).until(
                 EC.element_to_be_clickable((By.CLASS_NAME, 'success'))

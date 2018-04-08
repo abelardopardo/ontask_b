@@ -116,7 +116,7 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
     # Update workflow fields and save
     workflow.nrows = data_frame.shape[0]
     workflow.ncols = data_frame.shape[1]
-    workflow.set_query_builder_ops()
+    workflow.set_query_builder_ops(data_frame)
     workflow.data_frame_table_name = table_name
     workflow.save()
 

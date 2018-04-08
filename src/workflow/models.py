@@ -121,7 +121,7 @@ class Workflow(models.Model):
         """
         return list(self.columns.all().values_list('is_key', flat=True))
 
-    def set_query_builder_ops(self):
+    def set_query_builder_ops(self, data_frame=None):
         """
         Update the JS structure with the initial operators and names for the
         columns
@@ -129,6 +129,10 @@ class Workflow(models.Model):
         Example:
 
         [{id: 'FIELD1', type: 'string'}, {id: 'FIELD2', type: 'number'}]
+
+        :param data_frame: Optional pandas data frame to check the data type
+                           of those columns with data_type = number
+        :return: Set the appropriate string value in the object field
         """
 
         result = []
@@ -149,6 +153,12 @@ class Workflow(models.Model):
                 # Number field needs validation field to bypass browser forcing
                 # integer
                 item['validation'] = {'step': 'any'}
+
+                # Rewrite the type field to reflect either integer or double
+                if data_frame[column.name].dtype.name.startswith('int'):
+                    item['type'] = 'integer'
+                else:
+                    item['type'] = 'double'
 
             if column.get_categories():
                 item['input'] = 'select'

@@ -1824,14 +1824,14 @@
                 "id": "email"
             },
             {
-                "type": "number",
+                "type": "double",
                 "id": "sid"
             },
             {
                 "validation": {
                     "step": "any"
                 },
-                "type": "number",
+                "type": "double",
                 "id": "age"
             },
             {
