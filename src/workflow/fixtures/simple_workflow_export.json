@@ -1816,7 +1816,7 @@
                 "id": "email"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "sid"
             },
             {
@@ -1827,7 +1827,7 @@
                 "id": "WAM"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "credits"
             },
             {
@@ -1918,43 +1918,43 @@
                 "id": "mt_total"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "q01"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "q02"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "q03"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "q04"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "q05"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "q06"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "q07"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "q08"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "q09"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "q10"
             },
             {
@@ -1970,15 +1970,15 @@
                 "id": "took_mt"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "video_1"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "video_2"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "video_3"
             }
         ],
@@ -1994,7 +1994,7 @@
         "name": "sid",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": true,
         "categories": [],
         "active_from": null,
@@ -2081,7 +2081,7 @@
         "name": "credits",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2095,7 +2095,7 @@
         "name": "WAM",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "double",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2177,7 +2177,7 @@
         "name": "q01",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2191,7 +2191,7 @@
         "name": "q02",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2205,7 +2205,7 @@
         "name": "q03",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2219,7 +2219,7 @@
         "name": "q04",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2233,7 +2233,7 @@
         "name": "q05",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2247,7 +2247,7 @@
         "name": "q06",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2261,7 +2261,7 @@
         "name": "q07",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2275,7 +2275,7 @@
         "name": "q08",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2289,7 +2289,7 @@
         "name": "q09",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2303,7 +2303,7 @@
         "name": "q10",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2317,7 +2317,7 @@
         "name": "mt_total",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "double",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2345,7 +2345,7 @@
         "name": "days_online",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "double",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2359,7 +2359,7 @@
         "name": "video_1",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2373,7 +2373,7 @@
         "name": "video_2",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2387,7 +2387,7 @@
         "name": "video_3",
         "description_text": "",
         "workflow": 140,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2585,7 +2585,7 @@
                     "field": "q01",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q01"
                 },
                 {
@@ -2593,7 +2593,7 @@
                     "field": "q02",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q02"
                 }
             ],
@@ -2620,7 +2620,7 @@
                     "field": "q03",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q03"
                 },
                 {
@@ -2628,7 +2628,7 @@
                     "field": "q04",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q04"
                 }
             ],
@@ -2655,7 +2655,7 @@
                     "field": "q05",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q05"
                 },
                 {
@@ -2663,7 +2663,7 @@
                     "field": "q06",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q06"
                 }
             ],
@@ -2690,7 +2690,7 @@
                     "field": "q07",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q07"
                 },
                 {
@@ -2698,7 +2698,7 @@
                     "field": "q08",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q08"
                 }
             ],
@@ -2725,7 +2725,7 @@
                     "field": "q09",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q09"
                 },
                 {
@@ -2733,7 +2733,7 @@
                     "field": "q10",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q10"
                 }
             ],
@@ -2763,7 +2763,7 @@
                             "field": "q01",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q01"
                         },
                         {
@@ -2771,7 +2771,7 @@
                             "field": "q02",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q02"
                         }
                     ],
@@ -2785,7 +2785,7 @@
                             "field": "q01",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q01"
                         },
                         {
@@ -2793,7 +2793,7 @@
                             "field": "q02",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q02"
                         }
                     ],
@@ -2826,7 +2826,7 @@
                             "field": "q03",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q03"
                         },
                         {
@@ -2834,7 +2834,7 @@
                             "field": "q04",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q04"
                         }
                     ],
@@ -2848,7 +2848,7 @@
                             "field": "q03",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q03"
                         },
                         {
@@ -2856,7 +2856,7 @@
                             "field": "q04",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q04"
                         }
                     ],
@@ -2889,7 +2889,7 @@
                             "field": "q05",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q05"
                         },
                         {
@@ -2897,7 +2897,7 @@
                             "field": "q06",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q06"
                         }
                     ],
@@ -2911,7 +2911,7 @@
                             "field": "q05",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q05"
                         },
                         {
@@ -2919,7 +2919,7 @@
                             "field": "q06",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q06"
                         }
                     ],
@@ -2952,7 +2952,7 @@
                             "field": "q07",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q07"
                         },
                         {
@@ -2960,7 +2960,7 @@
                             "field": "q08",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q08"
                         }
                     ],
@@ -2974,7 +2974,7 @@
                             "field": "q07",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q07"
                         },
                         {
@@ -2982,7 +2982,7 @@
                             "field": "q08",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q08"
                         }
                     ],
@@ -3015,7 +3015,7 @@
                             "field": "q09",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q09"
                         },
                         {
@@ -3023,7 +3023,7 @@
                             "field": "q10",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q10"
                         }
                     ],
@@ -3037,7 +3037,7 @@
                             "field": "q09",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q09"
                         },
                         {
@@ -3045,7 +3045,7 @@
                             "field": "q10",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "q10"
                         }
                     ],
@@ -3075,7 +3075,7 @@
                     "field": "q01",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q01"
                 },
                 {
@@ -3083,7 +3083,7 @@
                     "field": "q02",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q02"
                 }
             ],
@@ -3110,7 +3110,7 @@
                     "field": "q03",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q03"
                 },
                 {
@@ -3118,7 +3118,7 @@
                     "field": "q04",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q04"
                 }
             ],
@@ -3145,7 +3145,7 @@
                     "field": "q05",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q05"
                 },
                 {
@@ -3153,7 +3153,7 @@
                     "field": "q06",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q06"
                 }
             ],
@@ -3180,7 +3180,7 @@
                     "field": "q07",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q07"
                 },
                 {
@@ -3188,7 +3188,7 @@
                     "field": "q08",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q08"
                 }
             ],
@@ -3215,7 +3215,7 @@
                     "field": "q09",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q09"
                 },
                 {
@@ -3223,7 +3223,7 @@
                     "field": "q10",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "q10"
                 }
             ],
@@ -3277,7 +3277,7 @@
                     "field": "video_1",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "video_1"
                 },
                 {
@@ -3285,7 +3285,7 @@
                     "field": "video_2",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "video_2"
                 },
                 {
@@ -3293,7 +3293,7 @@
                     "field": "video_3",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "video_3"
                 }
             ],
@@ -3320,7 +3320,7 @@
                     "field": "video_1",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "video_1"
                 }
             ],
@@ -3347,7 +3347,7 @@
                     "field": "video_2",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "video_2"
                 }
             ],
@@ -3374,7 +3374,7 @@
                     "field": "video_3",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "video_3"
                 }
             ],
@@ -3401,7 +3401,7 @@
                     "field": "video_1",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "video_1"
                 },
                 {
@@ -3409,7 +3409,7 @@
                     "field": "video_2",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "video_2"
                 },
                 {
@@ -3417,7 +3417,7 @@
                     "field": "video_3",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "video_3"
                 }
             ],
@@ -3447,7 +3447,7 @@
                             "field": "video_1",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_1"
                         },
                         {
@@ -3455,7 +3455,7 @@
                             "field": "video_2",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_2"
                         },
                         {
@@ -3463,7 +3463,7 @@
                             "field": "video_3",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_3"
                         }
                     ],
@@ -3477,7 +3477,7 @@
                             "field": "video_1",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_1"
                         },
                         {
@@ -3485,7 +3485,7 @@
                             "field": "video_2",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_2"
                         },
                         {
@@ -3493,7 +3493,7 @@
                             "field": "video_3",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_3"
                         }
                     ],
@@ -3507,7 +3507,7 @@
                             "field": "video_1",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_1"
                         },
                         {
@@ -3515,7 +3515,7 @@
                             "field": "video_2",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_2"
                         },
                         {
@@ -3523,7 +3523,7 @@
                             "field": "video_3",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_3"
                         }
                     ],
@@ -3556,7 +3556,7 @@
                             "field": "video_1",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_1"
                         },
                         {
@@ -3564,7 +3564,7 @@
                             "field": "video_2",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_2"
                         },
                         {
@@ -3572,7 +3572,7 @@
                             "field": "video_3",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_3"
                         }
                     ],
@@ -3586,7 +3586,7 @@
                             "field": "video_1",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_1"
                         },
                         {
@@ -3594,7 +3594,7 @@
                             "field": "video_2",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_2"
                         },
                         {
@@ -3602,7 +3602,7 @@
                             "field": "video_3",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_3"
                         }
                     ],
@@ -3616,7 +3616,7 @@
                             "field": "video_1",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_1"
                         },
                         {
@@ -3624,7 +3624,7 @@
                             "field": "video_2",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_2"
                         },
                         {
@@ -3632,7 +3632,7 @@
                             "field": "video_3",
                             "operator": "equal",
                             "input": "number",
-                            "type": "double",
+                            "type": "integer",
                             "id": "video_3"
                         }
                     ],
@@ -3662,7 +3662,7 @@
                     "field": "video_1",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "video_1"
                 },
                 {
@@ -3670,7 +3670,7 @@
                     "field": "video_2",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "video_2"
                 },
                 {
@@ -3678,7 +3678,7 @@
                     "field": "video_3",
                     "operator": "equal",
                     "input": "number",
-                    "type": "double",
+                    "type": "integer",
                     "id": "video_3"
                 }
             ],
@@ -3821,7 +3821,7 @@
         "created": "2017-12-16T01:13:19.128Z",
         "name": "workflow_data_upload",
         "workflow": 140,
-        "payload": "{\"column_names\": [\"email\", \"first_name\", \"last_name\", \"sid\", \"Credits\", \"First_Session\", \"Gender\", \"Group\", \"Induction\", \"Initial\", \"WAM\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"string\", \"string\", \"number\", \"number\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"number\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, true, false, false, false, false, false, false, false], \"id\": 140}"
+        "payload": "{\"column_names\": [\"email\", \"first_name\", \"last_name\", \"sid\", \"Credits\", \"First_Session\", \"Gender\", \"Group\", \"Induction\", \"Initial\", \"WAM\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"string\", \"string\", \"integer\", \"integer\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"double\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, true, false, false, false, false, false, false, false], \"id\": 140}"
     }
 },
 {
@@ -3873,7 +3873,7 @@
         "created": "2017-12-16T01:15:07.819Z",
         "name": "workflow_data_upload",
         "workflow": 140,
-        "payload": "{\"column_names\": [\"email\", \"first_name\", \"last_name\", \"sid\", \"Credits\", \"First_Session\", \"Gender\", \"Group\", \"Induction\", \"WAM\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"string\", \"string\", \"number\", \"number\", \"datetime\", \"string\", \"string\", \"boolean\", \"number\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, true, false, false, false, false, false, false], \"id\": 140}"
+        "payload": "{\"column_names\": [\"email\", \"first_name\", \"last_name\", \"sid\", \"Credits\", \"First_Session\", \"Gender\", \"Group\", \"Induction\", \"WAM\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"string\", \"string\", \"integer\", \"integer\", \"datetime\", \"string\", \"string\", \"boolean\", \"double\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, true, false, false, false, false, false, false], \"id\": 140}"
     }
 },
 {
@@ -4068,7 +4068,7 @@
         "created": "2017-12-16T01:34:41.324Z",
         "name": "workflow_data_merge",
         "workflow": 140,
-        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"number\", \"number\", \"number\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\"], \"num_cols\": 12, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
+        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"integer\", \"double\", \"integer\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"double\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 12, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
     }
 },
 {
@@ -4094,7 +4094,7 @@
         "created": "2017-12-16T01:36:20.789Z",
         "name": "workflow_data_merge",
         "workflow": 140,
-        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"number\", \"number\", \"number\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"boolean\"], \"num_cols\": 23, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
+        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"integer\", \"double\", \"integer\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"double\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"boolean\"], \"num_cols\": 23, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
     }
 },
 {
@@ -4133,7 +4133,7 @@
         "created": "2017-12-16T01:39:08.911Z",
         "name": "workflow_data_merge",
         "workflow": 140,
-        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"number\", \"number\", \"number\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"boolean\"], \"num_cols\": 23, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
+        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"integer\", \"double\", \"integer\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"double\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"boolean\"], \"num_cols\": 23, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
     }
 },
 {
@@ -4666,7 +4666,7 @@
         "created": "2017-12-16T01:51:43.190Z",
         "name": "workflow_data_merge",
         "workflow": 140,
-        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"days_online\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"number\", \"number\", \"number\", \"number\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"boolean\"], \"num_cols\": 24, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
+        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"days_online\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"integer\", \"double\", \"integer\", \"double\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"double\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"boolean\"], \"num_cols\": 24, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
     }
 },
 {
@@ -4783,7 +4783,7 @@
         "created": "2017-12-16T01:57:34.098Z",
         "name": "workflow_data_merge",
         "workflow": 140,
-        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"days_online\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\", \"video_1\", \"video_2\", \"video_3\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"number\", \"number\", \"number\", \"number\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"boolean\", \"number\", \"number\", \"number\"], \"num_cols\": 25, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
+        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"days_online\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\", \"video_1\", \"video_2\", \"video_3\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"integer\", \"double\", \"integer\", \"double\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"double\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"boolean\", \"integer\", \"integer\", \"double\"], \"num_cols\": 25, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
     }
 },
 {
@@ -4835,7 +4835,7 @@
         "created": "2017-12-16T02:01:17.664Z",
         "name": "workflow_data_merge",
         "workflow": 140,
-        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"days_online\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\", \"video_1\", \"video_2\", \"video_3\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"number\", \"number\", \"number\", \"number\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"boolean\", \"number\", \"number\", \"number\"], \"num_cols\": 28, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
+        "payload": "{\"column_names\": [\"email\", \"sid\", \"WAM\", \"credits\", \"days_online\", \"difficult_week01\", \"difficult_week02\", \"first_name\", \"first_session\", \"gender\", \"group\", \"induction\", \"last_name\", \"mt_total\", \"q01\", \"q02\", \"q03\", \"q04\", \"q05\", \"q06\", \"q07\", \"q08\", \"q09\", \"q10\", \"took_mt\", \"video_1\", \"video_2\", \"video_3\"], \"name\": \"ELON5839\", \"column_types\": [\"string\", \"integer\", \"double\", \"integer\", \"double\", \"string\", \"string\", \"string\", \"datetime\", \"string\", \"string\", \"boolean\", \"string\", \"double\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"boolean\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 28, \"num_rows\": 12, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 140}"
     }
 },
 {

@@ -116,7 +116,9 @@ def evaluate_node(node, given_variables):
     constant = None
     if 'between' not in operator:
         # Calculate the constant value depending on the type
-        if node['type'] == 'number':
+        if node['type'] == 'integer':
+            constant = int(node['value'])
+        elif node['type'] == 'double':
             constant = float(node['value'])
         elif node['type'] == 'boolean':
             constant = node['value'] == '1'
@@ -159,27 +161,33 @@ def evaluate_node(node, given_variables):
         result = varvalue != ''
 
     elif operator == 'less' and \
-            (node['type'] == 'number' or node['type'] == 'datetime'):
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
         result = varvalue < constant
 
     elif operator == 'less_or_equal' and \
-            (node['type'] == 'number' or node['type'] == 'datetime'):
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
         result = varvalue <= constant
 
     elif operator == 'greater' and \
-            (node['type'] == 'number' or node['type'] == 'datetime'):
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
         result = varvalue > constant
 
     elif operator == 'greater_or_equal' and \
-            (node['type'] == 'number' or node['type'] == 'datetime'):
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
         result = varvalue >= constant
 
     elif operator == 'between' and \
-            (node['type'] == 'number' or node['type'] == 'datetime'):
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
         result = node['value'][0] <= varvalue <= node['value'][1]
 
     elif operator == 'not_between' and \
-            (node['type'] == 'number' or node['type'] == 'datetime'):
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
         result = not (node['value'][0] <= varvalue <= node['value'][1])
 
     else:
@@ -236,7 +244,9 @@ def evaluate_node_sql(node):
     constant = None
     if 'between' not in operator:
         # Calculate the constant value depending on the type
-        if node['type'] == 'number':
+        if node['type'] == 'integer':
+            constant = int(node['value'])
+        elif node['type'] == 'double':
             constant = float(node['value'])
         elif node['type'] == 'boolean':
             constant = int(node['value'] == '1')
@@ -288,32 +298,38 @@ def evaluate_node_sql(node):
         result = '"{0}"'.format(varname) + " != ''"
 
     elif operator == 'less' and \
-            (node['type'] == 'number' or node['type'] == 'datetime'):
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
         result = '"{0}"'.format(varname) + ' < %s'
         result_fields = [str(constant)]
 
     elif operator == 'less_or_equal' and \
-            (node['type'] == 'number' or node['type'] == 'datetime'):
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
         result = '"{0}"'.format(varname) + ' <= %s'
         result_fields = [str(constant)]
 
     elif operator == 'greater' and \
-            (node['type'] == 'number' or node['type'] == 'datetime'):
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
         result = '"{0}"'.format(varname) + ' > %s'
         result_fields = [str(constant)]
 
     elif operator == 'greater_or_equal' and \
-            (node['type'] == 'number' or node['type'] == 'datetime'):
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
         result = '"{0}"'.format(varname) + ' >= %s'
         result_fields = [str(constant)]
 
     elif operator == 'between' and \
-            (node['type'] == 'number' or node['type'] == 'datetime'):
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
         result = '"{0}"'.format(varname) + ' BETWEEN %s AND %s'
         result_fields = [str(node['value'][0]), str(node['value'][1])]
 
     elif operator == 'not_between' and \
-            (node['type'] == 'number' or node['type'] == 'datetime'):
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
         result = '"{0}"'.format(varname) + ' NOT BETWEEN %s AND %s'
         result_fields = [str(node['value'][0]), str(node['value'][1])]
 

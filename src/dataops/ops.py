@@ -116,7 +116,7 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
     # Update workflow fields and save
     workflow.nrows = data_frame.shape[0]
     workflow.ncols = data_frame.shape[1]
-    workflow.set_query_builder_ops(data_frame)
+    workflow.set_query_builder_ops()
     workflow.data_frame_table_name = table_name
     workflow.save()
 
@@ -298,7 +298,9 @@ def data_frame_add_empty_column(df, column_name, column_type, initial_value):
         # Choose the right numpy type
         if column_type == 'string':
             initial_value = ''
-        elif column_type == 'number':
+        elif column_type == 'integer':
+            initial_value = 0
+        elif column_type == 'double':
             initial_value = 0.0
         elif column_type == 'boolean':
             initial_value = False

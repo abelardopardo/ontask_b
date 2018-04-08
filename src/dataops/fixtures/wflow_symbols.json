@@ -1824,7 +1824,7 @@
                 "id": "email"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "sid"
             },
             {
@@ -1867,7 +1867,7 @@
         "name": "sid",
         "description_text": "",
         "workflow": 149,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": true,
         "categories": [],
         "active_from": null,
@@ -1909,7 +1909,7 @@
         "name": "age",
         "description_text": "",
         "workflow": 149,
-        "data_type": "number",
+        "data_type": "double",
         "is_key": false,
         "categories": [],
         "active_from": null,

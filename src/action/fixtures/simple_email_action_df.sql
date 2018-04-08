@@ -27,8 +27,8 @@ SET default_with_oids = false;
 CREATE TABLE "__ONTASK_WORKFLOW_TABLE_5" (
     age double precision,
     email text,
-    sid double precision,
-    "EmailRead_1" double precision,
+    sid bigint,
+    "EmailRead_1" bigint,
     another text,
     name text,
     one text,

@@ -1844,47 +1844,47 @@
         "attributes": {},
         "query_builder_ops": [
             {
-                "type": "double",
+                "type": "integer",
                 "id": "aaa"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "c0"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "c1"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "c2"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "c3"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "c4"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "c5"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "c6"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "c7"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "c8"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "c9"
             },
             {
@@ -1924,7 +1924,7 @@
         "name": "c0",
         "description_text": "",
         "workflow": 112,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": true,
         "categories": [],
         "active_from": null,
@@ -1938,7 +1938,7 @@
         "name": "c1",
         "description_text": "",
         "workflow": 112,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -1952,7 +1952,7 @@
         "name": "c2",
         "description_text": "",
         "workflow": 112,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -1966,7 +1966,7 @@
         "name": "c3",
         "description_text": "",
         "workflow": 112,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -1980,7 +1980,7 @@
         "name": "c4",
         "description_text": "",
         "workflow": 112,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -1994,7 +1994,7 @@
         "name": "c5",
         "description_text": "",
         "workflow": 112,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2008,7 +2008,7 @@
         "name": "c6",
         "description_text": "",
         "workflow": 112,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2022,7 +2022,7 @@
         "name": "c7",
         "description_text": "",
         "workflow": 112,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2036,7 +2036,7 @@
         "name": "c8",
         "description_text": "",
         "workflow": 112,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2050,7 +2050,7 @@
         "name": "c9",
         "description_text": "",
         "workflow": 112,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": [],
         "active_from": null,
@@ -2108,7 +2108,7 @@
         "created": "2018-01-17T03:20:37.966Z",
         "name": "workflow_data_upload",
         "workflow": 112,
-        "payload": "{\"column_names\": [\"c0\", \"c1\", \"c2\", \"c3\", \"c4\", \"c5\", \"c6\", \"c7\", \"c8\", \"c9\"], \"name\": \"combine columns\", \"column_types\": [\"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, false, false, false, false, false, false, false, false, false], \"id\": 112}"
+        "payload": "{\"column_names\": [\"c0\", \"c1\", \"c2\", \"c3\", \"c4\", \"c5\", \"c6\", \"c7\", \"c8\", \"c9\"], \"name\": \"combine columns\", \"column_types\": [\"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, false, false, false, false, false, false, false, false, false], \"id\": 112}"
     }
 },
 {
@@ -2121,7 +2121,7 @@
         "created": "2018-01-17T03:56:07.641Z",
         "name": "column_add",
         "workflow": 112,
-        "payload": "{\"column_name\": \"d1\", \"id\": 112, \"column_type\": \"number\", \"name\": \"combine columns\"}"
+        "payload": "{\"column_name\": \"d1\", \"id\": 112, \"column_type\": \"integer\", \"name\": \"combine columns\"}"
     }
 },
 {
@@ -2134,7 +2134,7 @@
         "created": "2018-01-17T03:56:29.106Z",
         "name": "column_add",
         "workflow": 112,
-        "payload": "{\"column_name\": \"d2\", \"id\": 112, \"column_type\": \"number\", \"name\": \"combine columns\"}"
+        "payload": "{\"column_name\": \"d2\", \"id\": 112, \"column_type\": \"integer\", \"name\": \"combine columns\"}"
     }
 },
 {
@@ -2147,7 +2147,7 @@
         "created": "2018-01-17T03:56:48.500Z",
         "name": "column_add",
         "workflow": 112,
-        "payload": "{\"column_name\": \"d3\", \"id\": 112, \"column_type\": \"number\", \"name\": \"combine columns\"}"
+        "payload": "{\"column_name\": \"d3\", \"id\": 112, \"column_type\": \"integer\", \"name\": \"combine columns\"}"
     }
 },
 {
@@ -2160,7 +2160,7 @@
         "created": "2018-01-17T03:57:18.387Z",
         "name": "column_add",
         "workflow": 112,
-        "payload": "{\"column_name\": \"d4\", \"id\": 112, \"column_type\": \"number\", \"name\": \"combine columns\"}"
+        "payload": "{\"column_name\": \"d4\", \"id\": 112, \"column_type\": \"integer\", \"name\": \"combine columns\"}"
     }
 },
 {
@@ -2173,7 +2173,7 @@
         "created": "2018-01-17T07:04:17.762Z",
         "name": "workflow_data_merge",
         "workflow": 112,
-        "payload": "{\"column_names\": [\"aaa\", \"c0\", \"c1\", \"c10\", \"c11\", \"c2\", \"c3\", \"c4\", \"c5\", \"c6\", \"c7\", \"c8\", \"c9\", \"d1\", \"d2\", \"d3\", \"d4\"], \"name\": \"combine columns\", \"column_types\": [\"number\", \"number\", \"number\", \"boolean\", \"boolean\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\", \"number\"], \"num_cols\": 14, \"num_rows\": 100, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 112}"
+        "payload": "{\"column_names\": [\"aaa\", \"c0\", \"c1\", \"c10\", \"c11\", \"c2\", \"c3\", \"c4\", \"c5\", \"c6\", \"c7\", \"c8\", \"c9\", \"d1\", \"d2\", \"d3\", \"d4\"], \"name\": \"combine columns\", \"column_types\": [\"integer\", \"integer\", \"integer\", \"boolean\", \"boolean\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 14, \"num_rows\": 100, \"column_unique\": [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], \"id\": 112}"
     }
 },
 {

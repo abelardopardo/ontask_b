@@ -22,7 +22,7 @@
     <p class="lead">{{ column.description_text }}</p>
   {% endif %}
 
-  {% if column.data_type == 'number' %}
+  {% if column.data_type == 'integer' or column.data_type == 'double' %}
     <table class="table display dataTable no-footer table-bordered"
            id="stat-column" role="grid" aria-describedby="stat-column_info">
       <thead>

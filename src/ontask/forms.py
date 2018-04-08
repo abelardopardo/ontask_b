@@ -82,7 +82,12 @@ def column_to_field(col, initial=None, required=False, label=None):
                                    label=label,
                                    required=required)
 
-    elif col.data_type == 'number':
+    elif col.data_type == 'integer':
+        return forms.IntegerField(initial=initial,
+                                  label=label,
+                                  required=required)
+
+    elif col.data_type == 'double':
         return forms.FloatField(initial=initial,
                                 label=label,
                                 required=required)

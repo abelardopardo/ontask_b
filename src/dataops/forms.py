@@ -321,7 +321,10 @@ class RowFilterForm(forms.Form):
                 self.fields[name] = forms.CharField(initial='',
                                                     label=name,
                                                     required=False)
-            elif field_type == 'number':
+            elif field_type == 'integer':
+                self.fields[name] = forms.IntegerField(label=name,
+                                                       required=False)
+            elif field_type == 'double':
                 self.fields[name] = forms.FloatField(label=name,
                                                      required=False)
             elif field_type == 'boolean':
@@ -367,5 +370,5 @@ class RowForm(forms.Form):
                         'readonly'
                 else:
                     self.fields[field_name].required = True
-            elif column.data_type == 'number':
+            elif column.data_type == 'integer':
                 self.fields[field_name].required = True

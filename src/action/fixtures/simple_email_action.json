@@ -696,7 +696,7 @@
                 "id": "email"
             },
             {
-                "type": "double",
+                "type": "integer",
                 "id": "sid"
             },
             {
@@ -739,7 +739,7 @@
     "fields": {
         "name": "sid",
         "workflow": 5,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": true,
         "categories": []
     }
@@ -772,7 +772,7 @@
     "fields": {
         "name": "age",
         "workflow": 5,
-        "data_type": "number",
+        "data_type": "double",
         "is_key": true,
         "categories": []
     }
@@ -827,7 +827,7 @@
     "fields": {
         "name": "EmailRead_1",
         "workflow": 5,
-        "data_type": "number",
+        "data_type": "integer",
         "is_key": false,
         "categories": []
     }
@@ -923,7 +923,7 @@
         "created": "2017-11-06T05:30:48.120Z",
         "name": "workflow_data_upload",
         "workflow": 5,
-        "payload": "{\"column_names\": [\"age\", \"email\", \"sid\", \"name\", \"registered\", \"when\"], \"name\": \"wflow1\", \"column_types\": [\"number\", \"string\", \"number\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, false, false, false], \"id\": 5}"
+        "payload": "{\"column_names\": [\"age\", \"email\", \"sid\", \"name\", \"registered\", \"when\"], \"name\": \"wflow1\", \"column_types\": [\"double\", \"string\", \"integer\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, false, false, false], \"id\": 5}"
     }
 },
 {
@@ -936,7 +936,7 @@
         "created": "2017-11-06T05:31:10.469Z",
         "name": "workflow_data_merge",
         "workflow": 5,
-        "payload": "{\"column_names\": [\"age\", \"email\", \"sid\", \"another\", \"name\", \"one\", \"registered\", \"when\"], \"name\": \"wflow1\", \"column_types\": [\"number\", \"string\", \"number\", \"string\", \"string\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 6, \"num_rows\": 3, \"column_unique\": [true, true, true, false, false, false, false, false], \"id\": 5}"
+        "payload": "{\"column_names\": [\"age\", \"email\", \"sid\", \"another\", \"name\", \"one\", \"registered\", \"when\"], \"name\": \"wflow1\", \"column_types\": [\"double\", \"string\", \"integer\", \"string\", \"string\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 6, \"num_rows\": 3, \"column_unique\": [true, true, true, false, false, false, false, false], \"id\": 5}"
     }
 },
 {

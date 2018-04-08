@@ -26,13 +26,14 @@ from .ops import get_workflow, workflow_delete_column, clone_column
 # - Textual description
 # - List of data types that are allowed (for data type checking)
 formula_column_operands = [
-    ('sum', 'sum: Sum selected columns', ['number']),
-    ('prod', 'prod: Product of the selected columns', ['number']),
-    ('max', 'max: Maximum of the selected columns', ['number']),
-    ('min', 'min: Minimum of the selected columns', ['number']),
-    ('mean', 'mean: Mean of the selected columns', ['number']),
-    ('median', 'median: Median of the selected columns', ['number']),
-    ('std', 'std: Standard deviation over the selected columns', ['number']),
+    ('sum', 'sum: Sum selected columns', ['integer', 'double']),
+    ('prod', 'prod: Product of the selected columns', ['integer', 'double']),
+    ('max', 'max: Maximum of the selected columns', ['integer', 'double']),
+    ('min', 'min: Minimum of the selected columns', ['integer', 'double']),
+    ('mean', 'mean: Mean of the selected columns', ['integer', 'double']),
+    ('median', 'median: Median of the selected columns', ['integer', 'double']),
+    ('std', 'std: Standard deviation over the selected columns',
+     ['integer', 'double']),
     ('all', 'all: True when all elements in selected columns are true',
      ['boolean']),
     ('any', 'any: True when any element in selected columns is true',
