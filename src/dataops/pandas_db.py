@@ -31,6 +31,7 @@ pandas_datatype_names = {
     'object': 'string',
     # 'int64': 'integer',
     # 'float64': 'double',
+    'int64': 'number',
     'float64': 'number',
     'bool': 'boolean',
     'datetime64[ns]': 'datetime'
