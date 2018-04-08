@@ -84,11 +84,11 @@ def csvupload1(request):
         # Strip white space from all string columns and try to convert to
         # datetime just in case
         for x in list(data_frame.columns):
-            if data_frame[x].dtype.name.startswith('int'):
-                # Columns that only have integers are translated to double to
-                # prevent unexpected changes due to the presence of NA.
-                data_frame[x] = data_frame[x].astype('double')
-                continue
+            # if data_frame[x].dtype.name.startswith('int'):
+            #     # Columns that only have integers are translated to double to
+            #     # prevent unexpected changes due to the presence of NA.
+            #     data_frame[x] = data_frame[x].astype('double')
+            #     continue
 
             if data_frame[x].dtype.name == 'object':
                 # Column is a string! Remove the leading and trailing white
