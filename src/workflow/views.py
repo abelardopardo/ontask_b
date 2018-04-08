@@ -460,9 +460,14 @@ def column_ss(request, pk):
             {'id': col.id, 'is_key': col.is_key}
         )
 
+        # The data type for integers or doubles is shown as 'number'
+        col_data_type = col.data_type
+        if col_data_type == 'integer' or col_data_type == 'double':
+            col_data_type = 'number'
+
         final_qs.append([
             col.name,
-            col.data_type,
+            col_data_type,
             '<span class="true">✔</span>' if col.is_key \
                   else '<span class="true">✘</span>',
             ops_string

@@ -178,11 +178,12 @@
           <tr>
             {% for col in columns %}
               <th>
-                {{ col.data_type }} <br/>
+                {% if col.data_type == 'integer' or col.data_type == 'double' %}
+                  number {% else %}{{ col.data_type }}{% endif %}<br/>
                 {% if col.is_active %}
-                <font color="green">Active</font>
+                  <font color="green">Active</font>
                 {% else %}
-                <font color="red">Inactive</font>
+                  <font color="red">Inactive</font>
                 {% endif %}
               </th>
             {% endfor %}
