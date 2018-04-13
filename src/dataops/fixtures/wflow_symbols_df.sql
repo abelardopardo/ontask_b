@@ -21,7 +21,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: __ONTASK_WORKFLOW_TABLE_149; Type: TABLE; Schema: public; Owner: abelardopardo
+-- Name: __ONTASK_WORKFLOW_TABLE_149; Type: TABLE; Schema: public; Owner: ontask
 --
 
 CREATE TABLE "__ONTASK_WORKFLOW_TABLE_149" (
@@ -34,10 +34,10 @@ CREATE TABLE "__ONTASK_WORKFLOW_TABLE_149" (
 );
 
 
-ALTER TABLE "__ONTASK_WORKFLOW_TABLE_149" OWNER TO abelardopardo;
+ALTER TABLE "__ONTASK_WORKFLOW_TABLE_149" OWNER TO ontask;
 
 --
--- Data for Name: __ONTASK_WORKFLOW_TABLE_149; Type: TABLE DATA; Schema: public; Owner: abelardopardo
+-- Data for Name: __ONTASK_WORKFLOW_TABLE_149; Type: TABLE DATA; Schema: public; Owner: ontask
 --
 
 COPY "__ONTASK_WORKFLOW_TABLE_149" (email, sid, age, name, registered, "when") FROM stdin;
