@@ -5,7 +5,6 @@ import os
 
 from django.conf import settings
 from django.shortcuts import reverse
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
@@ -171,7 +170,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
                          'age')
         self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[1]/td[2]").text,
-                         'double')
+                         'number')
 
         # Second column must be email string
         self.assertEqual(self.selenium.find_element_by_xpath(
@@ -187,7 +186,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
                          'sid')
         self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[3]/td[2]").text,
-                         'integer')
+                         'number')
 
         # Fourth column must be name string
         self.assertEqual(self.selenium.find_element_by_xpath(
@@ -480,7 +479,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
             ('newc1', 'string', 'male,female', ''),
             ('newc2', 'boolean', '', 'True'),
             ('newc3', 'integer', '0, 10, 20, 30', '0'),
-            ('newc4', 'double', '0, 0.5, 1, 1.5, 2', '0'),
+            ('newc4', 'integer', '0, 0.5, 1, 1.5, 2', '0'),
             ('newc5', 'datetime', '', '2017-10-11 00:00:00.000+11:00'),
         ]
 
@@ -522,13 +521,13 @@ class WorkflowModify(test.OntaskLiveTestCase):
         ).click()
         self.wait_close_modal_refresh_table('column-table_previous')
 
-        # Third column must be age, double
+        # Third column must be age, number
         self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[3]/td[1]").text,
                          'age')
         self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[3]/td[2]").text,
-                         'double')
+                         'number')
 
         # ADD COLUMNS
         for cname, ctype, clist, cinit in new_cols:
@@ -564,6 +563,8 @@ class WorkflowModify(test.OntaskLiveTestCase):
         # CHECK THAT THE COLUMNS HAVE BEEN CREATED (starting in the sixth)
         idx = 6
         for cname, ctype, _, _ in new_cols:
+            if ctype == 'integer':
+                ctype = 'number'
             row_path1 = "//table[@id='column-table']/tbody/tr[{0}]/td[1]"
             row_path2 = "//table[@id='column-table']/tbody/tr[{0}]/td[2]"
 
@@ -593,7 +594,13 @@ class WorkflowModify(test.OntaskLiveTestCase):
             self.selenium.find_element_by_xpath(
                 "//div[@id='modal-item']//button[@type='submit']"
             ).click()
-            # Wait for the details page
+            # Wait for modal to close
+            WebDriverWait(self.selenium, 10).until_not(
+                EC.presence_of_element_located(
+                    (By.CLASS_NAME, 'modal-open')
+                )
+            )
+            # Wait for the details page to reload.
             WebDriverWait(self.selenium, 10).until(
                 EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
             )

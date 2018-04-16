@@ -22,44 +22,51 @@
     <p class="lead">{{ column.description_text }}</p>
   {% endif %}
 
-  {% if column.data_type == 'integer' or column.data_type == 'double' %}
-    <table class="table display dataTable no-footer table-bordered"
-           id="stat-column" role="grid" aria-describedby="stat-column_info">
-      <thead>
-        <tr role="row">
-          <th class="dt-center">Min</th>
-          <th class="dt-center">Q1</th>
-          <th class="dt-center">Mean</th>
-          <th class="dt-center">Median</th>
-          <th class="dt-center">Q3</th>
-          <th class="dt-center">Max</th>
-          <th class="dt-center">Std</th>
-          <th class="dt-center">Mode</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr role="row">
-          <td class="dt-center">{{ stat_data.min }}</td>
-          <td class="dt-center">{{ stat_data.q1 }}</td>
-          <td class="dt-center">{{ stat_data.mean }}</td>
-          <td class="dt-center">{{ stat_data.median }}</td>
-          <td class="dt-center">{{ stat_data.q3 }}</td>
-          <td class="dt-center">{{ stat_data.max }}</td>
-          <td class="dt-center">{{ stat_data.std }}</td>
-          <td class="dt-center">{{ stat_data.mode }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <p><a href="{{ request.META.HTTP_REFERER }}"
+        class="btn btn-default btn-sm align-middle"> Back</a></p>
+
+  {% if stat_data %}
+    {% if column.data_type == 'integer' or column.data_type == 'double' %}
+      <table class="table display dataTable no-footer table-bordered"
+             id="stat-column" role="grid" aria-describedby="stat-column_info">
+        <thead>
+          <tr role="row">
+            <th class="dt-center">Min</th>
+            <th class="dt-center">Q1</th>
+            <th class="dt-center">Mean</th>
+            <th class="dt-center">Median</th>
+            <th class="dt-center">Q3</th>
+            <th class="dt-center">Max</th>
+            <th class="dt-center">Std</th>
+            <th class="dt-center">Mode</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr role="row">
+            <td class="dt-center">{{ stat_data.min }}</td>
+            <td class="dt-center">{{ stat_data.q1 }}</td>
+            <td class="dt-center">{{ stat_data.mean }}</td>
+            <td class="dt-center">{{ stat_data.median }}</td>
+            <td class="dt-center">{{ stat_data.q3 }}</td>
+            <td class="dt-center">{{ stat_data.max }}</td>
+            <td class="dt-center">{{ stat_data.std }}</td>
+            <td class="dt-center">{{ stat_data.mode }}</td>
+          </tr>
+        </tbody>
+      </table>
+    {% endif %}
+
+    {% comment %}
+      <h1>MACRO</h1>
+      {% visualization 'WAM' 'boxplot' %}
+    {% endcomment %}
+
+    {% for vis_item in visualizations %}
+      {{ vis_item|safe }}
+    {% endfor %}
+  {% else %}
+    <p class="alert-warning">Column has no data</p>
   {% endif %}
-
-  {% comment %}
-    <h1>MACRO</h1>
-    {% visualization 'WAM' 'boxplot' %}
-  {% endcomment %}
-
-  {% for vis_item in visualizations %}
-    {{ vis_item|safe }}
-  {% endfor %}
 
   <a href="{{ request.META.HTTP_REFERER }}"
        class="btn btn-default btn-sm align-middle"> Back</a>

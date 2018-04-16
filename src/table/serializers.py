@@ -102,11 +102,6 @@ class DataFrameBasicMergeSerializer(serializers.Serializer):
         help_text='ID of the column in the source data frame with the unique '
                   'key')
 
-    dup_column = serializers.CharField(
-        required=False,
-        initial='rename',
-        help_text='One of the two values: rename (default), or override')
-
 
 class DataFrameJSONMergeSerializer(DataFrameBasicMergeSerializer):
     src_df = DataFrameJSONField(
