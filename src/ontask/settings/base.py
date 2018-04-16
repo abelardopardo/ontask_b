@@ -10,13 +10,13 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import environ
-import os
-# import ldap
-
-from django.core.urlresolvers import reverse_lazy
 from os.path import dirname, join, exists
+
+import environ
 from django.contrib import messages
+from django.core.urlresolvers import reverse_lazy
+
+# import ldap
 # from django_auth_ldap.config import (
 #     LDAPSearch,
 #     GroupOfNamesType,
@@ -300,6 +300,9 @@ SUMMERNOTE_CONFIG = {
 # Extra configuration options
 DATAOPS_CONTENT_TYPES = '["text/csv", "application/json", "application/gzip", "application/x-gzip", "application/vnd.ms-excel"]'
 DATAOPS_MAX_UPLOAD_SIZE = 209715200  # 200 MB
+
+# Raise because default of 1000 is too short
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
 # Email sever configuration
 EMAIL_HOST = ''
