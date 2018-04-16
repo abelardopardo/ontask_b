@@ -7,6 +7,7 @@ import subprocess
 from collections import OrderedDict
 from itertools import izip
 
+import numpy as np
 import pandas as pd
 from django.conf import settings
 from django.db import connection
@@ -26,13 +27,22 @@ query_count_rows = 'SELECT count(*) from "{0}"'
 
 logger = logging.getLogger(__name__)
 
-# Translation between pandas data type names, and those handled in ontask
+# Translation between pandas data type names, and those handled in OnTask
 pandas_datatype_names = {
     'object': 'string',
     'int64': 'integer',
     'float64': 'double',
     'bool': 'boolean',
     'datetime64[ns]': 'datetime'
+}
+
+# Translation between SQL data type names, and those handled in OnTask
+sql_datatype_names = {
+    'text': 'string',
+    'bigint': 'integer',
+    'double precision': 'double',
+    'boolean': 'boolean',
+    'timestamp without time zone': 'datetime'
 }
 
 # DB Engine to use with Pandas (required by to_sql, from_sql
@@ -181,7 +191,53 @@ def load_table(table_name):
     if settings.DEBUG:
         print('Loading table ', table_name)
 
-    return pd.read_sql(table_name, engine)
+    result = pd.read_sql(table_name, engine)
+
+    # After reading from the DB, turn all None into NaN
+    result.fillna(value=np.nan, inplace=True)
+    return result
+
+
+def load_df_from_csvfile(file, skiprows=0, skipfooter=0):
+    """
+    Given a file object, try to read the content as a CSV file and transform
+    into a data frame. The skiprows and skipfooter are number of lines to skip
+    from the top and bottom of the file (see read_csv in pandas).
+
+    It also tries to convert as many columns as possible to date/time format
+    (testing the conversion on every string column).
+
+    :param filename: File object to read the CSV content
+    :param skiprows: Number of lines to skip at the top of the document
+    :param skipfooter: Number of lines to skip at the bottom of the document
+    :return: Resulting data frame, or an Exception.
+    """
+    data_frame = pd.read_csv(
+        file,
+        index_col=False,
+        infer_datetime_format=True,
+        quotechar='"',
+        skiprows=skiprows,
+        skipfooter=skipfooter
+    )
+
+    # Strip white space from all string columns and try to convert to
+    # datetime just in case
+    for x in list(data_frame.columns):
+        if data_frame[x].dtype.name == 'object':
+            # Column is a string! Remove the leading and trailing white
+            # space
+            data_frame[x] = data_frame[x].str.strip().fillna(data_frame[x])
+
+            # Try the datetime conversion
+            try:
+                series = pd.to_datetime(data_frame[x],
+                                        infer_datetime_format=True)
+                # Datetime conversion worked! Update the data_frame
+                data_frame[x] = series
+            except (ValueError, TypeError):
+                pass
+    return data_frame
 
 
 def store_table(data_frame, table_name):
@@ -226,12 +282,31 @@ def delete_upload_table(pk):
     connection.commit()
 
 
-def df_column_types_rename(df):
-    result = [df[x].dtype.name for x in list(df.columns)]
-    for tname, ntname in pandas_datatype_names.items():
-        result[:] = [x if x != tname else ntname for x in result]
+def get_table_column_types(table_name):
+    """
+    :param table_name: Table name
+    :return: List of pairs (column name, SQL type)
+    """
+    cursor = connection.cursor()
+    cursor.execute("""select column_name, data_type from 
+    INFORMATION_SCHEMA.COLUMNS where table_name = '{0}'""".format(table_name))
 
-    return result
+    return cursor.fetchall()
+
+
+def df_column_types_rename(table_name):
+    """
+    
+    :param table_name: Primary key of the workflow containing this data frame (table) 
+    :return: List of data type strings translated to the proper values
+    """
+    column_types = get_table_column_types(table_name)
+
+    # result = [table_name[x].dtype.name for x in list(table_name.columns)]
+    # for tname, ntname in pandas_datatype_names.items():
+    #     result[:] = [x if x != tname else ntname for x in result]
+
+    return [sql_datatype_names[x] for _, x in get_table_column_types(table_name)]
 
 
 def df_drop_column(pk, column_name):
@@ -477,9 +552,16 @@ def get_column_stats_from_df(df_column):
        'q3': Q3 value (0.75) (integer, double),
        'max': maximum value (integer, double an datetime),
        'std': standard deviation (integer, double),
-       'mode': (integer, double, string, datetime, Boolean,
        'counts': (integer, double, string, datetime, Boolean',
+       'mode': (integer, double, string, datetime, Boolean,
+
+       or None if the column has all its values to NaN
     """
+
+    if len(df_column.loc[df_column.notnull()]) == 0:
+        # The column has no data
+        return None
+
     # Dictionary to return
     result = {
         'min': 0,
@@ -506,16 +588,12 @@ def get_column_stats_from_df(df_column):
         result['std'] = '{0:g}'.format(df_column.std())
 
     result['counts'] = df_column.value_counts().to_dict()
-    result['mode'] = df_column.mode()[0]
+    mode = df_column.mode()
+    if len(mode) == 0:
+        mode = '--'
+    result['mode'] = mode[0]
 
     return result
-
-
-def get_column_stats(workflow, column, cond_filter=None):
-    # Get the dataframe
-    df = load_from_db(workflow.id)
-
-    return get_column_stats_from_df(df[column.name])
 
 
 def search_table_rows(workflow_id,
@@ -564,12 +642,9 @@ def search_table_rows(workflow_id,
         likes = []
         tuple_fields = []
         for name, value, data_type in cv_tuples:
-            # Make sure we escape the name
+            # Make sure we escape the name and search as text
             name = fix_pctg_in_name(name)
-            if data_type == 'string':
-                mod_name = '("{0}" LIKE %s)'.format(name)
-            else:
-                mod_name = '(CAST("{0}" AS TEXT) LIKE %s)'.format(name)
+            mod_name = '(CAST("{0}" AS TEXT) LIKE %s)'.format(name)
 
             # Create the second part of the query setting column LIKE '%value%'
             likes.append(mod_name)
@@ -702,7 +777,12 @@ def check_wf_df(workflow):
 
     # Identical data types
     for n1, n2 in zip(wf_cols, df_col_names):
-        if n1.data_type != pandas_datatype_names[df[n2].dtype.name]:
+        df_dt = pandas_datatype_names[df[n2].dtype.name]
+        if n1.data_type == 'boolean' and df_dt == 'string':
+            # This is the case of a column with Boolean and Nulls
+            continue
+
+        if n1.data_type != df_dt:
             return False
 
     return True

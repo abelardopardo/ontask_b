@@ -146,7 +146,8 @@ class PlotlyColumnHistogram(PlotlyHandler):
         data_list = self.data[column].dropna().tolist()
         # Special case for bool and datetime. Turn into strings to be
         # treated as such
-        if column_dtype == 'boolean' or column_dtype == 'datetime':
+        if column_dtype == 'boolean' or column_dtype == 'datetime' or \
+                column_dtype == 'string':
             data_list = [str(x) for x in data_list]
 
         data.append(
