@@ -21,6 +21,7 @@
           // Required for DataTables
           $(document).ready(function() {
               $('#column-table').DataTable({
+                  stateSave: true,
                   processing: true,
                   serverSide: true,
                   ajax: {

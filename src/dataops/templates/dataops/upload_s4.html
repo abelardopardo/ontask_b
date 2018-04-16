@@ -31,9 +31,9 @@
       </thead>
       <tbody>
         <tr class="success">
-          <td class="text-center">{{ request.session.upload_data.dst_selected_key }}: Key</td>
+          <td class="text-center">{{ request.session.upload_data.dst_selected_key }} (Key)</td>
           <td class="text-center"><button class=" glyphicon glyphicon-arrow-left"></button></td>
-          <td class="text-center">{{ request.session.upload_data.src_selected_key }}: Key</td>
+          <td class="text-center">{{ request.session.upload_data.src_selected_key }} (Key)</td>
         </tr>
         {% for item in info %}
           <tr>

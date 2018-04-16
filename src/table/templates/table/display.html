@@ -22,6 +22,7 @@
         // Required for DataTables
         $(document).ready(function() {
             table_data = $('#table-data').DataTable({
+                stateSave: true,
                 processing: true,
                 serverSide: true,
                 ajax: {

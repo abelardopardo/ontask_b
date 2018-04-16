@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
-from contextlib import contextmanager
-
 import pandas as pd
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -14,7 +12,6 @@ from rest_framework.test import APITransactionTestCase
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.expected_conditions import staleness_of
 from selenium.webdriver.support.ui import WebDriverWait
 
 from dataops import pandas_db
@@ -182,15 +179,4 @@ class OntaskLiveTestCase(LiveServerTestCase):
         # Wait for the table to be refreshed
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, table_id))
-        )
-
-    @contextmanager
-    def wait_for_page_load(self, timeout=30):
-        # Hack taken from
-        # http://www.obeythetestinggoat.com/
-        # how-to-get-selenium-to-wait-for-page-load-after-a-click.html
-        old_page = self.selenium.find_element_by_tag_name('html')
-        yield
-        WebDriverWait(self.selenium, timeout).until(
-            staleness_of(old_page)
         )

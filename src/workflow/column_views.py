@@ -83,17 +83,19 @@ def column_add(request):
     # Fill in the remaining fields in the column
     column.workflow = workflow
     column.is_key = False
-    column.save()
 
     # Update the data frame, which must be stored in the form because
     # it was loaded when validating it.
     df = pandas_db.load_from_db(workflow.id)
 
     # Add the column with the initial value
-    df = ops.data_frame_add_empty_column(df,
-                                         column.name,
-                                         column.data_type,
-                                         column_initial_value)
+    df = ops.data_frame_add_column(df, column, column_initial_value)
+
+    # Update the column type with the value extracted from the data frame
+    column.data_type = \
+        pandas_db.pandas_datatype_names[df[column.name].dtype.name]
+    column.save()
+
     # Store the df to DB
     ops.store_dataframe_in_db(df, workflow.id)
 

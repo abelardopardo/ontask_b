@@ -20,6 +20,7 @@
       if (document.getElementById("view-table") != null) {
         // Required for DataTables
         $('#view-table').DataTable({
+          stateSave: true,
           "language": {
             "emptyTable": "There are no views for this workflow."
           },

@@ -2,8 +2,8 @@
 from __future__ import unicode_literals, print_function
 
 import os
-
 import time
+
 from django.conf import settings
 from django.shortcuts import reverse
 from selenium.webdriver.common.by import By
@@ -11,10 +11,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait, Select
 
 import test
+from action.models import Action, Column, Condition
 from dataops import pandas_db
 from dataops.formula_evaluation import has_variable
 from workflow.models import Workflow
-from action.models import Action, Column, Condition
+
 
 class ActionActionEdit(test.OntaskLiveTestCase):
     fixtures = ['simple_action']
@@ -119,6 +120,12 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until_not(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'modal-open')
+            )
+        )
+        # Wait for page to reload
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//div[@id='filter-set']/h4/div/button")
             )
         )
 
@@ -966,6 +973,10 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
                 (By.CLASS_NAME, 'modal-open')
             )
         )
+        # Wait for the page to reload
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
+        )
 
         # Click in the more ops button and then attribute
         self.selenium.find_element_by_xpath(
@@ -999,6 +1010,10 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
                 (By.CLASS_NAME, 'modal-open')
             )
         )
+        # Wait for the page to reload
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'dataTables_paginate'))
+        )
 
         # Go to the actions and select the edit button of the action out
         self.selenium.find_element_by_link_text("Actions").click()
@@ -1008,7 +1023,7 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
 
         # Click the button to edit a condition and change its name
         self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[6]"
+            "//button[contains(@class, 'js-condition-edit')]"
         ).click()
         self.selenium.find_element_by_id("id_name").click()
         self.selenium.find_element_by_id("id_name").clear()

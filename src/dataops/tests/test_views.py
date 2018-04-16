@@ -265,7 +265,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         # Insert attribute
         self.selenium.find_element_by_id("select-attribute-name").click()
         Select(self.selenium.find_element_by_id(
-            "select-attribute-name")).select_by_visible_text("-----")
+            "select-attribute-name")).select_by_visible_text("- Attribute -")
 
         # Insert column name
         self.selenium.find_element_by_id("select-column-name").click()
@@ -336,6 +336,12 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until_not(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'modal-open')
+            )
+        )
+        # Wait for page to reload
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//div[@id='filter-set']/h4/div/button")
             )
         )
 

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+import datetime
 import json
 
-import datetime
 import pytz
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
@@ -245,7 +245,7 @@ class Column(models.Model):
         default=list,
         blank=True,
         null=True,
-        verbose_name='Comma separated list of allowed values')
+        verbose_name='Comma separated list of values allowed in this column')
 
     # Validity window
     active_from = models.DateTimeField(
@@ -315,7 +315,12 @@ class Column(models.Model):
         if data_type == 'string':
             newval = str(value)
         elif data_type == 'integer':
-            newval = int(value)
+            # In this case, although the column has been declared as an
+            # integer, it could mutate to a float, so we allow this value.
+            try:
+                newval = int(value)
+            except ValueError:
+                newval = float(value)
         elif data_type == 'double':
             newval = float(value)
         elif data_type == 'boolean':

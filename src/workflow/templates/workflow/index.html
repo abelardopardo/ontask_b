@@ -15,6 +15,7 @@
     if (document.getElementById("workflow-table") != null) {
         $(document).ready(function() {
             $('#workflow-table').DataTable({
+                stateSave: true,
                 "order": [[0, "asc"]],
                 "language": {
                     "emptyTable": "No workflows available."

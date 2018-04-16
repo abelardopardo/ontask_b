@@ -19,6 +19,7 @@
         // Required for DataTables
         $(document).ready(function() {
             $('#actioninrun-data').DataTable({
+                stateSave: true,
                 processing: true,
                 serverSide: true,
                 ajax: {

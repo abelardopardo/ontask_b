@@ -12,9 +12,9 @@ from dataops import pandas_db
 from ontask.permissions import is_instructor
 from table.models import View
 from visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
-
 from workflow.models import Column
 from workflow.ops import get_workflow
+
 
 def get_column_visualisations(column, col_data, vis_scripts,
                               id='', single_val=None, context=None):
@@ -187,8 +187,8 @@ def stat_column(request, pk):
                   {'column': column,
                    'stat_data': stat_data,
                    'vis_scripts': vis_scripts,
-                   'visualizations': [v.html_content
-                                      for v in visualizations]})
+                   'visualizations': [v.html_content for v in visualizations]}
+                  )
 
 
 @user_passes_test(is_instructor)

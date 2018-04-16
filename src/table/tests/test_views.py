@@ -860,7 +860,7 @@ class TableInsertRow(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.ID, 'table-data_info'),
-                '1 to 10 of 100 entries'
+                'of 100 entries'
             )
         )
 

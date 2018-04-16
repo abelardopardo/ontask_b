@@ -3,7 +3,6 @@ from __future__ import unicode_literals, print_function
 
 from collections import Counter
 
-import pandas as pd
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -72,31 +71,10 @@ def csvupload1(request):
 
     # Process CSV file using pandas read_csv
     try:
-        data_frame = pd.read_csv(
+        data_frame = pandas_db.load_df_from_csvfile(
             request.FILES['file'],
-            index_col=False,
-            infer_datetime_format=True,
-            quotechar='"',
-            skiprows=form.cleaned_data['skip_lines_at_top'],
-            skipfooter=form.cleaned_data['skip_lines_at_bottom'],
-        )
-
-        # Strip white space from all string columns and try to convert to
-        # datetime just in case
-        for x in list(data_frame.columns):
-            if data_frame[x].dtype.name == 'object':
-                # Column is a string! Remove the leading and trailing white
-                # space
-                data_frame[x] = data_frame[x].str.strip().fillna(data_frame[x])
-
-                # Try the datetime conversion
-                try:
-                    series = pd.to_datetime(data_frame[x],
-                                            infer_datetime_format=True)
-                    # Datetime conversion worked! Update the data_frame
-                    data_frame[x] = series
-                except (ValueError, TypeError):
-                    pass
+            form.cleaned_data['skip_lines_at_top'],
+            form.cleaned_data['skip_lines_at_bottom'])
     except Exception as e:
         form.add_error('file',
                        'File could not be processed ({0})'.format(e.message))
