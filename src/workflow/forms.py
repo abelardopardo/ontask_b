@@ -107,7 +107,15 @@ class ColumnBasicForm(forms.ModelForm):
     raw_categories = forms.CharField(
         strip=True,
         required=False,
-        label='Comma separated list of allowed values')
+        label='Comma separated list of values allowed in this column')
+
+    data_type_choices = [
+        ('double', 'number'),
+        ('integer', 'number'),
+        ('string', 'string'),
+        ('boolean', 'boolean'),
+        ('datetime', 'datetime')
+    ]
 
     def __init__(self, *args, **kwargs):
 
@@ -119,7 +127,10 @@ class ColumnBasicForm(forms.ModelForm):
         self.fields['raw_categories'].initial = \
             ', '.join([str(x) for x in self.instance.get_categories()])
 
+        self.fields['data_type'].choices = self.data_type_choices
+
     def clean(self):
+
         data = super(ColumnBasicForm, self).clean()
 
         # Load the data frame from the DB for various checks and leave it in
@@ -219,15 +230,21 @@ class ColumnAddForm(ColumnBasicForm):
     )
 
     def __init__(self, *args, **kwargs):
+
         super(ColumnAddForm, self).__init__(*args, **kwargs)
+
         self.initial_valid_value = None
 
+        self.fields['data_type'].choices = self.data_type_choices[1:]
+
     def clean(self):
+
         data = super(ColumnAddForm, self).clean()
 
         # Try to convert the initial value ot the right type
         initial_value = data['initial_value']
         if initial_value:
+            # See if the given value is allowed for the column data type
             try:
                 self.initial_valid_value = Column.validate_column_value(
                     data['data_type'],
@@ -237,6 +254,13 @@ class ColumnAddForm(ColumnBasicForm):
                 self.add_error(
                     'initial_value',
                     'Incorrect initial value'
+                )
+
+            categories = self.instance.get_categories()
+            if categories and self.initial_valid_value not in categories:
+                self.add_error(
+                    'initial_value',
+                    'This value is not in the list of allowed values'
                 )
 
         return data
