@@ -86,7 +86,6 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = (
     'django_extensions',
     'django.contrib.auth',
-    'django_admin_bootstrapped',
     'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
