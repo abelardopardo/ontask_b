@@ -4,18 +4,51 @@
 
 - Documentation on how to open the URL in OnTask to track email reading when using SAML authentication (Apache configuration)
 
+- Tables now remember their state (number of items shown, search item)
+
 ### Changed
 
 - Column delete now returns to previous screen (table or workflow detail)
 
 - Email preview now uses the subject text provided in the form.
 
+- Platform now prevents concurrent sessions from the same user. If a user tries
+  to access a workflow that is being used by another session in another 
+  browser, the platform rejects the access until the previous session is 
+  terminated by logout, or (if the browser has been closed) it expires.
+  
+- Removed bootstrapped Admin interface and restored the original one.
+
 ### Fixed
 
+- Changed the update of the action out text to use a POST request and prevent
+  the System Error due to the length of the text (Issues 13 and 15)
+  
 - Bug preventing columns to be deleted from the table view.
 
-- Bug limiting the length of the action text when using preview.
+- Bug limiting the length of the action text when using preview (Issue 18)
 
+- Bug limiting the search in tables to only pure string columns (unable to
+  search columns with booleans that are promoted to strings)
+  
+- Bug when merging/updating data sets with overlapping columns. The code
+  was not considering them as existing columns. Major rewriting of the
+  update/merge functionality.
+
+- Bug detecting condition names with spaces in action out text
+
+- Bug when enforcing new data types after merge/update operation
+
+- Bug when flushing a workflow that did not restored the selected number of 
+  rows in the action filters.
+  
+- Bug when evaluating the condition and filter expressions in the presence of 
+  None or NULL values  (Issue 14)
+  
+- Bug when sending emails when preview fails (Issue 16)
+
+- Bug failing to detect a non gzip file when given to Import (Issue 11)
+  
 ## 2.5.0 (2018-02-18)
 
 ### Added
@@ -42,7 +75,7 @@
 ### Fixed 
 
 - Bug when filtering columns and obtaining a row in the table
-  
+
 ## 2.4.0 (2017-12-18)
 
 ### Added
