@@ -219,9 +219,16 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
         obj = get_workflow(self.request, old_obj.id)
         if not obj:
             user = get_user_locked_workflow(old_obj)
-            messages.error(
-                self.request,
-                'The workflow is being modified by user ' + user.email)
+            if user != self.request.user:
+                messages.error(
+                    self.request,
+                    'The workflow is being modified by user ' + user.email)
+            else:
+                messages.error(
+                    self.request,
+                    'There is another session still open with your account. '
+                    'Log that session out or wait for it to expire.'
+                )
             return None
 
         # Remember the current workflow

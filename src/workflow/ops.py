@@ -146,9 +146,9 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
     # Step 5: The workflow is locked by a session that is valid. See if the
     # session locking it happens to be from the same user (a previous session
     # that has not been properly closed)
-    if owner == request.user:
-        lock_workflow(request, workflow)
-        return workflow
+    # if owner == request.user:
+    #     lock_workflow(request, workflow)
+    #     return workflow
 
     # Step 6: The workflow is locked by an existing session. See if the
     # session is valid
