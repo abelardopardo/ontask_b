@@ -670,7 +670,13 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']/div/div/form/div/button[2]"
         ).click()
-        # Wait for page to refresh (FLAKY)
+        # MODAL WAITING
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
+        # Wait for page to refresh
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.CLASS_NAME, 'js-condition-edit')

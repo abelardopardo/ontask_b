@@ -57,7 +57,8 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             self.selenium.find_element_by_class_name(
                 'js-create-workflow').click()
             WebDriverWait(self.selenium, 10).until(
-                EC.presence_of_element_located((By.ID, 'id_name')))
+                EC.presence_of_element_located((By.ID, 'id_name'))
+            )
 
             self.selenium.find_element_by_id('id_name').send_keys(
                 test.wflow_name

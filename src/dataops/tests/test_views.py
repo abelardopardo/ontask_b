@@ -653,3 +653,292 @@ class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
 
         # End of session
         self.logout()
+
+
+class DataopsNaNProcessing(test.OntaskLiveTestCase):
+    fixtures = ['empty_wflow']
+    action_text = "Bool1 = {{ bool1 }}\\n" + \
+        "Bool2 = {{ bool2 }}\\n" + \
+        "Bool3 = {{ bool3 }}\\n" + \
+        "{% if bool1 cond %}Bool 1 is true{% endif %}\\n" + \
+        "{% if bool2 cond %}Bool 2 is true{% endif %}\\n" + \
+        "{% if bool3 cond %}Bool 3 is true{% endif %}\\n"
+
+    def tearDown(self):
+        pandas_db.delete_all_tables()
+        super(DataopsNaNProcessing, self).tearDown()
+
+    def test_01_nan_manipulation(self):
+        # Login
+        self.login('instructor1@bogus.com')
+
+        self.open(reverse('workflow:index'))
+
+        # Create new workflow
+        self.selenium.find_element_by_xpath(
+            "(//button[@type='button'])[2]").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'id_name'))
+        )
+
+        # Insert name and click create
+        self.selenium.find_element_by_id("id_name").click()
+        self.selenium.find_element_by_id("id_name").clear()
+        self.selenium.find_element_by_id("id_name").send_keys("NaN")
+        self.selenium.find_element_by_xpath("//button[@type='submit']").click()
+        # Wait for workflows page
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.LINK_TEXT, 'NaN')
+            )
+        )
+
+        # Open the Workflow page
+        self.selenium.find_element_by_link_text("NaN").click()
+
+        # Open the DataOps page
+        self.selenium.find_element_by_link_text("DataOps").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('OnTask :: Dataops')
+        )
+
+        # Start the upload process: Select upload
+        self.selenium.find_element_by_link_text("CSV Upload/Merge").click()
+
+        # Select file and upload
+        self.selenium.find_element_by_id("id_file").send_keys(
+            os.path.join(settings.BASE_DIR(),
+                         'dataops',
+                         'fixtures',
+                         'test_df_merge_update_df1.csv')
+        )
+        self.selenium.find_element_by_name("Submit").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+                                             'Step 2: Select Columns')
+        )
+
+        # Select all the columns to upload and submit
+        self.selenium.find_element_by_id("checkAll").click()
+        self.selenium.find_element_by_xpath(
+            "(//button[@name='Submit'])[2]"
+        ).click()
+        # Wait for the upload/merge
+        WebDriverWait(self.selenium, 20).until(
+            EC.title_is('OnTask :: Dataops')
+        )
+
+        # Select again the upload/merge function
+        self.selenium.find_element_by_link_text("CSV Upload/Merge").click()
+
+        # Select the second file and submit
+        self.selenium.find_element_by_id("id_file").send_keys(
+            os.path.join(settings.BASE_DIR(),
+                         'dataops',
+                         'fixtures',
+                         'test_df_merge_update_df2.csv')
+        )
+        self.selenium.find_element_by_name("Submit").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+                                             'Step 2: Select Columns')
+        )
+
+        # Select all the columns for upload
+        self.selenium.find_element_by_id("checkAll").click()
+        self.selenium.find_element_by_name("Submit").click()
+        # Wait for the upload/merge
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.CLASS_NAME, 'page-header'),
+                'Step 3: Select Keys to Merge')
+        )
+
+        # Choose the default options for the merge (key and outer)
+        self.selenium.find_element_by_name("Submit").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.CLASS_NAME, 'page-header'),
+                'Step 4: Review and confirm')
+        )
+
+        # Check the merge summary and proceed
+        self.selenium.find_element_by_name("Submit").click()
+        # Wait for the upload/merge
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('OnTask :: Dataops')
+        )
+
+        # Go to the actions page
+        self.selenium.find_element_by_link_text("Actions").click()
+
+        # Create a new action
+        self.selenium.find_element_by_xpath(
+            "(//button[@type='button'])[3]"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'id_name'))
+        )
+
+        # Type action name and click complete to edit
+        self.selenium.find_element_by_id("id_name").click()
+        self.selenium.find_element_by_id("id_name").clear()
+        self.selenium.find_element_by_id("id_name").send_keys("action out")
+        self.selenium.find_element_by_xpath("//button[@type='submit']").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//div[@id='filter-set']/h4/div/button")
+            )
+        )
+
+        # Create the first condition.
+        self.selenium.find_element_by_xpath(
+            "(//button[@type='button'])[3]"
+        ).click()
+        # Wait for the form to appear
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
+                'Create condition')
+        )
+
+        # Add name and condition
+        self.selenium.find_element_by_id("id_name").click()
+        self.selenium.find_element_by_id("id_name").clear()
+        self.selenium.find_element_by_id("id_name").send_keys("bool1 cond")
+        self.selenium.find_element_by_name("builder_rule_0_filter").click()
+        Select(self.selenium.find_element_by_name(
+            "builder_rule_0_filter")).select_by_visible_text("bool1")
+        # Wait for the select elements to be clickable
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//input[@name='builder_rule_0_value_0']")
+            )
+        )
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='builder_rule_0_value_0'])[2]").click()
+        self.selenium.find_element_by_xpath(
+            "(//button[@type='submit'])[3]"
+        ).click()
+        # MODAL WAITING
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
+        # Wait for page to refresh
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.CLASS_NAME, 'js-condition-edit')
+            )
+        )
+
+        # Create the second condition
+        self.selenium.find_element_by_xpath(
+            "(//button[@type='button'])[3]"
+        ).click()
+        # Wait for the form to appear
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
+                'Create condition')
+        )
+
+        # Add name and condition
+        self.selenium.find_element_by_id("id_name").click()
+        self.selenium.find_element_by_id("id_name").clear()
+        self.selenium.find_element_by_id("id_name").send_keys("bool2 cond")
+        self.selenium.find_element_by_name("builder_rule_0_filter").click()
+        Select(self.selenium.find_element_by_name(
+            "builder_rule_0_filter")).select_by_visible_text("bool2")
+        # Wait for the select elements to be clickable
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//input[@name='builder_rule_0_value_0']")
+            )
+        )
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='builder_rule_0_value_0'])[2]").click()
+        self.selenium.find_element_by_xpath(
+            "(//button[@type='submit'])[3]"
+        ).click()
+        # MODAL WAITING
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
+        # Wait for page to refresh
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.CLASS_NAME, 'js-condition-edit')
+            )
+        )
+
+        # Create the third condition
+        self.selenium.find_element_by_xpath(
+            "(//button[@type='button'])[3]"
+        ).click()
+        # Wait for the form to appear
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
+                'Create condition')
+        )
+
+        # Add name and condition
+        self.selenium.find_element_by_id("id_name").click()
+        self.selenium.find_element_by_id("id_name").clear()
+        self.selenium.find_element_by_id("id_name").send_keys("bool3 cond")
+        self.selenium.find_element_by_name("builder_rule_0_filter").click()
+        Select(self.selenium.find_element_by_name(
+            "builder_rule_0_filter")).select_by_visible_text("bool3")
+        # Wait for the select elements to be clickable
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//input[@name='builder_rule_0_value_0']")
+            )
+        )
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='builder_rule_0_value_0'])[2]").click()
+        self.selenium.find_element_by_xpath(
+            "(//button[@type='submit'])[3]").click()
+
+        self.selenium.find_element_by_name("Submit").click()
+        # MODAL WAITING
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
+        # Wait for page to refresh
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.CLASS_NAME, 'js-condition-edit')
+            )
+        )
+
+        # insert the action text
+        self.selenium.execute_script(
+            """$('#id_content').summernote('editor.insertText', 
+            "{0}");""".format(self.action_text)
+        )
+
+        # Click in the preview and circle around the 12 rows
+        self.selenium.find_element_by_xpath(
+            "//button[contains(@class, 'js-action-preview')]").click()
+        # Wait for the modal to appear
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//div[@id='modal-item']/div/div/div/div/h4"),
+                'Action Preview 1')
+        )
+
+        for x in range(11):
+            self.selenium.find_element_by_xpath(
+                "//div[@id='modal-item']/div/div/div/div[2]/button[3]/span"
+            ).click()
+
+        # End of session
+        self.logout()
+
