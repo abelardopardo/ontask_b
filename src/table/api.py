@@ -8,14 +8,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from dataops import pandas_db, ops
+from ontask.permissions import UserIsInstructor
 from table.serializers import (
     DataFramePandasMergeSerializer,
     DataFramePandasSerializer,
     DataFrameJSONSerializer,
     DataFrameJSONMergeSerializer)
-from ontask.permissions import UserIsInstructor
 from workflow.models import Workflow
-from workflow.ops import is_locked, detach_dataframe
+from workflow.ops import is_locked, flush_workflow
 
 
 class TableBasicOps(APIView):
@@ -86,7 +86,7 @@ class TableBasicOps(APIView):
     # Delete
     def delete(self, request, pk, format=None):
         wflow = self.get_object(pk, user=self.request.user)
-        detach_dataframe(wflow)
+        flush_workflow(wflow)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

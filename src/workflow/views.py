@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
-from collections import OrderedDict
-
 import django_tables2 as tables
 from django.conf import settings
 from django.contrib import messages
@@ -19,7 +17,6 @@ from django.views.decorators.http import require_http_methods
 
 import action
 import logs.ops
-from action.models import Condition
 from dataops import ops, pandas_db
 from ontask.permissions import is_instructor, UserIsInstructor
 from ontask.tables import OperationsColumn
@@ -28,7 +25,7 @@ from .models import Workflow, Column
 from .ops import (get_workflow,
                   unlock_workflow_by_id,
                   get_user_locked_workflow,
-                  detach_dataframe)
+                  flush_workflow)
 
 
 class WorkflowTable(tables.Table):
@@ -322,7 +319,7 @@ def flush(request, pk):
 
     if request.method == 'POST':
         # Delete the table
-        detach_dataframe(workflow)
+        flush_workflow(workflow)
 
         # Log the event
         logs.ops.put(request.user,
@@ -331,17 +328,6 @@ def flush(request, pk):
                      {'id': workflow.id,
                       'name': workflow.name})
 
-        # Delete the conditions attached to all the actions attached to the
-        # workflow.
-        to_delete = Condition.objects.filter(
-            action__workflow=workflow)
-        for item in to_delete:
-            logs.ops.put(request.user,
-                         'condition_delete',
-                         workflow,
-                         {'id': item.id,
-                          'name': item.name})
-        to_delete.delete()
 
         # In this case, the form is valid
         data['form_is_valid'] = True

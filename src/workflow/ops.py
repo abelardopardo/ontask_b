@@ -2,23 +2,24 @@
 from __future__ import unicode_literals, print_function
 
 import gzip
-
 from io import BytesIO
+
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.http import HttpResponse
 from django.utils import timezone
+from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
-from action.models import Condition
+import logs.ops
+from action.models import Condition, Action
 from dataops import formula_evaluation, pandas_db, ops
 from .models import Workflow, Column
 from .serializers import (WorkflowExportSerializer, WorkflowImportSerializer)
-from rest_framework import serializers
-import logs.ops
+
 
 def lock_workflow(request, workflow):
     """
@@ -196,6 +197,49 @@ def detach_dataframe(workflow):
 
     # Table name
     workflow.data_frame_table_name = ''
+
+    # Save the workflow with the new fields.
+    workflow.save()
+
+
+def flush_workflow(workflow):
+    """
+    Flush all the data from the workflow and propagate changes throughout the
+    relations with columns, conditions, filters, etc. These steps require:
+
+    1) Delete the data frame from the database
+
+    2) Delete all the columns attached to the workflow
+
+    3) Delete all the conditions attached to the actions
+
+    4) Reflect the number of selected columns to -1 for all actions
+
+    :param workflow: Workflow object
+    :return: Reflected in the DB
+    """
+
+    # Step 1: Delete the data frame from the database
+    pandas_db.delete_table(workflow.id)
+
+    # Reset some of the workflow fields
+    workflow.nrows = 0
+    workflow.ncols = 0
+    workflow.n_filterd_rows = -1
+    workflow.set_query_builder_ops()
+    workflow.data_frame_table_name = ''
+
+    # Step 2: Delete the column_names, column_types and column_unique
+    Column.objects.filter(workflow__id=workflow.id).delete()
+
+    # Step 3: Delete the conditions attached to all the actions attached to the
+    # workflow.
+    Condition.objects.filter(action__workflow=workflow).delete()
+
+    # Step 4: Reset selected columns from all actions
+    for action in Action.objects.filter(workflow=workflow):
+        action.n_selected_rows = -1
+        action.save()
 
     # Save the workflow with the new fields.
     workflow.save()
