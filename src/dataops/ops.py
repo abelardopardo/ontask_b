@@ -405,17 +405,34 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
     for col in Workflow.objects.get(pk=pk).columns.all():
         # New values in this column should be compatible with the current
         # column properties.
-        # Condition 1: Data type
-        if pandas_datatype_names[new_df[col.name].dtype.name] != col.data_type:
-            return 'New values in column ' + col.name + ' are not of type ' \
-                   + col.data_type
+        # Condition 1: Data type is correct (there is an exception for columns
+        # of type "object" in the data frame and "boolean" in the column as the
+        # new resulting column may have a mix of booleans and floats.
+        df_col_type = pandas_datatype_names[new_df[col.name].dtype.name]
+        if col.data_type == 'boolean' and df_col_type == 'string':
+            column_data_types = set([type(x) for x in new_df[col.name]])
+            # Remove the NaN type
+            column_data_types.remove(float)
+            if len(column_data_types) != 1 or column_data_types.pop() != bool:
+                return 'New values in column {0} are not of type {1}'.format(
+                    col.name,
+                    col.data_type
+                )
+        elif df_col_type != col.data_type:
+            return 'New values in column {0} are not of type {1}'.format(
+                col.name,
+                col.data_type
+            )
 
         # Condition 2: If there are categories, the new values should be
         # compatible with them.
         if col.categories and not all([x in col.categories
                                        for x in new_df[col.name]]):
-            return 'New values in column ' + col.name + ' are not within ' \
-                   + 'the categories ' + ', '.join(col.categories)
+            return \
+                'New values in column {0} are not in categories {1}'.format(
+                    col.name,
+                    ', '.join(col.categories)
+                )
 
         # Condition 3:
         col.is_key = is_unique_column(new_df[col.name])
