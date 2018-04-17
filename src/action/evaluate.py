@@ -9,8 +9,8 @@ import string
 from django.core.exceptions import ObjectDoesNotExist
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
-from validate_email import validate_email
 from django.utils.html import escape
+from validate_email import validate_email
 
 import dataops.formula_evaluation
 from action.models import Condition
@@ -140,21 +140,23 @@ def render_template(template_text, context_dict, action=None):
     :return: The rendered template
     """
 
-    # Regular expression detecting the use of a variable, or the
+    # Regular expressions detecting the use of a variable, or the
     # presence of a "{% MACRONAME variable %} construct in a string (template)
-    var_use_re = re.compile(
-        '(?P<markup_pre>{({|%\s+[^\s+])\s+)' + \
-        '(?P<varname>.+?)' + \
-        '(?P<markup_post>\s+[%\}]\})'
-    )
+    var_use_res = [
+        re.compile('(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+\}\})'),
+        re.compile('(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})')
+    ]
 
     # Steps 1 and 2. Apply the tranlation process to all variables that
     # appear in the the template text
-    new_template_text = '{% load vis_include %}' + var_use_re.sub(
-        lambda m: m.group('markup_pre') + \
-                  translate(m.group('varname')) + \
-                  m.group('markup_post'),
-        template_text)
+    new_template_text = template_text
+    for rexpr in var_use_res:
+        new_template_text = rexpr.sub(
+            lambda m: m.group('mup_pre') + \
+                      translate(m.group('vname')) + \
+                      m.group('mup_post'),
+            new_template_text)
+    new_template_text = '{% load vis_include %}' + new_template_text
 
     # Step 3. Apply the translation process to the context keys
     new_context = dict([(translate(escape(x)), y)
