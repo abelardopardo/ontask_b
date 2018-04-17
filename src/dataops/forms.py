@@ -171,13 +171,16 @@ class SelectColumnUploadForm(forms.Form):
 
         # Names of the columns to process and Boolean stating if they are key
         self.column_names = kargs.pop('column_names')
+        self.columns_to_upload = kargs.pop('columns_to_upload')
         self.is_key = kargs.pop('is_key')
 
         super(SelectColumnUploadForm, self).__init__(*args, **kargs)
 
         # Create as many fields as the given columns
-        for idx, c in enumerate(self.column_names):
+        for idx, (c, upload) in enumerate(zip(self.column_names,
+                                              self.columns_to_upload)):
             self.fields['upload_%s' % idx] = forms.BooleanField(
+                initial=upload,
                 label='',
                 required=False,
             )
@@ -208,15 +211,12 @@ class SelectColumnUploadForm(forms.Form):
 
 # Step 3 of the CSV upload: select unique keys to merge
 class SelectKeysForm(forms.Form):
-    how_merge_choices = [('left', 'only the keys in the table'),
-                         ('right', 'only the new keys'),
-                         ('outer', 'the union of the table and new keys '
-                                   '(outer)'),
-                         ('inner', 'the intersection of the table and new'
-                                   ' keys (inner)')]
-
-    how_dup_columns_choices = [('override', 'override columns with new data'),
-                               ('rename', 'be renamed and become new columns.')]
+    how_merge_choices = [
+        ('outer', 'the union of keys in existing and new tables (outer)'),
+        ('inner', 'the intersection of keys in existing and new table (inner)'),
+        ('left', 'only the keys in the existing table'),
+        ('right', 'only the keys in the new table'),
+    ]
 
     dst_help = """Key column in the existing table to match with the new 
     data."""
@@ -231,11 +231,6 @@ class SelectKeysForm(forms.Form):
     removed, but some rows will have empty values. 4) If the intersection of 
     the keys is used, only those rows with keys in both the table and the 
     file will be updated, the rest will be deleted."""
-
-    how_dup_columns_help = """The new data has columns with names identical 
-    to those that are already part of the table. You may choose to override
-    them with the new data, or rename the new data and add them as new 
-    columns."""
 
     def __init__(self, *args, **kargs):
         # Get the dst choices
@@ -260,11 +255,6 @@ class SelectKeysForm(forms.Form):
                   if v[0] == how_merge),
                  None)
 
-        # Boolean telling us if we have to add field to handle overlapping
-        # column names
-        are_overlap_cols = kargs.pop('are_overlap_cols')
-        how_dup_columns = kargs.pop('how_dup_columns')
-
         super(SelectKeysForm, self).__init__(*args, **kargs)
 
         self.fields['dst_key'] = \
@@ -287,18 +277,6 @@ class SelectKeysForm(forms.Form):
                               required=True,
                               label='Merge rows using',
                               help_text=self.merge_help)
-
-        if are_overlap_cols:
-            how_dup_columns_initial = \
-                next((v for x, v in enumerate(self.how_dup_columns_choices)
-                      if v[0] == how_dup_columns), None)
-            self.fields['how_dup_columns'] = \
-                forms.ChoiceField(initial=how_dup_columns_initial,
-                                  choices=self.how_dup_columns_choices,
-                                  required=True,
-                                  label='Columns with already existing names'
-                                        ' will',
-                                  help_text=self.merge_help)
 
 
 # Form to allow value selection through unique keys in a workflow
