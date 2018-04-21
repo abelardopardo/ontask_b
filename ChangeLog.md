@@ -6,6 +6,8 @@
 
 - Tables now remember their state (number of items shown, search item)
 
+- Documentation now has the initial set of *scenarios* to showcase the differet functionality available in the platform. This section is unfinished.
+
 ### Changed
 
 - Column delete now returns to previous screen (table or workflow detail)
