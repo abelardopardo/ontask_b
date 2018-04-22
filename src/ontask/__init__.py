@@ -4,7 +4,7 @@ Basic functions and definitions used all over the platform.
 """
 from __future__ import unicode_literals, print_function
 
-__version__ = 'B.2.5.1'
+__version__ = 'B.2.5.2'
 
 
 def is_legal_name(val):
