@@ -292,8 +292,8 @@ SUMMERNOTE_CONFIG = {
         'lineNumbers': 'true',
         'lineWrapping': 'true',
     },
-    'lazy': True,
-    'dialogsInBody': True,
+    'lazy': 'true',
+    'dialogsInBody': 'true',
 }
 
 # Extra configuration options
