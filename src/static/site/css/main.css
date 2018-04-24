@@ -188,9 +188,7 @@ body>.navbar-transparent {
 }
 
 /* OnTask personalisation */
-div#filter-set,
-div#condition-set,
-div#html-editor {
+div#filter-set {
   border: 1px solid black;
 }
 
