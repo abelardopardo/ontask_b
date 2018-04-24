@@ -21,10 +21,10 @@
           // Required for DataTables
           $(document).ready(function() {
               $('#column-table').DataTable({
-                  stateSave: true,
-                  processing: true,
-                  serverSide: true,
-                  ajax: {
+                  "stateSave": true,
+                  "processing": true,
+                  "serverSide": true,
+                  "ajax": {
                     url: "{% url 'workflow:column_ss' workflow.id %}",
                     type: 'POST',
                   },
