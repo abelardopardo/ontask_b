@@ -65,9 +65,9 @@ def show_ss(request):
     if search_value:
         # Refine the log
         qs = qs.filter(
-            Q(user__email__contains=search_value) |
-            Q(name__contains=search_value) |
-            Q(payload__contains=search_value),
+            Q(user__email__icontains=search_value) |
+            Q(name__icontains=search_value) |
+            Q(payload__icontains=search_value),
             workflow__id=workflow.id,
         ).distinct()
 

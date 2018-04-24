@@ -15,6 +15,9 @@
     if (document.getElementById("attribute-table") != null) {
         $(document).ready(function() {
             $('#attribute-table').DataTable({
+                "search": {
+                  "caseInsensitive": true,
+                },
                 stateSave: true,
                 "order": [[0, "asc"]],
                 "language": {

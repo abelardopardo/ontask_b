@@ -15,6 +15,9 @@
     $(document).ready(function() {
       if (document.getElementById("scheduler-table") != null) {
         $('#scheduler-table').DataTable({
+          "search": {
+            "caseInsensitive": true,
+          },
           "language": {
             "emptyTable": "No scheduled operations in this workflow"
           },

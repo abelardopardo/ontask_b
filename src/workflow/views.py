@@ -441,8 +441,8 @@ def column_ss(request, pk):
         qs = qs.order_by(col_name)
 
     if search_value:
-        qs = qs.filter(Q(name__contains=search_value) |
-                       Q(data_type__contains=search_value))
+        qs = qs.filter(Q(name__icontains=search_value) |
+                       Q(data_type__icontains=search_value))
         recordsFiltered = len(qs)
 
     # Creating the result

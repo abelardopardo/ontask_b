@@ -18,6 +18,9 @@
       if (document.getElementById("action-table") != null) {
         // Required for DataTables
         $('#action-table').DataTable({
+          "search": {
+            "caseInsensitive": true,
+          },
           stateSave: true,
           "language": {
             "emptyTable": "There are no actions for this workflow."
