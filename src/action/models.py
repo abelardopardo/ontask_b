@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+import datetime
 import re
 
-import datetime
 import pytz
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
@@ -77,7 +77,7 @@ class Action(models.Model):
     #
     # Text to be personalised for action OUT
     content = models.TextField(
-        default='{% comment %}Your action content here{% endcomment %}',
+        default='',
         null=False,
         blank=True)
 
