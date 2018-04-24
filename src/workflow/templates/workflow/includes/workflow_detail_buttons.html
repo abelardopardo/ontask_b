@@ -35,6 +35,12 @@
     </li>
     {% if request.user == workflow.user %}
       <li>
+        <button type="button" style="width:100%;"
+                class="btn btn-default btn-sm js-workflow-update align-middle"
+                data-url="{% url 'workflow:update' workflow.id %}">
+            <span class="glyphicon glyphicon-pencil"></span> Edit
+        </button>
+      </li>     <li>
         <a href="{% url 'workflow:share' %}" class="btn btn-default btn-sm"
            data-toggle="tooltip"
            title="Allow other users to access the workflow">
@@ -46,13 +52,6 @@
            class="btn btn-default btn-sm js-workflow-clone align-middle"
                 data-url="{% url 'workflow:clone' workflow.id %}">
           <span class="glyphicon glyphicon-duplicate"></span> Clone
-        </button>
-      </li>
-      <li>
-        <button type="button" style="width:100%;"
-                class="btn btn-default btn-sm js-workflow-update align-middle"
-                data-url="{% url 'workflow:update' workflow.id %}">
-            <span class="glyphicon glyphicon-pencil"></span> Rename
         </button>
       </li>
       <li>
