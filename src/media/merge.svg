@@ -2,20 +2,19 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="297mm"
-   height="210mm"
-   viewBox="0 0 1052.3622 744.09448"
-   id="svg2"
-   version="1.1"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="merge.svg">
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:cc="http://creativecommons.org/ns#"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+        xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+        width="297mm"
+        height="210mm"
+        viewBox="0 0 1052.3622 744.09448"
+        id="svg2"
+        version="1.1"
+        inkscape:version="0.91 r13725"
+        sodipodi:docname="merge.svg">
   <defs
      id="defs4">
     <marker
@@ -417,7 +416,7 @@
      inkscape:cx="526.1811"
      inkscape:cy="372.04724"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g6882"
      showgrid="false"
      inkscape:window-width="1922"
      inkscape:window-height="1032"
@@ -1711,7 +1710,9 @@
       <g
          id="g6882">
         <g
-           id="g6884">
+           id="g6884"
+           inkscape:export-xdpi="900"
+           inkscape:export-ydpi="900">
           <g
              id="g6886">
             <rect
@@ -1938,7 +1939,9 @@
            x="337.88281"
            y="445.71548"
            id="text6960"
-           sodipodi:linespacing="125%"><tspan
+           sodipodi:linespacing="125%"
+           inkscape:export-xdpi="900"
+           inkscape:export-ydpi="900"><tspan
              sodipodi:role="line"
              id="tspan6962"
              x="337.88281"
@@ -1949,7 +1952,9 @@
            y="445.71548"
            x="361.75098"
            style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-           xml:space="preserve"><tspan
+           xml:space="preserve"
+           inkscape:export-xdpi="900"
+           inkscape:export-ydpi="900"><tspan
              y="445.71548"
              x="361.75098"
              id="tspan6966"
@@ -1960,7 +1965,9 @@
            y="445.71548"
            x="312.2124"
            style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-           xml:space="preserve"><tspan
+           xml:space="preserve"
+           inkscape:export-xdpi="900"
+           inkscape:export-ydpi="900"><tspan
              y="445.71548"
              x="312.2124"
              id="tspan6970"
@@ -1971,7 +1978,9 @@
            y="569.98773"
            x="337.94507"
            style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-           xml:space="preserve"><tspan
+           xml:space="preserve"
+           inkscape:export-xdpi="900"
+           inkscape:export-ydpi="900"><tspan
              y="569.98773"
              x="337.94507"
              id="tspan6974"
@@ -1979,7 +1988,9 @@
       </g>
       <g
          id="g6976"
-         transform="translate(100,50.000359)">
+         transform="translate(100,50.000359)"
+         inkscape:export-xdpi="900"
+         inkscape:export-ydpi="900">
         <rect
            style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-opacity:1"
            id="rect6978"
@@ -2246,7 +2257,7 @@
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="397.94702"
-       y="900.76495"
+       y="853.44159"
        id="text7068"
        sodipodi:linespacing="125%"
        inkscape:export-xdpi="900"
@@ -2254,7 +2265,7 @@
          sodipodi:role="line"
          id="tspan7070"
          x="397.94702"
-         y="900.76495">Result</tspan></text>
+         y="853.44159">Result</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -5746,7 +5757,9 @@
          sodipodi:role="line">In New</tspan></text>
     <g
        id="ok_1_"
-       transform="translate(231.99258,425.23656)">
+       transform="translate(231.99258,425.23656)"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          d="m 6.457,13.641 c -0.097,-0.097 -0.097,-0.256 0,-0.354 l 1.768,-1.768 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.713,1.714 c 0.097,0.097 0.256,0.097 0.354,0 l 5.713,-5.714 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.768,1.768 c 0.097,0.097 0.097,0.256 0,0.354 l -7.831,7.838 c -0.097,0.097 -0.256,0.097 -0.353,0 l -3.84,-3.838 z"
          id="path_14_"
@@ -5754,7 +5767,9 @@
     </g>
     <g
        id="g5312"
-       transform="translate(39.99258,785.23656)">
+       transform="translate(39.99258,785.23656)"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          d="m 6.457,13.641 c -0.097,-0.097 -0.097,-0.256 0,-0.354 l 1.768,-1.768 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.713,1.714 c 0.097,0.097 0.256,0.097 0.354,0 l 5.713,-5.714 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.768,1.768 c 0.097,0.097 0.097,0.256 0,0.354 l -7.831,7.838 c -0.097,0.097 -0.256,0.097 -0.353,0 l -3.84,-3.838 z"
          id="path5314"
@@ -5762,7 +5777,9 @@
     </g>
     <g
        transform="translate(39.99258,810.23656)"
-       id="g5316">
+       id="g5316"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          inkscape:connector-curvature="0"
          id="path5318"
@@ -5770,7 +5787,9 @@
     </g>
     <g
        transform="translate(231.99258,785.23656)"
-       id="g5320">
+       id="g5320"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          inkscape:connector-curvature="0"
          id="path5322"
@@ -5778,7 +5797,9 @@
     </g>
     <g
        id="g5324"
-       transform="translate(231.99258,810.23656)">
+       transform="translate(231.99258,810.23656)"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          d="m 6.457,13.641 c -0.097,-0.097 -0.097,-0.256 0,-0.354 l 1.768,-1.768 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.713,1.714 c 0.097,0.097 0.256,0.097 0.354,0 l 5.713,-5.714 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.768,1.768 c 0.097,0.097 0.097,0.256 0,0.354 l -7.831,7.838 c -0.097,0.097 -0.256,0.097 -0.353,0 l -3.84,-3.838 z"
          id="path5326"
@@ -5786,7 +5807,9 @@
     </g>
     <g
        transform="translate(39.99258,373.86291)"
-       id="g5332">
+       id="g5332"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          inkscape:connector-curvature="0"
          id="path5334"
@@ -5794,7 +5817,9 @@
     </g>
     <g
        id="g5346"
-       transform="translate(39.99258,398.86246)">
+       transform="translate(39.99258,398.86246)"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          d="m 6.457,13.641 c -0.097,-0.097 -0.097,-0.256 0,-0.354 l 1.768,-1.768 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.713,1.714 c 0.097,0.097 0.256,0.097 0.354,0 l 5.713,-5.714 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.768,1.768 c 0.097,0.097 0.097,0.256 0,0.354 l -7.831,7.838 c -0.097,0.097 -0.256,0.097 -0.353,0 l -3.84,-3.838 z"
          id="path5348"
@@ -5802,7 +5827,9 @@
     </g>
     <g
        transform="translate(39.99258,423.86246)"
-       id="g5350">
+       id="g5350"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          inkscape:connector-curvature="0"
          id="path5352"
@@ -5810,7 +5837,9 @@
     </g>
     <g
        id="g5354"
-       transform="translate(39.99258,448.86246)">
+       transform="translate(39.99258,448.86246)"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          d="m 6.457,13.641 c -0.097,-0.097 -0.097,-0.256 0,-0.354 l 1.768,-1.768 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.713,1.714 c 0.097,0.097 0.256,0.097 0.354,0 l 5.713,-5.714 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.768,1.768 c 0.097,0.097 0.097,0.256 0,0.354 l -7.831,7.838 c -0.097,0.097 -0.256,0.097 -0.353,0 l -3.84,-3.838 z"
          id="path5356"
@@ -5818,7 +5847,9 @@
     </g>
     <g
        transform="translate(231.99258,450.23646)"
-       id="g5358">
+       id="g5358"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          inkscape:connector-curvature="0"
          id="path5360"
@@ -5826,7 +5857,9 @@
     </g>
     <g
        id="g5362"
-       transform="translate(231.99258,475.23646)">
+       transform="translate(231.99258,475.23646)"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          d="m 6.457,13.641 c -0.097,-0.097 -0.097,-0.256 0,-0.354 l 1.768,-1.768 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.713,1.714 c 0.097,0.097 0.256,0.097 0.354,0 l 5.713,-5.714 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.768,1.768 c 0.097,0.097 0.097,0.256 0,0.354 l -7.831,7.838 c -0.097,0.097 -0.256,0.097 -0.353,0 l -3.84,-3.838 z"
          id="path5364"
@@ -5834,7 +5867,9 @@
     </g>
     <g
        transform="translate(231.99258,500.23646)"
-       id="g5366">
+       id="g5366"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          inkscape:connector-curvature="0"
          id="path5368"
@@ -5842,7 +5877,9 @@
     </g>
     <g
        id="g5370"
-       transform="translate(559.99258,373.86291)">
+       transform="translate(559.99258,373.86291)"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          d="m 6.457,13.641 c -0.097,-0.097 -0.097,-0.256 0,-0.354 l 1.768,-1.768 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.713,1.714 c 0.097,0.097 0.256,0.097 0.354,0 l 5.713,-5.714 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.768,1.768 c 0.097,0.097 0.097,0.256 0,0.354 l -7.831,7.838 c -0.097,0.097 -0.256,0.097 -0.353,0 l -3.84,-3.838 z"
          id="path5372"
@@ -5850,7 +5887,9 @@
     </g>
     <g
        transform="translate(559.99258,398.86246)"
-       id="g5374">
+       id="g5374"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          inkscape:connector-curvature="0"
          id="path5376"
@@ -5858,7 +5897,9 @@
     </g>
     <g
        id="g5378"
-       transform="translate(559.99258,423.86246)">
+       transform="translate(559.99258,423.86246)"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          d="m 6.457,13.641 c -0.097,-0.097 -0.097,-0.256 0,-0.354 l 1.768,-1.768 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.713,1.714 c 0.097,0.097 0.256,0.097 0.354,0 l 5.713,-5.714 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.768,1.768 c 0.097,0.097 0.097,0.256 0,0.354 l -7.831,7.838 c -0.097,0.097 -0.256,0.097 -0.353,0 l -3.84,-3.838 z"
          id="path5380"
@@ -5866,7 +5907,9 @@
     </g>
     <g
        transform="translate(559.99258,448.86246)"
-       id="g5382">
+       id="g5382"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          inkscape:connector-curvature="0"
          id="path5384"
@@ -5874,7 +5917,9 @@
     </g>
     <g
        id="remove"
-       transform="translate(751.66169,475.07442)">
+       transform="translate(751.66169,475.07442)"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          d="m 16.825,15.036 -1.787,1.788 c -0.098,0.099 -0.26,0.099 -0.358,0 L 12,14.146 9.321,16.825 c -0.098,0.098 -0.26,0.098 -0.358,0 L 7.175,15.037 c -0.098,-0.099 -0.098,-0.26 0,-0.358 L 9.854,12 7.176,9.32 C 7.078,9.222 7.078,9.06 7.176,8.962 L 8.964,7.175 c 0.099,-0.098 0.26,-0.098 0.358,0 L 12,9.853 14.679,7.174 c 0.098,-0.098 0.26,-0.098 0.358,0 l 1.788,1.788 c 0.098,0.098 0.098,0.26 0,0.358 l -2.678,2.678 2.679,2.679 c 0.097,0.099 0.097,0.26 -0.001,0.359 z"
          id="path_15_"
@@ -5882,7 +5927,9 @@
     </g>
     <g
        transform="translate(751.19275,423.86246)"
-       id="g5444">
+       id="g5444"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          inkscape:connector-curvature="0"
          id="path5446"
@@ -5890,7 +5937,9 @@
     </g>
     <g
        id="g5448"
-       transform="translate(751.19275,448.86246)">
+       transform="translate(751.19275,448.86246)"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          d="m 6.457,13.641 c -0.097,-0.097 -0.097,-0.256 0,-0.354 l 1.768,-1.768 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.713,1.714 c 0.097,0.097 0.256,0.097 0.354,0 l 5.713,-5.714 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.768,1.768 c 0.097,0.097 0.097,0.256 0,0.354 l -7.831,7.838 c -0.097,0.097 -0.256,0.097 -0.353,0 l -3.84,-3.838 z"
          id="path5450"
@@ -5898,7 +5947,9 @@
     </g>
     <g
        transform="translate(751.66169,500.07471)"
-       id="g5452">
+       id="g5452"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          inkscape:connector-curvature="0"
          id="path5454"
@@ -5906,7 +5957,9 @@
     </g>
     <g
        id="g5456"
-       transform="translate(40.461517,734.36241)">
+       transform="translate(40.461517,734.36241)"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          d="m 16.825,15.036 -1.787,1.788 c -0.098,0.099 -0.26,0.099 -0.358,0 L 12,14.146 9.321,16.825 c -0.098,0.098 -0.26,0.098 -0.358,0 L 7.175,15.037 c -0.098,-0.099 -0.098,-0.26 0,-0.358 L 9.854,12 7.176,9.32 C 7.078,9.222 7.078,9.06 7.176,8.962 L 8.964,7.175 c 0.099,-0.098 0.26,-0.098 0.358,0 L 12,9.853 14.679,7.174 c 0.098,-0.098 0.26,-0.098 0.358,0 l 1.788,1.788 c 0.098,0.098 0.098,0.26 0,0.358 l -2.678,2.678 2.679,2.679 c 0.097,0.099 0.097,0.26 -0.001,0.359 z"
          id="path5458"
@@ -5914,7 +5967,9 @@
     </g>
     <g
        transform="translate(40.461517,759.36271)"
-       id="g5466">
+       id="g5466"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          inkscape:connector-curvature="0"
          id="path5468"
@@ -5922,7 +5977,9 @@
     </g>
     <g
        transform="translate(232.46152,836.46371)"
-       id="g5470">
+       id="g5470"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          inkscape:connector-curvature="0"
          id="path5472"
@@ -5930,7 +5987,9 @@
     </g>
     <g
        id="g5474"
-       transform="translate(232.46152,861.46371)">
+       transform="translate(232.46152,861.46371)"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          d="m 16.825,15.036 -1.787,1.788 c -0.098,0.099 -0.26,0.099 -0.358,0 L 12,14.146 9.321,16.825 c -0.098,0.098 -0.26,0.098 -0.358,0 L 7.175,15.037 c -0.098,-0.099 -0.098,-0.26 0,-0.358 L 9.854,12 7.176,9.32 C 7.078,9.222 7.078,9.06 7.176,8.962 L 8.964,7.175 c 0.099,-0.098 0.26,-0.098 0.358,0 L 12,9.853 14.679,7.174 c 0.098,-0.098 0.26,-0.098 0.358,0 l 1.788,1.788 c 0.098,0.098 0.098,0.26 0,0.358 l -2.678,2.678 2.679,2.679 c 0.097,0.099 0.097,0.26 -0.001,0.359 z"
          id="path5476"
@@ -5938,7 +5997,9 @@
     </g>
     <g
        transform="translate(751.99258,783.86291)"
-       id="g5478">
+       id="g5478"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          inkscape:connector-curvature="0"
          id="path5480"
@@ -5946,7 +6007,9 @@
     </g>
     <g
        id="g5482"
-       transform="translate(751.99258,808.86246)">
+       transform="translate(751.99258,808.86246)"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          d="m 6.457,13.641 c -0.097,-0.097 -0.097,-0.256 0,-0.354 l 1.768,-1.768 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.713,1.714 c 0.097,0.097 0.256,0.097 0.354,0 l 5.713,-5.714 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.768,1.768 c 0.097,0.097 0.097,0.256 0,0.354 l -7.831,7.838 c -0.097,0.097 -0.256,0.097 -0.353,0 l -3.84,-3.838 z"
          id="path5484"
@@ -5954,7 +6017,9 @@
     </g>
     <g
        transform="translate(751.99258,833.86246)"
-       id="g5486">
+       id="g5486"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          inkscape:connector-curvature="0"
          id="path5488"
@@ -5962,7 +6027,9 @@
     </g>
     <g
        id="g5490"
-       transform="translate(751.99258,858.86246)">
+       transform="translate(751.99258,858.86246)"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          d="m 6.457,13.641 c -0.097,-0.097 -0.097,-0.256 0,-0.354 l 1.768,-1.768 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.713,1.714 c 0.097,0.097 0.256,0.097 0.354,0 l 5.713,-5.714 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.768,1.768 c 0.097,0.097 0.097,0.256 0,0.354 l -7.831,7.838 c -0.097,0.097 -0.256,0.097 -0.353,0 l -3.84,-3.838 z"
          id="path5492"
@@ -5970,7 +6037,9 @@
     </g>
     <g
        id="g5494"
-       transform="translate(559.34862,783.86246)">
+       transform="translate(559.34862,783.86246)"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          d="m 6.457,13.641 c -0.097,-0.097 -0.097,-0.256 0,-0.354 l 1.768,-1.768 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.713,1.714 c 0.097,0.097 0.256,0.097 0.354,0 l 5.713,-5.714 c 0.097,-0.097 0.256,-0.097 0.354,0 l 1.768,1.768 c 0.097,0.097 0.097,0.256 0,0.354 l -7.831,7.838 c -0.097,0.097 -0.256,0.097 -0.353,0 l -3.84,-3.838 z"
          id="path5496"
@@ -5978,7 +6047,9 @@
     </g>
     <g
        transform="translate(559.34862,809.81046)"
-       id="g5498">
+       id="g5498"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          inkscape:connector-curvature="0"
          id="path5500"
@@ -5986,7 +6057,9 @@
     </g>
     <g
        id="g5502"
-       transform="translate(559.81756,735.46371)">
+       transform="translate(559.81756,735.46371)"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          d="m 16.825,15.036 -1.787,1.788 c -0.098,0.099 -0.26,0.099 -0.358,0 L 12,14.146 9.321,16.825 c -0.098,0.098 -0.26,0.098 -0.358,0 L 7.175,15.037 c -0.098,-0.099 -0.098,-0.26 0,-0.358 L 9.854,12 7.176,9.32 C 7.078,9.222 7.078,9.06 7.176,8.962 L 8.964,7.175 c 0.099,-0.098 0.26,-0.098 0.358,0 L 12,9.853 14.679,7.174 c 0.098,-0.098 0.26,-0.098 0.358,0 l 1.788,1.788 c 0.098,0.098 0.098,0.26 0,0.358 l -2.678,2.678 2.679,2.679 c 0.097,0.099 0.097,0.26 -0.001,0.359 z"
          id="path5504"
@@ -5994,7 +6067,9 @@
     </g>
     <g
        transform="translate(559.81756,760.46371)"
-       id="g5506">
+       id="g5506"
+       inkscape:export-xdpi="900"
+       inkscape:export-ydpi="900">
       <path
          inkscape:connector-curvature="0"
          id="path5508"

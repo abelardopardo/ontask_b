@@ -212,25 +212,19 @@ class SelectColumnUploadForm(forms.Form):
 # Step 3 of the CSV upload: select unique keys to merge
 class SelectKeysForm(forms.Form):
     how_merge_choices = [
-        ('outer', 'the union of keys in existing and new tables (outer)'),
-        ('inner', 'the intersection of keys in existing and new table (inner)'),
-        ('left', 'only the keys in the existing table'),
-        ('right', 'only the keys in the new table'),
+        ('', '- Choose row selection method -'),
+        ('outer', '1) Select all rows in both the existing and new table'),
+        ('inner', '2) Select only the rows with keys present in both the '
+                  'existing and new table'),
+        ('left', '3) Select only the rows with keys in the existing table'),
+        ('right', '4) Select only the rows with keys in the new table'),
     ]
 
-    dst_help = """Key column in the existing table to match with the new 
-    data."""
+    dst_help = "Key column in the existing table to match with the new table."
 
-    src_help = """Key column in the new table to match with the existing data."""
+    src_help = "Key column in the new table to match with the existing table."
 
-    merge_help = """How the keys in the table and the file are used for the 
-    merge: 1) If only the keys from the table are used, any row in the file 
-    with a key value not in the table is removed (default). 2) If only the 
-    keys from the file are used, any row in the table with a key value not 
-    in the file is removed. 3) If the union of keys is used, no row is 
-    removed, but some rows will have empty values. 4) If the intersection of 
-    the keys is used, only those rows with keys in both the table and the 
-    file will be updated, the rest will be deleted."""
+    merge_help = "Select one method to see detailed information"
 
     def __init__(self, *args, **kargs):
         # Get the dst choices
@@ -247,7 +241,7 @@ class SelectKeysForm(forms.Form):
         src_choice_initial = \
             next((v for x, v in enumerate(src_choices)
                   if v[0] == src_selected_key),
-                 ('', '---'))
+                 ('', '- Select merge option -'))
 
         how_merge = kargs.pop('how_merge', None)
         how_merge_initial = \
@@ -261,21 +255,21 @@ class SelectKeysForm(forms.Form):
             forms.ChoiceField(initial=dst_choice_initial,
                               choices=dst_choices,
                               required=True,
-                              label='Key Column in Table',
+                              label='Key Column in Existing Table',
                               help_text=self.dst_help)
 
         self.fields['src_key'] = \
             forms.ChoiceField(initial=src_choice_initial,
                               choices=src_choices,
                               required=True,
-                              label='Key Column in CSV',
+                              label='Key Column in New Table',
                               help_text=self.src_help)
 
         self.fields['how_merge'] = \
             forms.ChoiceField(initial=how_merge_initial,
                               choices=self.how_merge_choices,
                               required=True,
-                              label='Merge rows using',
+                              label='Method to select rows to merge/update',
                               help_text=self.merge_help)
 
 
