@@ -364,4 +364,4 @@ class Column(models.Model):
 
     class Meta:
         unique_together = ('name', 'workflow')
-        ordering = ('-is_key', 'name')
+        ordering = ('-is_key',)
