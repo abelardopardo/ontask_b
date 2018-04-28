@@ -196,6 +196,7 @@ div#filter-set {
 div.conditions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 div.condition-btn {
@@ -257,9 +258,12 @@ mark {
     background-color: #dff0d8;
 }
 
-button {
+/* button {
     margin-top: 0.5ex;
     margin-bottom: 0.5ex;
+} */
+div.group-conditions > label:not([class*=active]) {
+    opacity: 0.3;
 }
 a.btn {
     margin-top: 0.5ex;
