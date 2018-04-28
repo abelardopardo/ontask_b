@@ -233,6 +233,13 @@ class Column(models.Model):
                                  null=False,
                                  blank=False)
 
+    # Position of the column in the workflow table
+    position = models.IntegerField(verbose_name='Column position',
+                                   default=0,
+                                   name='position',
+                                   null=False,
+                                   blank=False)
+
     # Boolean stating if the column is included in the visualizations
     in_viz = models.BooleanField(default=True,
                                  verbose_name='Include in visualization',
@@ -364,4 +371,4 @@ class Column(models.Model):
 
     class Meta:
         unique_together = ('name', 'workflow')
-        ordering = ('-is_key',)
+        ordering = ('-is_key', 'position')
