@@ -294,6 +294,7 @@ SUMMERNOTE_CONFIG = {
     },
     'lazy': 'true',
     'dialogsInBody': 'true',
+    'disableDragAndDrop': 'true',
 }
 
 # Extra configuration options
