@@ -17,6 +17,7 @@ from rest_framework.renderers import JSONRenderer
 import logs.ops
 from action.models import Condition, Action
 from dataops import formula_evaluation, pandas_db, ops
+from table.models import View
 from .models import Workflow, Column
 from .serializers import (WorkflowExportSerializer, WorkflowImportSerializer)
 
@@ -215,6 +216,8 @@ def flush_workflow(workflow):
 
     4) Reflect the number of selected columns to -1 for all actions
 
+    5) Delete all the views attached to the workflow
+
     :param workflow: Workflow object
     :return: Reflected in the DB
     """
@@ -240,6 +243,9 @@ def flush_workflow(workflow):
     for action in Action.objects.filter(workflow=workflow):
         action.n_selected_rows = -1
         action.save()
+
+    # Step 5: Delete all the views attached to the workflow
+    View.objects.filter(workflow__id=workflow.id).delete()
 
     # Save the workflow with the new fields.
     workflow.save()
