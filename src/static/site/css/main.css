@@ -265,9 +265,9 @@ mark {
 div.group-conditions > label:not([class*=active]) {
     opacity: 0.3;
 }
-a.btn {
+/* a.btn {
     margin-top: 0.5ex;
-}
+} */
 
 #base_footer .div1 {
     float: left;
