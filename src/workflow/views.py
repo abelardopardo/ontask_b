@@ -269,7 +269,7 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
             cpos = Column.objects.filter(
                 workflow__id=workflow_id
             ).values_list('position', flat=True)
-            # assert sorted(cpos) == range(1, len(cpos) + 1)
+            assert sorted(cpos) == range(1, len(cpos) + 1)
 
         return context
 

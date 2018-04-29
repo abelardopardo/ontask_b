@@ -236,7 +236,7 @@ class Column(models.Model):
     # Position of the column in the workflow table
     position = models.IntegerField(
         verbose_name='Column position (zero to insert last)',
-        default=1,
+        default=0,
         name='position',
         null=False,
         blank=False

@@ -127,8 +127,6 @@ class ColumnBasicForm(forms.ModelForm):
         self.fields['raw_categories'].initial = \
             ', '.join([str(x) for x in self.instance.get_categories()])
 
-        self.fields['position'].initial = 0
-
         self.fields['data_type'].choices = self.data_type_choices
 
     def clean(self):
@@ -157,11 +155,6 @@ class ColumnBasicForm(forms.ModelForm):
                     'There is a column already with this name'
                 )
                 return data
-
-        # Check and force a correct column index
-        ncols = Column.objects.filter(workflow__id = self.workflow.id).count()
-        if data['position'] < 1 or data['position'] > ncols:
-            data['position'] = ncols + 1
 
         # Categories must be valid types
         if 'raw_categories' in self.changed_data:
@@ -271,6 +264,11 @@ class ColumnAddForm(ColumnBasicForm):
                     'This value is not in the list of allowed values'
                 )
 
+        # Check and force a correct column index
+        ncols = Column.objects.filter(workflow__id = self.workflow.id).count()
+        if data['position'] < 1 or data['position'] > ncols:
+            data['position'] = ncols + 1
+
         return data
 
     class Meta(ColumnBasicForm.Meta):
@@ -313,6 +311,11 @@ class ColumnRenameForm(ColumnBasicForm):
                     'The column does not have unique values for each row.'
                 )
                 return data
+
+        # Check and force a correct column index
+        ncols = Column.objects.filter(workflow__id = self.workflow.id).count()
+        if data['position'] < 1 or data['position'] > ncols:
+            data['position'] = ncols
 
         return data
 
@@ -382,10 +385,8 @@ class FormulaColumnAddForm(forms.ModelForm):
             return data
 
         # Check and force a correct column index
-        if data['position'] < 1:
-            data['position'] = 1
-        ncols = len(self.wf_columns)
-        if data['position'] > ncols + 1:
+        ncols = Column.objects.filter(workflow__id = self.workflow.id).count()
+        if data['position'] < 1 or data['position'] > ncols:
             data['position'] = ncols + 1
 
         return data
