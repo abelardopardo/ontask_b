@@ -86,7 +86,7 @@ class EditActionInForm(forms.ModelForm):
 
     class Meta:
         model = Action
-        fields = ('filter', 'columns')
+        fields = ('name', 'description_text', 'columns', 'filter')
 
 
 # Form to enter values in a row

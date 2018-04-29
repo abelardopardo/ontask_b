@@ -33,24 +33,28 @@
 {% endblock %}
 {% block title %}{{ block.super }}Edit Action In{% endblock %}
 {% block container %}
-<div align="center" class="container-fluid">
-  <h1 class="page-header"><strong>{{ action.name }}</strong></h1>
-  <form method="POST" action="" onsubmit="return insert_fields(this)">
-    {% include 'action/includes/partial_edit_in_buttons.html' %}
-    {% csrf_token %}
-    {% if form.errors %}
-      {% for error in form.non_field_errors %}
-        <div class="alert alert-danger">
-          <strong>{{ error|escape }}</strong>
-        </div>
-      {% endfor %}
-    {% endif %}
-    {% render_field form.filter class="form-control" %}
-    <h4>Condition to select students</h4>
-    <div id="builder" class="container"></div>
-    <h4>Select the columns to use in the action</h4>
-    {% render_field form.columns class="form-control" %}
-    {% include 'action/includes/partial_edit_in_buttons.html' %}
-  </form>
-</div>
+  <div align="center" class="container-fluid">
+    <h1 class="page-header"><strong>{{ action.name }}</strong></h1>
+    <form method="POST" action="" onsubmit="return insert_fields(this)">
+      {% include 'action/includes/partial_edit_in_buttons.html' %}
+      {% csrf_token %}
+      {% if form.errors %}
+        {% for error in form.non_field_errors %}
+          <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+          </div>
+        {% endfor %}
+      {% endif %}
+      <h4>Name</h4>
+      {% render_field form.name class="form-control" %}
+      <h4>Description (shown to students)</h4>
+      {% render_field form.description_text class="form-control" %}
+      <h4>Columns to obtain and store the data</h4>
+      {% render_field form.filter class="form-control" %}
+      {% render_field form.columns class="form-control" %}
+      <h4>Filter students (optional)</h4>
+      <div id="builder" class="container"></div>
+      {% include 'action/includes/partial_edit_in_buttons.html' %}
+    </form>
+  </div>
 {% endblock container %}
