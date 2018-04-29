@@ -310,3 +310,10 @@ div.sol-container {
 .modal-body div {
     word-wrap: break-word;
 }
+
+a.column-move-prev > span,
+a.column-move-next> span,
+a.column-move-top> span,
+a.column-move-bottom> span {
+    font-size:75%;
+}

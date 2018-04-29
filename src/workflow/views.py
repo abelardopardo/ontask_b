@@ -263,7 +263,7 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
         # Safety check for consistency (only in development)
         if settings.DEBUG:
-            assert pandas_db.check_wf_df(self.object)
+            # assert pandas_db.check_wf_df(self.object)
 
             # Columns are properly numbered
             cpos = Column.objects.filter(
@@ -465,7 +465,10 @@ def column_ss(request, pk):
             col_data_type = 'number'
 
         final_qs.append([
-            col.position,
+            render_to_string(
+                'workflow/includes/workflow_column_movement.html',
+                {'column': col}
+            ),
             col.name,
             col_data_type,
             '<span class="true">✔</span>' if col.is_key \

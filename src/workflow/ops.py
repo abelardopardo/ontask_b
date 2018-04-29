@@ -454,3 +454,19 @@ def reposition_columns(workflow, from_idx, to_idx):
     for col in cols:
         col.position = col.position + step
         col.save()
+
+
+def reposition_column_and_update_df(workflow, column, to_idx):
+    """
+
+    :param workflow: Workflow object for which the repositioning is done
+    :param column: column object to relocate
+    :param to_idx: Destination index of the given column
+    :return: Content reflected in the DB
+    """
+
+    df = pandas_db.load_from_db(workflow.id)
+    reposition_columns(workflow, column.position, to_idx)
+    column.position = to_idx
+    column.save()
+    ops.store_dataframe_in_db(df, workflow.id)

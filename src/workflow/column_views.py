@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.http import JsonResponse
+from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 
@@ -21,7 +22,8 @@ from .ops import (
     get_workflow,
     workflow_delete_column,
     clone_column,
-    reposition_columns)
+    reposition_columns,
+    reposition_column_and_update_df)
 
 # These are the column operands offered through the GUI. They have immediate
 # translations onto Pandas operators over dataframes.
@@ -508,3 +510,126 @@ def column_clone(request, pk):
                                     kwargs={'pk': workflow.id})
 
     return JsonResponse(data)
+
+
+@user_passes_test(is_instructor)
+def column_move_prev(request, pk):
+    """
+
+    :param request: HTTP request to move a column to its previous position
+    :param pk: Column ID
+    :return:
+    """
+
+    # JSON response, context and default values
+    data = dict()  # JSON response
+
+    # Get the workflow element
+    workflow = get_workflow(request)
+    if not workflow:
+        return JsonResponse({'html_redirect': reverse('workflow:index')})
+
+    # Get the column
+    try:
+        column = Column.objects.get(pk=pk, workflow=workflow)
+    except ObjectDoesNotExist:
+        return JsonResponse({
+            'html_redirect': reverse('workflow:detail',
+                                      kwargs={'pk': workflow.id})
+        })
+
+    # The workflow and column objects have been correctly obtained
+    if column.position > 1:
+        reposition_column_and_update_df(workflow, column, column.position - 1)
+
+    return JsonResponse({})
+
+
+@user_passes_test(is_instructor)
+def column_move_next(request, pk):
+    """
+
+    :param request: HTTP request to move a column to its next position
+    :param pk: Column ID
+    :return:
+    """
+
+    # Get the workflow element
+    workflow = get_workflow(request)
+    if not workflow:
+        return JsonResponse({'html_redirect': reverse('workflow:index')})
+
+    # Get the column
+    try:
+        column = Column.objects.get(pk=pk, workflow=workflow)
+    except ObjectDoesNotExist:
+        return JsonResponse({
+            'html_redirect': reverse('workflow:detail',
+                                      kwargs={'pk': workflow.id})
+        })
+
+    # The workflow and column objects have been correctly obtained
+    if column.position < workflow.ncols:
+        reposition_column_and_update_df(workflow, column, column.position + 1)
+
+    return JsonResponse({})
+
+
+@user_passes_test(is_instructor)
+def column_move_top(request, pk):
+    """
+
+    :param request: HTTP request to move a column to the top of the list
+    :param pk: Column ID
+    :return:
+    """
+
+    # Get the workflow element
+    workflow = get_workflow(request)
+    if not workflow:
+        return JsonResponse({'html_redirect': reverse('workflow:index')})
+
+    # Get the column
+    try:
+        column = Column.objects.get(pk=pk, workflow=workflow)
+    except ObjectDoesNotExist:
+        return JsonResponse({
+            'html_redirect': reverse('workflow:detail',
+                                      kwargs={'pk': workflow.id})
+        })
+
+    # The workflow and column objects have been correctly obtained
+    if column.position > 1:
+        reposition_column_and_update_df(workflow, column, 1)
+
+    return JsonResponse({})
+
+
+@user_passes_test(is_instructor)
+def column_move_bottom(request, pk):
+    """
+
+    :param request: HTTP request to move a column to end of the list
+    :param pk: Column ID
+    :return:
+    """
+
+    # Get the workflow element
+    workflow = get_workflow(request)
+    if not workflow:
+        return JsonResponse({'html_redirect': reverse('workflow:index')})
+
+    # Get the column
+    try:
+        column = Column.objects.get(pk=pk, workflow=workflow)
+    except ObjectDoesNotExist:
+        return JsonResponse({
+            'html_redirect': reverse('workflow:detail',
+                                      kwargs={'pk': workflow.id})
+        })
+
+    # The workflow and column objects have been correctly obtained
+    if column.position < workflow.ncols:
+        reposition_column_and_update_df(workflow, column, workflow.ncols)
+
+    return JsonResponse({})

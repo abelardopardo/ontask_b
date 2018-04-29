@@ -17,6 +17,7 @@
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
   <script src="{% static 'site/js/sol.js' %}"></script>
   <script src="{% static 'table/js/table.js' %}{% otv %}"></script>
+  <script src="{% static 'workflow/js/column_move.js' %}{% otv %}"></script>
   <script type="text/javascript">
     if (document.getElementById("table-data") != null) {
         // Required for DataTables
@@ -179,13 +180,40 @@
           <tr>
             {% for col in columns %}
               <th>
-                {% if col.data_type == 'integer' or col.data_type == 'double' %}
-                  number {% else %}{{ col.data_type }}{% endif %}<br/>
+                <div style="display:block;">
                 {% if col.is_active %}
                   <font color="green">Active</font>
                 {% else %}
                   <font color="red">Inactive</font>
                 {% endif %}
+                </div>
+                <div style="display:block;">
+                {% if col.position != 1 %}
+                  <div style="float:left;">
+                  <a href="{% url 'workflow:column_move_top' col.id %}"
+                     class="column-move-top"
+                     style="display:table-cell;">
+                    <span class="glyphicon glyphicon-step-backward"></span></a>
+                  <a href="{% url 'workflow:column_move_prev' col.id %}"
+                     class="column-move-prev"
+                     style="display:table-cell;">
+                    <span class="glyphicon glyphicon-chevron-left"></span></a>
+                  </div>
+                {% endif %}
+                {% if col.position != col.workflow.ncols %}
+                  <div style="float:right;">
+                  <a href="{% url 'workflow:column_move_next' col.id %}"
+                     class="column-move-next"
+                     style="display:table-cell;">
+                     <span
+                         class="glyphicon glyphicon-chevron-right"></span></a>
+                  <a href="{% url 'workflow:column_move_bottom' col.id %}"
+                     class="column-move-bottom"
+                     style="display:table-cell;">
+                    <span class="glyphicon glyphicon-step-forward"></span></a>
+                  </div>
+                {% endif %}
+                </div>
               </th>
             {% endfor %}
           </tr>
