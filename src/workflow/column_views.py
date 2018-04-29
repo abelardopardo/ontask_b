@@ -17,7 +17,11 @@ from .forms import (ColumnRenameForm,
                     ColumnAddForm,
                     FormulaColumnAddForm)
 from .models import Column
-from .ops import get_workflow, workflow_delete_column, clone_column
+from .ops import (
+    get_workflow,
+    workflow_delete_column,
+    clone_column,
+    reposition_columns)
 
 # These are the column operands offered through the GUI. They have immediate
 # translations onto Pandas operators over dataframes.
@@ -43,6 +47,8 @@ formula_column_operands = [
 
 @user_passes_test(is_instructor)
 def column_add(request):
+    # TODO: Encapsulate operations in a function so that is available for the
+    #  API
     # Data to send as JSON response
     data = {}
 
@@ -94,6 +100,10 @@ def column_add(request):
     # Update the column type with the value extracted from the data frame
     column.data_type = \
         pandas_db.pandas_datatype_names[df[column.name].dtype.name]
+
+    # Update the positions of the appropriate columns
+    reposition_columns(workflow, workflow.ncols + 1, column.position)
+
     column.save()
 
     # Store the df to DB
@@ -116,6 +126,8 @@ def column_add(request):
 
 @user_passes_test(is_instructor)
 def formula_column_add(request):
+    # TODO: Encapsulate operations in a function so that is available for the
+    #  API
     # Data to send as JSON response, in principle, assume form is not valid
     data = {'form_is_valid': False}
 
@@ -217,6 +229,10 @@ def formula_column_add(request):
     # Populate the column type
     column.data_type = \
         pandas_db.pandas_datatype_names[df[column.name].dtype.name]
+
+    # Update the positions of the appropriate columns
+    reposition_columns(workflow, workflow.ncols + 1, column.position)
+
     column.save()
 
     # Store the df to DB
@@ -239,6 +255,8 @@ def formula_column_add(request):
 
 @user_passes_test(is_instructor)
 def column_edit(request, pk):
+    # TODO: Encapsulate operations in a function so that is available for the
+    #  API
     # Data to send as JSON response
     data = {}
 
@@ -266,6 +284,8 @@ def column_edit(request, pk):
                             instance=column)
 
     old_name = column.name
+    # Keep a copy of the previous position
+    old_position = column.position
     context = {'form': form,
                'cname': old_name,
                'pk': pk}
@@ -282,6 +302,7 @@ def column_edit(request, pk):
 
     # Process further only if any data changed.
     if form.changed_data:
+
         # Some field changed value, so save the result, but
         # no commit as we need to propagate the info to the df
         column = form.save(commit=False)
@@ -297,6 +318,10 @@ def column_edit(request, pk):
                                       workflow,
                                       old_name,
                                       column.name)
+
+        if 'position' in form.changed_data:
+            # Update the positions of the appropriate columns
+            reposition_columns(workflow, old_position, column.position)
 
         # Save the column information
         form.save()

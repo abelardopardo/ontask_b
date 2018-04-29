@@ -1,3 +1,29 @@
+## 2.5.2 
+
+### Added
+
+- Possibility to change the order in which columns are shown.
+
+### Changed
+
+- Preventing the modal window to close when clicking outside of it.
+
+- Simplified the layout for the Action-Out screen
+
+- Changed the name of the Workflow "Rename" button to "Edit"
+
+- Search in tables is now case insensitive.
+
+- End of CSV upload operation now is followed by workflow details screen
+
+### Fixed
+
+- AND/OR button in condition builder is now easier to differentiate.
+
+- Misalignment of the NOT button in condition builder.
+
+- Bug that leaked Views when table is flushed in the workflow
+
 ## 2.5.1 (2018-04-21)
 
 ### Added

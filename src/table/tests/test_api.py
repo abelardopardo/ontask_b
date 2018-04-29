@@ -430,15 +430,14 @@ class TableApiMerge(TableApiBase):
             },
             format='json')
 
-        # Anomaly detected
-        self.assertIn('New values in column', response.data['detail'])
-        self.assertIn('are not of type', response.data['detail'])
+        # No anomaly should be detected
+        self.assertEqual(None, response.data.get('detail', None))
 
         # Get the new workflow
         workflow = Workflow.objects.all()[0]
 
         # Result should have three rows as the initial DF
-        self.assertEqual(workflow.nrows, 3)
+        self.assertEqual(workflow.nrows, 4)
 
         # Check for df/wf consistency
         self.assertTrue(pandas_db.check_wf_df(workflow))
@@ -461,15 +460,14 @@ class TableApiMerge(TableApiBase):
             },
             format='json')
 
-        # Anomaly detected
-        self.assertIn('New values in column', response.data['detail'])
-        self.assertIn('are not of type', response.data['detail'])
+        # No anomaly should be detected
+        self.assertEqual(None, response.data.get('detail', None))
 
         # Get the new workflow
         workflow = Workflow.objects.all()[0]
 
         # Result should have three rows as the initial DF
-        self.assertEqual(workflow.nrows, 3)
+        self.assertEqual(workflow.nrows, 4)
 
         # Check for df/wf consistency
         self.assertTrue(pandas_db.check_wf_df(workflow))

@@ -234,11 +234,13 @@ class Column(models.Model):
                                  blank=False)
 
     # Position of the column in the workflow table
-    position = models.IntegerField(verbose_name='Column position',
-                                   default=0,
-                                   name='position',
-                                   null=False,
-                                   blank=False)
+    position = models.IntegerField(
+        verbose_name='Column position (zero to insert last)',
+        default=1,
+        name='position',
+        null=False,
+        blank=False
+    )
 
     # Boolean stating if the column is included in the visualizations
     in_viz = models.BooleanField(default=True,

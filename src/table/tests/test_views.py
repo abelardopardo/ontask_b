@@ -80,10 +80,10 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[2]"
+            "(//input[@name='columns'])[3]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[3]"
+            "(//input[@name='columns'])[4]"
         ).click()
         self.selenium.find_element_by_css_selector(
             "div.sol-current-selection"
@@ -128,10 +128,10 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[4]"
+            "(//input[@name='columns'])[5]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[5]"
+            "(//input[@name='columns'])[6]"
         ).click()
         self.selenium.find_element_by_css_selector(
             "div.sol-current-selection"
@@ -173,10 +173,10 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[6]"
+            "(//input[@name='columns'])[7]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[7]"
+            "(//input[@name='columns'])[8]"
         ).click()
         self.selenium.find_element_by_css_selector("div.modal-body").click()
         self.selenium.find_element_by_css_selector(
@@ -216,10 +216,10 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[8]"
+            "(//input[@name='columns'])[9]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[9]"
+            "(//input[@name='columns'])[10]"
         ).click()
         self.selenium.find_element_by_css_selector("div.modal-body").click()
         self.selenium.find_element_by_css_selector(
@@ -262,10 +262,10 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[2]"
+            "(//input[@name='columns'])[3]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[3]"
+            "(//input[@name='columns'])[4]"
         ).click()
         self.selenium.find_element_by_css_selector(
             "div.sol-current-selection"
@@ -310,10 +310,10 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[4]"
+            "(//input[@name='columns'])[5]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[5]"
+            "(//input[@name='columns'])[6]"
         ).click()
         self.selenium.find_element_by_css_selector(
             "div.sol-current-selection"
@@ -357,10 +357,10 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[6]"
+            "(//input[@name='columns'])[7]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[7]"
+            "(//input[@name='columns'])[8]"
         ).click()
         self.selenium.find_element_by_css_selector("div.modal-body").click()
         self.selenium.find_element_by_css_selector(
@@ -407,10 +407,10 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
                 (By.XPATH, "(//input[@name='columns'])[12]"))
         )
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[11]"
+            "(//input[@name='columns'])[12]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[12]"
+            "(//input[@name='columns'])[13]"
         ).click()
         self.selenium.find_element_by_css_selector("div.modal-body").click()
         self.selenium.find_element_by_css_selector(
@@ -457,10 +457,10 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
                 (By.XPATH, "(//input[@name='columns'])[12]"))
         )
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[11]"
+            "(//input[@name='columns'])[12]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "(//input[@name='columns'])[12]"
+            "(//input[@name='columns'])[13]"
         ).click()
         self.selenium.find_element_by_css_selector("div.modal-body").click()
         self.selenium.find_element_by_css_selector(

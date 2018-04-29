@@ -127,6 +127,8 @@ class ColumnBasicForm(forms.ModelForm):
         self.fields['raw_categories'].initial = \
             ', '.join([str(x) for x in self.instance.get_categories()])
 
+        self.fields['position'].initial = 0
+
         self.fields['data_type'].choices = self.data_type_choices
 
     def clean(self):
@@ -155,6 +157,11 @@ class ColumnBasicForm(forms.ModelForm):
                     'There is a column already with this name'
                 )
                 return data
+
+        # Check and force a correct column index
+        ncols = Column.objects.filter(workflow__id = self.workflow.id).count()
+        if data['position'] < 1 or data['position'] > ncols:
+            data['position'] = ncols + 1
 
         # Categories must be valid types
         if 'raw_categories' in self.changed_data:
@@ -207,7 +214,8 @@ class ColumnBasicForm(forms.ModelForm):
 
     class Meta:
         model = Column
-        fields = ['name', 'description_text', 'data_type', 'raw_categories',
+        fields = ['name', 'description_text', 'data_type',
+                  'position', 'raw_categories',
                   'active_from', 'active_to']
 
         widgets = {
@@ -266,7 +274,8 @@ class ColumnAddForm(ColumnBasicForm):
         return data
 
     class Meta(ColumnBasicForm.Meta):
-        fields = ['name', 'description_text', 'data_type', 'active_from',
+        fields = ['name', 'description_text', 'data_type',
+                  'position', 'active_from',
                   'active_to']
 
 
@@ -308,7 +317,7 @@ class ColumnRenameForm(ColumnBasicForm):
         return data
 
     class Meta(ColumnBasicForm.Meta):
-        fields = ['name', 'description_text', 'data_type', 'is_key',
+        fields = ['name', 'description_text', 'data_type', 'position', 'is_key',
                   'active_from', 'active_to']
 
 
@@ -372,11 +381,19 @@ class FormulaColumnAddForm(forms.ModelForm):
             )
             return data
 
+        # Check and force a correct column index
+        if data['position'] < 1:
+            data['position'] = 1
+        ncols = len(self.wf_columns)
+        if data['position'] > ncols + 1:
+            data['position'] = ncols + 1
+
         return data
 
     class Meta(ColumnBasicForm.Meta):
         fields = ['name',
                   'description_text',
+                  'position',
                   'op_type',
                   'columns',
                   'active_from',

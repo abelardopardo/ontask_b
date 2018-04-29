@@ -349,6 +349,9 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
     # Drop the column from the DB table storing the data frame
     pandas_db.df_drop_column(workflow.id, column.name)
 
+    # Reposition the columns above the one being deleted
+    reposition_columns(workflow, column.position, workflow.ncols + 1)
+
     # Delete the column
     column.delete()
 
@@ -393,8 +396,8 @@ def clone_column(column, new_workflow=None, new_name=None):
     :return: Cloned object
     """
     # Store the old object name before squashing it
-    old_id = column.id
     old_name = column.name
+    old_position = column.position
 
     # Clone
     column.id = None
@@ -405,6 +408,11 @@ def clone_column(column, new_workflow=None, new_name=None):
     if new_workflow:
         column.workflow = new_workflow
 
+    # Reposition the columns above the one being deleted
+    reposition_columns(column.workflow,
+                       column.workflow.ncols + 1,
+                       old_position + 1)
+
     # Update
     column.save()
 
@@ -414,3 +422,35 @@ def clone_column(column, new_workflow=None, new_name=None):
     ops.store_dataframe_in_db(data_frame, column.workflow.id)
 
     return column
+
+def reposition_columns(workflow, from_idx, to_idx):
+    """
+
+    :param workflow: Workflow object where the columns are
+    :param from_idx: Position from which the column is repositioned.
+    :param to_idx: New position for the column
+    :return: Appropriate column positions are modified
+    """
+
+    # If the indeces are identical, nothing needs to be moved.
+    if from_idx == to_idx:
+        return
+
+    # if from_idx == -1:
+    #    from_idx = Column.objects.filter(workflow=workflow).count() + 1
+
+    if from_idx < to_idx:
+        cols = Column.objects.filter(workflow=workflow,
+                                     position__gt=from_idx,
+                                     position__lte=to_idx)
+        step = -1
+    else:
+        cols = Column.objects.filter(workflow=workflow,
+                                     position__gte=to_idx,
+                                     position__lt=from_idx)
+        step = 1
+
+    # Update the positions of the appropriate columns
+    for col in cols:
+        col.position = col.position + step
+        col.save()

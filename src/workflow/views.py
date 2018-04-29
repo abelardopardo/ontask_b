@@ -265,6 +265,12 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
         if settings.DEBUG:
             assert pandas_db.check_wf_df(self.object)
 
+            # Columns are properly numbered
+            cpos = Column.objects.filter(
+                workflow__id=workflow_id
+            ).values_list('position', flat=True)
+            # assert sorted(cpos) == range(1, len(cpos) + 1)
+
         return context
 
 

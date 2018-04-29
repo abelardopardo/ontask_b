@@ -445,7 +445,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         ).click()
         # Wait for the upload/merge
         WebDriverWait(self.selenium, 20).until(
-            EC.title_is('OnTask :: Dataops')
+            EC.title_is('OnTask :: Details')
         )
 
         # Check that the number of rows is the correct one in the only
@@ -642,12 +642,12 @@ class WorkflowModify(test.OntaskLiveTestCase):
             EC.presence_of_element_located((By.CLASS_NAME, 'success'))
         )
 
-        # Edit the other column
+        # Edit the another column
         self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[4]/div/button[1]"
+            "//table[@id='column-table']/tbody/tr[6]/td[4]/div/button[1]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[4]/div/ul/li[1]/button"
+            "//table[@id='column-table']/tbody/tr[6]/td[4]/div/ul/li[1]/button"
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),
@@ -667,9 +667,9 @@ class WorkflowModify(test.OntaskLiveTestCase):
         ).click()
         self.wait_close_modal_refresh_table('column-table_previous')
 
-        # Fourth column must now have name another2
+        # The column must now have name another2
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[1]").text,
+            "//table[@id='column-table']/tbody/tr[6]/td[1]").text,
                          'another2')
 
         # Goto the action page
@@ -1001,6 +1001,10 @@ class WorkflowShare(test.OntaskLiveTestCase):
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'modal-open')
             )
+        )
+        # Wait for the user share page to reload.
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'js-share-delete'))
         )
 
         # Value now should be in the table
