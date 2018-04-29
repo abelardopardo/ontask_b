@@ -465,6 +465,7 @@ def column_ss(request, pk):
             col_data_type = 'number'
 
         final_qs.append([
+            col.position,
             col.name,
             col_data_type,
             '<span class="true">✔</span>' if col.is_key \

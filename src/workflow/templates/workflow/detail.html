@@ -31,11 +31,11 @@
                   "order": [],
                   "columnDefs": [
                       {"className": "dt-center", "targets": "_all"},
-                      {"orderable": false, "targets": 3},
-                      {"searchable": false, "targets": 3},
+                      {"orderable": false, "targets": 4},
+                      {"searchable": false, "targets": 4},
                   ],
                   "createdRow": function(row, data, dataIndex) {
-                      if (data[2] == '<span class="true">✔</span>') {
+                      if (data[3] == '<span class="true">✔</span>') {
                         $(row).addClass('success');
                       }
                   },
@@ -70,6 +70,7 @@
                id="column-table">
           <thead>
             <tr>
+              <th>#</th>
               <th>Name</th>
               <th>Type</th>
               <th>Key?</th>
