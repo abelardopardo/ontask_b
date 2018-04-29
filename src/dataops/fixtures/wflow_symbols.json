@@ -1869,6 +1869,7 @@
         "workflow": 149,
         "data_type": "integer",
         "is_key": true,
+        "position": 1,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1883,6 +1884,7 @@
         "workflow": 149,
         "data_type": "string",
         "is_key": false,
+        "position": 2,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1897,6 +1899,7 @@
         "workflow": 149,
         "data_type": "string",
         "is_key": true,
+        "position": 3,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1911,6 +1914,7 @@
         "workflow": 149,
         "data_type": "double",
         "is_key": false,
+        "position": 4,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1925,6 +1929,7 @@
         "workflow": 149,
         "data_type": "boolean",
         "is_key": false,
+        "position": 5,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1939,6 +1944,7 @@
         "workflow": 149,
         "data_type": "datetime",
         "is_key": false,
+        "position": 6,
         "categories": [],
         "active_from": null,
         "active_to": null

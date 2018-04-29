@@ -611,6 +611,7 @@
         "workflow": 1,
         "data_type": "integer",
         "is_key": true,
+        "position": 1,
         "categories": []
     }
 },
@@ -622,6 +623,7 @@
         "workflow": 1,
         "data_type": "string",
         "is_key": false,
+        "position": 2,
         "categories": []
     }
 },
@@ -633,6 +635,7 @@
         "workflow": 1,
         "data_type": "string",
         "is_key": true,
+        "position": 3,
         "categories": []
     }
 },
@@ -644,6 +647,7 @@
         "workflow": 1,
         "data_type": "double",
         "is_key": true,
+        "position": 4,
         "categories": []
     }
 },
@@ -655,6 +659,7 @@
         "workflow": 1,
         "data_type": "boolean",
         "is_key": false,
+        "position": 5,
         "categories": []
     }
 },
@@ -666,6 +671,7 @@
         "workflow": 1,
         "data_type": "datetime",
         "is_key": false,
+        "position": 6,
         "categories": []
     }
 },
@@ -677,6 +683,7 @@
         "workflow": 1,
         "data_type": "string",
         "is_key": false,
+        "position": 7,
         "categories": []
     }
 },
@@ -688,6 +695,7 @@
         "workflow": 1,
         "data_type": "string",
         "is_key": false,
+        "position": 8,
         "categories": []
     }
 },

@@ -1996,6 +1996,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": true,
+        "position": 1,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2010,6 +2011,7 @@
         "workflow": 140,
         "data_type": "string",
         "is_key": true,
+        "position": 2,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2024,6 +2026,7 @@
         "workflow": 140,
         "data_type": "string",
         "is_key": false,
+        "position": 3,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2038,6 +2041,7 @@
         "workflow": 140,
         "data_type": "string",
         "is_key": false,
+        "position": 4,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2052,6 +2056,7 @@
         "workflow": 140,
         "data_type": "string",
         "is_key": false,
+        "position": 5,
         "categories": [
             "male",
             "female"
@@ -2069,6 +2074,7 @@
         "workflow": 140,
         "data_type": "string",
         "is_key": false,
+        "position": 6,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2083,6 +2089,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 7,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2097,6 +2104,7 @@
         "workflow": 140,
         "data_type": "double",
         "is_key": false,
+        "position": 8,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2111,6 +2119,7 @@
         "workflow": 140,
         "data_type": "boolean",
         "is_key": false,
+        "position": 9,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2125,6 +2134,7 @@
         "workflow": 140,
         "data_type": "datetime",
         "is_key": false,
+        "position": 10,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2139,6 +2149,7 @@
         "workflow": 140,
         "data_type": "string",
         "is_key": false,
+        "position": 11,
         "categories": [
             "",
             "Concept 1",
@@ -2159,6 +2170,7 @@
         "workflow": 140,
         "data_type": "string",
         "is_key": false,
+        "position": 12,
         "categories": [
             "",
             "Concept 1",
@@ -2179,6 +2191,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 13,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2193,6 +2206,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 14,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2207,6 +2221,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 15,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2221,6 +2236,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 16,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2235,6 +2251,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 17,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2249,6 +2266,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 18,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2263,6 +2281,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 19,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2277,6 +2296,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 20,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2291,6 +2311,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 21,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2305,6 +2326,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 22,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2319,6 +2341,7 @@
         "workflow": 140,
         "data_type": "double",
         "is_key": false,
+        "position": 23,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2333,6 +2356,7 @@
         "workflow": 140,
         "data_type": "boolean",
         "is_key": false,
+        "position": 24,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2347,6 +2371,7 @@
         "workflow": 140,
         "data_type": "double",
         "is_key": false,
+        "position": 25,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2361,6 +2386,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 26,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2375,6 +2401,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 27,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2389,6 +2416,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 28,
         "categories": [],
         "active_from": null,
         "active_to": null
