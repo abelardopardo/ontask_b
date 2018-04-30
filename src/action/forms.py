@@ -3,7 +3,6 @@ from __future__ import unicode_literals, print_function
 
 from datetimewidget.widgets import DateTimeWidget
 from django import forms
-from django.forms.widgets import SelectMultiple
 from django_summernote.widgets import SummernoteInplaceWidget
 
 from ontask import is_legal_name
@@ -49,7 +48,12 @@ class EditActionInForm(forms.ModelForm):
     to select multiple columns.
     """
 
-    # Columns to to select
+    # Key Columns to use
+    # key_cols = forms.MultipleChoiceField(
+    #     label='Key column to use',
+    #     required=True)
+
+    # Columns to select
     columns = forms.ModelMultipleChoiceField(queryset=None, required=False)
 
     def __init__(self, data, *args, **kwargs):
@@ -58,14 +62,20 @@ class EditActionInForm(forms.ModelForm):
 
         super(EditActionInForm, self).__init__(data, *args, **kwargs)
 
-        # Required enforced in the server (not in the browser)
-        self.fields['filter'].required = False
-
-        # Filter should be hidden.
-        self.fields['filter'].widget = forms.HiddenInput()
+        # The key columns to use for the workflow
+        # self.fields['key_cols'].choices = [
+        #     (x, x.name) for x in workflow.columns.filter(is_key=True)
+        # ]
 
         # The queryset for the columns must be extracted from the workflow
+        # self.fields['columns'].queryset = workflow.columns.filter(
+        # is_key=False)
         self.fields['columns'].queryset = workflow.columns.all()
+
+        # Required enforced in the server (not in the browser), and hidden
+        self.fields['filter'].required = False
+        self.fields['filter'].widget = forms.HiddenInput()
+
 
     def clean(self):
         data = super(EditActionInForm, self).clean()
@@ -74,19 +84,19 @@ class EditActionInForm(forms.ModelForm):
         if not any([a.is_key for a in data['columns']]):
             self.add_error(
                 None,
-               'There must be at least one unique column in the view')
+               'There must be at least one key column in the view')
 
         # Check if there is at least one non-key column
         if not any([not a.is_key for a in data['columns']]):
             self.add_error(
                 None,
-                'There must be at least one non-unique column in the view')
+                'There must be at least one non-key column in the view')
 
         return data
 
     class Meta:
         model = Action
-        fields = ('name', 'description_text', 'columns', 'filter')
+        fields = ('description_text', 'columns', 'filter')
 
 
 # Form to enter values in a row

@@ -27,7 +27,7 @@
       window.onload = set_qbuilder('#id_filter', qbuilder_options);
     }
     if (document.getElementById("id_columns") != null) {
-      set_column_select();
+      set_column_select("#id_columns");
     }
   </script>
 {% endblock %}
@@ -50,9 +50,9 @@
       <h4>Description (shown to students)</h4>
       {% render_field form.description_text class="form-control" %}
       <h4>Columns to obtain and store the data</h4>
-      {% render_field form.filter class="form-control" %}
       {% render_field form.columns class="form-control" %}
       <h4>Filter students (optional)</h4>
+      {% render_field form.filter class="form-control" %}
       <div id="builder" class="container"></div>
       {% include 'action/includes/partial_edit_in_buttons.html' %}
     </form>
