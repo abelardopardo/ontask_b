@@ -1,8 +1,11 @@
 <div class="container-fluid" id="condition-set" style="padding-bottom: 0.5ex;">
   <h4 class="text-center"><strong>Text Conditions</strong>
-    <button type="button" class="btn btn-sm btn-primary js-condition-create{% if not has_data %} disabled{% endif %}"
+    <button type="button"
+            class="btn btn-sm btn-primary js-condition-create{% if not has_data %} disabled{% endif %}"
             data-url="{% url 'action:create_condition' action.id %}"
-            style="margin-bottom: 0.5ex;">
+            style="margin-bottom: 0.5ex;"
+            data-toggle="tooltip"
+            title="Define a new text condition">
       <span class="glyphicon glyphicon-plus"></span> New</button></h4>
   <div class="conditions">
     {% for condition in conditions %}
@@ -11,7 +14,8 @@
                 class="btn btn-primary btn-sm js-condition-edit"
                 data-url="{% url 'action:edit_condition' condition.id %}"
                 data-toggle="tooltip"
-                title="Edit name, description and formula">{{ condition.name }}
+                title="Edit the condition's name, description and formula">{{
+          condition.name }}
         </button>
         <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
                 data-toggle="dropdown"
@@ -25,7 +29,7 @@
                     class="btn btn-default btn-sm js-condition-insert"
                     data-name="{{ condition.name }}"
                     data-toggle="tooltip"
-                    title="Surround selected text with condition">
+                    title="Insert condition to control the highlighted text">
               <span class="glyphicon glyphicon-arrow-down"></span> Insert in
               text
             </button>

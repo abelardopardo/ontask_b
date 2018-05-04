@@ -150,7 +150,8 @@ def save_workflow_form(request, form, template_name):
 
     # Here we can say that the form processing is done.
     data['form_is_valid'] = True
-    data['html_redirect'] = reverse('workflow:index')
+    data['html_redirect'] = reverse('workflow:detail',
+                                    kwargs={'pk': form.instance.id})
 
     return JsonResponse(data)
 
@@ -302,10 +303,11 @@ def update(request, pk):
                    'You can only rename workflows you created.')
     if request.is_ajax():
         data = {'form_is_valid': True,
-                'html_redirect': reverse('workflow:index')}
+                'html_redirect': reverse('workflow:detail',
+                                         kwargs={'pk': workflow.id})}
         return JsonResponse(data)
 
-    return redirect('workflow:index')
+    return redirect('workflow:detail', kwargs={'pk': workflow.id})
 
 
 @user_passes_test(is_instructor)
@@ -535,7 +537,7 @@ def clone(request, pk):
         workflow.save()
     except IntegrityError:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:details',
+        data['html_redirect'] = reverse('workflow:detail',
                                         kwargs={'pk': workflow.id})
         messages.error(request, 'Unable to clone workflow')
         return JsonResponse(data)

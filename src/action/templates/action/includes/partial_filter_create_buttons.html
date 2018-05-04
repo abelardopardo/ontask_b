@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="col-lg-12" id="filter-set">
-    <h4>Filter students
+    <h4>Filter learners
     <div class="btn-group">
       {% if filter_condition %}
         <button type="button"
@@ -8,7 +8,7 @@
                 data-url="{% url 'action:edit_filter' filter_condition.id %}"
                 data-type="filter"
                 data-toggle="tooltip"
-                title="Edit name, description and formula">
+                title="Edit the filter name and expression">
                 {{ filter_condition.name }}
         </button>
         <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
@@ -24,7 +24,7 @@
                     data-url="{% url 'action:edit_filter' filter_condition.id %}"
                     data-type="filter"
                     data-toggle="tooltip"
-                    title="Edit name, description and formula">
+                    title="Edit the filter name and expression">
               <span class="glyphicon glyphicon-pencil"></span> Edit
             </button>
           </li>
@@ -46,7 +46,15 @@
       {% endif %}
     </div></h4>
     {% if filter_condition %}
-      <p>Selects {{ selected_rows }} students out of {{ total_rows }}.</p>
+      {% if selected_rows == 0 %}
+        <p class="alert-danger">The filter excludes all learners!</p>
+      {% else %}
+        <p {% if selected_rows == 0 %}class="alert-warning"{% endif %}>
+           {{ selected_rows }} learners selected out of {{ total_rows }}.
+        </p>
+      {% endif %}
+    {% else %}
+      <p>All learners considered for this action.</p>
     {% endif %}
   </div>
 </div>

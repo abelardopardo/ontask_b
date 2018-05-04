@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load settings %}
 {% load static %}
-{% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 
@@ -14,7 +13,7 @@
 {% block container %}
 <div align="center" class="container">
   <h4 class="page-header"><strong>{{ action.name }}</strong></h4>
-  <p class="help-block">{{ action.description_text }}</p>
+  <p class="lead">{{ action.description_text }}</p>
   <div class="container-fluid">
     <form action="" method="post">
       {% csrf_token %}

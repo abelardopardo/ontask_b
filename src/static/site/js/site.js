@@ -31,10 +31,9 @@ var loadForm = function () {
     if ($(this).is('[class*="disabled"]')) {
       return;
     }
+    data = {};
     if (document.getElementById("id_subject") != null) {
-      data = {'subject_content': $("#id_subject").val()};
-    } else {
-      data = {};
+      data['subject_content'] = $("#id_subject").val();
     }
     $.ajax({
       url: btn.attr("data-url"),
@@ -113,5 +112,9 @@ var saveForm = function () {
 }
 
 $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+    $('[data-toggle="tooltip"]').tooltip({
+      trigger: "hover",
+      placement: "auto",
+      container: "body"
+    });
 });

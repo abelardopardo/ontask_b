@@ -31,9 +31,7 @@
     });
   </script>
 {% endblock %}
-
-{% block title %}{{ block.super }}Edit action out{% endblock %}
-
+{% block title %}{{ block.super }}Edit action Out{% endblock %}
 {% block container %}
   <div align="center" class="container-fluid">
     <h1 class="page-header"><strong>{{ action.name }}</strong></h1>
@@ -76,38 +74,29 @@
           {% csrf_token %}
           {{ form|safe }}
           <div style="margin: 1ex 0 1ex 0;">
-            <button type="button" class="btn btn-info js-action-preview"
+            <button type="button"
+                    class="btn btn-info js-action-preview {% if selected_rows == 0 %}disabled{% endif %}"
                     style="margin-right:2ex;"
                     data-url="{% url 'action:preview' action.id 1 %}"
                     data-toggle="tooltip"
-                    title="Preview the text evaluated for each table row">
+                title="See how is the content shown to each learner">
               <span class="glyphicon glyphicon-eye-open"></span> Preview
-            </button>
-            <button type="submit" name="Submit" value="Save"
-                    style="margin-right:2ex;"
-                    class="btn btn-primary"
-                    data-toggle="tooltip"
-                    title="Save the text and remain in this page">
-              <span class="glyphicon glyphicon-floppy-disk"></span> Save
             </button>
             <button type="submit" name="Submit" value="Save-and-close"
                     class="btn btn-primary"
                     data-toggle="tooltip"
-                    title="Save and go back to the table with all actions">
-              <span class="glyphicon glyphicon-ok"></span> Save &
-              Close</button>
+                    title="Save and go back">
+              <span class="glyphicon glyphicon-ok"></span> Done</button>
           </div>
         </form>
       </div>
     </div>
-
     <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog">
         <div class="modal-content">
         </div>
       </div>
     </div>
-
-</div>
+  </div>
 {% endblock container %}
 
