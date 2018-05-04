@@ -33,6 +33,16 @@ urlpatterns = [
         views_action.edit_action_in,
         name='edit_in'),
 
+    # Select column for action in
+    url(r'^(?P<apk>\d+)/(?P<cpk>\d+)/select_column_action/$',
+        views_action.select_column_action,
+        name='select_column_action'),
+
+    # Unselect column for action in
+    url(r'^(?P<apk>\d+)/(?P<cpk>\d+)/unselect_column_action/$',
+        views_action.unselect_column_action,
+        name='unselect_column_action'),
+
     # Update an action of type 0: in, 1: Out
     url(r'^(?P<pk>\d+)/(?P<type>[01])/update/$',
         views_action.ActionUpdateView.as_view(),
@@ -57,7 +67,7 @@ urlpatterns = [
     # Say thanks
     url(r'thanks/$', views_action.thanks, name='thanks'),
 
-    # Preview content of the action out
+    # Preview content of the action
     url(r'^(?P<pk>\d+)/(?P<idx>\d+)/preview/$',
         views_action.preview,
         name='preview'),
@@ -69,6 +79,13 @@ urlpatterns = [
     # Serve the personalised content
     #
     url(r'^(?P<action_id>\d+)/serve/$', views_action.serve, name='serve'),
+
+    #
+    # DESCRIPTION
+    #
+    url(r'^(?P<pk>\d+)/edit_description/$',
+        views_action.edit_description,
+        name='edit_description'),
 
     #
     # FILTERS

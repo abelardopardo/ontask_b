@@ -7,6 +7,7 @@ operations when cloning conditions and actions, and sending messages.
 from __future__ import unicode_literals, print_function
 
 import datetime
+
 import pytz
 from django.conf import settings as ontask_settings
 from django.contrib import messages
@@ -69,7 +70,8 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
     # Bind the form with the existing data
     form = EnterActionIn(request.POST or None,
                          columns=columns,
-                         values=row_pairs.values())
+                         values=row_pairs.values(),
+                         show_key=is_inst)
 
     if is_inst:
         cancel_url = reverse('action:run', kwargs={'pk': action.id})

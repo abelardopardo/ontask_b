@@ -79,8 +79,7 @@ def save_condition_form(request,
                                                is_filter=True).exists():
             # Should not happen. Go back to editing the action
             data['form_is_valid'] = True
-            data['html_redirect'] = reverse('action:edit_out',
-                                            kwargs={'pk': action.id})
+            data['html_redirect'] = ''
             return JsonResponse(data)
 
         log_type = 'filter'
@@ -186,7 +185,7 @@ def save_condition_form(request,
                   'selected_rows': action.n_selected_rows,
                   'formula': formula})
 
-    data['html_redirect'] = reverse('action:edit_out', kwargs={'pk': action.id})
+    data['html_redirect'] = ''
     return JsonResponse(data)
 
 
@@ -319,8 +318,8 @@ def delete_filter(request, pk):
         action.save()
 
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('action:edit_out',
-                                        kwargs={'pk': cond_filter.action.id})
+        data['html_redirect'] = ''
+
         return JsonResponse(data)
 
     data['html_form'] = \

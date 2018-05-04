@@ -21,6 +21,11 @@ var insertAttributeInContent = function() {
   $(this).val(this.defaultSelected);
 }
 
+var insertColumnInActionIn = function () {
+  var val = $(this).val();
+  window.location = val;
+}
+
 var loadFormPost = function () {
     $.ajax({
       url: $(this).attr("data-url"),
@@ -82,6 +87,10 @@ $(function () {
   $("#action-table").on("click", ".js-action-clone", loadForm);
   $("#modal-item").on("submit", ".js-action-clone-form", saveForm);
 
+  // Edit Action Description
+  $("#action-in-editor").on("click", ".js-description-edit", loadForm);
+  $("#modal-item").on("submit", ".js-description-edit-form", saveForm);
+
   // Create filter
   $("#filter-set").on("click", ".js-filter-create", loadForm);
   $("#modal-item").on("submit", ".js-filter-create-form", saveForm);
@@ -122,15 +131,43 @@ $(function () {
                            "#select-column-name",
                            insertAttributeInContent);
 
+  // Insert columns in action in
+  $("#column-names").on("change",
+                       "#select-column-name",
+                       insertColumnInActionIn);
+
   // Preview
   $("#html-editor").on("click", ".js-action-preview", loadFormPost);
   $("#email-action-request-data").on("click", ".js-email-preview", loadForm);
+  $("#action-in-editor").on("click", ".js-action-preview", loadForm);
   $(".modal-content").on("click", ".js-action-preview-nxt", loadForm);
   $(".modal-content").on("click", ".js-action-preview-prv", loadForm);
 
   // Show URL
   $("#action-table").on("click", ".js-action-showurl", loadForm);
   $("#modal-item").on("submit", ".js-action-showurl-form", saveForm);
+
+  // Column Add
+  $("#column-selection").on("click", ".js-workflow-column-add", loadForm);
+  $("#modal-item").on("submit", ".js-workflow-column-add-form", saveForm);
+
+  // Derived column add
+  $("#column-selection").on("click", ".js-workflow-formula-column-add", loadForm);
+  $("#modal-item").on("submit", ".js-workflow-formula-column-add-form",
+  saveForm);
+
+  // Column Edit
+  $("#column-selected-table").on("click", ".js-workflow-column-edit", loadForm);
+  $("#modal-item").on("submit", ".js-column-edit-form", saveForm);
+
+  // Delete column
+  $("#column-selected-table").on("click", ".js-column-delete", loadForm);
+  $("#modal-item").on("submit", ".js-column-delete-form", saveForm);
+
+  // Clone column
+  $("#column-selected-table").on("click", ".js-column-clone", loadForm);
+  $("#modal-item").on("submit", ".js-column-clone-form", saveForm);
+
 });
 
 

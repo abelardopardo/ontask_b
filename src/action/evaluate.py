@@ -13,6 +13,7 @@ from django.utils.html import escape
 from validate_email import validate_email
 
 import dataops.formula_evaluation
+from action.forms import EnterActionIn
 from action.models import Condition
 from dataops import pandas_db, ops
 from ontask import OntaskException
@@ -286,20 +287,17 @@ def evaluate_action(action, extra_string, column_name):
 
 def evaluate_row(action, row_idx):
     """
+    Given an action and a row index, evaluate the content of the action for
+    that index. The evaluation depends on the action type.
+
     Given an action object and a row index:
     1) Access the attached workflow
     2) Obtain the row of data from the appropriate data frame
-    3) Evaluate the conditions with respect to the values in the row
-    4) Create a context with the result of evaluating the conditions,
-       attributes and column names to values
-    5) Run the template with the context
-    6) Return the resulting object (HTML?)
+    3) Process further depending on the type of action
 
-    :param action: Action object with pointers to conditions, filter,
-                   workflow, etc.
-    :param row_idx: Either an integer (row index), or a pair key=value to
-           filter
-    :return: None to flag an error
+    :param action: Action object
+    :param row_idx: Row index to use for evaluation
+    :return HTML content resulting from the evaluation
     """
 
     # Step 1: Get the workflow to access the data. No need to check for
@@ -326,7 +324,29 @@ def evaluate_row(action, row_idx):
         # No rows satisfy the given condition
         return None
 
-    # Step 3: Evaluate all the conditions
+    # Invoke the appropriate function depending on the action type
+    if action.is_out:
+        return evaluate_row_out(action, row_values)
+
+    return evaluate_row_in(action, row_values)
+
+
+def evaluate_row_out(action, row_values):
+    """
+    Given an action object and a row index:
+    1) Evaluate the conditions with respect to the values in the row
+    2) Create a context with the result of evaluating the conditions,
+       attributes and column names to values
+    3) Run the template with the context
+    4) Return the resulting object (HTML?)
+
+    :param action: Action object with pointers to conditions, filter,
+                   workflow, etc.
+    :param row_values: dictionary with the pairs name, value
+    :return: String with the HTML content resulting from the evaluation
+    """
+
+    # Step 1: Evaluate all the conditions
     condition_eval = {}
     condition_anomalies = []
     for condition in Condition.objects.filter(
@@ -352,12 +372,12 @@ def evaluate_row(action, row_idx):
         return render_to_string('action/incorrect_preview.html',
                                 {'missing_values': condition_anomalies})
 
-    # Step 4: Create the context with the attributes, the evaluation of the
+    # Step 2: Create the context with the attributes, the evaluation of the
     # conditions and the values of the columns.
-    attributes = workflow.attributes
+    attributes = action.workflow.attributes
     context = dict(dict(row_values, **condition_eval), **attributes)
 
-    # Step 5: run the template with the given context
+    # Step 3: run the template with the given context
     # First create the template with the string stored in the action
     try:
         result = render_template(action.content, context, action)
@@ -365,8 +385,39 @@ def evaluate_row(action, row_idx):
         return render_to_string('action/syntax_error.html',
                                 {'msg': e.message})
 
-    # Render the text
+    # Step 4: Render the text
     return result
+
+
+def evaluate_row_in(action, row_values):
+    """
+    Given an action IN object and a row index:
+    1) Create the form and the context
+    2) Run the template with the context
+    3) Return the resulting object (HTML?)
+
+    :param action: Action object.
+    :param row_values: Dictionary with pairs name/value
+    :return: String with the HTML content resulting from the evaluation
+    """
+
+    # Get the active columns attached to the action
+    columns = [c for c in action.columns.all() if c.is_active]
+
+    # Get the row values.
+    selected_values = [row_values[c.name] for c in columns]
+
+    form = EnterActionIn(None, columns=columns, values=selected_values)
+
+    # Render the form
+    return Template(
+        """<div align="center" class=≠≠≠=">
+             <h4 class="page-header"><strong>{{ action.name }}</strong></h4>
+             <p class="lead">{{ description_text }}</p>
+             {% load crispy_forms_tags %}{{ form|crispy }}
+           </div>"""
+    ).render(Context({'form': form,
+                      'description_text': action.description_text}))
 
 
 def run(*script_args):

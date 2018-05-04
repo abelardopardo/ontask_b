@@ -1,17 +1,19 @@
 {% extends 'base.html' %}
 {% load settings %}
 {% load static %}
-{% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% load django_tables2 %}
 {% block extrahead %}
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
-  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
-  {{ form.media }}
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
+  <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
-  <script src="{% static 'site/js/sol.js' %}"></script>
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
   <script type="text/javascript">
     var qbuilder_options = {
       plugins: ['bt-tooltip-errors', 'not-group'],
@@ -21,40 +23,98 @@
                   'ends_with', 'not_ends_with', 'is_empty', 'is_not_empty'],
       allow_empty: true,
       filters: {{ query_builder_ops|safe }},
-      rules: [],
     };
-    if (document.getElementById('id_filter') != null) {
-      window.onload = set_qbuilder('#id_filter', qbuilder_options);
-    }
-    if (document.getElementById("id_columns") != null) {
-      set_column_select("#id_columns");
+    if (document.getElementById("column-selected-table") != null) {
+        $(document).ready(function() {
+            $('#column-selected-table').DataTable({
+                "search": {
+                  "caseInsensitive": true,
+                },
+                stateSave: true,
+                "order": [[0, "asc"]],
+                "language": {
+                    "emptyTable": "No columns selected."
+                },
+                "columnDefs": [
+                    {"className": "dt-center", "targets": "_all"},
+                    {"orderable": false, "targets": 2},
+                    {"searchable": false, "targets": 2},
+                ],
+            });
+        });
     }
   </script>
 {% endblock %}
 {% block title %}{{ block.super }}Edit Action In{% endblock %}
 {% block container %}
-  <div align="center" class="container-fluid">
+  <div align="center" class="container-fluid" id="action-in-editor">
     <h1 class="page-header"><strong>{{ action.name }}</strong></h1>
-    <form method="POST" action="" onsubmit="return insert_fields(this)">
-      {% include 'action/includes/partial_edit_in_buttons.html' %}
-      {% csrf_token %}
-      {% if form.errors %}
-        {% for error in form.non_field_errors %}
-          <div class="alert alert-danger">
-            <strong>{{ error|escape }}</strong>
-          </div>
-        {% endfor %}
-      {% endif %}
-      <h4>Name</h4>
-      {% render_field form.name class="form-control" %}
-      <h4>Description (shown to students)</h4>
-      {% render_field form.description_text class="form-control" %}
-      <h4>Columns to obtain and store the data</h4>
-      {% render_field form.columns class="form-control" %}
-      <h4>Filter students (optional)</h4>
-      {% render_field form.filter class="form-control" %}
-      <div id="builder" class="container"></div>
-      {% include 'action/includes/partial_edit_in_buttons.html' %}
-    </form>
+    {% include 'action/includes/partial_filter_create_buttons.html' %}
+    <h4>Description (shown to learners)
+      <button type="button"
+              class="btn btn-sm btn-primary js-description-edit"
+              data-url="{% url 'action:edit_description' action.id %}"
+              data-type="filter"
+              data-toggle="tooltip"
+              title="Edit description">
+        <span class="glyphicon glyphicon-pencil"></span> Edit</button>
+    </h4>
+    {% if action.description_text %}
+      <p class="lead">{{ action.description_text }}</p>
+    {% else %}
+      <p class="alert-warning">No description text provided</p>
+    {% endif %}
+    <h4>Columns to obtain and store the data</h4>
+    {% if not has_key %}
+      <p class="alert-danger">There must be at least one key item.</p>
+    {% endif %}
+    {% if not has_no_key %}
+      <p class="alert-danger">There must be at least one non-key item.</p>
+    {% endif %}
+    {% if has_empty_description %}
+      <p class="alert-danger">All items should have non-empty descriptions
+        .</p>
+    {% endif %}
+    <div id="column-names">
+      <div style="display: table-cell; padding-right: 1ex;">Insert column:</div>
+      <div style="display: table-cell; padding-right: 1ex;">
+          <select id="select-column-name">
+            <option value="">- Column -</option>
+            {% for col in columns_to_insert %}
+              <option
+                value="{% url 'action:select_column_action' action.id col.id %}">{{ col.name }}</option>
+            {% endfor %}
+          </select>
+      </div>
+    </div>
+    <div class="container-fluid" id="column-selection"
+         style="display: table-cell; padding-right: 1ex;padding-top:1ex;">
+      {% render_table column_selected_table %}
+    </div>
+    <div class="text-center" style="margin-bottom:1.5ex;margin-top:1.5ex">
+      <button type="button"
+              class="btn btn-info js-action-preview {% if not has_key or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
+              style="margin-right:2ex;"
+              data-url="{% url 'action:preview' action.id 1 %}"
+              data-toggle="tooltip"
+              title="See how is the content shown to each learner">
+        <span class="glyphicon glyphicon-eye-open"></span> Preview
+      </button>
+      <a href="{% url 'action:index' %}"
+              style="margin-right:2ex;"
+              class="btn btn-primary"
+              data-toggle="tooltip"
+              data-placement="auto"
+              title="Save and remain editing">
+        <span class="glyphicon glyphicon-ok"></span> Done
+      </a>
+    </div>
+    <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+      </div>
+    </div>
   </div>
 {% endblock container %}
+

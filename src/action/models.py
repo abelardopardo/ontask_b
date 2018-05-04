@@ -107,6 +107,18 @@ class Action(models.Model):
         return not ((self.active_from and now < self.active_from) or
                     (self.active_to and self.active_to < now))
 
+    @property
+    def is_correct(self):
+        """
+        Function to ask if an action is correct. All actions out are correct,
+        and action ins are correct if they have at least one key column and one
+        non-key column.
+        :return: Boolean stating correctness
+        """
+
+        return self.columns.filter(is_key=True).exists() and \
+               self.columns.filter(is_key=False).exists()
+
     def rename_variable(self, old_name, new_name):
         """
         Function that renames a variable present in the action content

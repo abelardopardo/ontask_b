@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.http import JsonResponse
-from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 
@@ -506,8 +505,7 @@ def column_clone(request, pk):
                   'new_column_name': column.name})
 
     data['form_is_valid'] = True
-    data['html_redirect'] = reverse('workflow:detail',
-                                    kwargs={'pk': workflow.id})
+    data['html_redirect'] = ''
 
     return JsonResponse(data)
 

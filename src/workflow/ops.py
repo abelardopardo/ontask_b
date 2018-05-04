@@ -408,12 +408,21 @@ def clone_column(column, new_workflow=None, new_name=None):
     if new_workflow:
         column.workflow = new_workflow
 
+    # Set column at the end
+    column.position = column.workflow.ncols + 1
+    column.save()
+
+    # Update the number of columns in the workflow
+    column.workflow.ncols += 1
+    column.workflow.save()
+
     # Reposition the columns above the one being deleted
     reposition_columns(column.workflow,
-                       column.workflow.ncols + 1,
+                       column.position,
                        old_position + 1)
 
-    # Update
+    # Set the new column in the right location
+    column.position = old_position + 1
     column.save()
 
     # Add the column to the table and update it.

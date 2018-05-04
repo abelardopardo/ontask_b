@@ -25,6 +25,13 @@ class ActionForm(forms.ModelForm):
         fields = ('name', 'description_text',)
 
 
+class ActionDescriptionForm(forms.ModelForm):
+
+    class Meta:
+        model = Action
+        fields = ('description_text',)
+
+
 class EditActionOutForm(forms.ModelForm):
     """
     Main class to edit an action out. The main element is the text editor (
@@ -40,65 +47,6 @@ class EditActionOutForm(forms.ModelForm):
         fields = ('content',)
 
 
-# Form to select a subset of the columns
-class EditActionInForm(forms.ModelForm):
-    """
-    Main class to edit an action in. Two elements appear in the form. The
-    filter expression to select a subset of rows from the table, and a widget
-    to select multiple columns.
-    """
-
-    # Key Columns to use
-    # key_cols = forms.MultipleChoiceField(
-    #     label='Key column to use',
-    #     required=True)
-
-    # Columns to select
-    columns = forms.ModelMultipleChoiceField(queryset=None, required=False)
-
-    def __init__(self, data, *args, **kwargs):
-        # Get the workflow to access the columns
-        workflow = kwargs.pop('workflow', None)
-
-        super(EditActionInForm, self).__init__(data, *args, **kwargs)
-
-        # The key columns to use for the workflow
-        # self.fields['key_cols'].choices = [
-        #     (x, x.name) for x in workflow.columns.filter(is_key=True)
-        # ]
-
-        # The queryset for the columns must be extracted from the workflow
-        # self.fields['columns'].queryset = workflow.columns.filter(
-        # is_key=False)
-        self.fields['columns'].queryset = workflow.columns.all()
-
-        # Required enforced in the server (not in the browser), and hidden
-        self.fields['filter'].required = False
-        self.fields['filter'].widget = forms.HiddenInput()
-
-
-    def clean(self):
-        data = super(EditActionInForm, self).clean()
-
-        # Check if there is at least one key column
-        if not any([a.is_key for a in data['columns']]):
-            self.add_error(
-                None,
-               'There must be at least one key column in the view')
-
-        # Check if there is at least one non-key column
-        if not any([not a.is_key for a in data['columns']]):
-            self.add_error(
-                None,
-                'There must be at least one non-key column in the view')
-
-        return data
-
-    class Meta:
-        model = Action
-        fields = ('description_text', 'columns', 'filter')
-
-
 # Form to enter values in a row
 class EnterActionIn(forms.Form):
 
@@ -107,6 +55,7 @@ class EnterActionIn(forms.Form):
         # Store the instance
         self.columns = kargs.pop('columns', None)
         self.values = kargs.pop('values', None)
+        self.show_key = kargs.pop('show_key', False)
 
         super(EnterActionIn, self).__init__(*args, **kargs)
 
@@ -115,6 +64,11 @@ class EnterActionIn(forms.Form):
             self.values = [None] * len(self.columns)
 
         for idx, column in enumerate(self.columns):
+
+            # Skip the key columns if flag is true
+            if not self.show_key and column.is_key:
+                continue
+
             self.fields[field_prefix + '%s' % idx] = \
                 column_to_field(column,
                                 self.values[idx],
