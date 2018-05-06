@@ -175,8 +175,7 @@ def formula_column_add(request):
     try:
         column = form.save()
     except IntegrityError as e:
-        form.add_error('name',
-                       'A column with that name already exists')
+        form.add_error('name', 'A column with that name already exists')
         data['html_form'] = render_to_string(
             'workflow/includes/partial_formula_column_add.html',
             {'form': form},

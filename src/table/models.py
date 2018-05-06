@@ -34,11 +34,16 @@ class View(models.Model):
 
     # Set of columns for the personalised action IN (subset of the matrix
     # columns
-    columns = models.ManyToManyField(Column, related_name='views')
+    columns = models.ManyToManyField(
+        Column,
+        verbose_name="Subset of columns to show",
+        related_name='views')
 
     # Formula to select a subset of rows for action IN
-    formula = JSONField(default=dict,
-                        blank=True, null=True,
+    formula = JSONField(verbose_name="Subset of rows to show",
+                        default=dict,
+                        blank=True,
+                        null=True,
                         help_text='Preselect rows satisfying this condition')
 
     # Number of rows allowed by the formula.

@@ -17,16 +17,16 @@
       {% include 'dataops/includes/upload_buttons.html' %}
       {{ form|crispy }}
       <div id="merge_outer" style="display:none;">
-        <p>Selects all the rows from both the existing and new table for the
-          update. For cells in rows with keys in both tables, the values are
-          updated if the new table has a non-empty value (cell 4B remains
-          with value <i>b</i>).</p>
+        <p style="max-width:400px;">Selects all the rows from both the existing
+          and new table for the update. For cells in rows with keys in both
+          tables, the values are updated if the new table has a non-empty value
+          (cell 4B remains with value <i>b</i>).</p>
         <img src="{{ MEDIA_URL }}/merge_outer.png"
              alt="Merge using all the keys in either the existing or new table"
              style="width:400px;"/>
       </div>
       <div id="merge_inner" style="display:none;">
-        <p>Selects only those rows for which the key is in both tables (the
+        <p style="max-width:400px;">Selects only those rows for which the key is in both tables (the
         existing one and the one you are updating/merging) and remove the other
         rows. In the example below, Rows 1 and 2 in the existing table and 5 and
         6 of the new table are removed. The cells in the result rows are
@@ -37,7 +37,7 @@
              style="width:400px;"/>
       </div>
       <div id="merge_left" style="display:none;">
-        <p>Selects only the rows with key values present in the existing table.
+        <p style="max-width:400px;">Selects only the rows with key values present in the existing table.
         This method drops those rows in the new table with key values not in
         the existing one (rows 5 and 6 in the figure below). The cells in the
         result rows are updated only if the new value is non-empty (cell 4B
@@ -47,7 +47,7 @@
              style="width:400px;"/>
       </div>
       <div id="merge_right" style="display:none;">
-        <p>Selects only the rows with key values present in the new table. This
+        <p style="max-width:400px;">Selects only the rows with key values present in the new table. This
         method drops those rows from the existing table with key values not
         in the new table (rows 1 and 2 in the figure below). The cells in the
         result rows are updated only if the new value is non-empty (cell 4B

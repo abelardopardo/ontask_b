@@ -411,8 +411,7 @@ def evaluate_row_in(action, row_values):
 
     # Render the form
     return Template(
-        """<div align="center" class=≠≠≠=">
-             <h4 class="page-header"><strong>{{ action.name }}</strong></h4>
+        """<div align="center">
              <p class="lead">{{ description_text }}</p>
              {% load crispy_forms_tags %}{{ form|crispy }}
            </div>"""

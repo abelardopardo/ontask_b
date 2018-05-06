@@ -7,9 +7,11 @@
   <link href="{% static 'site/css/query-builder.default.min.css' %}"
         rel="stylesheet">
   {{ form.media }}
+  {% comment %}
   {% for script_src in vis_scripts %}
     <script src="{{ script_src|safe }}"></script>
   {% endfor %}
+  {% endcomment %}
 {% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}"></script>

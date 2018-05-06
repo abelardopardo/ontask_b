@@ -591,7 +591,7 @@ def edit_action_in(request, pk):
            'has_no_key': has_no_key,
            'has_empty_description': has_empty_description}
 
-    return render(request, 'action/edit_in2.html', ctx)
+    return render(request, 'action/edit_in.html', ctx)
 
 
 @user_passes_test(is_instructor)
@@ -1016,9 +1016,10 @@ def run_ss(request, pk):
     # Get the column information from the request and the rest of values.
     search_value = request.POST.get('search[value]', None)
 
-    # Get columns
+    # Get columns and the position of the first key
     columns = action.columns.all()
     column_names = [x.name for x in columns]
+    key_idx = next(idx for idx, c in enumerate(columns) if c.is_key)
 
     # See if an order column has been given.
     if order_col:
@@ -1051,14 +1052,16 @@ def run_ss(request, pk):
         dst_url = reverse('action:run_row', kwargs={'pk': action.id})
         url_parts = list(urlparse.urlparse(dst_url))
         query = dict(urlparse.parse_qs(url_parts[4]))
-        query.update({'uatn': column_names[0], 'uatv': row[0]})
+        query.update({'uatn': column_names[key_idx], 'uatv': row[key_idx]})
         url_parts[4] = urlencode(query)
         link_item = '<a href="{0}">{1}</a>'.format(
-            urlparse.urlunparse(url_parts), row[0]
+            urlparse.urlunparse(url_parts), row[key_idx]
         )
+        row = list(row)
+        row[key_idx] = link_item
 
         # Add the row for rendering
-        final_qs.append([link_item] + list(row)[1:])
+        final_qs.append(row)
 
         if items == length:
             # We reached the number or requested elements, abandon loop

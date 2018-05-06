@@ -1,7 +1,5 @@
 var show_merge_figure = function() {
-    console.log('Hello');
     var option = $(this).val();
-
     if (option == 'inner') {
         $("#merge_inner").show();
     } else {

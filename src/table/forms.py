@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 from django import forms
+
 from .models import View
 
 
@@ -14,6 +15,11 @@ class ViewAddForm(forms.ModelForm):
         self.workflow = kwargs.pop('workflow', None)
 
         super(ViewAddForm, self).__init__(data, *args, **kwargs)
+
+        # Rename some of the fields
+        self.fields['name'].label = 'View name'
+        self.fields['columns'].label = 'Columns to show'
+        self.fields['description_text'].label = 'View Description'
 
         # Required enforced in the server (not in the browser)
         self.fields['formula'].required = False
@@ -47,5 +53,4 @@ class ViewAddForm(forms.ModelForm):
         fields = ['name',
                   'description_text',
                   'formula',
-                  'columns',
-                  ]
+                  'columns']

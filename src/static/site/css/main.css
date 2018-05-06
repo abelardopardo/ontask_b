@@ -241,6 +241,7 @@ td.dt-body-center {
 #log-table td,
 #scheduler-table td,
 #column-selected-table td,
+#column-table td,
 #view-table td {
     vertical-align: middle;
 }
