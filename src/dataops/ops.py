@@ -99,13 +99,14 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
             continue
 
         # Create the new column
-        Column.objects.create(
+        column = Column(
             name=cname,
             workflow=workflow,
             data_type=pandas_datatype_names[data_frame[cname].dtype.name],
             is_key=is_unique_column(data_frame[cname]),
             position=Column.objects.filter(workflow=workflow).count() + 1,
         )
+        column.save()
 
     # Get now the new set of columns with names
     wf_columns = Column.objects.filter(
