@@ -385,7 +385,7 @@ class FormulaColumnAddForm(forms.ModelForm):
             return data
 
         # Check and force a correct column index
-        ncols = Column.objects.filter(workflow__id = self.workflow.id).count()
+        ncols = self.wf_columns.count()
         if data['position'] < 1 or data['position'] > ncols:
             data['position'] = ncols + 1
 
