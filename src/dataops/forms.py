@@ -81,9 +81,11 @@ class UploadExcelFileForm(forms.Form):
         label="",
         help_text='File in Excel format (.xls or .xlsx)')
 
-    sheet = forms.CharField(max_length=512,
-                            required=True,
-                            initial='Sheet 1')
+    sheet = forms.CharField(
+        max_length=512,
+        required=True,
+        initial='Sheet 1',
+        help_text='Sheet within the excelsheet to upload')
 
 
 # Step 1 of the CSV upload
@@ -156,6 +158,7 @@ class UploadSQLForm(forms.Form):
             )
 
         return data
+
 
 # Form to select columns to upload and rename
 class SelectColumnUploadForm(forms.Form):
@@ -313,6 +316,7 @@ class RowForm(forms.Form):
     """
     Form to enter values for a table row
     """
+
     def __init__(self, *args, **kargs):
 
         # Store the instance
