@@ -129,7 +129,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         )
 
         # Check that the filter is selecting 2 out of 3 rows
-        self.assertIn('Selects 2 out of 3 rows', self.selenium.page_source)
+        self.assertIn('2 learners selected out of 3.', self.selenium.page_source)
 
         # Add a second clause to the filter
         # Click in the edit filter button
@@ -194,7 +194,8 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         )
 
         # Check that the filter is selecting 2 out of 3 rows
-        self.assertIn('Selects 1 out of 3 rows', self.selenium.page_source)
+        self.assertIn('1 learners selected out of 3.',
+                      self.selenium.page_source)
 
         # End of session
         self.logout()

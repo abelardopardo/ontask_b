@@ -249,10 +249,10 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         )
 
         # Enter data using the RUN menu. Select one entry to populate
-        self.selenium.find_element_by_link_text("1").click()
-        self.selenium.find_element_by_id("id____ontask___select_1").click()
-        self.selenium.find_element_by_id("id____ontask___select_1").clear()
-        self.selenium.find_element_by_id("id____ontask___select_1").send_keys(
+        self.selenium.find_element_by_link_text("student1@bogus.com").click()
+        self.selenium.find_element_by_id("id____ontask___select_3").click()
+        self.selenium.find_element_by_id("id____ontask___select_3").clear()
+        self.selenium.find_element_by_id("id____ontask___select_3").send_keys(
             "Carmelo Coton2")
         self.selenium.find_element_by_id("id____ontask___select_4").click()
         self.selenium.find_element_by_id("id____ontask___select_4").clear()
@@ -308,7 +308,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.selenium.find_element_by_id("id_description_text").click()
         self.selenium.find_element_by_name("builder_rule_0_filter").click()
         Select(self.selenium.find_element_by_name(
-            "builder_rule_0_filter")).select_by_visible_text(symbols + "2")
+            "builder_rule_0_filter")).select_by_visible_text(symbols)
         self.selenium.find_element_by_name("builder_rule_0_operator").click()
         Select(self.selenium.find_element_by_name(
             "builder_rule_0_operator")).select_by_visible_text(
@@ -321,11 +321,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         # Save the condition
         self.selenium.find_element_by_xpath(
             "(//button[@type='submit'])[2]").click()
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
+        self.wait_close_modal_refresh_table('html-editor')
 
         # Create a filter
         self.selenium.find_element_by_xpath(
@@ -371,7 +367,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         )
 
         # Certain name should be in the page now.
-        self.assertIn('12.1', self.selenium.page_source)
+        self.assertIn('Carmelo Coton', self.selenium.page_source)
 
         # Click in the "Close" button
         self.selenium.find_element_by_xpath(
@@ -467,7 +463,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         # Set the right columns to process
         select = Select(self.selenium.find_element_by_id(
             'select-column-name'))
-        select.select_by_visible_text('email' + symbols)
+        select.select_by_visible_text('email')
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME,
                                         'js-workflow-column-edit'))
@@ -491,9 +487,9 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.selenium.find_element_by_link_text("student1@bogus.com").click()
 
         # Modify the value of the column
-        self.selenium.find_element_by_id("id____ontask___select_2").click()
-        self.selenium.find_element_by_id("id____ontask___select_2").clear()
-        self.selenium.find_element_by_id("id____ontask___select_2").send_keys(
+        self.selenium.find_element_by_id("id____ontask___select_1").click()
+        self.selenium.find_element_by_id("id____ontask___select_1").clear()
+        self.selenium.find_element_by_id("id____ontask___select_1").send_keys(
             "14"
         )
         # Submit changes to the first element
@@ -508,9 +504,9 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.selenium.find_element_by_link_text("student2@bogus.com").click()
 
         # Modify the value of the column
-        self.selenium.find_element_by_id("id____ontask___select_2").clear()
+        self.selenium.find_element_by_id("id____ontask___select_1").clear()
         self.selenium.find_element_by_id(
-            "id____ontask___select_2"
+            "id____ontask___select_1"
         ).send_keys("15")
         # Submit changes to the second element
         self.selenium.find_element_by_xpath(
@@ -524,10 +520,10 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.selenium.find_element_by_link_text("student3@bogus.com").click()
 
         # Modify the value of the column
-        self.selenium.find_element_by_id("id____ontask___select_2").click()
-        self.selenium.find_element_by_id("id____ontask___select_2").clear()
+        self.selenium.find_element_by_id("id____ontask___select_1").click()
+        self.selenium.find_element_by_id("id____ontask___select_1").clear()
         self.selenium.find_element_by_id(
-            "id____ontask___select_2"
+            "id____ontask___select_1"
         ).send_keys("16")
         # Submit changes to the second element
         self.selenium.find_element_by_xpath(
@@ -610,6 +606,9 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
         )
         self.selenium.find_element_by_id("checkAll").click()
         self.selenium.find_element_by_name("Submit").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('OnTask :: Details')
+        )
 
         # The number of rows must be 29
         wflow = Workflow.objects.all()[0]

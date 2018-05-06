@@ -503,12 +503,12 @@ class WorkflowModify(test.OntaskLiveTestCase):
         ).click()
         self.wait_close_modal_refresh_table('column-table_previous')
 
-        # Third column must be age, number
+        # First column must be age, number
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[2]").text,
+            "//table[@id='column-table']/tbody/tr[1]/td[2]").text,
                          'age')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[3]").text,
+            "//table[@id='column-table']/tbody/tr[1]/td[3]").text,
                          'number')
 
         # ADD COLUMNS
@@ -594,10 +594,10 @@ class WorkflowModify(test.OntaskLiveTestCase):
 
         # Sixth column must be one string
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[7]/td[2]").text,
+            "//table[@id='column-table']/tbody/tr[6]/td[2]").text,
                          'one')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[7]/td[3]").text,
+            "//table[@id='column-table']/tbody/tr[6]/td[3]").text,
                          'string')
 
         # End of session
@@ -630,10 +630,10 @@ class WorkflowModify(test.OntaskLiveTestCase):
 
         # Edit the another column
         self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[8]/td[5]/div/button[1]"
+            "//table[@id='column-table']/tbody/tr[4]/td[5]/div/button[1]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[8]/td[5]/div/ul/li[1]/button"
+            "//table[@id='column-table']/tbody/tr[4]/td[5]/div/ul/li[1]/button"
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),
@@ -655,7 +655,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
 
         # The column must now have name another2
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[8]/td[2]").text,
+            "//table[@id='column-table']/tbody/tr[4]/td[2]").text,
                          'another2')
 
         # Goto the action page

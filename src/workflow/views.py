@@ -264,7 +264,7 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
         # Safety check for consistency (only in development)
         if settings.DEBUG:
-            # assert pandas_db.check_wf_df(self.object)
+            assert pandas_db.check_wf_df(self.object)
 
             # Columns are properly numbered
             cpos = Column.objects.filter(

@@ -605,35 +605,11 @@
 },
 {
     "model": "workflow.column",
-    "pk": 1,
+    "pk": 3,
     "fields": {
         "name": "sid",
         "workflow": 1,
         "data_type": "integer",
-        "is_key": true,
-        "position": 1,
-        "categories": []
-    }
-},
-{
-    "model": "workflow.column",
-    "pk": 2,
-    "fields": {
-        "name": "name",
-        "workflow": 1,
-        "data_type": "string",
-        "is_key": false,
-        "position": 2,
-        "categories": []
-    }
-},
-{
-    "model": "workflow.column",
-    "pk": 3,
-    "fields": {
-        "name": "email",
-        "workflow": 1,
-        "data_type": "string",
         "is_key": true,
         "position": 3,
         "categories": []
@@ -641,23 +617,11 @@
 },
 {
     "model": "workflow.column",
-    "pk": 4,
-    "fields": {
-        "name": "age",
-        "workflow": 1,
-        "data_type": "double",
-        "is_key": true,
-        "position": 4,
-        "categories": []
-    }
-},
-{
-    "model": "workflow.column",
     "pk": 5,
     "fields": {
-        "name": "registered",
+        "name": "name",
         "workflow": 1,
-        "data_type": "boolean",
+        "data_type": "string",
         "is_key": false,
         "position": 5,
         "categories": []
@@ -665,13 +629,25 @@
 },
 {
     "model": "workflow.column",
-    "pk": 6,
+    "pk": 2,
     "fields": {
-        "name": "when",
+        "name": "email",
         "workflow": 1,
-        "data_type": "datetime",
-        "is_key": false,
-        "position": 6,
+        "data_type": "string",
+        "is_key": true,
+        "position": 2,
+        "categories": []
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 1,
+    "fields": {
+        "name": "age",
+        "workflow": 1,
+        "data_type": "double",
+        "is_key": true,
+        "position": 1,
         "categories": []
     }
 },
@@ -679,9 +655,9 @@
     "model": "workflow.column",
     "pk": 7,
     "fields": {
-        "name": "one",
+        "name": "registered",
         "workflow": 1,
-        "data_type": "string",
+        "data_type": "boolean",
         "is_key": false,
         "position": 7,
         "categories": []
@@ -691,11 +667,35 @@
     "model": "workflow.column",
     "pk": 8,
     "fields": {
+        "name": "when",
+        "workflow": 1,
+        "data_type": "datetime",
+        "is_key": false,
+        "position": 8,
+        "categories": []
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 6,
+    "fields": {
+        "name": "one",
+        "workflow": 1,
+        "data_type": "string",
+        "is_key": false,
+        "position": 6,
+        "categories": []
+    }
+},
+{
+    "model": "workflow.column",
+    "pk": 4,
+    "fields": {
         "name": "another",
         "workflow": 1,
         "data_type": "string",
         "is_key": false,
-        "position": 8,
+        "position": 4,
         "categories": []
     }
 },
