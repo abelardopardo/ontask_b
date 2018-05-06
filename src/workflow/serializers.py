@@ -19,6 +19,7 @@ class ColumnSerializer(serializers.ModelSerializer):
             workflow=self.context['workflow'],
             data_type=validated_data['data_type'],
             is_key=validated_data['is_key'],
+            position=validated_data['position'],
             categories=validated_data['categories']
         )
 
