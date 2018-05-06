@@ -426,6 +426,12 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[4]/td[5]/div/ul/li[1]/button"
         ).click()
+        # Wait for the modal to open
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
+                'Edit column')
+        )
 
         # Append symbols to the name
         self.selenium.find_element_by_id("id_name").click()
