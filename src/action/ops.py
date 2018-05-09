@@ -366,7 +366,8 @@ def send_messages(user,
             name=track_col_name,
             workflow=action.workflow,
             data_type='integer',
-            is_key=False
+            is_key=False,
+            position=action.workflow.ncols + 1
         )
         column.save()
 
