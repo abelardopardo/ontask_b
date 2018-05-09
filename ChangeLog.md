@@ -1,4 +1,4 @@
-## 2.5.2 
+## 2.6 
 
 ### Added
 
@@ -6,6 +6,10 @@
 
 ### Changed
 
+- Major overhaul of the documentation available when merging dataframes. When
+  choosing now the merging uption, a figure and corresponding text explains the
+  result of the operation.
+  
 - Preventing the modal window to close when clicking outside of it.
 
 - Simplified the layout for the Action-Out screen
@@ -16,6 +20,11 @@
 
 - End of CSV upload operation now is followed by workflow details screen
 
+- Re-writing of the action-in screen to make it consistent with the rest of
+  the application.
+  
+- Various navigation sequences to reduce the number of clicks
+
 ### Fixed
 
 - AND/OR button in condition builder is now easier to differentiate.
@@ -23,6 +32,8 @@
 - Misalignment of the NOT button in condition builder.
 
 - Bug that leaked Views when table is flushed in the workflow
+
+- Error in URL included in emails
 
 ## 2.5.1 (2018-04-21)
 
