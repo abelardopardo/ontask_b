@@ -35,11 +35,15 @@ env_file = join(dirname(__file__), 'local.env')
 if exists(env_file):
     environ.Env.read_env(str(env_file))
 
+# Read various variables from the environment
+BASE_URL = env('BASE_URL')
+DOMAIN_NAME = env('DOMAIN_NAME')
+
 # Build paths inside the project like this: join(BASE_DIR(), "directory")
 BASE_DIR = environ.Path(__file__) - 3
 STATICFILES_DIRS = [join(BASE_DIR(), 'static')]
 MEDIA_ROOT = join(BASE_DIR(), 'media')
-MEDIA_URL = "/media/"
+MEDIA_URL = BASE_URL + "/media/"
 ONTASK_HELP_URL = "html/index.html"
 
 # Project root folder (needed somewhere in Django
@@ -256,7 +260,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = BASE_URL + '/static/'
 
 # Crispy Form Theme - Bootstrap 3
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -268,8 +272,8 @@ MESSAGE_TAGS = {
 
 # Authentication Settings
 AUTH_USER_MODEL = 'authtools.User'
-LOGIN_REDIRECT_URL = reverse_lazy("profiles:show_self")
-LOGIN_URL = reverse_lazy("accounts:login")
+LOGIN_REDIRECT_URL = BASE_URL + reverse_lazy("profiles:show_self")
+LOGIN_URL = BASE_URL + reverse_lazy("accounts:login")
 
 THUMBNAIL_EXTENSION = 'png'     # Or any extn for your thumbnails
 

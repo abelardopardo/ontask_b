@@ -1,4 +1,8 @@
-<div class="text-center" style="margin-bottom:1.5ex;margin-top:1.5ex">
+<div class="text-center"
+     style="margin-bottom:1.5ex;margin-top:1.5ex;">
+  <button type="button" class="btn btn-default"
+          style="margin-right:2ex;"
+          onclick="location.href='{% url 'dataops:list' %}'">Cancel</button>
   <button type="button" class="btn btn-primary" style="margin-right:2ex;"
   onclick="location.href='{{ prev_step }}'">
     <span class="glyphicon glyphicon-triangle-left"></span> Back
@@ -6,7 +10,5 @@
   <button class="btn btn-primary btn-space"  style="margin-right:2ex;"
           type="Submit" name="Submit" value="Submit">
     <span class="glyphicon glyphicon-triangle-right"></span> {% if next_name %}{{ next_name }}{% else %}Next{% endif %}</button>
-  <button type="button" class="btn btn-default"
-  onclick="location.href='{% url 'dataops:list' %}'">Cancel</button>
 </div>
 
