@@ -60,11 +60,11 @@ body>.navbar-transparent {
 
 .navbar-brand {
     font-weight: bold;
+    padding: 15px 10px 15px 10px;
 }
 
 .navbar-brand > img {
     float: left;
-    margin-right: 10px;
 }
 
 .btn {
