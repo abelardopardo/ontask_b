@@ -16,6 +16,10 @@ $(function () {
   $("#table-data").on("click", ".js-column-delete", loadForm)
   $("#modal-item").on("submit", ".js-column-delete-form", saveForm)
 
+  // Clone column
+  $("#table-data").on("click", ".js-column-clone", loadForm);
+  $("#modal-item").on("submit", ".js-column-clone-form", saveForm);
+
   // Row delete
   $("#table-content").on("click", ".js-row-delete", loadForm);
   $("#modal-item").on("submit", ".js-row-delete-form", saveForm);

@@ -166,6 +166,14 @@
                     </li>
                     <li>
                       <button type="button"
+                              class="btn btn-default btn-sm js-column-clone align-middle"
+                              data-url="{% url 'workflow:column_clone' col.id %}"
+                              data-toggle="tooltip" title="Create an exact duplicate of this column">
+                          <span class="glyphicon glyphicon-duplicate"></span> Clone
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button"
                               class="btn btn-default btn-sm js-column-delete"
                               data-url="{% url 'workflow:column_delete' col.id %}"
                               data-toggle="tooltip" title="Delete column">
