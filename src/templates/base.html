@@ -37,11 +37,13 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{% url 'entry' %}">
+        <a class="navbar-brand" href="{% url 'home' %}">
           {% block navbar-brand %}
             <img src="{% static 'site/img/logo.png' %}" alt="logo">
-            <span class="glyphicon glyphicon-home"></span>
           {% endblock %}
+        </a>
+        <a class="navbar-brand" href="{% url 'entry' %}">
+          <span class="glyphicon glyphicon-home"></span>
         </a>
       </div>
       {% block navbar-menu %}
