@@ -351,13 +351,12 @@ def send_messages(user,
         msgs.append(msg)
 
     # Mass mail!
-    if str(getattr(ontask_settings, 'EMAIL_HOST')):
-        try:
-            connection = mail.get_connection()
-            connection.send_messages(msgs)
-        except Exception as e:
-            # Something went wrong, notify above
-            return e.message
+    try:
+        connection = mail.get_connection()
+        connection.send_messages(msgs)
+    except Exception as e:
+        # Something went wrong, notify above
+        return str(e)
 
     # Add the column if needed
     if add_column:

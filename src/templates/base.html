@@ -42,9 +42,11 @@
             <img src="{% static 'site/img/logo.png' %}" alt="logo">
           {% endblock %}
         </a>
-        <a class="navbar-brand" href="{% url 'entry' %}">
-          <span class="glyphicon glyphicon-home"></span>
-        </a>
+        {% if user.is_authenticated %}
+          <a class="navbar-brand" href="{% url 'entry' %}">
+            <span class="glyphicon glyphicon-home"></span>
+          </a>
+        {% endif %}
       </div>
       {% block navbar-menu %}
       <div class="collapse navbar-collapse">

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Installation process &#8212; OnTask (B.2.5.1) 1.1.0 documentation</title>
+    <title>Installation process &#8212; OnTask (B.2.6.0) 1.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
@@ -157,6 +157,8 @@ replacing the value <code class="docutils literal notranslate"><span class="pre"
 in the folder <code class="docutils literal notranslate"><span class="pre">src/ontask/settings</span></code> with the following content (note there is
 no space between variable names and the equal sign):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TIME_ZONE</span><span class="o">=</span><span class="s1">&#39;[YOUR LOCAL PYTHON TIME ZONE]&#39;</span>
+<span class="n">BASE_URL</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+<span class="n">DOMAIN_NAME</span><span class="o">=</span><span class="s1">&#39;[YOUR DOMAIN NAME]&#39;</span>
 <span class="c1"># syntax: DATABASE_URL=postgres://username:password@127.0.0.1:5432/database</span>
 <span class="n">DATABASE_URL</span><span class="o">=</span><span class="n">postgres</span><span class="p">:</span><span class="o">//</span><span class="p">[</span><span class="n">PSQLUSERNAME</span><span class="p">]:[</span><span class="n">PSQLPWD</span><span class="p">]</span><span class="nd">@127</span><span class="o">.</span><span class="mf">0.0</span><span class="o">.</span><span class="mi">1</span><span class="p">:</span><span class="mi">5432</span><span class="o">/</span><span class="n">ontask</span>
 <span class="n">SECRET_KEY</span><span class="o">=</span>
@@ -171,6 +173,12 @@ no space between variable names and the equal sign):</p>
 <p>Replace <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">LOCAL</span> <span class="pre">PYTHON</span> <span class="pre">TIME</span> <span class="pre">ZONE]</span></code> in the <code class="docutils literal notranslate"><span class="pre">local.env</span></code> file by the
 description of your time zone produced by the previous command.</p>
 </li>
+<li><p class="first">If OnTask is going to be served from a location different from the root of your server (for example <code class="docutils literal notranslate"><span class="pre">myhost.com/ontask</span></code>, then modify the value of the variable <code class="docutils literal notranslate"><span class="pre">BASE_URL</span></code> with the suffix that should follow the domain name (in the example, <code class="docutils literal notranslate"><span class="pre">/ontask</span></code>).</p>
+</li>
+</ol>
+<p>#. Modify the line starting with <code class="docutils literal notranslate"><span class="pre">DOMAIN_NAME=</span></code> and change the field
+<code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">DOMAIN</span> <span class="pre">NAME</span></code>] with the domain name of the machine hosting OnTask.</p>
+<ol class="arabic">
 <li><p class="first">Modify the line starting with <code class="docutils literal notranslate"><span class="pre">DATABASE_URL=</span></code> and change the
 field <code class="docutils literal notranslate"><span class="pre">[PSQLUSERNAME]</span></code> with the name of the Postgresql user created in the
 previous step (the one that could access the ontask database and run
@@ -501,7 +509,7 @@ tasks</em> and match it (in minutes) to the interval reflected in the crontab.</
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">OnTask (B.2.5.1)</a></h1>
+<h1 class="logo"><a href="../index.html">OnTask (B.2.6.0)</a></h1>
 
 
 

@@ -135,6 +135,8 @@ in the folder ``src/ontask/settings`` with the following content (note there is
 no space between variable names and the equal sign)::
 
    TIME_ZONE='[YOUR LOCAL PYTHON TIME ZONE]'
+   BASE_URL=''
+   DOMAIN_NAME='[YOUR DOMAIN NAME]'
    # syntax: DATABASE_URL=postgres://username:password@127.0.0.1:5432/database
    DATABASE_URL=postgres://[PSQLUSERNAME]:[PSQLPWD]@127.0.0.1:5432/ontask
    SECRET_KEY=
@@ -146,6 +148,11 @@ no space between variable names and the equal sign)::
 
    Replace ``[YOUR LOCAL PYTHON TIME ZONE]`` in the ``local.env`` file by the
    description of your time zone produced by the previous command.
+
+#. If OnTask is going to be served from a location different from the root of your server (for example ``myhost.com/ontask``, then modify the value of the variable ``BASE_URL`` with the suffix that should follow the domain name (in the example, ``/ontask``).
+
+#. Modify the line starting with ``DOMAIN_NAME=`` and change the field
+``[YOUR DOMAIN NAME``] with the domain name of the machine hosting OnTask.
 
 #. Modify the line starting with ``DATABASE_URL=`` and change the
    field ``[PSQLUSERNAME]`` with the name of the Postgresql user created in the

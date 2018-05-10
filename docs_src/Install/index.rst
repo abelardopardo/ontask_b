@@ -149,10 +149,7 @@ no space between variable names and the equal sign)::
    Replace ``[YOUR LOCAL PYTHON TIME ZONE]`` in the ``local.env`` file by the
    description of your time zone produced by the previous command.
 
-#. If OnTask is going to be served from a location different from the root of
- your server (for example ``myhost.com/ontask``, then modify the value of the
-  variable ``BASE_URL`` with the suffix that should follow the domain name
-  (in the example, ``/ontask``).
+#. If OnTask is going to be served from a location different from the root of your server (for example ``myhost.com/ontask``, then modify the value of the variable ``BASE_URL`` with the suffix that should follow the domain name (in the example, ``/ontask``).
 
 #. Modify the line starting with ``DOMAIN_NAME=`` and change the field
 ``[YOUR DOMAIN NAME``] with the domain name of the machine hosting OnTask.
