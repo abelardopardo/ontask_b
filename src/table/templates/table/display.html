@@ -130,6 +130,12 @@
             Full table
           </button>
         {% endif %}
+        <a href="{% url 'table:csvdownload' %}" download
+           class="btn btn-primary btn-sm js-logs-download"
+           data-toggle="tooltip"
+           title="Download a CSV file contining this table">
+          <span class="glyphicon glyphicon-download-alt"></span> CSV Download
+        </a>
       </div>
       <table class="table display dataTable no-footer cell-border table-bordered"
              id="table-data">

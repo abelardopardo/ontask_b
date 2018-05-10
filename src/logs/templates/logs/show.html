@@ -42,14 +42,12 @@
 <div align="center" class="container">
   <h1 class="page-header">Logs</h1>
   <div class="container" id="csv-download">
-    <p>
-      <a href="{% url 'logs:export' workflow.id %}" download
-         class="btn btn-primary btn-sm js-logs-download"
-         data-toggle="tooltip"
-         title="Download a CSV file contining these logs">
-        <span class="glyphicon glyphicon-download-alt"></span> CSV Download
-      </a>
-    </p>
+    <a href="{% url 'logs:export' workflow.id %}" download
+       class="btn btn-primary btn-sm js-logs-download"
+       data-toggle="tooltip"
+       title="Download a CSV file contining these logs">
+      <span class="glyphicon glyphicon-download-alt"></span> CSV Download
+    </a>
   </div>
   <table class="table display dataTable no-footer table-bordered"
          id="log-table">

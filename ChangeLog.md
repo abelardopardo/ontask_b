@@ -4,6 +4,8 @@
 
 - Possibility to change the order in which columns are shown.
 
+- Download the table as CSV
+
 ### Changed
 
 - Major overhaul of the documentation available when merging dataframes. When

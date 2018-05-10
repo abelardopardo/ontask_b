@@ -4,8 +4,7 @@ from __future__ import unicode_literals, print_function
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from . import api
-from . import views, stat_views
+from . import api, views, stat_views
 
 app_name = 'table'
 
@@ -75,6 +74,10 @@ urlpatterns = [
         stat_views.stat_column,
         name="stat_column"),
 
+    #
+    # CSV Download
+    #
+    url(r'^csvdownload/$', views.csvdownload, name="csvdownload"),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

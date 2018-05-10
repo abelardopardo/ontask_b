@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
@@ -625,3 +625,35 @@ def view_clone(request, pk):
                   'new_view_name': view.name})
 
     return JsonResponse({'form_is_valid': True, 'html_redirect': ''})
+
+@user_passes_test(is_instructor)
+def csvdownload(request):
+    """
+
+    :param request: HTML request
+    :return: Return a CSV download of the data in the table
+    """
+
+    # Get the appropriate workflow object
+    workflow = get_workflow(request)
+    if not workflow:
+        return redirect('workflow:index')
+
+    # Check if dataframe is present
+    if not ops.workflow_id_has_table(workflow.id):
+        # Go back to show the workflow detail
+        return redirect(reverse('workflow:detail',
+                                kwargs={'pk': workflow.id}))
+
+    # Fetch the data frame
+    data_frame = pandas_db.load_from_db(workflow.id)
+
+    # Create the response object
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = \
+        'attachment; filename="ontask_table.csv"'
+
+    # Dump the data frame as the content of the response object
+    data_frame.to_csv(path_or_buf=response, sep=str(','), index=False)
+
+    return response
