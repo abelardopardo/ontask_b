@@ -256,11 +256,22 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
                 'num_actions': self.object.actions.all().count(),
                 'num_attributes': len(self.object.attributes)}
 
-        # put the number of key columns in the workflow
-        context['num_key_columns'] = Column.objects.filter(
+        # Get the key columns
+        columns = Column.objects.filter(
             workflow__id=workflow_id,
             is_key=True
-        ).count()
+        )
+
+        # put the number of key columns in the workflow
+        context['num_key_columns'] = columns.count()
+
+        # Guarantee that column position is set for backward compatibility
+        columns = self.object.columns.all()
+        if any(x.position == 0 for x in columns):
+            # At least a column has index equal to zero, so reset all of them
+            for idx, c in enumerate(columns):
+                c.position = idx + 1
+                c.save()
 
         # Safety check for consistency (only in development)
         if settings.DEBUG:
