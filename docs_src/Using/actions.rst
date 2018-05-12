@@ -110,11 +110,11 @@ following image shows an example of this condition.
 The Boolean expression is contained under the title **Formula**. The
 expression can be alternatively read as::
 
-  Days_online_2 = 0
+  Days online = 0
 
-The first element of the expression is the variable ``Days_online_2``. The
+The first element of the expression is the variable ``Days online_``. The
 second element is the equal sign, and the third component is the constant
-zero. The variable ``Days_online_2`` may be replaced by any value in a
+zero. The variable ``Days online`` may be replaced by any value in a
 procedure we call *evaluation*. So, if the expression is evaluated replacing
 the variable by the value 3, it results in :math:`3 = 0` which is false.
 Alternatively, if we evaluate the expression replacing ``Days_online_2`` with
@@ -129,7 +129,7 @@ These conditions can have nested sub-expressions and get complex fairly quickly.
 
 However, the underlying mechanism to evaluate them remains the same: replace
 variables with values and decide the result (true or false). OnTask relies on
-these expressions to personalise the content of the actions.
+these expressions to personalize the content of the actions.
 
 Let's now go back to the screen to edit an action. The area has four components
 
@@ -229,7 +229,7 @@ Sending personalised emails
 You now have created an action and verified its content using the
 *Preview* button. Go back to the *Actions* screen (showing the table with
 the actions you created in the workflow). The right-most column shows a
-button that reads *Send Email*.
+button that reads *Email*.
 
 .. figure:: images/Ontask____ActionsOperations.png
    :align: center

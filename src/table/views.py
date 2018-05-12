@@ -612,7 +612,7 @@ def view_clone(request, pk):
     view.save()
 
     # Clone the columns
-    view.columns.clear()
+    view.conlumns.clear()
     view.columns.add(*list(View.objects.get(pk=pk).columns.all()))
 
     # Log the event

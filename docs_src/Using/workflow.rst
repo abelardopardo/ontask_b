@@ -16,15 +16,15 @@ workflows as shown in the following figure.
    :align: center
    :width: 100%
 
-Clicking in the OnTask icon in the upper left corner brings you back to the
+Clicking in the home icon in the upper left corner brings you back to the
 list of workflows from any page in the application. Clicking in the icon in
 the upper right corner opens the documentation page.
 
-The screen includes three operations:
+The screen includes the following operations:
 
 .. sidebar:: Going back
 
-   Remember that clicking in the icon in the upper left corner *closes* the
+   Remember that clicking in the home icon in the upper left corner *closes* the
    workflow and you see the list of available workflows again.
 
 1. Create a new workflow: Clicking in the *New Workflow* button will ask you

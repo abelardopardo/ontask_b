@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import datetime
+
 import django_tables2 as tables
 import pytz
 from django.conf import settings
@@ -11,8 +12,8 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse
 from django.template.loader import render_to_string
-from django_tables2 import A
 from django.utils.html import format_html
+from django_tables2 import A
 
 # Create your views here.
 import logs
@@ -28,6 +29,14 @@ class ScheduleEmailActionTable(tables.Table):
     """
     Table to show the email actions scheduled for a workflow
     """
+
+    operations = OperationsColumn(
+        attrs={'td': {'class': 'dt-body-center'}},
+        verbose_name='Operations',
+        orderable=False,
+        template_file='scheduler/includes/partial_scheduler_operations.html',
+        template_context=lambda record: {'id': record.id}
+    )
 
     action = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
@@ -71,14 +80,6 @@ class ScheduleEmailActionTable(tables.Table):
         attrs={'td': {'class': 'dt-center'}},
         verbose_name=str('Add column'),
         get_field=lambda x: x.add_column
-    )
-
-    operations = OperationsColumn(
-        attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name='Operations',
-        orderable=False,
-        template_file='scheduler/includes/partial_scheduler_operations.html',
-        template_context=lambda record: {'id': record.id}
     )
 
     message = tables.Column(

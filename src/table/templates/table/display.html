@@ -125,7 +125,7 @@
                   data-toggle="tooltip" title="Change elements in view">
             <span class="glyphicon glyphicon-pencil"></span> Edit view
           </button>
-          <button type="button" class="btn btn-sm btn-default" style="margin-right:2ex;"
+          <button type="button" class="btn btn-sm btn-default"
                   onclick="location.href='{% url 'table:display' %}'">
             Full table
           </button>
@@ -199,33 +199,6 @@
                   <font color="green">Active</font>
                 {% else %}
                   <font color="red">Inactive</font>
-                {% endif %}
-                </div>
-                <div style="display:block;">
-                {% if col.position != 1 %}
-                  <div style="float:left;">
-                  <a href="{% url 'workflow:column_move_top' col.id %}"
-                     class="column-move-top"
-                     style="display:table-cell;">
-                    <span class="glyphicon glyphicon-step-backward"></span></a>
-                  <a href="{% url 'workflow:column_move_prev' col.id %}"
-                     class="column-move-prev"
-                     style="display:table-cell;">
-                    <span class="glyphicon glyphicon-chevron-left"></span></a>
-                  </div>
-                {% endif %}
-                {% if col.position != col.workflow.ncols %}
-                  <div style="float:right;">
-                  <a href="{% url 'workflow:column_move_next' col.id %}"
-                     class="column-move-next"
-                     style="display:table-cell;">
-                     <span
-                         class="glyphicon glyphicon-chevron-right"></span></a>
-                  <a href="{% url 'workflow:column_move_bottom' col.id %}"
-                     class="column-move-bottom"
-                     style="display:table-cell;">
-                    <span class="glyphicon glyphicon-step-forward"></span></a>
-                  </div>
                 {% endif %}
                 </div>
               </th>

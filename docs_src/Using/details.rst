@@ -18,15 +18,14 @@ The top of the page now includes links to additional menus with operations to
 perform over the workflow (some of them will be available depending on your
 user profile). Under the top bar the application shows the name of the workflow
 selected for manipulation. Under the title *Workflow Details* there are buttons
-(available depending on your profile and ownership of the workflow) that offer
-the following operations:
+to access the following operations:
 
 .. _details_add_column:
 
 Add a new column
-  Opens a dialogue to create a new column in the table. It requires the name,
-  type of column, a comma separated list of allowed values (optional) and a
-  value to assign to all cells in the column (optional).
+  Opens a dialog to create a new column in the table. It requires the name,
+  type of column, a comma separated list of allowed values (optional), the position
+  of that column, and a value to assign to all cells in the column (optional).
 
   .. figure:: images/Ontask____add_column.png
      :align: center
@@ -35,7 +34,7 @@ Add a new column
 
 Attributes
   This is simply a dictionary of pairs ``(name, value)`` so that when a ``name``
-  appears in a personalised text, it is replaced by the ``value``. The main use
+  appears in a personalized text, it is replaced by the ``value``. The main use
   of these attributes is when a value has to appear in various locations and
   you may want to change all its occurrences. For example, the instructor name
   could be included as one of the attributes so that if it changes, modifying
@@ -121,15 +120,15 @@ columns is included in a table in the workflow details page.
 .. figure:: images/Ontask____columns.png
    :align: center
 
-Each column has a name (cannot contain the quotes *'* or *"*), a type (one of
-integer, string, double, boolean or datetime), a field stating if the values
-of that column are unique for the rows, and two operations. When a column is
+Each column has a position, name (cannot contain the quotes *'* or *"*), a type (one of
+integer, string, double, boolean or date/time), a field stating if the values
+of that column are unique for the rows, and operations. When a column is
 marked as *Unique*, it means that all the values it contains are different and
 unique for each row. Think of a column containing a passport number. Such
 number is different for every person. There could be several columns with this
 property. The application detects automatically this property in a column. You
 may edit and change this properly as long as the values are the adequate ones
-(they satisfy the uniqueness property if you try mark a column as unique. The
+(they satisfy the uniqueness property if you try mark a column as unique). The
 operations available over columns are:
 
 Edit
