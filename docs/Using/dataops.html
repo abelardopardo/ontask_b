@@ -56,7 +56,7 @@
 <p class="first sidebar-title">Merge a.k.a “Join”</p>
 <p class="last">Merging is quite common in databases and is known as a <em>join</em> operation. There are several variants of join operations depending how the differences between the key columns are handled. These same variants exist when combining columns in data frames (or a table).</p>
 </div>
-<p>A merge operation is needed when you want to <em>merge</em> a set of columns with an <strong>already existing table</strong>. This operation is very common in data science contexts. One of the problems is to specify how the values in the columns are <em>matched</em> with respect to the ones already existing in the table. In other words, each new column has a set of values, but they need to be ordered in the right way so that the information is matched appropriately for every row. The solution for this problem is to include in both the existing table and the new data being merge a <strong>unique or key column</strong>. These two columns are used to compare the values, identify the matching row, and make sure the right rows are merged.</p>
+<p>A merge operation is needed when you want to <em>merge</em> a set of columns with an <strong>already existing table</strong>. This operation is very common in data science contexts. One of the problems is to specify how the values in the columns are <em>matched</em> with respect to the ones already existing in the table. In other words, each new column has a set of values, but they need to be ordered in the right way so that the information is matched appropriately for every row. The solution for this problem is to include in both the existing table and the new data being merged a <strong>unique or key column</strong>. These two columns are used to make sure that rows with matching values in these columns are merged.</p>
 <p>When uploading a CSV file in a workflow that already contains data, the platform automatically detects it and executes a <em>merge</em> operation. The first step is very similar to a regular update and requires you to select the columns that will be considered for the merge.</p>
 <div class="figure align-center">
 <img alt="../_images/Ontask____Merge.png" src="../_images/Ontask____Merge.png" />
@@ -66,19 +66,19 @@
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/Ontask____Merge2.png"><img alt="../_images/Ontask____Merge2.png" src="../_images/Ontask____Merge2.png" style="width: 100%;" /></a>
 </div>
-<p>You have to select the pair of unique columns from those in the already existing data and those in the new data about to be merge. These columns are the only choices in the form.</p>
-<p>The criteria to merge the rows offers four options:</p>
+<p>You have to select the pair of unique columns from those in the already existing data and those in the new data about to be merge.</p>
+<p>There are four types of merging. Once you choose an option an explanation appears below.</p>
 <dl class="docutils">
-<dt>Inner</dt>
-<dd>It will store only the rows for which values in both unique columns are present. Or in other words, any row for which there is no value in either of the key columns <strong>will be dropped</strong>.</dd>
-<dt>Outer</dt>
-<dd>The rows that have only one value in one of the key columns will be considered. You have to be careful with this option because it may produce columns that are no longer unique as a result.</dd>
-<dt>Left</dt>
+<dt>Select only the rows with keys in both existing and new table</dt>
+<dd>It will process only the rows for which values in both key columns are present. Or in other words, any row for which there is no value in either of the key columns <strong>will be dropped</strong>.</dd>
+<dt>Select all rows in both the existing and new table</dt>
+<dd>All rows in both tables will be considered. You have to be careful with this option because it may produce columns that are no longer unique as a result.</dd>
+<dt>Select the rows with keys in the existing table</dt>
 <dd>Only the rows with a value in the existing table will be considered, the rest will be dropped.</dd>
-<dt>Right</dt>
+<dt>Select the rows with keys in the new table</dt>
 <dd>Only the rows with a value in the table being uploaded will be considered, the rest will be dropped.</dd>
 </dl>
-<p>You have to take extra care when performing this operation as it may destroy part of the existing data. In the extreme case, if you try to merge a table with a key column with no values in common with the existing key and you select the <em>inner</em> method, you may end up with an empty table. After selecting these parameters the platform will show you what it will happen with the various columns involved.</p>
+<p>You have to take extra care when performing this operation as it may destroy part of the existing data. In the extreme case, if you try to merge a table with a key column with no values in common with the existing key and you select the method that considers rows with keys in both the existing and new table, the result is an empty table. After selecting these parameters the platform will show you what it will happen with the various columns involved.</p>
 <div class="figure align-center">
 <img alt="../_images/Ontask____Merge3.png" src="../_images/Ontask____Merge3.png" />
 </div>

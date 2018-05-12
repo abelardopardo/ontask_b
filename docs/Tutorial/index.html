@@ -62,7 +62,7 @@ five, and number of times a video was watched is larger than 2).</dd>
 <div class="figure align-center">
 <img alt="../_images/drawing.png" src="../_images/drawing.png" />
 </div>
-<p>The process to create a personalised text is divided into four stages:</p>
+<p>The process to create a personalized text is divided into four stages:</p>
 <dl class="docutils">
 <dt>Upload the data</dt>
 <dd>We will use a <a class="reference download internal" href="../_downloads/learner_information.csv" download=""><code class="xref download docutils literal notranslate"><span class="pre">CSV</span> <span class="pre">file</span> <span class="pre">with</span> <span class="pre">the</span> <span class="pre">learners</span> <span class="pre">data</span></code></a> about several activities in a course. In
@@ -73,7 +73,7 @@ the learner ID)</dd>
 <dd>In this stage you will explore the values in the table.</dd>
 <dt>Create an action</dt>
 <dd>In this stage you will create an action with various conditions that will be
-applied to the text of a personalised email message.</dd>
+applied to the text of a personalized email message.</dd>
 <dt>Review the messages</dt>
 <dd>And finally you will review the appearance of these messages for different
 learners.</dd>
@@ -94,10 +94,7 @@ workflows available.</p>
 <div class="figure align-center">
 <img alt="../_images/02_b_workflow_table.png" src="../_images/02_b_workflow_table.png" />
 </div>
-<p>The first step is to select or <em>open</em> a workflow by clicking on the name to
-manipulate it. Once this operation is done, the access to the element is
-blocked for any other users (in case the workflow is being shared) to
-prevent two users changing the data or the actions simultaneously. The following screens will show the name of the selected workflow at the top. If you want to select another workflow to manipulate, you simply click in the OnTask icon at the top left corner of the screen to go back to the initial table.</p>
+<p>The first step is to select or <em>open</em> a workflow by clicking on the name to manipulate it. Once this operation is done, the access to the element is blocked for any other users (in case the workflow is being shared) to prevent two users changing the data or the actions simultaneously. The following screens will show the name of the selected workflow at the top. If you want to select another workflow to manipulate, you simply click in the OnTask icon at the top left corner of the screen to go back to the initial table.</p>
 </div>
 <div class="section" id="open-a-workflow">
 <h2>Open a workflow<a class="headerlink" href="#open-a-workflow" title="Permalink to this headline">¶</a></h2>
@@ -117,15 +114,13 @@ over the workflow:</p>
 <dd>Is the current page with information about the columns, data types,
 number of actions, etc.</dd>
 <dt>Table</dt>
-<dd>Operations to visualise and manipulate the table (search for values,
-add a row, add a column)</dd>
+<dd>Operations to visualize and manipulate the table (search for values, add a row, add a column)</dd>
 <dt>Actions</dt>
 <dd>Operations to create the actions and conditions.</dd>
 <dt>Logs</dt>
 <dd>A table showing the history of operations performed on this workflow</dd>
 </dl>
-<p>The buttons immediately under title <em>Workflow Details</em> show some of the
-operations available at this point:</p>
+<p>The buttons immediately under title <em>Workflow Details</em> show some of the operations available at this point:</p>
 <ul class="simple">
 <li><a class="reference internal" href="../Using/details.html#details-add-column"><span class="std std-ref">New column</span></a></li>
 <li><a class="reference internal" href="../Using/details.html#details-attributes"><span class="std std-ref">Attributes</span></a></li>
@@ -141,71 +136,49 @@ operations available at this point:</p>
 <div class="figure align-center">
 <img alt="../_images/05_data_csvupload_initial.png" src="../_images/05_data_csvupload_initial.png" />
 </div>
-<p>The next screen asks you to choose a file to upload the data.</p>
+<p>The next screen asks you to choose a file to upload the data. You can optionally specify a number of lines to skip at the top or bottom of your data file. This is useful when the CSV file is produced by another tool and contains some of these lines that have to be ignored.</p>
 <div class="figure align-center">
 <img alt="../_images/05_b_data_csvupload_initial.png" src="../_images/05_b_data_csvupload_initial.png" />
 </div>
-<p>Choose the file <a class="reference download internal" href="../_downloads/learner_information.csv" download=""><code class="xref download docutils literal notranslate"><span class="pre">learner_information.csv</span></code></a> and proceed to the next step. The next screen shows a table with the
-name of the detected columns, the type (also automatically detected), a
-pre-filled field with the column name (in case you want to change it), and if
-it is a <em>key column</em> (there are no repeated values in all the rows).</p>
+<p>Choose the file <a class="reference download internal" href="../_downloads/learner_information.csv" download=""><code class="xref download docutils literal notranslate"><span class="pre">learner_information.csv</span></code></a> and proceed to the next step. The next screen shows the name of the columns detected in the file, the type (also automatically detected), a pre-filled field with the column name (in case you want to change it), and if it is a <em>key column</em> (there are no repeated values in all the rows).</p>
 <div class="figure align-center">
 <img alt="../_images/06_data_csvupload_student_list.png" src="../_images/06_data_csvupload_student_list.png" />
 </div>
-<p>The <em>key</em> columns are highlighted because a workflow must have at least one column of this type in its table. Select all the column (clicking in the top element labelled <em>load</em>) and click on the <em>Finish</em> button, and then back to the
+<p>The <em>key</em> columns are highlighted because a workflow must have at least one column of this type in its table. Select all the column (clicking in the top element labeled <em>load</em>) and click on the <em>Finish</em> button, and then back to the
 <em>Details</em> page to see the summary of the information in the workflow.</p>
-<p>You can now see the information about the columns present in the workflow as
-shown in the following figure</p>
+<p>You can now see the information about the columns present in the workflow as shown in the following figure</p>
 <div class="figure align-center">
 <img alt="../_images/07_data_view_student_external.png" src="../_images/07_data_view_student_external.png" />
 </div>
-<p>For each column you can change its name, description, type and key
-attributes, or delete it from the workflow (icons in the left most column of
-the table).</p>
+<p>For each column you can change its name, description, type, position in the table and key attributes, or delete it from the workflow (icons in the left most column of the table). You can also use the arrows in the first column to adjust the order in which the columns are stored. For example, the following figure shows the information after relocating the columns in position 3-8.</p>
+<div class="figure align-center">
+<img alt="../_images/07_b_data_view_student_external.png" src="../_images/07_b_data_view_student_external.png" />
 </div>
-<div class="section" id="browsing-the-table">
-<h2>Browsing the table<a class="headerlink" href="#browsing-the-table" title="Permalink to this headline">¶</a></h2>
-<p>Once the data has been uploaded, click in the <em>Table</em> link at the top of the screen. The following screen shows the values stored in the table</p>
-<blockquote>
-<div><div class="figure align-center">
-<img alt="../_images/18_table_initial.png" src="../_images/18_table_initial.png" />
-</div>
-</div></blockquote>
 </div>
 <div class="section" id="workflow-operations">
 <h2>Workflow Operations<a class="headerlink" href="#workflow-operations" title="Permalink to this headline">¶</a></h2>
 <p>There are several operations available at the details page.</p>
 <div class="section" id="attributes">
 <h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
-<p>If you click again in the <em>Details</em> link at the top of the screen you will
-see again the page with the workflow details, but this time it will include
-the information about the columns just loaded.</p>
-<p>You can define a set of <em>attributes</em> in the workflow. This is simply a set of
-pairs <em>name, value</em> that you can use to have a single place where a value is
-defined and then reused in several other locations. For example, the name of
-the course is probably going to appear in various communications with the
-learners. If you define the attribute <em>Course_name</em> with that value, you can
-then refer to the attribute and it will be replaced by its value.</p>
+<p>If you click again in the <em>Details</em> link at the top of the screen you will see again the page with the workflow details, but this time it will include the information about the columns just loaded.</p>
+<p>You can define a set of <em>attributes</em> in the workflow. This is simply a set of pairs <em>name, value</em> that you can use to have a single place where a value is defined and then reused in several other locations. For example, the name of the course is probably going to appear in various communications with the learners. If you define the attribute <em>Course_name</em> with that value, you can then refer to the attribute and it will be replaced by its value.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/20_table_custom_attributes_initial.png"><img alt="../_images/20_table_custom_attributes_initial.png" src="../_images/20_table_custom_attributes_initial.png" style="width: 50%;" /></a>
+<img alt="../_images/20_table_custom_attributes_initial.png" src="../_images/20_table_custom_attributes_initial.png" />
 </div>
 </div>
 <div class="section" id="share">
 <h3>Share<a class="headerlink" href="#share" title="Permalink to this headline">¶</a></h3>
-<p>You may share a workflow with other instructors in the platform. The <em>Share</em>
-button will allow you to add/remove other users to this list.</p>
+<p>You may share a workflow with other instructors in the platform. The <em>Share</em> button will allow you to add/remove other users to this list.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/21_workflow_share.png"><img alt="../_images/21_workflow_share.png" src="../_images/21_workflow_share.png" style="width: 50%;" /></a>
+<img alt="../_images/21_workflow_share.png" src="../_images/21_workflow_share.png" />
 </div>
 <p>Remember that whenever you open a workflow, it becomes unavailable for the other users with whom it is being shared.</p>
 </div>
 <div class="section" id="export">
 <h3>Export<a class="headerlink" href="#export" title="Permalink to this headline">¶</a></h3>
-<p>This functionality allows you to take all the information included in a
-workflow and export it. The functionality offers the option of including in
-the export only the data, or the data and the actions.</p>
+<p>This functionality allows you to take all the information included in a workflow and export it. The functionality offers the option of including in the export only the data, or the data and the actions.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/22_workflow_export.png"><img alt="../_images/22_workflow_export.png" src="../_images/22_workflow_export.png" style="width: 50%;" /></a>
+<img alt="../_images/22_workflow_export.png" src="../_images/22_workflow_export.png" />
 </div>
 </div>
 <div class="section" id="clone">
@@ -227,6 +200,28 @@ from all the actions.</p>
 <p>This function deletes completely the workflow from the platform.</p>
 </div>
 </div>
+<div class="section" id="browsing-the-table">
+<h2>Browsing the table<a class="headerlink" href="#browsing-the-table" title="Permalink to this headline">¶</a></h2>
+<p>Once the data has been uploaded, click in the <em>Table</em> link at the top of the screen. The following screen shows the values stored in the table</p>
+<div class="figure align-center">
+<img alt="../_images/18_table_initial.png" src="../_images/18_table_initial.png" />
+</div>
+<div class="section" id="table-views">
+<h3>Table Views<a class="headerlink" href="#table-views" title="Permalink to this headline">¶</a></h3>
+<p>For tables with large number of columns and/or rows OnTask allows you to define a <em>view</em> of the table that shows only a subset of the rows and/or a subset of the columns. To create a view click first in the <em>Views</em> button at the top of the page showing the table and then the button to add a view. Insert a name, description and select some of the columns a shown in the following figure.</p>
+<div class="figure align-center">
+<img alt="../_images/27_table_view.png" src="../_images/27_table_view.png" />
+</div>
+<p>Save the definition of the view and now click in the <em>Table</em> button that appears in the page showing all the available views. The table is shown but only with the selected columns. The buttons at the top of the page allow you to edit the view (change the rows and columns selected), or select another available view.</p>
+</div>
+<div class="section" id="column-and-row-statistics">
+<h3>Column and Row Statistics<a class="headerlink" href="#column-and-row-statistics" title="Permalink to this headline">¶</a></h3>
+<p>If you click in the button with the column name and select the <em>Stats</em> link, OnTask shows a page with an statistical description of the values in that column. The analogous option is available as part of the operations (button <em>Ops</em>) in the row. The page shows identical representations than in the case of the column stats, but for each of the columns, the words <em>Your value</em> appear in the location corresponding to the values of the selected row (that typically correspond to one learner).</p>
+<div class="figure align-center">
+<img alt="../_images/28_row_stats.png" src="../_images/28_row_stats.png" />
+</div>
+</div>
+</div>
 <div class="section" id="actions">
 <h2>Actions<a class="headerlink" href="#actions" title="Permalink to this headline">¶</a></h2>
 <p>Click in the <em>Actions</em> link at the top of the screen. The next screen shows
@@ -240,9 +235,9 @@ will only see the buttons to crate a new ones.</p>
 <p>Click on the button to create a new <em>Action Out</em> and provide a name and a
 description.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/23_action_create.png"><img alt="../_images/23_action_create.png" src="../_images/23_action_create.png" style="width: 40%;" /></a>
+<img alt="../_images/23_action_create.png" src="../_images/23_action_create.png" />
 </div>
-<p>The next screen is the <em>action editor</em>. The functions are divided into three areas. The one at the top allows you to specify a condition to select or filter a subset of students. The second contains the conditions to be used in the personalised text. The third is a HTML text editor with the content to personalise.</p>
+<p>The next screen is the <em>action editor</em>. The functions are divided into three areas. The one at the top allows you to specify a condition to select or filter a subset of students. The second contains the conditions to be used in the personalized text. The third is a HTML text editor with the content to personalize.</p>
 <div class="figure align-center">
 <img alt="../_images/24_action_edit.png" src="../_images/24_action_edit.png" />
 </div>
@@ -269,10 +264,39 @@ click in the arrow button in the condition.</p>
 </pre></div>
 </div>
 <p>This is the encoding to instruct the processing step to check the value of
-the condition <code class="docutils literal notranslate"><span class="pre">Topic_1_incorrect</span></code> and include the surrounded text only if
+the condition <code class="docutils literal notranslate"><span class="pre">Topic</span> <span class="pre">1</span> <span class="pre">incorrect</span></code> and include the surrounded text only if
 the condition is true.</p>
 <p>You may also insert any attributes attached to the workflow. The attribute
 name will be replaced by its value when processing the text.</p>
+<p>In some cases, you may want to create an action only for a subset of the learners. OnTask allows this functionality by defining a <em>Filter</em> at the top of the action-out editor. For example, the following filter</p>
+<div class="figure align-center">
+<img alt="../_images/29_action_out_filter.png" src="../_images/29_action_out_filter.png" />
+</div>
+<p>Once the filter is saved, the application informs how many rows in the table are selected by the expression written in the filter.</p>
+<p>The text in the action will be instantiated for each row in the table (or the subset specified by the filter) and all conditions and fields will be evaluated in the context of the values stored in the table. In other words, if a sentence is surrounded by one of the conditions, its text will appear in the final text if the condition evaluates to true with the values stored in the table for that particular row.</p>
+<p>Within the action-out editor you may see the appearance of the text for each of the entries in the table by clicking in the <em>Preview</em> button at the bottom of the screen.</p>
+<div class="figure align-center">
+<img alt="../_images/30_action_out_preview.png" src="../_images/30_action_out_preview.png" />
+</div>
+<div class="section" id="sending-emails">
+<h4>Sending Emails<a class="headerlink" href="#sending-emails" title="Permalink to this headline">¶</a></h4>
+<p>Once you define an action-out, you may send emails to the learners in the table (or the subset selected by the filter, if defined). From the page that shows all the actions in the workflow (<em>Actions</em> link in the navigation menu at the top of the page), click in the <em>Email</em> button for the corresponding action. The form in the following screen allows you to select several additional features.</p>
+<div class="figure align-center">
+<img alt="../_images/31_action_out_email.png" src="../_images/31_action_out_email.png" />
+</div>
+<p>The button <em>Preview</em> at the bottom of the page allows to check again the final appearance of the message that will be sent to the users.</p>
+<div class="figure align-center">
+<img alt="../_images/31_action_out_email_preview.png" src="../_images/31_action_out_email_preview.png" />
+</div>
+<p>If selected, once. the email messages are sent, a summary message is sent to the email address of the user account, and a snapshot of the workflow is downloaded. This workflow snapshot can be imported through the home page and create an exact replica of the workflow when the messages were sent, for future reference.</p>
+</div>
+<div class="section" id="making-content-available-through-ontask">
+<h4>Making content available through OnTask<a class="headerlink" href="#making-content-available-through-ontask" title="Permalink to this headline">¶</a></h4>
+<p>Sending an email through OnTask is one possible way to offer the personalized content to the learners. Alternatively, OnTask assigns a unique URL to each action that can be given to the learners and (if the authentication layer of the application verifies learner requests appropriately) shows the corresponding personalized text to the learners. The URL, the option to enable/disable it and an optional time window validity is available through the link <em>URL</em>.</p>
+<div class="figure align-center">
+<img alt="../_images/32_action_out_url.png" src="../_images/32_action_out_url.png" />
+</div>
+</div>
 </div>
 <div class="section" id="actions-in">
 <h3>Actions In<a class="headerlink" href="#actions-in" title="Permalink to this headline">¶</a></h3>
@@ -306,7 +330,6 @@ name will be replaced by its value when processing the text.</p>
 <li class="toctree-l2"><a class="reference internal" href="#create-a-new-workflow">Create a new workflow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#open-a-workflow">Open a workflow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#data-upload">Data Upload</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#browsing-the-table">Browsing the table</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#workflow-operations">Workflow Operations</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#attributes">Attributes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#share">Share</a></li>
@@ -315,6 +338,11 @@ name will be replaced by its value when processing the text.</p>
 <li class="toctree-l3"><a class="reference internal" href="#rename">Rename</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#flush-data">Flush Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#delete">Delete</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#browsing-the-table">Browsing the table</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#table-views">Table Views</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#column-and-row-statistics">Column and Row Statistics</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#actions">Actions</a><ul>

@@ -5,7 +5,7 @@ Installation process
 ********************
 
 OnTask is a Web application that manages data about learners to provide them
-with personalised support. For this reason, it is recommended an installation
+with personalized support. For this reason, it is recommended an installation
 that observes a set of tight security restrictions. Some of these
 restrictions lie within the scope of the tool, but some other are part of the
 environment in which the application is installed. We strongly recommend to
@@ -322,7 +322,7 @@ OnTask comes with the following authentication mechanisms: IMS-LTI,
 
   Ontask only provides two points of access for LTI requests coming from the
   consumer. One is the URL with suffix ``/lti_entry`` and the second is the
-  URL provided by the actions to serve the personalised content (accessible
+  URL provided by the actions to serve the personalized content (accessible
   through the ``Actions`` menu.
 
   To allow LTI access you need:

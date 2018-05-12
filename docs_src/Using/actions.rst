@@ -55,7 +55,7 @@ as illustrated in the next figure.
    :width: 100%
 
 An instructor may click in the link available in the right column and it is
-offered the possibility of modifying the information in the pre-selected
+offered the possibility of modifying the information in the preselected
 columns for that learner.
 
 .. figure:: images/Ontask____Enter_Data.png
@@ -157,7 +157,7 @@ The conditions
      :width: 100%
 
 The HTML text
-  This is the area to create the personalised document. It is a conventional
+  This is the area to create the personalized document. It is a conventional
   HTML editor offering the usual functionalities (inserting text in
   various forms, headings, lists, links, images, etc.) Right above the editor
   window you have two choice menus that you can use to insert either a
@@ -178,7 +178,7 @@ Using column values, attributes and conditions in an Action Out
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The purpose of this page is to allow you to create a text in the editor that
-may include three types of elements that are personalised for each row: an
+may include three types of elements that are personalized for each row: an
 attribute name, a column name or a condition.
 
 To insert an attribute name simply place the cursor in the text editor in the
@@ -216,14 +216,14 @@ Previewing the content of an Action Out
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Once a text is created, you need to verify that all the elements are properly
-visualised for each of the rows. This is the purpose of the ``Preview``
+visualized for each of the rows. This is the purpose of the ``Preview``
 button at the bottom of the page.
 
   .. figure:: images/Ontask____howtopreviewtext.gif
      :align: center
      :width: 100%
 
-Sending personalised emails
+Sending personalized emails
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You now have created an action and verified its content using the
@@ -263,13 +263,13 @@ Snapshot of the workflow
   In this new workflow you can check the values and messages at the time the
   operation was executed.
 
-Making personalised content available to learners
+Making personalized content available to learners
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Sending a personalised email is just one of various possible actions to do
-with a personalised text. Another one is to make the content available
+Sending a personalized email is just one of various possible actions to do
+with a personalized text. Another one is to make the content available
 through a URL that can then be given to the learners. OnTask offers this
-possibility through the button labelled ``URL`` followed by either the word
+possibility through the button labeled ``URL`` followed by either the word
 ``(Off)`` or ``(On)``.
 
 .. figure:: images/Ontask____ActionsOperations.png

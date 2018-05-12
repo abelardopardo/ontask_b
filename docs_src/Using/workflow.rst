@@ -9,7 +9,7 @@ The Workflow
 
 The workflow in OnTask is simply a container that brings together the table,
 the operations to upload the data, and the actions to create the
-personalised content. The initial screen in OnTask shows the available
+personalized content. The initial screen in OnTask shows the available
 workflows as shown in the following figure.
 
 .. figure:: images/Ontask____Workflows.png
