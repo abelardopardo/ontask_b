@@ -10,6 +10,8 @@ from .base import *  # NOQA
 DEBUG = True
 TEMPLATES[0]['OPTIONS'].update({'debug': True})
 
+ALLOWED_HOSTS = ['*']
+
 # Define STATIC_ROOT for the collectstatic command
 STATIC_ROOT = join(BASE_DIR(), '..', 'site', 'static')
 
