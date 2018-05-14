@@ -7,7 +7,7 @@
       <div style="float:left; clear:left;">
         <a href="{% url 'workflow:column_move_prev' column.id %}"
            class="column-move-prev" data-toggle="tooltip"
-           title="Move column up">
+           title="Move one column left in Table View">
           <span class="glyphicon glyphicon-chevron-up"></span></a>
       </div>
     {% endif %}
@@ -15,7 +15,7 @@
       <div style="float:left; clear:left;">
         <a href="{% url 'workflow:column_move_next' column.id %}"
            class="column-move-next" data-toggle="tooltip"
-           title="Move column down">
+           title="Move one column right in Table View">
            <span class="glyphicon glyphicon-chevron-down"></span></a>
       </div>
     {% endif %}
@@ -25,7 +25,7 @@
       <div style="float:left; clear:left;">
         <a href="{% url 'workflow:column_move_top' column.id %}"
            class="column-move-top" data-toggle="tooltip"
-           title="Move column to the top">
+           title="Move to first column (far left) in Table View">
            <span class="glyphicon glyphicon-step-forward"
                  style="transform:rotate(-90deg);"></span></a>
       </div>
@@ -34,7 +34,7 @@
       <div style="float:left; clear:left;">
         <a href="{% url 'workflow:column_move_bottom' column.id %}"
            class="column-move-bottom" data-toggle="tooltip"
-           title="Move column to the button">
+           title="Move to last column (far right) in Table View">
            <span class="glyphicon glyphicon-step-backward"
                  style="transform:rotate(-90deg);"></span></a>
       </div>
