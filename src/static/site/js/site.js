@@ -12,7 +12,7 @@ var set_column_select = function(element_id) {
     texts: {
       searchplaceholder: 'Click here to search for columns',
       noItemsAvailable: 'No columns found',
-    }
+    },
   });
  }
 var insert_fields = function (the_form) {
@@ -41,7 +41,7 @@ var loadForm = function () {
       dataType: 'json',
       data: data,
       beforeSend: function() {
-        $(".modal-body").html("");
+        $("#modal-item .modal-body").html("");
         $("#modal-item").modal("show");
       },
       success: function(data) {
