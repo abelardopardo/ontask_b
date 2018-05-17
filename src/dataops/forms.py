@@ -84,7 +84,7 @@ class UploadExcelFileForm(forms.Form):
     sheet = forms.CharField(
         max_length=512,
         required=True,
-        initial='Sheet 1',
+        initial='',
         help_text='Sheet within the excelsheet to upload')
 
 
