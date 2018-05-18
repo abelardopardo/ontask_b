@@ -27,7 +27,7 @@ def is_unique_column(df_column):
     :param df_column: Column of a pandas data frame
     :return: Boolean encoding if the column has unique values
     """
-    return len(df_column.unique()) == len(df_column)
+    return len(df_column.dropna().unique()) == len(df_column)
 
 
 def are_unique_columns(data_frame):
@@ -421,7 +421,14 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
                     col.name,
                     col.data_type
                 )
-        elif df_col_type != col.data_type:
+        elif col.data_type == 'integer' and df_col_type != 'integer' and \
+            df_col_type != 'double':
+            # Numeric column results in a non-numeric column
+            return 'New values in column {0} are not of type number'.format(
+                col.name
+            )
+        elif col.data_type != 'integer' and df_col_type != col.data_type:
+            # Any other type change
             return 'New values in column {0} are not of type {1}'.format(
                 col.name,
                 col.data_type
@@ -438,10 +445,20 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
                 )
 
         # Condition 3:
-        col.is_key = is_unique_column(new_df[col.name])
+        is_key_now = is_unique_column(new_df[col.name])
+        if col.is_key and not is_key_now:
+            return \
+                'Column {0} is no longer a key column.'.format(col.name)
+
+        col.is_key = is_key_now
+        col.save()
 
     # Store the result back in the DB
     store_dataframe_in_db(new_df, pk)
+
+    # Recompute all the values of the conditions in each of the actions
+    for action in Workflow.objects.get(pk=pk).actions.all():
+        action.update_n_rows_selected()
 
     # Operation was correct, no need to flag anything
     return None
