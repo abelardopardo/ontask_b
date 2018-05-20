@@ -290,12 +290,11 @@ SUMMERNOTE_CONFIG = {
     'codemirror': {
         'theme': 'base16-dark',
         'mode': 'htmlmixed',
-        'lineNumbers': 'true',
-        'lineWrapping': 'true',
+        'lineNumbers': True,
+        'lineWrapping': True,
     },
-    'lazy': 'true',
-    'dialogsInBody': 'true',
-    'disableDragAndDrop': 'true',
+    'lazy': True,
+    'disableDragAndDrop': True,
 }
 
 # Extra configuration options
