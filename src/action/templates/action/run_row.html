@@ -20,9 +20,11 @@
       <div class="input-group input-group-lg" style="padding-bottom:1.5ex;">
         {{ form|crispy }}
       </div>
-      <a type="button" class="btn btn-default"
-         href="{{ cancel_url }}"> Cancel
-      </a>
+      {% if cancel_url %}
+        <a type="button" class="btn btn-default"
+           href="{{ cancel_url }}"> Back
+        </a>
+      {% endif %}
       <button type="submit" name="submit" value="update"
               class="btn btn-primary">
         <span class="glyphicon glyphicon-ok"></span> Update
