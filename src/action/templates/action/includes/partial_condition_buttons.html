@@ -5,7 +5,7 @@
             data-url="{% url 'action:create_condition' action.id %}"
             style="margin-bottom: 0.5ex;"
             data-toggle="tooltip"
-            title="Define a new text condition">
+            title="Define a text condition to insert in the text body below.">
       <span class="glyphicon glyphicon-plus"></span> New</button></h4>
   <div class="conditions">
     {% for condition in conditions %}
@@ -14,7 +14,8 @@
                 class="btn btn-primary btn-sm js-condition-edit"
                 data-url="{% url 'action:edit_condition' condition.id %}"
                 data-toggle="tooltip"
-                title="Edit the condition's name, description and formula">{{ condition.name }}
+                title="Edit the condition ({{ condition.n_rows_selected }} rows satisfy this condition)">
+          {{ condition.name }} ({{ condition.n_rows_selected }} learners)
         </button>
         <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
                 data-toggle="dropdown"
@@ -28,7 +29,7 @@
                     class="btn btn-default btn-sm js-condition-insert"
                     data-name="{{ condition.name }}"
                     data-toggle="tooltip"
-                    title="Insert condition to control the highlighted text">
+                    title="Insert text condition into the body.">
               <span class="glyphicon glyphicon-arrow-down"></span> Insert in
               text
             </button>
@@ -62,7 +63,8 @@
         </ul>
       </div>
     {% empty %}
-      <p class="text-center">There are no conditions yet</p>
+      <p class="text-center">Create conditions to control the text in the
+        body below (optional)</p>
     {% endfor %}
   </div>
 </div>

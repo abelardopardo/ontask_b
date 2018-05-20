@@ -3,8 +3,8 @@ from __future__ import unicode_literals, print_function
 
 from rest_framework import serializers
 
-from .models import Condition, Action
 from workflow.models import Column
+from .models import Condition, Action
 
 
 class ColumnNameSerializer(serializers.ModelSerializer):
@@ -25,7 +25,8 @@ class ConditionSerializer(serializers.ModelSerializer):
             name=validated_data['name'],
             description_text=validated_data['description_text'],
             formula=validated_data['formula'],
-            is_filter=validated_data['is_filter']
+            is_filter=validated_data['is_filter'],
+            n_rows_selected=validated_data.get('n_rows_selected', -1),
         )
 
         condition_obj.save()
@@ -54,7 +55,6 @@ class ActionSerializer(serializers.ModelSerializer):
             workflow=self.context['workflow'],
             name=validated_data['name'],
             description_text=validated_data['description_text'],
-            n_selected_rows=validated_data['n_selected_rows'],
             is_out=validated_data['is_out'],
             serve_enabled=validated_data['serve_enabled'],
             active_from=validated_data['active_from'],

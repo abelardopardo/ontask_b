@@ -13,7 +13,6 @@ from django.views import generic
 import logs
 import logs.ops
 from action import ops
-from dataops import pandas_db
 from dataops.formula_evaluation import evaluate_node_sql
 from ontask.permissions import is_instructor, UserIsInstructor
 from workflow.ops import get_workflow
@@ -149,22 +148,17 @@ def save_condition_form(request,
 
     # Proceed to update the DB
     if is_new:
-        # Update the fields not in the form
-
         # Get the condition from the form, but don't commit as there are
         # changes pending.
         condition = form.save(commit=False)
-
         condition.action = action
         condition.is_filter = is_filter
         condition.save()
     else:
         condition = form.save()
 
-    if is_filter:
-        # Update the number of selected rows applying the new formula
-        action.n_selected_rows = \
-            pandas_db.num_rows(action.workflow.id, condition.formula)
+    # Update the number of selected rows applying the new formula
+    action.condition_update_n_rows_selected(condition)
 
     # Update the action
     action.save()
@@ -182,7 +176,7 @@ def save_condition_form(request,
                  condition.action.workflow,
                  {'id': condition.id,
                   'name': condition.name,
-                  'selected_rows': action.n_selected_rows,
+                  'selected_rows': condition.n_rows_selected,
                   'formula': formula})
 
     data['html_redirect'] = ''
@@ -305,17 +299,16 @@ def delete_filter(request, pk):
                      cond_filter.action.workflow,
                      {'id': cond_filter.id,
                       'name': cond_filter.name,
-                      'selected_rows': cond_filter.action.n_selected_rows,
+                      'selected_rows': cond_filter.action.n_rows_selected,
                       'formula': formula,
                       'formula_fields': fields}, )
 
         # Perform the delete operation
         cond_filter.delete()
 
-        # Action now has number of selected rows equal to 0
-        action = Action.objects.get(pk=cond_filter.action.id)
-        action.n_selected_rows = -1
-        action.save()
+        # Number of selected rows now needs to be updated in all remaining
+        # conditions
+        ops.update_n_rows_selected_for_non_filters(cond_filter.action)
 
         data['form_is_valid'] = True
         data['html_redirect'] = ''

@@ -73,13 +73,14 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
                          values=row_pairs.values(),
                          show_key=is_inst)
 
+    cancel_url = None
     if is_inst:
         cancel_url = reverse('action:run', kwargs={'pk': action.id})
-    else:
-        cancel_url = reverse('action:thanks')
 
     # Create the context
-    context = {'form': form, 'action': action, 'cancel_url': cancel_url}
+    context = {'form': form,
+               'action': action,
+               'cancel_url': cancel_url}
 
     if request.method == 'GET' or not form.is_valid():
         return render(request, 'action/run_row.html', context)
@@ -116,6 +117,10 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
                          set_values,
                          [where_field],
                          [where_value])
+
+    # Recompute all the values of the conditions in each of the actions
+    for act in action.workflow.actions.all():
+        act.update_n_rows_selected()
 
     # Log the event
     logs.ops.put(request.user,
@@ -267,8 +272,7 @@ def send_messages(user,
                   email_column,
                   from_email,
                   send_confirmation,
-                  track_read,
-                  add_column):
+                  track_read):
     """
     Performs the submission of the emails for the given action and with the
     given subject. The subject will be evaluated also with respect to the
@@ -280,7 +284,6 @@ def send_messages(user,
     :param from_email: Email of the sender
     :param send_confirmation: Boolean to send confirmation to sender
     :param track_read: Should read tracking be included?
-    :param add_column: Should a new column be added?
     :return: Send the emails
     """
 
@@ -297,7 +300,7 @@ def send_messages(user,
 
     track_col_name = ''
     data_frame = None
-    if add_column:
+    if track_read:
         data_frame = pandas_db.load_from_db(action.workflow.id)
         # Make sure the column name does not collide with an existing one
         i = 0  # Suffix to rename
@@ -309,9 +312,10 @@ def send_messages(user,
 
     # Update the number of filtered rows if the action has a filter (table
     # might have changed)
-    if action.n_selected_rows != len(result):
-        action.n_selected_rows = len(result)
-        action.save()
+    filter = action.conditions.filter(is_filter=True).first()
+    if filter and filter.n_rows_selected != len(result):
+        filter.n_rows_selected = len(result)
+        filter.save()
 
     # Everything seemed to work to create the messages.
     msgs = []
@@ -359,7 +363,7 @@ def send_messages(user,
         return str(e)
 
     # Add the column if needed
-    if add_column:
+    if track_read:
         # Create the new column and store
         column = Column(
             name=track_col_name,
@@ -401,7 +405,7 @@ def send_messages(user,
          'action': action.name,
          'num_messages': len(msgs),
          'email_sent_datetime': str(now),
-         'filter_present': action.n_selected_rows != -1,
+         'filter_present': filter is not None,
          'num_rows': action.workflow.nrows,
          'subject': subject,
          'from_email': user.email})
@@ -416,9 +420,9 @@ def send_messages(user,
         'action': action,
         'num_messages': len(msgs),
         'email_sent_datetime': now,
-        'filter_present': action.n_selected_rows != -1,
+        'filter_present': filter is not None,
         'num_rows': action.workflow.nrows,
-        'num_selected': action.n_selected_rows}
+        'num_selected': filter.n_rows_selected if filter else -1}
 
     # Create template and render with context
     try:
@@ -438,7 +442,7 @@ def send_messages(user,
          'action': action.id,
          'num_messages': len(msgs),
          'email_sent_datetime': str(now),
-         'filter_present': action.n_selected_rows != -1,
+         'filter_present': filter is not None,
          'num_rows': action.workflow.nrows,
          'subject': str(getattr(settings, 'NOTIFICATION_SUBJECT')),
          'body': text_content,

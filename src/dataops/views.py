@@ -9,7 +9,7 @@ import logs.ops
 from dataops import pandas_db, ops
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
-from .forms import RowFilterForm, RowForm, field_prefix
+from .forms import RowForm, field_prefix
 
 
 @user_passes_test(is_instructor)
@@ -103,6 +103,10 @@ def row_update(request):
                          set_values,
                          [unique_field],
                          [unique_value])
+
+    # Recompute all the values of the conditions in each of the actions
+    for act in workflow.actions.all():
+        act.update_n_rows_selected()
 
     # Log the event
     logs.ops.put(request.user,

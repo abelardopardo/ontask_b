@@ -8,8 +8,9 @@
                 data-url="{% url 'action:edit_filter' filter_condition.id %}"
                 data-type="filter"
                 data-toggle="tooltip"
-                title="Edit the filter name and expression">
-                {{ filter_condition.name }}
+                title="Edit the filter (selects {{ selected_rows }} learners of {{ total_rows }})">
+                {{ filter_condition.name }} ({{ selected_rows }} learners of
+          {{ total_rows }})
         </button>
         <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
                 data-toggle="dropdown"

@@ -78,8 +78,7 @@ class ActionTable(tables.Table):
 
         sequence = ('name', 'description_text', 'is_out', 'modified')
 
-        exclude = ('n_selected_rows', 'content', 'serve_enabled',
-                   'columns', 'filter')
+        exclude = ('content', 'serve_enabled', 'columns', 'filter')
 
         attrs = {
             'class': 'table display table-bordered',
@@ -170,7 +169,6 @@ def save_action_form(request, form, is_out, template_name):
                     # Correct New action. Proceed with the
                     action_item.user = request.user
                     action_item.workflow = workflow
-                    action_item.n_selected_rows = -1
 
             # Save item in the DB now
             action_item.save()
@@ -431,9 +429,7 @@ def edit_action_out(request, pk):
 
     # See if the action has a filter or not
     try:
-        filter_condition = Condition.objects.get(
-            action=action, is_filter=True
-        )
+        filter_condition = Condition.objects.get(action=action, is_filter=True)
     except Condition.DoesNotExist:
         filter_condition = None
     except Condition.MultipleObjectsReturned:
@@ -444,13 +440,7 @@ def edit_action_out(request, pk):
     # Conditions to show in the page as well.
     conditions = Condition.objects.filter(
         action=action, is_filter=False
-    ).order_by('created').values('id', 'name')
-
-    # Get the number of rows in DF selected by filter.
-    if filter_condition:
-        action.n_selected_rows = \
-            pandas_db.num_rows(action.workflow.id, filter_condition.formula)
-        action.save()
+    ).order_by('created')
 
     # Context to render the form
     context = {'filter_condition': filter_condition,
@@ -459,7 +449,8 @@ def edit_action_out(request, pk):
                'query_builder_ops': workflow.get_query_builder_ops_as_str(),
                'attribute_names': [x for x in workflow.attributes.keys()],
                'column_names': workflow.get_column_names(),
-               'selected_rows': action.n_selected_rows,
+               'selected_rows':
+                   filter_condition.n_rows_selected if filter_condition else -1,
                'has_data': ops.workflow_has_table(action.workflow),
                'total_rows': workflow.nrows,
                'form': form,
@@ -551,9 +542,9 @@ def edit_action_in(request, pk):
 
     # Get the number of rows in DF selected by filter.
     if filter_condition:
-        action.n_selected_rows = \
+        filter_condition.n_rows_selected = \
             pandas_db.num_rows(action.workflow.id, filter_condition.formula)
-        action.save()
+        filter_condition.save()
 
     # Column names suitable to insert
     columns_selected = action.columns.all()
@@ -569,7 +560,8 @@ def edit_action_in(request, pk):
     # Create the context info.
     ctx = {'action': action,
            'filter_condition': filter_condition,
-           'selected_rows': action.n_selected_rows,
+           'selected_rows':
+               filter_condition.n_rows_selected if filter_condition else -1,
            'total_rows': workflow.nrows,
            'query_builder_ops': workflow.get_query_builder_ops_as_str(),
            'has_data': ops.workflow_has_table(action.workflow),
@@ -718,7 +710,8 @@ def preview_response(request, pk, idx, template, prelude=None):
     idx = int(idx)
 
     # Get the total number of items
-    n_items = action.n_selected_rows
+    filter = action.conditions.filter(is_filter=True).first()
+    n_items = filter.n_rows_selected if filter else -1
     if n_items == -1:
         n_items = workflow.nrows
 

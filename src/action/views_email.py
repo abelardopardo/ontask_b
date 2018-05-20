@@ -50,8 +50,7 @@ def request_data(request, pk):
                                    form.cleaned_data['email_column'],
                                    request.user.email,
                                    form.cleaned_data['send_confirmation'],
-                                   form.cleaned_data['track_read'],
-                                   form.cleaned_data['add_column'])
+                                   form.cleaned_data['track_read'])
 
             if result:
                 # Something went wrong
@@ -70,7 +69,8 @@ def request_data(request, pk):
                               context)
 
     # Get the number of rows from the action
-    num_msgs = action.n_selected_rows
+    filter = action.conditions.filter(is_filter=True).first()
+    num_msgs = filter.n_rows_selected if filter else -1
     if num_msgs == -1:
         # There is no filter in the action, so take the number of rows
         num_msgs = workflow.nrows
