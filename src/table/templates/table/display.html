@@ -129,13 +129,20 @@
                   onclick="location.href='{% url 'table:display' %}'">
             Full table
           </button>
+          <a href="{% url 'table:csvdownload_view' view.id %}" download
+             class="btn btn-primary btn-sm js-logs-download"
+             data-toggle="tooltip"
+             title="Download a CSV file contining this table">
+            <span class="glyphicon glyphicon-download-alt"></span> CSV Download
+          </a>
+        {% else %}
+          <a href="{% url 'table:csvdownload' %}" download
+             class="btn btn-primary btn-sm js-logs-download"
+             data-toggle="tooltip"
+             title="Download a CSV file contining this table">
+            <span class="glyphicon glyphicon-download-alt"></span> CSV Download
+          </a>
         {% endif %}
-        <a href="{% url 'table:csvdownload' %}" download
-           class="btn btn-primary btn-sm js-logs-download"
-           data-toggle="tooltip"
-           title="Download a CSV file contining this table">
-          <span class="glyphicon glyphicon-download-alt"></span> CSV Download
-        </a>
       </div>
       <table class="table display dataTable no-footer cell-border table-bordered"
              id="table-data">
@@ -195,11 +202,38 @@
             {% for col in columns %}
               <th>
                 <div style="display:block;">
-                {% if col.is_active %}
-                  <font color="green">Active</font>
-                {% else %}
-                  <font color="red">Inactive</font>
+                {% if not col.is_active %}
+                  <font color="red" data-toggle="tooltip"
+                        title="Out of given date/time window. Edit column to enable.">
+                    Disabled</font>
                 {% endif %}
+                </div>
+                <div style="display:flex;justify-content:space-between">
+                  <div>
+                    {% if col.position != 1 %}
+                      <a href="{% url 'workflow:column_move_top' col.id %}"
+                         class="column-move-top"
+                         style="display:table-cell;">
+                        <span class="glyphicon glyphicon-step-backward"></span></a>
+                      <a href="{% url 'workflow:column_move_prev' col.id %}"
+                         class="column-move-prev"
+                         style="display:table-cell;">
+                        <span class="glyphicon glyphicon-chevron-left"></span></a>
+                    {% endif %}
+                  </div>
+                  {% if col.position != col.workflow.ncols %}
+                    <div>
+                    <a href="{% url 'workflow:column_move_next' col.id %}"
+                       class="column-move-next"
+                       style="display:table-cell;">
+                       <span
+                           class="glyphicon glyphicon-chevron-right"></span></a>
+                    <a href="{% url 'workflow:column_move_bottom' col.id %}"
+                       class="column-move-bottom"
+                       style="display:table-cell;">
+                      <span class="glyphicon glyphicon-step-forward"></span></a>
+                    </div>
+                  {% endif %}
                 </div>
               </th>
             {% endfor %}

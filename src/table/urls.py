@@ -78,6 +78,9 @@ urlpatterns = [
     # CSV Download
     #
     url(r'^csvdownload/$', views.csvdownload, name="csvdownload"),
+
+    url(r'^(?P<pk>\d+)/csvdownload/$', views.csvdownload,
+        name="csvdownload_view"),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
