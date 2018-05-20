@@ -68,8 +68,10 @@
     <p class="alert-warning">Column has no data</p>
   {% endif %}
 
-  <a href="{{ request.META.HTTP_REFERER }}"
-       class="btn btn-default btn-sm align-middle"> Back</a>
+  <div class="text-center">
+    <a href="{{ request.META.HTTP_REFERER }}"
+         class="btn btn-default btn-sm align-middle"> Back</a>
+  </div>
 </div>
 {% endblock container %}
 

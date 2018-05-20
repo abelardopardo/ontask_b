@@ -210,10 +210,10 @@ def render_table_display_data(request, workflow, columns, formula,
         ops_string = render_to_string(
             'table/includes/partial_table_ops.html',
             {'stat_url': stat_url +
-                 '?key={0}&val={1}'.format(key_name, row[key_idx]),
+                         '?key={0}&val={1}'.format(key_name, row[key_idx]),
              'edit_url': reverse('dataops:rowupdate') +
-                 '?update_key={0}&update_val={1}'.format(key_name,
-                                                         row[key_idx]),
+                         '?update_key={0}&update_val={1}'.format(key_name,
+                                                                 row[key_idx]),
              'delete_key': '?key={0}&value={1}'.format(key_name,
                                                        row[key_idx]),
              'view_id': view_id}
@@ -626,11 +626,13 @@ def view_clone(request, pk):
 
     return JsonResponse({'form_is_valid': True, 'html_redirect': ''})
 
+
 @user_passes_test(is_instructor)
-def csvdownload(request):
+def csvdownload(request, pk=None):
     """
 
     :param request: HTML request
+    :param pk: If given, the PK of the view to subset the table
     :return: Return a CSV download of the data in the table
     """
 
@@ -645,8 +647,24 @@ def csvdownload(request):
         return redirect(reverse('workflow:detail',
                                 kwargs={'pk': workflow.id}))
 
+    # Get the columns from the view (if given)
+    view = None
+    if pk:
+        try:
+            view = View.objects.filter(
+                Q(workflow__user=request.user) |
+                Q(workflow__shared=request.user)
+            ).distinct().prefetch_related('columns').get(pk=pk)
+        except ObjectDoesNotExist:
+            # Go back to show the workflow detail
+            return redirect(reverse('workflow:detail',
+                                    kwargs={'pk': workflow.id}))
+
     # Fetch the data frame
-    data_frame = pandas_db.load_from_db(workflow.id)
+    data_frame = pandas_db.get_subframe(
+        workflow.id,
+        view,
+        [x.name for x in view.columns.all()] if view is not None else None)
 
     # Create the response object
     response = HttpResponse(content_type='text/csv')

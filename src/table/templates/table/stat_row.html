@@ -18,6 +18,11 @@
 <div class="container-fluid text-center">
   <h1 class="page-header">Stats for {{ value }}</h1>
 
+  <div class="text-center">
+    <a href="{{ request.META.HTTP_REFERER }}"
+         class="btn btn-default btn-sm align-middle"> Back</a>
+  </div>
+
   {% for vis_item in visualizations %}
       {{ vis_item|safe }}
   {% endfor %}

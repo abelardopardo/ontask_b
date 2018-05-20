@@ -68,8 +68,8 @@ def get_column_visualisations(column, col_data, vis_scripts,
 
     return visualizations
 
-def get_row_visualisations(request, view_id=None):
 
+def get_row_visualisations(request, view_id=None):
     # If there is no workflow object, go back to the index
     workflow = get_workflow(request)
     if not workflow:
@@ -124,6 +124,17 @@ def get_row_visualisations(request, view_id=None):
 
         # Add the title and surrounding container
         visualizations.append('<h4>' + column.name + '</h4>')
+        # If all values are empty, no need to proceed
+        if all([not x for x in df[column.name]]):
+            visualizations.append("<p>No values in this column</p><hr/>")
+            continue
+
+        if row[idx] is None or row[idx] == '':
+            visualizations.append(
+                '<p class="alert-warning">No value for this student in this '
+                'column</p>'
+            )
+
         visualizations.append(
             '<div style="display: inline-flex;">'
         )
@@ -131,20 +142,19 @@ def get_row_visualisations(request, view_id=None):
         v = get_column_visualisations(
             column,
             df[[column.name]],
-            vis_scripts = vis_scripts,
-            id='column_{}'.format(idx),
+            vis_scripts=vis_scripts,
+            id='column_{0}'.format(idx),
             single_val=row[idx],
             context=context)
 
         visualizations.extend([x.html_content for x in v])
-        visualizations.append('<hr/></div>')
+        visualizations.append('</div><hr/>')
 
     return render(request,
                   'table/stat_row.html',
                   {'value': update_val,
                    'vis_scripts': vis_scripts,
                    'visualizations': visualizations})
-
 
 
 @user_passes_test(is_instructor)
@@ -178,9 +188,13 @@ def stat_column(request, pk):
     stat_data = pandas_db.get_column_stats_from_df(df[column.name])
 
     vis_scripts = []
-    visualizations = get_column_visualisations(column,
-                                               df[[column.name]],
-                                               vis_scripts)
+    visualizations = get_column_visualisations(
+        column,
+        df[[column.name]],
+        vis_scripts,
+        context={'style':
+                     'max-width:800px; max-height:450px;display:inline-block;'}
+    )
 
     return render(request,
                   'table/stat_column.html',
