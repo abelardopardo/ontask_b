@@ -1,3 +1,36 @@
+## 2.6.1
+
+### Added
+
+### Changed
+
+- Platform now notifies with a pop-up one minute before the session user session
+  expires (Issue #31)
+  
+- File name when exporting a workflow now includes a date/time suffix (issue 
+  36)
+
+- Conditions and filters now show the number of rows that satisfy the 
+  specified condition (issue #26)
+
+- Removed the back buttom from the page for learner submission (issue 27)  
+
+- All columns are selected by default when uploading a new CSV (issue #28)
+
+- Merged the options of tracking an email and adding a column in the table. 
+  They are now the same option (issue #35)
+  
+### Fixed
+
+- Merge procedure improved to consider the case where src and dst keys are
+  different, but still src key is equal to a column in dst (issue #41)
+
+- CSV download button in table view now correctly narrows the table to the right
+  data when using a view (previously, it would download the whole table 
+  regardless, issue #34)
+
+- Column picker widget was rendered in an incorrect location (issue #21)   
+
 ## 2.6.0 (2018-05-13) 
 
 ### Added

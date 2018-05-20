@@ -270,3 +270,4 @@ licenses:
 
 - [validate_email](https://pypi.python.org/pypi/validate_email) LGPL
 
+- [bootstrap-session-timeout](https://github.com/orangehill/bootstrap-session-timeout) MIT
