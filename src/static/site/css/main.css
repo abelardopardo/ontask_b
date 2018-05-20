@@ -319,3 +319,8 @@ a.column-move-top> span,
 a.column-move-bottom> span {
     font-size:75%;
 }
+
+/* Fix placement of SOL inside modal */
+.sol-container.sol-active .sol-selection-container {
+    position: unset;
+}
