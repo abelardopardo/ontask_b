@@ -42,6 +42,8 @@ urlpatterns = [
 
     url(r'^trck/', views.trck, name='trck'),
 
+    url(r'^keep-alive/', views.keep_alive, name='keep-alive'),
+
     url(r'^', include(accounts.urls, namespace='accounts')),
 
     url(r'^workflow/', include(workflow.urls, namespace='workflow')),
