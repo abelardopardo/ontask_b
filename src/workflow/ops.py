@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 import gzip
+from datetime import datetime
 from io import BytesIO
 
 from django.contrib.auth import get_user_model
@@ -15,7 +16,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
 import logs.ops
-from action.models import Condition, Action
+from action.models import Condition
 from dataops import formula_evaluation, pandas_db, ops
 from table.models import View
 from .models import Workflow, Column
@@ -214,9 +215,7 @@ def flush_workflow(workflow):
 
     3) Delete all the conditions attached to the actions
 
-    4) Reflect the number of selected columns to -1 for all actions
-
-    5) Delete all the views attached to the workflow
+    4) Delete all the views attached to the workflow
 
     :param workflow: Workflow object
     :return: Reflected in the DB
@@ -239,12 +238,7 @@ def flush_workflow(workflow):
     # workflow.
     Condition.objects.filter(action__workflow=workflow).delete()
 
-    # Step 4: Reset selected columns from all actions
-    for action in Action.objects.filter(workflow=workflow):
-        action.n_selected_rows = -1
-        action.save()
-
-    # Step 5: Delete all the views attached to the workflow
+    # Step 4: Delete all the views attached to the workflow
     View.objects.filter(workflow__id=workflow.id).delete()
 
     # Save the workflow with the new fields.
@@ -324,12 +318,14 @@ def do_export_workflow(workflow, selected_actions=None):
     zfile.write(to_send)
     zfile.close()
 
+    suffix = datetime.datetime.now().strftime('%y%m%d_%H%M%S')
     # Attach the compressed value to the response and send
     compressed_content = zbuf.getvalue()
     response = HttpResponse(compressed_content)
-    response['Content-Encoding'] = 'application/gzip'
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Transfer-Encoding'] = 'binary'
     response['Content-Disposition'] = \
-        'attachment; filename="ontask_workflow.gz"'
+        'attachment; filename="ontask_workflow_{0}.gz"'.format(suffix)
     response['Content-Length'] = str(len(compressed_content))
 
     return response
@@ -362,20 +358,20 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
     if not cond_to_delete:
         # The conditions to delete are not given, so calculate them
         # Get the conditions/actions attached to this workflow
-        cond_to_delete = [x for x in Condition.objects.filter(
-            action__workflow=workflow)
-                          if formula_evaluation.has_variable(x.formula,
-                                                             column.name)]
+        cond_to_delete = [
+            x for x in Condition.objects.filter(action__workflow=workflow)
+            if formula_evaluation.has_variable(x.formula,
+                                               column.name)]
 
     # If a column disappears, the conditions that contain that variable
-    # are removed..
+    # are removed.
     for condition in cond_to_delete:
-        # Formula has the name of the deleted column.
-        # Solution 1: Nuke (Very easy)
-        # Solution 2: Mark as invalid and enhance the edit condition form
-        #  to handle renaming the fields in a formula (Complex)
-        #
-        # Solution 1 chosen.
+        if condition.is_filter:
+            # If the condition is a filter, all the conditions in the same
+            # action need to be reassessed
+            condition.action.update_n_rows_selected_for_non_filters()
+
+        # Formula has the name of the deleted column. Delete it
         condition.delete()
 
     # If a column disappears, the views that contain only that column need to
@@ -431,6 +427,7 @@ def clone_column(column, new_workflow=None, new_name=None):
     ops.store_dataframe_in_db(data_frame, column.workflow.id)
 
     return column
+
 
 def reposition_columns(workflow, from_idx, to_idx):
     """
