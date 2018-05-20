@@ -1,8 +1,11 @@
 <div class="container-fluid" id="condition-set" style="padding-bottom: 0.5ex;">
-  <h4 class="text-center"><strong>Conditions</strong>
-    <button type="button" class="btn btn-sm btn-primary js-condition-create{% if not has_data %} disabled{% endif %}"
+  <h4 class="text-center"><strong>Text Conditions</strong>
+    <button type="button"
+            class="btn btn-sm btn-primary js-condition-create{% if not has_data %} disabled{% endif %}"
             data-url="{% url 'action:create_condition' action.id %}"
-            style="margin-bottom: 0.5ex;">
+            style="margin-bottom: 0.5ex;"
+            data-toggle="tooltip"
+            title="Define a text condition to insert in the text body below.">
       <span class="glyphicon glyphicon-plus"></span> New</button></h4>
   <div class="conditions">
     {% for condition in conditions %}
@@ -11,7 +14,8 @@
                 class="btn btn-primary btn-sm js-condition-edit"
                 data-url="{% url 'action:edit_condition' condition.id %}"
                 data-toggle="tooltip"
-                title="Edit name, description and formula">{{ condition.name }}
+                title="Edit the condition ({{ condition.n_rows_selected }} rows satisfy this condition)">
+          {{ condition.name }} ({{ condition.n_rows_selected }} learners)
         </button>
         <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
                 data-toggle="dropdown"
@@ -25,15 +29,26 @@
                     class="btn btn-default btn-sm js-condition-insert"
                     data-name="{{ condition.name }}"
                     data-toggle="tooltip"
-                    title="Surround selected text with condition">
+                    title="Insert text condition into the body.">
               <span class="glyphicon glyphicon-arrow-down"></span> Insert in
               text
             </button>
           </li>
           <li>
+            <button type="button"
+                    class="btn btn-default btn-sm js-condition-edit"
+                    data-url="{% url 'action:edit_condition' condition.id %}"
+                    data-toggle="tooltip"
+                    title="Edit name, description and formula">
+              <span class="glyphicon glyphicon-pencil"></span> Edit
+            </button>
+          </li>
+          <li>
             <a href="{% url 'action:clone_condition' condition.id %}"
-               class="btn btn-default btn-sm"
-               data-toggle="tooltip" title="Create an exact copy of this condition">
+               class="btn btn-default btn-sm js-condition-clone"
+               data-url="{% url 'action:action_out_save_content' action.id %}"
+               data-toggle="tooltip"
+               title="Create an exact copy of this condition">
               <span class="glyphicon glyphicon-duplicate"></span> Clone
             </a>
           </li>
@@ -48,7 +63,8 @@
         </ul>
       </div>
     {% empty %}
-      <p class="text-center">There are no conditions yet</p>
+      <p class="text-center">Create conditions to control the text in the
+        body below (optional)</p>
     {% endfor %}
   </div>
 </div>

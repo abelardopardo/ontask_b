@@ -5,7 +5,6 @@ import os
 
 from django.conf import settings
 from django.shortcuts import reverse
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
@@ -51,14 +50,15 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
-        self.assertIn('Import', self.selenium.page_source)
+        self.assertIn('Import Workflow', self.selenium.page_source)
 
         # Create the workflow if not present
         if test.wflow_desc not in self.selenium.page_source:
             self.selenium.find_element_by_class_name(
                 'js-create-workflow').click()
             WebDriverWait(self.selenium, 10).until(
-                EC.presence_of_element_located((By.ID, 'id_name')))
+                EC.presence_of_element_located((By.ID, 'id_name'))
+            )
 
             self.selenium.find_element_by_id('id_name').send_keys(
                 test.wflow_name
@@ -66,20 +66,15 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             desc = self.selenium.find_element_by_id('id_description_text')
             desc.send_keys(test.wflow_desc)
             desc.send_keys(Keys.RETURN)
-            # Wait for workflows page
-            WebDriverWait(self.selenium, 10).until(
-                EC.element_to_be_clickable(
-                    (By.LINK_TEXT, test.wflow_name)
-                )
-            )
+        else:
+            # Verify that the workflow is now part of the catalog
+            self.assertIn(test.wflow_name, self.selenium.page_source)
+            self.assertIn(test.wflow_desc, self.selenium.page_source)
 
-        # Verify that the workflow is now part of the catalog
-        self.assertIn(test.wflow_name, self.selenium.page_source)
-        self.assertIn(test.wflow_desc, self.selenium.page_source)
+            # Open the workflow
+            wf_link = self.selenium.find_element_by_link_text(test.wflow_name)
+            wf_link.click()
 
-        # Open the workflow
-        wf_link = self.selenium.find_element_by_link_text(test.wflow_name)
-        wf_link.click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'wflow-name')))
 
@@ -149,13 +144,6 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//button[@name='Submit']"
         ).click()
-        # Wait for the upload/merge
-        WebDriverWait(self.selenium, 20).until(
-            EC.title_is('OnTask :: Dataops')
-        )
-
-        # Goto Details list
-        self.selenium.find_element_by_link_text('Details').click()
         # Wait for the details page
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
@@ -167,50 +155,50 @@ class WorkflowInitial(test.OntaskLiveTestCase):
 
         # First column must be: age, double
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[1]/td[1]").text,
-                         'age')
-        self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[1]/td[2]").text,
-                         'double')
+                         'sid')
+        self.assertEqual(self.selenium.find_element_by_xpath(
+            "//table[@id='column-table']/tbody/tr[1]/td[3]").text,
+                         'number')
 
         # Second column must be email string
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[2]/td[1]").text,
-                         'email')
-        self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[2]/td[2]").text,
+                         'name')
+        self.assertEqual(self.selenium.find_element_by_xpath(
+            "//table[@id='column-table']/tbody/tr[2]/td[3]").text,
                          'string')
 
         # Third column must be sid integer
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[3]/td[1]").text,
-                         'sid')
-        self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[3]/td[2]").text,
-                         'integer')
+                         'email')
+        self.assertEqual(self.selenium.find_element_by_xpath(
+            "//table[@id='column-table']/tbody/tr[3]/td[3]").text,
+                         'string')
 
         # Fourth column must be name string
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[1]").text,
-                         'name')
-        self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[4]/td[2]").text,
-                         'string')
+                         'age')
+        self.assertEqual(self.selenium.find_element_by_xpath(
+            "//table[@id='column-table']/tbody/tr[4]/td[3]").text,
+                         'number')
 
         # Fifth registered and boolean
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[5]/td[1]").text,
+            "//table[@id='column-table']/tbody/tr[5]/td[2]").text,
                          'registered')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[5]/td[2]").text,
+            "//table[@id='column-table']/tbody/tr[5]/td[3]").text,
                          'boolean')
 
         # Sixth when and datetime
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[6]/td[1]").text,
+            "//table[@id='column-table']/tbody/tr[6]/td[2]").text,
                          'when')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[6]/td[2]").text,
+            "//table[@id='column-table']/tbody/tr[6]/td[3]").text,
                          'datetime')
 
         # Number of key columns
@@ -269,13 +257,18 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.CLASS_NAME, 'page-header'),
-                'Step 3: Select Keys to Merge')
+                'Step 3: Select Keys and Merge Option')
         )
 
         # Select SID in the first key
         self.selenium.find_element_by_id('id_dst_key').send_keys('sid')
         # Select SID in the first key
         self.selenium.find_element_by_id('id_src_key').send_keys('sid')
+
+        # Select the merger function type
+        select = Select(self.selenium.find_element_by_id(
+            'id_how_merge'))
+        select.select_by_value('outer')
 
         # Click on the Next button
         self.selenium.find_element_by_xpath(
@@ -292,13 +285,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//button[@name='Submit']"
         ).click()
-        # Wait for the upload/merge
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Dataops')
-        )
-
-        # Goto Dataops list
-        self.selenium.find_element_by_link_text('Details').click()
+        # Wait for the upload/merge to finish
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
                                              'Workflow Details')
@@ -309,18 +296,18 @@ class WorkflowInitial(test.OntaskLiveTestCase):
 
         # Fourth column must be: another, string
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[1]").text,
+            "//table[@id='column-table']/tbody/tr[7]/td[2]").text,
                          'another')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[2]").text,
+            "//table[@id='column-table']/tbody/tr[7]/td[3]").text,
                          'string')
 
         # Sixth column must be one string
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[6]/td[1]").text,
+            "//table[@id='column-table']/tbody/tr[8]/td[2]").text,
                          'one')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[6]/td[2]").text,
+            "//table[@id='column-table']/tbody/tr[8]/td[3]").text,
                          'string')
 
         # Number of key columns
@@ -348,7 +335,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
-        self.assertIn('Import', self.selenium.page_source)
+        self.assertIn('Import Workflow', self.selenium.page_source)
 
         # Create the workflow if not present
         if test.wflow_desc not in self.selenium.page_source:
@@ -363,20 +350,14 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             desc = self.selenium.find_element_by_id('id_description_text')
             desc.send_keys(test.wflow_desc)
             desc.send_keys(Keys.RETURN)
-            # Wait for workflows page
-            WebDriverWait(self.selenium, 10).until(
-                EC.element_to_be_clickable(
-                    (By.LINK_TEXT, test.wflow_name)
-                )
-            )
+        else:
+            # Verify that the workflow is now part of the catalog
+            self.assertIn(test.wflow_name, self.selenium.page_source)
+            self.assertIn(test.wflow_desc, self.selenium.page_source)
 
-        # Verify that the workflow is now part of the catalog
-        self.assertIn(test.wflow_name, self.selenium.page_source)
-        self.assertIn(test.wflow_desc, self.selenium.page_source)
-
-        # Open the workflow
-        wf_link = self.selenium.find_element_by_link_text(test.wflow_name)
-        wf_link.click()
+            # Open the workflow
+            wf_link = self.selenium.find_element_by_link_text(test.wflow_name)
+            wf_link.click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'wflow-name')))
 
@@ -445,7 +426,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         ).click()
         # Wait for the upload/merge
         WebDriverWait(self.selenium, 20).until(
-            EC.title_is('OnTask :: Dataops')
+            EC.title_is('OnTask :: Details')
         )
 
         # Check that the number of rows is the correct one in the only
@@ -480,7 +461,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
             ('newc1', 'string', 'male,female', ''),
             ('newc2', 'boolean', '', 'True'),
             ('newc3', 'integer', '0, 10, 20, 30', '0'),
-            ('newc4', 'double', '0, 0.5, 1, 1.5, 2', '0'),
+            ('newc4', 'integer', '0, 0.5, 1, 1.5, 2', '0'),
             ('newc5', 'datetime', '', '2017-10-11 00:00:00.000+11:00'),
         ]
 
@@ -493,7 +474,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
-        self.assertIn('Import', self.selenium.page_source)
+        self.assertIn('Import Workflow', self.selenium.page_source)
 
         # Open the workflow
         wf_link = self.selenium.find_element_by_link_text(test.wflow_name)
@@ -504,7 +485,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
 
         # Edit the age column
         self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[1]/td[4]/div/button[1]"
+            "//table[@id='column-table']/tbody/tr[1]/td[5]/div/button[1]"
         ).click()
         self.selenium.find_element_by_class_name(
             'js-workflow-column-edit').click()
@@ -522,15 +503,16 @@ class WorkflowModify(test.OntaskLiveTestCase):
         ).click()
         self.wait_close_modal_refresh_table('column-table_previous')
 
-        # Third column must be age, double
+        # First column must be age, number
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[3]/td[1]").text,
+            "//table[@id='column-table']/tbody/tr[1]/td[2]").text,
                          'age')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[3]/td[2]").text,
-                         'double')
+            "//table[@id='column-table']/tbody/tr[1]/td[3]").text,
+                         'number')
 
         # ADD COLUMNS
+        idx = 6
         for cname, ctype, clist, cinit in new_cols:
             # ADD A NEW COLUMN
             WebDriverWait(self.selenium, 10).until(
@@ -554,6 +536,8 @@ class WorkflowModify(test.OntaskLiveTestCase):
                 self.selenium.find_element_by_id(
                     'id_initial_value'
                 ).send_keys(cinit)
+            self.selenium.find_element_by_id('id_position').send_keys(str(idx))
+
             # Click on the Submit button
             self.selenium.find_element_by_xpath(
                 "//div[@id='modal-item']/div/div/form/div[@class='modal-footer']/button[@type='submit']"
@@ -561,11 +545,15 @@ class WorkflowModify(test.OntaskLiveTestCase):
             self.wait_close_modal_refresh_table('column-table_previous')
             pandas_db.check_wf_df(Workflow.objects.get(pk=1))
 
+            idx += 1
+
         # CHECK THAT THE COLUMNS HAVE BEEN CREATED (starting in the sixth)
         idx = 6
         for cname, ctype, _, _ in new_cols:
-            row_path1 = "//table[@id='column-table']/tbody/tr[{0}]/td[1]"
-            row_path2 = "//table[@id='column-table']/tbody/tr[{0}]/td[2]"
+            if ctype == 'integer':
+                ctype = 'number'
+            row_path1 = "//table[@id='column-table']/tbody/tr[{0}]/td[2]"
+            row_path2 = "//table[@id='column-table']/tbody/tr[{0}]/td[3]"
 
             # Third column must be age, double
             self.assertEqual(self.selenium.find_element_by_xpath(
@@ -578,7 +566,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
 
         # DELETE THE COLUMNS
         for cname, ctype, _, _ in new_cols:
-            row_prefix = "//table[@id='column-table']/tbody/tr[6]/td[4]"
+            row_prefix = "//table[@id='column-table']/tbody/tr[6]/td[5]"
             self.selenium.find_element_by_xpath(
                 row_prefix + "/div/button[1]"
             ).click()
@@ -593,17 +581,23 @@ class WorkflowModify(test.OntaskLiveTestCase):
             self.selenium.find_element_by_xpath(
                 "//div[@id='modal-item']//button[@type='submit']"
             ).click()
-            # Wait for the details page
+            # Wait for modal to close
+            WebDriverWait(self.selenium, 10).until_not(
+                EC.presence_of_element_located(
+                    (By.CLASS_NAME, 'modal-open')
+                )
+            )
+            # Wait for the details page to reload.
             WebDriverWait(self.selenium, 10).until(
                 EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
             )
 
         # Sixth column must be one string
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[6]/td[1]").text,
+            "//table[@id='column-table']/tbody/tr[6]/td[2]").text,
                          'one')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[6]/td[2]").text,
+            "//table[@id='column-table']/tbody/tr[6]/td[3]").text,
                          'string')
 
         # End of session
@@ -623,7 +617,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
-        self.assertIn('Import', self.selenium.page_source)
+        self.assertIn('Import Workflow', self.selenium.page_source)
 
         # Open the workflow
         wf_link = self.selenium.find_element_by_link_text(test.wflow_name)
@@ -634,12 +628,12 @@ class WorkflowModify(test.OntaskLiveTestCase):
             EC.presence_of_element_located((By.CLASS_NAME, 'success'))
         )
 
-        # Edit the other column
+        # Edit the another column
         self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[4]/div/button[1]"
+            "//table[@id='column-table']/tbody/tr[4]/td[5]/div/button[1]"
         ).click()
         self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[4]/div/ul/li[1]/button"
+            "//table[@id='column-table']/tbody/tr[4]/td[5]/div/ul/li[1]/button"
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),
@@ -659,9 +653,9 @@ class WorkflowModify(test.OntaskLiveTestCase):
         ).click()
         self.wait_close_modal_refresh_table('column-table_previous')
 
-        # Fourth column must now have name another2
+        # The column must now have name another2
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[1]").text,
+            "//table[@id='column-table']/tbody/tr[4]/td[2]").text,
                          'another2')
 
         # Goto the action page
@@ -674,8 +668,8 @@ class WorkflowModify(test.OntaskLiveTestCase):
         )
         self.assertIn('New Action', self.selenium.page_source)
 
-        # click in the create action button
-        self.selenium.find_element_by_class_name(
+        # click in the create action out button
+        new_actions = self.selenium.find_element_by_class_name(
             'js-create-action').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'id_name')))
@@ -685,17 +679,19 @@ class WorkflowModify(test.OntaskLiveTestCase):
         desc = self.selenium.find_element_by_id('id_description_text')
         desc.send_keys(action_desc)
         desc.send_keys(Keys.RETURN)
-        # Wait for workflows page
+        # Wait for actions page
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//div[@id='builder']/dl/dt/div/button")
-            )
+            EC.presence_of_element_located((By.ID, 'action-in-editor'))
         )
 
         # Click in the add rule button (the filter is initially empty)
         self.selenium.find_element_by_xpath(
-            "//div[@id='builder']/dl/dt/div/button"
+            "//div[@id='filter-set']/h4/div/button"
         ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),
+                                             'Create action filter')
+        )
 
         # Select the another2 column (with new name
         select = Select(self.selenium.find_element_by_name(
@@ -755,7 +751,7 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
-        self.assertIn('Import', self.selenium.page_source)
+        self.assertIn('Import Workflow', self.selenium.page_source)
 
         # Open the workflow
         wf_link = self.selenium.find_element_by_link_text(test.wflow_name)
@@ -956,7 +952,7 @@ class WorkflowShare(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Workflows'))
         self.assertIn('New Workflow', self.selenium.page_source)
-        self.assertIn('Import', self.selenium.page_source)
+        self.assertIn('Import Workflow', self.selenium.page_source)
 
         # Open the workflow
         wf_link = self.selenium.find_element_by_link_text(test.wflow_name)
@@ -993,6 +989,10 @@ class WorkflowShare(test.OntaskLiveTestCase):
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'modal-open')
             )
+        )
+        # Wait for the user share page to reload.
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'js-share-delete'))
         )
 
         # Value now should be in the table

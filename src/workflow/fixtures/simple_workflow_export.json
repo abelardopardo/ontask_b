@@ -1996,6 +1996,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": true,
+        "position": 2,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2010,6 +2011,7 @@
         "workflow": 140,
         "data_type": "string",
         "is_key": true,
+        "position": 1,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2024,6 +2026,7 @@
         "workflow": 140,
         "data_type": "string",
         "is_key": false,
+        "position": 13,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2038,6 +2041,7 @@
         "workflow": 140,
         "data_type": "string",
         "is_key": false,
+        "position": 8,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2052,6 +2056,7 @@
         "workflow": 140,
         "data_type": "string",
         "is_key": false,
+        "position": 10,
         "categories": [
             "male",
             "female"
@@ -2069,6 +2074,7 @@
         "workflow": 140,
         "data_type": "string",
         "is_key": false,
+        "position": 11,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2083,6 +2089,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 4,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2097,6 +2104,7 @@
         "workflow": 140,
         "data_type": "double",
         "is_key": false,
+        "position": 3,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2111,6 +2119,7 @@
         "workflow": 140,
         "data_type": "boolean",
         "is_key": false,
+        "position": 12,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2125,6 +2134,7 @@
         "workflow": 140,
         "data_type": "datetime",
         "is_key": false,
+        "position": 9,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2139,6 +2149,7 @@
         "workflow": 140,
         "data_type": "string",
         "is_key": false,
+        "position": 6,
         "categories": [
             "",
             "Concept 1",
@@ -2159,6 +2170,7 @@
         "workflow": 140,
         "data_type": "string",
         "is_key": false,
+        "position": 7,
         "categories": [
             "",
             "Concept 1",
@@ -2179,6 +2191,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 15,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2193,6 +2206,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 16,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2207,6 +2221,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 17,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2221,6 +2236,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 18,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2235,6 +2251,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 19,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2249,6 +2266,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 20,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2263,6 +2281,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 21,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2277,6 +2296,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 22,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2291,6 +2311,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 23,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2305,6 +2326,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 24,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2319,6 +2341,7 @@
         "workflow": 140,
         "data_type": "double",
         "is_key": false,
+        "position": 14,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2333,6 +2356,7 @@
         "workflow": 140,
         "data_type": "boolean",
         "is_key": false,
+        "position": 25,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2347,6 +2371,7 @@
         "workflow": 140,
         "data_type": "double",
         "is_key": false,
+        "position": 5,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2361,6 +2386,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 26,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2375,6 +2401,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 27,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2389,6 +2416,7 @@
         "workflow": 140,
         "data_type": "integer",
         "is_key": false,
+        "position": 28,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -2403,7 +2431,6 @@
         "description_text": "Comment the midterm scores divided by topic",
         "created": "2017-12-16T01:33:35.442Z",
         "modified": "2017-12-16T01:49:41.394Z",
-        "n_selected_rows": 10,
         "is_out": true,
         "serve_enabled": false,
         "active_from": null,
@@ -2422,7 +2449,6 @@
         "description_text": "Message to remind those students that haven't visited the forum to do so.",
         "created": "2017-12-16T01:52:24.867Z",
         "modified": "2017-12-16T01:55:11.369Z",
-        "n_selected_rows": 2,
         "is_out": true,
         "serve_enabled": false,
         "active_from": null,
@@ -2441,7 +2467,6 @@
         "description_text": "A message commenting on the videos they watched.",
         "created": "2017-12-16T01:58:13.398Z",
         "modified": "2017-12-16T02:09:47.947Z",
-        "n_selected_rows": 10,
         "is_out": true,
         "serve_enabled": false,
         "active_from": null,
@@ -2460,7 +2485,6 @@
         "description_text": "A badge reflecting the activity with respect to the videos",
         "created": "2017-12-16T02:12:55.006Z",
         "modified": "2017-12-16T02:32:57.507Z",
-        "n_selected_rows": -1,
         "is_out": true,
         "serve_enabled": true,
         "active_from": null,
@@ -2479,7 +2503,6 @@
         "description_text": "Feedback about today's lecture",
         "created": "2017-12-16T02:25:39.324Z",
         "modified": "2017-12-16T02:38:42.659Z",
-        "n_selected_rows": -1,
         "is_out": false,
         "serve_enabled": true,
         "active_from": null,
@@ -2506,7 +2529,6 @@
         "description_text": "Feedback about today's lecture",
         "created": "2017-12-16T02:26:17.641Z",
         "modified": "2017-12-16T02:38:50.054Z",
-        "n_selected_rows": -1,
         "is_out": false,
         "serve_enabled": true,
         "active_from": null,
@@ -2533,7 +2555,6 @@
         "description_text": "List of additional resources depending on the value given in the difficult topic",
         "created": "2017-12-16T02:34:08.882Z",
         "modified": "2017-12-16T02:38:32.206Z",
-        "n_selected_rows": -1,
         "is_out": true,
         "serve_enabled": false,
         "active_from": null,

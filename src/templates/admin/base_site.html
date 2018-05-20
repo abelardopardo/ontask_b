@@ -1,11 +1,15 @@
 {% extends "admin/base.html" %}
 {% load settings %}
-{% load i18n %}{% load admin_static bootstrapped_goodies_tags %}
+{% load i18n %}
+{% load admin_static %}
+{% comment %}
+{% load bootstrapped_goodies_tags %}
+{% endcomment %}
 
-{% block title %}{% include "_brandname.html" %} Admin{% endblock %}
+{% block title %}{% include "_brandname.html" %} Admin {% endblock %}
 
 {% block branding %}
-  <a class="navbar-brand" href="{% url 'admin:index' %}">{% include "_brandname.html" %} Admin</a>
+  <a class="navbar-brand" href="{% url 'admin:index' %}">{% include "_brandname.html" %} Admin&nbsp;</a>
 {% endblock %}
 
 {% block nav-global %}

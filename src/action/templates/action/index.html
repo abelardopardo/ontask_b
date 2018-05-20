@@ -18,6 +18,10 @@
       if (document.getElementById("action-table") != null) {
         // Required for DataTables
         $('#action-table').DataTable({
+          "search": {
+            "caseInsensitive": true,
+          },
+          stateSave: true,
           "language": {
             "emptyTable": "There are no actions for this workflow."
           },
@@ -56,7 +60,7 @@
     {% render_table table %}
   {% endif %}
 
-  <div class="modal fade" id="modal-item">
+  <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">
       </div>

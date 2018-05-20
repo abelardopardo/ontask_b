@@ -9,14 +9,20 @@ import string
 from django.core.exceptions import ObjectDoesNotExist
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
-from validate_email import validate_email
 from django.utils.html import escape
+from validate_email import validate_email
 
 import dataops.formula_evaluation
+from action.forms import EnterActionIn
 from action.models import Condition
 from dataops import pandas_db, ops
 from ontask import OntaskException
 from workflow.models import Workflow
+
+# Variable name to store the workflow ID in the context used to render a
+# template
+action_context_var = 'ONTASK_ACTION_CONTEXT_VARIABLE___'
+viz_number_context_var = 'ONTASK_VIZ_NUMBER_CONTEXT_VARIABLE___'
 
 def make_xlat(*args, **kwds):
     """
@@ -69,6 +75,15 @@ def translate(varname):
     :return: New variable name starting with a letter followed only by
              letter, digit or _
     """
+
+    # If the variable name is surrounded by quotes, we leave it untouched!
+    # because it represents a literal
+    if varname.startswith("'") and varname.endswith("'"):
+        return varname
+
+    if varname.startswith('"') and varname.endswith('"'):
+        return varname
+
     # If the variable name starts with a non-letter or the prefix used to
     # force letter start, add a prefix.
     if not varname[0] in string.letters or varname.startswith('OT_'):
@@ -78,7 +93,7 @@ def translate(varname):
     return tr_item(varname)
 
 
-def render_template(template_text, context_dict):
+def render_template(template_text, context_dict, action=None):
     """
     Given a template text and a context, performs the rendering of the
     template using the django template mechanism but with an additional
@@ -88,7 +103,7 @@ def render_template(template_text, context_dict):
     In OnTask, the variable names are: column names, attribute names,
     or condition names. It is too restrictive to propagate the restrictions
     imposed by Jinja variables all the way to these three components. To
-    shield this from the users, there is a preliminary step in which those
+    hide this from the users, there is a preliminary step in which those
     variables in the template and keys in the context that do not comply with
     the syntax restriction are renamed to compliant names.
 
@@ -121,21 +136,28 @@ def render_template(template_text, context_dict):
 
     :param template_text: Text in the template to be rendered
     :param context_dict: Dictionary used by Jinja to evaluate the template
+    :param action: Action object to insert in the context in case it is
+    needed by any other custom template.
     :return: The rendered template
     """
 
-    # Regular expression detecting the use of a variable, or the
-    # presence of a "{% if variable %} construct in a string (template)
-    var_use_re = re.compile(
-        '(?P<markup_pre>{({|% if) )(?P<varname>.+?)(?P<markup_post> [%\}]\})')
+    # Regular expressions detecting the use of a variable, or the
+    # presence of a "{% MACRONAME variable %} construct in a string (template)
+    var_use_res = [
+        re.compile('(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+\}\})'),
+        re.compile('(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})')
+    ]
 
     # Steps 1 and 2. Apply the tranlation process to all variables that
     # appear in the the template text
-    new_template_text = var_use_re.sub(
-        lambda m: m.group('markup_pre') + \
-                  translate(m.group('varname')) + \
-                  m.group('markup_post'),
-        template_text)
+    new_template_text = template_text
+    for rexpr in var_use_res:
+        new_template_text = rexpr.sub(
+            lambda m: m.group('mup_pre') + \
+                      translate(m.group('vname')) + \
+                      m.group('mup_post'),
+            new_template_text)
+    new_template_text = '{% load vis_include %}' + new_template_text
 
     # Step 3. Apply the translation process to the context keys
     new_context = dict([(translate(escape(x)), y)
@@ -144,6 +166,14 @@ def render_template(template_text, context_dict):
     # If the number of elements in the two dictionaries is different, we have
     #  a case of collision in the translation. Need to stop immediately.
     assert len(context_dict) == len(new_context)
+
+    if action_context_var in new_context:
+        raise Exception('Name {0} is reserved.'.format(action_context_var))
+    new_context[action_context_var] = action
+
+    if viz_number_context_var in new_context:
+        raise Exception('Name {0} is reserved.'.format(viz_number_context_var))
+    new_context[viz_number_context_var] = 0
 
     # Step 4. Return the redering of the new elements
     return Template(new_template_text).render(Context(new_context))
@@ -190,18 +220,19 @@ def evaluate_action(action, extra_string, column_name):
 
     # Step 3: Get the table data
     result = []
-    data_table = pandas_db.get_table_data(workflow.id, cond_filter)
+    data_frame = pandas_db.get_subframe(workflow.id, cond_filter)
 
     # Check if the values in the email column are correct emails
     try:
-        correct_emails = all([validate_email(x[col_idx]) for x in data_table])
+        correct_emails = all([validate_email(x)
+                              for x in data_frame[column_name]])
         if not correct_emails:
             # column has incorrect email addresses
             return 'The column with email addresses has incorrect values.'
     except TypeError:
         return 'The column with email addresses has incorrect values'
 
-    for row in data_table:
+    for _, row in data_frame.iterrows():
 
         # Get the dict(col_name, value)
         row_values = dict(zip(col_names, row))
@@ -230,7 +261,9 @@ def evaluate_action(action, extra_string, column_name):
         # Step 5: run the template with the given context
         # Render the text and append to result
         try:
-            partial_result = [render_template(action.content, context)]
+            partial_result = [render_template(action.content,
+                                              context,
+                                              action)]
         except Exception as e:
             return 'Syntax error detected in the action text. ' + e.message
 
@@ -254,20 +287,17 @@ def evaluate_action(action, extra_string, column_name):
 
 def evaluate_row(action, row_idx):
     """
+    Given an action and a row index, evaluate the content of the action for
+    that index. The evaluation depends on the action type.
+
     Given an action object and a row index:
     1) Access the attached workflow
     2) Obtain the row of data from the appropriate data frame
-    3) Evaluate the conditions with respect to the values in the row
-    4) Create a context with the result of evaluating the conditions,
-       attributes and column names to values
-    5) Run the template with the context
-    6) Return the resulting object (HTML?)
+    3) Process further depending on the type of action
 
-    :param action: Action object with pointers to conditions, filter,
-                   workflow, etc.
-    :param row_idx: Either an integer (row index), or a pair key=value to
-           filter
-    :return: None to flag an error
+    :param action: Action object
+    :param row_idx: Row index to use for evaluation
+    :return HTML content resulting from the evaluation
     """
 
     # Step 1: Get the workflow to access the data. No need to check for
@@ -294,7 +324,29 @@ def evaluate_row(action, row_idx):
         # No rows satisfy the given condition
         return None
 
-    # Step 3: Evaluate all the conditions
+    # Invoke the appropriate function depending on the action type
+    if action.is_out:
+        return evaluate_row_out(action, row_values)
+
+    return evaluate_row_in(action, row_values)
+
+
+def evaluate_row_out(action, row_values):
+    """
+    Given an action object and a row index:
+    1) Evaluate the conditions with respect to the values in the row
+    2) Create a context with the result of evaluating the conditions,
+       attributes and column names to values
+    3) Run the template with the context
+    4) Return the resulting object (HTML?)
+
+    :param action: Action object with pointers to conditions, filter,
+                   workflow, etc.
+    :param row_values: dictionary with the pairs name, value
+    :return: String with the HTML content resulting from the evaluation
+    """
+
+    # Step 1: Evaluate all the conditions
     condition_eval = {}
     condition_anomalies = []
     for condition in Condition.objects.filter(
@@ -320,21 +372,52 @@ def evaluate_row(action, row_idx):
         return render_to_string('action/incorrect_preview.html',
                                 {'missing_values': condition_anomalies})
 
-    # Step 4: Create the context with the attributes, the evaluation of the
+    # Step 2: Create the context with the attributes, the evaluation of the
     # conditions and the values of the columns.
-    attributes = workflow.attributes
+    attributes = action.workflow.attributes
     context = dict(dict(row_values, **condition_eval), **attributes)
 
-    # Step 5: run the template with the given context
+    # Step 3: run the template with the given context
     # First create the template with the string stored in the action
     try:
-        result = render_template(action.content, context)
+        result = render_template(action.content, context, action)
     except TemplateSyntaxError as e:
         return render_to_string('action/syntax_error.html',
                                 {'msg': e.message})
 
-    # Render the text
+    # Step 4: Render the text
     return result
+
+
+def evaluate_row_in(action, row_values):
+    """
+    Given an action IN object and a row index:
+    1) Create the form and the context
+    2) Run the template with the context
+    3) Return the resulting object (HTML?)
+
+    :param action: Action object.
+    :param row_values: Dictionary with pairs name/value
+    :return: String with the HTML content resulting from the evaluation
+    """
+
+    # Get the active columns attached to the action
+    columns = [c for c in action.columns.all() if c.is_active]
+
+    # Get the row values.
+    selected_values = [row_values[c.name] for c in columns]
+
+    form = EnterActionIn(None, columns=columns, values=selected_values)
+
+    # Render the form
+    return Template(
+        """<div align="center">
+             <p class="lead">{{ description_text }}</p>
+             {% load crispy_forms_tags %}{{ form|crispy }}
+           </div>"""
+    ).render(Context({'form': form,
+                      'description_text': action.description_text}))
+
 
 def run(*script_args):
     """
@@ -342,6 +425,7 @@ def run(*script_args):
     :param script_args:
     :return:
     """
+    del script_args
 
     template = """
     hi --{{ one }}--

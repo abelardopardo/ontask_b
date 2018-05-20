@@ -30,11 +30,24 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="success">
-          <td class="text-center">{{ request.session.upload_data.dst_selected_key }}: Key</td>
-          <td class="text-center"><button class=" glyphicon glyphicon-arrow-left"></button></td>
-          <td class="text-center">{{ request.session.upload_data.src_selected_key }}: Key</td>
-        </tr>
+        {% if request.session.upload_data.dst_selected_key == request.session.upload_data.src_selected_key %}
+          <tr class="success">
+            <td class="text-center">{{ request.session.upload_data.dst_selected_key }} (Key)</td>
+            <td class="text-center"><button class=" glyphicon glyphicon-arrow-left"></button></td>
+            <td class="text-center">{{ request.session.upload_data.src_selected_key }} (Key)</td>
+          </tr>
+        {% else %}
+          <tr class="success">
+            <td class="text-center">{{ request.session.upload_data.dst_selected_key }} (Key)</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr class="success">
+            <td></td>
+            <td class="text-center"><button class=" glyphicon glyphicon-arrow-left"></button></td>
+            <td class="text-center">{{ request.session.upload_data.src_selected_key }} (Key)</td>
+          </tr>
+        {% endif %}
         {% for item in info %}
           <tr>
             <td class="text-center" style="max-width:220px">{{ item.0 }}</td>

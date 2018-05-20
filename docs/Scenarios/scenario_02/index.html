@@ -1,0 +1,187 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Scenario 2: Send email to all students with tailored text &#8212; OnTask (B.2.6.0) 1.1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Scenario 3: Send email to some students with personalised text" href="../scenario_03/index.html" />
+    <link rel="prev" title="Scenario? I don’t even know what the tool does" href="../scenario_01/index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="scenario-2-send-email-to-all-students-with-tailored-text">
+<span id="scenario-02"></span><h1>Scenario 2: Send email to all students with tailored text<a class="headerlink" href="#scenario-2-send-email-to-all-students-with-tailored-text" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>CSV data file: <a class="reference download internal" href="../../_downloads/scenario_02_data.csv" download=""><code class="xref download docutils literal notranslate"><span class="pre">Scenario</span> <span class="pre">2</span> <span class="pre">Data</span> <span class="pre">File</span></code></a>.</li>
+<li>Workflow data file: <a class="reference download internal" href="../../_downloads/scenario_02_wflow.gz" download=""><code class="xref download docutils literal notranslate"><span class="pre">Scenario</span> <span class="pre">2</span> <span class="pre">Workflow</span> <span class="pre">File</span></code></a>.</li>
+</ul>
+<p>Suppose you have a course with 500 students and they take the course as part of four programs named FASS, FEIT, FSCI, SMED in different disciplines. They are all related, but at the same time different. You would like to send all your students an initial email explaining a few aspects of the course. One paragraph is about the structure of the course and is common to all students. A second one explains the connection between the material and their program. This second paragraph has to change depending on the program in which each student is enrolled. The task consists on drafting one email with a personalised greeting (using the student’s name) a common paragraph, and a second paragraph that changes depending on the program.</p>
+<p>Suppose now that you <a class="reference download internal" href="../../_downloads/scenario_02_data.csv" download=""><code class="xref download docutils literal notranslate"><span class="pre">do</span> <span class="pre">have</span> <span class="pre">the</span> <span class="pre">class</span> <span class="pre">listing</span> <span class="pre">in</span> <span class="pre">an</span> <span class="pre">excel</span> <span class="pre">sheet</span></code></a>. The table has the names of the students (one student per row), and the column named <em>Program</em> contains for each student one of four possible values “FASS”, “FSCI”, “FEIT” or “SMED”.</p>
+<div class="admonition-steps admonition">
+<p class="first admonition-title">Steps</p>
+<ol class="arabic">
+<li><p class="first">Create a new workflow (click in the <em>New Workflow</em> button in the home page of the tool). Introduce a name and a description (optional) for this workflow.</p>
+</li>
+<li><p class="first">Open the newly created workflow by clicking its name. A page titled <em>Workflow Details</em> will be shown.</p>
+</li>
+<li><p class="first">The page says that there is no data uploaded yet, and to upload it you need to click in the <em>Dataops</em> link either at the bottom of the text or at the context menu at the top.</p>
+</li>
+<li><p class="first">A new page titled <em>Upload/Merge</em> appears. Select the option <em>CSV Upload/Merge</em> and follow the instructions to upload the <a class="reference download internal" href="../../_downloads/scenario_02_data.csv" download=""><code class="xref download docutils literal notranslate"><span class="pre">CSV</span> <span class="pre">file</span></code></a> (select all the columns to upload)</p>
+</li>
+<li><p class="first">Click the <em>Details</em> page to see a summary of the elements in the workflow: 500 rows, 10 columns, 1 action and 0 attributes. All the steps up to here can be done by <a class="reference download internal" href="../../_downloads/scenario_02_wflow.gz" download=""><code class="xref download docutils literal notranslate"><span class="pre">importing</span> <span class="pre">the</span> <span class="pre">given</span> <span class="pre">workflow</span> <span class="pre">file</span></code></a>.</p>
+</li>
+<li><p class="first">Click the <em>Table</em> link at the top of the page and browse through the data included in the workflow. Locate the column called <em>Program</em> and verify that it has the correct values.</p>
+</li>
+<li><p class="first">Click the <em>Actions</em> link at the top of the page. The new page shows a list of actions available for this workflow. Click on the button to create a <em>New Action Out</em> to send a welcome email to all students. Choose an name and description (optional) for the action, for example <em>Welcome email</em>.</p>
+</li>
+<li><p class="first">The next page is the action out editor. In the second area from the top you will see a button to create a new condition (<em>Conditions + New</em>). Click the button and a new window opens to specify a condition. Enter the following data:</p>
+<div class="figure align-center">
+<img alt="../../_images/scenario_02_condition_FASS.png" src="../../_images/scenario_02_condition_FASS.png" />
+</div>
+</li>
+</ol>
+<p>The formula states that the condition will be satisfied when the column <em>Program</em> has the value <em>FASS</em>. Click the button to save the condition.</p>
+<ol class="arabic">
+<li><p class="first">Create three additional conditions that are analogous to this one but are true when the <em>Program</em> column is equal to <em>FEIT</em>, <em>FSCI</em> and <em>SMED</em> respectively. The area in the <em>Action Out</em> editor should look like:</p>
+<div class="figure align-center">
+<img alt="../../_images/scenario_02_conditions.png" src="../../_images/scenario_02_conditions.png" />
+</div>
+</li>
+<li><p class="first">Write the text of the email starting with a greeting. Immediately after the greeting select from the pull down menu titled <code class="docutils literal notranslate"><span class="pre">Insert</span> <span class="pre">column</span> <span class="pre">value</span></code> the column <code class="docutils literal notranslate"><span class="pre">GivenName</span></code>. You will see how the string <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">GivenName</span> <span class="pre">}}</span></code> is inserted in the text. This is the way OnTask has to mark that the string with the double curly braces should be replaced by the value of the column <em>GivenName</em>.</p>
+</li>
+<li><p class="first">Next, write the paragraph that is common to all the students suggesting to read the course syllabus. The following figure shows a possible text:</p>
+<div class="figure align-center">
+<img alt="../../_images/scenario_02_text_top.png" src="../../_images/scenario_02_text_top.png" />
+</div>
+</li>
+<li><p class="first">Next, write the four paragraphs that you would write to the students in each of the programs (FEIT, FSCI, FASS and SMED). Separate them with an empty line.</p>
+</li>
+<li><p class="first">Now, and this is the crucial step, we are going to mark these paragraphs with one of the previously defined conditions. Select and highlight the paragraph to the students in the FASS program. Then click in the arrow next to the condition named <em>Student in FASS</em> and select the option <em>Insert in text</em>. The text should now be surrounded by the strings <code class="docutils literal notranslate"><span class="pre">{%</span> <span class="pre">if</span> <span class="pre">Student</span> <span class="pre">in</span> <span class="pre">FASS</span> <span class="pre">%}</span></code> and <code class="docutils literal notranslate"><span class="pre">{%</span> <span class="pre">endif</span> <span class="pre">%}</span></code> as shown in the following figure.</p>
+<div class="figure align-center">
+<img alt="../../_images/scenario_02_text_condition.png" src="../../_images/scenario_02_text_condition.png" />
+</div>
+</li>
+<li><p class="first">Repeat the same procedure now with the three remaining paragraphs. Select the text and then click in the appropriate condition. The final result should be similar to the one shown in the following figure.</p>
+<div class="figure align-center">
+<img alt="../../_images/scenario_02_text_all_conditions.png" src="../../_images/scenario_02_text_all_conditions.png" />
+</div>
+</li>
+<li><p class="first">Add the signature at the end of the text. Use the button named <em>Preview</em> at the bottom and use the arrows in the emerging window to browse through the different messages created for each user.</p>
+<div class="figure align-center">
+<img alt="../../_images/scenario_02_preview.png" src="../../_images/scenario_02_preview.png" />
+</div>
+</li>
+<li><p class="first">Save and close the <em>Action Out</em>. You now are back to the screen showing the actions in the workflow (you can see the one we just created). If you click in the <em>Email</em> button, you will be asked for some extra data such as the email subject, the column to use as email address and some options to track email reading or even obtain a snapshot (duplicate) of the workflow as it is right now for future reference.</p>
+</li>
+</ol>
+<blockquote>
+<div><div class="figure align-center">
+<img alt="../../_images/scenario_02_action_email.png" src="../../_images/scenario_02_action_email.png" />
+</div>
+</div></blockquote>
+<ol class="last arabic simple">
+<li>That’s it! Each student will receive a message with the content of the second paragraph different depending on the program.</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">OnTask (B.2.6.0)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction/index.html">What is OnTask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Install/index.html">Installation process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Using/index.html">Using the tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorial/index.html">OnTask Tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Use Scenarios</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../scenario_01/index.html">Scenario? I don’t even know what the tool does</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Scenario 2: Send email to all students with tailored text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../scenario_03/index.html">Scenario 3: Send email to some students with personalised text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../scenario_04/index.html">Scenario 4: I want to change all actions at the same time</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Advanced/index.html">Advanced Features</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Use Scenarios</a><ul>
+      <li>Previous: <a href="../scenario_01/index.html" title="previous chapter">Scenario? I don’t even know what the tool does</a></li>
+      <li>Next: <a href="../scenario_03/index.html" title="next chapter">Scenario 3: Send email to some students with personalised text</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Content Licensed under Creative Commons BY 3.0.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../_sources/Scenarios/scenario_02/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

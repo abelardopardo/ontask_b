@@ -15,13 +15,16 @@
     $(document).ready(function() {
       if (document.getElementById("scheduler-table") != null) {
         $('#scheduler-table').DataTable({
+          "search": {
+            "caseInsensitive": true,
+          },
           "language": {
             "emptyTable": "No scheduled operations in this workflow"
           },
           "columnDefs": [
               {"className": "dt-center", "targets": "_all"},
-              {"orderable": false, "targets": 9},
-              {"searchable": false, "targets": 9},
+              {"orderable": false, "targets": 0},
+              {"searchable": false, "targets": 0},
           ],
         });
       }
@@ -33,7 +36,7 @@
 <div align="center" class="container-fluid">
   <h1 class="page-header">Scheduled Operations</h1>
   {% render_table table %}
-  <div class="modal fade" id="modal-item">
+  <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">
       </div>

@@ -1,3 +1,128 @@
+## 2.6.1
+
+### Added
+
+### Changed
+
+- Platform now notifies with a pop-up one minute before the session user session
+  expires (Issue #31)
+  
+- File name when exporting a workflow now includes a date/time suffix (issue 
+  36)
+
+- Conditions and filters now show the number of rows that satisfy the 
+  specified condition (issue #26)
+
+- Removed the back buttom from the page for learner submission (issue 27)  
+
+- All columns are selected by default when uploading a new CSV (issue #28)
+
+- Merged the options of tracking an email and adding a column in the table. 
+  They are now the same option (issue #35)
+  
+### Fixed
+
+- Merge procedure improved to consider the case where src and dst keys are
+  different, but still src key is equal to a column in dst (issue #41)
+
+- CSV download button in table view now correctly narrows the table to the right
+  data when using a view (previously, it would download the whole table 
+  regardless, issue #34)
+
+- Column picker widget was rendered in an incorrect location (issue #21)   
+
+## 2.6.0 (2018-05-13) 
+
+### Added
+
+- Possibility to change the order in which columns are shown.
+
+- Download the table as CSV
+
+### Changed
+
+- Major overhaul of the documentation available when merging dataframes. When
+  choosing now the merging uption, a figure and corresponding text explains the
+  result of the operation.
+  
+- Preventing the modal window to close when clicking outside of it.
+
+- Simplified the layout for the Action-Out screen
+
+- Changed the name of the Workflow "Rename" button to "Edit"
+
+- Search in tables is now case insensitive.
+
+- End of CSV upload operation now is followed by workflow details screen
+
+- Re-writing of the action-in screen to make it consistent with the rest of
+  the application.
+  
+- Various navigation sequences to reduce the number of clicks
+
+### Fixed
+
+- AND/OR button in condition builder is now easier to differentiate.
+
+- Misalignment of the NOT button in condition builder.
+
+- Bug that leaked Views when table is flushed in the workflow
+
+- Error in URL included in emails
+
+## 2.5.1 (2018-04-21)
+
+### Added
+
+- Documentation on how to open the URL in OnTask to track email reading when using SAML authentication (Apache configuration)
+
+- Tables now remember their state (number of items shown, search item)
+
+- Documentation now has the initial set of *scenarios* to showcase the differet functionality available in the platform. This section is unfinished.
+
+### Changed
+
+- Column delete now returns to previous screen (table or workflow detail)
+
+- Email preview now uses the subject text provided in the form.
+
+- Platform now prevents concurrent sessions from the same user. If a user tries
+  to access a workflow that is being used by another session in another 
+  browser, the platform rejects the access until the previous session is 
+  terminated by logout, or (if the browser has been closed) it expires.
+  
+- Removed bootstrapped Admin interface and restored the original one.
+
+### Fixed
+
+- Changed the update of the action out text to use a POST request and prevent
+  the System Error due to the length of the text (Issues 13 and 15)
+  
+- Bug preventing columns to be deleted from the table view.
+
+- Bug limiting the length of the action text when using preview (Issue 18)
+
+- Bug limiting the search in tables to only pure string columns (unable to
+  search columns with booleans that are promoted to strings)
+  
+- Bug when merging/updating data sets with overlapping columns. The code
+  was not considering them as existing columns. Major rewriting of the
+  update/merge functionality.
+
+- Bug detecting condition names with spaces in action out text
+
+- Bug when enforcing new data types after merge/update operation
+
+- Bug when flushing a workflow that did not restored the selected number of 
+  rows in the action filters.
+  
+- Bug when evaluating the condition and filter expressions in the presence of 
+  None or NULL values  (Issue 14)
+  
+- Bug when sending emails when preview fails (Issue 16)
+
+- Bug failing to detect a non gzip file when given to Import (Issue 11)
+  
 ## 2.5.0 (2018-02-18)
 
 ### Added
@@ -24,7 +149,7 @@
 ### Fixed 
 
 - Bug when filtering columns and obtaining a row in the table
-  
+
 ## 2.4.0 (2017-12-18)
 
 ### Added

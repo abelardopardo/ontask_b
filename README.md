@@ -1,6 +1,6 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 2.4.0 ([documentation](https://abelardopardo.github.io/ontask_b))
+Current Version: 2.6.0 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
 ## OnTask in a nutshell
 
@@ -11,6 +11,9 @@ Current Version: 2.4.0 ([documentation](https://abelardopardo.github.io/ontask_b
 - Actions such as personalised email, personalised web page
 
 - Integrated annotation capture mechanism (similar to a survey engine)
+
+- Visualization of columns (population measures) and individuals with
+  respect to the population
 
 - Email tracking integrated in data table
 
@@ -267,3 +270,4 @@ licenses:
 
 - [validate_email](https://pypi.python.org/pypi/validate_email) LGPL
 
+- [bootstrap-session-timeout](https://github.com/orangehill/bootstrap-session-timeout) MIT

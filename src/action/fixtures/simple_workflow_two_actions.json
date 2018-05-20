@@ -1895,6 +1895,7 @@
         "workflow": 108,
         "data_type": "integer",
         "is_key": true,
+        "position": 1,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1909,6 +1910,7 @@
         "workflow": 108,
         "data_type": "string",
         "is_key": false,
+        "position": 2,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1923,6 +1925,7 @@
         "workflow": 108,
         "data_type": "string",
         "is_key": true,
+        "position": 3,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1937,6 +1940,7 @@
         "workflow": 108,
         "data_type": "double",
         "is_key": true,
+        "position": 4,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1951,6 +1955,7 @@
         "workflow": 108,
         "data_type": "boolean",
         "is_key": false,
+        "position": 5,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1965,6 +1970,7 @@
         "workflow": 108,
         "data_type": "datetime",
         "is_key": false,
+        "position": 6,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1979,7 +1985,6 @@
         "description_text": "",
         "created": "2017-12-08T01:29:40.524Z",
         "modified": "2017-12-31T02:33:50.166Z",
-        "n_selected_rows": 2,
         "is_out": true,
         "serve_enabled": false,
         "active_from": null,
@@ -1998,7 +2003,6 @@
         "description_text": "",
         "created": "2017-12-08T01:34:56.311Z",
         "modified": "2017-12-08T01:35:06.267Z",
-        "n_selected_rows": -1,
         "is_out": false,
         "serve_enabled": false,
         "active_from": null,

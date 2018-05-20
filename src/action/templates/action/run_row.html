@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load settings %}
 {% load static %}
-{% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 
@@ -13,25 +12,19 @@
 
 {% block container %}
 <div align="center" class="container">
-    <h4 class="page-header"><strong>{{ action.name }}</strong></h4>
-    <p class="help-block">{{ action.description_text }}</p>
-
+  <h4 class="page-header"><strong>{{ action.name }}</strong></h4>
+  <p class="lead">{{ action.description_text }}</p>
   <div class="container-fluid">
     <form action="" method="post">
       {% csrf_token %}
-      <a type="button" class="btn btn-default"
-         href="{{ cancel_url }}"> Cancel
-      </a>
-      <button type="submit" name="submit" value="update"
-              class="btn btn-primary">
-        <span class="glyphicon glyphicon-ok"></span> Update
-      </button>
-      <div class="input-group input-group-lg">
+      <div class="input-group input-group-lg" style="padding-bottom:1.5ex;">
         {{ form|crispy }}
       </div>
-      <a type="button" class="btn btn-default"
-         href="{{ cancel_url }}"> Cancel
-      </a>
+      {% if cancel_url %}
+        <a type="button" class="btn btn-default"
+           href="{{ cancel_url }}"> Back
+        </a>
+      {% endif %}
       <button type="submit" name="submit" value="update"
               class="btn btn-primary">
         <span class="glyphicon glyphicon-ok"></span> Update

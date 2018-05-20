@@ -14,7 +14,7 @@
           {% endif %}
           >
     <span class="glyphicon glyphicon-link"></span> URL
-    <span class="badge">{% if serve_enabled %}On{% else %}Off{% endif %}</span>
+    {% if serve_enabled %}<span class="badge">On</span>{% else %}(Off){% endif %}
   </button>
   {% if is_out %}
     <a href="{% url 'action:send_email' id %}"
@@ -23,8 +23,9 @@
       <span class="glyphicon glyphicon-envelope"></span> Email</a>
   {% else %}
     <a href="{% url 'action:run' id %}"
-            class="btn btn-primary btn-sm"
-            data-toggle="tooltip" title="Input data manually">
+       class="btn btn-primary btn-sm {% if not is_correct %}disabled{% endif %}"
+       data-toggle="tooltip"
+       title="Enter data manually">
       <span class="glyphicon glyphicon-off"></span> Run</a>
   {% endif %}
   <button class="btn btn-primary btn-sm dropdown-toggle" type="button"

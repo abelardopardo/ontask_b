@@ -741,6 +741,7 @@
         "workflow": 5,
         "data_type": "integer",
         "is_key": true,
+        "position": 3,
         "categories": []
     }
 },
@@ -752,6 +753,7 @@
         "workflow": 5,
         "data_type": "string",
         "is_key": false,
+        "position": 6,
         "categories": []
     }
 },
@@ -763,6 +765,7 @@
         "workflow": 5,
         "data_type": "string",
         "is_key": true,
+        "position": 2,
         "categories": []
     }
 },
@@ -774,6 +777,7 @@
         "workflow": 5,
         "data_type": "double",
         "is_key": true,
+        "position": 1,
         "categories": []
     }
 },
@@ -785,6 +789,7 @@
         "workflow": 5,
         "data_type": "boolean",
         "is_key": false,
+        "position": 8,
         "categories": []
     }
 },
@@ -796,6 +801,7 @@
         "workflow": 5,
         "data_type": "datetime",
         "is_key": false,
+        "position": 9,
         "categories": []
     }
 },
@@ -807,6 +813,7 @@
         "workflow": 5,
         "data_type": "string",
         "is_key": false,
+        "position": 7,
         "categories": []
     }
 },
@@ -818,6 +825,7 @@
         "workflow": 5,
         "data_type": "string",
         "is_key": false,
+        "position": 5,
         "categories": []
     }
 },
@@ -829,6 +837,7 @@
         "workflow": 5,
         "data_type": "integer",
         "is_key": false,
+        "position": 4,
         "categories": []
     }
 },
@@ -841,7 +850,6 @@
         "description_text": "action description text",
         "created": "2017-11-06T22:15:41.165Z",
         "modified": "2017-11-07T02:56:02.865Z",
-        "n_selected_rows": -1,
         "content": "<p>{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}</p>",
         "serve_enabled": false
     }

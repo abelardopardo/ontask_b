@@ -60,11 +60,11 @@ body>.navbar-transparent {
 
 .navbar-brand {
     font-weight: bold;
+    padding: 15px 10px 15px 10px;
 }
 
 .navbar-brand > img {
     float: left;
-    margin-right: 10px;
 }
 
 .btn {
@@ -77,7 +77,7 @@ body>.navbar-transparent {
 /* Home page styling */
 .corporate-jumbo {
     background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0)),
-      url("/static/site/img/banner.jpg");
+      url("../img/banner.jpg");
     background-repeat: no-repeat;
     background-position: 80% center;
     /* background-attachment: fixed;*/
@@ -188,9 +188,7 @@ body>.navbar-transparent {
 }
 
 /* OnTask personalisation */
-div#filter-set,
-div#condition-set,
-div#html-editor {
+div#filter-set {
   border: 1px solid black;
 }
 
@@ -198,6 +196,7 @@ div#html-editor {
 div.conditions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 div.condition-btn {
@@ -241,6 +240,8 @@ td.dt-body-center {
 #action-table td,
 #log-table td,
 #scheduler-table td,
+#column-selected-table td,
+#column-table td,
 #view-table td {
     vertical-align: middle;
 }
@@ -252,20 +253,23 @@ td.dt-body-center {
 
 /* Wflow name */
 #wflow-name.alert {
-    padding: 0.5ex;
+    padding: 0ex;
 }
 
 mark {
     background-color: #dff0d8;
 }
 
-button {
+/* button {
     margin-top: 0.5ex;
     margin-bottom: 0.5ex;
+} */
+div.group-conditions > label:not([class*=active]) {
+    opacity: 0.3;
 }
-a.btn {
+/* a.btn {
     margin-top: 0.5ex;
-}
+} */
 
 #base_footer .div1 {
     float: left;
@@ -302,4 +306,21 @@ table#attribute-table {
 
 div.sol-container {
     display: table;
+}
+
+.modal-body p,
+.modal-body div {
+    word-wrap: break-word;
+}
+
+a.column-move-prev > span,
+a.column-move-next> span,
+a.column-move-top> span,
+a.column-move-bottom> span {
+    font-size:75%;
+}
+
+/* Fix placement of SOL inside modal */
+.sol-container.sol-active .sol-selection-container {
+    position: unset;
 }

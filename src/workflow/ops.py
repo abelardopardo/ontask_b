@@ -2,23 +2,26 @@
 from __future__ import unicode_literals, print_function
 
 import gzip
-
+from datetime import datetime
 from io import BytesIO
+
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.http import HttpResponse
 from django.utils import timezone
+from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
+import logs.ops
 from action.models import Condition
 from dataops import formula_evaluation, pandas_db, ops
+from table.models import View
 from .models import Workflow, Column
 from .serializers import (WorkflowExportSerializer, WorkflowImportSerializer)
-from rest_framework import serializers
-import logs.ops
+
 
 def lock_workflow(request, workflow):
     """
@@ -145,9 +148,9 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
     # Step 5: The workflow is locked by a session that is valid. See if the
     # session locking it happens to be from the same user (a previous session
     # that has not been properly closed)
-    if owner == request.user:
-        lock_workflow(request, workflow)
-        return workflow
+    # if owner == request.user:
+    #     lock_workflow(request, workflow)
+    #     return workflow
 
     # Step 6: The workflow is locked by an existing session. See if the
     # session is valid
@@ -201,6 +204,47 @@ def detach_dataframe(workflow):
     workflow.save()
 
 
+def flush_workflow(workflow):
+    """
+    Flush all the data from the workflow and propagate changes throughout the
+    relations with columns, conditions, filters, etc. These steps require:
+
+    1) Delete the data frame from the database
+
+    2) Delete all the columns attached to the workflow
+
+    3) Delete all the conditions attached to the actions
+
+    4) Delete all the views attached to the workflow
+
+    :param workflow: Workflow object
+    :return: Reflected in the DB
+    """
+
+    # Step 1: Delete the data frame from the database
+    pandas_db.delete_table(workflow.id)
+
+    # Reset some of the workflow fields
+    workflow.nrows = 0
+    workflow.ncols = 0
+    workflow.n_filterd_rows = -1
+    workflow.set_query_builder_ops()
+    workflow.data_frame_table_name = ''
+
+    # Step 2: Delete the column_names, column_types and column_unique
+    Column.objects.filter(workflow__id=workflow.id).delete()
+
+    # Step 3: Delete the conditions attached to all the actions attached to the
+    # workflow.
+    Condition.objects.filter(action__workflow=workflow).delete()
+
+    # Step 4: Delete all the views attached to the workflow
+    View.objects.filter(workflow__id=workflow.id).delete()
+
+    # Save the workflow with the new fields.
+    workflow.save()
+
+
 def do_import_workflow(user, name, file_item):
     """
     Receives a name and a file item (submitted through a form) and creates
@@ -212,8 +256,12 @@ def do_import_workflow(user, name, file_item):
     :return:
     """
 
-    data_in = gzip.GzipFile(fileobj=file_item)
-    data = JSONParser().parse(data_in)
+    try:
+        data_in = gzip.GzipFile(fileobj=file_item)
+        data = JSONParser().parse(data_in)
+    except IOError:
+        return 'Incorrect file. Expecting a GZIP file (exported workflow).'
+
     # Serialize content
     workflow_data = WorkflowImportSerializer(
         data=data,
@@ -270,12 +318,14 @@ def do_export_workflow(workflow, selected_actions=None):
     zfile.write(to_send)
     zfile.close()
 
+    suffix = datetime.datetime.now().strftime('%y%m%d_%H%M%S')
     # Attach the compressed value to the response and send
     compressed_content = zbuf.getvalue()
     response = HttpResponse(compressed_content)
-    response['Content-Encoding'] = 'application/gzip'
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Transfer-Encoding'] = 'binary'
     response['Content-Disposition'] = \
-        'attachment; filename="ontask_workflow.gz"'
+        'attachment; filename="ontask_workflow_{0}.gz"'.format(suffix)
     response['Content-Length'] = str(len(compressed_content))
 
     return response
@@ -295,6 +345,9 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
     # Drop the column from the DB table storing the data frame
     pandas_db.df_drop_column(workflow.id, column.name)
 
+    # Reposition the columns above the one being deleted
+    reposition_columns(workflow, column.position, workflow.ncols + 1)
+
     # Delete the column
     column.delete()
 
@@ -305,20 +358,20 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
     if not cond_to_delete:
         # The conditions to delete are not given, so calculate them
         # Get the conditions/actions attached to this workflow
-        cond_to_delete = [x for x in Condition.objects.filter(
-            action__workflow=workflow)
-                          if formula_evaluation.has_variable(x.formula,
-                                                             column.name)]
+        cond_to_delete = [
+            x for x in Condition.objects.filter(action__workflow=workflow)
+            if formula_evaluation.has_variable(x.formula,
+                                               column.name)]
 
     # If a column disappears, the conditions that contain that variable
-    # are removed..
+    # are removed.
     for condition in cond_to_delete:
-        # Formula has the name of the deleted column.
-        # Solution 1: Nuke (Very easy)
-        # Solution 2: Mark as invalid and enhance the edit condition form
-        #  to handle renaming the fields in a formula (Complex)
-        #
-        # Solution 1 chosen.
+        if condition.is_filter:
+            # If the condition is a filter, all the conditions in the same
+            # action need to be reassessed
+            condition.action.update_n_rows_selected_for_non_filters()
+
+        # Formula has the name of the deleted column. Delete it
         condition.delete()
 
     # If a column disappears, the views that contain only that column need to
@@ -339,8 +392,8 @@ def clone_column(column, new_workflow=None, new_name=None):
     :return: Cloned object
     """
     # Store the old object name before squashing it
-    old_id = column.id
     old_name = column.name
+    old_position = column.position
 
     # Clone
     column.id = None
@@ -351,7 +404,21 @@ def clone_column(column, new_workflow=None, new_name=None):
     if new_workflow:
         column.workflow = new_workflow
 
-    # Update
+    # Set column at the end
+    column.position = column.workflow.ncols + 1
+    column.save()
+
+    # Update the number of columns in the workflow
+    column.workflow.ncols += 1
+    column.workflow.save()
+
+    # Reposition the columns above the one being deleted
+    reposition_columns(column.workflow,
+                       column.position,
+                       old_position + 1)
+
+    # Set the new column in the right location
+    column.position = old_position + 1
     column.save()
 
     # Add the column to the table and update it.
@@ -360,3 +427,52 @@ def clone_column(column, new_workflow=None, new_name=None):
     ops.store_dataframe_in_db(data_frame, column.workflow.id)
 
     return column
+
+
+def reposition_columns(workflow, from_idx, to_idx):
+    """
+
+    :param workflow: Workflow object where the columns are
+    :param from_idx: Position from which the column is repositioned.
+    :param to_idx: New position for the column
+    :return: Appropriate column positions are modified
+    """
+
+    # If the indeces are identical, nothing needs to be moved.
+    if from_idx == to_idx:
+        return
+
+    # if from_idx == -1:
+    #    from_idx = Column.objects.filter(workflow=workflow).count() + 1
+
+    if from_idx < to_idx:
+        cols = Column.objects.filter(workflow=workflow,
+                                     position__gt=from_idx,
+                                     position__lte=to_idx)
+        step = -1
+    else:
+        cols = Column.objects.filter(workflow=workflow,
+                                     position__gte=to_idx,
+                                     position__lt=from_idx)
+        step = 1
+
+    # Update the positions of the appropriate columns
+    for col in cols:
+        col.position = col.position + step
+        col.save()
+
+
+def reposition_column_and_update_df(workflow, column, to_idx):
+    """
+
+    :param workflow: Workflow object for which the repositioning is done
+    :param column: column object to relocate
+    :param to_idx: Destination index of the given column
+    :return: Content reflected in the DB
+    """
+
+    df = pandas_db.load_from_db(workflow.id)
+    reposition_columns(workflow, column.position, to_idx)
+    column.position = to_idx
+    column.save()
+    ops.store_dataframe_in_db(df, workflow.id)

@@ -13,7 +13,6 @@ DEBUG = False
 TEMPLATE_DEBUG = False
 
 # Must mention ALLOWED_HOSTS in production!
-# ALLOWED_HOSTS = ["ontask.com"]
 ALLOWED_HOSTS = [socket.getfqdn()]
 
 # Additional middleware introduced by debug toolbar

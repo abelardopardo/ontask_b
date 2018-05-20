@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import datetime
+
 import django_tables2 as tables
 import pytz
 from django.conf import settings
@@ -11,8 +12,8 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse
 from django.template.loader import render_to_string
-from django_tables2 import A
 from django.utils.html import format_html
+from django_tables2 import A
 
 # Create your views here.
 import logs
@@ -28,6 +29,14 @@ class ScheduleEmailActionTable(tables.Table):
     """
     Table to show the email actions scheduled for a workflow
     """
+
+    operations = OperationsColumn(
+        attrs={'td': {'class': 'dt-body-center'}},
+        verbose_name='Operations',
+        orderable=False,
+        template_file='scheduler/includes/partial_scheduler_operations.html',
+        template_context=lambda record: {'id': record.id}
+    )
 
     action = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
@@ -67,20 +76,6 @@ class ScheduleEmailActionTable(tables.Table):
         get_field=lambda x: x.track_read,
     )
 
-    add_column = BooleanColumn(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('Add column'),
-        get_field=lambda x: x.add_column
-    )
-
-    operations = OperationsColumn(
-        attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name='Operations',
-        orderable=False,
-        template_file='scheduler/includes/partial_scheduler_operations.html',
-        template_context=lambda record: {'id': record.id}
-    )
-
     message = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
         verbose_name=str('Execution message'),
@@ -100,7 +95,7 @@ class ScheduleEmailActionTable(tables.Table):
 
         fields = ('action', 'created', 'execute', 'status', 'subject',
                   'email_column', 'send_confirmation', 'track_read',
-                  'add_column', 'operations', 'message')
+                  'operations', 'message')
 
         sequence = ('operations',
                     'action',
@@ -175,8 +170,7 @@ def save_email_schedule(request, workflow, action, schedule_item):
         'subject': s_item.subject,
         'email_column': s_item.email_column.name,
         'send_confirmation': s_item.send_confirmation,
-        'track_read': s_item.track_read,
-        'add_column': s_item.add_column
+        'track_read': s_item.track_read
     }
 
     # Log the operation
@@ -328,8 +322,7 @@ def delete_email(request, pk):
                       'subject': s_item.subject,
                       'email_column': s_item.email_column.name,
                       'send_confirmation': s_item.send_confirmation,
-                      'track_read': s_item.track_read,
-                      'add_column': s_item.add_column})
+                      'track_read': s_item.track_read})
 
         # Perform the delete operation
         s_item.deleted = True

@@ -12,12 +12,12 @@ from dataops import pandas_db
 from ontask.permissions import is_instructor
 from table.models import View
 from visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
-
 from workflow.models import Column
 from workflow.ops import get_workflow
 
-def get_column_visualisations(column, data_frame, vis_scripts,
-                              id='', single_val=None, context={}):
+
+def get_column_visualisations(column, col_data, vis_scripts,
+                              id='', single_val=None, context=None):
     """
     Given a column object and a dataframe, create the visualisations for
     this column. The list vis_scripts is modified to include the scripts to
@@ -25,7 +25,7 @@ def get_column_visualisations(column, data_frame, vis_scripts,
     the visualisation is marked (place individual value in population
     measure.
     :param column: Column element to visualize
-    :param data_frame: Data frame with all the data
+    :param col_data: Data in the column (extracted from the data frame)
     :param id: String to use to label the visualization
     :param vis_scripts: Collection of visualisation scripts needed in HTML
     :param single_val: Mark a specific value (or None)
@@ -36,6 +36,10 @@ def get_column_visualisations(column, data_frame, vis_scripts,
     # Result to return
     visualizations = []
 
+    # Initialize the context properly
+    if context is None:
+        context = {}
+
     # Create V1 if data type is integer or real
     if column.data_type == 'integer' or column.data_type == 'double':
 
@@ -45,7 +49,7 @@ def get_column_visualisations(column, data_frame, vis_scripts,
 
         if single_val is not None:
             context['individual_value'] = single_val
-        v1 = PlotlyBoxPlot(data=data_frame[[column.name]],
+        v1 = PlotlyBoxPlot(data=col_data,
                            context=context)
         v1.get_engine_scripts(vis_scripts)
         visualizations.append(v1)
@@ -57,15 +61,15 @@ def get_column_visualisations(column, data_frame, vis_scripts,
 
     if single_val is not None:
         context['individual_value'] = single_val
-    v2 = PlotlyColumnHistogram(data=data_frame[[column.name]],
+    v2 = PlotlyColumnHistogram(data=col_data,
                                context=context)
     v2.get_engine_scripts(vis_scripts)
     visualizations.append(v2)
 
     return visualizations
 
-def get_row_visualisations(request, view_id=None):
 
+def get_row_visualisations(request, view_id=None):
     # If there is no workflow object, go back to the index
     workflow = get_workflow(request)
     if not workflow:
@@ -120,27 +124,37 @@ def get_row_visualisations(request, view_id=None):
 
         # Add the title and surrounding container
         visualizations.append('<h4>' + column.name + '</h4>')
+        # If all values are empty, no need to proceed
+        if all([not x for x in df[column.name]]):
+            visualizations.append("<p>No values in this column</p><hr/>")
+            continue
+
+        if row[idx] is None or row[idx] == '':
+            visualizations.append(
+                '<p class="alert-warning">No value for this student in this '
+                'column</p>'
+            )
+
         visualizations.append(
             '<div style="display: inline-flex;">'
         )
 
         v = get_column_visualisations(
             column,
-            df,
-            vis_scripts = vis_scripts,
-            id='column_{}'.format(idx),
+            df[[column.name]],
+            vis_scripts=vis_scripts,
+            id='column_{0}'.format(idx),
             single_val=row[idx],
             context=context)
 
         visualizations.extend([x.html_content for x in v])
-        visualizations.append('<hr/></div>')
+        visualizations.append('</div><hr/>')
 
     return render(request,
                   'table/stat_row.html',
                   {'value': update_val,
                    'vis_scripts': vis_scripts,
                    'visualizations': visualizations})
-
 
 
 @user_passes_test(is_instructor)
@@ -174,15 +188,21 @@ def stat_column(request, pk):
     stat_data = pandas_db.get_column_stats_from_df(df[column.name])
 
     vis_scripts = []
-    visualizations = get_column_visualisations(column, df, vis_scripts)
+    visualizations = get_column_visualisations(
+        column,
+        df[[column.name]],
+        vis_scripts,
+        context={'style':
+                     'max-width:800px; max-height:450px;display:inline-block;'}
+    )
 
     return render(request,
                   'table/stat_column.html',
                   {'column': column,
                    'stat_data': stat_data,
                    'vis_scripts': vis_scripts,
-                   'visualizations': [v.html_content
-                                      for v in visualizations]})
+                   'visualizations': [v.html_content for v in visualizations]}
+                  )
 
 
 @user_passes_test(is_instructor)

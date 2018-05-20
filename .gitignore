@@ -87,3 +87,9 @@ mynotes.txt
 # Sublime annotations
 *.sublime-project
 *.sublime-workspace
+
+initial_workflow
+
+venvs
+
+docs

@@ -10,13 +10,13 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import environ
-import os
-# import ldap
-
-from django.core.urlresolvers import reverse_lazy
 from os.path import dirname, join, exists
+
+import environ
 from django.contrib import messages
+from django.core.urlresolvers import reverse_lazy
+
+# import ldap
 # from django_auth_ldap.config import (
 #     LDAPSearch,
 #     GroupOfNamesType,
@@ -35,11 +35,15 @@ env_file = join(dirname(__file__), 'local.env')
 if exists(env_file):
     environ.Env.read_env(str(env_file))
 
+# Read various variables from the environment
+BASE_URL = env('BASE_URL')
+DOMAIN_NAME = env('DOMAIN_NAME')
+
 # Build paths inside the project like this: join(BASE_DIR(), "directory")
 BASE_DIR = environ.Path(__file__) - 3
 STATICFILES_DIRS = [join(BASE_DIR(), 'static')]
 MEDIA_ROOT = join(BASE_DIR(), 'media')
-MEDIA_URL = "/media/"
+MEDIA_URL = BASE_URL + "/media/"
 ONTASK_HELP_URL = "html/index.html"
 
 # Project root folder (needed somewhere in Django
@@ -69,6 +73,7 @@ TEMPLATES = [
             ],
             'libraries': {
                 'settings': 'ontask.templatetags.settings',
+                'vis_include': 'visualizations.templatetags.vis_include',
             }
         },
     },
@@ -78,14 +83,11 @@ TEMPLATES = [
 # Raises ImproperlyConfigured exception if SECRET_KEY not in os.environ
 SECRET_KEY = env('SECRET_KEY')
 
-ALLOWED_HOSTS = ['*']
-
 # Application definition
 
 INSTALLED_APPS = (
     'django_extensions',
     'django.contrib.auth',
-    'django_admin_bootstrapped',
     'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -255,8 +257,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
-
-STATIC_URL = '/static/'
+STATIC_URL = BASE_URL + '/static/'
 
 # Crispy Form Theme - Bootstrap 3
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -289,15 +290,19 @@ SUMMERNOTE_CONFIG = {
     'codemirror': {
         'theme': 'base16-dark',
         'mode': 'htmlmixed',
-        'lineNumbers': 'true',
-        'lineWrapping': 'true',
+        'lineNumbers': True,
+        'lineWrapping': True,
     },
     'lazy': True,
+    'disableDragAndDrop': True,
 }
 
 # Extra configuration options
 DATAOPS_CONTENT_TYPES = '["text/csv", "application/json", "application/gzip", "application/x-gzip", "application/vnd.ms-excel"]'
 DATAOPS_MAX_UPLOAD_SIZE = 209715200  # 200 MB
+
+# Raise because default of 1000 is too short
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
 # Email sever configuration
 EMAIL_HOST = ''

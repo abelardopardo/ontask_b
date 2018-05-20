@@ -36,9 +36,13 @@ class WorkflowImportExport(test.OntaskTestCase):
                                       workflow.actions.all())
 
         self.assertEqual(response.get('Content-Encoding'),
-                         'application/gzip')
-        self.assertEqual(response.get('Content-Disposition'),
-                         'attachment; filename="ontask_workflow.gz"')
+                         'application/octet-stream')
+        self.assertEqual(response['Content-Transfer-Encoding'], 'binary')
+        self.assertTrue(
+            response.get('Content-Disposition').startswith(
+                'attachment; filename="ontask_workflow"'
+            )
+        )
 
         # Process the file
         data_in = gzip.GzipFile(fileobj=BytesIO(response.content))

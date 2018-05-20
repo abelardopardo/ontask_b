@@ -12,7 +12,7 @@ import logs.ops
 from dataops import pandas_db, ops
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
-from .forms import RowFilterForm, RowForm, field_prefix
+from .forms import RowForm, field_prefix
 from .models import PluginRegistry
 from .plugin_manager import refresh_plugin_data
 
@@ -235,29 +235,18 @@ def row_update(request):
                                              [update_key],
                                              [update_val])
 
-    # This method can only be invoked through a POST operation
-    if request.method == 'GET':
-        # Get the row form and render the page
-        row_form = RowForm(None,
-                           workflow=workflow,
-                           initial_values=list(rows[0]))
+    row_form = RowForm(request.POST or None,
+                       workflow=workflow,
+                       initial_values=list(rows[0]))
 
+    if request.method == 'GET' or not row_form.is_valid():
         return render(request,
                       'dataops/row_filter.html',
                       {'workflow': workflow,
                        'row_form': row_form,
                        'cancel_url': reverse('table:display')})
 
-    # This is A POST request
-
-    # Initialise the form
-    row_form = RowForm(request.POST,
-                       workflow=workflow,
-                       initial_values=list(rows[0]))
-
-    # If the form was not valid, something went wrong
-    if not row_form.is_valid():
-        return redirect('dataops:rowupdate')
+    # This is a valid POST request
 
     # Create the query to update the row
     set_fields = []
@@ -286,6 +275,10 @@ def row_update(request):
                          set_values,
                          [unique_field],
                          [unique_value])
+
+    # Recompute all the values of the conditions in each of the actions
+    for act in workflow.actions.all():
+        act.update_n_rows_selected()
 
     # Log the event
     logs.ops.put(request.user,
@@ -318,57 +311,55 @@ def row_create(request):
     # Create the form
     form = RowForm(request.POST or None, workflow=workflow)
 
-    if request.method == 'POST':
+    if request.method == 'GET' or not form.is_valid():
+        return render(request,
+                      'dataops/row_create.html',
+                      {'workflow': workflow,
+                       'form': form,
+                       'cancel_url': reverse('table:display')})
 
-        # If the form is valid proceed with the operation
-        if form.is_valid():
-            # Create the query to update the row
-            columns = workflow.get_columns()
-            column_names = [c.name for c in columns]
-            field_name = field_prefix + '%s'
-            row_vals = [form.cleaned_data[field_name % idx]
-                        for idx in range(len(columns))]
+    # Create the query to update the row
+    columns = workflow.get_columns()
+    column_names = [c.name for c in columns]
+    field_name = field_prefix + '%s'
+    row_vals = [form.cleaned_data[field_name % idx]
+                for idx in range(len(columns))]
 
-            # Load the existing df from the db
-            df = pandas_db.load_from_db(workflow.id)
+    # Load the existing df from the db
+    df = pandas_db.load_from_db(workflow.id)
 
-            # Perform the row addition in the DF first
-            # df2 = pd.DataFrame([[5, 6], [7, 8]], columns=list('AB'))
-            # df.append(df2, ignore_index=True)
-            new_row = pd.DataFrame([row_vals], columns=column_names)
-            df = df.append(new_row, ignore_index=True)
+    # Perform the row addition in the DF first
+    # df2 = pd.DataFrame([[5, 6], [7, 8]], columns=list('AB'))
+    # df.append(df2, ignore_index=True)
+    new_row = pd.DataFrame([row_vals], columns=column_names)
+    df = df.append(new_row, ignore_index=True)
 
-            # Verify that the unique columns remain unique
-            for ucol in [c for c in columns if c.is_key]:
-                if not ops.is_unique_column(df[ucol.name]):
-                    form.add_error(
-                        None,
-                        'Value in column ' + ucol.name + ' is in another row.' +
-                        ' It must be different to maintain Key property'
-                    )
-                    return render(request,
-                                  'dataops/row_create.html',
-                                  {'workflow': workflow,
-                                   'form': form,
-                                   'cancel_url': reverse('table:display')})
+    # Verify that the unique columns remain unique
+    for ucol in [c for c in columns if c.is_key]:
+        if not ops.is_unique_column(df[ucol.name]):
+            form.add_error(
+                None,
+                'Repeated value in column ' + ucol.name + '.' +
+                ' It must be different to maintain Key property'
+            )
+            return render(request,
+                          'dataops/row_create.html',
+                          {'workflow': workflow,
+                           'form': form,
+                           'cancel_url': reverse('table:display')})
 
-            # Restore the dataframe to the DB
-            ops.store_dataframe_in_db(df, workflow.id)
+    # Restore the dataframe to the DB
+    ops.store_dataframe_in_db(df, workflow.id)
 
-            # Log the event
-            log_payload = zip(column_names, row_vals)
-            logs.ops.put(request.user,
-                         'tablerow_create',
-                         workflow,
-                         {'id': workflow.id,
-                          'name': workflow.name,
-                          'new_values': log_payload})
+    # Log the event
+    log_payload = zip(column_names, [str(x) for x in row_vals])
+    logs.ops.put(request.user,
+                 'tablerow_create',
+                 workflow,
+                 {'id': workflow.id,
+                  'name': workflow.name,
+                  'new_values': log_payload})
 
-            # Done. Back to the table view
-            return redirect('table:display')
+    # Done. Back to the table view
+    return redirect('table:display')
 
-    return render(request,
-                  'dataops/row_create.html',
-                  {'workflow': workflow,
-                   'form': form,
-                   'cancel_url': reverse('table:display')})

@@ -14,6 +14,7 @@
   <script type="text/javascript">
     $(document).ready(function() {
         $('#log-table').DataTable({
+          stateSave: true,
           processing: true,
           serverSide: true,
           ajax: {
@@ -41,14 +42,12 @@
 <div align="center" class="container">
   <h1 class="page-header">Logs</h1>
   <div class="container" id="csv-download">
-    <p>
-      <a href="{% url 'logs:export' workflow.id %}" download
-         class="btn btn-primary btn-sm js-logs-download"
-         data-toggle="tooltip"
-         title="Download a CSV file contining these logs">
-        <span class="glyphicon glyphicon-download-alt"></span> CSV Download
-      </a>
-    </p>
+    <a href="{% url 'logs:export' workflow.id %}" download
+       class="btn btn-primary btn-sm js-logs-download"
+       data-toggle="tooltip"
+       title="Download a CSV file contining these logs">
+      <span class="glyphicon glyphicon-download-alt"></span> CSV Download
+    </a>
   </div>
   <table class="table display dataTable no-footer table-bordered"
          id="log-table">
@@ -60,7 +59,7 @@
       </tr>
     </thead>
   </table>
-  <div class="modal fade" id="modal-item">
+  <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">
       </div>

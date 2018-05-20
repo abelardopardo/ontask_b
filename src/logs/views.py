@@ -3,7 +3,6 @@ from __future__ import unicode_literals, print_function
 
 import json
 
-import django_tables2 as tables
 import pytz
 from django.conf import settings as ontask_settings
 from django.contrib.auth.decorators import user_passes_test
@@ -11,10 +10,8 @@ from django.db.models import F, Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
-from django.utils.html import format_html
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django_tables2 import A
 
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
@@ -68,9 +65,9 @@ def show_ss(request):
     if search_value:
         # Refine the log
         qs = qs.filter(
-            Q(user__email__contains=search_value) |
-            Q(name__contains=search_value) |
-            Q(payload__contains=search_value),
+            Q(user__email__icontains=search_value) |
+            Q(name__icontains=search_value) |
+            Q(payload__icontains=search_value),
             workflow__id=workflow.id,
         ).distinct()
 

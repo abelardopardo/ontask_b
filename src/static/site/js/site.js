@@ -5,14 +5,14 @@ var set_qbuilder = function (element_id, qbuilder_options) {
     }
     $('#builder').queryBuilder(qbuilder_options);
 };
-var set_column_select = function() {
-  $('#id_columns').searchableOptionList({
+var set_column_select = function(element_id) {
+  $(element_id).searchableOptionList({
     maxHeight: '250px',
     showSelectAll: true,
     texts: {
       searchplaceholder: 'Click here to search for columns',
       noItemsAvailable: 'No columns found',
-    }
+    },
   });
  }
 var insert_fields = function (the_form) {
@@ -31,10 +31,9 @@ var loadForm = function () {
     if ($(this).is('[class*="disabled"]')) {
       return;
     }
-    if (document.getElementById("id_content") != null) {
-      data = {'action_content': $("#id_content").summernote('code')};
-    } else {
-      data = {};
+    data = {};
+    if (document.getElementById("id_subject") != null) {
+      data['subject_content'] = $("#id_subject").val();
     }
     $.ajax({
       url: btn.attr("data-url"),
@@ -42,12 +41,12 @@ var loadForm = function () {
       dataType: 'json',
       data: data,
       beforeSend: function() {
+        $("#modal-item .modal-body").html("");
         $("#modal-item").modal("show");
       },
       success: function(data) {
         if (data.form_is_valid) {
           if (data.html_redirect == "") {
-            // If there is no redirect, simply refresh
             window.location.reload(true);
           } else {
             location.href = data.html_redirect;
@@ -59,7 +58,7 @@ var loadForm = function () {
           set_qbuilder('#id_formula', qbuilder_options);
         }
         if (document.getElementById("id_columns") != null) {
-          set_column_select();
+          set_column_select("#id_columns");
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -77,16 +76,19 @@ var saveForm = function () {
       f_text = JSON.stringify(formula, undefined, 2);
       $('#id_formula').val(f_text);
     }
+    var data = form.serializeArray();
+    if (document.getElementById("id_content") != null) {
+      data.push({'name': 'action_content',
+                 'value': $("#id_content").summernote('code')});
+    }
     $.ajax({
       url: form.attr("action"),
-      data: form.serialize(),
+      data: data,
       type: form.attr("method"),
       dataType: 'json',
       success: function (data) {
         if (data.form_is_valid) {
-          $("#modal-item .modal-content").html("");
           if (data.html_redirect == "") {
-            // If there is no redirect, simply refresh
             window.location.reload(true);
           } else {
             location.href = data.html_redirect;
@@ -98,7 +100,7 @@ var saveForm = function () {
             set_qbuilder('#id_formula', qbuilder_options);
           }
           if (document.getElementById("id_columns") != null) {
-            set_column_select();
+            set_column_select("#id_columns");
           }
         }
       },
@@ -110,5 +112,9 @@ var saveForm = function () {
 }
 
 $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+    $('[data-toggle="tooltip"]').tooltip({
+      trigger: "hover",
+      placement: "auto",
+      container: "body"
+    });
 });

@@ -2,20 +2,19 @@
 from __future__ import unicode_literals, print_function
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.core import signing
-from django.http import Http404
-from django.http import HttpResponse
+from django.http import Http404, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.views import generic
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
-from django_auth_lti.decorators import lti_role_required
 from django.views.decorators.clickjacking import xframe_options_exempt
+from django.views.decorators.csrf import csrf_exempt
 
 import logs.ops
+from action import settings
 from action.models import Action
 from dataops import pandas_db, ops
-from action import settings
+from django_auth_lti.decorators import lti_role_required
 from ontask.permissions import UserIsInstructor
 
 
@@ -94,6 +93,13 @@ def trck(request):
         # Save DF
         ops.store_dataframe_in_db(data_frame, action.workflow.id)
 
+        # Traverse all the actions and update those conditions that have the
+        # column modified
+        for act in action.workflow.actions.all():
+            # FIX: the following function could receive a column_name to
+            # optimize which conditions truly need a recalculation.
+            act.update_n_rows_selected()
+
     # Record the event
     logs.ops.put(
         user,
@@ -106,6 +112,12 @@ def trck(request):
     )
 
     return HttpResponse(settings.PIXEL, content_type='image/png')
+
+
+@login_required
+@csrf_exempt
+def keep_alive(request):
+    return JsonResponse({})
 
 
 def ontask_handler400(request):

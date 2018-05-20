@@ -11,13 +11,16 @@ class VisHandler:
 
     id = None
 
+    head_scripts = []
+
     @abstractmethod
     def __init__(self, data, *args, **kwargs):
         self.data = data
         super(VisHandler, self).__init__()
 
+    @staticmethod
     @abstractmethod
-    def get_engine_scripts(self, current):
+    def get_engine_scripts(current=None):
         """
         Add to the given list the additional src attributes for the
         <script > elements to include in the HTML head

@@ -1,0 +1,43 @@
+<div id="column-movements" style="display:table-row">
+  <div style="display:table-cell;vertical-align:middle;padding-right:1ex;">
+    {{ column.position }}
+  </div>
+  <div style="display:table-cell">
+    {% if column.position != 1 %}
+      <div style="float:left; clear:left;">
+        <a href="{% url 'workflow:column_move_prev' column.id %}"
+           class="column-move-prev" data-toggle="tooltip"
+           title="Move one column left in Table View">
+          <span class="glyphicon glyphicon-chevron-up"></span></a>
+      </div>
+    {% endif %}
+    {% if column.position != column.workflow.ncols %}
+      <div style="float:left; clear:left;">
+        <a href="{% url 'workflow:column_move_next' column.id %}"
+           class="column-move-next" data-toggle="tooltip"
+           title="Move one column right in Table View">
+           <span class="glyphicon glyphicon-chevron-down"></span></a>
+      </div>
+    {% endif %}
+  </div>
+  <div style="display:table-cell">
+    {% if column.position != 1 %}
+      <div style="float:left; clear:left;">
+        <a href="{% url 'workflow:column_move_top' column.id %}"
+           class="column-move-top" data-toggle="tooltip"
+           title="Move to first column (far left) in Table View">
+           <span class="glyphicon glyphicon-step-forward"
+                 style="transform:rotate(-90deg);"></span></a>
+      </div>
+    {% endif %}
+    {% if column.position != column.workflow.ncols %}
+      <div style="float:left; clear:left;">
+        <a href="{% url 'workflow:column_move_bottom' column.id %}"
+           class="column-move-bottom" data-toggle="tooltip"
+           title="Move to last column (far right) in Table View">
+           <span class="glyphicon glyphicon-step-backward"
+                 style="transform:rotate(-90deg);"></span></a>
+      </div>
+    {% endif %}
+  </div>
+</div>

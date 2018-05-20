@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+import numpy as np
 import pandas as pd
 from django.conf import settings
 
@@ -26,7 +27,7 @@ def is_unique_column(df_column):
     :param df_column: Column of a pandas data frame
     :return: Boolean encoding if the column has unique values
     """
-    return len(df_column.unique()) == len(df_column)
+    return len(df_column.dropna().unique()) == len(df_column)
 
 
 def are_unique_columns(data_frame):
@@ -63,9 +64,8 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
     if settings.DEBUG:
         print('Storing table ', table_name)
 
-    # get column names and types
+    # get column names
     df_column_names = list(data_frame.columns)
-    df_column_types = df_column_types_rename(data_frame)
 
     # if the data frame is temporary, the procedure is much simpler
     if temporary:
@@ -74,6 +74,9 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
 
         # Store the table in the DB
         store_table(data_frame, table_name)
+
+        # Get the column types
+        df_column_types = df_column_types_rename(table_name)
 
         # Return a list with three list with information about the
         # data frame that will be needed in the next steps
@@ -96,22 +99,33 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
             continue
 
         # Create the new column
-        Column.objects.create(
+        column = Column(
             name=cname,
             workflow=workflow,
-            data_type=pandas_datatype_names[
-                data_frame[cname].dtype.name],
-            is_key=is_unique_column(data_frame[cname]))
+            data_type=pandas_datatype_names[data_frame[cname].dtype.name],
+            is_key=is_unique_column(data_frame[cname]),
+            position=Column.objects.filter(workflow=workflow).count() + 1,
+        )
+        column.save()
 
     # Get now the new set of columns with names
-    wf_column_names = Column.objects.filter(
-        workflow__id=pk).values_list('name', flat=True)
+    wf_columns = Column.objects.filter(
+        workflow__id=pk)
 
     # Reorder the columns in the data frame
-    data_frame = data_frame[list(wf_column_names)]
+    data_frame = data_frame[[x.name for x in wf_columns]]
 
     # Store the table in the DB
     store_table(data_frame, table_name)
+
+    # Review the column types because some "objects" are stored as booleans
+    column_types = df_column_types_rename(table_name)
+    for ctype, col in zip(column_types, wf_columns):
+        if col.data_type != ctype:
+            # If the column type in the DB is different from the one in the
+            # object, update
+            col.data_type = ctype
+            col.save()
 
     # Update workflow fields and save
     workflow.nrows = data_frame.shape[0]
@@ -198,22 +212,148 @@ def get_queryset_by_workflow_id(workflow_id):
     return get_table_queryset(create_table_name(workflow_id))
 
 
+def perform_overlap_update(dst_df, src_df, dst_key, src_key, how_merge):
+    """
+    :param dst_df: Left data frame with all the columns
+    :param src_df: Right data frame with the overlapping columns
+    :param dst_key: Left key column
+    :param src_key: Right key column
+    :param how_merge: Merge version: inner, outer, left or right
+    :return: Returns the updated data frame depending on the type of merge
+    variant requested.
+
+    For this function the 'update' and 'append' functions in Pandas will be
+    used.
+
+    The 'update' function will be used for those rows for
+    which there is a corresponding key in src_df. This means that the data in
+    dst_df_tmp1 will only be updated if the value is not NaN.
+
+    The 'append' function will be used for those rows in src_df that are not
+    present in dst_df.
+
+    There are four possible cases for this STEP depending on the type of
+    merge (inner, outer, left, right). Here is the pseudocode used for each
+    of these cases:
+
+    - left: Simplest case because this is exactly how the function 'update'
+    behaves. So, in this case dst_df_tmp1.update(src_df[OVERLAP]) is the
+    result.
+
+    - inner: First obtain the subset dst_df_tmp1 with intersection of
+    dst_df_tmp1 and src_df keys (result in dst_df_tmp2) and then update
+    dst_df_tmp2 with src_df[OVERLAP]
+
+    - outer: First apply the update operation in the left case, that is
+    dst_df_tmp1.update(src_df[OVERLAP], select from src_df[OVERLAP] the rows
+    that are not part of dst_df_tmp1, and then append these to dst_df_tmp1 to
+    create the result dst_df_tmp2
+
+    - right: This is the most complex. It requires first to subset
+    dst_df_tmp1 with the intersection of the two keys (src and dst). Then,
+    dst_df_tmp1 is updated with the content of src_df[OVERLAP]. Finally,
+    the rows only in the src_df need to be appended to the dataframe.
+
+    """
+    # If the src data frame has a single column (they key), there is no need
+    # to do any operation
+    if len(src_df.columns) <= 1:
+        return dst_df
+
+    dst_df_tmp1 = dst_df.set_index(dst_key)
+    src_df_tmp1 = src_df.set_index(src_key)
+    if how_merge == 'inner':
+        # Subset of dst_df_tmp1 with the keys in both DFs
+        result = dst_df_tmp1.loc[
+            dst_df_tmp1.index.intersection(src_df_tmp1.index)
+        ]
+        # Update the subset with the values in the right
+        result.update(src_df_tmp1)
+    elif how_merge == 'outer':
+        # Update
+        result = dst_df_tmp1
+        result.update(src_df_tmp1)
+        # Append the missing rows
+        tmp1 = src_df_tmp1.loc[src_df_tmp1.index.difference(dst_df_tmp1.index)]
+        if not tmp1.empty:
+            # Append only if the tmp1 data frame is not empty (otherwise it
+            # looses the name of the index column
+            result = result.append(tmp1)
+    elif how_merge == 'left':
+        result = dst_df_tmp1
+        result.update(src_df_tmp1)
+    else:
+        # Right merge
+        # Subset of dst_df_tmp1 with the keys in both DFs
+        tmp1 = dst_df_tmp1.loc[
+            dst_df_tmp1.index.intersection(src_df_tmp1.index)
+        ]
+        # Update with the right DF
+        tmp1.update(src_df_tmp1)
+        # Append the rows that are in right and not in left
+        tmp2 = src_df_tmp1.loc[src_df_tmp1.index.difference(dst_df_tmp1.index)]
+        if not tmp2.empty:
+            # Append only if it is not empty
+            result = tmp1.append(tmp2)
+
+    # Return result
+    return result.reset_index()
+
+
 def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
     """
-    It either stores a data frame in the db (dst_df is None), or merges
+    It either stores a data frame in the db (dst_df is None), or combines
     the two data frames dst_df and src_df and stores its content.
+
+    The combination of dst_df and src_df assumes:
+
+    - dst_df has a set of columns (potentially empty) that do not overlap in
+      name with the ones in src_df (dst_df[NO_OVERLAP_DST])
+
+    - dst_df and src_df have a set of columns (potentially empty) that overlap
+      in name (dst_df[OVERLAP] and src_df[OVERLAP] respectively)
+
+    - src_df has a set of columns (potentially empty) that do not overlap in
+      name with the ones in dst_df (src_df[NO_OVERLAP_SRC])
+
+    The function combines dst_df and src_df following two main steps (in both
+    steps, the number of rows processed are derived from the parameter
+    merge_info['how_merge']).
+
+    STEP A: A new data frame dst_df_tmp1 is created using the pandas "merge"
+    operation between dst_df and src_df[NO_OVERLAP_SRC]. This increases the
+    number of columns in dst_df_tmp1 with respect to dst_df by adding the new
+    columns from src_df.
+
+    The pseudocode for this step is:
+
+    dst_df_tmp1 = pd.merge(dst_df,
+                           src_df[NO_OVERLAP_SRC],
+                           how=merge['how_merge'],
+                           left_on=merge_info['dst_selected_key'],
+                           right_on=merge_info['src_selected_key'])
+
+    STEP B: The data frame dst_df_tmp1 is then updated with the values in
+    src_df[OVERLAP].
 
     :param pk: Primary key of the Workflow containing the data frames
     :param dst_df: Destination dataframe (already stored in DB)
     :param src_df: Source dataframe, stored in temporary table
     :param merge_info: Dictionary with merge options
+           - initial_column_names: List of initial column names in src data
+             frame.
+           - rename_column_names: Columns that need to be renamed in src data
+             frame.
+           - columns_to_uplooad: Columns to be considered for the update
+           - src_selected_key: Key in the source data frame
+           - dst_selected_key: key in the destination (existing) data frame
+           - how_merge: How to merge: inner, outer, left or right
     :return:
     """
 
     # STEP 1 Rename the column names.
     src_df = src_df.rename(
         columns=dict(zip(merge_info['initial_column_names'],
-                         merge_info.get('autorename_column_names', None) or
                          merge_info['rename_column_names'])))
 
     # STEP 2 Drop the columns not selected
@@ -227,64 +367,120 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
         store_dataframe_in_db(src_df, pk)
         return None
 
-    # Step 3. Drop the columns that are going to be overriden.
-    dst_df.drop(merge_info['override_columns_names'],
-                inplace=True,
-                axis=1)
-    # Step 4. Perform the merge
-    try:
-        new_df = pd.merge(dst_df,
-                          src_df,
-                          how=merge_info['how_merge'],
-                          left_on=merge_info['dst_selected_key'],
-                          right_on=merge_info['src_selected_key'])
-    except Exception as e:
-        return 'Merge operation failed. Exception: ' + e.message
+    # Get the keys
+    src_key = merge_info['src_selected_key']
+    dst_key = merge_info['dst_selected_key']
+
+    # STEP 3 Perform the combination
+    # Separate the columns in src that overlap from those that do not
+    # overlap, but include the key column in both data frames.
+    overlap_names = set(dst_df.columns).intersection(src_df.columns)
+    src_no_overlap_names = set(src_df.columns).difference(overlap_names)
+    src_df_overlap = src_df[list(overlap_names.union({src_key}))]
+    src_df_no_overlap = src_df[list(src_no_overlap_names.union({src_key}))]
+
+    # Step A. Perform the update with the overlapping columns
+    new_df = perform_overlap_update(dst_df,
+                                    src_df_overlap,
+                                    dst_key,
+                                    src_key,
+                                    merge_info['how_merge'])
+
+    # Step B. Perform the merge of non-overlapping columns
+    if len(src_df_no_overlap.columns) > 1:
+        try:
+            new_df = pd.merge(new_df,
+                              src_df_no_overlap,
+                              how=merge_info['how_merge'],
+                              left_on=dst_key,
+                              right_on=src_key)
+        except Exception as e:
+            return 'Merge operation failed. Exception: ' + e.message
+
+        # VERY special case: The key used for the merge in src_df can have an
+        # identical column in dst_df, but it is not the one used for the
+        # merge. For example: DST has columns C1(key), C2, C3, SRC has
+        # columns C2(key) and C4. The merge is done matching C1 in DST with
+        # C2 in SRC, but this will produce two columns C2_x and C2_y. In this
+        # case we drop C2_y because C2_x has been properly updated with the
+        # values from C2_y in the previous step (Step A).
+        if src_key != dst_key and src_key in dst_df.columns:
+            # Drop column_y
+            new_df.drop([src_key + '_y'], axis=1, inplace=True)
+            # Rename column_x
+            new_df = new_df.rename(columns={src_key + '_x': src_key})
 
     # If the merge produced a data frame with no rows, flag it as an error to
     # prevent loosing data when there is a mistake in the key column
     if new_df.shape[0] == 0:
         return 'Merge operation produced a result with no rows'
 
-    # For each column, if it is overriden, remove it, if not, check that the
-    # new column is consistent with data_type, and allowed values,
-    # and recheck its unique key status
+    # For each column check that the new column is consistent with data_type,
+    # and allowed values, and recheck its unique key status
     for col in Workflow.objects.get(pk=pk).columns.all():
-        # If column is overriden, remove it
-        if col.name in merge_info['override_columns_names']:
-            col.delete()
-            continue
-
         # New values in this column should be compatible with the current
         # column properties.
-        # Condition 1: Data type
-        if pandas_datatype_names[new_df[col.name].dtype.name] != col.data_type:
-            return 'New values in column ' + col.name + ' are not of type ' \
-                   + col.data_type
+        # Condition 1: Data type is correct (there is an exception for columns
+        # of type "object" in the data frame and "boolean" in the column as the
+        # new resulting column may have a mix of booleans and floats.
+        df_col_type = pandas_datatype_names[new_df[col.name].dtype.name]
+        if col.data_type == 'boolean' and df_col_type == 'string':
+            column_data_types = set([type(x) for x in new_df[col.name]])
+            # Remove the NaN type
+            column_data_types.remove(float)
+            if len(column_data_types) != 1 or column_data_types.pop() != bool:
+                return 'New values in column {0} are not of type {1}'.format(
+                    col.name,
+                    col.data_type
+                )
+        elif col.data_type == 'integer' and df_col_type != 'integer' and \
+                df_col_type != 'double':
+            # Numeric column results in a non-numeric column
+            return 'New values in column {0} are not of type number'.format(
+                col.name
+            )
+        elif col.data_type != 'integer' and df_col_type != col.data_type:
+            # Any other type change
+            return 'New values in column {0} are not of type {1}'.format(
+                col.name,
+                col.data_type
+            )
 
         # Condition 2: If there are categories, the new values should be
         # compatible with them.
         if col.categories and not all([x in col.categories
                                        for x in new_df[col.name]]):
-            return 'New values in column ' + col.name + ' are not within ' \
-                   + 'the categories ' + ', '.join(col.categories)
+            return \
+                'New values in column {0} are not in categories {1}'.format(
+                    col.name,
+                    ', '.join(col.categories)
+                )
 
         # Condition 3:
-        col.is_key = is_unique_column(new_df[col.name])
+        is_key_now = is_unique_column(new_df[col.name])
+        if col.is_key and not is_key_now:
+            return \
+                'Column {0} is no longer a key column.'.format(col.name)
+
+        col.is_key = is_key_now
+        col.save()
 
     # Store the result back in the DB
     store_dataframe_in_db(new_df, pk)
+
+    # Recompute all the values of the conditions in each of the actions
+    for action in Workflow.objects.get(pk=pk).actions.all():
+        action.update_n_rows_selected()
 
     # Operation was correct, no need to flag anything
     return None
 
 
-def data_frame_add_empty_column(df, column_name, column_type, initial_value):
+def data_frame_add_column(df, column, initial_value):
     """
 
     :param df: Data frame to modify
-    :param column_name: Name of the column to add
-    :param column_type: type of the column to add
+    :param column: Column object to add
     :param initial_value: initial value in the column
     :return: new data frame with the additional column
     """
@@ -294,23 +490,24 @@ def data_frame_add_empty_column(df, column_name, column_type, initial_value):
     # b = np.empty((10,), dtype=[('nnn', np.float64)] (ARRAY)
     # pd.concat([df, pd.DataFrame(b)], axis=1)
 
-    if not initial_value:
+    column_type = column.data_type
+    if initial_value is None:
         # Choose the right numpy type
         if column_type == 'string':
             initial_value = ''
         elif column_type == 'integer':
-            initial_value = 0
+            initial_value = np.nan
         elif column_type == 'double':
-            initial_value = 0.0
+            initial_value = np.nan
         elif column_type == 'boolean':
-            initial_value = False
+            initial_value = np.nan
         elif column_type == 'datetime':
             initial_value = pd.NaT
         else:
             raise ValueError('Type ' + column_type + ' not found.')
 
     # Create the empty column
-    df[column_name] = initial_value
+    df[column.name] = initial_value
 
     return df
 

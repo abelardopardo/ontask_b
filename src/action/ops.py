@@ -7,15 +7,17 @@ operations when cloning conditions and actions, and sending messages.
 from __future__ import unicode_literals, print_function
 
 import datetime
+
 import pytz
 from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.core import signing, mail
 from django.core.mail import send_mail, EmailMultiAlternatives
-from django.http import Http404, HttpResponse
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import Context, Template, TemplateSyntaxError
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import strip_tags
 
@@ -68,15 +70,17 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
     # Bind the form with the existing data
     form = EnterActionIn(request.POST or None,
                          columns=columns,
-                         values=row_pairs.values())
+                         values=row_pairs.values(),
+                         show_key=is_inst)
 
+    cancel_url = None
     if is_inst:
         cancel_url = reverse('action:run', kwargs={'pk': action.id})
-    else:
-        cancel_url = reverse('action:thanks')
 
     # Create the context
-    context = {'form': form, 'action': action, 'cancel_url': cancel_url}
+    context = {'form': form,
+               'action': action,
+               'cancel_url': cancel_url}
 
     if request.method == 'GET' or not form.is_valid():
         return render(request, 'action/run_row.html', context)
@@ -114,6 +118,10 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
                          [where_field],
                          [where_value])
 
+    # Recompute all the values of the conditions in each of the actions
+    for act in action.workflow.actions.all():
+        act.update_n_rows_selected()
+
     # Log the event
     logs.ops.put(request.user,
                  'tablerow_update',
@@ -144,21 +152,25 @@ def serve_action_out(user, action, user_attribute_name):
     action_content = evaluate_row(action, (user_attribute_name,
                                            user.email))
 
+    payload = {'action': action.name,
+               'action_id': action.id}
+
     # If the action content is empty, forget about it
+    response = action_content
     if action_content is None:
-        raise Http404
+        response = render_to_string('action/action_unavailable.html', {})
+        payload['error'] = 'Action not enabled for user ' + user.email
 
     # Log the event
     logs.ops.put(
         user,
         'action_served_execute',
         workflow=action.workflow,
-        payload={'action': action.name,
-                 'action_id': action.id}
+        payload=payload
     )
 
     # Respond the whole thing
-    return HttpResponse(action_content)
+    return HttpResponse(response)
 
 
 def clone_condition(condition, new_action=None, new_name=None):
@@ -260,8 +272,7 @@ def send_messages(user,
                   email_column,
                   from_email,
                   send_confirmation,
-                  track_read,
-                  add_column):
+                  track_read):
     """
     Performs the submission of the emails for the given action and with the
     given subject. The subject will be evaluated also with respect to the
@@ -273,7 +284,6 @@ def send_messages(user,
     :param from_email: Email of the sender
     :param send_confirmation: Boolean to send confirmation to sender
     :param track_read: Should read tracking be included?
-    :param add_column: Should a new column be added?
     :return: Send the emails
     """
 
@@ -290,7 +300,7 @@ def send_messages(user,
 
     track_col_name = ''
     data_frame = None
-    if add_column:
+    if track_read:
         data_frame = pandas_db.load_from_db(action.workflow.id)
         # Make sure the column name does not collide with an existing one
         i = 0  # Suffix to rename
@@ -299,6 +309,13 @@ def send_messages(user,
             track_col_name = 'EmailRead_{0}'.format(i)
             if track_col_name not in data_frame.columns:
                 break
+
+    # Update the number of filtered rows if the action has a filter (table
+    # might have changed)
+    filter = action.conditions.filter(is_filter=True).first()
+    if filter and filter.n_rows_selected != len(result):
+        filter.n_rows_selected = len(result)
+        filter.save()
 
     # Everything seemed to work to create the messages.
     msgs = []
@@ -316,9 +333,10 @@ def send_messages(user,
             }
 
             track_str = \
-                """<img src="https://{0}/{1}?v={2}" alt="" 
+                """<img src="https://{0}{1}{2}?v={3}" alt="" 
                     style="position:absolute; visibility:hidden"/>""".format(
                     Site.objects.get_current().domain,
+                    ontask_settings.BASE_URL,
                     reverse('trck'),
                     signing.dumps(track_id)
                 )
@@ -337,22 +355,22 @@ def send_messages(user,
         msgs.append(msg)
 
     # Mass mail!
-    if str(getattr(ontask_settings, 'EMAIL_HOST')):
-        try:
-            connection = mail.get_connection()
-            connection.send_messages(msgs)
-        except Exception as e:
-            # Something went wrong, notify above
-            return e.message
+    try:
+        connection = mail.get_connection()
+        connection.send_messages(msgs)
+    except Exception as e:
+        # Something went wrong, notify above
+        return str(e)
 
     # Add the column if needed
-    if add_column:
+    if track_read:
         # Create the new column and store
         column = Column(
             name=track_col_name,
             workflow=action.workflow,
             data_type='integer',
-            is_key=False
+            is_key=False,
+            position=action.workflow.ncols + 1
         )
         column.save()
 
@@ -387,7 +405,7 @@ def send_messages(user,
          'action': action.name,
          'num_messages': len(msgs),
          'email_sent_datetime': str(now),
-         'filter_present': action.n_selected_rows != -1,
+         'filter_present': filter is not None,
          'num_rows': action.workflow.nrows,
          'subject': subject,
          'from_email': user.email})
@@ -402,9 +420,9 @@ def send_messages(user,
         'action': action,
         'num_messages': len(msgs),
         'email_sent_datetime': now,
-        'filter_present': action.n_selected_rows != -1,
+        'filter_present': filter is not None,
         'num_rows': action.workflow.nrows,
-        'num_selected': action.n_selected_rows}
+        'num_selected': filter.n_rows_selected if filter else -1}
 
     # Create template and render with context
     try:
@@ -424,7 +442,7 @@ def send_messages(user,
          'action': action.id,
          'num_messages': len(msgs),
          'email_sent_datetime': str(now),
-         'filter_present': action.n_selected_rows != -1,
+         'filter_present': filter is not None,
          'num_rows': action.workflow.nrows,
          'subject': str(getattr(settings, 'NOTIFICATION_SUBJECT')),
          'body': text_content,

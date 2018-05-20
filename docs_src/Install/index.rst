@@ -5,7 +5,7 @@ Installation process
 ********************
 
 OnTask is a Web application that manages data about learners to provide them
-with personalised support. For this reason, it is recommended an installation
+with personalized support. For this reason, it is recommended an installation
 that observes a set of tight security restrictions. Some of these
 restrictions lie within the scope of the tool, but some other are part of the
 environment in which the application is installed. We strongly recommend to
@@ -135,6 +135,8 @@ in the folder ``src/ontask/settings`` with the following content (note there is
 no space between variable names and the equal sign)::
 
    TIME_ZONE='[YOUR LOCAL PYTHON TIME ZONE]'
+   BASE_URL=''
+   DOMAIN_NAME='[YOUR DOMAIN NAME]'
    # syntax: DATABASE_URL=postgres://username:password@127.0.0.1:5432/database
    DATABASE_URL=postgres://[PSQLUSERNAME]:[PSQLPWD]@127.0.0.1:5432/ontask
    SECRET_KEY=
@@ -146,6 +148,11 @@ no space between variable names and the equal sign)::
 
    Replace ``[YOUR LOCAL PYTHON TIME ZONE]`` in the ``local.env`` file by the
    description of your time zone produced by the previous command.
+
+#. If OnTask is going to be served from a location different from the root of your server (for example ``myhost.com/ontask``, then modify the value of the variable ``BASE_URL`` with the suffix that should follow the domain name (in the example, ``/ontask``).
+
+#. Modify the line starting with ``DOMAIN_NAME=`` and change the field
+``[YOUR DOMAIN NAME``] with the domain name of the machine hosting OnTask.
 
 #. Modify the line starting with ``DATABASE_URL=`` and change the
    field ``[PSQLUSERNAME]`` with the name of the Postgresql user created in the
@@ -315,7 +322,7 @@ OnTask comes with the following authentication mechanisms: IMS-LTI,
 
   Ontask only provides two points of access for LTI requests coming from the
   consumer. One is the URL with suffix ``/lti_entry`` and the second is the
-  URL provided by the actions to serve the personalised content (accessible
+  URL provided by the actions to serve the personalized content (accessible
   through the ``Actions`` menu.
 
   To allow LTI access you need:
@@ -347,6 +354,8 @@ OnTask comes with the following authentication mechanisms: IMS-LTI,
   the ``REMOTE_USER`` variable. OnTask relies on emails as the user name
   differentiator, so if you plan to use this authentication method make sure
   the value of ``REMOTE_USER`` is the email.
+
+  Additionally, this mode of authentication will be enforced in all requests reaching OnTask. However, this configuration prevents the recording of email reads. Read the section :ref:`email_config` to configure the server to allow such functionality to be properly configured.
 
 - Basic authentication. If the variable ``REMOTE_USER`` is not set in the
   internal environment of Django where the web requests are served, OnTask
@@ -418,7 +427,19 @@ and are: ``EMAIL_HOST``, ``EMAIL_PORT``, ``EMAIL_HOST_USER``,
 ``EMAIL_HOST_PASSWORD``, ``EMAIL_USE_TLS`` and ``EMAIL_USE_SSL``.
 
 Set theses variables in the configuration file to the appropriate values
-before starting the application.
+before starting the application. Make sure the server is running **in production mode**. The development mode is configured to **not send** emails but show their content in the console instead.
+
+Tracking Email Reads
+--------------------
+
+If OnTask is deployed using SAML, all URLs are likely to be configured to go through the authentication layer. This configuration prevents OnTask from receiving the email read confirmations. In this case, the web server needs to be configured so that the SAML authentication is removed for the url ``trck`` (the one receiving the email read tracking). In Apache, this can be achieved by the following directive::
+
+  <Location /trck>
+    Require all granted
+  </Location>
+
+If OnTask is not served from the root of your web server, make sure you include the absolute URL to ``trck``. For example, if OnTask is available through the URL ``my.server.com/somesuffix/ontask``, then the URL to use in the previous configuration is ``my.server.com/somesuffix/ontask/trck``.
+
 
 .. _scheduling_tasks:
 

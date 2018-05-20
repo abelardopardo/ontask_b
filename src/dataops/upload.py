@@ -70,13 +70,14 @@ def upload_s2(request):
     # Get or create list of booleans identifying columns to be uploaded
     columns_to_upload = upload_data.get('columns_to_upload', None)
     if columns_to_upload is None:
-        columns_to_upload = [False] * len(initial_columns)
+        columns_to_upload = [True] * len(initial_columns)
         upload_data['columns_to_upload'] = columns_to_upload
 
     # Bind the form with the received data (remember unique columns)
     form = SelectColumnUploadForm(
         request.POST or None,
         column_names=rename_column_names,
+        columns_to_upload=columns_to_upload,
         is_key=src_is_key_column
     )
 
@@ -179,8 +180,9 @@ def upload_s2(request):
                   'column_types': col_info[1],
                   'column_unique': col_info[2]})
 
-    # Go back to show the detail of the data frame
-    return redirect('dataops:list')
+    # Go back to show the workflow detail
+    return redirect(reverse('workflow:detail',
+                            kwargs={'pk': workflow.id}))
 
 
 @user_passes_test(is_instructor)
@@ -226,10 +228,6 @@ def upload_s3(request):
 
     how_merge: How to merge. One of {left, right, outter, inner}
 
-    how_dup_columns: How to handle column overlap
-
-    autorename_column_names: Automatically modified column names
-
     :param request: Web request
     :return: the dictionary upload_data in the session object
     """
@@ -271,21 +269,7 @@ def upload_s3(request):
     src_is_key_column = upload_data['src_is_key_column']
     src_unique_col_names = [v for x, v in enumerate(src_column_names)
                             if src_is_key_column[x] and columns_to_upload[x]]
-
-    # Calculate the names of columns that overlap between the two data
-    # frames. It is the intersection of the column names that are not key in
-    # the existing data frame and those in the source DF that are selected,
-    # renamed and not unique
     rename_column_names = upload_data['rename_column_names']
-    are_overlap_cols = (  # DST Column names that are not Keys
-                               (set(dst_column_names) - set(
-                                   dst_is_unique_column)) &
-                               # SRC Column names that are renamed, selected and not
-                               #  unique
-                               set([x for x, y, z in zip(rename_column_names,
-                                                         columns_to_upload,
-                                                         src_is_key_column)
-                                    if y and not z])) != set([])
 
     # Bind the form with the received data (remember unique columns and
     # preselected keys.)'
@@ -295,9 +279,7 @@ def upload_s3(request):
         src_keys=src_unique_col_names,
         src_selected_key=upload_data.get('src_selected_key', None),
         dst_selected_key=upload_data.get('dst_selected_key', None),
-        how_merge=upload_data.get('how_merge', None),
-        how_dup_columns=upload_data.get('how_dup_columns', None),
-        are_overlap_cols=are_overlap_cols,
+        how_merge=upload_data.get('how_merge', None)
     )
 
     # Process the initial loading of the form
@@ -321,40 +303,6 @@ def upload_s3(request):
     upload_data['dst_selected_key'] = form.cleaned_data['dst_key']
     upload_data['src_selected_key'] = form.cleaned_data['src_key']
     upload_data['how_merge'] = form.cleaned_data['how_merge']
-    upload_data['how_dup_columns'] = \
-        form.cleaned_data.get('how_dup_columns', None)
-
-    # Check if there are overlapping columns and if rename was selected as
-    # the method to deal with them. If so, create a list with the new
-    # names (adding a numeric suffix)
-    how_dup_columns = form.cleaned_data.get('how_dup_columns', None)
-    autorename_column_names = []
-    if are_overlap_cols and how_dup_columns == 'rename':
-        # Columns must be renamed!
-        # Initially the new list is identical to the previous one
-        autorename_column_names = rename_column_names[:]
-        for idx, col in enumerate(rename_column_names):
-            # Skip the selected keys
-            if col == upload_data['src_selected_key']:
-                continue
-
-            # If the column name is not in dst, no need to rename
-            if col not in dst_column_names:
-                continue
-
-            # Column with a name that collides with one in the DST
-            i = 0  # Suffix to rename
-            while True:
-                i += 1
-                new_name = col + '_{0}'.format(i)
-                if new_name not in rename_column_names and \
-                        new_name not in dst_column_names:
-                    break
-            # Record the new created name in the resulting list
-            autorename_column_names[idx] = new_name
-
-    # Remember the autorename list for the next step
-    upload_data['autorename_column_names'] = autorename_column_names
 
     # Update session object
     request.session['upload_data'] = upload_data
@@ -396,13 +344,6 @@ def upload_s4(request):
 
     how_merge: How to merge. One of {left, right, outter, inner}
 
-    how_dup_columns: How to handle column overlap
-
-    autorename_column_names: Automatically modified column names
-
-    override_columns_names: Names of dst columns that will be overridden in
-    merge
-
     :param request: Web request
     :return:
     """
@@ -414,7 +355,7 @@ def upload_s4(request):
     # Get the dictionary containing the information about the upload
     upload_data = request.session.get('upload_data', None)
     if not upload_data:
-        # If there is no object, someone is trying to jump directly here.
+        # If there is nsendo object, someone is trying to jump directly here.
         return redirect('dataops:list')
 
     # Check the type of request that is being processed
@@ -472,85 +413,97 @@ def upload_s4(request):
         # Remove the csvupload from the session object
         request.session.pop('upload_data', None)
 
-        return redirect('dataops:list')
+        return redirect(reverse('workflow:detail',
+                                kwargs={'pk': workflow.id}))
 
     # We are processing a GET request
 
     # Create the information to include in the final report table
     dst_column_names = upload_data['dst_column_names']
+    dst_selected_key = upload_data['dst_selected_key']
     src_selected_key = upload_data['src_selected_key']
-
-    # Triplets to show in the page (dst column, Boolean saying there is some
-    # change, and the message on the src column
-    autorename_column_names = upload_data['autorename_column_names']
-    rename_column_names = upload_data['rename_column_names']
-    info = []
-    initial_column_names = upload_data['initial_column_names']
+    # List of final column names
+    final_columns = sorted(set().union(
+        dst_column_names,
+        upload_data['rename_column_names']
+    ))
+    # Dictionary with (new src column name: (old name, is_uploaded?)
+    src_info = {x: (y, z) for (x, y, z) in zip(
+        upload_data['rename_column_names'],
+        upload_data['initial_column_names'],
+        upload_data['columns_to_upload']
+    )}
 
     # Create the strings to show in the table for each of the rows explaining
-    # what is going to be the effect of the merge operation over them.
-    override_columns_names = set([])
-    for idx, (x, y, z) in enumerate(zip(initial_column_names,
-                                        rename_column_names,
-                                        upload_data['columns_to_upload'])):
-        # There are several possible cases
-        #
-        # 1) The unique key. No message needed because it is displayed at
-        #    the top of the rows
-        # 2) The column has not been selected. Simply show (Ignored) in the
-        #    right.
-        # 3) Column is selected and is NEW
-        # 4) Column is selected and was renamed by the user
-        # 5) Column is selected and was automatically renamed by the tool
-        #    when requesting to preserve the overlapping columns
+    # what is going to be the effect of the update operation over them.
+    #
+    # There are 8 cases depending on the column name being a key column,
+    # in DST, SRC, if SRC is being renamed, and SRC is being loaded.
+    #
+    # Case 1: The column is the key column used for the merge (skip it)
+    #
+    # Case 2: in DST, NOT in SRC:
+    #         Dst | |
+    #
+    # Case 3: in DST, in SRC, NOT LOADED
+    #         Dst Name | <-- | Src new name (Ignored)
+    #
+    # Case 4: NOT in DST, in SRC, NOT LOADED
+    #         | | Src new name (Ignored)
+    #
+    # Case 5: in DST, in SRC, Loaded, no rename:
+    #         Dst Name (Update) | <-- | Src name
+    #
+    # Case 6: in DST, in SRC, loaded, rename:
+    #         Dst Name (Update) | <-- | Src new name (Renamed)
+    #
+    # Case 7: NOT in DST, in SRC, loaded, no rename
+    #         Dst Name (NEW) | <-- | src name
+    #
+    # Case 8: NOT in DST, in SRC, loaded, renamed
+    #         Dst Name (NEW) | <-- | src name (renamed)
+    #
+    info = []
+    for colname in final_columns:
 
-        # CASE 1: If it is a key (compare the rename value in case user tried
-        # to rename it.
-        if y == src_selected_key:
+        # Case 1: Skip the keys
+        if colname == src_selected_key or colname == dst_selected_key:
             continue
 
-        # CASE 2: Column not selected, thus simply print "Ignored")
-        if not z:
-            info.append(('', False, x + ' (Ignored)'))
+        # Case 2: Column is in DST and left untouched (no counter part in SRC)
+        if colname not in src_info.keys():
+            info.append((colname, False, ''))
             continue
 
-        # Calculate the final name after the renaming
-        final_name = x
-        suffix = ''
+        # Get old name and if it is going to be loaded
+        old_name, toLoad = src_info[colname]
 
-        # Logic to figure out the final name after renaming
-        if y != x:
-            # If the corresponding name in rename_column_names is different,
-            #  change
-            final_name = y
+        # Column is not going to be loaded anyway
+        if not toLoad:
+            if colname in dst_column_names:
+                # Case 3
+                info.append((colname, False, colname + ' (Ignored)'))
+            else:
+                # Case 4
+                info.append(('', False, colname + ' (Ignored)'))
+            continue
 
-            # To add to the column
-            suffix = ', Renamed'
-
-            # If autorename table exists, and the new name is different,
-            # rename again
-            if autorename_column_names and autorename_column_names[idx] != y:
-                final_name = \
-                    autorename_column_names[idx]
-                suffix = ', Automatically renamed'
+        # Initial name on the dst data frame
+        dst_name = colname
+        # Column not present in DST, so it is a new column
+        if colname not in dst_column_names:
+            dst_name += ' (New)'
         else:
-            # Check if there was autorename
-            if autorename_column_names and \
-                    autorename_column_names[idx] != x:
-                final_name = \
-                    autorename_column_names[idx]
-                suffix = ', Automatically renamed'
+            dst_name += ' (Update)'
 
-        if final_name in dst_column_names:
-            suffix = ' (Override' + suffix + ')'
-            override_columns_names.add(final_name)
-        else:
-            suffix = ' (New' + suffix + ')'
+        src_name = colname
+        if colname != old_name:
+            src_name += ' (Renamed)'
 
-        info.append((final_name + suffix, True, x))
+        # Cases 5 - 8
+        info.append((dst_name, True, src_name))
 
     # Store the value in the request object and update
-    upload_data['override_columns_names'] = list(override_columns_names)
     request.session['upload_data'] = upload_data
 
     return render(request, 'dataops/upload_s4.html',

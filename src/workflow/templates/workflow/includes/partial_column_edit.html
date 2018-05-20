@@ -1,7 +1,7 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 <form method="post" action="{% url 'workflow:column_edit' pk %}"
-      class="js-workflow-column-edit-form">
+      class="js-column-edit-form">
   {% csrf_token %}
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">

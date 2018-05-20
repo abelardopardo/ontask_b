@@ -86,6 +86,22 @@ urlpatterns = [
         column_views.column_clone,
         name='column_clone'),
 
+    url(r'^(?P<pk>\d+)/column_move_prev/$',
+        column_views.column_move_prev,
+        name='column_move_prev'),
+
+    url(r'^(?P<pk>\d+)/column_move_next/$',
+        column_views.column_move_next,
+        name='column_move_next'),
+
+    url(r'^(?P<pk>\d+)/column_move_top/$',
+        column_views.column_move_top,
+        name='column_move_top'),
+
+    url(r'^(?P<pk>\d+)/column_move_bottom/$',
+        column_views.column_move_bottom,
+        name='column_move_bottom'),
+
     # API
 
     url(r'^workflows/$', api.WorkflowAPIListCreate.as_view(),

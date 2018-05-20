@@ -8,12 +8,12 @@ but instead, those actions that are programmed to execute at a certain point
 in time."""
 from __future__ import unicode_literals, print_function
 
+import datetime
 import getopt
 import logging
 import shlex
 import sys
 
-import datetime
 import pytz
 from django.conf import settings as ontask_settings
 
@@ -82,7 +82,6 @@ def execute_email_actions(debug):
         # - email column
         # - send_confirmation
         # - track_read
-        # - add_column
         msg = ''
         try:
             # Log the event
@@ -95,8 +94,7 @@ def execute_email_actions(debug):
                           'subject': item.subject,
                           'email_column': item.email_column.name,
                           'send_confirmation': item.send_confirmation,
-                          'track_read': item.track_read,
-                          'add_column': item.add_column})
+                          'track_read': item.track_read})
 
             result = send_messages(item.user,
                                    item.action,
@@ -104,8 +102,7 @@ def execute_email_actions(debug):
                                    item.email_column.name,
                                    item.user.email,
                                    item.send_confirmation,
-                                   item.track_read,
-                                   item.add_column)
+                                   item.track_read)
             # If the result has some sort of message, push it to the log
             if result:
                 msg = 'Incorrect execution message: ' + str(result)

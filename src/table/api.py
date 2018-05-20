@@ -8,14 +8,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from dataops import pandas_db, ops
+from ontask.permissions import UserIsInstructor
 from table.serializers import (
     DataFramePandasMergeSerializer,
     DataFramePandasSerializer,
     DataFrameJSONSerializer,
     DataFrameJSONMergeSerializer)
-from ontask.permissions import UserIsInstructor
 from workflow.models import Workflow
-from workflow.ops import is_locked, detach_dataframe
+from workflow.ops import is_locked, flush_workflow
 
 
 class TableBasicOps(APIView):
@@ -86,7 +86,7 @@ class TableBasicOps(APIView):
     # Delete
     def delete(self, request, pk, format=None):
         wflow = self.get_object(pk, user=self.request.user)
-        detach_dataframe(wflow)
+        flush_workflow(wflow)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -207,8 +207,7 @@ class TableBasicMerge(APIView):
             {'src_df': pandas_db.load_from_db(pk),
              'how': '',
              'left_on': '',
-             'right_on': '',
-             'dup_column': ''}
+             'right_on': ''}
         )
         return Response(serializer.data)
 
@@ -247,49 +246,13 @@ class TableBasicMerge(APIView):
             raise APIException('column' + right_on +
                                'does not contain a unique key.')
 
-        dup_column = serializer.validated_data['dup_column']
-        if dup_column == '' or dup_column not in ['override', 'rename']:
-            raise APIException('dup_column must be override or rename')
-
-        override_columns_names = []
-        autorename_column_names = None
-        if dup_column == 'override':
-            # List of columns to drop (the ones in both data sets
-            override_columns_names = list(
-                (set(dst_df.columns) & set(src_df.columns)) -
-                {left_on}
-            )
-        else:
-            autorename_column_names = []
-            for colname in list(src_df.columns):
-                # If the column is the key, insert as is
-                if colname == right_on:
-                    autorename_column_names.append(colname)
-                    continue
-
-                # If the column does not collide, insert as is
-                if colname not in dst_df.columns:
-                    autorename_column_names.append(colname)
-                    continue
-
-                # Column name collides with existing column
-                i = 0  # Suffix to rename
-                while True:
-                    i += 1
-                    new_name = colname + '_{0}'.format(i)
-                    if new_name not in dst_df.columns:
-                        break
-                autorename_column_names.append(new_name)
-
         merge_info = {
             'how_merge': how,
             'dst_selected_key': left_on,
             'src_selected_key': right_on,
             'initial_column_names': list(src_df.columns),
-            'autorename_column_names': autorename_column_names,
             'rename_column_names': list(src_df.columns),
             'columns_to_upload': [True] * len(list(src_df.columns)),
-            'override_columns_names': override_columns_names
         }
 
         # Ready to perform the MERGE

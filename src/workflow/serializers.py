@@ -19,6 +19,7 @@ class ColumnSerializer(serializers.ModelSerializer):
             workflow=self.context['workflow'],
             data_type=validated_data['data_type'],
             is_key=validated_data['is_key'],
+            position=validated_data.get('position', 0),
             categories=validated_data['categories']
         )
 
@@ -127,6 +128,13 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
         else:
             workflow_obj.delete()
             return None
+
+        # If there is any column with position = 0, recompute (this is to
+        # guarantee backward compatibility.
+        if workflow_obj.columns.filter(position=0).exists():
+            for idx, c in enumerate(workflow_obj.columns.all()):
+                c.position = idx + 1
+                c.save()
 
         # Create the actions pointing to the workflow
         action_data = ActionSerializer(

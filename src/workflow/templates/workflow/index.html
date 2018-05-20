@@ -15,6 +15,10 @@
     if (document.getElementById("workflow-table") != null) {
         $(document).ready(function() {
             $('#workflow-table').DataTable({
+                "search": {
+                  "caseInsensitive": true,
+                },
+                stateSave: true,
                 "order": [[0, "asc"]],
                 "language": {
                     "emptyTable": "No workflows available."
@@ -54,7 +58,7 @@
       {% render_table table %}
     {% endif %}
 
-    <div class="modal fade" id="modal-item">
+    <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog">
         <div class="modal-content">
         </div>

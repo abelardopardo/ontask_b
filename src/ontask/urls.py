@@ -2,20 +2,20 @@
 from __future__ import unicode_literals, print_function
 
 from django.conf import settings
-from django.conf.urls import include
-from django.conf.urls import url
+from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.sites.models import Site
 from rest_framework.documentation import include_docs_urls
 
 import accounts.urls
 import action.urls
 import dataops.urls
 import logs.urls
-import table.urls
 import profiles.urls
-import workflow.urls
 import scheduler.urls
+import table.urls
+import workflow.urls
 from dataops import pandas_db
 from . import views
 
@@ -41,6 +41,8 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^trck/', views.trck, name='trck'),
+
+    url(r'^keep-alive/', views.keep_alive, name='keep-alive'),
 
     url(r'^', include(accounts.urls, namespace='accounts')),
 
@@ -97,3 +99,9 @@ pandas_db.engine = pandas_db.create_db_engine(
     settings.DATABASES['default']['HOST'],
     settings.DATABASES['default']['NAME'],
 )
+
+# Make sure the Site has the right information
+site = Site.objects.get(pk=settings.SITE_ID)
+site.domain = settings.DOMAIN_NAME
+site.name = settings.DOMAIN_NAME
+site.save()
