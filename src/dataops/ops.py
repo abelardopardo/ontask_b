@@ -275,7 +275,10 @@ def perform_overlap_update(dst_df, src_df, dst_key, src_key, how_merge):
         result.update(src_df_tmp1)
         # Append the missing rows
         tmp1 = src_df_tmp1.loc[src_df_tmp1.index.difference(dst_df_tmp1.index)]
-        result = result.append(tmp1)
+        if not tmp1.empty:
+            # Append only if the tmp1 data frame is not empty (otherwise it
+            # looses the name of the index column
+            result = result.append(tmp1)
     elif how_merge == 'left':
         result = dst_df_tmp1
         result.update(src_df_tmp1)
@@ -289,7 +292,9 @@ def perform_overlap_update(dst_df, src_df, dst_key, src_key, how_merge):
         tmp1.update(src_df_tmp1)
         # Append the rows that are in right and not in left
         tmp2 = src_df_tmp1.loc[src_df_tmp1.index.difference(dst_df_tmp1.index)]
-        result = tmp1.append(tmp2)
+        if not tmp2.empty:
+            # Append only if it is not empty
+            result = tmp1.append(tmp2)
 
     # Return result
     return result.reset_index()
@@ -362,41 +367,48 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
         store_dataframe_in_db(src_df, pk)
         return None
 
-    # STEP 3 Perform the combination
+    # Get the keys
+    src_key = merge_info['src_selected_key']
+    dst_key = merge_info['dst_selected_key']
 
+    # STEP 3 Perform the combination
     # Separate the columns in src that overlap from those that do not
     # overlap, but include the key column in both data frames.
     overlap_names = set(dst_df.columns).intersection(src_df.columns)
     src_no_overlap_names = set(src_df.columns).difference(overlap_names)
-    src_df_overlap = \
-        src_df[list(overlap_names.union({merge_info['src_selected_key']}))]
-    src_df_no_overlap = \
-        src_df[list(src_no_overlap_names.union(
-            {merge_info['src_selected_key']}
-        ))]
+    src_df_overlap = src_df[list(overlap_names.union({src_key}))]
+    src_df_no_overlap = src_df[list(src_no_overlap_names.union({src_key}))]
 
-    # Step A. Perform the merge of non-overlapping columns
-    dst_df_tmp1 = dst_df
+    # Step A. Perform the update with the overlapping columns
+    new_df = perform_overlap_update(dst_df,
+                                    src_df_overlap,
+                                    dst_key,
+                                    src_key,
+                                    merge_info['how_merge'])
+
+    # Step B. Perform the merge of non-overlapping columns
     if len(src_df_no_overlap.columns) > 1:
         try:
-            dst_df_tmp1 = pd.merge(dst_df,
-                                   src_df_no_overlap,
-                                   how=merge_info['how_merge'],
-                                   left_on=merge_info['dst_selected_key'],
-                                   right_on=merge_info['src_selected_key'])
+            new_df = pd.merge(new_df,
+                              src_df_no_overlap,
+                              how=merge_info['how_merge'],
+                              left_on=dst_key,
+                              right_on=src_key)
         except Exception as e:
             return 'Merge operation failed. Exception: ' + e.message
 
-    # Set the result temporarily
-    new_df = dst_df_tmp1
-
-    # Step B. Perform the update with the overlapping columns (four cases
-    # depending on the how_merge value
-    new_df = perform_overlap_update(new_df,
-                                    src_df_overlap,
-                                    merge_info['dst_selected_key'],
-                                    merge_info['src_selected_key'],
-                                    merge_info['how_merge'])
+        # VERY special case: The key used for the merge in src_df can have an
+        # identical column in dst_df, but it is not the one used for the
+        # merge. For example: DST has columns C1(key), C2, C3, SRC has
+        # columns C2(key) and C4. The merge is done matching C1 in DST with
+        # C2 in SRC, but this will produce two columns C2_x and C2_y. In this
+        # case we drop C2_y because C2_x has been properly updated with the
+        # values from C2_y in the previous step (Step A).
+        if src_key != dst_key and src_key in dst_df.columns:
+            # Drop column_y
+            new_df.drop([src_key + '_y'], axis=1, inplace=True)
+            # Rename column_x
+            new_df = new_df.rename(columns={src_key + '_x': src_key})
 
     # If the merge produced a data frame with no rows, flag it as an error to
     # prevent loosing data when there is a mistake in the key column
@@ -422,7 +434,7 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
                     col.data_type
                 )
         elif col.data_type == 'integer' and df_col_type != 'integer' and \
-            df_col_type != 'double':
+                df_col_type != 'double':
             # Numeric column results in a non-numeric column
             return 'New values in column {0} are not of type number'.format(
                 col.name
