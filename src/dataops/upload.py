@@ -70,7 +70,7 @@ def upload_s2(request):
     # Get or create list of booleans identifying columns to be uploaded
     columns_to_upload = upload_data.get('columns_to_upload', None)
     if columns_to_upload is None:
-        columns_to_upload = [False] * len(initial_columns)
+        columns_to_upload = [True] * len(initial_columns)
         upload_data['columns_to_upload'] = columns_to_upload
 
     # Bind the form with the received data (remember unique columns)
@@ -355,7 +355,7 @@ def upload_s4(request):
     # Get the dictionary containing the information about the upload
     upload_data = request.session.get('upload_data', None)
     if not upload_data:
-        # If there is no object, someone is trying to jump directly here.
+        # If there is nsendo object, someone is trying to jump directly here.
         return redirect('dataops:list')
 
     # Check the type of request that is being processed
