@@ -2,12 +2,13 @@
 from __future__ import unicode_literals, print_function
 
 import datetime
+
 import pytz
 from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.conf import settings
-from core import settings as core_settings
 
+from core import settings as core_settings
 from workflow.models import Column
 from .models import ScheduledEmailAction
 
@@ -36,11 +37,6 @@ class EmailForm(forms.ModelForm):
 
         data = super(EmailForm, self).clean()
 
-        # If adding a column, track read has to be enabled
-        if data['add_column'] and not data['track_read']:
-            self.add_error('track_read',
-                           'To add a column, you need to track email reading')
-
         # The executed time must be in the future
         now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
         when_data = self.cleaned_data.get('execute', None)
@@ -52,7 +48,7 @@ class EmailForm(forms.ModelForm):
     class Meta:
         model = ScheduledEmailAction
         fields = ('subject', 'email_column', 'send_confirmation', 'track_read',
-                  'add_column', 'execute')
+                  'execute')
 
         widgets = {
             'execute': DateTimeWidget(

@@ -76,12 +76,6 @@ class ScheduleEmailActionTable(tables.Table):
         get_field=lambda x: x.track_read,
     )
 
-    add_column = BooleanColumn(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('Add column'),
-        get_field=lambda x: x.add_column
-    )
-
     message = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
         verbose_name=str('Execution message'),
@@ -101,7 +95,7 @@ class ScheduleEmailActionTable(tables.Table):
 
         fields = ('action', 'created', 'execute', 'status', 'subject',
                   'email_column', 'send_confirmation', 'track_read',
-                  'add_column', 'operations', 'message')
+                  'operations', 'message')
 
         sequence = ('operations',
                     'action',
@@ -176,8 +170,7 @@ def save_email_schedule(request, workflow, action, schedule_item):
         'subject': s_item.subject,
         'email_column': s_item.email_column.name,
         'send_confirmation': s_item.send_confirmation,
-        'track_read': s_item.track_read,
-        'add_column': s_item.add_column
+        'track_read': s_item.track_read
     }
 
     # Log the operation
@@ -329,8 +322,7 @@ def delete_email(request, pk):
                       'subject': s_item.subject,
                       'email_column': s_item.email_column.name,
                       'send_confirmation': s_item.send_confirmation,
-                      'track_read': s_item.track_read,
-                      'add_column': s_item.add_column})
+                      'track_read': s_item.track_read})
 
         # Perform the delete operation
         s_item.deleted = True

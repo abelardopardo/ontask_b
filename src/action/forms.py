@@ -180,14 +180,7 @@ class EmailActionBasicForm(forms.Form):
     track_read = forms.BooleanField(
         initial=False,
         required=False,
-        label="Track email reading?"
-    )
-
-    add_column = forms.BooleanField(
-        initial=False,
-        required=False,
-        label="Add column to track email reading?",
-        help_text="Number of times the email was opened."
+        label="Track email reading in an extra column?"
     )
 
     def __init__(self, *args, **kargs):
@@ -207,15 +200,6 @@ class EmailActionBasicForm(forms.Form):
         self.fields['email_column'].initial = initial_choice,
         self.fields['email_column'].choices = \
             [(x, x) for x in self.column_names]
-
-    def clean(self):
-        data = super(EmailActionBasicForm, self).clean()
-
-        if data['add_column'] and not data['track_read']:
-            self.add_error(
-                'track_read',
-                'To add a column, you need to track email reading'
-            )
 
     class Meta:
         widgets = {'subject': forms.TextInput(attrs={'size': 256})}
