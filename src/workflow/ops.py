@@ -318,7 +318,7 @@ def do_export_workflow(workflow, selected_actions=None):
     zfile.write(to_send)
     zfile.close()
 
-    suffix = datetime.datetime.now().strftime('%y%m%d_%H%M%S')
+    suffix = datetime.now().strftime('%y%m%d_%H%M%S')
     # Attach the compressed value to the response and send
     compressed_content = zbuf.getvalue()
     response = HttpResponse(compressed_content)
