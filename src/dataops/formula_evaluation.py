@@ -27,6 +27,21 @@ def has_variable(formula, variable):
     return formula['id'] == variable
 
 
+def get_variables(formula):
+    """
+    Return a list with the variable names in a formula
+    :param formula:
+    :return: list of strings (variable names)
+    """
+
+    if 'condition' in formula:
+        return list(itertools.chain.from_iterable(
+            [get_variables(x) for x in formula['rules']]
+        ))
+
+    return [formula['id']]
+
+
 def rename_variable(formula, old_name, new_name):
     """
     Function that traverses the formula and changes the appearance of one
@@ -68,7 +83,7 @@ def evaluate_top_node(query_obj, given_vars):
     :return: True/False
     """
     # Pop the "valid" field. It should always be true anyway
-    query_obj.pop('valid')
+    # query_obj.pop('valid')
 
     return evaluate_node(query_obj, given_vars)
 
@@ -92,7 +107,7 @@ def evaluate_node(node, given_variables):
         else:
             result = any(sub_clauses)
 
-        if node.pop('not', False):
+        if node.get('not', False):
             result = not result
 
         return result
@@ -240,7 +255,7 @@ def evaluate_node_sql(node):
         result_fields = \
             list(itertools.chain.from_iterable([x for _, x in sub_pairs]))
 
-        if node.pop('not', False):
+        if node.get('not', False):
             result = '(NOT (' + result + '))'
 
         return result, result_fields

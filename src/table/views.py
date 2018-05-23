@@ -386,6 +386,10 @@ def row_delete(request):
         workflow.nrows -= 1
         workflow.save()
 
+        # Update the value of all the conditions in the actions
+        for action in workflow.actions.all():
+            action.update_n_rows_selected()
+
         return JsonResponse(data)
 
     # Render the page

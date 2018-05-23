@@ -93,12 +93,11 @@ def trck(request):
         # Save DF
         ops.store_dataframe_in_db(data_frame, action.workflow.id)
 
-        # Traverse all the actions and update those conditions that have the
-        # column modified
-        for act in action.workflow.actions.all():
-            # FIX: the following function could receive a column_name to
-            # optimize which conditions truly need a recalculation.
-            act.update_n_rows_selected()
+        # Get the tracking column and update all the conditions in the
+        # actions that have this column as part of their formulas
+        track_col = action.workflow.columns.get(name=track_col_name)
+        for action in action.workflow.actions.all():
+            action.update_n_rows_selected(track_col)
 
     # Record the event
     logs.ops.put(

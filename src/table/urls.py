@@ -13,7 +13,6 @@ urlpatterns = [
     #
     # API
     #
-    # JSON
     url(r'^(?P<pk>\d+)/ops/$', api.TableJSONOps.as_view(), name="api_ops"),
 
     url(r'^(?P<pk>\d+)/merge/$', api.TableJSONMerge.as_view(),

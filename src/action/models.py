@@ -126,7 +126,7 @@ class Action(models.Model):
             new_text = var_use_re.sub(
                 lambda m: '{{ ' +
                           (new_name if m.group('varname') == escape(old_name)
-                          else m.group('varname')) + ' }}',
+                           else m.group('varname')) + ' }}',
                 self.content
             )
             self.content = new_text
@@ -137,102 +137,30 @@ class Action(models.Model):
 
         self.save()
 
-    def update_n_rows_selected(self):
+    def update_n_rows_selected(self, column=None):
         """
         Given an action reset the field n_rows_selected in all conditions
 
-        A second more optimal version could receive the name of a column
-        (optional) to process only those that have this name.
+        If the column argument is present, select only those conditions that
+        have column as part of their variables.
 
-        :param column_name: Optional column name to process only those
-        conditions that use this column name
-        :return: All conditions are updated
+        :param column: Optional column name to process only those
+        conditions that use this column
+        :return: All appropriate conditions are updated
         """
 
-        formula = None
+        # Get the filter, if it exists.
         filter = self.conditions.filter(is_filter=True).first()
         if filter:
-            formula = filter.formula
-            filter.n_rows_selected = pandas_db.num_rows(self.workflow.id,
-                                                        formula)
-            filter.save()
-
-        self.update_n_rows_selected_for_non_filters(formula)
-
-    def update_n_rows_selected_for_non_filters(self, filter_formula=None):
-        """
-        Given an action and its filter condition, reset the field n_rows_selected
-        in all the non-filter conditions in the action.
-        :param action: Action object with the conditions to update
-        :param filter_formula: Filter formula to take the conjunction
-        :return: All conditions are updated
-        """
-
-        # Loop over the non-filter conditions in the action
-        for cond in self.conditions.filter(is_filter=False):
-            if filter_formula:
-                formula = {'condition': 'AND',
-                           'not': False,
-                           'rules': [cond.formula, filter_formula],
-                           'valid': True
-                           }
-            else:
-                formula = cond.formula
-
-            cond.n_rows_selected = \
-                pandas_db.num_rows(self.workflow.id, formula)
-            cond.save()
-
-    def condition_update_n_rows_selected(self, condition):
-        """
-        Given a condition update the number of rows
-        for which this condition will have true result. In other words,
-        we calculate the number of rows for which the condition is true.
-
-        WARNING: If the condition IS NOT a filter, this calculation has to be
-        done after the filter condition is applied in order for this number to
-        reflect the correct number of rows.
-
-        Conversely, if the condition is a filter, then ALL other conditions need
-        to be updated, because the new formula in the filter renders the counts
-        in the other conditions obsolete.
-
-        :param action: Action object where the condition is stored
-        :param condition: Condition to update the count
-        :param filter: Extra condition to use
-        :return: field is updated in the condition object
-        """
-
-        # See if we are processing a filter or not (in which case needs to be
-        # taken into account anyway)
-        filter = None
-        if not condition.is_filter:
-            filter = self.conditions.filter(is_filter=True).first()
-
-        if filter and filter != condition:
-            # There is a filter to add to the condition, create a conjunction
-            # formula
-            formula = {'condition': 'AND',
-                       'not': False,
-                       'rules': [filter.formula, condition.formula],
-                       'valid': True
-                       }
-        else:
-            formula = condition.formula
-
-        condition.n_rows_selected = \
-            pandas_db.num_rows(self.workflow.id, formula)
-        condition.save()
-
-        if not condition.is_filter:
-            # If the condition is not the filter, we are done
+            # If there is a filter, update the filter and this call
+            # propagates to the other conditions. Nothing else is needed.
+            filter.update_n_rows_selected(column=column)
             return
 
-        # If the condition given for update is a filter, we need to update all
-        # the other conditions in the action
-        self.update_n_rows_selected_for_non_filters(
-            filter_formula=condition.formula
-        )
+        # This action does not have a filter, so simply recalculate the value
+        # for each of the conditions
+        for cond in self.conditions.all():
+            cond.update_n_rows_selected(column=column)
 
     class Meta:
         """
@@ -253,13 +181,19 @@ class Condition(models.Model):
                                on_delete=models.CASCADE,
                                null=False,
                                blank=False,
-                                related_name='conditions')
+                               related_name='conditions')
 
     name = models.CharField(max_length=256, blank=False)
 
     description_text = models.CharField(max_length=512, default='', blank=True)
 
     formula = JSONField(default=dict, blank=True, null=True)
+
+    # Set of columns that appear in this condition
+    columns = models.ManyToManyField(
+        Column,
+        verbose_name="Columns present in this condition",
+        related_name='conditions')
 
     # Number or rows selected by the expression
     n_rows_selected = models.IntegerField(
@@ -276,14 +210,78 @@ class Condition(models.Model):
 
     modified = models.DateTimeField(auto_now=True, null=False)
 
-    def __str__(self):
-        return self.name
+    def update_n_rows_selected(self, column=None, filter_formula=None):
+        """
+        Given a condition update the number of rows
+        for which this condition will have true result. In other words,
+        we calculate the number of rows for which the condition is true.
 
-    class Meta:
+        The function implements two algorithms depending on the condition
+        being a filter or not:
+
+        Case 1: Condition is a filter
+
+        - Evaluate the filter and update field.
+
+        - Param filter_formula is ignored
+
+        Case 2: Condition is NOT a filter
+
+        - If there is a filter_formula, create the conjunction together with
+        the condition formula.
+
+        :param column: Column that has changed value (None when unknown)
+        :param filter_formula: Formula provided by another filter condition
+        and to take the conjunction with the condition formula.
+        :return: Nothing. Effect recorded in DB objects
         """
-        The unique criteria here is within the action, the name and being a
-        filter. We may choose to name a filter and a condition with the same
-        name (no need to restrict it)
-        """
-        unique_together = ('action', 'name', 'is_filter')
-        ordering = ('created',)
+
+        if column and column not in self.columns.all():
+            # The column is not part of this condition. Nothing to do
+            return
+
+        # Case 1: Condition is a filter
+        if self.is_filter:
+            self.n_rows_selected = \
+                pandas_db.num_rows(self.action.workflow.id, self.formula)
+            self.save()
+
+            # Propagate the filter effect to the rest of actions.
+            for condition in self.action.conditions.filter(is_filter=False):
+                # Update the rest of conditions. The column=None because
+                # the filter has changed, thus the condition needs to be
+                # reevaluated regardless.
+                condition.update_n_rows_selected(
+                    column=None,
+                    filter_formula=self.formula
+                )
+            return
+
+        # Case 2: Condition is NOT a filter
+        formula = self.formula
+        if filter_formula:
+            # There is a formula to add to the condition, create a conjunction
+            formula = {'condition': 'AND',
+                       'not': False,
+                       'rules': [filter_formula, self.formula],
+                       'valid': True
+                       }
+        self.n_rows_selected = pandas_db.num_rows(
+            self.action.workflow.id, formula)
+        self.save()
+
+        return
+
+
+def __str__(self):
+    return self.name
+
+
+class Meta:
+    """
+    The unique criteria here is within the action, the name and being a
+    filter. We may choose to name a filter and a condition with the same
+    name (no need to restrict it)
+    """
+    unique_together = ('action', 'name', 'is_filter')
+    ordering = ('created',)

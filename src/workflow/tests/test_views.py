@@ -792,6 +792,11 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
                 (By.CLASS_NAME, 'modal-open')
             )
         )
+        # Wait for the table to fully load
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME,
+                                        'dataTables_paginate'))
+        )
 
         # Values now should be in the table
         self.assertEqual(

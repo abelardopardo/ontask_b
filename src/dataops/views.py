@@ -179,6 +179,10 @@ def row_create(request):
     # Restore the dataframe to the DB
     ops.store_dataframe_in_db(df, workflow.id)
 
+    # Recompute all the values of the conditions in each of the actions
+    for act in workflow.actions.all():
+        act.update_n_rows_selected()
+
     # Log the event
     log_payload = zip(column_names, [str(x) for x in row_vals])
     logs.ops.put(request.user,

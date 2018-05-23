@@ -157,8 +157,8 @@ def save_condition_form(request,
     else:
         condition = form.save()
 
-    # Update the number of selected rows applying the new formula
-    action.condition_update_n_rows_selected(condition)
+    # Update the number of selected rows for the conditions
+    condition.update_n_rows_selected()
 
     # Update the action
     action.save()
@@ -303,17 +303,17 @@ def delete_filter(request, pk):
                       'formula': formula,
                       'formula_fields': fields}, )
 
+        # Get the action object for further processing
+        action = cond_filter.action
+
         # Perform the delete operation
         cond_filter.delete()
 
         # Number of selected rows now needs to be updated in all remaining
         # conditions
-        ops.update_n_rows_selected_for_non_filters(cond_filter.action)
+        action.update_n_rows_selected()
 
-        data['form_is_valid'] = True
-        data['html_redirect'] = ''
-
-        return JsonResponse(data)
+        return JsonResponse({'form_is_valid': True, 'html_redirect': ''})
 
     data['html_form'] = \
         render_to_string('action/includes/partial_filter_delete.html',

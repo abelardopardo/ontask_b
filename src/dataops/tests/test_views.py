@@ -740,8 +740,7 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
                                              'Step 2: Select Columns')
         )
 
-        # Select all the columns to upload and submit
-        self.selenium.find_element_by_id("checkAll").click()
+        # Submit
         self.selenium.find_element_by_xpath(
             "(//button[@name='Submit'])[2]"
         ).click()

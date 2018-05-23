@@ -50,12 +50,16 @@ class TableBasicOps(APIView):
 
     def override(self, request, pk, format=None):
         # Try to retrieve the wflow to check for permissions
-        self.get_object(pk, user=self.request.user)
+        wflow = self.get_object(pk, user=self.request.user)
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             df = serializer.validated_data['data_frame']
 
             ops.store_dataframe_in_db(df, pk)
+
+            # Update all the counters in the conditions
+            for action in wflow.actions.all():
+                action.update_n_rows_selected()
 
             return Response(None,
                             status=status.HTTP_201_CREATED)
