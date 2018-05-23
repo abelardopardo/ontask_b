@@ -225,7 +225,7 @@ def render_table_display_data(request, workflow, columns, formula,
         new_element = [ops_string] + list(row)
 
         # Tweak the date time format
-        new_element = map(lambda x: x.strftime('%Y-%m-%d %H:%M:%S %z') \
+        new_element = map(lambda x: x.strftime('%Y-%m-%d %H:%M:%S %z')
             if isinstance(x, datetime) else x, new_element)
 
         # Create the list of elements to display and add it ot the final QS
