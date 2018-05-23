@@ -9,8 +9,12 @@
 
 ### Changed
 
+- Changed the way a merge is reported before the last step. The key columns
+  now appear separately if they have different names as they will both 
+  survive the merge operation (issue #39)
+  
 - File name when exporting a workflow now includes a date/time suffix (issue 
-  36)
+  #36)
 
 - Changed HTTP headers to allow Safari to save the workflow with the right 
   extension.
@@ -18,7 +22,8 @@
 - Conditions and filters now show the number of rows that satisfy the 
   specified condition (issue #26)
 
-- Removed the back buttom from the page for learner data submission (issue 27)  
+- Removed the back buttom from the page for learner data submission (issue 
+  #27)  
 
 - All columns are selected by default when uploading a new CSV (issue #28)
 
@@ -31,7 +36,11 @@
 - Changed wording in tooltips in the Action Out edit page to offer better 
   guidance to the new user (issue #23)
   
-- Changed wording in the buttons to move columns in the workflow (issue 29))
+- Changed wording in the buttons to move columns in the workflow (issue #29)
+
+- Excel upload does not have a sheet name by default any more (issue #38)
+
+- Datetimes shown now without the T in between (issue #42)
   
 ### Fixed
 
@@ -49,6 +58,18 @@
   
 - Fixed glitch when inserting an image in action out after using the modal
   page to edit a condition (issue #32)
+  
+- Fixed merge procedure to account for the corner case in which the upcoming 
+  key column is matched against another existing column with a different name, 
+  but the existing data frame does have a column with such name. Example: 
+  Existing data frame with columns C1, C2 and C3 (C1 and C2 are keys). New 
+  data frame with columns C2 and C4. The merge is done matching C1 in the 
+  existing DF and C2 in the new DF. The merge now goes through and C2 is 
+  updated accordingly (issue #40)
+  
+- Fixed how merge operation fails in the presence of NaN appearing in Key 
+  columns. The merge operation now has a security check to prevent this from 
+  hapenning (issue #41) 
 
 ## 2.6.0 (2018-05-13) 
 

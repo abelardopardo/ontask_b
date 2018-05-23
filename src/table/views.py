@@ -218,8 +218,15 @@ def render_table_display_data(request, workflow, columns, formula,
                                                        row[key_idx]),
              'view_id': view_id}
         )
+
+        # Element to add to the final queryset
+        new_element = [ops_string] + list(row)
+
+        # Tweak the date time format
+        new_element[6] = new_element[6].strftime('%Y-%m-%d %H:%M:%S %z')
+
         # Create the list of elements to display and add it ot the final QS
-        final_qs.append([ops_string] + list(row))
+        final_qs.append(new_element)
 
         if items == length:
             # We reached the number or requested elements, abandon.
