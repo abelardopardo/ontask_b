@@ -130,9 +130,6 @@ class WorkflowInitial(test.OntaskLiveTestCase):
                                              'Step 2: Select Columns')
         )
 
-        # Select all the columns
-        self.selenium.find_element_by_id('checkAll').click()
-
         # Change the name of one of the columns
         input_email = self.selenium.find_element_by_xpath(
             "//table[@id='workflow-table']/tbody/tr[3]/td[3]/input"
@@ -238,9 +235,6 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
                                              'Step 2: Select Columns')
         )
-
-        # Select all the columns
-        self.selenium.find_element_by_id('checkAll').click()
 
         # Change the name of sid2 to sid
         input_email = self.selenium.find_element_by_xpath(
@@ -416,9 +410,6 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
                                              'Step 2: Select Columns')
         )
-
-        # Select all the columns
-        self.selenium.find_element_by_id('checkAll').click()
 
         # Click on the FINISH button
         self.selenium.find_element_by_xpath(

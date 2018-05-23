@@ -610,7 +610,6 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
             EC.element_to_be_clickable(
                 (By.ID, 'checkAll'))
         )
-        self.selenium.find_element_by_id("checkAll").click()
         self.selenium.find_element_by_name("Submit").click()
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Details')
@@ -667,7 +666,6 @@ class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
             EC.element_to_be_clickable(
                 (By.ID, 'checkAll'))
         )
-        self.selenium.find_element_by_id("checkAll").click()
         self.selenium.find_element_by_name("Submit").click()
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Details')
@@ -770,7 +768,6 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
         )
 
         # Select all the columns for upload
-        self.selenium.find_element_by_id("checkAll").click()
         self.selenium.find_element_by_name("Submit").click()
         # Wait for the upload/merge
         WebDriverWait(self.selenium, 10).until(
