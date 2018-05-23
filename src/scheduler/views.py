@@ -106,7 +106,6 @@ class ScheduleEmailActionTable(tables.Table):
                     'email_column',
                     'send_confirmation',
                     'track_read',
-                    'add_column',
                     'message')
 
         attrs = {

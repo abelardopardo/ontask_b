@@ -110,10 +110,3 @@ class ScheduledEmailAction(ScheduledAction):
         verbose_name='Track if emails are read?',
         null=False,
         blank=False)
-
-    # If a new column will be added to the table with tracking counts.
-    # add_column = models.BooleanField(
-    #     default=False,
-    #     verbose_name='Add a column with the number of email reads tracked',
-    #     null=False,
-    #     blank=False)
