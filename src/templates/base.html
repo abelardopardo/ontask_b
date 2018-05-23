@@ -181,12 +181,13 @@
     {% block footer %}
       <div class="container-fluid">
         <div class="footer">
-          <div class="row navbar-default" id="base_footer">
-            <div class="col-lg-6 div1">
-                <span style="color: #777;margin-top:15px; margin-bottom:15px">
+          <div class="row navbar-default navbar" id="base_footer"
+               style="margin-bottom: 0px">
+            <div class="col-lg-6 div1" style="margin-top:15px;">
+                <span style="color: #777;">
                   &copy; OnTask Project {% now 'Y' %}</span>
             </div>
-            <div class="col-lg-6 div2 text-right">
+            <div class="col-lg-6 div2 text-right" style="margin-top:15px;">
               <span class="align-middle"
                  style="color: #777;">Version: {% ontask_version %}</span>
             </div>
