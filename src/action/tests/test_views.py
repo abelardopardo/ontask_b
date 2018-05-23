@@ -416,9 +416,6 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         # Tick the track email
         self.selenium.find_element_by_id('id_track_read').click()
 
-        # Tick add column
-        self.selenium.find_element_by_id('id_add_column').click()
-
         # Click the send button
         self.selenium.find_element_by_class_name('btn-success').click()
         WebDriverWait(self.selenium, 10).until(

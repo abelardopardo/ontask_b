@@ -136,6 +136,21 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
                 c.position = idx + 1
                 c.save()
 
+        # Load the data frame
+        data_frame = validated_data.get('data_frame', None)
+        if data_frame is not None:
+            ops.store_dataframe_in_db(data_frame, workflow_obj.id)
+
+            # Reconcile now the information in workflow and columns with the
+            # one loaded
+            workflow_obj.data_frame_table_name = \
+                pandas_db.create_table_name(workflow_obj.pk)
+
+            workflow_obj.ncols = validated_data['ncols']
+            workflow_obj.nrows = validated_data['nrows']
+
+            workflow_obj.save()
+
         # Create the actions pointing to the workflow
         action_data = ActionSerializer(
             data=validated_data.get('actions', []),
@@ -159,21 +174,6 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
         else:
             workflow_obj.delete()
             return None
-
-        # Load the data frame
-        data_frame = validated_data.get('data_frame', None)
-        if data_frame is not None:
-            ops.store_dataframe_in_db(data_frame, workflow_obj.id)
-
-            # Reconcile now the information in workflow and columns with the
-            # one loaded
-            workflow_obj.data_frame_table_name = \
-                pandas_db.create_table_name(workflow_obj.pk)
-
-            workflow_obj.ncols = validated_data['ncols']
-            workflow_obj.nrows = validated_data['nrows']
-
-            workflow_obj.save()
 
         return workflow_obj
 

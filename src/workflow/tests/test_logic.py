@@ -35,12 +35,12 @@ class WorkflowImportExport(test.OntaskTestCase):
         response = do_export_workflow(workflow,
                                       workflow.actions.all())
 
-        self.assertEqual(response.get('Content-Encoding'),
+        self.assertEqual(response.get('Content-Type'),
                          'application/octet-stream')
         self.assertEqual(response['Content-Transfer-Encoding'], 'binary')
         self.assertTrue(
             response.get('Content-Disposition').startswith(
-                'attachment; filename="ontask_workflow"'
+                'attachment; filename="ontask_workflow'
             )
         )
 

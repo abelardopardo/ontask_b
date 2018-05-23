@@ -419,6 +419,14 @@ class TableApiMerge(TableApiBase):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
+        age = workflow.columns.filter(name='age')[0]
+        age.is_key = False
+        age.save()
+
+        email = workflow.columns.filter(name='email')[0]
+        email.is_key = False
+        email.save()
+
         # Get the data through the API
         response = self.client.put(
             reverse('table:api_merge', kwargs={'pk': workflow.id}),
@@ -445,6 +453,14 @@ class TableApiMerge(TableApiBase):
     def test_table_pandas_merge_to_outer(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
+
+        age = workflow.columns.filter(name='age')[0]
+        age.is_key = False
+        age.save()
+
+        email = workflow.columns.filter(name='email')[0]
+        email.is_key = False
+        email.save()
 
         # Transform new table into string
         r_df = pd.DataFrame(self.src_df)
@@ -476,6 +492,14 @@ class TableApiMerge(TableApiBase):
     def test_table_JSON_merge_to_left(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
+
+        age = workflow.columns.filter(name='age')[0]
+        age.is_key = False
+        age.save()
+
+        email = workflow.columns.filter(name='email')[0]
+        email.is_key = False
+        email.save()
 
         # Get the data through the API
         response = self.client.put(
@@ -537,6 +561,14 @@ class TableApiMerge(TableApiBase):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
+        age = workflow.columns.filter(name='age')[0]
+        age.is_key = False
+        age.save()
+
+        email = workflow.columns.filter(name='email')[0]
+        email.is_key = False
+        email.save()
+
         # Drop the column with booleans because the data type is lost
         workflow_delete_column(
             workflow,
@@ -583,6 +615,14 @@ class TableApiMerge(TableApiBase):
     def test_table_pandas_merge_to_outer_NaN(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
+
+        age = workflow.columns.filter(name='age')[0]
+        age.is_key = False
+        age.save()
+
+        email = workflow.columns.filter(name='email')[0]
+        email.is_key = False
+        email.save()
 
         # Drop the column with booleans because the data type is lost
         workflow_delete_column(

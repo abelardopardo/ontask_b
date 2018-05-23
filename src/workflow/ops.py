@@ -17,7 +17,7 @@ from rest_framework.renderers import JSONRenderer
 
 import logs.ops
 from action.models import Condition
-from dataops import formula_evaluation, pandas_db, ops
+from dataops import pandas_db, ops
 from table.models import View
 from .models import Workflow, Column
 from .serializers import (WorkflowExportSerializer, WorkflowImportSerializer)
@@ -318,7 +318,7 @@ def do_export_workflow(workflow, selected_actions=None):
     zfile.write(to_send)
     zfile.close()
 
-    suffix = datetime.datetime.now().strftime('%y%m%d_%H%M%S')
+    suffix = datetime.now().strftime('%y%m%d_%H%M%S')
     # Attach the compressed value to the response and send
     compressed_content = zbuf.getvalue()
     response = HttpResponse(compressed_content)
@@ -360,19 +360,23 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
         # Get the conditions/actions attached to this workflow
         cond_to_delete = [
             x for x in Condition.objects.filter(action__workflow=workflow)
-            if formula_evaluation.has_variable(x.formula,
-                                               column.name)]
+            if column in x.columns.all()]
 
     # If a column disappears, the conditions that contain that variable
-    # are removed.
+    # are removed
+    actions_without_filters = []
     for condition in cond_to_delete:
         if condition.is_filter:
-            # If the condition is a filter, all the conditions in the same
-            # action need to be reassessed
-            condition.action.update_n_rows_selected_for_non_filters()
+            actions_without_filters.append(condition.action)
+            is_filter = True
 
         # Formula has the name of the deleted column. Delete it
         condition.delete()
+
+    # Traverse the actions for which the filter has been deleted and reassess
+    #  all their conditions
+    for action in actions_without_filters:
+        action.update_n_rows_selected()
 
     # If a column disappears, the views that contain only that column need to
     # disappear as well as they are no longer relevant.
