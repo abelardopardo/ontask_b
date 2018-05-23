@@ -4,6 +4,8 @@ File containing functions to implement all views related to the table element.
 """
 from __future__ import unicode_literals, print_function
 
+from datetime import datetime
+
 import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -223,7 +225,8 @@ def render_table_display_data(request, workflow, columns, formula,
         new_element = [ops_string] + list(row)
 
         # Tweak the date time format
-        new_element[6] = new_element[6].strftime('%Y-%m-%d %H:%M:%S %z')
+        new_element = map(lambda x: x.strftime('%Y-%m-%d %H:%M:%S %z') \
+            if isinstance(x, datetime) else x, new_element)
 
         # Create the list of elements to display and add it ot the final QS
         final_qs.append(new_element)
