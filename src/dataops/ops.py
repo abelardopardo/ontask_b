@@ -119,6 +119,7 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
     store_table(data_frame, table_name)
 
     # Review the column types because some "objects" are stored as booleans
+    # TODO: Review this process to optimise
     column_types = df_column_types_rename(table_name)
     for ctype, col in zip(column_types, wf_columns):
         if col.data_type != ctype:
@@ -379,14 +380,8 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
     src_df_overlap = src_df[list(overlap_names.union({src_key}))]
     src_df_no_overlap = src_df[list(src_no_overlap_names.union({src_key}))]
 
-    # Step A. Perform the update with the overlapping columns
-    new_df = perform_overlap_update(dst_df,
-                                    src_df_overlap,
-                                    dst_key,
-                                    src_key,
-                                    merge_info['how_merge'])
-
-    # Step B. Perform the merge of non-overlapping columns
+    # Step A. Perform the merge of non-overlapping columns
+    new_df = dst_df
     if len(src_df_no_overlap.columns) > 1:
         try:
             new_df = pd.merge(new_df,
@@ -409,6 +404,13 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
             new_df.drop([src_key + '_y'], axis=1, inplace=True)
             # Rename column_x
             new_df = new_df.rename(columns={src_key + '_x': src_key})
+
+    # Step B. Perform the update with the overlapping columns
+    new_df = perform_overlap_update(new_df,
+                                    src_df_overlap,
+                                    dst_key,
+                                    src_key,
+                                    merge_info['how_merge'])
 
     # If the merge produced a data frame with no rows, flag it as an error to
     # prevent loosing data when there is a mistake in the key column
