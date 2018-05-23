@@ -2,23 +2,36 @@
 
 ### Added
 
-### Changed
-
 - Platform now notifies with a pop-up one minute before the session user session
   expires (Issue #31)
   
+- Arrows in the table view to move columns left and right (issue #33)
+
+### Changed
+
 - File name when exporting a workflow now includes a date/time suffix (issue 
   36)
 
+- Changed HTTP headers to allow Safari to save the workflow with the right 
+  extension.
+   
 - Conditions and filters now show the number of rows that satisfy the 
   specified condition (issue #26)
 
-- Removed the back buttom from the page for learner submission (issue 27)  
+- Removed the back buttom from the page for learner data submission (issue 27)  
 
 - All columns are selected by default when uploading a new CSV (issue #28)
 
 - Merged the options of tracking an email and adding a column in the table. 
   They are now the same option (issue #35)
+  
+- Active column label only appears if the column is "Disabled" by date/time 
+  (issue #22)
+  
+- Changed wording in tooltips in the Action Out edit page to offer better 
+  guidance to the new user (issue #23)
+  
+- Changed wording in the buttons to move columns in the workflow (issue 29))
   
 ### Fixed
 
@@ -30,6 +43,12 @@
   regardless, issue #34)
 
 - Column picker widget was rendered in an incorrect location (issue #21)   
+
+- Modal windows now opening for all the operations are not closed when clicking
+  outside of the area (issue #20)
+  
+- Fixed glitch when inserting an image in action out after using the modal
+  page to edit a condition (issue #32)
 
 ## 2.6.0 (2018-05-13) 
 
