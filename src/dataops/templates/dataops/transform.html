@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block extrahead %}
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+{% endblock extrahead %}
+
+{% block scripts %}
+  <script src="{% static 'dataops/js/dataops.js' %}"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+{% endblock %}
+
+{% block title %}{{ block.super }}Transformations{% endblock %}
+
+{% block container %}
+  <div align="center" class="container">
+    <h1 class="page-header">Transformations</h1>
+      {% render_table table %}
+    </div>
+  </div>
+{% endblock container %}
