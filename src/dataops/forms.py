@@ -13,6 +13,41 @@ from ontask.forms import RestrictedFileField, column_to_field
 field_prefix = '___ontask___upload_'
 
 
+# Form to select a subset of the columns
+class SelectColumnForm(forms.ModelForm):
+    """
+    Form to select a subset of columns
+    """
+
+    def __init__(self, *args, **kwargs):
+
+        self.columns = kwargs.pop('columns', [])
+        self.selected = kwargs.pop('selected', [])
+
+        super(SelectColumnForm, self).__init__(*args, **kwargs)
+
+        # Create as many fields as the given columns
+        for idx in range(len(self.columns)):
+
+            self.fields[field_prefix + '%s' % idx] = forms.BooleanField(
+                initial=self.selected[idx],
+                label='',
+                required=False,
+            )
+
+    def clean(self):
+        cleaned_data = super(SelectColumnForm, self).clean()
+
+        selected_list = [
+            cleaned_data.get(field_prefix + '%s' % i, False)
+            for i in range(len(self.columns))
+        ]
+
+        # Check if at least one column has been selected
+        if not any(selected_list):
+            self.add_error(None, 'No key column specified',)
+
+
 # Step 1 of the CSV upload
 class UploadCSVFileForm(forms.Form):
     """

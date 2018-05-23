@@ -6,6 +6,7 @@ from django.conf.urls import url
 import dataops.upload
 from . import views
 from . import csvupload, excelupload
+from . import plugin_manager
 
 app_name = 'dataops'
 
@@ -14,6 +15,8 @@ urlpatterns = [
     url(r'^$', views.dataops, name="list"),
 
     url(r'^uploadmerge/$', views.uploadmerge, name="uploadmerge"),
+
+    url(r'^transform/$', views.transform, name="transform"),
 
     # Manual Data Entry
     url(r'^rowupdate/$', views.row_update, name="rowupdate"),
@@ -33,4 +36,6 @@ urlpatterns = [
 
     url(r'^upload_s4/$', dataops.upload.upload_s4, name='upload_s4'),
 
+    url(r'^(?P<pk>\d+)/plugin_invoke/$', plugin_manager.run,
+        name='plugin_invoke'),
 ]

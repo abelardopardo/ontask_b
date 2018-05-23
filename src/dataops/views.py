@@ -4,12 +4,67 @@ from __future__ import unicode_literals, print_function
 import pandas as pd
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render, reverse
+from django.utils.html import format_html
+from django.views.decorators.cache import cache_page
+import django_tables2 as tables
 
 import logs.ops
 from dataops import pandas_db, ops
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
 from .forms import RowForm, field_prefix
+from .models import PluginRegistry
+from .plugin_manager import refresh_plugin_data
+
+
+class PluginRegistryTable(tables.Table):
+    name = tables.Column(
+        attrs={'th': {'style': 'text-align:center;vertical-align:middle;'},
+               'td': {'style': 'text-align:center;vertical-align:middle;'}},
+        verbose_name=str('Name')
+    )
+
+    modified = tables.DateTimeColumn(
+        attrs={'th': {'style': 'text-align:center;vertical-align:middle;'},
+               'td': {'style': 'text-align:center;vertical-align:middle;'}},
+        verbose_name='Last modified'
+    )
+
+    description_txt = tables.Column(
+        attrs={'th': {'style': 'text-align:center;vertical-align:middle;'},
+               'td': {'style': 'text-align:center;vertical-align:middle;'}},
+        verbose_name=str('Description')
+    )
+
+    def __init__(self, data, *args, **kwargs):
+        super(PluginRegistryTable, self).__init__(data, *args, **kwargs)
+
+    def render_name(self, record):
+        return format_html(
+            """<a href="{0}">{1}</a>""".format(
+                reverse('dataops:plugin_invoke',
+                        kwargs={'pk': record.id}),
+                record.name
+            )
+        )
+
+    class Meta:
+        model = PluginRegistry
+
+        fields = ('name', 'description_txt', 'modified')
+
+        sequence = ('name', 'description_txt', 'modified')
+
+        exclude = ('id', 'num_column_input_from', 'num_column_input_to')
+
+        attrs = {
+            'class': 'table display',
+            'id': 'item-table'
+        }
+
+        row_attrs = {
+            'style': 'text-align:center;'
+        }
 
 
 @user_passes_test(is_instructor)
@@ -23,12 +78,129 @@ def dataops(request):
     if ops.workflow_has_upload_table(workflow):
         pandas_db.delete_upload_table(workflow.id)
 
-    return render(request, 'dataops/data_ops.html', {})
+    # Traverse the plugin folder and refresh the db content.
+    refresh_plugin_data(request, workflow)
+
+    table = PluginRegistryTable(PluginRegistry.objects.all(), orderable=False)
+    # RequestConfig(request, paginate={'per_page': 15}).configure(table)
+
+    return render(request, 'dataops/data_ops.html', {'table': table})
 
 
+@cache_page(60 * 15)
 @user_passes_test(is_instructor)
 def uploadmerge(request):
     return render(request, 'dataops/uploadmerge.html', {})
+
+
+@cache_page(60 * 15)
+@user_passes_test(is_instructor)
+def transform(request):
+    # Get the workflow that is being used
+    workflow = get_workflow(request)
+    if not workflow:
+        return redirect('workflow:index')
+
+    # Traverse the plugin folder and refresh the db content.
+    refresh_plugin_data(request, workflow)
+
+    table = PluginRegistryTable(PluginRegistry.objects.all(),
+                                orderable=False)
+
+    return render(request, 'dataops/transform.html', {'table': table})
+
+
+@user_passes_test(is_instructor)
+def row_filter(request):
+    # Get the workflow object
+    workflow = get_workflow(request)
+    if not workflow:
+        return redirect('workflow:index')
+
+    # Add to context for rendering the title
+    context = {'workflow': workflow,
+               'cancel_url': reverse('dataops:list')}
+
+    # If the workflow does not have any rows, there is no point on doing this.
+    if workflow.nrows == 0:
+        return render(request, 'dataops/row_filter.html', context)
+
+    # Fetch the information for the search form regardless
+    form = RowFilterForm(request.POST or None, workflow=workflow)
+    # This form is always rendered, so it is included in the context anyway
+    context['form'] = form
+
+    if request.method == 'POST':
+        if request.POST.get('submit') == 'update':
+            # This is the case in which the row is updated
+            row_form = RowForm(request.POST, workflow=workflow)
+            if row_form.is_valid() and row_form.has_changed():
+                # Update content in the DB
+
+                set_fields = []
+                set_values = []
+                where_field = None
+                where_value = None
+                log_payload = []
+                # Create the SET name = value part of the query
+                for name, is_unique in zip(row_form.col_names,
+                                           row_form.col_unique):
+                    value = row_form.cleaned_data[name]
+                    if is_unique:
+                        if not where_field:
+                            # Remember one unique key for selecting the row
+                            where_field = name
+                            where_value = value
+                        continue
+
+                    set_fields.append(name)
+                    set_values.append(value)
+                    log_payload.append((name, value))
+
+                pandas_db.update_row(workflow.id,
+                                     set_fields,
+                                     set_values,
+                                     [where_field],
+                                     [where_value])
+
+                # Log the event
+                logs.ops.put(request.user,
+                             'matrixrow_update',
+                             workflow,
+                             {'id': workflow.id,
+                              'name': workflow.name,
+                              'new_values': log_payload})
+
+                # Change is done.
+        else:
+            if form.is_valid():
+                # Request is a POST of the SEARCH (first form)
+                where_field = []
+                where_value = []
+                for name in form.key_names:
+                    value = form.cleaned_data[name]
+                    if value:
+                        # Remember the value of the key
+                        where_field = name
+                        where_value = value
+                        break
+
+                # Get the row from the matrix
+                rows = pandas_db.execute_select_on_table(workflow.id,
+                                                         [where_field],
+                                                         [where_value])
+
+                if len(rows) == 1:
+                    # A single row has been selected. Create and pre-populate
+                    # the update form
+                    row_form = RowForm(None,
+                                       workflow=workflow,
+                                       initial_values=list(rows[0]))
+                    context['row_form'] = row_form
+                else:
+                    form.add_error(None, 'No data found with the given keys')
+
+    return render(request, 'dataops/row_filter.html', context)
 
 
 @user_passes_test(is_instructor)
@@ -45,7 +217,7 @@ def row_update(request):
         return redirect('workflow:index')
 
     # If the workflow has no data, something went wrong, go back to the
-    # dataops home
+    # main dataops page
     if workflow.nrows == 0:
         return redirect('dataops:list')
 

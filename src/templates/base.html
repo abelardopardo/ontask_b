@@ -57,8 +57,14 @@
               <li {% if '/workflow/' in request.path %}class="active"{% endif %}><a
                   href="{{ workflow_url }}">Details</a></li>
               {% url 'dataops:list' as dataops_url %}
-              <li {% if '/dataops/' in request.path %}class="active"{% endif %}><a
-                  href="{{ dataops_url }}">Dataops</a>
+                <li class="dropdown" {% if request.path == dataops_url %}class="active"{% endif %}>
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="{{ dataops_url }}">Dataops
+                    <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{% url 'dataops:uploadmerge' %}">File Upload
+                      /Merge</a></li>
+                    <li><a href="{% url 'dataops:transform' %}">Transform</a></li>
+                  </ul>
               </li>
 
               {% comment %}

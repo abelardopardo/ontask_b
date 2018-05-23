@@ -8,7 +8,6 @@
 {% block title %}{{ block.super }}{{ workflow.name }}{% endblock %}
 
 {% block container %}
-
 <div align="center" class="container">
   <h1 class="page-header">Data Operations</h1>
 
@@ -24,24 +23,30 @@
         <tr>
           <td class="text-center">
             <a href="{% url 'dataops:csvupload1' %}" class="btn btn-primary">
-              <span class="glyphicon glyphicon-plus"></span> Upload/Merge CSV
+              <span class="glyphicon glyphicon-plus"></span> CSV Upload/Merge
             </a>
           </td>
           <td style="vertical-align:middle">
             Upload data contained in a CSV file (typically saved using a spreadsheet or other data manipulation package).<br/>
-            If the table is empty, the data will be simply loaded detecting those columns that seem to have values that are unique for every row.<br/>
-            If your table already has data, it will ask you to match one column in your table with unique values, with another one with unique values from the file that is uploaded.
+            If the table is empty, the data will be simply loaded detecting those columns that have unique values for every row.<br/>
+            If the workflow table has data, the operation will ask you
+            to match a key column in your table with a key column in the file
+            to upload so that the rows can be matched.
           </td>
         </tr>
-
         <tr>
           <td class="text-center">
-            <a href="{% url 'dataops:rowfilter' %}" class="btn btn-primary">
-              <span class="glyphicon glyphicon-plus"></span> Row data entry
+            <a href="{% url 'dataops:excelupload1' %}" class="btn btn-primary">
+              <span class="glyphicon glyphicon-plus"></span> Excel Upload/Merge
             </a>
           </td>
           <td style="vertical-align:middle">
-            Upload data for a single row of the workflow (non empty) data structure.
+            Upload data contained in an Excel file.<br/>
+            Given a file name and the name of a sheet, upload or merge the
+            content of the Excel file.<br/>
+            If the workflow table has data, the operation will ask you
+            to match a key column in your table with a key column in the file
+            to upload so that the rows can be matched.
           </td>
         </tr>
       </tbody>
