@@ -369,7 +369,9 @@ def get_table_cursor(pk, cond_filter, column_names=None):
     fields = []
     if cond_filter is not None:
         cond_filter, fields = evaluate_node_sql(cond_filter.formula)
-        query += ' WHERE ' + cond_filter
+        if cond_filter:
+            # The condition may be empty, in which case, nothing is needed.
+            query += ' WHERE ' + cond_filter
 
     # Execute the query
     cursor = connection.cursor()
