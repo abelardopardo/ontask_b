@@ -12,8 +12,7 @@ class PluginRegistryAdmin(admin.ModelAdmin):
                     'modified',
                     'name',
                     'description_txt',
-                    'num_column_input_from',
-                    'num_column_input_to')
+                    'executed')
 
 
 admin.site.register(PluginRegistry, PluginRegistryAdmin)
