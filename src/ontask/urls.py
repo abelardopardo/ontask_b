@@ -42,7 +42,7 @@ urlpatterns = [
 
     url(r'^trck/', views.trck, name='trck'),
 
-    url(r'^keep-alive/', views.keep_alive, name='keep-alive'),
+    url(r'^keep_alive/', views.keep_alive, name='keep_alive'),
 
     url(r'^', include(accounts.urls, namespace='accounts')),
 

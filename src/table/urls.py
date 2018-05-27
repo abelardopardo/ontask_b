@@ -27,7 +27,7 @@ urlpatterns = [
     #
     # Display
     #
-    url(r'^display/$', views.display, name="display"),
+    url(r'^$', views.display, name="display"),
 
     url(r'^display_ss/$', views.display_ss, name="display_ss"),
 

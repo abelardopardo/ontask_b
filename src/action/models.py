@@ -272,16 +272,14 @@ class Condition(models.Model):
 
         return
 
+    def __str__(self):
+        return self.name
 
-def __str__(self):
-    return self.name
-
-
-class Meta:
-    """
-    The unique criteria here is within the action, the name and being a
-    filter. We may choose to name a filter and a condition with the same
-    name (no need to restrict it)
-    """
-    unique_together = ('action', 'name', 'is_filter')
-    ordering = ('created',)
+    class Meta:
+        """
+        The unique criteria here is within the action, the name and being a
+        filter. We may choose to name a filter and a condition with the same
+        name (no need to restrict it)
+        """
+        unique_together = ('action', 'name', 'is_filter')
+        ordering = ('created',)

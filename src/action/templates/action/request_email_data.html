@@ -9,7 +9,7 @@
 {% block title %}{{ block.super }}Email action{% endblock %}
 {% block container %}
 <div align="center" class="container" id="email-action-request-data">
-  <h1 class="page-header">Send emails</h1>
+  <h1 class="page-header">Send emails for action "{{ action.name }}"</h1>
   <div class="container" style="max-width: 500px;">
     {% if num_msgs > 0 %}
       <p>{{ num_msgs }} Emails will be sent.</p>

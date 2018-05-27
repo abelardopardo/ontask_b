@@ -36,7 +36,7 @@ if DEBUG:
     print('BASE_DIR: ' + BASE_DIR())
     print('STATICFILES_DIRS: ' + ', '.join(STATICFILES_DIRS))
     print('MEDIA_ROOT: ' + MEDIA_ROOT)
-    print('MEDIA_URL: ' + MEDIA_URL )
+    print('MEDIA_URL: ' + MEDIA_URL)
     print('ONTASK_HELP_URL: ' + ONTASK_HELP_URL)
 
 # Additional middleware introduced by debug toolbar
