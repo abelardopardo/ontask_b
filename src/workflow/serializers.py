@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-#
 from __future__ import unicode_literals, print_function
 
+from builtins import str
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
@@ -40,7 +41,7 @@ class WorkflowListSerializer(serializers.ModelSerializer):
             raise APIException('Attributes must be a dictionary ' +
                                ' of (string, string) pairs.')
 
-        if any([not isinstance(k, basestring) or not isinstance(v, basestring)
+        if any([not isinstance(k, str) or not isinstance(v, str)
                 for k, v in attributes.items()]):
             raise APIException('Attributes must be a dictionary (str, str)')
 
