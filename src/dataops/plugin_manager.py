@@ -2,22 +2,16 @@
 from __future__ import unicode_literals, print_function
 
 import os
+import time
 
 import pandas as pd
-import time
+from builtins import str
 from django.conf import settings as django_settings
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
-from django.shortcuts import redirect, render
+from django.utils.dateparse import parse_datetime
 
-import dataops.ops
-import dataops.pandas_db
-import pandas_db
 from logs import ops
-from ontask.permissions import is_instructor
-from workflow.ops import get_workflow
 from . import plugin, settings
-from .forms import SelectColumnForm
 from .models import PluginRegistry
 
 
@@ -31,31 +25,209 @@ def get_plugin_path():
                         plugin_folder)
 
 
+def verify_plugin_elements(plugin_instance):
+    """
+    Verify all elements in the plugin and return a list of messages with the
+    result of the tests.
+    :param plugin_instance: Instance of the plugin to verify
+    :return: List of messages with the results of these tests.
+    """
+    result = ['Unchecked'] * 5
+    check_idx = 0
+
+    try:
+        # Verify that all the fields and methods are present in the instance
+        result[check_idx] = 'Not found'
+        if not isinstance(plugin_instance.name, str):
+            result[check_idx] = 'Incorrect type'
+        else:
+            result[check_idx] = 'Ok'
+        check_idx += 1
+
+        result[check_idx] = 'Not found'
+        if not isinstance(plugin_instance.description_txt, str):
+            result[check_idx] = 'Incorrect type'
+        else:
+            result[check_idx] = 'Ok'
+        check_idx += 1
+
+        result[check_idx] = 'Not found'
+        if not all(isinstance(s, str)
+                   for s in plugin_instance.input_column_names):
+            result[check_idx] = 'Incorrect type'
+        else:
+            result[check_idx] = 'Ok'
+        check_idx += 1
+
+        result[check_idx] = 'Not found'
+        if not (plugin_instance.output_column_names and
+                isinstance(plugin_instance.output_column_names, list) and
+                len(plugin_instance.output_column_names) > 0 and
+                all(isinstance(s, str) for s in
+                    plugin_instance.output_column_names)):
+            result[check_idx] = 'Incorrect type/value'
+        else:
+            result[check_idx] = 'Ok'
+        check_idx += 1
+
+        result[check_idx] = 'Not found'
+        if not isinstance(plugin_instance.parameters, list):
+            result[check_idx] = 'Incorrect type'
+            return result
+
+        for (k, p_type, p_allowed, p_initial, p_help) in \
+                plugin_instance.parameters:
+
+            if not isinstance(k, str):
+                # The type should be a string
+                result[check_idx] = 'Key values should be strings'
+                return result
+
+            if not isinstance(p_type, str):
+                # The type should be a string
+                result[check_idx] = \
+                    'First tuple element should be as string'
+                return result
+
+            if p_type == 'integer':
+                t_func = int
+            elif p_type == 'double':
+                t_func = float
+            elif p_type == 'string':
+                t_func = str
+            elif p_type == 'datetime':
+                t_func = parse_datetime
+            elif p_type == 'boolean':
+                t_func = bool
+            else:
+                # This is an incorrect data type
+                result[check_idx] = 'Incorrect type "{0}" in ' \
+                                    'parameter'.format(p_type)
+                return result
+
+            # If the column is of type datetime, the list of allowed values
+            # should be empty
+            if p_type == 'datetime' and p_allowed:
+                result[check_idx] = 'Parameter of type datetime cannot have ' \
+                                    'list of allowed values'
+                return result
+
+
+            # Translate all values to the right type
+            result[check_idx] = 'Incorrect list of allowed value'
+            _ = map(t_func, p_allowed)
+
+            # And translate the initial value to the right type
+            result[check_idx] = 'Incorrect initial value'
+            if p_initial:
+                item = t_func(p_initial)
+                if item is None:
+                    return result
+
+            if p_help and not isinstance(p_help, str):
+                result[check_idx] = 'Help text must be as string'
+                # Help text must be a string
+                return result
+
+        result[check_idx] = 'Ok'
+        check_idx += 1
+
+        # Test
+        if not (hasattr(plugin_instance, 'run') and
+                callable(getattr(plugin_instance, 'run'))):
+            # Run is either not in the class, or not a method.
+            result[check_idx] = 'Incorrect run method'
+            return result
+        result[check_idx] = 'Ok'
+    except Exception:
+        return result
+
+    # If all steps are clear, the plugin is good to go
+    return result
+
+
+def verify_plugin(plugin_instance):
+    """
+    Run some tests in the plugin instance to make sure it complies with the
+    requirements. There is probably a much better way to do this, but it'll
+    have to do it by now. The tests are:
+
+    1. Presence of string field "name"
+
+    2. Presence of string field "description_txt
+
+    3. Presence of a list of strings (possibly empty) with name
+       "input_column_names"
+
+    4. Presence of a non-empty list of strings with name "output_column_names"
+
+    5. Presence of a dictionary with name "parametes" that contains the
+       tuples of the form:
+
+       key: (type string, [list of allowed values], initial value, help text)
+
+       Of types respectively:
+
+       key: string
+       type string: one of "double", "integer", "string", "boolean", "datetime"
+       list of allowed values: potentially empty list of values of the type
+       described by the 'type string'
+       initial value: one value of the type described by 'type string'
+       help text: string
+
+    :param plugin_instance: Plugin instance
+    :return: List of Booleans with the result of the tests
+    """
+    # Initial list of results (all false until proven otherwise
+    checks = [
+        'Presence of a string field with name "name"',
+        'Presence of a string field with name "description_txt"',
+        'Presence of a field with name "input_column_names" storing a ('
+        'possible empty) list of strings',
+        'Presence of a field with name "output_column_names" storing a '
+        'non-empty list of strings',
+        'Presence of a (possible empty) list of tuples with name "parameters". '
+        'The tuples must have six '
+        'elements: name (a string), type (one of "double", "integer", '
+        '"string", "boolean", '
+        'or "datetime"), (possible empty) list of allowed values of the '
+        'corresponding type, an initial value of the right type or None, '
+        'and a help string to be shown when requesting this parameter.'
+    ]
+
+    return zip(verify_plugin_elements(plugin_instance), checks)
+
+
 def load_plugin(foldername):
     """
     Loads the plugin given in the filename
     :param foldername: folder where the plugin code is installed. Only the
                        folder name
-    :return: An instance of the plugin or None
+    :return: A pair (instance of the plugin or None,
+                     List of [diagnostic msg, test description])
     """
 
     try:
         ctx_handler = __import__(foldername)
-    except Exception:
-        return None
 
-    class_name = getattr(ctx_handler, 'class_name')
-    if not class_name:
-        class_name = getattr(ctx_handler, plugin.class_name)
-
-    try:
+        class_name = getattr(ctx_handler, 'class_name')
+        if not class_name:
+            class_name = getattr(ctx_handler, plugin.class_name)
         plugin_class = getattr(ctx_handler, class_name)
         # Get an instance of this class
         plugin_instance = plugin_class()
-    except AttributeError:
-        return None
 
-    return plugin_instance
+        # Run some additional checks in the instance and if it does not
+        # comply with them, bail out.
+        tests = verify_plugin(plugin_instance)
+        if not all(x == 'Ok' for x, _ in tests):
+            return (None, tests)
+    except AttributeError as e:
+        return (None, [(e.message, 'Class instantiation')])
+    except Exception as e:
+        return (None, [(e.message, 'Instance creation')])
+
+    return (plugin_instance, tests)
 
 
 def load_plugin_info(plugin_folder, plugin_rego=None):
@@ -65,25 +237,24 @@ def load_plugin_info(plugin_folder, plugin_rego=None):
     :param plugin_folder: Folder to load the information from.
     :param plugin_rego: Plugin record in the table (none if it needs to
                         be created)
-    :return: Record in the DB is updated and returned. None if error
+    :return: Record in the DB is updated and returned.
     """
 
     # Load the given module
-    plugin_instance = load_plugin(plugin_folder)
-    if plugin_instance is None:
-        return None
+    plugin_instance, _ = load_plugin(plugin_folder)
 
     # If there is no instance given of the registry, create a new one
     if not plugin_rego:
         plugin_rego = PluginRegistry()
+        plugin_rego.filename = plugin_folder
 
-    # Upload the fields.
-    plugin_rego.filename = plugin_folder
-    plugin_rego.name = plugin_instance.get_name()
-    plugin_rego.description_txt = plugin_instance.get_description_txt()
-    plugin_rego.num_column_input_from = \
-        plugin_instance.get_num_column_input_from()
-    plugin_rego.num_column_input_to = plugin_instance.get_num_column_input_to()
+    if plugin_instance:
+        plugin_rego.name = plugin_instance.name
+        plugin_rego.description_txt = plugin_instance.description_txt
+
+    plugin_rego.is_verified = plugin_instance is not None
+
+    # All went good
     plugin_rego.save()
 
     return plugin_rego
@@ -94,7 +265,7 @@ def refresh_plugin_data(request, workflow):
     Function to traverse the directory where the plugins live and check if
     the folders in there are reflected in the PluginRegistry model.
 
-    :return:
+    :return: Reflect the changes in the database
     """
 
     plugin_folder = get_plugin_path()
@@ -102,10 +273,13 @@ def refresh_plugin_data(request, workflow):
     pfolders = [f for f in os.listdir(plugin_folder)
                 if os.path.isdir(os.path.join(plugin_folder, f))]
 
+    # Get the objects from the DB
     reg_plugins = PluginRegistry.objects.all()
+
+    # Travers the list of registered plugins and detect changes
     for rpin in reg_plugins:
         if rpin.filename not in pfolders:
-            # A plugin has vanised. Delete
+            # A plugin has vanished. Delete
 
             # Log the event
             ops.put(request.user,
@@ -116,47 +290,59 @@ def refresh_plugin_data(request, workflow):
             rpin.delete()
             continue
 
-        if os.stat(os.path.join(plugin_folder, rpin.filename)).st_mtime > \
+        if os.stat(os.path.join(plugin_folder,
+                                rpin.filename,
+                                '__init__.py')).st_mtime > \
                 time.mktime(rpin.modified.timetuple()):
             # A plugin has changed
-            load_plugin_info(rpin.filename, rpin)
+            pinstance = load_plugin_info(rpin.filename, rpin)
 
             # Log the event
             ops.put(request.user,
                     'plugin_update',
                     workflow,
-                    {'id': rpin.id, 'name': rpin.filename})
+                    {'id': rpin.id,
+                     'name': rpin.filename})
 
         pfolders.remove(rpin.filename)
 
     # The remaining folders are new plugins
     for fname in pfolders:
+        if not os.path.exists(os.path.join(plugin_folder,
+                                           fname,
+                                           '__init__.py')):
+            # Skip folders that do not have a __init__.py file
+            continue
+
         # Load the plugin info in a new record.
         rpin = load_plugin_info(fname)
 
         if not rpin:
+            messages.error(
+                request,
+                'Unable to load plugin in folder "{0}".'.format(fname))
             continue
 
         # Log the event
-        ops.put(request.user, 'plugin_create', workflow,
-                {'id': rpin.id, 'name': rpin.filename})
+        ops.put(request.user,
+                'plugin_create', workflow,
+                {'id': rpin.id,
+                 'name': rpin.filename})
 
 
-def run_plugin(plugin_info, param_df):
+def run_plugin(plugin_instance, df, merge_key, params):
     """
     Execute the run method in a plugin with the given data frame
-    :param plugin_info: Record with the plugin information
-    :param param_df: data frame to be passed as parameter
-    :return: (result, message) If messag is None, result is a valid data frame
+    :param plugin_instance: Plugin instance
+    :param df: data frame to be passed as parameter
+    :param params: Parameter dictionary: (name, value)
+    :return: (result, message) If message is None, result is a valid data frame
     """
-
-    # Load the plugin
-    plugin_instance = load_plugin(plugin_info.filename)
 
     # Try the execution and catch any exception
     try:
-        new_df = plugin_instance.run(param_df)
-    except Exception, e:
+        new_df = plugin_instance.run(df, merge_key, parameters=params)
+    except Exception as e:
         msg = e.message
         return None, msg
 
@@ -164,162 +350,5 @@ def run_plugin(plugin_info, param_df):
     if not isinstance(new_df, pd.DataFrame):
         return None, 'Result is not a pandas data frame.'
 
-    # Execution was correct. Proceed with some additional checks.
+    # Execution was correct
     return new_df, None
-
-
-@user_passes_test(is_instructor)
-def run(request, pk):
-    """
-    View provided as the first step to execute a plugin.
-    :param request: HTTP request received
-    :param pk: primary key of the plugin
-    :return: Page offering to select the columns to invoke
-    """
-
-    # Get the workflow and the plugin information
-    workflow = get_workflow(request)
-    if not workflow:
-        return redirect('workflow:index')
-    try:
-        plugin_info = PluginRegistry.objects.get(pk=pk)
-    except PluginRegistry.DoesNotExist:
-        return redirect('workflow:index')
-
-    context = {
-        'plugin_name': plugin_info.name,
-        'min_col_num': plugin_info.num_column_input_from
-    }
-
-    # If there are not enough columns, render the page
-    if workflow.ncols < plugin_info.num_column_input_from:
-        return render(request, 'dataops/plugin_select_columns.html', context)
-
-    # create the form to select the columns to process and insert it in the
-    # context
-    columns = workflow.get_columns()
-    form = SelectColumnForm(request.POST or None,
-                            columns=[c.is_key for c in columns])
-    context['form'] = form
-
-    # Prepare info to render the form. (name, unique, type, checked)
-    checked = [request.POST.get('upload_%s' % i, '') == 'on'
-               for i in range(len(columns))]
-
-    form_info = zip(columns, checked)
-    context['form_info'] = form_info
-
-    if request.method == 'POST':
-        if not form.is_valid():
-            return render(request,
-                          'dataops/plugin_select_columns.html',
-                          context)
-
-        # Check that the number of selected columns is within the limits
-        # provided by the plugin
-        col_selected = [form.cleaned_data['upload_%s' % i]
-                        for i in range(len(columns))]
-        ncol_selected = len([x for x in col_selected if x])
-
-        # Number of columns in the proper limit
-        if (plugin_info.num_column_input_from > 0 and
-            ncol_selected < plugin_info.num_column_input_from) or \
-                (0 < plugin_info.num_column_input_to < ncol_selected):
-            form.add_error(None,
-                           'The plugin needs between ' +
-                           str(plugin_info.num_column_input_from) +
-                           ' and ' + str(plugin_info.num_column_input_to) +
-                           ' columns selected to execute.')
-            return render(request,
-                          'dataops/plugin_select_columns.html',
-                          context)
-
-        # POST is correct proceed with execution
-
-        # Get the data frame and select the appropriate columns
-        dst_df = None
-        try:
-            dst_df = dataops.pandas_db.load_from_db(workflow.id)
-        except Exception:
-            messages.error(request, 'Exception while retrieving the data frame')
-            return render(request, 'error.html', {})
-
-        selected_column_names = [c.name for x, c in enumerate(columns)
-                                 if checked[x]]
-        param_df = dst_df[selected_column_names]
-
-        # Execute the plugin
-        result_df, status = run_plugin(plugin_info, param_df)
-
-        if status is not None:
-            context['exec_status'] = status
-
-            # Log the event
-            ops.put(request.user,
-                    'plugin_execute',
-                    workflow,
-                    {'id': plugin_info.id,
-                     'name': plugin_info.name,
-                     'status': status})
-
-            return render(request,
-                          'dataops/plugin_execution_report.html',
-                          context)
-
-        # Additional checks
-        # Result has the same number of rows
-        if result_df.shape[0] != dst_df.shape[0]:
-            status = 'Incorrect number of rows in result data frame.'
-            context['exec_status'] = status
-
-            # Log the event
-            ops.put(request.user,
-                    'plugin_execute',
-                    workflow,
-                    {'id': plugin_info.id,
-                     'name': plugin_info.name,
-                     'status': status})
-
-            return render(request,
-                          'dataops/plugin_execution_report.html',
-                          context)
-
-        # Rename columns if needed
-        dst_columns = list(dst_df)
-        result_columns = list(result_df.columns)
-        rename_dict = {}
-        for idx, cname in enumerate(result_columns):
-            if cname in dst_columns:
-                i = 0
-                while True:
-                    i += 1
-                    new_name = cname + '_{0}'.format(i)
-                    if new_name not in dst_columns and \
-                            new_name not in result_columns:
-                        break
-                rename_dict[cname] = new_name
-        result_df.rename(columns=rename_dict, inplace=True)
-
-        # Proceed with the append
-        dst_df = pd.concat([dst_df, result_df], axis=1)
-
-        # Dump in DB
-        dataops.ops.store_dataframe_in_db(dst_df, workflow.id)
-
-        result_columns = zip(
-            list(result_df.columns),
-            pandas_db.df_column_types_rename(result_df))
-        context['result_columns'] = result_columns
-
-        # Log the event
-        ops.put(request.user,
-                'plugin_execute',
-                workflow,
-                {'id': plugin_info.id,
-                 'name': plugin_info.name,
-                 'status': status,
-                 'result_columns': result_columns})
-        # Redirect to the notification page with the proper info
-        return render(request, 'dataops/plugin_execution_report.html', context)
-
-    return render(request, 'dataops/plugin_select_columns.html', context)

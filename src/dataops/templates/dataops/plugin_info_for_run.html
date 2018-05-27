@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+{% load widget_tweaks %}
+{% block extrahead %}
+  <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
+  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
+  <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+{% endblock extrahead %}
+{% block scripts %}
+  <script src="{% static 'site/js/sol.js' %}"></script>
+  <script src="{% static 'dataops/js/dataops.js' %}"></script>
+{% endblock %}
+{% block title %}{{ block.super }}Run Transformation{% endblock %}
+{% block container %}
+  <div align="center" class="container-fluid" style="max-width:800px">
+    <h1 class="page-header">Information to run plugin "{{ pinstance.name }}"</h1>
+    <form method="POST" action="">
+      {% csrf_token %}
+      {% comment %}
+       {{ form|crispy }}
+      {% endcomment %}
+      <div class="form-group{% if form.columns.errors %} has-error{% endif %}"
+           style="border:1px solid black;padding-left:1ex;padding-right:1ex;">
+        {% if pinstance.input_column_names %}
+            <p class="lead">Input columns</p>
+            <p>{{ pinstance.input_column_names|join:", " }}</p>
+        {% else %}
+            {% include 'form_field.html' with field=form.columns form_show_labels=True %}
+        {% endif %}
+      </div>
+
+      <div class="form-group{% if form.merge_key.errors %} has-error{% endif %}"
+           style="border:1px solid black;padding:1ex;">
+        {% include 'form_field.html' with field=form.merge_key form_show_labels=True %}
+      </div>
+
+      <div class="form-group{% if form.merge_key.errors %} has-error{% endif %}"
+           style="border:1px solid black;padding:1ex;">
+        <p class="lead">Output column names</p>
+        {% for field in output_column_fields %}
+          {% include 'form_field.html' with field=field form_show_labels=True %}
+        {% endfor %}
+        <p class="help-block">Change the default names if needed.</p>
+      </div>
+
+      <div class="form-group{% if form.merge_key.errors %} has-error{% endif %}"
+           style="border:1px solid black;padding:1ex;">
+        {% include 'form_field.html' with field=form.out_column_suffix form_show_labels=True %}
+      </div>
+
+      <div class="form-group{% if form.merge_key.errors %} has-error{% endif %}"
+           style="border:1px solid black;padding:1ex;">
+        <p class="lead">Execution parameters</p>
+        {% for field in parameters %}
+          {% include 'form_field.html' with field=field form_show_labels=True %}
+        {% endfor %}
+      </div>
+      {% include 'dataops/includes/plugin_run_buttons.html' %}
+    </form>
+  </div>
+{% endblock container %}

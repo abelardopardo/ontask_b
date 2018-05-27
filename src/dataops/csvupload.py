@@ -48,7 +48,7 @@ def csvupload1(request):
                        'wid': workflow.id,
                        'dtype': 'CSV',
                        'dtype_select': 'CSV file',
-                       'prev_step': reverse('dataops:list')})
+                       'prev_step': reverse('dataops:uploadmerge')})
 
     # Process the reception of the file
     if not form.is_multipart():
@@ -67,7 +67,7 @@ def csvupload1(request):
                        'wid': workflow.id,
                        'dtype': 'CSV',
                        'dtype_select': 'CSV file',
-                       'prev_step': reverse('dataops:list')})
+                       'prev_step': reverse('dataops:uploadmerge')})
 
     # Process CSV file using pandas read_csv
     try:
@@ -83,7 +83,7 @@ def csvupload1(request):
                       {'form': form,
                        'dtype': 'CSV',
                        'dtype_select': 'CSV file',
-                       'prev_step': reverse('dataops:list')})
+                       'prev_step': reverse('dataops:uploadmerge')})
 
     # If the frame has repeated column names, it will not be processed.
     if len(set(data_frame.columns)) != len(data_frame.columns):
@@ -96,7 +96,7 @@ def csvupload1(request):
                       {'form': form,
                        'dtype': 'CSV',
                        'dtype_select': 'CSV file',
-                       'prev_step': reverse('dataops:list')})
+                       'prev_step': reverse('dataops:uploadmerge')})
 
     # If the data frame does not have any unique key, it is not useful (no
     # way to uniquely identify rows). There must be at least one.
@@ -110,7 +110,7 @@ def csvupload1(request):
                       {'form': form,
                        'dtype': 'CSV',
                        'dtype_select': 'CSV file',
-                       'prev_step': reverse('dataops:list')})
+                       'prev_step': reverse('dataops:uploadmerge')})
 
     # Store the data frame in the DB.
     try:
@@ -125,7 +125,7 @@ def csvupload1(request):
                       {'form': form,
                        'dtype': 'CSV',
                        'dtype_select': 'CSV file',
-                       'prev_step': reverse('dataops:list')})
+                       'prev_step': reverse('dataops:uploadmerge')})
 
     # Dictionary to populate gradually throughout the sequence of steps. It
     # is stored in the session.

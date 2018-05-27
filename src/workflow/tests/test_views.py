@@ -97,8 +97,8 @@ class WorkflowInitial(test.OntaskLiveTestCase):
                 EC.text_to_be_present_in_element(
                     (By.ID, 'wflow-empty'), test.wflow_empty))
 
-        # Goto Dataops list
-        self.open(reverse('dataops:list'))
+        # Goto Dataops uploadmerge page
+        self.open(reverse('dataops:uploadmerge'))
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Dataops')
         )
@@ -204,7 +204,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
                          '3 Key columns')
 
         # Goto Dataops list
-        self.open(reverse('dataops:list'))
+        self.open(reverse('dataops:uploadmerge'))
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Dataops')
         )
@@ -375,7 +375,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
                     (By.ID, 'wflow-empty'), test.wflow_empty))
 
         # Goto Dataops list
-        self.open(reverse('dataops:list'))
+        self.open(reverse('dataops:uploadmerge'))
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Dataops')
         )

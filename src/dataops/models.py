@@ -26,10 +26,25 @@ class PluginRegistry(models.Model):
                                        default='',
                                        blank=True)
 
-    # Number of minimum columns needed to be invocation
-    num_column_input_from = models.IntegerField(null=False,
-                                                blank=False)
+    # Boolean stating if the column is a unique key
+    is_verified = models.BooleanField(default=False,
+                                      verbose_name='Ready to run',
+                                      null=False,
+                                      blank=False)
 
-    # Number of maximum columns needed for invocation
-    num_column_input_to = models.IntegerField(null=False,
-                                              blank=False)
+    # Last time the file was checked (to detect changes)
+    executed = models.DateTimeField(
+        'Last execution',
+        blank=True,
+        null=True,
+        default=None
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        """
+        Define the criteria for ordering
+        """
+        ordering = ('name',)

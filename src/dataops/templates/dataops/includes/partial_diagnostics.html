@@ -1,0 +1,31 @@
+<div class="js-transform-diagnose-view">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Diagnostics</h4>
+  </div>
+  <div class="modal-body text-center">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-bordered" id="transform-diagnostics-table">
+      <thead>
+        <tr>
+          <th class="text-center">Status</th>
+          <th class="text-center">Test</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in diagnostic_table %}
+          <tr {% if item.0 != "Ok" and item.0 != "Unchecked" %}class="danger"{% endif %}>
+            <td class="text-center">{{ item.0 }}</td>
+            <td>{{ item.1 }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+

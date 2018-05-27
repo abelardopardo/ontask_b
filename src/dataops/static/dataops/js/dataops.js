@@ -37,8 +37,16 @@ $(function () {
   $("#modal-item").on("submit", ".js-rowview-delete-form", saveForm)
 
   $(document).on('change','#id_how_merge', show_merge_figure);
+
+  $("#transform-selection").on("click", ".js-transform-diagnose", loadForm);
 });
 
 window.onload = function(){
-  show_merge_figure.call($("#id_how_merge"));
+  if (document.getElementById("id_how_merge") != null) {
+    show_merge_figure.call($("#id_how_merge"));
+  }
+  if (document.getElementById("id_columns") != null) {
+    set_column_select("#id_columns");
+  }
 };
+

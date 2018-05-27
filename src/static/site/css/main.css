@@ -240,7 +240,9 @@ td.dt-body-center {
 #scheduler-table td,
 #column-selected-table td,
 #column-table td,
-#view-table td {
+#view-table td,
+#transform-table td,
+#transform-diagnostics-table td {
     vertical-align: middle;
 }
 

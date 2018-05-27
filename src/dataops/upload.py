@@ -50,7 +50,7 @@ def upload_s2(request):
     if not upload_data:
         # If there is no object, or it is an empty dict, it denotes a direct
         # jump to this step, get back to the dataops page
-        return redirect('dataops:list')
+        return redirect('dataops:uploadmerge')
 
     # Get the column names, types, and those that are unique from the data frame
     try:
@@ -59,7 +59,7 @@ def upload_s2(request):
         src_is_key_column = upload_data.get('src_is_key_column')
     except KeyError:
         # The page has been invoked out of order
-        return redirect(upload_data.get('step_1', 'dataops:list'))
+        return redirect(upload_data.get('step_1', 'dataops:uploadmerge'))
 
     # Get or create the list with the renamed column names
     rename_column_names = upload_data.get('rename_column_names', None)
@@ -241,7 +241,7 @@ def upload_s3(request):
     upload_data = request.session.get('upload_data', None)
     if not upload_data:
         # If there is no object, someone is trying to jump directly here.
-        return redirect('dataops:list')
+        return redirect('dataops:uploadmerge')
 
     # Get column names in dst_df
     dst_column_names = upload_data.get('dst_column_names', None)
@@ -356,7 +356,7 @@ def upload_s4(request):
     upload_data = request.session.get('upload_data', None)
     if not upload_data:
         # If there is nsendo object, someone is trying to jump directly here.
-        return redirect('dataops:list')
+        return redirect('dataops:uploadmerge')
 
     # Check the type of request that is being processed
     if request.method == 'POST':
@@ -396,7 +396,7 @@ def upload_s4(request):
 
             messages.error(request,
                            'Merge operation failed. (' + status + ')'),
-            return redirect(reverse('dataops:list'))
+            return redirect(reverse('dataops:uploadmerge'))
 
         # Log the event
         logs.ops.put(request.user,

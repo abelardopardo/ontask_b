@@ -56,30 +56,16 @@
               {% url 'workflow:detail' request.session.ontask_workflow_id as workflow_url %}
               <li {% if '/workflow/' in request.path %}class="active"{% endif %}><a
                   href="{{ workflow_url }}">Details</a></li>
-              {% url 'dataops:list' as dataops_url %}
-                <li class="dropdown" {% if request.path == dataops_url %}class="active"{% endif %}>
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="{{ dataops_url }}">Dataops
-                    <span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="{% url 'dataops:uploadmerge' %}">File Upload
-                      /Merge</a></li>
-                    <li><a href="{% url 'dataops:transform' %}">Transform</a></li>
-                  </ul>
-              </li>
 
-              {% comment %}
-              {% url 'dataops:list' as dataops_url %}
-              <li class="dropdown" {% if request.path == dataops_url %}class="active"{% endif %}>
-                <a class="dropdown-toggle" data-toggle="dropdown" href="{{ dataops_url }}">Dataops
+              <li {% if '/dataops/' in request.path %}class="dropdown active"{% else %}class="dropdown"{% endif %}>
+                <a class="dropdown-toggle" data-toggle="dropdown">Dataops
                   <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li><a href="{% url 'dataops:uploadmerge' %}">File Upload
-                      /Merge</a></li>
+                    /Merge</a></li>
                   <li><a href="{% url 'dataops:transform' %}">Transform</a></li>
                 </ul>
               </li>
-              {% endcomment %}
-
 
               {% url 'table:display' as table_display %}
               <li {% if '/table/' in request.path %}class="active"{% endif %}><a
@@ -130,6 +116,11 @@
       {% endblock %}
     </div>
     {% endblock navbar %}
+    {% if request.session.ontask_workflow_name %}
+      <div id="wflow-name" class="text-center alert alert-info">
+        {{ request.session.ontask_workflow_name }}
+      </div>
+    {% endif %}
     {% block messages %}
       {% if messages %}
         {% for message in messages %}
@@ -142,11 +133,6 @@
     {% endblock %}
     {% block splash %}
     {% endblock splash %}
-    {% if request.session.ontask_workflow_name %}
-      <div id="wflow-name" class="text-center alert alert-info">
-        {{ request.session.ontask_workflow_name }}
-      </div>
-    {% endif %}
     {% block container %}
     <div class="container">
       <div class="starter-template">
@@ -207,7 +193,7 @@
           logoutButton: 'Logout',
           ignoreUserActivity: true,
           keepAliveButton: 'Remain Connected',
-          keepAliveUrl: "{% url 'keep-alive' %}",
+          keepAliveUrl: "{% url 'keep_alive' %}",
           logoutUrl: "{% url 'accounts:logout' %}",
           redirUrl: "{% url 'accounts:logout' %}",
           warnAfter: ({{ ONTASK_TIMEOUT }} - 60) * 1000,

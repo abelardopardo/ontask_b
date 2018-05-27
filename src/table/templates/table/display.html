@@ -242,7 +242,8 @@
       </table>
     {% else %}
       <p>The workflow does not have data.</p>
-      <p>Go to <a href="{% url 'dataops:list' %}">Dataops</a> to upload data</p>
+      <p>Go to <a href="{% url 'dataops:uploadmerge' %}">Dataops</a> to upload
+          data</p>
     {% endif %}
     <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog">

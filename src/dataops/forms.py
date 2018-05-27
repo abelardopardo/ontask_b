@@ -3,10 +3,12 @@ from __future__ import unicode_literals, print_function
 
 import json
 
+from datetimewidget.widgets import DateTimeWidget
 from django import forms
+from django.utils.dateparse import parse_datetime
 
 import ontask.ontask_prefs
-from ontask.forms import RestrictedFileField, column_to_field
+from ontask.forms import RestrictedFileField, column_to_field, dateTimeOptions
 
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)
@@ -14,38 +16,133 @@ field_prefix = '___ontask___upload_'
 
 
 # Form to select a subset of the columns
-class SelectColumnForm(forms.ModelForm):
+class SelectColumnForm(forms.Form):
     """
     Form to select a subset of columns
     """
 
-    def __init__(self, *args, **kwargs):
+    # Columns to combine
+    columns = forms.ModelMultipleChoiceField(
+        label='Input Columns (to read   data)',
+        queryset=None,
+        required=False,
+        help_text='To select a subset of the dataframe to pass to the plugin')
 
-        self.columns = kwargs.pop('columns', [])
-        self.selected = kwargs.pop('selected', [])
+    def __init__(self, *args, **kwargs):
+        self.workflow = kwargs.pop('workflow', None)
+        self.plugin_instance = kwargs.pop('plugin_instance', None)
 
         super(SelectColumnForm, self).__init__(*args, **kwargs)
 
-        # Create as many fields as the given columns
-        for idx in range(len(self.columns)):
+        if self.plugin_instance.input_column_names != []:
+            # The set of columns is fixed, remove the field.
+            self.fields.pop('columns')
+        else:
+            # The queryset for the columns must be extracted from the
+            # workflow and should only include the non-key columns
+            self.fields['columns'].queryset = self.workflow.columns.filter(
+                is_key=False
+            )
 
-            self.fields[field_prefix + '%s' % idx] = forms.BooleanField(
-                initial=self.selected[idx],
-                label='',
+        # Field to choose the Key column to merge the results
+        self.fields['merge_key'] = forms.ChoiceField(
+            initial=('', '---'),
+            label='Key column for merging',
+            required=True,
+            help_text='One of the existing key columns to merge the results',
+            choices=[('', '---')] + [(x, x) for x in
+                                     self.workflow.columns.filter(is_key=True)]
+        )
+
+        # Add the fields for the output column names
+        for idx, cname in enumerate(self.plugin_instance.output_column_names):
+            self.fields[field_prefix + 'output_%s' % idx] = forms.CharField(
+                initial=cname,
+                label='Name for result column "{0}"'.format(cname),
+                strip=True,
                 required=False,
             )
 
+        self.fields['out_column_suffix'] = forms.CharField(
+            initial='',
+            label='Suffix to add to result columns (empty to ignore)',
+            strip=True,
+            required=False,
+            help_text=
+            'Added to all output column names. Useful to keep results from '
+            'several executions in separated columns.'
+        )
+
+        for idx, (k, p_type, p_allow, p_init, p_help) in \
+                enumerate(self.plugin_instance.parameters):
+
+            if p_allow:
+                new_field = forms.ChoiceField(
+                    choices=[(x, x) for x in p_allow],
+                    required=False,
+                    label=k,
+                    help_text=p_help)
+            elif p_type == 'integer':
+                new_field = forms.IntegerField(
+                    label=k,
+                    required=False,
+                    help_text=p_help
+                )
+            elif p_type == 'double':
+                new_field = forms.FloatField(
+                    label=k,
+                    required=False,
+                    help_text=p_help
+                )
+            elif p_type == 'string':
+                new_field = forms.CharField(
+                    max_length=1024,
+                    strip=True,
+                    required=False,
+                    label=k,
+                    help_text=p_help
+                )
+            elif p_type == 'boolean':
+                new_field = forms.BooleanField(
+                    required=False,
+                    label=k,
+                    help_text=p_help
+                )
+            else:  # p_type == 'datetime':
+                new_field = forms.DateTimeField(
+                    required=False,
+                    label=k,
+                    widget=DateTimeWidget(
+                        options=dateTimeOptions,
+                        usel10n=True,
+                        bootstrap_version=3),
+                    help_text=p_help
+                )
+
+            # Set the initial value of each field
+            if p_allow:
+                new_field.initial = (p_init, p_init)
+            else:
+                if p_type == 'datetime':
+                    new_field.initial = parse_datetime(p_init)
+                else:
+                    new_field.initial = p_init
+
+            # Insert the new_field in the form
+            self.fields[field_prefix + 'parameter_%s' % idx] = new_field
+
+
     def clean(self):
-        cleaned_data = super(SelectColumnForm, self).clean()
 
-        selected_list = [
-            cleaned_data.get(field_prefix + '%s' % i, False)
-            for i in range(len(self.columns))
-        ]
+        data = super(SelectColumnForm, self).clean()
 
-        # Check if at least one column has been selected
-        if not any(selected_list):
-            self.add_error(None, 'No key column specified',)
+        if data['columns'].count() == 0:
+            self.add_error(
+                'columns',
+                'The plugin needs at least one input column'
+            )
+
+        return data
 
 
 # Step 1 of the CSV upload
