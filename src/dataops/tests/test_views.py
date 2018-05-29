@@ -968,3 +968,216 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
 
         # End of session
         self.logout()
+
+
+class DataopsPluginExecution(test.OntaskLiveTestCase):
+    fixtures = ['plugin_execution']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'dataops',
+        'fixtures',
+        'plugin_execution.sql'
+    )
+
+    def setUp(self):
+        super(DataopsPluginExecution, self).setUp()
+        pandas_db.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        pandas_db.delete_all_tables()
+        super(DataopsPluginExecution, self).tearDown()
+
+    def test_01_first_plugin(self):
+        # Login
+        self.login('instructor1@bogus.com')
+
+        self.open(reverse('workflow:index'))
+
+        # GO TO THE WORKFLOW PAGE
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('OnTask :: Workflows'))
+        self.assertIn('New Workflow', self.selenium.page_source)
+        self.assertIn('Import Workflow', self.selenium.page_source)
+
+        # Open the workflow
+        wf_link = self.selenium.find_element_by_link_text('Plugin test')
+        wf_link.click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'column-table_previous'))
+        )
+
+        # Open the transform page
+        self.selenium.find_element_by_link_text("Dataops").click()
+        self.selenium.find_element_by_link_text("Transform").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'transform-table_previous'))
+        )
+
+        # Click in the first plugin
+        self.selenium.find_element_by_link_text("Run").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
+        )
+
+        # Provide the execution data
+        self.selenium.find_element_by_xpath("//input[@type='text']").click()
+        self.selenium.find_element_by_name("columns").click()
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='columns'])[2]"
+        ).click()
+
+        # Click outside the SOL widget
+        self.selenium.find_element_by_class_name(
+            'sol-current-selection'
+        ).click()
+
+        self.selenium.find_element_by_id("id_merge_key").click()
+        Select(self.selenium.find_element_by_id(
+            "id_merge_key"
+        )).select_by_visible_text("email")
+        # Submit the execution
+        self.selenium.find_element_by_name("Submit").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'plugin-execution-report'))
+        )
+
+        # Done. Click continue.
+        self.selenium.find_element_by_xpath(
+            "(//button[@type='button'])[2]"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'column-table_previous'))
+        )
+
+        # Assert the content of the dataframe
+        wflow = Workflow.objects.get(name='Plugin test')
+        df = pandas_db.load_from_db(wflow.id)
+        self.assertTrue('RESULT 1' in set(df.columns))
+        self.assertTrue('RESULT 2' in set(df.columns))
+        self.assertTrue(all([x == 1 for x in df['RESULT 1']]))
+        self.assertTrue(all([x == 2 for x in df['RESULT 2']]))
+
+        # Second execution, this time adding a suffix to the column
+        # Open the transform page
+        self.selenium.find_element_by_link_text("Dataops").click()
+        self.selenium.find_element_by_link_text("Transform").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'transform-table_previous'))
+        )
+
+        # Click in the first plugin
+        self.selenium.find_element_by_link_text("Run").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
+        )
+
+        # Provide the execution data
+        self.selenium.find_element_by_xpath("//input[@type='text']").click()
+        self.selenium.find_element_by_name("columns").click()
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='columns'])[2]"
+        ).click()
+        # Click outside the SOL widget
+        self.selenium.find_element_by_class_name(
+            'sol-current-selection'
+        ).click()
+        self.selenium.find_element_by_id("id_merge_key").click()
+        Select(self.selenium.find_element_by_id(
+            "id_merge_key"
+        )).select_by_visible_text("email")
+
+        # Put the suffix _2
+        self.selenium.find_element_by_id("id_out_column_suffix").click()
+        self.selenium.find_element_by_id("id_out_column_suffix").clear()
+        self.selenium.find_element_by_id("id_out_column_suffix").send_keys("_2")
+
+        # Submit the execution
+        self.selenium.find_element_by_name("Submit").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'plugin-execution-report'))
+        )
+
+        # Done. Click continue.
+        self.selenium.find_element_by_xpath(
+            "(//button[@type='button'])[2]"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'column-table_previous'))
+        )
+
+        # Assert the content of the dataframe
+        wflow = Workflow.objects.get(name='Plugin test')
+        df = pandas_db.load_from_db(wflow.id)
+        self.assertTrue('RESULT 1_2' in set(df.columns))
+        self.assertTrue('RESULT 2_2' in set(df.columns))
+        self.assertTrue(all([x == 1 for x in df['RESULT 1_2']]))
+        self.assertTrue(all([x == 2 for x in df['RESULT 2_2']]))
+
+
+        # End of session
+        self.logout()
+
+    def test_02_second_plugin(self):
+        # Login
+        self.login('instructor1@bogus.com')
+
+        self.open(reverse('workflow:index'))
+
+        # GO TO THE WORKFLOW PAGE
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('OnTask :: Workflows'))
+        self.assertIn('New Workflow', self.selenium.page_source)
+        self.assertIn('Import Workflow', self.selenium.page_source)
+
+        # Open the workflow
+        wf_link = self.selenium.find_element_by_link_text('Plugin test')
+        wf_link.click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'column-table_previous'))
+        )
+
+        # Open the transform page
+        self.selenium.find_element_by_link_text("Dataops").click()
+        self.selenium.find_element_by_link_text("Transform").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'transform-table_previous'))
+        )
+
+        # Click in the second plugin
+        self.selenium.find_element_by_xpath(
+            "//table[@id='transform-table']/tbody/tr[2]/td[7]/div/a"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
+        )
+
+        # Provide the execution data
+        self.selenium.find_element_by_id("id_merge_key").click()
+        Select(self.selenium.find_element_by_id(
+            "id_merge_key"
+        )).select_by_visible_text("email")
+        # Submit the execution
+        self.selenium.find_element_by_name("Submit").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'plugin-execution-report'))
+        )
+
+        # Done. Click continue.
+        self.selenium.find_element_by_xpath(
+            "(//button[@type='button'])[2]"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'column-table_previous'))
+        )
+
+        # Assert the content of the dataframe
+        wflow = Workflow.objects.get(name='Plugin test')
+        df = pandas_db.load_from_db(wflow.id)
+        self.assertTrue('RESULT 3' in set(df.columns))
+        self.assertTrue('RESULT 4' in set(df.columns))
+        self.assertTrue(df['RESULT 3'].equals(df['A1'] + df['A2']))
+        self.assertTrue(df['RESULT 4'].equals(df['A1'] - df['A2']))
+
+        # End of session
+        self.logout()
+
