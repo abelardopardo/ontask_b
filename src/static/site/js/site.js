@@ -110,11 +110,15 @@ var saveForm = function () {
     });
     return false;
 }
-
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip({
       trigger: "hover",
       placement: "auto",
       container: "body"
     });
+
 });
+$(window).bind("load", function() {
+   $('#div-spinner').hide();
+});
+
