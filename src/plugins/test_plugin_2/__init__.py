@@ -94,7 +94,11 @@ class OntaskTestPlugin(object):
         result = pd.DataFrame(data_frame[merge_key])
 
         # Process the given data and create the result
-        result[self.output_column_names[0]] = 3
-        result[self.output_column_names[1]] = 4
+        result[self.output_column_names[0]] = \
+            data_frame[self.input_column_names[0]] + \
+ 	        data_frame[self.input_column_names[1]]
+        result[self.output_column_names[1]] = \
+            data_frame[self.input_column_names[0]] - \
+ 	        data_frame[self.input_column_names[1]]
 
         return result
