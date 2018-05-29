@@ -10,7 +10,7 @@ django-widget-tweaks==1.4.2
 django-siteprefs==0.7.0
 pandas==0.23.0
 django-tables2==1.21.2
-django-summernote==0.8.8.7
+django-summernote==0.8.8.4
 django-import-export==1.0.1
 django-redis==4.9.0
 djangorestframework==3.8.2
