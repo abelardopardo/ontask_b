@@ -373,7 +373,10 @@ def run(request, pk):
         return render(request, 'error.html', {})
 
     # Load the proper subset of the data frame
-    selected_column_names = [c.name for c in form.cleaned_data['columns']]
+    if plugin_instance.input_column_names:
+        selected_column_names = plugin_instance.input_column_names
+    else:
+        selected_column_names = [c.name for c in form.cleaned_data['columns']]
     sub_df = dst_df[[form.cleaned_data['merge_key']] + selected_column_names]
 
     # Process the output columns

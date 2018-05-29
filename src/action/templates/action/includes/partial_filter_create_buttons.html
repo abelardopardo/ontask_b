@@ -49,10 +49,6 @@
     {% if filter_condition %}
       {% if selected_rows == 0 %}
         <p class="alert-danger">The filter excludes all learners!</p>
-      {% else %}
-        <p {% if selected_rows == 0 %}class="alert-warning"{% endif %}>
-           {{ selected_rows }} learners selected out of {{ total_rows }}.
-        </p>
       {% endif %}
     {% else %}
       <p>All learners considered for this action.</p>

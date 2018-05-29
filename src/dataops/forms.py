@@ -136,7 +136,8 @@ class SelectColumnForm(forms.Form):
 
         data = super(SelectColumnForm, self).clean()
 
-        if data['columns'].count() == 0:
+        columns = data.get('columns', None)
+        if columns and columns.count() == 0:
             self.add_error(
                 'columns',
                 'The plugin needs at least one input column'
