@@ -74,8 +74,9 @@ def column_add(request):
     # If a GET or incorrect request, render the form again
     if request.method == 'GET' or not form.is_valid():
         data['html_form'] = render_to_string(
-            'workflow/includes/partial_column_add.html',
-            {'form': form},
+            'workflow/includes/partial_column_addedit.html',
+            {'form': form,
+             'add': True},
             request=request)
 
         return JsonResponse(data)
@@ -292,7 +293,7 @@ def column_edit(request, pk):
 
     if request.method == 'GET' or not form.is_valid():
         data['html_form'] = render_to_string(
-            'workflow/includes/partial_column_edit.html',
+            'workflow/includes/partial_column_addedit.html',
             context,
             request=request)
 

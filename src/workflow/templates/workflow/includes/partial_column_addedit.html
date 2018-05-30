@@ -1,13 +1,23 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-<form method="post" action="{% url 'workflow:column_edit' pk %}"
-      class="js-column-edit-form">
+<form method="post" 
+  {% if add %}
+    action="{% url 'workflow:column_add' %}"
+    class="js-workflow-column-add-form">
+  {% else %}
+    action="{% url 'workflow:column_edit' pk %}"
+    class="js-column-edit-form">
+  {% endif %}
   {% csrf_token %}
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
+  {% if add %}
+    <h4 class="modal-title">Add column</h4>
+  {% else %}
     <h4 class="modal-title">Edit column <strong>{{ cname }}</strong></h4>
+  {% endif %}
   </div>
   <div class="modal-body">
     {{ form|crispy }}
@@ -15,6 +25,8 @@
   <div class="modal-footer" style="text-align: center;">
     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
     </button>
-    <button type="submit" class="btn btn-primary">Update</button>
+    <button type="submit" class="btn btn-primary">
+       <span class="glyphicon glyphicon-ok"></span> {% if add %}Add column{% else %}Update{% endif %}
+    </button>
   </div>
 </form>
