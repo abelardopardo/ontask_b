@@ -47,8 +47,8 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         # GO TO THE WORKFLOW PAGE
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Workflows'))
-        self.assertIn('New Workflow', self.selenium.page_source)
-        self.assertIn('Import Workflow', self.selenium.page_source)
+        self.assertIn('New workflow', self.selenium.page_source)
+        self.assertIn('Import workflow', self.selenium.page_source)
 
         # Open the workflow
         wf_link = self.selenium.find_element_by_link_text(self.wflow_name)
@@ -210,8 +210,8 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         # GO TO THE WORKFLOW PAGE
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Workflows'))
-        self.assertIn('New Workflow', self.selenium.page_source)
-        self.assertIn('Import Workflow', self.selenium.page_source)
+        self.assertIn('New workflow', self.selenium.page_source)
+        self.assertIn('Import workflow', self.selenium.page_source)
 
         # Open the workflow
         wf_link = self.selenium.find_element_by_link_text(self.wflow_name)
@@ -379,8 +379,8 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         # GO TO THE WORKFLOW PAGE
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Workflows'))
-        self.assertIn('New Workflow', self.selenium.page_source)
-        self.assertIn('Import Workflow', self.selenium.page_source)
+        self.assertIn('New workflow', self.selenium.page_source)
+        self.assertIn('Import workflow', self.selenium.page_source)
 
         # Open the workflow
         wf_link = self.selenium.find_element_by_link_text(self.wflow_name)
@@ -452,8 +452,8 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         # GO TO THE WORKFLOW PAGE
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Workflows'))
-        self.assertIn('New Workflow', self.selenium.page_source)
-        self.assertIn('Import Workflow', self.selenium.page_source)
+        self.assertIn('New workflow', self.selenium.page_source)
+        self.assertIn('Import workflow', self.selenium.page_source)
 
         # Open the workflow
         wf_link = self.selenium.find_element_by_link_text(self.wflow_name)

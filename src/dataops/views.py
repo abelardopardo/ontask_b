@@ -79,7 +79,7 @@ def uploadmerge(request):
     return render(request, 'dataops/uploadmerge.html', {})
 
 
-# @cache_page(60 * 15)
+@cache_page(60 * 15)
 @user_passes_test(is_instructor)
 def transform(request):
     # Get the workflow that is being used
