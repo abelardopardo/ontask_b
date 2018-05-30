@@ -29,3 +29,4 @@ oauth2==1.9.0.post1
 ims-lti-py==0.6
 django-datetime-widget==0.9.3
 django-formtools==2.1
+argon2-cffi==18.1.0
