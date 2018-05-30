@@ -155,7 +155,7 @@ def excelupload1(request):
         'initial_column_names': frame_info[0],
         'column_types': frame_info[1],
         'src_is_key_column': frame_info[2],
-        'step_1': 'dataops:excelupload1'
+        'step_1': reverse('dataops:excelupload1')
     }
 
     return redirect('dataops:upload_s2')

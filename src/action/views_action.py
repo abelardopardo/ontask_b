@@ -34,7 +34,8 @@ from .forms import (
     EditActionOutForm,
     EnableURLForm,
     ActionDescriptionForm)
-from action.ops import serve_action_in, serve_action_out, clone_action
+from action.ops import serve_action_in, serve_action_out, clone_action, \
+    do_export_action
 from .models import Action, Condition
 
 
@@ -585,6 +586,50 @@ def edit_action_in(request, pk):
 
     return render(request, 'action/edit_in.html', ctx)
 
+
+@user_passes_test(is_instructor)
+def export_ask(request, pk):
+    """
+    Function that asks for confirmation before exporting an action
+    :param request: HTTP request
+    :param pk: Action ID
+    :return: HTTP response to the next page where the export is done
+    """
+
+    # Get the workflow
+    workflow = get_workflow(request)
+    if not workflow:
+        return redirect('workflow:index')
+
+    action = Action.objects.filter(pk=pk).first()
+    if not action:
+        return redirect('action:index')
+
+    # GET request, simply render the form
+    return render(request, 'action/export_ask.html', {'action': action})
+
+
+@user_passes_test(is_instructor)
+def export_done(request, pk):
+    """
+    This request exports the action pointed by the pk
+    :param request:
+    :param pk: Unique key of the action to export
+    :return: HTTP response
+    """
+
+    # Get the workflow
+    workflow = get_workflow(request)
+    if not workflow:
+        return redirect('workflow:index')
+
+    action = Action.objects.filter(pk=pk).first()
+    if not action:
+        return redirect('action:index')
+
+    response = do_export_action(action)
+
+    return response
 
 @user_passes_test(is_instructor)
 def select_column_action(request, apk, cpk):

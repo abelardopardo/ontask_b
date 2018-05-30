@@ -9,16 +9,17 @@
 {% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'workflow/js/workflow.js' %}{% otv %}"></script>
+  <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
   <script type="text/javascript">
     if (document.getElementById("workflow-table") != null) {
         $(document).ready(function() {
             $('#workflow-table').DataTable({
+                "stateSave": true,
                 "search": {
                   "caseInsensitive": true,
                 },
-                stateSave: true,
                 "order": [[0, "asc"]],
                 "language": {
                     "emptyTable": "No workflows available."
@@ -27,6 +28,26 @@
                         {"className": "dt-center", "targets": "_all"}
                 ],
             });
+        });
+    }
+    if (document.getElementById("sqlconn-table") != null) {
+        // Required for DataTables
+        $(document).ready(function() {
+            $('#sqlconn-table').DataTable({
+                "stateSave": true,
+                "search": {
+                  "caseInsensitive": true,
+                },
+                "order": [[0, "asc"]],
+                language: {
+                    "emptyTable": "No sql connections defined."
+                },
+                "columnDefs": [
+                    {"className": "dt-center", "targets": "_all"},
+                    {"orderable": false, "targets": 10},
+                    {"searchable": false, "targets": 10},
+                ],
+              });
         });
     }
   </script>
@@ -45,19 +66,28 @@
                 data-toggle="tooltip"
                 title="Provide name and description for a new workflow">
         <span class="glyphicon glyphicon-plus"></span>
-          New Workflow
+          New workflow
       </button>
       <a href="{% url 'workflow:import' %}" class="btn btn-primary"
                 data-toggle="tooltip"
                 title="Import a previously exported OnTask workflow">
-        <span class="glyphicon glyphicon-import"></span> Import Workflow
+        <span class="glyphicon glyphicon-import"></span> Import workflow
       </a>
     </p>
-
-    {% if table %}
-      {% render_table table %}
+    {% render_table table %}
+    {% if user.is_superuser %}
+      <h1 class="page-header">SQL Connections</h1>
+      <p>
+        <button type="button" class="btn btn-primary js-create-workflow"
+                data-url="{% url 'dataops:sqlconn_add' %}"
+                  data-toggle="tooltip"
+                  title="Add a new SQL database connection">
+          <span class="glyphicon glyphicon-plus"></span>
+            New SQL connection
+        </button>
+      </p>
+      {% render_table table2 %}
     {% endif %}
-
     <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog">
         <div class="modal-content">

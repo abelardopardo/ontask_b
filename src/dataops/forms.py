@@ -8,6 +8,7 @@ from django import forms
 from django.utils.dateparse import parse_datetime
 
 import ontask.ontask_prefs
+from dataops.models import SQLConnection
 from ontask.forms import RestrictedFileField, column_to_field, dateTimeOptions
 
 # Field prefix to use in forms to avoid using column names (they are given by
@@ -131,7 +132,6 @@ class SelectColumnForm(forms.Form):
             # Insert the new_field in the form
             self.fields[field_prefix + 'parameter_%s' % idx] = new_field
 
-
     def clean(self):
 
         data = super(SelectColumnForm, self).clean()
@@ -221,8 +221,7 @@ class UploadExcelFileForm(forms.Form):
         help_text='Sheet within the excelsheet to upload')
 
 
-# Step 1 of the CSV upload
-class UploadSQLForm(forms.Form):
+class SQLConnectionForm(forms.ModelForm):
     """
     Form to read data from SQL. We collect information to create a Database URI
     to be used by SQLAlchemy:
@@ -230,67 +229,34 @@ class UploadSQLForm(forms.Form):
     dialect[+driver]://user:password@host/dbname[?key=value..]
     """
 
-    dialect = forms.CharField(
-        label='Dialect',
-        max_length=512,
+    class Meta:
+        model = SQLConnection
+
+        fields = [
+            'name',
+            'description_txt',
+            'conn_type',
+            'conn_driver',
+            'db_user',
+            'db_password',
+            'db_host',
+            'db_port',
+            'db_name',
+            'db_table'
+        ]
+
+
+# Step 1 of the CSV upload
+class SQLRequestPassword(forms.Form):
+    """
+    Form to ask for a password for a SQL connection execution
+    """
+
+    password = forms.CharField(
+        max_length=2048,
+        widget=forms.PasswordInput,
         required=True,
-        initial='',
-        help_text='Database type (mysql, oracle, postgresql, etc.'
-    )
-
-    driver = forms.CharField(
-        label='Driver',
-        max_length=512,
-        required=False,
-        initial='',
-        help_text='Name of the driver implementing the DBAPI'
-    )
-
-    dbusername = forms.CharField(
-        max_length=512,
-        label="Database user name",
-        required=False,
-        initial='',
-        help_text='User name to connect'
-    )
-
-    dbpassword = forms.CharField(
-        label='Database password',
-        required=False,
-        widget=forms.PasswordInput
-    )
-
-    host = forms.CharField(
-        label='Host',
-        max_length=512,
-        required=True,
-        help_text='Host to connect (include port if needed)'
-    )
-
-    dbname = forms.CharField(
-        label='Database name',
-        max_length=512,
-        required=True,
-        help_text='Name of the database'
-    )
-
-    query = forms.CharField(
-        label='Query',
-        required=True,
-        widget=forms.Textarea,
-        help_text='SQL query or table name to read'
-    )
-
-    def clean(self):
-        data = super(UploadSQLForm, self).clean()
-
-        if 'localhost' in data['host'] or '127.0.0' in data['host']:
-            self.add_error(
-                'host',
-                'Given host value is not accepted for security reasons.'
-            )
-
-        return data
+        help_text='Password to authenticate the database connection')
 
 
 # Form to select columns to upload and rename

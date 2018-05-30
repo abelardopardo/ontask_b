@@ -49,6 +49,33 @@ sql_datatype_names = {
 engine = None
 
 
+def create_db_connection(dialect, driver, username, password, host, dbname):
+    """
+    Function that creates the engine object to connect to the database. The
+    object is required by the pandas functions to_sql and from_sql
+
+    :param dialect: Dialect for the engine (oracle, mysql, postgresql, etc)
+    :param driver: DBAPI driver (psycopg2, ...)
+    :param username: Username to connect with the database
+    :param password: Password to connect with the database
+    :param host: Host to connect with the database
+    :param dbname: database name
+    :return: the engine
+    """
+
+    # DB engine
+    database_url = \
+        '{dialect}{driver}://{user}:{password}@{host}/{database_name}'.format(
+            dialect=dialect,
+            driver=driver,
+            user=username,
+            password=password,
+            host=host,
+            database_name=dbname,
+        )
+    return create_engine(database_url, echo=False, paramstyle='format')
+
+
 def create_db_engine(dialect, driver, username, password, host, dbname):
     """
     Function that creates the engine object to connect to the database. The
@@ -73,7 +100,8 @@ def create_db_engine(dialect, driver, username, password, host, dbname):
             host=host,
             database_name=dbname,
         )
-    engine = create_engine(database_url, echo=False, paramstyle='format')
+    engine = create_db_connection(dialect, driver, username, password, host,
+                                  dbname)
 
     if settings.DEBUG:
         print('Creating engine with ', database_url)
@@ -240,6 +268,30 @@ def load_df_from_csvfile(file, skiprows=0, skipfooter=0):
     return data_frame
 
 
+def load_df_from_sqlconnection(conn_item, pwd=None):
+    """
+    Load a DF from a SQL connection open with the parameters given in conn_item.
+
+    :param conn_item: SQLConnection object with the connection parameters.
+    :return: Data frame or raise an exception.
+    """
+
+    # Get the connection
+    db_connection = create_db_connection(conn_item.conn_type,
+                                         conn_item.conn_driver,
+                                         conn_item.db_user,
+                                         pwd,
+                                         conn_item.db_host,
+                                         conn_item.db_name)
+
+    # Try to fetch the data
+    result = pd.read_sql(conn_item.db_table, db_connection)
+
+    # After reading from the DB, turn all None into NaN
+    result.fillna(value=np.nan, inplace=True)
+    return result
+
+
 def store_table(data_frame, table_name):
     """
     Store a data frame in the DB
@@ -306,7 +358,8 @@ def df_column_types_rename(table_name):
     # for tname, ntname in pandas_datatype_names.items():
     #     result[:] = [x if x != tname else ntname for x in result]
 
-    return [sql_datatype_names[x] for _, x in get_table_column_types(table_name)]
+    return [sql_datatype_names[x] for _, x in
+            get_table_column_types(table_name)]
 
 
 def df_drop_column(pk, column_name):

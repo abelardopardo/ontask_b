@@ -3,8 +3,8 @@ from __future__ import unicode_literals, print_function
 
 import json
 
-from django.db import models
 from django.conf import settings
+from django.db import models
 
 from workflow.models import Workflow
 
@@ -29,8 +29,7 @@ class Log(models.Model):
 
     workflow = models.ForeignKey(Workflow,
                                  db_index=True,
-                                 null=False,
-                                 blank=False)
+                                 null=True)
 
     # JSON element with additional information
     payload = models.CharField(max_length=65536,

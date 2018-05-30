@@ -28,6 +28,16 @@ def is_instructor(user):
         user.groups.filter(name='instructor').exists()
 
 
+def is_admin(user):
+    """
+    @DynamicAttrs
+    Check if the user is authenticated and is supergroup
+    :param user: User object
+    :return: Boolean stating if user is admin
+    """
+    return user.is_authenticated and user.is_superuser
+
+
 class UserIsInstructor(UserPassesTestMixin, permissions.BasePermission):
     """
     @DynamicAttrs

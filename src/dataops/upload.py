@@ -59,7 +59,8 @@ def upload_s2(request):
         src_is_key_column = upload_data.get('src_is_key_column')
     except KeyError:
         # The page has been invoked out of order
-        return redirect(upload_data.get('step_1', 'dataops:uploadmerge'))
+        return redirect(upload_data.get('step_1',
+                                        reverse('dataops:uploadmerge')))
 
     # Get or create the list with the renamed column names
     rename_column_names = upload_data.get('rename_column_names', None)
@@ -98,7 +99,7 @@ def upload_s2(request):
         request.session['upload_data'] = upload_data
         context = {'form': form,
                    'df_info': df_info,
-                   'prev_step': reverse(upload_data['step_1']),
+                   'prev_step': upload_data['step_1'],
                    'wid': workflow.id}
 
         if not ops.workflow_id_has_table(workflow.id):
@@ -112,7 +113,7 @@ def upload_s2(request):
     if not form.is_valid():
         context = {'form': form,
                    'wid': workflow.id,
-                   'prev_step': reverse(upload_data['step_1']),
+                   'prev_step': upload_data['step_1'],
                    'df_info': df_info}
         if not ops.workflow_id_has_table(workflow.id):
             # If it is an upload, not a merge, set next step to finish
@@ -160,7 +161,7 @@ def upload_s2(request):
         # Something went wrong. Flag it and reload
         context = {'form': form,
                    'wid': workflow.id,
-                   'prev_step': reverse(upload_data['step_1']),
+                   'prev_step': upload_data['step_1'],
                    'df_info': df_info}
         return render(request, 'dataops/upload_s2.html', context)
 

@@ -133,7 +133,7 @@ def csvupload1(request):
         'initial_column_names': frame_info[0],
         'column_types': frame_info[1],
         'src_is_key_column': frame_info[2],
-        'step_1': 'dataops:csvupload1'
+        'step_1': reverse('dataops:csvupload1')
     }
 
     return redirect('dataops:upload_s2')

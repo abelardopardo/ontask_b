@@ -18,6 +18,8 @@ from django.views.decorators.http import require_http_methods
 import action
 import logs.ops
 from dataops import ops, pandas_db
+from dataops.models import SQLConnection
+from dataops.sqlcon_views import SQLConnectionTableAdmin
 from ontask.permissions import is_instructor, UserIsInstructor
 from ontask.tables import OperationsColumn
 from .forms import WorkflowForm
@@ -178,10 +180,29 @@ def workflow_index(request):
 
     # We include the table only if it is not empty.
     context = {}
-    if workflows.count() > 0:
-        context['table'] = WorkflowTable(workflows,
-                                         id='workflow-table',
-                                         orderable=False)
+    context['table'] = WorkflowTable(workflows,
+                                     id='workflow-table',
+                                     orderable=False)
+
+    # Add the SQL connection table only if appropriate
+    if request.user.is_superuser:
+        conns = SQLConnection.objects.all().values(
+            'id',
+            'name',
+            'description_txt',
+            'conn_type',
+            'conn_driver',
+            'db_user',
+            'db_password',
+            'db_host',
+            'db_port',
+            'db_name',
+            'db_table'
+        )
+
+        context['table2'] = SQLConnectionTableAdmin(conns,
+                                   id='sqlconn-table',
+                                   orderable=False)
 
     return render(request, 'workflow/index.html', context)
 
@@ -354,7 +375,6 @@ def flush(request, pk):
                      {'id': workflow.id,
                       'name': workflow.name})
 
-
         # In this case, the form is valid
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('workflow:detail', kwargs={'pk': pk})
@@ -485,7 +505,7 @@ def column_ss(request, pk):
             col.name,
             col_data_type,
             '<span class="true">✔</span>' if col.is_key \
-                  else '<span class="true">✘</span>',
+                else '<span class="true">✘</span>',
             ops_string
         ])
 

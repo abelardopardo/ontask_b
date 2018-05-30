@@ -39,6 +39,19 @@ $(function () {
   $(document).on('change','#id_how_merge', show_merge_figure);
 
   $("#transform-selection").on("click", ".js-transform-diagnose", loadForm);
+
+  // View add
+  $("#sqlconn-table").on("click", ".js-sqlconn-add", loadForm);
+  $("#modal-item").on("submit", ".js-sqlconn-add-form", saveForm);
+
+  $("#sqlconn-table").on("click", ".js-sqlconn-edit", loadForm);
+  $("#modal-item").on("submit", ".js-sqlconn-edit-form", saveForm);
+
+  $("#sqlconn-table").on("click", ".js-sqlconn-delete", loadForm);
+  $("#modal-item").on("submit", ".js-sqlconn-delete-form", saveForm);
+
+  $("#sqlconn-table").on("click", ".js-sqlconn-clone", loadForm);
+  $("#modal-item").on("submit", ".js-sqlconn-clone-form", saveForm);
 });
 
 window.onload = function(){
