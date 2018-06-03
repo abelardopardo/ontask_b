@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+import json
+
 from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django_summernote.widgets import SummernoteInplaceWidget
 
-from ontask import is_legal_name
-from ontask.forms import column_to_field, dateTimeOptions
+from ontask import ontask_prefs, is_legal_name
+from ontask.forms import column_to_field, dateTimeOptions, RestrictedFileField
 from .models import Action, Condition
 
 # Field prefix to use in forms to avoid using column names (they are given by
@@ -212,3 +214,21 @@ class EmailActionForm(EmailActionBasicForm):
         label="Download a snapshot of the current state of the workflow?",
         help_text="A zip file useful to review the emails sent."
     )
+
+class ActionImportForm(forms.Form):
+
+    # Action name
+    name = forms.CharField(
+        max_length=512,
+        strip=True,
+        required=True,
+        label='Name')
+
+    file = RestrictedFileField(
+        max_upload_size=str(ontask_prefs.MAX_UPLOAD_SIZE),
+        content_types=json.loads(str(ontask_prefs.CONTENT_TYPES)),
+        allow_empty_file=False,
+        label="File",
+        help_text='File containing a previously exported action')
+
+

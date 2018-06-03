@@ -281,6 +281,8 @@ def do_import_workflow(user, name, file_item):
         return 'Unable to import workflow (Exception: ' + e.message + ')'
     except serializers.ValidationError as e:
         return 'Unable to import workflow due to a validation error'
+    except Exception as e:
+        return 'Unable to import workflow (Exception: ' + e.message + ')'
 
     if not pandas_db.check_wf_df(workflow):
         # Something went wrong.

@@ -54,12 +54,14 @@
       <span class="glyphicon glyphicon-plus"></span>
         New Action Out
     </button>
+    {% if has_table %}
+      <a href="{% url 'action:import' %}"
+         class="btn btn-primary"
+         data-toggle="tooltip" title="Import action previously exported">
+        <span class="glyphicon glyphicon-import"></span> Import action</a>
+    {% endif %}
   </p>
-
-  {% if table %}
-    {% render_table table %}
-  {% endif %}
-
+  {% render_table table %}
   <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">

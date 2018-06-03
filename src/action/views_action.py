@@ -33,9 +33,9 @@ from .forms import (
     ActionForm,
     EditActionOutForm,
     EnableURLForm,
-    ActionDescriptionForm)
+    ActionDescriptionForm, ActionImportForm)
 from action.ops import serve_action_in, serve_action_out, clone_action, \
-    do_export_action
+    do_export_action, do_import_action
 from .models import Action, Condition
 
 
@@ -227,21 +227,20 @@ def action_index(request):
         workflow__id=workflow.id)
 
     # Context to render the template
-    context = {}
+    context = {'has_table': ops.workflow_has_table(workflow)}
 
     # Build the table only if there is anything to show (prevent empty table)
-    if actions.count() > 0:
-        qset = []
-        for action in actions:
-            qset.append({'id': action.id,
-                         'name': action.name,
-                         'description_text': action.description_text,
-                         'is_out': action.is_out,
-                         'is_correct': action.is_correct,
-                         'modified': action.modified,
-                         'serve_enabled': action.serve_enabled})
+    qset = []
+    for action in actions:
+        qset.append({'id': action.id,
+                     'name': action.name,
+                     'description_text': action.description_text,
+                     'is_out': action.is_out,
+                     'is_correct': action.is_correct,
+                     'modified': action.modified,
+                     'serve_enabled': action.serve_enabled})
 
-        context['table'] = ActionTable(qset, orderable=False)
+    context['table'] = ActionTable(qset, orderable=False)
 
     return render(request, 'action/index.html', context)
 
@@ -548,12 +547,12 @@ def edit_action_in(request, pk):
         filter_condition.save()
 
     # Column names suitable to insert
-    columns_selected = action.columns.all()
-    columns_to_insert = set(workflow.columns.all()) - set(columns_selected)
+    columns_selected = action.columns.filter(is_key=False)
+    columns_to_insert = [c for c in workflow.columns.all()
+                         if not c.is_key and c not in columns_selected]
 
     # Has key column and has no-key column
-    has_key = columns_selected.filter(is_key=True).exists()
-    has_no_key = columns_selected.filter(is_key=False).exists()
+    has_no_key = action.columns.filter(is_key=False).exists()
     has_empty_description = columns_selected.filter(
         description_text=''
     ).exists()
@@ -566,8 +565,8 @@ def edit_action_in(request, pk):
            'total_rows': workflow.nrows,
            'query_builder_ops': workflow.get_query_builder_ops_as_str(),
            'has_data': ops.workflow_has_table(action.workflow),
+           'key_selected': action.columns.filter(is_key=True).first(),
            'columns_to_insert': columns_to_insert,
-           'columns_selected': columns_selected,
            'column_selected_table': ColumnSelectedTable(
                columns_selected.values('id', 'name', 'description_text'),
                orderable=False,
@@ -580,7 +579,6 @@ def edit_action_in(request, pk):
                                                          'aid': action.id})
                     )]
            ),
-           'has_key': has_key,
            'has_no_key': has_no_key,
            'has_empty_description': has_empty_description}
 
@@ -606,7 +604,10 @@ def export_ask(request, pk):
         return redirect('action:index')
 
     # GET request, simply render the form
-    return render(request, 'action/export_ask.html', {'action': action})
+    return render(request,
+                  'action/export_ask.html',
+                  {'action': action,
+                   'cnames': [c.name for c in action.columns.all()]})
 
 
 @user_passes_test(is_instructor)
@@ -631,8 +632,58 @@ def export_done(request, pk):
 
     return response
 
+
 @user_passes_test(is_instructor)
-def select_column_action(request, apk, cpk):
+def action_import(request):
+    """
+    This request imports one action given in a gz file
+    :param request: Http request
+    :return: HTTP response
+    """
+
+    # Get workflow
+    workflow = get_workflow(request)
+    if not workflow:
+        return redirect('workflow:index')
+
+    form = ActionImportForm(request.POST or None, request.FILES or None)
+
+    context = {'form': form}
+
+    # If a get request or the form is not valid, render the page.
+    if request.method == 'GET' or not form.is_valid():
+        return render(request, 'action/import.html', context)
+
+    new_action_name = form.cleaned_data['name']
+    if Action.objects.filter(
+            workflow=workflow,
+            workflow__user=request.user,
+            name=new_action_name).exists():
+        # There is an action with this name. Return error.
+        form.add_error(None, 'An action with this name already exists')
+        return render(request, 'action/import.html', context)
+
+    # Process the reception of the file
+    if not form.is_multipart():
+        form.add_error(None, 'Incorrect form request (it is not multipart)')
+        return render(request, 'action/import.html', context)
+
+    # UPLOAD THE FILE!
+    status = do_import_action(request.user,
+                              workflow,
+                              form.cleaned_data['name'],
+                              request.FILES['file'])
+
+    # If something went wrong, show at to the top of the page
+    if status:
+        messages.error(request, status)
+
+    # Go back to the list of actions
+    return redirect('action:index')
+
+
+@user_passes_test(is_instructor)
+def select_column_action(request, apk, cpk, key=None):
     """
     Operation to add a column to action in
     :param request: Request object
@@ -667,7 +718,14 @@ def select_column_action(request, apk, cpk):
         return redirect(reverse('action:index'))
 
     # Parameters are correct, so add the column to the action.
-    action.columns.add(column)
+    if key:
+        current_key = action.columns.filter(is_key=True).first()
+        if current_key:
+            action.columns.remove(current_key)
+        if column.is_key:
+            action.columns.add(column)
+    else:
+        action.columns.add(column)
 
     return redirect(reverse('action:edit_in', kwargs={'pk': action.id}))
 
@@ -1068,6 +1126,9 @@ def run_ss(request, pk):
     if search_value:
         cv_tuples = [(c.name, search_value, c.data_type) for c in columns]
 
+    # Filter
+    filter = action.conditions.filter(is_filter=True).first()
+
     # Get the query set (including the filter in the action)
     qs = pandas_db.search_table_rows(
         workflow.id,
@@ -1076,7 +1137,7 @@ def run_ss(request, pk):
         order_col.name,
         order_dir == 'asc',
         column_names,  # Column names in the action
-        action.filter  # Filter in the action
+        filter.formula if filter else None
     )
 
     # Post processing + adding operations

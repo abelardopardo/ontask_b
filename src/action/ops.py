@@ -7,6 +7,8 @@ operations when cloning conditions and actions, and sending messages.
 from __future__ import unicode_literals, print_function
 
 import datetime
+import gzip
+from io import BytesIO
 
 import pytz
 from django.conf import settings as ontask_settings
@@ -20,6 +22,9 @@ from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import strip_tags
+from rest_framework import serializers
+from rest_framework.parsers import JSONParser
+from rest_framework.renderers import JSONRenderer
 
 import logs.ops
 from action.evaluate import evaluate_row, evaluate_action
@@ -27,6 +32,7 @@ from action.forms import EnterActionIn, field_prefix
 from action.models import Action
 from dataops import pandas_db, ops
 from workflow.models import Column
+from workflow.serializers import ActionSelfcontainedSerializer
 from . import settings
 
 
@@ -460,4 +466,87 @@ def send_messages(user,
     except Exception as e:
         return 'An error occurred when sending your notification: ' + e.message
 
+    return None
+
+
+def do_export_action(action):
+    """
+    Proceed with the action export.
+    :param action: Element to export.
+    :return: Page that shows a confirmation message and starts the download
+    """
+
+    # Context
+    context = {'workflow': action.workflow}
+
+    # Get the info to send from the serializer
+    serializer = ActionSelfcontainedSerializer(action, context=context)
+    to_send = JSONRenderer().render(serializer.data)
+
+    # Get the in-memory file to compress
+    zbuf = BytesIO()
+    zfile = gzip.GzipFile(mode='wb', compresslevel=6, fileobj=zbuf)
+    zfile.write(to_send)
+    zfile.close()
+
+    suffix = datetime.datetime.now().strftime('%y%m%d_%H%M%S')
+    # Attach the compressed value to the response and send
+    compressed_content = zbuf.getvalue()
+    response = HttpResponse(compressed_content)
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Transfer-Encoding'] = 'binary'
+    response['Content-Disposition'] = \
+        'attachment; filename="ontask_action_{0}.gz"'.format(suffix)
+    response['Content-Length'] = str(len(compressed_content))
+
+    return response
+
+
+def do_import_action(user, workflow, name, file_item):
+    """
+    Receives a name and a file item (submitted through a form) and creates
+    the structure of action with conditions and columns
+
+    :param user: User record to use for the import (own all created items)
+    :param workflow: Workflow object to attach the action
+    :param name: Workflow name (it has been checked that it does not exist)
+    :param file_item: File item obtained through a form
+    :return:
+    """
+
+    try:
+        data_in = gzip.GzipFile(fileobj=file_item)
+        data = JSONParser().parse(data_in)
+    except IOError:
+        return 'Incorrect file. Expecting a GZIP file (exported workflow).'
+
+    # Serialize content
+    action_data = ActionSelfcontainedSerializer(
+        data=data,
+        context={'user': user, 'name': name, 'workflow': workflow}
+    )
+
+    # If anything goes wrong, return a string to show in the page.
+    action = None
+    try:
+        if not action_data.is_valid():
+            return 'Unable to import action:' + ' ' + action_data.errors
+
+        # Save the new workflow
+        action = action_data.save(user=user, name=name)
+    except (TypeError, NotImplementedError) as e:
+        return 'Unable to import action:  ' + e.message
+    except serializers.ValidationError as e:
+        return 'Unable to import action due to a validation error:' + e.message
+    except Exception as e:
+        return 'Unable to import action: ' + e.message
+
+
+    # Success
+    # Log the event
+    logs.ops.put(user,
+                 'workflow_import',
+                 workflow,
+                 {'id': workflow.id,
+                  'name': workflow.name})
     return None

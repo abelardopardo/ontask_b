@@ -58,6 +58,13 @@
       </button>
     </li>
     <li>
+      <a href="{% url 'action:export_ask' id %}"
+         class="btn btn-default btn-sm"
+         data-toggle="tooltip"
+         title="Export the content of this action">
+        <span class="glyphicon glyphicon-export"></span> Export</a>
+    </li>
+    <li>
       <button type="button"
               class="btn btn-default btn-sm js-action-delete"
               data-url="{% url 'action:delete' id %}"

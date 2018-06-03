@@ -33,6 +33,24 @@ urlpatterns = [
         views_action.edit_action_in,
         name='edit_in'),
 
+    # Action export ask
+    url(r'^(?P<pk>\d+)/export_ask/$',
+        views_action.export_ask,
+        name='export_ask'),
+
+    # Action export done
+    url(r'^(?P<pk>\d+)/export_done/$',
+        views_action.export_done,
+        name='export_done'),
+
+    # Action import
+    url(r'^import/$', views_action.action_import, name='import'),
+
+    # Select column for action in
+    url(r'^(?P<apk>\d+)/(?P<cpk>\d+)/(?P<key>\d+)/select_column_action/$',
+        views_action.select_column_action,
+        name='select_key_column_action'),
+
     # Select column for action in
     url(r'^(?P<apk>\d+)/(?P<cpk>\d+)/select_column_action/$',
         views_action.select_column_action,

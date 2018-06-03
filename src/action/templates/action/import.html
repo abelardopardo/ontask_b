@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load settings %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block scripts %}
+  <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
+{% endblock %}
+
+{% block title %}{{ block.super }}Import action{% endblock %}
+
+{% block container %}
+  <div align="center" class="container">
+    <h1 class="page-header">Import action</h1>
+    <form action="{% url 'action:import' %}" method="post"
+          enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="input-group input-group-lg">
+        {{ form|crispy }}
+        <button type="button" class="btn btn-default" style="margin-right:2ex;"
+                onclick="location.href='{% url 'action:index' %}'">Cancel
+        </button>
+        <button class="btn btn-primary btn-space"
+                type="Submit" name="Submit" value="Submit">
+          <span class="glyphicon glyphicon-import"></span> Import</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}
