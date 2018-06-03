@@ -1,10 +1,17 @@
-<form method="post" action="{% url 'action:edit_condition' condition_id %}" class="js-condition-edit-form">
+<form method="post" 
+  {% if add %}
+    action="{% url 'action:create_condition' action_id %}" 
+    class="js-condition-create-form">
+  {% else %}
+    action="{% url 'action:edit_condition' condition_id %}" 
+    class="js-condition-edit-form"
+  {% endif %}>
   {% csrf_token %}
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" arial-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title">Edit condition</h4>
+    <h4 class="modal-title">{% if add %}Create{% else %}Edit{% else %} condition</h4>
   </div>
   <div class="modal-body">
     {% include 'action/includes/partial_form_fields.html' %}
@@ -14,6 +21,6 @@
     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
     </button>
     <button type="submit" class="btn btn-primary">
-      <span class="glyphicon glyphicon-ok"></span> Update condition</button>
+      <span class="glyphicon glyphicon-ok"></span> {% if add %}Create{% else %}Update{% endif %} condition</button>
   </div>
 </form>

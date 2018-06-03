@@ -339,7 +339,7 @@ class ConditionCreateView(UserIsInstructor, generic.TemplateView):
     is the action id where the condition needs to point.
     """
     form_class = ConditionForm
-    template_name = 'action/includes/partial_condition_create.html'
+    template_name = 'action/includes/partial_condition_addedit.html'
 
     def get_context_data(self, **kwargs):
         context = super(ConditionCreateView, self).get_context_data(**kwargs)
@@ -407,7 +407,7 @@ def edit_condition(request, pk):
 
     # Render the form with the Condition information
     return save_condition_form(request, form,
-                               'action/includes/partial_condition_edit.html',
+                               'action/includes/partial_condition_addedit.html',
                                condition.action,
                                condition,
                                False)  # It is not new
