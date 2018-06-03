@@ -628,6 +628,27 @@ def export_done(request, pk):
     if not action:
         return redirect('action:index')
 
+    return render(request, 'action/export_done.html', {'action': action})
+
+
+@user_passes_test(is_instructor)
+def export_download(request, pk):
+    """
+    This request exports the action pointed by the pk
+    :param request:
+    :param pk: Unique key of the action to export
+    :return: HTTP response
+    """
+
+    # Get the workflow
+    workflow = get_workflow(request)
+    if not workflow:
+        return redirect('workflow:index')
+
+    action = Action.objects.filter(pk=pk).first()
+    if not action:
+        return redirect('action:index')
+
     response = do_export_action(action)
 
     return response

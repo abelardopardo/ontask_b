@@ -43,6 +43,11 @@ urlpatterns = [
         views_action.export_done,
         name='export_done'),
 
+    # Action export done
+    url(r'^(?P<pk>\d+)/export_download/$',
+        views_action.export_download,
+        name='export_download'),
+
     # Action import
     url(r'^import/$', views_action.action_import, name='import'),
 

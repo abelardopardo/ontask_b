@@ -2,17 +2,17 @@
 {% load static %}
 {% block scripts %}
   <script>
-    location.href="{% url 'workflow:export' include %}";
+    location.href="{% url 'action:export_download' action.id %}";
     $('#div-spinner').hide();
   </script>
 {% endblock scripts %}
 {% block title %}Done!{% endblock %}
 {% block container %}
   <div class="container-fluid" style="text-align:center;">
-    <h1 class="page-header text-center">Workflow export</h1>
+    <h1 class="page-header text-center">Action export</h1>
     <p class="text-center">Done!</p>
     <button type="button" class="btn btn-default"
-      onclick="location.href='{% url 'workflow:detail' wid %}'">Back
+      onclick="location.href='{% url 'action:index' %}'">Back
     </button>
   </div>
 {% endblock container %}
