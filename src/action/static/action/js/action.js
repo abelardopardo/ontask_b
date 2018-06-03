@@ -136,6 +136,10 @@ $(function () {
                        "#select-column-name",
                        insertColumnInActionIn);
 
+  // Insert columns in action in
+  $("#action-in-editor").on("change",
+                       "#select-key-column-name",
+                       insertColumnInActionIn);
   // Preview
   $("#html-editor").on("click", ".js-action-preview", loadFormPost);
   $("#email-action-request-data").on("click", ".js-email-preview", loadForm);

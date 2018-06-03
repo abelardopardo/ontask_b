@@ -64,12 +64,28 @@
     {% else %}
       <p class="alert-warning">No description text provided</p>
     {% endif %}
-    <h4>Columns to obtain and store the data</h4>
-    {% if not has_key %}
-      <p class="alert-danger">There must be at least one key item.</p>
+    <h4>Key column to match the user id</h4>
+    <select id="select-key-column-name">
+      {% if not key_selected %}
+        <option value="">- Key column -</option>
+      {% endif %}
+      {% for col in action.workflow.columns.all %}
+        {% if col.is_key %}
+          <option
+            value="{% url 'action:select_key_column_action' action.id col.id 1 %}"
+            {% if col == key_selected %}selected{% endif %}>
+            {{ col.name }}
+          </option>
+        {% endif %}
+      {% endfor %}
+    </select>
+    {% if not key_selected %}
+      <p class="alert-danger" style="margin-top:1ex;">You need to
+        specify a key column</p>
     {% endif %}
+    <h4>Columns to obtain and store the data</h4>
     {% if not has_no_key %}
-      <p class="alert-danger">There must be at least one non-key item.</p>
+      <p class="alert-danger">There must be at least one non-key column.</p>
     {% endif %}
     {% if has_empty_description %}
       <p class="alert-danger">All items should have non-empty descriptions
@@ -93,11 +109,11 @@
     </div>
     <div class="text-center" style="margin-bottom:1.5ex;margin-top:1.5ex">
       <button type="button"
-              class="btn btn-info js-action-preview {% if not has_key or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
+              class="btn btn-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
               style="margin-right:2ex;"
               data-url="{% url 'action:preview' action.id 1 %}"
               data-toggle="tooltip"
-              title="See how is the content shown to each learner">
+              title="See the content as shown to each learner">
         <span class="glyphicon glyphicon-eye-open"></span> Preview
       </button>
       <a href="{% url 'action:index' %}"
