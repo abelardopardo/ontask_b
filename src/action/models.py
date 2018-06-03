@@ -82,11 +82,6 @@ class Action(models.Model):
     # columns
     columns = models.ManyToManyField(Column, related_name='actions_in')
 
-    # Filter to select a subset of rows for action IN
-    filter = JSONField(default=dict,
-                       blank=True, null=True,
-                       help_text='Preselect rows satisfying this condition')
-
     def __str__(self):
         return self.name
 
@@ -161,6 +156,27 @@ class Action(models.Model):
         # for each of the conditions
         for cond in self.conditions.all():
             cond.update_n_rows_selected(column=column)
+
+    def used_columns(self):
+        """
+        Function that returns a list of the columns being used in this
+        action. These are those that are used in any condition + those used
+        in the columns field (if it is an action in)
+
+        :return: List of column objects
+        """
+
+        result = set([])
+
+        # Accumulate all columns for all conditions
+        for c in self.conditions.all():
+            result = result.union(set(c.columns.all()))
+
+        # Accumulate now those in the field columns
+        for c in self.columns.all():
+            result.add(c)
+
+        return list(result)
 
     class Meta:
         """

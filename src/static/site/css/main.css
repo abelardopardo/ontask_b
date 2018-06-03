@@ -15,7 +15,7 @@ body {
 }
 
 .page-header {
-    margin: 20px 0 20px 0;
+    margin: 1ex 0 1ex 0;
 }
 
 .footer {
@@ -185,9 +185,10 @@ body>.navbar-transparent {
   z-index: 2;
 }
 
-/* OnTask personalisation */
-div#filter-set {
-  border: 1px solid black;
+div#action-in-editor h4,
+div#action-out-editor h4 {
+    border-top: solid 1px #eee;
+    padding-top:1ex
 }
 
 /* For the Action Edit */
@@ -344,4 +345,9 @@ a.column-move-bottom> span {
   top: 50%;
   left: 50%;
   z-index: 100;
+}
+
+td.operations a,
+td.operations button {
+    margin-top: 0.5ex;
 }

@@ -677,7 +677,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
 
         # Click in the add rule button (the filter is initially empty)
         self.selenium.find_element_by_xpath(
-            "//div[@id='filter-set']/h4/div/button"
+            "//h4[@id='filter-set']/div/button"
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),

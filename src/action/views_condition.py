@@ -13,7 +13,7 @@ from django.views import generic
 import logs
 import logs.ops
 from action import ops
-from dataops.formula_evaluation import evaluate_node_sql
+from dataops.formula_evaluation import evaluate_node_sql, get_variables
 from ontask.permissions import is_instructor, UserIsInstructor
 from workflow.ops import get_workflow
 from .forms import ConditionForm, FilterForm
@@ -54,11 +54,11 @@ def save_condition_form(request,
     # Context for rendering
     context = {'form': form,
                'action_id': action.id,
-               'condition_id': condition_id}
+               'condition_id': condition_id,
+               'add': is_new}
 
     # If the method is GET or the form is not valid, re-render the page.
     if request.method == 'GET' or not form.is_valid():
-
         data['html_form'] = render_to_string(template_name,
                                              context,
                                              request=request)
@@ -112,7 +112,8 @@ def save_condition_form(request,
                 'A column name with that name already exists.')
             context = {'form': form,
                        'action_id': action.id,
-                       'condition_id': condition_id}
+                       'condition_id': condition_id,
+                       'add': is_new}
             data['html_form'] = render_to_string(template_name,
                                                  context,
                                                  request=request)
@@ -125,7 +126,8 @@ def save_condition_form(request,
                 'The workflow has an attribute with this name.')
             context = {'form': form,
                        'action_id': action.id,
-                       'condition_id': condition_id}
+                       'condition_id': condition_id,
+                       'add': is_new}
             data['html_form'] = render_to_string(template_name,
                                                  context,
                                                  request=request)
@@ -160,8 +162,14 @@ def save_condition_form(request,
     # Update the number of selected rows for the conditions
     condition.update_n_rows_selected()
 
-    # Update the action
-    action.save()
+    # Update the columns field
+    condition.columns.set(
+        action.workflow.columns.filter(
+            name__in=get_variables(condition.formula))
+    )
+
+    # Update the condition
+    condition.save()
 
     # Log the event
     formula, _ = evaluate_node_sql(condition.formula)
@@ -189,10 +197,11 @@ class FilterCreateView(UserIsInstructor, generic.TemplateView):
     where the condition needs to be connected.
     """
     form_class = FilterForm
-    template_name = 'action/includes/partial_filter_create.html'
+    template_name = 'action/includes/partial_filter_addedit.html'
 
     def get_context_data(self, **kwargs):
         context = super(FilterCreateView, self).get_context_data(**kwargs)
+        context['add'] = True
         return context
 
     def get(self, request, *args, **kwargs):
@@ -255,8 +264,9 @@ def edit_filter(request, pk):
     form = FilterForm(request.POST or None, instance=cond_filter)
 
     # Render the form with the Condition information
-    return save_condition_form(request, form,
-                               'action/includes/partial_filter_edit.html',
+    return save_condition_form(request,
+                               form,
+                               'action/includes/partial_filter_addedit.html',
                                cond_filter.action,
                                cond_filter,  # Condition object
                                True)  # It is a filter
@@ -299,7 +309,7 @@ def delete_filter(request, pk):
                      cond_filter.action.workflow,
                      {'id': cond_filter.id,
                       'name': cond_filter.name,
-                      'selected_rows': cond_filter.action.n_rows_selected,
+                      'selected_rows': cond_filter.n_rows_selected,
                       'formula': formula,
                       'formula_fields': fields}, )
 

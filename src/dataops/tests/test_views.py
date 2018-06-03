@@ -355,7 +355,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         # Wait for page to reload
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, "//div[@id='filter-set']/h4/div/button")
+                (By.XPATH, "//h4[@id='filter-set']/div/button")
             )
         )
 
@@ -816,7 +816,7 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath("//button[@type='submit']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, "//div[@id='filter-set']/h4/div/button")
+                (By.XPATH, "//h4[@id='filter-set']/div/button")
             )
         )
 

@@ -492,6 +492,9 @@ def data_frame_add_column(df, column, initial_value):
     # b = np.empty((10,), dtype=[('nnn', np.float64)] (ARRAY)
     # pd.concat([df, pd.DataFrame(b)], axis=1)
 
+    # TODO: Explore using the pd.Series
+    # df2['aaa'] = pd.Series(dtype=np.int64)
+
     column_type = column.data_type
     if initial_value is None:
         # Choose the right numpy type

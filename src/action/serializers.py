@@ -19,7 +19,6 @@ class ColumnNameSerializer(serializers.ModelSerializer):
 
 
 class ConditionSerializer(serializers.ModelSerializer):
-
     # The columns field needs a nested serializer because at this point,
     # the column objects must contain only the name (not the entire model).
     # An action is connected to a workflow which has a set of columns
@@ -35,8 +34,8 @@ class ConditionSerializer(serializers.ModelSerializer):
             name=validated_data['name'],
             description_text=validated_data['description_text'],
             formula=validated_data['formula'],
-            is_filter=validated_data['is_filter'],
             n_rows_selected=validated_data.get('n_rows_selected', -1),
+            is_filter=validated_data['is_filter'],
         )
 
         condition_obj.save()
@@ -69,7 +68,6 @@ class ConditionSerializer(serializers.ModelSerializer):
 
 
 class ActionSerializer(serializers.ModelSerializer):
-
     conditions = ConditionSerializer(required=False, many=True)
 
     # The columns field needs a nested serializer because at this point,
