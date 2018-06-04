@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>The Actions &#8212; OnTask (B.2.6.1) 1.1.0 documentation</title>
+    <title>The Actions &#8212; OnTask (B.2.7.0) 1.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
@@ -54,19 +54,14 @@ for each action (right most column in the table shown in the previous figure).</
 <p>These actions allow you either instructors or students to introduce
 information in the table stored in a workflow. When providing information, you
 typically are interested in a subset of the rows (some of the learners) and a
-subset of the columns (some of the factors). For example, you would like to
-check if a group of students is attending one face-to-face session, or if a
-group of students is engaging in a project discussion.</p>
+subset of the columns. For example, an instructor may like to check if a group of students is attending a face-to-face session, or if a group of students is engaging in a project discussion.</p>
 <p>These actions are edited using the screen shown in the following figure:</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/Ontask____Edit_action_in.png"><img alt="../_images/Ontask____Edit_action_in.png" src="../_images/Ontask____Edit_action_in.png" style="width: 100%;" /></a>
 </div>
-<p>The page has two elements. The first one is a filter to restrict the rows in
-the table considered for data entry. You create a condition, and those rows
-that satisfy it are then prepared for data entry. The second part of the
-screen is to select those columns that you want to include in the data entry
-form. You must select at least a <em>Unique</em> column (shown with green background)
-and a non-unique column.</p>
+<p>The page has several elements. From top to bottom, the first one is a filter to restrict the rows in the table considered for data entry. Those rows
+that satisfy the condition are prepared for data entry. The second part of the
+screen is a description that will be shown at the top of the page as a prelude for the fields to enter the data. The next section is they key column that will be used to match the data entry. The last section of the screen is a set of non-key columns to use to ask the questions. The <em>Preview</em> button at the bottom of the page shows the page that will be shown to the students.</p>
 <p>Once an <em>Action In</em> has been selected, there are two operations available
 represented by the buttons with labels <em>Run</em> and <em>URL</em>. The <em>Run</em> operation is
 intended for the instructors to enter the data for a set of learners. After
@@ -102,13 +97,7 @@ personalized content is made available to the learners.</p>
 </div>
 <div class="section" id="actions-out">
 <h2>Actions Out<a class="headerlink" href="#actions-out" title="Permalink to this headline">¶</a></h2>
-<p>These actions allow to create a resource (in a format
-close to HTML) and mark certain elements with conditions that will control its
-appearance in the final view. Think of these <em>actions out</em> as a resource
-(item, message, tip, comment) you would give learners during a experience. You
-may have several of these items prepared to be used at different points during
-the experience. The action is manipulated with the screen shown in the
-following figure</p>
+<p>These actions allow to create a resource (in a format close to HTML) and mark certain elements with conditions that will control its appearance in the final view. Think of these <em>actions out</em> as a resource (item, message, tip, comment) you would give learners during a experience. You may have several of these items prepared to be used at different points during the experience. The action is manipulated with the screen shown in the following figure</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/Ontask____Edit_action1.png"><img alt="../_images/Ontask____Edit_action1.png" src="../_images/Ontask____Edit_action1.png" style="width: 100%;" /></a>
 </div>
@@ -130,9 +119,9 @@ expression can be alternatively read as:</p>
 second element is the equal sign, and the third component is the constant
 zero. The variable <code class="docutils literal notranslate"><span class="pre">Days</span> <span class="pre">online</span></code> may be replaced by any value in a
 procedure we call <em>evaluation</em>. So, if the expression is evaluated replacing
-the variable by the value 3, it results in <span class="math notranslate">\(3 = 0\)</span> which is false.
+the variable by the value 3, it results in <span class="math notranslate nohighlight">\(3 = 0\)</span> which is false.
 Alternatively, if we evaluate the expression replacing <code class="docutils literal notranslate"><span class="pre">Days_online_2</span></code> with
-the value 0, then the expression becomes <span class="math notranslate">\(0 = 0\)</span>, which is trivially
+the value 0, then the expression becomes <span class="math notranslate nohighlight">\(0 = 0\)</span>, which is trivially
 true. With this structure, any expression then is evaluated by replacing the
 variables by values and deciding if the resulting expression is true or false.</p>
 <p>These conditions can have nested sub-expressions and get complex fairly quickly.</p>
@@ -150,7 +139,7 @@ decide which table rows will be selected and used with this condition.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/Ontask____Edit_action_filterpart.png"><img alt="../_images/Ontask____Edit_action_filterpart.png" src="../_images/Ontask____Edit_action_filterpart.png" style="width: 100%;" /></a>
 </div>
-<p class="last">The line below the button to edit the expression states how many table
+<p class="last">The name given to the expression is followed by how many table
 rows satisfy the filter condition (and therefore are selected). In
 practice, this is as if you dropped from the table some of the rows (it is
 just that they are ignored, not dropped.</p>
@@ -239,7 +228,7 @@ button that reads <em>Email</em>.</p>
 action for each learner and sends the resulting text as an email. If you
 click in that button the platform asks you for additional information:</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/Ontask____Email_action.png"><img alt="../_images/Ontask____Email_action.png" src="../_images/Ontask____Email_action.png" style="width: 60%;" /></a>
+<img alt="../_images/Ontask____Email_action.png" src="../_images/Ontask____Email_action.png" />
 </div>
 <dl class="docutils">
 <dt>The subject</dt>
@@ -290,7 +279,7 @@ information is not available.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">OnTask (B.2.6.1)</a></h1>
+<h1 class="logo"><a href="../index.html">OnTask (B.2.7.0)</a></h1>
 
 
 
@@ -307,7 +296,10 @@ information is not available.</p>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Using the tool</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="workflow.html">The Workflow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="details.html">Workflow Details</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dataops.html">Data Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataops.html">Data Sources for Upload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataops.html#data-upload">Data Upload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataops.html#data-merge">Data Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataops.html#plugins-transforming-the-data-with-your-own-code">Plugins – Transforming the data with your own code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="table.html">The Table</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">The Actions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#actions-in">Actions In</a></li>
@@ -354,7 +346,7 @@ information is not available.</p>
       &copy;Content Licensed under Creative Commons BY 3.0.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Using the tool &#8212; OnTask (B.2.6.1) 1.1.0 documentation</title>
+    <title>Using the tool &#8212; OnTask (B.2.7.0) 1.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
@@ -53,9 +53,16 @@
 <li class="toctree-l2"><a class="reference internal" href="details.html#the-columns">The Columns</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dataops.html">Data Operations</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="dataops.html">Data Sources for Upload</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="dataops.html#csv-files">CSV Files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dataops.html#merge-operation">Merge Operation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataops.html#excel-files">Excel Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataops.html#sql-connection">SQL connection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dataops.html#data-upload">Data Upload</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataops.html#data-merge">Data Merge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataops.html#plugins-transforming-the-data-with-your-own-code">Plugins – Transforming the data with your own code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dataops.html#plugin-requirements">Plugin requirements</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="table.html">The Table</a></li>
@@ -76,7 +83,7 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">OnTask (B.2.6.1)</a></h1>
+<h1 class="logo"><a href="../index.html">OnTask (B.2.7.0)</a></h1>
 
 
 
@@ -93,7 +100,10 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Using the tool</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="workflow.html">The Workflow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="details.html">Workflow Details</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dataops.html">Data Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataops.html">Data Sources for Upload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataops.html#data-upload">Data Upload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataops.html#data-merge">Data Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataops.html#plugins-transforming-the-data-with-your-own-code">Plugins – Transforming the data with your own code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="table.html">The Table</a></li>
 <li class="toctree-l2"><a class="reference internal" href="actions.html">The Actions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scheduler.html">The Scheduler</a></li>
@@ -134,7 +144,7 @@
       &copy;Content Licensed under Creative Commons BY 3.0.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

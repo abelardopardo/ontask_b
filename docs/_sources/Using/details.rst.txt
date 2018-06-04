@@ -152,3 +152,6 @@ Delete
   Deletes the column from the workflow. If there are conditions inside
   *actions out* that use this column, those conditions will be removed from
   the action.
+
+Stats
+  In addition to these operations, OnTask also offers a visualization of the values in a column. x

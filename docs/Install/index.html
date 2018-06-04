@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Installation process &#8212; OnTask (B.2.6.1) 1.1.0 documentation</title>
+    <title>Installation process &#8212; OnTask (B.2.7.0) 1.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
@@ -52,23 +52,19 @@ But as with many other applications, OnTask requires a set of additional
 applications for its execution:</p>
 <ul class="simple">
 <li>Python 2.7</li>
-<li>Django (version 1.11)</li>
+<li>Django</li>
 <li>Additional Django modules (included in the requirements/base.txt) file</li>
-<li>Redis (version 4.0 or later)</li>
+<li>Redis</li>
 <li>PostgreSQL (version 9.5 or later)</li>
 </ul>
-<p>Some of these requirements are (hopefully) properly handled by
-Python through its package index application <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a>.</p>
+<p>Some of these requirements are handled through Python’s package index application <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a>.</p>
 </div>
 <div class="section" id="installing-the-required-tools">
 <h2>Installing the required tools<a class="headerlink" href="#installing-the-required-tools" title="Permalink to this headline">¶</a></h2>
-<p>The following installation steps assume that you are deploying OnTask in a
-production web server capable of serving pages using the HTTPS protocol.</p>
+<p>The following installation steps assume that you are deploying OnTask in a production web server capable of serving pages using the HTTPS protocol.</p>
 <div class="section" id="install-and-configure-redis">
 <h3>Install and Configure Redis<a class="headerlink" href="#install-and-configure-redis" title="Permalink to this headline">¶</a></h3>
-<p>Django requires Redis to execute as a daemon in the same machine to cache
-information about the sessions. You do not need to make any adjustments in
-the code for this tool, simply have the server running in the background.</p>
+<p>Django requires Redis to execute as a daemon in the same machine to cache information about the sessions. No specific changes are required in the code, simply have the server running in the background.</p>
 <ol class="arabic">
 <li><p class="first">Download and install <a class="reference external" href="https://redis.io/">redis</a>.</p>
 <p>Follow the instructions to configure it to be used by Django.</p>
@@ -77,12 +73,9 @@ the code for this tool, simply have the server running in the background.</p>
 command in the command line interface.</p>
 </li>
 </ol>
-<p>For OnTask you only need executing in the machine. If you use the default
-settings, there are not additional changes required in OnTask (the code is
-already using this application internally).</p>
 </div>
 <div class="section" id="install-and-configure-postgresql">
-<h3>Install and Configure PostgreSQL<a class="headerlink" href="#install-and-configure-postgresql" title="Permalink to this headline">¶</a></h3>
+<span id="install-postgresql"></span><h3>Install and Configure PostgreSQL<a class="headerlink" href="#install-and-configure-postgresql" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic">
 <li><p class="first">Download and install <a class="reference external" href="https://www.postgresql.org/">postgresql</a>.</p>
 </li>
@@ -90,14 +83,14 @@ already using this application internally).</p>
 should be able to create new databases but not new roles and you should
 define a password for the user (use <code class="docutils literal notranslate"><span class="pre">createuser</span> <span class="pre">--interactive</span> <span class="pre">-W</span></code>).</p>
 </li>
-<li><p class="first">Adjust the access configuration in postgresql (usually in file
+<li><p class="first">Adjust the access configuration in postgresql (in the configuration file
 <code class="docutils literal notranslate"><span class="pre">pg_hba.conf</span></code>) to allow the newly created user to access databases locally.</p>
 </li>
 <li><p class="first">Create a new database with name <code class="docutils literal notranslate"><span class="pre">ontask</span></code> with the <code class="docutils literal notranslate"><span class="pre">createdb</span></code> command.</p>
 </li>
-<li><p class="first">Use the client application <code class="docutils literal notranslate"><span class="pre">psql</span></code> to verify that the user has access to
+<li><p class="first">Use the client application <code class="docutils literal notranslate"><span class="pre">psql</span></code> to verify that the user has access
 the newly created database and can create and delete a new table and run
-regular queries. Try to connect to the database with the following command:</p>
+regular queries. Test the connection with the following command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">psql</span> <span class="o">-</span><span class="n">h</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span> <span class="o">-</span><span class="n">U</span> <span class="n">ontask</span> <span class="o">-</span><span class="n">W</span> <span class="n">ontask</span>
 </pre></div>
 </div>
@@ -116,46 +109,37 @@ interpreter and you can execute the python interpreter.</p>
 using the command line interpreter.</li>
 <li>Install <a class="reference external" href="https://pip.pypa.io/en/stable/">pip</a> (the package may be called
 <code class="docutils literal notranslate"><span class="pre">python-pip</span></code>). This tool will be used by both Python and Django to install
-numerous libraries that are required to execute OnTask.</li>
+additional libraries required to execute OnTask.</li>
 </ol>
 </div>
 <div class="section" id="download-install-and-configure-ontask">
 <h3>Download, install and configure OnTask<a class="headerlink" href="#download-install-and-configure-ontask" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic">
-<li><p class="first">Download or clone_actions a copy of <a class="reference external" href="https://github.com/abelardopardo/ontask_b">OnTask</a>.</p>
+<li><p class="first">Download or clone a copy of <a class="reference external" href="https://github.com/abelardopardo/ontask_b">OnTask</a>.</p>
 </li>
 <li><p class="first">Using a command interpreter, go to the OnTask folder and locate a folder
-inside it with name <code class="docutils literal notranslate"><span class="pre">requirements</span></code>. Verify that the <code class="docutils literal notranslate"><span class="pre">requirements</span></code>
-folder contains the files <code class="docutils literal notranslate"><span class="pre">base.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">production.txt</span></code> and
+inside it with name <code class="docutils literal notranslate"><span class="pre">requirements</span></code>. Verify that it
+contains the files <code class="docutils literal notranslate"><span class="pre">base.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">production.txt</span></code> and
 <code class="docutils literal notranslate"><span class="pre">development.txt</span></code>. The first file contains a list of python modules that
 are required by OnTask. The second is a set of additional modules to run a
-<em>production</em> instance, and the third is a list if you intend to run a
+<em>production</em> instance, and the third is the same list if you intend to run a
 <em>development</em> instance.</p>
 </li>
-<li><p class="first">If you plan to run a production instance of OnTask execute the command:</p>
+<li><p class="first">If you plan to run a production instance of OnTask execute the command (you may need administrative privileges to execute this command):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">/</span><span class="n">production</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
-<p>Alternatively, if you plan to run a development instance of OnTask then
+<p>Alternatively, if you plan to run a development instance of OnTask,
 execute the command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">/</span><span class="n">development</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
-<p>This command traverses a list of libraries and modules and installs them as
-part of the python libraries in the system. These modules include Django,
-Django Rest Framework, Django braces, etc.</p>
+<p>This command downloads  a set of libraries and modules and installs them as
+part of the python libraries in the system.</p>
 </li>
 </ol>
-<p>At this point you have the major modules in place. The next steps include the
-configuration of the Django environment to run OnTask.</p>
-<p>If you plan to install a production instance of OnTask, using a plain text
-editor (nano, vim, Emacs or similar) in a command line interpreter, open the
-file <code class="docutils literal notranslate"><span class="pre">manage.py</span></code> in the <code class="docutils literal notranslate"><span class="pre">src</span></code> folder of the project. Modify line 14
-replacing the value <code class="docutils literal notranslate"><span class="pre">&quot;ontask.settings.development&quot;</span></code> by
-<code class="docutils literal notranslate"><span class="pre">&quot;ontask.settings.production&quot;</span></code>. Save and close the file.</p>
-<p>Using the same plain text editor create a file with name <code class="docutils literal notranslate"><span class="pre">local.env</span></code>
-in the folder <code class="docutils literal notranslate"><span class="pre">src/ontask/settings</span></code> with the following content (note there is
-no space between variable names and the equal sign):</p>
+<p>At this point you have the major modules in place. The next steps include the configuration of the Django environment to run OnTask. If you plan to install a production instance of OnTask, using a plain text editor (nano, vim, Emacs or similar) in a command line interpreter, open the file <code class="docutils literal notranslate"><span class="pre">manage.py</span></code> in the <code class="docutils literal notranslate"><span class="pre">src</span></code> folder of the project. Modify line 10 replacing the value <code class="docutils literal notranslate"><span class="pre">&quot;ontask.settings.development&quot;</span></code> by <code class="docutils literal notranslate"><span class="pre">&quot;ontask.settings.production&quot;</span></code>. Save and close the file.</p>
+<p>Using the same plain text editor create a file with name <code class="docutils literal notranslate"><span class="pre">local.env</span></code> in the folder <code class="docutils literal notranslate"><span class="pre">src/ontask/settings</span></code> with the following content (note there is no space between variable names and the equal sign):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TIME_ZONE</span><span class="o">=</span><span class="s1">&#39;[YOUR LOCAL PYTHON TIME ZONE]&#39;</span>
 <span class="n">BASE_URL</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
 <span class="n">DOMAIN_NAME</span><span class="o">=</span><span class="s1">&#39;[YOUR DOMAIN NAME]&#39;</span>
@@ -202,12 +186,9 @@ comma-separated list of pairs key=secret for LTI authentication. See the
 section  <a class="reference internal" href="#authentication"><span class="std std-ref">Authentication</span></a> for more details about this type of
 authentication.</p>
 </li>
-<li><p class="first">Create a new folder with name <code class="docutils literal notranslate"><span class="pre">logs</span></code> in the OnTask top folder (next to
-the <code class="docutils literal notranslate"><span class="pre">requirements</span></code> folder). This folder <strong>is different</strong> from the folder
-with the same name in the <code class="docutils literal notranslate"><span class="pre">src</span></code> folder.</p>
+<li><p class="first">Create a new folder with name <code class="docutils literal notranslate"><span class="pre">logs</span></code> in the OnTask top folder (next to the <code class="docutils literal notranslate"><span class="pre">requirements</span></code> folder). This folder <strong>is different</strong> from the folder with the same name in the <code class="docutils literal notranslate"><span class="pre">src</span></code> folder.</p>
 </li>
-<li><p class="first">If at some point during the following steps you want to reset
-the content of the database, run the commands <code class="docutils literal notranslate"><span class="pre">dropdb</span></code> and <code class="docutils literal notranslate"><span class="pre">createdb</span></code></p>
+<li><p class="first">If at some point during the following steps you want to reset the content of the database, run the commands <code class="docutils literal notranslate"><span class="pre">dropdb</span></code> and <code class="docutils literal notranslate"><span class="pre">createdb</span></code> explained in <a class="reference internal" href="#install-postgresql"><span class="std std-ref">Install and Configure PostgreSQL</span></a>.</p>
 </li>
 <li><p class="first">Execute the following commands from the <code class="docutils literal notranslate"><span class="pre">src</span></code> folder to prepare the
 database initialization:</p>
@@ -324,8 +305,7 @@ your needs.</p>
 <h2>Production Deployment<a class="headerlink" href="#production-deployment" title="Permalink to this headline">¶</a></h2>
 <p>Once OnTask is executing normally, you may configure a web server (nginx,
 apache or similar) to make it available to a community of users. The
-instructions to make such deployment are beyond the scope of this manual but
-they are available for users to consult.</p>
+instructions to make such deployment are beyond the scope of this manual but are available through the corresponding manual pages of these applications.</p>
 </div>
 <div class="section" id="authentication">
 <span id="id1"></span><h2>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h2>
@@ -501,6 +481,178 @@ OnTask, open the section with name <em>Core Configuration</em>, click in the
 preferences and adjust the value of the <em>Minute interval to program scheduled
 tasks</em> and match it (in minutes) to the interval reflected in the crontab.</p>
 </div>
+<div class="section" id="plugins">
+<span id="plugin-install"></span><h2>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h2>
+<p>OnTask allows also the inclusion of arbitrary Python modules to execute and transform the data stored in a workflow. The Python code in the plugins is executed the same interpreter and execution environment as the rest of the platform. Thus, <strong>use this functionality to execute only code that is fully trusted</strong>. There is nothing preventing a plugin to run malicious code (think <code class="docutils literal notranslate"><span class="pre">system.exec('rm</span> <span class="pre">-rf</span> <span class="pre">/')</span></code>, so use at your own risk. To configure the execution of plugins follow these steps:</p>
+<ol class="arabic">
+<li><p class="first">Create a folder at any location in your instance of OnTask to store the Python modules. OnTask assumes that each directory in that folder contains a Python module (that is, a folder with a file <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> inside).</p>
+</li>
+<li><p class="first">Open the administration page of OnTask as superuser and go to the section with title <cite>Data Upload/Merge Operations</cite>.</p>
+</li>
+<li><p class="first">Select the <cite>Preferences</cite> section.</p>
+</li>
+<li><p class="first">Modify the field <cite>Folder where plugins are installed</cite> to contain the absolute path to the folder created in your systems.</p>
+</li>
+<li><p class="first">Make sure that the Python interpreter that is currently executing the Django code is also capable of accessing and executing the code in the plugin folder.</p>
+</li>
+<li><p class="first">Restart the server to make sure this variable is properly updated.</p>
+</li>
+<li><p class="first">To create a new plugin first create a folder in the plugin space previously configured.</p>
+</li>
+<li><p class="first">Inside this new folder create a Python file with name <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code>. The file has to have a structure a shown in <a class="reference download internal" href="../_downloads/__init__.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">the</span> <span class="pre">following</span> <span class="pre">template</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span><span class="p">,</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="c1"># The field class_name contains the name of the class to load to execute the</span>
+<span class="c1"># plugin.</span>
+<span class="n">class_name</span> <span class="o">=</span> <span class="s1">&#39;OntaskTestPlugin&#39;</span>
+
+
+<span class="k">class</span> <span class="nc">OntaskTestPlugin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Example of a class that implements the OnTask plugin interface. The</span>
+<span class="sd">    objects of this class have to provide the following elements:</span>
+
+<span class="sd">    1. Field name: Plugin name show to the users.</span>
+
+<span class="sd">    2. Field description_txt: A string with the detailed description of what the</span>
+<span class="sd">    plugin does</span>
+
+<span class="sd">    3. Field input_column_names: A potentially empty list of column names </span>
+<span class="sd">    (strings). If the list is empty, the columns are selected by the userat </span>
+<span class="sd">    execution time.</span>
+
+<span class="sd">    4. Field output_column_names: Non empty list of names (strings) of the </span>
+<span class="sd">    columns to be used for the output of the transformation.</span>
+
+<span class="sd">    5. Field parameters: an optionally empty list with tuples with the following</span>
+<span class="sd">    structure:</span>
+
+<span class="sd">      (&#39;name&#39;, type, [list of allowed values], initial value, help_text)</span>
+
+<span class="sd">      These elements will be requested from the user before executing the</span>
+<span class="sd">      plugin through a form. The conditions on these values are:</span>
+
+<span class="sd">      - name must be a string</span>
+<span class="sd">      - type must be a string equal to &quot;integer&quot;, &quot;double&quot;, &quot;string&quot;, </span>
+<span class="sd">        &quot;datetime&quot; or &quot;boolean&quot;. </span>
+<span class="sd">      - The list of values is to restrict the</span>
+<span class="sd">        possible values</span>
+<span class="sd">      - The initial value must be of the type specified by the second </span>
+<span class="sd">        element.</span>
+<span class="sd">      - Help_text a string to show as help text</span>
+
+<span class="sd">    6. Method &quot;run&quot; that receives:</span>
+<span class="sd">       - a pandas data frame with the data to process</span>
+<span class="sd">       - a string with the name of the key column that will be used to merge</span>
+<span class="sd">       the result.</span>
+<span class="sd">       - A dictionary of pairs (name, value) with the parameters described in</span>
+<span class="sd">       the previous element.</span>
+
+<span class="sd">       and returns a result Pandas data frame. This frame **must** have one</span>
+<span class="sd">       column with the key column name provided so that it can be properly</span>
+<span class="sd">       merged with the existing data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Plugin Template&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description_txt</span> <span class="o">=</span> <span class="s1">&#39;Example of plugin description&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_column_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_column_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;RESULT 1&#39;</span><span class="p">,</span> <span class="s1">&#39;RESULT 2&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s1">&#39;param string&#39;</span><span class="p">,</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="s1">&#39;v2&#39;</span><span class="p">],</span> <span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="s1">&#39;help param string&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;param integer&#39;</span><span class="p">,</span> <span class="s1">&#39;integer&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="bp">None</span><span class="p">,</span> <span class="s1">&#39;help param integer&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;param double&#39;</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">],</span> <span class="bp">None</span><span class="p">,</span>
+                             <span class="s1">&#39;help param double&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;param boolean&#39;</span><span class="p">,</span> <span class="s1">&#39;boolean&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;help param boolean&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;param datetime&#39;</span><span class="p">,</span> <span class="s1">&#39;datetime&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="s1">&#39;2018-05-25 18:03:00+09:30&#39;</span><span class="p">,</span>
+                               <span class="s1">&#39;help param datetime&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;param datetime2&#39;</span><span class="p">,</span> <span class="s1">&#39;datetime&#39;</span><span class="p">,</span> 
+                                <span class="p">[],</span>
+                                <span class="s1">&#39;2018-05-25 18:03:00+09:30&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;help param datetime&#39;</span><span class="p">),</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_frame</span><span class="p">,</span> <span class="n">merge_key</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to overwrite. Receives a data frame wih a number of columns</span>
+<span class="sd">        stipulated by the num_column_input pair, the name of a key column and a</span>
+<span class="sd">        dictionary with parameters of the form name, value.</span>
+
+<span class="sd">        Runs the algorithm and returns a pandas data frame structure that is</span>
+<span class="sd">        merged with the existing data frame in the workflow using the merge_key.</span>
+
+<span class="sd">        :param data_frame: Input data for the plugin</span>
+<span class="sd">        :param merge_key: Name of the column key that will be used for merging</span>
+<span class="sd">        :param parameters: Dictionary with (name, value) pairs.</span>
+
+<span class="sd">        :return: a Pandas data_frame to merge with the existing one (must</span>
+<span class="sd">        contain a column with name merge_key)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Extract the key column from the given data frame</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data_frame</span><span class="p">[</span><span class="n">merge_key</span><span class="p">])</span>
+
+        <span class="c1"># Process the given data and create the result</span>
+        <span class="n">result</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">output_column_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">result</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">output_column_names</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">2</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">The menu <em>Dataops</em> at the top of the platform includes the page <em>Transform</em> that provides access to the plugins and its invocation with the current workflow.</p>
+</li>
+</ol>
+<blockquote>
+<div></div></blockquote>
+</div>
+<div class="section" id="sql-connections">
+<span id="id3"></span><h2>SQL Connections<a class="headerlink" href="#sql-connections" title="Permalink to this headline">¶</a></h2>
+<p>One of the key functionalities of OnTask is to be able to merge data from multiple sources. Section <a class="reference internal" href="../Using/dataops.html#dataops"><span class="std std-ref">Data Sources for Upload</span></a> describes the functionality available to perform these operations. Some of them, however, require additional configuration from the administrator. This is the case for the uploading and merging of data from a remote database that allows SQL connections. These connections must be defined by the administrator and then they are available to the instructors.</p>
+<p>The definition of these connections is done from the platform’s home page, right after the table showing the available workflows.</p>
+<div class="figure align-center">
+<img alt="../_images/Ontask____SQLtable.png" src="../_images/Ontask____SQLtable.png" />
+</div>
+<p>Each connection can be defined with the following parameters:</p>
+<div class="figure align-center">
+<img alt="../_images/Ontask___SQLcreate.png" src="../_images/Ontask___SQLcreate.png" />
+</div>
+<dl class="docutils">
+<dt>Name (required)</dt>
+<dd>Name of the connection for reference purposes within the platform. This name must be unique across the entire platform.</dd>
+<dt>Description</dt>
+<dd>A paragraph or two explaining more detail about this connection.</dd>
+<dt>Type (required)</dt>
+<dd>Type of database connection to be used. Typical types include <em>postgres</em>, <em>mysql</em>, etc.</dd>
+<dt>Driver</dt>
+<dd>Driver to be used for the connection. OnTask assumes that these drivers are properly installed and available to the underlying Python interpreter running Django.</dd>
+<dt>User</dt>
+<dd>User name to connect to the remote database.</dd>
+<dt>Requires password</dt>
+<dd>Flag denoting if the connection requires password. If it does, the password will be required at execution time. This feature allows OnTask to avoid storing DB passwords.</dd>
+<dt>Host</dt>
+<dd>Host name or IP storing the remote database</dd>
+<dt>Port</dt>
+<dd>Port to use to connect to the remote host</dd>
+<dt>DB Name (required)</dt>
+<dd>Name of the remote database</dd>
+<dt>Table (required)</dt>
+<dd>Name of the table stored in the remote database and containing the data to upload/merge</dd>
+</dl>
+<p>Once a connection is defined, as described in <a class="reference internal" href="../Using/dataops.html#sql-connection-run"><span class="std std-ref">SQL connection</span></a>, all the data in the table will be accessed and loaded/merged into the current workflow.</p>
+<p>The operations allowed in each connection are:</p>
+<dl class="docutils">
+<dt>Edit</dt>
+<dd>Change any of the parameters of the connection</dd>
+<dt>Clone</dt>
+<dd>Create a duplicate of the connection (useful to reuse configuration parameters)</dd>
+<dt>Delete</dt>
+<dd>Remove the connection from the platform.</dd>
+</dl>
+</div>
 </div>
 
 
@@ -509,7 +661,7 @@ tasks</em> and match it (in minutes) to the interval reflected in the crontab.</
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">OnTask (B.2.6.1)</a></h1>
+<h1 class="logo"><a href="../index.html">OnTask (B.2.7.0)</a></h1>
 
 
 
@@ -542,6 +694,8 @@ tasks</em> and match it (in minutes) to the interval reflected in the crontab.</
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#scheduling-tasks">Scheduling tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plugins">Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sql-connections">SQL Connections</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../Using/index.html">Using the tool</a></li>
@@ -579,7 +733,7 @@ tasks</em> and match it (in minutes) to the interval reflected in the crontab.</
       &copy;Content Licensed under Creative Commons BY 3.0.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
