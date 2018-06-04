@@ -121,8 +121,7 @@ def column_add(request):
                   'column_type': column.data_type})
 
     data['form_is_valid'] = True
-    data['html_redirect'] = reverse('workflow:detail',
-                                    kwargs={'pk': workflow.id})
+    data['html_redirect'] = ''
     return JsonResponse(data)
 
 
@@ -175,6 +174,7 @@ def formula_column_add(request):
     # Save the instance
     try:
         column = form.save()
+        form.save_m2m()
     except IntegrityError as e:
         form.add_error('name', 'A column with that name already exists')
         data['html_form'] = render_to_string(

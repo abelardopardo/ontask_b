@@ -3,6 +3,10 @@
 {% load static %}
 {% load widget_tweaks %}
 {% load django_tables2 %}
+{% block styles %}
+  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
+  <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
+{% endblock styles %}
 {% block extrahead %}
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
@@ -11,6 +15,7 @@
 {% block scripts %}
   <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
+  <script src="{% static 'site/js/sol.js' %}"></script>
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
@@ -92,7 +97,7 @@
         .</p>
     {% endif %}
     <div id="column-names">
-      <div style="display: table-cell; padding-right: 1ex;">Insert column:</div>
+      <div style="display: table-cell; padding-right: 1ex;">Insert</div>
       <div style="display: table-cell; padding-right: 1ex;">
           <select id="select-column-name">
             <option value="">- Column -</option>
@@ -101,6 +106,22 @@
                 value="{% url 'action:select_column_action' action.id col.id %}">{{ col.name }}</option>
             {% endfor %}
           </select>
+      </div>
+      <div style="display: table-cell; padding-right: 1ex;">
+        <button type="button"
+                class="btn btn-primary btn-sm js-workflow-column-add"
+                data-url="{% url 'workflow:column_add' %}"
+                data-toggle="tooltip" title="Add a new column to the table">
+          <span class="glyphicon glyphicon-plus"></span> Add column
+        </button>
+      </div>
+      <div style="display: table-cell; padding-right: 1ex;">
+        <button type="button"
+                class="btn btn-primary btn-sm js-workflow-formula-column-add"
+                data-url="{% url 'workflow:formula_column_add' %}"
+                data-toggle="tooltip" title="Add a new derived column to the table">
+          <span class="glyphicon glyphicon-plus"></span> Add derived column
+        </button>
       </div>
     </div>
     <div class="container-fluid" id="column-selection"

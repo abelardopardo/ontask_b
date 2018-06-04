@@ -152,13 +152,16 @@ $(function () {
   $("#modal-item").on("submit", ".js-action-showurl-form", saveForm);
 
   // Column Add
-  $("#column-selection").on("click", ".js-workflow-column-add", loadForm);
+  $("#column-names").on("click", ".js-workflow-column-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-column-add-form", saveForm);
 
   // Derived column add
-  $("#column-selection").on("click", ".js-workflow-formula-column-add", loadForm);
-  $("#modal-item").on("submit", ".js-workflow-formula-column-add-form",
-  saveForm);
+  $("#column-names").on("click",
+                        ".js-workflow-formula-column-add",
+                        loadForm);
+  $("#modal-item").on("submit",
+                      ".js-workflow-formula-column-add-form",
+                      saveForm);
 
   // Column Edit
   $("#column-selected-table").on("click", ".js-workflow-column-edit", loadForm);
