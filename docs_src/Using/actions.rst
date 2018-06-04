@@ -26,9 +26,7 @@ Actions In
 These actions allow you either instructors or students to introduce
 information in the table stored in a workflow. When providing information, you
 typically are interested in a subset of the rows (some of the learners) and a
-subset of the columns (some of the factors). For example, you would like to
-check if a group of students is attending one face-to-face session, or if a
-group of students is engaging in a project discussion.
+subset of the columns. For example, an instructor may like to check if a group of students is attending a face-to-face session, or if a group of students is engaging in a project discussion.
 
 These actions are edited using the screen shown in the following figure:
 
@@ -36,12 +34,9 @@ These actions are edited using the screen shown in the following figure:
    :align: center
    :width: 100%
 
-The page has two elements. The first one is a filter to restrict the rows in
-the table considered for data entry. You create a condition, and those rows
-that satisfy it are then prepared for data entry. The second part of the
-screen is to select those columns that you want to include in the data entry
-form. You must select at least a *Unique* column (shown with green background)
-and a non-unique column.
+The page has several elements. From top to bottom, the first one is a filter to restrict the rows in the table considered for data entry. Those rows
+that satisfy the condition are prepared for data entry. The second part of the
+screen is a description that will be shown at the top of the page as a prelude for the fields to enter the data. The next section is they key column that will be used to match the data entry. The last section of the screen is a set of non-key columns to use to ask the questions. The *Preview* button at the bottom of the page shows the page that will be shown to the students. 
 
 Once an *Action In* has been selected, there are two operations available
 represented by the buttons with labels *Run* and *URL*. The *Run* operation is
@@ -85,13 +80,7 @@ personalized content is made available to the learners.
 Actions Out
 -----------
 
-These actions allow to create a resource (in a format
-close to HTML) and mark certain elements with conditions that will control its
-appearance in the final view. Think of these *actions out* as a resource
-(item, message, tip, comment) you would give learners during a experience. You
-may have several of these items prepared to be used at different points during
-the experience. The action is manipulated with the screen shown in the
-following figure
+These actions allow to create a resource (in a format close to HTML) and mark certain elements with conditions that will control its appearance in the final view. Think of these *actions out* as a resource (item, message, tip, comment) you would give learners during a experience. You may have several of these items prepared to be used at different points during the experience. The action is manipulated with the screen shown in the following figure
 
 .. figure:: images/Ontask____Edit_action1.png
    :align: center
@@ -141,7 +130,7 @@ The filter
      :align: center
      :width: 100%
 
-  The line below the button to edit the expression states how many table
+  The name given to the expression is followed by how many table
   rows satisfy the filter condition (and therefore are selected). In
   practice, this is as if you dropped from the table some of the rows (it is
   just that they are ignored, not dropped.
@@ -240,7 +229,6 @@ click in that button the platform asks you for additional information:
 
 .. figure:: images/Ontask____Email_action.png
    :align: center
-   :width: 60%
 
 The subject
   A line to be included as subject of all the emails.

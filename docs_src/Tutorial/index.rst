@@ -25,10 +25,9 @@ Table
   videos, etc.
 
 Actions
-  An action is a HTML resource of which certain parts that are included
-  or excluded based on a set of **conditions** created with the learner
-  attributes   (for example, number of interventions in the forum is larger than
-  five, and number of times a video was watched is larger than 2).
+  An action in OnTask can be one of two entities:
+  * A HTML resource of which certain parts are included or excluded based on a set of **conditions** created with the learner attributes (for example, number of interventions in the forum is larger than five, and number of times a video was watched is larger than 2).
+  * A set of questions that are shown to the students and their answers are incorporated to the data table.
 
 The following figure represents the high level view of the tool.
 
@@ -54,6 +53,9 @@ Create an action
 Review the messages
   And finally you will review the appearance of these messages for different
   learners.
+
+Collect data from the students
+  Create a set of columns to ask students for additional data.
 
 The following steps describe the required operations in each of these stages.
 
@@ -125,7 +127,7 @@ The buttons immediately under title *Workflow Details* show some of the operatio
 Data Upload
 ===========
 
-We now upload the data included in the file :download:`learner_information.csv <../Dataset/learner_information.csv>`. Click in the *Dataops* menu, and then in the option to *CSV Update/Merge* as shown in the following figure
+We now upload the data included in the file :download:`learner_information.csv <../Dataset/learner_information.csv>`. Click in the *Dataops* menu, and then in the option to *Data Upload/Merge* to see the following page:
 
 .. figure:: ../Ontask_screens/05_data_csvupload_initial.png
    :align: center
@@ -330,4 +332,68 @@ Sending an email through OnTask is one possible way to offer the personalized co
 Actions In
 ----------
 
-To be written.
+These actions offer the possibility of collecting data by directly asking students a set of questions. This functionality could be considered as a *simplified survey engime*. The action consists of a document with a paragraph introducing a set of questions. Each  question corresponds with a column in the workflow, and the text describing that columns is used as the question text. To create one of these actions click in the button *New Action In*. The description of the action will be used as the introductory text for the survey.
+
+.. figure:: ../Ontask_screens/33_action_in_create.png
+   :align: center
+
+After the action is created, an editor similar to the action out is shown.
+
+.. figure:: ../Ontask_screens/34_action_in_edit.png
+
+This editor allows you to specify several elements of the action, more precisely:
+
+Filter learners
+  An expression to select a subset of the learners for which the action (or survey) will be offered.
+
+Description
+  A text used to describe the set of questions.
+
+Key column to identify learners
+  The column in the table that will be used to identify the users when submitting their answers. This is typically the column that contains the user email.
+
+Columns to obtain data
+  The columns that will be used to collect the data. You may choose an existing column, create a new one, or create a new derived one (the values are crated by combining values from other columns and an operator).
+
+The editor will remind you that you need to choose one key column before the action is ready to be used, and that it would be desirable to have a description (or question text) for each of the columns. Let's suppose you want to ask the learners two questions:
+
+- What was the most challenging topic for you this week? 
+
+- What was your dedication to the course this week?
+
+And in order to make the data suitable for further processing, we would like to define a set of pre-defined answers. You can easily define this by creating a new column
+
+.. figure:: ../Ontask_screens/35_action_in_new_column.png
+   :align: center
+
+and analogously, the second column
+
+.. figure:: ../Ontask_screens/35_action_in_new_column2.png
+   :align: center
+
+You can now add these columns to the action and the editor will show them in the table at the bottom as shown in the following figure
+
+.. figure:: ../Ontask_screens/36_action_in_edit_complete.png
+   :align: center
+
+You may see how these questions will be shown to the users with the *Preview* button.
+
+.. figure:: ../Ontask_screens/37_action_in_preview.png
+   :align: center
+
+Once created, you may select the URL from the action table and make it available for learners to enter their answers, which will be automatically added to the table in the workflow and ready to be used as part of the conditions to create personalized content.
+
+A Predictive Model
+------------------
+
+Suppose that your favorite data analyst has processed the data set and created a predictive model that estimates the score of the final exam based on the value of the column *Contributions* applying the following linear equation::
+
+  final exam score = 3.73 * Contributions + 25.4
+
+You would like to incorporate this model to the workflow and use the predicted final exam score as another column to create conditions and personalize content. One way to achieve this is by creating a plugin that given the two coefficients of a linear model (in the example 3.73 and 25.4) returns a new data set with a column with the values obtained using the corresponding equation. In order for the plugin to comply with the  :ref:`requirements <plugin_requirements>`, one possible definition would be:
+
+.. literalinclude:: __init__.py
+   :language: python
+
+
+

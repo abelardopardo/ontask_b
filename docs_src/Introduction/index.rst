@@ -3,7 +3,7 @@ What is OnTask
 **************
 
 Welcome to OnTask, the platform offering instructors and educational designers
-the capacity to use data to personalise the learners experience.
+the capacity to use data to personalize the learners experience.
 
 Learning is complex, highly situated, and requires interacting with peers,
 instructors, resources, platforms, etc. This complexity can be alleviated
@@ -13,33 +13,37 @@ the more difficult is for instructors to provide support and usual
 solutions usually include generic resources that are only relevant to a subset
 of the audience.
 
-.. sidebar:: Testimonials
-
-   Comments extracted from focus interviews with learners.
+.. sidebar:: Learner testimonials
 
    "its not the email itself, but what it represents: the accountability for
    your learning"
 
    "I think it makes sense as a reflection of the whole semester, oh this is where I struggled with."
 
-In parallel wih this increase in complexity, learning platforms now generate
+In parallel with this increase in complexity, learning platforms now generate
 a wealth of data when activities are mediated by technology. This
 data can be collected and used to help instructors and designers provide a
-truly personalised experience. Why is this not happening in current
+truly personalized experience. Why is this not happening in current
 platforms? Because the connection between this data and learner support
 actions is challenging to implement. This is the focus of OnTask:
 provide instructors and designers with a platform to connect data emerging
-from learning environments with highly personalised student support actions.
+from learning environments with highly personalized student support actions.
 
 OnTask is a web application that allows instructors and designers to combine
 data previously captured and stored in a table with a set of rules to
-personalise the content of a web document. That document can then be sent as
+personalize the content of a web document. That document can then be sent as
 an email or made available to each learner. The following picture shows the
 high level structure of the platform.
 
 .. figure:: diagram.png
    :align: center
    :width: 100%
+
+.. sidebar:: Instructor testimonials
+
+   "A number of the participants were highly complimentary of the OnTask software tool and several of the teaching staff [...] are actively planning and preparing to use OnTask in the second semester of this academic year."
+
+   "We were also very pleased to support the inclusion of OnTask into the Apereo Incubation process. We have been impressed by the thinking that informs OnTask and would like to see it thrive as an open source solution as we think it has great potential."
 
 The rest of the document is divided into blocks. The :ref:`first block
 <install>` covers the technical details to download, install and configure
@@ -50,8 +54,8 @@ to use the tool within their institution or for their own use.
 
 The :ref:`second part <using>` explains how to use OnTask in the context of a
 learning experience, how to load data, manipulate the table and create the
-personalised actions. The audience for this part is teachers and designers that
-need to personalise the interactions they have with learners in a platform
+personalized actions. The audience for this part is teachers and designers that
+need to personalize the interactions they have with learners in a platform
 offering some data sources.
 
 The :ref:`third part <tutorial>` contains a step by step tutorial on how to
@@ -67,7 +71,7 @@ Research
 There are several platforms that implement similar functionality or follow a
 similar approach. OnTask has been implemented with numerous ideas initially
 present in the Student Relationship Engagement System `SRES <http://sres.io>`_) and subsequent versions. The common idea
-among them is the positive impact that personalised communication may have when
+among them is the positive impact that personalized communication may have when
 supporting learners. There are a few scientific publications that document the
 ideas and processes that inspired the creation of OnTask:
 
