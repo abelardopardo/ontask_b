@@ -1895,7 +1895,7 @@
         "workflow": 108,
         "data_type": "integer",
         "is_key": true,
-        "position": 1,
+        "position": 3,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1910,7 +1910,7 @@
         "workflow": 108,
         "data_type": "string",
         "is_key": false,
-        "position": 2,
+        "position": 4,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1925,7 +1925,7 @@
         "workflow": 108,
         "data_type": "string",
         "is_key": true,
-        "position": 3,
+        "position": 2,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1940,7 +1940,7 @@
         "workflow": 108,
         "data_type": "double",
         "is_key": true,
-        "position": 4,
+        "position": 1,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1990,7 +1990,6 @@
         "active_from": null,
         "active_to": null,
         "content": "<p>Hi {{ name }}</p><p>ATT:&nbsp;{{ attribute name }}</p><p>COL:&nbsp;{{ registered }}</p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>",
-        "filter": {},
         "columns": []
     }
 },
@@ -2008,21 +2007,6 @@
         "active_from": null,
         "active_to": null,
         "content": "{% comment %}Your action content here{% endcomment %}",
-        "filter": {
-            "not": false,
-            "rules": [
-                {
-                    "value": "0",
-                    "field": "registered",
-                    "operator": "equal",
-                    "input": "radio",
-                    "type": "boolean",
-                    "id": "registered"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
         "columns": [
             2927,
             2929
@@ -2052,6 +2036,7 @@
             "condition": "AND"
         },
         "is_filter": true,
+        "n_rows_selected": 3,
         "created": "2017-12-08T01:29:51.431Z",
         "modified": "2017-12-08T01:30:04.937Z"
     }
@@ -2079,6 +2064,7 @@
             "condition": "AND"
         },
         "is_filter": false,
+        "n_rows_selected": 2,
         "created": "2017-12-08T01:33:21.687Z",
         "modified": "2017-12-08T01:33:21.687Z"
     }
