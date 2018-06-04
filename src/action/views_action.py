@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+from django.db import IntegrityError
+
 from visualizations.plotly import PlotlyHandler
 
 try:
@@ -156,23 +158,25 @@ def save_action_form(request, form, is_out, template_name):
             if not workflow:
                 redirect('workflow:index')
 
+            if is_new:  # Action is New. Update user and workflow fields
+                action_item.user = request.user
+                action_item.workflow = workflow
+
             # Verify that that action does comply with the name uniqueness
             # property (only with respec to other actions)
-            if is_new:  # Action is New
-                if Action.objects.filter(workflow=workflow,
-                                         workflow__user=request.user,
-                                         name=action_item.name).exists():
-                    # There is an action with this name already
-                    form.add_error('name',
-                                   'An action with that name already exists')
-                    data['html_redirect'] = reverse('action:index')
-                else:
-                    # Correct New action. Proceed with the
-                    action_item.user = request.user
-                    action_item.workflow = workflow
-
-            # Save item in the DB now
-            action_item.save()
+            try:
+                action_item.save()
+                form.save_m2m()  # Propagate the save effect to M2M relations
+            except IntegrityError as e:
+                # There is an action with this name already
+                form.add_error('name',
+                               'An action with that name already exists')
+                data['html_form'] = render_to_string(
+                    template_name,
+                    {'form': form,
+                     'is_out': int(is_out)},
+                    request=request)
+                return JsonResponse(data)
 
             # Log the event
             logs.ops.put(request.user,

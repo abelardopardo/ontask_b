@@ -15,13 +15,11 @@ from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
 from django.views.decorators.cache import cache_page
 
-import dataops.ops
-import dataops.pandas_db
+import dataops.ops as ops
 import logs.ops
-from dataops import pandas_db, ops
+from dataops import pandas_db
 from dataops.forms import SelectColumnForm
 from dataops.plugin_manager import run_plugin
-from logs import ops
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from workflow.ops import get_workflow
@@ -79,7 +77,6 @@ def uploadmerge(request):
     return render(request, 'dataops/uploadmerge.html', {})
 
 
-@cache_page(60 * 15)
 @user_passes_test(is_instructor)
 def transform(request):
     # Get the workflow that is being used
@@ -353,7 +350,8 @@ def run(request, pk):
                                  if x.name.startswith(field_prefix + 'output')],
         'parameters': [x for x in list(form)
                        if x.name.startswith(field_prefix + 'parameter')],
-        'pinstance': plugin_instance
+        'pinstance': plugin_instance,
+        'id': workflow.id
     }
 
     # If it is a GET request or non valid, render the form.
@@ -365,19 +363,20 @@ def run(request, pk):
     # POST is correct proceed with execution
 
     # Get the data frame and select the appropriate columns
-    dst_df = None
     try:
-        dst_df = dataops.pandas_db.load_from_db(workflow.id)
+        dst_df = pandas_db.load_from_db(workflow.id)
     except Exception:
         messages.error(request, 'Exception while retrieving the data frame')
         return render(request, 'error.html', {})
 
-    # Load the proper subset of the data frame
-    if plugin_instance.input_column_names:
-        selected_column_names = plugin_instance.input_column_names
-    else:
-        selected_column_names = [c.name for c in form.cleaned_data['columns']]
-    sub_df = dst_df[[form.cleaned_data['merge_key']] + selected_column_names]
+    # Take the list of inputs from the form if empty list is given.
+    if not plugin_instance.input_column_names:
+        plugin_instance.input_column_names = \
+            [c.name for c in form.cleaned_data['columns']]
+
+    # Get the proper subset of the data frame
+    sub_df = dst_df[[form.cleaned_data['merge_key']] +
+                    plugin_instance.input_column_names]
 
     # Process the output columns
     for idx, output_cname in enumerate(plugin_instance.output_column_names):
@@ -388,9 +387,8 @@ def run(request, pk):
 
     # Pack the parameters
     params = dict()
-    for idx, tuple in enumerate(plugin_instance.parameters):
-        params[tuple[0]] = form.cleaned_data[field_prefix + \
-                                             'parameter_%s' % idx]
+    for idx, tpl in enumerate(plugin_instance.parameters):
+        params[tpl[0]] = form.cleaned_data[field_prefix + 'parameter_%s' % idx]
 
     # Execute the plugin
     result_df, status = run_plugin(plugin_instance,
@@ -402,12 +400,12 @@ def run(request, pk):
         context['exec_status'] = status
 
         # Log the event
-        ops.put(request.user,
-                'plugin_execute',
-                workflow,
-                {'id': plugin_info.id,
-                 'name': plugin_info.name,
-                 'status': status})
+        logs.ops.put(request.user,
+                     'plugin_execute',
+                     workflow,
+                     {'id': plugin_info.id,
+                      'name': plugin_info.name,
+                      'status': status})
 
         return render(request,
                       'dataops/plugin_execution_report.html',
@@ -420,12 +418,12 @@ def run(request, pk):
         context['exec_status'] = status
 
         # Log the event
-        ops.put(request.user,
-                'plugin_execute',
-                workflow,
-                {'id': plugin_info.id,
-                 'name': plugin_info.name,
-                 'status': status})
+        logs.ops.put(request.user,
+                     'plugin_execute',
+                     workflow,
+                     {'id': plugin_info.id,
+                      'name': plugin_info.name,
+                      'status': status})
 
         return render(request,
                       'dataops/plugin_execution_report.html',
@@ -439,12 +437,12 @@ def run(request, pk):
         context['exec_status'] = status
 
         # Log the event
-        ops.put(request.user,
-                'plugin_execute',
-                workflow,
-                {'id': plugin_info.id,
-                 'name': plugin_info.name,
-                 'status': status})
+        logs.ops.put(request.user,
+                     'plugin_execute',
+                     workflow,
+                     {'id': plugin_info.id,
+                      'name': plugin_info.name,
+                      'status': status})
 
         return render(request,
                       'dataops/plugin_execution_report.html',
@@ -452,7 +450,7 @@ def run(request, pk):
 
     # Proceed with the merge
     try:
-        merge_result = dataops.ops.perform_dataframe_upload_merge(
+        result = ops.perform_dataframe_upload_merge(
             workflow.id,
             dst_df,
             result_df,
@@ -469,8 +467,15 @@ def run(request, pk):
                       'dataops/plugin_execution_report.html',
                       context)
 
+    if isinstance(result, str):
+        # Something went wrong
+        context['exec_status'] = result
+        return render(request,
+                      'dataops/plugin_execution_report.html',
+                      context)
+
     # Get the resulting dataframe
-    final_df = dataops.pandas_db.load_from_db(workflow.id)
+    final_df = pandas_db.load_from_db(workflow.id)
 
     # Update execution time
     plugin_info.executed = datetime.now(
@@ -485,13 +490,13 @@ def run(request, pk):
         pandas_db.df_column_types_rename(result_df))
 
     # Log the event
-    ops.put(request.user,
-            'plugin_execute',
-            workflow,
-            {'id': plugin_info.id,
-             'name': plugin_info.name,
-             'status': status,
-             'result_columns': result_columns})
+    logs.ops.put(request.user,
+                 'plugin_execute',
+                 workflow,
+                 {'id': plugin_info.id,
+                  'name': plugin_info.name,
+                  'status': status,
+                  'result_columns': result_columns})
 
     # Create the table information to show in the report.
     column_info = []

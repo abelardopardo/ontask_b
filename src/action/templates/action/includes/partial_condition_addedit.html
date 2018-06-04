@@ -11,7 +11,7 @@
     <button type="button" class="close" data-dismiss="modal" arial-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title">{% if add %}Create{% else %}Edit{% else %} condition</h4>
+    <h4 class="modal-title">{% if add %}Create{% else %}Edit{% endif %} condition</h4>
   </div>
   <div class="modal-body">
     {% include 'action/includes/partial_form_fields.html' %}

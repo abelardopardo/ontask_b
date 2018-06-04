@@ -5,8 +5,7 @@
             class="btn btn-sm btn-primary js-filter-edit"
             data-url="{% url 'action:edit_filter' filter_condition.id %}"
             data-type="filter" data-toggle="tooltip" title="Edit the filter">
-      {{ filter_condition.name }} ({{ selected_rows }}
-      learner{{ selected_rows|pluralize:",s" }} of {{ total_rows }})
+      {{ filter_condition.name }} ({{ selected_rows }} learner{{ selected_rows|pluralize:",s" }} of {{ total_rows }})
     </button>
     <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
             data-toggle="dropdown"

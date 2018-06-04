@@ -15,8 +15,7 @@
                 data-url="{% url 'action:edit_condition' condition.id %}"
                 data-toggle="tooltip"
                 title="Edit the condition ({{ condition.n_rows_selected }} rows satisfy this condition)">
-          {{ condition.name }} ({{ condition.n_rows_selected }}
-          learner{{ condition.n_rows_selected|pluralize:",s" }})
+          {{ condition.name }} ({{ condition.n_rows_selected }} learner{{ condition.n_rows_selected|pluralize:",s" }})
         </button>
         <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
                 data-toggle="dropdown"

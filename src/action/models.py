@@ -127,8 +127,12 @@ class Action(models.Model):
             self.content = new_text
         else:
             # Action in: Need to change name appearances in filter
-            self.filter = formula_evaluation.rename_variable(
-                self.filter, old_name, new_name)
+            fcond = self.conditions.filter(is_filter=True).first()
+            if fcond:
+                fcond.formula = formula_evaluation.rename_variable(
+                    fcond.formula, old_name, new_name
+                )
+                fcond.save()
 
         self.save()
 

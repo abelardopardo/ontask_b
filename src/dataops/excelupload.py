@@ -76,7 +76,7 @@ def excelupload1(request):
     try:
         data_frame = pd.read_excel(
             request.FILES['file'],
-            sheetname=form.cleaned_data['sheet'],
+            sheet_name=form.cleaned_data['sheet'],
             index_col=False,
             infer_datetime_format=True,
             quotechar='"',
