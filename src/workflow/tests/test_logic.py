@@ -92,7 +92,7 @@ class WorkflowImport(test.OntaskLiveTestCase):
         self.selenium.find_element_by_link_text('Import workflow').click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
-                                             'Import Workflow')
+                                             'Import workflow')
         )
 
         # Set the workflow name and file

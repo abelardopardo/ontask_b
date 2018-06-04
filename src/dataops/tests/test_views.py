@@ -177,22 +177,12 @@ class DataopsSymbols(test.OntaskLiveTestCase):
             "//div[@class='modal-footer']/button[2]"
         ).click()
         # MODAL WAITING
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
+        self.wait_close_modal_refresh_table('attribute-table_previous')
 
         # Save and close the attribute page
         self.selenium.find_element_by_link_text('Back').click()
         # Wait for the details page
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
-                                             'Workflow Details')
-        )
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
-        )
+        self.wait_close_modal_refresh_table('column-table_previous')
 
         # Click in the TABLE link
         self.selenium.find_element_by_link_text("Table").click()
@@ -216,22 +206,22 @@ class DataopsSymbols(test.OntaskLiveTestCase):
             'select-column-name'))
         select.select_by_visible_text('!#$%&()*+,-./:;<=>?@[\]^_`{|}~2')
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME,
-                                        'js-workflow-column-edit'))
+            EC.presence_of_element_located(
+                (By.ID, 'column-selected-table_previous'))
         )
         select = Select(self.selenium.find_element_by_id(
-            'select-column-name'))
-        select.select_by_visible_text('email')
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME,
-                                        'js-workflow-column-edit'))
-        )
-        select = Select(self.selenium.find_element_by_id(
-            'select-column-name'))
+            'select-key-column-name'))
         select.select_by_visible_text('sid')
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME,
-                                        'js-workflow-column-edit'))
+            EC.presence_of_element_located(
+                (By.ID, 'column-selected-table_previous'))
+        )
+        select = Select(self.selenium.find_element_by_id(
+            'select-key-column-name'))
+        select.select_by_visible_text('email')
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.ID, 'column-selected-table_previous'))
         )
 
         # Save action-in
@@ -250,19 +240,19 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Enter data using the RUN menu. Select one entry to populate
         self.selenium.find_element_by_link_text("student1@bogus.com").click()
+        self.selenium.find_element_by_id("id____ontask___select_2").click()
+        self.selenium.find_element_by_id("id____ontask___select_2").clear()
+        self.selenium.find_element_by_id("id____ontask___select_2").send_keys(
+            "Carmelo Coton2")
         self.selenium.find_element_by_id("id____ontask___select_3").click()
         self.selenium.find_element_by_id("id____ontask___select_3").clear()
         self.selenium.find_element_by_id("id____ontask___select_3").send_keys(
-            "Carmelo Coton2")
-        self.selenium.find_element_by_id("id____ontask___select_4").click()
-        self.selenium.find_element_by_id("id____ontask___select_4").clear()
-        self.selenium.find_element_by_id("id____ontask___select_4").send_keys(
             "xxx"
         )
 
         # Submit the data for one entry
         self.selenium.find_element_by_xpath(
-            "//body/div[3]/div/form/button[1]/span").click()
+            "//body/div[4]/div/form/button[1]/span").click()
         # Wait for paging widget
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'actioninrun-data_previous'))
@@ -468,7 +458,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         # Set the correct values for an action-in
         # Set the right columns to process
         select = Select(self.selenium.find_element_by_id(
-            'select-column-name'))
+            'select-key-column-name'))
         select.select_by_visible_text('email')
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME,
@@ -591,8 +581,9 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
         wf_link.click()
 
         self.selenium.find_element_by_link_text("Dataops").click()
+        self.selenium.find_element_by_link_text("Data Upload/Merge").click()
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Dataops')
+            EC.title_is('OnTask :: Data Upload/Merge')
         )
 
         self.selenium.find_element_by_link_text("Excel Upload/Merge").click()
@@ -648,8 +639,9 @@ class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
         wf_link.click()
 
         self.selenium.find_element_by_link_text("Dataops").click()
+        self.selenium.find_element_by_link_text("Data Upload/Merge").click()
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Dataops')
+            EC.title_is('OnTask :: Data Upload/Merge')
         )
         self.selenium.find_element_by_link_text("Excel Upload/Merge").click()
         self.selenium.find_element_by_id("id_file").send_keys(
@@ -718,8 +710,9 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
 
         # Open the Dataops page
         self.selenium.find_element_by_link_text("Dataops").click()
+        self.selenium.find_element_by_link_text("Data Upload/Merge").click()
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Dataops')
+            EC.title_is('OnTask :: Data Upload/Merge')
         )
 
         # Start the upload process: Select upload
@@ -749,8 +742,9 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
 
         # Select again the upload/merge function
         self.selenium.find_element_by_link_text("Dataops").click()
+        self.selenium.find_element_by_link_text("Data Upload/Merge").click()
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Dataops')
+            EC.title_is('OnTask :: Data Upload/Merge')
         )
         self.selenium.find_element_by_link_text("CSV Upload/Merge").click()
 

@@ -100,7 +100,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         # Goto Dataops uploadmerge page
         self.open(reverse('dataops:uploadmerge'))
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Dataops')
+            EC.title_is('OnTask :: Data Upload/Merge')
         )
         # Click in the upload/Merge link
         upload = self.selenium.find_element_by_xpath(
@@ -206,7 +206,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         # Goto Dataops list
         self.open(reverse('dataops:uploadmerge'))
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Dataops')
+            EC.title_is('OnTask :: Data Upload/Merge')
         )
         # Click in the upload/Merge link
         upload = self.selenium.find_element_by_xpath(
@@ -377,7 +377,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         # Goto Dataops list
         self.open(reverse('dataops:uploadmerge'))
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Dataops')
+            EC.title_is('OnTask :: Data Upload/Merge')
         )
         # Click in the upload/Merge link
         upload = self.selenium.find_element_by_xpath(
@@ -672,7 +672,9 @@ class WorkflowModify(test.OntaskLiveTestCase):
         desc.send_keys(Keys.RETURN)
         # Wait for actions page
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'action-in-editor'))
+            EC.element_to_be_clickable(
+                (By.XPATH, "//h4[@id='filter-set']/div/button")
+            )
         )
 
         # Click in the add rule button (the filter is initially empty)

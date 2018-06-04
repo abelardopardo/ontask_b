@@ -1964,12 +1964,6 @@
         "active_from": null,
         "active_to": null,
         "content": "{% comment %}Your action content here{% endcomment %}",
-        "filter": {
-            "not": false,
-            "rules": [],
-            "valid": true,
-            "condition": "AND"
-        },
         "columns": [
             4786,
             4784
@@ -1990,7 +1984,6 @@
         "active_from": null,
         "active_to": null,
         "content": "<p><br></p>",
-        "filter": {},
         "columns": []
     }
 }
