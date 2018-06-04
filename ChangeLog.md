@@ -1,8 +1,23 @@
-## 2.7.0
+## 2.7.0 (2018-06-04)
 
 ### Added
 
+- Functionality to export andi mport actions alone. This is very useful to 
+  simply transfer a single set of conditions or columns from one workflow to 
+  another.
+  
+- Definition and usage of SQL connections. The definition is only available 
+for the superuser and instructors are allowed to use them in the upload/merge
+ page.
+ 
+- Use of plugins. Arbitrary transformations of a subset of the dataframe are 
+now allowed by installing python modules in a specific folder. 
+
 ### Changed
+
+- Revamped the structure of the page to edit the action ins.
+
+- Extended and polished documetation
 
 ### Fixed
 

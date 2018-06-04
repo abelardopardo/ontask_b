@@ -1,16 +1,16 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 2.6.1 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 2.7.0 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
 ## OnTask in a nutshell
 
 - Authentication through LTI, LDAP, Shibboleth
 
-- Data upload through CSV or Excel files
+- Data upload through CSV, Excel files or SQL connections
 
 - Actions such as personalised email, personalised web page
 
-- Integrated annotation capture mechanism (similar to a survey engine)
+- Integrated data capture mechanism (similar to a survey engine)
 
 - Visualization of columns (population measures) and individuals with
   respect to the population
@@ -21,9 +21,11 @@ Current Version: 2.6.1 ([documentation](http://ontask-version-b.readthedocs.io/e
 
 - Time-based scheduler for actions
 
-- Import/Export functionality to share workflows and data.
+- Import/Export functionality to share workflows, data and actions.
 
 - Table views to see only a subset of the data
+
+- Execution of plugins to process and modify workflow data.
 
 **For a detailed description of the tool, how to install it, and how to use it
 check the [OnTask Documentation](https://abelardopardo.github.io/ontask_b)**.
