@@ -82,6 +82,13 @@ class Action(models.Model):
     # columns
     columns = models.ManyToManyField(Column, related_name='actions_in')
 
+    # Shuffle column order when creating the page to serve
+    shuffle = models.BooleanField(
+        default=False,
+        verbose_name='Shuffle questions?',
+        null=False,
+        blank=False)
+
     def __str__(self):
         return self.name
 
