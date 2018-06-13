@@ -6,6 +6,7 @@ from datetime import datetime
 import django_tables2 as tables
 import pandas as pd
 import pytz
+from builtins import str
 from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
