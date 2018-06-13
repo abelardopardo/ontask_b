@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import os
 from os.path import dirname, join, exists
 
 import environ
@@ -31,8 +32,10 @@ env = environ.Env(
 
 # Ideally move env file should be outside the git repo
 # i.e. BASE_DIR.parent.parent
-env_file = join(dirname(__file__), 'local.env')
+env_file_name = os.environ.get('ENV_FILENAME', 'local.env')
+env_file = join(dirname(__file__), env_file_name)
 if exists(env_file):
+    print('Loading environment file {0}'.format(env_file_name))
     environ.Env.read_env(str(env_file))
 
 # Read various variables from the environment
@@ -196,7 +199,7 @@ AUTHENTICATION_BACKENDS = [
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": env('REDIS_URL'),
         "TIMEOUT": 1800,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
