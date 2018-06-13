@@ -551,7 +551,7 @@ def edit_action_in(request, pk):
         filter_condition.save()
 
     # Column names suitable to insert
-    columns_selected = action.columns.filter(is_key=False)
+    columns_selected = action.columns.filter(is_key=False).order_by('position')
     columns_to_insert = [c for c in workflow.columns.all()
                          if not c.is_key and c not in columns_selected]
 
