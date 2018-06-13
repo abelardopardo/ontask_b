@@ -109,8 +109,7 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
         column.save()
 
     # Get now the new set of columns with names
-    wf_columns = Column.objects.filter(
-        workflow__id=pk)
+    wf_columns = Column.objects.filter(workflow__id=pk)
 
     # Reorder the columns in the data frame
     data_frame = data_frame[[x.name for x in wf_columns]]

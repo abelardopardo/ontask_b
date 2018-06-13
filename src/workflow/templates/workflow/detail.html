@@ -29,14 +29,20 @@
                     url: "{% url 'workflow:column_ss' workflow.id %}",
                     type: 'POST',
                   },
+                  "columns": [
+                    {"data": "number", "class": "dt-center"},
+                    {"data": "name", "class": "dt-center"},
+                    {"data": "type", "class": "dt-center"},
+                    {"data": "key", "class": "dt-center"},
+                    {"data": "operations", "class": "dt-center operations"},
+                  ],
                   "order": [],
                   "columnDefs": [
-                      {"className": "dt-center", "targets": "_all"},
                       {"orderable": false, "targets": "_all"},
-                      {"searchable": false, "targets": 4},
+                      {"searchable": false, "targets": "operations"},
                   ],
                   "createdRow": function(row, data, dataIndex) {
-                      if (data[3] == '<span class="true">✔</span>') {
+                      if (data['key'] == '<span class="true">✔</span>') {
                         $(row).addClass('success');
                       }
                   },
@@ -69,15 +75,15 @@
       {% if table_info %}
         <p class="help-block">{{ table_info.num_rows }} rows, {{ table_info.num_cols }} columns (<mark>{{ num_key_columns }} Key columns</mark>), {{ table_info.num_actions }} actions, {{ table_info.num_attributes }}
         attributes.</p>
-        <table class="table display dataTable no-footer table-bordered"
+        <table class="table display dataTable no-footer cell-border table-bordered"
                id="column-table">
           <thead>
             <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Key?</th>
-              <th></th>
+              <th class="number">#</th>
+              <th class="name">Name</th>
+              <th class="type">Type</th>
+              <th class="key">Key?</th>
+              <th class="operations">Operations</th>
             </tr>
           </thead>
         </table>

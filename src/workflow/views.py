@@ -201,8 +201,8 @@ def workflow_index(request):
         )
 
         context['table2'] = SQLConnectionTableAdmin(conns,
-                                   id='sqlconn-table',
-                                   orderable=False)
+                                                    id='sqlconn-table',
+                                                    orderable=False)
 
     return render(request, 'workflow/index.html', context)
 
@@ -497,17 +497,17 @@ def column_ss(request, pk):
         if col_data_type == 'integer' or col_data_type == 'double':
             col_data_type = 'number'
 
-        final_qs.append([
-            render_to_string(
-                'workflow/includes/workflow_column_movement.html',
-                {'column': col}
-            ),
-            col.name,
-            col_data_type,
-            '<span class="true">✔</span>' if col.is_key \
-                else '<span class="true">✘</span>',
-            ops_string
-        ])
+        final_qs.append({
+            'number': render_to_string(
+                 'workflow/includes/workflow_column_movement.html',
+                 {'column': col}
+             ),
+            'name': col.name,
+            'type': col_data_type,
+            'key': '<span class="true">✔</span>' \
+                if col.is_key else '<span class="true">✘</span>',
+            'operations': ops_string
+        })
 
         if len(final_qs) == length:
             break

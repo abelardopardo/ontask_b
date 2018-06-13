@@ -51,7 +51,7 @@ urlpatterns = [
     # Action import
     url(r'^import/$', views_action.action_import, name='import'),
 
-    # Select column for action in
+    # Select key column for action in
     url(r'^(?P<apk>\d+)/(?P<cpk>\d+)/(?P<key>\d+)/select_column_action/$',
         views_action.select_column_action,
         name='select_key_column_action'),

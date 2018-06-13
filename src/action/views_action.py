@@ -54,6 +54,7 @@ class ActionTable(tables.Table):
 
     is_out = tables.Column(verbose_name=str('Type'))
 
+
     description_text = tables.Column(verbose_name=str('Description'))
 
     modified = tables.DateTimeColumn(verbose_name='Modified')
