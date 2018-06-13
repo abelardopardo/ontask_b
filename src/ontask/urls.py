@@ -72,13 +72,12 @@ urlpatterns = [
             description=api_description,
             public = False),
         ),
-
 ]
 
 # User-uploaded files like profile pics need to be served in development
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# Include django debug toolbar if DEBUG is on
+# Include django debug toolbar if DEBUG is ons
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns += [
@@ -101,7 +100,12 @@ pandas_db.engine = pandas_db.create_db_engine(
 )
 
 # Make sure the Site has the right information
-site = Site.objects.get(pk=settings.SITE_ID)
-site.domain = settings.DOMAIN_NAME
-site.name = settings.DOMAIN_NAME
-site.save()
+try:
+    site = Site.objects.get(pk=settings.SITE_ID)
+    site.domain = settings.DOMAIN_NAME
+    site.name = settings.DOMAIN_NAME
+    site.savse()
+except Exception:
+    # To bypass the migrate command execution that fails because the Site
+    # table is not created yet.
+    pass
