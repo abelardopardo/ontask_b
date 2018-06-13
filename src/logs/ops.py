@@ -22,6 +22,7 @@ log_types = {
     'column_rename': 'Column renamed',
     'column_delete': 'Column deleted',
     'column_clone': 'Column cloned',
+    'column_restrict': 'Column restricted',
     'action_create': 'Action created',
     'action_update': 'Action updated',
     'action_delete': 'Action deleted',

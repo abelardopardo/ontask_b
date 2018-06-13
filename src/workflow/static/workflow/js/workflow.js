@@ -60,5 +60,9 @@ $(function () {
   // Clone column
   $("#column-table").on("click", ".js-column-clone", loadForm);
   $("#modal-item").on("submit", ".js-column-clone-form", saveForm);
+
+  // Restrict column
+  $("#column-table").on("click", ".js-column-restrict", loadForm);
+  $("#modal-item").on("submit", ".js-column-restrict-form", saveForm);
 });
 

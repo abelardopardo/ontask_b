@@ -389,6 +389,32 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
     return
 
 
+def workflow_restrict_column(workflow, column):
+    """
+    Given a workflow and a column, modifies the column so that only the
+    values already present are allowed for future updates.
+
+    :param workflow: Workflow object
+    :param column: Column object to restrict
+    :return: String with error or None if correct
+    """
+
+    # Load the data frame
+    data_frame = pandas_db.load_from_db(column.workflow.id)
+
+    cat_values = set(data_frame[column.name].dropna())
+    if not cat_values:
+        # Column has no meaningful values. Nothing to do.
+        return 'Column has no meaningful values'
+
+    # Set categories
+    column.set_categories(list(cat_values))
+    column.save()
+
+    # Correct execution
+    return None
+
+
 def clone_column(column, new_workflow=None, new_name=None):
     """
     Function that given a column clones it and changes workflow and name
@@ -422,10 +448,6 @@ def clone_column(column, new_workflow=None, new_name=None):
     reposition_columns(column.workflow,
                        column.position,
                        old_position + 1)
-
-    # Set the new column in the right location
-    column.position = old_position + 1
-    column.save()
 
     # Add the column to the table and update it.
     data_frame = pandas_db.load_from_db(column.workflow.id)

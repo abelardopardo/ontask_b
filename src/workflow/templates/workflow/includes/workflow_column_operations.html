@@ -20,6 +20,14 @@
     </li>
     <li>
       <button type="button"
+              class="btn btn-default btn-sm js-column-restrict"
+              data-url="{% url 'workflow:column_restrict' id %}"
+              data-toggle="tooltip" title="Restrict values in column">
+        <span class="glyphicon glyphicon-resize-small"></span> Restrict
+      </button>
+    </li>
+    <li>
+      <button type="button"
               class="btn btn-default btn-sm js-column-clone align-middle"
               data-url="{% url 'workflow:column_clone' id %}"
               data-toggle="tooltip" title="Create an exact duplicate of this column">

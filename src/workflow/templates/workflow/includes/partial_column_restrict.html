@@ -1,0 +1,21 @@
+<form method="post" action="{% url 'workflow:column_restrict' pk %}" class="js-column-restrict-form">
+  {% csrf_token %}
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Confirm column deletion</h4>
+  </div>
+  <div class="modal-body">
+    <p class="lead">Are you sure you want to restrict column 
+      <strong>{{ cname }}</strong> to the values {{ values }}?
+    </p>
+  </div>
+  <div class="modal-footer" style="text-align: center;">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
+    </button>
+    <button type="submit" class="btn btn-danger">
+      <span class="glyphicon glyphicon-trash"></span> Restrict column</button>
+  </div>
+</form>
+
