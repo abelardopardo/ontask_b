@@ -1,3 +1,9 @@
+## 2.7.1 (2018-06-04)
+
+### Fixed
+
+- Bug preventing installation from scratch
+
 ## 2.7.0 (2018-06-04)
 
 ### Added
@@ -17,9 +23,7 @@ now allowed by installing python modules in a specific folder.
 
 - Revamped the structure of the page to edit the action ins.
 
-- Extended and polished documetation
-
-### Fixed
+- Extended and polished documentation
 
 ## 2.6.1 (2018-05-23)
 
