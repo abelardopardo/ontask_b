@@ -101,11 +101,15 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
     # Post with different data. # Update content in the DB
     set_fields = []
     set_values = []
-    where_field = None
-    where_value = None
+    where_field = 'email'
+    where_value = request.user.email
     log_payload = []
     # Create the SET name = value part of the query
     for idx, column in enumerate(columns):
+        if not is_inst and column.is_key:
+            # If it is a learner request and a key column, skip
+            continue
+
         value = form.cleaned_data[field_prefix + '%s' % idx]
         if column.is_key:
             if not where_field:
