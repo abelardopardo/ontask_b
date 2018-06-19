@@ -4,8 +4,6 @@ from __future__ import unicode_literals
 
 from django.db import migrations
 
-from action.models import Action
-
 
 def update_n_rows_selected(apps, schema_editor):
     """
@@ -19,6 +17,7 @@ def update_n_rows_selected(apps, schema_editor):
     if schema_editor.connection.alias != 'default':
         return
 
+    Action = apps.get_model('action', 'Action')
     for action in Action.objects.all():
         action.update_n_rows_selected()
 
