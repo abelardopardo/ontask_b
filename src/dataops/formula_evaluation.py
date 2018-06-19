@@ -201,7 +201,19 @@ def evaluate_node(node, given_variables):
     elif operator == 'between' and \
             (node['type'] == 'integer' or node['type'] == 'double'
              or node['type'] == 'datetime'):
-        result = node['value'][0] <= varvalue <= node['value'][1]
+        if node['type'] == 'integer':
+            left = int(node['value'][0])
+            right = int(node['value'][1])
+        elif node['type'] == 'double':
+            left = float(node['value'][0])
+            right = float(node['value'][1])
+        elif node['type'] == 'datetime':
+            left = parse_datetime(node['value'][0])
+            right = parse_datetime(node['value'][1])
+        else:
+            raise Exception('Incorrect data type')
+
+        result = left <= varvalue <= right
 
     elif operator == 'not_between' and \
             (node['type'] == 'integer' or node['type'] == 'double'
