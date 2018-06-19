@@ -198,9 +198,7 @@ def evaluate_node(node, given_variables):
              or node['type'] == 'datetime'):
         result = varvalue >= constant
 
-    elif operator == 'between' and \
-            (node['type'] == 'integer' or node['type'] == 'double'
-             or node['type'] == 'datetime'):
+    elif operator == 'between' or operator == 'not_between':
         if node['type'] == 'integer':
             left = int(node['value'][0])
             right = int(node['value'][1])
@@ -214,11 +212,8 @@ def evaluate_node(node, given_variables):
             raise Exception('Incorrect data type')
 
         result = left <= varvalue <= right
-
-    elif operator == 'not_between' and \
-            (node['type'] == 'integer' or node['type'] == 'double'
-             or node['type'] == 'datetime'):
-        result = not (node['value'][0] <= varvalue <= node['value'][1])
+        if operator == 'not_between':
+            result = not result
 
     else:
         raise Exception('Type, operator, field',
