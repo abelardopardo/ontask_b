@@ -1,6 +1,6 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 2.7.1 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 2.7.2 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
 ## OnTask in a nutshell
 

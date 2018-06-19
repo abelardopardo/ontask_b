@@ -1,3 +1,9 @@
+## 2.7.2 (2018-06-19)
+
+### Fixed
+
+- Bug preventing learner data input (Issue #46)
+
 ## 2.7.1 (2018-06-04)
 
 ### Fixed
