@@ -297,7 +297,7 @@ class Column(models.Model):
         if validate:
             to_store = self.validate_column_values(
                 self.data_type,
-                list(set([x.strip() for x in values]))
+                [x.strip() for x in values]
             )
         else:
             to_store = values
