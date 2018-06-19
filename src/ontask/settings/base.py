@@ -26,7 +26,7 @@ from django.core.urlresolvers import reverse_lazy
 
 # Use 12factor inspired environment variables or from a file and define defaults
 env = environ.Env(
-    DEBUG=False,
+    DEBUG=(bool, False),
     LTI_OAUTH_CREDENTIALS=(dict, {})
 )
 
@@ -41,6 +41,7 @@ if exists(env_file):
 # Read various variables from the environment
 BASE_URL = env('BASE_URL')
 DOMAIN_NAME = env('DOMAIN_NAME')
+DEBUG = env('DEBUG')
 
 # Build paths inside the project like this: join(BASE_DIR(), "directory")
 BASE_DIR = environ.Path(__file__) - 3

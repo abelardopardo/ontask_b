@@ -6,8 +6,6 @@ import sys
 
 from .base import *  # NOQA
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 TEMPLATES[0]['OPTIONS'].update({'debug': True})
 
 ALLOWED_HOSTS = ['*']
