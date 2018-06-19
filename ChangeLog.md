@@ -1,3 +1,34 @@
+## 2.7.2
+
+### Added
+
+- Boolean field in the action-in to request the questions to be shuffled when
+  shown to the learners (some survey instruments suggest this).
+  
+- Function to restrict the values in a column based on the current values. 
+  Useful to manage future updates
+  
+- New folder containing a catalogue of surveys and its corresponding plugins 
+  (if applicable)
+  
+### Changed
+
+- Changed configuration scripts to take the environment file name from the 
+  environment variable ENV_FILENAME (if it exists). 
+  
+- Additional parameters in the configuration that are taken from the ENV_FILE
+  
+- Show questions in Action In in the same order in which they are in the 
+  workflow 
+  
+### Fixed
+
+## 2.7.1 (2018-06-15)
+
+### Fixed
+
+- Bug preventing installation from scratch
+
 ## 2.7.0 (2018-06-04)
 
 ### Added
