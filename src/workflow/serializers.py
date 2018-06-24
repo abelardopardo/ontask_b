@@ -220,6 +220,14 @@ class WorkflowImportSerializer(WorkflowExportSerializer):
     actions = ActionSerializer(many=True, required=False)
 
 
+class WorkflowLockSerializer(serializers.Serializer):
+    """
+    Serializer to transmit the boolean value of the lock in a workflow
+    """
+
+    lock = serializers.BooleanField()
+
+
 class ActionSelfcontainedSerializer(serializers.ModelSerializer):
     conditions = ConditionSerializer(required=False, many=True)
 

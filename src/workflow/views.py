@@ -24,10 +24,7 @@ from ontask.permissions import is_instructor, UserIsInstructor
 from ontask.tables import OperationsColumn
 from .forms import WorkflowForm
 from .models import Workflow, Column
-from .ops import (get_workflow,
-                  unlock_workflow_by_id,
-                  get_user_locked_workflow,
-                  flush_workflow)
+from .ops import (get_workflow)
 
 
 class WorkflowTable(tables.Table):
@@ -163,7 +160,7 @@ def workflow_index(request):
     wid = request.session.pop('ontask_workflow_id', None)
     # If removing workflow from session, mark it as available for sharing
     if wid:
-        unlock_workflow_by_id(wid)
+        Workflow.unlock_workflow_by_id(wid)
     request.session.pop('ontask_workflow_name', None)
 
     # Get the available workflows
@@ -240,7 +237,7 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
         # Check if the workflow is locked
         obj = get_workflow(self.request, old_obj.id)
         if not obj:
-            user = get_user_locked_workflow(old_obj)
+            user = old_obj.get_user_locking_workflow()
             if user != self.request.user:
                 messages.error(
                     self.request,
@@ -366,7 +363,7 @@ def flush(request, pk):
 
     if request.method == 'POST':
         # Delete the table
-        flush_workflow(workflow)
+        workflow.flush()
 
         # Log the event
         logs.ops.put(request.user,

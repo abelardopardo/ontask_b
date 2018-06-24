@@ -21,7 +21,6 @@ from .ops import (
     get_workflow,
     workflow_delete_column,
     clone_column,
-    reposition_columns,
     reposition_column_and_update_df)
 
 # These are the column operands offered through the GUI. They have immediate
@@ -104,7 +103,7 @@ def column_add(request):
         pandas_db.pandas_datatype_names[df[column.name].dtype.name]
 
     # Update the positions of the appropriate columns
-    reposition_columns(workflow, workflow.ncols + 1, column.position)
+    workflow.reposition_columns(workflow.ncols + 1, column.position)
 
     column.save()
 
@@ -232,7 +231,7 @@ def formula_column_add(request):
         pandas_db.pandas_datatype_names[df[column.name].dtype.name]
 
     # Update the positions of the appropriate columns
-    reposition_columns(workflow, workflow.ncols + 1, column.position)
+    workflow.reposition_columns(workflow.ncols + 1, column.position)
 
     column.save()
 
@@ -322,7 +321,7 @@ def column_edit(request, pk):
 
         if 'position' in form.changed_data:
             # Update the positions of the appropriate columns
-            reposition_columns(workflow, old_position, column.position)
+            workflow.reposition_columns(old_position, column.position)
 
         # Save the column information
         form.save()
