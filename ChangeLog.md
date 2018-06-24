@@ -1,3 +1,23 @@
+## 2.7.3 (2018-06-24)
+
+### Fixed
+
+- Bug when checking the lock status of workflows through the API
+
+### Added
+
+- New functionality to check the lock status, lock and unlock workflows 
+  through the API
+  
+### Changed
+
+- Policy to handle workflow locks. If a session tries to access a workflow 
+  locked by another session, but with the same user, access is granted. This 
+  case occurs when the same account is used from two browsers (or API 
+  clients). This policy is adopted because the API authentication is done 
+  through Tokens (not sessions), and is needed to maintain workflow locks 
+  through consecutive API calls due to the lack of a proper session object.
+
 ## 2.7.2 (2018-06-19)
 
 ### Fixed
