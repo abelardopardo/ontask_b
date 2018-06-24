@@ -108,11 +108,20 @@ urlpatterns = [
 
     # API
 
-    url(r'^workflows/$', api.WorkflowAPIListCreate.as_view(),
+    # Listing and creating workflows
+    url(r'^workflows/$',
+        api.WorkflowAPIListCreate.as_view(),
         name='api_workflows'),
 
+    # Get, update content or destroy workflows
     url(r'^(?P<pk>\d+)/rud/$',
-        api.WorkflowAPIRetrieveUpdateDestroy.as_view(), name='api_rud'),
+        api.WorkflowAPIRetrieveUpdateDestroy.as_view(),
+        name='api_rud'),
+
+    # Manage workflow locks (get, set (post, put), unset (delete))
+    url(r'^(?P<pk>\d+)/lock/$',
+        api.WorkflowAPILock.as_view(),
+        name='api_lock'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

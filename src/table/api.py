@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
-from django.db.models import Q
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
@@ -14,8 +13,7 @@ from table.serializers import (
     DataFramePandasSerializer,
     DataFrameJSONSerializer,
     DataFrameJSONMergeSerializer)
-from workflow.models import Workflow
-from workflow.ops import is_locked, flush_workflow
+from workflow.ops import get_workflow
 
 
 class TableBasicOps(APIView):
@@ -30,46 +28,59 @@ class TableBasicOps(APIView):
     serializer_class = None
     permission_classes = (UserIsInstructor,)
 
-    def get_object(self, pk, **kwargs):
-        user = kwargs['user']
-        try:
-            if user.is_superuser:
-                workflow = Workflow.objects.get(pk=pk)
-            else:
-                workflow = Workflow.objects.filter(
-                    Q(user=self.request.user) |
-                    Q(shared__id=self.request.user.id)
-                ).distinct().get(id=pk)
-        except Workflow.DoesNotExist:
-            raise APIException('Incorrect object')
-
-        if is_locked(workflow):
-            raise APIException('Workflow is locked by another user')
-
+    def get_object(self, pk):
+        # try:
+        #     if self.request.user.is_superuser:
+        #         workflow = Workflow.objects.get(pk=pk)
+        #     else:
+        #         workflow = Workflow.objects.filter(
+        #             Q(user=self.request.user) |
+        #             Q(shared__id=self.request.user.id)
+        #         ).distinct().get(id=pk)
+        # except Workflow.DoesNotExist:
+        #     raise APIException('Incorrect object')
+        #
+        # if workflow.is_locked():
+        #     raise APIException('Workflow is locked by another user')
+        #
+        workflow = get_workflow(self.request, pk)
+        if workflow is None:
+            raise APIException('Unable to access the workflow')
         return workflow
 
     def override(self, request, pk, format=None):
+        """
+        Method to override the content in the workflow
+        :param request: Received request object
+        :param pk: Workflow ID
+        :param format: format for the response
+        :return:
+        """
+
         # Try to retrieve the wflow to check for permissions
-        wflow = self.get_object(pk, user=self.request.user)
+        wflow = self.get_object(pk)
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            df = serializer.validated_data['data_frame']
+        if not serializer.is_valid():
+            # Flag the error
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
 
-            ops.store_dataframe_in_db(df, pk)
+        # Data received is a correct data frame.
+        df = serializer.validated_data['data_frame']
 
-            # Update all the counters in the conditions
-            for action in wflow.actions.all():
-                action.update_n_rows_selected()
+        # Store the content in the db and...
+        ops.store_dataframe_in_db(df, pk)
 
-            return Response(None,
-                            status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,
-                        status=status.HTTP_400_BAD_REQUEST)
+        # Update all the counters in the conditions
+        for action in wflow.actions.all():
+            action.update_n_rows_selected()
+
+        return Response(None, status=status.HTTP_201_CREATED)
 
     # Retrieve
     def get(self, request, pk, format=None):
         # Try to retrieve the wflow to check for permissions
-        self.get_object(pk, user=self.request.user)
+        self.get_object(pk)
         serializer = self.serializer_class(
             {'data_frame': pandas_db.load_from_db(pk)}
         )
@@ -89,8 +100,8 @@ class TableBasicOps(APIView):
 
     # Delete
     def delete(self, request, pk, format=None):
-        wflow = self.get_object(pk, user=self.request.user)
-        flush_workflow(wflow)
+        wflow = self.get_object(pk)
+        wflow.flush(wflow)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -185,28 +196,33 @@ class TableBasicMerge(APIView):
     serializer_class = None
     permission_classes = (UserIsInstructor,)
 
-    def get_object(self, pk, **kwargs):
-        user = kwargs['user']
-        try:
-            if user.is_superuser:
-                workflow = Workflow.objects.get(pk=pk)
-            else:
-                workflow = Workflow.objects.filter(
-                    Q(user=self.request.user) |
-                    Q(shared__id=self.request.user.id)
-                ).distinct().get(id=pk)
-        except Workflow.DoesNotExist:
-            raise APIException('Incorrect object')
+    def get_object(self, pk):
+        # try:
+        #     if self.request.user.is_superuser:
+        #         workflow = Workflow.objects.get(pk=pk)
+        #     else:
+        #         workflow = Workflow.objects.filter(
+        #             Q(user=self.request.user) |
+        #             Q(shared__id=self.request.user.id)
+        #         ).distinct().get(id=pk)
+        # except Workflow.DoesNotExist:
+        #     raise APIException('Incorrect object')
+        #
+        # # if not self.request.session.session_key:
+        # #     self.request.session.save()
+        # #
+        # if workflow.is_locked():
+        #     raise APIException('Workflow is locked by another user')
 
-        if is_locked(workflow):
-            raise APIException('Workflow is locked by another user')
-
+        workflow = get_workflow(self.request, pk)
+        if workflow is None:
+            raise APIException('Unable to access the workflow')
         return workflow
 
     # Retrieve
     def get(self, request, pk, format=None):
         # Try to retrieve the wflow to check for permissions
-        self.get_object(pk, user=self.request.user)
+        self.get_object(pk)
         serializer = self.serializer_class(
             {'src_df': pandas_db.load_from_db(pk),
              'how': '',
@@ -218,7 +234,7 @@ class TableBasicMerge(APIView):
     # Update
     def put(self, request, pk, format=None):
         # Try to retrieve the wflow to check for permissions
-        self.get_object(pk, user=self.request.user)
+        self.get_object(pk)
         # Get the dst_df
         dst_df = pandas_db.load_from_db(pk)
 

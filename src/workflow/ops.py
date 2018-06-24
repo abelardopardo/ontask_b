@@ -18,66 +18,8 @@ from rest_framework.renderers import JSONRenderer
 import logs.ops
 from action.models import Condition
 from dataops import pandas_db, ops
-from table.models import View
 from .models import Workflow, Column
 from .serializers import (WorkflowExportSerializer, WorkflowImportSerializer)
-
-
-def lock_workflow(request, workflow):
-    """
-    Function that sets the session key in the workflow to flag that is locked.
-    :param request: HTTP request
-    :param workflow: workflow to lock
-    :return:
-    """
-    workflow.session_key = request.session.session_key
-    workflow.save()
-
-
-def unlock_workflow_by_id(wid):
-    """
-    Removes the session_key from the workflow with given id
-    :param wid: Workflow id
-    :return:
-    """
-    try:
-        workflow = Workflow.objects.get(id=wid)
-    except ObjectDoesNotExist:
-        return
-
-    # Workflow exists, unlock
-    unlock_workflow(workflow)
-
-
-def unlock_workflow(workflow):
-    """
-    Removes the session_key from the workflow
-    :param workflow:
-    :return:
-    """
-    workflow.session_key = ''
-    workflow.save()
-
-
-def is_locked(workflow):
-    """
-    :param workflow: workflow object to check if it is locked
-    :return: Is the given workflow locked?
-    """
-
-    if not workflow.session_key:
-        # No key in the workflow, then it is not locked.
-        return False
-
-    try:
-        session = Session.objects.get(session_key=workflow.session_key)
-    except ObjectDoesNotExist:
-        # Session does not exist, then it is not locked
-        return False
-
-    # Session is in the workflow and in the session table. Locked if expire
-    # date is less that current time.
-    return session.expire_date < timezone.now()
 
 
 def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
@@ -119,14 +61,14 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
         return None
 
     # Step 2: If the workflow is locked by this user session, return correct
-    # result
+    # result (the session_key may be None if using the API)
     if request.session.session_key == workflow.session_key:
         return workflow
 
     # Step 3: If the workflow is unlocked, lock and return
     if not workflow.session_key:
         # Workflow is unlocked. Proceed to lock
-        lock_workflow(request, workflow)
+        workflow.lock(request, True)
         return workflow
 
     # Step 4: The workflow is locked. See if the session locking it is
@@ -137,7 +79,7 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
         # An exception means that the session stored as locking the
         # workflow is no longer in the session table, so the user can access
         # the workflow
-        lock_workflow(request, workflow)
+        workflow.lock(request, True)
         return workflow
 
     # Get the owner of the session locking the workflow
@@ -146,11 +88,11 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
     )
 
     # Step 5: The workflow is locked by a session that is valid. See if the
-    # session locking it happens to be from the same user (a previous session
-    # that has not been properly closed)
-    # if owner == request.user:
-    #     lock_workflow(request, workflow)
-    #     return workflow
+    # session locking happens to be from the same user (a previous session
+    # that has not been properly closed, or an API call from the same user  )
+    if owner == request.user:
+        workflow.lock(request)
+        return workflow
 
     # Step 6: The workflow is locked by an existing session. See if the
     # session is valid
@@ -161,20 +103,8 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
 
     # The workflow is locked by a session that has expired. Take the workflow
     # and lock it with the current session.
-    lock_workflow(request, workflow)
+    workflow.lock(request)
     return workflow
-
-
-def get_user_locked_workflow(workflow):
-    """
-    Given a workflow that is supposed to be locked, it returns the user that
-    is locking it.
-    :param workflow:
-    :return:
-    """
-    session = Session.objects.get(session_key=workflow.session_key)
-    session_data = session.get_decoded()
-    return get_user_model().objects.get(id=session_data.get('_auth_user_id'))
 
 
 def detach_dataframe(workflow):
@@ -199,47 +129,6 @@ def detach_dataframe(workflow):
 
     # Table name
     workflow.data_frame_table_name = ''
-
-    # Save the workflow with the new fields.
-    workflow.save()
-
-
-def flush_workflow(workflow):
-    """
-    Flush all the data from the workflow and propagate changes throughout the
-    relations with columns, conditions, filters, etc. These steps require:
-
-    1) Delete the data frame from the database
-
-    2) Delete all the columns attached to the workflow
-
-    3) Delete all the conditions attached to the actions
-
-    4) Delete all the views attached to the workflow
-
-    :param workflow: Workflow object
-    :return: Reflected in the DB
-    """
-
-    # Step 1: Delete the data frame from the database
-    pandas_db.delete_table(workflow.id)
-
-    # Reset some of the workflow fields
-    workflow.nrows = 0
-    workflow.ncols = 0
-    workflow.n_filterd_rows = -1
-    workflow.set_query_builder_ops()
-    workflow.data_frame_table_name = ''
-
-    # Step 2: Delete the column_names, column_types and column_unique
-    Column.objects.filter(workflow__id=workflow.id).delete()
-
-    # Step 3: Delete the conditions attached to all the actions attached to the
-    # workflow.
-    Condition.objects.filter(action__workflow=workflow).delete()
-
-    # Step 4: Delete all the views attached to the workflow
-    View.objects.filter(workflow__id=workflow.id).delete()
 
     # Save the workflow with the new fields.
     workflow.save()
@@ -348,7 +237,7 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
     pandas_db.df_drop_column(workflow.id, column.name)
 
     # Reposition the columns above the one being deleted
-    reposition_columns(workflow, column.position, workflow.ncols + 1)
+    workflow.reposition_columns(column.position, workflow.ncols + 1)
 
     # Delete the column
     column.delete()
@@ -445,9 +334,7 @@ def clone_column(column, new_workflow=None, new_name=None):
     column.workflow.save()
 
     # Reposition the columns above the one being deleted
-    reposition_columns(column.workflow,
-                       column.position,
-                       old_position + 1)
+    column.workflow.reposition_columns(column.position, old_position + 1)
 
     # Add the column to the table and update it.
     data_frame = pandas_db.load_from_db(column.workflow.id)
@@ -455,39 +342,6 @@ def clone_column(column, new_workflow=None, new_name=None):
     ops.store_dataframe_in_db(data_frame, column.workflow.id)
 
     return column
-
-
-def reposition_columns(workflow, from_idx, to_idx):
-    """
-
-    :param workflow: Workflow object where the columns are
-    :param from_idx: Position from which the column is repositioned.
-    :param to_idx: New position for the column
-    :return: Appropriate column positions are modified
-    """
-
-    # If the indeces are identical, nothing needs to be moved.
-    if from_idx == to_idx:
-        return
-
-    # if from_idx == -1:
-    #    from_idx = Column.objects.filter(workflow=workflow).count() + 1
-
-    if from_idx < to_idx:
-        cols = Column.objects.filter(workflow=workflow,
-                                     position__gt=from_idx,
-                                     position__lte=to_idx)
-        step = -1
-    else:
-        cols = Column.objects.filter(workflow=workflow,
-                                     position__gte=to_idx,
-                                     position__lt=from_idx)
-        step = 1
-
-    # Update the positions of the appropriate columns
-    for col in cols:
-        col.position = col.position + step
-        col.save()
 
 
 def reposition_column_and_update_df(workflow, column, to_idx):
@@ -500,7 +354,7 @@ def reposition_column_and_update_df(workflow, column, to_idx):
     """
 
     df = pandas_db.load_from_db(workflow.id)
-    reposition_columns(workflow, column.position, to_idx)
+    workflow.reposition_columns(column.position, to_idx)
     column.position = to_idx
     column.save()
     ops.store_dataframe_in_db(df, workflow.id)
