@@ -14,7 +14,7 @@ django-summernote==0.8.8.4
 django-import-export==1.0.1
 django-redis==4.9.0
 djangorestframework==3.8.2
-future
+future==0.16.0
 Markdown==2.6.11
 SQLAlchemy==1.2.7
 validate_email==1.3
