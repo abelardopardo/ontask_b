@@ -328,7 +328,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         # Action now has two complementary conditions, add the conditions to
         # the message
         self.selenium.execute_script(
-            """$('#id_content').summernote(
+            """$('#id__content').summernote(
                    'editor.insertText', 
                    "{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}")""")
 
@@ -471,13 +471,13 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.assertEqual(
             "{% comment %}Your action content here{% endcomment %}",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id__content").summernote('code')"""
             )
         )
 
         # insert the first mark
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "mark1");"""
+            """$('#id__content').summernote('editor.insertText', "mark1");"""
         )
 
         # Create filter. Click in the add filter button
@@ -531,13 +531,13 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.assertIn(
             "mark1",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id__content").summernote('code')"""
             )
         )
 
         # insert the second mark
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "mark2");"""
+            """$('#id__content').summernote('editor.insertText', "mark2");"""
         )
 
         # Modify the filter. Click in the edit filter button
@@ -567,13 +567,13 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.assertIn(
             "mark2",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id__content").summernote('code')"""
             )
         )
 
         # insert the third mark
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "mark3");"""
+            """$('#id__content').summernote('editor.insertText', "mark3");"""
         )
 
         # Click in the more ops and then the delete filter button
@@ -598,12 +598,12 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.assertIn(
             "mark3",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id__content").summernote('code')"""
             )
         )
         # insert the first mark
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "cmark1");"""
+            """$('#id__content').summernote('editor.insertText', "cmark1");"""
         )
 
         # Create condition. Click in the add condition button
@@ -652,13 +652,13 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.assertIn(
             "cmark1",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id__content").summernote('code')"""
             )
         )
 
         # insert the second mark
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "cmark2");"""
+            """$('#id__content').summernote('editor.insertText', "cmark2");"""
         )
 
         # Modify the filter. Click in the edit filter button
@@ -683,13 +683,13 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.assertIn(
             "cmark2",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id__content").summernote('code')"""
             )
         )
 
         # insert the third mark
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "cmark3");"""
+            """$('#id__content').summernote('editor.insertText', "cmark3");"""
         )
 
         # Click in the delete condition button
@@ -715,7 +715,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.assertIn(
             "cmark3",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id__content").summernote('code')"""
             )
         )
 
@@ -925,9 +925,9 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
         # Column name is present in condition formula
         self.assertTrue(has_variable(condition.formula, 'registered'))
         # Column name is present in action_out text
-        self.assertTrue('{{ registered }}' in action_out.content)
+        self.assertTrue('{{ registered }}' in action_out._content)
         # Attribute name is present in action_out text
-        self.assertTrue('{{ attribute name }}' in action_out.content)
+        self.assertTrue('{{ attribute name }}' in action_out._content)
         # Column name is present in action-in filter
         self.assertTrue(has_variable(filter.formula, 'age'))
 
@@ -1090,9 +1090,9 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
         self.assertTrue(has_variable(condition.formula,
                                      'registered new'))
         # Column name is present in action_out text
-        self.assertTrue('{{ registered new }}' in action_out.content)
+        self.assertTrue('{{ registered new }}' in action_out._content)
         # Attribute name is present in action_out text
-        #self.assertTrue('{{ attribute name new }}' in action_out.content)
+        #self.assertTrue('{{ attribute name new }}' in action_out._content)
         # Column age is present in action-in filter
         self.assertFalse(has_variable(filter.formula, 'age'))
         self.assertTrue(has_variable(filter.formula, 'age new'))

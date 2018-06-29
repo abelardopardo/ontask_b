@@ -67,7 +67,7 @@ def save_condition_form(request,
     # If the request has the 'action_content' field, update the action
     action_content = request.POST.get('action_content', None)
     if action_content:
-        action.content = action_content
+        action.set_content(action_content)
         action.save()
 
     if is_filter:
@@ -137,8 +137,9 @@ def save_condition_form(request,
         # field of the action.
         if form.old_name and 'name' in form.changed_data:
             # Performing string substitution in the content and saving
+            # TODO: Review!
             replacing = '{{% if {0} %}}'
-            action.content = action.content.replace(
+            action._content = action._content.replace(
                 replacing.format(form.old_name),
                 replacing.format(condition.name))
             action.save()
@@ -299,7 +300,7 @@ def delete_filter(request, pk):
         # If the request has 'action_content', update the action
         action_content = request.POST.get('action_content', None)
         if action_content:
-            cond_filter.action.content = action_content
+            cond_filter.action.set_content(action_content)
             cond_filter.action.save()
 
         # Log the event
@@ -443,7 +444,7 @@ def delete_condition(request, pk):
         # If the request has the 'action_content', update the action
         action_content = request.POST.get('action_content', None)
         if action_content:
-            condition.action.content = action_content
+            condition.action.set_content(action_content)
             condition.action.save()
 
         formula, fields = evaluate_node_sql(condition.formula)

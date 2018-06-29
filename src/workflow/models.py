@@ -241,8 +241,6 @@ class Workflow(models.Model):
         # Case 4: The workflow has a perfectly valid session: UPDATE THE
         # EXPIRE DATE OF THE SESSION
         #
-        print('AAA API INVOKED')
-
         if create_new_session:
             # Cases 1 and 2. Create a session and store the user_id
             request.session.save()

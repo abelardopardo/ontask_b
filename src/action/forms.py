@@ -28,7 +28,6 @@ class ActionForm(forms.ModelForm):
 
 
 class ActionDescriptionForm(forms.ModelForm):
-
     class Meta:
         model = Action
         fields = ('description_text',)
@@ -39,14 +38,14 @@ class EditActionOutForm(forms.ModelForm):
     Main class to edit an action out. The main element is the text editor (
     currently using summernote).
     """
-    content = forms.CharField(
+    _content = forms.CharField(
         widget=SummernoteInplaceWidget(),
         label='',
         required=False)
 
     class Meta:
         model = Action
-        fields = ('content',)
+        fields = ('_content',)
 
 
 # Form to enter values in a row
@@ -215,8 +214,8 @@ class EmailActionForm(EmailActionBasicForm):
         help_text="A zip file useful to review the emails sent."
     )
 
-class ActionImportForm(forms.Form):
 
+class ActionImportForm(forms.Form):
     # Action name
     name = forms.CharField(
         max_length=512,
@@ -230,5 +229,3 @@ class ActionImportForm(forms.Form):
         allow_empty_file=False,
         label="File",
         help_text='File containing a previously exported action')
-
-

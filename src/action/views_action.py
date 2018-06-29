@@ -26,7 +26,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 import logs.ops
-from action.evaluate import evaluate_row, render_template
+from action.evaluate import evaluate_row, render_template, get_row_values
 from dataops import ops, pandas_db
 from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
@@ -53,7 +53,6 @@ class ActionTable(tables.Table):
     name = tables.Column(verbose_name=str('Name'))
 
     is_out = tables.Column(verbose_name=str('Type'))
-
 
     description_text = tables.Column(verbose_name=str('Description'))
 
@@ -396,7 +395,7 @@ def action_out_save_content(request, pk):
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content', None)
     if action_content:
-        action.content = action_content
+        action.set_content(action_content)
         action.save()
 
     return JsonResponse({})
@@ -489,7 +488,7 @@ def edit_action_out(request, pk):
                           'content': content})
 
             # Text is good. Update the content of the action
-            action.content = content
+            action.set_content(content)
             action.save()
 
             # Closing, return to index if save-and-close is given
@@ -832,7 +831,7 @@ def preview_response(request, pk, idx, template, prelude=None):
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content', None)
     if action_content:
-        action.content = action_content
+        action.set_content(action_content)
         action.save()
 
     # Turn the parameter into an integer
@@ -856,8 +855,25 @@ def preview_response(request, pk, idx, template, prelude=None):
     if nxt > n_items:
         nxt = 1
 
-    action_content = evaluate_row(action, idx)
-    if action_content is None:
+    row_values = get_row_values(action, idx)
+
+    # Evaluate the action content.
+    action_content = evaluate_row(action, row_values)
+    show_values = ''
+    if action_content:
+        # Get the conditions used in the action content
+        act_cond = action.get_action_conditions()
+        # Get the variables/columns from the conditions
+        vars = set().union(
+            *[x.columns.all()
+              for x in action.conditions.filter(name__in=act_cond)
+              ]
+        )
+        # Sort the variables/columns  by position and get the name
+        show_values = ', '.join(
+            ["{0} = {1}".format(x.name, row_values[x.name]) for x in vars]
+        )
+    else:
         action_content = \
             "Error while retrieving content for student {0}".format(idx)
 
@@ -868,7 +884,8 @@ def preview_response(request, pk, idx, template, prelude=None):
                           'index': idx,
                           'nxt': nxt,
                           'prv': prv,
-                          'prelude': prelude},
+                          'prelude': prelude,
+                          'show_values': show_values},
                          request=request)
 
     return JsonResponse(data)

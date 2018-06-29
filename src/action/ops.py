@@ -28,7 +28,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
 import logs.ops
-from action.evaluate import evaluate_row, evaluate_action
+from action.evaluate import evaluate_row, evaluate_action, get_row_values
 from action.forms import EnterActionIn, field_prefix
 from action.models import Action
 from dataops import pandas_db, ops
@@ -164,8 +164,11 @@ def serve_action_out(user, action, user_attribute_name):
     :return:
     """
     # User_instance has the record used for verification
-    action_content = evaluate_row(action, (user_attribute_name,
-                                           user.email))
+    row_values = get_row_values(action,
+                                (user_attribute_name, user.email))
+
+    # Evaluate the action content.
+    action_content = evaluate_row(action, row_values)
 
     payload = {'action': action.name,
                'action_id': action.id}

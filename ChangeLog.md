@@ -1,4 +1,4 @@
-## 2.7.2
+## 2.8.0
 
 ### Added
 
@@ -11,6 +11,8 @@
 - New folder containing a catalogue of surveys and its corresponding plugins 
   (if applicable)
   
+- Docker scripts to create development and production containers for OnTask.
+  
 ### Changed
 
 - Changed configuration scripts to take the environment file name from the 
@@ -22,6 +24,12 @@
   workflow 
   
 ### Fixed
+
+## 2.7.2 (2018-06-19)
+
+### Fixed
+
+- Bug preventing learner data input (Issue #46)
 
 ## 2.7.1 (2018-06-15)
 

@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 import datetime
+import itertools
 import re
 
 import pytz
@@ -11,10 +12,15 @@ from django.db import models
 from django.utils.html import escape
 
 from dataops import formula_evaluation, pandas_db
+from dataops.formula_evaluation import get_variables
 from workflow.models import Workflow, Column
 
-# Regular expression to detect the use of a variable in a django template
-var_use_re = re.compile('{{ (?P<varname>.+?) \}\}')
+# Regular expressions detecting the use of a variable, or the
+# presence of a "{% MACRONAME variable %} construct in a string (template)
+var_use_res = [
+    re.compile('(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+\}\})'),
+    re.compile('(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})')
+]
 
 
 class Action(models.Model):
@@ -66,11 +72,15 @@ class Action(models.Model):
         default=None
     )
 
+    # Set of columns used in the action (either to capture data in action IN
+    # or present in any of the conditions in action OUT)
+    columns = models.ManyToManyField(Column, related_name='actions_in')
+
     #
     # Field for action OUT
     #
     # Text to be personalised for action OUT
-    content = models.TextField(
+    _content = models.TextField(
         default='',
         null=False,
         blank=True)
@@ -78,10 +88,6 @@ class Action(models.Model):
     #
     # Fields for action IN
     #
-    # Set of columns for the personalised action IN (subset of the matrix
-    # columns
-    columns = models.ManyToManyField(Column, related_name='actions_in')
-
     # Shuffle column order when creating the page to serve
     shuffle = models.BooleanField(
         default=False,
@@ -115,6 +121,61 @@ class Action(models.Model):
         return self.columns.filter(is_key=True).exists() and \
                self.columns.filter(is_key=False).exists()
 
+    def get_content(self):
+        """
+        Get the action out content
+        :return: context string
+        """
+        return self._content
+
+    def set_content(self, content):
+        """
+        Set the action content and update the list of columns
+        :return: Update the DB
+        """
+        # Assign the content and clean the new lines
+        self.clean_new_lines()
+
+        # Update the list of columns used in the action
+        cond_names = self.get_action_conditions()
+        colnames = list(itertools.chain.from_iterable(
+            [get_variables(x.formula)
+             for x in self.conditions.filter(name__in=cond_names)]
+        ))
+        self.columns.add(*[x for x in self.workflow.columns.filter(
+            name__in=colnames
+        )])
+
+    def get_action_conditions(self):
+        """
+        Return the list of contition names used in the macros contained in
+        the action content field
+        :return: list of condition names
+        """
+
+        result = []
+        # Loop over the regular expressions, match the expressions and extract
+        # the list of vname fields.
+        for rexpr in var_use_res:
+            result += [x.group('vname') for x in rexpr.finditer(self._content)]
+        return result
+
+    def clean_new_lines(self):
+        """
+        Function that removes the new lines from the middle of the macros in
+        the action content
+
+        :return: new text with the newlines in the middle of the macros removed
+        """
+        self._content = re.sub(
+            '{%(?P<varname>[^%}]+)%}',
+            lambda m: '{%' + m.group('varname').replace('\n', ' ') + '%}',
+            self._content)
+        self._content = re.sub(
+            '{{(?P<varname>[^%}]+)}}',
+            lambda m: '{{' + m.group('varname').replace('\n', ' ') + '}}',
+            self._content)
+
     def rename_variable(self, old_name, new_name):
         """
         Function that renames a variable present in the action content
@@ -125,13 +186,13 @@ class Action(models.Model):
 
         if self.is_out:
             # Action out: Need to change name appearances in content
-            new_text = var_use_re.sub(
+            new_text = var_use_res[0].sub(
                 lambda m: '{{ ' +
-                          (new_name if m.group('varname') == escape(old_name)
-                           else m.group('varname')) + ' }}',
-                self.content
+                          (new_name if m.group('vname') == escape(old_name)
+                           else m.group('vname')) + ' }}',
+                self._content
             )
-            self.content = new_text
+            self._content = new_text
         else:
             # Action in: Need to change name appearances in filter
             fcond = self.conditions.filter(is_filter=True).first()

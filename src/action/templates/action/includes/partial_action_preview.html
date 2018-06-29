@@ -22,5 +22,11 @@
        style="text-align: left; border: solid 1px black;margin: 0 2ex 2ex 2ex;">
     {{ action_content }}
   </div>
+  {% if action.is_out %}
+    <div class="modal-body"
+         style="text-align: left; border: solid 1px black;margin: 0 2ex 2ex 2ex;">
+      {% if show_values %}<strong>Values:</strong> {{ show_values }}{% endif %}
+    </div>
+  {% endif %}
 </div>
 

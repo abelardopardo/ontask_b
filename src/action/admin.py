@@ -13,7 +13,7 @@ class ActionAdmin(admin.ModelAdmin):
                     'description_text',
                     'created',
                     'modified',
-                    'content',
+                    '_content',
                     'serve_enabled'
                     )
 

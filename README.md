@@ -1,6 +1,6 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 2.7.0 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 2.7.3 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
 ## OnTask in a nutshell
 
@@ -157,7 +157,8 @@ Q19. **Where do I find the details on how to install it and some more
 OnTask started as a project combining ideas that were present in the Student 
 Relationship Engagement System [SRES](http://sres.io) and subsequent versions. 
 Support for this activity has been provided by the Australian Government 
-Office for Learning and Teaching as part of the [OnTask Project](https://ontasklearning.org) 
+Office for Learning and Teaching as part of the 
+[OnTask Project](https://ontasklearning.org) 
 titled *Scaling the Provision of Personalised Learning Support Actions to
 Large Student Cohorts* (OLT project reference SP16-5264). The views expressed
 in this activity do not necessarily reflect the views of the Australian
@@ -205,6 +206,8 @@ SOFTWARE.
 
 OnTask uses the following additional libraries/modules with the following 
 licenses:
+
+- [bootstrap-session-timeout](https://github.com/orangehill/bootstrap-session-timeout) MIT
 
 - [coreapi](https://pypi.python.org/pypi/coreapi) BSD
 
@@ -272,4 +275,3 @@ licenses:
 
 - [validate_email](https://pypi.python.org/pypi/validate_email) LGPL
 
-- [bootstrap-session-timeout](https://github.com/orangehill/bootstrap-session-timeout) MIT
