@@ -147,6 +147,8 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.BCryptPasswordHasher',
 ]
 
+LOCALE_PATHS = (join(PROJECT_PATH, 'locale'),)
+
 #
 # LDAP AUTHENTICATION
 #
