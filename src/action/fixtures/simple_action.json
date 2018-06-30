@@ -629,7 +629,7 @@
         "description_text": "action description text",
         "created": "2017-11-06T22:15:41.165Z",
         "modified": "2017-11-06T23:08:47.224Z",
-        "content": "{% comment %}Your action content here{% endcomment %}",
+        "_content": "{% comment %}Your action content here{% endcomment %}",
         "serve_enabled": false
     }
 },
