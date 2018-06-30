@@ -11,8 +11,6 @@
 - New folder containing a catalogue of surveys and its corresponding plugins 
   (if applicable)
   
-- Docker scripts to create development and production containers for OnTask.
-  
 ### Changed
 
 - Changed configuration scripts to take the environment file name from the 
@@ -20,11 +18,9 @@
   
 - Additional parameters in the configuration that are taken from the ENV_FILE
   
-- Show questions in Action In in the same order in which they are in the 
+- Show questions in Action In editor in the same order in which they are in the 
   workflow 
   
-### Fixed
-
 ## 2.7.2 (2018-06-19)
 
 ### Fixed
@@ -41,7 +37,7 @@
 
 ### Added
 
-- Functionality to export andi mport actions alone. This is very useful to 
+- Functionality to export and import actions alone. This is very useful to 
   simply transfer a single set of conditions or columns from one workflow to 
   another.
   
