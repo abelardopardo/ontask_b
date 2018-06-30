@@ -80,7 +80,7 @@ class Action(models.Model):
     # Field for action OUT
     #
     # Text to be personalised for action OUT
-    _content = models.TextField(
+    content = models.TextField(
         default='',
         null=False,
         blank=True)
@@ -126,7 +126,7 @@ class Action(models.Model):
         Get the action out content
         :return: context string
         """
-        return self._content
+        return self.content
 
     def set_content(self, content):
         """
@@ -157,7 +157,7 @@ class Action(models.Model):
         # Loop over the regular expressions, match the expressions and extract
         # the list of vname fields.
         for rexpr in var_use_res:
-            result += [x.group('vname') for x in rexpr.finditer(self._content)]
+            result += [x.group('vname') for x in rexpr.finditer(self.content)]
         return result
 
     def clean_new_lines(self):
@@ -167,14 +167,14 @@ class Action(models.Model):
 
         :return: new text with the newlines in the middle of the macros removed
         """
-        self._content = re.sub(
+        self.content = re.sub(
             '{%(?P<varname>[^%}]+)%}',
             lambda m: '{%' + m.group('varname').replace('\n', ' ') + '%}',
-            self._content)
-        self._content = re.sub(
+            self.content)
+        self.content = re.sub(
             '{{(?P<varname>[^%}]+)}}',
             lambda m: '{{' + m.group('varname').replace('\n', ' ') + '}}',
-            self._content)
+            self.content)
 
     def rename_variable(self, old_name, new_name):
         """
@@ -190,9 +190,9 @@ class Action(models.Model):
                 lambda m: '{{ ' +
                           (new_name if m.group('vname') == escape(old_name)
                            else m.group('vname')) + ' }}',
-                self._content
+                self.content
             )
-            self._content = new_text
+            self.content = new_text
         else:
             # Action in: Need to change name appearances in filter
             fcond = self.conditions.filter(is_filter=True).first()

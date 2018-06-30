@@ -14,6 +14,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 
+import ontask.templatetags.settings
 from dataops import pandas_db
 
 
@@ -185,6 +186,20 @@ class Workflow(models.Model):
         :return: Query builder ops structure as string (JSON dumps)
         """
         return json.dumps(self.query_builder_ops)
+
+    def version(self):
+        """
+        Function that simply returns the platform version (function used by
+        the serializer
+        :return: the platform version
+        """
+        return ontask.templatetags.settings.ontask_version()
+
+    def has_data_frame(self):
+        """
+        :return: If the workflow has a dataframe
+        """
+        return not self.data_frame_table_name
 
     def data_frame(self):
         # Function used by the serializer to access the data frame in the DB

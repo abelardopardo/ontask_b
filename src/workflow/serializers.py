@@ -69,18 +69,21 @@ class WorkflowListSerializer(serializers.ModelSerializer):
                 for k, v in attributes.items()]):
             raise APIException('Attributes must be a dictionary (str, str)')
 
-        workflow_obj = Workflow(
-            user=self.context['request'].user,
-            name=validated_data['name'],
-            description_text=validated_data.get('description_text', ''),
-            nrows=0,
-            ncols=0,
-            attributes=attributes
-        )
-
+        workflow_obj = None
         try:
+            workflow_obj = Workflow(
+                user=self.context['request'].user,
+                name=validated_data['name'],
+                description_text=validated_data.get('description_text', ''),
+                nrows=0,
+                ncols=0,
+                attributes=attributes
+            )
+
             workflow_obj.save()
         except Exception:
+            if workflow_obj:
+                workflow_obj.delete()
             raise APIException('Workflow could not be created.')
 
         return workflow_obj
@@ -110,6 +113,12 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
 
     views = ViewSerializer(many=True, required=False)
 
+    version = serializers.CharField(read_only=True,
+                                    default='NO VERSION',
+                                    allow_blank=True,
+                                    label="OnTask Version",
+                                    help_text="To guarantee compability")
+
     def get_filtered_actions(self, workflow):
         # Get the subset of actions specified in the context
         action_list = self.context.get('selected_actions', [])
@@ -131,74 +140,81 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, **kwargs):
 
-        workflow_obj = Workflow(
-            user=self.context['user'],
-            name=self.context['name'],
-            description_text=validated_data['description_text'],
-            nrows=0,
-            ncols=0,
-            attributes=validated_data['attributes'],
-            query_builder_ops=validated_data.get('query_builder_ops', {})
-        )
-        workflow_obj.save()
-
-        # Create the columns
-        column_data = ColumnSerializer(
-            data=validated_data.get('columns', []),
-            many=True,
-            context={'workflow': workflow_obj})
-        # And save its content
-        if column_data.is_valid():
-            column_data.save()
-        else:
-            workflow_obj.delete()
-            return None
-
-        # If there is any column with position = 0, recompute (this is to
-        # guarantee backward compatibility.
-        if workflow_obj.columns.filter(position=0).exists():
-            for idx, c in enumerate(workflow_obj.columns.all()):
-                c.position = idx + 1
-                c.save()
-
-        # Load the data frame
-        data_frame = validated_data.get('data_frame', None)
-        if data_frame is not None:
-            ops.store_dataframe_in_db(data_frame, workflow_obj.id)
-
-            # Reconcile now the information in workflow and columns with the
-            # one loaded
-            workflow_obj.data_frame_table_name = \
-                pandas_db.create_table_name(workflow_obj.pk)
-
-            workflow_obj.ncols = validated_data['ncols']
-            workflow_obj.nrows = validated_data['nrows']
-
+        # Initial values
+        workflow_obj = None
+        try:
+            workflow_obj = Workflow(
+                user=self.context['user'],
+                name=self.context['name'],
+                description_text=validated_data['description_text'],
+                nrows=0,
+                ncols=0,
+                attributes=validated_data['attributes'],
+                query_builder_ops=validated_data.get('query_builder_ops', {})
+            )
             workflow_obj.save()
 
-        # Create the actions pointing to the workflow
-        action_data = ActionSerializer(
-            data=validated_data.get('actions', []),
-            many=True,
-            context={'workflow': workflow_obj}
-        )
-        if action_data.is_valid():
-            action_data.save()
-        else:
-            workflow_obj.delete()
-            return None
+            # Create the columns
+            column_data = ColumnSerializer(
+                data=validated_data.get('columns', []),
+                many=True,
+                context={'workflow': workflow_obj})
+            # And save its content
+            if column_data.is_valid():
+                column_data.save()
+            else:
+                raise Exception('Unable to save column information')
 
-        # Create the views pointing to the workflow
-        view_data = ViewSerializer(
-            data=validated_data.get('views', []),
-            many=True,
-            context={'workflow': workflow_obj}
-        )
-        if view_data.is_valid():
-            view_data.save()
-        else:
-            workflow_obj.delete()
-            return None
+            # If there is any column with position = 0, recompute (this is to
+            # guarantee backward compatibility.
+            if workflow_obj.columns.filter(position=0).exists():
+                for idx, c in enumerate(workflow_obj.columns.all()):
+                    c.position = idx + 1
+                    c.save()
+
+            # Load the data frame
+            data_frame = validated_data.get('data_frame', None)
+            if data_frame is not None:
+                ops.store_dataframe_in_db(data_frame, workflow_obj.id)
+
+                # Reconcile now the information in workflow and columns with the
+                # one loaded
+                workflow_obj.data_frame_table_name = \
+                    pandas_db.create_table_name(workflow_obj.pk)
+
+                workflow_obj.ncols = validated_data['ncols']
+                workflow_obj.nrows = validated_data['nrows']
+
+                workflow_obj.save()
+
+            # Create the actions pointing to the workflow
+            action_data = ActionSerializer(
+                data=validated_data.get('actions', []),
+                many=True,
+                context={'workflow': workflow_obj}
+            )
+            if action_data.is_valid():
+                action_data.save()
+            else:
+                raise Exception('Unable to save column information')
+
+            # Create the views pointing to the workflow
+            view_data = ViewSerializer(
+                data=validated_data.get('views', []),
+                many=True,
+                context={'workflow': workflow_obj}
+            )
+            if view_data.is_valid():
+                view_data.save()
+            else:
+                raise Exception('Unable to save column information')
+        except Exception:
+            # Get rid of the objects created
+            if workflow_obj:
+                if workflow_obj.has_data_frame():
+                    pandas_db.delete_table(workflow_obj.id)
+                workflow_obj.delete()
+            raise
 
         return workflow_obj
 
@@ -269,32 +285,31 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
                 )
         new_column_names = [x['name'] for x in new_columns]
 
-        # used_columns has been verified.
-        action_obj = Action(
-            workflow=self.context['workflow'],
-            name=validated_data['name'],
-            description_text=validated_data['description_text'],
-            is_out=validated_data['is_out'],
-            serve_enabled=validated_data['serve_enabled'],
-            active_from=validated_data['active_from'],
-            active_to=validated_data['active_to'],
-            content=validated_data['content']
-        )
+        action_obj = None
+        try:
+            # used_columns has been verified.
+            action_obj = Action(
+                workflow=self.context['workflow'],
+                name=validated_data['name'],
+                description_text=validated_data['description_text'],
+                is_out=validated_data['is_out'],
+                serve_enabled=validated_data['serve_enabled'],
+                active_from=validated_data['active_from'],
+                active_to=validated_data['active_to'],
+                content=validated_data.get('content', '')
+            )
 
-        action_obj.save()
+            action_obj.save()
 
-        if new_columns:
-            # There are some new columns that need to be created
-            column_data = ColumnSerializer(data=new_columns,
-                                           many=True,
-                                           context=self.context)
+            if new_columns:
+                # There are some new columns that need to be created
+                column_data = ColumnSerializer(data=new_columns,
+                                               many=True,
+                                               context=self.context)
 
-            # And save its content
-            if column_data.is_valid():
-                column_data.save()
-
-                # Update the data frame
-                try:
+                # And save its content
+                if column_data.is_valid():
+                    column_data.save()
                     workflow = self.context['workflow']
                     df = pandas_db.load_from_db(self.context['workflow'].id)
                     if df is None:
@@ -319,61 +334,49 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
 
                     # Store the df to DB
                     ops.store_dataframe_in_db(df, workflow.id)
-                except Exception as e:
-                    # Something went wrong with the used_column, clean the new
-                    # columns and the newly created action
-                    Column.objects.filter(workflow=self.context['workflow'],
-                                          name__in=new_column_names).delete()
-                    action_obj.delete()
-                    raise e
+                else:
+                    raise Exception('Unable to create column data')
 
+            # Load the conditions pointing to the action
+            condition_data = ConditionSerializer(
+                data=validated_data.get('conditions', []),
+                many=True,
+                context={'action': action_obj})
+            if condition_data.is_valid():
+                condition_data.save()
             else:
-                # Something went wrong with the used_column, clean the new
-                # columns and the newly created action
-                Column.objects.filter(workflow=self.context['workflow'],
-                                      name__in=new_column_names).delete()
+                raise Exception('Unable to create condition information')
+
+            # Update the condition variables for each formula if not present
+            for condition in action_obj.conditions.all():
+                if condition.columns.all().count() == 0:
+                    col_names = get_variables(condition.formula)
+                    # Add the corresponding columns to the condition
+                    condition.columns.set(
+                        self.context['workflow'].columns.filter(name__in=col_names)
+                    )
+
+            # Load the columns field
+            columns = ColumnNameSerializer(
+                data=validated_data['columns'],
+                many=True,
+                required=False,
+                context=self.context
+            )
+            if columns.is_valid():
+                for citem in columns.data:
+                    column = action_obj.workflow.columns.get(name=citem['name'])
+                    action_obj.columns.add(column)
+                columns.save()
+            else:
+                raise Exception('Unable to create columns field')
+        except Exception:
+            if action_obj:
                 action_obj.delete()
-                raise Exception('Unable to create column data')
-
-        # Load the conditions pointing to the action
-        condition_data = ConditionSerializer(
-            data=validated_data.get('conditions', []),
-            many=True,
-            context={'action': action_obj})
-        if condition_data.is_valid():
-            condition_data.save()
-        else:
-            Column.objects.filter(workflow=self.context['workflow'],
-                                  name__in=new_column_names).delete()
-            action_obj.delete()
-            raise Exception('Unable to create condition information')
-
-        # Update the condition variables for each formula if not present
-        for condition in action_obj.conditions.all():
-            if condition.columns.all().count() == 0:
-                col_names = get_variables(condition.formula)
-                # Add the corresponding columns to the condition
-                condition.columns.set(
-                    self.context['workflow'].columns.filter(name__in=col_names)
-                )
-
-        # Load the columns field
-        columns = ColumnNameSerializer(
-            data=validated_data['columns'],
-            many=True,
-            required=False,
-            context=self.context
-        )
-        if columns.is_valid():
-            for citem in columns.data:
-                column = action_obj.workflow.columns.get(name=citem['name'])
-                action_obj.columns.add(column)
-            columns.save()
-        else:
-            Column.objects.filter(workflow=self.context['workflow'],
-                                  name__in=new_column_names).delete()
-            action_obj.delete()
-            raise Exception('Unable to create columns field')
+            Column.objects.filter(
+                workflow=self.context['workflow'],
+                name__in=new_column_names).delete()
+            raise
 
         return action_obj
 

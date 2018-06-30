@@ -139,7 +139,7 @@ def save_condition_form(request,
             # Performing string substitution in the content and saving
             # TODO: Review!
             replacing = '{{% if {0} %}}'
-            action._content = action._content.replace(
+            action.content = action.content.replace(
                 replacing.format(form.old_name),
                 replacing.format(condition.name))
             action.save()

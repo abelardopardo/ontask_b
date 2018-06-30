@@ -38,14 +38,14 @@ class EditActionOutForm(forms.ModelForm):
     Main class to edit an action out. The main element is the text editor (
     currently using summernote).
     """
-    _content = forms.CharField(
+    content = forms.CharField(
         widget=SummernoteInplaceWidget(),
         label='',
         required=False)
 
     class Meta:
         model = Action
-        fields = ('_content',)
+        fields = ('content',)
 
 
 # Form to enter values in a row

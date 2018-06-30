@@ -77,9 +77,9 @@ var saveForm = function () {
       $('#id_formula').val(f_text);
     }
     var data = form.serializeArray();
-    if (document.getElementById("id__content") != null) {
+    if (document.getElementById("id_content") != null) {
       data.push({'name': 'action_content',
-                 'value': $("#id__content").summernote('code')});
+                 'value': $("#id_content").summernote('code')});
     }
     $.ajax({
       url: form.attr("action"),

@@ -850,7 +850,7 @@
         "description_text": "action description text",
         "created": "2017-11-06T22:15:41.165Z",
         "modified": "2017-11-07T02:56:02.865Z",
-        "_content": "<p>{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}</p>",
+        "content": "<p>{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}</p>",
         "serve_enabled": false
     }
 },

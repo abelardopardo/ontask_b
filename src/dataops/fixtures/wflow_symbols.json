@@ -1963,7 +1963,7 @@
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
-        "_content": "{% comment %}Your action content here{% endcomment %}",
+        "content": "{% comment %}Your action content here{% endcomment %}",
         "columns": [
             4786,
             4784
@@ -1983,7 +1983,7 @@
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
-        "_content": "<p><br></p>",
+        "content": "<p><br></p>",
         "columns": []
     }
 }

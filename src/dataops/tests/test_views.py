@@ -941,7 +941,7 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
 
         # insert the action text
         self.selenium.execute_script(
-            """$('#id__content').summernote('editor.insertText', 
+            """$('#id_content').summernote('editor.insertText', 
             "{0}");""".format(self.action_text)
         )
 

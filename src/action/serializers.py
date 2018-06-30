@@ -79,58 +79,57 @@ class ActionSerializer(serializers.ModelSerializer):
     columns = ColumnNameSerializer(required=False, many=True)
 
     def create(self, validated_data, **kwargs):
-        # Get content (have to use two names for backward compatibility)
-        content = validated_data.get('content', None)
-        if not content:
-            content = validated_data.get('_content', None)
+        action_obj = None
+        try:
+            action_obj = Action(
+                workflow=self.context['workflow'],
+                name=validated_data['name'],
+                description_text=validated_data['description_text'],
+                is_out=validated_data['is_out'],
+                serve_enabled=validated_data['serve_enabled'],
+                active_from=validated_data['active_from'],
+                active_to=validated_data['active_to'],
+                content=validated_data.get('content', None)
+            )
 
-        action_obj = Action(
-            workflow=self.context['workflow'],
-            name=validated_data['name'],
-            description_text=validated_data['description_text'],
-            is_out=validated_data['is_out'],
-            serve_enabled=validated_data['serve_enabled'],
-            active_from=validated_data['active_from'],
-            active_to=validated_data['active_to'],
-            content=content
-        )
-
-        action_obj.save()
-
-        # Load the conditions pointing to the action
-        condition_data = ConditionSerializer(
-            data=validated_data.get('conditions', []),
-            many=True,
-            context={'action': action_obj})
-        if condition_data.is_valid():
-            condition_data.save()
-        else:
-            action_obj.delete()
-            return None
-
-        # Update the condition variables for each formula if not present
-        for condition in action_obj.conditions.all():
-            if condition.columns.all().count() == 0:
-                col_names = get_variables(condition.formula)
-                # Add the corresponding columns to the condition
-                condition.columns.set(
-                    self.context['workflow'].columns.filter(name__in=col_names)
-                )
-
-        # Load the columns pointing to the action (if any)
-        columns = ColumnNameSerializer(
-            data=validated_data.get('columns'),
-            many=True,
-            required=False,
-        )
-        if columns.is_valid():
-            for citem in columns.data:
-                column = action_obj.workflow.columns.get(name=citem['name'])
-                action_obj.columns.add(column)
             action_obj.save()
-        else:
-            action_obj.delete()
-            return None
+
+            # Load the conditions pointing to the action
+            condition_data = ConditionSerializer(
+                data=validated_data.get('conditions', []),
+                many=True,
+                context={'action': action_obj})
+            if condition_data.is_valid():
+                condition_data.save()
+            else:
+                raise Exception('Invalid condition data')
+
+            # Update the condition variables for each formula if not present
+            for condition in action_obj.conditions.all():
+                if condition.columns.all().count() == 0:
+                    col_names = get_variables(condition.formula)
+                    # Add the corresponding columns to the condition
+                    condition.columns.set(
+                        self.context['workflow'].columns.filter(name__in=col_names)
+                    )
+
+            # Load the columns pointing to the action (if any)
+            columns = ColumnNameSerializer(
+                data=validated_data.get('columns'),
+                many=True,
+                required=False,
+            )
+            if columns.is_valid():
+                for citem in columns.data:
+                    column = action_obj.workflow.columns.get(name=citem['name'])
+                    action_obj.columns.add(column)
+                action_obj.save()
+            else:
+                raise Exception('Invalid column data')
+        except Exception:
+            if action_obj:
+                action_obj.delete()
+            raise
 
         return action_obj
 

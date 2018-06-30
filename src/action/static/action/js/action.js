@@ -1,6 +1,6 @@
 var insertConditionInContent = function() {
   var btn = $(this);
-  var range = $("#id__content").summernote('createRange');
+  var range = $("#id_content").summernote('createRange');
   condition_text = 'YOUR TEXT HERE';
   range_text = range.toString();
   if (range_text != '') {
@@ -8,7 +8,7 @@ var insertConditionInContent = function() {
   }
   insert_text = "{% if " + btn.attr('data-name') +
       " %}" + condition_text + "{% endif %}";
-  $('#id__content').summernote('editor.insertText', insert_text);
+  $('#id_content').summernote('editor.insertText', insert_text);
 };
 
 var insertAttributeInContent = function() {
@@ -17,7 +17,7 @@ var insertAttributeInContent = function() {
     return;
   }
   insert_text = "{{ " + val + " }}";
-  $('#id__content').summernote('editor.insertText', insert_text);
+  $('#id_content').summernote('editor.insertText', insert_text);
   $(this).val(this.defaultSelected);
 }
 
@@ -30,7 +30,7 @@ var loadFormPost = function () {
     $.ajax({
       url: $(this).attr("data-url"),
       data: [{'name': 'action_content',
-              'value': $("#id__content").summernote('code')}],
+              'value': $("#id_content").summernote('code')}],
       type: 'post',
       dataType: 'json',
       beforeSend: function() {
@@ -57,7 +57,7 @@ var saveActionText = function() {
     $.ajax({
       url: $(this).attr("data-url"),
       data: [{'name': 'action_content',
-              'value': $("#id__content").summernote('code')}],
+              'value': $("#id_content").summernote('code')}],
       type: 'post',
       dataType: 'json',
       error: function(jqXHR, textStatus, errorThrown) {
