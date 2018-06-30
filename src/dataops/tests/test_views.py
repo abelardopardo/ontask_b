@@ -1008,7 +1008,9 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
         )
 
         # Click in the first plugin
-        self.selenium.find_element_by_link_text("Run").click()
+        self.selenium.find_element_by_xpath(
+            "//table[@id='transform-table']/tbody/tr[4]/td[7]/div/a"
+        ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -1060,7 +1062,9 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
         )
 
         # Click in the first plugin
-        self.selenium.find_element_by_link_text("Run").click()
+        self.selenium.find_element_by_xpath(
+            "//table[@id='transform-table']/tbody/tr[4]/td[7]/div/a"
+        ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -1139,7 +1143,7 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
 
         # Click in the second plugin
         self.selenium.find_element_by_xpath(
-            "//table[@id='transform-table']/tbody/tr[2]/td[7]/div/a"
+            "//table[@id='transform-table']/tbody/tr[5]/td[7]/div/a"
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))

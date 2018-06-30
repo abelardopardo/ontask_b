@@ -144,7 +144,7 @@ def render_template(template_text, context_dict, action=None):
 
     # Steps 1 and 2. Apply the tranlation process to all variables that
     # appear in the the template text
-    new_template_text = action.get_content()
+    new_template_text = template_text
     for rexpr in var_use_res:
         new_template_text = rexpr.sub(
             lambda m: m.group('mup_pre') + \

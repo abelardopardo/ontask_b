@@ -117,10 +117,9 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
 
         value = form.cleaned_data[field_prefix + '%s' % idx]
         if column.is_key:
-            if not where_field:
-                # Remember one unique key for selecting the row
-                where_field = column.name
-                where_value = value
+            # Remember one unique key for selecting the row
+            where_field = column.name
+            where_value = value
             continue
 
         set_fields.append(column.name)

@@ -26,29 +26,35 @@ class ColumnSerializer(serializers.ModelSerializer):
             # The data type is not legal
             raise Exception('Incorrect data type {0}.'.format(data_type))
 
-        # Create the object, but point to the given workflow
-        column_obj = Column(
-            name=validated_data['name'],
-            description_text=validated_data.get('description_text', ''),
-            workflow=self.context['workflow'],
-            data_type=data_type,
-            is_key=validated_data.get('is_key', False),
-            position=validated_data.get('position', 0),
-            in_viz=validated_data.get('in_viz', True),
-            active_from=validated_data.get('active_from', None),
-            active_to=validated_data.get('active_to', None),
-        )
+        column_obj = None
+        try:
+            # Create the object, but point to the given workflow
+            column_obj = Column(
+                name=validated_data['name'],
+                description_text=validated_data.get('description_text', ''),
+                workflow=self.context['workflow'],
+                data_type=data_type,
+                is_key=validated_data.get('is_key', False),
+                position=validated_data.get('position', 0),
+                in_viz=validated_data.get('in_viz', True),
+                active_from=validated_data.get('active_from', None),
+                active_to=validated_data.get('active_to', None),
+            )
 
-        # Set the categories if they exists
-        column_obj.set_categories(validated_data.get('categories', []), True)
+            # Set the categories if they exists
+            column_obj.set_categories(validated_data.get('categories', []), True)
 
-        if column_obj.active_from and column_obj.active_to and \
-                column_obj.active_from > column_obj.active_to:
-            raise Exception('Incorrect date/times in the active window for '
-                            'column {0}'.format(validated_data['name']))
+            if column_obj.active_from and column_obj.active_to and \
+                    column_obj.active_from > column_obj.active_to:
+                raise Exception('Incorrect date/times in the active window for '
+                                'column {0}'.format(validated_data['name']))
 
-        # All tests passed, proceed to save the object.
-        column_obj.save()
+            # All tests passed, proceed to save the object.
+            column_obj.save()
+        except Exception as e:
+            if column_obj:
+                column_obj.delete()
+            raise e
 
         return column_obj
 
@@ -82,7 +88,7 @@ class WorkflowListSerializer(serializers.ModelSerializer):
 
             workflow_obj.save()
         except Exception:
-            if workflow_obj:
+            if workflow_obj and workflow_obj.id:
                 workflow_obj.delete()
             raise APIException('Workflow could not be created.')
 
@@ -213,7 +219,8 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             if workflow_obj:
                 if workflow_obj.has_data_frame():
                     pandas_db.delete_table(workflow_obj.id)
-                workflow_obj.delete()
+                if workflow_obj.id:
+                    workflow_obj.delete()
             raise
 
         return workflow_obj
@@ -371,7 +378,7 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
             else:
                 raise Exception('Unable to create columns field')
         except Exception:
-            if action_obj:
+            if action_obj and action_obj.id:
                 action_obj.delete()
             Column.objects.filter(
                 workflow=self.context['workflow'],

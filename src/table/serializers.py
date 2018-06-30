@@ -124,28 +124,34 @@ class ViewSerializer(serializers.ModelSerializer):
     columns = ColumnNameSerializer(required=False, many=True)
 
     def create(self, validated_data, **kwargs):
-        view_obj = View(
-            workflow=self.context['workflow'],
-            name=validated_data['name'],
-            description_text=validated_data['description_text'],
-            formula=validated_data['formula']
-        )
-        view_obj.save()
-
-        # Load the columns in the view
-        columns = ColumnNameSerializer(
-            data=validated_data.get('columns'),
-            many=True,
-            required=False,
-        )
-        if columns.is_valid():
-            for citem in columns.data:
-                column = view_obj.workflow.columns.get(name=citem['name'])
-                view_obj.columns.add(column)
+        view_obj = None
+        try:
+            view_obj = View(
+                workflow=self.context['workflow'],
+                name=validated_data['name'],
+                description_text=validated_data['description_text'],
+                formula=validated_data['formula']
+            )
             view_obj.save()
-        else:
-            view_obj.delete()
-            return None
+
+            # Load the columns in the view
+            columns = ColumnNameSerializer(
+                data=validated_data.get('columns'),
+                many=True,
+                required=False,
+            )
+            if columns.is_valid():
+                for citem in columns.data:
+                    column = view_obj.workflow.columns.get(name=citem['name'])
+                    view_obj.columns.add(column)
+                view_obj.save()
+            else:
+                raise Exception('Incorrect column data')
+
+        except Exception:
+            if view_obj and view_obj.id:
+                view_obj.delete()
+            raise
 
         return view_obj
 

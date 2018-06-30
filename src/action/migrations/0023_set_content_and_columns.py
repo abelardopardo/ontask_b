@@ -18,7 +18,7 @@ def update_content_and_columns(apps, schema_editor):
     if schema_editor.connection.alias != 'default':
         return
 
-    # Action = apps.get_model('action', 'Action')
+    Action = apps.get_model('action', 'Action')
     for action in Action.objects.all():
         if not action.is_out:
             continue

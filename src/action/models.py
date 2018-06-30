@@ -134,6 +134,7 @@ class Action(models.Model):
         :return: Update the DB
         """
         # Assign the content and clean the new lines
+        self.content = content
         self.clean_new_lines()
 
         # Update the list of columns used in the action

@@ -323,7 +323,7 @@ class Workflow(models.Model):
 
         # Step 3: Delete the conditions attached to all the actions attached to the
         # workflow.
-        self.actions.conditions.all().delete()
+        self.actions.all().delete()
 
         # Step 4: Delete all the views attached to the workflow
         self.views.all().delete()

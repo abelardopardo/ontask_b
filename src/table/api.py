@@ -101,7 +101,7 @@ class TableBasicOps(APIView):
     # Delete
     def delete(self, request, pk, format=None):
         wflow = self.get_object(pk)
-        wflow.flush(wflow)
+        wflow.flush()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
