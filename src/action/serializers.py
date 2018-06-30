@@ -79,6 +79,11 @@ class ActionSerializer(serializers.ModelSerializer):
     columns = ColumnNameSerializer(required=False, many=True)
 
     def create(self, validated_data, **kwargs):
+        # Get content (have to use two names for backward compatibility)
+        content = validated_data.get('content', None)
+        if not content:
+            content = validated_data.get('_content', None)
+
         action_obj = Action(
             workflow=self.context['workflow'],
             name=validated_data['name'],
@@ -87,7 +92,7 @@ class ActionSerializer(serializers.ModelSerializer):
             serve_enabled=validated_data['serve_enabled'],
             active_from=validated_data['active_from'],
             active_to=validated_data['active_to'],
-            content=validated_data['content']
+            content=content
         )
 
         action_obj.save()
