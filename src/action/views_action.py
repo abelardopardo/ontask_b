@@ -26,7 +26,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 import logs.ops
-from action.evaluate import evaluate_row, render_template, get_row_values
+from action.evaluate import (
+    evaluate_row_action_out,
+    render_template,
+    get_row_values)
 from dataops import ops, pandas_db
 from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
@@ -857,9 +860,13 @@ def preview_response(request, pk, idx, template, prelude=None):
 
     row_values = get_row_values(action, idx)
 
+    # Get the dictionary containing column names, attributes and condition
+    # valuations:
+    context = action.get_evaluation_context(row_values)
+
     # Evaluate the action content.
-    action_content = evaluate_row(action, row_values)
     show_values = ''
+    action_content = evaluate_row_action_out(action, context)
     if action_content:
         # Get the conditions used in the action content
         act_cond = action.get_action_conditions()
@@ -876,6 +883,10 @@ def preview_response(request, pk, idx, template, prelude=None):
     else:
         action_content = \
             "Error while retrieving content for student {0}".format(idx)
+
+    # Process the prelude?
+    if prelude:
+        prelude = evaluate_row_action_out(action, context, prelude)
 
     data['html_form'] = \
         render_to_string(template,

@@ -28,7 +28,8 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
 import logs.ops
-from action.evaluate import evaluate_row, evaluate_action, get_row_values
+from action.evaluate import evaluate_row_action_out, evaluate_action, \
+    get_row_values
 from action.forms import EnterActionIn, field_prefix
 from action.models import Action
 from dataops import pandas_db, ops
@@ -59,7 +60,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
     if action.shuffle:
         # Shuffle the columns if needed
         rnd = random.seed(request.user)
-        random.shuffle(columns)
+        rnd.shuffle(columns)
 
     # Get the row values. User_instance has the record used for verification
     row_pairs = pandas_db.get_table_row_by_key(
@@ -162,15 +163,33 @@ def serve_action_out(user, action, user_attribute_name):
     :param user_attribute_name: Column to check for email
     :return:
     """
+
+    # For the response
+    payload = {'action': action.name,
+               'action_id': action.id}
+
     # User_instance has the record used for verification
     row_values = get_row_values(action,
                                 (user_attribute_name, user.email))
 
-    # Evaluate the action content.
-    action_content = evaluate_row(action, row_values)
+    # Get the dictionary containing column names, attributes and condition
+    # valuations:
+    context = action.get_evaluation_context(row_values)
+    if context is None:
+        payload['error'] = \
+            'Error when evaluating conditions for user {0}'.format(user.email)
+        # Log the event
+        logs.ops.put(
+            user,
+            'action_served_execute',
+            workflow=action.workflow,
+            payload=payload
+        )
+        return HttpResponse(render_to_string('action/action_unavailable.html',
+                                             {}))
 
-    payload = {'action': action.name,
-               'action_id': action.id}
+    # Evaluate the action content.
+    action_content = evaluate_row_action_out(action, context)
 
     # If the action content is empty, forget about it
     response = action_content
@@ -329,10 +348,10 @@ def send_messages(user,
 
     # Update the number of filtered rows if the action has a filter (table
     # might have changed)
-    filter = action.conditions.filter(is_filter=True).first()
-    if filter and filter.n_rows_selected != len(result):
-        filter.n_rows_selected = len(result)
-        filter.save()
+    cfilter = action.conditions.filter(is_filter=True).first()
+    if cfilter and cfilter.n_rows_selected != len(result):
+        cfilter.n_rows_selected = len(result)
+        cfilter.save()
 
     # Everything seemed to work to create the messages.
     msgs = []
@@ -439,7 +458,7 @@ def send_messages(user,
         'email_sent_datetime': now,
         'filter_present': filter is not None,
         'num_rows': action.workflow.nrows,
-        'num_selected': filter.n_rows_selected if filter else -1}
+        'num_selected': cfilter.n_rows_selected if filter else -1}
 
     # Create template and render with context
     try:
@@ -538,7 +557,6 @@ def do_import_action(user, workflow, name, file_item):
     )
 
     # If anything goes wrong, return a string to show in the page.
-    action = None
     try:
         if not action_data.is_valid():
             return 'Unable to import action:' + ' ' + action_data.errors
@@ -552,12 +570,10 @@ def do_import_action(user, workflow, name, file_item):
     except Exception as e:
         return 'Unable to import action: ' + e.message
 
-
-    # Success
-    # Log the event
+    # Success, log the event
     logs.ops.put(user,
-                 'workflow_import',
+                 'action_import',
                  workflow,
-                 {'id': workflow.id,
-                  'name': workflow.name})
+                 {'id': action.id,
+                  'name': action.name})
     return None

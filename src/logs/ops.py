@@ -32,6 +32,7 @@ log_types = {
     'action_email_read': 'Email read',
     'action_serve_toggled': 'Action URL toggled',
     'action_served_execute': 'Action served',
+    'action_import': 'Action imported',
     'condition_create': 'Condition created',
     'condition_update': 'Condition updated',
     'condition_delete': 'Condition deleted',

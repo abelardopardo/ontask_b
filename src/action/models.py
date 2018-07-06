@@ -12,7 +12,8 @@ from django.db import models
 from django.utils.html import escape
 
 from dataops import formula_evaluation, pandas_db
-from dataops.formula_evaluation import get_variables
+from dataops.formula_evaluation import get_variables, evaluate_top_node
+from ontask import OntaskException
 from workflow.models import Workflow, Column
 
 # Regular expressions detecting the use of a variable, or the
@@ -250,6 +251,42 @@ class Action(models.Model):
             result.add(c)
 
         return list(result)
+
+    def get_evaluation_context(self, row_values):
+        """
+        Given an action and a set of row_values, prepare the dictionary with the
+        condition names, attribute names and column names and their
+        corresponding values.
+        :param action: Action object for which the conditions need to be taken.
+        :param row_values: Values to use in the evaluation of conditions.
+        :return: Context dictionary, or None if there has been some anomaly
+        """
+
+        # If no row values are given, there is nothing to do here.
+        if row_values is None:
+            # No rows satisfy the given condition
+            return None
+
+        # Step 1: Evaluate all the conditions
+        condition_eval = {}
+        condition_anomalies = []
+        for condition in self.conditions.filter(is_filter=False).values(
+                'name', 'is_filter', 'formula'):
+            # Evaluate the condition
+            try:
+                condition_eval[condition['name']] = evaluate_top_node(
+                    condition['formula'],
+                    row_values
+                )
+            except OntaskException:
+                # Something went wrong evaluating a condition. Stop.
+                return None
+
+        # Step 2: Create the context with the attributes, the evaluation of the
+        # conditions and the values of the columns.
+        attributes = self.workflow.attributes
+
+        return dict(dict(row_values, **condition_eval), **attributes)
 
     class Meta:
         """
