@@ -16,7 +16,7 @@
                 data-url="{% url 'action:edit_condition' condition.id %}"
                 data-toggle="tooltip"
                 title="{% blocktrans with n=condition.n_rows_selected %}Edit the condition ({{ n }} rows satisfy this condition){% endblocktrans %}">
-          {{ condition.name }} {% blocktrans n=condition.n_rows_selected count counter=condition.n_rows_selected %}({{ n }} learner){% plural %}({{ n }} learners){% endblocktrans %}
+          {{ condition.name }} {% blocktrans with n=condition.n_rows_selected count counter=condition.n_rows_selected %}({{ n }} learner){% plural %}({{ n }} learners){% endblocktrans %}
         </button>
         <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
                 data-toggle="dropdown"
