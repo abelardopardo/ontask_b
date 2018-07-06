@@ -730,7 +730,7 @@ def select_column_action(request, apk, cpk, key=None):
         messages.error(request,
                        'Workflow has no data. '
                        'Go to Dataops to upload data.')
-        return redirect(reverse('action:index'))
+        return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Get the action and the columns
     try:
@@ -739,13 +739,13 @@ def select_column_action(request, apk, cpk, key=None):
             Q(workflow__shared=request.user)
         ).distinct().prefetch_related('columns').get(pk=apk)
     except ObjectDoesNotExist:
-        return redirect(reverse('action:index'))
+        return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Get the column
     try:
         column = action.workflow.columns.get(pk=cpk)
     except ObjectDoesNotExist:
-        return redirect(reverse('action:index'))
+        return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Parameters are correct, so add the column to the action.
     if key:
@@ -757,7 +757,7 @@ def select_column_action(request, apk, cpk, key=None):
     else:
         action.columns.add(column)
 
-    return redirect(reverse('action:edit_in', kwargs={'pk': action.id}))
+    return JsonResponse({})
 
 
 @user_passes_test(is_instructor)
@@ -799,6 +799,41 @@ def unselect_column_action(request, apk, cpk):
     action.columns.remove(column)
 
     return redirect(reverse('action:edit_in', kwargs={'pk': action.id}))
+
+
+@user_passes_test(is_instructor)
+def shuffle_questions(request, pk):
+    """
+    Operation to drop a column from action in
+    :param request: Request object
+    :param pk: Action PK
+    :return: HTML response
+    """
+
+    # Check if the workflow is locked
+    workflow = get_workflow(request)
+    if not workflow:
+        return reverse('workflow:index')
+
+    if workflow.nrows == 0:
+        messages.error(request,
+                       'Workflow has no data. '
+                       'Go to Dataops to upload data.')
+        return redirect(reverse('action:index'))
+
+    # Get the action and the columns
+    try:
+        action = Action.objects.filter(
+            Q(workflow__user=request.user) |
+            Q(workflow__shared=request.user)
+        ).distinct().prefetch_related('columns').get(pk=pk)
+    except ObjectDoesNotExist:
+        return redirect(reverse('action:index'))
+
+    action.shuffle = not action.shuffle
+    action.save()
+
+    return JsonResponse({'shuffle': action.shuffle})
 
 
 def preview_response(request, pk, idx, template, prelude=None):
