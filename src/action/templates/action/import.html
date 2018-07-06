@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load crispy_forms_tags %}
@@ -18,7 +19,7 @@
       <div class="input-group input-group-lg">
         {{ form|crispy }}
         <button type="button" class="btn btn-default" style="margin-right:2ex;"
-                onclick="location.href='{% url 'action:index' %}'">Cancel
+                onclick="location.href='{% url 'action:index' %}'">{% trans 'Cancel' %}
         </button>
         <button class="btn btn-primary btn-space"
                 type="Submit" name="Submit" value="Submit">

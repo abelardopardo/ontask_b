@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load django_tables2 %}
@@ -22,6 +23,9 @@
           // Required for DataTables
           $(document).ready(function() {
               $('#column-table').DataTable({
+                  "language": {
+                    url: getLanguage()
+                  },
                   "stateSave": true,
                   "processing": true,
                   "serverSide": true,
@@ -56,34 +60,38 @@
     </script>
   {% endif %}
 {% endblock %}
-{% block title %}{{ block.super }}Details{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Details' %}{% endblock %}
 {% block container %}
 <div class="container-fluid text-center">
-  <h1 class="page-header">Workflow Details</h1>
+  <h1 class="page-header">{% trans 'Workflow Details' %}</h1>
   {% if workflow %}
     <div style="display: inline-block;" id="workflow-area">
       {% if not table_info %}
-        <p><strong>The workflow does not have data.</strong></p>
-        <h4>Go to <a href="{% url 'dataops:uploadmerge' %}">Dataops</a> to
-          upload data</h4>
+        <p><strong>{% trans 'The workflow does not have data.' %}</strong></p>
+        <h4>{% trans 'Go to' %} <a href="{% url 'dataops:uploadmerge' %}">
+          {% trans 'Dataops' %}</a> {% trans 'to upload data' %}</h4>
       {% endif %}
       {% include 'workflow/includes/workflow_detail_buttons.html' %}
       <p class="help-block"
-         style="max-width:400px;text-align:center;"><strong>Description
+         style="text-align:center;"><strong>{% trans 'Description' %}
         </strong>: {{ workflow.description_text }}</p>
-      <p class="help-block">Last modified: {{ workflow.modified }}</p>
+      <p class="help-block">{% trans 'Last modified' %}: {{ workflow.modified }}</p>
       {% if table_info %}
-        <p class="help-block">{{ table_info.num_rows }} rows, {{ table_info.num_cols }} columns (<mark>{{ num_key_columns }} Key columns</mark>), {{ table_info.num_actions }} actions, {{ table_info.num_attributes }}
-        attributes.</p>
+        <p class="help-block">
+          {% blocktrans with num=table_info.num_rows count counter=table_info.num_rows %}{{ num }} row{% plural %}{{ num }} rows,{% endblocktrans %},
+          {% blocktrans with num=table_info.num_cols count counter=table_info.num_cols %}{{ num }} column{% plural %}{{ num }} columns{% endblocktrans %}
+          (<mark>{% blocktrans with num=num_key_columns count counter=num_key_columns %}{{ num }} Key column{% plural %}{{ num }} Key columns{% endblocktrans %}</mark>),
+          {% blocktrans with num=table_info.num_actions count counter=table_info.num_actions %}{{ num }} action{% plural %}{{ num }} actions,{% endblocktrans %},
+          {% blocktrans with num=table_info.num_attributes count counter=table_info.num_attributes %}{{ num }} attribute{% plural %} {{ num }} attributes{% endblocktrans %}.
         <table class="table display dataTable no-footer cell-border table-bordered"
                id="column-table">
           <thead>
             <tr>
               <th class="number">#</th>
-              <th class="name">Name</th>
-              <th class="type">Type</th>
-              <th class="key">Key?</th>
-              <th class="operations">Operations</th>
+              <th class="name">{% trans 'Name' %}</th>
+              <th class="type">{% trans 'Type' %}</th>
+              <th class="key">{% trans 'Key?' %}</th>
+              <th class="operations">{% trans 'Operations' %}</th>
             </tr>
           </thead>
         </table>

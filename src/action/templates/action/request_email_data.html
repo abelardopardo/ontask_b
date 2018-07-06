@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load crispy_forms_tags %}
@@ -19,7 +20,7 @@
           {{ form|crispy }}
           <div style="margin: 1ex 0 1ex 0;">
             <a type="button" class="btn btn-default"
-               href="{% url 'action:index' %}" style="margin-right:2ex;"> Cancel
+               href="{% url 'action:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
             </a>
             <button type="button" class="btn btn-primary js-email-preview"
                     style="margin-right:2ex;"
@@ -44,6 +45,5 @@
       </div>
     </div>
   </div>
-
 </div>
 {% endblock container %}

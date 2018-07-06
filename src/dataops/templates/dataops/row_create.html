@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load django_tables2 %}
@@ -21,7 +22,7 @@
       {% csrf_token %}
       {% if cancel_url %}
         <button type="button" class="btn btn-default"
-        onclick="location.href='{{ cancel_url }}'">Cancel</button>
+        onclick="location.href='{{ cancel_url }}'">{% trans 'Cancel' %}</button>
       {% endif %}
       <button type="submit" name="submit" value="update"
               class="btn btn-primary">
@@ -32,7 +33,7 @@
       </div>
       {% if cancel_url %}
         <button type="button" class="btn btn-default"
-        onclick="location.href='{{ cancel_url }}'">Cancel</button>
+        onclick="location.href='{{ cancel_url }}'">{% trans 'Cancel' %}</button>
       {% endif %}
       <button type="submit" name="submit" value="update"
               class="btn btn-primary">

@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 <form method="post" 
@@ -14,19 +15,19 @@
       <span aria-hidden="true">&times;</span>
     </button>
   {% if add %}
-    <h4 class="modal-title">Add column</h4>
+    <h4 class="modal-title">{% trans 'Add column' %}</h4>
   {% else %}
-    <h4 class="modal-title">Edit column <strong>{{ cname }}</strong></h4>
+    <h4 class="modal-title">{% blocktrans with n=cname %}Edit column <strong>{{ n }}</strong>{% endblocktrans %}</h4>
   {% endif %}
   </div>
   <div class="modal-body">
     {{ form|crispy }}
   </div>
   <div class="modal-footer" style="text-align: center;">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
+    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}
     </button>
     <button type="submit" class="btn btn-primary">
-       <span class="glyphicon glyphicon-ok"></span> {% if add %}Add column{% else %}Update{% endif %}
+       <span class="glyphicon glyphicon-ok"></span> {% if add %}{% trans 'Add column' %}{% else %}{% trans 'Update' %}{% endif %}
     </button>
   </div>
 </form>

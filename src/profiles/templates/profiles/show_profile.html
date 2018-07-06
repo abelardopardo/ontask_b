@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% load staticfiles %}
 {% load thumbnail %}
 
@@ -12,7 +12,8 @@
     <div class="col-sm-10">
       <h1>{{ show_user.get_full_name }}</h1>
       {% if editable %}
-      <a href="{% url 'profiles:edit_self' %}" class="btn btn-info">Edit Profile</a>
+      <a href="{% url 'profiles:edit_self' %}" class="btn btn-info">
+        {% trans 'Edit Profile' %}</a>
       {% endif %}
     </div>
     <div class="col-sm-2"><img title="profile picture" class="img-circle img-responsive" src="{% thumbnail show_user.profile.picture|default:'default_profile.png' 140x140 crop %}">
@@ -24,7 +25,7 @@
   <div class="row">
     <div class="col-sm-4">
       <ul class="list-group">
-        <li class="list-group-item text-muted">Profile</li>
+        <li class="list-group-item text-muted">{% trans 'Profile' as profile %}</li>
         <li class="list-group-item text-right"><span class="pull-left"><strong>Email:</strong></span> {{ show_user.email|default:"missing" }}
 	  {% if show_user.profile.email_verified %}
 	    <span class="glyphicon glyphicon-ok-circle" aria-hidden="true" title="This email address has been verified"></span>
@@ -34,13 +35,13 @@
 	    <span class="sr-only">Not Verified</span>
 	  {% endif %}
 	</li>
-        <li class="list-group-item text-right"><span class="pull-left"><strong>Joined</strong></span> {{ show_user.date_joined }}</li>
-        <li class="list-group-item text-right"><span class="pull-left"><strong>Last seen</strong></span> {{ show_user.last_login }}</li>
+        <li class="list-group-item text-right"><span class="pull-left"><strong>{% trans "Joined" %}</strong></span>{{ show_user.date_joined }}</li>
+        <li class="list-group-item text-right"><span class="pull-left"><strong>{% trans "Last seen" %}</strong></span>{{ show_user.last_login }}</li>
       </ul>
     </div>
     <div class="col-sm-8">
       <div class="panel panel-default">
-        <div class="panel-heading">{{ show_user.get_full_name }}'s Profile
+        <div class="panel-heading">{{ profile }}
 	  {% if show_user.profile.slug %}
 	    <a href="{% url 'profiles:show' show_user.profile.slug %}">
 	    	<span class="glyphicon glyphicon-link" aria-hidden="true" title="Profile permalink"></span>
@@ -50,13 +51,14 @@
 	  {% endif %}
 	</div>
         <div class="panel-body">
-	  <strong>Bio</strong>: {{ show_user.profile.bio }}
+	  <strong>{% trans 'Bio' %}</strong>: {{ show_user.profile.bio }}
 	</div>
       </div>
         <div class="panel-default panel-body">
-            <strong>API Auth token</strong> {{ user.auth_token }}
+            <strong>{% trans 'API Auth token' %}</strong> {{ user.auth_token }}
           <a href="{% url 'profiles:reset_token' %}"
-             class="btn btn-sm btn-info">{% if user.auth_token %}Reset{% else %}Create{% endif %}
+             class="btn btn-sm btn-info">{% if user.auth_token %}{% trans 'Reset' %}
+              {% else %}{% trans 'Create' %}{% endif %}
           </a>
         </div>
     </div>

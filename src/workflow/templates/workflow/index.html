@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load django_tables2 %}
@@ -22,7 +23,8 @@
                 },
                 "order": [[0, "asc"]],
                 "language": {
-                    "emptyTable": "No workflows available."
+                    "emptyTable": "{% trans 'No workflows available.' %}",
+                    "url": getLanguage()
                 },
                 "columnDefs": [
                         {"className": "dt-center", "targets": "_all"}
@@ -39,8 +41,9 @@
                   "caseInsensitive": true,
                 },
                 "order": [[0, "asc"]],
-                language: {
-                    "emptyTable": "No sql connections defined."
+                "language": {
+                    "emptyTable": "{% trans 'No SQL connections defined.' %}",
+                    "url": getLanguage()
                 },
                 "columnDefs": [
                     {"className": "dt-center", "targets": "_all"},
@@ -52,26 +55,27 @@
     }
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}Workflows{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Workflows' %}{% endblock %}
 {% block container %}
   <div align="center" class="container">
     {% if table %}
-      <h1 class="page-header">Workflows</h1>
+      <h1 class="page-header">{% trans 'Workflows' %}</h1>
     {% else %}
-      <h1 class="page-header">Create a workflow</h1>
+      <h1 class="page-header">{% trans 'Create a workflow' %}</h1>
     {% endif %}
     <p>
       <button type="button" class="btn btn-primary js-create-workflow"
               data-url="{% url 'workflow:create' %}"
                 data-toggle="tooltip"
-                title="Provide name and description for a new workflow">
+                title="{% trans 'Provide the name and description for a new workflow' %}">
         <span class="glyphicon glyphicon-plus"></span>
-          New workflow
+          {% trans 'New workflow' %}
       </button>
       <a href="{% url 'workflow:import' %}" class="btn btn-primary"
                 data-toggle="tooltip"
-                title="Import a previously exported OnTask workflow">
-        <span class="glyphicon glyphicon-import"></span> Import workflow
+                title="{% trans 'Import a file with an OnTask workflow' %}">
+        <span class="glyphicon glyphicon-import"></span>
+          {% trans 'Import workflow' %}
       </a>
     </p>
     {% render_table table %}

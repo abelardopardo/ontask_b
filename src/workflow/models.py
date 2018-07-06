@@ -42,14 +42,14 @@ class Workflow(models.Model):
     modified = models.DateTimeField(auto_now=True, null=False)
 
     # Storing the number of rows currently in the data_frame
-    nrows = models.IntegerField(verbose_name='Number of rows',
+    nrows = models.IntegerField(verbose_name='number of rows',
                                 default=0,
                                 name='nrows',
                                 null=False,
                                 blank=True)
 
     # Storing the number of rows currently in the data_frame
-    ncols = models.IntegerField(verbose_name='Number of columns',
+    ncols = models.IntegerField(verbose_name='number of columns',
                                 default=0,
                                 name='ncols',
                                 null=False,
@@ -367,6 +367,8 @@ class Workflow(models.Model):
         return self.name
 
     class Meta:
+        verbose_name = 'workflow'
+        verbose_name_plural = 'workflows'
         unique_together = ('user', 'name')
 
 
@@ -389,13 +391,13 @@ class Column(models.Model):
     # Column name
     name = models.CharField(max_length=512,
                             blank=False,
-                            verbose_name='Column name')
+                            verbose_name='column name')
 
     description_text = models.CharField(
         max_length=2048,
         default='',
         blank=True,
-        verbose_name='Description'
+        verbose_name='description'
     )
 
     workflow = models.ForeignKey(Workflow,
@@ -411,17 +413,17 @@ class Column(models.Model):
         blank=False,
         null=False,
         choices=[(x, x) for _, x in pandas_db.pandas_datatype_names.items()],
-        verbose_name='Type of data to store in the column')
+        verbose_name='type of data to store in the column')
 
     # Boolean stating if the column is a unique key
     is_key = models.BooleanField(default=False,
-                                 verbose_name='Has unique values per row',
+                                 verbose_name='has unique values per row',
                                  null=False,
                                  blank=False)
 
     # Position of the column in the workflow table
     position = models.IntegerField(
-        verbose_name='Column position (zero to insert last)',
+        verbose_name='column position (zero to insert last)',
         default=0,
         name='position',
         null=False,
@@ -430,7 +432,7 @@ class Column(models.Model):
 
     # Boolean stating if the column is included in the visualizations
     in_viz = models.BooleanField(default=True,
-                                 verbose_name='Include in visualization',
+                                 verbose_name='include in visualization',
                                  null=False,
                                  blank=False)
 
@@ -440,7 +442,7 @@ class Column(models.Model):
         default=list,
         blank=True,
         null=True,
-        verbose_name='Comma separated list of values allowed in this column')
+        verbose_name='comma separated list of values allowed in this column')
 
     # Validity window
     active_from = models.DateTimeField(
@@ -558,5 +560,7 @@ class Column(models.Model):
         return self.name
 
     class Meta:
+        verbose_name = 'column'
+        verbose_name_plural = 'columns'
         unique_together = ('name', 'workflow')
         ordering = ('position',)

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   {% load settings %}
   {% load staticfiles %}
   {% load thumbnail %}
@@ -17,6 +17,8 @@
     {% block styles %}
     <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
     {% endblock styles %}
+    <script src="{% static 'site/js/initial.js' %}{% otv %}"></script>
+    <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
     <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
     <script type="text/javascript"
             src="{% static 'site/js/bootstrap-session-timeout.min.js' %}"></script>
@@ -37,7 +39,7 @@
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
+          <span class="sr-only">{% trans 'Toggle navigation' %}</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -60,57 +62,59 @@
             {% if request.session.ontask_workflow_id %}
               {% url 'workflow:detail' request.session.ontask_workflow_id as workflow_url %}
               <li {% if '/workflow/' in request.path %}class="active"{% endif %}><a
-                  href="{{ workflow_url }}">Details</a></li>
+                  href="{{ workflow_url }}">{% trans 'Details' %}</a></li>
 
               <li {% if '/dataops/' in request.path %}class="dropdown active"{% else %}class="dropdown"{% endif %}>
-                <a class="dropdown-toggle" data-toggle="dropdown">Dataops
+                <a class="dropdown-toggle" data-toggle="dropdown">{% trans 'Dataops' %}
                   <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  <li><a href="{% url 'dataops:uploadmerge' %}">Data Upload/Merge</a></li>
-                  <li><a href="{% url 'dataops:transform' %}">Transform</a></li>
+                  <li><a href="{% url 'dataops:uploadmerge' %}">{% trans 'Data Upload/Merge' %}</a></li>
+                  <li><a href="{% url 'dataops:transform' %}">{% trans 'Transform' %}</a></li>
                 </ul>
               </li>
 
               {% url 'table:display' as table_display %}
               <li {% if '/table/' in request.path %}class="active"{% endif %}><a
-                  href="{% url 'table:display' %}">Table</a>
+                  href="{% url 'table:display' %}">{% trans 'Table' %}</a>
               </li>
 
               {% url 'action:index' as actions_url %}
               <li {% if '/action/' in request.path %}class="active"{% endif %}><a
-                  href="{{ actions_url }}">Actions</a></li>
+                  href="{{ actions_url }}">{% trans 'Actions' %}</a></li>
 
               {% url 'scheduler:index' as scheduler_url %}
               <li {% if '/scheduler/' in request.path %}class="active"{% endif %}><a
-                  href="{{ scheduler_url }}">Scheduler</a></li>
+                  href="{{ scheduler_url }}">{% trans 'Scheduler' %}</a></li>
 
               {% url 'logs:show' as logs_url %}
               <li {% if '/logs/' in request.path %}class="active"{% endif %}><a
-                  href="{{ logs_url }}">Logs</a>
+                  href="{{ logs_url }}">{% trans 'Logs' %}</a>
               </li>
             {% else %}
-              <li><a href="https://ontasklearning.org">About</a></li>
-              <li><a href="https://www.ontasklearning.org/contact/">Contact</a></li>
+              <li><a href="https://ontasklearning.org">{% trans 'About' %}</a></li>
+              <li><a href="https://www.ontasklearning.org/contact/">
+                {% trans 'Contact' %}</a></li>
             {% endif %}
           {% endblock %}
         </ul>
         <ul class="nav navbar-nav navbar-right">
           {% block navbar-right %}
             <a href="{% static ONTASK_HELP_URL %}" class="btn btn-info"
-                    data-toggle="tooltip"
-                    data-placement="bottom" title="Read the manual">
+               data-toggle="tooltip"
+               data-placement="bottom"
+               title="{% trans 'Read the manual' %}">
               <span class="glyphicon glyphicon-book"></span></a>
             {% if user.is_authenticated %}
               {% if user.is_staff %}
-                <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                <li><a href="{% url 'admin:index' %}">{% trans 'Admin' %}</a></li>
               {% endif %}
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle profile-menu" data-toggle="dropdown">
                  <img src="{% thumbnail user.profile.picture|default:'default_profile.png' 30x30 crop %}" alt="" />
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="{% url 'profiles:show_self' %}">Profile</a></li>
-                  <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+                  <li><a href="{% url 'profiles:show_self' %}">{% trans 'Profile' %}</a></li>
+                  <li><a href="{% url 'accounts:logout' %}">{% trans 'Logout' %}</a></li>
                 </ul>
               </li>
             {% endif %}
@@ -141,7 +145,7 @@
     <div class="container">
       <div class="starter-template">
         <h1>To Be Done</h1>
-        <p class="lead">This functionality has not been implemented yet.</p>
+        <p class="lead">{% trans 'This functionality has not been implemented yet.' %}</p>
       </div>
     </div>
     {% endblock container %}
@@ -152,16 +156,16 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Your session is about to expire</h4>
+                <h4 class="modal-title">{% trans 'Your session is about to expire' %}</h4>
             </div>
             <div class="modal-body">
-              Your session will expire in <span id="seconds-timer"></span>
-              seconds.
+              {% trans 'Your session will expire in' %}
+              <span id="seconds-timer"></span>{% trans 'seconds.' %}
             </div>
             <div class="modal-footer">
               <button type="button"
                       class="btn btn-primary">
-                <span class="glyphicon glyphicon-ok"></span> Ok</button>
+                <span class="glyphicon glyphicon-ok"></span> {% trans 'Ok' %}</button>
             </div>
           </div>
         </div>
@@ -175,11 +179,11 @@
                style="margin-bottom: 0px">
             <div class="col-lg-6 div1" style="margin-top:15px;">
                 <span style="color: #777;">
-                  &copy; OnTask Project {% now 'Y' %}</span>
+                  &copy; {% trans 'OnTask Project' %} {% now 'Y' %}</span>
             </div>
             <div class="col-lg-6 div2 text-right" style="margin-top:15px;">
               <span class="align-middle"
-                 style="color: #777;">Version: {% ontask_version %}</span>
+                 style="color: #777;">{% trans 'Version:' %} {% ontask_version %}</span>
             </div>
           </div>
         </div>
@@ -193,10 +197,10 @@
       <script  type="text/javascript">
         $.sessionTimeout({
           title: 'OnTask',
-          message: 'Your session is about to expire.',
-          logoutButton: 'Logout',
+          message: "{% trans 'Your session is about to expire.' %}",
+          logoutButton: "{% trans 'Logout' %}",
           ignoreUserActivity: true,
-          keepAliveButton: 'Remain Connected',
+          keepAliveButton: "{% trans 'Remain Connected' %}",
           keepAliveUrl: "{% url 'keep_alive' %}",
           logoutUrl: "{% url 'accounts:logout' %}",
           redirUrl: "{% url 'accounts:logout' %}",

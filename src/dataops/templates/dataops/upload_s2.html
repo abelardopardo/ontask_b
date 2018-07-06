@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load crispy_forms_tags %}
@@ -6,12 +7,10 @@
 {% block scripts %}
   <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
 {% endblock %}
-
-{% block title %}{{ block.super }}Upload/Merge CSV{% endblock %}
-
+{% block title %}{{ block.super }}{% trans 'Upload/Merge CSV' %}{% endblock %}
 {% block container %}
 <div align="center" class="container">
-  <h1 class="page-header">Step 2: Select Columns</h1>
+  <h1 class="page-header">{% trans 'Step 2' %}: {% trans 'Select Columns' %}</h1>
 
   <form method="POST" action="">
     {% csrf_token %}
@@ -35,13 +34,13 @@
       <thead>
         <tr>
           <th class="text-center" style="vertical-align:middle;">
-            Load<br/>
+            {% trans 'Load' %}<br/>
             <input type="checkbox" id="checkAll" checked/>
           </th>
-          <th class="text-center" style="vertical-align:middle;">Name</th>
-          <th class="text-center" style="vertical-align:middle;">Rename to</th>
-          <th class="text-center" style="vertical-align:middle;">Type</th>
-          <th class="text-center" style="vertical-align:middle;">Key?</th>
+          <th class="text-center" style="vertical-align:middle;">{% trans 'Name' %}</th>
+          <th class="text-center" style="vertical-align:middle;">{% trans 'Rename to' %}</th>
+          <th class="text-center" style="vertical-align:middle;">{% trans 'Type' %}</th>
+          <th class="text-center" style="vertical-align:middle;">{% trans 'Key?' %}</th>
         </tr>
       </thead>
       <tbody>
@@ -54,7 +53,7 @@
               {% if item.3 == 'integer' or item.3 == 'double' %}
               number{% else %}{{ item.3 }}{% endif %}
             </td>
-            <td class="text-center"style="vertical-align: middle;">{% if item.4 %}YES{% endif %}</td>
+            <td class="text-center"style="vertical-align: middle;">{% if item.4 %}{% trans 'YES' %}{% endif %}</td>
           </tr>
         {% endfor %}
       </tbody>

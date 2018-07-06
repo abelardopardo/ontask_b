@@ -1,6 +1,8 @@
+{% load i18n %}
 <a class="btn btn-primary btn-sm align-middle"
    href="{% url 'dataops:rowview_edit' id %}"
-   data-toggle="tooltip" title="Edit name and description">
+   data-toggle="tooltip" 
+   title="{% trans 'Edit name and description' %}">
     <span class="glyphicon glyphicon-pencil"></span>
 </a>
 <button type="button"

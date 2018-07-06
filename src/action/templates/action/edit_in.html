@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load widget_tweaks %}
@@ -38,7 +39,8 @@
                 stateSave: true,
                 "order": [],
                 "language": {
-                    "emptyTable": "No columns selected."
+                    "emptyTable": "{% trans 'No columns selected.' %}",
+                    "url": getLanguage()
                 },
                 "columnDefs": [
                     {"className": "dt-center", "targets": "_all"},

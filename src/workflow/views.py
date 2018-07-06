@@ -14,6 +14,7 @@ from django.utils.html import format_html
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.utils.translation import ugettext_lazy as _l
 
 import action
 import logs.ops
@@ -28,17 +29,17 @@ from .ops import (get_workflow)
 
 
 class WorkflowTable(tables.Table):
-    name = tables.Column(verbose_name=str('Name'))
+    name = tables.Column(verbose_name=_l('Name'))
     description_text = tables.Column(
         empty_values=[],
-        verbose_name=str('Description')
+        verbose_name=str(_l('Description'))
     )
     nrows_cols = tables.Column(
         empty_values=[],
-        verbose_name=str('Rows/Columns'),
-        default='No data'
+        verbose_name=_l('Rows/Columns'),
+        default=_l('No data')
     )
-    modified = tables.DateTimeColumn(verbose_name='Last modified')
+    modified = tables.DateTimeColumn(verbose_name=_l('Last modified'))
 
     def __init__(self, data, *args, **kwargs):
         table_id = kwargs.pop('id')

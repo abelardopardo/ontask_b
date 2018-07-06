@@ -6,6 +6,7 @@ import json
 from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.utils.dateparse import parse_datetime
+from django.utils.translation import ugettext_lazy as _l
 
 import ontask.ontask_prefs
 from dataops.models import SQLConnection
@@ -24,10 +25,10 @@ class SelectColumnForm(forms.Form):
 
     # Columns to combine
     columns = forms.ModelMultipleChoiceField(
-        label='Input Columns (to read   data)',
+        label=_l('Input Columns (to read data)'),
         queryset=None,
         required=False,
-        help_text='To select a subset of the dataframe to pass to the plugin')
+        help_text=_l('To select a subset of the table to pass to the plugin'))
 
     def __init__(self, *args, **kwargs):
         self.workflow = kwargs.pop('workflow', None)
@@ -48,9 +49,10 @@ class SelectColumnForm(forms.Form):
         # Field to choose the Key column to merge the results
         self.fields['merge_key'] = forms.ChoiceField(
             initial=('', '---'),
-            label='Key column for merging',
+            label=_l('Key column for merging'),
             required=True,
-            help_text='One of the existing key columns to merge the results',
+            help_text=_l('One of the existing key columns to merge the '
+                         'results'),
             choices=[('', '---')] + [(x, x) for x in
                                      self.workflow.columns.filter(is_key=True)]
         )
@@ -59,19 +61,19 @@ class SelectColumnForm(forms.Form):
         for idx, cname in enumerate(self.plugin_instance.output_column_names):
             self.fields[field_prefix + 'output_%s' % idx] = forms.CharField(
                 initial=cname,
-                label='Name for result column "{0}"'.format(cname),
+                label=_l('Name for result column "{0}"').format(cname),
                 strip=True,
                 required=False,
             )
 
         self.fields['out_column_suffix'] = forms.CharField(
             initial='',
-            label='Suffix to add to result columns (empty to ignore)',
+            label=_l('Suffix to add to result columns (empty to ignore)'),
             strip=True,
             required=False,
             help_text=
-            'Added to all output column names. Useful to keep results from '
-            'several executions in separated columns.'
+            _l('Added to all output column names. Useful to keep results from '
+               'several executions in separated columns.')
         )
 
         for idx, (k, p_type, p_allow, p_init, p_help) in \
@@ -140,7 +142,7 @@ class SelectColumnForm(forms.Form):
         if columns and columns.count() == 0:
             self.add_error(
                 'columns',
-                'The plugin needs at least one input column'
+                _l('The plugin needs at least one input column')
             )
 
         return data
@@ -158,20 +160,21 @@ class UploadCSVFileForm(forms.Form):
         content_types=json.loads(str(ontask.ontask_prefs.CONTENT_TYPES)),
         allow_empty_file=False,
         label="",
-        help_text='File in CSV format (typically produced by a statistics'
-                  ' package or Excel)')
+        help_text=_l('File in CSV format (typically produced by a statistics'
+                  ' package or Excel)'))
 
     skip_lines_at_top = forms.IntegerField(
-        label='Lines to skip at the top',
-        help_text="Number of lines to skip at the top when reading the file",
+        label=_l('Lines to skip at the top'),
+        help_text=_l("Number of lines to skip at the top when reading the "
+                     "file"),
         initial=0,
         required=False
     )
 
     skip_lines_at_bottom = forms.IntegerField(
-        label='Lines to skip at the bottom',
-        help_text="Number of lines to skip at the bottom when reading the "
-                  "file",
+        label=_l('Lines to skip at the bottom'),
+        help_text=_l("Number of lines to skip at the bottom when reading the "
+                  "file"),
         initial=0,
         required=False
     )
@@ -187,13 +190,13 @@ class UploadCSVFileForm(forms.Form):
         if data['skip_lines_at_top'] < 0:
             self.add_error(
                 'skip_lines_at_top',
-                'This number has to be zero or positive'
+                _l('This number has to be zero or positive')
             )
 
         if data['skip_lines_at_bottom'] < 0:
             self.add_error(
                 'skip_lines_at_bottom',
-                'This number has to be zero or positive'
+                _l('This number has to be zero or positive')
             )
 
         return data
@@ -212,13 +215,13 @@ class UploadExcelFileForm(forms.Form):
         ],
         allow_empty_file=False,
         label="",
-        help_text='File in Excel format (.xls or .xlsx)')
+        help_text=_l('File in Excel format (.xls or .xlsx)'))
 
     sheet = forms.CharField(
         max_length=512,
         required=True,
         initial='',
-        help_text='Sheet within the excelsheet to upload')
+        help_text=_l('Sheet within the excelsheet to upload'))
 
 
 class SQLConnectionForm(forms.ModelForm):
@@ -256,7 +259,7 @@ class SQLRequestPassword(forms.Form):
         max_length=2048,
         widget=forms.PasswordInput,
         required=True,
-        help_text='Password to authenticate the database connection')
+        help_text=_l('Password to authenticate the database connection'))
 
 
 # Form to select columns to upload and rename
@@ -303,7 +306,7 @@ class SelectColumnUploadForm(forms.Form):
         # Check if at least a unique column has been selected
         both_lists = zip(upload_list, self.is_key)
         if not any([a and b for a, b in both_lists]):
-            raise forms.ValidationError('No unique column specified',
+            raise forms.ValidationError(_l('No unique column specified'),
                                         code='invalid')
 
         # Get list of new names
@@ -314,19 +317,21 @@ class SelectColumnUploadForm(forms.Form):
 # Step 3 of the CSV upload: select unique keys to merge
 class SelectKeysForm(forms.Form):
     how_merge_choices = [
-        ('', '- Choose row selection method -'),
-        ('outer', '1) Select all rows in both the existing and new table'),
-        ('inner', '2) Select only the rows with keys present in both the '
-                  'existing and new table'),
-        ('left', '3) Select only the rows with keys in the existing table'),
-        ('right', '4) Select only the rows with keys in the new table'),
+        ('', _l('- Choose row selection method -')),
+        ('outer', _l('1) Select all rows in both the existing and new table')),
+        ('inner', _l('2) Select only the rows with keys present in both the '
+                  'existing and new table')),
+        ('left', _l('3) Select only the rows with keys in the existing table')),
+        ('right', _l('4) Select only the rows with keys in the new table')),
     ]
 
-    dst_help = "Key column in the existing table to match with the new table."
+    dst_help = _l("Key column in the existing table to match with the new "
+                 "table.")
 
-    src_help = "Key column in the new table to match with the existing table."
+    src_help = _l("Key column in the new table to match with the existing "
+                 "table.")
 
-    merge_help = "Select one method to see detailed information"
+    merge_help = _l("Select one method to see detailed information")
 
     def __init__(self, *args, **kargs):
         # Get the dst choices
@@ -343,7 +348,7 @@ class SelectKeysForm(forms.Form):
         src_choice_initial = \
             next((v for x, v in enumerate(src_choices)
                   if v[0] == src_selected_key),
-                 ('', '- Select merge option -'))
+                 ('', _l('- Select merge option -')))
 
         how_merge = kargs.pop('how_merge', None)
         how_merge_initial = \
@@ -357,21 +362,21 @@ class SelectKeysForm(forms.Form):
             forms.ChoiceField(initial=dst_choice_initial,
                               choices=dst_choices,
                               required=True,
-                              label='Key Column in Existing Table',
+                              label=_l('Key Column in Existing Table'),
                               help_text=self.dst_help)
 
         self.fields['src_key'] = \
             forms.ChoiceField(initial=src_choice_initial,
                               choices=src_choices,
                               required=True,
-                              label='Key Column in New Table',
+                              label=_l('Key Column in New Table'),
                               help_text=self.src_help)
 
         self.fields['how_merge'] = \
             forms.ChoiceField(initial=how_merge_initial,
                               choices=self.how_merge_choices,
                               required=True,
-                              label='Method to select rows to merge/update',
+                              label=_l('Method to select rows to merge/update'),
                               help_text=self.merge_help)
 
 
@@ -408,7 +413,7 @@ class RowFilterForm(forms.Form):
                 self.fields[name] = forms.DateTimeField(required=False,
                                                         label=name)
             else:
-                raise Exception('Unable to process datatype', field_type)
+                raise Exception(_l('Unable to process datatype'), field_type)
 
 
 class RowForm(forms.Form):

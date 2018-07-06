@@ -4,7 +4,7 @@ from __future__ import unicode_literals, print_function
 from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.template.defaultfilters import filesizeformat
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _l
 
 import ontask.ontask_prefs
 
@@ -29,15 +29,15 @@ class RestrictedFileField(forms.FileField):
             if data.content_type in self.content_types:
                 if data.size > self.max_upload_size:
                     raise forms.ValidationError(
-                        _('File size must be under %(max)s. Current file size is'
-                          ' %(current)s.')
+                        _l('File size must be under %(max)s. Current file '
+                           'size is %(current)s.')
                         % ({
                             'max': filesizeformat(self.max_upload_size),
                             'current': filesizeformat(data.size)
                         }))
             else:
                 raise forms.ValidationError(
-                    _('File type (%s) is not supported.') % data.content_type)
+                    _l('File type (%s) is not supported.') % data.content_type)
         except AttributeError:
             pass
 

@@ -6,6 +6,7 @@ from collections import Counter
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.translation import ugettext as _
 
 from dataops import ops, pandas_db
 from ontask.permissions import is_instructor
@@ -47,7 +48,7 @@ def csvupload1(request):
                       {'form': form,
                        'wid': workflow.id,
                        'dtype': 'CSV',
-                       'dtype_select': 'CSV file',
+                       'dtype_select': _('CSV file'),
                        'prev_step': reverse('dataops:uploadmerge')})
 
     # Process the reception of the file
@@ -66,7 +67,7 @@ def csvupload1(request):
                       {'form': form,
                        'wid': workflow.id,
                        'dtype': 'CSV',
-                       'dtype_select': 'CSV file',
+                       'dtype_select': _('CSV file'),
                        'prev_step': reverse('dataops:uploadmerge')})
 
     # Process CSV file using pandas read_csv

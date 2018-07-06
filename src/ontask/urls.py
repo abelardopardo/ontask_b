@@ -7,6 +7,9 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sites.models import Site
 from rest_framework.documentation import include_docs_urls
+from django.views.i18n import JavaScriptCatalog
+from django.conf.urls.i18n import i18n_patterns
+from django.views.decorators.cache import cache_page
 
 import accounts.urls
 import action.urls
@@ -18,6 +21,7 @@ import table.urls
 import workflow.urls
 from dataops import pandas_db
 from . import views
+from templatetags.settings import ontask_version
 
 api_description = """
 The Ontask API offers functionality to manipulate workflows, 
@@ -70,16 +74,24 @@ urlpatterns = [
         include_docs_urls(
             title='OnTask API',
             description=api_description,
-            public = False),
+            public=False),
         ),
 ]
 
 # User-uploaded files like profile pics need to be served in development
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+urlpatterns += i18n_patterns(
+    url(r'^jsi18n/$',
+        cache_page(86400, key_prefix='js18n-%s' % ontask_version())(
+            JavaScriptCatalog.as_view()),
+        name='javascript-catalog'),
+)
+
 # Include django debug toolbar if DEBUG is ons
 if settings.DEBUG:
     import debug_toolbar
+
     urlpatterns += [
         url(r'^__debug__/', include(debug_toolbar.urls)),
     ]

@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 <form method="post" action="{% url 'workflow:formula_column_add' %}"
@@ -7,15 +8,15 @@
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title">Add derived column</h4>
+    <h4 class="modal-title">{% trans 'Add derived column' %}</h4>
   </div>
   <div class="modal-body">
     {{ form|crispy }}
   </div>
   <div class="modal-footer" style="text-align: center;">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
+    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}
     </button>
     <button type="submit" class="btn btn-primary">
-      <span class="glyphicon glyphicon-ok"></span> Add derived column</button>
+      <span class="glyphicon glyphicon-ok"></span> {% trans 'Add derived column' %}</button>
   </div>
 </form>

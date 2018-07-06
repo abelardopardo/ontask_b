@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load django_tables2 %}
@@ -21,9 +22,10 @@
           "search": {
             "caseInsensitive": true,
           },
-          stateSave: true,
+          "stateSave": true,
           "language": {
-            "emptyTable": "There are no actions for this workflow."
+            "emptyTable": "{% trans 'There are no actions for this workflow.' %}",
+            "url": getLanguage()
           },
           "columnDefs": [
             {"className": "dt-center", "targets": "_all"},

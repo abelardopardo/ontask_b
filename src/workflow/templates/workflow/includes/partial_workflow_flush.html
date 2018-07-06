@@ -1,21 +1,22 @@
+{% load i18n %}
 <form method="post" action="{% url 'workflow:flush' workflow.id %}" class="js-workflow-flush-form">
   {% csrf_token %}
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title">Confirm workflow deletion</h4>
+    <h4 class="modal-title">{% trans 'Confirm workflow deletion' %}</h4>
   </div>
   <div class="modal-body">
-    <p class="lead">Are you sure you want to flush the data in workflow <strong>{{ workflow.name }}</strong>?</p>
-    <p>This operation will also remove <b>everything</b> stored in a workflow
-      except its name, description and the text in the Actions Out.</p>
+    <p class="lead">{% blocktrans with n=workflow.name %}Are you sure you want to flush the data in workflow <strong>{{ n }}</strong>?{% endblocktrans %}</p>
+    <p>{% blocktrans %}This operation will also remove <b>everything</b> stored in a workflow
+      except its name, description and the text in the Actions Out.{% endblocktrans %}</p>
   </div>
   <div class="modal-footer" style="text-align: center;">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
+    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}
     </button>
     <button type="submit" class="btn btn-danger">
-      <span class="glyphicon glyphicon-floppy-remove"></span> Flush workflow data</button>
+      <span class="glyphicon glyphicon-floppy-remove"></span> {% trans 'Flush workflow data' %}</button>
   </div>
 </form>
 

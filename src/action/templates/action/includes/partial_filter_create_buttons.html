@@ -1,17 +1,19 @@
+{% load i18n %}
 <h4 id="filter-set" style="border-top: none;">Filter learners
 <div class="btn-group">
   {% if filter_condition %}
     <button type="button"
             class="btn btn-sm btn-primary js-filter-edit"
             data-url="{% url 'action:edit_filter' filter_condition.id %}"
-            data-type="filter" data-toggle="tooltip" title="Edit the filter">
-      {{ filter_condition.name }} ({{ selected_rows }} learner{{ selected_rows|pluralize:",s" }} of {{ total_rows }})
+            data-type="filter" data-toggle="tooltip" 
+            title="{% trans 'Edit the filter' %}">
+      {{ filter_condition.name }} {% blocktrans with n=selected_rows tot=total_rows count counter=selected_rows %}({{ n }} learner of {{ tot }}){% plural %}({{ n }} learners of {{ tot }}){% endblocktrans %}
     </button>
     <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
             data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
       <span class="caret"></span>
-      <span class="sr-only">Toggle Dropdown</span>
+      <span class="sr-only">{% trans 'Toggle Dropdown' %}</span>
     </button>
     <ul role="menu" class="dropdown-menu">
       <li>
@@ -20,8 +22,8 @@
                 data-url="{% url 'action:edit_filter' filter_condition.id %}"
                 data-type="filter"
                 data-toggle="tooltip"
-                title="Edit the filter name and expression">
-          <span class="glyphicon glyphicon-pencil"></span> Edit
+                title="{% trans 'Edit the filter name and expression' %}">
+          <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
         </button>
       </li>
       <li>
@@ -29,7 +31,7 @@
                 class="btn btn-sm btn-default js-filter-delete"
                 data-url="{% url 'action:delete_filter' filter_condition.id %}"
                 data-toggle="tooltip" title="Delete the filter">
-          <span class="glyphicon glyphicon-trash"></span> Delete
+          <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
         </button>
       </li>
     </ul>
@@ -38,14 +40,14 @@
             class="btn btn-primary btn-sm js-filter-create{% if not has_data %} disabled{% endif %}"
             data-url="{% url 'action:create_filter' action.id %}"
             data-type="filter">
-      <span class="glyphicon glyphicon-plus"></span> Add Filter</button>
+      <span class="glyphicon glyphicon-plus"></span> {% trans 'Add Filter' %}</button>
   {% endif %}
 </div></h4>
 {% if filter_condition %}
   {% if selected_rows == 0 %}
-    <p class="alert-danger">The filter excludes all learners!</p>
+    <p class="alert-danger">{% trans 'The filter excludes all learners!' %}</p>
   {% endif %}
 {% else %}
-  <p>All learners considered for this action.</p>
+  <p>{% trasns 'All learners considered for this action.' %}</p>
 {% endif %}
 
