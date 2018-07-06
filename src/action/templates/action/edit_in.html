@@ -93,8 +93,7 @@
       <p class="alert-danger">There must be at least one non-key column.</p>
     {% endif %}
     {% if has_empty_description %}
-      <p class="alert-danger">All items should have non-empty descriptions
-        .</p>
+      <p class="alert-danger">All items should have non-empty descriptions.</p>
     {% endif %}
     <div id="column-names">
       <div style="display: table-cell; padding-right: 1ex;">Insert</div>
@@ -111,16 +110,17 @@
         <button type="button"
                 class="btn btn-primary btn-sm js-workflow-column-add"
                 data-url="{% url 'workflow:column_add' %}"
-                data-toggle="tooltip" title="Add a new column to the table">
-          <span class="glyphicon glyphicon-plus"></span> Add column
+                data-toggle="tooltip" title="Add a new column to the workflow">
+          <span class="glyphicon glyphicon-plus"></span> Add new column
         </button>
       </div>
       <div style="display: table-cell; padding-right: 1ex;">
         <button type="button"
                 class="btn btn-primary btn-sm js-workflow-formula-column-add"
                 data-url="{% url 'workflow:formula_column_add' %}"
-                data-toggle="tooltip" title="Add a new derived column to the table">
-          <span class="glyphicon glyphicon-plus"></span> Add derived column
+                data-toggle="tooltip"
+                title="Add a new derived column to the workflow">
+          <span class="glyphicon glyphicon-plus"></span> Add new derived column
         </button>
       </div>
     </div>

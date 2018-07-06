@@ -13,6 +13,7 @@ from django.utils.html import escape
 from validate_email import validate_email
 
 import dataops.formula_evaluation
+from action.forms import EnterActionIn
 from action.models import Condition, var_use_res
 from dataops import pandas_db, ops
 from workflow.models import Workflow
@@ -342,6 +343,36 @@ def evaluate_row_action_out(action, context, text=None):
                                 {'msg': e.message})
 
     return result
+
+
+def evaluate_row_action_in(action, context):
+    """
+    Given an action IN object and a row index:
+    1) Create the form and the context
+    2) Run the template with the context
+    3) Return the resulting object (HTML?)
+
+    :param action: Action object.
+    :param row_values: Dictionary with pairs name/value
+    :return: String with the HTML content resulting from the evaluation
+    """
+
+    # Get the active columns attached to the action
+    columns = [c for c in action.columns.all() if c.is_active]
+
+    # Get the row values.
+    selected_values = [context[c.name] for c in columns]
+
+    form = EnterActionIn(None, columns=columns, values=selected_values)
+
+    # Render the form
+    return Template(
+        """<div align="center">
+             <p class="lead">{{ description_text }}</p>
+             {% load crispy_forms_tags %}{{ form|crispy }}
+           </div>"""
+    ).render(Context({'form': form,
+                      'description_text': action.description_text}))
 
 
 def run(*script_args):
