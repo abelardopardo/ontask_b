@@ -59,8 +59,8 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
     columns = [c for c in action.columns.all() if c.is_active]
     if action.shuffle:
         # Shuffle the columns if needed
-        rnd = random.seed(request.user)
-        rnd.shuffle(columns)
+        random.seed(request.user)
+        random.shuffle(columns)
 
     # Get the row values. User_instance has the record used for verification
     row_pairs = pandas_db.get_table_row_by_key(
