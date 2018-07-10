@@ -757,7 +757,7 @@ def select_column_action(request, apk, cpk, key=None):
     else:
         action.columns.add(column)
 
-    return JsonResponse({})
+    return JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)

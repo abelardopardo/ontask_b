@@ -35,7 +35,6 @@ var insertColumnInActionIn = function () {
         location.href = data.html_redirect;
       }
       sel.children("option[value='']").remove();
-      // $("#selectBox option[value='option1']").remove();
     },
     error: function(jqXHR, textStatus, errorThrown) {
       location.reload();
