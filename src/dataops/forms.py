@@ -275,6 +275,7 @@ class SelectColumnUploadForm(forms.Form):
         self.column_names = kargs.pop('column_names')
         self.columns_to_upload = kargs.pop('columns_to_upload')
         self.is_key = kargs.pop('is_key')
+        self.keep_key = kargs.pop('keep_key')
 
         super(SelectColumnUploadForm, self).__init__(*args, **kargs)
 
@@ -294,21 +295,27 @@ class SelectColumnUploadForm(forms.Form):
                 required=False
             )
 
+            # Field to confirm if the key columns are kept.
+            if self.is_key[idx]:
+                self.fields['make_key_%s' % idx] = forms.BooleanField(
+                    initial=self.keep_key[idx],
+                    label='',
+                    required=False
+                )
+
     def clean(self):
         cleaned_data = super(SelectColumnUploadForm, self).clean()
 
         upload_list = [cleaned_data.get('upload_%s' % i, False)
                        for i in range(len(self.column_names))]
+        keep_key = [cleaned_data.get('make_key_%s' % i, False)
+                    for i in range(len(self.column_names))]
 
         # Check if at least a unique column has been selected
-        both_lists = zip(upload_list, self.is_key)
-        if not any([a and b for a, b in both_lists]):
+        if not any([a and b and c
+                    for a, b, c in zip(upload_list, self.is_key, keep_key)]):
             raise forms.ValidationError('No unique column specified',
                                         code='invalid')
-
-        # Get list of new names
-        new_names = [cleaned_data.get('new_name_%s' % i)
-                     for i in range(len(self.column_names))]
 
 
 # Step 3 of the CSV upload: select unique keys to merge
