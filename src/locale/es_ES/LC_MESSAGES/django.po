@@ -117,7 +117,7 @@ msgstr ""
 
 #: action/templates/action/includes/partial_action_clone.html:12
 msgid "A new action with the prefix \"Copy of \" will be created"
-msgstr ""
+msgstr "Se creará una acción nueva con el prefijo \"Copy of \""
 
 #: action/templates/action/includes/partial_action_clone.html:18
 msgid "Clone action"
@@ -472,7 +472,7 @@ msgstr "¡El filtro excluye a todos los alumnos!"
 
 #: action/templates/action/includes/partial_filter_create_buttons.html:51
 msgid "All learners considered for this action."
-msgstr ""
+msgstr "Todos los estudiantes están incluidos en esta acción"
 
 #: action/templates/action/includes/partial_filter_delete.html:8
 msgid "Confirm filter deletion"
@@ -601,7 +601,7 @@ msgstr "Obtener data de la conexión SQL"
 
 #: dataops/templates/dataops/includes/plugin_run_buttons.html:9
 msgid "Run the plugin"
-msgstr ""
+msgstr "Ejecutar el plugin"
 
 #: dataops/templates/dataops/includes/upload_buttons.html:10
 #: table/templates/table/stat_view.html:30
@@ -775,7 +775,7 @@ msgstr ""
 
 #: logs/templates/logs/includes/partial_log_view.html:11
 msgid "Log type:"
-msgstr ""
+msgstr "Tipo de registro:"
 
 #: logs/templates/logs/includes/partial_log_view.html:12
 msgid "Workflow:"
@@ -783,7 +783,7 @@ msgstr "Flujos:"
 
 #: logs/templates/logs/includes/partial_log_view.html:13
 msgid "Payload:"
-msgstr ""
+msgstr "Datos addicionales:"
 
 #: logs/templates/logs/show.html:30
 msgid "No logs recorded for this workflow."
@@ -834,7 +834,7 @@ msgstr "Envío de Email"
 #: scheduler/templates/scheduler/email.html:19
 #, python-format
 msgid "Time now is %(n)s"
-msgstr ""
+msgstr "Hora actual %(n)s"
 
 #: scheduler/templates/scheduler/includes/partial_scheduler_delete.html:9
 msgid "Confirm scheduled operation deletion"
@@ -860,7 +860,7 @@ msgstr "No hay ninguna operación planificada en este flujo."
 
 #: table/stat_views.py:92
 msgid "Unable to visualize table row"
-msgstr ""
+msgstr "Imposible visualizar esta fila de la tabla"
 
 #: table/stat_views.py:133
 msgid "No values in this column"
@@ -1510,7 +1510,7 @@ msgstr "Añadir column derivada"
 
 #: workflow/templates/workflow/includes/partial_share_create.html:8
 msgid "Select user to allow access to the workflow"
-msgstr ""
+msgstr "Seleccione el usuario al que dar acceso al flujo"
 
 #: workflow/templates/workflow/includes/partial_share_create.html:17
 #: workflow/templates/workflow/includes/workflow_detail_buttons.html:54
