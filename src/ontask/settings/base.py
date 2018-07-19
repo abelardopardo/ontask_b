@@ -291,8 +291,14 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 SITE_ID = 1
 
 SUMMERNOTE_CONFIG = {
-    'width': '100%',
-    'height': '400px',
+    'iframe': False,
+    'summernote': {
+        'width': '100%',
+        'height': '400px',
+        # Use proper language setting automatically
+        'lang': None,
+        'disableDragAndDrop': True,
+    },
     'css': (
         '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/theme/base16-dark.min.css',
     ),
@@ -305,8 +311,9 @@ SUMMERNOTE_CONFIG = {
         'lineNumbers': True,
         'lineWrapping': True,
     },
+    # Disable attachment feature.
+    'disable_attachment': False,
     'lazy': True,
-    'disableDragAndDrop': True,
 }
 
 # Extra configuration options
