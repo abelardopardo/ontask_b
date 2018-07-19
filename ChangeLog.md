@@ -10,7 +10,12 @@
   
 - New folder containing a catalogue of surveys and its corresponding plugins 
   (if applicable)
-  
+
+- Added capacity to retain/forget key columns in the upload/merge steps 
+  (Issue #55)
+ 
+- Dashboard now available from the table views (and subviews)
+
 ### Changed
 
 - Changed configuration scripts to take the environment file name from the 
@@ -20,6 +25,12 @@
   
 - Show questions in Action In editor in the same order in which they are in the 
   workflow 
+  
+- Configuration of Summernote now precludes the use of drag and drop.
+
+### Fixed
+
+- Row dashboard now takes into account the subset of data considered in a view.
   
 ## 2.7.2 (2018-06-19)
 
@@ -42,11 +53,11 @@
   another.
   
 - Definition and usage of SQL connections. The definition is only available 
-for the superuser and instructors are allowed to use them in the upload/merge
- page.
+  for the superuser and instructors are allowed to use them in the upload/merge
+  page.
  
 - Use of plugins. Arbitrary transformations of a subset of the dataframe are 
-now allowed by installing python modules in a specific folder. 
+  now allowed by installing python modules in a specific folder. 
 
 ### Changed
 

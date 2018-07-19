@@ -184,16 +184,20 @@ def create_upload_table_name(pk):
     return upload_table_prefix.format(pk)
 
 
-def load_from_db(pk):
+def load_from_db(pk, columns=None, filter_exp=None):
     """
     Load the data frame stored for the workflow with the pk
-    :param pk:
+    :param pk: Primary key of the workflow
+    :param columns: Optional list of columns to load (all if NOne is given)
+    :param filter_exp: JSON expression to filter a subset of rows
     :return: data frame
     """
-    return load_table(create_table_name(pk))
+    return load_table(create_table_name(pk),
+                      columns=columns,
+                      filter_exp=filter_exp)
 
 
-def load_table(table_name):
+def load_table(table_name, columns=None, filter_exp=None):
     """
     Load a data frame from the SQL DB.
 
@@ -211,6 +215,7 @@ def load_table(table_name):
     If feasible, a write-through system could be easily implemented.
 
     :param table_name: Table name to read from the db in to data frame
+    :param view: Optional view object to restrict access to the DB
     :return: data_frame or None if it does not exist.
     """
     if table_name not in connection.introspection.table_names():
@@ -219,7 +224,31 @@ def load_table(table_name):
     if settings.DEBUG:
         print('Loading table ', table_name)
 
-    result = pd.read_sql(table_name, engine)
+    if columns or filter_exp:
+        # A list of columns or a filter exp is given
+        query, params = get_filter_query(table_name, columns, filter_exp)
+        result = pd.read_sql_query(query, engine, params=params)
+    else:
+        # No view given, so simply get the whole table
+        result = pd.read_sql(table_name, engine)
+
+    # After reading from the DB, turn all None into NaN
+    result.fillna(value=np.nan, inplace=True)
+    return result
+
+
+def load_query(query):
+    """
+    Load a data frame from the SQL DB running the given query.
+
+    :param query: Query to run in the DB
+    :return: data_frame or None if it does not exist.
+    """
+
+    if settings.DEBUG:
+        print('Loading query ', query)
+
+    result = pd.read_sql_query(query, engine)
 
     # After reading from the DB, turn all None into NaN
     result.fillna(value=np.nan, inplace=True)
@@ -649,6 +678,46 @@ def get_column_stats_from_df(df_column):
     result['mode'] = mode[0]
 
     return result
+
+
+def get_filter_query(table_name, column_names, filter_exp):
+    """
+
+    Given a set of columns and a filter expression, return a pair of SQL query
+    and params to be executed
+    :param table_name: Table to query
+    :param column_names: list of columns to consider or None to consider all
+    :param filter_exp: Text filter expression
+    :return: (sql query, sql params)
+    """
+
+    # Create the query
+    if column_names:
+        safe_column_names = [fix_pctg_in_name(x) for x in column_names]
+        query = 'SELECT "{0}"'.format('", "'.join(safe_column_names))
+    else:
+        query = 'SELECT *'
+
+    # Add the table
+    query += ' FROM "{0}"'.format(table_name)
+
+    # Calculate the first suffix to add to the query
+    filter_txt = ''
+    filter_fields = []
+    if filter_exp:
+        filter_txt, filter_fields = evaluate_node_sql(filter_exp)
+
+    # Build the query so far appending the filter and/or the cv_tuples
+    if filter_txt:
+        query += ' WHERE '
+
+    fields = []
+    # If there has been a suffix from the filter, add it.
+    if filter_txt and filter_fields:
+        query += filter_txt
+        fields.extend(filter_fields)
+
+    return (query, fields)
 
 
 def search_table_rows(workflow_id,

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load django_tables2 %}
@@ -135,12 +136,26 @@
              title="Download a CSV file contining this table">
             <span class="glyphicon glyphicon-download-alt"></span> CSV Download
           </a>
+          <a href="{% url 'table:stat_table_view' view.id %}"
+             class="btn btn-primary btn-sm"
+             data-toggle="tooltip"
+             title="Dashboard created with the view data">
+            <span class="glyphicon glyphicon-dashboard"></span>
+            {% trans 'Dashboard' %}
+          </a>
         {% else %}
-          <a href="{% url 'table:csvdownload' %}" download
-             class="btn btn-primary btn-sm js-logs-download"
+          <a href="{% url 'table:csvdownload' %}"
+             class="btn btn-primary btn-sm"
              data-toggle="tooltip"
              title="Download a CSV file contining this table">
             <span class="glyphicon glyphicon-download-alt"></span> CSV Download
+          </a>
+          <a href="{% url 'table:stat_table' %}"
+             class="btn btn-primary btn-sm"
+             data-toggle="tooltip"
+             title="Dashboard created with the table data">
+            <span class="glyphicon glyphicon-dashboard"></span>
+            {% trans 'Dashboard' %}
           </a>
         {% endif %}
       </div>
