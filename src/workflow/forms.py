@@ -8,6 +8,7 @@ from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import ugettext_lazy as _l
 
 from dataops import pandas_db, ops
 from ontask import ontask_prefs, is_legal_name
@@ -33,7 +34,7 @@ class AttributeItemForm(forms.Form):
     key = forms.CharField(max_length=1024,
                           strip=True,
                           required=True,
-                          label='Name')
+                          label=_l('Name'))
 
     # Field for the value
     value = forms.CharField(max_length=1024,
@@ -62,7 +63,7 @@ class AttributeItemForm(forms.Form):
         if data['key'] in self.keys:
             self.add_error(
                 'key',
-                'Name has to be different from all existing ones.')
+                _l('Name has to be different from all existing ones.'))
             return data
 
         return data
@@ -73,7 +74,7 @@ class ColumnBasicForm(forms.ModelForm):
     raw_categories = forms.CharField(
         strip=True,
         required=False,
-        label='Comma separated list of values allowed in this column')
+        label=_l('Comma separated list of values allowed in this column'))
 
     data_type_choices = [
         ('double', 'number'),
@@ -118,7 +119,7 @@ class ColumnBasicForm(forms.ModelForm):
                 # New column name collides with existing one
                 self.add_error(
                     'name',
-                    'There is a column already with this name'
+                    _l('There is a column already with this name')
                 )
                 return data
 
@@ -135,7 +136,7 @@ class ColumnBasicForm(forms.ModelForm):
                 except ValueError:
                     self.add_error(
                         'raw_categories',
-                        'Incorrect list of values'
+                        _l('Incorrect list of values')
                     )
                     return data
 
@@ -147,8 +148,8 @@ class ColumnBasicForm(forms.ModelForm):
                                  if x and not pd.isnull(x)]):
                     self.add_error(
                         'raw_categories',
-                        'The values in the column are not compatible with ' +
-                        'these ones.'
+                        _l('The values in the column are not compatible ' +
+                           ' with these ones.')
                     )
                     return data
             else:
@@ -162,11 +163,11 @@ class ColumnBasicForm(forms.ModelForm):
         if a_from and a_to and a_from >= a_to:
             self.add_error(
                 'active_from',
-                'Incorrect date/time window'
+                _l('Incorrect date/time window')
             )
             self.add_error(
                 'active_to',
-                'Incorrect date/time window'
+                _l('Incorrect date/time window')
             )
 
         return data
@@ -193,7 +194,7 @@ class ColumnAddForm(ColumnBasicForm):
         max_length=512,
         strip=True,
         required=False,
-        label='Value to assign to all cells in the column'
+        label=_l('Value to assign to all cells in the column')
     )
 
     def __init__(self, *args, **kwargs):
@@ -220,14 +221,14 @@ class ColumnAddForm(ColumnBasicForm):
             except ValueError:
                 self.add_error(
                     'initial_value',
-                    'Incorrect initial value'
+                    _l('Incorrect initial value')
                 )
 
             categories = self.instance.get_categories()
             if categories and self.initial_valid_value not in categories:
                 self.add_error(
                     'initial_value',
-                    'This value is not in the list of allowed values'
+                    _l('This value is not in the list of allowed values')
                 )
 
         # Check and force a correct column index
@@ -264,7 +265,7 @@ class ColumnRenameForm(ColumnBasicForm):
                     len([x for x in column_unique if x]) == 1:
                 self.add_error(
                     'is_key',
-                    'There must be at least one column with unique values'
+                    _l('There must be at least one column with unique values')
                 )
                 return data
 
@@ -274,7 +275,7 @@ class ColumnRenameForm(ColumnBasicForm):
                                                  self.instance.name]):
                 self.add_error(
                     'is_key',
-                    'The column does not have unique values for each row.'
+                    _l('The column does not have unique values for each row.')
                 )
                 return data
 
@@ -327,7 +328,7 @@ class FormulaColumnAddForm(forms.ModelForm):
         if not column_idx_str:
             self.add_error(
                 None,
-                'You need to select the columns to combine'
+                _l('You need to select the columns to combine')
             )
             return data
 
@@ -346,7 +347,7 @@ class FormulaColumnAddForm(forms.ModelForm):
         if not result_type.issubset(set(operand[2])):
             self.add_error(
                 None,
-                'Incorrect data type for the selected operand'
+                _l('Incorrect data type for the selected operand')
             )
             return data
 
@@ -379,8 +380,8 @@ class WorkflowImportForm(forms.Form):
         max_upload_size=str(ontask_prefs.MAX_UPLOAD_SIZE),
         content_types=json.loads(str(ontask_prefs.CONTENT_TYPES)),
         allow_empty_file=False,
-        label="File",
-        help_text='File containing a previously exported workflow')
+        label=_l("File"),
+        help_text=_l('File containing a previously exported workflow'))
 
 
 class WorkflowExportRequestForm(forms.Form):
@@ -426,7 +427,7 @@ class SharedForm(forms.Form):
     """
     user_email = forms.CharField(max_length=1024,
                                  strip=True,
-                                 label='User email')
+                                 label=_l('User email'))
 
     def __init__(self, *args, **kwargs):
 
@@ -444,18 +445,18 @@ class SharedForm(forms.Form):
                 email__iexact=data['user_email']
             )
         except ObjectDoesNotExist:
-            self.add_error('user_email', 'User not found')
+            self.add_error('user_email', _l('User not found'))
 
         if self.user_obj == self.request_user:
             self.add_error(
                 'user_email',
-                "You don't need to add yourself to the share list"
+                _l("You don't need to add yourself to the share list")
             )
 
         if self.user_obj in self.workflow.shared.all():
             self.add_error(
                 'user_email',
-                "User already in the list"
+                _l("User already in the list")
             )
 
         return data

@@ -137,7 +137,7 @@ def get_row_visualisations(request, view_id=None):
         if row[idx] is None or row[idx] == '':
             visualizations.append(
                 '<p class="alert-warning">' + \
-                _('No value for this student in this column</p>')
+                _('No value for this student in this column') + '</p>'
             )
 
         visualizations.append(

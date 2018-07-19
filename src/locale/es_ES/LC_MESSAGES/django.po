@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-06 13:58+0930\n"
+"POT-Creation-Date: 2018-07-20 08:29+0930\n"
 "PO-Revision-Date: 2018-07-01 16:25+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -470,6 +470,10 @@ msgstr "Añadir filtro"
 msgid "The filter excludes all learners!"
 msgstr "¡El filtro excluye a todos los alumnos!"
 
+#: action/templates/action/includes/partial_filter_create_buttons.html:51
+msgid "All learners considered for this action."
+msgstr ""
+
 #: action/templates/action/includes/partial_filter_delete.html:8
 msgid "Confirm filter deletion"
 msgstr "Confirme el borrado del filtro"
@@ -600,6 +604,8 @@ msgid "Run the plugin"
 msgstr ""
 
 #: dataops/templates/dataops/includes/upload_buttons.html:10
+#: table/templates/table/stat_view.html:30
+#: table/templates/table/stat_view.html:39
 #: workflow/templates/workflow/includes/workflow_attribute_buttons.html:4
 msgid "Back"
 msgstr "Atrás"
@@ -659,13 +665,12 @@ msgid "Type"
 msgstr "Tipo"
 
 #: dataops/templates/dataops/upload_s2.html:43
-#: workflow/templates/workflow/detail.html:93
-msgid "Key?"
-msgstr "¿Clave?"
+msgid "Key"
+msgstr "Clave"
 
 #: dataops/templates/dataops/upload_s2.html:56
-msgid "YES"
-msgstr "SI"
+msgid "Keep?"
+msgstr "¿Mantener?"
 
 #: dataops/templates/dataops/uploadmerge.html:8 templates/base.html:71
 msgid "Data Upload/Merge"
@@ -853,6 +858,28 @@ msgstr "Borrar la operación planificada"
 msgid "No scheduled operations in this workflow."
 msgstr "No hay ninguna operación planificada en este flujo."
 
+#: table/stat_views.py:92
+msgid "Unable to visualize table row"
+msgstr ""
+
+#: table/stat_views.py:133
+msgid "No values in this column"
+msgstr "Columna sin datos"
+
+#: table/stat_views.py:140
+msgid "No value for this student in this column"
+msgstr "No hay datos del estudiante en esta columna"
+
+#: table/stat_views.py:184
+msgid "Unable to provide visualisation without data."
+msgstr "No hay datos para crear la visualización."
+
+#: table/templates/table/display.html:147
+#: table/templates/table/display.html:161
+#: table/templates/table/stat_view.html:24
+msgid "Dashboard"
+msgstr "Tablero de control"
+
 #: table/templates/table/includes/partial_row_delete.html:8
 msgid "Confirm row deletion"
 msgstr "Confirmar el borrado de la fila"
@@ -871,6 +898,7 @@ msgid "Statistics about this column"
 msgstr "Estadísticas sobre esta columna"
 
 #: table/templates/table/includes/partial_table_ops.html:12
+#: table/templates/table/stat_view.html:17
 #: workflow/templates/workflow/includes/workflow_column_operations.html:9
 msgid "Stats"
 msgstr "Estadísticas"
@@ -948,6 +976,11 @@ msgstr "Crear una vista idéntica"
 #: table/templates/table/includes/partial_view_operations.html:35
 msgid "Delete the view"
 msgstr "Borrar vista"
+
+#: table/templates/table/stat_view.html:22
+#, python-format
+msgid "Dashboard for %(n)s"
+msgstr "Tablero de control para %(n)s"
 
 #: table/templates/table/view_index.html:32
 msgid "There are no views for this workflow."
@@ -1319,6 +1352,10 @@ msgid "%(num)s attribute"
 msgid_plural " %(num)s attributes"
 msgstr[0] "%(num)s attributo"
 msgstr[1] "%(num)s attributos"
+
+#: workflow/templates/workflow/detail.html:93
+msgid "Key?"
+msgstr "¿Clave?"
 
 #: workflow/templates/workflow/detail.html:94
 msgid "Operations"

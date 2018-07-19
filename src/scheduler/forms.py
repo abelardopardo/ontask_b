@@ -7,6 +7,7 @@ import pytz
 from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _l
 
 from core import settings as core_settings
 from workflow.models import Column
@@ -41,7 +42,8 @@ class EmailForm(forms.ModelForm):
         now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
         when_data = self.cleaned_data.get('execute', None)
         if when_data and when_data <= now:
-            self.add_error('execute', 'Date/time must be in the future')
+            self.add_error('execute',
+                           _l('Date/time must be in the future'))
 
         return data
 

@@ -109,4 +109,4 @@ def column_to_field(col, initial=None, required=False, label=None):
                                   bootstrap_version=3),
         )
     else:
-        raise Exception('Unable to process datatype ', col.data_type)
+        raise Exception(_l('Unable to process datatype '), col.data_type)
