@@ -73,6 +73,12 @@ urlpatterns = [
         stat_views.stat_column,
         name="stat_column"),
 
+    url(r'^stat_table/$', stat_views.stat_table, name="stat_table"),
+
+    url(r'^(?P<pk>\d+)/stat_table_view/$',
+        stat_views.stat_table_view,
+        name="stat_table_view"),
+
     #
     # CSV Download
     #

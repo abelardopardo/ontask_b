@@ -56,79 +56,100 @@
 {% block container %}
   <div align="center" class="container-fluid" id="action-in-editor">
     <h1 class="page-header"><strong>{{ action.name }}</strong></h1>
-    {% include 'action/includes/partial_filter_create_buttons.html' %}
-    <h4>Description (shown to learners)
-      <button type="button"
-              class="btn btn-sm btn-primary js-description-edit"
-              data-url="{% url 'action:edit_description' action.id %}"
-              data-type="filter"
-              data-toggle="tooltip"
-              title="Edit description">
-        <span class="glyphicon glyphicon-pencil"></span> Edit</button>
-    </h4>
-    {% if action.description_text %}
-      <p class="lead">{{ action.description_text }}</p>
-    {% else %}
-      <p class="alert-warning">No description text provided</p>
-    {% endif %}
-    <h4>Key column to match the user id</h4>
-    <select id="select-key-column-name">
-      {% if not key_selected %}
-        <option value="">- Key column -</option>
+    <div>
+      {% include 'action/includes/partial_filter_create_buttons.html' %}
+    </div>
+    <div>
+      <h4>Description (shown to learners)
+        <button type="button"
+                class="btn btn-sm btn-primary js-description-edit"
+                data-url="{% url 'action:edit_description' action.id %}"
+                data-type="filter"
+                data-toggle="tooltip"
+                title="Edit description">
+          <span class="glyphicon glyphicon-pencil"></span> Edit</button>
+      </h4>
+      {% if action.description_text %}
+        <p class="lead">{{ action.description_text }}</p>
+      {% else %}
+        <p class="alert-warning">No description text provided</p>
       {% endif %}
-      {% for col in action.workflow.columns.all %}
-        {% if col.is_key %}
-          <option
-            value="{% url 'action:select_key_column_action' action.id col.id 1 %}"
-            {% if col == key_selected %}selected{% endif %}>
-            {{ col.name }}
-          </option>
-        {% endif %}
-      {% endfor %}
-    </select>
-    {% if not key_selected %}
-      <p class="alert-danger" style="margin-top:1ex;">You need to
-        specify a key column</p>
-    {% endif %}
-    <h4>Columns to obtain and store the data</h4>
-    {% if not has_no_key %}
-      <p class="alert-danger">There must be at least one non-key column.</p>
-    {% endif %}
-    {% if has_empty_description %}
-      <p class="alert-danger">All items should have non-empty descriptions
-        .</p>
-    {% endif %}
-    <div id="column-names">
-      <div style="display: table-cell; padding-right: 1ex;">Insert</div>
-      <div style="display: table-cell; padding-right: 1ex;">
-          <select id="select-column-name">
-            <option value="">- Column -</option>
-            {% for col in columns_to_insert %}
-              <option
-                value="{% url 'action:select_column_action' action.id col.id %}">{{ col.name }}</option>
+    </div>
+    <div>
+      <h4>Key column to match the user id
+        <small>
+          <select id="select-key-column-name">
+            {% if not key_selected %}
+              <option value="">- Key column -</option>
+            {% endif %}
+            {% for col in action.workflow.columns.all %}
+              {% if col.is_key %}
+                <option
+                  value="{% url 'action:select_key_column_action' action.id col.id 1 %}"
+                  {% if col == key_selected %}selected{% endif %}>
+                  {{ col.name }}
+                </option>
+              {% endif %}
             {% endfor %}
           </select>
-      </div>
-      <div style="display: table-cell; padding-right: 1ex;">
-        <button type="button"
-                class="btn btn-primary btn-sm js-workflow-column-add"
-                data-url="{% url 'workflow:column_add' %}"
-                data-toggle="tooltip" title="Add a new column to the table">
-          <span class="glyphicon glyphicon-plus"></span> Add column
-        </button>
-      </div>
-      <div style="display: table-cell; padding-right: 1ex;">
-        <button type="button"
-                class="btn btn-primary btn-sm js-workflow-formula-column-add"
-                data-url="{% url 'workflow:formula_column_add' %}"
-                data-toggle="tooltip" title="Add a new derived column to the table">
-          <span class="glyphicon glyphicon-plus"></span> Add derived column
-        </button>
-      </div>
+        </small>
+      </h4>
+      {% if not key_selected %}
+        <p class="alert-danger" style="margin-top:1ex;">You need to specify a key column</p>
+      {% endif %}
     </div>
-    <div class="container-fluid" id="column-selection"
-         style="display: table-cell; padding-right: 1ex;padding-top:1ex;">
-      {% render_table column_selected_table %}
+    <div>
+      <h4>Shuffle questions?
+        <small>
+          <input id="shuffle-questions"
+                 {% if action.shuffle %}checked{% endif %}
+                 data-toggle="toggle"
+                 data-url="{% url 'action:shuffle_questions' action.id %}"
+                 type="checkbox"/>
+        </small>
+      </h4>
+    </div>
+    <div>
+      <h4>Columns to obtain and store the data</h4>
+      {% if not has_no_key %}
+        <p class="alert-danger">There must be at least one non-key column.</p>
+      {% endif %}
+      {% if has_empty_description %}
+        <p class="alert-danger">All items should have non-empty descriptions.</p>
+      {% endif %}
+      <div id="column-names">
+        <div style="display: table-cell; padding-right: 1ex;">Insert</div>
+        <div style="display: table-cell; padding-right: 1ex;">
+            <select id="select-column-name">
+              <option value="">- Column -</option>
+              {% for col in columns_to_insert %}
+                <option
+                  value="{% url 'action:select_column_action' action.id col.id %}">{{ col.name }}</option>
+              {% endfor %}
+            </select>
+        </div>
+        <div style="display: table-cell; padding-right: 1ex;">
+          <button type="button"
+                  class="btn btn-primary btn-sm js-workflow-column-add"
+                  data-url="{% url 'workflow:column_add' %}"
+                  data-toggle="tooltip" title="Add a new column to the workflow">
+            <span class="glyphicon glyphicon-plus"></span> Add new column
+          </button>
+        </div>
+        <div style="display: table-cell; padding-right: 1ex;">
+          <button type="button"
+                  class="btn btn-primary btn-sm js-workflow-formula-column-add"
+                  data-url="{% url 'workflow:formula_column_add' %}"
+                  data-toggle="tooltip"
+                  title="Add a new derived column to the workflow">
+            <span class="glyphicon glyphicon-plus"></span> Add new derived column
+          </button>
+        </div>
+      </div>
+      <div class="container-fluid" id="column-selection"
+           style="display: table-cell; padding-right: 1ex;padding-top:1ex;">
+        {% render_table column_selected_table %}
+      </div>
     </div>
     <div class="text-center" style="margin-bottom:1.5ex;margin-top:1.5ex">
       <button type="button"

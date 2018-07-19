@@ -66,6 +66,11 @@ urlpatterns = [
         views_action.unselect_column_action,
         name='unselect_column_action'),
 
+    # Toggle shuffle action-in
+    url(r'^(?P<pk>\d+)/shuffle_questions/$',
+        views_action.shuffle_questions,
+        name='shuffle_questions'),
+
     # Update an action of type 0: in, 1: Out
     url(r'^(?P<pk>\d+)/(?P<type>[01])/update/$',
         views_action.ActionUpdateView.as_view(),

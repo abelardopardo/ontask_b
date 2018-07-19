@@ -26,7 +26,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 import logs.ops
-from action.evaluate import evaluate_row, render_template, get_row_values
+from action.evaluate import (
+    evaluate_row_action_out,
+    evaluate_row_action_in,
+    render_template,
+    get_row_values)
 from dataops import ops, pandas_db
 from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
@@ -714,6 +718,7 @@ def select_column_action(request, apk, cpk, key=None):
     :param request: Request object
     :param apk: Action PK
     :param cpk: column PK
+    :param key: The columns is a key column
     :return: JSON response
     """
     # Check if the workflow is locked
@@ -725,7 +730,7 @@ def select_column_action(request, apk, cpk, key=None):
         messages.error(request,
                        'Workflow has no data. '
                        'Go to Dataops to upload data.')
-        return redirect(reverse('action:index'))
+        return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Get the action and the columns
     try:
@@ -734,13 +739,13 @@ def select_column_action(request, apk, cpk, key=None):
             Q(workflow__shared=request.user)
         ).distinct().prefetch_related('columns').get(pk=apk)
     except ObjectDoesNotExist:
-        return redirect(reverse('action:index'))
+        return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Get the column
     try:
         column = action.workflow.columns.get(pk=cpk)
     except ObjectDoesNotExist:
-        return redirect(reverse('action:index'))
+        return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Parameters are correct, so add the column to the action.
     if key:
@@ -752,7 +757,7 @@ def select_column_action(request, apk, cpk, key=None):
     else:
         action.columns.add(column)
 
-    return redirect(reverse('action:edit_in', kwargs={'pk': action.id}))
+    return JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)
@@ -794,6 +799,41 @@ def unselect_column_action(request, apk, cpk):
     action.columns.remove(column)
 
     return redirect(reverse('action:edit_in', kwargs={'pk': action.id}))
+
+
+@user_passes_test(is_instructor)
+def shuffle_questions(request, pk):
+    """
+    Operation to drop a column from action in
+    :param request: Request object
+    :param pk: Action PK
+    :return: HTML response
+    """
+
+    # Check if the workflow is locked
+    workflow = get_workflow(request)
+    if not workflow:
+        return reverse('workflow:index')
+
+    if workflow.nrows == 0:
+        messages.error(request,
+                       'Workflow has no data. '
+                       'Go to Dataops to upload data.')
+        return redirect(reverse('action:index'))
+
+    # Get the action and the columns
+    try:
+        action = Action.objects.filter(
+            Q(workflow__user=request.user) |
+            Q(workflow__shared=request.user)
+        ).distinct().prefetch_related('columns').get(pk=pk)
+    except ObjectDoesNotExist:
+        return redirect(reverse('action:index'))
+
+    action.shuffle = not action.shuffle
+    action.save()
+
+    return JsonResponse({'shuffle': action.shuffle})
 
 
 def preview_response(request, pk, idx, template, prelude=None):
@@ -838,8 +878,8 @@ def preview_response(request, pk, idx, template, prelude=None):
     idx = int(idx)
 
     # Get the total number of items
-    filter = action.conditions.filter(is_filter=True).first()
-    n_items = filter.n_rows_selected if filter else -1
+    cfilter = action.conditions.filter(is_filter=True).first()
+    n_items = cfilter.n_rows_selected if cfilter else -1
     if n_items == -1:
         n_items = workflow.nrows
 
@@ -857,25 +897,36 @@ def preview_response(request, pk, idx, template, prelude=None):
 
     row_values = get_row_values(action, idx)
 
+    # Get the dictionary containing column names, attributes and condition
+    # valuations:
+    context = action.get_evaluation_context(row_values)
+
     # Evaluate the action content.
-    action_content = evaluate_row(action, row_values)
     show_values = ''
+    if action.is_out:
+        action_content = evaluate_row_action_out(action, context)
+    else:
+        action_content = evaluate_row_action_in(action, context)
     if action_content:
         # Get the conditions used in the action content
         act_cond = action.get_action_conditions()
         # Get the variables/columns from the conditions
-        vars = set().union(
+        act_vars = set().union(
             *[x.columns.all()
               for x in action.conditions.filter(name__in=act_cond)
               ]
         )
         # Sort the variables/columns  by position and get the name
         show_values = ', '.join(
-            ["{0} = {1}".format(x.name, row_values[x.name]) for x in vars]
+            ["{0} = {1}".format(x.name, row_values[x.name]) for x in act_vars]
         )
     else:
         action_content = \
             "Error while retrieving content for student {0}".format(idx)
+
+    # Process the prelude?
+    if prelude:
+        prelude = evaluate_row_action_out(action, context, prelude)
 
     data['html_form'] = \
         render_to_string(template,
@@ -1170,7 +1221,7 @@ def run_ss(request, pk):
         cv_tuples = [(c.name, search_value, c.data_type) for c in columns]
 
     # Filter
-    filter = action.conditions.filter(is_filter=True).first()
+    cfilter = action.conditions.filter(is_filter=True).first()
 
     # Get the query set (including the filter in the action)
     qs = pandas_db.search_table_rows(
@@ -1180,7 +1231,7 @@ def run_ss(request, pk):
         order_col.name,
         order_dir == 'asc',
         column_names,  # Column names in the action
-        filter.formula if filter else None
+        cfilter.formula if cfilter else None
     )
 
     # Post processing + adding operations

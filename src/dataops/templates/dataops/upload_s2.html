@@ -40,7 +40,7 @@
           <th class="text-center" style="vertical-align:middle;">{% trans 'Name' %}</th>
           <th class="text-center" style="vertical-align:middle;">{% trans 'Rename to' %}</th>
           <th class="text-center" style="vertical-align:middle;">{% trans 'Type' %}</th>
-          <th class="text-center" style="vertical-align:middle;">{% trans 'Key?' %}</th>
+          <th class="text-center" style="vertical-align:middle;">{% trans 'Key' %}</th>
         </tr>
       </thead>
       <tbody>
@@ -53,7 +53,7 @@
               {% if item.3 == 'integer' or item.3 == 'double' %}
               number{% else %}{{ item.3 }}{% endif %}
             </td>
-            <td class="text-center"style="vertical-align: middle;">{% if item.4 %}{% trans 'YES' %}{% endif %}</td>
+            <td class="text-center"style="vertical-align: middle;">{% if item.4 %}{% trans 'Keep?' %} {% render_field item.4 %}{% endif %}</td>
           </tr>
         {% endfor %}
       </tbody>

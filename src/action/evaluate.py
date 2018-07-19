@@ -16,7 +16,6 @@ import dataops.formula_evaluation
 from action.forms import EnterActionIn
 from action.models import Condition, var_use_res
 from dataops import pandas_db, ops
-from ontask import OntaskException
 from workflow.models import Workflow
 
 # Variable name to store the workflow ID in the context used to render a
@@ -305,28 +304,7 @@ def get_row_values(action, row_idx):
     return result
 
 
-def evaluate_row(action, row_values):
-    """
-    Given an action and a dictionary with row values, evaluate the content of
-    the action. The evaluation depends on the action type.
-
-    :param action: Action object
-    :param row_values: Dictionary with rowvalues
-    :return HTML content resulting from the evaluation
-    """
-
-    if row_values is None:
-        # No rows satisfy the given condition
-        return None
-
-    # Invoke the appropriate function depending on the action type
-    if action.is_out:
-        return evaluate_row_out(action, row_values)
-
-    return evaluate_row_in(action, row_values)
-
-
-def evaluate_row_out(action, row_values):
+def evaluate_row_action_out(action, context, text=None):
     """
     Given an action object and a row index:
     1) Evaluate the conditions with respect to the values in the row
@@ -337,54 +315,37 @@ def evaluate_row_out(action, row_values):
 
     :param action: Action object with pointers to conditions, filter,
                    workflow, etc.
-    :param row_values: dictionary with the pairs name, value
+    :param context: dictionary with the pairs name, value for the columns,
+    attributes and conditions (true/false)
+    :param text: If given, the text is processed in the template, if not
+    action_content is used
     :return: String with the HTML content resulting from the evaluation
     """
 
-    # Step 1: Evaluate all the conditions
-    condition_eval = {}
-    condition_anomalies = []
-    for condition in Condition.objects.filter(
-            action__id=action.id
-    ).values('name', 'is_filter', 'formula'):
-        if condition['is_filter']:
-            # Filter can be skipped in this stage
-            continue
+    # If context is None, propagate.
+    if context is None:
+        return None
 
-        # Evaluate the condition
-        try:
-            condition_eval[condition['name']] = \
-                dataops.formula_evaluation.evaluate_top_node(
-                    condition['formula'],
-                    row_values
-                )
-        except OntaskException as e:
-            condition_anomalies.append(e.value)
+    # Invoke the appropriate function depending on the action type
+    if not action.is_out:
+        raise Exception('Incorrect type of action')
 
-    # If any of the variables was incorrectly evaluated, we replace the
-    # content and replace it by something noting this anomaly
-    if condition_anomalies:
-        return render_to_string('action/incorrect_preview.html',
-                                {'missing_values': condition_anomalies})
+    if text is None:
+        # If the text is not given, take the one in the action
+        text = action.get_content()
 
-    # Step 2: Create the context with the attributes, the evaluation of the
-    # conditions and the values of the columns.
-    attributes = action.workflow.attributes
-    context = dict(dict(row_values, **condition_eval), **attributes)
-
-    # Step 3: run the template with the given context
+    # Run the template with the given context
     # First create the template with the string stored in the action
     try:
-        result = render_template(action.get_content(), context, action)
+        result = render_template(text, context, action)
     except TemplateSyntaxError as e:
         return render_to_string('action/syntax_error.html',
                                 {'msg': e.message})
 
-    # Step 4: Render the text
     return result
 
 
-def evaluate_row_in(action, row_values):
+def evaluate_row_action_in(action, context):
     """
     Given an action IN object and a row index:
     1) Create the form and the context
@@ -400,7 +361,7 @@ def evaluate_row_in(action, row_values):
     columns = [c for c in action.columns.all() if c.is_active]
 
     # Get the row values.
-    selected_values = [row_values[c.name] for c in columns]
+    selected_values = [context[c.name] for c in columns]
 
     form = EnterActionIn(None, columns=columns, values=selected_values)
 

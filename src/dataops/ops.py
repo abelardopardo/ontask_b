@@ -365,6 +365,19 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
     # If no dst_df is given, simply dump the frame in the DB
     if dst_df is None:
         store_dataframe_in_db(src_df, pk)
+        # Reconcile the label is_key with the one in the merge_info
+        workflow = Workflow.objects.get(pk=pk)
+        for cname, uploaded, is_key in zip(merge_info['rename_column_names'],
+                                           merge_info['columns_to_upload'],
+                                           merge_info['keep_key_column']):
+            if not uploaded:
+                # If the column has not been uploaded, forget about it
+                continue
+
+            column = workflow.columns.get(name=cname)
+            column.is_key = is_key
+            column.save()
+
         return None
 
     # Get the keys
@@ -418,7 +431,11 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
 
     # For each column check that the new column is consistent with data_type,
     # and allowed values, and recheck its unique key status
-    for col in Workflow.objects.get(pk=pk).columns.all():
+    workflow = Workflow.objects.get(pk=pk)
+    # for col in Workflow.objects.get(pk=pk).columns.all():
+    for cname, keep_key in zip(merge_info['rename_column_names'],
+                               merge_info['keep_key_column']):
+        col = workflow.columns.get(name=cname)
         # New values in this column should be compatible with the current
         # column properties.
         # Condition 1: Data type is correct (there is an exception for columns
@@ -461,11 +478,10 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
                     ', '.join(col.categories)
                 )
 
-        # Condition 3:
-        is_key_now = is_unique_column(new_df[col.name])
+        # Condition 3: Process the is_key property.
+        is_key_now = is_unique_column(new_df[col.name]) and keep_key
         if col.is_key and not is_key_now:
-            return \
-                'Column {0} is no longer a key column.'.format(col.name)
+            return 'Column {0} is no longer a key column.'.format(col.name)
 
         col.is_key = is_key_now
         col.save()
