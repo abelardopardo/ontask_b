@@ -2,7 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 from django import forms
-from django.utils.translation import ugettext_lazy as _l
+from django.utils.translation import ugettext_lazy as _
 
 from .models import View
 
@@ -18,9 +18,9 @@ class ViewAddForm(forms.ModelForm):
         super(ViewAddForm, self).__init__(data, *args, **kwargs)
 
         # Rename some of the fields
-        self.fields['name'].label = _l('View name')
-        self.fields['columns'].label = _l('Columns to show')
-        self.fields['description_text'].label = _l('View Description')
+        self.fields['name'].label = _('View name')
+        self.fields['columns'].label = _('Columns to show')
+        self.fields['description_text'].label = _('View Description')
 
         # Required enforced in the server (not in the browser)
         self.fields['formula'].required = False
@@ -38,13 +38,13 @@ class ViewAddForm(forms.ModelForm):
         if data['columns'].count() == 0:
             self.add_error(
                 None,
-                _l('The view needs at least one column to show')
+                _('The view needs at least one column to show')
             )
 
         if not next((x for x in data['columns'] if x.is_key), None):
             self.add_error(
                 None,
-                _l('There needs to be at least one key column')
+                _('There needs to be at least one key column')
             )
 
         return data

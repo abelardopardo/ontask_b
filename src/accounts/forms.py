@@ -5,7 +5,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Field
 from django.contrib.auth import forms as authforms
 from django.contrib.auth.forms import AuthenticationForm
-from django.utils.translation import ugettext_lazy as _l
+from django.utils.translation import ugettext_lazy as _
 
 class LoginForm(AuthenticationForm):
     # remember_me = forms.BooleanField(required=False, initial=False)
@@ -16,12 +16,12 @@ class LoginForm(AuthenticationForm):
         self.fields["username"].widget.input_type = "email"  # ugly hack
 
         self.helper.layout = Layout(
-            Field('username', placeholder=_l("Enter Email"), autofocus=""),
-            Field('password', placeholder=_l("Enter Password")),
+            Field('username', placeholder=_("Enter Email"), autofocus=""),
+            Field('password', placeholder=_("Enter Password")),
             # HTML('<a href="{}">Forgot Password?</a>'.format(
             #    reverse("accounts:password-reset"))),
             # Field('remember_me'),
-            Submit('sign_in', _l(u"Log in"),
+            Submit('sign_in', _(u"Log in"),
                    css_class="btn btn-lg btn-primary btn-block"),
         )
 
