@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-20 15:32+0930\n"
+"POT-Creation-Date: 2018-07-20 15:38+0930\n"
 "PO-Revision-Date: 2018-07-01 16:25+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,23 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: accounts/forms.py:19
+#, fuzzy
+#| msgid "Enter Data"
+msgid "Enter Email"
+msgstr "Introducir datos"
+
+#: accounts/forms.py:20
+#, fuzzy
+#| msgid "Enter new password"
+msgid "Enter Password"
+msgstr "Entre la clave nueva"
+
+#: accounts/forms.py:24 templates/home.html:13
+#: templates/registration/password_reset_complete.html:18
+msgid "Log in"
+msgstr "Iniciar sesión"
 
 #: accounts/templates/accounts/emails/password-reset-email.html:2
 #, python-format
@@ -53,7 +70,8 @@ msgstr "Iniciar sesión"
 msgid "Please Log In"
 msgstr "Por favor, inicie sesión"
 
-#: action/forms.py:143 action/forms.py:147
+#: action/forms.py:143 action/forms.py:147 workflow/forms.py:166
+#: workflow/forms.py:170
 msgid "Incorrect date/time window"
 msgstr "Intervalo de fecha/hora incorrecto"
 
@@ -81,7 +99,7 @@ msgstr "¿Descargar un fichero con el estado actual del flujo?"
 msgid "A zip file useful to review the emails sent."
 msgstr "Un fichero zip útil para revisar los mensajes que se envían."
 
-#: action/forms.py:231
+#: action/forms.py:231 workflow/forms.py:383
 msgid "File"
 msgstr "Fichero"
 
@@ -780,7 +798,7 @@ msgstr ""
 "localizar el problema."
 
 #: action/views_action.py:58 action/views_action.py:106
-#: dataops/templates/dataops/upload_s2.html:40
+#: dataops/templates/dataops/upload_s2.html:40 workflow/forms.py:37
 #: workflow/templates/workflow/detail.html:91 workflow/views.py:32
 msgid "Name"
 msgstr "Nombre"
@@ -810,6 +828,141 @@ msgstr "Descripción (se muestra a los estudiantes)"
 #: dataops/csvupload.py:51 dataops/csvupload.py:70
 msgid "CSV file"
 msgstr "fichero CSV"
+
+#: dataops/forms.py:28
+msgid "Input Columns (to read data)"
+msgstr "Columnas de entrada (leer datos)"
+
+#: dataops/forms.py:31
+msgid "To select a subset of the table to pass to the plugin"
+msgstr "Para seleccionar la porción de la tabla que utiliza el plugin"
+
+#: dataops/forms.py:52
+#, fuzzy
+#| msgid "Key column to match the user id"
+msgid "Key column for merging"
+msgstr "Columna clave para emparejar el identificador de usuario"
+
+#: dataops/forms.py:54
+msgid "One of the existing key columns to merge the results"
+msgstr "Una de las columnas clave para mezclar los resultados"
+
+#: dataops/forms.py:64
+#, python-brace-format
+msgid "Name for result column \"{0}\""
+msgstr "Nombre de la columna resultado \"{0}\""
+
+#: dataops/forms.py:71
+msgid "Suffix to add to result columns (empty to ignore)"
+msgstr "Sufijo a añadir a las columnas resultado (vacío se ignora)"
+
+#: dataops/forms.py:75
+msgid ""
+"Added to all output column names. Useful to keep results from several "
+"executions in separated columns."
+msgstr ""
+"Añadido a los nombres de las columnas de salida. Útil para mantener "
+"resultados de varias ejecuciones en columnas diferentes."
+
+#: dataops/forms.py:145
+msgid "The plugin needs at least one input column"
+msgstr "El plugin necesita al menos una columna de entrada"
+
+#: dataops/forms.py:163
+msgid ""
+"File in CSV format (typically produced by a statistics package or Excel)"
+msgstr ""
+"Ficher on formation CSV (tipicamente creado por Excel o un paquete estadístico"
+
+#: dataops/forms.py:167
+msgid "Lines to skip at the top"
+msgstr "Ignorar líneas al comienzo"
+
+#: dataops/forms.py:168
+msgid "Number of lines to skip at the top when reading the file"
+msgstr "Número de líneas a ignorar al comienzo del fichero"
+
+#: dataops/forms.py:175
+msgid "Lines to skip at the bottom"
+msgstr "Ignorar líneas al final"
+
+#: dataops/forms.py:176
+msgid "Number of lines to skip at the bottom when reading the file"
+msgstr "Número de líneas a ignorar al final del fichero"
+
+#: dataops/forms.py:193 dataops/forms.py:199
+msgid "This number has to be zero or positive"
+msgstr "Este número debe ser positivo o zero"
+
+#: dataops/forms.py:218
+msgid "File in Excel format (.xls or .xlsx)"
+msgstr "Fichero en formato Excel (.xls o .xlsx)"
+
+#: dataops/forms.py:224
+msgid "Sheet within the excelsheet to upload"
+msgstr "Hoja a cargar dentro del fichero"
+
+#: dataops/forms.py:262
+msgid "Password to authenticate the database connection"
+msgstr "Clave para autenticar la conexión a la base de datos"
+
+#: dataops/forms.py:320
+msgid "No unique column specified"
+msgstr "No se ha especificado ninguna columna clave"
+
+#: dataops/forms.py:327
+msgid "- Choose row selection method -"
+msgstr "- Seleccioa el método de selección de filas -"
+
+#: dataops/forms.py:328
+msgid "1) Select all rows in both the existing and new table"
+msgstr "1) Selecciona todas las filas en ambas tablas, existente y nueva"
+
+#: dataops/forms.py:329
+msgid ""
+"2) Select only the rows with keys present in both the existing and new table"
+msgstr ""
+"2) Selecciona sólo las filas con clave en ambas tablas, existente y nueva"
+
+#: dataops/forms.py:331
+msgid "3) Select only the rows with keys in the existing table"
+msgstr "3) Selecciona sólo las filas con clave en la tabla existente"
+
+#: dataops/forms.py:332
+msgid "4) Select only the rows with keys in the new table"
+msgstr "4) Selecciona sólo las filas con la clave en la tabla nueva"
+
+#: dataops/forms.py:335
+msgid "Key column in the existing table to match with the new table."
+msgstr "Columna clave en la tabla existente para emparejar con la tabla nueva"
+
+#: dataops/forms.py:338
+msgid "Key column in the new table to match with the existing table."
+msgstr "Columna clave en la tabla nueva a emparejar con la tabla existente"
+
+#: dataops/forms.py:341
+msgid "Select one method to see detailed information"
+msgstr "Selecciona un método para ver más información"
+
+#: dataops/forms.py:358
+msgid "- Select merge option -"
+msgstr "- Selecciona la opción de mezcla -"
+
+#: dataops/forms.py:372
+msgid "Key Column in Existing Table"
+msgstr "Columna clave en la tabla existente"
+
+#: dataops/forms.py:379
+msgid "Key Column in New Table"
+msgstr "Columna clave en la nueva tabla"
+
+#: dataops/forms.py:386
+msgid "Method to select rows to merge/update"
+msgstr "Método para seleccionar las filas a mezclar/actualizar"
+
+#: dataops/forms.py:423
+msgid "Unable to process datatype"
+msgstr "No se puede processar el tipo de datos"
 
 #: dataops/templates/dataops/includes/partial_diagnostics.html:7
 msgid "Diagnostics"
@@ -1036,13 +1189,11 @@ msgstr "Clave: Requerida debajo"
 #: dataops/templates/dataops/sqlupload1.html:35
 #, python-format
 msgid "Host: %(n)s"
-msgstr ""
+msgstr "Nodo: %(n)s"
 
 #: dataops/templates/dataops/sqlupload1.html:39
-#, fuzzy, python-format
-#| msgid "Workflow %(n)s"
 msgid "Port: %(n)s"
-msgstr "Flujo %(n)s"
+msgstr "Puerto %(n)s"
 
 #: dataops/templates/dataops/sqlupload1.html:42
 #, python-format
@@ -1306,6 +1457,20 @@ msgstr "Datos addicionales:"
 msgid "No logs recorded for this workflow."
 msgstr "No hay registros en este flujo."
 
+#: ontask/forms.py:32
+#, python-format
+msgid "File size must be under %(max)s. Current file size is %(current)s."
+msgstr "El tamaño del fichero (%(current)s) ha de ser menor que %(max)s."
+
+#: ontask/forms.py:40
+#, python-format
+msgid "File type (%s) is not supported."
+msgstr "Los ficheros de typo (%s) no se pueden procesar"
+
+#: ontask/forms.py:112
+msgid "Unable to process datatype "
+msgstr "No es posible procesar el tipo de datos"
+
 #: profiles/templates/profiles/edit_profile.html:7
 #: profiles/templates/profiles/show_profile.html:28 templates/base.html:116
 msgid "Profile"
@@ -1343,6 +1508,10 @@ msgstr "Reiniciar"
 #: profiles/templates/profiles/show_profile.html:61
 msgid "Create"
 msgstr "Crear"
+
+#: scheduler/forms.py:46
+msgid "Date/time must be in the future"
+msgstr "Fecha/hora debe ser en el futuro"
 
 #: scheduler/templates/scheduler/email.html:14
 #: scheduler/templates/scheduler/email.html:17
@@ -1396,6 +1565,36 @@ msgstr "Operaciones planificadas"
 #: scheduler/templates/scheduler/index.html:39
 msgid "Scheduled Operations"
 msgstr "Operaciones planificadas"
+
+#: table/forms.py:21
+#, fuzzy
+#| msgid "Rename"
+msgid "View name"
+msgstr "Renombrar"
+
+#: table/forms.py:22
+#, fuzzy
+#| msgid "Columns:"
+msgid "Columns to show"
+msgstr "Columnas:"
+
+#: table/forms.py:23
+#, fuzzy
+#| msgid "Description"
+msgid "View Description"
+msgstr "Descripción"
+
+#: table/forms.py:41
+#, fuzzy
+#| msgid "There must be at least one non-key column."
+msgid "The view needs at least one column to show"
+msgstr "Debe haber al menos una columna que no sea clave."
+
+#: table/forms.py:47
+#, fuzzy
+#| msgid "There must be at least one non-key column."
+msgid "There needs to be at least one key column"
+msgstr "Debe haber al menos una columna que no sea clave."
 
 #: table/stat_views.py:92
 msgid "Unable to visualize table row"
@@ -1608,11 +1807,6 @@ msgstr "Mantener la sesión"
 #: templates/registration/password_reset_form.html:9
 msgid "Home"
 msgstr "Inicio"
-
-#: templates/home.html:13
-#: templates/registration/password_reset_complete.html:18
-msgid "Log in"
-msgstr "Iniciar sesión"
 
 #: templates/home.html:24
 msgid "Facilitating conversations at scale"
@@ -1827,6 +2021,74 @@ msgstr "Dirección de email:"
 #: templates/registration/password_reset_form.html:33
 msgid "Reset my password"
 msgstr "Reiniciar mi clave"
+
+#: workflow/forms.py:66
+msgid "Name has to be different from all existing ones."
+msgstr "El nombre ha de ser diferente a los ya existentes."
+
+#: workflow/forms.py:77
+msgid "Comma separated list of values allowed in this column"
+msgstr "Lista de valores permitidos separados por comas"
+
+#: workflow/forms.py:122
+msgid "There is a column already with this name"
+msgstr "Ya hay una columna con este nombre"
+
+#: workflow/forms.py:139
+msgid "Incorrect list of values"
+msgstr "La lista de valores es incorrecta"
+
+#: workflow/forms.py:151
+msgid "The values in the column are not compatible  with these ones."
+msgstr "Los valores en la columna no son compatibles con estos"
+
+#: workflow/forms.py:197
+msgid "Value to assign to all cells in the column"
+msgstr "Valor a asignar a toda la columna"
+
+#: workflow/forms.py:224
+msgid "Incorrect initial value"
+msgstr "Valor inicial incorrecto"
+
+#: workflow/forms.py:231
+msgid "This value is not in the list of allowed values"
+msgstr "Este valor no está en la lista de valores permitidos"
+
+#: workflow/forms.py:268
+msgid "There must be at least one column with unique values"
+msgstr "Debe haber una columna con valores únicos (clave)"
+
+#: workflow/forms.py:278
+msgid "The column does not have unique values for each row."
+msgstr "La columna no tiene valores únicos en cada celda."
+
+#: workflow/forms.py:331
+msgid "You need to select the columns to combine"
+msgstr "Se necesita seleccionar las columnas a combinar"
+
+#: workflow/forms.py:350
+msgid "Incorrect data type for the selected operand"
+msgstr "Tipo de datos incorrecto para el operando seleccionado"
+
+#: workflow/forms.py:384
+msgid "File containing a previously exported workflow"
+msgstr "Fichero que contiene un flujo previamente exportado"
+
+#: workflow/forms.py:430
+msgid "User email"
+msgstr "Correo de usuario"
+
+#: workflow/forms.py:448
+msgid "User not found"
+msgstr "Usuario no encontrado"
+
+#: workflow/forms.py:453
+msgid "You don't need to add yourself to the share list"
+msgstr "No necesitas añadirte a la lista para compartir"
+
+#: workflow/forms.py:459
+msgid "User already in the list"
+msgstr "El usuario ya está en la lista"
 
 #: workflow/templates/workflow/attributes.html:25
 msgid "No attributes defined."
