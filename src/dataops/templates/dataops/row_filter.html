@@ -12,10 +12,10 @@
 {% block scripts %}
   <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
 {% endblock %}
-{% block title %}{{ block.super }}Edit learner data{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Edit learner data' %}{% endblock %}
 {% block container %}
 <div align="center" class="container">
-  <h1 class="page-header">Edit learner data</h1>
+  <h1 class="page-header">{% trans 'Edit learner data' %}</h1>
   {% if row_form %}
     <div class="container">
       <form action="" method="post">
@@ -26,7 +26,7 @@
         {% endif %}
         <button type="submit" name="submit" value="update"
                 class="btn btn-primary">
-          <span class="glyphicon glyphicon-ok"></span> Update
+          <span class="glyphicon glyphicon-ok"></span> {% trans 'Update' %}
         </button>
         <div class="input-group input-group-lg">
           {{ row_form|crispy }}
@@ -37,12 +37,12 @@
         {% endif %}
         <button type="submit" name="submit" value="update"
                 class="btn btn-primary">
-          <span class="glyphicon glyphicon-ok"></span> Update
+          <span class="glyphicon glyphicon-ok"></span> {% trans 'Update' %}
         </button>
       </form>
     </div>
   {% else %}
-    <p><strong>No data available for this workflow</strong></p>
+    <p><strong>{% trans 'No data available for this workflow' %}</strong></p>
   {% endif %}
 </div>
 {% endblock container %}

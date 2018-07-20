@@ -36,10 +36,10 @@
     });
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}Transform{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Transform' %}{% endblock %}
 {% block container %}
   <div align="center" class="container">
-    <h1 class="page-header">Transformations</h1>
+    <h1 class="page-header">{% trans 'Transformations' %}</h1>
     <div class="container-fluid" id="transform-selection">
       {% render_table table %}
     </div>

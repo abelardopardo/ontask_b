@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _l
 
 import logs
 from dataops import ops, pandas_db
@@ -375,7 +376,7 @@ def sqlupload1(request, pk):
     context = {'form': form,
                'wid': workflow.id,
                'dtype': 'SQL',
-               'dtype_select': 'SQL connection',
+               'dtype_select': _l('SQL connection'),
                'prev_step': reverse('dataops:sqlconns'),
                'conn_type': conn.conn_type,
                'conn_driver': conn.conn_driver,

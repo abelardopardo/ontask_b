@@ -33,10 +33,10 @@
     }
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}SQL Connections{% endblock %}
+{% block title %}{{ block.super }}{% trans 'SQL Connections' %}{% endblock %}
 {% block container %}
 <div class="container-fluid text-center">
-  <h1 class="page-header">SQL Connections</h1>
+  <h1 class="page-header">{% trans 'SQL Connections' %}</h1>
   <div style="display: inline-block;" id="sqlconn-area">
     {% render_table table %}
   </div>

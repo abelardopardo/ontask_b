@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-20 08:29+0930\n"
+"POT-Creation-Date: 2018-07-20 13:40+0930\n"
 "PO-Revision-Date: 2018-07-01 16:25+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,7 +68,6 @@ msgstr "No se ha seleccionado ninguna columna"
 #: action/templates/action/includes/partial_filter_addedit.html:22
 #: action/templates/action/includes/partial_filter_delete.html:14
 #: action/templates/action/request_email_data.html:23
-#: dataops/templates/dataops/includes/partial_rowview_delete.html:14
 #: dataops/templates/dataops/includes/partial_sqlconn_addedit.html:27
 #: dataops/templates/dataops/includes/partial_sqlconn_clone.html:15
 #: dataops/templates/dataops/includes/partial_sqlconn_delete.html:14
@@ -161,6 +160,8 @@ msgstr "Editar descripción"
 #: action/templates/action/includes/partial_action_update.html:18
 #: action/templates/action/includes/partial_filter_addedit.html:28
 #: dataops/templates/dataops/includes/partial_sqlconn_addedit.html:30
+#: dataops/templates/dataops/row_filter.html:29
+#: dataops/templates/dataops/row_filter.html:40
 #: workflow/templates/workflow/includes/partial_column_addedit.html:30
 msgid "Update"
 msgstr "Actualizar"
@@ -507,6 +508,10 @@ msgstr "Estado"
 msgid "Test"
 msgstr "Comprobar"
 
+#: dataops/templates/dataops/includes/partial_plugin_operations.html:5
+msgid "Execute the transformation"
+msgstr "Ejecutar la transformación"
+
 #: dataops/templates/dataops/includes/partial_plugin_operations.html:11
 msgid "See how is the content shown to each learner"
 msgstr "Ver cómo ve el contenido el estudiante"
@@ -514,25 +519,6 @@ msgstr "Ver cómo ve el contenido el estudiante"
 #: dataops/templates/dataops/includes/partial_plugin_operations.html:12
 msgid "Diagnose"
 msgstr "Diagnosticar"
-
-#: dataops/templates/dataops/includes/partial_rowview_delete.html:8
-#: table/templates/table/includes/partial_view_delete.html:8
-msgid "Confirm view deletion"
-msgstr "Confirmar el borrado de la vista"
-
-#: dataops/templates/dataops/includes/partial_rowview_delete.html:11
-#, python-format
-msgid "Are you sure you want to delete view <strong>%(n)s</strong>?"
-msgstr "¿Está seguro de que quiere borrar la vista <strong>%(n)s</strong>?"
-
-#: dataops/templates/dataops/includes/partial_rowview_delete.html:17
-#: table/templates/table/includes/partial_view_delete.html:17
-msgid "Delete view"
-msgstr "Borrar vista"
-
-#: dataops/templates/dataops/includes/partial_rowview_operations.html:5
-msgid "Edit name and description"
-msgstr "Editar nombre y descripción"
 
 #: dataops/templates/dataops/includes/partial_sqlconn_addedit.html:18
 msgid "Add SQL connection"
@@ -614,37 +600,165 @@ msgstr "Atrás"
 msgid "Next"
 msgstr "Siguiente"
 
+#: dataops/templates/dataops/plugin_execution_report.html:9
+msgid "Plugin Execution"
+msgstr "Ejecución de plugin"
+
+#: dataops/templates/dataops/plugin_execution_report.html:12
+msgid "Plugin execution report"
+msgstr "Informe de ejecución de plugin"
+
+#: dataops/templates/dataops/plugin_execution_report.html:15
+msgid "Incorrect execution"
+msgstr "Ejecución incorrecta"
+
+#: dataops/templates/dataops/plugin_execution_report.html:24
+#: dataops/templates/dataops/upload_s4.html:26
+msgid "Existing Table"
+msgstr "Tabla existente"
+
+#: dataops/templates/dataops/plugin_execution_report.html:26
+#: dataops/templates/dataops/upload_s4.html:28
+msgid "New Data"
+msgstr "Nuevos datos"
+
+#: dataops/templates/dataops/plugin_execution_report.html:47
+msgid "Continue"
+msgstr "Continuar"
+
+#: dataops/templates/dataops/plugin_info_for_run.html:16
+msgid "Run Transformation"
+msgstr "Ejecutar transformación"
+
+#: dataops/templates/dataops/plugin_info_for_run.html:20
+msgid ""
+"Information to run plugin \"{{\n"
+"      n}}\""
+msgstr "Información para ejecutar el plugin \"{{n}}\""
+
+#: dataops/templates/dataops/plugin_info_for_run.html:28
+msgid "Input columns"
+msgstr "Columnas de entrada"
+
+#: dataops/templates/dataops/plugin_info_for_run.html:42
+msgid "Output column names"
+msgstr "Nombres de las columnas de salida"
+
+#: dataops/templates/dataops/plugin_info_for_run.html:46
+msgid "Change the default names if needed."
+msgstr "Cambia los nombres si es necesario."
+
+#: dataops/templates/dataops/plugin_info_for_run.html:56
+msgid "Execution parameters"
+msgstr "Parámetros de ejecución"
+
+#: dataops/templates/dataops/row_create.html:15
+#: dataops/templates/dataops/row_create.html:18
+msgid "Add row"
+msgstr "Añadir fila"
+
+#: dataops/templates/dataops/row_create.html:19
+msgid "Workflow {{ workflow.name }}"
+msgstr "Flujo {{ workflow.name }}"
+
+#: dataops/templates/dataops/row_create.html:29
+#: dataops/templates/dataops/row_create.html:40
+msgid "Add"
+msgstr ""
+
+#: dataops/templates/dataops/row_create.html:45
+#: dataops/templates/dataops/row_filter.html:45
+msgid "No data available for this workflow"
+msgstr "No hay ningún dato en este flujo."
+
+#: dataops/templates/dataops/row_filter.html:15
+#: dataops/templates/dataops/row_filter.html:18
+msgid "Edit learner data"
+msgstr ""
+
 #: dataops/templates/dataops/sql_connections.html:23
 msgid "No sql connections available."
 msgstr "No hay ninguna conexión SQL disponible."
+
+#: dataops/templates/dataops/sql_connections.html:36
+#: dataops/templates/dataops/sql_connections.html:39
+#: dataops/templates/dataops/uploadmerge.html:64
+msgid "SQL Connections"
+msgstr "Conexiones SQL"
+
+#: dataops/templates/dataops/sqlupload1.html:10
+msgid "Upload/Merge %(n)s"
+msgstr "Cargar/Mezclar %(n)s"
+
+#: dataops/templates/dataops/sqlupload1.html:13
+#, python-format
+msgid "Step 1: Establish a %(n)s"
+msgstr "Paso 1: Establecer una %(n)s"
+
+#: dataops/templates/dataops/sqlupload1.html:16
+msgid "The data will be accessed with the following parameters:"
+msgstr "Los datos se accederán con los siguientes parámetros:"
+
+#: dataops/templates/dataops/sqlupload1.html:19
+msgid "Connection type: {{ conn_type }}"
+msgstr "Tipo de conexión: {{ conn_type }}"
+
+#: dataops/templates/dataops/sqlupload1.html:22
+msgid "Connection driver: {{ conn_driver }}"
+msgstr "Driver para la conexión: {{ conn_driver }}"
+
+#: dataops/templates/dataops/sqlupload1.html:25
+msgid "Username: {{ db_user }}"
+msgstr "Usuario: {{ db_user }}"
+
+#: dataops/templates/dataops/sqlupload1.html:28
+msgid "Password: Requested below"
+msgstr "Clave: Requerida debajo"
+
+#: dataops/templates/dataops/sqlupload1.html:31
+msgid "Host: {{ db_host }}"
+msgstr "Servidor: {{ db_host }}"
+
+#: dataops/templates/dataops/sqlupload1.html:34
+msgid "Port: {{ db_port }}"
+msgstr "Puerto: {{ db_port }}"
+
+#: dataops/templates/dataops/sqlupload1.html:36
+msgid "Database name: {{ db_name }}"
+msgstr "Nombre de la base de datos: {{ db_name }}"
+
+#: dataops/templates/dataops/sqlupload1.html:37
+msgid "Database table: {{ db_table }}"
+msgstr "Tabla de la base de datos: {{ db_table }}"
 
 #: dataops/templates/dataops/transform.html:23
 msgid "No transformations in this workflow."
 msgstr "No hay transformaciones en este flujo."
 
+#: dataops/templates/dataops/transform.html:39 templates/base.html:72
+msgid "Transform"
+msgstr "Transformar"
+
+#: dataops/templates/dataops/transform.html:42
+msgid "Transformations"
+msgstr "Transformaciones"
+
 #: dataops/templates/dataops/upload1.html:10
+#: dataops/templates/dataops/upload_s3.html:10
 msgid "Upload/Merge"
 msgstr "Cargar/Mezclar"
 
 #: dataops/templates/dataops/upload1.html:13
-msgid "Step 1:"
-msgstr "Paso 1:"
-
-#: dataops/templates/dataops/upload1.html:13
-msgid "Select"
-msgstr "Seleccionar"
+msgid "Step 1: Select"
+msgstr "Paso 1: Seleccionar"
 
 #: dataops/templates/dataops/upload_s2.html:10
 msgid "Upload/Merge CSV"
 msgstr "Cargar/Mezclar"
 
 #: dataops/templates/dataops/upload_s2.html:13
-msgid "Step 2"
-msgstr "Paso 2:"
-
-#: dataops/templates/dataops/upload_s2.html:13
-msgid "Select Columns"
-msgstr "Seleccionar columnas"
+msgid "Step 2: Select Columns"
+msgstr "Paso 2: Seleccionar columnas"
 
 #: dataops/templates/dataops/upload_s2.html:37
 msgid "Load"
@@ -665,6 +779,10 @@ msgid "Type"
 msgstr "Tipo"
 
 #: dataops/templates/dataops/upload_s2.html:43
+#: dataops/templates/dataops/upload_s4.html:35
+#: dataops/templates/dataops/upload_s4.html:37
+#: dataops/templates/dataops/upload_s4.html:41
+#: dataops/templates/dataops/upload_s4.html:48
 msgid "Key"
 msgstr "Clave"
 
@@ -672,28 +790,123 @@ msgstr "Clave"
 msgid "Keep?"
 msgstr "¿Mantener?"
 
-#: dataops/templates/dataops/uploadmerge.html:8 templates/base.html:71
+#: dataops/templates/dataops/upload_s3.html:13
+msgid "Step 3: Select Keys and Merge Option"
+msgstr "Paso 3: Seleccionar las claves y opción de mezcla"
+
+#: dataops/templates/dataops/upload_s3.html:21
+msgid ""
+"Selects all the rows from\n"
+"          both the existing\n"
+"          and new table for the update. For cells in rows with keys in both\n"
+"          tables, the values are updated if the new table has a non-empty "
+"value\n"
+"          (cell 4B remains with value <i>b</i>)."
+msgstr ""
+"Selecciona todas las filas tanto de la tabla existente como de la tabla "
+"nueva. Los valores de las celdas en filas con claves en las dos tablas se "
+"actualizan is la tabla nueva tiene un valor no vacío"
+
+#: dataops/templates/dataops/upload_s3.html:27
+msgid "Merge using all the keys in either the existing or new table"
+msgstr ""
+"Mezclar utilizando todas las claves en ambas tablas, la existente y la nueva"
+
+#: dataops/templates/dataops/upload_s3.html:31
+msgid ""
+"Selects only those rows for\n"
+"          which the key is in both tables (the\n"
+"        existing one and the one you are updating/merging) and remove the "
+"other\n"
+"        rows. In the example below, Rows 1 and 2 in the existing table and 5 "
+"and\n"
+"        6 of the new table are removed. The cells in the result rows are\n"
+"        updated only if the new value is non-empty (cell 4B remains with "
+"value\n"
+"        <i>b</i>)."
+msgstr ""
+"Selecciona sólo aquellas filas cuya clave está en las dos tablas (la ya "
+"existente y la nueva) y borra el resto de filas. En el ejemplo debajo, la "
+"operación borra las filas 1 y 2 de la tabla existente, y las filas 5 y 6 de "
+"la tabla nueva. Las celdas en la tabla resultado se actualizan sólo si el "
+"valor nuevo no es vacío (la celda 4B permanece con el valor <i>b</i>)."
+
+#: dataops/templates/dataops/upload_s3.html:39
+msgid "Merge using only the keys in both the existing and new table"
+msgstr "Mezclar utilizando sólo claves en ambas tablas, existente y nueva"
+
+#: dataops/templates/dataops/upload_s3.html:43
+msgid ""
+"Selects only the rows with\n"
+"          key values\n"
+"          present in the existing table.\n"
+"        This method drops those rows in the new table with key values not "
+"in\n"
+"        the existing one (rows 5 and 6 in the figure below). The cells in "
+"the\n"
+"        result rows are updated only if the new value is non-empty (cell 4B\n"
+"        remains with value <i>b</i>)."
+msgstr ""
+"Selecciona sólo aquellas filas cuya clave está en la tabla existente. Este "
+"método elimina las filas de la nueva tabla con valores clave que no están "
+"enla tabla existente (filas 5 y 6 en la figura). Las celdas en la tabla "
+"resultante se actualizan sólo si el nuevo valor is no vacío (la celda 4B "
+"mantiene su valor <i>b</i>)."
+
+#: dataops/templates/dataops/upload_s3.html:51
+msgid "Merge using only the keys in the existing table"
+msgstr "Mezclar utilizando sólo las claves en la tabla existente"
+
+#: dataops/templates/dataops/upload_s3.html:55
+msgid ""
+"Selects only the rows with\n"
+"          key values present in the new table. This\n"
+"        method drops those rows from the existing table with key values not\n"
+"        in the new table (rows 1 and 2 in the figure below). The cells in "
+"the\n"
+"        result rows are updated only if the new value is non-empty (cell 4B\n"
+"        remains with value <i>b</i>)."
+msgstr ""
+"Selecciona sólo las aquellas filas cuya clave está en la nueva tabla. Este "
+"método elimina las filas de la tabla existente con valores clave que no "
+"están en la tabla nueva (filas 1 y 2 en la siguiente figura). Las celdas en "
+"la tabla resultante se actualizan sólo si el valor nuevo no es vacío (la "
+"celda 4B permanece con el valor <i>b</i>)."
+
+#: dataops/templates/dataops/upload_s3.html:62
+msgid "Merge using only the keys in the new table"
+msgstr "Mezclar utilizando sólo las claves en la tabla nueva"
+
+#: dataops/templates/dataops/upload_s4.html:11
+msgid "Review Operation"
+msgstr "Comprobar operación"
+
+#: dataops/templates/dataops/upload_s4.html:14
+msgid "Step 4: Review and confirm"
+msgstr "Paso 4: Revisar y confirmar"
+
+#: dataops/templates/dataops/uploadmerge.html:7 templates/base.html:71
 msgid "Data Upload/Merge"
 msgstr "Cargar/Mezclar datos"
 
-#: dataops/templates/dataops/uploadmerge.html:12
+#: dataops/templates/dataops/uploadmerge.html:10
 msgid "Data upload/merge operations"
 msgstr "Operaciones de carga/mezcla datos"
 
-#: dataops/templates/dataops/uploadmerge.html:18
+#: dataops/templates/dataops/uploadmerge.html:16
 msgid "Operation"
 msgstr "Operación"
 
-#: dataops/templates/dataops/uploadmerge.html:19
+#: dataops/templates/dataops/uploadmerge.html:17
 #: workflow/templates/workflow/detail.html:76
 msgid "Description"
 msgstr "Descripción"
 
-#: dataops/templates/dataops/uploadmerge.html:27
+#: dataops/templates/dataops/uploadmerge.html:25
 msgid "CSV Upload/Merge"
 msgstr "Cargar/Mezclar CSV"
 
-#: dataops/templates/dataops/uploadmerge.html:31
+#: dataops/templates/dataops/uploadmerge.html:29
 msgid ""
 "Upload data contained in a CSV file (typically\n"
 "            saved using a spreadsheet or other data manipulation package)."
@@ -702,7 +915,7 @@ msgstr ""
 "            creado por una hoja de cálculo u otro programa de manipulación "
 "de datos)."
 
-#: dataops/templates/dataops/uploadmerge.html:33
+#: dataops/templates/dataops/uploadmerge.html:31
 msgid ""
 "If the table is empty, the data will be simply\n"
 "            loaded detecting those columns that have unique values for "
@@ -712,7 +925,7 @@ msgstr ""
 "Si la tabla está vacía, los datos simplemente se cargaran detectando\n"
 "            las columnas con valores únicos para cada fila."
 
-#: dataops/templates/dataops/uploadmerge.html:36
+#: dataops/templates/dataops/uploadmerge.html:34
 msgid ""
 "If the workflow table has data, the operation will\n"
 "            ask you to match a key column in your table with a key column "
@@ -725,15 +938,15 @@ msgstr ""
 "            y así emparejar las filas al cargar.\n"
 "            "
 
-#: dataops/templates/dataops/uploadmerge.html:45
+#: dataops/templates/dataops/uploadmerge.html:43
 msgid "Excel Upload/Merge"
 msgstr "Cargar/Mezclar Excel"
 
-#: dataops/templates/dataops/uploadmerge.html:49
+#: dataops/templates/dataops/uploadmerge.html:47
 msgid "Upload data from Excel file."
 msgstr "Cargar datos de un fichero Excel."
 
-#: dataops/templates/dataops/uploadmerge.html:50
+#: dataops/templates/dataops/uploadmerge.html:48
 msgid ""
 "\n"
 "            Given a file name and the name of a sheet, upload or merge the\n"
@@ -745,7 +958,7 @@ msgstr ""
 "            contenido de un fichero Excel.\n"
 "            "
 
-#: dataops/templates/dataops/uploadmerge.html:55
+#: dataops/templates/dataops/uploadmerge.html:53
 msgid ""
 "\n"
 "            If the workflow table has data, the operation will ask you\n"
@@ -761,11 +974,7 @@ msgstr ""
 "            para poder emparejar las filas al cargar.\n"
 "            "
 
-#: dataops/templates/dataops/uploadmerge.html:66
-msgid "SQL Connections"
-msgstr "Conexiones SQL"
-
-#: dataops/templates/dataops/uploadmerge.html:70
+#: dataops/templates/dataops/uploadmerge.html:68
 msgid ""
 "Upload data stored in a remote database by\n"
 "            defining connections."
@@ -938,10 +1147,18 @@ msgstr "Se creará una vista nueva con el prefijo \"Copy_of_\""
 msgid "Clone view"
 msgstr "Clonar vista"
 
+#: table/templates/table/includes/partial_view_delete.html:8
+msgid "Confirm view deletion"
+msgstr "Confirmar el borrado de la vista"
+
 #: table/templates/table/includes/partial_view_delete.html:11
 #, python-format
 msgid "Are you sure you want to delete the view <strong>%(n)s</strong>?"
 msgstr "¿Está seguro de que quiere borrar la vista <strong>%(n)s</strong>?"
+
+#: table/templates/table/includes/partial_view_delete.html:17
+msgid "Delete view"
+msgstr "Borrar vista"
 
 #: table/templates/table/includes/partial_view_edit.html:11
 msgid "Edit view"
@@ -1001,10 +1218,6 @@ msgstr "Detalles"
 #: templates/base.html:68 workflow/templates/workflow/detail.html:72
 msgid "Dataops"
 msgstr "Op-Datos"
-
-#: templates/base.html:72
-msgid "Transform"
-msgstr "Transformar"
 
 #: templates/base.html:83
 msgid "Actions"
@@ -1687,3 +1900,15 @@ msgstr "Crear un flujo"
 #: workflow/templates/workflow/index.html:76
 msgid "Import a file with an OnTask workflow"
 msgstr "Cargar un fichero con un flujo OnTask "
+
+#~ msgid "Are you sure you want to delete view <strong>%(n)s</strong>?"
+#~ msgstr "¿Está seguro de que quiere borrar la vista <strong>%(n)s</strong>?"
+
+#~ msgid "Edit name and description"
+#~ msgstr "Editar nombre y descripción"
+
+#~ msgid "Step 2"
+#~ msgstr "Paso 2:"
+
+#~ msgid "Select"
+#~ msgstr "Seleccionar"

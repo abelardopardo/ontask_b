@@ -10,6 +10,7 @@ from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.html import escape
+from django.utils.translation import ugettext_lazy as _l
 
 from dataops import formula_evaluation, pandas_db
 from dataops.formula_evaluation import get_variables, evaluate_top_node
@@ -47,31 +48,27 @@ class Action(models.Model):
     # If the action is to provide information to learners
     is_out = models.BooleanField(
         default=True,
-        verbose_name='Action is provide information',
+        verbose_name=_l('Action is provide information'),
         null=False,
         blank=False)
 
     # Boolean that enables the URL to be visible ot the outside.
     serve_enabled = models.BooleanField(
         default=False,
-        verbose_name='URL available to users?',
+        verbose_name=_l('URL available to users?'),
         null=False,
         blank=False)
 
     # Validity window for URL availability
-    active_from = models.DateTimeField(
-        'Action available from',
-        blank=True,
-        null=True,
-        default=None,
-    )
+    active_from = models.DateTimeField(_l('Action available from'),
+                                       blank=True,
+                                       null=True,
+                                       default=None)
 
-    active_to = models.DateTimeField(
-        'Action available until',
-        blank=True,
-        null=True,
-        default=None
-    )
+    active_to = models.DateTimeField(_l('Action available until'),
+                                     blank=True,
+                                     null=True,
+                                     default=None)
 
     # Set of columns used in the action (either to capture data in action IN
     # or present in any of the conditions in action OUT)
@@ -90,11 +87,10 @@ class Action(models.Model):
     # Fields for action IN
     #
     # Shuffle column order when creating the page to serve
-    shuffle = models.BooleanField(
-        default=False,
-        verbose_name='Shuffle questions?',
-        null=False,
-        blank=False)
+    shuffle = models.BooleanField(default=False,
+                                  verbose_name=_l('Shuffle questions?'),
+                                  null=False,
+                                  blank=False)
 
     def __str__(self):
         return self.name
@@ -318,16 +314,18 @@ class Condition(models.Model):
     # Set of columns that appear in this condition
     columns = models.ManyToManyField(
         Column,
-        verbose_name="Columns present in this condition",
-        related_name='conditions')
+        verbose_name=_l("Columns present in this condition"),
+        related_name=_l('conditions')
+    )
 
     # Number or rows selected by the expression
     n_rows_selected = models.IntegerField(
-        verbose_name='Number of rows selected',
+        verbose_name=_l('Number of rows selected'),
         default=-1,
         name='n_rows_selected',
         blank=False,
-        null=False)
+        null=False
+    )
 
     # Field to denote if this condition is the filter of an action
     is_filter = models.BooleanField(default=False)

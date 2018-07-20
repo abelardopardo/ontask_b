@@ -13,6 +13,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
+from django.utils.translation import ugettext_lazy as _l
 
 import ontask.templatetags.settings
 from dataops import pandas_db
@@ -42,14 +43,14 @@ class Workflow(models.Model):
     modified = models.DateTimeField(auto_now=True, null=False)
 
     # Storing the number of rows currently in the data_frame
-    nrows = models.IntegerField(verbose_name='number of rows',
+    nrows = models.IntegerField(verbose_name=_l('number of rows'),
                                 default=0,
                                 name='nrows',
                                 null=False,
                                 blank=True)
 
     # Storing the number of rows currently in the data_frame
-    ncols = models.IntegerField(verbose_name='number of columns',
+    ncols = models.IntegerField(verbose_name=_l('number of columns'),
                                 default=0,
                                 name='ncols',
                                 null=False,
@@ -321,8 +322,8 @@ class Workflow(models.Model):
         # Step 2: Delete the column_names, column_types and column_unique
         self.columns.all().delete()
 
-        # Step 3: Delete the conditions attached to all the actions attached to the
-        # workflow.
+        # Step 3: Delete the conditions attached to all the actions attached
+        # to the workflow.
         self.actions.all().delete()
 
         # Step 4: Delete all the views attached to the workflow
@@ -391,13 +392,13 @@ class Column(models.Model):
     # Column name
     name = models.CharField(max_length=512,
                             blank=False,
-                            verbose_name='column name')
+                            verbose_name=_l('column name'))
 
     description_text = models.CharField(
         max_length=2048,
         default='',
         blank=True,
-        verbose_name='description'
+        verbose_name=_l('description')
     )
 
     workflow = models.ForeignKey(Workflow,
@@ -413,17 +414,18 @@ class Column(models.Model):
         blank=False,
         null=False,
         choices=[(x, x) for _, x in pandas_db.pandas_datatype_names.items()],
-        verbose_name='type of data to store in the column')
+        verbose_name=_l('type of data to store in the column')
+    )
 
     # Boolean stating if the column is a unique key
     is_key = models.BooleanField(default=False,
-                                 verbose_name='has unique values per row',
+                                 verbose_name=_l('has unique values per row'),
                                  null=False,
                                  blank=False)
 
     # Position of the column in the workflow table
     position = models.IntegerField(
-        verbose_name='column position (zero to insert last)',
+        verbose_name=_l('column position (zero to insert last)'),
         default=0,
         name='position',
         null=False,
@@ -432,7 +434,7 @@ class Column(models.Model):
 
     # Boolean stating if the column is included in the visualizations
     in_viz = models.BooleanField(default=True,
-                                 verbose_name='include in visualization',
+                                 verbose_name=_l('include in visualization'),
                                  null=False,
                                  blank=False)
 
@@ -442,18 +444,19 @@ class Column(models.Model):
         default=list,
         blank=True,
         null=True,
-        verbose_name='comma separated list of values allowed in this column')
+        verbose_name=_l('comma separated list of values allowed')
+    )
 
     # Validity window
     active_from = models.DateTimeField(
-        'Column active from',
+        _l('Column active from'),
         blank=True,
         null=True,
         default=None,
     )
 
     active_to = models.DateTimeField(
-        'Column active until',
+       _l('Column active until'),
         blank=True,
         null=True,
         default=None
@@ -525,7 +528,9 @@ class Column(models.Model):
         elif data_type == 'datetime':
             newval = parse_datetime(value)
         else:
-            raise ValueError('Unsupported type ' + str(data_type))
+            raise ValueError(
+                _l('Unsupported type %(type)s') % {'type': str(data_type)}
+            )
 
         return newval
 
