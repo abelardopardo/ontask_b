@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-20 13:40+0930\n"
+"POT-Creation-Date: 2018-07-20 13:52+0930\n"
 "PO-Revision-Date: 2018-07-01 16:25+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -175,6 +175,7 @@ msgstr "Editar el texto, condiciones y filtro"
 #: action/templates/action/includes/partial_condition_buttons.html:43
 #: action/templates/action/includes/partial_filter_create_buttons.html:26
 #: dataops/templates/dataops/includes/partial_sqlconn_operations.html:13
+#: scheduler/templates/scheduler/email_done.html:15
 #: table/templates/table/includes/partial_table_ops.html:19
 #: table/templates/table/includes/partial_view_operations.html:18
 #: workflow/templates/workflow/includes/workflow_column_operations.html:22
@@ -590,6 +591,7 @@ msgid "Run the plugin"
 msgstr "Ejecutar el plugin"
 
 #: dataops/templates/dataops/includes/upload_buttons.html:10
+#: scheduler/templates/scheduler/email_done.html:11
 #: table/templates/table/stat_view.html:30
 #: table/templates/table/stat_view.html:39
 #: workflow/templates/workflow/includes/workflow_attribute_buttons.html:4
@@ -687,6 +689,7 @@ msgid "SQL Connections"
 msgstr "Conexiones SQL"
 
 #: dataops/templates/dataops/sqlupload1.html:10
+#, python-format
 msgid "Upload/Merge %(n)s"
 msgstr "Cargar/Mezclar %(n)s"
 
@@ -1037,13 +1040,26 @@ msgid "Create"
 msgstr "Crear"
 
 #: scheduler/templates/scheduler/email.html:14
-msgid "Email action"
-msgstr "Envío de Email"
+#: scheduler/templates/scheduler/email.html:17
+msgid "Schedule email send"
+msgstr ""
 
 #: scheduler/templates/scheduler/email.html:19
 #, python-format
 msgid "Time now is %(n)s"
 msgstr "Hora actual %(n)s"
+
+#: scheduler/templates/scheduler/email_done.html:4
+msgid "Email action scheduled"
+msgstr "Envío de correo planificado"
+
+#: scheduler/templates/scheduler/email_done.html:7
+msgid "Email scheduled for execution"
+msgstr "Correo planificado para su envío"
+
+#: scheduler/templates/scheduler/email_done.html:9
+msgid "The action will execute in {{ tdelta }}"
+msgstr ""
 
 #: scheduler/templates/scheduler/includes/partial_scheduler_delete.html:9
 msgid "Confirm scheduled operation deletion"
@@ -1066,6 +1082,14 @@ msgstr "Borrar la operación planificada"
 #: scheduler/templates/scheduler/index.html:23
 msgid "No scheduled operations in this workflow."
 msgstr "No hay ninguna operación planificada en este flujo."
+
+#: scheduler/templates/scheduler/index.html:36
+msgid "Scheduled operations"
+msgstr "Operaciones planificadas"
+
+#: scheduler/templates/scheduler/index.html:39
+msgid "Scheduled Operations"
+msgstr "Operaciones planificadas"
 
 #: table/stat_views.py:92
 msgid "Unable to visualize table row"

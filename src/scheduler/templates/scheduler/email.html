@@ -11,10 +11,10 @@
 {% block scripts %}
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
 {% endblock scripts %}
-{% block title %}{{ block.super }}{% trans 'Email action' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Schedule email send' %}{% endblock %}
 {% block container %}
 <div align="center" class="container" id="email-schedule-send">
-  <h1 class="page-header">Schedule email send</h1>
+  <h1 class="page-header">{% trans 'Schedule email send' %}</h1>
   <div class="container">
     <p>{% blocktrans with n=now %}Time now is {{ n }}{% endblocktrans %}</p>
     <form action="" method="post">
