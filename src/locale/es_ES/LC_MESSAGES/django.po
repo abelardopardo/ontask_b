@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-20 16:17+0930\n"
+"POT-Creation-Date: 2018-07-20 17:02+0930\n"
 "PO-Revision-Date: 2018-07-01 16:25+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,10 +25,15 @@ msgstr "Introducir correo"
 msgid "Enter Password"
 msgstr "Introducir clave"
 
-#: accounts/forms.py:24 templates/home.html:13
+#: accounts/forms.py:24 accounts/templates/accounts/signup.html:11
+#: templates/home.html:13
 #: templates/registration/password_reset_complete.html:18
 msgid "Log in"
 msgstr "Iniciar sesión"
+
+#: accounts/templates/accounts/auth_base.html:11
+msgid "OnTask Login"
+msgstr "Sesión en OnTask"
 
 #: accounts/templates/accounts/emails/password-reset-email.html:2
 #, python-format
@@ -65,6 +70,46 @@ msgstr "Iniciar sesión"
 #: accounts/templates/accounts/login.html:6
 msgid "Please Log In"
 msgstr "Por favor, inicie sesión"
+
+#: accounts/templates/accounts/password-change.html:4
+#: accounts/templates/accounts/password-change.html:5
+#: accounts/templates/accounts/password-reset-confirm.html:4
+#: accounts/templates/accounts/password-reset-confirm.html:5
+msgid "Password Change"
+msgstr "Cambio de clave"
+
+#: accounts/templates/accounts/password-reset-done.html:4
+msgid "Password Reset Done"
+msgstr "Clave cambiada"
+
+#: accounts/templates/accounts/password-reset-done.html:6
+msgid "Password Reset Email Sent"
+msgstr "Correo con el cambio de clave enviado"
+
+#: accounts/templates/accounts/password-reset-done.html:11
+msgid ""
+"Please check your mail. You would have received a password\n"
+"    reset mail from us."
+msgstr ""
+"Comprueba tu correo. Tienes que haber recibido un mensaje nuestro para "
+"cambia tu clave."
+
+#: accounts/templates/accounts/password-reset.html:4
+#: accounts/templates/accounts/password-reset.html:5
+msgid "Password Reset"
+msgstr "Cambio de clave"
+
+#: accounts/templates/accounts/signup.html:4
+msgid "Sign Up"
+msgstr "Crear cuenta"
+
+#: accounts/templates/accounts/signup.html:5
+msgid "Signing Up is Free"
+msgstr "Cuenta gratuita"
+
+#: accounts/templates/accounts/signup.html:10
+msgid "Already signed up?"
+msgstr "¿Has creado ya una cuenta?"
 
 #: action/forms.py:143 action/forms.py:147 workflow/forms.py:166
 #: workflow/forms.py:170
@@ -157,6 +202,7 @@ msgstr "Editar descripción"
 #: action/templates/action/includes/partial_filter_create_buttons.html:26
 #: dataops/templates/dataops/includes/partial_sqlconn_operations.html:13
 #: scheduler/templates/scheduler/email_done.html:17
+#: table/templates/table/display.html:193
 #: table/templates/table/includes/partial_table_ops.html:19
 #: table/templates/table/includes/partial_view_operations.html:18
 #: workflow/templates/workflow/includes/workflow_column_operations.html:22
@@ -254,8 +300,11 @@ msgstr "Envío de correo"
 #: action/templates/action/run.html:65 action/templates/action/run_row.html:23
 #: dataops/templates/dataops/includes/upload_buttons.html:10
 #: scheduler/templates/scheduler/email_done.html:13
-#: table/templates/table/stat_view.html:30
-#: table/templates/table/stat_view.html:39
+#: table/templates/table/stat_row.html:24
+#: table/templates/table/stat_row.html:33
+#: table/templates/table/stat_view.html:29
+#: table/templates/table/stat_view.html:36
+#: table/templates/table/view_index.html:61
 #: workflow/templates/workflow/includes/workflow_attribute_buttons.html:4
 msgid "Back"
 msgstr "Atrás"
@@ -482,6 +531,7 @@ msgstr "Crear una acción idéntica"
 #: action/templates/action/includes/partial_column_selected_operations.html:31
 #: action/templates/action/includes/partial_condition_buttons.html:52
 #: dataops/templates/dataops/includes/partial_sqlconn_operations.html:22
+#: table/templates/table/display.html:202
 #: table/templates/table/includes/partial_view_operations.html:27
 #: workflow/templates/workflow/includes/workflow_column_operations.html:42
 #: workflow/templates/workflow/includes/workflow_detail_buttons.html:62
@@ -500,6 +550,7 @@ msgstr "Borrar la acción"
 #: action/templates/action/includes/partial_condition_buttons.html:61
 #: action/templates/action/includes/partial_filter_create_buttons.html:34
 #: dataops/templates/dataops/includes/partial_sqlconn_operations.html:31
+#: table/templates/table/display.html:211
 #: table/templates/table/includes/partial_table_ops.html:28
 #: table/templates/table/includes/partial_view_operations.html:36
 #: workflow/templates/workflow/includes/workflow_column_operations.html:51
@@ -577,6 +628,7 @@ msgid "Remove from action"
 msgstr "Borrar de la acción"
 
 #: action/templates/action/includes/partial_column_selected_operations.html:30
+#: table/templates/table/display.html:201
 #: workflow/templates/workflow/includes/workflow_column_operations.html:40
 msgid "Create an exact duplicate of this column"
 msgstr "Crear un duplicado exacto de esta columna"
@@ -1025,7 +1077,7 @@ msgstr "Puerto"
 msgid "DB name"
 msgstr "Nombre de la base de datos"
 
-#: dataops/models.py:133
+#: dataops/models.py:133 table/templates/table/display.html:62
 #: table/templates/table/includes/partial_view_operations.html:7
 #: templates/base.html:78
 msgid "Table"
@@ -1185,6 +1237,7 @@ msgstr "Parámetros de ejecución"
 
 #: dataops/templates/dataops/row_create.html:15
 #: dataops/templates/dataops/row_create.html:18
+#: table/templates/table/display.html:81
 msgid "Add row"
 msgstr "Añadir fila"
 
@@ -1529,6 +1582,20 @@ msgstr "Datos addicionales:"
 msgid "No logs recorded for this workflow."
 msgstr "No hay registros en este flujo."
 
+#: logs/templates/logs/show.html:42 logs/templates/logs/show.html:45
+#: templates/base.html:91
+msgid "Logs"
+msgstr "Registro"
+
+#: logs/templates/logs/show.html:50
+msgid "Download a CSV file containing these logs"
+msgstr "Descarga un fichero CSV con estos registros"
+
+#: logs/templates/logs/show.html:51 table/templates/table/display.html:140
+#: table/templates/table/display.html:153
+msgid "CSV Download"
+msgstr "Descarga CSV"
+
 #: ontask/__init__.py:37
 msgid "The symbol ' cannot be used in the column name."
 msgstr "El símbolo ' no se puede utilizar en el nombre de la columna"
@@ -1560,8 +1627,6 @@ msgid "Email verified"
 msgstr "Correo verificado"
 
 #: profiles/models.py:29
-#, fuzzy
-#| msgid "Profile"
 msgid "{}'s profile"
 msgstr "Perfil de {}'s"
 
@@ -1748,11 +1813,113 @@ msgstr "No hay datos del estudiante en esta columna"
 msgid "Unable to provide visualisation without data."
 msgstr "No hay datos para crear la visualización."
 
-#: table/templates/table/display.html:147
-#: table/templates/table/display.html:161
+#: table/templates/table/display.html:67
+#, python-format
+msgid "Table view <strong>%(view.name)s</strong>"
+msgstr "Vista <strong>%(view.name)s</strong>"
+
+#: table/templates/table/display.html:80
+msgid "Add an extra row to the table"
+msgstr "Añadir una nueva fila a la tabla"
+
+#: table/templates/table/display.html:89
+msgid "Add a column to the table"
+msgstr "Añadir una columna a la tabla"
+
+#: table/templates/table/display.html:90
+#: workflow/templates/workflow/includes/partial_column_addedit.html:18
+#: workflow/templates/workflow/includes/partial_column_addedit.html:30
+#: workflow/templates/workflow/includes/workflow_detail_buttons.html:10
+msgid "Add column"
+msgstr "Añadir columna"
+
+#: table/templates/table/display.html:98
+msgid "Add a column operating with the current values"
+msgstr "Añadir una columna con una operación sobre los valores existentes"
+
+#: table/templates/table/display.html:99
+#: workflow/templates/workflow/includes/partial_formula_column_add.html:11
+#: workflow/templates/workflow/includes/partial_formula_column_add.html:20
+#: workflow/templates/workflow/includes/workflow_detail_buttons.html:18
+msgid "Add derived column"
+msgstr "Añadir column derivada"
+
+#: table/templates/table/display.html:108
+msgid "Views available for this table"
+msgstr "Vistas disponibles en esta tabla"
+
+#: table/templates/table/display.html:109
+msgid "Views"
+msgstr "Vistas"
+
+#: table/templates/table/display.html:129
+#: table/templates/table/includes/partial_view_operations.html:17
+msgid "Change elements in view"
+msgstr "Cambiar los elementos en la vista"
+
+#: table/templates/table/display.html:130
+#: table/templates/table/includes/partial_view_edit.html:11
+msgid "Edit view"
+msgstr "Editar vista"
+
+#: table/templates/table/display.html:139
+#: table/templates/table/display.html:152
+msgid "Download a CSV file containing this table"
+msgstr "Descarga un fichero CSV con esta tabla"
+
+#: table/templates/table/display.html:145
+msgid "Dashboard created with the view data"
+msgstr "Tablero de control creado con los datos de esta vista"
+
+#: table/templates/table/display.html:146
+#: table/templates/table/display.html:159
 #: table/templates/table/stat_view.html:24
 msgid "Dashboard"
 msgstr "Tablero de control"
+
+#: table/templates/table/display.html:158
+msgid "Dashboard created with the table data"
+msgstr "Tablero de control creado con los datos de la tabla"
+
+#: table/templates/table/display.html:182
+msgid "Stats and visualizations about this column"
+msgstr "Estadísticas y visualizaciones de esta columna"
+
+#: table/templates/table/display.html:183
+#: table/templates/table/includes/partial_table_ops.html:12
+#: table/templates/table/stat_row.html:17
+#: table/templates/table/stat_view.html:17
+#: workflow/templates/workflow/includes/workflow_column_operations.html:9
+msgid "Stats"
+msgstr "Estadísticas"
+
+#: table/templates/table/display.html:192
+msgid "Edit column name, description, etc"
+msgstr "Editor el nombre, descripción, tipo, valores, etc. de la columna."
+
+#: table/templates/table/display.html:210
+#: workflow/templates/workflow/includes/partial_column_delete.html:24
+#: workflow/templates/workflow/includes/workflow_column_operations.html:50
+msgid "Delete column"
+msgstr "Borrar columna"
+
+#: table/templates/table/display.html:225
+msgid "Out of given date/time window. Edit column to enable."
+msgstr "Fuera de la ventana de tiempo dado. Edita la columna para activar."
+
+#: table/templates/table/display.html:226
+msgid "Disabled"
+msgstr "Desactivado"
+
+#: table/templates/table/display.html:262
+#: workflow/templates/workflow/detail.html:70
+msgid "The workflow does not have data."
+msgstr "El flujo no tiene datos."
+
+#: table/templates/table/display.html:264
+#, python-format
+msgid "To upload data go to <a href=\"%(dops)s\">Dataops</a>"
+msgstr "Para cargar datos, ir a <a href=\"%(dops)s\">Op-Datos</a>"
 
 #: table/templates/table/includes/partial_row_delete.html:8
 msgid "Confirm row deletion"
@@ -1770,12 +1937,6 @@ msgstr "Borrar fila"
 #: workflow/templates/workflow/includes/workflow_column_operations.html:7
 msgid "Statistics about this column"
 msgstr "Estadísticas sobre esta columna"
-
-#: table/templates/table/includes/partial_table_ops.html:12
-#: table/templates/table/stat_view.html:17
-#: workflow/templates/workflow/includes/workflow_column_operations.html:9
-msgid "Stats"
-msgstr "Estadísticas"
 
 #: table/templates/table/includes/partial_table_ops.html:18
 msgid "Edit the data in this row"
@@ -1818,16 +1979,14 @@ msgstr "Confirmar el borrado de la vista"
 
 #: table/templates/table/includes/partial_view_delete.html:11
 #, python-format
-msgid "Are you sure you want to delete the view <strong>%(n)s</strong>?"
-msgstr "¿Está seguro de que quiere borrar la vista <strong>%(n)s</strong>?"
+msgid ""
+"Are you sure you want to delete the view <strong>%(view.name)s</strong>?"
+msgstr ""
+"¿Está seguro de que quiere borrar la vista <strong>%(view.name)s</strong>?"
 
 #: table/templates/table/includes/partial_view_delete.html:17
 msgid "Delete view"
 msgstr "Borrar vista"
-
-#: table/templates/table/includes/partial_view_edit.html:11
-msgid "Edit view"
-msgstr "Editar vista"
 
 #: table/templates/table/includes/partial_view_edit.html:22
 msgid "Save view"
@@ -1837,10 +1996,6 @@ msgstr "Guardar vista"
 msgid "Access the table with this view"
 msgstr "Acceder a la tabla con esta vista"
 
-#: table/templates/table/includes/partial_view_operations.html:17
-msgid "Change elements in view"
-msgstr "Cambiar los elementos en la vista"
-
 #: table/templates/table/includes/partial_view_operations.html:26
 msgid "Create an identical view"
 msgstr "Crear una vista idéntica"
@@ -1848,6 +2003,11 @@ msgstr "Crear una vista idéntica"
 #: table/templates/table/includes/partial_view_operations.html:35
 msgid "Delete the view"
 msgstr "Borrar vista"
+
+#: table/templates/table/stat_row.html:20
+#, python-format
+msgid "Stats for %(value)s"
+msgstr "Estadísticas para %(value)s"
 
 #: table/templates/table/stat_view.html:22
 #, python-format
@@ -1857,6 +2017,19 @@ msgstr "Tablero de control para %(n)s"
 #: table/templates/table/view_index.html:32
 msgid "There are no views for this workflow."
 msgstr "No hay ninguna vista definida en este flujo."
+
+#: table/templates/table/view_index.html:55
+#: table/templates/table/view_index.html:58
+msgid "Table Views"
+msgstr "Vistas de la tabla"
+
+#: table/templates/table/view_index.html:66
+msgid "New view for the table"
+msgstr "Nueva vista para esta tabla"
+
+#: table/templates/table/view_index.html:67
+msgid "Add View"
+msgstr "Añadir vista"
 
 #: templates/_navbar.html:3 templates/base.html:94
 msgid "About"
@@ -1877,10 +2050,6 @@ msgstr "Op-Datos"
 #: templates/base.html:87
 msgid "Scheduler"
 msgstr "Planificador"
-
-#: templates/base.html:91
-msgid "Logs"
-msgstr "Registro"
 
 #: templates/base.html:96
 msgid "Contact"
@@ -2278,10 +2447,6 @@ msgstr "No se ha definido ningún atributo."
 msgid "Workflow Details"
 msgstr "Detalles del Flujo"
 
-#: workflow/templates/workflow/detail.html:70
-msgid "The workflow does not have data."
-msgstr "El flujo no tiene datos."
-
 #: workflow/templates/workflow/detail.html:71
 msgid "Go to"
 msgstr "Ir a"
@@ -2408,12 +2573,6 @@ msgstr "Editar nombre y valor"
 msgid "Delete this pair name/value"
 msgstr "Borrar el par nombre/valor"
 
-#: workflow/templates/workflow/includes/partial_column_addedit.html:18
-#: workflow/templates/workflow/includes/partial_column_addedit.html:30
-#: workflow/templates/workflow/includes/workflow_detail_buttons.html:10
-msgid "Add column"
-msgstr "Añadir columna"
-
 #: workflow/templates/workflow/includes/partial_column_addedit.html:20
 #, python-format
 msgid "Edit column <strong>%(n)s</strong>"
@@ -2456,11 +2615,6 @@ msgstr ""
 msgid "These conditions will also be deleted."
 msgstr "Estas condiciones también se borrarán."
 
-#: workflow/templates/workflow/includes/partial_column_delete.html:24
-#: workflow/templates/workflow/includes/workflow_column_operations.html:50
-msgid "Delete column"
-msgstr "Borrar columna"
-
 #: workflow/templates/workflow/includes/partial_column_restrict.html:11
 #, python-format
 msgid ""
@@ -2473,12 +2627,6 @@ msgstr ""
 #: workflow/templates/workflow/includes/partial_column_restrict.html:19
 msgid "Restrict column"
 msgstr "Restringir columna"
-
-#: workflow/templates/workflow/includes/partial_formula_column_add.html:11
-#: workflow/templates/workflow/includes/partial_formula_column_add.html:20
-#: workflow/templates/workflow/includes/workflow_detail_buttons.html:18
-msgid "Add derived column"
-msgstr "Añadir column derivada"
 
 #: workflow/templates/workflow/includes/partial_share_create.html:8
 msgid "Select user to allow access to the workflow"

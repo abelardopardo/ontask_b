@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load django_tables2 %}
@@ -13,14 +14,14 @@
   <script src="{% static 'site/js/sol.js' %}"></script>
   <script src="{% static 'table/js/table.js' %}{% otv %}"></script>
 {% endblock %}
-{% block title %}{{ block.super }}Stats{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Stats' %}{% endblock %}
 {% block container %}
 <div class="container-fluid text-center">
-  <h1 class="page-header">Stats for {{ value }}</h1>
+  <h1 class="page-header">{% blocktrans %}Stats for {{ value }}{% endblocktrans %}</h1>
 
   <div class="text-center">
     <a href="{{ request.META.HTTP_REFERER }}"
-         class="btn btn-default btn-sm align-middle"> Back</a>
+         class="btn btn-default btn-sm align-middle"> {% trans 'Back' %}</a>
   </div>
 
   {% for vis_item in visualizations %}
@@ -29,7 +30,7 @@
 
   <div class="text-center">
     <a href="{{ request.META.HTTP_REFERER }}"
-         class="btn btn-default btn-sm align-middle"> Back</a>
+         class="btn btn-default btn-sm align-middle"> {% trans 'Back' %}</a>
   </div>
 </div>
 {% endblock container %}
