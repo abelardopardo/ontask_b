@@ -24,6 +24,7 @@ from django.views import generic
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.utils.translation import ugettext_lazy as _
 
 import logs.ops
 from action.evaluate import (
@@ -54,16 +55,16 @@ class ActionTable(tables.Table):
      taken from another class to centralise the customisation.
     """
 
-    name = tables.Column(verbose_name=str('Name'))
+    name = tables.Column(verbose_name=_('Name'))
 
-    is_out = tables.Column(verbose_name=str('Type'))
+    is_out = tables.Column(verbose_name=_('Type'))
 
-    description_text = tables.Column(verbose_name=str('Description'))
+    description_text = tables.Column(verbose_name=_('Description'))
 
-    modified = tables.DateTimeColumn(verbose_name='Modified')
+    modified = tables.DateTimeColumn(verbose_name=_('Modified'))
 
     operations = OperationsColumn(
-        verbose_name='Operations',
+        verbose_name=_('Operations'),
         template_file='action/includes/partial_action_operations.html',
         template_context=lambda record: {
             'id': record['id'],
@@ -102,9 +103,9 @@ class ColumnSelectedTable(tables.Table):
     """
     Table to render the columns selected for a given action in
     """
-    name = tables.Column(verbose_name=str('Name'))
+    name = tables.Column(verbose_name=_('Name'))
     description_text = tables.Column(
-        verbose_name=str('Description (shown to learners)'),
+        verbose_name=_('Description (shown to learners)'),
         default='',
     )
 

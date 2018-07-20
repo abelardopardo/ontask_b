@@ -1,32 +1,33 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load static %}
 {% block title %}{{ block.super }}Export action{% endblock %}
 {% block container %}
   <div align="center" class="container">
-    <h1 class="page-header">Export action</h1>
+    <h1 class="page-header">{% trans 'Export action' %}</h1>
 
     <div class="modal-body">
-      <p class="help-block">Name: {{ action.name }}</p>
-      <p class="help-block">Description: {{ action.description }}</p>
+      <p class="help-block">{% trans 'Name:' %} {{ action.name }}</p>
+      <p class="help-block">{% trans 'Description:' %} {{ action.description }}</p>
       {% if action.is_out %}
-        <p class="help-block">Type: Action out (personalized content)</p>
-        <p class="help-block">Content</p>
+        <p class="help-block">{% trans 'Type: Action out (personalized content)' %}</p>
+        <p class="help-block">{% trans 'Content' %}</p>
         <div class="container" style="border:solid 1px black;">
           {{ action.content|safe }}
         </div>
       {% else %}
-        <p class="help-block">Type: Action in (data request)</p>
-        <p class="help-block">Columns: {{ cnames|join:", " }}</p>
+        <p class="help-block">{% trans 'Type: Action in (data request)' %}</p>
+        <p class="help-block">{% trans 'Columns:' %} {{ cnames|join:", " }}</p>
       {% endif %}
     </div>
     <div class="modal-footer" style="text-align: center;">
       <button type="button" class="btn btn-default"
-              onclick="location.href='{% url 'action:index' %}'">Back
+              onclick="location.href='{% url 'action:index' %}'">{% trans 'Back' %}
       </button>
       <a href="{% url 'action:export_done' action.id %}"
          class="btn btn-primary btn-sm"
          data-toggle="tooltip" title="Proceed with the export operation">
-        <span class="glyphicon glyphicon-export"></span> Export</a>
+        <span class="glyphicon glyphicon-export"></span> {% trans 'Export' %}</a>
     </div>
   </div>
 {% endblock %}

@@ -1,22 +1,19 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% load static %}
-
 {% block scripts %}
   {% if download %}
     <script>location.href="{% url 'workflow:export' 1 %}";</script>
   {% endif %}
 {% endblock scripts %}
-
-{% block title %}Email action done{% endblock %}
-
+{% block title %}{% trans 'Email action' %}{% endblock %}
 {% block container %}
   <div class="container-fluid" style="margin-top:50px;text-align:center;">
-    <h1 class="page-header text-center">Email action</h1>
+    <h1 class="page-header text-center">{% trans 'Email action' %}</h1>
 
-    <p class="text-center">Emails successfully sent.</p>
+    <p class="text-center">{% trasns 'Emails successfully sent.' %}</p>
     <button type="button" class="btn btn-default"
-      onclick="location.href='{% url 'action:index' %}'">Back
+      onclick="location.href='{% url 'action:index' %}'">{% trans 'Back' %}
     </button>
 
   </div>

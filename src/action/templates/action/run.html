@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load django_tables2 %}
@@ -38,7 +39,7 @@
     }
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}Run Action In{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Run Action In' %}{% endblock %}
 {% block container %}
   <div id="table-content" align="center" class="container"
        style="padding-top:2ex;">
@@ -46,7 +47,7 @@
       <strong>{{ action.name }}</strong>
       <a href="{% url 'action:edit_in' action.id %}"
          class="btn btn-primary btn-sm align-middle">
-      <span class="glyphicon glyphicon-folder-open"></span> Edit</a>
+      <span class="glyphicon glyphicon-folder-open"></span> {% trasns 'Edit' %}</a>
     </h4>
     <p class="help-block">{{ action.description_text }}</p>
     <table class="table display dataTable no-footer cell-border table-bordered"
@@ -60,7 +61,7 @@
       </thead>
     </table>
     <button type="button" class="btn btn-default" style="margin-right:2ex;"
-            onclick="location.href='{% url 'action:index' %}'"> Back
+            onclick="location.href='{% url 'action:index' %}'"> {% trans 'Back' %}
     </button>
     <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog">

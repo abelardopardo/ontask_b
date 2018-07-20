@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load crispy_forms_tags %}
@@ -42,11 +43,11 @@
       {% include 'action/includes/partial_condition_buttons.html' %}
       <div id="html-editor">
         <div id="attribute-names" style="margin-bottom:1ex;">
-          <div style="display: table-cell; padding-right: 1ex;">Insert:</div>
+          <div style="display: table-cell; padding-right: 1ex;">{% trans 'Insert:' %}</div>
           {% if attribute_names %}
             <div style="display: table-cell; padding-right: 1ex;">
                 <select id="select-attribute-name">
-                  <option value="">- Attribute -</option>
+                  <option value="">- {% trans 'Attribute' %} -</option>
                   {% for attr in attribute_names %}
                     <option value="{{ attr }}">{{ attr }}</option>
                   {% endfor %}
@@ -55,7 +56,7 @@
           {% endif %}
           <div style="display: table-cell; padding-right: 1ex;">
               <select id="select-column-name">
-                <option value="">- Column Value -</option>
+                <option value="">- {% trans 'Column Value' %} -</option>
                 {% for colname in column_names %}
                   <option value="{{ colname }}">{{ colname }}</option>
                 {% endfor %}
@@ -64,7 +65,7 @@
           {% comment %}
           <div style="display: table-cell;">
               <select id="select-visualization">
-                <option value="">- Visualization -</option>
+                <option value="">- {% trans 'Visualization' %} -</option>
                 {% for colname in column_names %}
                   <option value="{{ colname }}">{{ colname }}</option>
                 {% endfor %}
@@ -82,13 +83,13 @@
                     data-url="{% url 'action:preview' action.id 1 %}"
                     data-toggle="tooltip"
                 title="See how is the content shown to each learner">
-              <span class="glyphicon glyphicon-eye-open"></span> Preview
+              <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Preview' %}
             </button>
             <button type="submit" name="Submit" value="Save-and-close"
                     class="btn btn-primary"
                     data-toggle="tooltip"
                     title="Save and go back">
-              <span class="glyphicon glyphicon-ok"></span> Done</button>
+              <span class="glyphicon glyphicon-ok"></span> {% trans 'Done' %}</button>
           </div>
         </form>
       </div>
