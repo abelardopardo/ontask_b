@@ -1,6 +1,6 @@
 {% load i18n %}
 <div class="container-fluid" id="condition-set" style="padding-bottom: 0.5ex;">
-  <h4 class="text-center"><strong>Text Conditions</strong>
+  <h4 class="text-center"><strong>{% trans 'Text Conditions' %}</strong>
     <button type="button"
             class="btn btn-sm btn-primary js-condition-create{% if not has_data %} disabled{% endif %}"
             data-url="{% url 'action:create_condition' action.id %}"

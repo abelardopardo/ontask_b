@@ -6,7 +6,9 @@
   <div class="container-fluid" style="margin-top:50px;text-align:center;">
     <h1 class="page-header text-center">{% trans 'Email scheduled for execution' %}</h1>
 
-    <p class="text-center">{% trans 'The action will execute in {{ tdelta }}' %}</p>
+    <p class="text-center">
+      {% blocktrans with n=tdelta %}The action will execute in {{ n }}{% endblocktrans %}
+    </p>
     <button type="button" class="btn btn-default"
       onclick="location.href='{% url 'scheduler:index' %}'">{% trans 'Back' %}
     </button>

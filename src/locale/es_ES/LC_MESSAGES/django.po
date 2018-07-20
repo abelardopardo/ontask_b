@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-20 14:43+0930\n"
+"POT-Creation-Date: 2018-07-20 15:32+0930\n"
 "PO-Revision-Date: 2018-07-01 16:25+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,6 +53,42 @@ msgstr "Iniciar sesión"
 msgid "Please Log In"
 msgstr "Por favor, inicie sesión"
 
+#: action/forms.py:143 action/forms.py:147
+msgid "Incorrect date/time window"
+msgstr "Intervalo de fecha/hora incorrecto"
+
+#: action/forms.py:170
+msgid "Email subject"
+msgstr "Asunto del correo"
+
+#: action/forms.py:173
+msgid "Column to use for target email address"
+msgstr "Columna con la dirección de correo"
+
+#: action/forms.py:180
+msgid "Send you a summary message?"
+msgstr "¿Enviar un mensaje con el resúmen de envios?"
+
+#: action/forms.py:185
+msgid "Track email reading in an extra column?"
+msgstr "¿Rastrear la lectura del correo en una columna extra?"
+
+#: action/forms.py:214
+msgid "Download a snapshot of the current state of the workflow?"
+msgstr "¿Descargar un fichero con el estado actual del flujo?"
+
+#: action/forms.py:215
+msgid "A zip file useful to review the emails sent."
+msgstr "Un fichero zip útil para revisar los mensajes que se envían."
+
+#: action/forms.py:231
+msgid "File"
+msgstr "Fichero"
+
+#: action/forms.py:232
+msgid "File containing a previously exported action"
+msgstr "Fichero que contiene una acción previamente exportada"
+
 #: action/templates/action/action_unavailable.html:3
 msgid ""
 "This action is not available for you\n"
@@ -78,7 +114,7 @@ msgstr "Editar descripción"
 #: action/templates/action/includes/partial_condition_buttons.html:43
 #: action/templates/action/includes/partial_filter_create_buttons.html:26
 #: dataops/templates/dataops/includes/partial_sqlconn_operations.html:13
-#: scheduler/templates/scheduler/email_done.html:15
+#: scheduler/templates/scheduler/email_done.html:17
 #: table/templates/table/includes/partial_table_ops.html:19
 #: table/templates/table/includes/partial_view_operations.html:18
 #: workflow/templates/workflow/includes/workflow_column_operations.html:22
@@ -143,7 +179,7 @@ msgstr "Ver el contenido como se muestra al estudiante"
 
 #: action/templates/action/edit_in.html:162
 #: action/templates/action/edit_out.html:88
-#: action/templates/action/request_email_data.html:28
+#: action/templates/action/request_email_data.html:29
 msgid "Preview"
 msgstr "Vista previa"
 
@@ -154,7 +190,7 @@ msgstr "Guardar y seguir editando"
 #: action/templates/action/edit_in.html:170
 #: action/templates/action/edit_out.html:94
 msgid "Done"
-msgstr "Terminado"
+msgstr "Terminar"
 
 #: action/templates/action/edit_out.html:47
 msgid "Insert:"
@@ -179,7 +215,7 @@ msgstr "Envío de correo"
 #: action/templates/action/export_done.html:16
 #: action/templates/action/run.html:65 action/templates/action/run_row.html:23
 #: dataops/templates/dataops/includes/upload_buttons.html:10
-#: scheduler/templates/scheduler/email_done.html:11
+#: scheduler/templates/scheduler/email_done.html:13
 #: table/templates/table/stat_view.html:30
 #: table/templates/table/stat_view.html:39
 #: workflow/templates/workflow/includes/workflow_attribute_buttons.html:4
@@ -245,7 +281,7 @@ msgstr "Importar acción"
 #: action/templates/action/includes/partial_condition_delete.html:16
 #: action/templates/action/includes/partial_filter_addedit.html:22
 #: action/templates/action/includes/partial_filter_delete.html:14
-#: action/templates/action/request_email_data.html:23
+#: action/templates/action/request_email_data.html:24
 #: dataops/templates/dataops/includes/partial_sqlconn_addedit.html:27
 #: dataops/templates/dataops/includes/partial_sqlconn_clone.html:15
 #: dataops/templates/dataops/includes/partial_sqlconn_delete.html:14
@@ -434,10 +470,13 @@ msgid "Delete"
 msgstr "Borrar"
 
 #: action/templates/action/includes/partial_action_preview.html:7
-msgid "Action Preview {{ index }}"
-msgstr "Vista previa de la acción {{ index }}"
+#, python-format
+msgid ""
+"Action Preview\n"
+"      %(n)s"
+msgstr "Vista previa de la acción %(n)s"
 
-#: action/templates/action/includes/partial_action_preview.html:29
+#: action/templates/action/includes/partial_action_preview.html:30
 #: action/templates/action/includes/partial_email_preview.html:31
 msgid "Values:"
 msgstr "Valores:"
@@ -516,6 +555,10 @@ msgstr "Editar condición"
 #: action/templates/action/includes/partial_condition_addedit.html:34
 msgid "Update condition"
 msgstr "Actualiza condición"
+
+#: action/templates/action/includes/partial_condition_buttons.html:3
+msgid "Text Conditions"
+msgstr "Condiciones en el texto"
 
 #: action/templates/action/includes/partial_condition_buttons.html:9
 msgid "Define a text condition to insert in the text body below."
@@ -612,6 +655,10 @@ msgstr "Editar perfil"
 msgid "Create filter"
 msgstr "Crear filtro"
 
+#: action/templates/action/includes/partial_filter_create_buttons.html:2
+msgid "Filter learners"
+msgstr "Filtrar estudiantes"
+
 #: action/templates/action/includes/partial_filter_create_buttons.html:9
 msgid "Edit the filter"
 msgstr "Editar el filtro"
@@ -641,7 +688,7 @@ msgstr "¡El filtro excluye a todos los alumnos!"
 
 #: action/templates/action/includes/partial_filter_create_buttons.html:51
 msgid "All learners considered for this action."
-msgstr "Todos los estudiantes están incluidos en esta acción"
+msgstr "Esta acción aplica a todos los estudiantes."
 
 #: action/templates/action/includes/partial_filter_delete.html:8
 msgid "Confirm filter deletion"
@@ -691,22 +738,26 @@ msgid "New Action Out"
 msgstr "Nueva acción de salida"
 
 #: action/templates/action/request_email_data.html:13
-msgid "Send emails for action \"{{ action.name }}\""
-msgstr "Enviar mensajes de la acción \"{{ action.name }}\""
+#, python-format
+msgid ""
+"Send emails for\n"
+"    action \"%(n)s\""
+msgstr "Enviar mensajes de la acción \"%(n)s\""
 
-#: action/templates/action/request_email_data.html:16
-msgid "{{ num_msgs }} Emails will be sent."
-msgstr "Se enviarán {{ num_msgs }} mensajes."
+#: action/templates/action/request_email_data.html:17
+#, python-format
+msgid "%(n)s Emails will be sent."
+msgstr "Se enviarán %(n)s mensajes."
 
-#: action/templates/action/request_email_data.html:32
+#: action/templates/action/request_email_data.html:33
 msgid "Send"
 msgstr "Enviar"
 
-#: action/templates/action/request_email_data.html:37
+#: action/templates/action/request_email_data.html:38
 msgid "The action does not apply to any data."
 msgstr "No hay datos a los que aplicar la acción."
 
-#: action/templates/action/request_email_data.html:38
+#: action/templates/action/request_email_data.html:39
 msgid "Review the action filter"
 msgstr "Revisar el filtro de la acción"
 
@@ -888,24 +939,23 @@ msgid "Run Transformation"
 msgstr "Ejecutar transformación"
 
 #: dataops/templates/dataops/plugin_info_for_run.html:20
-msgid ""
-"Information to run plugin \"{{\n"
-"      n}}\""
-msgstr "Información para ejecutar el plugin \"{{n}}\""
+#, python-format
+msgid "Information to run plugin \"%(n)s\""
+msgstr "Información para ejecutar el plugin \"%(n)s\""
 
-#: dataops/templates/dataops/plugin_info_for_run.html:28
+#: dataops/templates/dataops/plugin_info_for_run.html:27
 msgid "Input columns"
 msgstr "Columnas de entrada"
 
-#: dataops/templates/dataops/plugin_info_for_run.html:42
+#: dataops/templates/dataops/plugin_info_for_run.html:41
 msgid "Output column names"
 msgstr "Nombres de las columnas de salida"
 
-#: dataops/templates/dataops/plugin_info_for_run.html:46
+#: dataops/templates/dataops/plugin_info_for_run.html:45
 msgid "Change the default names if needed."
 msgstr "Cambia los nombres si es necesario."
 
-#: dataops/templates/dataops/plugin_info_for_run.html:56
+#: dataops/templates/dataops/plugin_info_for_run.html:55
 msgid "Execution parameters"
 msgstr "Parámetros de ejecución"
 
@@ -915,8 +965,9 @@ msgid "Add row"
 msgstr "Añadir fila"
 
 #: dataops/templates/dataops/row_create.html:19
-msgid "Workflow {{ workflow.name }}"
-msgstr "Flujo {{ workflow.name }}"
+#, python-format
+msgid "Workflow %(n)s"
+msgstr "Flujo %(n)s"
 
 #: dataops/templates/dataops/row_create.html:29
 #: dataops/templates/dataops/row_create.html:40
@@ -958,36 +1009,50 @@ msgid "The data will be accessed with the following parameters:"
 msgstr "Los datos se accederán con los siguientes parámetros:"
 
 #: dataops/templates/dataops/sqlupload1.html:19
-msgid "Connection type: {{ conn_type }}"
-msgstr "Tipo de conexión: {{ conn_type }}"
+#, python-format
+msgid ""
+"Connection type:\n"
+"        %(n)s"
+msgstr "Tipo de conexión: %(n)s"
 
-#: dataops/templates/dataops/sqlupload1.html:22
-msgid "Connection driver: {{ conn_driver }}"
-msgstr "Driver para la conexión: {{ conn_driver }}"
+#: dataops/templates/dataops/sqlupload1.html:23
+#, python-format
+msgid ""
+"Connection\n"
+"        driver: %(n)s"
+msgstr "Driver para la conexión: %(n)s"
 
-#: dataops/templates/dataops/sqlupload1.html:25
-msgid "Username: {{ db_user }}"
-msgstr "Usuario: {{ db_user }}"
+#: dataops/templates/dataops/sqlupload1.html:27
+#, python-format
+msgid ""
+"Username: %(n)s\n"
+"        "
+msgstr "Usuario: %(n)s"
 
-#: dataops/templates/dataops/sqlupload1.html:28
+#: dataops/templates/dataops/sqlupload1.html:31
 msgid "Password: Requested below"
 msgstr "Clave: Requerida debajo"
 
-#: dataops/templates/dataops/sqlupload1.html:31
-msgid "Host: {{ db_host }}"
-msgstr "Servidor: {{ db_host }}"
+#: dataops/templates/dataops/sqlupload1.html:35
+#, python-format
+msgid "Host: %(n)s"
+msgstr ""
 
-#: dataops/templates/dataops/sqlupload1.html:34
-msgid "Port: {{ db_port }}"
-msgstr "Puerto: {{ db_port }}"
+#: dataops/templates/dataops/sqlupload1.html:39
+#, fuzzy, python-format
+#| msgid "Workflow %(n)s"
+msgid "Port: %(n)s"
+msgstr "Flujo %(n)s"
 
-#: dataops/templates/dataops/sqlupload1.html:36
-msgid "Database name: {{ db_name }}"
-msgstr "Nombre de la base de datos: {{ db_name }}"
+#: dataops/templates/dataops/sqlupload1.html:42
+#, python-format
+msgid "Database name: %(n)s"
+msgstr "Nombre de la base de datos: %(n)s"
 
-#: dataops/templates/dataops/sqlupload1.html:37
-msgid "Database table: {{ db_table }}"
-msgstr "Tabla de la base de datos: {{ db_table }}"
+#: dataops/templates/dataops/sqlupload1.html:45
+#, python-format
+msgid "Database table: %(n)s"
+msgstr "Tabla de la base de datos: %(n)s"
 
 #: dataops/templates/dataops/transform.html:23
 msgid "No transformations in this workflow."
@@ -1297,9 +1362,10 @@ msgstr "Envío de correo planificado"
 msgid "Email scheduled for execution"
 msgstr "Correo planificado para su envío"
 
-#: scheduler/templates/scheduler/email_done.html:9
-msgid "The action will execute in {{ tdelta }}"
-msgstr "La acción se ejecutará en {{ tdelta }}"
+#: scheduler/templates/scheduler/email_done.html:10
+#, python-format
+msgid "The action will execute in %(n)s"
+msgstr "La acción se ejecutará en %(n)s"
 
 #: scheduler/templates/scheduler/includes/partial_scheduler_delete.html:9
 msgid "Confirm scheduled operation deletion"

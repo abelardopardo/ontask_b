@@ -16,25 +16,34 @@
     <p>{% trans 'The data will be accessed with the following parameters:' %}</p>
 
     {% if conn_type %}
-      <p class="help-block">{% trans 'Connection type: {{ conn_type }}' %}</p>
+      <p class="help-block">{% blocktrans with n=conn_type %}Connection type:
+        {{ n }}{% endblocktrans %}</p>
     {% endif %}
     {% if conn_driver %}
-      <p class="help-block">{% trans 'Connection driver: {{ conn_driver }}' %}</p>
+      <p class="help-block">{% blocktrans with n=conn_driver %}Connection
+        driver: {{ n }}{% endblocktrans %}</p>
     {% endif %}
     {% if db_user %}
-      <p class="help-block">{% trans 'Username: {{ db_user }}' %}</p>
+      <p class="help-block">{% blocktrans with n=db_user %}Username: {{ n }}
+        {% endblocktrans %}</p>
     {% endif %}
     {% if db_password %}
       <p class="help-block">{% trans 'Password: Requested below' %}</p>
     {% endif %}
     {% if db_host %}
-      <p class="help-block">{% trans 'Host: {{ db_host }}' %}</p>
+      <p class="help-block">
+        {% blocktrans with n=db_host %}Host: {{ n }}{% endblocktrans %}</p>
     {% endif %}
     {% if db_port %}
-      <p class="help-block">{% trans 'Port: {{ db_port }}' %}</p>
+      <p class="help-block">
+        {% blocktrans with n=db_port %}Port: {{ n }}{% endblocktrans %}</p>
     {% endif %}
-    <p class="help-block">{% trans 'Database name: {{ db_name }}' %}</p>
-    <p class="help-block">{% trans 'Database table: {{ db_table }}' %}</p>
+    <p class="help-block">
+      {% blocktrans with n=db_name %}Database name: {{ n }}{% endblocktrans %}
+    </p>
+    <p class="help-block">
+      {% blocktrans with n=db_table %}Database table: {{ n }}{% endblocktrans %}
+    </p>
   </div>
   <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}

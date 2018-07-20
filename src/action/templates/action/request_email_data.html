@@ -10,10 +10,11 @@
 {% block title %}{{ block.super }}{% trans 'Email action' %}{% endblock %}
 {% block container %}
 <div align="center" class="container" id="email-action-request-data">
-  <h1 class="page-header">{% trans 'Send emails for action "{{ action.name }}"' %}</h1>
+  <h1 class="page-header">{% blocktrans with n=action.name %}Send emails for
+    action "{{ n }}"{% endblocktrans %}</h1>
   <div class="container" style="max-width: 500px;">
     {% if num_msgs > 0 %}
-      <p>{% trans '{{ num_msgs }} Emails will be sent.' %}</p>
+      <p>{% blocktrans with n=num_msgs%}{{ n }} Emails will be sent.{% endblocktrans %}</p>
       <form action="" method="post">
         {% csrf_token %}
         <div class="input-group input-group-lg">

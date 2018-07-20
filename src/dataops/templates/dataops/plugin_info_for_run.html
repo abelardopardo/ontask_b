@@ -17,8 +17,7 @@
 {% block container %}
   <div align="center" class="container-fluid" style="max-width:800px">
     <h1 class="page-header">
-      {% blocktrans with n=pinstance.name %}Information to run plugin "{{
-      n}}"{% endblocktrans %}
+      {% blocktrans with n=pinstance.name %}Information to run plugin "{{ n }}"{% endblocktrans %}
     </h1>
     <form method="POST" action="">
       {% csrf_token %}

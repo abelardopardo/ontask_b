@@ -16,7 +16,7 @@
 {% block container %}
 <div align="center" class="container">
   <h1 class="page-header">{% trans 'Add row' %}</h1>
-  <p>{% trans 'Workflow {{ workflow.name }}' %}</p>
+  <p>{% blocktrans with n=workflow.name %}Workflow {{ n }}{% endblocktrans %}</p>
   <div class="container">
     <form action="" method="post">
       {% csrf_token %}
