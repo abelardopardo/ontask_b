@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-20 15:38+0930\n"
+"POT-Creation-Date: 2018-07-20 16:17+0930\n"
 "PO-Revision-Date: 2018-07-01 16:25+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,16 +18,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: accounts/forms.py:19
-#, fuzzy
-#| msgid "Enter Data"
 msgid "Enter Email"
-msgstr "Introducir datos"
+msgstr "Introducir correo"
 
 #: accounts/forms.py:20
-#, fuzzy
-#| msgid "Enter new password"
 msgid "Enter Password"
-msgstr "Entre la clave nueva"
+msgstr "Introducir clave"
 
 #: accounts/forms.py:24 templates/home.html:13
 #: templates/registration/password_reset_complete.html:18
@@ -75,7 +71,7 @@ msgstr "Por favor, inicie sesión"
 msgid "Incorrect date/time window"
 msgstr "Intervalo de fecha/hora incorrecto"
 
-#: action/forms.py:170
+#: action/forms.py:170 scheduler/models.py:91
 msgid "Email subject"
 msgstr "Asunto del correo"
 
@@ -106,6 +102,34 @@ msgstr "Fichero"
 #: action/forms.py:232
 msgid "File containing a previously exported action"
 msgstr "Fichero que contiene una acción previamente exportada"
+
+#: action/models.py:51
+msgid "Action to provide personalized information"
+msgstr "Acción para ofrecer información personalizada"
+
+#: action/models.py:58
+msgid "URL available to users?"
+msgstr "¿URL disponible a los usuarios?"
+
+#: action/models.py:63
+msgid "Action available from"
+msgstr "Acción disponible desde"
+
+#: action/models.py:68
+msgid "Action available until"
+msgstr "Acción disponible hasta"
+
+#: action/models.py:91 action/templates/action/edit_in.html:102
+msgid "Shuffle questions?"
+msgstr "¿Barajar las preguntas?"
+
+#: action/models.py:317
+msgid "Columns present in this condition"
+msgstr "Columnas presentes en esta condición"
+
+#: action/models.py:323
+msgid "Number of rows selected"
+msgstr "Número de filas seleccionadas"
 
 #: action/templates/action/action_unavailable.html:3
 msgid ""
@@ -154,10 +178,6 @@ msgstr "Columna clave"
 #: action/templates/action/edit_in.html:98
 msgid "You need to specify a key column"
 msgstr "Se necesita especificar una columna clave"
-
-#: action/templates/action/edit_in.html:102
-msgid "Shuffle questions?"
-msgstr "¿Barajar las preguntas?"
 
 #: action/templates/action/edit_in.html:113
 msgid "Columns to obtain and store the data"
@@ -797,18 +817,20 @@ msgstr ""
 "texto de la acción. El siguiente mensaje puede ofrecer información para "
 "localizar el problema."
 
-#: action/views_action.py:58 action/views_action.py:106
+#: action/views_action.py:58 action/views_action.py:106 dataops/models.py:72
 #: dataops/templates/dataops/upload_s2.html:40 workflow/forms.py:37
 #: workflow/templates/workflow/detail.html:91 workflow/views.py:32
 msgid "Name"
 msgstr "Nombre"
 
-#: action/views_action.py:60 dataops/templates/dataops/upload_s2.html:42
+#: action/views_action.py:60 dataops/models.py:85
+#: dataops/templates/dataops/upload_s2.html:42
 #: workflow/templates/workflow/detail.html:92
 msgid "Type"
 msgstr "Tipo"
 
-#: action/views_action.py:62 dataops/templates/dataops/uploadmerge.html:17
+#: action/views_action.py:62 dataops/models.py:79
+#: dataops/templates/dataops/uploadmerge.html:17
 #: workflow/templates/workflow/detail.html:76 workflow/views.py:35
 msgid "Description"
 msgstr "Descripción"
@@ -838,10 +860,8 @@ msgid "To select a subset of the table to pass to the plugin"
 msgstr "Para seleccionar la porción de la tabla que utiliza el plugin"
 
 #: dataops/forms.py:52
-#, fuzzy
-#| msgid "Key column to match the user id"
 msgid "Key column for merging"
-msgstr "Columna clave para emparejar el identificador de usuario"
+msgstr "Columna clave para mezclar"
 
 #: dataops/forms.py:54
 msgid "One of the existing key columns to merge the results"
@@ -872,7 +892,8 @@ msgstr "El plugin necesita al menos una columna de entrada"
 msgid ""
 "File in CSV format (typically produced by a statistics package or Excel)"
 msgstr ""
-"Ficher on formation CSV (tipicamente creado por Excel o un paquete estadístico"
+"Ficher on formation CSV (tipicamente creado por Excel o un paquete "
+"estadístico"
 
 #: dataops/forms.py:167
 msgid "Lines to skip at the top"
@@ -963,6 +984,56 @@ msgstr "Método para seleccionar las filas a mezclar/actualizar"
 #: dataops/forms.py:423
 msgid "Unable to process datatype"
 msgstr "No se puede processar el tipo de datos"
+
+#: dataops/models.py:32
+msgid "Ready to run"
+msgstr "Listo para ejecutar"
+
+#: dataops/models.py:38
+msgid "Last execution"
+msgstr "Última ejecución"
+
+#: dataops/models.py:89
+msgid "Postgresql, Mysql, etc."
+msgstr "Postgresql, MySQL, etc."
+
+#: dataops/models.py:93
+msgid "Driver"
+msgstr "Driver"
+
+#: dataops/models.py:97
+msgid "Driver implementing the DBAPI"
+msgstr "Driver que implementat DBAPI"
+
+#: dataops/models.py:101
+msgid "User"
+msgstr "Usuario"
+
+#: dataops/models.py:109
+msgid "Requires password?"
+msgstr "¿Requiere clave?"
+
+#: dataops/models.py:114
+msgid "Host"
+msgstr "Nodo"
+
+#: dataops/models.py:120
+msgid "Port"
+msgstr "Puerto"
+
+#: dataops/models.py:126
+msgid "DB name"
+msgstr "Nombre de la base de datos"
+
+#: dataops/models.py:133
+#: table/templates/table/includes/partial_view_operations.html:7
+#: templates/base.html:78
+msgid "Table"
+msgstr "Tabla"
+
+#: dataops/sqlcon_views.py:379
+msgid "SQL connection"
+msgstr "conexión SQL"
 
 #: dataops/templates/dataops/includes/partial_diagnostics.html:7
 msgid "Diagnostics"
@@ -1192,6 +1263,7 @@ msgid "Host: %(n)s"
 msgstr "Nodo: %(n)s"
 
 #: dataops/templates/dataops/sqlupload1.html:39
+#, python-format
 msgid "Port: %(n)s"
 msgstr "Puerto %(n)s"
 
@@ -1457,6 +1529,14 @@ msgstr "Datos addicionales:"
 msgid "No logs recorded for this workflow."
 msgstr "No hay registros en este flujo."
 
+#: ontask/__init__.py:37
+msgid "The symbol ' cannot be used in the column name."
+msgstr "El símbolo ' no se puede utilizar en el nombre de la columna"
+
+#: ontask/__init__.py:40
+msgid "The symbol \" cannot be used in the column name."
+msgstr "El símbolo \" no se puede utilizar en el nombre de la columna"
+
 #: ontask/forms.py:32
 #, python-format
 msgid "File size must be under %(max)s. Current file size is %(current)s."
@@ -1470,6 +1550,20 @@ msgstr "Los ficheros de typo (%s) no se pueden procesar"
 #: ontask/forms.py:112
 msgid "Unable to process datatype "
 msgstr "No es posible procesar el tipo de datos"
+
+#: profiles/models.py:15
+msgid "Profile picture"
+msgstr "Foto del usuario"
+
+#: profiles/models.py:20
+msgid "Email verified"
+msgstr "Correo verificado"
+
+#: profiles/models.py:29
+#, fuzzy
+#| msgid "Profile"
+msgid "{}'s profile"
+msgstr "Perfil de {}'s"
 
 #: profiles/templates/profiles/edit_profile.html:7
 #: profiles/templates/profiles/show_profile.html:28 templates/base.html:116
@@ -1512,6 +1606,46 @@ msgstr "Crear"
 #: scheduler/forms.py:46
 msgid "Date/time must be in the future"
 msgstr "Fecha/hora debe ser en el futuro"
+
+#: scheduler/models.py:47
+msgid "When to execute this action"
+msgstr "Cuando ejecutar esta acción"
+
+#: scheduler/models.py:51
+msgid "Execution Status"
+msgstr "Estado de la ejecición"
+
+#: scheduler/models.py:53
+msgid "pending"
+msgstr "pendiente"
+
+#: scheduler/models.py:54
+msgid "running"
+msgstr "ejecutando"
+
+#: scheduler/models.py:55
+msgid "done"
+msgstr "terminado"
+
+#: scheduler/models.py:56
+msgid "done_error"
+msgstr "terminado_con_error"
+
+#: scheduler/models.py:63
+msgid "Execution message"
+msgstr "Mensaje de ejecución"
+
+#: scheduler/models.py:99
+msgid "Column containing the email address"
+msgstr "Columna con la dirección de correo"
+
+#: scheduler/models.py:104
+msgid "Send you a confirmation email"
+msgstr "Enviarte un mensaje de confirmación"
+
+#: scheduler/models.py:111
+msgid "Track if emails are read?"
+msgstr "¿Rastrear si se leen los emails?"
 
 #: scheduler/templates/scheduler/email.html:14
 #: scheduler/templates/scheduler/email.html:17
@@ -1567,34 +1701,36 @@ msgid "Scheduled Operations"
 msgstr "Operaciones planificadas"
 
 #: table/forms.py:21
-#, fuzzy
-#| msgid "Rename"
 msgid "View name"
-msgstr "Renombrar"
+msgstr "Nombre de la vista"
 
 #: table/forms.py:22
-#, fuzzy
-#| msgid "Columns:"
 msgid "Columns to show"
-msgstr "Columnas:"
+msgstr "Columnas a mostrar"
 
 #: table/forms.py:23
-#, fuzzy
-#| msgid "Description"
 msgid "View Description"
-msgstr "Descripción"
+msgstr "Descripción de la vista"
 
 #: table/forms.py:41
-#, fuzzy
-#| msgid "There must be at least one non-key column."
 msgid "The view needs at least one column to show"
-msgstr "Debe haber al menos una columna que no sea clave."
+msgstr "La vista necesita al menos una columna a mostrar"
 
 #: table/forms.py:47
-#, fuzzy
-#| msgid "There must be at least one non-key column."
 msgid "There needs to be at least one key column"
-msgstr "Debe haber al menos una columna que no sea clave."
+msgstr "Debe haber al menos una columna que sea clave."
+
+#: table/models.py:40
+msgid "Subset of columns to show"
+msgstr "Subconjunto de columnas a mostrar"
+
+#: table/models.py:46
+msgid "Subset of rows to show"
+msgstr "Subconjunto de filas a mostrar"
+
+#: table/models.py:50
+msgid "Preselect rows satisfying this condition"
+msgstr "Preseleccionar las filas que satisfacen esta condición"
 
 #: table/stat_views.py:92
 msgid "Unable to visualize table row"
@@ -1700,11 +1836,6 @@ msgstr "Guardar vista"
 #: table/templates/table/includes/partial_view_operations.html:6
 msgid "Access the table with this view"
 msgstr "Acceder a la tabla con esta vista"
-
-#: table/templates/table/includes/partial_view_operations.html:7
-#: templates/base.html:78
-msgid "Table"
-msgstr "Tabla"
 
 #: table/templates/table/includes/partial_view_operations.html:17
 msgid "Change elements in view"
@@ -2089,6 +2220,55 @@ msgstr "No necesitas añadirte a la lista para compartir"
 #: workflow/forms.py:459
 msgid "User already in the list"
 msgstr "El usuario ya está en la lista"
+
+#: workflow/models.py:46
+msgid "number of rows"
+msgstr "número de filas"
+
+#: workflow/models.py:53
+msgid "number of columns"
+msgstr "número de columnas"
+
+#: workflow/models.py:395
+msgid "column name"
+msgstr "nombre de columna"
+
+#: workflow/models.py:401
+msgid "description"
+msgstr "descripción"
+
+#: workflow/models.py:417
+msgid "type of data to store in the column"
+msgstr "tipo de dato almacenado en la columna"
+
+#: workflow/models.py:422
+msgid "has unique values per row"
+msgstr "tiene valores únicos por fila"
+
+#: workflow/models.py:428
+msgid "column position (zero to insert last)"
+msgstr "posición de la columna (cero para insertar última)"
+
+#: workflow/models.py:437
+msgid "include in visualization"
+msgstr "incluir en visualizaciones"
+
+#: workflow/models.py:447
+msgid "comma separated list of values allowed"
+msgstr "lista de valores permitidos separados por comas"
+
+#: workflow/models.py:452
+msgid "Column active from"
+msgstr "Columna activa desde"
+
+#: workflow/models.py:459
+msgid "Column active until"
+msgstr "Columna activa hasta"
+
+#: workflow/models.py:532
+#, python-format
+msgid "Unsupported type %(type)s"
+msgstr "Typo de datos %(type)s no soportado"
 
 #: workflow/templates/workflow/attributes.html:25
 msgid "No attributes defined."

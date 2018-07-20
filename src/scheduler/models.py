@@ -9,7 +9,7 @@ from django.db import models
 
 from action.models import Action
 from workflow.models import Column
-from django.utils.translation import ugettext_lazy as _l
+from django.utils.translation import ugettext_lazy as _
 
 
 class ScheduledAction(models.Model):
@@ -44,23 +44,23 @@ class ScheduledAction(models.Model):
     execute = models.DateTimeField(
         null=False,
         blank=False,
-        verbose_name=_l('When to execute this action')
+        verbose_name=_('When to execute this action')
     )
 
     # Status of the entry (pending, running or done)
-    status = models.IntegerField(verbose_name=_l("Execution Status"),
+    status = models.IntegerField(verbose_name=_("Execution Status"),
                                  name='status',
-                                 choices=[(0, _l('pending')),
-                                          (1, _l('running')),
-                                          (2, _l('done')),
-                                          (3, _l('done_error'))],
+                                 choices=[(0, _('pending')),
+                                          (1, _('running')),
+                                          (2, _('done')),
+                                          (3, _('done_error'))],
                                  null=False,
                                  blank=False)
 
     # Status message to capture a message resulting from the execution
     message = models.TextField(null=False,
                                blank=True,
-                               verbose_name=_l('Execution message'))
+                               verbose_name=_('Execution message'))
 
     class Meta:
         """
@@ -81,14 +81,14 @@ class ScheduledEmailAction(ScheduledAction):
                                db_index=True,
                                null=False,
                                blank=False,
-                               related_name=_l('scheduled_actions'))
+                               related_name='scheduled_actions')
 
     subject = models.CharField(
         max_length=2048,
         default='',
         blank=False,
         null=False,
-        verbose_name=_l('Email subject')
+        verbose_name=_('Email subject')
     )
 
     email_column = models.ForeignKey(
@@ -96,18 +96,18 @@ class ScheduledEmailAction(ScheduledAction):
         db_index=False,
         null=False,
         blank=False,
-        verbose_name=_l('Column containing the email address'))
+        verbose_name=_('Column containing the email address'))
 
     # If a confirmation email is sent ot the instructor
     send_confirmation = models.BooleanField(
         default=False,
-        verbose_name=_l('Send you a confirmation email'),
+        verbose_name=_('Send you a confirmation email'),
         null=False,
         blank=False)
 
     # If the email reading is tracked (produces events in the logs)
     track_read = models.BooleanField(
         default=False,
-        verbose_name=_l('Track if emails are read?'),
+        verbose_name=_('Track if emails are read?'),
         null=False,
         blank=False)

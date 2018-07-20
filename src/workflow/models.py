@@ -13,7 +13,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
-from django.utils.translation import ugettext_lazy as _l
+from django.utils.translation import ugettext_lazy as _
 
 import ontask.templatetags.settings
 from dataops import pandas_db
@@ -43,14 +43,14 @@ class Workflow(models.Model):
     modified = models.DateTimeField(auto_now=True, null=False)
 
     # Storing the number of rows currently in the data_frame
-    nrows = models.IntegerField(verbose_name=_l('number of rows'),
+    nrows = models.IntegerField(verbose_name=_('number of rows'),
                                 default=0,
                                 name='nrows',
                                 null=False,
                                 blank=True)
 
     # Storing the number of rows currently in the data_frame
-    ncols = models.IntegerField(verbose_name=_l('number of columns'),
+    ncols = models.IntegerField(verbose_name=_('number of columns'),
                                 default=0,
                                 name='ncols',
                                 null=False,
@@ -392,13 +392,13 @@ class Column(models.Model):
     # Column name
     name = models.CharField(max_length=512,
                             blank=False,
-                            verbose_name=_l('column name'))
+                            verbose_name=_('column name'))
 
     description_text = models.CharField(
         max_length=2048,
         default='',
         blank=True,
-        verbose_name=_l('description')
+        verbose_name=_('description')
     )
 
     workflow = models.ForeignKey(Workflow,
@@ -413,19 +413,19 @@ class Column(models.Model):
         max_length=512,
         blank=False,
         null=False,
-        choices=[(x, x) for _, x in pandas_db.pandas_datatype_names.items()],
-        verbose_name=_l('type of data to store in the column')
+        choices=[(x, x) for __, x in pandas_db.pandas_datatype_names.items()],
+        verbose_name=_('type of data to store in the column')
     )
 
     # Boolean stating if the column is a unique key
     is_key = models.BooleanField(default=False,
-                                 verbose_name=_l('has unique values per row'),
+                                 verbose_name=_('has unique values per row'),
                                  null=False,
                                  blank=False)
 
     # Position of the column in the workflow table
     position = models.IntegerField(
-        verbose_name=_l('column position (zero to insert last)'),
+        verbose_name=_('column position (zero to insert last)'),
         default=0,
         name='position',
         null=False,
@@ -434,7 +434,7 @@ class Column(models.Model):
 
     # Boolean stating if the column is included in the visualizations
     in_viz = models.BooleanField(default=True,
-                                 verbose_name=_l('include in visualization'),
+                                 verbose_name=_('include in visualization'),
                                  null=False,
                                  blank=False)
 
@@ -444,19 +444,19 @@ class Column(models.Model):
         default=list,
         blank=True,
         null=True,
-        verbose_name=_l('comma separated list of values allowed')
+        verbose_name=_('comma separated list of values allowed')
     )
 
     # Validity window
     active_from = models.DateTimeField(
-        _l('Column active from'),
+        _('Column active from'),
         blank=True,
         null=True,
         default=None,
     )
 
     active_to = models.DateTimeField(
-       _l('Column active until'),
+       _('Column active until'),
         blank=True,
         null=True,
         default=None
@@ -529,7 +529,7 @@ class Column(models.Model):
             newval = parse_datetime(value)
         else:
             raise ValueError(
-                _l('Unsupported type %(type)s') % {'type': str(data_type)}
+                _('Unsupported type %(type)s') % {'type': str(data_type)}
             )
 
         return newval

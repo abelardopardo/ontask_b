@@ -10,7 +10,7 @@ from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.html import escape
-from django.utils.translation import ugettext_lazy as _l
+from django.utils.translation import ugettext_lazy as _
 
 from dataops import formula_evaluation, pandas_db
 from dataops.formula_evaluation import get_variables, evaluate_top_node
@@ -48,24 +48,24 @@ class Action(models.Model):
     # If the action is to provide information to learners
     is_out = models.BooleanField(
         default=True,
-        verbose_name=_l('Action is provide information'),
+        verbose_name=_('Action to provide personalized information'),
         null=False,
         blank=False)
 
     # Boolean that enables the URL to be visible ot the outside.
     serve_enabled = models.BooleanField(
         default=False,
-        verbose_name=_l('URL available to users?'),
+        verbose_name=_('URL available to users?'),
         null=False,
         blank=False)
 
     # Validity window for URL availability
-    active_from = models.DateTimeField(_l('Action available from'),
+    active_from = models.DateTimeField(_('Action available from'),
                                        blank=True,
                                        null=True,
                                        default=None)
 
-    active_to = models.DateTimeField(_l('Action available until'),
+    active_to = models.DateTimeField(_('Action available until'),
                                      blank=True,
                                      null=True,
                                      default=None)
@@ -88,7 +88,7 @@ class Action(models.Model):
     #
     # Shuffle column order when creating the page to serve
     shuffle = models.BooleanField(default=False,
-                                  verbose_name=_l('Shuffle questions?'),
+                                  verbose_name=_('Shuffle questions?'),
                                   null=False,
                                   blank=False)
 
@@ -314,13 +314,13 @@ class Condition(models.Model):
     # Set of columns that appear in this condition
     columns = models.ManyToManyField(
         Column,
-        verbose_name=_l("Columns present in this condition"),
-        related_name=_l('conditions')
+        verbose_name=_("Columns present in this condition"),
+        related_name='conditions'
     )
 
     # Number or rows selected by the expression
     n_rows_selected = models.IntegerField(
-        verbose_name=_l('Number of rows selected'),
+        verbose_name=_('Number of rows selected'),
         default=-1,
         name='n_rows_selected',
         blank=False,

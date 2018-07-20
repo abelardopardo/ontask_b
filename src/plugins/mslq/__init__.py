@@ -120,7 +120,7 @@ class MSLQEvaluate(object):
         result = pd.concat([result,
                             pd.DataFrame(
                                 [mslq_encode(x, len(answer_values))
-                                 for _, x in new_df.iterrows()],
+                                 for __, x in new_df.iterrows()],
                                 columns=self.output_column_names
                             )],
                            axis=1
@@ -143,7 +143,7 @@ def main():
     df = pd.DataFrame(data=s, columns=['email'])
     for qidx in range(1, 45):
         df['MSLQ_Q{:02}'.format(qidx)] = [answers[random.randint(0, 4)]
-                                          for _ in range(num_rows)]
+                                          for __ in range(num_rows)]
 
     # df.to_csv('mslq_sample.csv', index=False)
     plugin_instance = MSLQEvaluate()

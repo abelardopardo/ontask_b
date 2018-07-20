@@ -255,12 +255,12 @@ def evaluate_node_sql(node):
         # Now combine
         if node['condition'] == 'AND':
             result = '((' + \
-                     ') AND ('.join([x for x, _ in sub_pairs]) + '))'
+                     ') AND ('.join([x for x, __ in sub_pairs]) + '))'
         else:
             result = '((' + \
-                     ') OR ('.join([x for x, _ in sub_pairs]) + '))'
+                     ') OR ('.join([x for x, __ in sub_pairs]) + '))'
         result_fields = \
-            list(itertools.chain.from_iterable([x for _, x in sub_pairs]))
+            list(itertools.chain.from_iterable([x for __, x in sub_pairs]))
 
         if node.get('not', False):
             result = '(NOT (' + result + '))'

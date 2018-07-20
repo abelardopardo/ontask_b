@@ -117,7 +117,7 @@ class SPQEvaluate(object):
 
         result = pd.concat([result,
                             pd.DataFrame(
-                                [spq_encode(x) for _, x in new_df.iterrows()],
+                                [spq_encode(x) for __, x in new_df.iterrows()],
                                 columns=self.output_column_names
                             )],
                            axis=1
@@ -138,7 +138,7 @@ def main():
     df = pd.DataFrame(data=s, columns=['email'])
     for qidx in range(1, len(self.input_column_names) + 1):
         df['SPQ_Q{:02}'.format(qidx)] = [answers[random.randint(0, 4)]
-                                         for _ in range(num_rows)]
+                                         for __ in range(num_rows)]
 
     # df.to_csv('spq_sample.csv', index=False)
     result = plugin_instance.run(

@@ -225,7 +225,7 @@ def evaluate_action(action, extra_string, column_name):
     except TypeError:
         return 'The column with email addresses has incorrect values'
 
-    for _, row in data_frame.iterrows():
+    for __, row in data_frame.iterrows():
 
         # Get the dict(col_name, value)
         row_values = dict(zip(col_names, row))

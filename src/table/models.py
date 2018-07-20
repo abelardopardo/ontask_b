@@ -3,7 +3,7 @@ from __future__ import unicode_literals, print_function
 
 from django.contrib.postgres.fields import JSONField
 from django.db import models
-from django.utils.translation import ugettext_lazy as _l
+from django.utils.translation import ugettext_lazy as _
 
 from dataops import pandas_db
 from workflow.models import Workflow, Column
@@ -37,17 +37,17 @@ class View(models.Model):
     # columns
     columns = models.ManyToManyField(
         Column,
-        verbose_name=_l("Subset of columns to show"),
+        verbose_name=_("Subset of columns to show"),
         related_name='views'
     )
 
     # Formula to select a subset of rows for action IN
     formula = JSONField(
-        verbose_name=_l("Subset of rows to show"),
+        verbose_name=_("Subset of rows to show"),
         default=dict,
         blank=True,
         null=True,
-        help_text=_l('Preselect rows satisfying this condition'))
+        help_text=_('Preselect rows satisfying this condition'))
 
     # Number of rows allowed by the formula.
     nrows = None

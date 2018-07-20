@@ -387,7 +387,7 @@ def df_column_types_rename(table_name):
     # for tname, ntname in pandas_datatype_names.items():
     #     result[:] = [x if x != tname else ntname for x in result]
 
-    return [sql_datatype_names[x] for _, x in
+    return [sql_datatype_names[x] for __, x in
             get_table_column_types(table_name)]
 
 
