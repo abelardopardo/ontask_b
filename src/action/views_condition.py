@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, reverse
 from django.template.loader import render_to_string
 from django.views import generic
+from django.utils.translation import ugettext_lazy as _
 
 import logs
 import logs.ops
@@ -92,7 +93,8 @@ def save_condition_form(request,
                 (not is_new and qs.filter(~Q(id=condition_id)).exists()):
             form.add_error(
                 'name',
-                'A condition with that name already exists in this action')
+                _('A condition with that name already exists in this action')
+            )
             data['html_form'] = render_to_string(template_name,
                                                  context,
                                                  request=request)
@@ -109,7 +111,8 @@ def save_condition_form(request,
         if form.cleaned_data['name'] in workflow.get_column_names():
             form.add_error(
                 'name',
-                'A column name with that name already exists.')
+                _('A column name with that name already exists.')
+            )
             context = {'form': form,
                        'action_id': action.id,
                        'condition_id': condition_id,
@@ -123,7 +126,8 @@ def save_condition_form(request,
         if form.cleaned_data['name'] in workflow.attributes.keys():
             form.add_error(
                 'name',
-                'The workflow has an attribute with this name.')
+                _('The workflow has an attribute with this name.')
+            )
             context = {'form': form,
                        'action_id': action.id,
                        'condition_id': condition_id,
@@ -489,7 +493,7 @@ def clone(request, pk):
         ).distinct().get(pk=pk)
     except (KeyError, ObjectDoesNotExist):
         messages.error(request,
-                       'Condition cannot be cloned.')
+                       _('Condition cannot be cloned.'))
         return redirect(reverse('action:index'))
 
     # Get the new name appending as many times as needed the 'Copy of '
@@ -514,6 +518,6 @@ def clone(request, pk):
                   'name_new': condition.name})
 
     messages.success(request,
-                     'Action successfully cloned.')
+                     _('Action successfully cloned.'))
     return redirect(reverse('action:edit_out',
                             kwargs={'pk': condition.action.id}))

@@ -3,11 +3,11 @@ from __future__ import unicode_literals, print_function
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect, render
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from action.models import Action, Condition
+from action.models import Action
 from ontask.permissions import is_instructor
 from .forms import (WorkflowImportForm,
                     WorkflowExportRequestForm)
@@ -107,16 +107,15 @@ def import_workflow(request):
     if request.method == 'GET' or not form.is_valid():
         return render(request, 'workflow/import.html', context)
 
-
     new_wf_name = form.cleaned_data['name']
     if Workflow.objects.filter(user=request.user, name=new_wf_name).exists():
         # There is a workflow with this name. Return error.
-        form.add_error(None, 'A workflow with this name already exists')
+        form.add_error(None, _('A workflow with this name already exists'))
         return render(request, 'workflow/import.html', context)
 
     # Process the reception of the file
     if not form.is_multipart():
-        form.add_error(None, 'Incorrect form request (it is not multipart)')
+        form.add_error(None, _('Incorrect form request (it is not multipart)'))
         return render(request, 'workflow/import.html', context)
 
     # UPLOAD THE FILE!

@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function
 from builtins import str
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
+from django.utils.translation import ugettext_lazy as _
 
 from action.models import Action
 from action.serializers import ActionSerializer, ConditionSerializer, \
@@ -24,7 +25,7 @@ class ColumnSerializer(serializers.ModelSerializer):
         if data_type is None or \
                 data_type not in pandas_datatype_names.values():
             # The data type is not legal
-            raise Exception('Incorrect data type {0}.'.format(data_type))
+            raise Exception(_('Incorrect data type {0}.').format(data_type))
 
         column_obj = None
         try:
@@ -46,8 +47,9 @@ class ColumnSerializer(serializers.ModelSerializer):
 
             if column_obj.active_from and column_obj.active_to and \
                     column_obj.active_from > column_obj.active_to:
-                raise Exception('Incorrect date/times in the active window for '
-                                'column {0}'.format(validated_data['name']))
+                raise Exception(
+                    _('Incorrect date/times in the active window for '
+                      'column {0}').format(validated_data['name']))
 
             # All tests passed, proceed to save the object.
             column_obj.save()
@@ -68,12 +70,13 @@ class WorkflowListSerializer(serializers.ModelSerializer):
     def create(self, validated_data, **kwargs):
         attributes = validated_data.get('attributes', {})
         if not isinstance(attributes, dict):
-            raise APIException('Attributes must be a dictionary ' +
-                               ' of (string, string) pairs.')
+            raise APIException(
+                _('Attributes must be a dictionary of (string, string) pairs.')
+            )
 
         if any([not isinstance(k, str) or not isinstance(v, str)
                 for k, v in attributes.items()]):
-            raise APIException('Attributes must be a dictionary (str, str)')
+            raise APIException(_('Attributes must be a dictionary (str, str)'))
 
         workflow_obj = None
         try:
@@ -90,7 +93,7 @@ class WorkflowListSerializer(serializers.ModelSerializer):
         except Exception:
             if workflow_obj and workflow_obj.id:
                 workflow_obj.delete()
-            raise APIException('Workflow could not be created.')
+            raise APIException(_('Workflow could not be created.'))
 
         return workflow_obj
 
@@ -111,8 +114,8 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
 
     data_frame = DataFramePandasField(
         required=False,
-        help_text='This field must be the Base64 encoded '
-                  'result of pandas.to_pickle() function'
+        help_text=_('This field must be the Base64 encoded '
+                    'result of pandas.to_pickle() function')
     )
 
     columns = ColumnSerializer(many=True, required=False)
@@ -123,7 +126,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
                                     default='NO VERSION',
                                     allow_blank=True,
                                     label="OnTask Version",
-                                    help_text="To guarantee compability")
+                                    help_text=_("To guarantee compability"))
 
     def get_filtered_actions(self, workflow):
         # Get the subset of actions specified in the context
@@ -169,7 +172,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             if column_data.is_valid():
                 column_data.save()
             else:
-                raise Exception('Unable to save column information')
+                raise Exception(_('Unable to save column information'))
 
             # If there is any column with position = 0, recompute (this is to
             # guarantee backward compatibility.
@@ -202,7 +205,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             if action_data.is_valid():
                 action_data.save()
             else:
-                raise Exception('Unable to save column information')
+                raise Exception(_('Unable to save column information'))
 
             # Create the views pointing to the workflow
             view_data = ViewSerializer(
@@ -213,7 +216,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             if view_data.is_valid():
                 view_data.save()
             else:
-                raise Exception('Unable to save column information')
+                raise Exception(_('Unable to save column information'))
         except Exception:
             # Get rid of the objects created
             if workflow_obj:
@@ -266,15 +269,15 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
         for citem in validated_data['used_columns']:
             cname = citem.get('name', None)
             if not cname:
-                raise Exception('Incorrect column name {0}.'.format(cname))
+                raise Exception(_('Incorrect column name {0}.').format(cname))
             col = Column.objects.filter(workflow=self.context['workflow'],
                                         name=cname).first()
             if not col:
                 # new column
                 if citem['is_key']:
                     raise Exception(
-                        'New action cannot have non-existing key '
-                        'column {0}'.format(cname))
+                        _('New action cannot have non-existing key '
+                          'column {0}').format(cname))
 
                 # Accummulate the new columns just in case we have to undo
                 # the changes
@@ -287,8 +290,8 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
                     set(col.categories) != set(citem['categories']):
                 # The two columns are different
                 raise Exception(
-                    'Imported column {0} is different from existing '
-                    'one.'.format(cname)
+                    _('Imported column {0} is different from existing '
+                      'one.').format(cname)
                 )
         new_column_names = [x['name'] for x in new_columns]
 
@@ -326,8 +329,10 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
                             workflow=self.context['workflow'],
                             name__in=new_column_names).delete()
                         action_obj.delete()
-                        raise Exception('Action cannot be imported with and '
-                                        'empty data table')
+                        raise Exception(
+                            _('Action cannot be imported with and '
+                              'empty data table')
+                        )
 
                     for col in Column.objects.filter(
                             workflow=workflow,
@@ -342,7 +347,7 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
                     # Store the df to DB
                     ops.store_dataframe_in_db(df, workflow.id)
                 else:
-                    raise Exception('Unable to create column data')
+                    raise Exception(_('Unable to create column data'))
 
             # Load the conditions pointing to the action
             condition_data = ConditionSerializer(
@@ -352,7 +357,7 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
             if condition_data.is_valid():
                 condition_data.save()
             else:
-                raise Exception('Unable to create condition information')
+                raise Exception(_('Unable to create condition information'))
 
             # Update the condition variables for each formula if not present
             for condition in action_obj.conditions.all():
@@ -376,7 +381,7 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
                     action_obj.columns.add(column)
                 columns.save()
             else:
-                raise Exception('Unable to create columns field')
+                raise Exception(_('Unable to create columns field'))
         except Exception:
             if action_obj and action_obj.id:
                 action_obj.delete()

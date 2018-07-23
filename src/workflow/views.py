@@ -134,7 +134,7 @@ def save_workflow_form(request, form, template_name):
         workflow_item = form.save()
     except IntegrityError as e:
         form.add_error('name',
-                       'A workflow with that name already exists')
+                       _('A workflow with that name already exists'))
         context = {'form': form}
         data['html_form'] = render_to_string(template_name,
                                              context,
@@ -242,12 +242,15 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
             if user != self.request.user:
                 messages.error(
                     self.request,
-                    'The workflow is being modified by user ' + user.email)
+                    _('The workflow is being modified by user {0}').format(
+                        user.email
+                    )
+                )
             else:
                 messages.error(
                     self.request,
-                    'There is another session still open with your account. '
-                    'Log that session out or wait for it to expire.'
+                    _('There is another session still open with your account. '
+                      'Log that session out or wait for it to expire.')
                 )
             return None
 
@@ -330,7 +333,7 @@ def update(request, pk):
     # If the user does not own the workflow, notify error and go back to
     # index
     messages.error(request,
-                   'You can only rename workflows you created.')
+                   _('You can only rename workflows you created.'))
     if request.is_ajax():
         data = {'form_is_valid': True,
                 'html_redirect': reverse('workflow:detail',
@@ -353,7 +356,7 @@ def flush(request, pk):
         # index
         messages.error(
             request,
-            'You can only flush the data of  workflows you created.')
+            _('You can only flush the data of  workflows you created.'))
 
         if request.is_ajax():
             data = {'form_is_valid': True,
@@ -397,7 +400,7 @@ def delete(request, pk):
     # If the request is not done by the user, flat the error
     if workflow.user != request.user:
         messages.error(request,
-                       'You can only delete workflows that you createds.')
+                       _('You can only delete workflows that you created.'))
 
         if request.is_ajax():
             data['form_is_valid'] = True
@@ -445,12 +448,14 @@ def column_ss(request, pk):
     """
     workflow = get_workflow(request)
     if not workflow:
-        return JsonResponse({'error': 'Incorrect request. Unlable to process'})
+        return JsonResponse(
+            {'error': _('Incorrect request. Unlable to process')}
+        )
 
     # If there is no DF, there are no columns to show, this should be
     # detected before this is executed
     if not ops.workflow_id_has_table(workflow.id):
-        return JsonResponse({'error': 'There is no data in the workflow'})
+        return JsonResponse({'error': _('There is no data in the workflow')})
 
     # Check that the GET parameter are correctly given
     try:
@@ -460,7 +465,9 @@ def column_ss(request, pk):
         order_col = request.POST.get('order[0][column]', None)
         order_dir = request.POST.get('order[0][dir]', 'asc')
     except ValueError:
-        return JsonResponse({'error': 'Incorrect request. Unable to process'})
+        return JsonResponse(
+            {'error': _('Incorrect request. Unable to process')}
+        )
 
     # Get the column information from the request and the rest of values.
     search_value = request.POST.get('search[value]', None)
@@ -568,7 +575,7 @@ def clone(request, pk):
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('workflow:detail',
                                         kwargs={'pk': workflow.id})
-        messages.error(request, 'Unable to clone workflow')
+        messages.error(request, _('Unable to clone workflow'))
         return JsonResponse(data)
 
     # Get the initial object back
@@ -595,7 +602,7 @@ def clone(request, pk):
                   'name_new': workflow.name})
 
     messages.success(request,
-                     'Workflow successfully cloned.')
+                     _('Workflow successfully cloned.'))
     data['form_is_valid'] = True
     data['html_redirect'] = ""  # Reload page
 

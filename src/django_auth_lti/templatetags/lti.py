@@ -3,6 +3,7 @@ import json
 
 from django import template
 from django.utils.html import format_html
+from django.utils.translation import ugettext_lazy as _
 
 from django_auth_lti.thread_local import get_current_request
 
@@ -20,11 +21,11 @@ class ResourceLinkIdNode(template.Node):
                 return format_html("<input type='hidden' name='resource_link_id' value='{}' />", rli)
             else:
                 logger.warning(
-                    "Failed to find resource_link_id in request context {}",
-                    json.dumps(request.LTI, indent=4)
+                    _("Failed to find resource_link_id in request context "
+                      "{0}").format(json.dumps(request.LTI, indent=4))
                 )
         else:
-            logger.warning("Failed to get current request from thread_local")
+            logger.warning(_("Failed to get current request from thread_local"))
         return ''
 
 

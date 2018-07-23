@@ -8,7 +8,8 @@
     <h4 class="modal-title">{% trans 'Confirm attribute deletion' %}</h4>
   </div>
   <div class="modal-body">
-    <p class="lead">{% blocktrans with k=key%}Are you sure you want to delete the attribute <strong>{{ k }}</strong>?{% endblocktrans %}</p>
+    <p class="lead">
+      {% blocktrans %}Are you sure you want to delete the attribute <strong>{{ key }}</strong>?{% endblocktrans %}</p>
   </div>
   <div class="modal-footer" style="text-align: center;">
     <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}

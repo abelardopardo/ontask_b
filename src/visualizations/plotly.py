@@ -3,6 +3,7 @@
 Implementation of visualizations using the Plotly JS libarry
 """
 from __future__ import unicode_literals, print_function
+from django.utils.translation import ugettext_lazy as _
 
 import json
 
@@ -89,14 +90,16 @@ class PlotlyBoxPlot(PlotlyHandler):
                 'ay': 0,
                 'xref': 'x',
                 'yref': 'y',
-                'text': self.format_dict.get('individual_text', 'Your value')
+                'text': self.format_dict.get('individual_text',
+                                             _('Your value'))
             }]
 
             # Get the two custom values from the given parameters.
             self.layout['annotations'][0]['y'] = \
                 self.format_dict['individual_value']
             self.layout['annotations'][0]['text'] = \
-                self.format_dict.get('individual_text', 'Your value')
+                self.format_dict.get('individual_text',
+                                     _('Your value'))
 
         # Redefine the layout
         self.format_dict['layout'] = json.dumps(self.layout)
@@ -133,7 +136,7 @@ class PlotlyColumnHistogram(PlotlyHandler):
         self.layout.update({'autobinx': True,
                             'autobiny': True,
                             'bargap': 0.01,
-                            'yaxis': {'title': 'Count'}})
+                            'yaxis': {'title': _('Count')}})
 
         # Transfer the keys to the formatting dictionary
         for key, value in kwargs.pop('context', {}).items():
@@ -175,7 +178,8 @@ class PlotlyColumnHistogram(PlotlyHandler):
                 'y': 0,
                 'yref': 'paper',
                 'yshift': 'bottom',
-                'text': self.format_dict.get('individual_text', 'Your value')
+                'text': self.format_dict.get('individual_text',
+                                             _('Your value'))
             }]
 
         self.format_dict['layout'] = json.dumps(self.layout)
@@ -248,7 +252,7 @@ class PlotlyGauge(PlotlyHandler):
         self.format_dict['data'] = json.dumps(data)
 
         self.layout['bargap'] = 0.01
-        self.layout['yaxis'] = {'title': 'Count'}
+        self.layout['yaxis'] = {'title': _('Count')}
 
         self.format_dict['layout'] = json.dumps(self.layout)
 

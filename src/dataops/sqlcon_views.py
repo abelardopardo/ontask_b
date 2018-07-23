@@ -22,7 +22,7 @@ from workflow.ops import get_workflow
 
 class SQLConnectionTableAdmin(tables.Table):
     operations = OperationsColumn(
-        verbose_name='Operations',
+        verbose_name=_('Operations'),
         template_file='dataops/includes/partial_sqlconn_operations.html',
         template_context=lambda record: {'id': record['id']}
     )
@@ -55,7 +55,7 @@ class SQLConnectionTableAdmin(tables.Table):
 
 class SQLConnectionTableRun(tables.Table):
     operations = OperationsColumn(
-        verbose_name='Operations',
+        verbose_name=_('Operations'),
         template_file='dataops/includes/partial_sqlconn_runop.html',
         template_context=lambda record: {'id': record['id']}
     )
@@ -114,7 +114,7 @@ def save_conn_form(request, form, template_name):
             conn = form.save()
         except IntegrityError:
             form.add_error('name',
-                           'A connection with this name already exists')
+                           _('A connection with this name already exists'))
             data['html_form'] = render_to_string(
                 template_name,
                 {'form': form,
@@ -125,19 +125,21 @@ def save_conn_form(request, form, template_name):
             return JsonResponse(data)
 
         # Log the event
-        logs.ops.put(request.user,
-                     event_type,
-                     None,
-                     {'name': conn.name,
-                      'description': conn.description_txt,
-                      'conn_type': conn.conn_type,
-                      'conn_driver': conn.conn_driver,
-                      'db_user': conn.db_user,
-                      'db_passwd': '<PROTECTED>' if conn.db_password else '',
-                      'db_host': conn.db_host,
-                      'db_port': conn.db_port,
-                      'db_name': conn.db_name,
-                      'db_table': conn.db_table})
+        logs.ops.put(
+            request.user,
+            event_type,
+            None,
+            {'name': conn.name,
+             'description': conn.description_txt,
+             'conn_type': conn.conn_type,
+             'conn_driver': conn.conn_driver,
+             'db_user': conn.db_user,
+             'db_passwd': _('<PROTECTED>') if conn.db_password else '',
+             'db_host': conn.db_host,
+             'db_port': conn.db_port,
+             'db_name': conn.db_name,
+             'db_table': conn.db_table}
+        )
 
         data['form_is_valid'] = True
         data['html_redirect'] = ''  # Refresh the page
@@ -278,7 +280,7 @@ def sqlconn_clone(request, pk):
                   'conn_type': conn.conn_type,
                   'conn_driver': conn.conn_driver,
                   'db_user': conn.db_user,
-                  'db_passwd': '<PROTECTED>' if conn.db_password else '',
+                  'db_passwd': _('<PROTECTED>') if conn.db_password else '',
                   'db_host': conn.db_host,
                   'db_port': conn.db_port,
                   'db_name': conn.db_name,
@@ -314,7 +316,7 @@ def sqlconn_delete(request, pk):
                       'conn_type': conn.conn_type,
                       'conn_driver': conn.conn_driver,
                       'db_user': conn.db_user,
-                      'db_passwd': '<PROTECTED>' if conn.db_password else '',
+                      'db_passwd': _('<PROTECTED>') if conn.db_password else '',
                       'db_host': conn.db_host,
                       'db_port': conn.db_port,
                       'db_name': conn.db_name,
@@ -381,7 +383,7 @@ def sqlupload1(request, pk):
                'conn_type': conn.conn_type,
                'conn_driver': conn.conn_driver,
                'db_user': conn.db_user,
-               'db_passwd': '<PROTECTED>' if conn.db_password else '',
+               'db_passwd': _('<PROTECTED>') if conn.db_password else '',
                'db_host': conn.db_host,
                'db_port': conn.db_port,
                'db_name': conn.db_name,
@@ -400,7 +402,7 @@ def sqlupload1(request, pk):
         data_frame = pandas_db.load_df_from_sqlconnection(conn, read_pwd)
     except Exception as e:
         messages.error(request,
-                      'Unable to obtain data: {0}'.format(e.message))
+                       _('Unable to obtain data: {0}').format(e.message))
         return render(request, 'dataops/upload1.html', context)
 
     # If the frame has repeated column names, it will not be processed.
@@ -408,7 +410,7 @@ def sqlupload1(request, pk):
         dup = [x for x, v in Counter(list(data_frame.columns)) if v > 1]
         messages.error(
             request,
-            'The data frame has duplicated column names (' +
+            _('The data frame has duplicated column names') + ' (' +
             ','.join(dup) + ').')
         return render(request, 'dataops/sqlupload1.html', context)
 
@@ -418,8 +420,8 @@ def sqlupload1(request, pk):
     if not any(src_is_key_column):
         messages.error(
             request,
-            'The data has no column with unique values per row. '
-            'At least one column must have unique values.')
+            _('The data has no column with unique values per row. '
+              'At least one column must have unique values.'))
         return render(request, 'dataops/sqlupload1.html', context)
 
     # Store the data frame in the DB.
@@ -429,7 +431,7 @@ def sqlupload1(request, pk):
     except Exception as e:
         form.add_error(
             None,
-            'Sorry. The data from this connection cannot be processed.'
+            _('Sorry. The data from this connection cannot be processed.')
         )
         return render(request, 'dataops/sqlupload1.html', context)
 

@@ -12,6 +12,7 @@ from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.utils.translation import ugettext_lazy as _
 
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
@@ -29,7 +30,7 @@ def show(request):
     # Create the context with the column names
     context = {
         'workflow': workflow,
-        'column_names': ['Date/Time', 'User', 'Event type', 'View']
+        'column_names': [_('Date/Time'), _('User'), _('Event type'), _('View')]
     }
 
     # Render the page with the table
@@ -43,7 +44,9 @@ def show_ss(request):
     # Try to get workflow and if not present, go to home page
     workflow = get_workflow(request)
     if not workflow:
-        return JsonResponse({'error': 'Incorrect request. Unable to process'})
+        return JsonResponse(
+            {'error': _('Incorrect request. Unable to process')}
+        )
 
     # Check that the GET parameter are correctly given
     try:
@@ -51,7 +54,9 @@ def show_ss(request):
         start = int(request.POST.get('start', None))
         length = int(request.POST.get('length', None))
     except ValueError:
-        return JsonResponse({'error': 'Incorrect request. Unable to process'})
+        return JsonResponse(
+            {'error': _('Incorrect request. Unable to process')}
+        )
 
     # Get the column information from the request and the rest of values.
     search_value = request.POST.get('search[value]', None)
@@ -85,10 +90,12 @@ def show_ss(request):
             item[3],
             """<button type="submit" class="btn btn-primary btn-sm js-log-view"
                     data-url="{0}"
-                    data-toggle="tooltip" title="View the content of this log">
-              <span class="glyphicon glyphicon-eye-open"></span> View
+                    data-toggle="tooltip" title="{1}">
+              <span class="glyphicon glyphicon-eye-open"></span> {2}
             </button>
-            """.format(reverse('logs:view', kwargs={'pk': item[0]}))]
+            """.formaat(reverse('logs:view', kwargs={'pk': item[0]}),
+                       _('View the content of this log'),
+                       _('View'))]
 
         # Add the row to the final query_set
         final_qs.append(row)

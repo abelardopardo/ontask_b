@@ -26,6 +26,7 @@ from django.utils.html import strip_tags
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
+from django.utils.translation import ugettext_lazy as _
 
 import logs.ops
 from action.evaluate import evaluate_row_action_out, evaluate_action, \
@@ -76,7 +77,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
             return render(request, '404.html', {})
 
         messages.error(request,
-                       'Data not found in the table')
+                       _('Data not found in the table'))
         return redirect(reverse('action:run', kwargs={'pk': action.id}))
 
     # Bind the form with the existing data
@@ -177,7 +178,9 @@ def serve_action_out(user, action, user_attribute_name):
     context = action.get_evaluation_context(row_values)
     if context is None:
         payload['error'] = \
-            'Error when evaluating conditions for user {0}'.format(user.email)
+            _('Error when evaluating conditions for user {0}').format(
+                user.email
+            )
         # Log the event
         logs.ops.put(
             user,
@@ -195,7 +198,9 @@ def serve_action_out(user, action, user_attribute_name):
     response = action_content
     if action_content is None:
         response = render_to_string('action/action_unavailable.html', {})
-        payload['error'] = 'Action not enabled for user ' + user.email
+        payload['error'] = _('Action not enabled for user {0}').format(
+            user.email
+        )
 
     # Log the event
     logs.ops.put(
@@ -467,8 +472,8 @@ def send_messages(user,
         ).render(Context(context))
         text_content = strip_tags(html_content)
     except TemplateSyntaxError as e:
-        return 'Syntax error detected in OnTask notification template (' + \
-               e.message + ')'
+        return _('Syntax error detected in OnTask notification template '
+                 '({0})').format(e.message)
 
     # Log the event
     logs.ops.put(
@@ -494,7 +499,8 @@ def send_messages(user,
             [user.email],
             html_message=html_content)
     except Exception as e:
-        return 'An error occurred when sending your notification: ' + e.message
+        return _('An error occurred when sending your notification: '
+                 '{0}').format(e.message)
 
     return None
 
@@ -548,7 +554,7 @@ def do_import_action(user, workflow, name, file_item):
         data_in = gzip.GzipFile(fileobj=file_item)
         data = JSONParser().parse(data_in)
     except IOError:
-        return 'Incorrect file. Expecting a GZIP file (exported workflow).'
+        return _('Incorrect file. Expecting a GZIP file (exported workflow).')
 
     # Serialize content
     action_data = ActionSelfcontainedSerializer(
@@ -559,16 +565,17 @@ def do_import_action(user, workflow, name, file_item):
     # If anything goes wrong, return a string to show in the page.
     try:
         if not action_data.is_valid():
-            return 'Unable to import action:' + ' ' + action_data.errors
+            return _('Unable to import action: {0}').format(action_data.errors)
 
         # Save the new workflow
         action = action_data.save(user=user, name=name)
     except (TypeError, NotImplementedError) as e:
-        return 'Unable to import action:  ' + e.message
+        return _('Unable to import action: {0}').format(e.message)
     except serializers.ValidationError as e:
-        return 'Unable to import action due to a validation error:' + e.message
+        return _('Unable to import action due to a validation error: '
+                 '{0}').format(e.message)
     except Exception as e:
-        return 'Unable to import action: ' + e.message
+        return _('Unable to import action: {0}').format(e.message)
 
     # Success, log the event
     logs.ops.put(user,

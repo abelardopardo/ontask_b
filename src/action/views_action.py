@@ -175,7 +175,7 @@ def save_action_form(request, form, is_out, template_name):
             except IntegrityError as e:
                 # There is an action with this name already
                 form.add_error('name',
-                               'An action with that name already exists')
+                               _('An action with that name already exists'))
                 data['html_form'] = render_to_string(
                     template_name,
                     {'form': form,
@@ -442,9 +442,10 @@ def edit_action_out(request, pk):
     except Condition.DoesNotExist:
         filter_condition = None
     except Condition.MultipleObjectsReturned:
-        return render(request, 'error.html',
-                      {'message': 'Malfunction detected when retrieving filter '
-                                  '(action: {0})'.format(action.id)})
+        return render(
+            request, 'error.html',
+            {'message': _('Malfunction detected when retrieving filter '
+                          '(action: {0})').format(action.id)})
 
     # Conditions to show in the page as well.
     conditions = Condition.objects.filter(
@@ -519,9 +520,10 @@ def edit_action_in(request, pk):
         return redirect('workflow:index')
 
     if workflow.nrows == 0:
-        messages.error(request,
-                       'Workflow has no data. '
-                       'Go to Dataops to upload data.')
+        messages.error(
+            request,
+            _('Workflow has no data. Go to Dataops to upload data.')
+        )
         return redirect(reverse('action:index'))
 
     # Get the action and the columns
@@ -545,9 +547,11 @@ def edit_action_in(request, pk):
     except Condition.DoesNotExist:
         filter_condition = None
     except Condition.MultipleObjectsReturned:
-        return render(request, 'error.html',
-                      {'message': 'Malfunction detected when retrieving filter '
-                                  '(action: {0})'.format(action.id)})
+        return render(
+            request, 'error.html',
+            {'message': _('Malfunction detected when retrieving filter '
+                          '(action: {0})').format(action.id)}
+        )
 
     # Get the number of rows in DF selected by filter.
     if filter_condition:
@@ -690,12 +694,12 @@ def action_import(request):
             workflow__user=request.user,
             name=new_action_name).exists():
         # There is an action with this name. Return error.
-        form.add_error(None, 'An action with this name already exists')
+        form.add_error(None, _('An action with this name already exists'))
         return render(request, 'action/import.html', context)
 
     # Process the reception of the file
     if not form.is_multipart():
-        form.add_error(None, 'Incorrect form request (it is not multipart)')
+        form.add_error(None, _('Incorrect form request (it is not multipart)'))
         return render(request, 'action/import.html', context)
 
     # UPLOAD THE FILE!
@@ -728,9 +732,10 @@ def select_column_action(request, apk, cpk, key=None):
         return reverse('workflow:index')
 
     if workflow.nrows == 0:
-        messages.error(request,
-                       'Workflow has no data. '
-                       'Go to Dataops to upload data.')
+        messages.error(
+            request,
+            _('Workflow has no data. Go to Dataops to upload data.')
+        )
         return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Get the action and the columns
@@ -776,9 +781,10 @@ def unselect_column_action(request, apk, cpk):
         return reverse('workflow:index')
 
     if workflow.nrows == 0:
-        messages.error(request,
-                       'Workflow has no data. '
-                       'Go to Dataops to upload data.')
+        messages.error(
+            request,
+            _('Workflow has no data. Go to Dataops to upload data.')
+        )
         return redirect(reverse('action:index'))
 
     # Get the action and the columns
@@ -817,9 +823,10 @@ def shuffle_questions(request, pk):
         return reverse('workflow:index')
 
     if workflow.nrows == 0:
-        messages.error(request,
-                       'Workflow has no data. '
-                       'Go to Dataops to upload data.')
+        messages.error(
+            request,
+            _('Workflow has no data. Go to Dataops to upload data.')
+        )
         return redirect(reverse('action:index'))
 
     # Get the action and the columns
@@ -923,7 +930,7 @@ def preview_response(request, pk, idx, template, prelude=None):
         )
     else:
         action_content = \
-            "Error while retrieving content for student {0}".format(idx)
+            _("Error while retrieving content for student {0}").format(idx)
 
     # Process the prelude?
     if prelude:
@@ -1180,11 +1187,13 @@ def run_ss(request, pk):
 
     workflow = get_workflow(request)
     if not workflow:
-        return JsonResponse({'error': 'Incorrect request. Unable to process'})
+        return JsonResponse(
+            {'error': _('Incorrect request. Unable to process')}
+        )
 
     # If there is not DF, go to workflow details.
     if not ops.workflow_id_has_table(workflow.id):
-        return JsonResponse({'error': 'There is no data in the table'})
+        return JsonResponse({'error': _('There is no data in the table')})
 
     # Get the action
     try:
@@ -1202,7 +1211,9 @@ def run_ss(request, pk):
         order_col = request.POST.get('order[0][column]', None)
         order_dir = request.POST.get('order[0][dir]', 'asc')
     except ValueError:
-        return JsonResponse({'error': 'Incorrect request. Unable to process'})
+        return JsonResponse(
+            {'error': _('Incorrect request. Unable to process')}
+        )
 
     # Get the column information from the request and the rest of values.
     search_value = request.POST.get('search[value]', None)
@@ -1289,9 +1300,10 @@ def run_row(request, pk):
         return redirect('workflow:index')
 
     if workflow.nrows == 0:
-        messages.error(request,
-                       'Workflow has no data. '
-                       'Go to Dataops to upload data.')
+        messages.error(
+            request,
+            _('Workflow has no data. Go to Dataops to upload data.')
+        )
         return redirect(reverse('action:index'))
 
     # Get the action

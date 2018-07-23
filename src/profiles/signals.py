@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
+
 import logging
 from . import models
 
@@ -17,4 +19,4 @@ def create_profile_handler(sender, instance, created, **kwargs):
     # Create the profile object, only if it is newly created
     profile = models.Profile(user=instance)
     profile.save()
-    logger.info('New user profile for {} created'.format(instance))
+    logger.info(_('New user profile for {0} created').format(instance))

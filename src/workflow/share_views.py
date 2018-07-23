@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 
 import logs.ops
 from ontask.permissions import is_instructor
@@ -28,7 +29,8 @@ def share(request):
         # Not allowed
         messages.error(
             request,
-            'You can only share workflows that you created.')
+            _('You can only share workflows that you created.')
+        )
         return redirect('workflow:detail', workflow.id)
 
     # Show the table

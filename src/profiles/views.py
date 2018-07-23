@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework.authtoken.models import Token
+from django.utils.translation import ugettext_lazy as _
+
 from . import forms
 from . import models
 
@@ -48,8 +50,9 @@ class EditProfile(LoginRequiredMixin, generic.TemplateView):
                                          request.FILES,
                                          instance=user.profile)
         if not (user_form.is_valid() and profile_form.is_valid()):
-            messages.error(request, "There was a problem with the form. "
-                           "Please check the details.")
+            messages.error(request,
+                           _("There was a problem with the form. "
+                             "Please check the details."))
             user_form = forms.UserForm(instance=user)
             profile_form = forms.ProfileForm(instance=user.profile)
             return super(EditProfile, self).get(request,
@@ -60,7 +63,7 @@ class EditProfile(LoginRequiredMixin, generic.TemplateView):
         profile = profile_form.save(commit=False)
         profile.user = user
         profile.save()
-        messages.success(request, "Profile details saved!")
+        messages.success(request, _("Profile details saved!"))
         return redirect("profiles:show_self")
 
 

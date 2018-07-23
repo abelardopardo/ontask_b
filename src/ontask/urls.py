@@ -3,13 +3,14 @@ from __future__ import unicode_literals, print_function
 
 from django.conf import settings
 from django.conf.urls import include, url
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sites.models import Site
-from rest_framework.documentation import include_docs_urls
-from django.views.i18n import JavaScriptCatalog
-from django.conf.urls.i18n import i18n_patterns
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import cache_page
+from django.views.i18n import JavaScriptCatalog
+from rest_framework.documentation import include_docs_urls
 
 import accounts.urls
 import action.urls
@@ -20,14 +21,12 @@ import scheduler.urls
 import table.urls
 import workflow.urls
 from dataops import pandas_db
-from . import views
 from templatetags.settings import ontask_version
+from . import views
 
-api_description = """
-The Ontask API offers functionality to manipulate workflows, 
-matrices and logs. The operations provide CRUD operations over 
-these objects.
-"""
+api_description = _("""The OnTask API offers functionality to manipulate 
+workflows, tables and logs. The interface provides CRUD operations over 
+these objects.""")
 
 urlpatterns = [
     url(r'^$', views.HomePage.as_view(), name='home'),

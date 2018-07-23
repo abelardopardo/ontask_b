@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-"""
 from __future__ import unicode_literals, print_function
 
 import re
@@ -11,6 +9,7 @@ from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.utils.html import escape
 from validate_email import validate_email
+from django.utils.translation import ugettext_lazy as _
 
 import dataops.formula_evaluation
 from action.forms import EnterActionIn
@@ -150,7 +149,7 @@ def render_template(template_text, context_dict, action=None):
                       translate(m.group('vname')) + \
                       m.group('mup_post'),
             new_template_text)
-    new_template_text = '{% load vis_include %}' + new_template_text
+    # new_template_text = '{% load vis_include %}' + new_template_text
 
     # Step 3. Apply the translation process to the context keys
     new_context = dict([(translate(escape(x)), y)
@@ -161,11 +160,13 @@ def render_template(template_text, context_dict, action=None):
     assert len(context_dict) == len(new_context)
 
     if action_context_var in new_context:
-        raise Exception('Name {0} is reserved.'.format(action_context_var))
+        raise Exception(_('Name {0} is reserved.').format(action_context_var))
     new_context[action_context_var] = action
 
     if viz_number_context_var in new_context:
-        raise Exception('Name {0} is reserved.'.format(viz_number_context_var))
+        raise Exception(_('Name {0} is reserved.').format(
+            viz_number_context_var)
+        )
     new_context[viz_number_context_var] = 0
 
     # Step 4. Return the redering of the new elements
@@ -221,9 +222,9 @@ def evaluate_action(action, extra_string, column_name):
                               for x in data_frame[column_name]])
         if not correct_emails:
             # column has incorrect email addresses
-            return 'The column with email addresses has incorrect values.'
+            return _('The column with email addresses has incorrect values.')
     except TypeError:
-        return 'The column with email addresses has incorrect values'
+        return _('The column with email addresses has incorrect values.')
 
     for __, row in data_frame.iterrows():
 
@@ -258,22 +259,26 @@ def evaluate_action(action, extra_string, column_name):
                                               context,
                                               action)]
         except Exception as e:
-            return 'Syntax error detected in the action text. ' + e.message
+            return _('Syntax error detected in the action text. {0}').format(
+                e.message
+            )
 
         # If there is extra message, render with context and create tuple
         if extra_string:
             try:
                 partial_result.append(render_template(extra_string, context))
             except Exception as e:
-                return 'Syntax error detected in the subject. ' + e.message
+                return _('Syntax error detected in the subject. {0}').format(
+                    e.message
+                )
 
-        # If column_name was given (and it exists), create a tuple with that
-        # element as the third component
-        if col_idx != -1:
-            partial_result.append(row_values[col_names[col_idx]])
+    # If column_name was given (and it exists), create a tuple with that
+    # element as the third component
+    if col_idx != -1:
+        partial_result.append(row_values[col_names[col_idx]])
 
-        # Append result
-        result.append(partial_result)
+    # Append result
+    result.append(partial_result)
 
     return result
 
@@ -328,7 +333,7 @@ def evaluate_row_action_out(action, context, text=None):
 
     # Invoke the appropriate function depending on the action type
     if not action.is_out:
-        raise Exception('Incorrect type of action')
+        raise Exception(_('Incorrect type of action'))
 
     if text is None:
         # If the text is not given, take the one in the action

@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 from rest_framework import serializers
+from django.utils.translation import ugettext_lazy as _
 
 from dataops.formula_evaluation import get_variables
 from workflow.models import Column
@@ -53,7 +54,7 @@ class ConditionSerializer(serializers.ModelSerializer):
                 if columns.is_valid():
                     cnames = [c['name'] for c in columns.data]
                 else:
-                    raise Exception('Incorrect column data')
+                    raise Exception(_('Incorrect column data'))
             else:
                 cnames = get_variables(condition_obj.formula)
 
@@ -115,7 +116,7 @@ class ActionSerializer(serializers.ModelSerializer):
             if condition_data.is_valid():
                 condition_data.save()
             else:
-                raise Exception('Invalid condition data')
+                raise Exception(_('Invalid condition data'))
 
             # Load the columns pointing to the action (if any)
             columns = ColumnNameSerializer(
@@ -129,7 +130,7 @@ class ActionSerializer(serializers.ModelSerializer):
                     action_obj.columns.add(column)
                 action_obj.save()
             else:
-                raise Exception('Invalid column data')
+                raise Exception(_('Invalid column data'))
         except Exception:
             if action_obj and action_obj.id:
                 action_obj.delete()

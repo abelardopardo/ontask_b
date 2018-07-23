@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function
 import itertools
 
 from django.utils.dateparse import parse_datetime
+from django.utils.translation import ugettext_lazy as _
 
 from ontask import OntaskException, fix_pctg_in_name
 
@@ -145,7 +146,9 @@ def evaluate_node(node, given_variables):
         elif node['type'] == 'datetime':
             constant = parse_datetime(node['value'])
         else:
-            raise Exception('No function to translate type', node['type'])
+            raise Exception(
+                _('No function to translate type {0}').format(node['type'])
+            )
 
     # Terminal Node
     if operator == 'equal':
@@ -209,19 +212,21 @@ def evaluate_node(node, given_variables):
             left = parse_datetime(node['value'][0])
             right = parse_datetime(node['value'][1])
         else:
-            raise Exception('Incorrect data type')
+            raise Exception(_('Incorrect data type'))
 
         result = left <= varvalue <= right
         if operator == 'not_between':
             result = not result
 
     else:
-        raise Exception('Type, operator, field',
-                        node['type'], operator, varname,
-                        'not supported yet.')
+        raise Exception(
+            _('Type, operator, field {0}, {1}, {2} not supported yet').format(
+                node['type'], operator, varname
+            )
+        )
 
     if node.get('not', False):
-        raise Exception('Negation found in unexpected location')
+        raise Exception(_('Negation found in unexpected location'))
 
     return result
 
@@ -290,7 +295,9 @@ def evaluate_node_sql(node):
         elif node['type'] == 'datetime':
             constant = node['value']
         else:
-            raise Exception('No function to translate type', node['type'])
+            raise Exception(
+                _('No function to translate type {0}').format(node['type'])
+            )
 
     # Terminal Node
     result_fields = []
@@ -379,11 +386,13 @@ def evaluate_node_sql(node):
         result_fields = [str(node['value'][0]), str(node['value'][1])]
 
     else:
-        raise Exception('Type, operator, field',
-                        node['type'], operator, varname,
-                        'not supported yet.')
+        raise Exception(
+            _('Type, operator, field {0}, {1}, {2} not supported yet').format(
+                node['type'], operator, varname
+            )
+        )
 
     if node.get('not', False):
-        raise Exception('Negation found in unexpected location')
+        raise Exception(_('Negation found in unexpected location'))
 
     return result, result_fields

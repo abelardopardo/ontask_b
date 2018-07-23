@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 from abc import ABCMeta
+from django.utils.translation import ugettext_lazy as _
 
 class_name = 'OntaskPlugin'
 
@@ -47,4 +48,4 @@ class OntaskPluginAbstract(object):
         :return: a Pandas data_frame to append to the existing one
         """
 
-        raise Exception('This method should be implemented!')
+        raise Exception(_('This method should be implemented!'))

@@ -2,7 +2,7 @@
 <form method="post" 
   {% if add %}
     action="{% url 'action:create_condition' action_id %}" 
-    class="js-condition-create-form">
+    class="js-condition-create-form"
   {% else %}
     action="{% url 'action:edit_condition' condition_id %}" 
     class="js-condition-edit-form"

@@ -80,14 +80,14 @@
     </p>
     {% render_table table %}
     {% if user.is_superuser %}
-      <h1 class="page-header">SQL Connections</h1>
+      <h1 class="page-header">{% trans 'SQL Connections' %}</h1>
       <p>
         <button type="button" class="btn btn-primary js-create-workflow"
                 data-url="{% url 'dataops:sqlconn_add' %}"
                   data-toggle="tooltip"
-                  title="Add a new SQL database connection">
+                  title="{% trans 'Add a new SQL database connection' %}">
           <span class="glyphicon glyphicon-plus"></span>
-            New SQL connection
+            {% trans 'New SQL connection' %}
         </button>
       </p>
       {% render_table table2 %}

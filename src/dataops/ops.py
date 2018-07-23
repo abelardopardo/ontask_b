@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function
 import numpy as np
 import pandas as pd
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 from action.models import Condition, Action
 from dataops import formula_evaluation
@@ -402,7 +403,7 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
                               left_on=dst_key,
                               right_on=src_key)
         except Exception as e:
-            return 'Merge operation failed. Exception: ' + e.message
+            return _('Merge operation failed. Exception: ') + e.message
 
         # VERY special case: The key used for the merge in src_df can have an
         # identical column in dst_df, but it is not the one used for the
@@ -427,7 +428,7 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
     # If the merge produced a data frame with no rows, flag it as an error to
     # prevent loosing data when there is a mistake in the key column
     if new_df.shape[0] == 0:
-        return 'Merge operation produced a result with no rows'
+        return _('Merge operation produced a result with no rows')
 
     # For each column check that the new column is consistent with data_type,
     # and allowed values, and recheck its unique key status
@@ -447,19 +448,19 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
             # Remove the NaN type
             column_data_types.remove(float)
             if len(column_data_types) != 1 or column_data_types.pop() != bool:
-                return 'New values in column {0} are not of type {1}'.format(
+                return _('New values in column {0} are not of type {1}').format(
                     col.name,
                     col.data_type
                 )
         elif col.data_type == 'integer' and df_col_type != 'integer' and \
                 df_col_type != 'double':
             # Numeric column results in a non-numeric column
-            return 'New values in column {0} are not of type number'.format(
+            return _('New values in column {0} are not of type number').format(
                 col.name
             )
         elif col.data_type != 'integer' and df_col_type != col.data_type:
             # Any other type change
-            return 'New values in column {0} are not of type {1}'.format(
+            return _('New values in column {0} are not of type {1}').format(
                 col.name,
                 col.data_type
             )
@@ -473,7 +474,7 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
                                           x != np.nan and
                                           x != pd.NaT]):
             return \
-                'New values in column {0} are not in categories {1}'.format(
+                _('New values in column {0} are not in categories {1}').format(
                     col.name,
                     ', '.join(col.categories)
                 )
@@ -481,7 +482,7 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
         # Condition 3: Process the is_key property.
         is_key_now = is_unique_column(new_df[col.name]) and keep_key
         if col.is_key and not is_key_now:
-            return 'Column {0} is no longer a key column.'.format(col.name)
+            return _('Column {0} is no longer a key column.').format(col.name)
 
         col.is_key = is_key_now
         col.save()
@@ -528,7 +529,7 @@ def data_frame_add_column(df, column, initial_value):
         elif column_type == 'datetime':
             initial_value = pd.NaT
         else:
-            raise ValueError('Type ' + column_type + ' not found.')
+            raise ValueError(_('Type {0} not found').format(column_type))
 
     # Create the empty column
     df[column.name] = initial_value

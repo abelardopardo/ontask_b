@@ -1,21 +1,18 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% load static %}
-
 {% block extrahead %}
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 {% endblock extrahead %}
-
 {% block scripts %}
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 {% endblock %}
-
-{% block title %}Ontask Permission denied{% endblock %}
+{% block title %}{% trans 'OnTask Permission denied' %}{% endblock %}
 
 {% block container %}
 <div class="container" style="margin-top:50px;">
-  <h1 class="page-header text-center">Permission denied</h1>
-  <p class="text-center">No permission for the requested operation.</p>
+  <h1 class="page-header text-center">{% trans 'Permission denied' %}</h1>
+  <p class="text-center">{% trans 'No permission for the requested operation.' %}</p>
 </div>
 {% endblock container %}

@@ -104,7 +104,8 @@
       </div>
     </div>
   {% else %}
-    Go to <a href="{% url 'workflow:index' %}">your list of workflows</a>
+    {% url 'workflow:index' as windex %}
+    {% blocktrans %}Go to <a href="{{ windex }}">your list of workflows</a>{% endblocktrans %}
   {% endif %}
 </div>
 {% endblock container %}

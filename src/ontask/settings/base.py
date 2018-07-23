@@ -16,6 +16,7 @@ from os.path import dirname, join, exists
 import environ
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 
 # import ldap
 # from django_auth_ldap.config import (
@@ -340,13 +341,13 @@ EMAIL_ACTION_NOTIFICATION_TEMPLATE = """
 <body>
 <p>Dear {{ user.name }}</p>
 
-<p>This message is to inform you that on {{ email_sent_datetime }}  
-{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent 
-resulting from the execution of the action with name "{{ action.name }}".</p> 
+<p>This message is to inform you that on {{ email_sent_datetime }}
+{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent
+resulting from the execution of the action with name "{{ action.name }}".</p>
 
 {% if filter_present %}
-<p>The action had a filter that reduced the number of messages from 
-{{ num_rows }} to {{ num_selected }}.</p> 
+<p>The action had a filter that reduced the number of messages from
+{{ num_rows }} to {{ num_selected }}.</p>
 {% else %}
 <p>All the data rows stored in the workflow table were used.</p>
 {% endif %}
@@ -355,7 +356,8 @@ Regards.
 The OnTask Support Team
 </body></html>"""
 
-EMAIL_ACTION_NOTIFICATION_SUBJECT = "OnTask: Action executed"
+
+EMAIL_ACTION_NOTIFICATION_SUBJECT = _("OnTask: Action executed")
 EMAIL_ACTION_NOTIFICATION_SENDER = 'ontask@ontasklearning.org'
 EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII='
 

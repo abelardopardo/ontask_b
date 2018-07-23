@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load static %}
 {% block title %}Ontask{% endblock %}
 {% block container %}
 <div class="container text-center" style="margin-top:50px;">
-  <h1 class="page-header text-center">Thanks</h1>
+  <h1 class="page-header text-center">{% trans 'Thanks' %}</h1>
   <button type="button" class="btn btn-primary" style="margin-right:2ex;"
           onclick="location.href='{{ request.path }}'">
-    <span class="glyphicon glyphicon-triangle-left"></span> Back
+    <span class="glyphicon glyphicon-triangle-left"></span> {% trans 'Back' %}
   </button>
 </div>
 {% endblock container %}

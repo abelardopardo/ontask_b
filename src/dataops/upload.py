@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 
 import logs.ops
 from dataops import ops, pandas_db
@@ -118,7 +119,7 @@ def upload_s2(request):
 
         if not ops.workflow_id_has_table(workflow.id):
             # It is an upload, not a merge, set the next step to finish
-            context['next_name'] = 'Finish'
+            context['next_name'] = _('Finish')
         return render(request, 'dataops/upload_s2.html', context)
 
     # At this point we are processing a valid POST request
@@ -154,7 +155,7 @@ def upload_s2(request):
         return render(
             request,
             'error.html',
-            {'message': 'Exception while retrieving the data frame'})
+            {'message': _('Exception while retrieving the data frame')})
 
     # Update the data frame
     status = ops.perform_dataframe_upload_merge(workflow.id,
@@ -375,7 +376,7 @@ def upload_s4(request):
         except Exception:
             return render(request,
                           'error.html',
-                          {'message': 'Exception while loading data frame'})
+                          {'message': _('Exception while loading data frame')})
 
         # Performing the merge
         status = ops.perform_dataframe_upload_merge(workflow.id,
@@ -401,7 +402,7 @@ def upload_s4(request):
                           'error_msg': status})
 
             messages.error(request,
-                           'Merge operation failed. (' + status + ')'),
+                           _('Merge operation failed.') + ' (' + status + ')'),
             return redirect(reverse('dataops:uploadmerge'))
 
         # Log the event
@@ -488,23 +489,23 @@ def upload_s4(request):
         if not toLoad:
             if colname in dst_column_names:
                 # Case 3
-                info.append((colname, False, colname + ' (Ignored)'))
+                info.append((colname, False, colname + _(' (Ignored)')))
             else:
                 # Case 4
-                info.append(('', False, colname + ' (Ignored)'))
+                info.append(('', False, colname + _(' (Ignored)')))
             continue
 
         # Initial name on the dst data frame
         dst_name = colname
         # Column not present in DST, so it is a new column
         if colname not in dst_column_names:
-            dst_name += ' (New)'
+            dst_name += _(' (New)')
         else:
-            dst_name += ' (Update)'
+            dst_name += _(' (Update)')
 
         src_name = colname
         if colname != old_name:
-            src_name += ' (Renamed)'
+            src_name += _(' (Renamed)')
 
         # Cases 5 - 8
         info.append((dst_name, True, src_name))

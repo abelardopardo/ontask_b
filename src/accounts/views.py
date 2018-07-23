@@ -5,6 +5,7 @@ from braces import views as bracesviews
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 
 from . import forms
 
@@ -58,8 +59,8 @@ class PasswordChangeView(authviews.PasswordChangeView):
     def form_valid(self, form):
         form.save()
         messages.success(self.request,
-                         "Your password was changed, "
-                         "hence you have been logged out. Please relogin")
+                         _("Your password was changed, "
+                           "hence you have been logged out. Please relogin"))
         return super(PasswordChangeView, self).form_valid(form)
 
 

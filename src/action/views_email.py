@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.shortcuts import redirect, render
+from django.utils.translation import ugettext_lazy as _
 
 from action.models import Action
 from action.ops import send_messages
@@ -97,7 +98,7 @@ def preview(request, pk, idx):
     """
 
     subject_content = request.GET.get('subject_content',
-                                      'THE SUBJECT WILL BE INSERTED HERE')
+                                      _('THE SUBJECT WILL BE INSERTED HERE'))
     return preview_response(
         request,
         pk,

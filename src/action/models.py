@@ -37,9 +37,12 @@ class Action(models.Model):
         blank=False,
         related_name='actions')
 
-    name = models.CharField(max_length=256, blank=False)
+    name = models.CharField(max_length=256, blank=False, verbose_name=_('name'))
 
-    description_text = models.CharField(max_length=512, default='', blank=True)
+    description_text = models.CharField(max_length=512,
+                                        default='',
+                                        blank=True,
+                                        verbose_name=_('description'))
 
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
@@ -305,11 +308,17 @@ class Condition(models.Model):
                                blank=False,
                                related_name='conditions')
 
-    name = models.CharField(max_length=256, blank=False)
+    name = models.CharField(max_length=256, blank=False, verbose_name=_('name'))
 
-    description_text = models.CharField(max_length=512, default='', blank=True)
+    description_text = models.CharField(max_length=512,
+                                        default='',
+                                        blank=True,
+                                        verbose_name=_('description'))
 
-    formula = JSONField(default=dict, blank=True, null=True)
+    formula = JSONField(default=dict,
+                        blank=True,
+                        null=True,
+                        verbose_name=_('formula'))
 
     # Set of columns that appear in this condition
     columns = models.ManyToManyField(

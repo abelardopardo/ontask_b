@@ -1,7 +1,7 @@
 var insertConditionInContent = function() {
   var btn = $(this);
   var range = $("#id_content").summernote('createRange');
-  condition_text = 'YOUR TEXT HERE';
+  condition_text = gettext('YOUR TEXT HERE');
   range_text = range.toString();
   if (range_text != '') {
     condition_text = range_text;
