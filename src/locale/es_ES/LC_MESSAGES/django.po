@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-23 10:12+0930\n"
+"POT-Creation-Date: 2018-07-23 19:36+0930\n"
 "PO-Revision-Date: 2018-07-01 16:25+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -181,35 +181,43 @@ msgstr "Fichero"
 msgid "File containing a previously exported action"
 msgstr "Fichero que contiene una acción previamente exportada"
 
-#: action/models.py:51
+#: action/models.py:40 action/models.py:311
+msgid "name"
+msgstr "nombre"
+
+#: action/models.py:45 action/models.py:316 workflow/models.py:401
+msgid "description"
+msgstr "descripción"
+
+#: action/models.py:54
 msgid "Action to provide personalized information"
 msgstr "Acción para ofrecer información personalizada"
 
-#: action/models.py:58
+#: action/models.py:61
 msgid "URL available to users?"
 msgstr "¿URL disponible a los usuarios?"
 
-#: action/models.py:63
+#: action/models.py:66
 msgid "Action available from"
 msgstr "Acción disponible desde"
 
-#: action/models.py:68
+#: action/models.py:71
 msgid "Action available until"
 msgstr "Acción disponible hasta"
 
-#: action/models.py:91 action/templates/action/edit_in.html:102
+#: action/models.py:94 action/templates/action/edit_in.html:102
 msgid "Shuffle questions?"
 msgstr "¿Barajar las preguntas?"
 
-#: action/models.py:315
+#: action/models.py:321
 msgid "formula"
 msgstr "fórmula"
 
-#: action/models.py:320
+#: action/models.py:326
 msgid "Columns present in this condition"
 msgstr "Columnas presentes en esta condición"
 
-#: action/models.py:326
+#: action/models.py:332
 msgid "Number of rows selected"
 msgstr "Número de filas seleccionadas"
 
@@ -408,6 +416,8 @@ msgstr "Envío de correo"
 #: action/templates/action/run.html:65 action/templates/action/run_row.html:23
 #: dataops/templates/dataops/includes/upload_buttons.html:10
 #: scheduler/templates/scheduler/email_done.html:13
+#: table/templates/table/stat_column.html:27
+#: table/templates/table/stat_column.html:75
 #: table/templates/table/stat_row.html:24
 #: table/templates/table/stat_row.html:33
 #: table/templates/table/stat_view.html:29
@@ -3093,6 +3103,10 @@ msgstr "Crear una vista idéntica"
 msgid "Delete the view"
 msgstr "Borrar vista"
 
+#: table/templates/table/stat_column.html:70
+msgid "Column has no data"
+msgstr "La columna no tiene datos"
+
 #: table/templates/table/stat_row.html:20
 #, python-format
 msgid "Stats for %(value)s"
@@ -3527,10 +3541,6 @@ msgstr "Gracias"
 msgid "Your value"
 msgstr "Tu valor"
 
-#: visualizations/plotly.py:139 visualizations/plotly.py:255
-msgid "Count"
-msgstr "Cuenta"
-
 #: visualizations/rgraph.py:264
 #, python-brace-format
 msgid "Warning: {0} NaN elements removed to create the graph"
@@ -3708,10 +3718,6 @@ msgstr "número de columnas"
 #: workflow/models.py:395
 msgid "column name"
 msgstr "nombre de columna"
-
-#: workflow/models.py:401
-msgid "description"
-msgstr "descripción"
 
 #: workflow/models.py:417
 msgid "type of data to store in the column"

@@ -3,9 +3,10 @@
 Implementation of visualizations using the Plotly JS libarry
 """
 from __future__ import unicode_literals, print_function
-from django.utils.translation import ugettext_lazy as _
 
 import json
+
+from django.utils.translation import ugettext_lazy as _
 
 from dataops import pandas_db
 from . import VisHandler
@@ -136,7 +137,7 @@ class PlotlyColumnHistogram(PlotlyHandler):
         self.layout.update({'autobinx': True,
                             'autobiny': True,
                             'bargap': 0.01,
-                            'yaxis': {'title': _('Count')}})
+                            'yaxis': {'title': 'Count'}})
 
         # Transfer the keys to the formatting dictionary
         for key, value in kwargs.pop('context', {}).items():
@@ -252,7 +253,7 @@ class PlotlyGauge(PlotlyHandler):
         self.format_dict['data'] = json.dumps(data)
 
         self.layout['bargap'] = 0.01
-        self.layout['yaxis'] = {'title': _('Count')}
+        self.layout['yaxis'] = {'title': 'Count'}
 
         self.format_dict['layout'] = json.dumps(self.layout)
 

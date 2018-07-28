@@ -282,7 +282,7 @@ def evaluate_node_sql(node):
     # If the operator is between or not_between, there is a special case,
     # the constant cannot be computed because the node['value'] is a pair
     constant = None
-    if 'between' not in operator:
+    if node['value'] is not None:
         # Calculate the constant value depending on the type
         if node['type'] == 'integer':
             constant = int(node['value'])
