@@ -31,6 +31,7 @@ ims-lti-py==0.6
 django-datetime-widget==0.9.3
 django-formtools==2.1
 argon2-cffi==18.1.0
-Celery==4.2.0
+Celery==4.2.1
 django-celery-beat==1.1.1
 django-celery-results==1.0.1
+supervisor==3.3.4
