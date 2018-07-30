@@ -2,7 +2,11 @@
 """
 Basic functions and definitions used all over the platform.
 """
-from __future__ import unicode_literals, print_function
+from __future__ import unicode_literals, print_function, absolute_import
+
+import random
+
+from celery.decorators import task
 
 __version__ = 'B.2.8.0'
 
@@ -60,3 +64,7 @@ class OntaskException(Exception):
 
     def __str__(self):
         return repr(self.value)
+
+@task(name="sum_two_numbers")
+def add(x, y):
+    return x + y

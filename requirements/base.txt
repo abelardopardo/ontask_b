@@ -1,5 +1,5 @@
 mock
-Django==1.11.13
+Django==1.11.14
 django-environ==0.4.4
 django-braces==1.13.0
 django-crispy-forms==1.7.2
@@ -23,6 +23,7 @@ coreapi==2.3.3
 Pygments==2.2.0
 tzlocal==1.5.1
 psycopg2==2.7.4
+psycopg2-binary==2.7.5
 Sphinx==1.7.4
 pytz==2018.4
 oauth2==1.9.0.post1
@@ -30,3 +31,6 @@ ims-lti-py==0.6
 django-datetime-widget==0.9.3
 django-formtools==2.1
 argon2-cffi==18.1.0
+Celery==4.2.0
+django-celery-beat==1.1.1
+django-celery-results==1.0.1
