@@ -99,6 +99,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django_celery_beat',
+    'django_celery_results',
 
     'authtools',
     'crispy_forms',
@@ -366,3 +368,11 @@ LOGS_MAX_LIST_SIZE = 200
 SHORT_DATETIME_FORMAT = 'r'
 
 SCHEDULER_MINUTE_STEP = 15
+
+# CELERY parameters
+CELERY_BROKER_URL = env('REDIS_URL')
+CELERY_RESULT_BACKEND = env('REDIS_URL')
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE

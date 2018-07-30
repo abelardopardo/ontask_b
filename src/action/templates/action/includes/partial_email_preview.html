@@ -4,7 +4,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title">{% trans 'Email Preview' %} {{ index }}</h4>
+    <h4 class="modal-title">{% blocktrans %}Email Preview {{ index }} of {{ n_items }}</h4>
   </div>
   <div class="modal-body text-center">
     <button type="button"
@@ -18,16 +18,13 @@
       <span class="glyphicon glyphicon-chevron-right"></span>
     </button>
   </div>
-  <div class="modal-body"
-       style="text-align: left; border: solid 1px black;margin: 0 2ex 0 2ex;">
+  <div class="modal-body" style="text-align: left; border: solid 1px black;margin: 0 2ex 0 2ex;">
     <strong>{% trans 'Subject:' %}</strong> {{ prelude }}
   </div>
-  <div class="modal-body"
-       style="text-align: left; border: solid 1px black;margin: 0 2ex 2ex 2ex;">
+  <div class="modal-body" style="text-align: left; border: solid 1px black;margin: 0 2ex 2ex 2ex;">
     {{ action_content }}
   </div>
-  <div class="modal-body"
-       style="text-align: left; border: solid 1px black;margin: 0 2ex 2ex 2ex;">
+  <div class="modal-body" style="text-align: left; border: solid 1px black;margin: 0 2ex 2ex 2ex;">
     {% if show_values %}<strong>{% trans 'Values:' %}</strong> {{ show_values }}{% endif %}
   </div>
 </div>

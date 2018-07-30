@@ -120,16 +120,24 @@ def keep_alive(request):
 
 
 def ontask_handler400(request):
-    return render(request, '400.html', {})
+    response = render(request, '400.html', {})
+    response.status_code = 400
+    return response
 
 
 def ontask_handler403(request):
-    return render(request, '403.html', {})
+    response = render(request, '403.html', {})
+    response.status_code = 403
+    return response
 
 
 def ontask_handler404(request):
-    return render(request, '404.html', {})
+    response = render(request, '404.html', {})
+    response.status_code = 404
+    return response
 
 
 def ontask_handler500(request):
-    return render(request, '500.html', {})
+    response = render(request, '500.html', {})
+    response.status_code = 500
+    return response

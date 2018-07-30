@@ -941,6 +941,7 @@ def preview_response(request, pk, idx, template, prelude=None):
                          {'action': action,
                           'action_content': action_content,
                           'index': idx,
+                          'n_items': n_items,
                           'nxt': nxt,
                           'prv': prv,
                           'prelude': prelude,

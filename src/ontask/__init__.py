@@ -2,7 +2,11 @@
 """
 Basic functions and definitions used all over the platform.
 """
-from __future__ import unicode_literals, print_function
+from __future__ import unicode_literals, print_function, absolute_import
+
+from ontask.celery import app as celery_app
+
+__all__ = ['celery_app']
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -62,3 +66,4 @@ class OntaskException(Exception):
 
     def __str__(self):
         return repr(self.value)
+
