@@ -175,18 +175,18 @@ class EmailActionBasicForm(forms.Form):
     )
 
     cc_email = forms.CharField(
-        label='Comma separated list of CC emails',
+        label=_('Comma separated list of CC emails'),
         required=False
     )
     bcc_email = forms.ChoiceField(
-        label='Comma separated list of BCC emails',
+        label=_('Comma separated list of BCC emails'),
         required=False
     )
 
     send_confirmation = forms.BooleanField(
         initial=False,
         required=False,
-        label=_('Send you a summary message?'))
+        label=_('Send you a summary message?')
     )
 
     track_read = forms.BooleanField(

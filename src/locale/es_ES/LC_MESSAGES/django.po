@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-23 19:36+0930\n"
+"POT-Creation-Date: 2018-07-30 14:30+0930\n"
 "PO-Revision-Date: 2018-07-01 16:25+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -157,27 +157,35 @@ msgstr "Asunto del correo"
 msgid "Column to use for target email address"
 msgstr "Columna con la dirección de correo"
 
-#: action/forms.py:180
+#: action/forms.py:178
+msgid "Comma separated list of CC emails"
+msgstr "Lista de emails en copia separados por comas"
+
+#: action/forms.py:182
+msgid "Comma separated list of BCC emails"
+msgstr "Lista de emails en copia oculta separados por comas"
+
+#: action/forms.py:189
 msgid "Send you a summary message?"
 msgstr "¿Enviar un mensaje con el resúmen de envios?"
 
-#: action/forms.py:185
+#: action/forms.py:195
 msgid "Track email reading in an extra column?"
 msgstr "¿Rastrear la lectura del correo en una columna extra?"
 
-#: action/forms.py:214
+#: action/forms.py:224
 msgid "Download a snapshot of the current state of the workflow?"
 msgstr "¿Descargar un fichero con el estado actual del flujo?"
 
-#: action/forms.py:215
+#: action/forms.py:225
 msgid "A zip file useful to review the emails sent."
 msgstr "Un fichero zip útil para revisar los mensajes que se envían."
 
-#: action/forms.py:231 workflow/forms.py:383
+#: action/forms.py:241 workflow/forms.py:383
 msgid "File"
 msgstr "Fichero"
 
-#: action/forms.py:232
+#: action/forms.py:242
 msgid "File containing a previously exported action"
 msgstr "Fichero que contiene una acción previamente exportada"
 
@@ -272,7 +280,7 @@ msgstr "Dato de condición incorrecto"
 msgid "Invalid column data"
 msgstr "Dato de columna incorrecto"
 
-#: action/settings.py:34 ontask/settings/base.py:360
+#: action/settings.py:34 ontask/settings/base.py:362
 msgid "OnTask: Action executed"
 msgstr "OnTask: Acción ejecutada"
 
@@ -682,11 +690,11 @@ msgstr "Borrar"
 #, python-format
 msgid ""
 "Action Preview\n"
-"      %(n)s"
-msgstr "Vista previa de la acción %(n)s"
+"      %(index)s of %(n_items)s"
+msgstr "Vista previa de la acción %(index)s de %(n_items)s"
 
 #: action/templates/action/includes/partial_action_preview.html:30
-#: action/templates/action/includes/partial_email_preview.html:31
+#: action/templates/action/includes/partial_email_preview.html:28
 msgid "Values:"
 msgstr "Valores:"
 
@@ -842,8 +850,9 @@ msgid "Delete condition"
 msgstr "Borrar condición"
 
 #: action/templates/action/includes/partial_email_preview.html:7
-msgid "Email Preview"
-msgstr "Vista previa del email"
+#, python-format
+msgid "Email Preview %(index)s of %(n_items)s"
+msgstr "Vista previa del email %(index)s de %(n_items)s"
 
 #: action/templates/action/includes/partial_email_preview.html:15
 #: dataops/templates/dataops/includes/partial_diagnostics.html:10
@@ -851,7 +860,7 @@ msgstr "Vista previa del email"
 msgid "Close"
 msgstr "Cerrar"
 
-#: action/templates/action/includes/partial_email_preview.html:23
+#: action/templates/action/includes/partial_email_preview.html:22
 msgid "Subject:"
 msgstr "Asunto:"
 
@@ -1036,7 +1045,7 @@ msgstr "Error detectado al acceder al filtro (acción: {0})"
 
 #: action/views_action.py:525 action/views_action.py:737
 #: action/views_action.py:786 action/views_action.py:828
-#: action/views_action.py:1305
+#: action/views_action.py:1306
 msgid "Workflow has no data. Go to Dataops to upload data."
 msgstr "El flujo no tiene datos. Ir a Op-datos para cargar los datos."
 
@@ -1053,13 +1062,13 @@ msgstr "Petición de formulario incorrecta (no es multiplart)"
 msgid "Error while retrieving content for student {0}"
 msgstr "Error al acceder al contenido para el estudiante {0}"
 
-#: action/views_action.py:1191 action/views_action.py:1215 logs/views.py:48
+#: action/views_action.py:1192 action/views_action.py:1216 logs/views.py:48
 #: logs/views.py:58 table/views.py:170 table/views.py:284 table/views.py:341
 #: workflow/views.py:469
 msgid "Incorrect request. Unable to process"
 msgstr "Petición incorrecta. No es posible procesarla."
 
-#: action/views_action.py:1196 table/views.py:289 table/views.py:346
+#: action/views_action.py:1197 table/views.py:289 table/views.py:346
 msgid "There is no data in the table"
 msgstr "No hay datos en la tabla"
 
@@ -2542,11 +2551,11 @@ msgstr "Vista"
 msgid "View the content of this log"
 msgstr "Ver el contenido de este registro"
 
-#: ontask/__init__.py:37
+#: ontask/__init__.py:41
 msgid "The symbol ' cannot be used in the column name."
 msgstr "El símbolo ' no se puede utilizar en el nombre de la columna"
 
-#: ontask/__init__.py:40
+#: ontask/__init__.py:44
 msgid "The symbol \" cannot be used in the column name."
 msgstr "El símbolo \" no se puede utilizar en el nombre de la columna"
 
@@ -3536,8 +3545,8 @@ msgstr "Reiniciar mi clave"
 msgid "Thanks"
 msgstr "Gracias"
 
-#: visualizations/plotly.py:94 visualizations/plotly.py:102
-#: visualizations/plotly.py:182
+#: visualizations/plotly.py:95 visualizations/plotly.py:103
+#: visualizations/plotly.py:183
 msgid "Your value"
 msgstr "Tu valor"
 
@@ -4267,3 +4276,6 @@ msgstr "Imposible clonar flujo"
 #: workflow/views.py:605
 msgid "Workflow successfully cloned."
 msgstr "Flujo clonado con éxito"
+
+#~ msgid "Email Preview"
+#~ msgstr "Vista previa del email"
