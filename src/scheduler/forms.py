@@ -49,7 +49,9 @@ class EmailForm(forms.ModelForm):
 
     class Meta:
         model = ScheduledEmailAction
-        fields = ('subject', 'email_column', 'send_confirmation', 'track_read',
+        fields = ('subject', 'email_column', 'cc_email',
+                  'bcc_email', 'send_confirmation',
+                  'track_read',
                   'execute')
 
         widgets = {

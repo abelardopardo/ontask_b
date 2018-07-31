@@ -98,6 +98,20 @@ class ScheduledEmailAction(ScheduledAction):
         blank=False,
         verbose_name=_('Column containing the email address'))
 
+    cc_email = models.CharField(
+        max_length=2048,
+        default='',
+        blank=True,
+        verbose_name='Comma-separated list of CC Emails'
+    )
+
+    bcc_email = models.CharField(
+        max_length=2048,
+        default='',
+        blank=True,
+        verbose_name='Comma-separated list of BCC Emails'
+    )
+
     # If a confirmation email is sent ot the instructor
     send_confirmation = models.BooleanField(
         default=False,

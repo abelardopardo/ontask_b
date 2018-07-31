@@ -45,13 +45,19 @@ def request_data(request, pk):
     if request.method == 'POST':
         if form.is_valid():
             # Send the emails!
-            result = send_messages(request.user,
-                                   action,
-                                   form.cleaned_data['subject'],
-                                   form.cleaned_data['email_column'],
-                                   request.user.email,
-                                   form.cleaned_data['send_confirmation'],
-                                   form.cleaned_data['track_read'])
+            result = send_messages(
+                request.user,
+                action,
+                form.cleaned_data['subject'],
+                form.cleaned_data['email_column'],
+                request.user.email,
+                [x.strip() for x in form.cleaned_data['cc_email'].split(',')
+                 if x],
+                [x.strip() for x in form.cleaned_data['bcc_email'].split(',')
+                 if x],
+                form.cleaned_data['send_confirmation'],
+                form.cleaned_data['track_read']
+            )
 
             if result:
                 # Something went wrong

@@ -41,8 +41,8 @@ def execute_email_actions(debug):
 
     # Calculate a window with half the interval in the past and half in the
     # future to reduce latency of execution.
-    after = now - datetime.timedelta(minutes=float(minute_step) / 2)
-    before = now + datetime.timedelta(minutes=float(minute_step) / 2)
+    after = now - datetime.timedelta(minutes=(float(minute_step) + 5) / 2)
+    before = now + datetime.timedelta(minutes=(float(minute_step) + 5) / 2)
     # Get all the actions that are with state pending and before the current
     # date/time
     s_items = ScheduledEmailAction.objects.filter(
@@ -96,13 +96,16 @@ def execute_email_actions(debug):
                           'send_confirmation': item.send_confirmation,
                           'track_read': item.track_read})
 
-            result = send_messages(item.user,
-                                   item.action,
-                                   item.subject,
-                                   item.email_column.name,
-                                   item.user.email,
-                                   item.send_confirmation,
-                                   item.track_read)
+            result = send_messages(
+                item.user,
+                item.action,
+                item.subject,
+                item.email_column.name,
+                item.user.email,
+                [x.strip() for x in item.cc_email.split(',') if x],
+                [x.strip() for x in item.bcc_email.split(',') if x],
+                item.send_confirmation,
+                item.track_read)
             # If the result has some sort of message, push it to the log
             if result:
                 msg = 'Incorrect execution message: ' + str(result)
@@ -121,6 +124,7 @@ def execute_email_actions(debug):
 
         # Save the new status in the DB
         item.save()
+
 
 def run(*script_args):
     """

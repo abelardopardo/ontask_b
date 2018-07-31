@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Installation process &#8212; OnTask (B.2.7.0) 1.1.0 documentation</title>
+    <title>Installation process &#8212; OnTask (B.2.8.0) 1.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
@@ -305,7 +305,8 @@ your needs.</p>
 <h2>Production Deployment<a class="headerlink" href="#production-deployment" title="Permalink to this headline">¶</a></h2>
 <p>Once OnTask is executing normally, you may configure a web server (nginx,
 apache or similar) to make it available to a community of users. The
-instructions to make such deployment are beyond the scope of this manual but are available through the corresponding manual pages of these applications.</p>
+instructions to make such deployment are beyond the scope of this manual but
+are available through the corresponding manual pages of these applications.</p>
 </div>
 <div class="section" id="authentication">
 <span id="id1"></span><h2>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h2>
@@ -360,6 +361,10 @@ resorts to conventional authentication requiring email and password. These
 credentials are stored in the internal database managed by OnTask.</p>
 </li>
 </ul>
+<p>The API can be accessed using through token authentication. The token can be
+generated manually through the user profile page. This type of authentication
+may need some special configuration in the web server (Apache or similar) so
+that the <code class="docutils literal notranslate"><span class="pre">HTTP_AUTHORIZATION</span></code> header is not removed.</p>
 <div class="section" id="ldap-authentication">
 <h3>LDAP Authentication<a class="headerlink" href="#ldap-authentication" title="Permalink to this headline">¶</a></h3>
 <p>OnTask may also be configured to use LDAP to authenticate users. This is done
@@ -661,7 +666,7 @@ tasks</em> and match it (in minutes) to the interval reflected in the crontab.</
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">OnTask (B.2.7.0)</a></h1>
+<h1 class="logo"><a href="../index.html">OnTask (B.2.8.0)</a></h1>
 
 
 
