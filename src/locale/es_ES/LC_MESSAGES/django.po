@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-30 14:30+0930\n"
+"POT-Creation-Date: 2018-07-31 15:43+0930\n"
 "PO-Revision-Date: 2018-07-01 16:25+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -229,41 +229,49 @@ msgstr "Columnas presentes en esta condición"
 msgid "Number of rows selected"
 msgstr "Número de filas seleccionadas"
 
-#: action/ops.py:80
+#: action/ops.py:81
 msgid "Data not found in the table"
 msgstr "No se han encontrado datos en la tabla"
 
-#: action/ops.py:181
+#: action/ops.py:182
 #, python-brace-format
 msgid "Error when evaluating conditions for user {0}"
 msgstr "Error al evaluar las condiciones para el usuario {0}"
 
-#: action/ops.py:201
+#: action/ops.py:202
 #, python-brace-format
 msgid "Action not enabled for user {0}"
 msgstr "Acción no permitida para el usuario {0}"
 
-#: action/ops.py:475
+#: action/ops.py:374
+msgid "Invalid email address in cc email"
+msgstr "Dirección de correo incorrecta en el CC"
+
+#: action/ops.py:376
+msgid "Invalid email address in bcc email"
+msgstr "Dirección de correo incorrecta en el BCC"
+
+#: action/ops.py:497
 #, python-brace-format
 msgid "Syntax error detected in OnTask notification template ({0})"
 msgstr ""
 "Error de sintaxis detectdado en la plantilla de notificación OnTask ({0})"
 
-#: action/ops.py:502
+#: action/ops.py:524
 #, python-brace-format
 msgid "An error occurred when sending your notification: {0}"
 msgstr "Se ha produciro un error al enviar la notificación: {0}"
 
-#: action/ops.py:557 workflow/ops.py:153
+#: action/ops.py:579 workflow/ops.py:153
 msgid "Incorrect file. Expecting a GZIP file (exported workflow)."
 msgstr "Fichero incorrect. Es espera un fichero GZIP (flujo exportado)."
 
-#: action/ops.py:568 action/ops.py:573 action/ops.py:578
+#: action/ops.py:590 action/ops.py:595 action/ops.py:600
 #, python-brace-format
 msgid "Unable to import action: {0}"
 msgstr "No se puede importar la acción: {0}"
 
-#: action/ops.py:575
+#: action/ops.py:597
 #, python-brace-format
 msgid "Unable to import action due to a validation error: {0}"
 msgstr "No es posible importar la acción debidi a un error de validación: {0}"
@@ -1092,7 +1100,7 @@ msgstr "No se ha podido clonar la condición"
 msgid "Action successfully cloned."
 msgstr "A acción ha sido clonada con éxito."
 
-#: action/views_email.py:101
+#: action/views_email.py:107
 msgid "THE SUBJECT WILL BE INSERTED HERE"
 msgstr "EL ASUNTO SE INSERTARÁ AQUÍ"
 
@@ -2715,7 +2723,7 @@ msgstr "terminado"
 msgid "done_error"
 msgstr "terminado_con_error"
 
-#: scheduler/models.py:63 scheduler/views.py:82
+#: scheduler/models.py:63 scheduler/views.py:92
 msgid "Execution message"
 msgstr "Mensaje de ejecución"
 
@@ -2723,11 +2731,19 @@ msgstr "Mensaje de ejecución"
 msgid "Column containing the email address"
 msgstr "Columna con la dirección de correo"
 
-#: scheduler/models.py:104
+#: scheduler/models.py:105
+msgid "Comma-separated list of CC Emails"
+msgstr "Lista de emails en copia separados por comas"
+
+#: scheduler/models.py:112
+msgid "Comma-separated list of BCC Emails"
+msgstr "Lista de emails en copia oculta separados por comas"
+
+#: scheduler/models.py:118
 msgid "Send you a confirmation email"
 msgstr "Enviarte un mensaje de confirmación"
 
-#: scheduler/models.py:111
+#: scheduler/models.py:125
 msgid "Track if emails are read?"
 msgstr "¿Rastrear si se leen los emails?"
 
@@ -2801,10 +2817,18 @@ msgid "Email column"
 msgstr "Columna con correo"
 
 #: scheduler/views.py:70
+msgid "CC Emails"
+msgstr "Emails en copia"
+
+#: scheduler/views.py:75
+msgid "BCC Emails"
+msgstr "Emails en copia oculta"
+
+#: scheduler/views.py:80
 msgid "Send confirmation"
 msgstr "Enviar confirmación"
 
-#: scheduler/views.py:76
+#: scheduler/views.py:86
 msgid "Track"
 msgstr "Rastrear"
 

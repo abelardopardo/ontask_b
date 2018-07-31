@@ -102,14 +102,14 @@ class ScheduledEmailAction(ScheduledAction):
         max_length=2048,
         default='',
         blank=True,
-        verbose_name='Comma-separated list of CC Emails'
+        verbose_name=_('Comma-separated list of CC Emails')
     )
 
     bcc_email = models.CharField(
         max_length=2048,
         default='',
         blank=True,
-        verbose_name='Comma-separated list of BCC Emails'
+        verbose_name=_('Comma-separated list of BCC Emails')
     )
 
     # If a confirmation email is sent ot the instructor

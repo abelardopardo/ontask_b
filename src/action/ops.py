@@ -371,9 +371,9 @@ def send_messages(user,
 
     # Check that cc and bcc contain list of valid email addresses
     if not all([validate_email(x) for x in cc_email_list]):
-        return 'Invalid email address in cc email'
+        return _('Invalid email address in cc email')
     if not all([validate_email(x) for x in bcc_email_list]):
-        return 'Invalid email address in bcc email'
+        return _('Invalid email address in bcc email')
 
     # Everything seemed to work to create the messages.
     msgs = []

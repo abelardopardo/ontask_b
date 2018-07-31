@@ -67,12 +67,12 @@ class ScheduleEmailActionTable(tables.Table):
 
     cc_email = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('CC Emails'),
+        verbose_name=_('CC Emails'),
     )
 
     bcc_email = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('BCC Emails'),
+        verbose_name=_('BCC Emails'),
     )
 
     send_confirmation = BooleanColumn(
