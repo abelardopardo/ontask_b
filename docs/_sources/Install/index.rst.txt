@@ -279,7 +279,8 @@ Production Deployment
 
 Once OnTask is executing normally, you may configure a web server (nginx,
 apache or similar) to make it available to a community of users. The
-instructions to make such deployment are beyond the scope of this manual but are available through the corresponding manual pages of these applications.
+instructions to make such deployment are beyond the scope of this manual but
+are available through the corresponding manual pages of these applications.
 
 .. _authentication:
 
@@ -339,6 +340,11 @@ OnTask comes with the following authentication mechanisms: IMS-LTI,
   internal environment of Django where the web requests are served, OnTask
   resorts to conventional authentication requiring email and password. These
   credentials are stored in the internal database managed by OnTask.
+
+The API can be accessed using through token authentication. The token can be
+generated manually through the user profile page. This type of authentication
+may need some special configuration in the web server (Apache or similar) so
+that the ``HTTP_AUTHORIZATION`` header is not removed.
 
 LDAP Authentication
 -------------------
