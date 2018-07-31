@@ -26,6 +26,7 @@ from django.utils.html import strip_tags
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
+from validate_email import validate_email
 
 import logs.ops
 from action.evaluate import evaluate_row_action_out, evaluate_action, \
@@ -307,6 +308,8 @@ def send_messages(user,
                   subject,
                   email_column,
                   from_email,
+                  cc_email_list,
+                  bcc_email_list,
                   send_confirmation,
                   track_read):
     """
@@ -318,13 +321,15 @@ def send_messages(user,
     :param subject: Email subject
     :param email_column: Name of the column from which to extract emails
     :param from_email: Email of the sender
+    :param cc_email_list: List of emails to include in the CC
+    :param bcc_email_list: List of emails to include in the BCC
     :param send_confirmation: Boolean to send confirmation to sender
     :param track_read: Should read tracking be included?
     :return: Send the emails
     """
 
     # Evaluate the action string, evaluate the subject, and get the value of
-    # the email colummn.
+    # the email column.
     result = evaluate_action(action,
                              extra_string=subject,
                              column_name=email_column)
@@ -352,6 +357,18 @@ def send_messages(user,
     if cfilter and cfilter.n_rows_selected != len(result):
         cfilter.n_rows_selected = len(result)
         cfilter.save()
+
+    # Set the cc_email_list and bcc_email_list to the right values
+    if not cc_email_list:
+        cc_email_list = []
+    if not bcc_email_list:
+        bcc_email_list = []
+
+    # Check that cc and bcc contain list of valid email addresses
+    if not all([validate_email(x) for x in cc_email_list]):
+        return 'Invalid email address in cc email'
+    if not all([validate_email(x) for x in bcc_email_list]):
+        return 'Invalid email address in bcc email'
 
     # Everything seemed to work to create the messages.
     msgs = []
@@ -386,7 +403,10 @@ def send_messages(user,
             msg_subject,
             text_content,
             from_email,
-            [msg_to])
+            [msg_to],
+            bcc_email_list,
+            cc=cc_email_list
+        )
         msg.attach_alternative(msg_body + track_str, "text/html")
         msgs.append(msg)
 
@@ -444,7 +464,9 @@ def send_messages(user,
          'filter_present': filter is not None,
          'num_rows': action.workflow.nrows,
          'subject': subject,
-         'from_email': user.email})
+         'from_email': user.email,
+         'cc_email': cc_email_list,
+         'bcc_email': bcc_email_list})
 
     # If no confirmation email is required, done
     if not send_confirmation:

@@ -64,6 +64,16 @@ class ScheduleEmailActionTable(tables.Table):
         verbose_name=str('Email column'),
     )
 
+    cc_email = tables.Column(
+        attrs={'td': {'class': 'dt-center'}},
+        verbose_name=str('CC Emails'),
+    )
+
+    bcc_email = tables.Column(
+        attrs={'td': {'class': 'dt-center'}},
+        verbose_name=str('BCC Emails'),
+    )
+
     send_confirmation = BooleanColumn(
         attrs={'td': {'class': 'dt-center'}},
         verbose_name=str('Send confirmation'),
@@ -86,7 +96,7 @@ class ScheduleEmailActionTable(tables.Table):
             '<a href="{0}">{1}</a>'.format(
                 reverse('action:edit_out',
                         kwargs={'pk': record.action.id}),
-                 record.action.name
+                record.action.name
             )
         )
 
@@ -94,8 +104,8 @@ class ScheduleEmailActionTable(tables.Table):
         model = ScheduledEmailAction
 
         fields = ('action', 'created', 'execute', 'status', 'subject',
-                  'email_column', 'send_confirmation', 'track_read',
-                  'operations', 'message')
+                  'email_column', 'cc_email', 'bcc_email', 'send_confirmation',
+                  'track_read', 'operations', 'message')
 
         sequence = ('operations',
                     'action',
@@ -104,6 +114,8 @@ class ScheduleEmailActionTable(tables.Table):
                     'status',
                     'subject',
                     'email_column',
+                    'cc_email',
+                    'bcc_email',
                     'send_confirmation',
                     'track_read',
                     'message')
