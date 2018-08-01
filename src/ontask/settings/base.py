@@ -14,6 +14,7 @@ import os
 from os.path import dirname, join, exists
 
 import environ
+from celery.schedules import crontab
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
 
@@ -372,3 +373,10 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
+CELERY_BEAT_SCHEDULE = {
+    'ontask_scheduler': {
+        'task': 'ontask.tasks.execute_email_actions',
+        'schedule': crontab(minute='*/{0}'.format(SCHEDULER_MINUTE_STEP)),
+        'args': (DEBUG,)
+    }
+}
