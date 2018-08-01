@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-31 15:43+0930\n"
-"PO-Revision-Date: 2018-07-01 16:25+0930\n"
+"POT-Creation-Date: 2018-08-01 16:32+0930\n"
+"PO-Revision-Date: 2018-08-01 16:25+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ES\n"
@@ -426,7 +426,16 @@ msgstr "Valor de la columna"
 msgid "Email action"
 msgstr "Envío de correo"
 
-#: action/templates/action/email_done.html:16
+#: action/templates/action/email_done.html:14
+#, python-format
+msgid ""
+"Emails being processed. You may check the status in\n"
+"    log record number %(log_id)s."
+msgstr ""
+"Los emails están siendo procesados. Puedes comprobar el estado de la "
+"ejecución en el registro número %(log_id)s."
+
+#: action/templates/action/email_done.html:17
 #: action/templates/action/export_ask.html:25
 #: action/templates/action/export_done.html:16
 #: action/templates/action/run.html:65 action/templates/action/run_row.html:23
@@ -1100,7 +1109,7 @@ msgstr "No se ha podido clonar la condición"
 msgid "Action successfully cloned."
 msgstr "A acción ha sido clonada con éxito."
 
-#: action/views_email.py:107
+#: action/views_email.py:123
 msgid "THE SUBJECT WILL BE INSERTED HERE"
 msgstr "EL ASUNTO SE INSERTARÁ AQUÍ"
 
@@ -2544,6 +2553,10 @@ msgid "CSV Download"
 msgstr "Descarga CSV"
 
 #: logs/views.py:33
+msgid "ID"
+msgstr "Número"
+
+#: logs/views.py:33
 msgid "Date/Time"
 msgstr "Fecha/Hora"
 
@@ -2551,11 +2564,11 @@ msgstr "Fecha/Hora"
 msgid "Event type"
 msgstr "Tipo de evento"
 
-#: logs/views.py:33 logs/views.py:98
+#: logs/views.py:33 logs/views.py:100
 msgid "View"
 msgstr "Vista"
 
-#: logs/views.py:97
+#: logs/views.py:99
 msgid "View the content of this log"
 msgstr "Ver el contenido de este registro"
 
@@ -2831,6 +2844,11 @@ msgstr "Enviar confirmación"
 #: scheduler/views.py:86
 msgid "Track"
 msgstr "Rastrear"
+
+#: scripts/scheduler_script.py:119
+#, python-brace-format
+msgid "Operation executed. Status available in Log {0}"
+msgstr "Operación ejecutada. Resultado disponible en registro {0}"
 
 #: table/api.py:49 table/api.py:220
 msgid "Unable to access the workflow"

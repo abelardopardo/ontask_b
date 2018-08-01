@@ -30,7 +30,7 @@ def show(request):
     # Create the context with the column names
     context = {
         'workflow': workflow,
-        'column_names': [_('Date/Time'), _('User'), _('Event type'), _('View')]
+        'column_names': [_('ID'), _('Date/Time'), _('User'), _('Event type'), _('View')]
     }
 
     # Render the page with the table
@@ -70,6 +70,7 @@ def show_ss(request):
     if search_value:
         # Refine the log
         qs = qs.filter(
+            Q(id=search_value) |
             Q(user__email__icontains=search_value) |
             Q(name__icontains=search_value) |
             Q(payload__icontains=search_value),
@@ -85,6 +86,7 @@ def show_ss(request):
     final_qs = []
     for item in qs[start:start + length]:
         row = [
+            item[0],
             item[1].astimezone(pytz.timezone(ontask_settings.TIME_ZONE)),
             item[2],
             item[3],

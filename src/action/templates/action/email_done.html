@@ -11,7 +11,8 @@
   <div class="container-fluid" style="margin-top:50px;text-align:center;">
     <h1 class="page-header text-center">{% trans 'Email action' %}</h1>
 
-    <p class="text-center">{% trasns 'Emails successfully sent.' %}</p>
+    <p class="text-center">{% blocktrans %}Emails being processed. You may check the status in
+    log record number {{ log_id }}.{% endblocktrans %}</p>
     <button type="button" class="btn btn-default"
       onclick="location.href='{% url 'action:index' %}'">{% trans 'Back' %}
     </button>
