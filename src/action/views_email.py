@@ -6,10 +6,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.shortcuts import redirect, render
 
+import logs.ops
 from action.models import Action
-from action.ops import send_messages
 from action.views_action import preview_response
 from ontask.permissions import is_instructor
+from ontask.tasks import send_email_messages
 from workflow.ops import get_workflow
 from .forms import EmailActionForm
 
@@ -40,53 +41,68 @@ def request_data(request, pk):
     form = EmailActionForm(request.POST or None,
                            column_names=workflow.get_column_names())
 
-    # Process the POST
-    if request.method == 'POST':
-        if form.is_valid():
-            # Send the emails!
-            result = send_messages(
-                request.user,
-                action,
-                form.cleaned_data['subject'],
-                form.cleaned_data['email_column'],
-                request.user.email,
-                [x.strip() for x in form.cleaned_data['cc_email'].split(',')
-                 if x],
-                [x.strip() for x in form.cleaned_data['bcc_email'].split(',')
-                 if x],
-                form.cleaned_data['send_confirmation'],
-                form.cleaned_data['track_read']
-            )
+    # Process the GET or invalid
+    if request.method == 'GET' or not form.is_valid():
+        # Get the number of rows from the action
+        filter_c = action.conditions.filter(is_filter=True).first()
+        num_msgs = filter_c.n_rows_selected if filter_c else -1
+        if num_msgs == -1:
+            # There is no filter in the action, so take the number of rows
+            num_msgs = workflow.nrows
 
-            if result:
-                # Something went wrong
-                # Put the message returned from send_messages as form error
-                form.add_error(None, result)
-            else:
-                # If the export has been requested, go there and send it as
-                # response
-                context = {}
-                if form.cleaned_data['export_wf']:
-                    context['download'] = True
+        # Render the form
+        return render(request,
+                      'action/request_email_data.html',
+                      {'action': action,
+                       'num_msgs': num_msgs,
+                       'form': form})
 
-                # Successful processing.
-                return render(request,
-                              'action/email_done.html',
-                              context)
+    # Requet is a POST and is valid
+    subject = form.cleaned_data['subject']
+    email_column = form.cleaned_data['email_column']
+    cc_email = [x.strip() for x in form.cleaned_data['cc_email'].split(',')
+                if x]
+    bcc_email = [x.strip() for x in form.cleaned_data['bcc_email'].split(',')
+                 if x]
+    send_confirmation = form.cleaned_data['send_confirmation']
+    track_read = form.cleaned_data['track_read']
 
-    # Get the number of rows from the action
-    filter = action.conditions.filter(is_filter=True).first()
-    num_msgs = filter.n_rows_selected if filter else -1
-    if num_msgs == -1:
-        # There is no filter in the action, so take the number of rows
-        num_msgs = workflow.nrows
+    # Log the event
+    log_id = logs.ops.put(request.user,
+                          'schedule_email_execute',
+                          action.workflow,
+                          {'action': action.name,
+                           'action_id': action.id,
+                           'subject': subject,
+                           'email_column': email_column,
+                           'cc_email': cc_email,
+                           'bcc_email': bcc_email,
+                           'send_confirmation': send_confirmation,
+                           'track_read': track_read,
+                           'status': 'pre-execution'})
 
-    # Render the form
+    # Send the emails!
+    send_email_messages.delay(request.user.id,
+                              action.id,
+                              form.cleaned_data['subject'],
+                              form.cleaned_data['email_column'],
+                              request.user.email,
+                              cc_email,
+                              bcc_email,
+                              send_confirmation,
+                              track_read,
+                              log_id)
+
+    # If the export has been requested, go there and send it as
+    # response
+    context = {'log_id': log_id}
+    if form.cleaned_data['export_wf']:
+        context['download'] = True
+
+    # Successful processing.
     return render(request,
-                  'action/request_email_data.html',
-                  {'action': action,
-                   'num_msgs': num_msgs,
-                   'form': form})
+                  'action/email_done.html',
+                  context)
 
 
 @user_passes_test(is_instructor)

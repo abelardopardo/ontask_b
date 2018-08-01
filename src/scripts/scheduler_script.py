@@ -18,8 +18,8 @@ import pytz
 from django.conf import settings as ontask_settings
 
 import logs
-from action.ops import send_messages
 from core import settings as core_settings
+from ontask.tasks import send_email_messages
 from scheduler.models import ScheduledEmailAction
 
 # Get the logger object
@@ -82,45 +82,40 @@ def execute_email_actions(debug):
         # - email column
         # - send_confirmation
         # - track_read
-        msg = ''
-        try:
-            # Log the event
-            logs.ops.put(item.user,
-                         'schedule_email_execute',
-                         item.action.workflow,
-                         {'action': item.action.name,
-                          'action_id': item.action.id,
-                          'execute': item.execute.isoformat(),
-                          'subject': item.subject,
-                          'email_column': item.email_column.name,
-                          'send_confirmation': item.send_confirmation,
-                          'track_read': item.track_read})
 
-            result = send_messages(
-                item.user,
-                item.action,
-                item.subject,
-                item.email_column.name,
-                item.user.email,
-                [x.strip() for x in item.cc_email.split(',') if x],
-                [x.strip() for x in item.bcc_email.split(',') if x],
-                item.send_confirmation,
-                item.track_read)
-            # If the result has some sort of message, push it to the log
-            if result:
-                msg = 'Incorrect execution message: ' + str(result)
-                logger.error(msg)
-        except Exception as e:
-            msg = 'Error while executing send_messages. Exception message: ' \
-                  + e.message
-            logger.error(msg)
-            item.status = 3  # Done with error
-        else:
-            logger.info('Finished execution of task ' + str(item.id))
-            item.status = 2  # Done.
+        # Get additional parameters for the log
+        cc_email = [x.strip() for x in cc_email.split(',') if x]
+        bcc_email = [x.strip() for x in bcc_email.split(',') if x]
+
+        # Log the event
+        log_id = logs.ops.put(item.user,
+                              'schedule_email_execute',
+                              item.action.workflow,
+                              {'action': item.action.name,
+                               'action_id': item.action.id,
+                               'execute': item.execute.isoformat(),
+                               'subject': item.subject,
+                               'email_column': item.email_column.name,
+                               'cc_email': cc_email,
+                               'bcc_email': bcc_email,
+                               'send_confirmation': item.send_confirmation,
+                               'track_read': item.track_read,
+                               'status': 'pre-execution'})
+
+        send_email_messages(item.user.id,
+                            item.action.id,
+                            item.subject,
+                            item.email_column.name,
+                            item.user.email,
+                            cc_email,
+                            bcc_email,
+                            item.send_confirmation,
+                            item.track_read,
+                            log_id)
 
         # Store the resulting message in the record
-        item.message = msg
+        item.message = \
+            'Operation executed. Status available in Log {0}'.format(log_id)
 
         # Save the new status in the DB
         item.save()

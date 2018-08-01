@@ -71,3 +71,5 @@ def put(user, name, workflow, payload):
     event.workflow = workflow
     event.set_payload(payload)
     event.save()
+
+    return event.id
