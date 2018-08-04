@@ -298,8 +298,6 @@ SUMMERNOTE_CONFIG = {
     'summernote': {
         'width': '100%',
         'height': '400px',
-        # Use proper language setting automatically
-        'lang': None,
         'disableDragAndDrop': True,
     },
     'css': (
