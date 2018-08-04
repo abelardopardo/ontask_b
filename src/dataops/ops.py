@@ -362,6 +362,13 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
                  if not columns_to_upload[x]],
                 axis=1, inplace=True)
 
+    # If no kee_key_column value is given, initialize to True
+    if 'keep_key_column' not in merge_info:
+        kk_column = []
+        for cname in merge_info['rename_column_names']:
+            kk_column.append(is_unique_column(src_df[cname]))
+        merge_info['keep_key_column'] = kk_column
+
     # If no dst_df is given, simply dump the frame in the DB
     if dst_df is None:
         store_dataframe_in_db(src_df, pk)
@@ -432,10 +439,7 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
     # For each column check that the new column is consistent with data_type,
     # and allowed values, and recheck its unique key status
     workflow = Workflow.objects.get(pk=pk)
-    # for col in Workflow.objects.get(pk=pk).columns.all():
-    for cname, keep_key in zip(merge_info['rename_column_names'],
-                               merge_info['keep_key_column']):
-        col = workflow.columns.get(name=cname)
+    for col in Workflow.objects.get(pk=pk).columns.all():
         # New values in this column should be compatible with the current
         # column properties.
         # Condition 1: Data type is correct (there is an exception for columns
@@ -478,6 +482,14 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
                     ', '.join(col.categories)
                 )
 
+
+    # Store the result back in the DB
+    store_dataframe_in_db(new_df, pk)
+
+    # Update the value of the "keey_key_column"
+    for cname, keep_key in zip(merge_info['rename_column_names'],
+                               merge_info['keep_key_column']):
+        col = workflow.columns.get(name=cname)
         # Condition 3: Process the is_key property.
         is_key_now = is_unique_column(new_df[col.name]) and keep_key
         if col.is_key and not is_key_now:
@@ -485,9 +497,6 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
 
         col.is_key = is_key_now
         col.save()
-
-    # Store the result back in the DB
-    store_dataframe_in_db(new_df, pk)
 
     # Recompute all the values of the conditions in each of the actions
     for action in Workflow.objects.get(pk=pk).actions.all():
