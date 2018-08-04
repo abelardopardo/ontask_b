@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+from celery.task.control import inspect
+from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.shortcuts import redirect, render
+from django.urls import reverse
 
 import logs.ops
 from action.models import Action
@@ -40,6 +43,20 @@ def request_data(request, pk):
     # Create the form to ask for the email subject and other information
     form = EmailActionForm(request.POST or None,
                            column_names=workflow.get_column_names())
+
+    # Verify that celery is running!
+    celery_stats = None
+    try:
+        celery_stats = inspect().stats()
+    except Exception as e:
+        pass
+    # If the stats are empty, celery is not running.
+    if not celery_stats:
+        messages.error(
+            request,
+            'Unable to send emails due to a misconfiguration. '
+            'Ask your system administrator to enable email queueing.'),
+        return redirect(reverse('action:index'))
 
     # Process the GET or invalid
     if request.method == 'GET' or not form.is_valid():
