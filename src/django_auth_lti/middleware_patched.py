@@ -1,16 +1,13 @@
-import logging
 import json
-import django_auth_lti.patch_reverse
-
+import logging
 from collections import OrderedDict
 
+from django.conf import settings
 from django.contrib import auth
 from django.core.exceptions import ImproperlyConfigured
-from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from timer import Timer
-
 from .thread_local import set_current_request
 
 logger = logging.getLogger(__name__)

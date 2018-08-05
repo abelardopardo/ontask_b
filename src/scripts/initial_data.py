@@ -116,10 +116,10 @@ def create_users(emails, password, group=None, debug=False):
 
 def run(*script_args):
     """
-    Script to create superuser, group and users in the platform from a CSV file
+    Script to creates group and users in the platform from a CSV file
     with a column containing email addresses. Invocation example:
 
-    python manage.py runscript create_users \
+    python manage.py runscript initial_data \
            --script-args "-d -i -e 'emailcolumn' users.csv"
 
     :param script_args: Arguments given to the script.
@@ -129,16 +129,11 @@ def run(*script_args):
             <filename> CSV filename containing the data
     :return: Changes reflected in the dt
 
-    The script executed three tasks:
+    The script executes two tasks:
 
-    1) Creates the superuser from the values of the environment variables
-       (if present)
-       SUPERUSER_NAME
-       SUPERUSER_PASSWORD
+    1) Creates the group "instructor" if needed
 
-    2) Creates the group "instructor" if needed
-
-    3) Process the CSV files (if given) by selecting the column with the given
+    2) Process the CSV files (if given) by selecting the column with the given
        name (option -e) or 'email' and creating the users accordingly.
     """
 
@@ -185,31 +180,22 @@ def run(*script_args):
         print(' Default password: ', password)
         print(' Files: ' + ', '.join(filenames))
 
-    if debug:
-        print('Step 1: Creating the instructor group')
-    group = Group.objects.filter(name='instructor').first()
-    # Create the instructor group if it does not exist
-    if not group:
-        group = Group(name='instructor')
-        group.save()
-    elif debug:
-        print('Group already exists. Bypassing.')
-    if debug:
-        print('Done')
+    group = None
+    if make_instructors:
+        if debug:
+            print('Step: Creating the instructor group')
+        group = Group.objects.filter(name='instructor').first()
+        # Create the instructor group if it does not exist
+        if not group:
+            group = Group(name='instructor')
+            group.save()
+        elif debug:
+            print('Group already exists. Bypassing.')
+        if debug:
+            print('Done')
 
     if debug:
-        print('Step 2: Creating the superuser')
-    suname = os.environ.get('SUPERUSER_NAME', None)
-    if suname and not get_user_model().objects.filter(email=suname).first():
-        usr = get_user_model().objects.create_superuser(
-            email=suname,
-            password=os.environ.get('SUPERUSER_PASSWORD', None))
-        usr.groups.add(group)
-        usr.save()
-    elif debug:
-        print('Superuser already exists. Bypassing.')
-    if debug:
-        print('Done')
+        print('Step: Creating users')
 
     not_present = [x for x in filenames if not os.path.exists(x)]
     if not_present:
@@ -220,8 +206,6 @@ def run(*script_args):
         print('No files provided to create users. Terminating')
         return
 
-    if debug:
-        print('Step 3: Creating users')
     # Get the emails
     emails = get_column_value_list(filenames, email_column_name, debug)
 

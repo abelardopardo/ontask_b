@@ -35,6 +35,7 @@ class Action(models.Model):
         db_index=True,
         null=False,
         blank=False,
+        on_delete=models.CASCADE,
         related_name='actions')
 
     name = models.CharField(max_length=256, blank=False, verbose_name=_('name'))

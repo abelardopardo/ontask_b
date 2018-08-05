@@ -14,8 +14,9 @@ import os
 from os.path import dirname, join, exists
 
 import environ
+from celery.schedules import crontab
 from django.contrib import messages
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 # import ldap
@@ -300,8 +301,6 @@ SUMMERNOTE_CONFIG = {
     'summernote': {
         'width': '100%',
         'height': '400px',
-        # Use proper language setting automatically
-        'lang': None,
         'disableDragAndDrop': True,
     },
     'css': (
@@ -376,3 +375,10 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
+CELERY_BEAT_SCHEDULE = {
+    'ontask_scheduler': {
+        'task': 'ontask.tasks.execute_email_actions',
+        'schedule': crontab(minute='*/{0}'.format(SCHEDULER_MINUTE_STEP)),
+        'args': (DEBUG,)
+    }
+}

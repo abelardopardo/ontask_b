@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-01 16:32+0930\n"
+"POT-Creation-Date: 2018-08-06 07:51+0930\n"
 "PO-Revision-Date: 2018-08-01 16:25+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -149,7 +149,7 @@ msgstr "Tipo de acción incorrecta"
 msgid "Incorrect date/time window"
 msgstr "Intervalo de fecha/hora incorrecto"
 
-#: action/forms.py:170 scheduler/models.py:91
+#: action/forms.py:170 scheduler/models.py:92
 msgid "Email subject"
 msgstr "Asunto del correo"
 
@@ -189,89 +189,89 @@ msgstr "Fichero"
 msgid "File containing a previously exported action"
 msgstr "Fichero que contiene una acción previamente exportada"
 
-#: action/models.py:40 action/models.py:311
+#: action/models.py:41 action/models.py:312
 msgid "name"
 msgstr "nombre"
 
-#: action/models.py:45 action/models.py:316 workflow/models.py:401
+#: action/models.py:46 action/models.py:317 workflow/models.py:401
 msgid "description"
 msgstr "descripción"
 
-#: action/models.py:54
+#: action/models.py:55
 msgid "Action to provide personalized information"
 msgstr "Acción para ofrecer información personalizada"
 
-#: action/models.py:61
+#: action/models.py:62
 msgid "URL available to users?"
 msgstr "¿URL disponible a los usuarios?"
 
-#: action/models.py:66
+#: action/models.py:67
 msgid "Action available from"
 msgstr "Acción disponible desde"
 
-#: action/models.py:71
+#: action/models.py:72
 msgid "Action available until"
 msgstr "Acción disponible hasta"
 
-#: action/models.py:94 action/templates/action/edit_in.html:102
+#: action/models.py:95 action/templates/action/edit_in.html:102
 msgid "Shuffle questions?"
 msgstr "¿Barajar las preguntas?"
 
-#: action/models.py:321
+#: action/models.py:322
 msgid "formula"
 msgstr "fórmula"
 
-#: action/models.py:326
+#: action/models.py:327
 msgid "Columns present in this condition"
 msgstr "Columnas presentes en esta condición"
 
-#: action/models.py:332
+#: action/models.py:333
 msgid "Number of rows selected"
 msgstr "Número de filas seleccionadas"
 
-#: action/ops.py:81
+#: action/ops.py:82
 msgid "Data not found in the table"
 msgstr "No se han encontrado datos en la tabla"
 
-#: action/ops.py:182
+#: action/ops.py:183
 #, python-brace-format
 msgid "Error when evaluating conditions for user {0}"
 msgstr "Error al evaluar las condiciones para el usuario {0}"
 
-#: action/ops.py:202
+#: action/ops.py:203
 #, python-brace-format
 msgid "Action not enabled for user {0}"
 msgstr "Acción no permitida para el usuario {0}"
 
-#: action/ops.py:374
+#: action/ops.py:375
 msgid "Invalid email address in cc email"
 msgstr "Dirección de correo incorrecta en el CC"
 
-#: action/ops.py:376
+#: action/ops.py:377
 msgid "Invalid email address in bcc email"
 msgstr "Dirección de correo incorrecta en el BCC"
 
-#: action/ops.py:497
+#: action/ops.py:503
 #, python-brace-format
 msgid "Syntax error detected in OnTask notification template ({0})"
 msgstr ""
 "Error de sintaxis detectdado en la plantilla de notificación OnTask ({0})"
 
-#: action/ops.py:524
+#: action/ops.py:530
 #, python-brace-format
 msgid "An error occurred when sending your notification: {0}"
 msgstr "Se ha produciro un error al enviar la notificación: {0}"
 
-#: action/ops.py:579 workflow/ops.py:153
+#: action/ops.py:585 workflow/ops.py:153
 msgid "Incorrect file. Expecting a GZIP file (exported workflow)."
 msgstr "Fichero incorrect. Es espera un fichero GZIP (flujo exportado)."
 
-#: action/ops.py:590 action/ops.py:595 action/ops.py:600
+#: action/ops.py:596 action/ops.py:601 action/ops.py:606
 #, python-brace-format
 msgid "Unable to import action: {0}"
 msgstr "No se puede importar la acción: {0}"
 
-#: action/ops.py:597
+#: action/ops.py:603
 #, python-brace-format
 msgid "Unable to import action due to a validation error: {0}"
 msgstr "No es posible importar la acción debidi a un error de validación: {0}"
@@ -288,7 +288,7 @@ msgstr "Dato de condición incorrecto"
 msgid "Invalid column data"
 msgstr "Dato de columna incorrecto"
 
-#: action/settings.py:34 ontask/settings/base.py:362
+#: action/settings.py:34 ontask/settings/base.py:361
 msgid "OnTask: Action executed"
 msgstr "OnTask: Acción ejecutada"
 
@@ -1020,7 +1020,7 @@ msgstr ""
 #: action/views_action.py:58 action/views_action.py:106 dataops/models.py:72
 #: dataops/templates/dataops/upload_s2.html:40 dataops/views.py:42
 #: table/views.py:35 workflow/attribute_views.py:24 workflow/forms.py:37
-#: workflow/templates/workflow/detail.html:91 workflow/views.py:32
+#: workflow/templates/workflow/detail.html:91 workflow/views.py:33
 msgid "Name"
 msgstr "Nombre"
 
@@ -1033,7 +1033,7 @@ msgstr "Tipo"
 #: action/views_action.py:62 dataops/models.py:79
 #: dataops/templates/dataops/uploadmerge.html:17 dataops/views.py:44
 #: table/views.py:38 workflow/templates/workflow/detail.html:76
-#: workflow/views.py:35
+#: workflow/views.py:36
 msgid "Description"
 msgstr "Descripción"
 
@@ -1081,7 +1081,7 @@ msgstr "Error al acceder al contenido para el estudiante {0}"
 
 #: action/views_action.py:1192 action/views_action.py:1216 logs/views.py:48
 #: logs/views.py:58 table/views.py:170 table/views.py:284 table/views.py:341
-#: workflow/views.py:469
+#: workflow/views.py:483
 msgid "Incorrect request. Unable to process"
 msgstr "Petición incorrecta. No es posible procesarla."
 
@@ -1109,7 +1109,15 @@ msgstr "No se ha podido clonar la condición"
 msgid "Action successfully cloned."
 msgstr "A acción ha sido clonada con éxito."
 
-#: action/views_email.py:123
+#: action/views_email.py:58
+msgid ""
+"Unable to send emails due to a misconfiguration. Ask your system "
+"administrator to enable email queueing."
+msgstr ""
+"No es posible mandar los emails por una incorrecta configuración. "
+" Contacte al administrador para activar la cola de emails."
+
+#: action/views_email.py:140
 msgid "THE SUBJECT WILL BE INSERTED HERE"
 msgstr "EL ASUNTO SE INSERTARÁ AQUÍ"
 
@@ -1360,35 +1368,35 @@ msgstr "Nombre de la base de datos"
 msgid "Table"
 msgstr "Tabla"
 
-#: dataops/ops.py:406
+#: dataops/ops.py:413
 msgid "Merge operation failed. Exception: "
 msgstr "La operación de mezcla ha fallado. Excepción: "
 
-#: dataops/ops.py:431
+#: dataops/ops.py:438
 msgid "Merge operation produced a result with no rows"
 msgstr "La operación de mecla ha producido un resultado sin filas"
 
-#: dataops/ops.py:451 dataops/ops.py:463
+#: dataops/ops.py:455 dataops/ops.py:467
 #, python-brace-format
 msgid "New values in column {0} are not of type {1}"
 msgstr "Los nuevos valores en la columna {0} no son de tipo {1}"
 
-#: dataops/ops.py:458
+#: dataops/ops.py:462
 #, python-brace-format
 msgid "New values in column {0} are not of type number"
 msgstr "Los nuevos valores en la columna {0} no son de tipo numérico"
 
-#: dataops/ops.py:477
+#: dataops/ops.py:481
 #, python-brace-format
 msgid "New values in column {0} are not in categories {1}"
 msgstr "Los nuevos valores en la columna {0} no están en la categoría {1}"
 
-#: dataops/ops.py:485
+#: dataops/ops.py:497
 #, python-brace-format
 msgid "Column {0} is no longer a key column."
 msgstr "La columna {0} ya no es una columna clave."
 
-#: dataops/ops.py:532
+#: dataops/ops.py:541
 #, python-brace-format
 msgid "Type {0} not found"
 msgstr "No se ha encontrado el tipo {0}"
@@ -2049,7 +2057,7 @@ msgid "Folder"
 msgstr "Carpeta"
 
 #: dataops/views.py:46 workflow/templates/workflow/detail.html:78
-#: workflow/views.py:42
+#: workflow/views.py:43
 msgid "Last modified"
 msgstr "Última modificación"
 
@@ -2202,7 +2210,7 @@ msgstr "actualizado el registro de usuario en la base de datos"
 msgid "improperly configured: requeset has no user attr"
 msgstr "configuración incorrecta: request no tiene atributo de usuario"
 
-#: django_auth_lti/middleware.py:35 django_auth_lti/middleware_patched.py:45
+#: django_auth_lti/middleware.py:35 django_auth_lti/middleware_patched.py:42
 msgid ""
 "The Django LTI auth middleware requires the authentication middleware to be "
 "installed.  Edit your MIDDLEWARE_CLASSES setting to insert 'django.contrib."
@@ -2213,20 +2221,20 @@ msgstr ""
 "'django.contrib.auth.middleware.AuthenticationMiddleware' antes de la clase "
 "PINAuthMiddleware."
 
-#: django_auth_lti/middleware.py:43 django_auth_lti/middleware_patched.py:55
+#: django_auth_lti/middleware.py:43 django_auth_lti/middleware_patched.py:52
 msgid "received a basic-lti-launch-request - authenticating the user"
 msgstr "recibido un basic-lti-launch-request - autenticando el usuario"
 
-#: django_auth_lti/middleware.py:49 django_auth_lti/middleware_patched.py:62
+#: django_auth_lti/middleware.py:49 django_auth_lti/middleware_patched.py:59
 #, python-format
 msgid "authenticate() took %s s"
 msgstr "authentiate() tardó %s s"
 
-#: django_auth_lti/middleware.py:56 django_auth_lti/middleware_patched.py:69
+#: django_auth_lti/middleware.py:56 django_auth_lti/middleware_patched.py:66
 msgid "user was successfully authenticated; now log them in"
 msgstr "usuario autenticado con éxito, ahora coenzar sesión"
 
-#: django_auth_lti/middleware.py:116 django_auth_lti/middleware_patched.py:182
+#: django_auth_lti/middleware.py:116 django_auth_lti/middleware_patched.py:179
 msgid ""
 "user could not be authenticated via LTI params; let the request continue in "
 "case another auth plugin is configured"
@@ -2238,7 +2246,7 @@ msgstr ""
 msgid "Could not find LTI launch parameters"
 msgstr "No se han encontrado los parámetros para arrancar LTI"
 
-#: django_auth_lti/middleware.py:137 django_auth_lti/middleware_patched.py:204
+#: django_auth_lti/middleware.py:137 django_auth_lti/middleware_patched.py:201
 #, python-brace-format
 msgid "calling the backend {0} clean_username with {1}"
 msgstr "invocando el backend {0} clean_username con {1}"
@@ -2248,37 +2256,37 @@ msgstr "invocando el backend {0} clean_username con {1}"
 msgid "cleaned username is {0}"
 msgstr "El nombre de usuario limpio es {0}"
 
-#: django_auth_lti/middleware_patched.py:39
+#: django_auth_lti/middleware_patched.py:36
 #, python-format
 msgid "inside process_request %s"
 msgstr "dentro de process_request %s"
 
-#: django_auth_lti/middleware_patched.py:75
+#: django_auth_lti/middleware_patched.py:72
 #, python-format
 msgid "login() took %s s"
 msgstr "login() tardó %s s"
 
-#: django_auth_lti/middleware_patched.py:171
+#: django_auth_lti/middleware_patched.py:168
 #, python-brace-format
 msgid "LTI launch invalidated: {0}"
 msgstr "Ejecución de LTI invalidada: {0}"
 
-#: django_auth_lti/middleware_patched.py:176
+#: django_auth_lti/middleware_patched.py:173
 #, python-brace-format
 msgid "LTI launch added to session: {0}"
 msgstr "LTI añadió la sesión: {0}"
 
-#: django_auth_lti/middleware_patched.py:192
+#: django_auth_lti/middleware_patched.py:189
 #, python-format
 msgid "Could not find LTI launch for resource_link_id %s"
 msgstr "No se ha encontrado LTI launch para resource_link_id %s"
 
-#: django_auth_lti/middleware_patched.py:209
+#: django_auth_lti/middleware_patched.py:206
 #, python-format
 msgid "cleaned username is %s"
 msgstr "Nombre de usuario limpio es %s"
 
-#: django_auth_lti/mixins.py:24
+#: django_auth_lti/mixins.py:25
 msgid "'LTIRoleRestrictionMixin' requires 'allowed_roles' attribute to be set."
 msgstr ""
 "'LTIRoleRestrictionMixin' requiere el atributo 'allowed_roles' asignado"
@@ -2612,19 +2620,19 @@ msgstr ""
 "registros. El interfaz provee operaciones CRUD (crear, leer, actualizar y "
 "borrar) sobre estos objetos."
 
-#: profiles/apps.py:7
+#: profiles/apps.py:9
 msgid "User Profiles"
 msgstr "Perfiles de usuario"
 
-#: profiles/models.py:15
+#: profiles/models.py:18
 msgid "Profile picture"
 msgstr "Foto del usuario"
 
-#: profiles/models.py:20
+#: profiles/models.py:23
 msgid "Email verified"
 msgstr "Correo verificado"
 
-#: profiles/models.py:29
+#: profiles/models.py:32
 msgid "{}'s profile"
 msgstr "Perfil de {}'s"
 
@@ -2740,23 +2748,23 @@ msgstr "terminado_con_error"
 msgid "Execution message"
 msgstr "Mensaje de ejecución"
 
-#: scheduler/models.py:99
+#: scheduler/models.py:101
 msgid "Column containing the email address"
 msgstr "Columna con la dirección de correo"
 
-#: scheduler/models.py:105
+#: scheduler/models.py:107
 msgid "Comma-separated list of CC Emails"
 msgstr "Lista de emails en copia separados por comas"
 
-#: scheduler/models.py:112
+#: scheduler/models.py:114
 msgid "Comma-separated list of BCC Emails"
 msgstr "Lista de emails en copia oculta separados por comas"
 
-#: scheduler/models.py:118
+#: scheduler/models.py:120
 msgid "Send you a confirmation email"
 msgstr "Enviarte un mensaje de confirmación"
 
-#: scheduler/models.py:125
+#: scheduler/models.py:127
 msgid "Track if emails are read?"
 msgstr "¿Rastrear si se leen los emails?"
 
@@ -2896,15 +2904,15 @@ msgstr "La vista necesita al menos una columna a mostrar"
 msgid "There needs to be at least one key column"
 msgstr "Debe haber al menos una columna que sea clave."
 
-#: table/models.py:40
+#: table/models.py:41
 msgid "Subset of columns to show"
 msgstr "Subconjunto de columnas a mostrar"
 
-#: table/models.py:46
+#: table/models.py:47
 msgid "Subset of rows to show"
 msgstr "Subconjunto de filas a mostrar"
 
-#: table/models.py:50
+#: table/models.py:51
 msgid "Preselect rows satisfying this condition"
 msgstr "Preseleccionar las filas que satisfacen esta condición"
 
@@ -3770,35 +3778,35 @@ msgstr "número de columnas"
 msgid "column name"
 msgstr "nombre de columna"
 
-#: workflow/models.py:417
+#: workflow/models.py:418
 msgid "type of data to store in the column"
 msgstr "tipo de dato almacenado en la columna"
 
-#: workflow/models.py:422
+#: workflow/models.py:423
 msgid "has unique values per row"
 msgstr "tiene valores únicos por fila"
 
-#: workflow/models.py:428
+#: workflow/models.py:429
 msgid "column position (zero to insert last)"
 msgstr "posición de la columna (cero para insertar última)"
 
-#: workflow/models.py:437
+#: workflow/models.py:438
 msgid "include in visualization"
 msgstr "incluir en visualizaciones"
 
-#: workflow/models.py:447
+#: workflow/models.py:448
 msgid "comma separated list of values allowed"
 msgstr "lista de valores permitidos separados por comas"
 
-#: workflow/models.py:452
+#: workflow/models.py:453
 msgid "Column active from"
 msgstr "Columna activa desde"
 
-#: workflow/models.py:459
+#: workflow/models.py:460
 msgid "Column active until"
 msgstr "Columna activa hasta"
 
-#: workflow/models.py:532
+#: workflow/models.py:533
 #, python-format
 msgid "Unsupported type %(type)s"
 msgstr "Typo de datos %(type)s no soportado"
@@ -4266,24 +4274,30 @@ msgstr "Nueva conexión SQL"
 msgid "Users with access to this workflow"
 msgstr "Usuarios que pueden acceder a este flujo"
 
-#: workflow/views.py:39
+#: workflow/views.py:40
 msgid "Rows/Columns"
 msgstr "Filas/Columnas"
 
-#: workflow/views.py:40
+#: workflow/views.py:41
 msgid "No data"
 msgstr "Sin datos"
 
-#: workflow/views.py:137
+#: workflow/views.py:138
 msgid "A workflow with that name already exists"
 msgstr "Ya existe un flujo con este nombre"
 
-#: workflow/views.py:245
+#: workflow/views.py:215
+msgid ""
+"WARNING: Celery is not currently running. Please configure it correctly."
+msgstr ""
+"AVISO: Celery no está ejecutando. Por favor, revise la configuración."
+
+#: workflow/views.py:259
 #, python-brace-format
 msgid "The workflow is being modified by user {0}"
 msgstr "El flujo está siendo modificado por el usuario {0}"
 
-#: workflow/views.py:252
+#: workflow/views.py:266
 msgid ""
 "There is another session still open with your account. Log that session out "
 "or wait for it to expire."
@@ -4291,31 +4305,31 @@ msgstr ""
 "Hay otra sesión que está todavía activa con esta cuenta. Termine esa sesión "
 "o espere a que expire."
 
-#: workflow/views.py:336
+#: workflow/views.py:350
 msgid "You can only rename workflows you created."
 msgstr "Sólo se pueden renombrar los flujos que ha creado."
 
-#: workflow/views.py:359
+#: workflow/views.py:373
 msgid "You can only flush the data of  workflows you created."
 msgstr "Sólo se pueden borrar los datos de flujos que ha creado."
 
-#: workflow/views.py:403
+#: workflow/views.py:417
 msgid "You can only delete workflows that you created."
 msgstr "Sólo se pueden borrar flujos que ha creado."
 
-#: workflow/views.py:452
+#: workflow/views.py:466
 msgid "Incorrect request. Unlable to process"
 msgstr "Petición incorrecta. No se puede procesar"
 
-#: workflow/views.py:458
+#: workflow/views.py:472
 msgid "There is no data in the workflow"
 msgstr "No hay datos en el flujo"
 
-#: workflow/views.py:578
+#: workflow/views.py:592
 msgid "Unable to clone workflow"
 msgstr "Imposible clonar flujo"
 
-#: workflow/views.py:605
+#: workflow/views.py:619
 msgid "Workflow successfully cloned."
 msgstr "Flujo clonado con éxito"
 

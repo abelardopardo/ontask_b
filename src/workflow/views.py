@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 import django_tables2 as tables
+from celery.task.control import inspect
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -201,6 +202,19 @@ def workflow_index(request):
         context['table2'] = SQLConnectionTableAdmin(conns,
                                                     id='sqlconn-table',
                                                     orderable=False)
+
+        # Verify that celery is running!
+        celery_stats = None
+        try:
+            celery_stats = inspect().stats()
+        except Exception as e:
+            pass
+        if not celery_stats:
+            messages.error(
+                request,
+                _('WARNING: Celery is not currently running. '
+                'Please configure it correctly.')
+            )
 
     return render(request, 'workflow/index.html', context)
 

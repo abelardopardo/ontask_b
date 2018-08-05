@@ -81,6 +81,7 @@ class ScheduledEmailAction(ScheduledAction):
                                db_index=True,
                                null=False,
                                blank=False,
+                               on_delete=models.CASCADE,
                                related_name='scheduled_actions')
 
     subject = models.CharField(
@@ -96,6 +97,7 @@ class ScheduledEmailAction(ScheduledAction):
         db_index=False,
         null=False,
         blank=False,
+        on_delete=models.CASCADE,
         verbose_name=_('Column containing the email address'))
 
     cc_email = models.CharField(

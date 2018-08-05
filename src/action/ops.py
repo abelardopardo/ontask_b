@@ -22,6 +22,7 @@ from django.shortcuts import render, redirect
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.html import strip_tags
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
@@ -426,8 +427,13 @@ def send_messages(user,
     # Add the column if needed
     if track_read:
         # Create the new column and store
+        d_str = 'Emails sent with action {0} on {1}'.format(
+            action.name,
+            str(timezone.now())
+        )
         column = Column(
             name=track_col_name,
+            description_text=d_str,
             workflow=action.workflow,
             data_type='integer',
             is_key=False,
