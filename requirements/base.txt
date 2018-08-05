@@ -22,8 +22,7 @@ django-jquery==3.1.0
 coreapi==2.3.3
 Pygments==2.2.0
 tzlocal==1.5.1
-psycopg2==2.7.4
-psycopg2-binary==2.7.5
+psycopg2==2.7.5
 Sphinx==1.7.4
 pytz==2018.4
 oauth2==1.9.0.post1
