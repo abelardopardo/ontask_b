@@ -125,6 +125,7 @@ def view_log_list(request, pk):
     context['log_type'] = log_item.name
     context['op_name'] = log_types[log_item.name]
     context['workflow'] = log_item.workflow
+
     # TODO: Change the model to include directly a JSON object, not this.
     context['json_pretty'] = json.dumps(json.loads(log_item.payload),
                                         sort_keys=True,

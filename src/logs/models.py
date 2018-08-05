@@ -33,6 +33,7 @@ class Log(models.Model):
                                  null=True)
 
     # JSON element with additional information
+    # TODO: Change the model to include directly a JSON object, not this
     payload = models.CharField(max_length=65536,
                                default='',
                                null=False,

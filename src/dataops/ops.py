@@ -119,7 +119,6 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
     store_table(data_frame, table_name)
 
     # Review the column types because some "objects" are stored as booleans
-    # TODO: Review this process to optimise
     column_types = df_column_types_rename(table_name)
     for ctype, col in zip(column_types, wf_columns):
         if col.data_type != ctype:
