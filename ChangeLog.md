@@ -2,6 +2,10 @@
 
 ### Added
 
+- Localization and internationalization support. First language supported, 
+  es-ES. There are still a few areas that need polishing, but the bulk of the
+  translation is done.
+   
 - Boolean field in the action-in to request the questions to be shuffled when
   shown to the learners (some survey instruments suggest this).
   
@@ -28,7 +32,7 @@
 - Show questions in Action In editor in the same order in which they are in the 
   workflow 
   
-- Configuration of Summernote now precludes the use of drag and drop.
+- Configuration of Summernote now precludes the use of drag and drop (Issue #63)
 
 ### Fixed
 
