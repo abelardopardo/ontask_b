@@ -403,6 +403,7 @@ class Column(models.Model):
                                  editable=False,
                                  null=False,
                                  blank=False,
+                                 on_delete=models.CASCADE,
                                  related_name='columns')
 
     # Column type

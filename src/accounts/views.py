@@ -4,7 +4,7 @@ from authtools import views as authviews
 from braces import views as bracesviews
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 
 from . import forms
 

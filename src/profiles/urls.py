@@ -2,7 +2,10 @@
 from __future__ import unicode_literals
 
 from django.conf.urls import url
+
 from . import views
+
+app_name = 'profiles'
 
 urlpatterns = [
     url(r'^me$', views.ShowProfile.as_view(), name='show_self'),
