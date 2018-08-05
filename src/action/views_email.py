@@ -55,7 +55,7 @@ def request_data(request, pk):
         messages.error(
             request,
             'Unable to send emails due to a misconfiguration. '
-            'Ask your system administrator to enable email queueing.'),
+            'Ask your system administrator to enable email queueing.')
         return redirect(reverse('action:index'))
 
     # Process the GET or invalid
