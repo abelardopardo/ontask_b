@@ -2,9 +2,9 @@
 from __future__ import unicode_literals, print_function
 
 from builtins import str
+from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
-from django.utils.translation import ugettext_lazy as _
 
 from action.models import Action
 from action.serializers import ActionSerializer, ConditionSerializer, \
@@ -293,6 +293,12 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
                     _('Imported column {0} is different from existing '
                       'one.').format(cname)
                 )
+
+            # Update the column categories (just in case the new one has a
+            # different order)
+            col.set_categories(citem['categories'])
+
+
         new_column_names = [x['name'] for x in new_columns]
 
         action_obj = None
