@@ -16,7 +16,7 @@ from os.path import dirname, join, exists
 import environ
 from celery.schedules import crontab
 from django.contrib import messages
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 
 # import ldap
 # from django_auth_ldap.config import (
