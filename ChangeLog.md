@@ -16,6 +16,8 @@
  
 - Dashboard now available from the table views (and subviews)
 
+- Script to create users in bulk with a CSV file.
+
 ### Changed
 
 - Changed configuration scripts to take the environment file name from the 
