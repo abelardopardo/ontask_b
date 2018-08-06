@@ -10,9 +10,9 @@ from django.db.models import F, Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.utils.translation import ugettext_lazy as _
 
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
@@ -95,7 +95,7 @@ def show_ss(request):
                     data-toggle="tooltip" title="{1}">
               <span class="glyphicon glyphicon-eye-open"></span> {2}
             </button>
-            """.formaat(reverse('logs:view', kwargs={'pk': item[0]}),
+            """.format(reverse('logs:view', kwargs={'pk': item[0]}),
                        _('View the content of this log'),
                        _('View'))]
 
