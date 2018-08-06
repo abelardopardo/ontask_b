@@ -160,7 +160,7 @@ def evaluate_node(node, given_variables):
     elif operator == 'begins_with' and node['type'] == 'string':
         result = (varvalue is not None) and varvalue.startswith(constant)
 
-    elif operator == 'not_begin_with' and node['type'] == 'string':
+    elif operator == 'not_begins_with' and node['type'] == 'string':
         result = not ((varvalue is not None) and varvalue.startswith(constant))
 
     elif operator == 'contains' and node['type'] == 'string':
