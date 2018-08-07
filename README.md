@@ -1,6 +1,6 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 2.7.3 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 2.8.0 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
 ## OnTask in a nutshell
 
@@ -10,7 +10,7 @@ Current Version: 2.7.3 ([documentation](http://ontask-version-b.readthedocs.io/e
 
 - Actions such as personalised email, personalised web page
 
-- Integrated data capture mechanism (similar to a survey engine)
+- Basic survey engine to collect student responses
 
 - Visualization of columns (population measures) and individuals with
   respect to the population
@@ -22,6 +22,8 @@ Current Version: 2.7.3 ([documentation](http://ontask-version-b.readthedocs.io/e
 - Time-based scheduler for actions
 
 - Import/Export functionality to share workflows, data and actions.
+
+- Import/Export functionality for surveys
 
 - Table views to see only a subset of the data
 
@@ -209,6 +211,8 @@ licenses:
 
 - [bootstrap-session-timeout](https://github.com/orangehill/bootstrap-session-timeout) MIT
 
+- [Celery](https://github.com/celery/celery) BSD 3 Clause
+
 - [coreapi](https://pypi.python.org/pypi/coreapi) BSD
 
 - [Django](https://www.djangoproject.com) BSD License
@@ -220,8 +224,17 @@ licenses:
 - [django-braces](https://pypi.python.org/pypi/django-braces/1.12.0). BSD 
   License
 
+- [django-celery-beat](https://github.com/celery/django-celery-beat) BSD 3 
+  Clause
+
+- [django-celery-results](https://github.com/celery/django-celery-results) 
+  BSD 3 Clause
+
 - [django-crispy-forms](https://pypi.python.org/pypi/django-crispy-forms/1.7.0) 
   MIT
+  
+- [django-datetime-widget](https://github.com/asaglimbeni/django-datetime-widget) 
+  BSD 3 Clause
 
 - [django-environ](https://pypi.python.org/pypi/django-environ) MIT License
 
@@ -266,6 +279,9 @@ licenses:
 - [pytz](https://pypi.python.org/pypi/pytz) MIT
 
 - [Redis](https://redis.io) BSD
+
+- [searchable-option-list](https://github.com/pbauerochse/searchable-option-list) 
+  MIT License
 
 - [Sphinx](https://pypi.python.org/pypi/Sphinx) BSD
 
