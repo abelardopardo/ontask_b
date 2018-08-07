@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function
 import itertools
 
 from django.utils.dateparse import parse_datetime
+from django.utils.translation import ugettext_lazy as _
 
 from ontask import OntaskException, fix_pctg_in_name
 
@@ -145,7 +146,9 @@ def evaluate_node(node, given_variables):
         elif node['type'] == 'datetime':
             constant = parse_datetime(node['value'])
         else:
-            raise Exception('No function to translate type', node['type'])
+            raise Exception(
+                _('No function to translate type {0}').format(node['type'])
+            )
 
     # Terminal Node
     if operator == 'equal':
@@ -157,7 +160,7 @@ def evaluate_node(node, given_variables):
     elif operator == 'begins_with' and node['type'] == 'string':
         result = (varvalue is not None) and varvalue.startswith(constant)
 
-    elif operator == 'not_begin_with' and node['type'] == 'string':
+    elif operator == 'not_begins_with' and node['type'] == 'string':
         result = not ((varvalue is not None) and varvalue.startswith(constant))
 
     elif operator == 'contains' and node['type'] == 'string':
@@ -198,23 +201,32 @@ def evaluate_node(node, given_variables):
              or node['type'] == 'datetime'):
         result = varvalue >= constant
 
-    elif operator == 'between' and \
-            (node['type'] == 'integer' or node['type'] == 'double'
-             or node['type'] == 'datetime'):
-        result = node['value'][0] <= varvalue <= node['value'][1]
+    elif operator == 'between' or operator == 'not_between':
+        if node['type'] == 'integer':
+            left = int(node['value'][0])
+            right = int(node['value'][1])
+        elif node['type'] == 'double':
+            left = float(node['value'][0])
+            right = float(node['value'][1])
+        elif node['type'] == 'datetime':
+            left = parse_datetime(node['value'][0])
+            right = parse_datetime(node['value'][1])
+        else:
+            raise Exception(_('Incorrect data type'))
 
-    elif operator == 'not_between' and \
-            (node['type'] == 'integer' or node['type'] == 'double'
-             or node['type'] == 'datetime'):
-        result = not (node['value'][0] <= varvalue <= node['value'][1])
+        result = left <= varvalue <= right
+        if operator == 'not_between':
+            result = not result
 
     else:
-        raise Exception('Type, operator, field',
-                        node['type'], operator, varname,
-                        'not supported yet.')
+        raise Exception(
+            _('Type, operator, field {0}, {1}, {2} not supported yet').format(
+                node['type'], operator, varname
+            )
+        )
 
     if node.get('not', False):
-        raise Exception('Negation found in unexpected location')
+        raise Exception(_('Negation found in unexpected location'))
 
     return result
 
@@ -248,12 +260,12 @@ def evaluate_node_sql(node):
         # Now combine
         if node['condition'] == 'AND':
             result = '((' + \
-                     ') AND ('.join([x for x, _ in sub_pairs]) + '))'
+                     ') AND ('.join([x for x, __ in sub_pairs]) + '))'
         else:
             result = '((' + \
-                     ') OR ('.join([x for x, _ in sub_pairs]) + '))'
+                     ') OR ('.join([x for x, __ in sub_pairs]) + '))'
         result_fields = \
-            list(itertools.chain.from_iterable([x for _, x in sub_pairs]))
+            list(itertools.chain.from_iterable([x for __, x in sub_pairs]))
 
         if node.get('not', False):
             result = '(NOT (' + result + '))'
@@ -270,7 +282,7 @@ def evaluate_node_sql(node):
     # If the operator is between or not_between, there is a special case,
     # the constant cannot be computed because the node['value'] is a pair
     constant = None
-    if 'between' not in operator:
+    if node['value'] is not None:
         # Calculate the constant value depending on the type
         if node['type'] == 'integer':
             constant = int(node['value'])
@@ -283,7 +295,9 @@ def evaluate_node_sql(node):
         elif node['type'] == 'datetime':
             constant = node['value']
         else:
-            raise Exception('No function to translate type', node['type'])
+            raise Exception(
+                _('No function to translate type {0}').format(node['type'])
+            )
 
     # Terminal Node
     result_fields = []
@@ -372,11 +386,13 @@ def evaluate_node_sql(node):
         result_fields = [str(node['value'][0]), str(node['value'][1])]
 
     else:
-        raise Exception('Type, operator, field',
-                        node['type'], operator, varname,
-                        'not supported yet.')
+        raise Exception(
+            _('Type, operator, field {0}, {1}, {2} not supported yet').format(
+                node['type'], operator, varname
+            )
+        )
 
     if node.get('not', False):
-        raise Exception('Negation found in unexpected location')
+        raise Exception(_('Negation found in unexpected location'))
 
     return result, result_fields

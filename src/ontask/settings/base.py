@@ -10,11 +10,14 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import os
 from os.path import dirname, join, exists
 
 import environ
+from celery.schedules import crontab
 from django.contrib import messages
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 
 # import ldap
 # from django_auth_ldap.config import (
@@ -25,19 +28,22 @@ from django.core.urlresolvers import reverse_lazy
 
 # Use 12factor inspired environment variables or from a file and define defaults
 env = environ.Env(
-    DEBUG=False,
+    DEBUG=(bool, False),
     LTI_OAUTH_CREDENTIALS=(dict, {})
 )
 
 # Ideally move env file should be outside the git repo
 # i.e. BASE_DIR.parent.parent
-env_file = join(dirname(__file__), 'local.env')
+env_file_name = os.environ.get('ENV_FILENAME', 'local.env')
+env_file = join(dirname(__file__), env_file_name)
 if exists(env_file):
+    print('Loading environment file {0}'.format(env_file_name))
     environ.Env.read_env(str(env_file))
 
 # Read various variables from the environment
 BASE_URL = env('BASE_URL')
 DOMAIN_NAME = env('DOMAIN_NAME')
+DEBUG = env('DEBUG')
 
 # Build paths inside the project like this: join(BASE_DIR(), "directory")
 BASE_DIR = environ.Path(__file__) - 3
@@ -94,6 +100,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django_celery_beat',
+    'django_celery_results',
 
     'authtools',
     'crispy_forms',
@@ -123,6 +131,7 @@ INSTALLED_APPS = (
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django_auth_lti.middleware_patched.MultiLTILaunchAuthMiddleware',
@@ -132,7 +141,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
-    'django.middleware.locale.LocaleMiddleware'
 )
 
 PASSWORD_HASHERS = [
@@ -142,6 +150,8 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
     'django.contrib.auth.hashers.BCryptPasswordHasher',
 ]
+
+LOCALE_PATHS = (join(PROJECT_PATH, 'locale'),)
 
 #
 # LDAP AUTHENTICATION
@@ -196,7 +206,7 @@ AUTHENTICATION_BACKENDS = [
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": env('REDIS_URL'),
         "TIMEOUT": 1800,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
@@ -287,8 +297,12 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 SITE_ID = 1
 
 SUMMERNOTE_CONFIG = {
-    'width': '100%',
-    'height': '400px',
+    'iframe': False,
+    'summernote': {
+        'width': '100%',
+        'height': '400px',
+        'disableDragAndDrop': True,
+    },
     'css': (
         '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/theme/base16-dark.min.css',
     ),
@@ -301,8 +315,9 @@ SUMMERNOTE_CONFIG = {
         'lineNumbers': True,
         'lineWrapping': True,
     },
+    # Disable attachment feature.
+    'disable_attachment': False,
     'lazy': True,
-    'disableDragAndDrop': True,
 }
 
 # Extra configuration options
@@ -327,13 +342,13 @@ EMAIL_ACTION_NOTIFICATION_TEMPLATE = """
 <body>
 <p>Dear {{ user.name }}</p>
 
-<p>This message is to inform you that on {{ email_sent_datetime }}  
-{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent 
-resulting from the execution of the action with name "{{ action.name }}".</p> 
+<p>This message is to inform you that on {{ email_sent_datetime }}
+{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent
+resulting from the execution of the action with name "{{ action.name }}".</p>
 
 {% if filter_present %}
-<p>The action had a filter that reduced the number of messages from 
-{{ num_rows }} to {{ num_selected }}.</p> 
+<p>The action had a filter that reduced the number of messages from
+{{ num_rows }} to {{ num_selected }}.</p>
 {% else %}
 <p>All the data rows stored in the workflow table were used.</p>
 {% endif %}
@@ -342,7 +357,8 @@ Regards.
 The OnTask Support Team
 </body></html>"""
 
-EMAIL_ACTION_NOTIFICATION_SUBJECT = "OnTask: Action executed"
+
+EMAIL_ACTION_NOTIFICATION_SUBJECT = _("OnTask: Action executed")
 EMAIL_ACTION_NOTIFICATION_SENDER = 'ontask@ontasklearning.org'
 EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII='
 
@@ -351,3 +367,18 @@ LOGS_MAX_LIST_SIZE = 200
 SHORT_DATETIME_FORMAT = 'r'
 
 SCHEDULER_MINUTE_STEP = 15
+
+# CELERY parameters
+CELERY_BROKER_URL = env('REDIS_URL')
+CELERY_RESULT_BACKEND = env('REDIS_URL')
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_BEAT_SCHEDULE = {
+    'ontask_scheduler': {
+        'task': 'ontask.tasks.execute_email_actions',
+        'schedule': crontab(minute='*/{0}'.format(SCHEDULER_MINUTE_STEP)),
+        'args': (DEBUG,)
+    }
+}

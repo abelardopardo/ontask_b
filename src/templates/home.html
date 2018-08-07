@@ -1,33 +1,27 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load settings %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
-
-{% block title %}{{ block.super }}Home{% endblock %}
-
+{% block title %}{{ block.super }}{% trans 'Home' %}{% endblock %}
 {% block navbar-left %}
   {% include "_navbar.html" with active_link="home" %}
 {% endblock %}
-
 {% block navbar-right %}
   {% if not user.is_authenticated %}
     <a class="btn btn-default" href="{% url 'accounts:login' %}"
-    role="button">Log in</a>
+    role="button">{% trans 'Log in' %}</a>
   {% else %}
     {{ block.super }}
   {% endif %}
 {% endblock %}
-
 {% block splash %}
   <div class="jumbotron jumbotron-carousel corporate-jumbo">
     <div class="container">
       <div class="row">
         <div class="col-md-8 col-sm-8">
           <h1>{% include "_brandname.html" %}</h1>
-          <p>Facilitating conversations at scale</p>
-          {% comment %}
-	  <a class="btn btn-primary" href="{% url 'accounts:signup' %}" role="button">Sign up for Free!</a>
-          {% endcomment %}
+          <p>{% trans 'Facilitating conversations at scale' %}</p>
         </div>
         <div class="col-md-4 col-sm-4">
 
@@ -36,33 +30,34 @@
     </div>
   </div>
 {% endblock splash %}
-
 {% block container %}
   <div class="container-fluid">
     <div class="row">
       <div class="col-lg-4">
-        <h2>The importance of personalisation</h2>
-        <p>Learners are more likely to have an effective experience
+        <h2>{% trans 'The importance of personalisation' %}</h2>
+        <p>{% blocktrans %}Learners are more likely to have an effective
+          experience
           when their environment is personalised. Resources, comments,
           suggestions and feedback that take into account the reality of each
           learner are much more effective than those addressing an entire
           cohort. But personalisation has traditionally been based on highly
           detailed pre-conceived models of learner behaviour. OnTask offers an
           environment to personalise resources based on data collected from any
-          learning environment.
+          learning environment.{% endblocktrans %}
         </p>
       </div>
       <div class="col-lg-4">
-        <h2>The importance of feedback</h2>
-        <p>Feedback is more effective when framed as a dialogue. But such
+        <h2>{% trans 'The importance of feedback' %}</h2>
+        <p>{% blocktrans %}Feedback is more effective when framed as a
+          dialogue. But such
           dialogue will be highly dependent on the personal situation of each
           learner. How can we combine knowledge about the learners with the
           need to have personalised interaction? OnTask will help instructors
-          and learners to initiate this dialogue.</p>
+          and learners to initiate this dialogue.{% endblocktrans %}</p>
       </div>
       <div class="col-lg-4">
-        <h2>The importance of data</h2>
-        <p>In the era of technology-mediated learning, data is
+        <h2>{% trans 'The importance of data' %}</h2>
+        <p>{% blocktrans %}In the era of technology-mediated learning, data is
           ubiquitous. But instead of providing instantaneous benefits,
           this abundance brings a serious challenge to tranform data into
         actionable knowledge. It is not enough to have data, it is essential
@@ -70,9 +65,9 @@
           learning environment. How can this support be articulated?
           How can it be used in multiple environments? OnTask
         establishes this connection between data and its use to provide a
-          scalable solution to learning personalisation.</p>
+          scalable solution to learning personalisation.{% endblocktrans %}</p>
         <p><a class="btn btn-primary" href="https://ontasklearning.org"
-              role="button">More Information &raquo;</a></p>
+              role="button">{% trans 'More Information' %} &raquo;</a></p>
       </div>
     </div>
     <div class="container-fluid">
@@ -81,8 +76,7 @@
     </div>
   </div>
 {% endblock container %}
-
 {% block scripts %}
-<script src="{% static 'site/js/site.js' %}{% otv %}"></script>
+  <script src="{% static 'site/js/site.js' %}{% otv %}"></script>
 {% endblock scripts %}
 

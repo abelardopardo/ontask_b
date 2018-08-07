@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function
 import numpy as np
 import pandas as pd
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 from action.models import Condition, Action
 from dataops import formula_evaluation
@@ -109,8 +110,7 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
         column.save()
 
     # Get now the new set of columns with names
-    wf_columns = Column.objects.filter(
-        workflow__id=pk)
+    wf_columns = Column.objects.filter(workflow__id=pk)
 
     # Reorder the columns in the data frame
     data_frame = data_frame[[x.name for x in wf_columns]]
@@ -119,7 +119,6 @@ def store_table_in_db(data_frame, pk, table_name, temporary=False):
     store_table(data_frame, table_name)
 
     # Review the column types because some "objects" are stored as booleans
-    # TODO: Review this process to optimise
     column_types = df_column_types_rename(table_name)
     for ctype, col in zip(column_types, wf_columns):
         if col.data_type != ctype:
@@ -363,9 +362,29 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
                  if not columns_to_upload[x]],
                 axis=1, inplace=True)
 
+    # If no kee_key_column value is given, initialize to True
+    if 'keep_key_column' not in merge_info:
+        kk_column = []
+        for cname in merge_info['rename_column_names']:
+            kk_column.append(is_unique_column(src_df[cname]))
+        merge_info['keep_key_column'] = kk_column
+
     # If no dst_df is given, simply dump the frame in the DB
     if dst_df is None:
         store_dataframe_in_db(src_df, pk)
+        # Reconcile the label is_key with the one in the merge_info
+        workflow = Workflow.objects.get(pk=pk)
+        for cname, uploaded, is_key in zip(merge_info['rename_column_names'],
+                                           merge_info['columns_to_upload'],
+                                           merge_info['keep_key_column']):
+            if not uploaded:
+                # If the column has not been uploaded, forget about it
+                continue
+
+            column = workflow.columns.get(name=cname)
+            column.is_key = is_key
+            column.save()
+
         return None
 
     # Get the keys
@@ -390,7 +409,7 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
                               left_on=dst_key,
                               right_on=src_key)
         except Exception as e:
-            return 'Merge operation failed. Exception: ' + e.message
+            return _('Merge operation failed. Exception: ') + e.message
 
         # VERY special case: The key used for the merge in src_df can have an
         # identical column in dst_df, but it is not the one used for the
@@ -415,10 +434,11 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
     # If the merge produced a data frame with no rows, flag it as an error to
     # prevent loosing data when there is a mistake in the key column
     if new_df.shape[0] == 0:
-        return 'Merge operation produced a result with no rows'
+        return _('Merge operation produced a result with no rows')
 
     # For each column check that the new column is consistent with data_type,
     # and allowed values, and recheck its unique key status
+    workflow = Workflow.objects.get(pk=pk)
     for col in Workflow.objects.get(pk=pk).columns.all():
         # New values in this column should be compatible with the current
         # column properties.
@@ -431,19 +451,19 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
             # Remove the NaN type
             column_data_types.remove(float)
             if len(column_data_types) != 1 or column_data_types.pop() != bool:
-                return 'New values in column {0} are not of type {1}'.format(
+                return _('New values in column {0} are not of type {1}').format(
                     col.name,
                     col.data_type
                 )
         elif col.data_type == 'integer' and df_col_type != 'integer' and \
                 df_col_type != 'double':
             # Numeric column results in a non-numeric column
-            return 'New values in column {0} are not of type number'.format(
+            return _('New values in column {0} are not of type number').format(
                 col.name
             )
         elif col.data_type != 'integer' and df_col_type != col.data_type:
             # Any other type change
-            return 'New values in column {0} are not of type {1}'.format(
+            return _('New values in column {0} are not of type {1}').format(
                 col.name,
                 col.data_type
             )
@@ -457,22 +477,26 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
                                           x != np.nan and
                                           x != pd.NaT]):
             return \
-                'New values in column {0} are not in categories {1}'.format(
+                _('New values in column {0} are not in categories {1}').format(
                     col.name,
                     ', '.join(col.categories)
                 )
 
-        # Condition 3:
-        is_key_now = is_unique_column(new_df[col.name])
-        if col.is_key and not is_key_now:
-            return \
-                'Column {0} is no longer a key column.'.format(col.name)
-
-        col.is_key = is_key_now
-        col.save()
 
     # Store the result back in the DB
     store_dataframe_in_db(new_df, pk)
+
+    # Update the value of the "keey_key_column"
+    for cname, keep_key in zip(merge_info['rename_column_names'],
+                               merge_info['keep_key_column']):
+        col = workflow.columns.get(name=cname)
+        # Condition 3: Process the is_key property.
+        is_key_now = is_unique_column(new_df[col.name]) and keep_key
+        if col.is_key and not is_key_now:
+            return _('Column {0} is no longer a key column.').format(col.name)
+
+        col.is_key = is_key_now
+        col.save()
 
     # Recompute all the values of the conditions in each of the actions
     for action in Workflow.objects.get(pk=pk).actions.all():
@@ -513,7 +537,7 @@ def data_frame_add_column(df, column, initial_value):
         elif column_type == 'datetime':
             initial_value = pd.NaT
         else:
-            raise ValueError('Type ' + column_type + ' not found.')
+            raise ValueError(_('Type {0} not found').format(column_type))
 
     # Create the empty column
     df[column.name] = initial_value

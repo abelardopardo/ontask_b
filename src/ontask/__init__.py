@@ -2,9 +2,15 @@
 """
 Basic functions and definitions used all over the platform.
 """
-from __future__ import unicode_literals, print_function
+from __future__ import unicode_literals, print_function, absolute_import
 
-__version__ = 'B.2.7.3'
+from ontask.celery import app as celery_app
+
+__all__ = ['celery_app']
+
+from django.utils.translation import ugettext_lazy as _
+
+__version__ = 'B.2.8.0'
 
 
 def is_legal_name(val):
@@ -32,10 +38,10 @@ def is_legal_name(val):
     """
 
     if "'" in val:
-        return "The symbol ' cannot be used in the column name."
+        return _("The symbol ' cannot be used in the column name.")
 
     if '"' in val:
-        return 'The symbol " cannot be used in the column name.'
+        return _('The symbol " cannot be used in the column name.')
 
     return None
 
@@ -60,3 +66,4 @@ class OntaskException(Exception):
 
     def __str__(self):
         return repr(self.value)
+

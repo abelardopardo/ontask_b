@@ -40,3 +40,7 @@ basic operations (create a table, update a table, merge).
    datetime, but instead it will render the column of type string. This my
    have also an effect on how rules and actions are evaluated.
 
+If OnTask is hosted in a server like Apache, you may need to check your
+configuration so that it allows the processing of the ``HTTP_AUTHORIZATION``
+headers. For example, the module WSGI for Apache by default filters out this
+header.

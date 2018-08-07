@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load django_tables2 %}
@@ -28,7 +29,8 @@
           },
           stateSave: true,
           "language": {
-            "emptyTable": "There are no views for this workflow."
+            "emptyTable": "{% trans 'There are no views for this workflow.' %}",
+            "url": getLanguage()
           },
           "columnDefs": [
             {"className": "dt-center", "targets": "_all"},
@@ -50,26 +52,24 @@
     };
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}Views{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Table Views' %}{% endblock %}
 {% block container %}
 <div id="view-content" align="center" class="container-fluid">
-  <h1 class="page-header">Table Views</h1>
+  <h1 class="page-header">{% trans 'Table Views' %}</h1>
   <p>
     <button type="button" class="btn btn-sm btn-default"
-            onclick="location.href='{% url 'table:display' %}'">Back
+            onclick="location.href='{% url 'table:display' %}'">{% trans 'Back' %}
     </button>
     <button type="button" class="btn btn-sm btn-primary js-view-add"
             data-url="{% url 'table:view_add' %}"
             data-toggle="tooltip"
-            title="New view for the table">
-      <span class="glyphicon glyphicon-plus"></span> Add View
+            title="{% trans 'New view for the table' %}">
+      <span class="glyphicon glyphicon-plus"></span> {% trans 'Add View' %}
     </button>
   </p>
-
   {% if table %}
     {% render_table table %}
   {% endif %}
-
   <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">

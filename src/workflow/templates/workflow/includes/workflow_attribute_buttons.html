@@ -1,10 +1,12 @@
+{% load i18n %}
 <div style="margin-bottom: 2ex;">
   <a href="{% url 'workflow:detail' wid %}"
-       class="btn btn-default btn-sm align-middle"> Back</a>
+       class="btn btn-default btn-sm align-middle"> {% trans 'Back' %}</a>
   <button type="button"
           class="btn btn-primary btn-sm js-attribute-create"
           data-url="{% url 'workflow:attribute_create' %}"
-          data-toggle="tooltip" title="Add a new name/value pair">
-    <span class="glyphicon glyphicon-plus"></span> New Attribute
+          data-toggle="tooltip"
+          title="{% trans 'Add a new name/value pair' %}">
+    <span class="glyphicon glyphicon-plus"></span> {% trans 'New Attribute' %}
   </button>
 </div>

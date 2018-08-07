@@ -1,16 +1,13 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 {% load thumbnail %}
-
-{% block title %}{{ block.super }}Profile{% endblock %}
-
+{% block title %}{{ block.super }}{% trans 'Profile' %}{% endblock %}
 <!-- Benefits of the Django application -->
 {% block container %}
-
 <div class="container">
-  <h1 class="text-primary">Edit Profile</h1>
+  <h1 class="text-primary">{% trans 'Edit Profile' %}</h1>
   <hr>
   <div class="row">
     <!-- left column -->
@@ -19,10 +16,9 @@
         <img title="profile picture" class="img-circle img-responsive" src="{% thumbnail user.profile.picture|default:'default_profile.png' 140x140 crop %}">
       </div>
     </div>
-      
     <!-- edit form column -->
     <div class="col-md-9">
-      <h3>Personal info</h3>
+      <h3>{% trans 'Personal info' %}</h3>
       <form enctype="multipart/form-data" method="post">
 	{% crispy user_form %}
 	{% crispy profile_form %}
@@ -33,7 +29,8 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <a class="btn btn-default pull-right" href="{% url 'accounts:password-change' %}">Change Password</a>
+      <a class="btn btn-default pull-right"
+         href="{% url 'accounts:password-change' %}">{% trans 'Change Password' %}</a>
     </div>
   </div>
 </div>

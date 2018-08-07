@@ -1,7 +1,7 @@
 var insertConditionInContent = function() {
   var btn = $(this);
   var range = $("#id_content").summernote('createRange');
-  condition_text = 'YOUR TEXT HERE';
+  condition_text = gettext('YOUR TEXT HERE');
   range_text = range.toString();
   if (range_text != '') {
     condition_text = range_text;
@@ -23,7 +23,44 @@ var insertAttributeInContent = function() {
 
 var insertColumnInActionIn = function () {
   var val = $(this).val();
-  window.location = val;
+  var sel = $(this)
+  $('#div-spinner').show();
+  //window.location = val;
+  $.ajax({
+    url: val,
+    type: 'get',
+    dataType: 'json',
+    success: function (data) {
+      if (typeof data.html_redirect != 'undefined') {
+        location.href = data.html_redirect;
+      }
+      sel.children("option[value='']").remove();
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      location.reload();
+    }
+  });
+  $('#div-spinner').hide();
+}
+
+var toggleShuffleQuestion = function () {
+  $('#div-spinner').show();
+  $.ajax({
+    url: $(this).attr("data-url"),
+    type: 'get',
+    dataType: 'json',
+    success: function (data) {
+        if (data.shuffle = true) {
+            $(this).attr('checked')
+        } else {
+            $(this).removeAttr('checked')
+        }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      location.reload();
+    }
+  });
+  $('#div-spinner').hide();
 }
 
 var loadFormPost = function () {
@@ -140,6 +177,11 @@ $(function () {
   $("#action-in-editor").on("change",
                        "#select-key-column-name",
                        insertColumnInActionIn);
+
+  // Toggle shuffle question
+  $("#action-in-editor").on("change",
+                       "#shuffle-questions",
+                       toggleShuffleQuestion);
   // Preview
   $("#html-editor").on("click", ".js-action-preview", loadFormPost);
   $("#email-action-request-data").on("click", ".js-email-preview", loadForm);

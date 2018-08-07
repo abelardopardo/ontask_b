@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load django_tables2 %}
@@ -11,37 +12,37 @@
 {% block scripts %}
   <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
 {% endblock %}
-{% block title %}{{ block.super }}Add row{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Add row' %}{% endblock %}
 {% block container %}
 <div align="center" class="container">
-  <h1 class="page-header">Add row</h1>
-  <p>Workflow {{ workflow.name }}</p>
+  <h1 class="page-header">{% trans 'Add row' %}</h1>
+  <p>{% blocktrans with n=workflow.name %}Workflow {{ n }}{% endblocktrans %}</p>
   <div class="container">
     <form action="" method="post">
       {% csrf_token %}
       {% if cancel_url %}
         <button type="button" class="btn btn-default"
-        onclick="location.href='{{ cancel_url }}'">Cancel</button>
+        onclick="location.href='{{ cancel_url }}'">{% trans 'Cancel' %}</button>
       {% endif %}
       <button type="submit" name="submit" value="update"
               class="btn btn-primary">
-        <span class="glyphicon glyphicon-ok"></span> Add
+        <span class="glyphicon glyphicon-ok"></span> {% trans 'Add' %}
       </button>
       <div class="input-group input-group-lg">
         {{ form|crispy }}
       </div>
       {% if cancel_url %}
         <button type="button" class="btn btn-default"
-        onclick="location.href='{{ cancel_url }}'">Cancel</button>
+        onclick="location.href='{{ cancel_url }}'">{% trans 'Cancel' %}</button>
       {% endif %}
       <button type="submit" name="submit" value="update"
               class="btn btn-primary">
-        <span class="glyphicon glyphicon-ok"></span> Add
+        <span class="glyphicon glyphicon-ok"></span> {% trans 'Add' %}
       </button>
     </form>
   </div>
   {% if not form %}
-    <p><strong>No data available for this workflow</strong></p>
+    <p><strong>{% trans 'No data available for this workflow' %}</strong></p>
   {% endif %}
 </div>
 {% endblock container %}

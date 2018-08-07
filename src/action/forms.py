@@ -6,6 +6,7 @@ import json
 from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django_summernote.widgets import SummernoteInplaceWidget
+from django.utils.translation import ugettext_lazy as _
 
 from ontask import ontask_prefs, is_legal_name
 from ontask.forms import column_to_field, dateTimeOptions, RestrictedFileField
@@ -28,7 +29,6 @@ class ActionForm(forms.ModelForm):
 
 
 class ActionDescriptionForm(forms.ModelForm):
-
     class Meta:
         model = Action
         fields = ('description_text',)
@@ -140,11 +140,11 @@ class EnableURLForm(forms.ModelForm):
         if a_from and a_to and a_from >= a_to:
             self.add_error(
                 'active_from',
-                'Incorrect date/time window'
+                _('Incorrect date/time window')
             )
             self.add_error(
                 'active_to',
-                'Incorrect date/time window'
+                _('Incorrect date/time window')
             )
 
         return data
@@ -167,22 +167,32 @@ class EmailActionBasicForm(forms.Form):
     subject = forms.CharField(max_length=1024,
                               strip=True,
                               required=True,
-                              label='Email subject')
+                              label=_('Email subject'))
 
     email_column = forms.ChoiceField(
-        label='Column to use for target email address',
+        label=_('Column to use for target email address'),
         required=True
+    )
+
+    cc_email = forms.CharField(
+        label=_('Comma separated list of CC emails'),
+        required=False
+    )
+    bcc_email = forms.ChoiceField(
+        label=_('Comma separated list of BCC emails'),
+        required=False
     )
 
     send_confirmation = forms.BooleanField(
         initial=False,
         required=False,
-        label='Send you a summary message?')
+        label=_('Send you a summary message?')
+    )
 
     track_read = forms.BooleanField(
         initial=False,
         required=False,
-        label="Track email reading in an extra column?"
+        label=_('Track email reading in an extra column?')
     )
 
     def __init__(self, *args, **kargs):
@@ -211,12 +221,12 @@ class EmailActionForm(EmailActionBasicForm):
     export_wf = forms.BooleanField(
         initial=False,
         required=False,
-        label="Download a snapshot of the current state of the workflow?",
-        help_text="A zip file useful to review the emails sent."
+        label=_('Download a snapshot of the current state of the workflow?'),
+        help_text=_('A zip file useful to review the emails sent.')
     )
 
-class ActionImportForm(forms.Form):
 
+class ActionImportForm(forms.Form):
     # Action name
     name = forms.CharField(
         max_length=512,
@@ -228,7 +238,5 @@ class ActionImportForm(forms.Form):
         max_upload_size=str(ontask_prefs.MAX_UPLOAD_SIZE),
         content_types=json.loads(str(ontask_prefs.CONTENT_TYPES)),
         allow_empty_file=False,
-        label="File",
-        help_text='File containing a previously exported action')
-
-
+        label=_('File'),
+        help_text=_('File containing a previously exported action'))

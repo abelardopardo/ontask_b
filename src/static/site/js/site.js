@@ -10,8 +10,8 @@ var set_column_select = function(element_id) {
     maxHeight: '250px',
     showSelectAll: true,
     texts: {
-      searchplaceholder: 'Click here to search for columns',
-      noItemsAvailable: 'No columns found',
+      searchplaceholder: gettext('Click here to search for columns'),
+      noItemsAvailable: gettext('No columns found'),
     },
   });
  }

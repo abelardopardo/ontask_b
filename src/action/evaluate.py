@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-"""
 from __future__ import unicode_literals, print_function
 
 import re
@@ -11,18 +9,19 @@ from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.utils.html import escape
 from validate_email import validate_email
+from django.utils.translation import ugettext_lazy as _
 
 import dataops.formula_evaluation
 from action.forms import EnterActionIn
-from action.models import Condition
+from action.models import Condition, var_use_res
 from dataops import pandas_db, ops
-from ontask import OntaskException
 from workflow.models import Workflow
 
 # Variable name to store the workflow ID in the context used to render a
 # template
 action_context_var = 'ONTASK_ACTION_CONTEXT_VARIABLE___'
 viz_number_context_var = 'ONTASK_VIZ_NUMBER_CONTEXT_VARIABLE___'
+
 
 def make_xlat(*args, **kwds):
     """
@@ -141,13 +140,6 @@ def render_template(template_text, context_dict, action=None):
     :return: The rendered template
     """
 
-    # Regular expressions detecting the use of a variable, or the
-    # presence of a "{% MACRONAME variable %} construct in a string (template)
-    var_use_res = [
-        re.compile('(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+\}\})'),
-        re.compile('(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})')
-    ]
-
     # Steps 1 and 2. Apply the tranlation process to all variables that
     # appear in the the template text
     new_template_text = template_text
@@ -157,7 +149,7 @@ def render_template(template_text, context_dict, action=None):
                       translate(m.group('vname')) + \
                       m.group('mup_post'),
             new_template_text)
-    new_template_text = '{% load vis_include %}' + new_template_text
+    # new_template_text = '{% load vis_include %}' + new_template_text
 
     # Step 3. Apply the translation process to the context keys
     new_context = dict([(translate(escape(x)), y)
@@ -168,11 +160,13 @@ def render_template(template_text, context_dict, action=None):
     assert len(context_dict) == len(new_context)
 
     if action_context_var in new_context:
-        raise Exception('Name {0} is reserved.'.format(action_context_var))
+        raise Exception(_('Name {0} is reserved.').format(action_context_var))
     new_context[action_context_var] = action
 
     if viz_number_context_var in new_context:
-        raise Exception('Name {0} is reserved.'.format(viz_number_context_var))
+        raise Exception(_('Name {0} is reserved.').format(
+            viz_number_context_var)
+        )
     new_context[viz_number_context_var] = 0
 
     # Step 4. Return the redering of the new elements
@@ -228,11 +222,11 @@ def evaluate_action(action, extra_string, column_name):
                               for x in data_frame[column_name]])
         if not correct_emails:
             # column has incorrect email addresses
-            return 'The column with email addresses has incorrect values.'
+            return _('The column with email addresses has incorrect values.')
     except TypeError:
-        return 'The column with email addresses has incorrect values'
+        return _('The column with email addresses has incorrect values.')
 
-    for _, row in data_frame.iterrows():
+    for __, row in data_frame.iterrows():
 
         # Get the dict(col_name, value)
         row_values = dict(zip(col_names, row))
@@ -261,77 +255,61 @@ def evaluate_action(action, extra_string, column_name):
         # Step 5: run the template with the given context
         # Render the text and append to result
         try:
-            partial_result = [render_template(action.content,
+            partial_result = [render_template(action.get_content(),
                                               context,
                                               action)]
         except Exception as e:
-            return 'Syntax error detected in the action text. ' + e.message
+            return _('Syntax error detected in the action text. {0}').format(
+                e.message
+            )
 
         # If there is extra message, render with context and create tuple
         if extra_string:
             try:
                 partial_result.append(render_template(extra_string, context))
             except Exception as e:
-                return 'Syntax error detected in the subject. ' + e.message
+                return _('Syntax error detected in the subject. {0}').format(
+                    e.message
+                )
 
-        # If column_name was given (and it exists), create a tuple with that
-        # element as the third component
-        if col_idx != -1:
-            partial_result.append(row_values[col_names[col_idx]])
+    # If column_name was given (and it exists), create a tuple with that
+    # element as the third component
+    if col_idx != -1:
+        partial_result.append(row_values[col_names[col_idx]])
 
-        # Append result
-        result.append(partial_result)
+    # Append result
+    result.append(partial_result)
 
     return result
 
 
-def evaluate_row(action, row_idx):
+def get_row_values(action, row_idx):
     """
-    Given an action and a row index, evaluate the content of the action for
-    that index. The evaluation depends on the action type.
-
-    Given an action object and a row index:
-    1) Access the attached workflow
-    2) Obtain the row of data from the appropriate data frame
-    3) Process further depending on the type of action
+    Given an action and a row index, obtain the appropriate row of values
+    from the data frame.
 
     :param action: Action object
     :param row_idx: Row index to use for evaluation
-    :return HTML content resulting from the evaluation
+    :return Dictionary with the data row
     """
 
-    # Step 1: Get the workflow to access the data. No need to check for
-    # locking information as it has been checked upstream.
-    workflow = Workflow.objects.get(pk=action.workflow.id)
-
-    # Step 2: Get the row of data from the DB
-    try:
-        cond_filter = Condition.objects.get(action__id=action.id,
-                                            is_filter=True)
-    except ObjectDoesNotExist:
-        cond_filter = None
+    # Step 1: Get the row of data from the DB
+    cond_filter = Condition.objects.filter(action__id=action.id,
+                                           is_filter=True).first()
 
     # If row_idx is an integer, get the data by index, otherwise, by key
     if isinstance(row_idx, int):
-        row_values = ops.get_table_row_by_index(workflow,
+        result = ops.get_table_row_by_index(action.workflow,
+                                            cond_filter,
+                                            row_idx)
+    else:
+        result = pandas_db.get_table_row_by_key(action.workflow,
                                                 cond_filter,
                                                 row_idx)
-    else:
-        row_values = pandas_db.get_table_row_by_key(workflow,
-                                                    cond_filter,
-                                                    row_idx)
-    if row_values is None:
-        # No rows satisfy the given condition
-        return None
-
-    # Invoke the appropriate function depending on the action type
-    if action.is_out:
-        return evaluate_row_out(action, row_values)
-
-    return evaluate_row_in(action, row_values)
+    return result
 
 
-def evaluate_row_out(action, row_values):
+def evaluate_row_action_out(action, context, text=None):
     """
     Given an action object and a row index:
     1) Evaluate the conditions with respect to the values in the row
@@ -342,54 +320,37 @@ def evaluate_row_out(action, row_values):
 
     :param action: Action object with pointers to conditions, filter,
                    workflow, etc.
-    :param row_values: dictionary with the pairs name, value
+    :param context: dictionary with the pairs name, value for the columns,
+    attributes and conditions (true/false)
+    :param text: If given, the text is processed in the template, if not
+    action_content is used
     :return: String with the HTML content resulting from the evaluation
     """
 
-    # Step 1: Evaluate all the conditions
-    condition_eval = {}
-    condition_anomalies = []
-    for condition in Condition.objects.filter(
-            action__id=action.id
-    ).values('name', 'is_filter', 'formula'):
-        if condition['is_filter']:
-            # Filter can be skipped in this stage
-            continue
+    # If context is None, propagate.
+    if context is None:
+        return None
 
-        # Evaluate the condition
-        try:
-            condition_eval[condition['name']] = \
-                dataops.formula_evaluation.evaluate_top_node(
-                    condition['formula'],
-                    row_values
-                )
-        except OntaskException as e:
-            condition_anomalies.append(e.value)
+    # Invoke the appropriate function depending on the action type
+    if not action.is_out:
+        raise Exception(_('Incorrect type of action'))
 
-    # If any of the variables was incorrectly evaluated, we replace the
-    # content and replace it by something noting this anomaly
-    if condition_anomalies:
-        return render_to_string('action/incorrect_preview.html',
-                                {'missing_values': condition_anomalies})
+    if text is None:
+        # If the text is not given, take the one in the action
+        text = action.get_content()
 
-    # Step 2: Create the context with the attributes, the evaluation of the
-    # conditions and the values of the columns.
-    attributes = action.workflow.attributes
-    context = dict(dict(row_values, **condition_eval), **attributes)
-
-    # Step 3: run the template with the given context
+    # Run the template with the given context
     # First create the template with the string stored in the action
     try:
-        result = render_template(action.content, context, action)
+        result = render_template(text, context, action)
     except TemplateSyntaxError as e:
         return render_to_string('action/syntax_error.html',
                                 {'msg': e.message})
 
-    # Step 4: Render the text
     return result
 
 
-def evaluate_row_in(action, row_values):
+def evaluate_row_action_in(action, context):
     """
     Given an action IN object and a row index:
     1) Create the form and the context
@@ -405,7 +366,7 @@ def evaluate_row_in(action, row_values):
     columns = [c for c in action.columns.all() if c.is_active]
 
     # Get the row values.
-    selected_values = [row_values[c.name] for c in columns]
+    selected_values = [context[c.name] for c in columns]
 
     form = EnterActionIn(None, columns=columns, values=selected_values)
 
@@ -473,5 +434,3 @@ def run(*script_args):
 
     print(escape(context.items()[0][0]))
     print(render_template(template, context))
-
-

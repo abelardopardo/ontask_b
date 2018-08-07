@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load crispy_forms_field %}
@@ -12,19 +13,18 @@
   <script src="{% static 'site/js/sol.js' %}"></script>
   <script src="{% static 'dataops/js/dataops.js' %}"></script>
 {% endblock %}
-{% block title %}{{ block.super }}Run Transformation{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Run Transformation' %}{% endblock %}
 {% block container %}
   <div align="center" class="container-fluid" style="max-width:800px">
-    <h1 class="page-header">Information to run plugin "{{ pinstance.name }}"</h1>
+    <h1 class="page-header">
+      {% blocktrans with n=pinstance.name %}Information to run plugin "{{ n }}"{% endblocktrans %}
+    </h1>
     <form method="POST" action="">
       {% csrf_token %}
-      {% comment %}
-       {{ form|crispy }}
-      {% endcomment %}
       <div class="form-group{% if form.columns.errors %} has-error{% endif %}"
            style="border:1px solid black;padding-left:1ex;padding-right:1ex;">
         {% if pinstance.input_column_names %}
-            <p class="lead">Input columns</p>
+            <p class="lead">{% trans 'Input columns' %}</p>
             <p>{{ pinstance.input_column_names|join:", " }}</p>
         {% else %}
             {% include 'form_field.html' with field=form.columns form_show_labels=True %}
@@ -38,11 +38,11 @@
 
       <div class="form-group{% if form.merge_key.errors %} has-error{% endif %}"
            style="border:1px solid black;padding:1ex;">
-        <p class="lead">Output column names</p>
+        <p class="lead">{% trans 'Output column names' %}</p>
         {% for field in output_column_fields %}
           {% include 'form_field.html' with field=field form_show_labels=True %}
         {% endfor %}
-        <p class="help-block">Change the default names if needed.</p>
+        <p class="help-block">{% trans 'Change the default names if needed.' %}</p>
       </div>
 
       <div class="form-group{% if form.merge_key.errors %} has-error{% endif %}"
@@ -52,7 +52,7 @@
 
       <div class="form-group{% if form.merge_key.errors %} has-error{% endif %}"
            style="border:1px solid black;padding:1ex;">
-        <p class="lead">Execution parameters</p>
+        <p class="lead">{% trans 'Execution parameters' %}</p>
         {% for field in parameters %}
           {% include 'form_field.html' with field=field form_show_labels=True %}
         {% endfor %}

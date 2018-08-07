@@ -1,3 +1,4 @@
+{% load i18n %}
 <form method="post" 
   {% if add %}
     action="{% url 'action:create_filter' action_id %}" 
@@ -11,20 +12,20 @@
     <button type="button" class="close" data-dismiss="modal" arial-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title">{% if add %}Create action filter{% else %}Edit filter{% endif %}</h4>
+    <h4 class="modal-title">{% if add %}{% trans 'Create action filter' %}{% else %}{% trans 'Edit filter' %}{% endif %}</h4>
   </div>
   <div class="modal-body">
     {% include 'action/includes/partial_form_fields.html' %}
     <div id="builder"></div>
   </div>
   <div class="modal-footer" style="text-align: center;">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
+    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}
     </button>
     <button type="submit" class="btn btn-primary">
       {% if add %}
-        <span class="glyphicon glyphicon-ok"></span> Create filter</button>
+        <span class="glyphicon glyphicon-ok"></span> {% trans 'Create filter' %}</button>
       {% else %}
-        <span class="glyphicon glyphicon-ok"></span> Update</button>
+        <span class="glyphicon glyphicon-ok"></span> {% trans 'Update' %}</button>
       {% endif %}
   </div>
 </form>

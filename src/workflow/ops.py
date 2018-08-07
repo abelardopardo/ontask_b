@@ -14,6 +14,7 @@ from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
+from django.utils.translation import ugettext_lazy as _
 
 import logs.ops
 from action.models import Condition
@@ -149,7 +150,7 @@ def do_import_workflow(user, name, file_item):
         data_in = gzip.GzipFile(fileobj=file_item)
         data = JSONParser().parse(data_in)
     except IOError:
-        return 'Incorrect file. Expecting a GZIP file (exported workflow).'
+        return _('Incorrect file. Expecting a GZIP file (exported workflow).')
 
     # Serialize content
     workflow_data = WorkflowImportSerializer(
@@ -167,16 +168,16 @@ def do_import_workflow(user, name, file_item):
         # Save the new workflow
         workflow = workflow_data.save(user=user, name=name)
     except (TypeError, NotImplementedError) as e:
-        return 'Unable to import workflow (Exception: ' + e.message + ')'
+        return _('Unable to import workflow (Exception: {0})').format(e.message)
     except serializers.ValidationError as e:
-        return 'Unable to import workflow due to a validation error'
+        return _('Unable to import workflow due to a validation error')
     except Exception as e:
-        return 'Unable to import workflow (Exception: ' + e.message + ')'
+        return _('Unable to import workflow (Exception: {0})').format(e.message)
 
     if not pandas_db.check_wf_df(workflow):
         # Something went wrong.
         workflow.delete()
-        return 'Workflow data with incorrect structure.'
+        return _('Workflow data with incorrect structure.')
 
     # Success
     # Log the event
@@ -278,6 +279,32 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
     return
 
 
+def workflow_restrict_column(workflow, column):
+    """
+    Given a workflow and a column, modifies the column so that only the
+    values already present are allowed for future updates.
+
+    :param workflow: Workflow object
+    :param column: Column object to restrict
+    :return: String with error or None if correct
+    """
+
+    # Load the data frame
+    data_frame = pandas_db.load_from_db(column.workflow.id)
+
+    cat_values = set(data_frame[column.name].dropna())
+    if not cat_values:
+        # Column has no meaningful values. Nothing to do.
+        return _('Column has no meaningful values')
+
+    # Set categories
+    column.set_categories(list(cat_values))
+    column.save()
+
+    # Correct execution
+    return None
+
+
 def clone_column(column, new_workflow=None, new_name=None):
     """
     Function that given a column clones it and changes workflow and name
@@ -309,10 +336,6 @@ def clone_column(column, new_workflow=None, new_name=None):
 
     # Reposition the columns above the one being deleted
     column.workflow.reposition_columns(column.position, old_position + 1)
-
-    # Set the new column in the right location
-    column.position = old_position + 1
-    column.save()
 
     # Add the column to the table and update it.
     data_frame = pandas_db.load_from_db(column.workflow.id)

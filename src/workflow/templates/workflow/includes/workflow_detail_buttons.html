@@ -1,20 +1,25 @@
+{% load i18n %}
 <div class="dropdown">
   {% if workflow.nrows != 0 %}
     <button type="button"
             class="btn btn-primary btn-sm js-workflow-column-add"
             data-url="{% url 'workflow:column_add' %}"
-            data-toggle="tooltip" title="Add a new column to the table">
-      <span class="glyphicon glyphicon-plus"></span> Add column
+            data-toggle="tooltip" 
+            title="{% trans 'Add a new column to the table' %}">
+      <span class="glyphicon glyphicon-plus"></span>
+      {% trans 'Add column' %}
     </button>
     <button type="button"
             class="btn btn-primary btn-sm js-workflow-formula-column-add"
             data-url="{% url 'workflow:formula_column_add' %}"
-            data-toggle="tooltip" title="Add a new derived column to the table">
-      <span class="glyphicon glyphicon-plus"></span> Add derived column
+            data-toggle="tooltip" 
+            title="{% trans 'Add a new derived column to the table' %}">
+      <span class="glyphicon glyphicon-plus"></span>
+      {% trans 'Add derived column' %}
     </button>
   {% endif %}
   <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-          data-toggle="dropdown"> More
+          data-toggle="dropdown"> {% trans 'More' %}
     <span class="caret"></span>
   </button>
   <ul role="menu" class="dropdown-menu">
@@ -22,15 +27,16 @@
       <a href="{% url 'workflow:attributes' %}"
          class="btn btn-default btn-sm"
          data-toggle="tooltip"
-         title="List of name=value pairs to use in the actions">
-        <span class="glyphicon glyphicon-list"></span> Attributes
+         title="{% trans 'List of name=value pairs to use in the actions' %}">
+        <span class="glyphicon glyphicon-list"></span> {% trans 'Attributes' %}
       </a>
     </li>
     <li>
       <a href="{% url 'workflow:export_ask' workflow.id %}"
          class="btn btn-default btn-sm"
-         data-toggle="tooltip" title="Export the workflow and its actions">
-        <span class="glyphicon glyphicon-export"></span> Export
+         data-toggle="tooltip" 
+         title="{% trans 'Export the workflow and its actions' %}">
+        <span class="glyphicon glyphicon-export"></span> {% trans 'Export' %}
       </a>
     </li>
     {% if request.user == workflow.user %}
@@ -38,34 +44,37 @@
         <button type="button" style="width:100%;"
                 class="btn btn-default btn-sm js-workflow-update align-middle"
                 data-url="{% url 'workflow:update' workflow.id %}">
-            <span class="glyphicon glyphicon-pencil"></span> Rename
+            <span class="glyphicon glyphicon-pencil"></span>
+          {% trans 'Rename' %}
         </button>
       </li>     <li>
         <a href="{% url 'workflow:share' %}" class="btn btn-default btn-sm"
            data-toggle="tooltip"
-           title="Allow other users to access the workflow">
-          <span class="glyphicon glyphicon-share"></span> Share
+           title="{% trans 'Allow other users to access the workflow' %}">
+          <span class="glyphicon glyphicon-share"></span> {% trans 'Share' %}
         </a>
       </li>
       <li>
         <button type="button" style="width:100%;"
            class="btn btn-default btn-sm js-workflow-clone align-middle"
                 data-url="{% url 'workflow:clone' workflow.id %}">
-          <span class="glyphicon glyphicon-duplicate"></span> Clone
+          <span class="glyphicon glyphicon-duplicate"></span>
+          {% trans 'Clone' %}
         </button>
       </li>
       <li>
         <button type="button" style="width:100%;"
                 class="btn btn-default btn-sm js-workflow-flush"
                 data-url="{% url 'workflow:flush' workflow.id %}">
-          <span class="glyphicon glyphicon-floppy-remove"></span> Flush Data
+          <span class="glyphicon glyphicon-floppy-remove"></span>
+          {% trans 'Flush Data' %}
         </button>
       </li>
       <li>
         <button type="button" style="width:100%;"
                 class="btn btn-default btn-sm js-workflow-delete"
                 data-url="{% url 'workflow:delete' workflow.id %}">
-          <span class="glyphicon glyphicon-trash"></span> Delete
+          <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
         </button>
       </li>
     {% endif %}

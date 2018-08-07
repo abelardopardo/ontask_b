@@ -29,10 +29,12 @@ class RestrictedFileField(forms.FileField):
             if data.content_type in self.content_types:
                 if data.size > self.max_upload_size:
                     raise forms.ValidationError(
-                        _('File size must be under %s. Current file size is'
-                          ' %s.')
-                        % (filesizeformat(self.max_upload_size),
-                           filesizeformat(data.size)))
+                        _('File size must be under %(max)s. Current file '
+                           'size is %(current)s.')
+                        % ({
+                            'max': filesizeformat(self.max_upload_size),
+                            'current': filesizeformat(data.size)
+                        }))
             else:
                 raise forms.ValidationError(
                     _('File type (%s) is not supported.') % data.content_type)
@@ -107,5 +109,4 @@ def column_to_field(col, initial=None, required=False, label=None):
                                   bootstrap_version=3),
         )
     else:
-        raise Exception('Unable to process datatype ', col.data_type)
-
+        raise Exception(_('Unable to process datatype '), col.data_type)

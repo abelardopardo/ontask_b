@@ -29,9 +29,11 @@ class Log(models.Model):
 
     workflow = models.ForeignKey(Workflow,
                                  db_index=True,
+                                 on_delete=models.CASCADE,
                                  null=True)
 
     # JSON element with additional information
+    # TODO: Change the model to include directly a JSON object, not this
     payload = models.CharField(max_length=65536,
                                default='',
                                null=False,

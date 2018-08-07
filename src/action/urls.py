@@ -51,7 +51,7 @@ urlpatterns = [
     # Action import
     url(r'^import/$', views_action.action_import, name='import'),
 
-    # Select column for action in
+    # Select key column for action in
     url(r'^(?P<apk>\d+)/(?P<cpk>\d+)/(?P<key>\d+)/select_column_action/$',
         views_action.select_column_action,
         name='select_key_column_action'),
@@ -65,6 +65,11 @@ urlpatterns = [
     url(r'^(?P<apk>\d+)/(?P<cpk>\d+)/unselect_column_action/$',
         views_action.unselect_column_action,
         name='unselect_column_action'),
+
+    # Toggle shuffle action-in
+    url(r'^(?P<pk>\d+)/shuffle_questions/$',
+        views_action.shuffle_questions,
+        name='shuffle_questions'),
 
     # Update an action of type 0: in, 1: Out
     url(r'^(?P<pk>\d+)/(?P<type>[01])/update/$',

@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 
 import logs.ops
 from action.models import Condition
@@ -20,8 +21,8 @@ class AttributeTable(tables.Table):
     """
     Table to render the list of attributes attached to a workflow
     """
-    name = tables.Column(verbose_name=str('Name'))
-    value = tables.Column(verbose_name=str('Value'))
+    name = tables.Column(verbose_name=_('Name'))
+    value = tables.Column(verbose_name=_('Value'))
     operations = OperationsColumn(
         verbose_name='Ops',
         template_file='workflow/includes/partial_attribute_operations.html',
@@ -85,7 +86,7 @@ def save_attribute_form(request, workflow, template, form, key_idx):
     if attr_name in workflow.get_column_names():
         form.add_error(
             'key',
-            'There is a column with this name. Please change.'
+            _('There is a column with this name. Please change.')
         )
         data['html_form'] = render_to_string(
             template,
@@ -102,7 +103,7 @@ def save_attribute_form(request, workflow, template, form, key_idx):
     if attr_name in cond_names:
         form.add_error(
             'key',
-            'There is a condition already with this name.'
+            _('There is a condition already with this name.')
         )
         data['html_form'] = render_to_string(
             'workflow/includes/partial_attribute_create.html',

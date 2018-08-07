@@ -1,14 +1,15 @@
+{% load i18n %}
 <div class="dropdown">
   {% if is_verified %}
     <a href="{% url 'dataops:plugin_invoke' id %}" class="btn btn-primary btn-sm"
-       data-toggle="tooltip" title="Execute the transformation">
-      <span class="glyphicon glyphicon-off"></span> Run</a>
+       data-toggle="tooltip" title="{% trans 'Execute the transformation' %}">
+      <span class="glyphicon glyphicon-off"></span> {% trans 'Run' %}</a>
   {% else %}
     <button type="button" class="btn btn-danger js-transform-diagnose"
             data-url="{% url 'dataops:plugin_diagnose' id %}"
             data-toggle="tooltip"
-            title="See how is the content shown to each learner">
-      <span class="glyphicon glyphicon-eye-open"></span> Diagnose
+            title="{% trans 'See how is the content shown to each learner' %}">
+      <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Diagnose' %}
     </button>
   {% endif %}
 </div>

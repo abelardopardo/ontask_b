@@ -8,6 +8,7 @@ from __future__ import unicode_literals, print_function
 
 import datetime
 import gzip
+import random
 from io import BytesIO
 
 import pytz
@@ -21,13 +22,17 @@ from django.shortcuts import render, redirect
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.html import strip_tags
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
+from django.utils.translation import ugettext_lazy as _
+from validate_email import validate_email
 
 import logs.ops
-from action.evaluate import evaluate_row, evaluate_action
+from action.evaluate import evaluate_row_action_out, evaluate_action, \
+    get_row_values
 from action.forms import EnterActionIn, field_prefix
 from action.models import Action
 from dataops import pandas_db, ops
@@ -55,6 +60,10 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
 
     # Get the active columns attached to the action
     columns = [c for c in action.columns.all() if c.is_active]
+    if action.shuffle:
+        # Shuffle the columns if needed
+        random.seed(request.user)
+        random.shuffle(columns)
 
     # Get the row values. User_instance has the record used for verification
     row_pairs = pandas_db.get_table_row_by_key(
@@ -70,7 +79,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
             return render(request, '404.html', {})
 
         messages.error(request,
-                       'Data not found in the table')
+                       _('Data not found in the table'))
         return redirect(reverse('action:run', kwargs={'pk': action.id}))
 
     # Bind the form with the existing data
@@ -112,10 +121,9 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
 
         value = form.cleaned_data[field_prefix + '%s' % idx]
         if column.is_key:
-            if not where_field:
-                # Remember one unique key for selecting the row
-                where_field = column.name
-                where_value = value
+            # Remember one unique key for selecting the row
+            where_field = column.name
+            where_value = value
             continue
 
         set_fields.append(column.name)
@@ -158,18 +166,43 @@ def serve_action_out(user, action, user_attribute_name):
     :param user_attribute_name: Column to check for email
     :return:
     """
-    # User_instance has the record used for verification
-    action_content = evaluate_row(action, (user_attribute_name,
-                                           user.email))
 
+    # For the response
     payload = {'action': action.name,
                'action_id': action.id}
+
+    # User_instance has the record used for verification
+    row_values = get_row_values(action,
+                                (user_attribute_name, user.email))
+
+    # Get the dictionary containing column names, attributes and condition
+    # valuations:
+    context = action.get_evaluation_context(row_values)
+    if context is None:
+        payload['error'] = \
+            _('Error when evaluating conditions for user {0}').format(
+                user.email
+            )
+        # Log the event
+        logs.ops.put(
+            user,
+            'action_served_execute',
+            workflow=action.workflow,
+            payload=payload
+        )
+        return HttpResponse(render_to_string('action/action_unavailable.html',
+                                             {}))
+
+    # Evaluate the action content.
+    action_content = evaluate_row_action_out(action, context)
 
     # If the action content is empty, forget about it
     response = action_content
     if action_content is None:
         response = render_to_string('action/action_unavailable.html', {})
-        payload['error'] = 'Action not enabled for user ' + user.email
+        payload['error'] = _('Action not enabled for user {0}').format(
+            user.email
+        )
 
     # Log the event
     logs.ops.put(
@@ -281,6 +314,8 @@ def send_messages(user,
                   subject,
                   email_column,
                   from_email,
+                  cc_email_list,
+                  bcc_email_list,
                   send_confirmation,
                   track_read):
     """
@@ -292,13 +327,15 @@ def send_messages(user,
     :param subject: Email subject
     :param email_column: Name of the column from which to extract emails
     :param from_email: Email of the sender
+    :param cc_email_list: List of emails to include in the CC
+    :param bcc_email_list: List of emails to include in the BCC
     :param send_confirmation: Boolean to send confirmation to sender
     :param track_read: Should read tracking be included?
     :return: Send the emails
     """
 
     # Evaluate the action string, evaluate the subject, and get the value of
-    # the email colummn.
+    # the email column.
     result = evaluate_action(action,
                              extra_string=subject,
                              column_name=email_column)
@@ -322,10 +359,22 @@ def send_messages(user,
 
     # Update the number of filtered rows if the action has a filter (table
     # might have changed)
-    filter = action.conditions.filter(is_filter=True).first()
-    if filter and filter.n_rows_selected != len(result):
-        filter.n_rows_selected = len(result)
-        filter.save()
+    cfilter = action.conditions.filter(is_filter=True).first()
+    if cfilter and cfilter.n_rows_selected != len(result):
+        cfilter.n_rows_selected = len(result)
+        cfilter.save()
+
+    # Set the cc_email_list and bcc_email_list to the right values
+    if not cc_email_list:
+        cc_email_list = []
+    if not bcc_email_list:
+        bcc_email_list = []
+
+    # Check that cc and bcc contain list of valid email addresses
+    if not all([validate_email(x) for x in cc_email_list]):
+        return _('Invalid email address in cc email')
+    if not all([validate_email(x) for x in bcc_email_list]):
+        return _('Invalid email address in bcc email')
 
     # Everything seemed to work to create the messages.
     msgs = []
@@ -360,7 +409,10 @@ def send_messages(user,
             msg_subject,
             text_content,
             from_email,
-            [msg_to])
+            [msg_to],
+            bcc_email_list,
+            cc=cc_email_list
+        )
         msg.attach_alternative(msg_body + track_str, "text/html")
         msgs.append(msg)
 
@@ -375,8 +427,13 @@ def send_messages(user,
     # Add the column if needed
     if track_read:
         # Create the new column and store
+        d_str = 'Emails sent with action {0} on {1}'.format(
+            action.name,
+            str(timezone.now())
+        )
         column = Column(
             name=track_col_name,
+            description_text=d_str,
             workflow=action.workflow,
             data_type='integer',
             is_key=False,
@@ -418,7 +475,9 @@ def send_messages(user,
          'filter_present': filter is not None,
          'num_rows': action.workflow.nrows,
          'subject': subject,
-         'from_email': user.email})
+         'from_email': user.email,
+         'cc_email': cc_email_list,
+         'bcc_email': bcc_email_list})
 
     # If no confirmation email is required, done
     if not send_confirmation:
@@ -432,7 +491,7 @@ def send_messages(user,
         'email_sent_datetime': now,
         'filter_present': filter is not None,
         'num_rows': action.workflow.nrows,
-        'num_selected': filter.n_rows_selected if filter else -1}
+        'num_selected': cfilter.n_rows_selected if filter else -1}
 
     # Create template and render with context
     try:
@@ -441,8 +500,8 @@ def send_messages(user,
         ).render(Context(context))
         text_content = strip_tags(html_content)
     except TemplateSyntaxError as e:
-        return 'Syntax error detected in OnTask notification template (' + \
-               e.message + ')'
+        return _('Syntax error detected in OnTask notification template '
+                 '({0})').format(e.message)
 
     # Log the event
     logs.ops.put(
@@ -468,7 +527,8 @@ def send_messages(user,
             [user.email],
             html_message=html_content)
     except Exception as e:
-        return 'An error occurred when sending your notification: ' + e.message
+        return _('An error occurred when sending your notification: '
+                 '{0}').format(e.message)
 
     return None
 
@@ -522,7 +582,7 @@ def do_import_action(user, workflow, name, file_item):
         data_in = gzip.GzipFile(fileobj=file_item)
         data = JSONParser().parse(data_in)
     except IOError:
-        return 'Incorrect file. Expecting a GZIP file (exported workflow).'
+        return _('Incorrect file. Expecting a GZIP file (exported workflow).')
 
     # Serialize content
     action_data = ActionSelfcontainedSerializer(
@@ -531,26 +591,24 @@ def do_import_action(user, workflow, name, file_item):
     )
 
     # If anything goes wrong, return a string to show in the page.
-    action = None
     try:
         if not action_data.is_valid():
-            return 'Unable to import action:' + ' ' + action_data.errors
+            return _('Unable to import action: {0}').format(action_data.errors)
 
         # Save the new workflow
         action = action_data.save(user=user, name=name)
     except (TypeError, NotImplementedError) as e:
-        return 'Unable to import action:  ' + e.message
+        return _('Unable to import action: {0}').format(e.message)
     except serializers.ValidationError as e:
-        return 'Unable to import action due to a validation error:' + e.message
+        return _('Unable to import action due to a validation error: '
+                 '{0}').format(e.message)
     except Exception as e:
-        return 'Unable to import action: ' + e.message
+        return _('Unable to import action: {0}').format(e.message)
 
-
-    # Success
-    # Log the event
+    # Success, log the event
     logs.ops.put(user,
-                 'workflow_import',
+                 'action_import',
                  workflow,
-                 {'id': workflow.id,
-                  'name': workflow.name})
+                 {'id': action.id,
+                  'name': action.name})
     return None

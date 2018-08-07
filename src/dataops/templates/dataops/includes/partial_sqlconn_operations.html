@@ -1,6 +1,7 @@
+{% load i18n %}
 <div class="dropdown">
   <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-          data-toggle="dropdown"> Ops <span class="caret"></span>
+          data-toggle="dropdown"> {% trans 'Ops' %} <span class="caret"></span>
   </button>
   <ul role="menu" class="dropdown-menu">
     <li>
@@ -8,24 +9,26 @@
               class="btn btn-default btn-sm js-sqlconn-edit"
               data-url="{% url 'dataops:sqlconn_edit' id %}"
               data-toggle="tooltip"
-              title="Edit sql connection parameters.">
-        <span class="glyphicon glyphicon-pencil"></span> Edit
+              title="{% trans 'Edit SQL connection parameters' %}.">
+        <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
       </button>
     </li>
     <li>
       <button type="button"
               class="btn btn-default btn-sm js-sqlconn-clone align-middle"
               data-url="{% url 'dataops:sqlconn_clone' id %}"
-              data-toggle="tooltip" title="Create an exact duplicate of this connection">
-          <span class="glyphicon glyphicon-duplicate"></span> Clone
+              data-toggle="tooltip" 
+              title="{% trans 'Create an exact duplicate of this connection' %}">
+          <span class="glyphicon glyphicon-duplicate"></span> {% trans 'Clone' %}
       </button>
     </li>
     <li>
       <button type="button"
               class="btn btn-default btn-sm js-sqlconn-delete"
               data-url="{% url 'dataops:sqlconn_delete' id %}"
-              data-toggle="tooltip" title="Delete SQL connection">
-        <span class="glyphicon glyphicon-trash"></span> Delete
+              data-toggle="tooltip" 
+              title="{% trans 'Delete SQL connection' %}">
+        <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
       </button>
     </li>
   </ul>

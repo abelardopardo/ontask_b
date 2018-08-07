@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load crispy_forms_tags %}
@@ -10,22 +11,22 @@
 {% block scripts %}
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
 {% endblock scripts %}
-{% block title %}{{ block.super }}Email action{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Schedule email send' %}{% endblock %}
 {% block container %}
 <div align="center" class="container" id="email-schedule-send">
-  <h1 class="page-header">Schedule email send</h1>
+  <h1 class="page-header">{% trans 'Schedule email send' %}</h1>
   <div class="container">
-    <p>Time now is {{ now }}</p>
+    <p>{% blocktrans with n=now %}Time now is {{ n }}{% endblocktrans %}</p>
     <form action="" method="post">
       {% csrf_token %}
       {{ form|crispy }}
       <div style="margin: 1ex 0 1ex 0;">
         <a type="button" class="btn btn-default"
-           href="{% url 'scheduler:index' %}" style="margin-right:2ex;"> Cancel
+           href="{% url 'scheduler:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
         </a>
         <button type="Submit" name="Submit" value="Send"
                 style="margin-right:2ex;"
-                class="btn btn-success">Schedule</button>
+                class="btn btn-success">{% trans 'Schedule' %}</button>
       </div>
     </form>
   </div>

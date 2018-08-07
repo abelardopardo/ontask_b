@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load django_tables2 %}
@@ -10,7 +11,7 @@
 {% block title %}{{ block.super }}{{ workflow.name }}{% endblock %}
 {% block container %}
 <div align="center" class="container">
-  <h1 class="page-header">Users with access to this workflow</h1>
+  <h1 class="page-header">{% trans 'Users with access to this workflow' %}</h1>
   <div style="display: inline-block;" id="workflow-shared">
     <a href="{% url 'workflow:detail' workflow.id %}"
        class="btn btn-default btn-sm">Back</a>

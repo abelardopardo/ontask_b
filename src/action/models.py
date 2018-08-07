@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 import datetime
+import itertools
 import re
 
 import pytz
@@ -9,12 +10,19 @@ from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.html import escape
+from django.utils.translation import ugettext_lazy as _
 
 from dataops import formula_evaluation, pandas_db
+from dataops.formula_evaluation import get_variables, evaluate_top_node
+from ontask import OntaskException
 from workflow.models import Workflow, Column
 
-# Regular expression to detect the use of a variable in a django template
-var_use_re = re.compile('{{ (?P<varname>.+?) \}\}')
+# Regular expressions detecting the use of a variable, or the
+# presence of a "{% MACRONAME variable %} construct in a string (template)
+var_use_res = [
+    re.compile('(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+\}\})'),
+    re.compile('(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})')
+]
 
 
 class Action(models.Model):
@@ -27,11 +35,15 @@ class Action(models.Model):
         db_index=True,
         null=False,
         blank=False,
+        on_delete=models.CASCADE,
         related_name='actions')
 
-    name = models.CharField(max_length=256, blank=False)
+    name = models.CharField(max_length=256, blank=False, verbose_name=_('name'))
 
-    description_text = models.CharField(max_length=512, default='', blank=True)
+    description_text = models.CharField(max_length=512,
+                                        default='',
+                                        blank=True,
+                                        verbose_name=_('description'))
 
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
@@ -40,31 +52,31 @@ class Action(models.Model):
     # If the action is to provide information to learners
     is_out = models.BooleanField(
         default=True,
-        verbose_name='Action is provide information',
+        verbose_name=_('Action to provide personalized information'),
         null=False,
         blank=False)
 
     # Boolean that enables the URL to be visible ot the outside.
     serve_enabled = models.BooleanField(
         default=False,
-        verbose_name='URL available to users?',
+        verbose_name=_('URL available to users?'),
         null=False,
         blank=False)
 
     # Validity window for URL availability
-    active_from = models.DateTimeField(
-        'Action available from',
-        blank=True,
-        null=True,
-        default=None,
-    )
+    active_from = models.DateTimeField(_('Action available from'),
+                                       blank=True,
+                                       null=True,
+                                       default=None)
 
-    active_to = models.DateTimeField(
-        'Action available until',
-        blank=True,
-        null=True,
-        default=None
-    )
+    active_to = models.DateTimeField(_('Action available until'),
+                                     blank=True,
+                                     null=True,
+                                     default=None)
+
+    # Set of columns used in the action (either to capture data in action IN
+    # or present in any of the conditions in action OUT)
+    columns = models.ManyToManyField(Column, related_name='actions_in')
 
     #
     # Field for action OUT
@@ -78,9 +90,11 @@ class Action(models.Model):
     #
     # Fields for action IN
     #
-    # Set of columns for the personalised action IN (subset of the matrix
-    # columns
-    columns = models.ManyToManyField(Column, related_name='actions_in')
+    # Shuffle column order when creating the page to serve
+    shuffle = models.BooleanField(default=False,
+                                  verbose_name=_('Shuffle questions?'),
+                                  null=False,
+                                  blank=False)
 
     def __str__(self):
         return self.name
@@ -108,6 +122,62 @@ class Action(models.Model):
         return self.columns.filter(is_key=True).exists() and \
                self.columns.filter(is_key=False).exists()
 
+    def get_content(self):
+        """
+        Get the action out content
+        :return: context string
+        """
+        return self.content
+
+    def set_content(self, content):
+        """
+        Set the action content and update the list of columns
+        :return: Update the DB
+        """
+        # Assign the content and clean the new lines
+        self.content = content
+        self.clean_new_lines()
+
+        # Update the list of columns used in the action
+        cond_names = self.get_action_conditions()
+        colnames = list(itertools.chain.from_iterable(
+            [get_variables(x.formula)
+             for x in self.conditions.filter(name__in=cond_names)]
+        ))
+        self.columns.add(*[x for x in self.workflow.columns.filter(
+            name__in=colnames
+        )])
+
+    def get_action_conditions(self):
+        """
+        Return the list of contition names used in the macros contained in
+        the action content field
+        :return: list of condition names
+        """
+
+        result = []
+        # Loop over the regular expressions, match the expressions and extract
+        # the list of vname fields.
+        for rexpr in var_use_res:
+            result += [x.group('vname') for x in rexpr.finditer(self.content)]
+        return result
+
+    def clean_new_lines(self):
+        """
+        Function that removes the new lines from the middle of the macros in
+        the action content
+
+        :return: new text with the newlines in the middle of the macros removed
+        """
+        self.content = re.sub(
+            '{%(?P<varname>[^%}]+)%}',
+            lambda m: '{%' + m.group('varname').replace('\n', ' ') + '%}',
+            self.content)
+        self.content = re.sub(
+            '{{(?P<varname>[^%}]+)}}',
+            lambda m: '{{' + m.group('varname').replace('\n', ' ') + '}}',
+            self.content)
+
     def rename_variable(self, old_name, new_name):
         """
         Function that renames a variable present in the action content
@@ -118,10 +188,10 @@ class Action(models.Model):
 
         if self.is_out:
             # Action out: Need to change name appearances in content
-            new_text = var_use_re.sub(
+            new_text = var_use_res[0].sub(
                 lambda m: '{{ ' +
-                          (new_name if m.group('varname') == escape(old_name)
-                           else m.group('varname')) + ' }}',
+                          (new_name if m.group('vname') == escape(old_name)
+                           else m.group('vname')) + ' }}',
                 self.content
             )
             self.content = new_text
@@ -182,6 +252,42 @@ class Action(models.Model):
 
         return list(result)
 
+    def get_evaluation_context(self, row_values):
+        """
+        Given an action and a set of row_values, prepare the dictionary with the
+        condition names, attribute names and column names and their
+        corresponding values.
+        :param action: Action object for which the conditions need to be taken.
+        :param row_values: Values to use in the evaluation of conditions.
+        :return: Context dictionary, or None if there has been some anomaly
+        """
+
+        # If no row values are given, there is nothing to do here.
+        if row_values is None:
+            # No rows satisfy the given condition
+            return None
+
+        # Step 1: Evaluate all the conditions
+        condition_eval = {}
+        condition_anomalies = []
+        for condition in self.conditions.filter(is_filter=False).values(
+                'name', 'is_filter', 'formula'):
+            # Evaluate the condition
+            try:
+                condition_eval[condition['name']] = evaluate_top_node(
+                    condition['formula'],
+                    row_values
+                )
+            except OntaskException:
+                # Something went wrong evaluating a condition. Stop.
+                return None
+
+        # Step 2: Create the context with the attributes, the evaluation of the
+        # conditions and the values of the columns.
+        attributes = self.workflow.attributes
+
+        return dict(dict(row_values, **condition_eval), **attributes)
+
     class Meta:
         """
         Define the criteria of uniqueness with name in workflow and order by
@@ -203,25 +309,33 @@ class Condition(models.Model):
                                blank=False,
                                related_name='conditions')
 
-    name = models.CharField(max_length=256, blank=False)
+    name = models.CharField(max_length=256, blank=False, verbose_name=_('name'))
 
-    description_text = models.CharField(max_length=512, default='', blank=True)
+    description_text = models.CharField(max_length=512,
+                                        default='',
+                                        blank=True,
+                                        verbose_name=_('description'))
 
-    formula = JSONField(default=dict, blank=True, null=True)
+    formula = JSONField(default=dict,
+                        blank=True,
+                        null=True,
+                        verbose_name=_('formula'))
 
     # Set of columns that appear in this condition
     columns = models.ManyToManyField(
         Column,
-        verbose_name="Columns present in this condition",
-        related_name='conditions')
+        verbose_name=_("Columns present in this condition"),
+        related_name='conditions'
+    )
 
     # Number or rows selected by the expression
     n_rows_selected = models.IntegerField(
-        verbose_name='Number of rows selected',
+        verbose_name=_('Number of rows selected'),
         default=-1,
         name='n_rows_selected',
         blank=False,
-        null=False)
+        null=False
+    )
 
     # Field to denote if this condition is the filter of an action
     is_filter = models.BooleanField(default=False)

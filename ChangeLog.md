@@ -1,3 +1,69 @@
+## 2.8.0
+
+### Added
+
+- Localization and internationalization support. First language supported, 
+  es-ES. There are still a few areas that need polishing, but the bulk of the
+  translation is done.
+   
+- Boolean field in the action-in to request the questions to be shuffled when
+  shown to the learners as some surveys suggest (Issue #48)
+  
+- Function to restrict the values in a column based on the current values. 
+  Useful to manage future updates
+  
+- New folder containing a catalogue of surveys and its corresponding plugins 
+  (if applicable)
+
+- Added capacity to retain/forget key columns in the upload/merge steps 
+  (Issue #55)
+ 
+- Dashboard now available from the table views (and subviews)
+
+- Script to create users in bulk with a CSV file.
+
+- Functionality to send email now includes CC and BCC fields (Issue #57)
+
+- Possibility to "unmark" a column as key when uploading in CSV (Issue #55)
+
+- Preview screen now shows the value of those variables used when computing 
+the personalised message (Issue #47)
+
+### Changed
+
+- Changed configuration scripts to take the environment file name from the 
+  environment variable ENV_FILENAME (if it exists). 
+  
+- Additional parameters in the configuration that are taken from the ENV_FILE
+  
+- Show questions in Action In editor in the same order in which they are in the 
+  workflow 
+  
+- Configuration of Summernote now precludes the use of drag and drop (Issue #63)
+
+- Preview screen for emails now includes the total number of emails (Issue #64)
+
+### Fixed
+
+- Row dashboard now takes into account the subset of data considered in a view.
+
+- Emails are now sent asynchronously through a queue (Issue #45)
+  
+- Subject line for emails is now properly processed in the preview it if 
+  contains variables like a template (Issue #54)
+  
+- Fixed incorrect number comparison when providing a range (Issue #49)
+
+- Text in the personalised messages is now processed to remove newlines that 
+  break the processing (Issue #44) 
+  
+- Action out editor no longer allows drag & drop (Issue #25)
+  
+- Bug when evaluating a condition with the operand "doesn't begin with" (Issue
+  #68)
+  
+- Bug when receiving a large volume of tracking requests (Issue #67)
+
 ## 2.7.3 (2018-06-24)
 
 ### Fixed
@@ -17,14 +83,14 @@
   clients). This policy is adopted because the API authentication is done 
   through Tokens (not sessions), and is needed to maintain workflow locks 
   through consecutive API calls due to the lack of a proper session object.
-
+  
 ## 2.7.2 (2018-06-19)
 
 ### Fixed
 
 - Bug preventing learner data input (Issue #46)
 
-## 2.7.1 (2018-06-04)
+## 2.7.1 (2018-06-15)
 
 ### Fixed
 
@@ -34,16 +100,16 @@
 
 ### Added
 
-- Functionality to export andi mport actions alone. This is very useful to 
+- Functionality to export and import actions alone. This is very useful to 
   simply transfer a single set of conditions or columns from one workflow to 
   another.
   
 - Definition and usage of SQL connections. The definition is only available 
-for the superuser and instructors are allowed to use them in the upload/merge
- page.
+  for the superuser and instructors are allowed to use them in the upload/merge
+  page.
  
 - Use of plugins. Arbitrary transformations of a subset of the dataframe are 
-now allowed by installing python modules in a specific folder. 
+  now allowed by installing python modules in a specific folder. 
 
 ### Changed
 
@@ -123,7 +189,7 @@ now allowed by installing python modules in a specific folder.
 - Fixed how merge operation fails in the presence of NaN appearing in Key 
   columns. The merge operation now has a security check to prevent this from 
   hapenning (issue #41) 
-
+  
 ## 2.6.0 (2018-05-13) 
 
 ### Added

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load django_tables2 %}
@@ -40,6 +41,9 @@
                    // Needed to enable tooltips in ajax produced content
                    $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
                 },
+                language: {
+                  url: getLanguage()
+                }
             });
         });
     }
@@ -55,12 +59,12 @@
     };
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}Table{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Table' %}{% endblock %}
 {% block container %}
   <div id="table-content" align="center" class="container-fluid"
        style="padding-top:2ex;">
     {% if view %}
-      <h4>Table view <strong>{{ view.name }}</strong></h4>
+      <h4>{% blocktrans %}Table view <strong>{{ view.name }}</strong>{% endblocktrans %}</h4>
     {% endif %}
     {% if columns %}
       <div style="padding-bottom: 2ex;">
@@ -73,8 +77,8 @@
               <a href="{% url 'dataops:rowcreate' %}"
                  class="btn btn-sm btn-defult"
                  data-toggle="tooltip"
-                 title="Add an extra row to the table">
-                <span class="glyphicon glyphicon-plus"></span> Add row
+                 title="{% trans 'Add an extra row to the table' %}">
+                <span class="glyphicon glyphicon-plus"></span> {% trans 'Add row' %}
               </a>
             </li>
             <li>
@@ -82,8 +86,8 @@
                       class="btn btn-default btn-sm js-workflow-column-add"
                       data-url="{% url 'workflow:column_add' %}"
                       data-toggle="tooltip"
-                      title="Add a column to the table">
-                <span class="glyphicon glyphicon-plus"></span> Add column
+                      title="{% trans 'Add a column to the table' %}">
+                <span class="glyphicon glyphicon-plus"></span> {% trans 'Add column' %}
               </button>
             </li>
             <li>
@@ -91,8 +95,8 @@
                       class="btn btn-default btn-sm js-workflow-formula-column-add"
                       data-url="{% url 'workflow:formula_column_add' %}"
                       data-toggle="tooltip"
-                      title="Add a column operating with the current values">
-                <span class="glyphicon glyphicon-plus"></span> Add derived column
+                      title="{% trans 'Add a column operating with the current values' %}">
+                <span class="glyphicon glyphicon-plus"></span> {% trans 'Add derived column' %}
               </button>
             </li>
           </ul>
@@ -101,8 +105,8 @@
           <a href="{% url 'table:view_index' %}"
              class="btn btn-primary btn-sm"
              data-toggle="tooltip"
-             title="Views available for this table">
-            <span class="glyphicon glyphicon-eye-open"></span> Views
+             title="{% trans 'Views available for this table' %}">
+            <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Views' %}
           </a>
           {% if views %}
             <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
@@ -122,8 +126,8 @@
           <button type="button"
                   class="btn btn-primary btn-sm js-view-edit align-middle"
                   data-url="{% url 'table:view_edit' view.id %}"
-                  data-toggle="tooltip" title="Change elements in view">
-            <span class="glyphicon glyphicon-pencil"></span> Edit view
+                  data-toggle="tooltip" title="{% trans 'Change elements in view' %}">
+            <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit view' %}
           </button>
           <button type="button" class="btn btn-sm btn-default"
                   onclick="location.href='{% url 'table:display' %}'">
@@ -132,15 +136,27 @@
           <a href="{% url 'table:csvdownload_view' view.id %}" download
              class="btn btn-primary btn-sm js-logs-download"
              data-toggle="tooltip"
-             title="Download a CSV file contining this table">
-            <span class="glyphicon glyphicon-download-alt"></span> CSV Download
+             title="{% trans 'Download a CSV file containing this table' %}">
+            <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
+          </a>
+          <a href="{% url 'table:stat_table_view' view.id %}"
+             class="btn btn-primary btn-sm"
+             data-toggle="tooltip"
+             title="{% trans 'Dashboard created with the view data' %}">
+            <span class="glyphicon glyphicon-dashboard"></span> {% trans 'Dashboard' %}
           </a>
         {% else %}
-          <a href="{% url 'table:csvdownload' %}" download
-             class="btn btn-primary btn-sm js-logs-download"
+          <a href="{% url 'table:csvdownload' %}"
+             class="btn btn-primary btn-sm"
              data-toggle="tooltip"
-             title="Download a CSV file contining this table">
-            <span class="glyphicon glyphicon-download-alt"></span> CSV Download
+             title="{% trans 'Download a CSV file containing this table' %}">
+            <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
+          </a>
+          <a href="{% url 'table:stat_table' %}"
+             class="btn btn-primary btn-sm"
+             data-toggle="tooltip"
+             title="{% trans 'Dashboard created with the table data' %}">
+            <span class="glyphicon glyphicon-dashboard"></span> {% trans 'Dashboard' %}
           </a>
         {% endif %}
       </div>
@@ -163,8 +179,8 @@
                         <a href="{% url 'table:stat_column' col.id %}"
                            class="btn btn-default btn-sm align-middle"
                            data-toggle="tooltip"
-                           title="Stats and visualizations about this column">
-                          <span class="glyphicon glyphicon-stats"></span> Stats
+                           title="{% trans 'Stats and visualizations about this column' %}">
+                          <span class="glyphicon glyphicon-stats"></span> {% trans 'Stats' %}
                         </a>
                       </li>
                     {% endif %}
@@ -173,24 +189,26 @@
                               class="btn btn-sm btn-default js-column-edit"
                               data-url="{% url 'workflow:column_edit' col.id %}"
                               data-toggle="tooltip"
-                              title="Edit column name, description, etc">
-                        <span class="glyphicon glyphicon-pencil"></span> Edit
+                              title="{% trans 'Edit column name, description, etc' %}">
+                        <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
                       </button>
                     </li>
                     <li>
                       <button type="button"
                               class="btn btn-default btn-sm js-column-clone align-middle"
                               data-url="{% url 'workflow:column_clone' col.id %}"
-                              data-toggle="tooltip" title="Create an exact duplicate of this column">
-                          <span class="glyphicon glyphicon-duplicate"></span> Clone
+                              data-toggle="tooltip"
+                              title="{% trans 'Create an exact duplicate of this column' %}">
+                          <span class="glyphicon glyphicon-duplicate"></span> {% trans 'Clone' %}
                       </button>
                     </li>
                     <li>
                       <button type="button"
                               class="btn btn-default btn-sm js-column-delete"
                               data-url="{% url 'workflow:column_delete' col.id %}"
-                              data-toggle="tooltip" title="Delete column">
-                        <span class="glyphicon glyphicon-trash"></span> Delete
+                              data-toggle="tooltip"
+                              title="{% trans 'Delete column' %}">
+                        <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
                       </button>
                     </li>
                   </ul>
@@ -204,8 +222,8 @@
                 <div style="display:block;">
                 {% if not col.is_active %}
                   <font color="red" data-toggle="tooltip"
-                        title="Out of given date/time window. Edit column to enable.">
-                    Disabled</font>
+                        title="{% trans 'Out of given date/time window. Edit column to enable.' %}">
+                    {% trans 'Disabled' %}</font>
                 {% endif %}
                 </div>
                 <div style="display:flex;justify-content:space-between">
@@ -241,9 +259,9 @@
         </thead>
       </table>
     {% else %}
-      <p>The workflow does not have data.</p>
-      <p>Go to <a href="{% url 'dataops:uploadmerge' %}">Dataops</a> to upload
-          data</p>
+      <p>{% trans 'The workflow does not have data.' %}</p>
+      {% url 'dataops:uploadmerge' as dops %}
+      <p>{% blocktrans %}To upload data go to <a href="{{ dops }}">Dataops</a>{% endblocktrans %}</p>
     {% endif %}
     <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog">

@@ -10,6 +10,7 @@ from django.db.models import F, Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
@@ -29,7 +30,7 @@ def show(request):
     # Create the context with the column names
     context = {
         'workflow': workflow,
-        'column_names': ['Date/Time', 'User', 'Event type', 'View']
+        'column_names': [_('ID'), _('Date/Time'), _('User'), _('Event type'), _('View')]
     }
 
     # Render the page with the table
@@ -43,7 +44,9 @@ def show_ss(request):
     # Try to get workflow and if not present, go to home page
     workflow = get_workflow(request)
     if not workflow:
-        return JsonResponse({'error': 'Incorrect request. Unable to process'})
+        return JsonResponse(
+            {'error': _('Incorrect request. Unable to process')}
+        )
 
     # Check that the GET parameter are correctly given
     try:
@@ -51,7 +54,9 @@ def show_ss(request):
         start = int(request.POST.get('start', None))
         length = int(request.POST.get('length', None))
     except ValueError:
-        return JsonResponse({'error': 'Incorrect request. Unable to process'})
+        return JsonResponse(
+            {'error': _('Incorrect request. Unable to process')}
+        )
 
     # Get the column information from the request and the rest of values.
     search_value = request.POST.get('search[value]', None)
@@ -65,6 +70,7 @@ def show_ss(request):
     if search_value:
         # Refine the log
         qs = qs.filter(
+            Q(id=search_value) |
             Q(user__email__icontains=search_value) |
             Q(name__icontains=search_value) |
             Q(payload__icontains=search_value),
@@ -80,15 +86,18 @@ def show_ss(request):
     final_qs = []
     for item in qs[start:start + length]:
         row = [
+            item[0],
             item[1].astimezone(pytz.timezone(ontask_settings.TIME_ZONE)),
             item[2],
             item[3],
             """<button type="submit" class="btn btn-primary btn-sm js-log-view"
                     data-url="{0}"
-                    data-toggle="tooltip" title="View the content of this log">
-              <span class="glyphicon glyphicon-eye-open"></span> View
+                    data-toggle="tooltip" title="{1}">
+              <span class="glyphicon glyphicon-eye-open"></span> {2}
             </button>
-            """.format(reverse('logs:view', kwargs={'pk': item[0]}))]
+            """.format(reverse('logs:view', kwargs={'pk': item[0]}),
+                       _('View the content of this log'),
+                       _('View'))]
 
         # Add the row to the final query_set
         final_qs.append(row)
@@ -116,6 +125,7 @@ def view_log_list(request, pk):
     context['log_type'] = log_item.name
     context['op_name'] = log_types[log_item.name]
     context['workflow'] = log_item.workflow
+
     # TODO: Change the model to include directly a JSON object, not this.
     context['json_pretty'] = json.dumps(json.loads(log_item.payload),
                                         sort_keys=True,

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load static %}
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
@@ -19,7 +20,8 @@
           },
           stateSave: true,
           "language": {
-            "emptyTable": "No transformations in this workflow"
+            "emptyTable": "{% trans 'No transformations in this workflow.' %}",
+            "url": getLanguage()
           },
           "createdRow": function(row, data, dataIndex) {
               if (data[4] == '<span class="false">✘</span>') {
@@ -34,10 +36,10 @@
     });
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}Transform{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Transform' %}{% endblock %}
 {% block container %}
   <div align="center" class="container">
-    <h1 class="page-header">Transformations</h1>
+    <h1 class="page-header">{% trans 'Transformations' %}</h1>
     <div class="container-fluid" id="transform-selection">
       {% render_table table %}
     </div>

@@ -1,27 +1,27 @@
+{% load i18n %}
 <form method="post" action="{% url 'workflow:column_delete' pk %}" class="js-column-delete-form">
   {% csrf_token %}
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title">Confirm column deletion</h4>
+    <h4 class="modal-title">{% trans 'Confirm column deletion' %}</h4>
   </div>
   <div class="modal-body">
-    <p class="lead">Are you sure you want to delete column <strong>{{ cname }}</strong>?</p>
+    <p class="lead">{% blocktrans with n=cname %}Are you sure you want to delete column <strong>{{ n }}</strong>?{% endblocktrans %}</p>
     {% if cond_to_delete %}
-      <p>The column is currently used in the following conditions (inside an
-        action):</p>
+      <p>{% trans 'The column is currently used in the following conditions (inside an action):' %}</p>
       {% for cname in cond_to_delete %}
         <p>{{ cname.name }} ({{ cname.action.name }})</p>
       {% endfor %}
-      <p>These conditions will also be deleted.</p>
+      <p>{% trans 'These conditions will also be deleted.' %}</p>
     {% endif %}
   </div>
   <div class="modal-footer" style="text-align: center;">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
+    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}
     </button>
     <button type="submit" class="btn btn-danger">
-      <span class="glyphicon glyphicon-trash"></span> Delete column</button>
+      <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete column' %}</button>
   </div>
 </form>
 

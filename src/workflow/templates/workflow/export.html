@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load crispy_forms_tags %}
@@ -9,8 +10,7 @@
 {% block title %}{{ block.super }}Export Workflow{% endblock %}
 {% block container %}
   <div align="center" class="container">
-    <h1 class="page-header">Export Workflow</h1>
-
+    <h1 class="page-header">{% trans 'Export Workflow' %}</h1>
       <form action="{% url 'workflow:export_ask' %}" method="post"
             enctype="multipart/form-data">
         {% csrf_token %}
@@ -22,17 +22,17 @@
               </div>
             {% endfor %}
           {% endif %}
-          <p>Workflow name: {{ name }}</p>
-          <p>Number of rows/columns: {{ nrows }}/{{ ncols }}</p>
-          <p>Number of actions: {{ nactions }}</p>
+          <p>{% trans 'Workflow name:' %} {{ name }}</p>
+          <p>{% trans 'Number of rows/columns:' %} {{ nrows }}/{{ ncols }}</p>
+          <p>{% trans 'Number of actions:' %} {{ nactions }}</p>
           {% if nactions > 0 %}
-            <p>Select the actions to include in the export:</p>
+            <p>{% trans 'Select the actions to include in the export:' %}</p>
             <table class="table display dataTable table-bordered">
             <thead>
               <tr>
-                <th class="text-center">Action</th>
+                <th class="text-center">{% trans 'Action' %}</th>
                 <th class="text-center">
-                  All <input type="checkbox" id="checkAll">
+                  {% trans 'All' %} <input type="checkbox" id="checkAll">
                 </th>
               </tr>
             </thead>
@@ -58,15 +58,12 @@
         </div>
         <div class="modal-footer" style="text-align: center;">
           <button type="button" class="btn btn-default"
-          onclick="location.href='{% url 'workflow:detail' wid %}'">Cancel
+          onclick="location.href='{% url 'workflow:detail' wid %}'">{% trans 'Cancel' %}
           </button>
           <button class="btn btn-primary btn-space"
                   type="Submit" name="Submit" value="Submit">
-            <span class="glyphicon glyphicon-export"></span> Export</button>
+            <span class="glyphicon glyphicon-export"></span> {% trans 'Export' %}</button>
         </div>
       </form>
   </div>
 {% endblock %}
-
-
-

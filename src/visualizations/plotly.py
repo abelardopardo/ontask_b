@@ -89,14 +89,14 @@ class PlotlyBoxPlot(PlotlyHandler):
                 'ay': 0,
                 'xref': 'x',
                 'yref': 'y',
-                'text': self.format_dict.get('individual_text', 'Your value')
+                'text': self.format_dict.get('individual_text', 'Value')
             }]
 
             # Get the two custom values from the given parameters.
             self.layout['annotations'][0]['y'] = \
                 self.format_dict['individual_value']
             self.layout['annotations'][0]['text'] = \
-                self.format_dict.get('individual_text', 'Your value')
+                self.format_dict.get('individual_text', 'Value')
 
         # Redefine the layout
         self.format_dict['layout'] = json.dumps(self.layout)
@@ -175,7 +175,7 @@ class PlotlyColumnHistogram(PlotlyHandler):
                 'y': 0,
                 'yref': 'paper',
                 'yshift': 'bottom',
-                'text': self.format_dict.get('individual_text', 'Your value')
+                'text': self.format_dict.get('individual_text', 'Value')
             }]
 
         self.format_dict['layout'] = json.dumps(self.layout)

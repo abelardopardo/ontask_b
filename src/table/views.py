@@ -17,6 +17,7 @@ from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.utils.translation import ugettext_lazy as _
 
 import logs.ops
 from dataops import ops, pandas_db
@@ -31,14 +32,14 @@ class ViewTable(tables.Table):
     """
     Table to display the set of views handled in a workflow
     """
-    name = tables.Column(verbose_name=str('Name'))
+    name = tables.Column(verbose_name=_('Name'))
     description_text = tables.Column(
         empty_values=[],
-        verbose_name=str('Description')
+        verbose_name=_('Description')
     )
-    modified = tables.DateTimeColumn(verbose_name='Modified')
+    modified = tables.DateTimeColumn(verbose_name=_('Modified'))
     operations = OperationsColumn(
-        verbose_name='Operations',
+        verbose_name=_('Operations'),
         template_file='table/includes/partial_view_operations.html',
         template_context=lambda record: {'id': record['id']}
     )
@@ -93,7 +94,7 @@ def save_view_form(request, form, template_name):
         form.save_m2m()  # Needed to propagate the save effect to M2M relations
     except IntegrityError:
         form.add_error('name',
-                       'A view with that name already exists')
+                       _('A view with that name already exists'))
         data['html_form'] = render_to_string(
             template_name,
             {'form': form, 'id': form.instance.id},
@@ -165,7 +166,9 @@ def render_table_display_data(request, workflow, columns, formula,
         order_col_name = request.POST.get('order[0][column]', None)
         order_dir = request.POST.get('order[0][dir]', 'asc')
     except ValueError:
-        return JsonResponse({'error': 'Incorrect request. Unable to process'})
+        return JsonResponse(
+            {'error': _('Incorrect request. Unable to process')}
+        )
 
     # Get the column information from the request and the rest of values.
     search_value = request.POST.get('search[value]', None)
@@ -277,11 +280,13 @@ def display_ss(request):
     """
     workflow = get_workflow(request)
     if not workflow:
-        return JsonResponse({'error': 'Incorrect request. Unable to process'})
+        return JsonResponse(
+            {'error': _('Incorrect request. Unable to process')}
+        )
 
     # If there is not DF, go to workflow details.
     if not ops.workflow_id_has_table(workflow.id):
-        return JsonResponse({'error': 'There is no data in the table'})
+        return JsonResponse({'error': _('There is no data in the table')})
 
     return render_table_display_data(
         request,
@@ -332,17 +337,19 @@ def display_view_ss(request, pk):
 
     workflow = get_workflow(request)
     if not workflow:
-        return JsonResponse({'error': 'Incorrect request. Unable to process'})
+        return JsonResponse(
+            {'error': _('Incorrect request. Unable to process')}
+        )
 
     # If there is not DF, go to workflow details.
     if not ops.workflow_id_has_table(workflow.id):
-        return JsonResponse({'error': 'There is no data in the table'})
+        return JsonResponse({'error': _('There is no data in the table')})
 
     try:
         view = View.objects.get(pk=pk, workflow=workflow)
     except ObjectDoesNotExist:
         # The view has not been found, so it must be due to a session expire
-        return JsonResponse({'error': 'Incorrect view reference'})
+        return JsonResponse({'error': _('Incorrect view reference')})
 
     return render_table_display_data(
         request,
@@ -386,7 +393,7 @@ def row_delete(request):
         # view
         if not key or not value:
             messages.error(request,
-                           'Incorrect URL invoked to delete a row')
+                           _('Incorrect URL invoked to delete a row'))
             return JsonResponse(data)
 
         # Proceed to delete the row
@@ -462,7 +469,7 @@ def view_add(request):
     if workflow.nrows == 0:
         messages.error(
             request,
-            'Cannot add a view to a workflow without data')
+            _('Cannot add a view to a workflow without data'))
         return JsonResponse(
             {'form_is_valid': True,
              'html_redirect': ''}
@@ -495,7 +502,7 @@ def view_edit(request, pk):
     if workflow.nrows == 0:
         messages.error(
             request,
-            'Cannot add a view to a workflow without data')
+            _('Cannot add a view to a workflow without data'))
         return JsonResponse(
             {'form_is_valid': True,
              'html_redirect': ''}

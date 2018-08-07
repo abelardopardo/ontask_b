@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-
 {% block scripts %}
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
 {% endblock %}
-
-{% block title %}{{ block.super }}Enter Data{% endblock %}
-
+{% block title %}{{ block.super }}{% trans 'Enter Data' %}{% endblock %}
 {% block container %}
 <div align="center" class="container">
   <h4 class="page-header"><strong>{{ action.name }}</strong></h4>
@@ -22,12 +20,12 @@
       </div>
       {% if cancel_url %}
         <a type="button" class="btn btn-default"
-           href="{{ cancel_url }}"> Back
+           href="{{ cancel_url }}"> {% trans 'Back' %}
         </a>
       {% endif %}
       <button type="submit" name="submit" value="update"
               class="btn btn-primary">
-        <span class="glyphicon glyphicon-ok"></span> Update
+        <span class="glyphicon glyphicon-ok"></span> {% trans 'Update' %}
       </button>
     </form>
   </div>

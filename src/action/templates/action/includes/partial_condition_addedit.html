@@ -1,7 +1,8 @@
+{% load i18n %}
 <form method="post" 
   {% if add %}
     action="{% url 'action:create_condition' action_id %}" 
-    class="js-condition-create-form">
+    class="js-condition-create-form"
   {% else %}
     action="{% url 'action:edit_condition' condition_id %}" 
     class="js-condition-edit-form"
@@ -11,16 +12,25 @@
     <button type="button" class="close" data-dismiss="modal" arial-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title">{% if add %}Create{% else %}Edit{% endif %} condition</h4>
+    <h4 class="modal-title">
+     {% if add %}
+       {% trans 'Create condition' %}
+     {% else %}
+       {% trans 'Edit condition' %}
+     {% endif %}</h4>
   </div>
   <div class="modal-body">
     {% include 'action/includes/partial_form_fields.html' %}
     <div id="builder"></div>
   </div>
   <div class="modal-footer" style="text-align: center;">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel
+    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}
     </button>
     <button type="submit" class="btn btn-primary">
-      <span class="glyphicon glyphicon-ok"></span> {% if add %}Create{% else %}Update{% endif %} condition</button>
+      <span class="glyphicon glyphicon-ok"></span> 
+      {% if add %}
+        {% trans 'Create condition' %}
+      {% else %}
+        {% trans 'Update condition' %}{% endif %}</button>
   </div>
 </form>

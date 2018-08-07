@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 
 class PluginRegistry(models.Model):
@@ -28,13 +29,13 @@ class PluginRegistry(models.Model):
 
     # Boolean stating if the column is a unique key
     is_verified = models.BooleanField(default=False,
-                                      verbose_name='Ready to run',
+                                      verbose_name=_('Ready to run'),
                                       null=False,
                                       blank=False)
 
     # Last time the file was checked (to detect changes)
     executed = models.DateTimeField(
-        'Last execution',
+        _('Last execution'),
         blank=True,
         null=True,
         default=None
@@ -68,34 +69,36 @@ class SQLConnection(models.Model):
     """
 
     # Connection name
-    name = models.CharField(verbose_name='Name',
+    name = models.CharField(verbose_name=_('Name'),
                             max_length=2048,
                             null=False,
                             blank=False,
                             unique=True)
 
     # Description
-    description_txt = models.CharField(verbose_name='Description',
+    description_txt = models.CharField(verbose_name=_('Description'),
                                        max_length=2048,
                                        default='',
                                        blank=True)
 
     # Connection type: postgresql, mysql, etc.
-    conn_type = models.CharField(verbose_name='Type',
+    conn_type = models.CharField(verbose_name=_('Type'),
                                  max_length=2048,
                                  blank=False,
                                  null=False,
-                                 help_text='Postgresql, Mysql, etc.')
+                                 help_text=_('Postgresql, Mysql, etc.'))
 
     # Connection type: postgresql, mysql, etc.
-    conn_driver = models.CharField(verbose_name='Driver',
-                                   default='',
-                                   max_length=2048,
-                                   blank=True,
-                                   help_text='Driver implementing the DBAPI')
+    conn_driver = models.CharField(
+        verbose_name=_('Driver'),
+        default='',
+        max_length=2048,
+        blank=True,
+        help_text=_('Driver implementing the DBAPI')
+    )
 
     # User name to connect
-    db_user = models.CharField(verbose_name='User',
+    db_user = models.CharField(verbose_name=_('User'),
                                max_length=2048,
                                default='',
                                blank=True)
@@ -103,31 +106,31 @@ class SQLConnection(models.Model):
     # db_password is required (will be asked in run time, but not stored here)
     db_password = models.BooleanField(
         default=False,
-        verbose_name='Requires password?',
+        verbose_name=_('Requires password?'),
         null=False,
         blank=False)
 
     # DB host
-    db_host = models.CharField(verbose_name='Host',
+    db_host = models.CharField(verbose_name=_('Host'),
                                max_length=2048,
                                default='',
                                blank=True)
 
     # DB port
-    db_port = models.IntegerField(verbose_name='Port',
+    db_port = models.IntegerField(verbose_name=_('Port'),
                                   null=True,
                                   blank=True)
 
     # DB name
     db_name = models.CharField(max_length=2048,
-                               verbose_name='DB name',
+                               verbose_name=_('DB name'),
                                default='',
                                blank=False,
                                null=False)
 
     # DB table name
     db_table = models.CharField(max_length=2048,
-                                verbose_name='Table',
+                                verbose_name=_('Table'),
                                 default='',
                                 blank=False,
                                 null=False)

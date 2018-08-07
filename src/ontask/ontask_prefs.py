@@ -3,6 +3,7 @@ from __future__ import unicode_literals, print_function
 
 from django.conf import settings
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 CONTENT_TYPES = getattr(settings, 'DATAOPS_CONTENT_TYPES',
                         '["text/csv", "application/json", "application/gzip"]')
@@ -17,11 +18,11 @@ if 'siteprefs' in settings.INSTALLED_APPS:
 
     register_prefs(
         pref(CONTENT_TYPES,
-             verbose_name='Content types allowed in uploads',
+             verbose_name=_('Content types allowed in uploads'),
              static=False,
              field=models.CharField(max_length=256, blank=True)),
         pref(MAX_UPLOAD_SIZE,
-             verbose_name='Maximum size allowed in file uplaods',
+             verbose_name=_('Maximum size allowed in file uplaods'),
              static=False,
              field=models.IntegerField(blank=True)),
     )

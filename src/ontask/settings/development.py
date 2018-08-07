@@ -6,8 +6,6 @@ import sys
 
 from .base import *  # NOQA
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 TEMPLATES[0]['OPTIONS'].update({'debug': True})
 
 ALLOWED_HOSTS = ['*']
@@ -27,14 +25,15 @@ INSTALLED_APPS += (
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 if not TESTING:
     DEBUG_TOOLBAR_CONFIG = {
-        # 'SHOW_TOOLBAR_CALLBACK': lambda r: True,  # enables it
-        'SHOW_TOOLBAR_CALLBACK': lambda r: False,  # disables it
+        'SHOW_TOOLBAR_CALLBACK': lambda r: True,  # enables it
         # '...
     }
 
 if DEBUG:
     print('BASE_DIR: ' + BASE_DIR())
     print('STATICFILES_DIRS: ' + ', '.join(STATICFILES_DIRS))
+    print('DATABASE_URL: ' + env('DATABASE_URL'))
+    print('REDIS_URL: ' + env('REDIS_URL'))
     print('MEDIA_ROOT: ' + MEDIA_ROOT)
     print('MEDIA_URL: ' + MEDIA_URL)
     print('ONTASK_HELP_URL: ' + ONTASK_HELP_URL)
@@ -126,6 +125,11 @@ LOGGING = {
             'propagate': True,
             'level': 'DEBUG',
         },
+	'django.security.DisallowedHost': {
+            'handlers': ['django_log_file'],
+            'propagate': True,
+            'level': 'DEBUG',
+        }
     }
 }
 

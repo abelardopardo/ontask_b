@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Advanced Features &#8212; OnTask (B.2.7.0) 1.1.0 documentation</title>
+    <title>Advanced Features &#8212; OnTask (B.2.8.0) 1.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
@@ -65,6 +65,10 @@ empty string, and Pandas will no longer recognise that column as
 datetime, but instead it will render the column of type string. This my
 have also an effect on how rules and actions are evaluated.</li>
 </ol>
+<p>If OnTask is hosted in a server like Apache, you may need to check your
+configuration so that it allows the processing of the <code class="docutils literal notranslate"><span class="pre">HTTP_AUTHORIZATION</span></code>
+headers. For example, the module WSGI for Apache by default filters out this
+header.</p>
 </div>
 </div>
 
@@ -74,7 +78,7 @@ have also an effect on how rules and actions are evaluated.</li>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">OnTask (B.2.7.0)</a></h1>
+<h1 class="logo"><a href="../index.html">OnTask (B.2.8.0)</a></h1>
 
 
 

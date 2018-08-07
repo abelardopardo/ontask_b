@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, reverse
 from django.template.loader import render_to_string
 from django.views import generic
+from django.utils.translation import ugettext_lazy as _
 
 import logs
 import logs.ops
@@ -67,7 +68,7 @@ def save_condition_form(request,
     # If the request has the 'action_content' field, update the action
     action_content = request.POST.get('action_content', None)
     if action_content:
-        action.content = action_content
+        action.set_content(action_content)
         action.save()
 
     if is_filter:
@@ -92,7 +93,8 @@ def save_condition_form(request,
                 (not is_new and qs.filter(~Q(id=condition_id)).exists()):
             form.add_error(
                 'name',
-                'A condition with that name already exists in this action')
+                _('A condition with that name already exists in this action')
+            )
             data['html_form'] = render_to_string(template_name,
                                                  context,
                                                  request=request)
@@ -109,7 +111,8 @@ def save_condition_form(request,
         if form.cleaned_data['name'] in workflow.get_column_names():
             form.add_error(
                 'name',
-                'A column name with that name already exists.')
+                _('A column name with that name already exists.')
+            )
             context = {'form': form,
                        'action_id': action.id,
                        'condition_id': condition_id,
@@ -123,7 +126,8 @@ def save_condition_form(request,
         if form.cleaned_data['name'] in workflow.attributes.keys():
             form.add_error(
                 'name',
-                'The workflow has an attribute with this name.')
+                _('The workflow has an attribute with this name.')
+            )
             context = {'form': form,
                        'action_id': action.id,
                        'condition_id': condition_id,
@@ -137,6 +141,7 @@ def save_condition_form(request,
         # field of the action.
         if form.old_name and 'name' in form.changed_data:
             # Performing string substitution in the content and saving
+            # TODO: Review!
             replacing = '{{% if {0} %}}'
             action.content = action.content.replace(
                 replacing.format(form.old_name),
@@ -299,7 +304,7 @@ def delete_filter(request, pk):
         # If the request has 'action_content', update the action
         action_content = request.POST.get('action_content', None)
         if action_content:
-            cond_filter.action.content = action_content
+            cond_filter.action.set_content(action_content)
             cond_filter.action.save()
 
         # Log the event
@@ -443,7 +448,7 @@ def delete_condition(request, pk):
         # If the request has the 'action_content', update the action
         action_content = request.POST.get('action_content', None)
         if action_content:
-            condition.action.content = action_content
+            condition.action.set_content(action_content)
             condition.action.save()
 
         formula, fields = evaluate_node_sql(condition.formula)
@@ -488,7 +493,7 @@ def clone(request, pk):
         ).distinct().get(pk=pk)
     except (KeyError, ObjectDoesNotExist):
         messages.error(request,
-                       'Condition cannot be cloned.')
+                       _('Condition cannot be cloned.'))
         return redirect(reverse('action:index'))
 
     # Get the new name appending as many times as needed the 'Copy of '
@@ -513,6 +518,6 @@ def clone(request, pk):
                   'name_new': condition.name})
 
     messages.success(request,
-                     'Action successfully cloned.')
+                     _('Action successfully cloned.'))
     return redirect(reverse('action:edit_out',
                             kwargs={'pk': condition.action.id}))

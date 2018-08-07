@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 import os
+import time
 
 from django.conf import settings
 from django.shortcuts import reverse
@@ -205,23 +206,48 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         select = Select(self.selenium.find_element_by_id(
             'select-column-name'))
         select.select_by_visible_text('!#$%&()*+,-./:;<=>?@[\]^_`{|}~2')
+        # Table disappears (page is updating)
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.ID, 'column-selected-table_previous')
+            )
+        )
+        # Table appears (page refreshed)
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
-                (By.ID, 'column-selected-table_previous'))
+                (By.ID, 'column-selected-table_previous')
+            )
         )
         select = Select(self.selenium.find_element_by_id(
             'select-key-column-name'))
         select.select_by_visible_text('sid')
+        # Table disappears (page is updating)
+        # WebDriverWait(self.selenium, 10).until_not(
+        #     EC.presence_of_element_located(
+        #         (By.ID, 'column-selected-table_previous')
+        #     )
+        # )
+        time.sleep(2)
+        # Table appears (page refreshed)
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
-                (By.ID, 'column-selected-table_previous'))
+                (By.ID, 'column-selected-table_previous')
+            )
         )
         select = Select(self.selenium.find_element_by_id(
             'select-key-column-name'))
         select.select_by_visible_text('email')
+        # Table disappears (page is updating)
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.ID, 'column-selected-table_previous')
+            )
+        )
+        # Table appears (page refreshed)
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
-                (By.ID, 'column-selected-table_previous'))
+                (By.ID, 'column-selected-table_previous')
+            )
         )
 
         # Save action-in
@@ -1008,7 +1034,9 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
         )
 
         # Click in the first plugin
-        self.selenium.find_element_by_link_text("Run").click()
+        self.selenium.find_element_by_xpath(
+            "//table[@id='transform-table']/tbody/tr[4]/td[7]/div/a"
+        ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -1060,7 +1088,9 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
         )
 
         # Click in the first plugin
-        self.selenium.find_element_by_link_text("Run").click()
+        self.selenium.find_element_by_xpath(
+            "//table[@id='transform-table']/tbody/tr[4]/td[7]/div/a"
+        ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -1139,7 +1169,7 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
 
         # Click in the second plugin
         self.selenium.find_element_by_xpath(
-            "//table[@id='transform-table']/tbody/tr[2]/td[7]/div/a"
+            "//table[@id='transform-table']/tbody/tr[5]/td[7]/div/a"
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))

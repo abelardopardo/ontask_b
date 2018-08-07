@@ -6,6 +6,7 @@ from datetime import datetime
 import django_tables2 as tables
 import pandas as pd
 import pytz
+from builtins import str
 from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -14,6 +15,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
 from django.views.decorators.cache import cache_page
+from django.utils.translation import ugettext_lazy as _
 
 import dataops.ops as ops
 import logs.ops
@@ -35,18 +37,18 @@ class PluginRegistryTable(tables.Table):
     customisation.
     """
 
-    filename = tables.Column(verbose_name=str('Folder'))
+    filename = tables.Column(verbose_name=_('Folder'))
 
-    name = tables.Column(verbose_name=str('Name'))
+    name = tables.Column(verbose_name=_('Name'))
 
-    description_txt = tables.Column(verbose_name=str('Description'))
+    description_txt = tables.Column(verbose_name=_('Description'))
 
-    modified = tables.DateTimeColumn(verbose_name='Last modified')
+    modified = tables.DateTimeColumn(verbose_name=_('Last modified'))
 
-    executed = tables.DateTimeColumn(verbose_name='Last executed')
+    executed = tables.DateTimeColumn(verbose_name=_('Last executed'))
 
     operations = OperationsColumn(
-        verbose_name='Operations',
+        verbose_name=_('Operations'),
         template_file='dataops/includes/partial_plugin_operations.html',
         template_context=lambda record: {'id': record.id,
                                          'is_verified': record.is_verified}
@@ -161,7 +163,7 @@ def row_update(request):
     if not update_key or not update_val:
         # Malformed request
         return render(request, 'error.html',
-                      {'message': 'Unable to update table row'})
+                      {'message': _('Unable to update table row')})
 
     # Get the rows from the table
     rows = pandas_db.execute_select_on_table(workflow.id,
@@ -201,7 +203,7 @@ def row_update(request):
 
     # If there is no unique key, something went wrong.
     if not unique_field:
-        raise Exception('Key value not found when updating row')
+        raise Exception(_('Key value not found when updating row'))
 
     pandas_db.update_row(workflow.id,
                          set_fields,
@@ -272,8 +274,8 @@ def row_create(request):
         if not ops.is_unique_column(df[ucol.name]):
             form.add_error(
                 None,
-                'Repeated value in column ' + ucol.name + '.' +
-                ' It must be different to maintain Key property'
+                _('Repeated value in column {0}. It must be different '
+                  'to maintain Key property').format(ucol.name)
             )
             return render(request,
                           'dataops/row_create.html',
@@ -323,7 +325,7 @@ def run(request, pk):
     if plugin_instance is None:
         messages.error(
             request,
-            'Unable to instantiate plugin "{0}"'.format(plugin_info.name)
+            _('Unable to instantiate plugin "{0}"').format(plugin_info.name)
         )
         return redirect('dataops:transform')
 
@@ -334,7 +336,8 @@ def run(request, pk):
             # The set of columns are not part of the workflow
             messages.error(
                 request,
-                'Workflow does not have the correct columns to run this plugin'
+                _('Workflow does not have the correct columns to run this '
+                  'plugin')
             )
             return redirect('dataops:transform')
 
@@ -366,7 +369,8 @@ def run(request, pk):
     try:
         dst_df = pandas_db.load_from_db(workflow.id)
     except Exception:
-        messages.error(request, 'Exception while retrieving the data frame')
+        messages.error(request,
+                       _('Exception while retrieving the data frame'))
         return render(request, 'error.html', {})
 
     # Take the list of inputs from the form if empty list is given.
@@ -414,7 +418,7 @@ def run(request, pk):
     # Additional checks
     # Result has the same number of rows
     if result_df.shape[0] != dst_df.shape[0]:
-        status = 'Incorrect number of rows in result data frame.'
+        status = _('Incorrect number of rows in result data frame.')
         context['exec_status'] = status
 
         # Log the event
@@ -506,12 +510,12 @@ def run(request, pk):
         if c not in result_names:
             column_info.append((c, ''))
         elif c not in dst_names:
-            column_info.append(('', c + ' (New)'))
+            column_info.append(('', c + _(' (New)')))
         else:
             if c == form.cleaned_data['merge_key']:
                 column_info.append((c, c))
             else:
-                column_info.append((c + ' (Update)', c))
+                column_info.append((c + _(' (Update)'), c))
 
     context['info'] = column_info
     context['key'] = form.cleaned_data['merge_key']

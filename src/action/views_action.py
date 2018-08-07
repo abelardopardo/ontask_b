@@ -24,9 +24,14 @@ from django.views import generic
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.utils.translation import ugettext_lazy as _
 
 import logs.ops
-from action.evaluate import evaluate_row, render_template
+from action.evaluate import (
+    evaluate_row_action_out,
+    evaluate_row_action_in,
+    render_template,
+    get_row_values)
 from dataops import ops, pandas_db
 from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
@@ -50,16 +55,16 @@ class ActionTable(tables.Table):
      taken from another class to centralise the customisation.
     """
 
-    name = tables.Column(verbose_name=str('Name'))
+    name = tables.Column(verbose_name=_('Name'))
 
-    is_out = tables.Column(verbose_name=str('Type'))
+    is_out = tables.Column(verbose_name=_('Type'))
 
-    description_text = tables.Column(verbose_name=str('Description'))
+    description_text = tables.Column(verbose_name=_('Description'))
 
-    modified = tables.DateTimeColumn(verbose_name='Modified')
+    modified = tables.DateTimeColumn(verbose_name=_('Modified'))
 
     operations = OperationsColumn(
-        verbose_name='Operations',
+        verbose_name=_('Operations'),
         template_file='action/includes/partial_action_operations.html',
         template_context=lambda record: {
             'id': record['id'],
@@ -98,9 +103,9 @@ class ColumnSelectedTable(tables.Table):
     """
     Table to render the columns selected for a given action in
     """
-    name = tables.Column(verbose_name=str('Name'))
+    name = tables.Column(verbose_name=_('Name'))
     description_text = tables.Column(
-        verbose_name=str('Description (shown to learners)'),
+        verbose_name=_('Description (shown to learners)'),
         default='',
     )
 
@@ -170,7 +175,7 @@ def save_action_form(request, form, is_out, template_name):
             except IntegrityError as e:
                 # There is an action with this name already
                 form.add_error('name',
-                               'An action with that name already exists')
+                               _('An action with that name already exists'))
                 data['html_form'] = render_to_string(
                     template_name,
                     {'form': form,
@@ -395,7 +400,7 @@ def action_out_save_content(request, pk):
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content', None)
     if action_content:
-        action.content = action_content
+        action.set_content(action_content)
         action.save()
 
     return JsonResponse({})
@@ -437,9 +442,10 @@ def edit_action_out(request, pk):
     except Condition.DoesNotExist:
         filter_condition = None
     except Condition.MultipleObjectsReturned:
-        return render(request, 'error.html',
-                      {'message': 'Malfunction detected when retrieving filter '
-                                  '(action: {0})'.format(action.id)})
+        return render(
+            request, 'error.html',
+            {'message': _('Malfunction detected when retrieving filter '
+                          '(action: {0})').format(action.id)})
 
     # Conditions to show in the page as well.
     conditions = Condition.objects.filter(
@@ -488,7 +494,7 @@ def edit_action_out(request, pk):
                           'content': content})
 
             # Text is good. Update the content of the action
-            action.content = content
+            action.set_content(content)
             action.save()
 
             # Closing, return to index if save-and-close is given
@@ -514,9 +520,10 @@ def edit_action_in(request, pk):
         return redirect('workflow:index')
 
     if workflow.nrows == 0:
-        messages.error(request,
-                       'Workflow has no data. '
-                       'Go to Dataops to upload data.')
+        messages.error(
+            request,
+            _('Workflow has no data. Go to Dataops to upload data.')
+        )
         return redirect(reverse('action:index'))
 
     # Get the action and the columns
@@ -540,9 +547,11 @@ def edit_action_in(request, pk):
     except Condition.DoesNotExist:
         filter_condition = None
     except Condition.MultipleObjectsReturned:
-        return render(request, 'error.html',
-                      {'message': 'Malfunction detected when retrieving filter '
-                                  '(action: {0})'.format(action.id)})
+        return render(
+            request, 'error.html',
+            {'message': _('Malfunction detected when retrieving filter '
+                          '(action: {0})').format(action.id)}
+        )
 
     # Get the number of rows in DF selected by filter.
     if filter_condition:
@@ -551,7 +560,7 @@ def edit_action_in(request, pk):
         filter_condition.save()
 
     # Column names suitable to insert
-    columns_selected = action.columns.filter(is_key=False)
+    columns_selected = action.columns.filter(is_key=False).order_by('position')
     columns_to_insert = [c for c in workflow.columns.all()
                          if not c.is_key and c not in columns_selected]
 
@@ -685,12 +694,12 @@ def action_import(request):
             workflow__user=request.user,
             name=new_action_name).exists():
         # There is an action with this name. Return error.
-        form.add_error(None, 'An action with this name already exists')
+        form.add_error(None, _('An action with this name already exists'))
         return render(request, 'action/import.html', context)
 
     # Process the reception of the file
     if not form.is_multipart():
-        form.add_error(None, 'Incorrect form request (it is not multipart)')
+        form.add_error(None, _('Incorrect form request (it is not multipart)'))
         return render(request, 'action/import.html', context)
 
     # UPLOAD THE FILE!
@@ -714,6 +723,7 @@ def select_column_action(request, apk, cpk, key=None):
     :param request: Request object
     :param apk: Action PK
     :param cpk: column PK
+    :param key: The columns is a key column
     :return: JSON response
     """
     # Check if the workflow is locked
@@ -722,10 +732,11 @@ def select_column_action(request, apk, cpk, key=None):
         return reverse('workflow:index')
 
     if workflow.nrows == 0:
-        messages.error(request,
-                       'Workflow has no data. '
-                       'Go to Dataops to upload data.')
-        return redirect(reverse('action:index'))
+        messages.error(
+            request,
+            _('Workflow has no data. Go to Dataops to upload data.')
+        )
+        return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Get the action and the columns
     try:
@@ -734,13 +745,13 @@ def select_column_action(request, apk, cpk, key=None):
             Q(workflow__shared=request.user)
         ).distinct().prefetch_related('columns').get(pk=apk)
     except ObjectDoesNotExist:
-        return redirect(reverse('action:index'))
+        return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Get the column
     try:
         column = action.workflow.columns.get(pk=cpk)
     except ObjectDoesNotExist:
-        return redirect(reverse('action:index'))
+        return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Parameters are correct, so add the column to the action.
     if key:
@@ -752,7 +763,7 @@ def select_column_action(request, apk, cpk, key=None):
     else:
         action.columns.add(column)
 
-    return redirect(reverse('action:edit_in', kwargs={'pk': action.id}))
+    return JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)
@@ -770,9 +781,10 @@ def unselect_column_action(request, apk, cpk):
         return reverse('workflow:index')
 
     if workflow.nrows == 0:
-        messages.error(request,
-                       'Workflow has no data. '
-                       'Go to Dataops to upload data.')
+        messages.error(
+            request,
+            _('Workflow has no data. Go to Dataops to upload data.')
+        )
         return redirect(reverse('action:index'))
 
     # Get the action and the columns
@@ -794,6 +806,42 @@ def unselect_column_action(request, apk, cpk):
     action.columns.remove(column)
 
     return redirect(reverse('action:edit_in', kwargs={'pk': action.id}))
+
+
+@user_passes_test(is_instructor)
+def shuffle_questions(request, pk):
+    """
+    Operation to drop a column from action in
+    :param request: Request object
+    :param pk: Action PK
+    :return: HTML response
+    """
+
+    # Check if the workflow is locked
+    workflow = get_workflow(request)
+    if not workflow:
+        return reverse('workflow:index')
+
+    if workflow.nrows == 0:
+        messages.error(
+            request,
+            _('Workflow has no data. Go to Dataops to upload data.')
+        )
+        return redirect(reverse('action:index'))
+
+    # Get the action and the columns
+    try:
+        action = Action.objects.filter(
+            Q(workflow__user=request.user) |
+            Q(workflow__shared=request.user)
+        ).distinct().prefetch_related('columns').get(pk=pk)
+    except ObjectDoesNotExist:
+        return redirect(reverse('action:index'))
+
+    action.shuffle = not action.shuffle
+    action.save()
+
+    return JsonResponse({'shuffle': action.shuffle})
 
 
 def preview_response(request, pk, idx, template, prelude=None):
@@ -831,15 +879,15 @@ def preview_response(request, pk, idx, template, prelude=None):
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content', None)
     if action_content:
-        action.content = action_content
+        action.set_content(action_content)
         action.save()
 
     # Turn the parameter into an integer
     idx = int(idx)
 
     # Get the total number of items
-    filter = action.conditions.filter(is_filter=True).first()
-    n_items = filter.n_rows_selected if filter else -1
+    cfilter = action.conditions.filter(is_filter=True).first()
+    n_items = cfilter.n_rows_selected if cfilter else -1
     if n_items == -1:
         n_items = workflow.nrows
 
@@ -855,19 +903,49 @@ def preview_response(request, pk, idx, template, prelude=None):
     if nxt > n_items:
         nxt = 1
 
-    action_content = evaluate_row(action, idx)
-    if action_content is None:
+    row_values = get_row_values(action, idx)
+
+    # Get the dictionary containing column names, attributes and condition
+    # valuations:
+    context = action.get_evaluation_context(row_values)
+
+    # Evaluate the action content.
+    show_values = ''
+    if action.is_out:
+        action_content = evaluate_row_action_out(action, context)
+    else:
+        action_content = evaluate_row_action_in(action, context)
+    if action_content:
+        # Get the conditions used in the action content
+        act_cond = action.get_action_conditions()
+        # Get the variables/columns from the conditions
+        act_vars = set().union(
+            *[x.columns.all()
+              for x in action.conditions.filter(name__in=act_cond)
+              ]
+        )
+        # Sort the variables/columns  by position and get the name
+        show_values = ', '.join(
+            ["{0} = {1}".format(x.name, row_values[x.name]) for x in act_vars]
+        )
+    else:
         action_content = \
-            "Error while retrieving content for student {0}".format(idx)
+            _("Error while retrieving content for student {0}").format(idx)
+
+    # Process the prelude?
+    if prelude:
+        prelude = evaluate_row_action_out(action, context, prelude)
 
     data['html_form'] = \
         render_to_string(template,
                          {'action': action,
                           'action_content': action_content,
                           'index': idx,
+                          'n_items': n_items,
                           'nxt': nxt,
                           'prv': prv,
-                          'prelude': prelude},
+                          'prelude': prelude,
+                          'show_values': show_values},
                          request=request)
 
     return JsonResponse(data)
@@ -1110,11 +1188,13 @@ def run_ss(request, pk):
 
     workflow = get_workflow(request)
     if not workflow:
-        return JsonResponse({'error': 'Incorrect request. Unable to process'})
+        return JsonResponse(
+            {'error': _('Incorrect request. Unable to process')}
+        )
 
     # If there is not DF, go to workflow details.
     if not ops.workflow_id_has_table(workflow.id):
-        return JsonResponse({'error': 'There is no data in the table'})
+        return JsonResponse({'error': _('There is no data in the table')})
 
     # Get the action
     try:
@@ -1132,7 +1212,9 @@ def run_ss(request, pk):
         order_col = request.POST.get('order[0][column]', None)
         order_dir = request.POST.get('order[0][dir]', 'asc')
     except ValueError:
-        return JsonResponse({'error': 'Incorrect request. Unable to process'})
+        return JsonResponse(
+            {'error': _('Incorrect request. Unable to process')}
+        )
 
     # Get the column information from the request and the rest of values.
     search_value = request.POST.get('search[value]', None)
@@ -1152,7 +1234,7 @@ def run_ss(request, pk):
         cv_tuples = [(c.name, search_value, c.data_type) for c in columns]
 
     # Filter
-    filter = action.conditions.filter(is_filter=True).first()
+    cfilter = action.conditions.filter(is_filter=True).first()
 
     # Get the query set (including the filter in the action)
     qs = pandas_db.search_table_rows(
@@ -1162,7 +1244,7 @@ def run_ss(request, pk):
         order_col.name,
         order_dir == 'asc',
         column_names,  # Column names in the action
-        filter.formula if filter else None
+        cfilter.formula if cfilter else None
     )
 
     # Post processing + adding operations
@@ -1219,9 +1301,10 @@ def run_row(request, pk):
         return redirect('workflow:index')
 
     if workflow.nrows == 0:
-        messages.error(request,
-                       'Workflow has no data. '
-                       'Go to Dataops to upload data.')
+        messages.error(
+            request,
+            _('Workflow has no data. Go to Dataops to upload data.')
+        )
         return redirect(reverse('action:index'))
 
     # Get the action

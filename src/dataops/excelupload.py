@@ -7,6 +7,7 @@ import pandas as pd
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 
 from dataops import ops
 from ontask.permissions import is_instructor
@@ -55,7 +56,7 @@ def excelupload1(request):
 
     # Process the reception of the file
     if not form.is_multipart():
-        msg = "Excel upload form is not multiform"
+        msg = _("Excel upload form is not multiform")
         context = {'message': msg}
 
         meta = request.META.get('HTTP_REFERER', None)
@@ -99,7 +100,7 @@ def excelupload1(request):
                     pass
     except Exception as e:
         form.add_error('file',
-                       'File could not be processed ({0})'.format(e.message))
+                       _('File could not be processed ({0})').format(e.message))
         return render(request,
                       'dataops/upload1.html',
                       {'form': form,
@@ -112,7 +113,7 @@ def excelupload1(request):
         dup = [x for x, v in Counter(list(data_frame.columns)) if v > 1]
         form.add_error(
             'file',
-            'The file has duplicated column names (' +
+            _('The file has duplicated column names') + ' (' +
             ','.join(dup) + ').')
         return render(request, 'dataops/upload1.html',
                       {'form': form,
@@ -126,8 +127,8 @@ def excelupload1(request):
     if not any(src_is_key_column):
         form.add_error(
             'file',
-            'The data has no column with unique values per row. '
-            'At least one column must have unique values.')
+            _('The data has no column with unique values per row. '
+            'At least one column must have unique values.'))
         return render(request, 'dataops/upload1.html',
                       {'form': form,
                        'dtype': 'Excel',
@@ -141,7 +142,7 @@ def excelupload1(request):
     except Exception as e:
         form.add_error(
             'file',
-            'Sorry. This file cannot be processed.'
+            _('Sorry. This file cannot be processed.')
         )
         return render(request, 'dataops/upload1.html',
                       {'form': form,

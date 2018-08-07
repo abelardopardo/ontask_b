@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load widget_tweaks %}
@@ -21,7 +22,8 @@
                 stateSave: true,
                 "order": [[0, "asc"]],
                 "language": {
-                    "emptyTable": "No attributes defined."
+                    "emptyTable": "{% trans 'No attributes defined.' %}",
+                    "url": getLanguage()
                 },
                 "columnDefs": [
                     {"className": "dt-center", "targets": "_all"},
@@ -36,21 +38,18 @@
 {% block title %}{{ block.super }}{{ workflow.name }}{% endblock %}
 {% block container %}
 <div align="center" class="container">
-  <h1 class="page-header">Workflow Attributes</h1>
+  <h1 class="page-header">{% trans 'Workflow Attributes' %}</h1>
   <div style="display: inline-block;" id="workflow-attributes">
     {% include 'workflow/includes/workflow_attribute_buttons.html' %}
     {% render_table table %}
   </div>
-
   <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">
       </div>
     </div>
   </div>
-
 </div>
-
 {% endblock container %}
 
 

@@ -1,11 +1,12 @@
+{% load i18n %}
 <div class="text-center" style="margin-bottom:1.5ex">
   <button type="button" class="btn btn-default" style="margin-right:2ex;"
-          onclick="location.href='{% url 'dataops:transform' %}'">Cancel
+          onclick="location.href='{% url 'dataops:transform' %}'">{% trans 'Cancel' %}
   </button>
   <button type="submit" name="Submit" value="Submit"
           class="btn btn-primary"
           data-toggle="tooltip"
-          title="Run the plugin">
-    <span class="glyphicon glyphicon-off"></span> Run</button>
+          title="{% trans 'Run the plugin' %}">
+    <span class="glyphicon glyphicon-off"></span> {% trans 'Run' %}</button>
 </div>
 

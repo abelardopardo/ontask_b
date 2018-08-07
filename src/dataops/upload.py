@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 
 import logs.ops
 from dataops import ops, pandas_db
@@ -36,6 +37,8 @@ def upload_s2(request):
 
     columns_to_upload: Boolean list denoting the columns in SRC that are
                        marked for upload.
+
+    keep_key_column: Boolean list with those key columns that need to be kept.
 
     :param request: Web request
     :return: the dictionary upload_data in the session object
@@ -74,16 +77,28 @@ def upload_s2(request):
         columns_to_upload = [True] * len(initial_columns)
         upload_data['columns_to_upload'] = columns_to_upload
 
+    # Get or create list of booleans identifying key columns to be kept
+    keep_key_column = upload_data.get('keep_key_column', None)
+    if keep_key_column is None:
+        keep_key_column = upload_data['src_is_key_column'][:]
+        upload_data['keep_key_column'] = keep_key_column
+
     # Bind the form with the received data (remember unique columns)
     form = SelectColumnUploadForm(
         request.POST or None,
         column_names=rename_column_names,
         columns_to_upload=columns_to_upload,
-        is_key=src_is_key_column
+        is_key=src_is_key_column,
+        keep_key=keep_key_column
     )
 
+    # Get a hold of the fields to create a list to be processed in the page
     load_fields = [f for f in form if f.name.startswith('upload_')]
     newname_fields = [f for f in form if f.name.startswith('new_name_')]
+    src_key_fields = [
+        form['make_key_%s' % idx] if src_is_key_column[idx] else None
+        for idx in range(len(src_is_key_column))
+    ]
 
     # Create one of the context elements for the form. Pack the lists so that
     # they can be iterated in the template
@@ -91,36 +106,23 @@ def upload_s2(request):
                                     initial_columns,
                                     newname_fields,
                                     column_types,
-                                    src_is_key_column)]
+                                    src_key_fields)]
 
     # Process the initial loading of the form and return
-    if request.method != 'POST':
+    if request.method != 'POST' or not form.is_valid():
         # Update the dictionary with the session information
         request.session['upload_data'] = upload_data
-        context = {'form': form,
-                   'df_info': df_info,
-                   'prev_step': upload_data['step_1'],
-                   'wid': workflow.id}
-
-        if not ops.workflow_id_has_table(workflow.id):
-            # It is an upload, not a merge, set the next step to finish
-            context['next_name'] = 'Finish'
-        return render(request, 'dataops/upload_s2.html', context)
-
-    # At this point we are processing a POST request
-
-    # If the form is not valid, re-load
-    if not form.is_valid():
         context = {'form': form,
                    'wid': workflow.id,
                    'prev_step': upload_data['step_1'],
                    'df_info': df_info}
+
         if not ops.workflow_id_has_table(workflow.id):
-            # If it is an upload, not a merge, set next step to finish
-            context['next_name'] = 'Finish'
+            # It is an upload, not a merge, set the next step to finish
+            context['next_name'] = _('Finish')
         return render(request, 'dataops/upload_s2.html', context)
 
-    # Form is valid
+    # At this point we are processing a valid POST request
 
     # We need to modify upload_data with the information received in the post
     for i in range(len(initial_columns)):
@@ -128,6 +130,10 @@ def upload_s2(request):
         upload_data['rename_column_names'][i] = new_name
         upload = form.cleaned_data['upload_%s' % i]
         upload_data['columns_to_upload'][i] = upload
+
+        if src_is_key_column[i]:
+            # If the column is key, check if the user wants to keep it
+            keep_key_column[i] = form.cleaned_data['make_key_%s' % i]
 
     # Update the dictionary with the session information
     request.session['upload_data'] = upload_data
@@ -149,7 +155,7 @@ def upload_s2(request):
         return render(
             request,
             'error.html',
-            {'message': 'Exception while retrieving the data frame'})
+            {'message': _('Exception while retrieving the data frame')})
 
     # Update the data frame
     status = ops.perform_dataframe_upload_merge(workflow.id,
@@ -370,7 +376,7 @@ def upload_s4(request):
         except Exception:
             return render(request,
                           'error.html',
-                          {'message': 'Exception while loading data frame'})
+                          {'message': _('Exception while loading data frame')})
 
         # Performing the merge
         status = ops.perform_dataframe_upload_merge(workflow.id,
@@ -396,7 +402,7 @@ def upload_s4(request):
                           'error_msg': status})
 
             messages.error(request,
-                           'Merge operation failed. (' + status + ')'),
+                           _('Merge operation failed.') + ' (' + status + ')'),
             return redirect(reverse('dataops:uploadmerge'))
 
         # Log the event
@@ -483,23 +489,23 @@ def upload_s4(request):
         if not toLoad:
             if colname in dst_column_names:
                 # Case 3
-                info.append((colname, False, colname + ' (Ignored)'))
+                info.append((colname, False, colname + _(' (Ignored)')))
             else:
                 # Case 4
-                info.append(('', False, colname + ' (Ignored)'))
+                info.append(('', False, colname + _(' (Ignored)')))
             continue
 
         # Initial name on the dst data frame
         dst_name = colname
         # Column not present in DST, so it is a new column
         if colname not in dst_column_names:
-            dst_name += ' (New)'
+            dst_name += _(' (New)')
         else:
-            dst_name += ' (Update)'
+            dst_name += _(' (Update)')
 
         src_name = colname
         if colname != old_name:
-            src_name += ' (Renamed)'
+            src_name += _(' (Renamed)')
 
         # Cases 5 - 8
         info.append((dst_name, True, src_name))

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
+from django.utils.translation import ugettext_lazy as _
 
 from django.conf import settings
 from django.db import models
@@ -14,7 +15,7 @@ if 'siteprefs' in settings.INSTALLED_APPS:
 
     register_prefs(
         pref(MAX_LIST_SIZE,
-             verbose_name='Maximum number of logs shown to the user',
+             verbose_name=_('Maximum number of logs shown to the user'),
              static=False,
              field=models.IntegerField(blank=True)),
     )

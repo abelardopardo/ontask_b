@@ -18,23 +18,33 @@ Requirements
 
 OnTask has been developed as a `Django <https://www.djangoproject.com/>`_
 application. Django is a high-level, python-based web framework that supports
-a rich set of functionalities typically required in applications like OnTask.
+a rich set of functionality typically required in applications like OnTask.
 But as with many other applications, OnTask requires a set of additional
 applications for its execution:
 
 - Python 2.7
-- Django 
+- Django 1.11
 - Additional Django modules (included in the requirements/base.txt) file
 - Redis 
 - PostgreSQL (version 9.5 or later)
 
 Some of these requirements are handled through Python's package index application `pip <https://pypi.python.org/pypi/pip>`__.
 
+Are you upgrading from a version < 2.8 to 2.8 or later?
+=======================================================
+
+If you are upgrading OnTask from a version lower than 2.8 to 2.8 or later, you
+need to disable the ``crontab`` used to execute tasks asynchronously from the
+web server. Starting in version 2.8 those tasks are executed by an
+application called ``celery`` that is managed using ``supervisor`` (see
+:ref:`scheduling_tasks`).
 
 Installing the required tools
 =============================
 
 The following installation steps assume that you are deploying OnTask in a production web server capable of serving pages using the HTTPS protocol.
+
+.. _install_redis:
 
 Install and Configure Redis
 ---------------------------
@@ -87,6 +97,84 @@ interpreter and you can execute the python interpreter.
 #. Install `pip <https://pip.pypa.io/en/stable/>`__ (the package may be called
    ``python-pip``). This tool will be used by both Python and Django to install
    additional libraries required to execute OnTask.
+
+.. _scheduling_tasks:
+
+Configure the Distributed Task Queue Celery
+-------------------------------------------
+
+There are various tasks that need to be executed by OnTask outside the web
+server. The solution adopted is to use `Celery
+<http://www.celeryproject.org/>`_, `Supervisor <http://supervisord.org/>`_ (a
+prcocess control system) and `Redis <https://redis.io/>`_. Redis
+has been configured in a previous step. This section explains how to set
+up the distributed task queue and make sure it is continuously executing in
+parallel with the web server.
+
+1. Make sure the binaries ``supervisord``, ``supervisorctl`` and ``celery``
+   are installed in your system.
+
+2. Go to the folder ``supervisor`` in the top of the project and edit the file
+   ``supervisor.conf``.
+
+3. The file configures ``supervisord`` to run in the background and prepare
+   two sets of processes for OnTask. You have two options to use this file:
+
+   a) Use environment variables.
+
+      The file uses internally the value of two environment variables:
+
+      * ``PROJECT_PATH``: Full path to the root of the project (the top
+        folder containing the file ``LICENSE``.
+
+      * ``CELERY_BIN``: Full path to the executable ``celery`` in your system
+        (typically ``/usr/local/bin/celery`` or similar).
+
+      * Set these variables in your environment to the correct values and make
+        sure they are properly exported and visible when running other
+        commands. For example, in ``bash``, this operation would be achieve
+        by two commands similar to::
+
+          $ export PROJECT_PATH=/full/path/to/OnTask/root/folder
+          $ export CELERY_BIN=/full/path/to/celery/executable
+
+   b) Change the file ``supervisor.conf``.
+
+      * replace any appearance of the string ``%(ENV_PROJECT_PATH)s`` by the
+        full path to the project folder.
+
+      * replace any appearance of the string ``%(ENV_CELERY_BIN)s`` by the
+        full path to the ``celery`` binary program.
+
+4. Start the process control system with the command::
+
+     $ supervisord -c supervisor.conf
+
+   The command starts the process control application ``supervisord``
+   which executes a set of process in the background.
+
+5. Check that the process control system is working with the command
+   (executed from the ``supervisor`` folder)::
+
+     $ supervisorctl -c supervisor.conf status
+
+   The output of this command should show a message similar to::
+
+     ontask-beat-celery               RUNNING   pid 28579, uptime 1 day, 0:07:36
+     ontask-celery                    RUNNING   pid 28578, uptime 1 day, 0:07:36
+
+   If the status of the two processes is ``STARTING`` wait a few seconds and
+   execute the command again. The names ``ontask-beat-celery`` and
+   ``ontask-celery`` are the names of the two processes that OnTask uses for
+   asynchronous task execution.
+
+   You may use this command to check if ``supervisord`` is still running. The
+   application is configured to write its messages to the file ``celery.log``
+   in the logs folder at the top of the project.
+
+6. If you are upgrading OnTask from a previous version (less than 2.8), you
+   need to edit the ``crontab`` entry and remove the command to execute the
+   script ``scheduler_script.py``.
 
 Download, install and configure OnTask
 --------------------------------------
@@ -183,13 +271,12 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
 
    The command should run without any error or exception.
 
-#. Execute the command to create a superuser
-   account in OnTask::
+#. Execute the command to create a superuser account in OnTask::
 
      python manage.py createsuperuser
 
-   Remember the data that you enter in this step so that
-   you use it when you enter OnTask with your browser.
+   Remember the data that you enter in this step so that you use it when you
+   enter OnTask with your browser.
 
 #. Go to the ``docs`` folder to generate the documentation. Make sure this
    folder contains the sub-folders with name ``_static`` and ``_templates``.
@@ -229,13 +316,15 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
    is because the production version requires the pages to be served through
    SSL with a valid certificate in a conventional server.
 
-   If you want to use the server through the the URL 127.0.0.1:8000 you have
-   to perform two more steps. First, edit the file ``manage.py`` and change
-   these three lines to look like::
+#. If OnTask is going to be accessed through a web server like Apache or Nginx,
+   stop the application and configure the web server accordingly.
+
+#. If you want to use the server in development mode through the URL
+   ``127.0.0.1:8000`` you have to perform two more steps. First, edit the file
+   ``manage.py`` and change these three lines to look like::
 
          os.environ.setdefault("DJANGO_SETTINGS_MODULE",
-                          "ontask.settings.production")
-         #                 "ontask.settings.development")
+                          "ontask.settings.development")
 
    Second, execute the following command from the ``src`` folder::
 
@@ -248,14 +337,16 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
    will start the server in the URL 127.0.0.1:8000 and you should be able to
    access it normally with the browser.
 
-#. If OnTask is going to be accessed through a web server like Apache or Nginx,
-   stop the application and configure the web server accordingly.
+   .. admonition:: Warning
+
+      The development version of OnTask is **not suited** to be used in
+      production because it disables several security features. Make sure you
+      only deploy a **production** version.
 
 The Administration Pages
 ========================
 
-As many applications developed using Django, OnTask takes full advantage of
-the administration pages offered by the framework. The account created with
+OnTask uses the administration pages offered by Django. The account created with
 the command ``createsuperuser`` has complete access to those pages through a
 link in the upper right corner of the screen.
 
@@ -279,7 +370,8 @@ Production Deployment
 
 Once OnTask is executing normally, you may configure a web server (nginx,
 apache or similar) to make it available to a community of users. The
-instructions to make such deployment are beyond the scope of this manual but are available through the corresponding manual pages of these applications.
+instructions to make such deployment are beyond the scope of this manual but
+are available through the corresponding manual pages of these applications.
 
 .. _authentication:
 
@@ -339,6 +431,11 @@ OnTask comes with the following authentication mechanisms: IMS-LTI,
   internal environment of Django where the web requests are served, OnTask
   resorts to conventional authentication requiring email and password. These
   credentials are stored in the internal database managed by OnTask.
+
+The API can be accessed using through token authentication. The token can be
+generated manually through the user profile page. This type of authentication
+may need some special configuration in the web server (Apache or similar) so
+that the ``HTTP_AUTHORIZATION`` header is not removed.
 
 LDAP Authentication
 -------------------
@@ -417,62 +514,6 @@ If OnTask is deployed using SAML, all URLs are likely to be configured to go thr
   </Location>
 
 If OnTask is not served from the root of your web server, make sure you include the absolute URL to ``trck``. For example, if OnTask is available through the URL ``my.server.com/somesuffix/ontask``, then the URL to use in the previous configuration is ``my.server.com/somesuffix/ontask/trck``.
-
-
-.. _scheduling_tasks:
-
-Scheduling tasks
-================
-
-OnTask allows to program certain tasks to execute at some point in the
-future. This functionality is implemented using a combination of persistent
-storage (the database), and a time-based job scheduler external to the tool.
-Time-based job schedulers are present in most operating systems (``cron``
-in Unix/Linux, or ``at`` in Windows). OnTask provides the functionality to
-describe the task to execute and assign it a date and time. Additionally, the
-tool has a script that checks the date/time, selects the appropriate task,
-and executes it. These instructions describe the configuration assuming an
-underlying Linux/Unix architecture using ``crontab``.
-
-Create a *crontab* file for the user running the server in your production
-environment with the following content::
-
-  MAILTO="[ADMIN EMAIL ADDRESS]"
-  PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-  SHELL=/bin/bash
-  ONTASK_PROJECT=[PATH TO ONTASK PROJECT ROOT]
-
-  0,15,30,45 * * * * python ${ONTASK_PROJECT}/src/manage.py runscript scheduler_script -v3 --traceback --script-args="-d" > [CRONTAB LOG] 2>&1
-
-Modify the previous script with the following information:
-
-- In the first line change the email address by an address to receive the
-  notifications produced by ``crontab``. The server running the application
-  needs to have the capacity to send emails.
-
-- Make sure the variable ``PATH`` contains the path to execute ``python``.
-
-- Define the variable ``SHELL`` to point to the shell to use to execute
-  ``python``.
-
-- Change the value of the variable ``ONTASK_PROJECT`` to point to the root
-  of OnTask (the folder containing the source code).
-
-- In the last line replace ``[CRONTAB LOG]`` with a file to capture the
-  output that the screen would write to a regular terminal. We recommend
-  this file to be in a temporary directory.
-
-The script ``scheduler_scrip`` has been configured to print messages through
-a logger that writes the messages to the file ``script.log`` in the ``logs``
-folder.
-
-The remaining parameter to adjust is the frequency in which the script
-``scheduler_script`` runs. In the example above, the script executes every 15
-minutes (at minutes 0, 15, 30 and 45 minutes in the hour). Adjust this
-frequency to suit your needs. Once adjusted, go to the administration menu in
-OnTask, open the section with name *Core Configuration*, click in the
-preferences and adjust the value of the *Minute interval to program scheduled
-tasks* and match it (in minutes) to the interval reflected in the crontab.
 
 .. _plugin_install:
 
@@ -562,9 +603,31 @@ Clone
 Delete
   Remove the connection from the platform.
 
+.. _bulk_user_creation:
 
+Creating users in Bulk
+======================
 
+OnTask offers the possibility of creating users in bulk through given the
+data in a CSV file through the following steps:
 
+1. Create a CSV file (plain text) with the initial line containing only the
+   word ``email`` (name of the column). Include then one email address per
+   user per line. You may check the file ``initial_learners.csv`` provided in
+   the folder ``src/scripts``.
 
+2. From the ``src`` folder run the command::
 
+     $ python manage.py runscript initial_data --script-args "-d scripts/initial_learners.csv"
+
+   If you have the user emails in a file with a different column name, you
+   may provide the script that name (instead of the default ``email`` using
+   the option ``-e``::
+
+     $ python manage.py runscript initial_data --script-args "-d -e your_email_column_name scripts/initial_learners.csv"
+
+   If you want to create user accounts for instructors, you need to specify
+   this with the option ``-i`` in the script::
+
+     $ python manage.py runscript initial_data --script-args "-d -e your_email_column_name -i scripts/initial_learners.csv"
 

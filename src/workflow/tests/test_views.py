@@ -562,7 +562,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
                 row_prefix + "/div/button[1]"
             ).click()
             self.selenium.find_element_by_xpath(
-                row_prefix + "/div/ul/li[3]/button"
+                row_prefix + "/div/ul/li[4]/button"
             ).click()
             WebDriverWait(self.selenium, 10).until(
                 EC.text_to_be_present_in_element(

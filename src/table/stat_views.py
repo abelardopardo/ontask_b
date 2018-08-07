@@ -4,9 +4,11 @@ Implementation of views providing visualisation and stats
 """
 from __future__ import unicode_literals, print_function
 
+from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect, render
+from django.utils.translation import ugettext as _
 
 from dataops import pandas_db
 from ontask.permissions import is_instructor
@@ -87,12 +89,11 @@ def get_row_visualisations(request, view_id=None):
     if not update_key or not update_val:
         # Malformed request
         return render(request, 'error.html',
-                      {'message': 'Unable to update table row'})
+                      {'message': _('Unable to visualize table row')})
 
-    # Get the dataframe
-    df = pandas_db.load_from_db(workflow.id)
-
-    # If a view is given, filter the columns.
+    # If a view is given, filter the columns
+    columns_to_view = workflow.columns.all()
+    column_names = None
     if view_id:
         try:
             view = View.objects.get(pk=view_id)
@@ -101,9 +102,11 @@ def get_row_visualisations(request, view_id=None):
             return redirect('workflow:detail', workflow.id)
         columns_to_view = view.columns.all()
         column_names = [c.name for c in columns_to_view]
+
+        df = pandas_db.load_from_db(workflow.id, column_names, view.formula)
     else:
-        columns_to_view = workflow.columns.all()
-        column_names = None
+        # No view given, fetch the entire data frame
+        df = pandas_db.load_from_db(workflow.id)
 
     # Get the rows from the table
     row = pandas_db.execute_select_on_table(workflow.id,
@@ -126,13 +129,15 @@ def get_row_visualisations(request, view_id=None):
         visualizations.append('<h4>' + column.name + '</h4>')
         # If all values are empty, no need to proceed
         if all([not x for x in df[column.name]]):
-            visualizations.append("<p>No values in this column</p><hr/>")
+            visualizations.append("<p>" +
+                                  _('No values in this column') +
+                                  "</p><hr/>")
             continue
 
         if row[idx] is None or row[idx] == '':
             visualizations.append(
-                '<p class="alert-warning">No value for this student in this '
-                'column</p>'
+                '<p class="alert-warning">' + \
+                _('No value for this student in this column') + '</p>'
             )
 
         visualizations.append(
@@ -153,6 +158,86 @@ def get_row_visualisations(request, view_id=None):
     return render(request,
                   'table/stat_row.html',
                   {'value': update_val,
+                   'vis_scripts': vis_scripts,
+                   'visualizations': visualizations})
+
+
+def get_view_visualisations(request, view_id=None):
+    """
+    Function that returns the visualisations for a view (or the entire table)
+    :param request: HTTP request
+    :param view_id: View id being used
+    :return: HTTP response
+
+    TODO: Review this function and get_row_visualisation because there is a
+    significant overlap.
+    """
+    # If there is no workflow object, go back to the index
+    workflow = get_workflow(request)
+    if not workflow:
+        return redirect('workflow:index')
+
+    # If the workflow has no data, something went wrong, go back to the
+    # workflow details page
+    if workflow.nrows == 0:
+        messages.error(request,
+                       _('Unable to provide visualisation without data.'))
+        return redirect('worflow:detail', workflow.id)
+
+    # If a view is given, filter the columns
+    columns_to_view = workflow.columns.all()
+    formula = None
+    view = None
+    if view_id:
+        try:
+            view = View.objects.get(pk=view_id)
+        except ObjectDoesNotExist:
+            # View not found. Redirect to workflow detail
+            return redirect('workflow:detail', workflow.id)
+        columns_to_view = view.columns.all()
+
+        df = pandas_db.load_from_db(workflow.id,
+                                    [x.name for x in columns_to_view],
+                                    view.formula)
+    else:
+        # No view given, fetch the entire data frame
+        df = pandas_db.load_from_db(workflow.id)
+
+    vis_scripts = []
+    visualizations = []
+    idx = -1
+    context = {'style': 'width:400px; height:225px;'}
+    for column in columns_to_view:
+        idx += 1
+
+        # Skip primary keys (no point to represent any of them)
+        if column.is_key:
+            continue
+
+        # Add the title and surrounding container
+        visualizations.append('<h4>' + column.name + '</h4>')
+        # If all values are empty, no need to proceed
+        if all([not x for x in df[column.name]]):
+            visualizations.append("<p>No values in this column</p><hr/>")
+            continue
+
+        visualizations.append(
+            '<div style="display: inline-flex;">'
+        )
+
+        v = get_column_visualisations(
+            column,
+            df[[column.name]],
+            vis_scripts=vis_scripts,
+            id='column_{0}'.format(idx),
+            context=context)
+
+        visualizations.extend([x.html_content for x in v])
+        visualizations.append('</div><hr/>')
+
+    return render(request,
+                  'table/stat_view.html',
+                  {'view': view,
                    'vis_scripts': vis_scripts,
                    'visualizations': visualizations})
 
@@ -233,3 +318,27 @@ def stat_row_view(request, pk):
     """
 
     return get_row_visualisations(request, pk)
+
+@user_passes_test(is_instructor)
+def stat_table(request):
+    """
+    Render the page with stats and visualizations for the whole table.
+
+    :param request: HTTP request
+    :return: Render the page
+    """
+
+    return get_view_visualisations(request)
+
+
+@user_passes_test(is_instructor)
+def stat_table_view(request, pk):
+    """
+    Render the page with stats and visualizations for a view.
+
+    :param request: HTTP request
+    :param pk: View id to use
+    :return: Render the page
+    """
+
+    return get_view_visualisations(request, pk)

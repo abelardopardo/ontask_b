@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.utils.translation import ugettext_lazy as _
 
 from dataops import pandas_db, ops
 from ontask.permissions import UserIsInstructor
@@ -45,7 +46,7 @@ class TableBasicOps(APIView):
         #
         workflow = get_workflow(self.request, pk)
         if workflow is None:
-            raise APIException('Unable to access the workflow')
+            raise APIException(_('Unable to access the workflow'))
         return workflow
 
     def override(self, request, pk, format=None):
@@ -90,8 +91,8 @@ class TableBasicOps(APIView):
     def post(self, request, pk, format=None):
         # If there is a table in the workflow, ignore the request
         if pandas_db.load_from_db(pk) is not None:
-            raise APIException('Post request requires workflow without '
-                               'a table')
+            raise APIException(_('Post request requires workflow without '
+                                 'a table'))
         return self.override(request, pk, format)
 
     # Update
@@ -101,7 +102,7 @@ class TableBasicOps(APIView):
     # Delete
     def delete(self, request, pk, format=None):
         wflow = self.get_object(pk)
-        wflow.flush(wflow)
+        wflow.flush()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -216,7 +217,7 @@ class TableBasicMerge(APIView):
 
         workflow = get_workflow(self.request, pk)
         if workflow is None:
-            raise APIException('Unable to access the workflow')
+            raise APIException(_('Unable to access the workflow'))
         return workflow
 
     # Retrieve
@@ -246,25 +247,27 @@ class TableBasicMerge(APIView):
         # Check that the parameters are correct
         how = serializer.validated_data['how']
         if how == '' or how not in ['left', 'right', 'outer', 'inner']:
-            raise APIException('how must be one of left, right, outer '
-                               'or inner')
+            raise APIException(_('how must be one of left, right, outer '
+                                 'or inner'))
 
         left_on = serializer.validated_data['left_on']
         if not ops.is_unique_column(dst_df[left_on]):
-            raise APIException('column' + left_on +
-                               'does not contain a unique key.')
+            raise APIException(_('column {0} does not contain a unique '
+                                 'key.').format(left_on))
 
         # Operation has been accepted by the serializer
         src_df = serializer.validated_data['src_df']
 
         right_on = serializer.validated_data['right_on']
         if right_on not in list(src_df.columns):
-            raise APIException('column ' + right_on +
-                               ' not found in data frame')
+            raise APIException(_('column {0} not found in data frame').format(
+                right_on)
+            )
 
         if not ops.is_unique_column(src_df[right_on]):
-            raise APIException('column' + right_on +
-                               'does not contain a unique key.')
+            raise APIException(
+                _('column {0} does not contain a unique key.').format(right_on)
+            )
 
         merge_info = {
             'how_merge': how,
@@ -282,7 +285,7 @@ class TableBasicMerge(APIView):
                                                               src_df,
                                                               merge_info)
         except Exception:
-            raise APIException('Unable to perform merge operation')
+            raise APIException(_('Unable to perform merge operation'))
 
         if merge_result:
             # Something went wrong, raise the exception

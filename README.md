@@ -1,6 +1,6 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 2.7.3 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 2.8.0 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
 ## OnTask in a nutshell
 
@@ -10,7 +10,7 @@ Current Version: 2.7.3 ([documentation](http://ontask-version-b.readthedocs.io/e
 
 - Actions such as personalised email, personalised web page
 
-- Integrated data capture mechanism (similar to a survey engine)
+- Basic survey engine to collect student responses
 
 - Visualization of columns (population measures) and individuals with
   respect to the population
@@ -22,6 +22,8 @@ Current Version: 2.7.3 ([documentation](http://ontask-version-b.readthedocs.io/e
 - Time-based scheduler for actions
 
 - Import/Export functionality to share workflows, data and actions.
+
+- Import/Export functionality for surveys
 
 - Table views to see only a subset of the data
 
@@ -157,7 +159,8 @@ Q19. **Where do I find the details on how to install it and some more
 OnTask started as a project combining ideas that were present in the Student 
 Relationship Engagement System [SRES](http://sres.io) and subsequent versions. 
 Support for this activity has been provided by the Australian Government 
-Office for Learning and Teaching as part of the [OnTask Project](https://ontasklearning.org) 
+Office for Learning and Teaching as part of the 
+[OnTask Project](https://ontasklearning.org) 
 titled *Scaling the Provision of Personalised Learning Support Actions to
 Large Student Cohorts* (OLT project reference SP16-5264). The views expressed
 in this activity do not necessarily reflect the views of the Australian
@@ -206,6 +209,10 @@ SOFTWARE.
 OnTask uses the following additional libraries/modules with the following 
 licenses:
 
+- [bootstrap-session-timeout](https://github.com/orangehill/bootstrap-session-timeout) MIT
+
+- [Celery](https://github.com/celery/celery) BSD 3 Clause
+
 - [coreapi](https://pypi.python.org/pypi/coreapi) BSD
 
 - [Django](https://www.djangoproject.com) BSD License
@@ -217,8 +224,17 @@ licenses:
 - [django-braces](https://pypi.python.org/pypi/django-braces/1.12.0). BSD 
   License
 
+- [django-celery-beat](https://github.com/celery/django-celery-beat) BSD 3 
+  Clause
+
+- [django-celery-results](https://github.com/celery/django-celery-results) 
+  BSD 3 Clause
+
 - [django-crispy-forms](https://pypi.python.org/pypi/django-crispy-forms/1.7.0) 
   MIT
+  
+- [django-datetime-widget](https://github.com/asaglimbeni/django-datetime-widget) 
+  BSD 3 Clause
 
 - [django-environ](https://pypi.python.org/pypi/django-environ) MIT License
 
@@ -264,6 +280,9 @@ licenses:
 
 - [Redis](https://redis.io) BSD
 
+- [searchable-option-list](https://github.com/pbauerochse/searchable-option-list) 
+  MIT License
+
 - [Sphinx](https://pypi.python.org/pypi/Sphinx) BSD
 
 - [SQLAlchemy](https://pypi.python.org/pypi/SQLAlchemy/1.2.0) MIT
@@ -272,4 +291,3 @@ licenses:
 
 - [validate_email](https://pypi.python.org/pypi/validate_email) LGPL
 
-- [bootstrap-session-timeout](https://github.com/orangehill/bootstrap-session-timeout) MIT

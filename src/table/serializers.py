@@ -7,6 +7,7 @@ import json
 
 import pandas as pd
 from rest_framework import serializers
+from django.utils.translation import ugettext_lazy as _
 
 from action.serializers import ColumnNameSerializer
 from dataops import ops
@@ -60,7 +61,7 @@ class DataFrameJSONField(serializers.Field):
 
 class DataFrameJSONSerializer(serializers.Serializer):
     data_frame = DataFrameJSONField(
-        help_text='JSON string encoding a pandas data frame'
+        help_text=_('JSON string encoding a pandas data frame')
     )
 
 
@@ -72,15 +73,15 @@ class DataFramePandasField(serializers.Field):
     def to_internal_value(self, data):
         result = string_to_df(data)
         if result is None:
-            raise serializers.ValidationError('Unable to create data frame')
+            raise serializers.ValidationError(_('Unable to create data frame'))
 
         return result
 
 
 class DataFramePandasSerializer(serializers.Serializer):
     data_frame = DataFramePandasField(
-        help_text='This field must be the Base64 encoded '
-                  'result of the pandas.to_pickle() function'
+        help_text=_('This field must be the Base64 encoded '
+                    'result of the pandas.to_pickle() function')
     )
 
 
@@ -88,32 +89,33 @@ class DataFrameBasicMergeSerializer(serializers.Serializer):
     how = serializers.CharField(
         required=True,
         initial='',
-        help_text='One of the following values: inner, outer, left or right'
+        help_text=_('One of the following values: inner, outer, left or right')
     )
 
     left_on = serializers.CharField(
         required=True,
         initial='',
-        help_text='ID of the column in destination data frame with unique key')
+        help_text=_('ID of the column in destination data frame with unique '
+                    'key'))
 
     right_on = serializers.CharField(
         required=True,
         initial='',
-        help_text='ID of the column in the source data frame with the unique '
-                  'key')
+        help_text=_('ID of the column in the source data frame with the unique '
+                  'key'))
 
 
 class DataFrameJSONMergeSerializer(DataFrameBasicMergeSerializer):
     src_df = DataFrameJSONField(
-        help_text='This field must be the JSON string encoding a pandas data '
-                  'frame'
+        help_text=_('This field must be the JSON string encoding a pandas data '
+                  'frame')
     )
 
 
 class DataFramePandasMergeSerializer(DataFrameBasicMergeSerializer):
     src_df = DataFramePandasField(
-        help_text='This field must be the Base64 encoded '
-                  'result of pandas.to_pickle() function'
+        help_text=_('This field must be the Base64 encoded '
+                    'result of pandas.to_pickle() function')
     )
 
 
@@ -124,28 +126,34 @@ class ViewSerializer(serializers.ModelSerializer):
     columns = ColumnNameSerializer(required=False, many=True)
 
     def create(self, validated_data, **kwargs):
-        view_obj = View(
-            workflow=self.context['workflow'],
-            name=validated_data['name'],
-            description_text=validated_data['description_text'],
-            formula=validated_data['formula']
-        )
-        view_obj.save()
-
-        # Load the columns in the view
-        columns = ColumnNameSerializer(
-            data=validated_data.get('columns'),
-            many=True,
-            required=False,
-        )
-        if columns.is_valid():
-            for citem in columns.data:
-                column = view_obj.workflow.columns.get(name=citem['name'])
-                view_obj.columns.add(column)
+        view_obj = None
+        try:
+            view_obj = View(
+                workflow=self.context['workflow'],
+                name=validated_data['name'],
+                description_text=validated_data['description_text'],
+                formula=validated_data['formula']
+            )
             view_obj.save()
-        else:
-            view_obj.delete()
-            return None
+
+            # Load the columns in the view
+            columns = ColumnNameSerializer(
+                data=validated_data.get('columns'),
+                many=True,
+                required=False,
+            )
+            if columns.is_valid():
+                for citem in columns.data:
+                    column = view_obj.workflow.columns.get(name=citem['name'])
+                    view_obj.columns.add(column)
+                view_obj.save()
+            else:
+                raise Exception(_('Incorrect column data'))
+
+        except Exception:
+            if view_obj and view_obj.id:
+                view_obj.delete()
+            raise
 
         return view_obj
 

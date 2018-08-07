@@ -9,6 +9,7 @@ from builtins import str
 from django.conf import settings as django_settings
 from django.contrib import messages
 from django.utils.dateparse import parse_datetime
+from django.utils.translation import ugettext_lazy as _
 
 from logs import ops
 from . import plugin, settings
@@ -21,8 +22,7 @@ def get_plugin_path():
     if os.path.isabs(plugin_folder):
         return plugin_folder
 
-    return os.path.join(django_settings.PROJECT_PATH,
-                        plugin_folder)
+    return os.path.join(django_settings.PROJECT_PATH, plugin_folder)
 
 
 def verify_plugin_elements(plugin_instance):
@@ -34,45 +34,44 @@ def verify_plugin_elements(plugin_instance):
     """
     result = ['Unchecked'] * 5
     check_idx = 0
-
     try:
         # Verify that all the fields and methods are present in the instance
-        result[check_idx] = 'Not found'
+        result[check_idx] = _('Not found')
         if not isinstance(plugin_instance.name, str):
-            result[check_idx] = 'Incorrect type'
+            result[check_idx] = _('Incorrect type')
         else:
-            result[check_idx] = 'Ok'
+            result[check_idx] = _('Ok')
         check_idx += 1
 
-        result[check_idx] = 'Not found'
+        result[check_idx] = _('Not found')
         if not isinstance(plugin_instance.description_txt, str):
-            result[check_idx] = 'Incorrect type'
+            result[check_idx] = _('Incorrect type')
         else:
-            result[check_idx] = 'Ok'
+            result[check_idx] = _('Ok')
         check_idx += 1
 
-        result[check_idx] = 'Not found'
+        result[check_idx] = _('Not found')
         if not all(isinstance(s, str)
                    for s in plugin_instance.input_column_names):
-            result[check_idx] = 'Incorrect type'
+            result[check_idx] = _('Incorrect type')
         else:
-            result[check_idx] = 'Ok'
+            result[check_idx] = _('Ok')
         check_idx += 1
 
-        result[check_idx] = 'Not found'
+        result[check_idx] = _('Not found')
         if not (plugin_instance.output_column_names and
                 isinstance(plugin_instance.output_column_names, list) and
                 len(plugin_instance.output_column_names) > 0 and
                 all(isinstance(s, str) for s in
                     plugin_instance.output_column_names)):
-            result[check_idx] = 'Incorrect type/value'
+            result[check_idx] = _('Incorrect type/value')
         else:
-            result[check_idx] = 'Ok'
+            result[check_idx] = _('Ok')
         check_idx += 1
 
-        result[check_idx] = 'Not found'
+        result[check_idx] = _('Not found')
         if not isinstance(plugin_instance.parameters, list):
-            result[check_idx] = 'Incorrect type'
+            result[check_idx] = _('Incorrect type')
             return result
 
         for (k, p_type, p_allowed, p_initial, p_help) in \
@@ -80,13 +79,13 @@ def verify_plugin_elements(plugin_instance):
 
             if not isinstance(k, str):
                 # The type should be a string
-                result[check_idx] = 'Key values should be strings'
+                result[check_idx] = _('Key values should be strings')
                 return result
 
             if not isinstance(p_type, str):
                 # The type should be a string
                 result[check_idx] = \
-                    'First tuple element should be as string'
+                    _('First tuple element should be as string')
                 return result
 
             if p_type == 'integer':
@@ -101,31 +100,32 @@ def verify_plugin_elements(plugin_instance):
                 t_func = bool
             else:
                 # This is an incorrect data type
-                result[check_idx] = 'Incorrect type "{0}" in ' \
-                                    'parameter'.format(p_type)
+                result[check_idx] = \
+                    _('Incorrect type "{0}" in parameter').format(p_type)
                 return result
 
             # If the column is of type datetime, the list of allowed values
             # should be empty
             if p_type == 'datetime' and p_allowed:
-                result[check_idx] = 'Parameter of type datetime cannot have ' \
-                                    'list of allowed values'
+                result[check_idx] = \
+                    _('Parameter of type datetime cannot have ' \
+                      'list of allowed values')
                 return result
 
 
             # Translate all values to the right type
-            result[check_idx] = 'Incorrect list of allowed value'
-            _ = map(t_func, p_allowed)
+            result[check_idx] = _('Incorrect list of allowed value')
+            __ = map(t_func, p_allowed)
 
             # And translate the initial value to the right type
-            result[check_idx] = 'Incorrect initial value'
+            result[check_idx] = _('Incorrect initial value')
             if p_initial:
                 item = t_func(p_initial)
                 if item is None:
                     return result
 
             if p_help and not isinstance(p_help, str):
-                result[check_idx] = 'Help text must be as string'
+                result[check_idx] = _('Help text must be as string')
                 # Help text must be a string
                 return result
 
@@ -136,9 +136,9 @@ def verify_plugin_elements(plugin_instance):
         if not (hasattr(plugin_instance, 'run') and
                 callable(getattr(plugin_instance, 'run'))):
             # Run is either not in the class, or not a method.
-            result[check_idx] = 'Incorrect run method'
+            result[check_idx] = _('Incorrect run method')
             return result
-        result[check_idx] = 'Ok'
+        result[check_idx] = _('Ok')
     except Exception:
         return result
 
@@ -180,19 +180,19 @@ def verify_plugin(plugin_instance):
     """
     # Initial list of results (all false until proven otherwise
     checks = [
-        'Presence of a string field with name "name"',
-        'Presence of a string field with name "description_txt"',
-        'Presence of a field with name "input_column_names" storing a ('
-        'possible empty) list of strings',
-        'Presence of a field with name "output_column_names" storing a '
-        'non-empty list of strings',
-        'Presence of a (possible empty) list of tuples with name "parameters". '
-        'The tuples must have six '
-        'elements: name (a string), type (one of "double", "integer", '
-        '"string", "boolean", '
-        'or "datetime"), (possible empty) list of allowed values of the '
-        'corresponding type, an initial value of the right type or None, '
-        'and a help string to be shown when requesting this parameter.'
+        _('Presence of a string field with name "name"'),
+        _('Presence of a string field with name "description_txt"'),
+        _('Presence of a field with name "input_column_names" storing a ('
+          'possible empty) list of strings'),
+        _('Presence of a field with name "output_column_names" storing a '
+          'non-empty list of strings'),
+        _('Presence of a (possible empty) list of tuples with name '
+          '"parameters". The tuples must have six '
+          'elements: name (a string), type (one of "double", "integer", '
+          '"string", "boolean", '
+          'or "datetime"), (possible empty) list of allowed values of the '
+          'corresponding type, an initial value of the right type or None, '
+          'and a help string to be shown when requesting this parameter.')
     ]
 
     return zip(verify_plugin_elements(plugin_instance), checks)
@@ -223,9 +223,9 @@ def load_plugin(foldername):
         if not all(x == 'Ok' for x, _ in tests):
             return (None, tests)
     except AttributeError as e:
-        return (None, [(e.message, 'Class instantiation')])
+        return (None, [(e.message, _('Class instantiation'))])
     except Exception as e:
-        return (None, [(e.message, 'Instance creation')])
+        return (None, [(e.message, _('Instance creation'))])
 
     return (plugin_instance, tests)
 
@@ -320,7 +320,7 @@ def refresh_plugin_data(request, workflow):
         if not rpin:
             messages.error(
                 request,
-                'Unable to load plugin in folder "{0}".'.format(fname))
+                _('Unable to load plugin in folder "{0}".').format(fname))
             continue
 
         # Log the event
@@ -348,7 +348,7 @@ def run_plugin(plugin_instance, df, merge_key, params):
 
     # If plugin does not return a data frame, flag as error
     if not isinstance(new_df, pd.DataFrame):
-        return None, 'Result is not a pandas data frame.'
+        return None, _('Result is not a pandas data frame.')
 
     # Execution was correct
     return new_df, None

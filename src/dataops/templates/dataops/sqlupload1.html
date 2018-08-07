@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load settings %}
 {% load static %}
 {% load crispy_forms_tags %}
@@ -6,22 +7,43 @@
 {% block scripts %}
   <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
 {% endblock %}
-{% block title %}{{ block.super }}Upload/Merge {{ dtype }}{% endblock %}
+{% block title %}{{ block.super }}{% blocktrans with n=dtype %}Upload/Merge {{ n }}{% endblocktrans %}{% endblock %}
 {% block container %}
 <div align="center" class="container">
-  <h1 class="page-header">Step 1: Establish a {{ dtype_select }}</h1>
+  <h1 class="page-header">{% blocktrans with n=dtype_select %}Step 1: Establish a {{ n }}{% endblocktrans %}</h1>
 
   <div style="display:block;">
-    <p>The data will be accessed with the following parameters:</p>
+    <p>{% trans 'The data will be accessed with the following parameters:' %}</p>
 
-    {% if conn_type %}<p class="help-block">Connection type: {{ conn_type }}</p>{% endif %}
-    {% if conn_driver %}<p class="help-block">Connection driver: {{ conn_driver }}</p>{% endif %}
-    {% if db_user %}<p class="help-block">Username: {{ db_user }}</p>{% endif %}
-    {% if db_password %}<p class="help-block">Password: Requested below</p>{% endif %}
-    {% if db_host %}<p class="help-block">Host: {{ db_host }}</p>{% endif %}
-    {% if db_port %}<p class="help-block">Port: {{ db_port }}</p>{% endif %}
-    <p class="help-block">Database name: {{ db_name }}</p>
-    <p class="help-block">Database table: {{ db_table }}</p>
+    {% if conn_type %}
+      <p class="help-block">{% blocktrans with n=conn_type %}Connection type:
+        {{ n }}{% endblocktrans %}</p>
+    {% endif %}
+    {% if conn_driver %}
+      <p class="help-block">{% blocktrans with n=conn_driver %}Connection
+        driver: {{ n }}{% endblocktrans %}</p>
+    {% endif %}
+    {% if db_user %}
+      <p class="help-block">{% blocktrans with n=db_user %}Username: {{ n }}
+        {% endblocktrans %}</p>
+    {% endif %}
+    {% if db_password %}
+      <p class="help-block">{% trans 'Password: Requested below' %}</p>
+    {% endif %}
+    {% if db_host %}
+      <p class="help-block">
+        {% blocktrans with n=db_host %}Host: {{ n }}{% endblocktrans %}</p>
+    {% endif %}
+    {% if db_port %}
+      <p class="help-block">
+        {% blocktrans with n=db_port %}Port: {{ n }}{% endblocktrans %}</p>
+    {% endif %}
+    <p class="help-block">
+      {% blocktrans with n=db_name %}Database name: {{ n }}{% endblocktrans %}
+    </p>
+    <p class="help-block">
+      {% blocktrans with n=db_table %}Database table: {{ n }}{% endblocktrans %}
+    </p>
   </div>
   <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}

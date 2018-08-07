@@ -1,6 +1,8 @@
+{% load i18n %}
 <div class="alert-danger">
-  <p class="alert-danger">This preview could not be produced because the row 
-  in the table does not have values in the following variables:</p>
+  <p class="alert-danger">{% blocktrans %}This preview could not be produced
+    because the row in the table does not have values in the following
+    variables:{% endblocktrans %}</p>
 
   <ul>
     {% for v in missing_values %}
@@ -8,6 +10,6 @@
     {% endfor %}
   </ul>
 
-  <p class="alert-danger">Review the conditions in the action or use a filter 
-  to exclude these entries.</p>
+  <p class="alert-danger">{% blocktrans %}Review the conditions in the action
+    or use a filter to exclude these entries.{% endblocktrans %}</p>
 </div>

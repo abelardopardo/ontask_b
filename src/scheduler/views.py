@@ -14,6 +14,7 @@ from django.shortcuts import render, redirect, reverse
 from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django_tables2 import A
+from django.utils.translation import ugettext_lazy as _
 
 # Create your views here.
 import logs
@@ -32,7 +33,7 @@ class ScheduleEmailActionTable(tables.Table):
 
     operations = OperationsColumn(
         attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name='Operations',
+        verbose_name=_('Operations'),
         orderable=False,
         template_file='scheduler/includes/partial_scheduler_operations.html',
         template_context=lambda record: {'id': record.id}
@@ -40,45 +41,55 @@ class ScheduleEmailActionTable(tables.Table):
 
     action = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('Action'),
+        verbose_name=_('Action'),
         accessor=A('action.name')
     )
 
     execute = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('Scheduled')
+        verbose_name=_('Scheduled')
     )
 
     status = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('Status')
+        verbose_name=_('Status')
     )
 
     subject = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('Subject')
+        verbose_name=_('Subject')
     )
 
     email_column = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('Email column'),
+        verbose_name=_('Email column'),
+    )
+
+    cc_email = tables.Column(
+        attrs={'td': {'class': 'dt-center'}},
+        verbose_name=_('CC Emails'),
+    )
+
+    bcc_email = tables.Column(
+        attrs={'td': {'class': 'dt-center'}},
+        verbose_name=_('BCC Emails'),
     )
 
     send_confirmation = BooleanColumn(
         attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('Send confirmation'),
+        verbose_name=_('Send confirmation'),
         get_field=lambda x: x.send_confirmation,
     )
 
     track_read = BooleanColumn(
         attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('Track'),
+        verbose_name=_('Track'),
         get_field=lambda x: x.track_read,
     )
 
     message = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
-        verbose_name=str('Execution message'),
+        verbose_name=_('Execution message'),
     )
 
     def render_action(self, record):
@@ -86,7 +97,7 @@ class ScheduleEmailActionTable(tables.Table):
             '<a href="{0}">{1}</a>'.format(
                 reverse('action:edit_out',
                         kwargs={'pk': record.action.id}),
-                 record.action.name
+                record.action.name
             )
         )
 
@@ -94,8 +105,8 @@ class ScheduleEmailActionTable(tables.Table):
         model = ScheduledEmailAction
 
         fields = ('action', 'created', 'execute', 'status', 'subject',
-                  'email_column', 'send_confirmation', 'track_read',
-                  'operations', 'message')
+                  'email_column', 'cc_email', 'bcc_email', 'send_confirmation',
+                  'track_read', 'operations', 'message')
 
         sequence = ('operations',
                     'action',
@@ -104,6 +115,8 @@ class ScheduleEmailActionTable(tables.Table):
                     'status',
                     'subject',
                     'email_column',
+                    'cc_email',
+                    'bcc_email',
                     'send_confirmation',
                     'track_read',
                     'message')

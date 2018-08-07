@@ -1,7 +1,9 @@
 from functools import wraps
-from django.utils.decorators import available_attrs
+
 from django.shortcuts import redirect
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
+from django.utils.decorators import available_attrs
+
 from django_auth_lti.verification import is_allowed
 
 

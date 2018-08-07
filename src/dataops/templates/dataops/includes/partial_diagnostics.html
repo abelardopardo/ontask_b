@@ -1,20 +1,21 @@
+{% load i18n %}
 <div class="js-transform-diagnose-view">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title">Diagnostics</h4>
+    <h4 class="modal-title">{% trans 'Diagnostics' %}</h4>
   </div>
   <div class="modal-body text-center">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Close
+    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Close' %}
     </button>
   </div>
   <div class="modal-body">
     <table class="table table-bordered" id="transform-diagnostics-table">
       <thead>
         <tr>
-          <th class="text-center">Status</th>
-          <th class="text-center">Test</th>
+          <th class="text-center">{% trans 'Status' %}</th>
+          <th class="text-center">{% trans 'Test' %}</th>
         </tr>
       </thead>
       <tbody>

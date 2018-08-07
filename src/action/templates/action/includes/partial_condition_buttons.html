@@ -1,12 +1,13 @@
+{% load i18n %}
 <div class="container-fluid" id="condition-set" style="padding-bottom: 0.5ex;">
-  <h4 class="text-center"><strong>Text Conditions</strong>
+  <h4 class="text-center"><strong>{% trans 'Text Conditions' %}</strong>
     <button type="button"
             class="btn btn-sm btn-primary js-condition-create{% if not has_data %} disabled{% endif %}"
             data-url="{% url 'action:create_condition' action.id %}"
             style="margin-bottom: 0.5ex;"
             data-toggle="tooltip"
-            title="Define a text condition to insert in the text body below.">
-      <span class="glyphicon glyphicon-plus"></span> New</button></h4>
+            title="{% trans 'Define a text condition to insert in the text body below.' %}">
+      <span class="glyphicon glyphicon-plus"></span> {% trans 'New' %}</button></h4>
   <div class="conditions">
     {% for condition in conditions %}
       <div class="condition-btn btn-group">
@@ -14,14 +15,14 @@
                 class="btn btn-primary btn-sm js-condition-edit"
                 data-url="{% url 'action:edit_condition' condition.id %}"
                 data-toggle="tooltip"
-                title="Edit the condition ({{ condition.n_rows_selected }} rows satisfy this condition)">
-          {{ condition.name }} ({{ condition.n_rows_selected }} learner{{ condition.n_rows_selected|pluralize:",s" }})
+                title="{% blocktrans with n=condition.n_rows_selected %}Edit the condition ({{ n }} rows satisfy this condition){% endblocktrans %}">
+          {{ condition.name }} {% blocktrans with n=condition.n_rows_selected count counter=condition.n_rows_selected %}({{ n }} learner){% plural %}({{ n }} learners){% endblocktrans %}
         </button>
         <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
                 data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
           <span class="caret"></span>
-          <span class="sr-only">Toggle Dropdown</span>
+          <span class="sr-only">{% trans 'Toggle Dropdown' %}</span>
         </button>
         <ul role="menu" class="dropdown-menu">
           <li>
@@ -29,9 +30,8 @@
                     class="btn btn-default btn-sm js-condition-insert"
                     data-name="{{ condition.name }}"
                     data-toggle="tooltip"
-                    title="Insert text condition into the body.">
-              <span class="glyphicon glyphicon-arrow-down"></span> Insert in
-              text
+                    title="{% trans 'Insert text condition into the body.' %}">
+              <span class="glyphicon glyphicon-arrow-down"></span> {% trans 'Insert in text' %}
             </button>
           </li>
           <li>
@@ -39,8 +39,8 @@
                     class="btn btn-default btn-sm js-condition-edit"
                     data-url="{% url 'action:edit_condition' condition.id %}"
                     data-toggle="tooltip"
-                    title="Edit name, description and formula">
-              <span class="glyphicon glyphicon-pencil"></span> Edit
+                    title="{% trans 'Edit name, description and formula' %}">
+              <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
             </button>
           </li>
           <li>
@@ -48,23 +48,25 @@
                class="btn btn-default btn-sm js-condition-clone"
                data-url="{% url 'action:action_out_save_content' action.id %}"
                data-toggle="tooltip"
-               title="Create an exact copy of this condition">
-              <span class="glyphicon glyphicon-duplicate"></span> Clone
+               title="{% trans 'Create an exact copy of this condition' %}">
+              <span class="glyphicon glyphicon-duplicate"></span> {% trans 'Clone' %}
             </a>
           </li>
           <li>
             <button type="button"
                     class="btn btn-default btn-sm js-condition-delete"
                     data-url="{% url 'action:delete_condition' condition.id %}"
-                    data-toggle="tooltip" title="Delete the condition">
-              <span class="glyphicon glyphicon-trash"></span> Delete
+                    data-toggle="tooltip" 
+                    title="{% trans 'Delete the condition' %}">
+              <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
             </button>
           </li>
         </ul>
       </div>
     {% empty %}
-      <p class="text-center">Create conditions to control the text in the
-        body below (optional)</p>
+      <p class="text-center">
+        {% blocktrans %}Create conditions to control the text in the
+        body below (optional){% endblocktrans %}</p>
     {% endfor %}
   </div>
 </div>

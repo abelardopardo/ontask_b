@@ -2,19 +2,18 @@
 from __future__ import unicode_literals
 
 import logging.config
-import os
-# In production set the environment variable like this:
-#    DJANGO_SETTINGS_MODULE=ontask.settings.production
-import socket
 
 from .base import *  # NOQA
+
+# In production set the environment variable like this:
+#    DJANGO_SETTINGS_MODULE=ontask.settings.production
 
 # For security and performance reasons, DEBUG is turned off
 DEBUG = False
 TEMPLATE_DEBUG = False
 
 # Must mention ALLOWED_HOSTS in production!
-ALLOWED_HOSTS = [socket.getfqdn()]
+ALLOWED_HOSTS = [os.environ['DOMAIN_NAME']]
 
 # Additional middleware introduced by debug toolbar
 MIDDLEWARE_CLASSES += (

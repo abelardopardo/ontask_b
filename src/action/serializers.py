@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 from rest_framework import serializers
+from django.utils.translation import ugettext_lazy as _
 
 from dataops.formula_evaluation import get_variables
 from workflow.models import Column
@@ -24,41 +25,54 @@ class ConditionSerializer(serializers.ModelSerializer):
     # An action is connected to a workflow which has a set of columns
     # attached to it. Thus, the column records are created through the
     # workflow structure, and at this point in the model, only the names are
-    # required to then restore the many to many relationship.
+    # required to restore the many to many relationship.
     columns = ColumnNameSerializer(required=False, many=True)
 
     def create(self, validated_data, **kwargs):
-        # Bypass create to insert the reference to the action (in context)
-        condition_obj = Condition(
-            action=self.context['action'],
-            name=validated_data['name'],
-            description_text=validated_data['description_text'],
-            formula=validated_data['formula'],
-            n_rows_selected=validated_data.get('n_rows_selected', -1),
-            is_filter=validated_data['is_filter'],
-        )
+        condition_obj = None
 
-        condition_obj.save()
+        try:
+            # Bypass create to insert the reference to the action (in context)
+            condition_obj = Condition(
+                action=self.context['action'],
+                name=validated_data['name'],
+                description_text=validated_data['description_text'],
+                formula=validated_data['formula'],
+                n_rows_selected=validated_data.get('n_rows_selected', -1),
+                is_filter=validated_data['is_filter'],
+            )
 
-        # Load the columns pointing to the action (if any)
-        columns = ColumnNameSerializer(
-            data=validated_data.get('columns'),
-            many=True,
-            required=False,
-        )
-        if columns.is_valid():
-            # Columns have been properly stored. If they are not there,
-            # they have to be calculated at the level of the action
-            for citem in columns.data:
-                column = condition_obj.action.workflow.columns.get(
-                    name=citem['name'])
-                condition_obj.columns.add(column)
+            condition_obj.save()
 
-        condition_obj.save()
+            if validated_data.get('columns'):
+                # Load the columns pointing to the action (if any)
+                columns = ColumnNameSerializer(
+                    data=validated_data.get('columns'),
+                    many=True,
+                    required=False,
+                )
+                if columns.is_valid():
+                    cnames = [c['name'] for c in columns.data]
+                else:
+                    raise Exception(_('Incorrect column data'))
+            else:
+                cnames = get_variables(condition_obj.formula)
 
-        if condition_obj.n_rows_selected == -1:
-            # Number of rows selected is not up to date, update
-            condition_obj.update_n_rows_selected()
+            # Set the condition values
+            condition_obj.columns.set(
+                condition_obj.action.workflow.columns.filter(name__in=cnames)
+            )
+
+            # Save condition object
+            condition_obj.save()
+
+            if condition_obj.n_rows_selected == -1:
+                # Number of rows selected is not up to date, update
+                condition_obj.update_n_rows_selected()
+        except Exception:
+            if condition_obj and condition_obj.id:
+                condition_obj.delete()
+            raise
 
         return condition_obj
 
@@ -79,53 +93,48 @@ class ActionSerializer(serializers.ModelSerializer):
     columns = ColumnNameSerializer(required=False, many=True)
 
     def create(self, validated_data, **kwargs):
-        action_obj = Action(
-            workflow=self.context['workflow'],
-            name=validated_data['name'],
-            description_text=validated_data['description_text'],
-            is_out=validated_data['is_out'],
-            serve_enabled=validated_data['serve_enabled'],
-            active_from=validated_data['active_from'],
-            active_to=validated_data['active_to'],
-            content=validated_data['content']
-        )
+        action_obj = None
+        try:
+            action_obj = Action(
+                workflow=self.context['workflow'],
+                name=validated_data['name'],
+                description_text=validated_data['description_text'],
+                is_out=validated_data['is_out'],
+                serve_enabled=validated_data['serve_enabled'],
+                active_from=validated_data['active_from'],
+                active_to=validated_data['active_to'],
+                content=validated_data.get('content', None)
+            )
 
-        action_obj.save()
-
-        # Load the conditions pointing to the action
-        condition_data = ConditionSerializer(
-            data=validated_data.get('conditions', []),
-            many=True,
-            context={'action': action_obj})
-        if condition_data.is_valid():
-            condition_data.save()
-        else:
-            action_obj.delete()
-            return None
-
-        # Update the condition variables for each formula if not present
-        for condition in action_obj.conditions.all():
-            if condition.columns.all().count() == 0:
-                col_names = get_variables(condition.formula)
-                # Add the corresponding columns to the condition
-                condition.columns.set(
-                    self.context['workflow'].columns.filter(name__in=col_names)
-                )
-
-        # Load the columns pointing to the action (if any)
-        columns = ColumnNameSerializer(
-            data=validated_data.get('columns'),
-            many=True,
-            required=False,
-        )
-        if columns.is_valid():
-            for citem in columns.data:
-                column = action_obj.workflow.columns.get(name=citem['name'])
-                action_obj.columns.add(column)
             action_obj.save()
-        else:
-            action_obj.delete()
-            return None
+
+            # Load the conditions pointing to the action
+            condition_data = ConditionSerializer(
+                data=validated_data.get('conditions', []),
+                many=True,
+                context={'action': action_obj})
+            if condition_data.is_valid():
+                condition_data.save()
+            else:
+                raise Exception(_('Invalid condition data'))
+
+            # Load the columns pointing to the action (if any)
+            columns = ColumnNameSerializer(
+                data=validated_data.get('columns'),
+                many=True,
+                required=False,
+            )
+            if columns.is_valid():
+                for citem in columns.data:
+                    column = action_obj.workflow.columns.get(name=citem['name'])
+                    action_obj.columns.add(column)
+                action_obj.save()
+            else:
+                raise Exception(_('Invalid column data'))
+        except Exception:
+            if action_obj and action_obj.id:
+                action_obj.delete()
+            raise
 
         return action_obj
 

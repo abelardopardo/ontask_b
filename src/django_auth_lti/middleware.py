@@ -6,6 +6,7 @@ from collections import OrderedDict
 from django.contrib import auth
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 from timer import Timer
 
@@ -29,28 +30,31 @@ class LTIAuthMiddleware(object):
         logger.debug('inside process_request %s' % request.path)
         # AuthenticationMiddleware is required so that request.user exists.
         if not hasattr(request, 'user'):
-            logger.debug('improperly configured: requeset has no user attr')
+            logger.debug(_('improperly configured: requeset has no user attr'))
             raise ImproperlyConfigured(
-                "The Django LTI auth middleware requires the"
-                " authentication middleware to be installed.  Edit your"
-                " MIDDLEWARE_CLASSES setting to insert"
-                " 'django.contrib.auth.middleware.AuthenticationMiddleware'"
-                " before the PINAuthMiddleware class.")
+                _("The Django LTI auth middleware requires the"
+                  " authentication middleware to be installed.  Edit your"
+                  " MIDDLEWARE_CLASSES setting to insert"
+                  " 'django.contrib.auth.middleware.AuthenticationMiddleware'"
+                  " before the PINAuthMiddleware class."))
 
         if request.method == 'POST' and request.POST.get('lti_message_type') == 'basic-lti-launch-request':
 
-            logger.debug('received a basic-lti-launch-request - authenticating the user')
+            logger.debug(_('received a basic-lti-launch-request - '
+                           'authenticating the user'))
 
             # authenticate and log the user in
             with Timer() as t:
                 user = auth.authenticate(request=request)
-            logger.debug('authenticate() took %s s' % t.secs)
+            logger.debug(_('authenticate() took %s s') % t.secs)
 
             if user is not None:
                 # User is valid.  Set request.user and persist user in the session
                 # by logging the user in.
 
-                logger.debug('user was successfully authenticated; now log them in')
+                logger.debug(
+                    _('user was successfully authenticated; now log them in')
+                )
                 request.user = user
                 with Timer() as t:
                     auth.login(request, user)
@@ -108,14 +112,18 @@ class LTIAuthMiddleware(object):
 
             else:
                 # User could not be authenticated!
-                logger.warning('user could not be authenticated via LTI params; let the request continue in case another auth plugin is configured')
+                logger.warning(
+                    _('user could not be authenticated via LTI params; let '
+                      'the request continue in case another auth plugin is '
+                      'configured')
+                )
 
         # Other functions in django-auth-lti expect there to be an LTI attribute on the request object
         # This enables backwards compatibility with consumers of this package who still want to use this
         # single launch version of LTIAuthMiddleware
         setattr(request, 'LTI', request.session.get('LTI_LAUNCH', {}))
         if not request.LTI:
-            logger.warning("Could not find LTI launch parameters")
+            logger.warning(_("Could not find LTI launch parameters"))
 
     def clean_username(self, username, request):
         """
@@ -125,9 +133,13 @@ class LTIAuthMiddleware(object):
         backend_str = request.session[auth.BACKEND_SESSION_KEY]
         backend = auth.load_backend(backend_str)
         try:
-            logger.debug('calling the backend %s clean_username with %s' % (backend, username))
+            logger.debug(
+                _('calling the backend {0} clean_username with {1}').format(
+                backend, username
+                )
+            )
             username = backend.clean_username(username)
-            logger.debug('cleaned username is %s' % username)
+            logger.debug(_('cleaned username is {0}').format(username))
         except AttributeError:  # Backend has no clean_username method.
             pass
         return username

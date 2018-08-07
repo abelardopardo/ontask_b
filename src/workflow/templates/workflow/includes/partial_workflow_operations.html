@@ -1,6 +1,7 @@
+{% load i18n %}
 <a href="{% url 'workflow:detail' id %}"
         class="btn btn-primary btn-sm align-middle">
-  <span class="glyphicon glyphicon-folder-open"></span> Open</a>
+  <span class="glyphicon glyphicon-folder-open"></span> {% trans 'Open' %}</a>
 <button type="button"
         class="btn btn-danger btn-sm js-workflow-delete"
         data-url="{% url 'workflow:delete' id %}">

@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django import template
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
 
 from action.evaluate import action_context_var, viz_number_context_var, tr_item
 from action.models import Condition
@@ -18,12 +19,12 @@ def vis_html_content(context, column_name):
     # Get the action
     action = context.get(action_context_var, None)
     if not action:
-        raise Exception('Action object not found when processing tag')
+        raise Exception(_('Action object not found when processing tag'))
     workflow = action.workflow
 
     # Check if the column is correct
     if not Column.objects.filter(workflow=workflow, name=column_name).exists():
-        raise Exception('Column {0} does not exist'.format(column_name))
+        raise Exception(_('Column {0} does not exist').format(column_name))
 
     # Get the visualization number to generate unique IDs
     viz_number = context[viz_number_context_var]
