@@ -37,7 +37,7 @@ If you are upgrading OnTask from a version lower than 2.8 to 2.8 or later, you
 need to disable the ``crontab`` used to execute tasks asynchronously from the
 web server. Starting in version 2.8 those tasks are executed by an
 application called ``celery`` that is managed using ``supervisor`` (see
-:ref:`install_celery`).
+:ref:`scheduling_tasks`).
 
 Installing the required tools
 =============================
@@ -98,7 +98,7 @@ interpreter and you can execute the python interpreter.
    ``python-pip``). This tool will be used by both Python and Django to install
    additional libraries required to execute OnTask.
 
-.. _install_celery:
+.. _scheduling_tasks:
 
 Configure the Distributed Task Queue Celery
 -------------------------------------------
