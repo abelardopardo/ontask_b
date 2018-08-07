@@ -10,6 +10,7 @@ from itertools import izip
 import numpy as np
 import pandas as pd
 from django.conf import settings
+from django.core.cache import cache
 from django.db import connection
 from sqlalchemy import create_engine
 
@@ -329,11 +330,12 @@ def store_table(data_frame, table_name):
     :return: Nothing. Side effect in the DB
     """
 
-    # We ovewrite the content and do not create an index
-    data_frame.to_sql(table_name,
-                      engine,
-                      if_exists='replace',
-                      index=False)
+    with cache.lock(table_name):
+        # We ovewrite the content and do not create an index
+        data_frame.to_sql(table_name,
+                          engine,
+                          if_exists='replace',
+                          index=False)
 
     return
 
@@ -566,6 +568,31 @@ def update_row(pk, set_fields, set_values, where_fields, where_values):
     # Execute the query
     cursor = connection.cursor()
     cursor.execute(query, parameters)
+    connection.commit()
+
+
+def increase_row_integer(pk, set_field, where_field, where_value):
+    """
+    Given a primary key, a field set_field, and a pair (where_field,
+    where_value), it increases the field in the appropriate row
+
+    :param pk: Primary key to detect workflow
+    :param set_field: name of the field to be increased
+    :param where_field: Field used to filter the row in the table
+    :param where_value: Value of the previous field to filter the row
+    :return: The table in the workflow pointed by PK is modified.
+    """
+
+    # First part of the query with the table name
+    query = 'UPDATE "{0}" SET "{1}" = "{1}" + 1 WHERE "{2}" = %s'.format(
+        create_table_name(pk),
+        set_field,
+        where_field
+    )
+
+    # Execute the query
+    cursor = connection.cursor()
+    cursor.execute(query, [where_value])
     connection.commit()
 
 

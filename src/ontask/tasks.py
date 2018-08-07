@@ -8,10 +8,12 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 from django.conf import settings as ontask_settings
 from django.contrib.auth import get_user_model
+from django.core import signing
 
 import logs.ops
 from action.models import Action
 from action.ops import send_messages
+from dataops import pandas_db
 from logs.models import Log
 from scheduler.models import ScheduledEmailAction
 
@@ -158,3 +160,74 @@ def execute_email_actions(debug):
 
         # Save the new status in the DB
         item.save()
+
+
+@shared_task
+def increase_track_count(method, get_dict):
+    """
+    Function to process track requests asynchronously.
+
+    :param request: HTTP request object.
+    :return: If correct, increases one row of the DB by one
+    """
+
+    if method != 'GET':
+        # Only GET requests are accepted
+        return
+
+    # Obtain the track_id from the request
+    track_id = get_dict.get('v', None)
+    if not track_id:
+        # No track id, nothing to do
+        return
+
+    # If the track_id is not correctly signed, finish.
+    try:
+        track_id = signing.loads(track_id)
+    except signing.BadSignature:
+        return
+
+    # The request is legit and the value has been verified. Track_id has now
+    # the dictionary with the tracking information
+
+    # Get the objects related to the ping
+    try:
+        user = get_user_model().objects.get(email=track_id['sender'])
+        action = Action.objects.get(pk=track_id['action'])
+    except Exception:
+        # Something went wrong (bad user or bad action)
+        return
+
+    # Extract the relevant fields from the track_id
+    column_dst = track_id.get('column_dst', '')
+    column_to = track_id.get('column_to', '')
+    msg_to = track_id.get('to', '')
+
+    log_payload = {'to': msg_to,
+                   'email_column': column_to,
+                   'column_dst': column_dst
+                   }
+
+    # If the track comes with column_dst, the event needs to be reflected
+    # back in the data frame
+    if column_dst:
+        try:
+            # Increase the relevant cell by one
+            pandas_db.increase_row_integer(action.workflow.id,
+                                           column_dst,
+                                           column_to,
+                                           msg_to)
+        except Exception as e:
+            log_payload['EXCEPTION_MSG'] = e.message
+        else:
+            # Get the tracking column and update all the conditions in the
+            # actions that have this column as part of their formulas
+            # FIX: Too aggressive?
+            track_col = action.workflow.columns.get(name=column_dst)
+            for action in action.workflow.actions.all():
+                action.update_n_rows_selected(track_col)
+
+    # Record the event
+    logs.ops.put(user, 'action_email_read', action.workflow, log_payload)
+
+    return
