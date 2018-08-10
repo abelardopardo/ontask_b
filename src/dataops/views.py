@@ -14,8 +14,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.cache import cache_page
-from django.utils.translation import ugettext_lazy as _
 
 import dataops.ops as ops
 import logs.ops
@@ -510,12 +510,12 @@ def run(request, pk):
         if c not in result_names:
             column_info.append((c, ''))
         elif c not in dst_names:
-            column_info.append(('', c + _(' (New)')))
+            column_info.append(('', c + ugettext(' (New)')))
         else:
             if c == form.cleaned_data['merge_key']:
                 column_info.append((c, c))
             else:
-                column_info.append((c + _(' (Update)'), c))
+                column_info.append((c + ugettext(' (Update)'), c))
 
     context['info'] = column_info
     context['key'] = form.cleaned_data['merge_key']

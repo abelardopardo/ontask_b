@@ -206,12 +206,13 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         select = Select(self.selenium.find_element_by_id(
             'select-column-name'))
         select.select_by_visible_text('!#$%&()*+,-./:;<=>?@[\]^_`{|}~2')
-        # Table disappears (page is updating)
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.ID, 'column-selected-table_previous')
-            )
-        )
+        time.sleep(2)
+        # # Table disappears (page is updating)
+        # WebDriverWait(self.selenium, 10).until_not(
+        #     EC.presence_of_element_located(
+        #         (By.ID, 'column-selected-table_previous')
+        #     )
+        # )
         # Table appears (page refreshed)
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
