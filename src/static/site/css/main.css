@@ -1,4 +1,4 @@
- @import "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min
+@import "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min
  .css";
 
 html, body{
@@ -233,6 +233,7 @@ td.dt-body-center {
     text-align: center;
     }
 
+table td,
 #table-data td,
 #actioninrun-data td,
 #workflow-table td,
@@ -243,8 +244,19 @@ td.dt-body-center {
 #column-table td,
 #view-table td,
 #transform-table td,
-#transform-diagnostics-table td {
+#transform-diagnostics-table td,
+#sqlconn-table td {
     vertical-align: middle;
+}
+
+/* Reducing padding in all column rows */
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+    padding: 4px;
 }
 
 /* Needed to show summer note aligned to the left */
