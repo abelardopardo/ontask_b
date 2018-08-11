@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-06 07:51+0930\n"
+"POT-Creation-Date: 2018-08-11 16:21+0930\n"
 "PO-Revision-Date: 2018-08-01 16:25+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -332,6 +332,7 @@ msgstr "Editar descripción"
 #: action/templates/action/includes/partial_column_selected_operations.html:8
 #: action/templates/action/includes/partial_condition_buttons.html:43
 #: action/templates/action/includes/partial_filter_create_buttons.html:26
+#: action/templates/action/run.html:51
 #: dataops/templates/dataops/includes/partial_sqlconn_operations.html:13
 #: scheduler/templates/scheduler/email_done.html:17
 #: table/templates/table/display.html:193
@@ -407,6 +408,19 @@ msgstr "Guardar y seguir editando"
 #: action/templates/action/edit_out.html:94
 msgid "Done"
 msgstr "Terminar"
+
+#: action/templates/action/edit_in.html:175
+#: action/templates/action/includes/partial_action_operations.html:30
+msgid "Enter data manually"
+msgstr "Introducir data manualmente"
+
+#: action/templates/action/edit_in.html:176
+#: action/templates/action/includes/partial_action_operations.html:31
+#: dataops/templates/dataops/includes/partial_plugin_operations.html:6
+#: dataops/templates/dataops/includes/partial_sqlconn_runop.html:5
+#: dataops/templates/dataops/includes/plugin_run_buttons.html:10
+msgid "Run"
+msgstr "Ejecutar"
 
 #: action/templates/action/edit_out.html:47
 msgid "Insert:"
@@ -550,6 +564,11 @@ msgstr "Importar acción"
 msgid "Cancel"
 msgstr "Cancelar"
 
+#: action/templates/action/import.html:25
+#: workflow/templates/workflow/import.html:24
+msgid "Import"
+msgstr "Importar"
+
 #: action/templates/action/includes/partial_action_clone.html:8
 msgid "Confirm action cloning"
 msgstr "Confirme la clonación de la acción"
@@ -633,17 +652,6 @@ msgstr "Enviar mensajes personalizados"
 msgid "Email"
 msgstr "Email"
 
-#: action/templates/action/includes/partial_action_operations.html:30
-msgid "Enter data manually"
-msgstr "Introducir data manualmente"
-
-#: action/templates/action/includes/partial_action_operations.html:31
-#: dataops/templates/dataops/includes/partial_plugin_operations.html:6
-#: dataops/templates/dataops/includes/partial_sqlconn_runop.html:5
-#: dataops/templates/dataops/includes/plugin_run_buttons.html:10
-msgid "Run"
-msgstr "Ejecutar"
-
 #: action/templates/action/includes/partial_action_operations.html:34
 #: table/templates/table/includes/partial_view_operations.html:9
 #: workflow/templates/workflow/includes/workflow_detail_buttons.html:22
@@ -664,7 +672,7 @@ msgid "Change name and/or description"
 msgstr "Cambiar el nombre y/o la descripción"
 
 #: action/templates/action/includes/partial_action_operations.html:52
-#: workflow/templates/workflow/includes/workflow_detail_buttons.html:48
+#: workflow/templates/workflow/includes/workflow_detail_buttons.html:47
 msgid "Rename"
 msgstr "Renombrar"
 
@@ -679,7 +687,7 @@ msgstr "Crear una acción idéntica"
 #: table/templates/table/display.html:202
 #: table/templates/table/includes/partial_view_operations.html:27
 #: workflow/templates/workflow/includes/workflow_column_operations.html:42
-#: workflow/templates/workflow/includes/workflow_detail_buttons.html:62
+#: workflow/templates/workflow/includes/workflow_detail_buttons.html:61
 msgid "Clone"
 msgstr "Clonar"
 
@@ -699,7 +707,7 @@ msgstr "Borrar la acción"
 #: table/templates/table/includes/partial_table_ops.html:28
 #: table/templates/table/includes/partial_view_operations.html:36
 #: workflow/templates/workflow/includes/workflow_column_operations.html:51
-#: workflow/templates/workflow/includes/workflow_detail_buttons.html:77
+#: workflow/templates/workflow/includes/workflow_detail_buttons.html:76
 msgid "Delete"
 msgstr "Borrar"
 
@@ -710,7 +718,14 @@ msgid ""
 "      %(index)s of %(n_items)s"
 msgstr "Vista previa de la acción %(index)s de %(n_items)s"
 
-#: action/templates/action/includes/partial_action_preview.html:30
+#: action/templates/action/includes/partial_action_preview.html:16
+#: action/templates/action/includes/partial_email_preview.html:15
+#: dataops/templates/dataops/includes/partial_diagnostics.html:10
+#: logs/templates/logs/includes/partial_log_view.html:19
+msgid "Close"
+msgstr "Cerrar"
+
+#: action/templates/action/includes/partial_action_preview.html:29
 #: action/templates/action/includes/partial_email_preview.html:28
 msgid "Values:"
 msgstr "Valores:"
@@ -870,12 +885,6 @@ msgstr "Borrar condición"
 #, python-format
 msgid "Email Preview %(index)s of %(n_items)s"
 msgstr "Vista previa del email %(index)s de %(n_items)s"
-
-#: action/templates/action/includes/partial_email_preview.html:15
-#: dataops/templates/dataops/includes/partial_diagnostics.html:10
-#: logs/templates/logs/includes/partial_log_view.html:19
-msgid "Close"
-msgstr "Cerrar"
 
 #: action/templates/action/includes/partial_email_preview.html:22
 msgid "Subject:"
@@ -1114,8 +1123,8 @@ msgid ""
 "Unable to send emails due to a misconfiguration. Ask your system "
 "administrator to enable email queueing."
 msgstr ""
-"No es posible mandar los emails por una incorrecta configuración. "
-" Contacte al administrador para activar la cola de emails."
+"No es posible mandar los emails por una incorrecta configuración.  Contacte "
+"al administrador para activar la cola de emails."
 
 #: action/views_email.py:140
 msgid "THE SUBJECT WILL BE INSERTED HERE"
@@ -1368,35 +1377,35 @@ msgstr "Nombre de la base de datos"
 msgid "Table"
 msgstr "Tabla"
 
-#: dataops/ops.py:413
+#: dataops/ops.py:412
 msgid "Merge operation failed. Exception: "
 msgstr "La operación de mezcla ha fallado. Excepción: "
 
-#: dataops/ops.py:438
+#: dataops/ops.py:437
 msgid "Merge operation produced a result with no rows"
 msgstr "La operación de mecla ha producido un resultado sin filas"
 
-#: dataops/ops.py:455 dataops/ops.py:467
+#: dataops/ops.py:454 dataops/ops.py:466
 #, python-brace-format
 msgid "New values in column {0} are not of type {1}"
 msgstr "Los nuevos valores en la columna {0} no son de tipo {1}"
 
-#: dataops/ops.py:462
+#: dataops/ops.py:461
 #, python-brace-format
 msgid "New values in column {0} are not of type number"
 msgstr "Los nuevos valores en la columna {0} no son de tipo numérico"
 
-#: dataops/ops.py:481
+#: dataops/ops.py:480
 #, python-brace-format
 msgid "New values in column {0} are not in categories {1}"
 msgstr "Los nuevos valores en la columna {0} no están en la categoría {1}"
 
-#: dataops/ops.py:497
+#: dataops/ops.py:496
 #, python-brace-format
 msgid "Column {0} is no longer a key column."
 msgstr "La columna {0} ya no es una columna clave."
 
-#: dataops/ops.py:541
+#: dataops/ops.py:540
 #, python-brace-format
 msgid "Type {0} not found"
 msgstr "No se ha encontrado el tipo {0}"
@@ -1550,8 +1559,8 @@ msgid "Status"
 msgstr "Estado"
 
 #: dataops/templates/dataops/includes/partial_diagnostics.html:18
-msgid "Test"
-msgstr "Comprobar"
+msgid "Requirements"
+msgstr "Requisitos"
 
 #: dataops/templates/dataops/includes/partial_plugin_operations.html:5
 msgid "Execute the transformation"
@@ -1823,10 +1832,10 @@ msgid "Rename to"
 msgstr "Renombrar"
 
 #: dataops/templates/dataops/upload_s2.html:43
-#: dataops/templates/dataops/upload_s4.html:35
-#: dataops/templates/dataops/upload_s4.html:37
-#: dataops/templates/dataops/upload_s4.html:41
-#: dataops/templates/dataops/upload_s4.html:48
+#: dataops/templates/dataops/upload_s4.html:34
+#: dataops/templates/dataops/upload_s4.html:36
+#: dataops/templates/dataops/upload_s4.html:40
+#: dataops/templates/dataops/upload_s4.html:47
 msgid "Key"
 msgstr "Clave"
 
@@ -2779,7 +2788,7 @@ msgid "Time now is %(n)s"
 msgstr "Hora actual %(n)s"
 
 #: scheduler/templates/scheduler/email_done.html:4
-msgid "Email action scheduled"
+msgid "Email scheduled"
 msgstr "Envío de correo planificado"
 
 #: scheduler/templates/scheduler/email_done.html:7
@@ -3595,11 +3604,6 @@ msgstr "Reiniciar mi clave"
 msgid "Thanks"
 msgstr "Gracias"
 
-#: visualizations/plotly.py:95 visualizations/plotly.py:103
-#: visualizations/plotly.py:183
-msgid "Your value"
-msgstr "Tu valor"
-
 #: visualizations/rgraph.py:264
 #, python-brace-format
 msgid "Warning: {0} NaN elements removed to create the graph"
@@ -3874,19 +3878,19 @@ msgstr "La nueva acción no puede tener la columna {0} porque no existe."
 msgid "Imported column {0} is different from existing one."
 msgstr "La columna importada {0} es diferente de la ya existente."
 
-#: workflow/serializers.py:333
+#: workflow/serializers.py:339
 msgid "Action cannot be imported with and empty data table"
 msgstr "La acción no se puede importar en un flujo sin datos en la tabla"
 
-#: workflow/serializers.py:350
+#: workflow/serializers.py:356
 msgid "Unable to create column data"
 msgstr "Imposible crear los datos para la columna"
 
-#: workflow/serializers.py:360
+#: workflow/serializers.py:366
 msgid "Unable to create condition information"
 msgstr "Imposible crear la información para la condición"
 
-#: workflow/serializers.py:384
+#: workflow/serializers.py:390
 msgid "Unable to create columns field"
 msgstr "Imposible crear el campo de la columna"
 
@@ -3897,6 +3901,11 @@ msgstr "Sólo se pueden compartir flujos que usted ha creado."
 #: workflow/templates/workflow/attributes.html:25
 msgid "No attributes defined."
 msgstr "No se ha definido ningún atributo."
+
+#: workflow/templates/workflow/attributes.html:38
+#: workflow/templates/workflow/includes/workflow_detail_buttons.html:31
+msgid "Attributes"
+msgstr "Attributos"
 
 #: workflow/templates/workflow/attributes.html:41
 msgid "Workflow Attributes"
@@ -3989,10 +3998,6 @@ msgstr "Exportar el flujo"
 #: workflow/templates/workflow/import.html:10
 msgid "Import workflows"
 msgstr "Importar flujos"
-
-#: workflow/templates/workflow/import.html:24
-msgid "Import"
-msgstr "Importar"
 
 #: workflow/templates/workflow/includes/partial_attribute_create.html:8
 #: workflow/templates/workflow/includes/partial_attribute_create.html:17
@@ -4088,13 +4093,18 @@ msgid "Select user to allow access to the workflow"
 msgstr "Seleccione el usuario al que dar acceso al flujo"
 
 #: workflow/templates/workflow/includes/partial_share_create.html:17
-#: workflow/templates/workflow/includes/workflow_detail_buttons.html:54
+#: workflow/templates/workflow/includes/workflow_detail_buttons.html:53
+#: workflow/templates/workflow/share.html:11
 msgid "Share"
 msgstr "Compartir"
 
 #: workflow/templates/workflow/includes/partial_share_delete.html:8
 msgid "Confirm user deletion"
 msgstr "Confirme el borrado del usuario"
+
+#: workflow/templates/workflow/includes/partial_share_delete.html:11
+msgid "Are you sure you want to remove the user <strong>%(n)s</strong>?"
+msgstr "¿Está seguro de que quiere borrar el usuario <strong>%(n)s</strong>?"
 
 #: workflow/templates/workflow/includes/partial_share_delete.html:17
 msgid "Remove"
@@ -4126,7 +4136,6 @@ msgid "Create workflow"
 msgstr "Crear un flujo"
 
 #: workflow/templates/workflow/includes/partial_workflow_delete.html:8
-#: workflow/templates/workflow/includes/partial_workflow_flush.html:8
 msgid "Confirm workflow deletion"
 msgstr "Confirme el borrado del flujo"
 
@@ -4146,6 +4155,10 @@ msgstr ""
 #: workflow/templates/workflow/includes/partial_workflow_delete.html:18
 msgid "Delete workflow"
 msgstr "Borrar flujo"
+
+#: workflow/templates/workflow/includes/partial_workflow_flush.html:8
+msgid "Confirm data deletion"
+msgstr "Confirme el borrado de los datos"
 
 #: workflow/templates/workflow/includes/partial_workflow_flush.html:11
 #, python-format
@@ -4222,19 +4235,15 @@ msgstr "Añadir nueva columna derivada a la tabla"
 msgid "List of name=value pairs to use in the actions"
 msgstr "Lista de pares nombre=valor a usar en las acciones"
 
-#: workflow/templates/workflow/includes/workflow_detail_buttons.html:31
-msgid "Attributes"
-msgstr "Attributos"
-
 #: workflow/templates/workflow/includes/workflow_detail_buttons.html:38
 msgid "Export the workflow and its actions"
 msgstr "Exportar el flujo y sus acciones"
 
-#: workflow/templates/workflow/includes/workflow_detail_buttons.html:53
+#: workflow/templates/workflow/includes/workflow_detail_buttons.html:52
 msgid "Allow other users to access the workflow"
 msgstr "Permitir a otros usuarios acceder a este flujo"
 
-#: workflow/templates/workflow/includes/workflow_detail_buttons.html:70
+#: workflow/templates/workflow/includes/workflow_detail_buttons.html:69
 msgid "Flush Data"
 msgstr "Borrar datos"
 
@@ -4289,8 +4298,7 @@ msgstr "Ya existe un flujo con este nombre"
 #: workflow/views.py:215
 msgid ""
 "WARNING: Celery is not currently running. Please configure it correctly."
-msgstr ""
-"AVISO: Celery no está ejecutando. Por favor, revise la configuración."
+msgstr "AVISO: Celery no está ejecutando. Por favor, revise la configuración."
 
 #: workflow/views.py:259
 #, python-brace-format
@@ -4332,6 +4340,12 @@ msgstr "Imposible clonar flujo"
 #: workflow/views.py:619
 msgid "Workflow successfully cloned."
 msgstr "Flujo clonado con éxito"
+
+#~ msgid "Test"
+#~ msgstr "Comprobar"
+
+#~ msgid "Your value"
+#~ msgstr "Tu valor"
 
 #~ msgid "Email Preview"
 #~ msgstr "Vista previa del email"
