@@ -88,7 +88,7 @@ class SQLConnection(models.Model):
                                  null=False,
                                  help_text=_('Postgresql, Mysql, etc.'))
 
-    # Connection type: postgresql, mysql, etc.
+    # Connection driver
     conn_driver = models.CharField(
         verbose_name=_('Driver'),
         default='',

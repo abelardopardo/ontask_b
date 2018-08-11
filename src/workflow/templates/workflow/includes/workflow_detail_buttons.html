@@ -44,8 +44,7 @@
         <button type="button" style="width:100%;"
                 class="btn btn-default btn-sm js-workflow-update align-middle"
                 data-url="{% url 'workflow:update' workflow.id %}">
-            <span class="glyphicon glyphicon-pencil"></span>
-          {% trans 'Rename' %}
+            <span class="glyphicon glyphicon-pencil"></span> {% trans 'Rename' %}
         </button>
       </li>     <li>
         <a href="{% url 'workflow:share' %}" class="btn btn-default btn-sm"

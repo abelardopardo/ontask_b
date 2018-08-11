@@ -343,6 +343,65 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
       production because it disables several security features. Make sure you
       only deploy a **production** version.
 
+.. _upgrading:
+
+Upgrading OnTask
+================
+
+If you have OnTask already configured and running, here are the steps to
+follow to upgrade to a new version (if you are upgrading from a version below
+2.8 to 2.8 or higher read :ref:`scheduling_tasks`).
+
+- Create a backup of the database to be able to restore the state of the tool
+  before the upgrade process.
+
+- Stop the apache web server.
+
+- Open a terminal and use a command interpreter to execute the following
+  commands.
+
+- Place the interpreter in the project folder (the one with the folder
+  ``src`` in it)
+
+- Pull the code for the new version from the repository::
+
+    git pull
+
+- Refresh the list of requirements::
+
+    pip install -r requirements/production.txt
+
+- Go to the sub-folder containing the tool documentation::
+
+    cd docs_src
+
+- Re-create the tool documentation and place it in the appropriate folder::
+
+    make clean html copy_to_docs
+
+- Go to the sub-folder containing the apps::
+
+    cd ../src
+
+- Collect all files to be served statically::
+
+    python manage.py collectstatic
+
+- Apply the migrations to the database::
+
+    python manage.py migrate
+
+- Check that the configuration is ready to run::
+
+    python manage.py check --deploy
+
+- Restart the ``supervisord`` configuration::
+
+    supervisorctl -c ../supervisor.conf reload
+
+- Restart the apache web server and check the new version is properly
+  installed.
+
 The Administration Pages
 ========================
 
@@ -552,12 +611,12 @@ One of the key functionalities of OnTask is to be able to merge data from multip
 
 The definition of these connections is done from the platform's home page, right after the table showing the available workflows.
 
-.. figure:: ../Using/images/Ontask____SQLtable.png
+.. figure:: ../scaptures/workflow_superuser_index.png
    :align: center
 
 Each connection can be defined with the following parameters:
 
-.. figure:: ../Using/images/Ontask___SQLcreate.png
+.. figure:: ../scaptures/workflow_superuser_sql_edit.png
    :align: center
 
 Name (required)
@@ -630,4 +689,5 @@ data in a CSV file through the following steps:
    this with the option ``-i`` in the script::
 
      $ python manage.py runscript initial_data --script-args "-d -e your_email_column_name -i scripts/initial_learners.csv"
+
 

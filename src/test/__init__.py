@@ -24,6 +24,7 @@ user_info = [
     ('Student Three', 'student3@bogus.com', [group_names[0]], False),
     ('Instructor One', 'instructor1@bogus.com', [group_names[1]], False),
     ('Instructor Two', 'instructor2@bogus.com', [group_names[1]], False),
+    ('Instructor Three', 'instructor3@bogus.com', [group_names[1]], False),
     ('Super User', 'superuser@bogus.com', group_names, True)]
 
 boguspwd = 'boguspwd'

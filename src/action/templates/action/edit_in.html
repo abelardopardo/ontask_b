@@ -169,6 +169,12 @@
               title="{% trans 'Save and remain editing' %}">
         <span class="glyphicon glyphicon-ok"></span> {% trans 'Done' %}
       </a>
+      <a href="{% url 'action:run' action.id %}"
+         class="btn btn-primary {% if not action.is_correct %}disabled{% endif %}"
+         data-toggle="tooltip"
+         title="{% trans 'Enter data manually' %}">
+        <span class="glyphicon glyphicon-off"></span> {% trans 'Run' %}
+      </a>
     </div>
     <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog">

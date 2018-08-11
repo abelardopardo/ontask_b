@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
-{% block title %}{% trans 'Email action scheduled' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Email scheduled' %}{% endblock %}
 {% block container %}
   <div class="container-fluid" style="margin-top:50px;text-align:center;">
     <h1 class="page-header text-center">{% trans 'Email scheduled for execution' %}</h1>

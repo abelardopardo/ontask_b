@@ -31,8 +31,7 @@
       <tbody>
         {% if request.session.upload_data.dst_selected_key == request.session.upload_data.src_selected_key %}
           <tr class="success">
-            <td class="text-center">{{
-              request.session.upload_data.dst_selected_key }} ({% trans 'Key' %})</td>
+            <td class="text-center">{{ request.session.upload_data.dst_selected_key }} ({% trans 'Key' %})</td>
             <td class="text-center"><button class=" glyphicon glyphicon-arrow-left"></button></td>
             <td class="text-center">{{ request.session.upload_data.src_selected_key }} ({% trans 'Key' %})</td>
           </tr>

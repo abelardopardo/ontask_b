@@ -8,7 +8,7 @@
     <h4 class="modal-title">{% trans 'Confirm user deletion' %}</h4>
   </div>
   <div class="modal-body">
-    <p class="lead">{% bloctrans with n=uemail %}Are you sure you want to remove the user <strong>{{ n }}</strong>?{% endblocktrans %}</p>
+    <p class="lead">{% blocktrans with n=uemail %}Are you sure you want to remove the user <strong>{{ n }}</strong>?{% endblocktrans %}</p>
   </div>
   <div class="modal-footer" style="text-align: center;">
     <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}
