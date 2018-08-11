@@ -731,6 +731,73 @@ this with the option <code class="docutils literal notranslate"><span class="pre
 </li>
 </ol>
 </div>
+<div class="section" id="upgrading-ontask">
+<span id="upgrading"></span><h2>Upgrading OnTask<a class="headerlink" href="#upgrading-ontask" title="Permalink to this headline">¶</a></h2>
+<p>If you have OnTask already configured and running, here are the steps to
+follow to upgrade to a new version (if you are upgrading from a version below
+2.8 to 2.8 or higher read <a class="reference internal" href="#scheduling-tasks"><span class="std std-ref">Configure the Distributed Task Queue Celery</span></a>).</p>
+<ul>
+<li><p class="first">Create a backup of the database to be able to restore the state of the tool
+before the upgrade process.</p>
+</li>
+<li><p class="first">Stop the apache web server.</p>
+</li>
+<li><p class="first">Open a terminal and use a command interpreter to execute the following
+commands.</p>
+</li>
+<li><p class="first">Place the interpreter in the project folder (the one with the folder
+<code class="docutils literal notranslate"><span class="pre">src</span></code> in it)</p>
+</li>
+<li><p class="first">Pull the code for the new version from the repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">pull</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Refresh the list of requirements:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">/</span><span class="n">production</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Go to the sub-folder containing the tool documentation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docs_src</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Re-create the tool documentation and place it in the appropriate folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">clean</span> <span class="n">html</span> <span class="n">copy_to_docs</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Go to the sub-folder containing the apps:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">../</span><span class="n">src</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Collect all files to be served statically:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">collectstatic</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Apply the migrations to the database:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Check that the configuration is ready to run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">check</span> <span class="o">--</span><span class="n">deploy</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Restart the <code class="docutils literal notranslate"><span class="pre">supervisord</span></code> configuration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">supervisorctl</span> <span class="o">-</span><span class="n">c</span> <span class="o">../</span><span class="n">supervisor</span><span class="o">.</span><span class="n">conf</span> <span class="n">reload</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Restart the apache web server and check the new version is properly
+installed.</p>
+</li>
+</ul>
+</div>
 </div>
 
 
@@ -776,6 +843,7 @@ this with the option <code class="docutils literal notranslate"><span class="pre
 <li class="toctree-l2"><a class="reference internal" href="#plugins">Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sql-connections">SQL Connections</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-users-in-bulk">Creating users in Bulk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#upgrading-ontask">Upgrading OnTask</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../Using/index.html">Using the tool</a></li>

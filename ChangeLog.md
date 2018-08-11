@@ -1,4 +1,14 @@
-## 2.8.0
+## 2.8.1 (2018-08-11)
+
+### Added
+
+- Surveys can be run directly from the editor (added Run button there)
+
+### Fixed
+
+- Fixed a few bugs related to localisation
+
+## 2.8.0 (2018-08-07)
 
 ### Added
 
