@@ -9,17 +9,17 @@
 {% endblock scripts %}
 {% block title %}{{ block.super }}{% trans 'Email action' %}{% endblock %}
 {% block container %}
-<div align="center" class="container" id="email-action-request-data">
+<div align="center" class="container-fluid" id="email-action-request-data">
   <h1 class="page-header">{% blocktrans with n=action.name %}Send emails for
     action "{{ n }}"{% endblocktrans %}</h1>
-  <div class="container text-center" style="max-width: 500px;">
+  <div class="container">
     {% if num_msgs > 0 %}
       <p>{% blocktrans with n=num_msgs%}{{ n }} Emails will be sent.{% endblocktrans %}</p>
       <form action="" method="post">
         {% csrf_token %}
         <div class="input-group input-group-lg">
           {{ form|crispy }}
-          <div style="margin: 1ex 0 1ex 0;">
+          <div class="text-center" style="margin: 1ex 0 1ex 0;">
             <a type="button" class="btn btn-default"
                href="{% url 'action:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
             </a>
@@ -39,7 +39,7 @@
         <a href="{% url 'action:edit_out' action.id %}">{% trans 'Review the action filter' %}</a></p>
     {% endif %}
   </div>
-    <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
+  <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">
       </div>

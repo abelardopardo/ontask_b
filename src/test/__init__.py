@@ -157,6 +157,10 @@ class OntaskLiveTestCase(LiveServerTestCase):
         self.selenium.find_element_by_id('id_username').send_keys(uemail)
         self.selenium.find_element_by_id('id_password').send_keys(boguspwd)
         self.selenium.find_element_by_id('submit-id-sign_in').click()
+        # Wait for the user profile page
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is("OnTask :: Profile")
+        )
 
         self.assertIn('Edit Profile', self.selenium.page_source)
 

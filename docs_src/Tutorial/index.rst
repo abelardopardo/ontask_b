@@ -1,22 +1,54 @@
 .. _tutorial:
 
-OnTask Tutorial
-***************
+Tutorial
+********
 
-Before you start the tutorial make sure you have an account in an OnTask
-instance and you have instructor privileges (create workflows, actions, etc).
-Also, download the file :download:`learner_information.csv
-<../Dataset/learner_information.csv>` that contains a synthetic data set
-with information about learners, participation in a discussion forum,
-engagement with activities, and some additional features.
+Before you start the tutorial make sure you have an instructor account in an
+OnTask server. Also, download and unpack the zip file :download:`dataset.zip
+<../Dataset/dataset.zip>` that contains a synthetic data set
+with the following files: ``student_list.csv``, ``midterm_results.csv``,
+``forum_participation.csv``, ``blended_participation.csv`` and ``all_data.csv``.
+The data has been extracted from the hypothetical scenario shown in the
+following figure.
+
+.. figure:: the_dataset.png
+   :width: 100%
+   :align: center
+
+We assume that a learning experience is through its sixth week. From weeks 2
+to 5 learners were engaging with two videos and to set of questions per week.
+In Week 6 students took a midterm examination consisting of 10 questions
+(about 5 topics, 2 question per topic). Additionally, during these six weeks
+a discussion forum has been available for them to make comments. The
+information contained in each file is:
+
+``student_list.csv``
+  File with student id (SID), email, name, gender, course id (`UOS Code`),
+  Degree (`FSCI`, `FEIT`, `FASS` or `SMED`), type of enrolment (`HECS`,
+  `Local` or `International`) and attendance (Full Time or Part Time).
+
+``midterm_results.csv``
+  File with student id (SID), email, name, the result of the 10 multiple
+  choice questions (1 means correct, 0 means incorrect) and the total exam
+  score (0-100).
+
+``forum_participation.csv``
+  File with student id (SID), days online, views, contributions and questions
+  for weeks 2-5, and the accumulated value for all weeks.
+
+``blended_participation.csv``
+  File with student id (SID), Video, questions answered, and questions
+  answered correctly (for two items) for weeks 2-5.
+
+``all_data.csv``
+  All data from the previous files properly combined into a single file.
 
 Remember the three central concepts in OnTask:
 
 Workflow
   A container with the data (table), a set of procedures to manipulate
-  columns, data upload and a set of actions. This container is typically
-  associated with a course, but it could also model an entire institutional
-  degree.
+  columns, data upload and a set of actions. This entity is typically
+  associated with a course, but it could also model an entire degree.
 
 Table
   A two-dimensional structure in which each row represents a learner, and
@@ -26,41 +58,26 @@ Table
 
 Actions
   An action in OnTask can be one of two entities:
-  * A HTML resource of which certain parts are included or excluded based on a set of **conditions** created with the learner attributes (for example, number of interventions in the forum is larger than five, and number of times a video was watched is larger than 2).
-  * A set of questions that are shown to the students and their answers are incorporated to the data table.
+
+  * A HTML resource of which certain parts are included or excluded based on
+    a set of **conditions** created with the learner attributes (for example,
+    number of interventions in the forum is larger than five, and number of
+    times a video was watched is larger than 2).
+
+  * A set of questions that are shown to the students and their answers are
+    incorporated to the data table.
 
 The following figure represents the high level view of the tool.
 
 .. figure:: drawing.png
    :align: center
 
-The process to create a personalized text is divided into four stages:
+The next sections explain how to perform various operations in OnTask.
 
-Upload the data
-  We will use a :download:`CSV file with the learners data
-  <../Dataset/learner_information.csv>` about several activities in a course. In
-  this first stage you will upload the data into a table and identify certain
-  special columns (those that provide a unique reference to a learner such as
-  the learner ID)
+.. _create_workflow:
 
-Review the data table
-  In this stage you will explore the values in the table.
-
-Create an action
-  In this stage you will create an action with various conditions that will be
-  applied to the text of a personalized email message.
-
-Review the messages
-  And finally you will review the appearance of these messages for different
-  learners.
-
-Collect data from the students
-  Create a set of columns to ask students for additional data.
-
-The following steps describe the required operations in each of these stages.
-
-Create a new workflow
-=====================
+Create a workflow
+=================
 
 Log into the tool and click in the tool icon on the top left corner of the
 screen. If you have an instructor account, you will see the buNew tton to
@@ -83,7 +100,7 @@ workflows available.
 The first step is to select or *open* a workflow by clicking on the name to manipulate it. Once this operation is done, the access to the element is blocked for any other users (in case the workflow is being shared) to prevent two users changing the data or the actions simultaneously. The following screens will show the name of the selected workflow at the top. If you want to select another workflow to manipulate, you simply click in the OnTask icon at the top left corner of the screen to go back to the initial table.
 
 Open a workflow
-===============
+---------------
 
 When you open a workflow, a page with its details is shown like the one in
 the following figure
@@ -158,8 +175,8 @@ For each column you can change its name, description, type, position in the tabl
 .. figure:: ../scaptures/07_b_data_view_student_external.png
    :align: center
 
-Workflow Operations
-===================
+Workflow Details
+================
 
 There are several operations available at the details page.
 
@@ -386,8 +403,27 @@ You may see how these questions will be shown to the users with the *Preview* bu
 
 Once created, you may select the URL from the action table and make it available for learners to enter their answers, which will be automatically added to the table in the workflow and ready to be used as part of the conditions to create personalized content.
 
-A Predictive Model
-------------------
+Scheduling Emails
+=================
+
+Work in progress.
+
+Merging Data
+============
+
+Work in progress
+
+Uploading Data from a Remote Database
+=====================================
+
+Work in progress
+
+Plugins: Write your own data processing code
+============================================
+
+
+Example: A Predictive Model
+---------------------------
 
 Suppose that your favorite data analyst has processed the data set and created a predictive model that estimates the score of the final exam based on the value of the column *Contributions* applying the following linear equation::
 
@@ -395,8 +431,11 @@ Suppose that your favorite data analyst has processed the data set and created a
 
 You would like to incorporate this model to the workflow and use the predicted final exam score as another column to create conditions and personalize content. One way to achieve this is by creating a plugin that given the two coefficients of a linear model (in the example 3.73 and 25.4) returns a new data set with a column with the values obtained using the corresponding equation. In order for the plugin to comply with the  :ref:`requirements <plugin_requirements>`, one possible definition would be:
 
-.. literalinclude:: __init__.py
+.. literalinclude:: ../../src/plugins/test_plugin_1/__init__.py
    :language: python
 
+Application Programming Interface (API)
+=======================================
 
+Work in progress
 

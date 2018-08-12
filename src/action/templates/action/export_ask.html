@@ -12,7 +12,7 @@
       {% if action.is_out %}
         <p class="help-block">{% trans 'Type: Action out (personalized content)' %}</p>
         <p class="help-block">{% trans 'Content' %}</p>
-        <div class="container" style="border:solid 1px black;">
+        <div class="container" style="border:solid 1px black; text-align:left;">
           {{ action.content|safe }}
         </div>
       {% else %}
