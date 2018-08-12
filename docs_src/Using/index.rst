@@ -98,17 +98,15 @@ Workflow Details
 
 After selecting a workflow to manage, the *details* page appears with a lot of
 information about operations, structure of the data, information about the
-columns, etc. The top of the screen contains the information shown in the
-following figure.
+columns, etc. The page contains the information shown in the following figure.
 
 .. figure:: ../scaptures/workflow_details.png
    :align: center
 
-The top of the page now includes links to additional menus with operations to
-perform over the workflow (some of them will be available depending on your
-user profile). Under the top bar the application shows the name of the workflow
-selected for manipulation. Under the title *Workflow Details* there are buttons
-to access the following operations:
+The name of the workflow is shown below the navigation bar. The page includes
+links to additional menus with various operations on the selected workflow (some
+ of them will be available depending on your user profile). Under the title
+*Workflow Details* there are buttons to access the following operations:
 
 .. _details_add_column:
 
@@ -119,6 +117,15 @@ Add a new column
 
   .. figure:: ../scaptures/workflow_add_column.png
      :align: center
+
+.. _details_add_derived_column:
+
+Add a derived column
+  A derived column is a column created as a result of combining values from
+  several existing columns using basic mathematical operations such as
+  maximum, minimum, etc. The operation is executed **only** upon column
+  creation. Changes in the source columns **will not be propagated** to the
+  resulting combined column.
 
 .. _details_attributes:
 
@@ -205,8 +212,8 @@ The Columns
 -----------
 
 The data in a workflow is stored in a structure called *a table* that is made
-of rows and columns (similar to a spreadsheet). The information about the
-columns is included in a table in the workflow details page.
+of rows and columns (similar to a spreadsheet). The details page
+basically shows information about the available columns.
 
 .. figure:: ../scaptures/wokflow_columns.png
    :align: center

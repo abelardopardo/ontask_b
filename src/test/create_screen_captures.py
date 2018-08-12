@@ -302,7 +302,7 @@ class ScreenTestFixture(ScreenTests):
                            element_id='column-table_previous')
 
         # Take picture of the navigation bar
-        self.element_ss("//div[@role='navigation']", 'navigation_bar.png')
+        self.element_ss("//body/div[3]", 'navigation_bar.png')
 
         # Take picture of the body
         self.element_ss("//body", 'workflow_details.png')

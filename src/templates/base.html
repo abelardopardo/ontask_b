@@ -50,9 +50,9 @@
           {% endblock %}
         </a>
         {% if user.is_authenticated %}
-          <a class="navbar-brand" href="{% url 'entry' %}">
-            <span class="glyphicon glyphicon-home"></span>
-          </a>
+          <ul class="nav navbar-nav">
+            <li><a class="nav navbar-nav" href="{% url 'entry' %}">Workflows</a></li>
+          </ul>
         {% endif %}
       </div>
       {% block navbar-menu %}
