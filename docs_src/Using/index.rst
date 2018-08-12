@@ -105,15 +105,34 @@ columns, etc. The page contains the information shown in the following figure.
 
 The name of the workflow is shown below the navigation bar. The page includes
 links to additional menus with various operations on the selected workflow (some
- of them will be available depending on your user profile). Under the title
+of them will be available depending on your user profile). Under the title
 *Workflow Details* there are buttons to access the following operations:
 
 .. _details_add_column:
 
 Add a new column
-  Opens a dialog to create a new column in the table. It requires the name,
-  type of column, a comma separated list of allowed values (optional), the position
-  of that column, and a value to assign to all cells in the column (optional).
+  Opens a dialog to create a new column in the table with the following
+  fields:
+
+  - Name (mandatory): column name (shown in the table)
+
+  - Description: text that will be shown to the learners if the column is
+    part of a survey action.
+
+  - Data type (mandatory: The possible data types are *number* (representing both
+    integers or real numbers), *string*, *boolean* (only possible values are *true*
+    and *false*), and *datetime* (a date and time together).
+
+  - An integer (mandatory) representing the position of the column in the table
+    (a value zero will insert it at the end of the table).
+
+  - Two date/time values to control the visibility of the column.
+
+  - Comma-separated list of possible values. This field is to restrict the
+    values in the column. The values have to be compatible with the specified
+    data type.
+
+  - Initial value to assign to all cells in the column.
 
   .. figure:: ../scaptures/workflow_add_column.png
      :align: center
@@ -152,20 +171,20 @@ Share
 .. _details_export:
 
 Export
-  This functionality allows you to take a snapshot (or a picture) of the content
-  of the workflow and store it in a file for your records. You may select which
+  This functionality allows you to take a snapshot of the content of the
+  workflow and store it in a file for your records. You may select which
   actions are included in the exported file
 
   .. figure:: ../scaptures/workflow_export.png
      :align: center
 
-  The menu offers you the possibility of exporting only the data, or the data
+  The menu offers the possibility of exporting only the data, or the data
   **and** the :ref:`action <action>` in the workflow.
 
 .. _details_clone:
 
 Clone
-  This function creates a new workflow by duplicating the data, actions and
+  This function creates a new workflow duplicating the data, actions and
   conditions of the current workflow. The new workflow will have the same
   name with the prefix "*Copy of *".
 
@@ -242,6 +261,11 @@ Edit
   The column may also have a *validity window* defined by two date/times.
   This validity is used when executing *action in* tasks.
 
+Restrict
+  Assigns as *allowed values* for the column those currently stored. This
+  operation is useful to transform a generic column into one with values
+  limited to the current ones.
+
 Clone
   Clones the column in the workflow changing its name adding the prefix "*Copy
   of *" to the name.
@@ -252,7 +276,10 @@ Delete
   the action.
 
 Stats
-  In addition to these operations, OnTask also offers a visualization of the values in a column. x
+  Shows a statistical summary of the values in the column. If the data type
+  is *number*, the summary includes information about quartiles, a boxplot, and
+   a histogram. For the rest of data types, the summary only includes the
+   histogram.
 
 .. _dataops:
 
@@ -263,104 +290,142 @@ Data Sources
     -- Brené Brown
 
 
-This section describes the operations to upload and merge data into the table. It may be the case that this task is already done, or it is done automatically before you work with a workflow. If this is the case, you may skip this section. The data operations page offers various options to upload and merge data to the table and the process is divided into 2 to 4 steps.
+This section describes the operations to upload and merge data into the table. 
+It may be the case that this task is already done, or it is done
+automatically before you work with a workflow. If this is the case, you may
+skip this section. The data operations page offers various options to upload
+and merge data to the table and the process is divided into several steps.
 
-CSV Files
----------
+Upload CSV Files
+----------------
 
 CSV or "comma separated value" files are plain text files in which the first line contains a comma-separated list of column names, and every subsequent line contains the values of these columns for each row. It is a popular format to exchange data that can be represented as a table, and it is for this reason that OnTask allows to upload data in this format.
 
-The functionality assumes that you have such file available in your computer and provides a form to upload it to the platform.
+This operation allows you to upload the values in a CSV file into the
+workflow table.
 
 .. figure:: ../scaptures/dataops_csvupload.png
    :align: center
 
-Some applications produce CSV files but the data is surrounded with by a few lines that need to be ignored. If this is the case, you may specify how many of these lines are present in your file and OnTask will ignored them when parsing the content.
+In some cases, the comma-separated values are surrounded by several lines
+that need to be ignored when processing the data. The page to upload the
+CSV file allows you to specify the number of lines to ignore at the start
+and end of the file.
 
-Excel Files
------------
+Upload Excel Files
+------------------
 
-The second format supported by OnTask to upload or merge data is Excel.
+OnTask also supports the upload of data from Excel files.
 
 .. figure:: ../scaptures/dataops_upload_excel.png
    :align: center
 
-In this case the file is assumed to have multiple *Sheets* and one of them has to be selected to upload/merge the data.
+In this case the file is assumed to have multiple *Sheets* and one of them
+has to be selected to upload the data.
 
 .. _sql_connection_run:
 
 SQL connection
 --------------
 
-The third method to upload/merge data into the current workflow is through a SQL connection to a remote database. These connections have to be :ref:`previously defined and configured by the system administrator <sql_connections>`. Instructor users can use them to access the content of a previously defined table in a remote database. When selected, the option to upload data with  a SQL connection shows the table of available connections and the possibility to *Run* such connection:
+The third method to upload data into the current workflow is through a SQL
+connection to a remote database. These connections have to be
+:ref:`previously defined and configured by the system administrator
+<sql_connections>`. Instructors can use them to access the content of a
+previously defined table in a remote database. The option to upload data with
+a SQL connection shows the available connections and the possibility to
+*Run* each one of them:
 
 .. figure:: ../scaptures/dataops_SQL_available.png
    :align: center
 
-When *running* a SQL connection the platform shows the configuration parameters and request the password to access the remote database (if required).
+When *running* a SQL connection the platform shows the configuration
+parameters and requests the password to access the remote database (if required).
 
 .. figure:: ../scaptures/dataops_SQL_run.png
    :align: center
 
-Data Upload
-===========
-
-The operations described in the previous section obtain a data set and, if the workflow table is empty, it sets its initial content. In Step 2 of the process, OnTask offers the possibility of selecting and renaming the columns before they are uploaded to the table. For each column detected in the file, the table includes if it has been detected to be unique, its automatically detected type, a box to select, the name, and an alternative name (to allow column renaming). This step is to allow you to select those columns that are relevant and discard the rest. The platform requires you to choose **at least** one column with unique values.
-
+When uploading data for the first time, the values are prepared to be assigned
+as the initial content of the table. Before this assignment is done,
+the platform first automatically detects those columns that have unique
+values (no repetitions) and marks them as *keys*. Key columns are very
+important because the values (as they are different for
+every row) are used for various operation. There must be **at least one key
+column* in the workflow and it is possible to remove the *key* mark from any
+column and only possible to mark a column as key if the values are all
+different. Before assigning the data to the table, the platform also allows
+to change the name of the columns as shown in the Step 2 of the upload process.
 
 .. figure:: ../scaptures/dataops_upload_merge_step2.png
    :align: center
 
-After this step is performed, the data is stored in the table and the platform shows the :ref:`details` page. If these operations are done with a workflow that already has data in the table, then two additional steps are required as part of the *merge* operation.
+After this step (if the table is empty), the data is stored and
+the platform shows the :ref:`details` page. If the upload operation is executed
+with a workflow with existing data in the table, then instead of an
+upload, the platform executes a **merge** operation.
 
 Data Merge
 ==========
 
 .. sidebar:: Merge a.k.a "Join"
 
-   Merging is quite common in databases and is known as a *join* operation. There are several variants of join operations depending how the differences between the key columns are handled. These same variants exist when combining columns in data frames (or a table).
+   Merging is a common operation in databases and is commonly known as *join*.
+   There are several variants of join operations depending how the
+   differences between the key columns are handled. These same variants exist
+   when combining columns in data frames (or a table).
 
-A merge operation is needed when you want to *merge* a set of columns with an **already existing table**. This operation is very common in data science contexts. One of the problems is to specify how the values in the columns are *matched* with respect to the ones already existing in the table. In other words, each new column has a set of values, but they need to be in the right order so that the information is matched appropriately for every row. The solution for this problem is to include in both the existing table and the new data being merged a **unique or key column**. These columns have the property that unique distinguish each row with a value and therefore they are used to make sure that rows with matching values in these columns are merged. When uploading new data in a workflow that already contains data in its table, the platform automatically detects it and executes two additional steps to complete a *merge* operation.
+A merge operation is required when uploading a set of columns with an
+**already existing table**. This operation is very common in data science
+contexts. One of the problems is to specify how the values in the columns are
+*matched* with respect to the ones already existing in the table. In other
+words, each new column has a set of values, but they need to be in the right
+order so that the information is matched appropriately for every row. The
+solution for this problem is to include in both the existing table and the
+new data being merged a **unique or key column**. These columns have the
+property that uniquely distinguish each row with a value and therefore they are
+used to make sure that rows with matching values in these columns are merged.
+When uploading data into a workflow that already contains data in its
+table, the platform automatically executes additional steps to complete a *merge* operation.
 
-The next step is the most delicate one. It requires you to identify the unique columns in both the existing data table and the one being uploaded, the criteria to merge the rows. We discuss each of these parameters in more detail.
+After detecting the key columns and offering the option of changing their names, the following steps requires to identify the key columns used to match rows from the existing table and the one being uploaded.
 
 .. figure:: ../scaptures/dataops_upload_merge_step3.png
    :align: center
    :width: 100%
 
 Key columns
-  You have to select a key column present in the data to be merged (mandatory) and a key column from the existing data (mandatory).
+  You have to select a key column present in the table to be merged (mandatory) and a key column from the existing table (mandatory).
 
 Merge method
-  There are four types of merging. Once you choose an option an explanation appears below.
+   Once you choose a merge method, a figure and explanation appear below.There are four possible merging methods:
 
-  Select only the rows with keys in both existing and new table
-    It will process only the rows for which values in both key columns are present. Or in other words, any row for which there is no value in either of the key columns **will be dropped**.
+  Select only the rows with keys in both existing **and** new table
+    It will select only the rows for which values in both key columns are present. Or in other words, any row for which there is no value in either of the key columns **will be dropped**.
 
     .. figure:: ../../src/media/merge_inner.png
        :align: center
 
-  Select all rows in both the existing and new table
+  Select all rows in either the existing or new table
     All rows in both tables will be considered. You have to be careful with this option because it may produce columns that are no longer unique as a result.
 
     .. figure:: ../../src/media/merge_outer.png
        :align: center
 
   Select the rows with keys in the existing table
-    Only the rows with a value in the existing table will be considered, the rest will be dropped.
+    Only the rows in the new table with a value in the key column that is present in the existing table will be considered, the rest will be dropped.
 
     .. figure:: ../../src/media/merge_left.png
        :align: center
 
   Select the rows with keys in the new table
-    Only the rows with a value in the table being uploaded will be considered, the rest will be dropped.
+    Only the rows in the existing table with a value in the key column that is present in the key column from the new table will be considered, the rest will be dropped.
 
     .. figure:: ../../src/media/merge_right.png
        :align: center
 
 In any of these variants, for those columns that are present in both the existing table and the new table, the values of the second will update the existing ones. This updating operation may introduce non-values in some of the columns. You have to take extra care when performing this operation as it may destroy part of the existing data. In the extreme case, if you try to merge a table with a key column with no values in common with the existing key and you select the method that considers rows with keys in both the existing and new table, the result is an empty table.
 
-After selecting these parameters the last step is to review the effect of the operation and proceed with the merge.
+After selecting these parameters the last step is to review the effect of the operation and proceed with the merge as shown in the following figure.
 
 .. figure:: ../scaptures/dataops_upload_merge_step4.png
    :align: center
@@ -374,14 +439,32 @@ The Table
    but you feel it"
    -- Morpheus, The Matrix
 
-This functionality is basically to show the values stored in the workflow. Since this data can be arbitrarily large, it is likely that only a portion of the columns is shown on the screen at any given point.
+This functionality is to show the values stored in the workflow. Since this data can be arbitrarily large, it is likely that only a portion of the columns is shown on the screen at any given point.
 
 .. figure:: ../scaptures/table.png
    :align: center
    :width: 100%
 
-The rows shown in the screen grouped into
-pages (you may choose the number of entries per page in the upper left side of the table) and allows to search for values. The icons in the left side of each row allow you to edit any of the values or delete a row entirely. If the *Add row* operation is selected a form with one field per column is shown. The values entered in this form will be checked to verify that the unique key property of the columns is preserved.
+The buttons at the top of the page allow to execute the following operations:
+
+Add row
+  A form appears with as many fields as columns to introduce a new row in the table.
+
+Add column
+  See :ref:`details_add_column`
+
+Add derived column
+  See :ref:`details_add_derived_column`
+
+
+The rows shown in the screen are automatically grouped into
+pages (you may choose the number of entries per page in the upper left side of the table). Additionally, the table offers a search box in the the upper left corner. The operations in the left side of the row allow you to access a statistical summary of the values in the row, edit any of the values or delete the row. If the *Add row* operation is selected a form with one field per column is shown. The values entered in this form will be checked to verify that the unique key property of the columns is preserved.
+
+
+.. _table_views:
+
+Table Views [IN PROGRESS]
+-----------
 
 Due to the potential large size of this table in either number of rows or columns, OnTask offers the possibility to define *views*. A view is simply a set of columns selected to visualize, and optionally, a filter that selects a subset of rows.
 
@@ -686,12 +769,12 @@ The Scheduler
 
 The *actions out* that are used to send emails can be *scheduled* to
 execute at some point in the future. The *Schedule* operation in these
-actions opens a dialogue like the one shown in the following figure:
+actions opens a dialog like the one shown in the following figure:
 
 .. figure:: ../scaptures/schedule_action_email.png
    :align: center
 
-The action (sending the emails with the personalised text) is executed at the
+The action (sending the emails with the personalized text) is executed at the
 selected time. This functionality requires the server to be configured to
 check the list of pending tasks and execute them at the appropriate time (see
 :ref:`scheduling_tasks`)
@@ -719,7 +802,7 @@ You may review the events and download them as a CSV file.
 Plugins -- Transforming the data with your own code
 ===================================================
 
-The additional method offered by OnTask to manipulate the data in a workflow's table is to execute arbitrary Python code encapsulated as a Python module and placed in a pre-defined folder in the computer hosting the server. In the context of the platform, these Python modules are called **Plugins** and require some :ref:`previous configuration <plugin_install>`. Before their execution, a plugin must be written and installed in the folder previously considered for that purpose.
+The additional method offered by OnTask to manipulate the data in a workflow's table is to execute arbitrary Python code encapsulated as a Python module and placed in a predefined folder in the computer hosting the server. In the context of the platform, these Python modules are called **Plugins** and require some :ref:`previous configuration <plugin_install>`. Before their execution, a plugin must be written and installed in the folder previously considered for that purpose.
 
 The purpose of the plugins is to allow arbitrary transformations of the data attached to a workflow. The list of plugins available for execution can be accessed through the link *Transform* in the *Dataops* top menu item.
 
@@ -755,7 +838,7 @@ After the appropriate data is provided the tool shows a plugin executing report 
 Plugin requirements
 -------------------
 
-The Python modules installed in the pre-defined folder need to satisfy various requirements to be considered for execution within OnTask. More precisely, the file ``__init__.py`` must contain:
+The Python modules installed in the predefined folder need to satisfy various requirements to be considered for execution within OnTask. More precisely, the file ``__init__.py`` must contain:
 
 1. Module variable ``class_name`` with the name of the class in the file that contains the required definitions.
 
