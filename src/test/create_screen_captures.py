@@ -692,6 +692,7 @@ class ScreenTestFixture(ScreenTests):
         self.selenium.find_element_by_link_text(self.workflow_name).click()
         self.wait_for_page(title='OnTask :: Details',
                            element_id='column-table_previous')
+
         #
         # Table
         #
@@ -700,6 +701,10 @@ class ScreenTestFixture(ScreenTests):
 
         # Picture of the body
         self.element_ss("//body", 'table.png')
+
+        # Picture of the buttons
+        self.element_ss("//div[@id='table-content']/div[1]",
+                        'table_buttons.png')
 
         #
         # Table Views

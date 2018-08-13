@@ -78,7 +78,7 @@
       <p class="help-block">{% trans 'Last modified' %}: {{ workflow.modified }}</p>
       {% if table_info %}
         <p class="help-block">
-          {% blocktrans with num=table_info.num_rows count counter=table_info.num_rows %}{{ num }} row{% plural %}{{ num }} rows,{% endblocktrans %},
+          {% blocktrans with num=table_info.num_rows count counter=table_info.num_rows %}{{ num }} row{% plural %}{{ num }} rows,{% endblocktrans %}
           {% blocktrans with num=table_info.num_cols count counter=table_info.num_cols %}{{ num }} column{% plural %}{{ num }} columns{% endblocktrans %}
           (<mark>{% blocktrans with num=num_key_columns count counter=num_key_columns %}{{ num }} Key column{% plural %}{{ num }} Key columns{% endblocktrans %}</mark>),
           {% blocktrans with num=table_info.num_actions count counter=table_info.num_actions %}{{ num }} action{% plural %}{{ num }} actions,{% endblocktrans %}

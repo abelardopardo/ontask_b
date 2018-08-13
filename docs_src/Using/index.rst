@@ -445,7 +445,11 @@ This functionality is to show the values stored in the workflow. Since this data
    :align: center
    :width: 100%
 
-The buttons at the top of the page allow to execute the following operations:
+The buttons at the top of the page allow to execute several operations.
+
+.. figure:: ../scaptures/table_buttons.png
+   :align: center
+   :width: 100%
 
 Add row
   A form appears with as many fields as columns to introduce a new row in the table.
@@ -456,35 +460,54 @@ Add column
 Add derived column
   See :ref:`details_add_derived_column`
 
+Dashboard
+  The dashboard is a page that shows a statistical summary for the columns
+  shown in the table. This number may be too high, so you should consider
+  using :ref:`table_views` to simplify the information shown.
+
+CSV Download
+  This functionality allows to obtain a CSV file with the data shown on the
+  screen. Combine this functionality wit the :ref:`table_views` to handle
+  large tables.
 
 The rows shown in the screen are automatically grouped into
-pages (you may choose the number of entries per page in the upper left side of the table). Additionally, the table offers a search box in the the upper left corner. The operations in the left side of the row allow you to access a statistical summary of the values in the row, edit any of the values or delete the row. If the *Add row* operation is selected a form with one field per column is shown. The values entered in this form will be checked to verify that the unique key property of the columns is preserved.
-
+pages (you may choose the number of entries per page in the upper left side
+of the table). Additionally, the table offers a search box in the the upper
+left corner. The operations in the left side of the row allow you to access a
+statistical summary of the values in the row, edit any of the values or
+delete the row.
 
 .. _table_views:
 
-Table Views [IN PROGRESS]
+Table Views
 -----------
 
-Due to the potential large size of this table in either number of rows or columns, OnTask offers the possibility to define *views*. A view is simply a set of columns selected to visualize, and optionally, a filter that selects a subset of rows.
-
-.. figure:: ../scaptures/table_view_edit.png
-   :align: center
-   :width: 100%
-
-You may define several views for the workflow.
+Due to the potentially large size of this table in either number of rows or
+columns, OnTask offers the possibility to define *views*. A view is simply a
+table that shows a subset of columns and rows. You may define as many views
+as needed for the table.
 
 .. figure:: ../scaptures/table_views.png
    :align: center
    :width: 100%
 
-And select to see the table values corresponding to one view
+When creating or editing the content of the view, aside from the name and the
+description, you may select those columns to show, and a expression to
+restrict the rows to those for which that expression is correct (you may
+leave this expression empty and all rows will be shown).
+
+.. figure:: ../scaptures/table_view_edit.png
+   :align: center
+   :width: 100%
+
+Once defined, you may select the view to show the corresponding data subset.
 
 .. figure:: ../scaptures/table_view_view.png
    :align: center
    :width: 100%
 
-The same page also allows to download the content of the whole table in CSV format.
+The *Dashboard* and *CSV Download* buttons, when used while using a view,
+will apply to the selected data subset.
 
 .. _action:
 

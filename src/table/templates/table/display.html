@@ -133,30 +133,30 @@
                   onclick="location.href='{% url 'table:display' %}'">
             Full table
           </button>
-          <a href="{% url 'table:csvdownload_view' view.id %}" download
-             class="btn btn-primary btn-sm js-logs-download"
-             data-toggle="tooltip"
-             title="{% trans 'Download a CSV file containing this table' %}">
-            <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
-          </a>
           <a href="{% url 'table:stat_table_view' view.id %}"
              class="btn btn-primary btn-sm"
              data-toggle="tooltip"
              title="{% trans 'Dashboard created with the view data' %}">
             <span class="glyphicon glyphicon-dashboard"></span> {% trans 'Dashboard' %}
           </a>
-        {% else %}
-          <a href="{% url 'table:csvdownload' %}"
-             class="btn btn-primary btn-sm"
+          <a href="{% url 'table:csvdownload_view' view.id %}" download
+             class="btn btn-primary btn-sm js-logs-download"
              data-toggle="tooltip"
              title="{% trans 'Download a CSV file containing this table' %}">
             <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
           </a>
+        {% else %}
           <a href="{% url 'table:stat_table' %}"
              class="btn btn-primary btn-sm"
              data-toggle="tooltip"
              title="{% trans 'Dashboard created with the table data' %}">
             <span class="glyphicon glyphicon-dashboard"></span> {% trans 'Dashboard' %}
+          </a>
+          <a href="{% url 'table:csvdownload' %}"
+             class="btn btn-primary btn-sm"
+             data-toggle="tooltip"
+             title="{% trans 'Download a CSV file containing this table' %}">
+            <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
           </a>
         {% endif %}
       </div>
