@@ -10,7 +10,7 @@ __all__ = ['celery_app']
 
 from django.utils.translation import ugettext_lazy as _
 
-__version__ = 'B.2.8.1'
+__version__ = 'B.2.8.2'
 
 
 def is_legal_name(val):
