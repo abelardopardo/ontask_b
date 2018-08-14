@@ -1,3 +1,9 @@
+## 2.8.1 (2018-08-14)
+
+### Fixed
+
+- Fixed celery configuration and bug in email send function
+
 ## 2.8.1 (2018-08-11)
 
 ### Added
