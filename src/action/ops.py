@@ -24,10 +24,10 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import strip_tags
+from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
-from django.utils.translation import ugettext_lazy as _
 from validate_email import validate_email
 
 import logs.ops
@@ -472,7 +472,7 @@ def send_messages(user,
          'action': action.name,
          'num_messages': len(msgs),
          'email_sent_datetime': str(now),
-         'filter_present': filter is not None,
+         'filter_present': cfilter is not None,
          'num_rows': action.workflow.nrows,
          'subject': subject,
          'from_email': user.email,
@@ -489,9 +489,9 @@ def send_messages(user,
         'action': action,
         'num_messages': len(msgs),
         'email_sent_datetime': now,
-        'filter_present': filter is not None,
+        'filter_present': cfilter is not None,
         'num_rows': action.workflow.nrows,
-        'num_selected': cfilter.n_rows_selected if filter else -1}
+        'num_selected': cfilter.n_rows_selected if cfilter else -1}
 
     # Create template and render with context
     try:
@@ -511,7 +511,7 @@ def send_messages(user,
          'action': action.id,
          'num_messages': len(msgs),
          'email_sent_datetime': str(now),
-         'filter_present': filter is not None,
+         'filter_present': cfilter is not None,
          'num_rows': action.workflow.nrows,
          'subject': str(getattr(settings, 'NOTIFICATION_SUBJECT')),
          'body': text_content,
