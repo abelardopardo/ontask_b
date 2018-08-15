@@ -217,6 +217,11 @@ $(function () {
   $("#column-selected-table").on("click", ".js-column-clone", loadForm);
   $("#modal-item").on("submit", ".js-column-clone-form", saveForm);
 
+  // Send email
+  $("#action-email-form").on("submit", function () {
+    $('#div-spinner').show();
+  });
+  
 });
 
 

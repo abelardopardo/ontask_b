@@ -15,7 +15,7 @@
   <div class="container">
     {% if num_msgs > 0 %}
       <p>{% blocktrans with n=num_msgs%}{{ n }} Emails will be sent.{% endblocktrans %}</p>
-      <form action="" method="post">
+      <form id="action-email-form" action="" method="post">
         {% csrf_token %}
         <div class="input-group input-group-lg">
           {{ form|crispy }}
