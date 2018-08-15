@@ -32,6 +32,11 @@
         initSummernote();
       }
     });
+    $("#id_content").on("summernote.paste",function(e,ne) {
+      var bufferText = ((ne.originalEvent || ne).clipboardData || window.clipboardData).getData('Text');
+      ne.preventDefault();
+      document.execCommand('insertText', false, bufferText);
+    });
   </script>
 {% endblock %}
 {% block title %}{{ block.super }}Edit action Out{% endblock %}
