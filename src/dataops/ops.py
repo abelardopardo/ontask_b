@@ -482,13 +482,16 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
                     ', '.join(col.categories)
                 )
 
-
     # Store the result back in the DB
     store_dataframe_in_db(new_df, pk)
 
     # Update the value of the "keey_key_column"
-    for cname, keep_key in zip(merge_info['rename_column_names'],
-                               merge_info['keep_key_column']):
+    for to_upload, cname, keep_key in zip(merge_info['columns_to_upload'],
+                                          merge_info['rename_column_names'],
+                                          merge_info['keep_key_column']):
+        if not to_upload:
+            continue
+
         col = workflow.columns.get(name=cname)
         # Condition 3: Process the is_key property.
         is_key_now = is_unique_column(new_df[col.name]) and keep_key
