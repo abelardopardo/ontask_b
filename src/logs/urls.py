@@ -9,11 +9,11 @@ app_name = 'logs'
 
 urlpatterns = [
 
-    url(r'^show/$', views.show, name="show"),
+    url(r'^$', views.display, name="index"),
 
-    url(r'^show_ss/$', views.show_ss, name="show_ss"),
+    url(r'^display_ss/$', views.display_ss, name="display_ss"),
 
-    url(r'^(?P<pk>\d+)/view/$', views.view_log_list, name="view"),
+    url(r'^(?P<pk>\d+)/view/$', views.view, name="view"),
 
     url(r'^(?P<pk>\d+)/export/$', resources.export, name="export"),
 

@@ -86,7 +86,7 @@
               <li {% if '/scheduler/' in request.path %}class="active"{% endif %}><a
                   href="{{ scheduler_url }}">{% trans 'Scheduler' %}</a></li>
 
-              {% url 'logs:show' as logs_url %}
+              {% url 'logs:index' as logs_url %}
               <li {% if '/logs/' in request.path %}class="active"{% endif %}><a
                   href="{{ logs_url }}">{% trans 'Logs' %}</a>
               </li>
