@@ -30,6 +30,18 @@ class Action(models.Model):
     @DynamicAttrs
     """
 
+    PERSONALIZED_TEXT = 'personalized_text'
+    PERSONALIZED_JSON = 'personalized_json'
+    SURVEY = 'survey'
+    TODO_LIST = 'todo_list'
+
+    ACTION_TYPES = [
+        (PERSONALIZED_TEXT, _('Personalized text')),
+        (PERSONALIZED_JSON, _('Personalized JSON')),
+        (SURVEY, _('Survey')),
+        (TODO_LIST, _('TODO List'))
+    ]
+
     workflow = models.ForeignKey(
         Workflow,
         db_index=True,
@@ -38,7 +50,10 @@ class Action(models.Model):
         on_delete=models.CASCADE,
         related_name='actions')
 
-    name = models.CharField(max_length=256, blank=False, verbose_name=_('name'))
+    name = models.CharField(max_length=256,
+                            blank=False,
+                            null=False,
+                            verbose_name=_('name'))
 
     description_text = models.CharField(max_length=512,
                                         default='',
@@ -49,12 +64,17 @@ class Action(models.Model):
 
     modified = models.DateTimeField(auto_now=True, null=False)
 
-    # If the action is to provide information to learners
-    is_out = models.BooleanField(
-        default=True,
-        verbose_name=_('Action to provide personalized information'),
-        null=False,
-        blank=False)
+    # Record the last time this action was executed
+    last_executed = models.DateTimeField(null=True,
+                                         blank=True,
+                                         verbose_name=_('Last execution'))
+
+    # Action type
+    action_type = models.CharField(
+        max_length=64,
+        choices=ACTION_TYPES,
+        default=PERSONALIZED_TEXT
+    )
 
     # Boolean that enables the URL to be visible ot the outside.
     serve_enabled = models.BooleanField(
@@ -79,16 +99,16 @@ class Action(models.Model):
     columns = models.ManyToManyField(Column, related_name='actions_in')
 
     #
-    # Field for action OUT
+    # Field for actions PERSONALIZED_TEXT and PERSONALIZED_JSON
     #
     # Text to be personalised for action OUT
-    content = models.TextField(
-        default='',
-        null=False,
-        blank=True)
+    content = models.TextField(default='', null=False, blank=True)
+
+    # Text to be personalised for action OUT
+    target_url = models.TextField(default='', null=True, blank=True)
 
     #
-    # Fields for action IN
+    # Fields for action SURVEY and TODO_LIST
     #
     # Shuffle column order when creating the page to serve
     shuffle = models.BooleanField(default=False,
@@ -111,7 +131,7 @@ class Action(models.Model):
                     (self.active_to and self.active_to < now))
 
     @property
-    def is_correct(self):
+    def survey_is_correct(self):
         """
         Function to ask if an action is correct. All actions out are correct,
         and action ins are correct if they have at least one key column and one
@@ -121,6 +141,15 @@ class Action(models.Model):
 
         return self.columns.filter(is_key=True).exists() and \
                self.columns.filter(is_key=False).exists()
+
+    @property
+    def is_in(self):
+        return self.action_type == self.SURVEY or \
+               self.action_type == self.TODO_LIST
+
+    @property
+    def is_out(self):
+        return not self.is_in
 
     def get_content(self):
         """
@@ -186,8 +215,9 @@ class Action(models.Model):
         :return: Updates the current object
         """
 
-        if self.is_out:
-            # Action out: Need to change name appearances in content
+        if self.action_type == self.PERSONALIZED_TEXT or \
+                self.action_type == self.PERSONALIZED_JSON:
+            # Need to change name appearances in content
             new_text = var_use_res[0].sub(
                 lambda m: '{{ ' +
                           (new_name if m.group('vname') == escape(old_name)

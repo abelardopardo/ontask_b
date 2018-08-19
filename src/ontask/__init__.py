@@ -4,13 +4,15 @@ Basic functions and definitions used all over the platform.
 """
 from __future__ import unicode_literals, print_function, absolute_import
 
+import json
+
 from ontask.celery import app as celery_app
 
 __all__ = ['celery_app']
 
 from django.utils.translation import ugettext_lazy as _
 
-__version__ = 'B.2.8.2'
+__version__ = 'B.2.8.3'
 
 
 def is_legal_name(val):
@@ -53,6 +55,14 @@ def fix_pctg_in_name(val):
     :return: Escaped value
     """
     return val.replace('%', '%%')
+
+
+def is_json(text):
+    try:
+        _= json.loads(text)
+    except ValueError:
+        return False
+    return True
 
 
 class OntaskException(Exception):

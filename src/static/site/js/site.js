@@ -26,6 +26,14 @@ var insert_fields = function (the_form) {
     }
     return true;
 }
+var get_id_content = function() {
+  if (typeof $('#id_content').summernote != 'undefined') {
+    value = $("#id_content").summernote('code');
+  } else {
+    value = $("#id_content").val()
+  }
+  return value;
+}
 var loadForm = function () {
     var btn = $(this);
     if ($(this).is('[class*="disabled"]')) {
@@ -78,8 +86,9 @@ var saveForm = function () {
     }
     var data = form.serializeArray();
     if (document.getElementById("id_content") != null) {
+      value = get_id_content();
       data.push({'name': 'action_content',
-                 'value': $("#id_content").summernote('code')});
+                 'value': value});
     }
     $.ajax({
       url: form.attr("action"),

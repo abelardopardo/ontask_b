@@ -1,0 +1,17 @@
+{% load i18n %}
+<div class="text-center" style="margin: 1ex 0 1ex 0;">
+  <button type="button"
+          class="btn btn-info js-action-preview {% if selected_rows == 0 %}disabled{% endif %}"
+          style="margin-right:2ex;"
+          data-url="{% url 'action:preview' action.id 1 %}"
+          data-toggle="tooltip"
+      title="{% trans 'See how is the content shown to each learner' %}">
+    <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Preview' %}
+  </button>
+  <button type="submit" name="Submit" value="Submit"
+          class="btn btn-primary"
+          data-toggle="tooltip"
+          title="{% trans 'Save and go back' %}">
+    <span class="glyphicon glyphicon-ok"></span> {% trans 'Done' %}</button>
+</div>
+

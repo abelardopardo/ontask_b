@@ -15,7 +15,7 @@ urlpatterns = [
     url(r'^$', views_action.action_index, name='index'),
 
     # Create an action of type 0: in, 1: Out
-    url(r'^(?P<type>[01])/create/$',
+    url(r'^create/$',
         views_action.ActionCreateView.as_view(), name='create'),
 
     # Edit action Out
@@ -72,7 +72,7 @@ urlpatterns = [
         name='shuffle_questions'),
 
     # Update an action of type 0: in, 1: Out
-    url(r'^(?P<pk>\d+)/(?P<type>[01])/update/$',
+    url(r'^(?P<pk>\d+)/update/$',
         views_action.ActionUpdateView.as_view(),
         name='update'),
 

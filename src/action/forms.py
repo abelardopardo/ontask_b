@@ -5,8 +5,8 @@ import json
 
 from datetimewidget.widgets import DateTimeWidget
 from django import forms
-from django_summernote.widgets import SummernoteInplaceWidget
 from django.utils.translation import ugettext_lazy as _
+from django_summernote.widgets import SummernoteInplaceWidget
 
 from ontask import ontask_prefs, is_legal_name
 from ontask.forms import column_to_field, dateTimeOptions, RestrictedFileField
@@ -17,15 +17,21 @@ from .models import Action, Condition
 field_prefix = '___ontask___select_'
 
 
-class ActionForm(forms.ModelForm):
+class ActionUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop(str('workflow_user'), None)
         self.workflow = kwargs.pop(str('action_workflow'), None)
-        super(ActionForm, self).__init__(*args, **kwargs)
+        super(ActionUpdateForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = Action
-        fields = ('name', 'description_text',)
+        fields = ('name', 'description_text')
+
+
+class ActionForm(ActionUpdateForm):
+    class Meta:
+        model = Action
+        fields = ('name', 'description_text', 'action_type')
 
 
 class ActionDescriptionForm(forms.ModelForm):
@@ -36,17 +42,42 @@ class ActionDescriptionForm(forms.ModelForm):
 
 class EditActionOutForm(forms.ModelForm):
     """
-    Main class to edit an action out. The main element is the text editor (
-    currently using summernote).
+    Main class to edit an action out.
     """
-    content = forms.CharField(
-        widget=SummernoteInplaceWidget(),
-        label='',
-        required=False)
+    content = forms.CharField(label='', required=False)
+
+    def __init__(self, *args, **kargs):
+
+        super(EditActionOutForm, self).__init__(*args, **kargs)
+
+        if self.instance.action_type == Action.PERSONALIZED_TEXT:
+            self.fields['content'].widget = SummernoteInplaceWidget()
+        else:
+            # Add the target_url field
+            self.fields['target_url'] = forms.CharField(
+                initial='',
+                label=_('Target URL'),
+                strip=True,
+                required=True,
+                widget=forms.Textarea(
+                    attrs={
+                        'rows': 1,
+                        'cols': 120,
+                        'placeholder': _('URL to send the personalized JSON')
+                    }
+                )
+            )
+
+            # Modify the content field so that it uses the TextArea
+            self.fields['content'].widget = forms.Textarea(
+                attrs={'cols': 80,
+                       'rows': 15,
+                       'placeholder': _('Write a JSON object')}
+            )
 
     class Meta:
         model = Action
-        fields = ('content',)
+        fields = ('content', 'target_url')
 
 
 # Form to enter values in a row

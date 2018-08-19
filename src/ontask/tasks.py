@@ -52,6 +52,12 @@ def send_email_messages(user_id,
     user = get_user_model().objects.get(id=user_id)
     action = Action.objects.get(id=action_id)
 
+    # Modify the time of execution for the action
+    action.last_executed = datetime.datetime.now(pytz.timezone(
+        ontask_settings.TIME_ZONE)
+    )
+    action.save()
+
     # Get the log_item to modify the message
     log_item = Log.objects.get(pk=log_id)
     payload = log_item.get_payload()

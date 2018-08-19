@@ -1,17 +1,12 @@
 {% load i18n %}
-<form method="post" action="{% url 'action:create' is_out %}"
+<form method="post" action="{% url 'action:create' %}"
       class="js-action-create-form">
   {% csrf_token %}
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" arial-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title">
-    {% if is_out %}
-      {% trans 'Create a new action out' %}
-    {% else %}
-      {% trans 'Create a new action in' %}
-    {% endif %}</h4>
+    <h4 class="modal-title">{% trans 'Create a new action' %}
   </div>
   <div class="modal-body">
     {% include 'action/includes/partial_form_fields.html' %}
@@ -20,11 +15,6 @@
     <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}
     </button>
     <button type="submit" class="btn btn-primary">
-    <span class="glyphicon glyphicon-ok"></span> 
-    {% if is_out %}
-      {% trans 'Create action out' %}
-    {% else %}
-      {% trans 'Create action in' %}
-    {% endif %}</button>
+    <span class="glyphicon glyphicon-ok"></span> {% trans 'Create action' %}
   </div>
 </form>

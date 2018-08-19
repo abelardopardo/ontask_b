@@ -55,7 +55,7 @@
 {% block title %}{{ block.super }}{% trans 'Edit Action In' %}{% endblock %}
 {% block container %}
   <div align="center" class="container-fluid" id="action-in-editor">
-    <h1 class="page-header"><strong>{{ action.name }}</strong></h1>
+    <h1 class="page-header"><strong>{{ action.name }}</strong> <small>({{ action.get_action_type_display }})</small></h1>
     <div>
       {% include 'action/includes/partial_filter_create_buttons.html' %}
     </div>
@@ -170,7 +170,7 @@
         <span class="glyphicon glyphicon-ok"></span> {% trans 'Done' %}
       </a>
       <a href="{% url 'action:run' action.id %}"
-         class="btn btn-primary {% if not action.is_correct %}disabled{% endif %}"
+         class="btn btn-primary {% if not action.survey_is_correct %}disabled{% endif %}"
          data-toggle="tooltip"
          title="{% trans 'Enter data manually' %}">
         <span class="glyphicon glyphicon-off"></span> {% trans 'Run' %}

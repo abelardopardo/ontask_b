@@ -41,20 +41,12 @@
 {% block container %}
 <div align="center" class="container">
   <h1 class="page-header">{% trans 'Actions' %}</h1>
-  <p>
+  <div class="dropdown">
     <button type="button" class="btn btn-primary js-create-action"
-            data-url="{% url 'action:create' 0 %}"
-            data-toggle="tooltip"
-            title="New action to collect data from learners">
-      <span class="glyphicon glyphicon-plus"></span>
-        {% trans 'New Action In' %}
-    </button>
-    <button type="button" class="btn btn-primary js-create-action"
-            data-url="{% url 'action:create' 1 %}"
-            data-toggle="tooltip"
-            title="New action to provide personalised content">
-      <span class="glyphicon glyphicon-plus"></span>
-        {% trans 'New Action Out' %}
+       data-url="{% url 'action:create' %}"
+       data-toggle="tooltip"
+       title="New action to collect data from learners">
+      <span class="glyphicon glyphicon-plus"></span> {% trans 'New Action' %}
     </button>
     {% if has_table %}
       <a href="{% url 'action:import' %}"
@@ -62,7 +54,7 @@
          data-toggle="tooltip" title="Import action previously exported">
         <span class="glyphicon glyphicon-import"></span> {% trans 'Import action' %}</a>
     {% endif %}
-  </p>
+  </div>
   {% render_table table %}
   <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">

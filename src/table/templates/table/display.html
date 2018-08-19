@@ -61,10 +61,11 @@
 {% endblock %}
 {% block title %}{{ block.super }}{% trans 'Table' %}{% endblock %}
 {% block container %}
-  <div id="table-content" align="center" class="container-fluid"
-       style="padding-top:2ex;">
+  <div id="table-content" align="center" class="container-fluid">
     {% if view %}
-      <h4>{% blocktrans %}Table view <strong>{{ view.name }}</strong>{% endblocktrans %}</h4>
+      <h4>{% blocktrans %}View <strong>{{ view.name }}</strong>{% endblocktrans %}</h4>
+    {% else %}
+      <h1>{% trans 'Table View' %}</h1>
     {% endif %}
     {% if columns %}
       <div style="padding-bottom: 2ex;">
@@ -167,7 +168,7 @@
             <th rowspan="2"></th>
             {% for col in columns %}
               <th class="text-center">
-                <div class="dropdown">
+                <div class="dropdown" style="display: inline-table;">
                   <button class="btn btn-primary btn-sm dropdown-toggle"
                           type="button"
                           data-toggle="dropdown">{{ col.name }}

@@ -8,8 +8,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.utils.html import escape
-from validate_email import validate_email
 from django.utils.translation import ugettext_lazy as _
+from validate_email import validate_email
 
 import dataops.formula_evaluation
 from action.forms import EnterActionIn
@@ -332,7 +332,7 @@ def evaluate_row_action_out(action, context, text=None):
         return None
 
     # Invoke the appropriate function depending on the action type
-    if not action.is_out:
+    if action.is_in:
         raise Exception(_('Incorrect type of action'))
 
     if text is None:

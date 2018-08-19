@@ -813,7 +813,7 @@ def search_table_rows(workflow_id,
 
     fields = []
     # If there has been a suffix from the filter, add it.
-    if filter_txt and filter_fields:
+    if filter_txt:
         query += filter_txt
         fields.extend(filter_fields)
 

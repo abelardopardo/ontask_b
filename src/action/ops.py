@@ -35,9 +35,9 @@ from action.evaluate import evaluate_row_action_out, evaluate_action, \
     get_row_values
 from action.forms import EnterActionIn, field_prefix
 from action.models import Action
+from action.serializers import ActionSelfcontainedSerializer
 from dataops import pandas_db, ops
 from workflow.models import Column
-from workflow.serializers import ActionSelfcontainedSerializer
 from . import settings
 
 
@@ -97,15 +97,22 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
                'action': action,
                'cancel_url': cancel_url}
 
+    # request_csrf_token = request.POST.get('csrfmiddlewaretokenone')
     if request.method == 'GET' or not form.is_valid():
         return render(request, 'action/run_row.html', context)
 
     # Correct POST request!
-    if not form.has_changed():
-        if not is_inst:
-            return redirect(reverse('action:thanks'))
+    # if not form.has_changed():
+    #     if not is_inst:
+    #         return redirect(reverse('action:thanks'))
+    #
+    #     return redirect(reverse('action:run', kwargs={'pk': action.id}))
 
-        return redirect(reverse('action:run', kwargs={'pk': action.id}))
+    # Modify the time of execution for the action
+    action.last_executed = datetime.datetime.now(pytz.timezone(
+        ontask_settings.TIME_ZONE)
+    )
+    action.save()
 
     # Post with different data. # Update content in the DB
     set_fields = []
@@ -278,7 +285,7 @@ def clone_action(action, new_workflow=None, new_name=None):
     old_action = Action.objects.get(id=old_id)
 
     # Clone the columns field (in case of an action in).
-    if not action.is_out:
+    if action.is_in:
         column_names = old_action.columns.all().values_list('name', flat=True)
         action.columns.clear()
         action.columns.add(

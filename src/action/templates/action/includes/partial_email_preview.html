@@ -24,8 +24,11 @@
   <div class="modal-body" style="text-align: left; border: solid 1px black;margin: 0 2ex 2ex 2ex;">
     {{ action_content }}
   </div>
-  <div class="modal-body" style="text-align: left; border: solid 1px black;margin: 0 2ex 2ex 2ex;">
-    {% if show_values %}<strong>{% trans 'Values:' %}</strong> {{ show_values }}{% endif %}
-  </div>
+  {% if action.is_out and show_values %}
+    <div class="modal-body"
+         style="text-align: left; border: solid 1px black;margin: 0 2ex 2ex 2ex;">
+      <strong>{% trans 'Values:' %}</strong> {{ show_values }}
+    </div>
+  {% endif %}
 </div>
 

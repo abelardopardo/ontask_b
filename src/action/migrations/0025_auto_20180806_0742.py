@@ -20,8 +20,6 @@ def update_content_and_columns(apps, schema_editor):
     for action in Action.objects.all():
         if not action.is_out:
             continue
-   
-  #     action.set_content(action.get_content())
 
 
 class Migration(migrations.Migration):
