@@ -272,13 +272,13 @@ def evaluate_action(action, extra_string, column_name):
                     e.message
                 )
 
-    # If column_name was given (and it exists), create a tuple with that
-    # element as the third component
-    if col_idx != -1:
-        partial_result.append(row_values[col_names[col_idx]])
+        # If column_name was given (and it exists), create a tuple with that
+        # element as the third component
+        if col_idx != -1:
+            partial_result.append(row_values[col_names[col_idx]])
 
-    # Append result
-    result.append(partial_result)
+        # Append result
+        result.append(partial_result)
 
     return result
 
