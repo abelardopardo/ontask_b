@@ -1,4 +1,10 @@
-## 2.8.1 (2018-08-14)
+## 2.8.3 (2018-08-21)
+
+### Fixed
+
+- Fixed bug accidentally introduced when committing code.
+
+## 2.8.2 (2018-08-14)
 
 ### Fixed
 
