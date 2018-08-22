@@ -19,19 +19,12 @@ urlpatterns = [
         views_action.ActionCreateView.as_view(), name='create'),
 
     # Edit action Out
-    url(r'^(?P<pk>\d+)/edit_out/$',
-        views_action.edit_action_out,
-        name='edit_out'),
+    url(r'^(?P<pk>\d+)/edit/$', views_action.edit_action, name='edit'),
 
     # Save action out content
     url(r'^(?P<pk>\d+)/action_out_save_content/$',
         views_action.action_out_save_content,
         name='action_out_save_content'),
-
-    # Edit action In
-    url(r'^(?P<pk>\d+)/edit_in/$',
-        views_action.edit_action_in,
-        name='edit_in'),
 
     # Action export ask
     url(r'^(?P<pk>\d+)/export_ask/$',
@@ -51,6 +44,23 @@ urlpatterns = [
     # Action import
     url(r'^import/$', views_action.action_import, name='import'),
 
+    # Update an action
+    url(r'^(?P<pk>\d+)/update/$',
+        views_action.ActionUpdateView.as_view(),
+        name='update'),
+
+    # Clone the action
+    url(r'^(?P<pk>\d+)/clone/$', views_action.clone, name='clone'),
+
+    # Nuke the action
+    url(r'^(?P<pk>\d+)/delete/$', views_action.delete_action, name='delete'),
+
+    # Run action
+    url(r'^(?P<pk>\d+)/run/$', views_action.run, name='run'),
+
+    #
+    # ACTION IN EDIT PAGE
+    #
     # Select key column for action in
     url(r'^(?P<apk>\d+)/(?P<cpk>\d+)/(?P<key>\d+)/select_column_action/$',
         views_action.select_column_action,
@@ -71,30 +81,26 @@ urlpatterns = [
         views_action.shuffle_questions,
         name='shuffle_questions'),
 
-    # Update an action of type 0: in, 1: Out
-    url(r'^(?P<pk>\d+)/update/$',
-        views_action.ActionUpdateView.as_view(),
-        name='update'),
-
-    # Clone the action
-    url(r'^(?P<pk>\d+)/clone/$', views_action.clone, name='clone'),
-
-    # Nuke the action
-    url(r'^(?P<pk>\d+)/delete/$', views_action.delete_action, name='delete'),
-
-    # Run action in
-    url(r'^(?P<pk>\d+)/run/$', views_action.run, name='run'),
-
-    # Server side update of the run page for action in
-    url(r'^(?P<pk>\d+)/run_ss/$', views_action.run_ss, name='run_ss'),
+    #
+    # RUN SURVEY
+    #
+    # Server side update of the run survey page for action in
+    url(r'^(?P<pk>\d+)/run_survey_ss/$',
+        views_action.run_survey_ss,
+        name='run_survey_ss'),
 
     # Run action in a row. Can be executed by the instructor or the
     # learner!!
-    url(r'^(?P<pk>\d+)/run_row/$', views_action.run_row, name='run_row'),
+    url(r'^(?P<pk>\d+)/run_survey_row/$',
+        views_action.run_survey_row,
+        name='run_survey_row'),
 
     # Say thanks
     url(r'thanks/$', views_action.thanks, name='thanks'),
 
+    #
+    # Action OUT
+    #
     # Preview content of the action
     url(r'^(?P<pk>\d+)/(?P<idx>\d+)/preview/$',
         views_action.preview,
@@ -151,14 +157,8 @@ urlpatterns = [
         name='clone_condition'),
 
     #
-    # Email
+    # Previews
     #
-    # Request data to send email
-    url(r'^(?P<pk>\d+)/send_email/$',
-        views_email.request_data,
-        name="send_email"),
-
-    # Preview emails
     url(r'^(?P<pk>\d+)/(?P<idx>\d+)/email_preview/$',
         views_email.preview,
         name='email_preview'),

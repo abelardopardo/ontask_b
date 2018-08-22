@@ -19,9 +19,16 @@
       <span class="glyphicon glyphicon-chevron-right"></span>
     </button>
   </div>
+  {% if not correct_json %}
+    <p class="alert-danger">Incorrect JSON object. Check action text</p>
+  {% endif %}
   <div class="modal-body"
        style="text-align: left; border: solid 1px black;margin: 0 2ex 2ex 2ex;">
-    {{ action_content }}
+    {% if action.action_type == 'personalized_json' %}
+      <pre>{{ action_content }}</pre>
+    {% else %}
+      {{ action_content }}
+    {% endif %}
   </div>
   {% if action.is_out and show_values %}
     <div class="modal-body"

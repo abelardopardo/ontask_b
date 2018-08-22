@@ -8,12 +8,14 @@ import re
 import pytz
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
+from django.core.validators import URLValidator
 from django.db import models
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
 from dataops import formula_evaluation, pandas_db
 from dataops.formula_evaluation import get_variables, evaluate_top_node
+from logs.models import Log
 from ontask import OntaskException
 from workflow.models import Workflow, Column
 
@@ -64,10 +66,13 @@ class Action(models.Model):
 
     modified = models.DateTimeField(auto_now=True, null=False)
 
-    # Record the last time this action was executed
-    last_executed = models.DateTimeField(null=True,
-                                         blank=True,
-                                         verbose_name=_('Last execution'))
+    # Reference to the record of the last execution
+    last_executed_log = models.ForeignKey(
+        Log,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
 
     # Action type
     action_type = models.CharField(
@@ -131,7 +136,7 @@ class Action(models.Model):
                     (self.active_to and self.active_to < now))
 
     @property
-    def survey_is_correct(self):
+    def is_executable(self):
         """
         Function to ask if an action is correct. All actions out are correct,
         and action ins are correct if they have at least one key column and one
@@ -139,8 +144,30 @@ class Action(models.Model):
         :return: Boolean stating correctness
         """
 
-        return self.columns.filter(is_key=True).exists() and \
-               self.columns.filter(is_key=False).exists()
+        if self.action_type == Action.PERSONALIZED_TEXT:
+            return True
+
+        if self.action_type == Action.PERSONALIZED_JSON:
+            # If None or empty, return false
+            if not self.target_url:
+                return False
+
+            # Validate the URL
+            validator = URLValidator()
+            valid_url = True
+            try:
+                validator(self.target_url)
+            except:
+                valid_url = False
+            return valid_url
+
+        if self.action_type == Action.SURVEY or self.action_type == \
+                Action.TODO_LIST:
+            return self.columns.filter(is_key=True).exists() and \
+                   self.columns.filter(is_key=False).exists()
+
+        raise Exception('Function is_executable not implemented for action '
+                        '{0}'.format(self.get_action_type_display()))
 
     @property
     def is_in(self):

@@ -160,7 +160,7 @@ class ActionSerializer(serializers.ModelSerializer):
                    'workflow',
                    'created',
                    'modified',
-                   'last_executed')
+                   'last_executed_log')
 
 
 class ActionSelfcontainedSerializer(serializers.ModelSerializer):
@@ -323,4 +323,4 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
                    'workflow',
                    'created',
                    'modified',
-                   'last_executed')
+                   'last_executed_log')

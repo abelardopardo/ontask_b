@@ -52,18 +52,17 @@ def send_email_messages(user_id,
     user = get_user_model().objects.get(id=user_id)
     action = Action.objects.get(id=action_id)
 
-    # Modify the time of execution for the action
-    action.last_executed = datetime.datetime.now(pytz.timezone(
-        ontask_settings.TIME_ZONE)
-    )
-    action.save()
-
     # Get the log_item to modify the message
     log_item = Log.objects.get(pk=log_id)
     payload = log_item.get_payload()
     payload['status'] = 'Executing'
     log_item.set_payload(payload)
     log_item.save()
+
+    # Set the log in the action
+    if action.last_executed_log != log_item:
+        action.last_executed_log = log_item
+        action.save()
 
     msg = 'Finished'
     try:
@@ -135,19 +134,19 @@ def execute_email_actions(debug):
         bcc_email = [x.strip() for x in item.bcc_email.split(',') if x]
 
         # Log the event
-        log_id = logs.ops.put(item.user,
-                              'schedule_email_execute',
-                              item.action.workflow,
-                              {'action': item.action.name,
-                               'action_id': item.action.id,
-                               'execute': item.execute.isoformat(),
-                               'subject': item.subject,
-                               'email_column': item.email_column.name,
-                               'cc_email': cc_email,
-                               'bcc_email': bcc_email,
-                               'send_confirmation': item.send_confirmation,
-                               'track_read': item.track_read,
-                               'status': 'pre-execution'})
+        log_item = logs.ops.put(item.user,
+                                'schedule_email_execute',
+                                item.action.workflow,
+                                {'action': item.action.name,
+                                 'action_id': item.action.id,
+                                 'execute': item.execute.isoformat(),
+                                 'subject': item.subject,
+                                 'email_column': item.email_column.name,
+                                 'cc_email': cc_email,
+                                 'bcc_email': bcc_email,
+                                 'send_confirmation': item.send_confirmation,
+                                 'track_read': item.track_read,
+                                 'status': 'pre-execution'})
 
         send_email_messages(item.user.id,
                             item.action.id,
@@ -158,11 +157,13 @@ def execute_email_actions(debug):
                             bcc_email,
                             item.send_confirmation,
                             item.track_read,
-                            log_id)
+                            log_item.id)
 
         # Store the resulting message in the record
         item.message = \
-            'Operation executed. Status available in Log {0}'.format(log_id)
+            'Operation executed. Status available in Log {0}'.format(
+                log_item.id
+            )
 
         # Save the new status in the DB
         item.save()

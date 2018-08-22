@@ -170,7 +170,7 @@
         <span class="glyphicon glyphicon-ok"></span> {% trans 'Done' %}
       </a>
       <a href="{% url 'action:run' action.id %}"
-         class="btn btn-primary {% if not action.survey_is_correct %}disabled{% endif %}"
+         class="btn btn-primary {% if not action.is_executable %}disabled{% endif %}"
          data-toggle="tooltip"
          title="{% trans 'Enter data manually' %}">
         <span class="glyphicon glyphicon-off"></span> {% trans 'Run' %}

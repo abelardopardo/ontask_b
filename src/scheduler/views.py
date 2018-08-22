@@ -13,8 +13,8 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse
 from django.template.loader import render_to_string
 from django.utils.html import format_html
-from django_tables2 import A
 from django.utils.translation import ugettext_lazy as _
+from django_tables2 import A
 
 # Create your views here.
 import logs
@@ -95,7 +95,7 @@ class ScheduleEmailActionTable(tables.Table):
     def render_action(self, record):
         return format_html(
             '<a href="{0}">{1}</a>'.format(
-                reverse('action:edit_out',
+                reverse('action:edit',
                         kwargs={'pk': record.action.id}),
                 record.action.name
             )

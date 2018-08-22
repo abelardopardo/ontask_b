@@ -8,8 +8,8 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse
 from django.template.loader import render_to_string
-from django.views import generic
 from django.utils.translation import ugettext_lazy as _
+from django.views import generic
 
 import logs
 import logs.ops
@@ -463,7 +463,7 @@ def delete_condition(request, pk):
         # Perform the delete operation
         condition.delete()
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('action:edit_out',
+        data['html_redirect'] = reverse('action:edit',
                                         kwargs={'pk': condition.action.id})
         return JsonResponse(data)
 
@@ -519,5 +519,5 @@ def clone(request, pk):
 
     messages.success(request,
                      _('Action successfully cloned.'))
-    return redirect(reverse('action:edit_out',
+    return redirect(reverse('action:edit',
                             kwargs={'pk': condition.action.id}))

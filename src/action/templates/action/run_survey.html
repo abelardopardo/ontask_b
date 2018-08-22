@@ -24,7 +24,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                  url: "{% url 'action:run_ss' action.id %}",
+                  url: "{% url 'action:run_survey_ss' action.id %}",
                   type: 'POST',
                 },
                 "order": [0],
@@ -45,7 +45,7 @@
        style="padding-top:2ex;">
     <h4 class="page-header">
       <strong>{{ action.name }}</strong>
-      <a href="{% url 'action:edit_in' action.id %}"
+      <a href="{% url 'action:edit' action.id %}"
          class="btn btn-primary btn-sm align-middle">
       <span class="glyphicon glyphicon-folder-open"></span> {% trans 'Edit' %}</a>
     </h4>

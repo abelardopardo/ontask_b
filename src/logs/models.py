@@ -24,6 +24,8 @@ class Log(models.Model):
 
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
+    modified = models.DateTimeField(auto_now=True, null=False)
+
     # Type of event logged see above
     name = models.CharField(max_length=256, blank=False)
 

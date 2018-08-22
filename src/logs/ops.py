@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
+
 from django.utils.translation import ugettext_lazy as _
 
 from .models import Log
@@ -73,4 +74,4 @@ def put(user, name, workflow, payload):
     event.set_payload(payload)
     event.save()
 
-    return event.id
+    return event

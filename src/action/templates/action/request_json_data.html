@@ -7,14 +7,14 @@
 {% block scripts %}
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
 {% endblock scripts %}
-{% block title %}{{ block.super }}{% trans 'Email action' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'JSON action' %}{% endblock %}
 {% block container %}
-<div align="center" class="container-fluid" id="email-action-request-data">
-  <h1 class="page-header">{% blocktrans with n=action.name %}Send emails for
+<div align="center" class="container-fluid" id="json-action-request-data">
+  <h1 class="page-header">{% blocktrans with n=action.name %}Send JSON objects for
     action "{{ n }}"{% endblocktrans %}</h1>
   <div class="container">
     {% if num_msgs > 0 %}
-      <p>{% blocktrans with n=num_msgs%}{{ n }} Emails will be sent.{% endblocktrans %}</p>
+      <p>{% blocktrans with n=num_msgs%}{{ n }} JSON objects will be sent.{% endblocktrans %}</p>
       <form action="" method="post">
         {% csrf_token %}
         <div class="input-group input-group-lg">
@@ -23,9 +23,9 @@
             <a type="button" class="btn btn-default"
                href="{% url 'action:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
             </a>
-            <button type="button" class="btn btn-primary js-email-preview"
+            <button type="button" class="btn btn-primary js-json-preview"
                     style="margin-right:2ex;"
-                    data-url="{% url 'action:email_preview' action.id 1 %}">
+                    data-url="{% url 'action:preview' action.id 1 %}">
               <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Preview' %}
             </button>
             <button type="Submit" name="Submit" value="Send"

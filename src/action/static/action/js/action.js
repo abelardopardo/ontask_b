@@ -205,6 +205,7 @@ $(function () {
   // Preview
   $("#html-editor").on("click", ".js-action-preview", loadFormPost);
   $("#email-action-request-data").on("click", ".js-email-preview", loadForm);
+  $("#json-action-request-data").on("click", ".js-json-preview", loadForm);
   $("#action-in-editor").on("click", ".js-action-preview", loadForm);
   $(".modal-content").on("click", ".js-action-preview-nxt", loadForm);
   $(".modal-content").on("click", ".js-action-preview-prv", loadForm);

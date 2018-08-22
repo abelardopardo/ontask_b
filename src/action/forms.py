@@ -55,10 +55,10 @@ class EditActionOutForm(forms.ModelForm):
         else:
             # Add the target_url field
             self.fields['target_url'] = forms.CharField(
-                initial='',
+                initial=self.instance.target_url,
                 label=_('Target URL'),
                 strip=True,
-                required=True,
+                required=False,
                 widget=forms.Textarea(
                     attrs={
                         'rows': 1,
@@ -77,7 +77,7 @@ class EditActionOutForm(forms.ModelForm):
 
     class Meta:
         model = Action
-        fields = ('content', 'target_url')
+        fields = ('content',)
 
 
 # Form to enter values in a row
@@ -194,7 +194,7 @@ class EnableURLForm(forms.ModelForm):
         }
 
 
-class EmailActionBasicForm(forms.Form):
+class EmailActionForm(forms.Form):
     subject = forms.CharField(max_length=1024,
                               strip=True,
                               required=True,
@@ -209,7 +209,7 @@ class EmailActionBasicForm(forms.Form):
         label=_('Comma separated list of CC emails'),
         required=False
     )
-    bcc_email = forms.ChoiceField(
+    bcc_email = forms.CharField(
         label=_('Comma separated list of BCC emails'),
         required=False
     )
@@ -226,10 +226,17 @@ class EmailActionBasicForm(forms.Form):
         label=_('Track email reading in an extra column?')
     )
 
+    export_wf = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Download a snapshot of the current state of the workflow?'),
+        help_text=_('A zip file useful to review the emails sent.')
+    )
+
     def __init__(self, *args, **kargs):
         self.column_names = kargs.pop('column_names')
 
-        super(EmailActionBasicForm, self).__init__(*args, **kargs)
+        super(EmailActionForm, self).__init__(*args, **kargs)
 
         # Try to guess if there is an "email" column
         initial_choice = next((x for x in self.column_names
@@ -248,12 +255,21 @@ class EmailActionBasicForm(forms.Form):
         widgets = {'subject': forms.TextInput(attrs={'size': 256})}
 
 
-class EmailActionForm(EmailActionBasicForm):
-    export_wf = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_('Download a snapshot of the current state of the workflow?'),
-        help_text=_('A zip file useful to review the emails sent.')
+class JSONActionForm(forms.Form):
+    token = forms.CharField(
+        initial='',
+        label=_('Authentication Token'),
+        strip=True,
+        required=True,
+        help_text=_('Authentication token provided by the external platform.'),
+        widget=forms.Textarea(
+            attrs={
+                'rows': 1,
+                'cols': 120,
+                'placeholder': _('Authentication token to be sent with the '
+                                 'JSON object.')
+            }
+        )
     )
 
 

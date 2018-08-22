@@ -9,12 +9,12 @@
   <div class="modal-body text-center">
     <button type="button"
             class="btn btn-info js-action-preview-prv"
-            data-url="{% url 'action:email_preview' action.id prv %}">
+            data-url="{% url 'action:preview' action.id prv %}">
       <span class="glyphicon glyphicon-chevron-left"></span>
     </button>
     <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Close' %}</button>
     <button type="button" class="btn btn-info js-action-preview-nxt"
-            data-url="{% url 'action:email_preview' action.id nxt %}">
+            data-url="{% url 'action:preview' action.id nxt %}">
       <span class="glyphicon glyphicon-chevron-right"></span>
     </button>
   </div>

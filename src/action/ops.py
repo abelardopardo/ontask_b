@@ -99,7 +99,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
 
     # request_csrf_token = request.POST.get('csrfmiddlewaretokenone')
     if request.method == 'GET' or not form.is_valid():
-        return render(request, 'action/run_row.html', context)
+        return render(request, 'action/run_survey_row.html', context)
 
     # Correct POST request!
     # if not form.has_changed():
@@ -107,12 +107,6 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
     #         return redirect(reverse('action:thanks'))
     #
     #     return redirect(reverse('action:run', kwargs={'pk': action.id}))
-
-    # Modify the time of execution for the action
-    action.last_executed = datetime.datetime.now(pytz.timezone(
-        ontask_settings.TIME_ZONE)
-    )
-    action.save()
 
     # Post with different data. # Update content in the DB
     set_fields = []
@@ -147,13 +141,17 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
     for act in action.workflow.actions.all():
         act.update_n_rows_selected()
 
-    # Log the event
-    logs.ops.put(request.user,
-                 'tablerow_update',
-                 action.workflow,
-                 {'id': action.workflow.id,
-                  'name': action.workflow.name,
-                  'new_values': log_payload})
+    # Log the event and update its content in the action
+    log_item = logs.ops.put(request.user,
+                            'tablerow_update',
+                            action.workflow,
+                            {'id': action.workflow.id,
+                             'name': action.workflow.name,
+                             'new_values': log_payload})
+
+    # Modify the time of execution for the action
+    action.last_executed_log = log_item
+    action.save()
 
     # If not instructor, just thank the user!
     if not is_inst:
