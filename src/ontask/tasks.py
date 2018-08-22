@@ -107,7 +107,7 @@ def execute_email_actions(debug):
     s_items = ScheduledEmailAction.objects.filter(
         type='email_send',
         status=0,  # Pending
-        execute__lt=now
+        execute__lt=now + datetime.timedelta(minutes=1)
     )
     logger.info(str(s_items.count()) + ' actions pending execution')
 
