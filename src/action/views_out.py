@@ -175,8 +175,8 @@ def run_json_action(request, workflow, action):
                              'status': 'Preparing to execute'})
 
     # Send the objects
-    send_json_objects(request.user.id,
-    # send_json_objects.delay(request.user.id,
+    # send_json_objects(request.user.id,
+    send_json_objects.delay(request.user.id,
                             action.id,
                             form.cleaned_data['token'],
                             log_item.id)
