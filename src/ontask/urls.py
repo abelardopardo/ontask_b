@@ -115,7 +115,7 @@ try:
     site = Site.objects.get(pk=settings.SITE_ID)
     site.domain = settings.DOMAIN_NAME
     site.name = settings.DOMAIN_NAME
-    site.savse()
+    site.save()
 except Exception:
     # To bypass the migrate command execution that fails because the Site
     # table is not created yet.
