@@ -6,17 +6,17 @@
     <script>location.href="{% url 'workflow:export' 1 %}";</script>
   {% endif %}
 {% endblock scripts %}
-{% block title %}{% trans 'Email action' %}{% endblock %}
+{% block title %}{% trans 'Action execution' %}{% endblock %}
 {% block container %}
   {% url 'logs:view' log_id as record_url %}
-  <div class="container-fluid" style="margin-top:50px;text-align:center;">
-    <h1 class="page-header text-center">{% trans 'Email action' %}</h1>
-    <p class="text-center">{% trans 'Emails are being processed.' %}
+  <div class="container-fluid" style="text-align:center;">
+    <h1 class="page-header text-center">{% trans 'Action scheduled for execution' %}</h1>
+    <div class="text-center">
       <a href="{{ record_url }}">{% blocktrans %}You may check the status in
-        log record number {{ log_id }}.{% endblocktrans %}</a></p>
+        log record number {{ log_id }}.{% endblocktrans %}</a>
+    </div>
     <button type="button" class="btn btn-default"
       onclick="location.href='{% url 'action:index' %}'">{% trans 'Back' %}
     </button>
-
   </div>
 {% endblock container %}

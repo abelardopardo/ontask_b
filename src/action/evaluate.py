@@ -173,7 +173,7 @@ def render_template(template_text, context_dict, action=None):
     return Template(new_template_text).render(Context(new_context))
 
 
-def evaluate_action(action, extra_string, column_name):
+def evaluate_action(action, extra_string=None, column_name=None):
     """
     Given an action object and an optional string:
     1) Access the attached workflow
@@ -215,16 +215,6 @@ def evaluate_action(action, extra_string, column_name):
     # Step 3: Get the table data
     result = []
     data_frame = pandas_db.get_subframe(workflow.id, cond_filter)
-
-    # Check if the values in the email column are correct emails
-    try:
-        correct_emails = all([validate_email(x)
-                              for x in data_frame[column_name]])
-        if not correct_emails:
-            # column has incorrect email addresses
-            return _('The column with email addresses has incorrect values.')
-    except TypeError:
-        return _('The column with email addresses has incorrect values.')
 
     for __, row in data_frame.iterrows():
 

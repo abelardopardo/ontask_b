@@ -201,7 +201,7 @@ def save_email_schedule(request, workflow, action, schedule_item):
     now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
     tdelta = s_item.execute - now
     return render(request,
-                  'scheduler/email_done.html',
+                  'scheduler/action_done.html',
                   {'tdelta': str(tdelta),
                    's_item': s_item})
 

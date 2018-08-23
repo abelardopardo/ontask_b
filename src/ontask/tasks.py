@@ -12,12 +12,56 @@ from django.core import signing
 
 import logs.ops
 from action.models import Action
-from action.ops import send_messages
+from action.ops import send_messages, send_json
 from dataops import pandas_db
 from logs.models import Log
 from scheduler.models import ScheduledEmailAction
 
 logger = get_task_logger(__name__)
+
+
+def get_execution_items(user_id, action_id, log_id):
+    """
+    Given a set of ids, get the objects from the DB
+    :param user_id: User id
+    :param action_id: Action id (to be executed)
+    :param log_id: Log id (to store execution report)
+    :return: (user, action, log)
+    """
+
+    # Get the objects
+    user = get_user_model().objects.get(id=user_id)
+    action = Action.objects.get(id=action_id)
+
+    # Set the log in the action
+    log_item = Log.objects.get(pk=log_id)
+    if action.last_executed_log != log_item:
+        action.last_executed_log = log_item
+        action.save()
+
+    # Update some fields in the log
+    payload = log_item.get_payload()
+    payload['datetime'] = \
+        str(datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)))
+    payload['filter_present'] = \
+        action.conditions.filter(is_filter=True) is not None
+    log_item.set_payload(payload)
+    log_item.save()
+
+    return user, action, log_item
+
+
+def update_payload_status(log_item, msg):
+    """
+    Update the field "status" in the log used for the execution
+    :param log_item: Log object containing the payload to update
+    :param msg: String to store in field status
+    :return: Nothing. Object updated in DB
+    """
+    payload = log_item.get_payload()
+    payload['status'] = msg
+    log_item.set_payload(payload)
+    log_item.save()
 
 
 @shared_task
@@ -49,20 +93,7 @@ def send_email_messages(user_id,
     """
 
     # Get the objects
-    user = get_user_model().objects.get(id=user_id)
-    action = Action.objects.get(id=action_id)
-
-    # Get the log_item to modify the message
-    log_item = Log.objects.get(pk=log_id)
-    payload = log_item.get_payload()
-    payload['status'] = 'Executing'
-    log_item.set_payload(payload)
-    log_item.save()
-
-    # Set the log in the action
-    if action.last_executed_log != log_item:
-        action.last_executed_log = log_item
-        action.save()
+    user, action, log_item = get_execution_items(user_id, action_id, log_id)
 
     msg = 'Finished'
     try:
@@ -74,7 +105,8 @@ def send_email_messages(user_id,
                                cc_email_list,
                                bcc_email_list,
                                send_confirmation,
-                               track_read)
+                               track_read,
+                               log_item)
         # If the result has some sort of message, push it to the log
         if result:
             msg = 'Incorrect execution: ' + str(result)
@@ -87,9 +119,41 @@ def send_email_messages(user_id,
         logger.info(msg)
 
     # Update the message in the payload
-    payload['status'] = msg
-    log_item.set_payload(payload)
-    log_item.save()
+    update_payload_status(log_item, msg)
+
+
+@shared_task
+def send_json_objects(user_id, action_id, token, log_id):
+    """
+    This function invokes send_json in action/ops.py, gets the JSON objects
+    that may be sent as a result, and records the appropriate events.
+
+    :param user_id: Id of User object that is executing the action
+    :param action_id: Id of Action object from where the messages are taken
+    :param token: String to include as authorisation token
+    :param log_id: Id of the log object where the status has to be reflected
+    :return: Nothing
+    """
+
+    # Get the objects
+    user, action, log_item = get_execution_items(user_id, action_id, log_id)
+
+    msg = 'Finished'
+    try:
+        # If the result has some sort of message, push it to the log
+        result = send_json(user, action, token, log_item)
+        if result:
+            msg = 'Incorrect execution: ' + str(result)
+            logger.error(msg)
+
+    except Exception as e:
+        msg = 'Error while executing send_messages: {0}'.format(e.message)
+        logger.error(msg)
+    else:
+        logger.info(msg)
+
+    # Update the message in the payload
+    update_payload_status(log_item, msg)
 
 
 @shared_task
@@ -139,6 +203,7 @@ def execute_email_actions(debug):
                                 item.action.workflow,
                                 {'action': item.action.name,
                                  'action_id': item.action.id,
+                                 'from_email': item.user.email,
                                  'execute': item.execute.isoformat(),
                                  'subject': item.subject,
                                  'email_column': item.email_column.name,
@@ -146,7 +211,7 @@ def execute_email_actions(debug):
                                  'bcc_email': bcc_email,
                                  'send_confirmation': item.send_confirmation,
                                  'track_read': item.track_read,
-                                 'status': 'pre-execution'})
+                                 'status': 'Preparing to execute'})
 
         send_email_messages(item.user.id,
                             item.action.id,
@@ -174,7 +239,8 @@ def increase_track_count(method, get_dict):
     """
     Function to process track requests asynchronously.
 
-    :param request: HTTP request object.
+    :param method: GET or POST received in the request
+    :param get_dict: GET dictionary received in the request
     :return: If correct, increases one row of the DB by one
     """
 

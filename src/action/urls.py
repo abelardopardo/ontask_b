@@ -3,7 +3,7 @@ from __future__ import unicode_literals, print_function
 
 from django.conf.urls import url
 
-from . import views_action, views_condition, views_email
+from . import views_action, views_condition, views_out
 
 app_name = 'action'
 
@@ -101,9 +101,9 @@ urlpatterns = [
     #
     # Action OUT
     #
-    # Preview content of the action
+    # Preview action content
     url(r'^(?P<pk>\d+)/(?P<idx>\d+)/preview/$',
-        views_action.preview,
+        views_out.preview_response,
         name='preview'),
 
     # Allow url on/off toggle
@@ -155,12 +155,5 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/clone_condition/$',
         views_condition.clone,
         name='clone_condition'),
-
-    #
-    # Previews
-    #
-    url(r'^(?P<pk>\d+)/(?P<idx>\d+)/email_preview/$',
-        views_email.preview,
-        name='email_preview'),
 
 ]

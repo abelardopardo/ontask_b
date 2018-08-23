@@ -35,6 +35,7 @@ log_types = {
     'action_serve_toggled': _('Action URL toggled'),
     'action_served_execute': _('Action served'),
     'action_import': _('Action imported'),
+    'action_json_sent': _('Emails sent'),
     'condition_create': _('Condition created'),
     'condition_update': _('Condition updated'),
     'condition_delete': _('Condition deleted'),
@@ -60,6 +61,7 @@ log_types = {
     'schedule_email_edit': _('Edit scheduled email action'),
     'schedule_email_delete': _('Delete scheduled email action'),
     'schedule_email_execute': _('Execute scheduled email action'),
+    'schedule_json_execute': _('Execute scheduled JSON action'),
 }
 
 

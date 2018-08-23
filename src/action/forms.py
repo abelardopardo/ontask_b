@@ -7,7 +7,9 @@ from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteInplaceWidget
+from validate_email import validate_email
 
+from dataops.pandas_db import execute_select_on_table
 from ontask import ontask_prefs, is_legal_name
 from ontask.forms import column_to_field, dateTimeOptions, RestrictedFileField
 from .models import Action, Condition
@@ -235,6 +237,7 @@ class EmailActionForm(forms.Form):
 
     def __init__(self, *args, **kargs):
         self.column_names = kargs.pop('column_names')
+        self.action = kargs.pop('action')
 
         super(EmailActionForm, self).__init__(*args, **kargs)
 
@@ -250,6 +253,30 @@ class EmailActionForm(forms.Form):
         self.fields['email_column'].initial = initial_choice,
         self.fields['email_column'].choices = \
             [(x, x) for x in self.column_names]
+
+    def clean(self):
+        data = super(EmailActionForm, self).clean()
+
+        email_column = self.cleaned_data['email_column']
+
+        # Check if the values in the email column are correct emails
+        try:
+            column_data = execute_select_on_table(self.action.workflow.id,
+                                                  [],
+                                                  [],
+                                                  column_names=[email_column])
+            if not all([validate_email(x[0]) for x in column_data]):
+                # column has incorrect email addresses
+                self.add_error(
+                    'email_column',
+                    _('The column with email addresses has incorrect values.')
+                )
+        except TypeError:
+            self.add_error(
+                'email_column',
+                _('The column with email addresses has incorrect values.')
+            )
+        return data
 
     class Meta:
         widgets = {'subject': forms.TextInput(attrs={'size': 256})}

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+import pytz
 from django.db import IntegrityError
 from django.utils.html import format_html
 
-from action.views_email import preview_response, run_json_action
+from action.views_out import run_json_action, run_email_action
 from visualizations.plotly import PlotlyHandler
 
 try:
@@ -27,10 +28,10 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 import logs.ops
-from action.evaluate import (
-    render_template)
+from action.evaluate import render_template
 from dataops import ops, pandas_db
 from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
@@ -40,11 +41,16 @@ from .forms import (
     ActionForm,
     EditActionOutForm,
     EnableURLForm,
-    ActionDescriptionForm, ActionImportForm)
-from action.ops import serve_action_in, serve_action_out, clone_action, \
-    do_export_action, do_import_action
+    ActionDescriptionForm, ActionImportForm
+)
+from action.ops import (
+    serve_action_in,
+    serve_action_out,
+    clone_action,
+    do_export_action,
+    do_import_action
+)
 from .models import Action, Condition
-from .views_email import run_email_action
 
 
 #
@@ -81,7 +87,9 @@ class ActionTable(tables.Table):
             return format_html(
                 """<a href="{0}">{1}</a>""".format(
                     reverse('logs:view', kwargs={'pk': log_item.id}),
-                    log_item.modified
+                    log_item.modified.astimezone(
+                        pytz.timezone(settings.TIME_ZONE)
+                    )
                 )
             )
         return "---"
@@ -855,28 +863,6 @@ def shuffle_questions(request, pk):
     return JsonResponse({'shuffle': action.shuffle})
 
 
-@csrf_exempt
-@user_passes_test(is_instructor)
-def preview(request, pk, idx):
-    """
-    HTML request and the primary key of an action to preview one of its
-    instances. The request must provide and additional parameter idx to
-    denote which instance to show. The request must be POST because it may
-    include the current text in the action (with changes) and it needs to be
-    updated in the database.
-
-    :param request: HTML request object
-    :param pk: Primary key of the an action for which to do the preview
-    :param idx: Index of the element to preview (from the queryset)
-    :return:
-    """
-
-    return preview_response(request,
-                            pk,
-                            idx,
-                            'action/includes/partial_action_preview.html')
-
-
 @user_passes_test(is_instructor)
 def showurl(request, pk):
     """
@@ -1070,7 +1056,6 @@ def run(request, pk):
         return run_email_action(request, workflow, action)
 
     if action.action_type == Action.PERSONALIZED_JSON:
-        # TODO!!!
         return run_json_action(request, workflow, action)
 
     if action.action_type == Action.SURVEY:
