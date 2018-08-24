@@ -948,7 +948,7 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
             name='Registered',
             action=action_out,
         )
-        filter = Condition.objects.get(action=action_out, is_filter=True)
+        filter_obj = action_out.get_filter()
 
         # pre-conditions
         # Column name is the correct one
@@ -964,7 +964,7 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
         # Attribute name is present in action_out text
         self.assertTrue('{{ attribute name }}' in action_out.content)
         # Column name is present in action-in filter
-        self.assertTrue(has_variable(filter.formula, 'age'))
+        self.assertTrue(has_variable(filter_obj.formula, 'age'))
 
         # Login
         self.login('instructor1@bogus.com')
@@ -1109,7 +1109,7 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
         action_in = Action.objects.get(pk=action_in.id)
         action_out = Action.objects.get(pk=action_out.id)
         condition = Condition.objects.get(pk=condition.id)
-        filter = Condition.objects.get(action=action_out, is_filter=True)
+        filter_obj = action_out.get_filter()
 
         # Post conditions
         # Column name is the correct one
@@ -1129,8 +1129,8 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
         # Attribute name is present in action_out text
         #self.assertTrue('{{ attribute name new }}' in action_out.content)
         # Column age is present in action-in filter
-        self.assertFalse(has_variable(filter.formula, 'age'))
-        self.assertTrue(has_variable(filter.formula, 'age new'))
+        self.assertFalse(has_variable(filter_obj.formula, 'age'))
+        self.assertTrue(has_variable(filter_obj.formula, 'age new'))
 
         # End of session
         self.logout()

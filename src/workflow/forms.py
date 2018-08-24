@@ -295,7 +295,7 @@ class FormulaColumnAddForm(forms.ModelForm):
     # Columns to combine
     columns = forms.MultipleChoiceField([],
                                         required=False,
-                                        label='Columns to combine*')
+                                        label=_('Columns to combine*'))
 
     # Type of operation
     op_type = forms.ChoiceField(

@@ -5,13 +5,13 @@ var set_qbuilder = function (element_id, qbuilder_options) {
     }
     $('#builder').queryBuilder(qbuilder_options);
 };
-var set_column_select = function(element_id) {
+var set_element_select = function(element_id) {
   $(element_id).searchableOptionList({
     maxHeight: '250px',
     showSelectAll: true,
     texts: {
-      searchplaceholder: gettext('Click here to search for columns'),
-      noItemsAvailable: gettext('No columns found'),
+      searchplaceholder: gettext('Click here to search'),
+      noItemsAvailable: gettext('No element found'),
     },
   });
  }
@@ -66,7 +66,7 @@ var loadForm = function () {
           set_qbuilder('#id_formula', qbuilder_options);
         }
         if (document.getElementById("id_columns") != null) {
-          set_column_select("#id_columns");
+          set_element_select("#id_columns");
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -109,7 +109,7 @@ var saveForm = function () {
             set_qbuilder('#id_formula', qbuilder_options);
           }
           if (document.getElementById("id_columns") != null) {
-            set_column_select("#id_columns");
+            set_element_select("#id_columns");
           }
         }
       },

@@ -15,8 +15,10 @@
       <a href="{{ record_url }}">{% blocktrans %}You may check the status in
         log record number {{ log_id }}.{% endblocktrans %}</a>
     </div>
-    <button type="button" class="btn btn-default"
-      onclick="location.href='{% url 'action:index' %}'">{% trans 'Back' %}
-    </button>
+    <div class="modal-footer" style="text-align: center;">
+      <button type="button" class="btn btn-default"
+        onclick="location.href='{% url 'action:index' %}'">{% trans 'Back' %}
+      </button>
+    </div>
   </div>
 {% endblock container %}

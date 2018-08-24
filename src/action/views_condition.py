@@ -75,8 +75,7 @@ def save_condition_form(request,
         # Process the filter form
         # If this is a create filter operation, but the action has one,
         # flag the error
-        if is_new and Condition.objects.filter(action=action,
-                                               is_filter=True).exists():
+        if is_new and action.get_filter():
             # Should not happen. Go back to editing the action
             data['form_is_valid'] = True
             data['html_redirect'] = ''

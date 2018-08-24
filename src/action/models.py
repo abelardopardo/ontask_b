@@ -178,6 +178,9 @@ class Action(models.Model):
     def is_out(self):
         return not self.is_in
 
+    def get_filter(self):
+        return self.conditions.filter(is_filter=True).first()
+
     def get_content(self):
         """
         Get the action out content
@@ -254,7 +257,7 @@ class Action(models.Model):
             self.content = new_text
         else:
             # Action in: Need to change name appearances in filter
-            fcond = self.conditions.filter(is_filter=True).first()
+            fcond = self.get_filter()
             if fcond:
                 fcond.formula = formula_evaluation.rename_variable(
                     fcond.formula, old_name, new_name
@@ -276,11 +279,11 @@ class Action(models.Model):
         """
 
         # Get the filter, if it exists.
-        filter = self.conditions.filter(is_filter=True).first()
-        if filter:
+        filter_obj = self.get_filter()
+        if filter_obj:
             # If there is a filter, update the filter and this call
             # propagates to the other conditions. Nothing else is needed.
-            filter.update_n_rows_selected(column=column)
+            filter_obj.update_n_rows_selected(column=column)
             return
 
         # This action does not have a filter, so simply recalculate the value

@@ -188,8 +188,7 @@ def upload_s2(request):
                   'column_unique': col_info[2]})
 
     # Go back to show the workflow detail
-    return redirect(reverse('workflow:detail',
-                            kwargs={'pk': workflow.id}))
+    return redirect(reverse('workflow:detail', kwargs={'pk': workflow.id}))
 
 
 @user_passes_test(is_instructor)
