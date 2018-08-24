@@ -138,8 +138,7 @@ def view(request, pk):
 
     context = {'log_item': log_item}
 
-    # TODO: Change the model to include directly a JSON object, not this.
-    context['json_pretty'] = json.dumps(json.loads(log_item.payload),
+    context['json_pretty'] = json.dumps(log_item.payload,
                                         sort_keys=True,
                                         indent=4)
 

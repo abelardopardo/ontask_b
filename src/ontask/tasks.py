@@ -40,27 +40,12 @@ def get_execution_items(user_id, action_id, log_id):
         action.save()
 
     # Update some fields in the log
-    payload = log_item.get_payload()
-    payload['datetime'] = \
+    log_item.payload['datetime'] = \
         str(datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)))
-    payload['filter_present'] = action.get_filter() is not None
-    log_item.set_payload(payload)
+    log_item.payload['filter_present'] = action.get_filter() is not None
     log_item.save()
 
     return user, action, log_item
-
-
-def update_payload_status(log_item, msg):
-    """
-    Update the field "status" in the log used for the execution
-    :param log_item: Log object containing the payload to update
-    :param msg: String to store in field status
-    :return: Nothing. Object updated in DB
-    """
-    payload = log_item.get_payload()
-    payload['status'] = msg
-    log_item.set_payload(payload)
-    log_item.save()
 
 
 @shared_task
@@ -121,7 +106,8 @@ def send_email_messages(user_id,
         logger.info(msg)
 
     # Update the message in the payload
-    update_payload_status(log_item, msg)
+    log_item.payload['status'] = msg
+    log_item.save()
 
 
 @shared_task
@@ -155,7 +141,8 @@ def send_json_objects(user_id, action_id, token, log_id):
         logger.info(msg)
 
     # Update the message in the payload
-    update_payload_status(log_item, msg)
+    log_item.payload['status'] = msg
+    log_item.save()
 
 
 @shared_task

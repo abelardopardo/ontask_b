@@ -451,9 +451,7 @@ def send_messages(user,
                 break
 
         # Get the log item payload to store the tracking column
-        log_payload = log_item.get_payload()
-        log_payload['track_column'] = track_col_name
-        log_item.set_payload(log_payload)
+        log_item.payload['track_column'] = track_col_name
         log_item.save()
 
     # Update the number of filtered rows if the action has a filter (table
@@ -566,13 +564,11 @@ def send_messages(user,
         logs.ops.put(user, 'action_email_sent', action.workflow, context)
 
     # Update data in the log item
-    log_payload = log_item.get_payload()
-    log_payload['objects_sent'] = len(result)
-    log_payload['filter_present'] =  cfilter is not None
-    log_payload['datetime'] = str(datetime.datetime.now(pytz.timezone(
+    log_item.payload['objects_sent'] = len(result)
+    log_item.payload['filter_present'] =  cfilter is not None
+    log_item.payload['datetime'] = str(datetime.datetime.now(pytz.timezone(
         ontask_settings.TIME_ZONE
     )))
-    log_item.set_payload(log_payload)
     log_item.save()
 
     # If no confirmation email is required, done
@@ -706,13 +702,11 @@ def send_json(user, action, token, log_item):
         logs.ops.put(user, 'action_json_sent', action.workflow, context)
 
     # Update data in the log item
-    log_payload = log_item.get_payload()
-    log_payload['objects_sent'] = len(result)
-    log_payload['filter_present'] =  cfilter is not None
-    log_payload['datetime'] = str(datetime.datetime.now(pytz.timezone(
+    log_item.payload['objects_sent'] = len(result)
+    log_item.payload['filter_present'] =  cfilter is not None
+    log_item.payload['datetime'] = str(datetime.datetime.now(pytz.timezone(
         ontask_settings.TIME_ZONE
     )))
-    log_item.set_payload(log_payload)
     log_item.save()
 
     return None

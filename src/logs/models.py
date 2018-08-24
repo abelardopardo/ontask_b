@@ -4,7 +4,9 @@ from __future__ import unicode_literals, print_function
 import json
 
 from django.conf import settings
+from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from workflow.models import Workflow
 
@@ -35,11 +37,10 @@ class Log(models.Model):
                                  null=True)
 
     # JSON element with additional information
-    # TODO: Change the model to include directly a JSON object, not this
-    payload = models.CharField(max_length=65536,
-                               default='',
-                               null=False,
-                               blank=False)
+    payload = JSONField(default=dict,
+                        blank=True,
+                        null=True,
+                        verbose_name=_('payload'))
 
     def get_payload(self):
         """
