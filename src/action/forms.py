@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteInplaceWidget
 from validate_email import validate_email
 
-from dataops.pandas_db import execute_select_on_table
+from dataops.pandas_db import execute_select_on_table, get_table_cursor
 from ontask import ontask_prefs, is_legal_name
 from ontask.forms import column_to_field, dateTimeOptions, RestrictedFileField
 from .models import Action, Condition
@@ -216,6 +216,12 @@ class EmailActionForm(forms.Form):
         required=False
     )
 
+    confirm_emails = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Check/exclude email addresses before sending?')
+    )
+
     send_confirmation = forms.BooleanField(
         initial=False,
         required=False,
@@ -238,19 +244,34 @@ class EmailActionForm(forms.Form):
     def __init__(self, *args, **kargs):
         self.column_names = kargs.pop('column_names')
         self.action = kargs.pop('action')
+        self.op_payload = kargs.pop('op_payload')
 
         super(EmailActionForm, self).__init__(*args, **kargs)
 
-        # Try to guess if there is an "email" column
-        initial_choice = next((x for x in self.column_names
-                               if 'email' == x.lower()), None)
 
-        if initial_choice is None:
-            initial_choice = ('', '---')
+        self.fields['subject'].initial = self.op_payload.get('subject', '')
+        email_column = self.op_payload.get('email_column', None)
+        self.fields['cc_email'].initial = self.op_payload.get('cc_email', '')
+        self.fields['bcc_email'].initial = self.op_payload.get('bcc_email', '')
+        self.fields['confirm_emails'].initial = self.op_payload.get(
+            'confirm_emails', False)
+        self.fields['send_confirmation'].initial = self.op_payload.get(
+            'send_confirmation', False)
+        self.fields['track_read'].initial = self.op_payload.get('track_read',
+                                                                False)
+        self.fields['export_wf'].initial = self.op_payload.get('export_wf',
+                                                               False)
+
+        if email_column is None:
+            # Try to guess if there is an "email" column
+            email_column = next((x for x in self.column_names
+                                   if 'email' == x.lower()), None)
+
+        if email_column is None:
+            email_column = ('', '---')
         else:
-            initial_choice = (initial_choice, initial_choice)
-
-        self.fields['email_column'].initial = initial_choice,
+            email_column = (email_column, email_column)
+        self.fields['email_column'].initial = email_column
         self.fields['email_column'].choices = \
             [(x, x) for x in self.column_names]
 
@@ -276,10 +297,43 @@ class EmailActionForm(forms.Form):
                 'email_column',
                 _('The column with email addresses has incorrect values.')
             )
+
+        if not all([validate_email(x)
+                    for x in self.cleaned_data['cc_email'].split(',') if x]):
+            self.add_error(
+                'cc_email',
+                _('Field needs a comma-separated list of emails.')
+            )
+
+        if not all([validate_email(x)
+                    for x in self.cleaned_data['bcc_email'].split(',') if x]):
+            self.add_error(
+                'bcc_email',
+                _('Field needs a comma-separated list of emails.')
+            )
+
         return data
 
     class Meta:
         widgets = {'subject': forms.TextInput(attrs={'size': 256})}
+
+
+class EmailExcludeForm(forms.Form):
+    # Email fields to exclude
+    exclude_values = forms.MultipleChoiceField([],
+                                               required=False,
+                                               label=_('Values to exclude'))
+
+    def __init__(self, data, *args, **kwargs):
+        self.action = kwargs.pop('action', None)
+        self.column_name = kwargs.pop('column_name', None)
+
+        super(EmailExcludeForm, self).__init__(data, *args, **kwargs)
+
+        self.fields['exclude_values'].choices = \
+            get_table_cursor(self.action.workflow.pk,
+                             self.action.get_filter(),
+                             [self.column_name, self.column_name]).fetchall()
 
 
 class JSONActionForm(forms.Form):

@@ -59,6 +59,16 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/run/$', views_action.run, name='run'),
 
     #
+    # Email action steps
+    #
+    url(r'^email_step2/$',
+        views_out.run_email_action_step2,
+        name='email_step2'),
+    url(r'^email_step3/$',
+        views_out.run_email_action_step3,
+        name='email_step3'),
+
+    #
     # ACTION IN EDIT PAGE
     #
     # Select key column for action in
@@ -99,9 +109,8 @@ urlpatterns = [
     url(r'thanks/$', views_action.thanks, name='thanks'),
 
     #
-    # Action OUT
+    # Preview action out
     #
-    # Preview action content
     url(r'^(?P<pk>\d+)/(?P<idx>\d+)/preview/$',
         views_out.preview_response,
         name='preview'),

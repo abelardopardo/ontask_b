@@ -23,7 +23,10 @@ from action.models import Action
 from ontask.permissions import is_instructor
 from ontask.tasks import send_email_messages, send_json_objects
 from workflow.ops import get_workflow
-from .forms import EmailActionForm, JSONActionForm
+from .forms import EmailActionForm, JSONActionForm, EmailExcludeForm
+
+# Dictionary to store in the session the data between forms.
+session_dictionary_name = 'send_email_action'
 
 
 def run_email_action(request, workflow, action):
@@ -36,10 +39,21 @@ def run_email_action(request, workflow, action):
     :return: HTTP response
     """
 
+    # Get the payload from the session, and if not, use the given one
+    op_payload = request.session.get(session_dictionary_name, None)
+    if not op_payload:
+        op_payload = {'action_id': action.id,
+                      'step_1_url': reverse('action:run',
+                                            kwargs={'pk': action.id}),
+                      'step_3_function': 'run_email_action_step3'}
+        request.session[session_dictionary_name] = op_payload
+        request.session.save()
+
     # Create the form to ask for the email subject and other information
     form = EmailActionForm(request.POST or None,
                            column_names=workflow.get_column_names(),
-                           action=action)
+                           action=action,
+                           op_payload=op_payload)
 
     # Verify that celery is running!
     celery_stats = None
@@ -58,15 +72,15 @@ def run_email_action(request, workflow, action):
     # Process the GET or invalid
     if request.method == 'GET' or not form.is_valid():
         # Get the number of rows from the action
-        filter_c = action.conditions.filter(is_filter=True).first()
-        num_msgs = filter_c.n_rows_selected if filter_c else -1
+        filter_obj = action.get_filter()
+        num_msgs = filter_obj.n_rows_selected if filter_obj else -1
         if num_msgs == -1:
             # There is no filter in the action, so take the number of rows
             num_msgs = workflow.nrows
 
         # Render the form
         return render(request,
-                      'action/request_email_data.html',
+                      'action/action_email_step1.html',
                       {'action': action,
                        'num_msgs': num_msgs,
                        'form': form})
@@ -74,12 +88,99 @@ def run_email_action(request, workflow, action):
     # Requet is a POST and is valid
     subject = form.cleaned_data['subject']
     email_column = form.cleaned_data['email_column']
-    cc_email = [x.strip() for x in form.cleaned_data['cc_email'].split(',')
-                if x]
-    bcc_email = [x.strip() for x in form.cleaned_data['bcc_email'].split(',')
-                 if x]
+    cc_email = form.cleaned_data['cc_email']
+    bcc_email = form.cleaned_data['bcc_email']
+    confirm_emails = form.cleaned_data['confirm_emails']
     send_confirmation = form.cleaned_data['send_confirmation']
     track_read = form.cleaned_data['track_read']
+
+    # Upload up_payload
+    op_payload['subject'] = subject
+    op_payload['email_column'] = email_column
+    op_payload['cc_email'] = cc_email
+    op_payload['bcc_email'] = bcc_email
+    op_payload['confirm_emails'] = confirm_emails
+    op_payload['send_confirmation'] = send_confirmation
+    op_payload['track_read'] = track_read
+    op_payload['export_wf'] = form.cleaned_data['export_wf']
+    op_payload['exclude_values'] = []
+
+    if confirm_emails:
+        # Create a dictionary in the session to carry over all the information
+        # to execute the next pages
+
+        request.session[session_dictionary_name] = op_payload
+
+        return redirect('action:email_step2')
+
+    # Go straight to the final step.
+    return run_email_action_step3(request, op_payload)
+
+
+def run_email_action_step2(request):
+    """
+    Offer a select widget to tick students to exclude from the email.
+    :param request: HTTP request (GET)
+    :return: HTTP response
+    """
+
+    # Get the payload from the session, and if not, use the given one
+    payload = request.session.get(session_dictionary_name, None)
+    if not payload:
+        # Something is wrong with this execution. Return to the action table.
+        messages.error(request,_('Incorrect email action invocation.'))
+        return redirect('action:index')
+
+    # Get the information from the payload
+    action = Action.objects.get(pk=payload['action_id'])
+
+    form = EmailExcludeForm(request.POST or None,
+                            action=action,
+                            column_name=payload['email_column'])
+    context = {
+        'form': form,
+        'action': action,
+        'prev_step': payload['step_1_url']
+    }
+
+    # Process the initial loading of the form and return
+    if request.method != 'POST' or not form.is_valid():
+        return render(request, 'action/action_email_step2.html', context)
+
+    # Updating the content of the exclude_values in the payload
+    payload['exclude_values'] = form.cleaned_data['exclude_values']
+
+    return globals().get(payload['step_3_function'])(request, payload)
+
+
+def run_email_action_step3(request, payload=None):
+    """
+    Final step. Create the log object, queue the operation request,
+    and render the DONE page.
+
+    :param request: HTTP request (GET)
+    :param payload: Dictionary containing all the required parameters. If
+    empty, the ditionary is taken from the session.
+    :return: HTTP response
+    """
+
+    # Get the payload from the session, and if not, use the given one
+    payload = request.session.get(session_dictionary_name, payload)
+    if not payload:
+        # Something is wrong with this execution. Return to the action table.
+        messages.error(request,_('Incorrect email action invocation.'))
+        return redirect('action:index')
+
+    # Get the information from the payload
+    action = Action.objects.get(pk=payload['action_id'])
+    subject = payload['subject']
+    email_column = payload['email_column']
+    cc_email = [x.strip() for x in payload['cc_email'].split(',') if x]
+    bcc_email = [x.strip() for x in payload['bcc_email'].split(',') if x]
+    send_confirmation = payload['send_confirmation']
+    track_read = payload['track_read']
+    export_wf = payload['export_wf']
+    exclude_values = payload['exclude_values']
 
     # Log the event
     log_item = logs.ops.put(request.user,
@@ -94,31 +195,27 @@ def run_email_action(request, workflow, action):
                              'bcc_email': bcc_email,
                              'send_confirmation': send_confirmation,
                              'track_read': track_read,
+                             'exclude_values': exclude_values,
                              'status': 'Preparing to execute'})
 
     # Send the emails!
     # send_email_messages(request.user.id,
     send_email_messages.delay(request.user.id,
                               action.id,
-                              form.cleaned_data['subject'],
-                              form.cleaned_data['email_column'],
+                              subject,
+                              email_column,
                               request.user.email,
                               cc_email,
                               bcc_email,
                               send_confirmation,
                               track_read,
+                              exclude_values,
                               log_item.id)
-
-    # If the export has been requested, go there and send it as
-    # response
-    context = {'log_id': log_item.id}
-    if form.cleaned_data['export_wf']:
-        context['download'] = True
 
     # Successful processing.
     return render(request,
                   'action/action_done.html',
-                  context)
+                  {'log_id': log_item.id, 'download': export_wf})
 
 
 def run_json_action(request, workflow, action):
@@ -150,8 +247,8 @@ def run_json_action(request, workflow, action):
     # Process the GET or invalid
     if request.method == 'GET' or not form.is_valid():
         # Get the number of rows from the action
-        filter_c = action.conditions.filter(is_filter=True).first()
-        num_msgs = filter_c.n_rows_selected if filter_c else -1
+        filter_obj = action.get_filter()
+        num_msgs = filter_obj.n_rows_selected if filter_obj else -1
         if num_msgs == -1:
             # There is no filter in the action, so take the number of rows
             num_msgs = workflow.nrows
@@ -233,8 +330,8 @@ def preview_response(request, pk, idx):
     idx = int(idx)
 
     # Get the total number of items
-    cfilter = action.conditions.filter(is_filter=True).first()
-    n_items = cfilter.n_rows_selected if cfilter else -1
+    filter_obj = action.get_filter()
+    n_items = filter_obj.n_rows_selected if filter_obj else -1
     if n_items == -1:
         n_items = workflow.nrows
 

@@ -406,6 +406,7 @@ def send_messages(user,
                   bcc_email_list,
                   send_confirmation,
                   track_read,
+                  exclude_values,
                   log_item):
     """
     Performs the submission of the emails for the given action and with the
@@ -420,6 +421,7 @@ def send_messages(user,
     :param bcc_email_list: List of emails to include in the BCC
     :param send_confirmation: Boolean to send confirmation to sender
     :param track_read: Should read tracking be included?
+    :param exclude_values: List of values to exclude from the mailing
     :param log_item: Log object to store results
     :return: Send the emails
     """
@@ -428,7 +430,8 @@ def send_messages(user,
     # the email column.
     result = evaluate_action(action,
                              extra_string=subject,
-                             column_name=email_column)
+                             column_name=email_column,
+                             exclude_values=exclude_values)
 
     # Check the type of the result to see if it was successful
     if not isinstance(result, list):
@@ -455,7 +458,7 @@ def send_messages(user,
 
     # Update the number of filtered rows if the action has a filter (table
     # might have changed)
-    cfilter = action.conditions.filter(is_filter=True).first()
+    cfilter = action.get_filter()
     if cfilter and cfilter.n_rows_selected != len(result):
         cfilter.n_rows_selected = len(result)
         cfilter.save()
@@ -649,7 +652,7 @@ def send_json(user, action, token, log_item):
 
     # Update the number of filtered rows if the action has a filter (table
     # might have changed)
-    cfilter = action.conditions.filter(is_filter=True).first()
+    cfilter = action.get_filter()
     if cfilter and cfilter.n_rows_selected != len(result):
         cfilter.n_rows_selected = len(result)
         cfilter.save()

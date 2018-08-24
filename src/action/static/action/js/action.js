@@ -239,4 +239,9 @@ $(function () {
   $("#modal-item").on("submit", ".js-column-clone-form", saveForm);
 });
 
+window.onload = function(){
+  if (document.getElementById("id_exclude_values") != null) {
+    set_element_select("#id_exclude_values");
+  }
+};
 

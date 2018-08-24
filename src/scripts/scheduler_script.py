@@ -112,6 +112,7 @@ def execute_email_actions(debug):
                             bcc_email,
                             item.send_confirmation,
                             item.track_read,
+                            [], # TODO, include this as a possibility
                             log_item.id)
 
         # Store the resulting message in the record

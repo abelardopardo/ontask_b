@@ -5,7 +5,8 @@ import pytz
 from django.db import IntegrityError
 from django.utils.html import format_html
 
-from action.views_out import run_json_action, run_email_action
+from action.views_out import run_json_action, run_email_action, \
+    session_dictionary_name
 from visualizations.plotly import PlotlyHandler
 
 try:
@@ -245,6 +246,10 @@ def action_index(request):
     if not workflow:
         return redirect('workflow:index')
 
+    # Reset object to carry action info throughout dialogs
+    request.session[session_dictionary_name] = {}
+    request.session.save()
+
     # Get the actions
     actions = Action.objects.filter(workflow__id=workflow.id)
 
@@ -473,16 +478,8 @@ def edit_action_out(request, workflow, action):
     # Create the form
     form = EditActionOutForm(request.POST or None, instance=action)
 
-    # See if the action has a filter or not
-    try:
-        filter_condition = Condition.objects.get(action=action, is_filter=True)
-    except Condition.DoesNotExist:
-        filter_condition = None
-    except Condition.MultipleObjectsReturned:
-        return render(
-            request, 'error.html',
-            {'message': _('Malfunction detected when retrieving filter '
-                          '(action: {0})').format(action.id)})
+    # Get the filter or None
+    filter_condition = action.get_filter()
 
     # Conditions to show in the page.
     conditions = Condition.objects.filter(
@@ -558,19 +555,8 @@ def edit_action_in(request, workflow, action):
     :return: HTTP response
     """
 
-    # See if the action has a filter or not
-    try:
-        filter_condition = Condition.objects.get(
-            action=action, is_filter=True
-        )
-    except Condition.DoesNotExist:
-        filter_condition = None
-    except Condition.MultipleObjectsReturned:
-        return render(
-            request, 'error.html',
-            {'message': _('Malfunction detected when retrieving filter '
-                          '(action: {0})').format(action.id)}
-        )
+    # Get filter or None
+    filter_condition = action.get_filter()
 
     # Get the number of rows in DF selected by filter.
     if filter_condition:
@@ -1143,7 +1129,7 @@ def run_survey_ss(request, pk):
         cv_tuples = [(c.name, search_value, c.data_type) for c in columns]
 
     # Filter
-    cfilter = action.conditions.filter(is_filter=True).first()
+    cfilter = action.get_filter()
 
     # Get the query set (including the filter in the action)
     qs = pandas_db.search_table_rows(

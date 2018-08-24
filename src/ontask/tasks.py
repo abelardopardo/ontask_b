@@ -43,8 +43,7 @@ def get_execution_items(user_id, action_id, log_id):
     payload = log_item.get_payload()
     payload['datetime'] = \
         str(datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)))
-    payload['filter_present'] = \
-        action.conditions.filter(is_filter=True) is not None
+    payload['filter_present'] = action.get_filter() is not None
     log_item.set_payload(payload)
     log_item.save()
 
@@ -74,6 +73,7 @@ def send_email_messages(user_id,
                         bcc_email_list,
                         send_confirmation,
                         track_read,
+                        exclude_values,
                         log_id):
     """
     This function invokes send_messages in action/ops.py, gets the message
@@ -88,6 +88,7 @@ def send_email_messages(user_id,
     :param bcc_email_list: List of BCC emails
     :param send_confirmation: Boolean to send confirmation to sender
     :param track_read: Boolean to try to track reads
+    :param exclude_values: List of values to exclude from the mailing
     :param log_id: Id of the log object where the status has to be reflected
     :return: Nothing
     """
@@ -106,6 +107,7 @@ def send_email_messages(user_id,
                                bcc_email_list,
                                send_confirmation,
                                track_read,
+                               exclude_values,
                                log_item)
         # If the result has some sort of message, push it to the log
         if result:
@@ -222,6 +224,7 @@ def execute_email_actions(debug):
                             bcc_email,
                             item.send_confirmation,
                             item.track_read,
+                            [], # TODO Allow for exclude_values field
                             log_item.id)
 
         # Store the resulting message in the record

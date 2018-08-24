@@ -28,9 +28,10 @@
                     data-url="{% url 'action:preview' action.id 1 %}">
               <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Preview' %}
             </button>
-            <button type="Submit" name="Submit" value="Send"
+            <button type="Submit" name="Submit" value="Submit"
                     style="margin-right:2ex;"
-                    class="btn btn-success">{% trans 'Send' %}</button>
+                    class="btn btn-primary btn-space">
+              <span class="glyphicon glyphicon-triangle-right"></span> {% trans 'Next' %}</button>
           </div>
         </div>
       </form>
