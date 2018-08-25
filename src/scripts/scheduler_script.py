@@ -20,6 +20,7 @@ from django.utils.translation import ugettext_lazy as _
 
 import logs
 from core import settings as core_settings
+from logs.models import Log
 from ontask.tasks import send_email_messages
 from scheduler.models import ScheduledEmailAction
 
@@ -89,19 +90,21 @@ def execute_email_actions(debug):
         bcc_email = [x.strip() for x in bcc_email.split(',') if x]
 
         # Log the event
-        log_item = logs.ops.put(item.user,
-                                'schedule_email_execute',
-                                item.action.workflow,
-                                {'action': item.action.name,
-                                 'action_id': item.action.id,
-                                 'execute': item.execute.isoformat(),
-                                 'subject': item.subject,
-                                 'email_column': item.email_column.name,
-                                 'cc_email': cc_email,
-                                 'bcc_email': bcc_email,
-                                 'send_confirmation': item.send_confirmation,
-                                 'track_read': item.track_read,
-                                 'status': 'pre-execution'})
+        log_item = Log.objects.record(
+            item.user,
+            Log.SCHEDULE_EMAIL_EXECUTE,
+            item.action.workflow,
+            {'action': item.action.name,
+             'action_id': item.action.id,
+             'execute': item.execute.isoformat(),
+             'subject': item.subject,
+             'email_column': item.email_column.name,
+             'cc_email': cc_email,
+             'bcc_email': bcc_email,
+             'send_confirmation': item.send_confirmation,
+             'track_read': item.track_read,
+             'status': 'pre-execution'}
+        )
 
         send_email_messages(item.user.id,
                             item.action.id,
@@ -112,7 +115,7 @@ def execute_email_actions(debug):
                             bcc_email,
                             item.send_confirmation,
                             item.track_read,
-                            [], # TODO, include this as a possibility
+                            [],  # TODO, include this as a possibility
                             log_item.id)
 
         # Store the resulting message in the record

@@ -18,6 +18,10 @@ urlpatterns = [
         views.email_create,
         name="create_email"),
 
+    url(r'^finish_schedule/$',
+        views.scheduler_finalize_action,
+        name='finish_schedule'),
+
     # Edit scheduled email action
     url(r'^(?P<pk>\d+)/edit_email/$', views.edit_email, name='edit_email'),
 

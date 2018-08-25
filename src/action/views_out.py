@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.csrf import csrf_exempt
 
 from action.evaluate import (
@@ -26,7 +26,7 @@ from workflow.ops import get_workflow
 from .forms import EmailActionForm, JSONActionForm, EmailExcludeForm
 
 # Dictionary to store in the session the data between forms.
-session_dictionary_name = 'send_email_action'
+session_dictionary_name = 'action_run_payload'
 
 
 def run_email_action(request, workflow, action):
@@ -43,17 +43,11 @@ def run_email_action(request, workflow, action):
     op_payload = request.session.get(session_dictionary_name, None)
     if not op_payload:
         op_payload = {'action_id': action.id,
-                      'step_1_url': reverse('action:run',
+                      'prev_url': reverse('action:run',
                                             kwargs={'pk': action.id}),
-                      'step_3_function': 'run_email_action_step3'}
+                      'post_url': reverse('action:email_step3')}
         request.session[session_dictionary_name] = op_payload
         request.session.save()
-
-    # Create the form to ask for the email subject and other information
-    form = EmailActionForm(request.POST or None,
-                           column_names=workflow.get_column_names(),
-                           action=action,
-                           op_payload=op_payload)
 
     # Verify that celery is running!
     celery_stats = None
@@ -68,6 +62,14 @@ def run_email_action(request, workflow, action):
             _('Unable to send emails due to a misconfiguration. '
               'Ask your system administrator to enable email queueing.'))
         return redirect(reverse('action:index'))
+
+    # Create the form to ask for the email subject and other information
+    form = EmailActionForm(
+        request.POST or None,
+        column_names=[x.name for x in workflow.columns.filter(is_key=True)],
+        action=action,
+        op_payload=op_payload
+    )
 
     # Process the GET or invalid
     if request.method == 'GET' or not form.is_valid():
@@ -94,7 +96,7 @@ def run_email_action(request, workflow, action):
     send_confirmation = form.cleaned_data['send_confirmation']
     track_read = form.cleaned_data['track_read']
 
-    # Upload up_payload
+    # Upload op_payload
     op_payload['subject'] = subject
     op_payload['email_column'] = email_column
     op_payload['cc_email'] = cc_email
@@ -108,49 +110,13 @@ def run_email_action(request, workflow, action):
     if confirm_emails:
         # Create a dictionary in the session to carry over all the information
         # to execute the next pages
-
+        op_payload['button_label'] = ugettext('Send')
         request.session[session_dictionary_name] = op_payload
 
-        return redirect('action:email_step2')
+        return redirect('action:email_filter')
 
     # Go straight to the final step.
     return run_email_action_step3(request, op_payload)
-
-
-def run_email_action_step2(request):
-    """
-    Offer a select widget to tick students to exclude from the email.
-    :param request: HTTP request (GET)
-    :return: HTTP response
-    """
-
-    # Get the payload from the session, and if not, use the given one
-    payload = request.session.get(session_dictionary_name, None)
-    if not payload:
-        # Something is wrong with this execution. Return to the action table.
-        messages.error(request, _('Incorrect email action invocation.'))
-        return redirect('action:index')
-
-    # Get the information from the payload
-    action = Action.objects.get(pk=payload['action_id'])
-
-    form = EmailExcludeForm(request.POST or None,
-                            action=action,
-                            column_name=payload['email_column'])
-    context = {
-        'form': form,
-        'action': action,
-        'prev_step': payload['step_1_url']
-    }
-
-    # Process the initial loading of the form and return
-    if request.method != 'POST' or not form.is_valid():
-        return render(request, 'action/action_email_step2.html', context)
-
-    # Updating the content of the exclude_values in the payload
-    payload['exclude_values'] = form.cleaned_data['exclude_values']
-
-    return globals().get(payload['step_3_function'])(request, payload)
 
 
 def run_email_action_step3(request, payload=None):
@@ -164,12 +130,15 @@ def run_email_action_step3(request, payload=None):
     :return: HTTP response
     """
 
-    # Get the payload from the session, and if not, use the given one
-    payload = request.session.get(session_dictionary_name, payload)
-    if not payload:
-        # Something is wrong with this execution. Return to the action table.
-        messages.error(request, _('Incorrect email action invocation.'))
-        return redirect('action:index')
+    # Get the payload from the session if not given
+    if payload is None:
+        payload = request.session.get(session_dictionary_name)
+
+        # If there is no payload, something went wrong.
+        if payload is None:
+            # Something is wrong with this execution. Return to action table.
+            messages.error(request, _('Incorrect email action invocation.'))
+            return redirect('action:index')
 
     # Get the information from the payload
     action = Action.objects.get(pk=payload['action_id'])
@@ -211,6 +180,10 @@ def run_email_action_step3(request, payload=None):
                               track_read,
                               exclude_values,
                               log_item.id)
+
+    # Reset object to carry action info throughout dialogs
+    request.session[session_dictionary_name] = {}
+    request.session.save()
 
     # Successful processing.
     return render(request,
@@ -401,3 +374,41 @@ def preview_response(request, pk, idx):
                          request=request)
 
     return JsonResponse(data)
+
+
+def run_action_email_filter(request):
+    """
+    Offer a select widget to tick students to exclude from the email.
+    :param request: HTTP request (GET)
+    :return: HTTP response
+    """
+
+    # Get the payload from the session, and if not, use the given one
+    payload = request.session.get(session_dictionary_name, None)
+    if not payload:
+        # Something is wrong with this execution. Return to the action table.
+        messages.error(request, _('Incorrect email action invocation.'))
+        return redirect('action:index')
+
+    # Get the information from the payload
+    action = Action.objects.get(pk=payload['action_id'])
+
+    form = EmailExcludeForm(request.POST or None,
+                            action=action,
+                            column_name=payload['email_column'],
+                            exclude_values=payload.get('exclude_values', list))
+    context = {
+        'form': form,
+        'action': action,
+        'button_label': payload['button_label'],
+        'prev_step': payload['prev_url']
+    }
+
+    # Process the initial loading of the form and return
+    if request.method != 'POST' or not form.is_valid():
+        return render(request, 'action/action_email_filter.html', context)
+
+    # Updating the content of the exclude_values in the payload
+    payload['exclude_values'] = form.cleaned_data['exclude_values']
+
+    return redirect(payload['post_url'])

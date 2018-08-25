@@ -9,7 +9,7 @@
 {% endblock scripts %}
 {% block title %}{{ block.super }}{% trans 'Email action' %}{% endblock %}
 {% block container %}
-<div align="center" class="container-fluid" id="email-action-request-data">
+<div align="center" class="container" id="email-action-request-data">
   <h1 class="page-header">{% blocktrans with n=action.name %}Send emails for
     action "{{ n }}"{% endblocktrans %}</h1>
   <div class="container">
@@ -17,22 +17,20 @@
       <p>{% blocktrans with n=num_msgs%}{{ n }} Emails will be sent.{% endblocktrans %}</p>
       <form action="" method="post">
         {% csrf_token %}
-        <div class="input-group input-group-lg">
-          {{ form|crispy }}
-          <div class="text-center" style="margin: 1ex 0 1ex 0;">
-            <a type="button" class="btn btn-default"
-               href="{% url 'action:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
-            </a>
-            <button type="button" class="btn btn-primary js-email-preview"
-                    style="margin-right:2ex;"
-                    data-url="{% url 'action:preview' action.id 1 %}">
-              <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Preview' %}
-            </button>
-            <button type="Submit" name="Submit" value="Submit"
-                    style="margin-right:2ex;"
-                    class="btn btn-primary btn-space">
-              <span class="glyphicon glyphicon-triangle-right"></span> {% trans 'Next' %}</button>
-          </div>
+        {{ form|crispy }}
+        <div class="text-center" style="margin: 1ex 0 1ex 0;">
+          <a type="button" class="btn btn-default"
+             href="{% url 'action:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
+          </a>
+          <button type="button" class="btn btn-primary js-email-preview"
+                  style="margin-right:2ex;"
+                  data-url="{% url 'action:preview' action.id 1 %}">
+            <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Preview' %}
+          </button>
+          <button type="Submit" name="Submit" value="Submit"
+                  style="margin-right:2ex;"
+                  class="btn btn-primary btn-space">
+            <span class="glyphicon glyphicon-triangle-right"></span> {% trans 'Next' %}</button>
         </div>
       </form>
     {% else %}

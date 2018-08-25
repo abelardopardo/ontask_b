@@ -216,12 +216,6 @@ class EmailActionForm(forms.Form):
         required=False
     )
 
-    confirm_emails = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_('Check/exclude email addresses before sending?')
-    )
-
     send_confirmation = forms.BooleanField(
         initial=False,
         required=False,
@@ -241,6 +235,12 @@ class EmailActionForm(forms.Form):
         help_text=_('A zip file useful to review the emails sent.')
     )
 
+    confirm_emails = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Check/exclude email addresses before sending?')
+    )
+
     def __init__(self, *args, **kargs):
         self.column_names = kargs.pop('column_names')
         self.action = kargs.pop('action')
@@ -248,7 +248,7 @@ class EmailActionForm(forms.Form):
 
         super(EmailActionForm, self).__init__(*args, **kargs)
 
-
+        # Set the initial values from the payload
         self.fields['subject'].initial = self.op_payload.get('subject', '')
         email_column = self.op_payload.get('email_column', None)
         self.fields['cc_email'].initial = self.op_payload.get('cc_email', '')
@@ -327,6 +327,7 @@ class EmailExcludeForm(forms.Form):
     def __init__(self, data, *args, **kwargs):
         self.action = kwargs.pop('action', None)
         self.column_name = kwargs.pop('column_name', None)
+        self.exclude_init = kwargs.pop('exclude_values', list)
 
         super(EmailExcludeForm, self).__init__(data, *args, **kwargs)
 
@@ -334,6 +335,7 @@ class EmailExcludeForm(forms.Form):
             get_table_cursor(self.action.workflow.pk,
                              self.action.get_filter(),
                              [self.column_name, self.column_name]).fetchall()
+        self.fields['exclude_values'].initial = self.exclude_init
 
 
 class JSONActionForm(forms.Form):

@@ -5,6 +5,7 @@ This model is to store process to execute in the platform at a certain time.
 from __future__ import unicode_literals
 
 from django.conf import settings
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 
 from action.models import Action
@@ -127,3 +128,9 @@ class ScheduledEmailAction(ScheduledAction):
         verbose_name=_('Track if emails are read?'),
         null=False,
         blank=False)
+
+    # JSON element with additional information
+    exclude_values = JSONField(default=list,
+                               blank=True,
+                               null=True,
+                               verbose_name=_('payload'))

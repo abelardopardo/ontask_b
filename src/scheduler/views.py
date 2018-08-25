@@ -5,7 +5,9 @@ import datetime
 
 import django_tables2 as tables
 import pytz
+from celery.task.control import inspect
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
@@ -14,12 +16,13 @@ from django.shortcuts import render, redirect, reverse
 from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext
 from django_tables2 import A
 
-# Create your views here.
-import logs
 from action.models import Action
-from forms import EmailForm
+from action.views_out import session_dictionary_name
+from forms import EmailScheduleForm
+from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn, BooleanColumn
 from scheduler.models import ScheduledEmailAction
@@ -65,6 +68,11 @@ class ScheduleEmailActionTable(tables.Table):
         verbose_name=_('Email column'),
     )
 
+    exclude_values = tables.Column(
+        attrs={'td': {'class': 'dt-center'}},
+        verbose_name=_('Exclude'),
+    )
+
     cc_email = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
         verbose_name=_('CC Emails'),
@@ -101,12 +109,15 @@ class ScheduleEmailActionTable(tables.Table):
             )
         )
 
+    def render_exclude_values(self, record):
+        return ', '.join(record.exclude_values)
+
     class Meta:
         model = ScheduledEmailAction
 
         fields = ('action', 'created', 'execute', 'status', 'subject',
-                  'email_column', 'cc_email', 'bcc_email', 'send_confirmation',
-                  'track_read', 'operations', 'message')
+                  'email_column', 'exclude_values', 'cc_email', 'bcc_email',
+                  'send_confirmation', 'track_read', 'operations', 'message')
 
         sequence = ('operations',
                     'action',
@@ -115,6 +126,7 @@ class ScheduleEmailActionTable(tables.Table):
                     'status',
                     'subject',
                     'email_column',
+                    'exclude_values',
                     'cc_email',
                     'bcc_email',
                     'send_confirmation',
@@ -142,10 +154,35 @@ def save_email_schedule(request, workflow, action, schedule_item):
     :return:
     """
 
+    # Get the payload from the session, and if not, use the given one
+    op_payload = request.session.get(session_dictionary_name, None)
+    if not op_payload:
+        op_payload = {'action_id': action.id,
+                      'prev_url': reverse('scheduler:create_email',
+                                            kwargs={'pk': action.id}),
+                      'post_url': reverse('scheduler:finish_schedule')}
+        request.session[session_dictionary_name] = op_payload
+        request.session.save()
+
+    # Verify that celery is running!
+    celery_stats = None
+    try:
+        celery_stats = inspect().stats()
+    except Exception as e:
+        pass
+    # If the stats are empty, celery is not running.
+    if not celery_stats:
+        messages.error(
+            request,
+            _('Unable to send emails due to a misconfiguration. '
+              'Ask your system administrator to enable email queueing.'))
+        return redirect(reverse('action:index'))
+
     # Create the form to ask for the email subject and other information
-    form = EmailForm(data=request.POST or None,
-                     instance=schedule_item,
-                     columns=workflow.columns.filter(is_key=True))
+    form = EmailScheduleForm(data=request.POST or None,
+                             action=action,
+                             instance=schedule_item,
+                             columns=workflow.columns.filter(is_key=True))
 
     now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
     # Check if the request is GET, or POST but not valid
@@ -157,10 +194,7 @@ def save_email_schedule(request, workflow, action, schedule_item):
                        'form': form,
                        'now': now})
 
-    # We are processing a valid POST request
-
-    # Check that the email column has correct values (FIX)
-    # correct_emails = all([validate_email(x[col_idx]) for x in data_table])
+    # Processing a valid POST request
 
     # Save the schedule item object
     s_item = form.save(commit=False)
@@ -172,38 +206,97 @@ def save_email_schedule(request, workflow, action, schedule_item):
     s_item.status = 0  # Pending
     s_item.save()
 
+    # Upload information to the op_payload
+    op_payload['schedule_id'] = s_item.id
+    op_payload['exclude_values'] = s_item.exclude_values
+
+    if form.cleaned_data['confirm_emails']:
+        # Create a dictionary in the session to carry over all the
+        # information to execute the next steps
+        op_payload['email_column'] = s_item.email_column.name
+        op_payload['button_label'] = ugettext('Schedule')
+        request.session[session_dictionary_name] = op_payload
+
+        return redirect('action:email_filter')
+
+    # Go straight to the final step
+    return scheduler_finalize_action(request, op_payload)
+
+
+def scheduler_finalize_action(request, payload=None):
+    """
+    Finalize the creation of a scheduled action. All required data is passed
+    through the payload.
+
+    :param request: Request object received
+    :param payload: Dictionary with all the required data coming from
+    previous requests.
+    :return:
+    """
+
+    # Get the payload from the session if not given
+    if payload is None:
+        payload = request.session.get(session_dictionary_name)
+
+        # If there is no payload, something went wrong.
+        if payload is None:
+            # Something is wrong with this execution. Return to action table.
+            messages.error(request,
+                           _('Incorrect action scheduling invocation.'))
+            return redirect('action:index')
+
+    # Get the index
+    s_item_id = payload.get('schedule_id')
+    if not s_item_id:
+        messages.error(request, _('Incorrect parameters in action scheduling'))
+        return redirect('action:index')
+
+    # Get the item being processed
+    schedule_item = ScheduledEmailAction.objects.get(pk=s_item_id)
+
+    # Check for exclude values and store them if needed
+    exclude_values = payload.get('exclude_values')
+    if exclude_values:
+        schedule_item.exclude_values = exclude_values
+        schedule_item.save()
+
     # Create the payload to record the event in the log
-    payload = {
-        'workflow': workflow.name,
-        'workflow_id': workflow.id,
-        'action': action.name,
-        'action_id': action.id,
-        'execute': s_item.execute.isoformat(),
-        'subject': s_item.subject,
-        'email_column': s_item.email_column.name,
-        'send_confirmation': s_item.send_confirmation,
-        'track_read': s_item.track_read
+    log_payload = {
+        'action': schedule_item.action.name,
+        'action_id': schedule_item.action.id,
+        'execute': schedule_item.execute.isoformat(),
+        'subject': schedule_item.subject,
+        'email_column': schedule_item.email_column.name,
+        'send_confirmation': schedule_item.send_confirmation,
+        'track_read': schedule_item.track_read
     }
 
     # Log the operation
     if schedule_item:
-        log_type = 'schedule_email_edit'
+        log_type = Log.SCHEDULE_EMAIL_EDIT
     else:
-        log_type = 'schedule_email_create'
-    logs.ops.put(request.user,
-                 log_type,
-                 workflow,
-                 payload)
+        log_type = Log.SCHEDULE_EMAIL_CREATE
+
+    Log.objects.register(request.user,
+                         log_type,
+                         schedule_item.action.workflow,
+                         log_payload)
 
     # Notify the user. Show the time left until execution and a link to
     # view the scheduled events with possibility of editing/deleting.
     # Successful processing.
     now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-    tdelta = s_item.execute - now
+    tdelta = schedule_item.execute - now
+
+    # Reset object to carry action info throughout dialogs
+    request.session[session_dictionary_name] = {}
+    request.session.save()
+
+    # Successful processing.
     return render(request,
-                  'scheduler/action_done.html',
+                  'scheduler/schedule_done.html',
                   {'tdelta': str(tdelta),
-                   's_item': s_item})
+                   's_item': schedule_item})
 
 
 @user_passes_test(is_instructor)
@@ -325,16 +418,18 @@ def delete_email(request, pk):
 
     if request.method == 'POST':
         # Log the event
-        logs.ops.put(request.user,
-                     'schedule_email_delete',
-                     s_item.action.workflow,
-                     {'action': s_item.action.name,
-                      'action_id': s_item.action.id,
-                      'execute': s_item.execute.isoformat(),
-                      'subject': s_item.subject,
-                      'email_column': s_item.email_column.name,
-                      'send_confirmation': s_item.send_confirmation,
-                      'track_read': s_item.track_read})
+        Log.objects.record(
+            request.user,
+            Log.SCHEDULE_EMAIL_DELETE,
+            s_item.action.workflow,
+            {'action': s_item.action.name,
+             'action_id': s_item.action.id,
+             'execute': s_item.execute.isoformat(),
+             'subject': s_item.subject,
+             'email_column': s_item.email_column.name,
+             'send_confirmation': s_item.send_confirmation,
+             'track_read': s_item.track_read}
+        )
 
         # Perform the delete operation
         s_item.deleted = True

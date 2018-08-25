@@ -15,6 +15,7 @@ import logs
 from dataops import ops, pandas_db
 from dataops.forms import SQLConnectionForm, SQLRequestPassword
 from dataops.models import SQLConnection
+from logs.models import Log
 from ontask.permissions import is_instructor, is_admin
 from ontask.tables import OperationsColumn
 from workflow.ops import get_workflow
@@ -100,10 +101,10 @@ def save_conn_form(request, form, template_name):
 
     # Type of event to record
     if form.instance.id:
-        event_type = 'sql_connection_edit'
+        event_type = Log.SQL_CONNECTION_EDIT
         is_add = False
     else:
-        event_type = 'sql_connection_create'
+        event_type = Log.SQL_CONNECTION_CREATE
         is_add = True
 
     # If it is a POST and it is correct
@@ -125,7 +126,7 @@ def save_conn_form(request, form, template_name):
             return JsonResponse(data)
 
         # Log the event
-        logs.ops.put(
+        Log.objects.record(
             request.user,
             event_type,
             None,
@@ -272,19 +273,20 @@ def sqlconn_clone(request, pk):
     conn.save()
 
     # Log the event
-    logs.ops.put(request.user,
-                 'sql_connection_clone',
-                 None,
-                 {'name': conn.name,
-                  'description': conn.description_txt,
-                  'conn_type': conn.conn_type,
-                  'conn_driver': conn.conn_driver,
-                  'db_user': conn.db_user,
-                  'db_passwd': _('<PROTECTED>') if conn.db_password else '',
-                  'db_host': conn.db_host,
-                  'db_port': conn.db_port,
-                  'db_name': conn.db_name,
-                  'db_table': conn.db_table})
+    Log.objects.record(
+        request.user,
+        Log.SQL_CONNECTION_CLONE,
+        None,
+        {'name': conn.name,
+         'description': conn.description_txt,
+         'conn_type': conn.conn_type,
+         'conn_driver': conn.conn_driver,
+         'db_user': conn.db_user,
+         'db_passwd': _('<PROTECTED>') if conn.db_password else '',
+         'db_host': conn.db_host,
+         'db_port': conn.db_port,
+         'db_name': conn.db_name,
+         'db_table': conn.db_table})
 
     return JsonResponse({'form_is_valid': True, 'html_redirect': ''})
 
@@ -308,19 +310,21 @@ def sqlconn_delete(request, pk):
 
     if request.method == 'POST':
         # Log the event
-        logs.ops.put(request.user,
-                     'sql_connection_delete',
-                     None,
-                     {'name': conn.name,
-                      'description': conn.description_txt,
-                      'conn_type': conn.conn_type,
-                      'conn_driver': conn.conn_driver,
-                      'db_user': conn.db_user,
-                      'db_passwd': _('<PROTECTED>') if conn.db_password else '',
-                      'db_host': conn.db_host,
-                      'db_port': conn.db_port,
-                      'db_name': conn.db_name,
-                      'db_table': conn.db_table})
+        Log.objects.record(
+            request.user,
+            Log.SQL_CONNECTION_DELETE,
+            None,
+            {'name': conn.name,
+             'description': conn.description_txt,
+             'conn_type': conn.conn_type,
+             'conn_driver': conn.conn_driver,
+             'db_user': conn.db_user,
+             'db_passwd': _('<PROTECTED>') if conn.db_password else '',
+             'db_host': conn.db_host,
+             'db_port': conn.db_port,
+             'db_name': conn.db_name,
+             'db_table': conn.db_table}
+        )
 
         # Perform the delete operation
         conn.delete()

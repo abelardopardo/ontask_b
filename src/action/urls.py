@@ -61,9 +61,9 @@ urlpatterns = [
     #
     # Email action steps
     #
-    url(r'^email_step2/$',
-        views_out.run_email_action_step2,
-        name='email_step2'),
+    url(r'^email_filter/$',
+        views_out.run_action_email_filter,
+        name='email_filter'),
     url(r'^email_step3/$',
         views_out.run_email_action_step3,
         name='email_step3'),
