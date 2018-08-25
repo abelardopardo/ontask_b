@@ -79,8 +79,6 @@ def save_condition_form(request,
             data['form_is_valid'] = True
             data['html_redirect'] = ''
             return JsonResponse(data)
-
-        log_type = 'filter'
     else:
         # Verify that the condition name does not exist yet (Uniqueness FIX)
         qs = Condition.objects.filter(
@@ -146,8 +144,6 @@ def save_condition_form(request,
                 replacing.format(condition.name))
             action.save()
 
-        log_type = 'condition'
-
     # Ok, here we can say that the data in the form is correct.
     data['form_is_valid'] = True
 
@@ -177,9 +173,15 @@ def save_condition_form(request,
     # Log the event
     formula, _ = evaluate_node_sql(condition.formula)
     if is_new:
-        log_type += '_create'
+        if is_filter:
+            log_type = Log.FILTER_CREATE
+        else:
+            log_type = Log.CONDITION_CREATE
     else:
-        log_type += '_update'
+        if is_filter:
+            log_type = Log.FILTER_UPDATE
+        else:
+            log_type = Log.CONDITION_UPDATE
 
     # Log the event
     Log.objects.register(request.user,
