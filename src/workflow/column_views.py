@@ -10,9 +10,9 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-import logs.ops
 from action.models import Condition
 from dataops import ops, formula_evaluation, pandas_db
+from logs.models import Log
 from ontask.permissions import is_instructor
 from .forms import (ColumnRenameForm,
                     ColumnAddForm,
@@ -114,13 +114,13 @@ def column_add(request):
     ops.store_dataframe_in_db(df, workflow.id)
 
     # Log the event
-    logs.ops.put(request.user,
-                 'column_add',
-                 workflow,
-                 {'id': workflow.id,
-                  'name': workflow.name,
-                  'column_name': column.name,
-                  'column_type': column.data_type})
+    Log.objects.register(request.user,
+                         Log.COLUMN_ADD,
+                         workflow,
+                         {'id': workflow.id,
+                          'name': workflow.name,
+                          'column_name': column.name,
+                          'column_type': column.data_type})
 
     data['form_is_valid'] = True
     data['html_redirect'] = ''
@@ -247,13 +247,13 @@ def formula_column_add(request):
     ops.store_dataframe_in_db(df, workflow.id)
 
     # Log the event
-    logs.ops.put(request.user,
-                 'column_add',
-                 workflow,
-                 {'id': workflow.id,
-                  'name': workflow.name,
-                  'column_name': column.name,
-                  'column_type': column.data_type})
+    Log.objects.register(request.user,
+                         Log.COLUMN_ADD,
+                         workflow,
+                         {'id': workflow.id,
+                          'name': workflow.name,
+                          'column_name': column.name,
+                          'column_type': column.data_type})
 
     # The form has been successfully processed
     data['form_is_valid'] = True
@@ -347,13 +347,13 @@ def column_edit(request, pk):
     data['html_redirect'] = ''
 
     # Log the event
-    logs.ops.put(request.user,
-                 'column_rename',
-                 workflow,
-                 {'id': workflow.id,
-                  'name': workflow.name,
-                  'column_name': old_name,
-                  'new_name': column.name})
+    Log.objects.register(request.user,
+                         Log.COLUMN_RENAME,
+                         workflow,
+                         {'id': workflow.id,
+                          'name': workflow.name,
+                          'column_name': old_name,
+                          'new_name': column.name})
 
     # Done processing the correct POST request
     return JsonResponse(data)
@@ -420,12 +420,12 @@ def column_delete(request, pk):
         workflow_delete_column(workflow, column, cond_to_delete)
 
         # Log the event
-        logs.ops.put(request.user,
-                     'column_delete',
-                     workflow,
-                     {'id': workflow.id,
-                      'name': workflow.name,
-                      'column_name': column.name})
+        Log.objects.register(request.user,
+                             Log.COLUMN_DELETE,
+                             workflow,
+                             {'id': workflow.id,
+                              'name': workflow.name,
+                              'column_name': column.name})
 
         data['form_is_valid'] = True
 
@@ -503,13 +503,13 @@ def column_clone(request, pk):
     column = clone_column(column, None, new_name)
 
     # Log the event
-    logs.ops.put(request.user,
-                 'column_clone',
-                 workflow,
-                 {'id': workflow.id,
-                  'name': workflow.name,
-                  'old_column_name': old_name,
-                  'new_column_name': column.name})
+    Log.objects.register(request.user,
+                         Log.COLUMN_CLONE,
+                         workflow,
+                         {'id': workflow.id,
+                          'name': workflow.name,
+                          'old_column_name': old_name,
+                          'new_column_name': column.name})
 
     data['form_is_valid'] = True
     data['html_redirect'] = ''
@@ -699,14 +699,14 @@ def column_restrict_values(request, pk):
             # Something went wrong. Show it
             messages.error(request, result)
 
-        # Log the event
-        logs.ops.put(request.user,
-                     'column_restrict',
-                     workflow,
-                     {'id': workflow.id,
-                      'name': workflow.name,
-                      'column_name': column.name,
-                      'values': context['values']})
+            # Log the event
+            Log.objects.register(request.user,
+                                 Log.COLUMN_RESTRICT,
+                                 workflow,
+                                 {'id': workflow.id,
+                                  'name': workflow.name,
+                                  'column_name': column.name,
+                                  'values': context['values']})
 
         data['form_is_valid'] = True
 

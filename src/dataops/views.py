@@ -18,10 +18,10 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.cache import cache_page
 
 import dataops.ops as ops
-import logs.ops
 from dataops import pandas_db
 from dataops.forms import SelectColumnForm
 from dataops.plugin_manager import run_plugin
+from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from workflow.ops import get_workflow
@@ -216,12 +216,12 @@ def row_update(request):
         act.update_n_rows_selected()
 
     # Log the event
-    logs.ops.put(request.user,
-                 'tablerow_update',
-                 workflow,
-                 {'id': workflow.id,
-                  'name': workflow.name,
-                  'new_values': log_payload})
+    Log.objects.register(request.user,
+                         Log.TABLEROW_UPDATE,
+                         workflow,
+                         {'id': workflow.id,
+                          'name': workflow.name,
+                          'new_values': log_payload})
 
     return redirect('table:display')
 
@@ -292,12 +292,12 @@ def row_create(request):
 
     # Log the event
     log_payload = zip(column_names, [str(x) for x in row_vals])
-    logs.ops.put(request.user,
-                 'tablerow_create',
-                 workflow,
-                 {'id': workflow.id,
-                  'name': workflow.name,
-                  'new_values': log_payload})
+    Log.objects.register(request.user,
+                         Log.TABLEROW_CREATE,
+                         workflow,
+                         {'id': workflow.id,
+                          'name': workflow.name,
+                          'new_values': log_payload})
 
     # Done. Back to the table view
     return redirect('table:display')
@@ -404,12 +404,12 @@ def run(request, pk):
         context['exec_status'] = status
 
         # Log the event
-        logs.ops.put(request.user,
-                     'plugin_execute',
-                     workflow,
-                     {'id': plugin_info.id,
-                      'name': plugin_info.name,
-                      'status': status})
+        Log.objects.register(request.user,
+                             Log.PLUGIN_EXECUTE,
+                             workflow,
+                             {'id': plugin_info.id,
+                              'name': plugin_info.name,
+                              'status': status})
 
         return render(request,
                       'dataops/plugin_execution_report.html',
@@ -422,12 +422,12 @@ def run(request, pk):
         context['exec_status'] = status
 
         # Log the event
-        logs.ops.put(request.user,
-                     'plugin_execute',
-                     workflow,
-                     {'id': plugin_info.id,
-                      'name': plugin_info.name,
-                      'status': status})
+        Log.objects.register(request.user,
+                             Log.PLUGIN_EXECUTE,
+                             workflow,
+                             {'id': plugin_info.id,
+                              'name': plugin_info.name,
+                              'status': status})
 
         return render(request,
                       'dataops/plugin_execution_report.html',
@@ -441,12 +441,12 @@ def run(request, pk):
         context['exec_status'] = status
 
         # Log the event
-        logs.ops.put(request.user,
-                     'plugin_execute',
-                     workflow,
-                     {'id': plugin_info.id,
-                      'name': plugin_info.name,
-                      'status': status})
+        Log.objects.register(request.user,
+                             Log.PLUGIN_EXECUTE,
+                             workflow,
+                             {'id': plugin_info.id,
+                              'name': plugin_info.name,
+                              'status': status})
 
         return render(request,
                       'dataops/plugin_execution_report.html',
@@ -494,13 +494,13 @@ def run(request, pk):
         pandas_db.df_column_types_rename(result_df))
 
     # Log the event
-    logs.ops.put(request.user,
-                 'plugin_execute',
-                 workflow,
-                 {'id': plugin_info.id,
-                  'name': plugin_info.name,
-                  'status': status,
-                  'result_columns': result_columns})
+    Log.objects.register(request.user,
+                         Log.PLUGIN_EXECUTE,
+                         workflow,
+                         {'id': plugin_info.id,
+                          'name': plugin_info.name,
+                          'status': status,
+                          'result_columns': result_columns})
 
     # Create the table information to show in the report.
     column_info = []

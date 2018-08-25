@@ -11,7 +11,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-import logs.ops
+from logs.models import Log
 from ontask.permissions import is_instructor
 from workflow.views import WorkflowShareTable
 from .forms import SharedForm
@@ -59,18 +59,17 @@ def share_create(request):
 
     if request.method == 'POST':
         if form.is_valid():
-
             # proceed with the update
             workflow.shared.add(form.user_obj)
             workflow.save()
 
             # Log the event
-            logs.ops.put(request.user,
-                         'workflow_share_add',
-                         workflow,
-                         {'id': workflow.id,
-                          'name': workflow.name,
-                          'user_email': form.user_obj.email})
+            Log.objects.register(request.user,
+                                 Log.WORKFLOW_SHARE_ADD,
+                                 workflow,
+                                 {'id': workflow.id,
+                                  'name': workflow.name,
+                                  'user_email': form.user_obj.email})
 
             data['form_is_valid'] = True
             data['html_redirect'] = reverse('workflow:share')
@@ -105,12 +104,12 @@ def share_delete(request, pk):
         workflow.save()
 
         # Log the event
-        logs.ops.put(request.user,
-                     'workflow_share_delete',
-                     workflow,
-                     {'id': workflow.id,
-                      'name': workflow.name,
-                      'user_email': user.email})
+        Log.objects.register(request.user,
+                             Log.WORKFLOW_SHARE_DELETE,
+                             workflow,
+                             {'id': workflow.id,
+                              'name': workflow.name,
+                              'user_email': user.email})
 
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('workflow:share')

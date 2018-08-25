@@ -7,6 +7,7 @@ from django.utils.html import format_html
 
 from action.views_out import run_json_action, run_email_action, \
     session_dictionary_name
+from logs.models import Log
 from visualizations.plotly import PlotlyHandler
 
 try:
@@ -31,7 +32,6 @@ from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
-import logs.ops
 from action.evaluate import render_template
 from dataops import ops, pandas_db
 from ontask.permissions import UserIsInstructor, is_instructor
@@ -202,13 +202,13 @@ def save_action_form(request, form, template_name):
         return JsonResponse(data)
 
     # Log the event
-    logs.ops.put(request.user,
-                 'action_create' if is_new else 'action_update',
-                 action_item.workflow,
-                 {'id': action_item.id,
-                  'name': action_item.name,
-                  'workflow_id': workflow.id,
-                  'workflow_name': workflow.name})
+    Log.objects.register(request.user,
+                         Log.ACTION_CREATE if is_new else Log.ACTION_UPDATE,
+                         action_item.workflow,
+                         {'id': action_item.id,
+                          'name': action_item.name,
+                          'workflow_id': workflow.id,
+                          'workflow_name': workflow.name})
 
     # Request is correct
     data['form_is_valid'] = True
@@ -364,13 +364,13 @@ def edit_description(request, pk):
         action.save()
 
         # Log the event
-        logs.ops.put(request.user,
-                     'action_update',
-                     action.workflow,
-                     {'id': action.id,
-                      'name': action.name,
-                      'workflow_id': workflow.id,
-                      'workflow_name': workflow.name})
+        Log.objects.register(request.user,
+                             Log.ACTION_UPDATE,
+                             action.workflow,
+                             {'id': action.id,
+                              'name': action.name,
+                              'workflow_id': workflow.id,
+                              'workflow_name': workflow.name})
 
         # Request is correct
         data['form_is_valid'] = True
@@ -525,14 +525,14 @@ def edit_action_out(request, workflow, action):
         return render(request, template, context)
 
     # Log the event
-    logs.ops.put(request.user,
-                 'action_update',
-                 action.workflow,
-                 {'id': action.id,
-                  'name': action.name,
-                  'workflow_id': workflow.id,
-                  'workflow_name': workflow.name,
-                  'content': content})
+    Log.objects.register(request.user,
+                         Log.ACTION_UPDATE,
+                         action.workflow,
+                         {'id': action.id,
+                          'name': action.name,
+                          'workflow_id': workflow.id,
+                          'workflow_name': workflow.name,
+                          'content': content})
 
     # Text is good. Update the content of the action
     action.set_content(content)
@@ -880,13 +880,12 @@ def showurl(request, pk):
             form.save()
 
             # Recording the event
-            logs.ops.put(
-                request.user,
-                'action_serve_toggled',
-                action.workflow,
-                {'id': action.id,
-                 'name': action.name,
-                 'serve_enabled': action.serve_enabled})
+            Log.objects.register(request.user,
+                                 Log.ACTION_SERVE_TOGGLED,
+                                 action.workflow,
+                                 {'id': action.id,
+                                  'name': action.name,
+                                  'serve_enabled': action.serve_enabled})
 
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('action:index')
@@ -983,13 +982,13 @@ def delete_action(request, pk):
 
     if request.method == 'POST':
         # Log the event
-        logs.ops.put(request.user,
-                     'action_delete',
-                     action.workflow,
-                     {'id': action.id,
-                      'name': action.name,
-                      'workflow_name': action.workflow.name,
-                      'workflow_id': action.workflow.id})
+        Log.objects.register(request.user,
+                             Log.ACTION_DELETE,
+                             action.workflow,
+                             {'id': action.id,
+                              'name': action.name,
+                              'workflow_name': action.workflow.name,
+                              'workflow_id': action.workflow.id})
 
         # Perform the delete operation
         action.delete()
@@ -1276,13 +1275,13 @@ def clone(request, pk):
     action = clone_action(action, new_workflow=None, new_name=new_name)
 
     # Log event
-    logs.ops.put(request.user,
-                 'action_clone',
-                 workflow,
-                 {'id_old': old_id,
-                  'id_new': action.id,
-                  'name_old': old_name,
-                  'name_new': action.name})
+    Log.objects.register(request.user,
+                         Log.ACTION_CLONE,
+                         workflow,
+                         {'id_old': old_id,
+                          'id_new': action.id,
+                          'name_old': old_name,
+                          'name_new': action.name})
     data['form_is_valid'] = True
     data['html_redirect'] = reverse('action:index')
 

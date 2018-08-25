@@ -11,12 +11,138 @@ from django.utils.translation import ugettext_lazy as _
 from workflow.models import Workflow
 
 
+class LogManager(models.Manager):
+
+    def register(self, user, name, workflow, payload):
+        log_item = self.create(user=user,
+                               name=name,
+                               workflow=workflow,
+                               payload=payload)
+        return log_item
+
+
 class Log(models.Model):
     """
     @DynamicAttrs
 
     Model to encode logs in OnTask
     """
+
+    WORKFLOW_CREATE = 'workflow_create'
+    WORKFLOW_UPDATE = 'workflow_update'
+    WORKFLOW_DELETE = 'workflow_delete'
+    WORKFLOW_DATA_UPLOAD = 'workflow_data_upload'
+    WORKFLOW_DATA_MERGE = 'workflow_data_merge'
+    WORKFLOW_DATA_FAILEDMERGE = 'workflow_data_failedmerge'
+    WORKFLOW_DATA_FLUSH = 'workflow_data_flush'
+    WORKFLOW_ATTRIBUTE_CREATE = 'workflow_attribute_create'
+    WORKFLOW_ATTRIBUTE_UPDATE = 'workflow_attribute_update'
+    WORKFLOW_ATTRIBUTE_DELETE = 'workflow_attribute_delete'
+    WORKFLOW_SHARE_ADD = 'workflow_share_add'
+    WORKFLOW_SHARE_DELETE = 'workflow_share_delete'
+    WORKFLOW_IMPORT = 'workflow_import'
+    WORKFLOW_CLONE = 'workflow_clone'
+    COLUMN_ADD = 'column_add'
+    COLUMN_RENAME = 'column_rename'
+    COLUMN_DELETE = 'column_delete'
+    COLUMN_CLONE = 'column_clone'
+    COLUMN_RESTRICT = 'column_restrict'
+    ACTION_CREATE = 'action_create'
+    ACTION_UPDATE = 'action_update'
+    ACTION_DELETE = 'action_delete'
+    ACTION_CLONE = 'action_clone'
+    ACTION_EMAIL_SENT = 'action_email_sent'
+    ACTION_EMAIL_NOTIFY = 'action_email_notify'
+    ACTION_EMAIL_READ = 'action_email_read'
+    ACTION_SERVE_TOGGLED = 'action_serve_toggled'
+    ACTION_SERVED_EXECUTE = 'action_served_execute'
+    ACTION_IMPORT = 'action_import'
+    ACTION_JSON_SENT = 'action_json_sent'
+    CONDITION_CREATE = 'condition_create'
+    CONDITION_UPDATE = 'condition_update'
+    CONDITION_DELETE = 'condition_delete'
+    CONDITION_CLONE = 'condition_clone'
+    TABLEROW_UPDATE = 'tablerow_update'
+    TABLEROW_CREATE = 'tablerow_create'
+    VIEW_CREATE = 'view_create'
+    VIEW_EDIT = 'view_edit'
+    VIEW_DELETE = 'view_delete'
+    VIEW_CLONE = 'view_clone'
+    FILTER_CREATE = 'filter_create'
+    FILTER_UPDATE = 'filter_update'
+    FILTER_DELETE = 'filter_delete'
+    PLUGIN_CREATE = 'plugin_create'
+    PLUGIN_UPDATE = 'plugin_update'
+    PLUGIN_DELETE = 'plugin_delete'
+    PLUGIN_EXECUTE = 'plugin_execute'
+    SQL_CONNECTION_CREATE = 'sql_connection_create'
+    SQL_CONNECTION_EDIT = 'sql_connection_edit'
+    SQL_CONNECTION_DELETE = 'sql_connection_delete'
+    SQL_CONNECTION_CLONE = 'sql_connection_clone'
+    SCHEDULE_EMAIL_CREATE = 'schedule_email_create'
+    SCHEDULE_EMAIL_EDIT = 'schedule_email_edit'
+    SCHEDULE_EMAIL_DELETE = 'schedule_email_delete'
+    SCHEDULE_EMAIL_EXECUTE = 'schedule_email_execute'
+    SCHEDULE_JSON_EXECUTE = 'schedule_json_execute'
+
+    LOG_TYPES = [
+        (WORKFLOW_CREATE, _('Workflow created')),
+        (WORKFLOW_UPDATE, _('Workflow updated')),
+        (WORKFLOW_DELETE, _('Workflow deleted')),
+        (WORKFLOW_DATA_UPLOAD, _('Data uploaded to workflow')),
+        (WORKFLOW_DATA_MERGE, _('Data merged into workflow')),
+        (WORKFLOW_DATA_FAILEDMERGE, _('Failed data merge into workflow')),
+        (WORKFLOW_DATA_FLUSH, _('Workflow data flushed')),
+        (WORKFLOW_ATTRIBUTE_CREATE, _('New attribute in workflow')),
+        (WORKFLOW_ATTRIBUTE_UPDATE, _('Attributes updated in workflow')),
+        (WORKFLOW_ATTRIBUTE_DELETE, _('Attribute deleted')),
+        (WORKFLOW_SHARE_ADD, _('User share added')),
+        (WORKFLOW_SHARE_DELETE, _('User share deleted')),
+        (WORKFLOW_IMPORT, _('Import workflow')),
+        (WORKFLOW_CLONE, _('Workflow cloned')),
+        (COLUMN_ADD, _('Column added')),
+        (COLUMN_RENAME, _('Column renamed')),
+        (COLUMN_DELETE, _('Column deleted')),
+        (COLUMN_CLONE, _('Column cloned')),
+        (COLUMN_RESTRICT, _('Column restricted')),
+        (ACTION_CREATE, _('Action created')),
+        (ACTION_UPDATE, _('Action updated')),
+        (ACTION_DELETE, _('Action deleted')),
+        (ACTION_CLONE, _('Action cloned')),
+        (ACTION_EMAIL_SENT, _('Emails sent')),
+        (ACTION_EMAIL_NOTIFY, _('Notification email sent')),
+        (ACTION_EMAIL_READ, _('Email read')),
+        (ACTION_SERVE_TOGGLED, _('Action URL toggled')),
+        (ACTION_SERVED_EXECUTE, _('Action served')),
+        (ACTION_IMPORT, _('Action imported')),
+        (ACTION_JSON_SENT, _('Emails sent')),
+        (CONDITION_CREATE, _('Condition created')),
+        (CONDITION_UPDATE, _('Condition updated')),
+        (CONDITION_DELETE, _('Condition deleted')),
+        (CONDITION_CLONE, _('Condition cloned')),
+        (TABLEROW_UPDATE, _('Table row updated')),
+        (TABLEROW_CREATE, _('Table row created')),
+        (VIEW_CREATE, _('Table view created')),
+        (VIEW_EDIT, _('Table view edited')),
+        (VIEW_DELETE, _('Table view deleted')),
+        (VIEW_CLONE, _('Table view cloned')),
+        (FILTER_CREATE, _('Filter created')),
+        (FILTER_UPDATE, _('Filter updated')),
+        (FILTER_DELETE, _('Filter deleted')),
+        (PLUGIN_CREATE, _('Plugin created')),
+        (PLUGIN_UPDATE, _('Plugin updated')),
+        (PLUGIN_DELETE, _('Plugin deleted')),
+        (PLUGIN_EXECUTE, _('Plugin executed')),
+        (SQL_CONNECTION_CREATE, _('SQL connection created')),
+        (SQL_CONNECTION_EDIT, _('SQL connection updated')),
+        (SQL_CONNECTION_DELETE, _('SQL connection deleted')),
+        (SQL_CONNECTION_CLONE, _('SQL connection cloned')),
+        (SCHEDULE_EMAIL_CREATE, _('Created scheduled email action')),
+        (SCHEDULE_EMAIL_EDIT, _('Edit scheduled email action')),
+        (SCHEDULE_EMAIL_DELETE, _('Delete scheduled email action')),
+        (SCHEDULE_EMAIL_EXECUTE, _('Execute scheduled email action')),
+        (SCHEDULE_JSON_EXECUTE, _('Execute scheduled JSON action')),
+    ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              db_index=True,
@@ -29,7 +155,9 @@ class Log(models.Model):
     modified = models.DateTimeField(auto_now=True, null=False)
 
     # Type of event logged see above
-    name = models.CharField(max_length=256, blank=False)
+    name = models.CharField(max_length=256,
+                            blank=False,
+                            choices=LOG_TYPES)
 
     workflow = models.ForeignKey(Workflow,
                                  db_index=True,
@@ -41,6 +169,9 @@ class Log(models.Model):
                         blank=True,
                         null=True,
                         verbose_name=_('payload'))
+
+    # Use our own manager
+    objects = LogManager()
 
     def get_payload(self):
         """

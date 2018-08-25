@@ -9,8 +9,8 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-import logs.ops
 from action.models import Condition
+from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from .forms import (AttributeItemForm)
@@ -128,13 +128,13 @@ def save_attribute_form(request, workflow, template, form, key_idx):
     workflow.save()
 
     # Log the event
-    logs.ops.put(request.user,
-                 'workflow_attribute_create',
-                 workflow,
-                 {'id': workflow.id,
-                  'name': workflow.name,
-                  'attr_key': form.cleaned_data['key'],
-                  'attr_val': form.cleaned_data['value']})
+    Log.objects.register(request.user,
+                         Log.WORKFLOW_ATTRIBUTE_CREATE,
+                         workflow,
+                         {'id': workflow.id,
+                          'name': workflow.name,
+                          'attr_key': form.cleaned_data['key'],
+                          'attr_val': form.cleaned_data['value']})
 
     data['form_is_valid'] = True
     data['html_redirect'] = reverse('workflow:attributes')
@@ -220,12 +220,12 @@ def attribute_delete(request, pk):
         workflow.attributes = wf_attributes
 
         # Log the event
-        logs.ops.put(request.user,
-                     'workflow_attribute_delete',
-                     workflow,
-                     {'id': workflow.id,
-                      'attr_key': key,
-                      'attr_val': val})
+        Log.objects.register(request.user,
+                             Log.WORKFLOW_ATTRIBUTE_DELETE,
+                             workflow,
+                             {'id': workflow.id,
+                              'attr_key': key,
+                              'attr_val': val})
 
         workflow.save()
 

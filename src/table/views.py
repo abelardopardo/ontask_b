@@ -19,8 +19,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
 
-import logs.ops
 from dataops import ops, pandas_db
+from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from workflow.ops import get_workflow
@@ -71,9 +71,9 @@ def save_view_form(request, form, template_name):
 
     # Type of event to be recorded
     if form.instance.id:
-        event_type = 'view_edit'
+        event_type = Log.VIEW_EDIT
     else:
-        event_type = 'view_create'
+        event_type = Log.VIEW_CREATE
 
     # If a GET or incorrect request, render the form again
     if request.method == 'GET' or not form.is_valid():
@@ -103,13 +103,13 @@ def save_view_form(request, form, template_name):
         return JsonResponse(data)
 
     # Log the event
-    logs.ops.put(request.user,
-                 event_type,
-                 view.workflow,
-                 {'id': view.id,
-                  'name': view.name,
-                  'workflow_name': view.workflow.name,
-                  'workflow_id': view.workflow.id})
+    Log.objects.register(request.user,
+                         event_type,
+                         view.workflow,
+                         {'id': view.id,
+                          'name': view.name,
+                          'workflow_name': view.workflow.name,
+                          'workflow_id': view.workflow.id})
 
     data['form_is_valid'] = True
     data['html_redirect'] = ''  # Refresh the page
@@ -229,7 +229,7 @@ def render_table_display_data(request, workflow, columns, formula,
 
         # Tweak the date time format
         new_element = map(lambda x: x.strftime('%Y-%m-%d %H:%M:%S %z')
-            if isinstance(x, datetime) else x, new_element)
+        if isinstance(x, datetime) else x, new_element)
 
         # Create the list of elements to display and add it ot the final QS
         final_qs.append(new_element)
@@ -553,13 +553,13 @@ def view_delete(request, pk):
 
     if request.method == 'POST':
         # Log the event
-        logs.ops.put(request.user,
-                     'view_delete',
-                     view.workflow,
-                     {'id': view.id,
-                      'name': view.name,
-                      'workflow_name': view.workflow.name,
-                      'workflow_id': view.workflow.id})
+        Log.objects.register(request.user,
+                             Log.VIEW_DELETE,
+                             view.workflow,
+                             {'id': view.id,
+                              'name': view.name,
+                              'workflow_name': view.workflow.name,
+                              'workflow_id': view.workflow.id})
 
         # Perform the delete operation
         view.delete()
@@ -637,13 +637,13 @@ def view_clone(request, pk):
     view.columns.add(*list(View.objects.get(pk=pk).columns.all()))
 
     # Log the event
-    logs.ops.put(request.user,
-                 'view_clone',
-                 workflow,
-                 {'id': workflow.id,
-                  'name': workflow.name,
-                  'old_view_name': old_name,
-                  'new_view_name': view.name})
+    Log.objects.register(request.user,
+                         Log.VIEW_CLONE,
+                         workflow,
+                         {'id': workflow.id,
+                          'name': workflow.name,
+                          'old_view_name': old_name,
+                          'new_view_name': view.name})
 
     return JsonResponse({'form_is_valid': True, 'html_redirect': ''})
 

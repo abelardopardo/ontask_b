@@ -14,12 +14,12 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
-import logs.ops
 from action.evaluate import (
     get_row_values,
     evaluate_row_action_out,
     evaluate_row_action_in)
 from action.models import Action
+from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tasks import send_email_messages, send_json_objects
 from workflow.ops import get_workflow
@@ -128,7 +128,7 @@ def run_email_action_step2(request):
     payload = request.session.get(session_dictionary_name, None)
     if not payload:
         # Something is wrong with this execution. Return to the action table.
-        messages.error(request,_('Incorrect email action invocation.'))
+        messages.error(request, _('Incorrect email action invocation.'))
         return redirect('action:index')
 
     # Get the information from the payload
@@ -168,7 +168,7 @@ def run_email_action_step3(request, payload=None):
     payload = request.session.get(session_dictionary_name, payload)
     if not payload:
         # Something is wrong with this execution. Return to the action table.
-        messages.error(request,_('Incorrect email action invocation.'))
+        messages.error(request, _('Incorrect email action invocation.'))
         return redirect('action:index')
 
     # Get the information from the payload
@@ -183,20 +183,20 @@ def run_email_action_step3(request, payload=None):
     exclude_values = payload['exclude_values']
 
     # Log the event
-    log_item = logs.ops.put(request.user,
-                            'schedule_email_execute',
-                            action.workflow,
-                            {'action': action.name,
-                             'action_id': action.id,
-                             'from_email': request.user.email,
-                             'subject': subject,
-                             'email_column': email_column,
-                             'cc_email': cc_email,
-                             'bcc_email': bcc_email,
-                             'send_confirmation': send_confirmation,
-                             'track_read': track_read,
-                             'exclude_values': exclude_values,
-                             'status': 'Preparing to execute'})
+    log_item = Log.objects.register(request.user,
+                                    Log.SCHEDULE_EMAIL_EXECUTE,
+                                    action.workflow,
+                                    {'action': action.name,
+                                     'action_id': action.id,
+                                     'from_email': request.user.email,
+                                     'subject': subject,
+                                     'email_column': email_column,
+                                     'cc_email': cc_email,
+                                     'bcc_email': bcc_email,
+                                     'send_confirmation': send_confirmation,
+                                     'track_read': track_read,
+                                     'exclude_values': exclude_values,
+                                     'status': 'Preparing to execute'})
 
     # Send the emails!
     # send_email_messages(request.user.id,
@@ -263,13 +263,13 @@ def run_json_action(request, workflow, action):
     # Requet is a POST and is valid
 
     # Log the event
-    log_item = logs.ops.put(request.user,
-                            'schedule_json_execute',
-                            action.workflow,
-                            {'action': action.name,
-                             'action_id': action.id,
-                             'target_url': action.target_url,
-                             'status': 'Preparing to execute'})
+    log_item = Log.objects.register(request.user,
+                                    Log.SCHEDULE_JSON_EXECUTE,
+                                    action.workflow,
+                                    {'action': action.name,
+                                     'action_id': action.id,
+                                     'target_url': action.target_url,
+                                     'status': 'Preparing to execute'})
 
     # Send the objects
     # send_json_objects(request.user.id,

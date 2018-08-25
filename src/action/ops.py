@@ -32,13 +32,13 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from validate_email import validate_email
 
-import logs.ops
 from action.evaluate import evaluate_row_action_out, evaluate_action, \
     get_row_values
 from action.forms import EnterActionIn, field_prefix
 from action.models import Action
 from action.serializers import ActionSelfcontainedSerializer
 from dataops import pandas_db, ops
+from logs.models import Log
 from workflow.models import Column
 from . import settings
 
@@ -144,12 +144,12 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
         act.update_n_rows_selected()
 
     # Log the event and update its content in the action
-    log_item = logs.ops.put(request.user,
-                            'tablerow_update',
-                            action.workflow,
-                            {'id': action.workflow.id,
-                             'name': action.workflow.name,
-                             'new_values': log_payload})
+    log_item = Log.objects.register(request.user,
+                                    Log.TABLEROW_UPDATE,
+                                    action.workflow,
+                                    {'id': action.workflow.id,
+                                     'name': action.workflow.name,
+                                     'new_values': log_payload})
 
     # Modify the time of execution for the action
     action.last_executed_log = log_item
@@ -191,12 +191,10 @@ def serve_action_out(user, action, user_attribute_name):
                 user.email
             )
         # Log the event
-        logs.ops.put(
-            user,
-            'action_served_execute',
-            workflow=action.workflow,
-            payload=payload
-        )
+        Log.objects.register(user,
+                             Log.ACTION_SERVED_EXECUTE,
+                             workflow=action.workflow,
+                             payload=payload)
         return HttpResponse(render_to_string('action/action_unavailable.html',
                                              {}))
 
@@ -212,12 +210,10 @@ def serve_action_out(user, action, user_attribute_name):
         )
 
     # Log the event
-    logs.ops.put(
-        user,
-        'action_served_execute',
-        workflow=action.workflow,
-        payload=payload
-    )
+    Log.objects.register(user,
+                         Log.ACTION_SERVED_EXECUTE,
+                         workflow=action.workflow,
+                         payload=payload)
 
     # Respond the whole thing
     return HttpResponse(response)
@@ -389,11 +385,11 @@ def do_import_action(user, workflow, name, file_item):
         return _('Unable to import action: {0}').format(e.message)
 
     # Success, log the event
-    logs.ops.put(user,
-                 'action_import',
-                 workflow,
-                 {'id': action.id,
-                  'name': action.name})
+    Log.objects.register(user,
+                         Log.ACTION_IMPORT,
+                         workflow,
+                         {'id': action.id,
+                          'name': action.name})
     return None
 
 
@@ -561,11 +557,14 @@ def send_messages(user,
         context['to_email'] = msg.to[0]
         if track_id:
             context['track_id'] = track_id
-        logs.ops.put(user, 'action_email_sent', action.workflow, context)
+        Log.objects.register(user,
+                             Log.ACTION_EMAIL_SENT,
+                             action.workflow,
+                             context)
 
     # Update data in the log item
     log_item.payload['objects_sent'] = len(result)
-    log_item.payload['filter_present'] =  cfilter is not None
+    log_item.payload['filter_present'] = cfilter is not None
     log_item.payload['datetime'] = str(datetime.datetime.now(pytz.timezone(
         ontask_settings.TIME_ZONE
     )))
@@ -597,9 +596,10 @@ def send_messages(user,
                  '({0})').format(e.message)
 
     # Log the event
-    logs.ops.put(
+    Log.objects.register(
         user,
-        'action_email_notify', action.workflow,
+        Log.ACTION_EMAIL_NOTIFY,
+        action.workflow,
         {'user': user.id,
          'action': action.id,
          'num_messages': len(msgs),
@@ -609,7 +609,8 @@ def send_messages(user,
          'subject': str(getattr(settings, 'NOTIFICATION_SUBJECT')),
          'body': text_content,
          'from_email': str(getattr(settings, 'NOTIFICATION_SENDER')),
-         'to_email': [user.email]})
+         'to_email': [user.email]}
+    )
 
     # Send email out
     try:
@@ -686,7 +687,7 @@ def send_json(user, action, token, log_item):
             (status,
              datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)),
              json_obj)
-         )
+        )
 
     # Create the context for the log events
     context = {
@@ -699,11 +700,14 @@ def send_json(user, action, token, log_item):
         context['object'] = json.dumps(json_obj)
         context['status'] = status
         context['json_sent_datetime'] = str(dt)
-        logs.ops.put(user, 'action_json_sent', action.workflow, context)
+        Log.objects.register(user,
+                             Log.ACTION_JSON_SENT,
+                             action.workflow,
+                             context)
 
     # Update data in the log item
     log_item.payload['objects_sent'] = len(result)
-    log_item.payload['filter_present'] =  cfilter is not None
+    log_item.payload['filter_present'] = cfilter is not None
     log_item.payload['datetime'] = str(datetime.datetime.now(pytz.timezone(
         ontask_settings.TIME_ZONE
     )))

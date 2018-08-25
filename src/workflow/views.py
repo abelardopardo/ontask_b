@@ -18,10 +18,10 @@ from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
 
 import action
-import logs.ops
 from dataops import ops, pandas_db
 from dataops.models import SQLConnection
 from dataops.sqlcon_views import SQLConnectionTableAdmin
+from logs.models import Log
 from ontask.permissions import is_instructor, UserIsInstructor
 from ontask.tables import OperationsColumn
 from .forms import WorkflowForm
@@ -126,9 +126,9 @@ def save_workflow_form(request, form, template_name):
         form.instance.nrows = 0
         form.instance.ncols = 0
         form.instance.session_key = request.session.session_key
-        log_type = 'workflow_create'
+        log_type = Log.WORKFLOW_CREATE
     else:
-        log_type = 'workflow_update'
+        log_type = Log.WORKFLOW_UPDATE
 
     # Save the instance
     try:
@@ -143,11 +143,11 @@ def save_workflow_form(request, form, template_name):
         return JsonResponse(data)
 
     # Log event
-    logs.ops.put(request.user,
-                 log_type,
-                 workflow_item,
-                 {'id': workflow_item.id,
-                  'name': workflow_item.name})
+    Log.objects.register(request.user,
+                         log_type,
+                         workflow_item,
+                         {'id': workflow_item.id,
+                          'name': workflow_item.name})
 
     # Here we can say that the form processing is done.
     data['form_is_valid'] = True
@@ -213,7 +213,7 @@ def workflow_index(request):
             messages.error(
                 request,
                 _('WARNING: Celery is not currently running. '
-                'Please configure it correctly.')
+                  'Please configure it correctly.')
             )
 
     return render(request, 'workflow/index.html', context)
@@ -384,11 +384,11 @@ def flush(request, pk):
         workflow.flush()
 
         # Log the event
-        logs.ops.put(request.user,
-                     'workflow_data_flush',
-                     workflow,
-                     {'id': workflow.id,
-                      'name': workflow.name})
+        Log.objects.register(request.user,
+                             Log.WORKFLOW_DATA_FLUSH,
+                             workflow,
+                             {'id': workflow.id,
+                              'name': workflow.name})
 
         # In this case, the form is valid
         data['form_is_valid'] = True
@@ -425,11 +425,11 @@ def delete(request, pk):
 
     if request.method == 'POST':
         # Log the event
-        logs.ops.put(request.user,
-                     'workflow_delete',
-                     workflow,
-                     {'id': workflow.id,
-                      'name': workflow.name})
+        Log.objects.register(request.user,
+                             Log.WORKFLOW_DELETE,
+                             workflow,
+                             {'id': workflow.id,
+                              'name': workflow.name})
 
         # And drop the table
         if pandas_db.is_wf_table_in_db(workflow):
@@ -518,9 +518,9 @@ def column_ss(request, pk):
 
         final_qs.append({
             'number': render_to_string(
-                 'workflow/includes/workflow_column_movement.html',
-                 {'column': col}
-             ),
+                'workflow/includes/workflow_column_movement.html',
+                {'column': col}
+            ),
             'name': col.name,
             'type': col_data_type,
             'key': '<span class="true">✔</span>' \
@@ -607,13 +607,13 @@ def clone(request, pk):
     workflow_new.save()
 
     # Log event
-    logs.ops.put(request.user,
-                 'workflow_clone',
-                 workflow_new,
-                 {'id_old': workflow_new.id,
-                  'id_new': workflow.id,
-                  'name_old': workflow_new.name,
-                  'name_new': workflow.name})
+    Log.objects.register(request.user,
+                         Log.WORKFLOW_CLONE,
+                         workflow_new,
+                         {'id_old': workflow_new.id,
+                          'id_new': workflow.id,
+                          'name_old': workflow_new.name,
+                          'name_new': workflow.name})
 
     messages.success(request,
                      _('Workflow successfully cloned.'))

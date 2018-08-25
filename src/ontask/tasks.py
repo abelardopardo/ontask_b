@@ -10,7 +10,6 @@ from django.conf import settings as ontask_settings
 from django.contrib.auth import get_user_model
 from django.core import signing
 
-import logs.ops
 from action.models import Action
 from action.ops import send_messages, send_json
 from dataops import pandas_db
@@ -187,20 +186,22 @@ def execute_email_actions(debug):
         bcc_email = [x.strip() for x in item.bcc_email.split(',') if x]
 
         # Log the event
-        log_item = logs.ops.put(item.user,
-                                'schedule_email_execute',
-                                item.action.workflow,
-                                {'action': item.action.name,
-                                 'action_id': item.action.id,
-                                 'from_email': item.user.email,
-                                 'execute': item.execute.isoformat(),
-                                 'subject': item.subject,
-                                 'email_column': item.email_column.name,
-                                 'cc_email': cc_email,
-                                 'bcc_email': bcc_email,
-                                 'send_confirmation': item.send_confirmation,
-                                 'track_read': item.track_read,
-                                 'status': 'Preparing to execute'})
+        log_item = Log.objects.register(
+            item.user,
+            Log.SCHEDULE_EMAIL_EXECUTE,
+            item.action.workflow,
+            {'action': item.action.name,
+             'action_id': item.action.id,
+             'from_email': item.user.email,
+             'execute': item.execute.isoformat(),
+             'subject': item.subject,
+             'email_column': item.email_column.name,
+             'cc_email': cc_email,
+             'bcc_email': bcc_email,
+             'send_confirmation': item.send_confirmation,
+             'track_read': item.track_read,
+             'status': 'Preparing to execute'}
+        )
 
         send_email_messages(item.user.id,
                             item.action.id,
@@ -211,7 +212,7 @@ def execute_email_actions(debug):
                             bcc_email,
                             item.send_confirmation,
                             item.track_read,
-                            [], # TODO Allow for exclude_values field
+                            [],  # TODO Allow for exclude_values field
                             log_item.id)
 
         # Store the resulting message in the record
@@ -291,6 +292,9 @@ def increase_track_count(method, get_dict):
                 action.update_n_rows_selected(track_col)
 
     # Record the event
-    logs.ops.put(user, 'action_email_read', action.workflow, log_payload)
+    Log.objects.register(user,
+                         Log.ACTION_EMAIL_READ,
+                         action.workflow,
+                         log_payload)
 
     return

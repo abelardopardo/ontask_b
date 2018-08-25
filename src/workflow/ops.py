@@ -16,9 +16,9 @@ from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
-import logs.ops
 from action.models import Condition
 from dataops import pandas_db, ops
+from logs.models import Log
 from workflow.serializers import (WorkflowExportSerializer,
                                   WorkflowImportSerializer)
 from .models import Workflow, Column
@@ -182,11 +182,11 @@ def do_import_workflow(user, name, file_item):
 
     # Success
     # Log the event
-    logs.ops.put(user,
-                 'workflow_import',
-                 workflow,
-                 {'id': workflow.id,
-                  'name': workflow.name})
+    Log.objects.register(user,
+                         Log.WORKFLOW_IMPORT,
+                         workflow,
+                         {'id': workflow.id,
+                          'name': workflow.name})
     return None
 
 
