@@ -110,7 +110,12 @@ def send_email_messages(user_id,
 
 
 @shared_task
-def send_json_objects(user_id, action_id, token, log_id):
+def send_json_objects(user_id,
+                      action_id,
+                      token,
+                      key_column,
+                      exclude_values,
+                      log_id):
     """
     This function invokes send_json in action/ops.py, gets the JSON objects
     that may be sent as a result, and records the appropriate events.
@@ -118,6 +123,8 @@ def send_json_objects(user_id, action_id, token, log_id):
     :param user_id: Id of User object that is executing the action
     :param action_id: Id of Action object from where the messages are taken
     :param token: String to include as authorisation token
+    :param key_column: Key column name to use to exclude elements (if needed)
+    :param exclude_values: List of values to exclude from the mailing
     :param log_id: Id of the log object where the status has to be reflected
     :return: Nothing
     """
@@ -128,7 +135,12 @@ def send_json_objects(user_id, action_id, token, log_id):
     msg = 'Finished'
     try:
         # If the result has some sort of message, push it to the log
-        result = send_json(user, action, token, log_item)
+        result = send_json(user,
+                           action,
+                           token,
+                           key_column,
+                           exclude_values,
+                           log_item)
         if result:
             msg = 'Incorrect execution: ' + str(result)
             logger.error(msg)

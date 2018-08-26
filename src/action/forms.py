@@ -250,7 +250,7 @@ class EmailActionForm(forms.Form):
 
         # Set the initial values from the payload
         self.fields['subject'].initial = self.op_payload.get('subject', '')
-        email_column = self.op_payload.get('email_column', None)
+        email_column = self.op_payload.get('item_column', None)
         self.fields['cc_email'].initial = self.op_payload.get('cc_email', '')
         self.fields['bcc_email'].initial = self.op_payload.get('bcc_email', '')
         self.fields['confirm_emails'].initial = self.op_payload.get(
@@ -339,6 +339,14 @@ class EmailExcludeForm(forms.Form):
 
 
 class JSONActionForm(forms.Form):
+
+    # Column with unique key to review objects to consider
+    key_column = forms.ChoiceField(
+        label=_('Column to exclude objects to send (empty to skip step)'),
+        required=False
+    )
+
+    # Token to use when sending the JSON request
     token = forms.CharField(
         initial='',
         label=_('Authentication Token'),
@@ -354,6 +362,26 @@ class JSONActionForm(forms.Form):
             }
         )
     )
+
+    def __init__(self, *args, **kargs):
+
+        self.column_names = kargs.pop('column_names')
+        self.op_payload = kargs.pop('op_payload')
+
+        super(JSONActionForm, self).__init__(*args, **kargs)
+
+        # Handle the key column setting the initial value if given and
+        # selecting the choices
+        key_column = self.op_payload.get('key_column', None)
+        if key_column is None:
+            key_column = ('', '---')
+        else:
+            key_column = (key_column, key_column)
+        self.fields['key_column'].initial = key_column
+        self.fields['key_column'].choices = [('', '---')] + \
+            [(x, x) for x in self.column_names]
+
+        self.fields['token'].initial = self.op_payload.get('token', '')
 
 
 class ActionImportForm(forms.Form):

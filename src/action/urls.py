@@ -61,12 +61,11 @@ urlpatterns = [
     #
     # Email action steps
     #
-    url(r'^email_filter/$',
-        views_out.run_action_email_filter,
-        name='email_filter'),
-    url(r'^email_step3/$',
-        views_out.run_email_action_step3,
-        name='email_step3'),
+    url(r'^item_filter/$',
+        views_out.run_action_item_filter,
+        name='item_filter'),
+    url(r'^email_done/$', views_out.run_email_action_done, name='email_done'),
+    url(r'^json_done/$', views_out.json_done, name='json_done'),
 
     #
     # ACTION IN EDIT PAGE

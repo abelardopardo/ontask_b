@@ -221,7 +221,7 @@ def evaluate_action(action, extra_string=None,
         row_values = dict(zip(col_names, row))
 
         if exclude_values and col_idx != -1 and \
-                row_values[column_name] in exclude_values:
+                str(row_values[column_name]) in exclude_values:
             # Skip the row with the col_idx value in exclude values
             continue
 

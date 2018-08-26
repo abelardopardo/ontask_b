@@ -44,8 +44,8 @@ def run_email_action(request, workflow, action):
     if not op_payload:
         op_payload = {'action_id': action.id,
                       'prev_url': reverse('action:run',
-                                            kwargs={'pk': action.id}),
-                      'post_url': reverse('action:email_step3')}
+                                          kwargs={'pk': action.id}),
+                      'post_url': reverse('action:email_done')}
         request.session[session_dictionary_name] = op_payload
         request.session.save()
 
@@ -53,8 +53,9 @@ def run_email_action(request, workflow, action):
     celery_stats = None
     try:
         celery_stats = inspect().stats()
-    except Exception as e:
+    except Exception:
         pass
+
     # If the stats are empty, celery is not running.
     if not celery_stats:
         messages.error(
@@ -88,38 +89,31 @@ def run_email_action(request, workflow, action):
                        'form': form})
 
     # Requet is a POST and is valid
-    subject = form.cleaned_data['subject']
-    email_column = form.cleaned_data['email_column']
-    cc_email = form.cleaned_data['cc_email']
-    bcc_email = form.cleaned_data['bcc_email']
-    confirm_emails = form.cleaned_data['confirm_emails']
-    send_confirmation = form.cleaned_data['send_confirmation']
-    track_read = form.cleaned_data['track_read']
 
-    # Upload op_payload
-    op_payload['subject'] = subject
-    op_payload['email_column'] = email_column
-    op_payload['cc_email'] = cc_email
-    op_payload['bcc_email'] = bcc_email
-    op_payload['confirm_emails'] = confirm_emails
-    op_payload['send_confirmation'] = send_confirmation
-    op_payload['track_read'] = track_read
+    # Collect information from the form and store it in op_payload
+    op_payload['subject'] = form.cleaned_data['subject']
+    op_payload['item_column'] = form.cleaned_data['email_column']
+    op_payload['cc_email'] = form.cleaned_data['cc_email']
+    op_payload['bcc_email'] = form.cleaned_data['bcc_email']
+    op_payload['confirm_emails'] = form.cleaned_data['confirm_emails']
+    op_payload['send_confirmation'] = form.cleaned_data['send_confirmation']
+    op_payload['track_read'] = form.cleaned_data['track_read']
     op_payload['export_wf'] = form.cleaned_data['export_wf']
     op_payload['exclude_values'] = []
 
-    if confirm_emails:
+    if op_payload['confirm_emails']:
         # Create a dictionary in the session to carry over all the information
         # to execute the next pages
         op_payload['button_label'] = ugettext('Send')
         request.session[session_dictionary_name] = op_payload
 
-        return redirect('action:email_filter')
+        return redirect('action:item_filter')
 
     # Go straight to the final step.
-    return run_email_action_step3(request, op_payload)
+    return run_email_action_done(request, op_payload)
 
 
-def run_email_action_step3(request, payload=None):
+def run_email_action_done(request, payload=None):
     """
     Final step. Create the log object, queue the operation request,
     and render the DONE page.
@@ -143,7 +137,7 @@ def run_email_action_step3(request, payload=None):
     # Get the information from the payload
     action = Action.objects.get(pk=payload['action_id'])
     subject = payload['subject']
-    email_column = payload['email_column']
+    email_column = payload['item_column']
     cc_email = [x.strip() for x in payload['cc_email'].split(',') if x]
     bcc_email = [x.strip() for x in payload['bcc_email'].split(',') if x]
     send_confirmation = payload['send_confirmation']
@@ -200,15 +194,23 @@ def run_json_action(request, workflow, action):
     :return:
     """
 
-    # Create the form to ask for the email subject and other information
-    form = JSONActionForm(request.POST or None)
+    # Get the payload from the session, and if not, use the given one
+    op_payload = request.session.get(session_dictionary_name, None)
+    if not op_payload:
+        op_payload = {'action_id': action.id,
+                      'prev_url': reverse('action:run',
+                                          kwargs={'pk': action.id}),
+                      'post_url': reverse('action:json_done')}
+        request.session[session_dictionary_name] = op_payload
+        request.session.save()
 
     # Verify that celery is running!
     celery_stats = None
     try:
         celery_stats = inspect().stats()
-    except Exception as e:
+    except Exception:
         pass
+
     # If the stats are empty, celery is not running.
     if not celery_stats:
         messages.error(
@@ -217,14 +219,17 @@ def run_json_action(request, workflow, action):
               'Ask your system administrator to enable json queueing.'))
         return redirect(reverse('action:index'))
 
+    # Create the form to ask for the email subject and other information
+    form = JSONActionForm(request.POST or None,
+                          column_names=[x.name for x in
+                                        workflow.columns.filter(is_key=True)],
+                          op_payload=op_payload)
+
     # Process the GET or invalid
     if request.method == 'GET' or not form.is_valid():
         # Get the number of rows from the action
         filter_obj = action.get_filter()
-        num_msgs = filter_obj.n_rows_selected if filter_obj else -1
-        if num_msgs == -1:
-            # There is no filter in the action, so take the number of rows
-            num_msgs = workflow.nrows
+        num_msgs = filter_obj.n_rows_selected if filter_obj else workflow.nrows
 
         # Render the form
         return render(request,
@@ -235,28 +240,76 @@ def run_json_action(request, workflow, action):
 
     # Requet is a POST and is valid
 
+    # Collect the information from the form
+    op_payload['key_column'] = form.cleaned_data['key_column']
+    op_payload['token'] = form.cleaned_data['token']
+
+    if op_payload['key_column']:
+        # Create a dictionary in the session to carry over all the information
+        # to execute the next pages
+        op_payload['item_column'] = op_payload['key_column']
+        op_payload['button_label'] = ugettext('Send')
+        request.session[session_dictionary_name] = op_payload
+
+        return redirect('action:item_filter')
+
+    # Go straight to the final step.
+    return json_done(request, op_payload)
+
+
+def json_done(request, payload=None):
+    """
+    Final step. Create the log object, queue the operation request,
+    and render the DONE page.
+
+    :param request: HTTP request (GET)
+    :param payload: Dictionary containing all the required parameters. If
+    empty, the ditionary is taken from the session.
+    :return: HTTP response
+    """
+
+    # Get the payload from the session if not given
+    if payload is None:
+        payload = request.session.get(session_dictionary_name)
+
+        # If there is no payload, something went wrong.
+        if payload is None:
+            # Something is wrong with this execution. Return to action table.
+            messages.error(request, _('Incorrect email action invocation.'))
+            return redirect('action:index')
+
+    # Get the information from the payload
+    action = Action.objects.get(pk=payload['action_id'])
+    token = payload['token']
+    key_column = payload['key_column']
+    exclude_values = payload.get('exclude_values', [])
+
     # Log the event
     log_item = Log.objects.register(request.user,
                                     Log.SCHEDULE_JSON_EXECUTE,
                                     action.workflow,
                                     {'action': action.name,
                                      'action_id': action.id,
+                                     'key_column': key_column,
                                      'target_url': action.target_url,
+                                     'exclude_values': exclude_values,
                                      'status': 'Preparing to execute'})
 
     # Send the objects
     # send_json_objects(request.user.id,
     send_json_objects.delay(request.user.id,
                             action.id,
-                            form.cleaned_data['token'],
+                            token,
+                            key_column,
+                            exclude_values,
                             log_item.id)
 
-    context = {'log_id': log_item.id, 'action': action}
+    # Reset object to carry action info throughout dialogs
+    request.session[session_dictionary_name] = {}
+    request.session.save()
 
     # Successful processing.
-    return render(request,
-                  'action/action_done.html',
-                  context)
+    return render(request, 'action/action_done.html', {'log_id': log_item.id})
 
 
 @csrf_exempt
@@ -270,8 +323,6 @@ def preview_response(request, pk, idx):
     :param request: HTML request object
     :param pk: Primary key of the an action for which to do the preview
     :param idx: Index of the reponse to preview
-    :param template: Path to the template to use for the render.
-    :param prelude: Optional text to include at the top of the rencering
     :return:
     """
 
@@ -376,7 +427,7 @@ def preview_response(request, pk, idx):
     return JsonResponse(data)
 
 
-def run_action_email_filter(request):
+def run_action_item_filter(request):
     """
     Offer a select widget to tick students to exclude from the email.
     :param request: HTTP request (GET)
@@ -395,7 +446,7 @@ def run_action_email_filter(request):
 
     form = EmailExcludeForm(request.POST or None,
                             action=action,
-                            column_name=payload['email_column'],
+                            column_name=payload['item_column'],
                             exclude_values=payload.get('exclude_values', list))
     context = {
         'form': form,
@@ -406,7 +457,7 @@ def run_action_email_filter(request):
 
     # Process the initial loading of the form and return
     if request.method != 'POST' or not form.is_valid():
-        return render(request, 'action/action_email_filter.html', context)
+        return render(request, 'action/item_filter.html', context)
 
     # Updating the content of the exclude_values in the payload
     payload['exclude_values'] = form.cleaned_data['exclude_values']

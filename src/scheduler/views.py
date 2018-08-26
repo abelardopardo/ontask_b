@@ -213,11 +213,11 @@ def save_email_schedule(request, workflow, action, schedule_item):
     if form.cleaned_data['confirm_emails']:
         # Create a dictionary in the session to carry over all the
         # information to execute the next steps
-        op_payload['email_column'] = s_item.email_column.name
+        op_payload['item_column'] = s_item.email_column.name
         op_payload['button_label'] = ugettext('Schedule')
         request.session[session_dictionary_name] = op_payload
 
-        return redirect('action:email_filter')
+        return redirect('action:item_filter')
 
     # Go straight to the final step
     return scheduler_finalize_action(request, op_payload)

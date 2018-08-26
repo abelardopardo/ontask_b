@@ -627,7 +627,7 @@ def send_messages(user,
     return None
 
 
-def send_json(user, action, token, log_item):
+def send_json(user, action, token, key_column, exclude_values, log_item):
     """
     Performs the submission of the emails for the given action and with the
     given subject. The subject will be evaluated also with respect to the
@@ -635,12 +635,16 @@ def send_json(user, action, token, log_item):
     :param user: User object that executed the action
     :param action: Action from where to take the messages
     :param token: String to include as authorisation token
+    :param key_column: Key column name to use to exclude elements (if needed)
+    :param exclude_values: List of values to exclude from the mailing
     :param log_item: Log object to store results
     :return: Send the json objects
     """
 
     # Evaluate the action string and obtain the list of list of JSON objects
-    result = evaluate_action(action)
+    result = evaluate_action(action,
+                             column_name=key_column,
+                             exclude_values=exclude_values)
 
     # Check the type of the result to see if it was successful
     if not isinstance(result, list):
