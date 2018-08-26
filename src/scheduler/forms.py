@@ -13,7 +13,7 @@ from validate_email import validate_email
 from core import settings as core_settings
 from dataops.pandas_db import execute_select_on_table
 from workflow.models import Column
-from .models import ScheduledEmailAction
+from .models import ScheduledAction
 
 
 class EmailScheduleForm(forms.ModelForm):
@@ -29,7 +29,34 @@ class EmailScheduleForm(forms.ModelForm):
 
     # This field is needed because it has to consider only a subset of the
     # columns, those that are "key".
-    email_column = forms.ModelChoiceField(queryset=Column.objects.none())
+    item_column = forms.ModelChoiceField(queryset=Column.objects.none())
+
+    subject = forms.CharField(initial='',
+                              label=_('Email subject'),
+                              strip=True,
+                              required=True)
+
+    cc_email = forms.CharField(initial='',
+                               label=_('Comma-separated list of CC Emails'),
+                               strip=True,
+                               required=False)
+
+    bcc_email = forms.CharField(initial='',
+                                label=_('Comma-separated list of BCC Emails'),
+                                strip=True,
+                                required=False)
+
+    send_confirmation = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Send you a confirmation email')
+    )
+
+    track_read = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Track if emails are read?')
+    )
 
     confirm_emails = forms.BooleanField(
         initial=False,
@@ -40,11 +67,28 @@ class EmailScheduleForm(forms.ModelForm):
     def __init__(self, data, *args, **kwargs):
         self.action = kwargs.pop('action')
         columns = kwargs.pop('columns')
+        confirm_emails = kwargs.pop('confirm_emails')
 
         # Call the parent constructor
         super(EmailScheduleForm, self).__init__(data, *args, **kwargs)
 
-        self.fields['email_column'].queryset = columns
+        self.fields['item_column'].queryset = columns
+        self.fields['item_column'].label = _('Column in the table containing '
+                                             'the email')
+
+        self.fields['confirm_emails'].initial = confirm_emails
+
+        # If there is an instance, push the values in the payload to the form
+        if self.instance:
+            payload = self.instance.payload
+            self.fields['subject'].initial = payload.get('subject')
+            self.fields['cc_email'].initial = \
+                ', '.join(payload.get('cc_email', []))
+            self.fields['bcc_email'].initial = \
+                ', '.join(payload.get('bcc_email', []))
+            self.fields['send_confirmation'].initial = \
+                payload.get('send_confirmation', False)
+            self.fields['track_read'].initial = payload.get('track_read', False)
 
     def clean(self):
 
@@ -57,7 +101,7 @@ class EmailScheduleForm(forms.ModelForm):
             self.add_error('execute',
                            _('Date/time must be in the future'))
 
-        email_column = self.cleaned_data['email_column']
+        item_column = self.cleaned_data['item_column']
 
         # Check if the values in the email column are correct emails
         try:
@@ -65,16 +109,16 @@ class EmailScheduleForm(forms.ModelForm):
                 self.action.workflow.id,
                 [],
                 [],
-                column_names=[email_column.name])
+                column_names=[item_column.name])
             if not all([validate_email(x[0]) for x in column_data]):
                 # column has incorrect email addresses
                 self.add_error(
-                    'email_column',
+                    'item_column',
                     _('The column with email addresses has incorrect values.')
                 )
         except TypeError:
             self.add_error(
-                'email_column',
+                'item_column',
                 _('The column with email addresses has incorrect values.')
             )
 
@@ -82,24 +126,21 @@ class EmailScheduleForm(forms.ModelForm):
                     for x in self.cleaned_data['cc_email'].split(',') if x]):
             self.add_error(
                 'cc_email',
-                _('Field needs a comma-separated list of emails.')
+                _('This field must be a comma-separated list of emails.')
             )
 
         if not all([validate_email(x)
                     for x in self.cleaned_data['bcc_email'].split(',') if x]):
             self.add_error(
                 'bcc_email',
-                _('Field needs a comma-separated list of emails.')
+                _('This field must be a comma-separated list of emails.')
             )
 
         return data
 
     class Meta:
-        model = ScheduledEmailAction
-        fields = ('subject', 'email_column', 'cc_email',
-                  'bcc_email', 'send_confirmation',
-                  'track_read',
-                  'execute')
+        model = ScheduledAction
+        fields = ('subject', 'item_column', 'execute')
 
         widgets = {
             'execute': DateTimeWidget(

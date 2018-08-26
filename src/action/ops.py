@@ -504,7 +504,7 @@ def send_messages(user,
             text_content,
             from_email,
             [msg_to],
-            bcc_email_list,
+            bcc=bcc_email_list,
             cc=cc_email_list
         )
         msg.attach_alternative(msg_body + track_str, "text/html")

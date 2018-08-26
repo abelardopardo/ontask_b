@@ -14,7 +14,7 @@ from action.models import Action
 from action.ops import send_messages, send_json
 from dataops import pandas_db
 from logs.models import Log
-from scheduler.models import ScheduledEmailAction
+from scheduler.models import ScheduledAction
 
 logger = get_task_logger(__name__)
 
@@ -74,13 +74,14 @@ def send_email_messages(user_id,
     :param track_read: Boolean to try to track reads
     :param exclude_values: List of values to exclude from the mailing
     :param log_id: Id of the log object where the status has to be reflected
-    :return: Nothing
+    :return: bool stating if execution has been correct
     """
 
     # Get the objects
     user, action, log_item = get_execution_items(user_id, action_id, log_id)
 
     msg = 'Finished'
+    to_return = True
     try:
         result = send_messages(user,
                                action,
@@ -97,16 +98,19 @@ def send_email_messages(user_id,
         if result:
             msg = 'Incorrect execution: ' + str(result)
             logger.error(msg)
-
+            to_return = False
     except Exception as e:
         msg = 'Error while executing send_messages: {0}'.format(e.message)
         logger.error(msg)
+        to_return = False
     else:
         logger.info(msg)
 
     # Update the message in the payload
     log_item.payload['status'] = msg
     log_item.save()
+
+    return to_return
 
 
 @shared_task
@@ -168,9 +172,9 @@ def execute_email_actions(debug):
     now = datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
 
     # Get all the actions that are pending
-    s_items = ScheduledEmailAction.objects.filter(
-        type='email_send',
-        status=0,  # Pending
+    s_items = ScheduledAction.objects.filter(
+        type=ScheduledAction.TYPE_EMAIL_SEND,
+        status=ScheduledAction.STATUS_PENDING,
         execute__lt=now + datetime.timedelta(minutes=1)
     )
     logger.info(str(s_items.count()) + ' actions pending execution')
@@ -183,19 +187,11 @@ def execute_email_actions(debug):
         if debug:
             logger.info('Starting execution of task ' + str(item.id))
 
-        # Set item to running
-        item.status = 1  # Running
-
-        # Execute an email task that contains:
-        # - action id
-        # - subject
-        # - email column
-        # - send_confirmation
-        # - track_read
-
-        # Get additional parameters for the log
-        cc_email = [x.strip() for x in item.cc_email.split(',') if x]
-        bcc_email = [x.strip() for x in item.bcc_email.split(',') if x]
+        subject = item.payload.get('subject', '')
+        cc_email = item.payload.get('cc_email', [])
+        bcc_email = item.payload.get('bcc_email', [])
+        send_confirmation = item.payload.get('send_confirmation', False)
+        track_read = item.payload.get('track_read', False)
 
         # Log the event
         log_item = Log.objects.register(
@@ -206,32 +202,42 @@ def execute_email_actions(debug):
              'action_id': item.action.id,
              'from_email': item.user.email,
              'execute': item.execute.isoformat(),
-             'subject': item.subject,
-             'email_column': item.email_column.name,
+             'email_column': item.item_column.name,
+             'subject': subject,
              'cc_email': cc_email,
              'bcc_email': bcc_email,
-             'send_confirmation': item.send_confirmation,
-             'track_read': item.track_read,
+             'send_confirmation': send_confirmation,
+             'track_read': track_read,
              'status': 'Preparing to execute'}
         )
 
-        send_email_messages(item.user.id,
-                            item.action.id,
-                            item.subject,
-                            item.email_column.name,
-                            item.user.email,
-                            cc_email,
-                            bcc_email,
-                            item.send_confirmation,
-                            item.track_read,
-                            [],  # TODO Allow for exclude_values field
-                            log_item.id)
+        # Set item to running
+        item.status = ScheduledAction.STATUS_EXECUTING
+        item.last_executed_log = log_item
+        item.save()
 
-        # Store the resulting message in the record
-        item.message = \
-            'Operation executed. Status available in Log {0}'.format(
-                log_item.id
-            )
+        if debug:
+            logger.info('Status set to {0}'.format(item.status))
+
+        result = send_email_messages(item.user.id,
+                                     item.action.id,
+                                     subject,
+                                     item.item_column.name,
+                                     item.user.email,
+                                     cc_email,
+                                     bcc_email,
+                                     send_confirmation,
+                                     track_read,
+                                     item.exclude_values,
+                                     log_item.id)
+
+        if result:
+            item.status = ScheduledAction.STATUS_DONE
+        else:
+            item.status = ScheduledAction.STATUS_DONE_ERROR
+
+        if debug:
+            logger.info('Status set to {0}'.format(item.status))
 
         # Save the new status in the DB
         item.save()

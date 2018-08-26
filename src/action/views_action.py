@@ -84,16 +84,17 @@ class ActionTable(tables.Table):
 
     def render_last_executed_log(self, record):
         log_item = record['last_executed_log']
-        if log_item:
-            return format_html(
-                """<a href="{0}">{1}</a>""".format(
-                    reverse('logs:view', kwargs={'pk': log_item.id}),
-                    log_item.modified.astimezone(
-                        pytz.timezone(settings.TIME_ZONE)
-                    )
+        if not log_item:
+            return "---"
+
+        return format_html(
+            """<a href="{0}">{1}</a>""".format(
+                reverse('logs:view', kwargs={'pk': log_item.id}),
+                log_item.modified.astimezone(
+                    pytz.timezone(settings.TIME_ZONE)
                 )
             )
-        return "---"
+        )
 
     class Meta:
         model = Action

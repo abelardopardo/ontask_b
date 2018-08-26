@@ -3,12 +3,11 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
-from models import ScheduledEmailAction
+from models import ScheduledAction
 
 
 class ScheduledEmailActionAdmin(admin.ModelAdmin):
     list_display = ('user', 'type', 'created', 'execute',
-                    'status', 'action', 'subject', 'email_column',
-                    'send_confirmation', 'track_read', 'message')
+                    'status', 'action', 'item_column', 'last_executed_log')
 
-admin.site.register(ScheduledEmailAction, ScheduledEmailActionAdmin)
+admin.site.register(ScheduledAction, ScheduledEmailActionAdmin)

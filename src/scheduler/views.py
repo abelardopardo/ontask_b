@@ -14,9 +14,8 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse
 from django.template.loader import render_to_string
-from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ugettext
+from django.utils.html import format_html, escape
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django_tables2 import A
 
 from action.models import Action
@@ -24,12 +23,12 @@ from action.views_out import session_dictionary_name
 from forms import EmailScheduleForm
 from logs.models import Log
 from ontask.permissions import is_instructor
-from ontask.tables import OperationsColumn, BooleanColumn
-from scheduler.models import ScheduledEmailAction
+from ontask.tables import OperationsColumn
+from scheduler.models import ScheduledAction
 from workflow.ops import get_workflow
 
 
-class ScheduleEmailActionTable(tables.Table):
+class ScheduleActionTable(tables.Table):
     """
     Table to show the email actions scheduled for a workflow
     """
@@ -42,30 +41,37 @@ class ScheduleEmailActionTable(tables.Table):
         template_context=lambda record: {'id': record.id}
     )
 
+    type = tables.Column(
+        attrs={'td': {'class': 'dt-center'}},
+        verbose_name=_('Type'),
+        accessor=A('get_type_display')
+    )
+
     action = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
         verbose_name=_('Action'),
         accessor=A('action.name')
     )
 
-    execute = tables.Column(
+    created = tables.DateTimeColumn(
+        attrs={'td': {'class': 'dt-center'}},
+        verbose_name=_('Scheduled')
+    )
+
+    execute = tables.DateTimeColumn(
         attrs={'td': {'class': 'dt-center'}},
         verbose_name=_('Scheduled')
     )
 
     status = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
-        verbose_name=_('Status')
+        verbose_name=_('Status'),
+        accessor=A('get_status_display')
     )
 
-    subject = tables.Column(
+    item_column = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
-        verbose_name=_('Subject')
-    )
-
-    email_column = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=_('Email column'),
+        verbose_name=_('Item column'),
     )
 
     exclude_values = tables.Column(
@@ -73,31 +79,14 @@ class ScheduleEmailActionTable(tables.Table):
         verbose_name=_('Exclude'),
     )
 
-    cc_email = tables.Column(
+    payload = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
-        verbose_name=_('CC Emails'),
+        verbose_name=_('Parameters'),
     )
 
-    bcc_email = tables.Column(
+    last_executed_log = tables.DateTimeColumn(
         attrs={'td': {'class': 'dt-center'}},
-        verbose_name=_('BCC Emails'),
-    )
-
-    send_confirmation = BooleanColumn(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=_('Send confirmation'),
-        get_field=lambda x: x.send_confirmation,
-    )
-
-    track_read = BooleanColumn(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=_('Track'),
-        get_field=lambda x: x.track_read,
-    )
-
-    message = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=_('Execution message'),
+        verbose_name=_('Result'),
     )
 
     def render_action(self, record):
@@ -112,26 +101,53 @@ class ScheduleEmailActionTable(tables.Table):
     def render_exclude_values(self, record):
         return ', '.join(record.exclude_values)
 
-    class Meta:
-        model = ScheduledEmailAction
+    def render_payload(self, record):
+        result = ''
+        if not record.payload:
+            return result
 
-        fields = ('action', 'created', 'execute', 'status', 'subject',
-                  'email_column', 'exclude_values', 'cc_email', 'bcc_email',
-                  'send_confirmation', 'track_read', 'operations', 'message')
+        for k, v in sorted(record.payload.items()):
+            if isinstance(v, list):
+                result += '<li>{0}: {1}</li>'.format(
+                    escape(str(k)), escape(', '.join([str(x) for x in v]))
+                )
+            else:
+                result += '<li>{0}: {1}</li>'.format(
+                    escape(str(k)), escape(str(v))
+                )
+        return format_html(
+            '<ul style="text-align:left;">{0}<ul>'.format(result)
+        )
+
+    def render_last_executed_log(self, record):
+        log_item = record.last_executed_log
+        if not log_item:
+            return "---"
+        return format_html(
+            """<a href="{0}">{1}</a>""".format(
+                reverse('logs:view', kwargs={'pk': log_item.id}),
+                log_item.modified.astimezone(
+                    pytz.timezone(settings.TIME_ZONE)
+                )
+            )
+        )
+
+    class Meta:
+        model = ScheduledAction
+
+        fields = ('type', 'action', 'created', 'execute', 'status',
+                  'item_column', 'exclude_values', 'operations',
+                  'last_executed_log')
 
         sequence = ('operations',
+                    'type',
                     'action',
                     'created',
                     'execute',
                     'status',
-                    'subject',
-                    'email_column',
+                    'item_column',
                     'exclude_values',
-                    'cc_email',
-                    'bcc_email',
-                    'send_confirmation',
-                    'track_read',
-                    'message')
+                    'last_executed_log')
 
         attrs = {
             'class': 'table display table-bordered',
@@ -140,7 +156,8 @@ class ScheduleEmailActionTable(tables.Table):
 
         row_attrs = {
             'style': 'text-align:center;',
-            'class': lambda record: 'success' if record.status == 0 else ''
+            'class': lambda record: 'success' \
+                if record.status == ScheduledAction.STATUS_PENDING else ''
         }
 
 
@@ -159,7 +176,7 @@ def save_email_schedule(request, workflow, action, schedule_item):
     if not op_payload:
         op_payload = {'action_id': action.id,
                       'prev_url': reverse('scheduler:create_email',
-                                            kwargs={'pk': action.id}),
+                                          kwargs={'pk': action.id}),
                       'post_url': reverse('scheduler:finish_schedule')}
         request.session[session_dictionary_name] = op_payload
         request.session.save()
@@ -179,10 +196,12 @@ def save_email_schedule(request, workflow, action, schedule_item):
         return redirect(reverse('action:index'))
 
     # Create the form to ask for the email subject and other information
-    form = EmailScheduleForm(data=request.POST or None,
-                             action=action,
-                             instance=schedule_item,
-                             columns=workflow.columns.filter(is_key=True))
+    form = EmailScheduleForm(
+        data=request.POST or None,
+        action=action,
+        instance=schedule_item,
+        columns=workflow.columns.filter(is_key=True),
+        confirm_emails=op_payload.get('confirm_emails', False))
 
     now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
     # Check if the request is GET, or POST but not valid
@@ -202,18 +221,27 @@ def save_email_schedule(request, workflow, action, schedule_item):
     # Assign additional fields and save
     s_item.user = request.user
     s_item.action = action
-    s_item.type = 'email_send'
-    s_item.status = 0  # Pending
+    s_item.type = ScheduledAction.TYPE_EMAIL_SEND
+    s_item.status = ScheduledAction.STATUS_CREATING
+    s_item.payload = {
+        'subject': form.cleaned_data['subject'],
+        'cc_email': [x for x in form.cleaned_data['cc_email'].split(',') if x],
+        'bcc_email': [x
+                      for x in form.cleaned_data['bcc_email'].split(',') if x],
+        'send_confirmation': form.cleaned_data['send_confirmation'],
+        'track_read': form.cleaned_data['track_read']
+    }
     s_item.save()
 
     # Upload information to the op_payload
     op_payload['schedule_id'] = s_item.id
     op_payload['exclude_values'] = s_item.exclude_values
+    op_payload['confirm_emails'] = form.cleaned_data['confirm_emails']
 
-    if form.cleaned_data['confirm_emails']:
+    if op_payload['confirm_emails']:
         # Create a dictionary in the session to carry over all the
         # information to execute the next steps
-        op_payload['item_column'] = s_item.email_column.name
+        op_payload['item_column'] = s_item.item_column.name
         op_payload['button_label'] = ugettext('Schedule')
         request.session[session_dictionary_name] = op_payload
 
@@ -252,23 +280,28 @@ def scheduler_finalize_action(request, payload=None):
         return redirect('action:index')
 
     # Get the item being processed
-    schedule_item = ScheduledEmailAction.objects.get(pk=s_item_id)
+    schedule_item = ScheduledAction.objects.get(pk=s_item_id)
 
     # Check for exclude values and store them if needed
     exclude_values = payload.get('exclude_values')
     if exclude_values:
         schedule_item.exclude_values = exclude_values
-        schedule_item.save()
+
+    schedule_item.status = ScheduledAction.STATUS_PENDING
+    schedule_item.save()
 
     # Create the payload to record the event in the log
     log_payload = {
         'action': schedule_item.action.name,
         'action_id': schedule_item.action.id,
         'execute': schedule_item.execute.isoformat(),
-        'subject': schedule_item.subject,
-        'email_column': schedule_item.email_column.name,
-        'send_confirmation': schedule_item.send_confirmation,
-        'track_read': schedule_item.track_read
+        'email_column': schedule_item.item_column.name,
+        'subject': schedule_item.payload.get('subject'),
+        'cc_email': schedule_item.payload.get('cc_email', []),
+        'bcc_email': schedule_item.payload.get('bcc_email', []),
+        'send_confirmation': schedule_item.payload.get('send_confirmation',
+                                                False),
+        'track_read': schedule_item.payload.get('track_read', False)
     }
 
     # Log the operation
@@ -313,16 +346,12 @@ def index(request):
         return redirect('workflow:index')
 
     # Get the actions
-    s_items = ScheduledEmailAction.objects.filter(
-        action__workflow=workflow.id,
-        deleted=False
-    )
+    s_items = ScheduledAction.objects.filter(action__workflow=workflow.id,
+                                             deleted=False)
 
-    return render(
-        request,
-        'scheduler/index.html',
-        {'table': ScheduleEmailActionTable(s_items, orderable=False)}
-    )
+    return render(request,
+                  'scheduler/index.html',
+                  {'table': ScheduleActionTable(s_items, orderable=False)})
 
 
 @user_passes_test(is_instructor)
@@ -349,10 +378,10 @@ def email_create(request, pk):
 
     # See if this action already has a scheduled action
     schedule_item = None
-    qs = ScheduledEmailAction.objects.filter(
+    qs = ScheduledAction.objects.filter(
         action=action,
-        type='email_send',
-        status=0,  # Pending
+        type=ScheduledAction.TYPE_EMAIL_SEND,
+        status=ScheduledAction.STATUS_CREATING,
         deleted=False
     )
     if qs:
@@ -379,9 +408,9 @@ def edit_email(request, pk):
 
     # Get the scheduled action from the parameter in the URL
     try:
-        s_item = ScheduledEmailAction.objects.filter(
+        s_item = ScheduledAction.objects.filter(
             action__workflow=workflow,
-            type='email_send',
+            type=ScheduledAction.TYPE_EMAIL_SEND,
             deleted=False,
         ).get(pk=pk)
     except ObjectDoesNotExist:
@@ -407,7 +436,7 @@ def delete_email(request, pk):
 
     # Get the appropriate scheduled action
     try:
-        s_item = ScheduledEmailAction.objects.filter(
+        s_item = ScheduledAction.objects.filter(
             action__workflow__user=request.user,
             deleted=False,
         ).distinct().get(pk=pk)
@@ -418,17 +447,20 @@ def delete_email(request, pk):
 
     if request.method == 'POST':
         # Log the event
-        Log.objects.record(
+        Log.objects.register(
             request.user,
             Log.SCHEDULE_EMAIL_DELETE,
             s_item.action.workflow,
             {'action': s_item.action.name,
              'action_id': s_item.action.id,
              'execute': s_item.execute.isoformat(),
-             'subject': s_item.subject,
-             'email_column': s_item.email_column.name,
-             'send_confirmation': s_item.send_confirmation,
-             'track_read': s_item.track_read}
+             'email_column': s_item.item_column.name,
+             'subject': s_item.payload.get('subject'),
+             'cc_email': s_item.payload.get('cc_email', []),
+             'bcc_email': s_item.payload.get('bcc_email', []),
+             'send_confirmation': s_item.payload.get('send_confirmation',
+                                                     False),
+             'track_read': s_item.payload.get('track_read', False)}
         )
 
         # Perform the delete operation

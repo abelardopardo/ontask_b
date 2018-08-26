@@ -126,7 +126,7 @@ def save_conn_form(request, form, template_name):
             return JsonResponse(data)
 
         # Log the event
-        Log.objects.record(
+        Log.objects.register(
             request.user,
             event_type,
             None,
@@ -273,7 +273,7 @@ def sqlconn_clone(request, pk):
     conn.save()
 
     # Log the event
-    Log.objects.record(
+    Log.objects.register(
         request.user,
         Log.SQL_CONNECTION_CLONE,
         None,
@@ -310,7 +310,7 @@ def sqlconn_delete(request, pk):
 
     if request.method == 'POST':
         # Log the event
-        Log.objects.record(
+        Log.objects.register(
             request.user,
             Log.SQL_CONNECTION_DELETE,
             None,
