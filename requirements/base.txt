@@ -34,4 +34,5 @@ argon2-cffi==18.1.0
 django-modeltranslation==0.12.2
 django-celery-beat==1.1.1
 django-celery-results==1.0.1
+celery==4.2.1
 supervisor==3.3.4

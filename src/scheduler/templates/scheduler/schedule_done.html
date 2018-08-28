@@ -12,7 +12,7 @@
     <button type="button" class="btn btn-default"
       onclick="location.href='{% url 'scheduler:index' %}'">{% trans 'Back' %}
     </button>
-    <a href="{% url 'scheduler:edit_email' s_item.id %}"
+    <a href="{% url 'scheduler:edit' s_item.id %}"
        class="btn btn-primary btn-sm align-middle">
     <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}</a>
   </div>

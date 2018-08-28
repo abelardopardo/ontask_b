@@ -79,10 +79,11 @@ class Log(models.Model):
     SQL_CONNECTION_EDIT = 'sql_connection_edit'
     SQL_CONNECTION_DELETE = 'sql_connection_delete'
     SQL_CONNECTION_CLONE = 'sql_connection_clone'
-    SCHEDULE_EMAIL_CREATE = 'schedule_email_create'
     SCHEDULE_EMAIL_EDIT = 'schedule_email_edit'
     SCHEDULE_EMAIL_DELETE = 'schedule_email_delete'
     SCHEDULE_EMAIL_EXECUTE = 'schedule_email_execute'
+    SCHEDULE_JSON_EDIT = 'schedule_json_edit'
+    SCHEDULE_JSON_DELETE = 'schedule_json_delete'
     SCHEDULE_JSON_EXECUTE = 'schedule_json_execute'
 
     LOG_TYPES = [
@@ -137,10 +138,11 @@ class Log(models.Model):
         (SQL_CONNECTION_EDIT, _('SQL connection updated')),
         (SQL_CONNECTION_DELETE, _('SQL connection deleted')),
         (SQL_CONNECTION_CLONE, _('SQL connection cloned')),
-        (SCHEDULE_EMAIL_CREATE, _('Created scheduled email action')),
         (SCHEDULE_EMAIL_EDIT, _('Edit scheduled email action')),
         (SCHEDULE_EMAIL_DELETE, _('Delete scheduled email action')),
         (SCHEDULE_EMAIL_EXECUTE, _('Execute scheduled email action')),
+        (SCHEDULE_JSON_EDIT, _('Edit scheduled JSON action')),
+        (SCHEDULE_JSON_DELETE, _('Delete scheduled JSON action')),
         (SCHEDULE_JSON_EXECUTE, _('Execute scheduled JSON action')),
     ]
 

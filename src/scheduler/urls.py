@@ -14,21 +14,17 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
 
     # Create scheduled email action
-    url(r'^(?P<pk>\d+)/create_email/$',
-        views.email_create,
-        name="create_email"),
-
-    url(r'^finish_schedule/$',
-        views.scheduler_finalize_action,
-        name='finish_schedule'),
+    url(r'^(?P<pk>\d+)/create/$', views.edit, name="create"),
 
     # Edit scheduled email action
-    url(r'^(?P<pk>\d+)/edit_email/$', views.edit_email, name='edit_email'),
+    url(r'^(?P<pk>\d+)/edit/$', views.edit, name='edit'),
 
     # Deletell scheduled email action
-    url(r'^(?P<pk>\d+)/delete_email/$',
-        views.delete_email,
-        name='delete_email'),
+    url(r'^(?P<pk>\d+)/delete/$', views.delete, name='delete'),
+
+    url(r'^finish_scheduling/$',
+        views.finish_scheduling,
+        name='finish_scheduling'),
 
 ]
 

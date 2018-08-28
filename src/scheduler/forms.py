@@ -16,20 +16,65 @@ from workflow.models import Column
 from .models import ScheduledAction
 
 
-class EmailScheduleForm(forms.ModelForm):
+class ScheduleForm(forms.ModelForm):
     """
-    Form to create/edit objects of the ScheduleEmailAction. One of the fields
-    is a reference to a key column, which is a subset of the columns attached
-    to the action. The subset is passed as the name arguments "columns" (list
-    of key columns).
+    Form to create/edit objects of the ScheduleAction. To be used for the
+    various types of actions.
 
     There is an additional field to allow for an extra step to review and
-    filter email addresses.
+    filter elements (item_column).
     """
 
     # This field is needed because it has to consider only a subset of the
     # columns, those that are "key".
     item_column = forms.ModelChoiceField(queryset=Column.objects.none())
+
+    def __init__(self, data, *args, **kwargs):
+        self.action = kwargs.pop('action')
+        columns = kwargs.pop('columns')
+
+        # Call the parent constructor
+        super(ScheduleForm, self).__init__(data, *args, **kwargs)
+
+        self.fields['item_column'].queryset = columns
+
+    def clean(self):
+
+        data = super(ScheduleForm, self).clean()
+
+        # The executed time must be in the future
+        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
+        when_data = self.cleaned_data.get('execute', None)
+        if when_data and when_data <= now:
+            self.add_error('execute',
+                           _('Date/time must be in the future'))
+
+        return data
+
+    class Meta:
+        model = ScheduledAction
+        fields = ('item_column', 'execute')
+
+        widgets = {
+            'execute': DateTimeWidget(
+                options={'weekStart': 1,
+                         'minuteStep': str(getattr(core_settings,
+                                                   'MINUTE_STEP'))},
+                usel10n=True,
+                bootstrap_version=3),
+        }
+
+
+class EmailScheduleForm(ScheduleForm):
+    """
+    Form to create/edit objects of the ScheduleAction of type email. One of the
+    fields is a reference to a key column, which is a subset of the columns
+    attached to the action. The subset is passed as the name arguments
+    "columns" (list of key columns).
+
+    There is an additional field to allow for an extra step to review and
+    filter email addresses.
+    """
 
     subject = forms.CharField(initial='',
                               label=_('Email subject'),
@@ -65,14 +110,11 @@ class EmailScheduleForm(forms.ModelForm):
     )
 
     def __init__(self, data, *args, **kwargs):
-        self.action = kwargs.pop('action')
-        columns = kwargs.pop('columns')
         confirm_emails = kwargs.pop('confirm_emails')
 
         # Call the parent constructor
         super(EmailScheduleForm, self).__init__(data, *args, **kwargs)
 
-        self.fields['item_column'].queryset = columns
         self.fields['item_column'].label = _('Column in the table containing '
                                              'the email')
 
@@ -93,13 +135,6 @@ class EmailScheduleForm(forms.ModelForm):
     def clean(self):
 
         data = super(EmailScheduleForm, self).clean()
-
-        # The executed time must be in the future
-        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-        when_data = self.cleaned_data.get('execute', None)
-        if when_data and when_data <= now:
-            self.add_error('execute',
-                           _('Date/time must be in the future'))
 
         item_column = self.cleaned_data['item_column']
 
@@ -138,15 +173,45 @@ class EmailScheduleForm(forms.ModelForm):
 
         return data
 
-    class Meta:
-        model = ScheduledAction
-        fields = ('subject', 'item_column', 'execute')
 
-        widgets = {
-            'execute': DateTimeWidget(
-                options={'weekStart': 1,
-                         'minuteStep': str(getattr(core_settings,
-                                                   'MINUTE_STEP'))},
-                usel10n=True,
-                bootstrap_version=3),
-        }
+class JSONScheduleForm(ScheduleForm):
+    """
+    Form to create/edit objects of the ScheduleAction of type email. One of the
+    fields is a reference to a key column, which is a subset of the columns
+    attached to the action. The subset is passed as the name arguments
+    "columns" (list of key columns).
+
+    There is an additional field to allow for an extra step to review and
+    filter email addresses.
+    """
+
+    # Token to use when sending the JSON request
+    token = forms.CharField(
+        initial='',
+        label=_('Authentication Token'),
+        strip=True,
+        required=True,
+        help_text=_('Authentication token provided by the external platform.'),
+        widget=forms.Textarea(
+            attrs={
+                'rows': 1,
+                'cols': 120,
+                'placeholder': _('Authentication token to be sent with the '
+                                 'JSON object.')
+            }
+        )
+    )
+
+    def __init__(self, data, *args, **kwargs):
+
+        # Call the parent constructor
+        super(JSONScheduleForm, self).__init__(data, *args, **kwargs)
+
+        self.fields['item_column'].label = _('Column to select elements ('
+                                             'empty to skip)')
+        self.fields['item_column'].required = False
+
+        # If there is an instance, push the values in the payload to the form
+        if self.instance:
+            payload = self.instance.payload
+            self.fields['token'].initial = payload.get('token')

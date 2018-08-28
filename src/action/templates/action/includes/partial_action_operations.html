@@ -1,6 +1,6 @@
 {% load i18n %}
 <div class="condition-btn" role="group">
-  <a href="{% if is_out %}{% url 'action:edit' id %}{% else %}{% url 'action:edit' id %}{% endif %}"
+  <a href="{% url 'action:edit' id %}"
      class="btn btn-primary btn-sm align-middle"
         data-toggle="tooltip"
         title="{% trans 'Edit the text, conditions and filter' %}">
@@ -40,9 +40,9 @@
             data-toggle="dropdown"> {% trans 'More' %} <span class="caret"></span>
     </button>
     <ul role="menu" class="dropdown-menu">
-      {% if action_tval == 'personalized_text' %}
+      {% if is_out %}
         <li>
-          <a href="{% url 'scheduler:create_email' id %}"
+          <a href="{% url 'scheduler:create' id %}"
              class="btn btn-default btn-sm"
              data-toggle="tooltip"
              title="{% trans 'Schedule the execution of the action' %}">

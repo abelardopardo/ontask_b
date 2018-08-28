@@ -20,7 +20,7 @@ from django_tables2 import A
 
 from action.models import Action
 from action.views_out import session_dictionary_name
-from forms import EmailScheduleForm
+from forms import EmailScheduleForm, JSONScheduleForm
 from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
@@ -161,51 +161,27 @@ class ScheduleActionTable(tables.Table):
         }
 
 
-def save_email_schedule(request, workflow, action, schedule_item):
+def save_email_schedule(request, action, schedule_item, op_payload):
     """
     Function to handle the creation and edition of email items
     :param request: Http request being processed
-    :param workflow: workflow item related to the action
     :param action: Action item related to the schedule
     :param schedule_item: Schedule item or None if it is new
+    :param op_payload: dictionary to carry over the request to the next step
     :return:
     """
-
-    # Get the payload from the session, and if not, use the given one
-    op_payload = request.session.get(session_dictionary_name, None)
-    if not op_payload:
-        op_payload = {'action_id': action.id,
-                      'prev_url': reverse('scheduler:create_email',
-                                          kwargs={'pk': action.id}),
-                      'post_url': reverse('scheduler:finish_schedule')}
-        request.session[session_dictionary_name] = op_payload
-        request.session.save()
-
-    # Verify that celery is running!
-    celery_stats = None
-    try:
-        celery_stats = inspect().stats()
-    except Exception as e:
-        pass
-    # If the stats are empty, celery is not running.
-    if not celery_stats:
-        messages.error(
-            request,
-            _('Unable to send emails due to a misconfiguration. '
-              'Ask your system administrator to enable email queueing.'))
-        return redirect(reverse('action:index'))
 
     # Create the form to ask for the email subject and other information
     form = EmailScheduleForm(
         data=request.POST or None,
         action=action,
         instance=schedule_item,
-        columns=workflow.columns.filter(is_key=True),
+        columns=action.workflow.columns.filter(is_key=True),
         confirm_emails=op_payload.get('confirm_emails', False))
 
-    now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
     # Check if the request is GET, or POST but not valid
     if request.method == 'GET' or not form.is_valid():
+        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
         # Render the form
         return render(request,
                       'scheduler/email.html',
@@ -248,10 +224,69 @@ def save_email_schedule(request, workflow, action, schedule_item):
         return redirect('action:item_filter')
 
     # Go straight to the final step
-    return scheduler_finalize_action(request, op_payload)
+    return finish_scheduling(request, op_payload)
 
 
-def scheduler_finalize_action(request, payload=None):
+def save_json_schedule(request, action, schedule_item, op_payload):
+    """
+    Function to handle the creation and edition of email items
+    :param request: Http request being processed
+    :param action: Action item related to the schedule
+    :param schedule_item: Schedule item or None if it is new
+    :param op_payload: dictionary to carry over the request to the next step
+    :return:
+    """
+
+    # Create the form to ask for the email subject and other information
+    form = JSONScheduleForm(
+        data=request.POST or None,
+        action=action,
+        instance=schedule_item,
+        columns=action.workflow.columns.filter(is_key=True))
+
+    # Check if the request is GET, or POST but not valid
+    if request.method == 'GET' or not form.is_valid():
+        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
+        # Render the form
+        return render(request,
+                      'scheduler/email.html',
+                      {'action': action,
+                       'form': form,
+                       'now': now})
+
+    # Processing a valid POST request
+
+    # Save the schedule item object
+    s_item = form.save(commit=False)
+
+    # Assign additional fields and save
+    s_item.user = request.user
+    s_item.action = action
+    s_item.type = ScheduledAction.TYPE_JSON_SEND
+    s_item.status = ScheduledAction.STATUS_CREATING
+    s_item.payload = {
+        'token': form.cleaned_data['token']
+    }
+    s_item.save()
+
+    # Upload information to the op_payload
+    op_payload['schedule_id'] = s_item.id
+    op_payload['exclude_values'] = s_item.exclude_values
+
+    if s_item.item_column:
+        # Create a dictionary in the session to carry over all the
+        # information to execute the next steps
+        op_payload['item_column'] = s_item.item_column.name
+        op_payload['button_label'] = ugettext('Schedule')
+        request.session[session_dictionary_name] = op_payload
+
+        return redirect('action:item_filter')
+
+    # Go straight to the final step
+    return finish_scheduling(request, op_payload)
+
+
+def finish_scheduling(request, payload=None):
     """
     Finalize the creation of a scheduled action. All required data is passed
     through the payload.
@@ -295,21 +330,28 @@ def scheduler_finalize_action(request, payload=None):
         'action': schedule_item.action.name,
         'action_id': schedule_item.action.id,
         'execute': schedule_item.execute.isoformat(),
-        'email_column': schedule_item.item_column.name,
-        'subject': schedule_item.payload.get('subject'),
-        'cc_email': schedule_item.payload.get('cc_email', []),
-        'bcc_email': schedule_item.payload.get('bcc_email', []),
-        'send_confirmation': schedule_item.payload.get('send_confirmation',
-                                                False),
-        'track_read': schedule_item.payload.get('track_read', False)
     }
-
-    # Log the operation
-    if schedule_item:
+    if schedule_item.action.action_type == Action.PERSONALIZED_TEXT:
+        log_payload.update({
+            'email_column': schedule_item.item_column.name,
+            'subject': schedule_item.payload.get('subject'),
+            'cc_email': schedule_item.payload.get('cc_email', []),
+            'bcc_email': schedule_item.payload.get('bcc_email', []),
+            'send_confirmation': schedule_item.payload.get('send_confirmation',
+                                                           False),
+            'track_read': schedule_item.payload.get('track_read', False)
+        })
         log_type = Log.SCHEDULE_EMAIL_EDIT
+    elif schedule_item.action.action_type == Action.PERSONALIZED_JSON:
+        log_payload.update({
+            'item_column': schedule_item.item_column.name,
+            'token': schedule_item.payload.get('subject')
+        })
+        log_type = Log.SCHEDULE_JSON_EDIT
     else:
-        log_type = Log.SCHEDULE_EMAIL_CREATE
+        log_type = None
 
+    # Create the log
     Log.objects.register(request.user,
                          log_type,
                          schedule_item.action.workflow,
@@ -355,45 +397,7 @@ def index(request):
 
 
 @user_passes_test(is_instructor)
-def email_create(request, pk):
-    """
-    Request data to send emails. Form asking for subject line, email column,
-    etc.
-    :param request: HTTP request (GET)
-    :param pk: Action key
-    :return:
-    """
-
-    # Get the action attached to this request
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
-        return redirect('workflow:index')
-
-    workflow = get_workflow(request, action.workflow.id)
-    if not workflow:
-        return redirect('workflow:index')
-
-    # See if this action already has a scheduled action
-    schedule_item = None
-    qs = ScheduledAction.objects.filter(
-        action=action,
-        type=ScheduledAction.TYPE_EMAIL_SEND,
-        status=ScheduledAction.STATUS_CREATING,
-        deleted=False
-    )
-    if qs:
-        if settings.DEBUG:
-            assert len(qs) == 1  # There should only be one
-        schedule_item = qs[0]
-
-    return save_email_schedule(request, workflow, action, schedule_item)
-
-
-@user_passes_test(is_instructor)
-def edit_email(request, pk):
+def edit(request, pk):
     """
     Edit an existing scheduled email action
     :param request: HTTP request
@@ -406,24 +410,65 @@ def edit_email(request, pk):
     if not workflow:
         return redirect('workflow:index')
 
-    # Get the scheduled action from the parameter in the URL
+    # Distinguish between creating a new element or editing an existing one
+    new_item = request.path.endswith(reverse('scheduler:create',
+                                             kwargs={'pk': pk}))
+
+    if new_item:
+        try:
+            action = Action.objects.filter(
+                workflow=workflow).filter(
+                Q(workflow__user=request.user) |
+                Q(workflow__shared=request.user)).distinct().get(pk=pk)
+        except ObjectDoesNotExist:
+            return redirect('workflow:index')
+        s_item = None
+    else:
+        # Get the scheduled action from the parameter in the URL
+        try:
+            s_item = ScheduledAction.objects.filter(
+                action__workflow=workflow,
+                deleted=False,
+            ).get(pk=pk)
+        except ObjectDoesNotExist:
+            return redirect('workflow:index')
+        action = s_item.action
+
+    # Get the payload from the session, and if not, use the given one
+    op_payload = request.session.get(session_dictionary_name, None)
+    if not op_payload:
+        op_payload = {'action_id': action.id,
+                      'prev_url': reverse('scheduler:create',
+                                          kwargs={'pk': action.id}),
+                      'post_url': reverse('scheduler:finish_scheduling')}
+        request.session[session_dictionary_name] = op_payload
+        request.session.save()
+
+    # Verify that celery is running!
+    celery_stats = None
     try:
-        s_item = ScheduledAction.objects.filter(
-            action__workflow=workflow,
-            type=ScheduledAction.TYPE_EMAIL_SEND,
-            deleted=False,
-        ).get(pk=pk)
-    except ObjectDoesNotExist:
-        return redirect('workflow:index')
+        celery_stats = inspect().stats()
+    except Exception:
+        pass
+    # If the stats are empty, celery is not running.
+    if not celery_stats:
+        messages.error(
+            request,
+            _('Unable to schedule actions due to a misconfiguration. '
+              'Ask your system administrator to enable queueing.'))
+        return redirect(reverse('action:index'))
 
-    # Get the action field.
-    action = s_item.action
+    if action.action_type == Action.PERSONALIZED_TEXT:
+        return save_email_schedule(request, action, s_item, op_payload)
+    elif action.action_type == Action.PERSONALIZED_JSON:
+        return save_json_schedule(request, action, s_item, op_payload)
 
-    return save_email_schedule(request, workflow, action, s_item)
+    # Action type not found, so return to the main table view
+    return redirect('scheduler:index')
 
 
 @user_passes_test(is_instructor)
-def delete_email(request, pk):
+def delete(request, pk):
     """
     View to handle the AJAX form to delete a scheduled item.
     :param request: Request object
@@ -445,36 +490,42 @@ def delete_email(request, pk):
         data['html_redirect'] = reverse('scheduler:index')
         return JsonResponse(data)
 
-    if request.method == 'POST':
-        # Log the event
-        Log.objects.register(
-            request.user,
-            Log.SCHEDULE_EMAIL_DELETE,
-            s_item.action.workflow,
-            {'action': s_item.action.name,
-             'action_id': s_item.action.id,
-             'execute': s_item.execute.isoformat(),
-             'email_column': s_item.item_column.name,
-             'subject': s_item.payload.get('subject'),
-             'cc_email': s_item.payload.get('cc_email', []),
-             'bcc_email': s_item.payload.get('bcc_email', []),
-             'send_confirmation': s_item.payload.get('send_confirmation',
-                                                     False),
-             'track_read': s_item.payload.get('track_read', False)}
-        )
-
-        # Perform the delete operation
-        s_item.deleted = True
-        s_item.save()
-
-        # In this case, the form is valid anyway
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('scheduler:index')
-
+    if request.method == 'GET':
+        data['html_form'] = render_to_string(
+            'scheduler/includes/partial_scheduler_delete.html',
+            {'s_item': s_item},
+            request=request)
         return JsonResponse(data)
 
-    data['html_form'] = render_to_string(
-        'scheduler/includes/partial_scheduler_delete.html',
-        {'s_item': s_item},
-        request=request)
+    log_type = None
+    if s_item.action.action_type == Action.PERSONALIZED_TEXT:
+        log_type = Log.SCHEDULE_EMAIL_DELETE
+    elif s_item.action.action_type == Action.PERSONALIZED_JSON:
+        log_type = Log.SCHEDULE_JSON_DELETE
+
+    # Log the event
+    Log.objects.register(
+        request.user,
+        log_type,
+        s_item.action.workflow,
+        {'action': s_item.action.name,
+         'action_id': s_item.action.id,
+         'execute': s_item.execute.isoformat(),
+         'email_column': s_item.item_column.name,
+         'subject': s_item.payload.get('subject'),
+         'cc_email': s_item.payload.get('cc_email', []),
+         'bcc_email': s_item.payload.get('bcc_email', []),
+         'send_confirmation': s_item.payload.get('send_confirmation',
+                                                 False),
+         'track_read': s_item.payload.get('track_read', False)}
+    )
+
+    # Perform the delete operation
+    s_item.deleted = True
+    s_item.save()
+
+    # In this case, the form is valid anyway
+    data['form_is_valid'] = True
+    data['html_redirect'] = reverse('scheduler:index')
+
     return JsonResponse(data)

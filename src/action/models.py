@@ -157,7 +157,7 @@ class Action(models.Model):
             valid_url = True
             try:
                 validator(self.target_url)
-            except:
+            except Exception:
                 valid_url = False
             return valid_url
 
@@ -171,8 +171,8 @@ class Action(models.Model):
 
     @property
     def is_in(self):
-        return self.action_type == self.SURVEY or \
-               self.action_type == self.TODO_LIST
+        return self.action_type == Action.SURVEY or \
+               self.action_type == Action.TODO_LIST
 
     @property
     def is_out(self):
@@ -317,7 +317,6 @@ class Action(models.Model):
         Given an action and a set of row_values, prepare the dictionary with the
         condition names, attribute names and column names and their
         corresponding values.
-        :param action: Action object for which the conditions need to be taken.
         :param row_values: Values to use in the evaluation of conditions.
         :return: Context dictionary, or None if there has been some anomaly
         """
@@ -329,7 +328,6 @@ class Action(models.Model):
 
         # Step 1: Evaluate all the conditions
         condition_eval = {}
-        condition_anomalies = []
         for condition in self.conditions.filter(is_filter=False).values(
                 'name', 'is_filter', 'formula'):
             # Evaluate the condition

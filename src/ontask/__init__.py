@@ -8,7 +8,7 @@ import json
 
 from ontask.celery import app as celery_app
 
-__all__ = ['celery_app']
+__all__ = ['celery_app', 'OntaskException']
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -59,7 +59,7 @@ def fix_pctg_in_name(val):
 
 def is_json(text):
     try:
-        _= json.loads(text)
+        _ = json.loads(text)
     except ValueError:
         return False
     return True
@@ -76,4 +76,3 @@ class OntaskException(Exception):
 
     def __str__(self):
         return repr(self.value)
-

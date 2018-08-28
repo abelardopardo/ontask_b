@@ -151,15 +151,15 @@ def run_email_action_done(request, payload=None):
                                     action.workflow,
                                     {'action': action.name,
                                      'action_id': action.id,
-                                     'from_email': request.user.email,
-                                     'subject': subject,
-                                     'email_column': email_column,
-                                     'cc_email': cc_email,
                                      'bcc_email': bcc_email,
-                                     'send_confirmation': send_confirmation,
-                                     'track_read': track_read,
+                                     'cc_email': cc_email,
+                                     'email_column': email_column,
                                      'exclude_values': exclude_values,
-                                     'status': 'Preparing to execute'})
+                                     'from_email': request.user.email,
+                                     'send_confirmation': send_confirmation,
+                                     'status': 'Preparing to execute',
+                                     'subject': subject,
+                                     'track_read': track_read})
 
     # Send the emails!
     # send_email_messages(request.user.id,
@@ -290,10 +290,10 @@ def json_done(request, payload=None):
                                     action.workflow,
                                     {'action': action.name,
                                      'action_id': action.id,
-                                     'key_column': key_column,
-                                     'target_url': action.target_url,
                                      'exclude_values': exclude_values,
-                                     'status': 'Preparing to execute'})
+                                     'key_column': key_column,
+                                     'status': 'Preparing to execute',
+                                     'target_url': action.target_url})
 
     # Send the objects
     # send_json_objects(request.user.id,

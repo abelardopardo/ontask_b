@@ -377,7 +377,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_BEAT_SCHEDULE = {
     'ontask_scheduler': {
-        'task': 'ontask.tasks.execute_email_actions',
+        'task': 'ontask.tasks.execute_scheduled_actions',
         'schedule': crontab(minute='*/{0}'.format(SCHEDULER_MINUTE_STEP)),
         'args': (DEBUG,)
     }

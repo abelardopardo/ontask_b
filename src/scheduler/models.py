@@ -22,9 +22,11 @@ class ScheduledAction(models.Model):
     """
 
     TYPE_EMAIL_SEND = 'email_send'
+    TYPE_JSON_SEND = 'json_send'
 
     SCHEDULED_TYPE = [
         (TYPE_EMAIL_SEND, _('Send emails')),
+        (TYPE_JSON_SEND, _('Send JSON objects')),
     ]
 
     STATUS_CREATING = 'creating'
