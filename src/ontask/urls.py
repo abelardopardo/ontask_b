@@ -7,7 +7,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sites.models import Site
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.cache import cache_page
 from django.views.i18n import JavaScriptCatalog
 from rest_framework.documentation import include_docs_urls
@@ -24,7 +24,7 @@ from dataops import pandas_db
 from templatetags.settings import ontask_version
 from . import views
 
-api_description = _("""The OnTask API offers functionality to manipulate 
+api_description = ugettext("""The OnTask API offers functionality to manipulate 
 workflows, tables and logs. The interface provides CRUD operations over 
 these objects.""")
 
