@@ -24,7 +24,7 @@ class AttributeTable(tables.Table):
     name = tables.Column(verbose_name=_('Name'))
     value = tables.Column(verbose_name=_('Value'))
     operations = OperationsColumn(
-        verbose_name='Ops',
+        verbose_name='Operations',
         template_file='workflow/includes/partial_attribute_operations.html',
         template_context=lambda record: {'id': record['id'], }
     )
