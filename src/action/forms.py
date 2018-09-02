@@ -265,7 +265,7 @@ class EmailActionForm(forms.Form):
         if email_column is None:
             # Try to guess if there is an "email" column
             email_column = next((x for x in self.column_names
-                                   if 'email' == x.lower()), None)
+                                 if 'email' == x.lower()), None)
 
         if email_column is None:
             email_column = ('', '---')

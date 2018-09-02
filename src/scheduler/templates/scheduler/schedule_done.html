@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
-{% block title %}{{ block.super }}{% trans 'Email scheduled' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Action scheduled' %}{% endblock %}
 {% block container %}
   <div class="container-fluid" style="text-align:center;">
-    <h1 class="page-header text-center">{% trans 'Email scheduled for execution' %}</h1>
+    <h1 class="page-header text-center">{% trans 'Action scheduled for execution' %}</h1>
 
     <p class="text-center">
       {% blocktrans with n=tdelta %}The action will execute in {{ n }}{% endblocktrans %}

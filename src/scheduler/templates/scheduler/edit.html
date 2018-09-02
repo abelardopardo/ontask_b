@@ -7,16 +7,17 @@
 {% block scripts %}
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
 {% endblock scripts %}
-{% block title %}{{ block.super }}{% trans 'Schedule email send' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Schedule Action Execution' %}{% endblock %}
 {% block extrahead %}
   <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
   <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
 {% endblock extrahead %}
 {% block container %}
 <div align="center" class="container" id="email-schedule-send">
-  <h1 class="page-header">{% trans 'Schedule email send' %}</h1>
+  <h1 class="page-header">{% trans 'Schedule Action Execution' %}</h1>
   <div class="container">
     <p>{% blocktrans with n=now %}Time now is {{ n }}{% endblocktrans %}</p>
+    <p class="lead">Action: {{ action.name }}</p>
     <form action="" method="post">
       {% csrf_token %}
       {{ form|crispy }}

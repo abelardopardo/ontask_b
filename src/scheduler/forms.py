@@ -53,7 +53,7 @@ class ScheduleForm(forms.ModelForm):
 
     class Meta:
         model = ScheduledAction
-        fields = ('item_column', 'execute')
+        fields = ('name', 'description_text', 'item_column', 'execute')
 
         widgets = {
             'execute': DateTimeWidget(
@@ -136,40 +136,14 @@ class EmailScheduleForm(ScheduleForm):
 
         data = super(EmailScheduleForm, self).clean()
 
-        item_column = self.cleaned_data['item_column']
+        errors = scheduled_eamil_action_data_is_correct(
+            self.action,
+            self.cleaned_data
+        )
 
-        # Check if the values in the email column are correct emails
-        try:
-            column_data = execute_select_on_table(
-                self.action.workflow.id,
-                [],
-                [],
-                column_names=[item_column.name])
-            if not all([validate_email(x[0]) for x in column_data]):
-                # column has incorrect email addresses
-                self.add_error(
-                    'item_column',
-                    _('The column with email addresses has incorrect values.')
-                )
-        except TypeError:
-            self.add_error(
-                'item_column',
-                _('The column with email addresses has incorrect values.')
-            )
-
-        if not all([validate_email(x)
-                    for x in self.cleaned_data['cc_email'].split(',') if x]):
-            self.add_error(
-                'cc_email',
-                _('This field must be a comma-separated list of emails.')
-            )
-
-        if not all([validate_email(x)
-                    for x in self.cleaned_data['bcc_email'].split(',') if x]):
-            self.add_error(
-                'bcc_email',
-                _('This field must be a comma-separated list of emails.')
-            )
+        # Pass the errors to the form
+        for a, b in errors:
+            self.add_error(a, b)
 
         return data
 
@@ -215,3 +189,105 @@ class JSONScheduleForm(ScheduleForm):
         if self.instance:
             payload = self.instance.payload
             self.fields['token'].initial = payload.get('token')
+
+    def clean(self):
+
+        data = super(JSONScheduleForm, self).clean()
+
+        errors = scheduled_json_action_data_is_correct(
+            self.action,
+            self.cleaned_data
+        )
+
+        # Pass the errors to the form
+        for a, b in errors:
+            self.add_error(a, b)
+
+        return data
+
+
+def scheduled_action_data_is_correct(cleaned_data):
+    """
+    Verify the integrity of a ScheduledAction object with a Personalised_text
+    type. The function returns a list of pairs (field name, message) with the
+    errors, or [] if no error has been found.
+    :param cleaned_data: Data to be verified.
+    :return: List of pairs (field name, error) or [] if correct
+    """
+
+    result = []
+
+    # The executed time must be in the future
+    now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
+    when_data = cleaned_data.get('execute', None)
+    if when_data and when_data <= now:
+        result.append(('execute',
+                       _('Date/time must be in the future')))
+
+    return result
+
+
+def scheduled_eamil_action_data_is_correct(action, cleaned_data):
+    """
+    Verify the integrity of a ScheduledAction object with a Personalised_text
+    type. The function returns a list of pairs (field name, message) with the
+    errors, or [] if no error has been found.
+    :param cleaned_data:
+    :return: List of pairs (field name, error) or [] if correct
+    """
+
+    result = []
+    item_column = cleaned_data['item_column']
+
+    # Verify the correct time
+    result.extend(scheduled_action_data_is_correct(cleaned_data))
+
+    # Check if the values in the email column are correct emails
+    try:
+        column_data = execute_select_on_table(
+            action.workflow.id,
+            [],
+            [],
+            column_names=[item_column.name])
+        if not all([validate_email(x[0]) for x in column_data]):
+            # column has incorrect email addresses
+            result.append(
+                ('item_column',
+                 _('The column with email addresses has incorrect values.'))
+            )
+    except TypeError:
+        result.append(
+            ('item_column',
+             _('The column with email addresses has incorrect values.'))
+        )
+
+    if not all([validate_email(x)
+                for x in cleaned_data['cc_email'].split(',') if x]):
+        result.append(
+            ('cc_email',
+             _('This field must be a comma-separated list of emails.'))
+        )
+
+    if not all([validate_email(x)
+                for x in cleaned_data['bcc_email'].split(',') if x]):
+        result.append(
+            ('bcc_email',
+             _('This field must be a comma-separated list of emails.'))
+        )
+
+    return result
+
+
+def scheduled_json_action_data_is_correct(action, cleaned_data):
+    result = []
+
+    # Verify the correct time
+    result.extend(scheduled_action_data_is_correct(cleaned_data))
+
+    payload = cleaned_data.get('payload', {})
+    if not payload.get('token'):
+        result.append(
+            ('token',
+             _('Scheduling action needs a token'))
+        )
+    return result

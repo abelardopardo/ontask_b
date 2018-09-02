@@ -10,6 +10,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse
@@ -41,21 +42,20 @@ class ScheduleActionTable(tables.Table):
         template_context=lambda record: {'id': record.id}
     )
 
+    name = tables.Column(verbose_name=_('Name'))
+
+    description_text = tables.Column(verbose_name=_('Description'))
+
     type = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
         verbose_name=_('Type'),
-        accessor=A('get_type_display')
+        accessor=A('action.get_action_type_display')
     )
 
     action = tables.Column(
         attrs={'td': {'class': 'dt-center'}},
         verbose_name=_('Action'),
         accessor=A('action.name')
-    )
-
-    created = tables.DateTimeColumn(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=_('Scheduled')
     )
 
     execute = tables.DateTimeColumn(
@@ -135,14 +135,15 @@ class ScheduleActionTable(tables.Table):
     class Meta:
         model = ScheduledAction
 
-        fields = ('type', 'action', 'created', 'execute', 'status',
-                  'item_column', 'exclude_values', 'operations',
+        fields = ('name', 'description_text', 'action', 'execute',
+                  'status', 'item_column', 'exclude_values', 'operations',
                   'last_executed_log')
 
         sequence = ('operations',
+                    'name',
+                    'description_text',
                     'type',
                     'action',
-                    'created',
                     'execute',
                     'status',
                     'item_column',
@@ -184,7 +185,7 @@ def save_email_schedule(request, action, schedule_item, op_payload):
         now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
         # Render the form
         return render(request,
-                      'scheduler/email.html',
+                      'scheduler/edit.html',
                       {'action': action,
                        'form': form,
                        'now': now})
@@ -197,7 +198,6 @@ def save_email_schedule(request, action, schedule_item, op_payload):
     # Assign additional fields and save
     s_item.user = request.user
     s_item.action = action
-    s_item.type = ScheduledAction.TYPE_EMAIL_SEND
     s_item.status = ScheduledAction.STATUS_CREATING
     s_item.payload = {
         'subject': form.cleaned_data['subject'],
@@ -207,24 +207,43 @@ def save_email_schedule(request, action, schedule_item, op_payload):
         'send_confirmation': form.cleaned_data['send_confirmation'],
         'track_read': form.cleaned_data['track_read']
     }
+    # Verify that that action does comply with the name uniqueness
+    # property (only with respec to other actions)
+    try:
+        s_item.save()
+    except IntegrityError as e:
+        # There is an action with this name already
+        form.add_error('name',
+                       _('A scheduled execution of this action with this name '
+                         'already exists'))
+        return render(request,
+                      'scheduler/edit.html',
+                      {'action': action,
+                       'form': form,
+                       'now': datetime.datetime.now(pytz.timezone(
+                           settings.TIME_ZONE))})
+
     s_item.save()
 
     # Upload information to the op_payload
     op_payload['schedule_id'] = s_item.id
-    op_payload['exclude_values'] = s_item.exclude_values
     op_payload['confirm_emails'] = form.cleaned_data['confirm_emails']
 
     if op_payload['confirm_emails']:
-        # Create a dictionary in the session to carry over all the
-        # information to execute the next steps
+        # Update information to carry to the filtering stage
+        op_payload['exclude_values'] = s_item.exclude_values
         op_payload['item_column'] = s_item.item_column.name
         op_payload['button_label'] = ugettext('Schedule')
         request.session[session_dictionary_name] = op_payload
 
         return redirect('action:item_filter')
+    else:
+        # If there is not item_column, the exclude values should be empty.
+        s_item.exclude_values = []
+        s_item.save()
 
     # Go straight to the final step
-    return finish_scheduling(request, op_payload)
+    return finish_scheduling(request, s_item, op_payload)
 
 
 def save_json_schedule(request, action, schedule_item, op_payload):
@@ -249,7 +268,7 @@ def save_json_schedule(request, action, schedule_item, op_payload):
         now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
         # Render the form
         return render(request,
-                      'scheduler/email.html',
+                      'scheduler/edit.html',
                       {'action': action,
                        'form': form,
                        'now': now})
@@ -262,7 +281,6 @@ def save_json_schedule(request, action, schedule_item, op_payload):
     # Assign additional fields and save
     s_item.user = request.user
     s_item.action = action
-    s_item.type = ScheduledAction.TYPE_JSON_SEND
     s_item.status = ScheduledAction.STATUS_CREATING
     s_item.payload = {
         'token': form.cleaned_data['token']
@@ -271,27 +289,33 @@ def save_json_schedule(request, action, schedule_item, op_payload):
 
     # Upload information to the op_payload
     op_payload['schedule_id'] = s_item.id
-    op_payload['exclude_values'] = s_item.exclude_values
 
     if s_item.item_column:
         # Create a dictionary in the session to carry over all the
         # information to execute the next steps
         op_payload['item_column'] = s_item.item_column.name
+        op_payload['exclude_values'] = s_item.exclude_values
         op_payload['button_label'] = ugettext('Schedule')
         request.session[session_dictionary_name] = op_payload
 
         return redirect('action:item_filter')
+    else:
+        # If there is not item_column, the exclude values should be empty.
+        s_item.exclude_values = []
+        s_item.save()
 
     # Go straight to the final step
-    return finish_scheduling(request, op_payload)
+    return finish_scheduling(request, s_item, op_payload)
 
 
-def finish_scheduling(request, payload=None):
+def finish_scheduling(request, schedule_item=None, payload=None):
     """
     Finalize the creation of a scheduled action. All required data is passed
     through the payload.
 
     :param request: Request object received
+    :param schedule_item: ScheduledAction item being processed. If None,
+    it has to be extracted from the information in the payload.
     :param payload: Dictionary with all the required data coming from
     previous requests.
     :return:
@@ -308,14 +332,15 @@ def finish_scheduling(request, payload=None):
                            _('Incorrect action scheduling invocation.'))
             return redirect('action:index')
 
-    # Get the index
-    s_item_id = payload.get('schedule_id')
-    if not s_item_id:
-        messages.error(request, _('Incorrect parameters in action scheduling'))
-        return redirect('action:index')
+    # Get the scheduled item if needed
+    if not schedule_item:
+        s_item_id = payload.get('schedule_id')
+        if not s_item_id:
+            messages.error(request, _('Incorrect parameters in action scheduling'))
+            return redirect('action:index')
 
-    # Get the item being processed
-    schedule_item = ScheduledAction.objects.get(pk=s_item_id)
+        # Get the item being processed
+        schedule_item = ScheduledAction.objects.get(pk=s_item_id)
 
     # Check for exclude values and store them if needed
     exclude_values = payload.get('exclude_values')
@@ -343,8 +368,11 @@ def finish_scheduling(request, payload=None):
         })
         log_type = Log.SCHEDULE_EMAIL_EDIT
     elif schedule_item.action.action_type == Action.PERSONALIZED_JSON:
+        ivalue = None
+        if schedule_item.item_column:
+            ivalue = schedule_item.item_column.name
         log_payload.update({
-            'item_column': schedule_item.item_column.name,
+            'item_column': ivalue,
             'token': schedule_item.payload.get('subject')
         })
         log_type = Log.SCHEDULE_JSON_EDIT
@@ -367,10 +395,21 @@ def finish_scheduling(request, payload=None):
     request.session[session_dictionary_name] = {}
     request.session.save()
 
+    # Create the timedelta string
+    delta_string = ''
+    if tdelta.days != 0:
+        delta_string += ugettext('{0} days').format(tdelta.days)
+    hours = tdelta.seconds / 3600
+    if hours != 0:
+        delta_string += ugettext(', {0} hours').format(hours)
+    minutes =  (tdelta.seconds % 3600) / 60
+    if minutes != 0:
+        delta_string += ugettext(', {0} minutes').format(minutes)
+
     # Successful processing.
     return render(request,
                   'scheduler/schedule_done.html',
-                  {'tdelta': str(tdelta),
+                  {'tdelta': delta_string,
                    's_item': schedule_item})
 
 
@@ -388,8 +427,7 @@ def index(request):
         return redirect('workflow:index')
 
     # Get the actions
-    s_items = ScheduledAction.objects.filter(action__workflow=workflow.id,
-                                             deleted=False)
+    s_items = ScheduledAction.objects.filter(action__workflow=workflow.id)
 
     return render(request,
                   'scheduler/index.html',
@@ -425,12 +463,8 @@ def edit(request, pk):
         s_item = None
     else:
         # Get the scheduled action from the parameter in the URL
-        try:
-            s_item = ScheduledAction.objects.filter(
-                action__workflow=workflow,
-                deleted=False,
-            ).get(pk=pk)
-        except ObjectDoesNotExist:
+        s_item = ScheduledAction.objects.filter(pk=pk).first()
+        if not s_item:
             return redirect('workflow:index')
         action = s_item.action
 
@@ -480,12 +514,11 @@ def delete(request, pk):
     data = dict()
 
     # Get the appropriate scheduled action
-    try:
-        s_item = ScheduledAction.objects.filter(
-            action__workflow__user=request.user,
-            deleted=False,
-        ).distinct().get(pk=pk)
-    except (KeyError, ObjectDoesNotExist):
+    s_item = ScheduledAction.objects.filter(
+        action__workflow__user=request.user,
+        pk=pk
+    ).first()
+    if not s_item:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('scheduler:index')
         return JsonResponse(data)
@@ -504,6 +537,11 @@ def delete(request, pk):
         log_type = Log.SCHEDULE_JSON_DELETE
 
     # Log the event
+    if s_item.item_column:
+        item_column_name = s_item.item_column.name
+    else:
+        item_column_name = None
+
     Log.objects.register(
         request.user,
         log_type,
@@ -511,7 +549,7 @@ def delete(request, pk):
         {'action': s_item.action.name,
          'action_id': s_item.action.id,
          'execute': s_item.execute.isoformat(),
-         'email_column': s_item.item_column.name,
+         'item_column': item_column_name,
          'subject': s_item.payload.get('subject'),
          'cc_email': s_item.payload.get('cc_email', []),
          'bcc_email': s_item.payload.get('bcc_email', []),
@@ -521,8 +559,7 @@ def delete(request, pk):
     )
 
     # Perform the delete operation
-    s_item.deleted = True
-    s_item.save()
+    s_item.delete()
 
     # In this case, the form is valid anyway
     data['form_is_valid'] = True

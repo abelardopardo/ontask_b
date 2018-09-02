@@ -137,6 +137,7 @@ def send_json_objects(user_id,
     user, action, log_item = get_execution_items(user_id, action_id, log_id)
 
     msg = 'Finished'
+    to_return = True
     try:
         # If the result has some sort of message, push it to the log
         result = send_json(user,
@@ -148,10 +149,12 @@ def send_json_objects(user_id,
         if result:
             msg = 'Incorrect execution: ' + str(result)
             logger.error(msg)
+            to_return = False
 
     except Exception as e:
         msg = 'Error while executing send_messages: {0}'.format(e.message)
         logger.error(msg)
+        to_return = False
     else:
         logger.info(msg)
 
@@ -159,6 +162,7 @@ def send_json_objects(user_id,
     log_item.payload['status'] = msg
     log_item.save()
 
+    return to_return
 
 @shared_task
 def execute_scheduled_actions(debug):
@@ -243,7 +247,9 @@ def execute_scheduled_actions(debug):
         elif item.action.action_type == Action.PERSONALIZED_JSON:
             # Get the information from the payload
             token = item.payload['token']
-            key_column = item.item_column.name
+            key_column = None
+            if item.item_column:
+                key_column = item.item_column.name
 
             # Log the event
             log_item = Log.objects.register(
@@ -253,7 +259,7 @@ def execute_scheduled_actions(debug):
                 {'action': item.action.name,
                  'action_id': item.action.id,
                  'exclude_values': item.exclude_values,
-                 'key_column': item.item_column.name,
+                 'key_column': key_column,
                  'status': 'Preparing to execute',
                  'target_url': item.action.target_url})
 

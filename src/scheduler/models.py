@@ -21,14 +21,6 @@ class ScheduledAction(models.Model):
     @DynamicAttrs
     """
 
-    TYPE_EMAIL_SEND = 'email_send'
-    TYPE_JSON_SEND = 'json_send'
-
-    SCHEDULED_TYPE = [
-        (TYPE_EMAIL_SEND, _('Send emails')),
-        (TYPE_JSON_SEND, _('Send JSON objects')),
-    ]
-
     STATUS_CREATING = 'creating'
     STATUS_PENDING = 'pending'
     STATUS_EXECUTING = 'executing'
@@ -49,11 +41,15 @@ class ScheduledAction(models.Model):
                              null=False,
                              blank=False)
 
-    # Type of action scheduled:
-    type = models.CharField(max_length=256,
+    name = models.CharField(max_length=256,
                             blank=False,
                             null=False,
-                            choices=SCHEDULED_TYPE)
+                            verbose_name=_('name'))
+
+    description_text = models.CharField(max_length=512,
+                                        default='',
+                                        blank=True,
+                                        verbose_name=_('description'))
 
     # The action used in the scheduling
     action = models.ForeignKey(Action,
@@ -65,12 +61,6 @@ class ScheduledAction(models.Model):
 
     # Time of creation
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
-
-    # Boolean saying of this entry is deleted
-    deleted = models.BooleanField(
-        default=False,
-        null=False,
-        blank=False)
 
     # Time of execution
     execute = models.DateTimeField(
@@ -89,12 +79,12 @@ class ScheduledAction(models.Model):
         verbose_name=_("Execution Status")
     )
 
-    # Column object denoting the one used to distiguish elements
+    # Column object denoting the one used to differentiate elements
     item_column = models.ForeignKey(
         Column,
         db_index=False,
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         on_delete=models.CASCADE,
         related_name='scheduled_actions',
         verbose_name=_('Column to select the elements for the action'))
@@ -118,3 +108,12 @@ class ScheduledAction(models.Model):
                         blank=True,
                         null=True,
                         verbose_name=_('payload'))
+
+    def item_column_name(self):
+        return self.item_column.name if self.item_column else None
+
+    class Meta:
+        """
+        Define the criteria of uniqueness with name and action
+        """
+        unique_together = ('name', 'action')

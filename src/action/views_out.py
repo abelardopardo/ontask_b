@@ -275,7 +275,7 @@ def json_done(request, payload=None):
         # If there is no payload, something went wrong.
         if payload is None:
             # Something is wrong with this execution. Return to action table.
-            messages.error(request, _('Incorrect email action invocation.'))
+            messages.error(request, _('Incorrect JSON action invocation.'))
             return redirect('action:index')
 
     # Get the information from the payload
@@ -438,7 +438,7 @@ def run_action_item_filter(request):
     payload = request.session.get(session_dictionary_name, None)
     if not payload:
         # Something is wrong with this execution. Return to the action table.
-        messages.error(request, _('Incorrect email action invocation.'))
+        messages.error(request, _('Incorrect item filter invocation.'))
         return redirect('action:index')
 
     # Get the information from the payload

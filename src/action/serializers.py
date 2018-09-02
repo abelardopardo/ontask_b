@@ -13,9 +13,6 @@ from .models import Condition, Action
 
 class ColumnNameSerializer(serializers.ModelSerializer):
 
-    def create(self, validated_data, **kwargs):
-        pass
-
     class Meta:
         model = Column
         fields = ('name',)
