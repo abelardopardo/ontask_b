@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+import random
+
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
@@ -16,7 +18,8 @@ from logs.models import Log
 from ontask.permissions import is_instructor
 from .forms import (ColumnRenameForm,
                     ColumnAddForm,
-                    FormulaColumnAddForm)
+                    FormulaColumnAddForm,
+                    RandomColumnAddForm)
 from .models import Column
 from .ops import (
     get_workflow,
@@ -178,7 +181,7 @@ def formula_column_add(request):
     try:
         column = form.save()
         form.save_m2m()
-    except IntegrityError as e:
+    except IntegrityError:
         form.add_error('name', _('A column with that name already exists'))
         data['html_form'] = render_to_string(
             'workflow/includes/partial_formula_column_add.html',
@@ -248,12 +251,143 @@ def formula_column_add(request):
 
     # Log the event
     Log.objects.register(request.user,
-                         Log.COLUMN_ADD,
+                         Log.COLUMN_ADD_FORMULA,
                          workflow,
                          {'id': workflow.id,
                           'name': workflow.name,
                           'column_name': column.name,
                           'column_type': column.data_type})
+
+    # The form has been successfully processed
+    data['form_is_valid'] = True
+    data['html_redirect'] = ''  # Refresh the page
+    return JsonResponse(data)
+
+
+@user_passes_test(is_instructor)
+def random_column_add(request):
+    """
+    Function that creates a column with random values (Modal)
+    :param request:
+    :return:
+    """
+    # TODO: Encapsulate operations in a function so that is available for the
+    #  API
+    # Data to send as JSON response, in principle, assume form is not valid
+    data = {'form_is_valid': False}
+
+    # Get the workflow element
+    workflow = get_workflow(request)
+    if not workflow:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('workflow:index')
+        return JsonResponse(data)
+
+    if workflow.nrows == 0:
+        data['form_is_valid'] = True
+        data['html_redirect'] = ''
+        messages.error(
+            request,
+            _('Cannot add column to a workflow without data')
+        )
+        return JsonResponse(data)
+
+    # Form to read/process data
+    form = RandomColumnAddForm(data=request.POST or None)
+
+    # If a GET or incorrect request, render the form again
+    if request.method == 'GET' or not form.is_valid():
+        data['html_form'] = render_to_string(
+            'workflow/includes/partial_random_column_add.html',
+            {'form': form},
+            request=request
+        )
+
+        return JsonResponse(data)
+
+    # Processing now a valid POST request
+
+    # Save the column object attached to the form and add additional fields
+    column = form.save(commit=False)
+    column.workflow = workflow
+    column.is_key = False
+
+    # Save the instance
+    try:
+        column = form.save()
+        form.save_m2m()
+    except IntegrityError:
+        form.add_error('name', _('A column with that name already exists'))
+        data['html_form'] = render_to_string(
+            'workflow/includes/partial_random_column_add.html',
+            {'form': form},
+            request=request
+        )
+        return JsonResponse(data)
+
+    # Update the data frame
+    df = pandas_db.load_from_db(workflow.id)
+
+    # Get the values and interpret its meaning
+    values = form.cleaned_data['values']
+    int_value = None
+    # First, try to see if the field is a valid integer
+    try:
+        int_value = int(values)
+    except ValueError:
+        pass
+
+    if int_value:
+        # At this point the field is an integer
+        if int_value <= 1:
+            form.add_error('values',
+                           _('The integer value has to be larger than 1'))
+            data['html_form'] = render_to_string(
+                'workflow/includes/partial_random_column_add.html',
+                {'form': form},
+                request=request
+            )
+            return JsonResponse(data)
+
+        df[column.name] = [random.randint(1, int_value)
+                           for __ in range(workflow.nrows)]
+    else:
+        # At this point the field is a string and the values are the comma
+        # separated strings.
+        vals = [x.strip() for x in values.strip().split(',') if x]
+        if not vals:
+            form.add_error('values',
+                           _('The value has to be a comma-separated list'))
+            data['html_form'] = render_to_string(
+                'workflow/includes/partial_random_column_add.html',
+                {'form': form},
+                request=request
+            )
+            return JsonResponse(data)
+
+        df[column.name] = [random.choice(vals) for __ in range(workflow.nrows)]
+
+    # Populate the column type
+    column.data_type = \
+        pandas_db.pandas_datatype_names[df[column.name].dtype.name]
+
+    # Update the positions of the appropriate columns
+    workflow.reposition_columns(workflow.ncols + 1, column.position)
+
+    column.save()
+
+    # Store the df to DB
+    ops.store_dataframe_in_db(df, workflow.id)
+
+    # Log the event
+    Log.objects.register(request.user,
+                         Log.COLUMN_ADD_RANDOM,
+                         workflow,
+                         {'id': workflow.id,
+                          'name': workflow.name,
+                          'column_name': column.name,
+                          'column_type': column.data_type,
+                          'value': values})
 
     # The form has been successfully processed
     data['form_is_valid'] = True
@@ -526,9 +660,6 @@ def column_move_prev(request, pk):
     :return:
     """
 
-    # JSON response, context and default values
-    data = dict()  # JSON response
-
     # Get the workflow element
     workflow = get_workflow(request)
     if not workflow:
@@ -675,7 +806,6 @@ def column_restrict_values(request, pk):
 
     # If the columns is unique and it is the only one, we cannot allow
     # the operation
-    unique_column = workflow.get_column_unique()
     if column.is_key:
         # This is the only key column
         messages.error(request, _('You cannot restrict a key column'))

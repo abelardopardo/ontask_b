@@ -43,6 +43,8 @@ class Log(models.Model):
     WORKFLOW_IMPORT = 'workflow_import'
     WORKFLOW_CLONE = 'workflow_clone'
     COLUMN_ADD = 'column_add'
+    COLUMN_ADD_FORMULA = 'column_add_formula'
+    COLUMN_ADD_RANDOM = 'column_add_random'
     COLUMN_RENAME = 'column_rename'
     COLUMN_DELETE = 'column_delete'
     COLUMN_CLONE = 'column_clone'
@@ -102,6 +104,8 @@ class Log(models.Model):
         (WORKFLOW_IMPORT, _('Import workflow')),
         (WORKFLOW_CLONE, _('Workflow cloned')),
         (COLUMN_ADD, _('Column added')),
+        (COLUMN_ADD_FORMULA, _('Column with formula created')),
+        (COLUMN_ADD_RANDOM, _('Column with random values created')),
         (COLUMN_RENAME, _('Column renamed')),
         (COLUMN_DELETE, _('Column deleted')),
         (COLUMN_CLONE, _('Column cloned')),

@@ -74,6 +74,10 @@ urlpatterns = [
         column_views.formula_column_add,
         name='formula_column_add'),
 
+    url(r'^random_column_add/$',
+        column_views.random_column_add,
+        name='random_column_add'),
+
     url(r'^(?P<pk>\d+)/column_delete/$',
         column_views.column_delete,
         name='column_delete'),
