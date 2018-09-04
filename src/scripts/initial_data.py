@@ -137,13 +137,10 @@ def run(*script_args):
        name (option -e) or 'email' and creating the users accordingly.
     """
 
-    # If there is no argument given, bomb out.
-    if len(script_args) == 0:
-        print(run.__doc__)
-        sys.exit(1)
-
     # Parse the arguments
-    argv = shlex.split(script_args[0])
+    argv = []
+    if script_args:
+        argv = shlex.split(script_args[0])
 
     # Default values for the arguments
     debug = False
@@ -180,19 +177,20 @@ def run(*script_args):
         print(' Default password: ', password)
         print(' Files: ' + ', '.join(filenames))
 
-    group = None
-    if make_instructors:
-        if debug:
-            print('Step: Creating the instructor group')
-        group = Group.objects.filter(name='instructor').first()
-        # Create the instructor group if it does not exist
-        if not group:
-            group = Group(name='instructor')
-            group.save()
-        elif debug:
-            print('Group already exists. Bypassing.')
-        if debug:
-            print('Done')
+    if debug:
+        print('Step: Creating the instructor group')
+    group = Group.objects.filter(name='instructor').first()
+    # Create the instructor group if it does not exist
+    if not group:
+        group = Group(name='instructor')
+        group.save()
+    elif debug:
+        print('Group already exists. Bypassing.')
+    if debug:
+        print('Done')
+
+    if not make_instructors:
+        group = None
 
     if debug:
         print('Step: Creating users')

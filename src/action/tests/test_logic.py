@@ -16,7 +16,7 @@ class EmailActionTracking(test.OntaskTestCase):
         settings.BASE_DIR(),
         'action',
         'fixtures',
-        'simple_email_action_df.sql'
+        'simple_email_action.sql'
     )
 
     trck_tokens = [

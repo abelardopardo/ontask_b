@@ -21,7 +21,7 @@ class TableApiBase(test.OntaskApiTestCase):
         settings.BASE_DIR(),
         'table',
         'fixtures',
-        'simple_table_df.sql'
+        'simple_table.sql'
     )
 
     new_table = {

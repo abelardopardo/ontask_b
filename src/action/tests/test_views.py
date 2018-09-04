@@ -23,7 +23,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         settings.BASE_DIR(),
         'action',
         'fixtures',
-        'simple_action_df.sql'
+        'simple_action.sql'
     )
 
     wflow_name = 'wflow1'

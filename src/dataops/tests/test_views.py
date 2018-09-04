@@ -23,7 +23,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         settings.BASE_DIR(),
         'dataops',
         'fixtures',
-        'wflow_symbols_df.sql'
+        'wflow_symbols.sql'
     )
 
     def setUp(self):
