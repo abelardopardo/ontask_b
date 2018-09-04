@@ -269,7 +269,9 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
 
      python manage.py runscript -v1 --traceback initial_data
 
-   The command should run without any error or exception.
+   The command should run without any error or exception. If you need to
+   create additional users before deploying the platform, read the section
+   :ref:`bulk_user_creation`.
 
 #. Execute the command to create a superuser account in OnTask::
 
