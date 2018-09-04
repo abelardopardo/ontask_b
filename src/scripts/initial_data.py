@@ -139,6 +139,7 @@ def run(*script_args):
 
     # If there is no argument given, bomb out.
     if len(script_args) == 0:
+        print('Script needs some arguments to run')
         print(run.__doc__)
         sys.exit(1)
 
