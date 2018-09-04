@@ -29,18 +29,18 @@ def change_action_type(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('action', '0028_merge_20180807_1702'),
+        ('action', '0029_auto_20180814_1327'),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='action',
-            name='action_type',
-            field=models.CharField(choices=[('personal_text', 'Personalized text'), ('json', 'Personalized JSON'), ('survey', 'Survey'), ('todolist', 'TODO List')], default='personal_text', max_length=64),
-        ),
-        # migrations.RunPython(change_action_type),
-        # migrations.RemoveField(
+        # migrations.AddField(
         #     model_name='action',
-        #     name='is_out',
+        #     name='action_type',
+        #     field=models.CharField(choices=[('personal_text', 'Personalized text'), ('json', 'Personalized JSON'), ('survey', 'Survey'), ('todolist', 'TODO List')], default='personal_text', max_length=64),
         # ),
+        migrations.RunPython(change_action_type),
+        migrations.RemoveField(
+            model_name='action',
+            name='is_out',
+        ),
     ]
