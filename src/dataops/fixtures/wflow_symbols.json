@@ -150,7 +150,7 @@
         "password": "pbkdf2_sha256$36000$7IWHqHRmEqHJ$MACKzkY9ez1AP8w+m6vBWJDgnBB63qiZ8ltnHRgp9DA=",
         "last_login": "2017-12-21T09:57:47.744Z",
         "is_superuser": false,
-        "email": "instructor1@bogus.com",
+        "email": "instructor01@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-13T10:44:13.687Z",
@@ -1807,7 +1807,7 @@
     "pk": 149,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "name": "sss",
         "description_text": "",

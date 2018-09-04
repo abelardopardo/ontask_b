@@ -150,7 +150,7 @@
         "password": "pbkdf2_sha256$36000$7IWHqHRmEqHJ$MACKzkY9ez1AP8w+m6vBWJDgnBB63qiZ8ltnHRgp9DA=",
         "last_login": "2018-01-17T07:03:27.821Z",
         "is_superuser": false,
-        "email": "instructor1@bogus.com",
+        "email": "instructor01@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-13T10:44:13.687Z",
@@ -1833,7 +1833,7 @@
     "pk": 112,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "name": "combine columns",
         "description_text": "",
@@ -2102,7 +2102,7 @@
     "pk": 1568,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2018-01-17T03:20:03.780Z",
         "name": "workflow_create",
@@ -2115,7 +2115,7 @@
     "pk": 1569,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2018-01-17T03:20:37.966Z",
         "name": "workflow_data_upload",
@@ -2128,7 +2128,7 @@
     "pk": 1574,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2018-01-17T03:56:07.641Z",
         "name": "column_add",
@@ -2141,7 +2141,7 @@
     "pk": 1575,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2018-01-17T03:56:29.106Z",
         "name": "column_add",
@@ -2154,7 +2154,7 @@
     "pk": 1576,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2018-01-17T03:56:48.500Z",
         "name": "column_add",
@@ -2167,7 +2167,7 @@
     "pk": 1577,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2018-01-17T03:57:18.387Z",
         "name": "column_add",
@@ -2180,7 +2180,7 @@
     "pk": 1578,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2018-01-17T07:04:17.762Z",
         "name": "workflow_data_merge",
@@ -2193,7 +2193,7 @@
     "pk": 1579,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2018-01-17T07:04:39.613Z",
         "name": "column_delete",
@@ -2206,7 +2206,7 @@
     "pk": 1580,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2018-01-17T07:04:46.916Z",
         "name": "column_delete",
@@ -2219,7 +2219,7 @@
     "pk": 1581,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2018-01-17T07:04:51.914Z",
         "name": "column_delete",
@@ -2232,7 +2232,7 @@
     "pk": 1582,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2018-01-17T07:04:57.659Z",
         "name": "column_delete",
@@ -2245,7 +2245,7 @@
     "pk": 1583,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2018-01-17T07:07:54.233Z",
         "name": "column_rename",
@@ -2258,7 +2258,7 @@
     "pk": 1584,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2018-01-17T07:08:03.920Z",
         "name": "column_rename",
@@ -2271,7 +2271,7 @@
     "pk": 1585,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2018-01-17T07:08:09.405Z",
         "name": "column_delete",
