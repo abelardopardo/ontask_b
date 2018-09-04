@@ -189,6 +189,9 @@ def run(*script_args):
     if debug:
         print('Done')
 
+    if not make_instructors:
+        group = None
+
     # If there is no argument we are done.
     if len(script_args) == 0:
         return

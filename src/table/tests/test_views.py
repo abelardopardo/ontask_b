@@ -20,7 +20,7 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
         settings.BASE_DIR(),
         'table',
         'fixtures',
-        'derived_column_df.sql'
+        'derived_column.sql'
     )
 
     wflow_name = 'combine columns'
@@ -510,7 +510,7 @@ class TableViews(test.OntaskLiveTestCase):
         settings.BASE_DIR(),
         'table',
         'fixtures',
-        'derived_column_df.sql'
+        'derived_column.sql'
     )
 
     wflow_name = 'combine columns'
@@ -749,7 +749,7 @@ class TableInsertRow(test.OntaskLiveTestCase):
         settings.BASE_DIR(),
         'table',
         'fixtures',
-        'derived_column_df.sql'
+        'derived_column.sql'
     )
 
     wflow_name = 'combine columns'

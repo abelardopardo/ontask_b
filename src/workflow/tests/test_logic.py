@@ -24,7 +24,7 @@ class WorkflowImportExport(test.OntaskTestCase):
         settings.BASE_DIR(),
         'workflow',
         'fixtures',
-        'simple_workflow_export_df.sql'
+        'simple_workflow_export.sql'
     )
 
     def test_export(self):
@@ -65,7 +65,7 @@ class WorkflowImport(test.OntaskLiveTestCase):
         settings.BASE_DIR(),
         'workflow',
         'fixtures',
-        'simple_workflow_export_df.sql'
+        'simple_workflow_export.sql'
     )
 
     def setUp(self):

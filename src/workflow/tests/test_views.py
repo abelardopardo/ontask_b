@@ -436,7 +436,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
         settings.BASE_DIR(),
         'workflow',
         'fixtures',
-        'simple_workflow_df.sql'
+        'simple_workflow.sql'
     )
 
     def setUp(self):
@@ -719,7 +719,7 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         settings.BASE_DIR(),
         'workflow',
         'fixtures',
-        'simple_workflow_df.sql'
+        'simple_workflow.sql'
     )
 
     def setUp(self):
@@ -929,7 +929,7 @@ class WorkflowShare(test.OntaskLiveTestCase):
         settings.BASE_DIR(),
         'workflow',
         'fixtures',
-        'simple_workflow_df.sql'
+        'simple_workflow.sql'
     )
 
     def setUp(self):
