@@ -1,3 +1,25 @@
+## 3.0.0 (2018-)
+
+### Added
+
+- Added screen to exclude emails before sending messages.
+
+- Added API entry point to schedule action execution (Issue #53)
+
+- Added functionality to create a column with either a random integer 
+  (between 1 and a given number) or with a random category value.
+
+### Changed
+
+- Log objects have been reencoded to use enumeration types.
+
+- Steps to create the actions have changed. Whe an action is created a set of
+  choices is presented.
+
+### Fixed
+
+- Bug preventing the visualisation of the API documentation.
+
 ## 2.8.3 (2018-08-21)
 
 ### Fixed
@@ -7,7 +29,6 @@
 ## 2.8.2 (2018-08-14)
 
 ### Fixed
-
 
 - Fixed celery configuration and bug in email send function
 
