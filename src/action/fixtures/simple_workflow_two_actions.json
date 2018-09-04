@@ -150,7 +150,7 @@
         "password": "pbkdf2_sha256$36000$7IWHqHRmEqHJ$MACKzkY9ez1AP8w+m6vBWJDgnBB63qiZ8ltnHRgp9DA=",
         "last_login": "2017-12-07T21:59:28.562Z",
         "is_superuser": false,
-        "email": "instructor1@bogus.com",
+        "email": "instructor01@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-13T10:44:13.687Z",
@@ -1833,7 +1833,7 @@
     "pk": 108,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "name": "wflow2",
         "description_text": "Simple workflow structure with two type of actions",
@@ -2074,7 +2074,7 @@
     "pk": 1450,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:25:32.164Z",
         "name": "workflow_create",
@@ -2087,7 +2087,7 @@
     "pk": 1451,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:28:52.686Z",
         "name": "workflow_data_upload",
@@ -2100,7 +2100,7 @@
     "pk": 1452,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:29:06.545Z",
         "name": "tablerow_update",
@@ -2113,7 +2113,7 @@
     "pk": 1453,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:29:16.583Z",
         "name": "tablerow_update",
@@ -2126,7 +2126,7 @@
     "pk": 1454,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:29:23.846Z",
         "name": "tablerow_update",
@@ -2139,7 +2139,7 @@
     "pk": 1455,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:29:40.528Z",
         "name": "action_create",
@@ -2152,7 +2152,7 @@
     "pk": 1456,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:29:51.441Z",
         "name": "filter_create",
@@ -2165,7 +2165,7 @@
     "pk": 1457,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:30:04.948Z",
         "name": "filter_update",
@@ -2178,7 +2178,7 @@
     "pk": 1458,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:30:23.063Z",
         "name": "column_rename",
@@ -2191,7 +2191,7 @@
     "pk": 1459,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:32:44.826Z",
         "name": "action_update",
@@ -2204,7 +2204,7 @@
     "pk": 1460,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:32:52.793Z",
         "name": "action_update",
@@ -2217,7 +2217,7 @@
     "pk": 1461,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:33:21.695Z",
         "name": "condition_create",
@@ -2230,7 +2230,7 @@
     "pk": 1462,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:34:46.118Z",
         "name": "action_update",
@@ -2243,7 +2243,7 @@
     "pk": 1463,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:34:56.315Z",
         "name": "action_create",
@@ -2256,7 +2256,7 @@
     "pk": 1464,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-31T02:33:12.655Z",
         "name": "workflow_attribute_create",
@@ -2269,7 +2269,7 @@
     "pk": 1465,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-31T02:33:15.092Z",
         "name": "workflow_attribute_update",
@@ -2282,7 +2282,7 @@
     "pk": 1466,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-31T02:33:50.162Z",
         "name": "action_update",

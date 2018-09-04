@@ -94,7 +94,7 @@
         "password": "pbkdf2_sha256$36000$rEMeS0qfZTG9$gNWXj6QMIroMR2q1q2PHDUjWYFxckP3U0y/FNSqbUYQ=",
         "last_login": "2017-11-04T05:33:07.802Z",
         "is_superuser": false,
-        "email": "instructor1@bogus.com",
+        "email": "instructor01@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-04T05:32:54.755Z",
@@ -134,7 +134,7 @@
         "password": "pbkdf2_sha256$36000$0ReTsxa1X4e3$8rU3YEnKnSPSzcQToiLSoUWHHa/47Y0ooXb3/lWGsqw=",
         "last_login": "2017-11-04T05:34:00.513Z",
         "is_superuser": false,
-        "email": "ainstructor1@bogus.com",
+        "email": "ainstructor01@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-04T05:32:54.842Z",
@@ -464,7 +464,7 @@
     "pk": "8c3048b3bc0a28009628297209c45efdcced0808",
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-11-08T01:29:29.741Z"
     }
@@ -484,7 +484,7 @@
     "pk": "ba0e3c844bea750a41838969ccfd08c9922c23a3",
     "fields": {
         "user": [
-            "ainstructor1@bogus.com"
+            "ainstructor01@bogus.com"
         ],
         "created": "2017-11-08T01:29:29.739Z"
     }
@@ -674,14 +674,14 @@
     "pk": 5,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "name": "wflow1",
         "description_text": "description text for workflow 1",
         "created": "2017-11-06T05:30:28.050Z",
         "modified": "2017-11-07T02:56:28.611Z",
         "nrows": 3,
-        "ncols": 8,
+        "ncols": 9,
         "attributes": {},
         "query_builder_ops": [
             {
