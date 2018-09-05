@@ -87,8 +87,8 @@
     "model": "sites.site",
     "pk": 1,
     "fields": {
-        "domain": "example.com",
-        "name": "example.com"
+        "domain": "127.0.0.1:8000",
+        "name": "127.0.0.1:8000"
     }
 },
 {
@@ -150,7 +150,7 @@
         "password": "pbkdf2_sha256$36000$7IWHqHRmEqHJ$MACKzkY9ez1AP8w+m6vBWJDgnBB63qiZ8ltnHRgp9DA=",
         "last_login": "2017-12-07T21:59:28.562Z",
         "is_superuser": false,
-        "email": "instructor01@bogus.com",
+        "email": "instructor1@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-13T10:44:13.687Z",
@@ -205,6 +205,46 @@
 },
 {
     "model": "authtools.user",
+    "pk": 7,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$QWxySVJIN242V3dP$LIvr5SElB5lCzdTRU27cgQ",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "instructor07@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-05T02:53:47.932Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 8,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$QmExNmF6dXpVcDV1$kkAjR49Gse6OWsAH9L2zvQ",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "instructor08@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-05T02:53:47.946Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
     "pk": 9,
     "fields": {
         "password": "boguspwd",
@@ -215,6 +255,186 @@
         "is_active": true,
         "date_joined": "2017-11-13T10:44:13.819Z",
         "name": "",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 10,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$Skx2YW5lMklRaWsx$Le5eeYv44zdASfFajhK2GA",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "instructor10@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-05T02:53:47.978Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 11,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$Y3VMQmI5SEdwbXdq$MVzPuCYJIz+7WpeBwAqoIA",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student01@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-05T02:53:51.612Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 12,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$SHBLT3FaQnNGbUFw$PPHSHgA2yjUbhU/bbEZJHw",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student02@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-05T02:53:51.659Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 13,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$MWFHMjV5b3FHbFJF$GX0ziOXCxvxoKLtjZ/kQPA",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student03@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-05T02:53:51.679Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 14,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$NHFPTmtIaDczMnNE$Brtevl5m6Ol3Z0LgNQ1KLg",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student04@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-05T02:53:51.695Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 15,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$Qkw2UzdlVWE3VFFx$MCNlJ0sX3tTl6TNn52644A",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student05@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-05T02:53:51.714Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 16,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$YXE2Y0ExTzdYSERB$2WtQzaUvk6fk55aSC/IzIA",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student06@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-05T02:53:51.736Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 17,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$R2I3UTlvNlpmcEhi$eVNwASg7HYs9p18CSfPiOQ",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student07@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-05T02:53:51.758Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 18,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$aDlyRm9GdzFFZ3U3$rf5KcynJliPDVfTF6LmBaA",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student08@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-05T02:53:51.779Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 19,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$cm5jdnh0YVJBR0lF$jTMbIwMlJBy+JWaAN1FaBg",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student09@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-05T02:53:51.793Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 20,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$aXhOSHhrVVJwMURW$gM8NpBs82efmRCPBc4XToQ",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student10@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-05T02:53:51.798Z",
+        "name": "User Name",
         "groups": [],
         "user_permissions": []
     }
@@ -1833,7 +2053,7 @@
     "pk": 108,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "name": "wflow2",
         "description_text": "Simple workflow structure with two type of actions",
@@ -1896,6 +2116,7 @@
         "data_type": "integer",
         "is_key": true,
         "position": 3,
+        "in_viz": true,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1911,6 +2132,7 @@
         "data_type": "string",
         "is_key": false,
         "position": 4,
+        "in_viz": true,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1926,6 +2148,7 @@
         "data_type": "string",
         "is_key": true,
         "position": 2,
+        "in_viz": true,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1941,6 +2164,7 @@
         "data_type": "double",
         "is_key": true,
         "position": 1,
+        "in_viz": true,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1956,6 +2180,7 @@
         "data_type": "boolean",
         "is_key": false,
         "position": 5,
+        "in_viz": true,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1971,6 +2196,7 @@
         "data_type": "datetime",
         "is_key": false,
         "position": 6,
+        "in_viz": true,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1984,12 +2210,15 @@
         "name": "Detecting age",
         "description_text": "",
         "created": "2017-12-08T01:29:40.524Z",
-        "modified": "2017-12-31T02:33:50.166Z",
-        "is_out": true,
+        "modified": "2018-09-05T02:55:52.788Z",
+        "last_executed_log": null,
+        "action_type": "personalized_text",
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
         "content": "<p>Hi {{ name }}</p><p>ATT:&nbsp;{{ attribute name }}</p><p>COL:&nbsp;{{ registered }}</p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>",
+        "target_url": "",
+        "shuffle": false,
         "columns": []
     }
 },
@@ -2001,12 +2230,15 @@
         "name": "Check registration",
         "description_text": "",
         "created": "2017-12-08T01:34:56.311Z",
-        "modified": "2017-12-08T01:35:06.267Z",
-        "is_out": false,
+        "modified": "2018-09-05T02:55:52.786Z",
+        "last_executed_log": null,
+        "action_type": "personalized_text",
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
         "content": "{% comment %}Your action content here{% endcomment %}",
+        "target_url": "",
+        "shuffle": false,
         "columns": [
             2927,
             2929
@@ -2035,10 +2267,11 @@
             "valid": true,
             "condition": "AND"
         },
-        "is_filter": true,
         "n_rows_selected": 3,
+        "is_filter": true,
         "created": "2017-12-08T01:29:51.431Z",
-        "modified": "2017-12-08T01:30:04.937Z"
+        "modified": "2017-12-08T01:30:04.937Z",
+        "columns": []
     }
 },
 {
@@ -2063,10 +2296,11 @@
             "valid": true,
             "condition": "AND"
         },
-        "is_filter": false,
         "n_rows_selected": 2,
+        "is_filter": false,
         "created": "2017-12-08T01:33:21.687Z",
-        "modified": "2017-12-08T01:33:21.687Z"
+        "modified": "2017-12-08T01:33:21.687Z",
+        "columns": []
     }
 },
 {
@@ -2074,12 +2308,16 @@
     "pk": 1450,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-08T01:25:32.164Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "workflow_create",
         "workflow": 108,
-        "payload": "{\"id\": 108, \"name\": \"wflow2\"}"
+        "payload": {
+            "id": 108,
+            "name": "wflow2"
+        }
     }
 },
 {
@@ -2087,12 +2325,42 @@
     "pk": 1451,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-08T01:28:52.686Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "workflow_data_upload",
         "workflow": 108,
-        "payload": "{\"column_names\": [\"age\", \"eamil\", \"sid\", \"name\", \"registered\", \"when\"], \"name\": \"wflow2\", \"column_types\": [\"double\", \"string\", \"integer\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, false, false, false], \"id\": 108}"
+        "payload": {
+            "column_names": [
+                "age",
+                "eamil",
+                "sid",
+                "name",
+                "registered",
+                "when"
+            ],
+            "name": "wflow2",
+            "column_types": [
+                "double",
+                "string",
+                "integer",
+                "string",
+                "boolean",
+                "datetime"
+            ],
+            "num_cols": 0,
+            "num_rows": 0,
+            "column_unique": [
+                true,
+                true,
+                true,
+                false,
+                false,
+                false
+            ],
+            "id": 108
+        }
     }
 },
 {
@@ -2100,12 +2368,42 @@
     "pk": 1452,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-08T01:29:06.545Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "tablerow_update",
         "workflow": 108,
-        "payload": "{\"new_values\": [[\"age\", \"12.0\"], [\"eamil\", \"student1@bogus.com\"], [\"sid\", \"1\"], [\"name\", \"Student One\"], [\"registered\", \"True\"], [\"when\", \"2017-10-11 00:33:44+11:00\"]], \"id\": 108, \"name\": \"wflow2\"}"
+        "payload": {
+            "new_values": [
+                [
+                    "age",
+                    "12.0"
+                ],
+                [
+                    "eamil",
+                    "student1@bogus.com"
+                ],
+                [
+                    "sid",
+                    "1"
+                ],
+                [
+                    "name",
+                    "Student One"
+                ],
+                [
+                    "registered",
+                    "True"
+                ],
+                [
+                    "when",
+                    "2017-10-11 00:33:44+11:00"
+                ]
+            ],
+            "id": 108,
+            "name": "wflow2"
+        }
     }
 },
 {
@@ -2113,12 +2411,42 @@
     "pk": 1453,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-08T01:29:16.583Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "tablerow_update",
         "workflow": 108,
-        "payload": "{\"new_values\": [[\"age\", \"12.1\"], [\"eamil\", \"student2@bogus.com\"], [\"sid\", \"2\"], [\"name\", \"Student Two\"], [\"registered\", \"False\"], [\"when\", \"2017-10-11 00:32:44+11:00\"]], \"id\": 108, \"name\": \"wflow2\"}"
+        "payload": {
+            "new_values": [
+                [
+                    "age",
+                    "12.1"
+                ],
+                [
+                    "eamil",
+                    "student2@bogus.com"
+                ],
+                [
+                    "sid",
+                    "2"
+                ],
+                [
+                    "name",
+                    "Student Two"
+                ],
+                [
+                    "registered",
+                    "False"
+                ],
+                [
+                    "when",
+                    "2017-10-11 00:32:44+11:00"
+                ]
+            ],
+            "id": 108,
+            "name": "wflow2"
+        }
     }
 },
 {
@@ -2126,12 +2454,42 @@
     "pk": 1454,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-08T01:29:23.846Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "tablerow_update",
         "workflow": 108,
-        "payload": "{\"new_values\": [[\"age\", \"13.2\"], [\"eamil\", \"student3@bogus.com\"], [\"sid\", \"3\"], [\"name\", \"Student Three\"], [\"registered\", \"True\"], [\"when\", \"2017-10-11 00:32:44+11:00\"]], \"id\": 108, \"name\": \"wflow2\"}"
+        "payload": {
+            "new_values": [
+                [
+                    "age",
+                    "13.2"
+                ],
+                [
+                    "eamil",
+                    "student3@bogus.com"
+                ],
+                [
+                    "sid",
+                    "3"
+                ],
+                [
+                    "name",
+                    "Student Three"
+                ],
+                [
+                    "registered",
+                    "True"
+                ],
+                [
+                    "when",
+                    "2017-10-11 00:32:44+11:00"
+                ]
+            ],
+            "id": 108,
+            "name": "wflow2"
+        }
     }
 },
 {
@@ -2139,12 +2497,18 @@
     "pk": 1455,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-08T01:29:40.528Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "action_create",
         "workflow": 108,
-        "payload": "{\"workflow_id\": 108, \"id\": 253, \"workflow_name\": \"wflow2\", \"name\": \"action out one\"}"
+        "payload": {
+            "workflow_id": 108,
+            "id": 253,
+            "workflow_name": "wflow2",
+            "name": "action out one"
+        }
     }
 },
 {
@@ -2152,12 +2516,23 @@
     "pk": 1456,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-08T01:29:51.441Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "filter_create",
         "workflow": 108,
-        "payload": "{\"selected_rows\": 0, \"formula\": [\"((\\\"age\\\" > %s))\", [\"14.0\"]], \"id\": 1037, \"name\": \"old\"}"
+        "payload": {
+            "selected_rows": 0,
+            "formula": [
+                "((\"age\" > %s))",
+                [
+                    "14.0"
+                ]
+            ],
+            "id": 1037,
+            "name": "old"
+        }
     }
 },
 {
@@ -2165,12 +2540,23 @@
     "pk": 1457,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-08T01:30:04.948Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "filter_update",
         "workflow": 108,
-        "payload": "{\"selected_rows\": 2, \"formula\": [\"((\\\"age\\\" > %s))\", [\"12.0\"]], \"id\": 1037, \"name\": \"old\"}"
+        "payload": {
+            "selected_rows": 2,
+            "formula": [
+                "((\"age\" > %s))",
+                [
+                    "12.0"
+                ]
+            ],
+            "id": 1037,
+            "name": "old"
+        }
     }
 },
 {
@@ -2178,12 +2564,18 @@
     "pk": 1458,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-08T01:30:23.063Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "column_rename",
         "workflow": 108,
-        "payload": "{\"new_name\": \"email\", \"column_name\": \"eamil\", \"id\": 108, \"name\": \"wflow2\"}"
+        "payload": {
+            "new_name": "email",
+            "column_name": "eamil",
+            "id": 108,
+            "name": "wflow2"
+        }
     }
 },
 {
@@ -2191,12 +2583,19 @@
     "pk": 1459,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-08T01:32:44.826Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "action_update",
         "workflow": 108,
-        "payload": "{\"content\": \"{% comment %}Your action content here{% endcomment %}\", \"workflow_id\": 108, \"id\": 253, \"workflow_name\": \"wflow2\", \"name\": \"action out one\"}"
+        "payload": {
+            "content": "{% comment %}Your action content here{% endcomment %}",
+            "workflow_id": 108,
+            "id": 253,
+            "workflow_name": "wflow2",
+            "name": "action out one"
+        }
     }
 },
 {
@@ -2204,12 +2603,18 @@
     "pk": 1460,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-08T01:32:52.793Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "action_update",
         "workflow": 108,
-        "payload": "{\"workflow_id\": 108, \"id\": 253, \"workflow_name\": \"wflow2\", \"name\": \"Detecting age\"}"
+        "payload": {
+            "workflow_id": 108,
+            "id": 253,
+            "workflow_name": "wflow2",
+            "name": "Detecting age"
+        }
     }
 },
 {
@@ -2217,12 +2622,23 @@
     "pk": 1461,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-08T01:33:21.695Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "condition_create",
         "workflow": 108,
-        "payload": "{\"selected_rows\": 2, \"formula\": [\"((\\\"registered\\\" = %s))\", [\"1\"]], \"id\": 1038, \"name\": \"Registered\"}"
+        "payload": {
+            "selected_rows": 2,
+            "formula": [
+                "((\"registered\" = %s))",
+                [
+                    "1"
+                ]
+            ],
+            "id": 1038,
+            "name": "Registered"
+        }
     }
 },
 {
@@ -2230,12 +2646,19 @@
     "pk": 1462,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-08T01:34:46.118Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "action_update",
         "workflow": 108,
-        "payload": "{\"content\": \"<p>Hi {{ name }}</p><p><br></p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>\", \"workflow_id\": 108, \"id\": 253, \"workflow_name\": \"wflow2\", \"name\": \"Detecting age\"}"
+        "payload": {
+            "content": "<p>Hi {{ name }}</p><p><br></p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>",
+            "workflow_id": 108,
+            "id": 253,
+            "workflow_name": "wflow2",
+            "name": "Detecting age"
+        }
     }
 },
 {
@@ -2243,12 +2666,18 @@
     "pk": 1463,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-08T01:34:56.315Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "action_create",
         "workflow": 108,
-        "payload": "{\"workflow_id\": 108, \"id\": 254, \"workflow_name\": \"wflow2\", \"name\": \"Check registration\"}"
+        "payload": {
+            "workflow_id": 108,
+            "id": 254,
+            "workflow_name": "wflow2",
+            "name": "Check registration"
+        }
     }
 },
 {
@@ -2256,12 +2685,18 @@
     "pk": 1464,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-31T02:33:12.655Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "workflow_attribute_create",
         "workflow": 108,
-        "payload": "{\"attr_key\": \"attribute name\", \"attr_val\": \"attribute value\", \"id\": 108, \"name\": \"wflow2\"}"
+        "payload": {
+            "attr_key": "attribute name",
+            "attr_val": "attribute value",
+            "id": 108,
+            "name": "wflow2"
+        }
     }
 },
 {
@@ -2269,12 +2704,19 @@
     "pk": 1465,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-31T02:33:15.092Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "workflow_attribute_update",
         "workflow": 108,
-        "payload": "{\"attr\": {\"attribute name\": \"attribute value\"}, \"id\": 108, \"name\": \"wflow2\"}"
+        "payload": {
+            "id": 108,
+            "name": "wflow2",
+            "attr": {
+                "attribute name": "attribute value"
+            }
+        }
     }
 },
 {
@@ -2282,12 +2724,19 @@
     "pk": 1466,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-12-31T02:33:50.162Z",
+        "modified": "2018-09-05T02:55:52.493Z",
         "name": "action_update",
         "workflow": 108,
-        "payload": "{\"content\": \"<p>Hi {{ name }}</p><p>ATT:&nbsp;{{ attribute name }}</p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>\", \"workflow_id\": 108, \"id\": 253, \"workflow_name\": \"wflow2\", \"name\": \"Detecting age\"}"
+        "payload": {
+            "content": "<p>Hi {{ name }}</p><p>ATT:&nbsp;{{ attribute name }}</p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>",
+            "workflow_id": 108,
+            "id": 253,
+            "workflow_name": "wflow2",
+            "name": "Detecting age"
+        }
     }
 }
 ]
