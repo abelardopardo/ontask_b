@@ -2,19 +2,18 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.3
--- Dumped by pg_dump version 9.6.3
+-- Dumped from database version 10.4
+-- Dumped by pg_dump version 10.4
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
-
-SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
 
@@ -24,7 +23,7 @@ SET default_with_oids = false;
 -- Name: __ONTASK_WORKFLOW_TABLE_112; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE "__ONTASK_WORKFLOW_TABLE_112" (
+CREATE TABLE public."__ONTASK_WORKFLOW_TABLE_112" (
     c0 bigint,
     c1 bigint,
     c2 bigint,
@@ -44,7 +43,7 @@ CREATE TABLE "__ONTASK_WORKFLOW_TABLE_112" (
 -- Data for Name: __ONTASK_WORKFLOW_TABLE_112; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY "__ONTASK_WORKFLOW_TABLE_112" (c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c91, c92) FROM stdin;
+COPY public."__ONTASK_WORKFLOW_TABLE_112" (c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c91, c92) FROM stdin;
 0	9	1	2	8	3	0	8	0	8	t	f
 1	0	5	7	1	5	9	7	0	7	t	f
 2	0	1	2	3	8	3	9	0	2	f	f
