@@ -37,12 +37,132 @@
 },
 {
     "model": "authtools.user",
+    "pk": 2,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$bk9KRTlKZ2xxbDlB$cAe2f8x6BpprOod9BCaOKg",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "instructor02@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:02:08.903Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 3,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$RVV0UDM1REIyaDFG$shPH16qN2KsXFn1ud5r5JA",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "instructor03@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:02:08.925Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 4,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$azZNQmpqakJZcWUx$hF26FK0JnzC2gCJlsgp/ag",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "instructor04@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:02:08.940Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 5,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$b1hoT3pkaENYTGJQ$R1/LEw0WgGKDl6RCzm+GDA",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "instructor05@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:02:08.958Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 6,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$QW15Wm81TzdXTllr$LljNmiC31E5CXkM5iVJBDQ",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "instructor06@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:02:08.972Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 7,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$TDM1eXBKUnBKS3FR$3jnq6vZWflYdPrnwpBL7Wg",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "instructor07@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:02:08.991Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
     "pk": 8,
     "fields": {
         "password": "pbkdf2_sha256$36000$8JbsSQ5I647Z$43TIb39dFsJqYmlIlnLZrvFdKyCw8l5ywgI6OzyPvNU=",
         "last_login": "2018-05-28T09:51:00.474Z",
         "is_superuser": false,
-        "email": "instructor01@bogus.com",
+        "email": "instructor1@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2018-03-26T04:16:01.548Z",
@@ -385,7 +505,7 @@
         "email": "andrew.kemp@adelaide.edu.au",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2018-05-07T10:10:03.000Z",
+        "date_joined": "2018-05-07T10:10:03Z",
         "name": "User Name",
         "groups": [
             [
@@ -984,7 +1104,7 @@
     "pk": 35,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "name": "Plugin test",
         "description_text": "Workflow to test plugin execution.",
@@ -1452,12 +1572,15 @@
         "name": "Email students in SMED",
         "description_text": "Message to those students in SMED",
         "created": "2018-05-03T23:24:19.740Z",
-        "modified": "2018-05-03T23:24:19.771Z",
-        "is_out": true,
+        "modified": "2018-09-06T00:02:34.236Z",
+        "last_executed_log": null,
+        "action_type": "personalized_text",
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
         "content": "<p>Hello&nbsp;{{ GivenName }}</p><p>Welcome to the course. As you may know, there are several techniques and concepts in <b>SMED</b> that are relevant to this course. For example one of them is ....</p><p><br></p><p>Regards.</p><p>Sarah Johnson</p><p>Course Coordinator</p>",
+        "target_url": "",
+        "shuffle": false,
         "columns": []
     }
 },
@@ -1469,12 +1592,15 @@
         "name": "Email to students in FASS",
         "description_text": "Message to students in program FASS",
         "created": "2018-05-03T23:24:19.778Z",
-        "modified": "2018-05-03T23:24:19.798Z",
-        "is_out": true,
+        "modified": "2018-09-06T00:02:34.237Z",
+        "last_executed_log": null,
+        "action_type": "personalized_text",
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
         "content": "<p>Hello&nbsp;{{ GivenName }}</p><p>Welcome to the course. As you may know, there are several techniques and concepts in <b>FASS</b> that are relevant to this course. For example one of them is ....</p><p><br></p><p>Regards.</p><p>Sarah Johnson</p><p>Course Coordinator</p>",
+        "target_url": "",
+        "shuffle": false,
         "columns": []
     }
 },
@@ -1486,12 +1612,15 @@
         "name": "Email to students in FEIT",
         "description_text": "Message to those students in FEIT",
         "created": "2018-05-03T23:24:19.807Z",
-        "modified": "2018-05-03T23:24:19.824Z",
-        "is_out": true,
+        "modified": "2018-09-06T00:02:34.238Z",
+        "last_executed_log": null,
+        "action_type": "personalized_text",
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
         "content": "<p>Hello&nbsp;{{ GivenName }}</p><p>Welcome to the course. As you may know, there are several techniques and concepts in <b>FEIT</b> that are relevant to this course. For example one of them is ....</p><p><br></p><p>Regards.</p><p>Sarah Johnson</p><p>Course Coordinator</p>",
+        "target_url": "",
+        "shuffle": false,
         "columns": []
     }
 },
@@ -1503,12 +1632,15 @@
         "name": "Email to students in FSCI",
         "description_text": "Message to students in program FSCI",
         "created": "2018-05-03T23:24:19.832Z",
-        "modified": "2018-05-03T23:24:19.868Z",
-        "is_out": true,
+        "modified": "2018-09-06T00:02:34.239Z",
+        "last_executed_log": null,
+        "action_type": "personalized_text",
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
         "content": "<p>Hello&nbsp;{{ GivenName }}</p><p>Welcome to the course. As you may know, there are several techniques and concepts in <b>FSCI</b> that are relevant to this course. For example one of them is ....</p><p><br></p><p>Regards.</p><p>Sarah Johnson</p><p>Course Coordinator</p>",
+        "target_url": "",
+        "shuffle": false,
         "columns": []
     }
 },
@@ -1520,12 +1652,15 @@
         "name": "aaa",
         "description_text": "This is the description",
         "created": "2018-05-03T23:24:31.031Z",
-        "modified": "2018-05-03T23:32:06.109Z",
-        "is_out": false,
+        "modified": "2018-09-06T00:02:34.240Z",
+        "last_executed_log": null,
+        "action_type": "personalized_text",
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
         "content": "",
+        "target_url": "",
+        "shuffle": false,
         "columns": [
             943,
             945
@@ -1690,9 +1825,13 @@
             "instructor2@bogus.com"
         ],
         "created": "2018-05-03T23:24:20.440Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_import",
         "workflow": 28,
-        "payload": "{\"id\": 28, \"name\": \"Scenario 4\"}"
+        "payload": {
+            "id": 28,
+            "name": "Scenario 4"
+        }
     }
 },
 {
@@ -1703,9 +1842,15 @@
             "instructor2@bogus.com"
         ],
         "created": "2018-05-03T23:24:31.037Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "action_create",
         "workflow": 28,
-        "payload": "{\"workflow_id\": 28, \"id\": 72, \"workflow_name\": \"Scenario 4\", \"name\": \"aaa\"}"
+        "payload": {
+            "workflow_id": 28,
+            "id": 72,
+            "workflow_name": "Scenario 4",
+            "name": "aaa"
+        }
     }
 },
 {
@@ -1716,9 +1861,15 @@
             "instructor2@bogus.com"
         ],
         "created": "2018-05-03T23:24:53.073Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "action_update",
         "workflow": 28,
-        "payload": "{\"workflow_id\": 28, \"id\": 72, \"workflow_name\": \"Scenario 4\", \"name\": \"aaa\"}"
+        "payload": {
+            "workflow_id": 28,
+            "id": 72,
+            "workflow_name": "Scenario 4",
+            "name": "aaa"
+        }
     }
 },
 {
@@ -1729,9 +1880,15 @@
             "instructor2@bogus.com"
         ],
         "created": "2018-05-03T23:30:10.071Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "filter_create",
         "workflow": 28,
-        "payload": "{\"selected_rows\": 0, \"formula\": \"(((\\\"SID\\\" = %s) AND (\\\"SID\\\" is not null)))\", \"id\": 203, \"name\": \"afaf\"}"
+        "payload": {
+            "selected_rows": 0,
+            "formula": "(((\"SID\" = %s) AND (\"SID\" is not null)))",
+            "id": 203,
+            "name": "afaf"
+        }
     }
 },
 {
@@ -1739,12 +1896,16 @@
     "pk": 625,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-15T11:44:53.208Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_create",
         "workflow": 35,
-        "payload": "{\"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -1752,12 +1913,36 @@
     "pk": 626,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-15T11:48:29.821Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_upload",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"sid\", \"name\", \"registered\", \"when\"], \"name\": \"aaa\", \"column_types\": [\"integer\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, false, false, false], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "sid",
+                "name",
+                "registered",
+                "when"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "integer",
+                "string",
+                "boolean",
+                "datetime"
+            ],
+            "num_cols": 0,
+            "num_rows": 0,
+            "column_unique": [
+                true,
+                false,
+                false,
+                false
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -1765,12 +1950,16 @@
     "pk": 669,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-17T04:39:42.480Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_flush",
         "workflow": 35,
-        "payload": "{\"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -1778,12 +1967,33 @@
     "pk": 670,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-17T04:39:58.219Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_upload",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"name\", \"email\", \"sis id\"], \"name\": \"aaa\", \"column_types\": [\"string\", \"string\", \"integer\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "name",
+                "email",
+                "sis id"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "string",
+                "string",
+                "integer"
+            ],
+            "num_cols": 0,
+            "num_rows": 0,
+            "column_unique": [
+                true,
+                true,
+                true
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -1791,12 +2001,48 @@
     "pk": 671,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-17T04:40:36.840Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_merge",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"name\", \"email\", \"sis id\", \"q1p4\", \"q1p2\", \"q1p3\", \"q1p1\", \"Student id\"], \"name\": \"aaa\", \"column_types\": [\"string\", \"string\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 3, \"num_rows\": 2, \"column_unique\": [true, true, true, false, true, true, false, true], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "name",
+                "email",
+                "sis id",
+                "q1p4",
+                "q1p2",
+                "q1p3",
+                "q1p1",
+                "Student id"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "string",
+                "string",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer"
+            ],
+            "num_cols": 3,
+            "num_rows": 2,
+            "column_unique": [
+                true,
+                true,
+                true,
+                false,
+                true,
+                true,
+                false,
+                true
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -1804,12 +2050,18 @@
     "pk": 672,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-17T04:40:54.869Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "column_rename",
         "workflow": 35,
-        "payload": "{\"new_name\": \"Student id\", \"column_name\": \"Student id\", \"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "new_name": "Student id",
+            "column_name": "Student id",
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -1817,12 +2069,18 @@
     "pk": 673,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-17T04:41:02.801Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "column_rename",
         "workflow": 35,
-        "payload": "{\"new_name\": \"sis id\", \"column_name\": \"sis id\", \"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "new_name": "sis id",
+            "column_name": "sis id",
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -1830,12 +2088,18 @@
     "pk": 674,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-17T04:41:08.761Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "column_rename",
         "workflow": 35,
-        "payload": "{\"new_name\": \"name\", \"column_name\": \"name\", \"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "new_name": "name",
+            "column_name": "name",
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -1843,12 +2107,18 @@
     "pk": 675,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-17T04:41:16.032Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "column_rename",
         "workflow": 35,
-        "payload": "{\"new_name\": \"q1p2\", \"column_name\": \"q1p2\", \"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "new_name": "q1p2",
+            "column_name": "q1p2",
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -1856,12 +2126,18 @@
     "pk": 676,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-17T04:41:21.755Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "column_rename",
         "workflow": 35,
-        "payload": "{\"new_name\": \"q1p3\", \"column_name\": \"q1p3\", \"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "new_name": "q1p3",
+            "column_name": "q1p3",
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -1869,12 +2145,60 @@
     "pk": 677,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-17T04:41:55.188Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_merge",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"Student id\", \"sis id\", \"name\", \"email\", \"q1p4\", \"q1p2\", \"q1p3\", \"q1p1\", \"q2p4\", \"q2p1\", \"q2p3\", \"q2p2\"], \"name\": \"aaa\", \"column_types\": [\"integer\", \"integer\", \"string\", \"string\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 8, \"num_rows\": 2, \"column_unique\": [true, true, false, true, false, false, false, false, false, false, true, true], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "Student id",
+                "sis id",
+                "name",
+                "email",
+                "q1p4",
+                "q1p2",
+                "q1p3",
+                "q1p1",
+                "q2p4",
+                "q2p1",
+                "q2p3",
+                "q2p2"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "integer",
+                "integer",
+                "string",
+                "string",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer"
+            ],
+            "num_cols": 8,
+            "num_rows": 2,
+            "column_unique": [
+                true,
+                true,
+                false,
+                true,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                true,
+                true
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -1882,12 +2206,16 @@
     "pk": 681,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-17T21:06:17.118Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_flush",
         "workflow": 35,
-        "payload": "{\"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -1895,12 +2223,30 @@
     "pk": 682,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-17T21:06:54.102Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_upload",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"email\", \"sis id\"], \"name\": \"aaa\", \"column_types\": [\"string\", \"integer\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "email",
+                "sis id"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "string",
+                "integer"
+            ],
+            "num_cols": 0,
+            "num_rows": 0,
+            "column_unique": [
+                true,
+                true
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -1908,12 +2254,36 @@
     "pk": 683,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-17T21:07:25.212Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_merge",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"email\", \"sis id\", \"A1\", \"student id\"], \"name\": \"aaa\", \"column_types\": [\"string\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 2, \"num_rows\": 3, \"column_unique\": [true, true, false, true], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "email",
+                "sis id",
+                "A1",
+                "student id"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "string",
+                "integer",
+                "integer",
+                "integer"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -1921,12 +2291,39 @@
     "pk": 684,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-17T21:08:38.995Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_merge",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"email\", \"sis id\", \"A1\", \"student id\", \"A2\"], \"name\": \"aaa\", \"column_types\": [\"string\", \"integer\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 4, \"num_rows\": 3, \"column_unique\": [true, true, false, true, false], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "email",
+                "sis id",
+                "A1",
+                "student id",
+                "A2"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "string",
+                "integer",
+                "integer",
+                "integer",
+                "integer"
+            ],
+            "num_cols": 4,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                true,
+                false,
+                true,
+                false
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -1934,12 +2331,16 @@
     "pk": 685,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:25:01.576Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_flush",
         "workflow": 35,
-        "payload": "{\"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -1947,12 +2348,30 @@
     "pk": 686,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:25:24.039Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_upload",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"column_types\": [\"integer\", \"integer\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, false], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 0,
+            "num_rows": 0,
+            "column_unique": [
+                true,
+                false
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -1960,12 +2379,31 @@
     "pk": 687,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:26:00.535Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_failedmerge",
         "workflow": 35,
-        "payload": "{\"column_types\": [\"integer\", \"integer\"], \"num_cols\": 2, \"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"num_rows\": 3, \"column_unique\": [true, false], \"id\": 35, \"error_msg\": \"New values in column student id are not of type integer\"}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "id": 35,
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                false
+            ],
+            "error_msg": "New values in column student id are not of type integer"
+        }
     }
 },
 {
@@ -1973,12 +2411,31 @@
     "pk": 688,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:38:58.563Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_failedmerge",
         "workflow": 35,
-        "payload": "{\"column_types\": [\"integer\", \"integer\"], \"num_cols\": 2, \"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"num_rows\": 3, \"column_unique\": [true, false], \"id\": 35, \"error_msg\": \"New values in column student id are not of type integer\"}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "id": 35,
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                false
+            ],
+            "error_msg": "New values in column student id are not of type integer"
+        }
     }
 },
 {
@@ -1986,12 +2443,31 @@
     "pk": 689,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:39:54.596Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_failedmerge",
         "workflow": 35,
-        "payload": "{\"column_types\": [\"integer\", \"integer\"], \"num_cols\": 2, \"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"num_rows\": 3, \"column_unique\": [true, false], \"id\": 35, \"error_msg\": \"New values in column A1 are not of type integer\"}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "id": 35,
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                false
+            ],
+            "error_msg": "New values in column A1 are not of type integer"
+        }
     }
 },
 {
@@ -1999,12 +2475,16 @@
     "pk": 690,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:41:08.531Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_flush",
         "workflow": 35,
-        "payload": "{\"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -2012,12 +2492,30 @@
     "pk": 691,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:41:16.622Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_upload",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"column_types\": [\"integer\", \"integer\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, false], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 0,
+            "num_rows": 0,
+            "column_unique": [
+                true,
+                false
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -2025,12 +2523,31 @@
     "pk": 692,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:42:29.503Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_failedmerge",
         "workflow": 35,
-        "payload": "{\"column_types\": [\"integer\", \"integer\"], \"num_cols\": 2, \"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"num_rows\": 3, \"column_unique\": [true, false], \"id\": 35, \"error_msg\": \"New values in column A1 are not of type integer\"}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "id": 35,
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                false
+            ],
+            "error_msg": "New values in column A1 are not of type integer"
+        }
     }
 },
 {
@@ -2038,12 +2555,31 @@
     "pk": 693,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:43:34.504Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_failedmerge",
         "workflow": 35,
-        "payload": "{\"column_types\": [\"integer\", \"integer\"], \"num_cols\": 2, \"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"num_rows\": 3, \"column_unique\": [true, false], \"id\": 35, \"error_msg\": \"New values in column A1 are not of type integer\"}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "id": 35,
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                false
+            ],
+            "error_msg": "New values in column A1 are not of type integer"
+        }
     }
 },
 {
@@ -2051,12 +2587,31 @@
     "pk": 694,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:46:21.485Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_failedmerge",
         "workflow": 35,
-        "payload": "{\"column_types\": [\"integer\", \"integer\"], \"num_cols\": 2, \"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"num_rows\": 3, \"column_unique\": [true, false], \"id\": 35, \"error_msg\": \"New values in column A1 are not of type integer\"}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "id": 35,
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                false
+            ],
+            "error_msg": "New values in column A1 are not of type integer"
+        }
     }
 },
 {
@@ -2064,12 +2619,31 @@
     "pk": 695,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:46:57.305Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_failedmerge",
         "workflow": 35,
-        "payload": "{\"column_types\": [\"integer\", \"integer\"], \"num_cols\": 2, \"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"num_rows\": 3, \"column_unique\": [true, false], \"id\": 35, \"error_msg\": \"New values in column A1 are not of type integer\"}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "id": 35,
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                false
+            ],
+            "error_msg": "New values in column A1 are not of type integer"
+        }
     }
 },
 {
@@ -2077,12 +2651,31 @@
     "pk": 696,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:52:39.741Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_failedmerge",
         "workflow": 35,
-        "payload": "{\"column_types\": [\"integer\", \"integer\"], \"num_cols\": 2, \"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"num_rows\": 3, \"column_unique\": [true, false], \"id\": 35, \"error_msg\": \"New values in column A1 are not of type integer\"}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "id": 35,
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                false
+            ],
+            "error_msg": "New values in column A1 are not of type integer"
+        }
     }
 },
 {
@@ -2090,12 +2683,31 @@
     "pk": 697,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:54:00.262Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_failedmerge",
         "workflow": 35,
-        "payload": "{\"column_types\": [\"integer\", \"integer\"], \"num_cols\": 2, \"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"num_rows\": 3, \"column_unique\": [true, false], \"id\": 35, \"error_msg\": \"New values in column A1 are not of type integer\"}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "id": 35,
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                false
+            ],
+            "error_msg": "New values in column A1 are not of type integer"
+        }
     }
 },
 {
@@ -2103,12 +2715,30 @@
     "pk": 698,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:58:06.458Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_merge",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"column_types\": [\"integer\", \"double\"], \"num_cols\": 2, \"num_rows\": 3, \"column_unique\": [true, false], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "integer",
+                "double"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                false
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -2116,12 +2746,16 @@
     "pk": 699,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:58:19.490Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_flush",
         "workflow": 35,
-        "payload": "{\"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -2129,12 +2763,30 @@
     "pk": 700,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:58:33.827Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_upload",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"column_types\": [\"integer\", \"integer\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, false], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 0,
+            "num_rows": 0,
+            "column_unique": [
+                true,
+                false
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -2142,12 +2794,36 @@
     "pk": 701,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T06:59:31.848Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_merge",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"student id\", \"A1\", \"A2\", \"sis id\"], \"name\": \"aaa\", \"column_types\": [\"double\", \"double\", \"double\", \"double\"], \"num_cols\": 2, \"num_rows\": 3, \"column_unique\": [true, false, false, true], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1",
+                "A2",
+                "sis id"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "double",
+                "double",
+                "double",
+                "double"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -2155,12 +2831,16 @@
     "pk": 702,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T07:01:56.490Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_flush",
         "workflow": 35,
-        "payload": "{\"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -2168,12 +2848,30 @@
     "pk": 703,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T07:02:07.474Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_upload",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"column_types\": [\"integer\", \"integer\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, false], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 0,
+            "num_rows": 0,
+            "column_unique": [
+                true,
+                false
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -2181,12 +2879,36 @@
     "pk": 704,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T07:02:51.077Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_merge",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"student id\", \"A1\", \"A2\", \"sis id\"], \"name\": \"aaa\", \"column_types\": [\"double\", \"double\", \"integer\", \"integer\"], \"num_cols\": 2, \"num_rows\": 3, \"column_unique\": [true, false, false, true], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1",
+                "A2",
+                "sis id"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "double",
+                "double",
+                "integer",
+                "integer"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -2194,12 +2916,16 @@
     "pk": 705,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T07:14:21.785Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_flush",
         "workflow": 35,
-        "payload": "{\"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -2207,12 +2933,30 @@
     "pk": 706,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T07:14:37.666Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_upload",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"column_types\": [\"integer\", \"integer\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, false], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 0,
+            "num_rows": 0,
+            "column_unique": [
+                true,
+                false
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -2220,12 +2964,36 @@
     "pk": 707,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T07:14:53.900Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_merge",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"student id\", \"A1\", \"A2\", \"sis id\"], \"name\": \"aaa\", \"column_types\": [\"double\", \"double\", \"double\", \"double\"], \"num_cols\": 2, \"num_rows\": 3, \"column_unique\": [true, false, false, true], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1",
+                "A2",
+                "sis id"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "double",
+                "double",
+                "double",
+                "double"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                false,
+                false,
+                true
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -2233,12 +3001,16 @@
     "pk": 708,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T07:17:15.215Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_flush",
         "workflow": 35,
-        "payload": "{\"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -2246,12 +3018,30 @@
     "pk": 709,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T07:17:32.011Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_upload",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"column_types\": [\"integer\", \"integer\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, false], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 0,
+            "num_rows": 0,
+            "column_unique": [
+                true,
+                false
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -2259,12 +3049,31 @@
     "pk": 710,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T07:17:52.578Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_failedmerge",
         "workflow": 35,
-        "payload": "{\"column_types\": [\"integer\", \"integer\"], \"num_cols\": 2, \"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"num_rows\": 3, \"column_unique\": [true, false], \"id\": 35, \"error_msg\": \"Values in column student id are no longer unique (key column).\"}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "id": 35,
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                false
+            ],
+            "error_msg": "Values in column student id are no longer unique (key column)."
+        }
     }
 },
 {
@@ -2272,12 +3081,31 @@
     "pk": 711,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T07:19:01.111Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_failedmerge",
         "workflow": 35,
-        "payload": "{\"column_types\": [\"integer\", \"integer\"], \"num_cols\": 2, \"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"num_rows\": 3, \"column_unique\": [true, false], \"id\": 35, \"error_msg\": \"Column student id is no longer a key column.\"}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "id": 35,
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                false
+            ],
+            "error_msg": "Column student id is no longer a key column."
+        }
     }
 },
 {
@@ -2285,12 +3113,31 @@
     "pk": 712,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T07:19:21.182Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_failedmerge",
         "workflow": 35,
-        "payload": "{\"column_types\": [\"integer\", \"integer\"], \"num_cols\": 2, \"column_names\": [\"student id\", \"A1\"], \"name\": \"aaa\", \"num_rows\": 3, \"column_unique\": [true, false], \"id\": 35, \"error_msg\": \"Column student id is no longer a key column.\"}"
+        "payload": {
+            "column_names": [
+                "student id",
+                "A1"
+            ],
+            "name": "aaa",
+            "id": 35,
+            "column_types": [
+                "integer",
+                "integer"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                false
+            ],
+            "error_msg": "Column student id is no longer a key column."
+        }
     }
 },
 {
@@ -2298,12 +3145,16 @@
     "pk": 713,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T07:21:08.288Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_flush",
         "workflow": 35,
-        "payload": "{\"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -2311,12 +3162,30 @@
     "pk": 714,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T07:21:26.041Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_upload",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"email\", \"sis id\"], \"name\": \"aaa\", \"column_types\": [\"string\", \"integer\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "email",
+                "sis id"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "string",
+                "integer"
+            ],
+            "num_cols": 0,
+            "num_rows": 0,
+            "column_unique": [
+                true,
+                true
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -2324,12 +3193,36 @@
     "pk": 715,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-18T07:21:54.620Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_merge",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"email\", \"sis id\", \"A1\", \"student id\"], \"name\": \"aaa\", \"column_types\": [\"string\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 2, \"num_rows\": 3, \"column_unique\": [true, true, false, true], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "email",
+                "sis id",
+                "A1",
+                "student id"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "string",
+                "integer",
+                "integer",
+                "integer"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -2337,12 +3230,16 @@
     "pk": 718,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-20T07:53:50.132Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_flush",
         "workflow": 35,
-        "payload": "{\"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -2350,12 +3247,30 @@
     "pk": 719,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-20T07:54:14.253Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_upload",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"email\", \"sis id\"], \"name\": \"aaa\", \"column_types\": [\"string\", \"integer\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "email",
+                "sis id"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "string",
+                "integer"
+            ],
+            "num_cols": 0,
+            "num_rows": 0,
+            "column_unique": [
+                true,
+                true
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -2363,12 +3278,36 @@
     "pk": 720,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-20T07:54:56.462Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_merge",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"email\", \"sis id\", \"A1\", \"student id\"], \"name\": \"aaa\", \"column_types\": [\"string\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 2, \"num_rows\": 3, \"column_unique\": [true, true, false, true], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "email",
+                "sis id",
+                "A1",
+                "student id"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "string",
+                "integer",
+                "integer",
+                "integer"
+            ],
+            "num_cols": 2,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                true,
+                false,
+                true
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -2376,12 +3315,39 @@
     "pk": 721,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-20T08:05:41.030Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_merge",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"email\", \"sis id\", \"A1\", \"student id\", \"A2\"], \"name\": \"aaa\", \"column_types\": [\"string\", \"integer\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 4, \"num_rows\": 3, \"column_unique\": [true, true, false, true, false], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "email",
+                "sis id",
+                "A1",
+                "student id",
+                "A2"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "string",
+                "integer",
+                "integer",
+                "integer",
+                "integer"
+            ],
+            "num_cols": 4,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                true,
+                false,
+                true,
+                false
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -2389,12 +3355,39 @@
     "pk": 722,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-20T09:43:52.415Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_merge",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"email\", \"sis id\", \"A1\", \"student id\", \"A2\"], \"name\": \"aaa\", \"column_types\": [\"string\", \"integer\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 5, \"num_rows\": 3, \"column_unique\": [true, true, false, true, false], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "email",
+                "sis id",
+                "A1",
+                "student id",
+                "A2"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "string",
+                "integer",
+                "integer",
+                "integer",
+                "integer"
+            ],
+            "num_cols": 5,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                true,
+                false,
+                true,
+                false
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -2402,12 +3395,39 @@
     "pk": 723,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-20T10:23:02.227Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_merge",
         "workflow": 35,
-        "payload": "{\"column_names\": [\"email\", \"sis id\", \"A1\", \"student id\", \"A2\"], \"name\": \"aaa\", \"column_types\": [\"string\", \"integer\", \"integer\", \"integer\", \"integer\"], \"num_cols\": 5, \"num_rows\": 3, \"column_unique\": [true, true, false, true, false], \"id\": 35}"
+        "payload": {
+            "column_names": [
+                "email",
+                "sis id",
+                "A1",
+                "student id",
+                "A2"
+            ],
+            "name": "aaa",
+            "column_types": [
+                "string",
+                "integer",
+                "integer",
+                "integer",
+                "integer"
+            ],
+            "num_cols": 5,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                true,
+                false,
+                true,
+                false
+            ],
+            "id": 35
+        }
     }
 },
 {
@@ -2415,12 +3435,38 @@
     "pk": 730,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-22T03:53:44.267Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "tablerow_update",
         "workflow": 35,
-        "payload": "{\"new_values\": [[\"email\", \"fake_addess2@bogus_email.com\"], [\"sis id\", \"222\"], [\"A1\", \"0\"], [\"student id\", \"222\"], [\"A2\", \"0\"]], \"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "new_values": [
+                [
+                    "email",
+                    "fake_addess2@bogus_email.com"
+                ],
+                [
+                    "sis id",
+                    "222"
+                ],
+                [
+                    "A1",
+                    "0"
+                ],
+                [
+                    "student id",
+                    "222"
+                ],
+                [
+                    "A2",
+                    "0"
+                ]
+            ],
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -2428,12 +3474,38 @@
     "pk": 731,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-22T03:56:56.366Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "tablerow_update",
         "workflow": 35,
-        "payload": "{\"new_values\": [[\"email\", \"fake_addess2@bogus_email.com\"], [\"sis id\", \"222\"], [\"A1\", \"1\"], [\"student id\", \"222\"], [\"A2\", \"0\"]], \"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "new_values": [
+                [
+                    "email",
+                    "fake_addess2@bogus_email.com"
+                ],
+                [
+                    "sis id",
+                    "222"
+                ],
+                [
+                    "A1",
+                    "1"
+                ],
+                [
+                    "student id",
+                    "222"
+                ],
+                [
+                    "A2",
+                    "0"
+                ]
+            ],
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -2441,12 +3513,18 @@
     "pk": 759,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-23T03:11:29.120Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "view_create",
         "workflow": 35,
-        "payload": "{\"workflow_name\": \"aaa\", \"id\": 26, \"workflow_id\": 35, \"name\": \"sxx\"}"
+        "payload": {
+            "workflow_id": 35,
+            "id": 26,
+            "workflow_name": "aaa",
+            "name": "sxx"
+        }
     }
 },
 {
@@ -2457,9 +3535,13 @@
             "instructor2@bogus.com"
         ],
         "created": "2018-05-23T03:43:06.227Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_create",
         "workflow": 53,
-        "payload": "{\"id\": 53, \"name\": \"sss\"}"
+        "payload": {
+            "id": 53,
+            "name": "sss"
+        }
     }
 },
 {
@@ -2470,9 +3552,39 @@
             "instructor2@bogus.com"
         ],
         "created": "2018-05-23T03:43:34.556Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_data_upload",
         "workflow": 53,
-        "payload": "{\"column_names\": [\"sid\", \"name\", \"email\", \"age\", \"registered\", \"when\"], \"name\": \"sss\", \"column_types\": [\"integer\", \"string\", \"string\", \"double\", \"boolean\", \"datetime\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, false, true, true, false, false], \"id\": 53}"
+        "payload": {
+            "column_names": [
+                "sid",
+                "name",
+                "email",
+                "age",
+                "registered",
+                "when"
+            ],
+            "name": "sss",
+            "column_types": [
+                "integer",
+                "string",
+                "string",
+                "double",
+                "boolean",
+                "datetime"
+            ],
+            "num_cols": 0,
+            "num_rows": 0,
+            "column_unique": [
+                true,
+                false,
+                true,
+                true,
+                false,
+                false
+            ],
+            "id": 53
+        }
     }
 },
 {
@@ -2480,12 +3592,16 @@
     "pk": 764,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-23T05:34:03.789Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2493,12 +3609,16 @@
     "pk": 765,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-23T05:34:04.432Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2506,12 +3626,16 @@
     "pk": 792,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-23T10:35:59.073Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2519,12 +3643,16 @@
     "pk": 793,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-23T10:48:39.784Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2532,12 +3660,16 @@
     "pk": 794,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-23T10:48:42.652Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2545,12 +3677,16 @@
     "pk": 795,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-23T10:48:50.044Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2558,12 +3694,16 @@
     "pk": 796,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-23T10:48:53.200Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2571,12 +3711,16 @@
     "pk": 797,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-23T10:48:57.247Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2584,12 +3728,16 @@
     "pk": 798,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-23T10:49:49.051Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2597,12 +3745,16 @@
     "pk": 816,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T01:16:21.201Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2610,12 +3762,16 @@
     "pk": 817,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T03:33:20.658Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2623,12 +3779,16 @@
     "pk": 818,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T03:47:05.314Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2636,12 +3796,16 @@
     "pk": 819,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T03:47:08.527Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2649,12 +3813,16 @@
     "pk": 820,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T03:47:37.836Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2662,12 +3830,18 @@
     "pk": 821,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T03:49:06.253Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -2675,12 +3849,17 @@
     "pk": 822,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T04:11:32.515Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": \"'PluginRegistry' object has no attribute 'run'\", \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": "'PluginRegistry' object has no attribute 'run'",
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -2688,12 +3867,17 @@
     "pk": 823,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T04:12:13.323Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": \"'PluginRegistry' object has no attribute 'run'\", \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": "'PluginRegistry' object has no attribute 'run'",
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -2701,12 +3885,18 @@
     "pk": 824,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T07:52:36.012Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -2714,12 +3904,16 @@
     "pk": 825,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:00:53.253Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2727,12 +3921,18 @@
     "pk": 826,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:03:37.115Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "column_rename",
         "workflow": 35,
-        "payload": "{\"new_name\": \"SCORE\", \"column_name\": \"SCORE\", \"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "new_name": "SCORE",
+            "column_name": "SCORE",
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -2740,12 +3940,18 @@
     "pk": 827,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:03:45.326Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "column_rename",
         "workflow": 35,
-        "payload": "{\"new_name\": \"SCORE_2\", \"column_name\": \"SCORE_2\", \"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "new_name": "SCORE_2",
+            "column_name": "SCORE_2",
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -2753,12 +3959,17 @@
     "pk": 828,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:03:56.949Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "column_delete",
         "workflow": 35,
-        "payload": "{\"column_name\": \"SCORE_1\", \"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "column_name": "SCORE_1",
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -2766,12 +3977,17 @@
     "pk": 829,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:04:03.030Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "column_delete",
         "workflow": 35,
-        "payload": "{\"column_name\": \"SCORE_2\", \"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "column_name": "SCORE_2",
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -2779,12 +3995,17 @@
     "pk": 830,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:04:08.962Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "column_delete",
         "workflow": 35,
-        "payload": "{\"column_name\": \"SCORE\", \"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "column_name": "SCORE",
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -2792,12 +4013,16 @@
     "pk": 831,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:04:13.832Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2805,12 +4030,18 @@
     "pk": 832,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:12:31.681Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -2818,12 +4049,16 @@
     "pk": 833,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:13:33.116Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2831,12 +4066,16 @@
     "pk": 834,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:14:10.734Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2844,12 +4083,16 @@
     "pk": 835,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:21:10.414Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2857,12 +4100,16 @@
     "pk": 836,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:28:59.687Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2870,12 +4117,16 @@
     "pk": 837,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:29:04.585Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2883,12 +4134,17 @@
     "pk": 838,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:29:28.034Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": \"Incorrect number of columns in result data frame.\", \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": "Incorrect number of columns in result data frame.",
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -2896,12 +4152,16 @@
     "pk": 839,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:30:26.638Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2909,12 +4169,16 @@
     "pk": 840,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:30:28.659Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2922,12 +4186,17 @@
     "pk": 841,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:30:47.696Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": \"Incorrect columns in result data frame.\", \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": "Incorrect columns in result data frame.",
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -2935,12 +4204,16 @@
     "pk": 842,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:30:54.752Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2948,12 +4221,16 @@
     "pk": 843,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:30:56.886Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2961,12 +4238,17 @@
     "pk": 844,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:35:35.048Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": \"Incorrect columns in result data frame.\", \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": "Incorrect columns in result data frame.",
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -2974,12 +4256,16 @@
     "pk": 845,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:37:14.319Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -2987,12 +4273,16 @@
     "pk": 846,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:37:16.802Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3000,12 +4290,17 @@
     "pk": 847,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:37:27.088Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": \"email\", \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": "email",
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -3013,12 +4308,16 @@
     "pk": 848,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:38:01.447Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3026,12 +4325,16 @@
     "pk": 849,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:38:04.141Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3039,12 +4342,17 @@
     "pk": 850,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:38:56.431Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": \"email\", \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": "email",
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -3052,12 +4360,16 @@
     "pk": 851,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:38:59.653Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3065,12 +4377,16 @@
     "pk": 852,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:39:01.737Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3078,12 +4394,18 @@
     "pk": 853,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T08:41:30.966Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -3091,12 +4413,16 @@
     "pk": 854,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:00:37.772Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3104,12 +4430,18 @@
     "pk": 855,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:02:07.435Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -3117,12 +4449,16 @@
     "pk": 856,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:02:29.510Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3130,12 +4466,16 @@
     "pk": 857,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:02:32.779Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3143,12 +4483,16 @@
     "pk": 858,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:03:56.113Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3156,12 +4500,18 @@
     "pk": 859,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:32:00.614Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -3169,12 +4519,16 @@
     "pk": 860,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:33:12.274Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3182,12 +4536,18 @@
     "pk": 861,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:33:34.187Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -3195,12 +4555,16 @@
     "pk": 862,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:33:42.268Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3208,12 +4572,16 @@
     "pk": 863,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:33:53.872Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3221,12 +4589,17 @@
     "pk": 864,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:36:13.725Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": \"Incorrect columns in result data frame.\", \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": "Incorrect columns in result data frame.",
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -3234,12 +4607,16 @@
     "pk": 865,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:36:24.769Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3247,12 +4624,16 @@
     "pk": 866,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:36:28.097Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3260,12 +4641,16 @@
     "pk": 867,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:37:20.812Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3273,12 +4658,17 @@
     "pk": 868,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:39:21.943Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": \"Incorrect columns in result data frame.\", \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": "Incorrect columns in result data frame.",
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -3286,12 +4676,16 @@
     "pk": 869,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:46:40.924Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3299,12 +4693,16 @@
     "pk": 870,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:46:43.881Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3312,12 +4710,16 @@
     "pk": 871,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:46:49.883Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3325,12 +4727,16 @@
     "pk": 872,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:46:59.725Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3338,12 +4744,16 @@
     "pk": 873,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:47:01.451Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3351,12 +4761,16 @@
     "pk": 874,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:48:17.597Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3364,12 +4778,18 @@
     "pk": 875,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:54:15.723Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 1, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 1,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -3377,12 +4797,16 @@
     "pk": 876,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-24T10:54:50.542Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3390,12 +4814,38 @@
     "pk": 877,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-25T04:27:12.601Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [[\"Ok\", \"Presence of a string field with name \\\"name\\\"\"], [\"Ok\", \"Presence of a string field with name \\\"description_txt\\\"\"], [\"Ok\", \"Presence of a field with name \\\"input_column_names\\\" storing a (possible empty) list of strings\"], [\"Ok\", \"Presence of a field with name \\\"output_column_names\\\" storing a non-empty list of strings\"], [\"Ok\", \"Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \\\"double\\\", \\\"integer\\\", \\\"string\\\", \\\"boolean\\\", or \\\"datetime\\\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter.\"]], \"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "diagnostics": [
+                [
+                    "Ok",
+                    "Presence of a string field with name \"name\""
+                ],
+                [
+                    "Ok",
+                    "Presence of a string field with name \"description_txt\""
+                ],
+                [
+                    "Ok",
+                    "Presence of a field with name \"input_column_names\" storing a (possible empty) list of strings"
+                ],
+                [
+                    "Ok",
+                    "Presence of a field with name \"output_column_names\" storing a non-empty list of strings"
+                ],
+                [
+                    "Ok",
+                    "Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \"double\", \"integer\", \"string\", \"boolean\", or \"datetime\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter."
+                ]
+            ],
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3403,12 +4853,38 @@
     "pk": 878,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-25T04:27:37.350Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [[\"Ok\", \"Presence of a string field with name \\\"name\\\"\"], [\"Ok\", \"Presence of a string field with name \\\"description_txt\\\"\"], [\"Ok\", \"Presence of a field with name \\\"input_column_names\\\" storing a (possible empty) list of strings\"], [\"Ok\", \"Presence of a field with name \\\"output_column_names\\\" storing a non-empty list of strings\"], [\"Ok\", \"Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \\\"double\\\", \\\"integer\\\", \\\"string\\\", \\\"boolean\\\", or \\\"datetime\\\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter.\"]], \"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "diagnostics": [
+                [
+                    "Ok",
+                    "Presence of a string field with name \"name\""
+                ],
+                [
+                    "Ok",
+                    "Presence of a string field with name \"description_txt\""
+                ],
+                [
+                    "Ok",
+                    "Presence of a field with name \"input_column_names\" storing a (possible empty) list of strings"
+                ],
+                [
+                    "Ok",
+                    "Presence of a field with name \"output_column_names\" storing a non-empty list of strings"
+                ],
+                [
+                    "Ok",
+                    "Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \"double\", \"integer\", \"string\", \"boolean\", or \"datetime\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter."
+                ]
+            ],
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3416,12 +4892,16 @@
     "pk": 879,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-25T04:27:37.359Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_create",
         "workflow": 35,
-        "payload": "{\"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3429,12 +4909,38 @@
     "pk": 880,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T01:42:39.458Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [[\"Ok\", \"Presence of a string field with name \\\"name\\\"\"], [\"Ok\", \"Presence of a string field with name \\\"description_txt\\\"\"], [\"Ok\", \"Presence of a field with name \\\"input_column_names\\\" storing a (possible empty) list of strings\"], [\"Ok\", \"Presence of a field with name \\\"output_column_names\\\" storing a non-empty list of strings\"], [\"Ok\", \"Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \\\"double\\\", \\\"integer\\\", \\\"string\\\", \\\"boolean\\\", or \\\"datetime\\\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter.\"]], \"id\": 1, \"name\": \"sample\"}"
+        "payload": {
+            "diagnostics": [
+                [
+                    "Ok",
+                    "Presence of a string field with name \"name\""
+                ],
+                [
+                    "Ok",
+                    "Presence of a string field with name \"description_txt\""
+                ],
+                [
+                    "Ok",
+                    "Presence of a field with name \"input_column_names\" storing a (possible empty) list of strings"
+                ],
+                [
+                    "Ok",
+                    "Presence of a field with name \"output_column_names\" storing a non-empty list of strings"
+                ],
+                [
+                    "Ok",
+                    "Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \"double\", \"integer\", \"string\", \"boolean\", or \"datetime\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter."
+                ]
+            ],
+            "id": 1,
+            "name": "sample"
+        }
     }
 },
 {
@@ -3442,12 +4948,38 @@
     "pk": 881,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T01:42:39.504Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [[\"Ok\", \"Presence of a string field with name \\\"name\\\"\"], [\"Ok\", \"Presence of a string field with name \\\"description_txt\\\"\"], [\"Ok\", \"Presence of a field with name \\\"input_column_names\\\" storing a (possible empty) list of strings\"], [\"Ok\", \"Presence of a field with name \\\"output_column_names\\\" storing a non-empty list of strings\"], [\"Ok\", \"Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \\\"double\\\", \\\"integer\\\", \\\"string\\\", \\\"boolean\\\", or \\\"datetime\\\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter.\"]], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                [
+                    "Ok",
+                    "Presence of a string field with name \"name\""
+                ],
+                [
+                    "Ok",
+                    "Presence of a string field with name \"description_txt\""
+                ],
+                [
+                    "Ok",
+                    "Presence of a field with name \"input_column_names\" storing a (possible empty) list of strings"
+                ],
+                [
+                    "Ok",
+                    "Presence of a field with name \"output_column_names\" storing a non-empty list of strings"
+                ],
+                [
+                    "Ok",
+                    "Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \"double\", \"integer\", \"string\", \"boolean\", or \"datetime\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter."
+                ]
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3455,12 +4987,20 @@
     "pk": 882,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T01:44:11.029Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Instance creation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Instance creation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3468,12 +5008,20 @@
     "pk": 883,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T01:45:19.612Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Instance creation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Instance creation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3481,12 +5029,20 @@
     "pk": 884,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T01:45:36.576Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3494,12 +5050,20 @@
     "pk": 885,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T01:45:39.372Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3507,12 +5071,20 @@
     "pk": 886,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T01:46:27.943Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3520,12 +5092,20 @@
     "pk": 887,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T01:52:18.898Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3533,12 +5113,20 @@
     "pk": 888,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T01:52:38.632Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3546,12 +5134,20 @@
     "pk": 889,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T01:52:44.065Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3559,12 +5155,20 @@
     "pk": 890,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T01:52:48.756Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3572,12 +5176,20 @@
     "pk": 891,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T01:53:04.510Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3585,12 +5197,20 @@
     "pk": 892,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T01:53:27.869Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3598,12 +5218,20 @@
     "pk": 893,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T01:57:40.337Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Instance creation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Instance creation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3611,12 +5239,20 @@
     "pk": 894,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T01:57:53.064Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3624,12 +5260,20 @@
     "pk": 895,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T01:58:45.302Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3637,12 +5281,20 @@
     "pk": 896,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:02:08.519Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3650,12 +5302,20 @@
     "pk": 897,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:09:44.461Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Instance creation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Instance creation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3663,12 +5323,20 @@
     "pk": 898,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:09:47.253Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3676,12 +5344,20 @@
     "pk": 899,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:09:47.408Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3689,12 +5365,20 @@
     "pk": 900,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:09:58.361Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3702,12 +5386,20 @@
     "pk": 901,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:09:58.536Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3715,12 +5407,20 @@
     "pk": 902,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:10:05.463Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3728,12 +5428,20 @@
     "pk": 903,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:10:05.635Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3741,12 +5449,20 @@
     "pk": 904,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:13:08.846Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Instance creation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Instance creation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3754,12 +5470,20 @@
     "pk": 905,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:13:28.644Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3767,12 +5491,20 @@
     "pk": 906,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:13:46.844Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3780,12 +5512,20 @@
     "pk": 907,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:14:18.521Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3793,12 +5533,20 @@
     "pk": 908,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:14:38.106Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3806,12 +5554,20 @@
     "pk": 909,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:16:15.836Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Instance creation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Instance creation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3819,12 +5575,20 @@
     "pk": 910,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:17:03.908Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3832,12 +5596,20 @@
     "pk": 911,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:17:18.107Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3845,12 +5617,20 @@
     "pk": 912,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:18:14.686Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3858,12 +5638,20 @@
     "pk": 913,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:18:55.704Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3871,12 +5659,20 @@
     "pk": 914,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:22:59.177Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Instance creation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Instance creation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3884,12 +5680,20 @@
     "pk": 915,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:23:37.519Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Instance creation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Instance creation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3897,12 +5701,20 @@
     "pk": 916,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:23:40.217Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3910,12 +5722,20 @@
     "pk": 917,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:25:13.288Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3923,12 +5743,38 @@
     "pk": 918,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:27:14.566Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [[\"Not found\", \"Presence of a string field with name \\\"name\\\"\"], [\"Unchecked\", \"Presence of a string field with name \\\"description_txt\\\"\"], [\"Unchecked\", \"Presence of a field with name \\\"input_column_names\\\" storing a (possible empty) list of strings\"], [\"Unchecked\", \"Presence of a field with name \\\"output_column_names\\\" storing a non-empty list of strings\"], [\"Unchecked\", \"Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \\\"double\\\", \\\"integer\\\", \\\"string\\\", \\\"boolean\\\", or \\\"datetime\\\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter.\"]], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                [
+                    "Not found",
+                    "Presence of a string field with name \"name\""
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a string field with name \"description_txt\""
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a field with name \"input_column_names\" storing a (possible empty) list of strings"
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a field with name \"output_column_names\" storing a non-empty list of strings"
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \"double\", \"integer\", \"string\", \"boolean\", or \"datetime\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter."
+                ]
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3936,12 +5782,38 @@
     "pk": 919,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:28:19.583Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [[\"Not found\", \"Presence of a string field with name \\\"name\\\"\"], [\"Unchecked\", \"Presence of a string field with name \\\"description_txt\\\"\"], [\"Unchecked\", \"Presence of a field with name \\\"input_column_names\\\" storing a (possible empty) list of strings\"], [\"Unchecked\", \"Presence of a field with name \\\"output_column_names\\\" storing a non-empty list of strings\"], [\"Unchecked\", \"Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \\\"double\\\", \\\"integer\\\", \\\"string\\\", \\\"boolean\\\", or \\\"datetime\\\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter.\"]], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                [
+                    "Not found",
+                    "Presence of a string field with name \"name\""
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a string field with name \"description_txt\""
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a field with name \"input_column_names\" storing a (possible empty) list of strings"
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a field with name \"output_column_names\" storing a non-empty list of strings"
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \"double\", \"integer\", \"string\", \"boolean\", or \"datetime\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter."
+                ]
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3949,12 +5821,20 @@
     "pk": 920,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:28:36.404Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Instance creation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Instance creation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3962,12 +5842,20 @@
     "pk": 921,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:29:37.201Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3975,12 +5863,20 @@
     "pk": 922,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:30:29.658Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"Error\", \"Instance creation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "Error",
+                "Instance creation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -3988,12 +5884,20 @@
     "pk": 923,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:33:11.860Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"'module' object has no attribute 'class_name'\", \"Class instantiation\"], \"id\": 2, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "'module' object has no attribute 'class_name'",
+                "Class instantiation"
+            ],
+            "id": 2,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4001,12 +5905,16 @@
     "pk": 924,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:43:40.181Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_create",
         "workflow": 35,
-        "payload": "{\"id\": 3, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 3,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4014,12 +5922,16 @@
     "pk": 925,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:43:40.199Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_create",
         "workflow": 35,
-        "payload": "{\"id\": 4, \"name\": \"sample\"}"
+        "payload": {
+            "id": 4,
+            "name": "sample"
+        }
     }
 },
 {
@@ -4027,12 +5939,38 @@
     "pk": 926,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:46:04.901Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [[\"Not found\", \"Presence of a string field with name \\\"name\\\"\"], [\"Unchecked\", \"Presence of a string field with name \\\"description_txt\\\"\"], [\"Unchecked\", \"Presence of a field with name \\\"input_column_names\\\" storing a (possible empty) list of strings\"], [\"Unchecked\", \"Presence of a field with name \\\"output_column_names\\\" storing a non-empty list of strings\"], [\"Unchecked\", \"Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \\\"double\\\", \\\"integer\\\", \\\"string\\\", \\\"boolean\\\", or \\\"datetime\\\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter.\"]], \"id\": 3, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                [
+                    "Not found",
+                    "Presence of a string field with name \"name\""
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a string field with name \"description_txt\""
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a field with name \"input_column_names\" storing a (possible empty) list of strings"
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a field with name \"output_column_names\" storing a non-empty list of strings"
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \"double\", \"integer\", \"string\", \"boolean\", or \"datetime\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter."
+                ]
+            ],
+            "id": 3,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4040,12 +5978,38 @@
     "pk": 927,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:46:23.098Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [[\"Not found\", \"Presence of a string field with name \\\"name\\\"\"], [\"Unchecked\", \"Presence of a string field with name \\\"description_txt\\\"\"], [\"Unchecked\", \"Presence of a field with name \\\"input_column_names\\\" storing a (possible empty) list of strings\"], [\"Unchecked\", \"Presence of a field with name \\\"output_column_names\\\" storing a non-empty list of strings\"], [\"Unchecked\", \"Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \\\"double\\\", \\\"integer\\\", \\\"string\\\", \\\"boolean\\\", or \\\"datetime\\\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter.\"]], \"id\": 3, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                [
+                    "Not found",
+                    "Presence of a string field with name \"name\""
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a string field with name \"description_txt\""
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a field with name \"input_column_names\" storing a (possible empty) list of strings"
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a field with name \"output_column_names\" storing a non-empty list of strings"
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \"double\", \"integer\", \"string\", \"boolean\", or \"datetime\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter."
+                ]
+            ],
+            "id": 3,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4053,12 +6017,38 @@
     "pk": 928,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:49:43.500Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [[\"Not found\", \"Presence of a string field with name \\\"name\\\"\"], [\"Unchecked\", \"Presence of a string field with name \\\"description_txt\\\"\"], [\"Unchecked\", \"Presence of a field with name \\\"input_column_names\\\" storing a (possible empty) list of strings\"], [\"Unchecked\", \"Presence of a field with name \\\"output_column_names\\\" storing a non-empty list of strings\"], [\"Unchecked\", \"Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \\\"double\\\", \\\"integer\\\", \\\"string\\\", \\\"boolean\\\", or \\\"datetime\\\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter.\"]], \"id\": 3, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                [
+                    "Not found",
+                    "Presence of a string field with name \"name\""
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a string field with name \"description_txt\""
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a field with name \"input_column_names\" storing a (possible empty) list of strings"
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a field with name \"output_column_names\" storing a non-empty list of strings"
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \"double\", \"integer\", \"string\", \"boolean\", or \"datetime\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter."
+                ]
+            ],
+            "id": 3,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4066,12 +6056,20 @@
     "pk": 929,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:52:47.810Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [\"\", \"Instance creation\"], \"id\": 3, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                "",
+                "Instance creation"
+            ],
+            "id": 3,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4079,12 +6077,22 @@
     "pk": 930,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:53:34.111Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [[\"\", \"Instance creation\"]], \"id\": 3, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                [
+                    "",
+                    "Instance creation"
+                ]
+            ],
+            "id": 3,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4092,12 +6100,16 @@
     "pk": 931,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:53:49.111Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_create",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4105,12 +6117,16 @@
     "pk": 932,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:53:49.125Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_create",
         "workflow": 35,
-        "payload": "{\"id\": 6, \"name\": \"sample\"}"
+        "payload": {
+            "id": 6,
+            "name": "sample"
+        }
     }
 },
 {
@@ -4118,12 +6134,38 @@
     "pk": 933,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T02:54:12.752Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"diagnostics\": [[\"Not found\", \"Presence of a string field with name \\\"name\\\"\"], [\"Unchecked\", \"Presence of a string field with name \\\"description_txt\\\"\"], [\"Unchecked\", \"Presence of a field with name \\\"input_column_names\\\" storing a (possible empty) list of strings\"], [\"Unchecked\", \"Presence of a field with name \\\"output_column_names\\\" storing a non-empty list of strings\"], [\"Unchecked\", \"Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \\\"double\\\", \\\"integer\\\", \\\"string\\\", \\\"boolean\\\", or \\\"datetime\\\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter.\"]], \"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "diagnostics": [
+                [
+                    "Not found",
+                    "Presence of a string field with name \"name\""
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a string field with name \"description_txt\""
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a field with name \"input_column_names\" storing a (possible empty) list of strings"
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a field with name \"output_column_names\" storing a non-empty list of strings"
+                ],
+                [
+                    "Unchecked",
+                    "Presence of a (possible empty) dictionary with name parameters and storing string keys and tuples as values. The tuples must have five elements: type (one of \"double\", \"integer\", \"string\", \"boolean\", or \"datetime\"), (possible empty) list of allowed values of the corresponding type, an initial value of the right type or None, and a help string to be shown when requesting this parameter."
+                ]
+            ],
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4131,12 +6173,16 @@
     "pk": 934,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T03:01:58.563Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4144,12 +6190,16 @@
     "pk": 935,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T03:02:03.125Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4157,12 +6207,16 @@
     "pk": 936,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T03:03:20.281Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4170,12 +6224,16 @@
     "pk": 937,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T03:03:41.192Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4183,12 +6241,16 @@
     "pk": 938,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T03:55:21.592Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4196,12 +6258,16 @@
     "pk": 939,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T04:29:34.259Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4209,12 +6275,16 @@
     "pk": 940,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T04:30:03.362Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4222,12 +6292,16 @@
     "pk": 941,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T04:57:21.364Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4235,12 +6309,16 @@
     "pk": 942,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T04:58:23.827Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4248,12 +6326,16 @@
     "pk": 943,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T04:58:44.066Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4261,12 +6343,16 @@
     "pk": 944,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T05:01:16.230Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4274,12 +6360,16 @@
     "pk": 945,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:17:03.782Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4287,12 +6377,16 @@
     "pk": 946,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:18:30.041Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4300,12 +6394,17 @@
     "pk": 947,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:18:43.392Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "column_delete",
         "workflow": 35,
-        "payload": "{\"column_name\": \"SCORE\", \"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "column_name": "SCORE",
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -4313,12 +6412,16 @@
     "pk": 948,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:18:46.495Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4326,12 +6429,18 @@
     "pk": 949,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:19:14.244Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 5, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 5,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -4339,12 +6448,16 @@
     "pk": 950,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:19:26.116Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4352,12 +6465,16 @@
     "pk": 951,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:19:36.385Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4365,12 +6482,18 @@
     "pk": 952,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:21:53.504Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 6, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 6,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -4378,12 +6501,16 @@
     "pk": 953,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:37:44.463Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4391,12 +6518,16 @@
     "pk": 954,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:37:47.793Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4404,12 +6535,18 @@
     "pk": 955,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:38:00.655Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 5, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 5,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -4417,12 +6554,18 @@
     "pk": 956,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:41:00.628Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 5, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 5,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -4430,12 +6573,18 @@
     "pk": 957,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:43:40.996Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 5, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 5,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -4443,12 +6592,18 @@
     "pk": 958,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:44:29.790Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 5, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 5,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -4456,12 +6611,18 @@
     "pk": 959,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:45:50.546Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 5, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 5,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -4469,12 +6630,18 @@
     "pk": 960,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:46:57.002Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 5, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 5,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -4482,12 +6649,18 @@
     "pk": 961,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:48:20.013Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_execute",
         "workflow": 35,
-        "payload": "{\"status\": null, \"result_columns\": [], \"id\": 5, \"name\": \"Sample plugin\"}"
+        "payload": {
+            "status": null,
+            "result_columns": [],
+            "id": 5,
+            "name": "Sample plugin"
+        }
     }
 },
 {
@@ -4495,12 +6668,17 @@
     "pk": 962,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:48:35.813Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "column_delete",
         "workflow": 35,
-        "payload": "{\"column_name\": \"SCORE_2\", \"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "column_name": "SCORE_2",
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -4508,12 +6686,18 @@
     "pk": 963,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:48:51.494Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "column_rename",
         "workflow": 35,
-        "payload": "{\"new_name\": \"SCORE\", \"column_name\": \"SCORE\", \"id\": 35, \"name\": \"aaa\"}"
+        "payload": {
+            "new_name": "SCORE",
+            "column_name": "SCORE",
+            "id": 35,
+            "name": "aaa"
+        }
     }
 },
 {
@@ -4521,12 +6705,16 @@
     "pk": 964,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:50:13.491Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4534,12 +6722,16 @@
     "pk": 965,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:50:21.673Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4547,12 +6739,16 @@
     "pk": 966,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:59:22.193Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4560,12 +6756,16 @@
     "pk": 967,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-26T07:59:47.160Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4573,12 +6773,16 @@
     "pk": 968,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T01:18:49.862Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4586,12 +6790,16 @@
     "pk": 969,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T03:04:52.088Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_delete",
         "workflow": 35,
-        "payload": "{\"id\": 6, \"name\": \"sample\"}"
+        "payload": {
+            "id": 6,
+            "name": "sample"
+        }
     }
 },
 {
@@ -4599,12 +6807,16 @@
     "pk": 970,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T03:04:52.105Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_delete",
         "workflow": 35,
-        "payload": "{\"id\": 5, \"name\": \"sample_2\"}"
+        "payload": {
+            "id": 5,
+            "name": "sample_2"
+        }
     }
 },
 {
@@ -4612,12 +6824,16 @@
     "pk": 971,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T03:04:52.119Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_create",
         "workflow": 35,
-        "payload": "{\"id\": 7, \"name\": \"test_plugin\"}"
+        "payload": {
+            "id": 7,
+            "name": "test_plugin"
+        }
     }
 },
 {
@@ -4625,12 +6841,16 @@
     "pk": 972,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T03:25:14.450Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 7, \"name\": \"test_plugin\"}"
+        "payload": {
+            "id": 7,
+            "name": "test_plugin"
+        }
     }
 },
 {
@@ -4638,12 +6858,16 @@
     "pk": 973,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T05:08:02.050Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 7, \"name\": \"test_plugin\"}"
+        "payload": {
+            "id": 7,
+            "name": "test_plugin"
+        }
     }
 },
 {
@@ -4651,12 +6875,16 @@
     "pk": 974,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T05:30:25.645Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 7, \"name\": \"test_plugin\"}"
+        "payload": {
+            "id": 7,
+            "name": "test_plugin"
+        }
     }
 },
 {
@@ -4664,12 +6892,16 @@
     "pk": 985,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T07:44:01.896Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 7, \"name\": \"test_plugin\"}"
+        "payload": {
+            "id": 7,
+            "name": "test_plugin"
+        }
     }
 },
 {
@@ -4677,12 +6909,16 @@
     "pk": 986,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T07:44:13.933Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 7, \"name\": \"test_plugin\"}"
+        "payload": {
+            "id": 7,
+            "name": "test_plugin"
+        }
     }
 },
 {
@@ -4690,12 +6926,16 @@
     "pk": 987,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T07:46:39.336Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 7, \"name\": \"test_plugin\"}"
+        "payload": {
+            "id": 7,
+            "name": "test_plugin"
+        }
     }
 },
 {
@@ -4703,12 +6943,16 @@
     "pk": 988,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T07:46:41.854Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 7, \"name\": \"test_plugin\"}"
+        "payload": {
+            "id": 7,
+            "name": "test_plugin"
+        }
     }
 },
 {
@@ -4716,12 +6960,16 @@
     "pk": 989,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T07:47:51.560Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 7, \"name\": \"test_plugin\"}"
+        "payload": {
+            "id": 7,
+            "name": "test_plugin"
+        }
     }
 },
 {
@@ -4729,12 +6977,16 @@
     "pk": 990,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T07:48:11.490Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 7, \"name\": \"test_plugin\"}"
+        "payload": {
+            "id": 7,
+            "name": "test_plugin"
+        }
     }
 },
 {
@@ -4742,12 +6994,16 @@
     "pk": 991,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T07:48:31.325Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 7, \"name\": \"test_plugin\"}"
+        "payload": {
+            "id": 7,
+            "name": "test_plugin"
+        }
     }
 },
 {
@@ -4755,12 +7011,16 @@
     "pk": 992,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T07:51:08.988Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 7, \"name\": \"test_plugin\"}"
+        "payload": {
+            "id": 7,
+            "name": "test_plugin"
+        }
     }
 },
 {
@@ -4768,12 +7028,16 @@
     "pk": 993,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T07:54:47.807Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 7, \"name\": \"test_plugin\"}"
+        "payload": {
+            "id": 7,
+            "name": "test_plugin"
+        }
     }
 },
 {
@@ -4781,12 +7045,16 @@
     "pk": 994,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T07:55:28.739Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 7, \"name\": \"test_plugin\"}"
+        "payload": {
+            "id": 7,
+            "name": "test_plugin"
+        }
     }
 },
 {
@@ -4794,12 +7062,16 @@
     "pk": 995,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T07:56:07.169Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_delete",
         "workflow": 35,
-        "payload": "{\"id\": 7, \"name\": \"test_plugin\"}"
+        "payload": {
+            "id": 7,
+            "name": "test_plugin"
+        }
     }
 },
 {
@@ -4807,12 +7079,16 @@
     "pk": 996,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T07:56:07.184Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_create",
         "workflow": 35,
-        "payload": "{\"id\": 8, \"name\": \"test_plugin_2\"}"
+        "payload": {
+            "id": 8,
+            "name": "test_plugin_2"
+        }
     }
 },
 {
@@ -4820,12 +7096,16 @@
     "pk": 997,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T07:56:07.190Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_create",
         "workflow": 35,
-        "payload": "{\"id\": 9, \"name\": \"test_plugin_1\"}"
+        "payload": {
+            "id": 9,
+            "name": "test_plugin_1"
+        }
     }
 },
 {
@@ -4833,12 +7113,16 @@
     "pk": 998,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T08:28:04.765Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 8, \"name\": \"test_plugin_2\"}"
+        "payload": {
+            "id": 8,
+            "name": "test_plugin_2"
+        }
     }
 },
 {
@@ -4846,12 +7130,16 @@
     "pk": 999,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T08:28:04.820Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 9, \"name\": \"test_plugin_1\"}"
+        "payload": {
+            "id": 9,
+            "name": "test_plugin_1"
+        }
     }
 },
 {
@@ -4859,12 +7147,16 @@
     "pk": 1000,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T08:55:47.468Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 9, \"name\": \"test_plugin_1\"}"
+        "payload": {
+            "id": 9,
+            "name": "test_plugin_1"
+        }
     }
 },
 {
@@ -4872,12 +7164,16 @@
     "pk": 1001,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T08:55:47.480Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 8, \"name\": \"test_plugin_2\"}"
+        "payload": {
+            "id": 8,
+            "name": "test_plugin_2"
+        }
     }
 },
 {
@@ -4885,12 +7181,16 @@
     "pk": 1002,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T08:57:15.418Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "workflow_update",
         "workflow": 35,
-        "payload": "{\"id\": 35, \"name\": \"Plugin test\"}"
+        "payload": {
+            "id": 35,
+            "name": "Plugin test"
+        }
     }
 },
 {
@@ -4898,12 +7198,17 @@
     "pk": 1007,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T08:58:12.150Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "column_delete",
         "workflow": 35,
-        "payload": "{\"column_name\": \"sis id\", \"id\": 35, \"name\": \"Plugin test\"}"
+        "payload": {
+            "column_name": "sis id",
+            "id": 35,
+            "name": "Plugin test"
+        }
     }
 },
 {
@@ -4911,12 +7216,17 @@
     "pk": 1008,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-27T08:58:18.939Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "column_delete",
         "workflow": 35,
-        "payload": "{\"column_name\": \"SCORE\", \"id\": 35, \"name\": \"Plugin test\"}"
+        "payload": {
+            "column_name": "SCORE",
+            "id": 35,
+            "name": "Plugin test"
+        }
     }
 },
 {
@@ -4924,12 +7234,16 @@
     "pk": 1010,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-28T01:00:42.620Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 9, \"name\": \"test_plugin_1\"}"
+        "payload": {
+            "id": 9,
+            "name": "test_plugin_1"
+        }
     }
 },
 {
@@ -4937,12 +7251,16 @@
     "pk": 1011,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2018-05-28T01:00:42.661Z",
+        "modified": "2018-09-06T00:02:33.974Z",
         "name": "plugin_update",
         "workflow": 35,
-        "payload": "{\"id\": 8, \"name\": \"test_plugin_2\"}"
+        "payload": {
+            "id": 8,
+            "name": "test_plugin_2"
+        }
     }
 }
 ]
