@@ -43,8 +43,8 @@
     "model": "sites.site",
     "pk": 1,
     "fields": {
-        "domain": "example.com",
-        "name": "example.com"
+        "domain": "127.0.0.1:8000",
+        "name": "127.0.0.1:8000"
     }
 },
 {
@@ -114,7 +114,7 @@
         "password": "pbkdf2_sha256$36000$tThbdsofgEo0$9M1t2jOuuD6XslPzk+uTSzKxOYijQWaFJdfkF6xP2eE=",
         "last_login": null,
         "is_superuser": false,
-        "email": "instructor01@bogus.com",
+        "email": "instructor1@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-08T00:12:05.265Z",
@@ -154,7 +154,7 @@
         "password": "pbkdf2_sha256$36000$xpGT3hmI5nKl$fk01UowlvFWmYgNgZ15Rmw6CqU6NIuv2mvzxkMLeJU0=",
         "last_login": null,
         "is_superuser": false,
-        "email": "ainstructor01@bogus.com",
+        "email": "ainstructor1@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-08T00:12:05.396Z",
@@ -364,7 +364,7 @@
     "pk": "8001cacfac70def66a9137e66a3101eee55bc0ec",
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "created": "2017-11-08T00:12:05.824Z"
     }
@@ -414,7 +414,7 @@
     "pk": "f5d14afe853706bf8e48c266306e5b32a5c3c17d",
     "fields": {
         "user": [
-            "ainstructor01@bogus.com"
+            "ainstructor1@bogus.com"
         ],
         "created": "2017-11-08T00:12:05.819Z"
     }
@@ -544,7 +544,7 @@
     "pk": 1,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "name": "wflow1",
         "description_text": "description text for workflow 1",
@@ -608,11 +608,15 @@
     "pk": 1,
     "fields": {
         "name": "sid",
+        "description_text": "",
         "workflow": 1,
         "data_type": "integer",
         "is_key": true,
         "position": 3,
-        "categories": []
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
@@ -620,11 +624,15 @@
     "pk": 2,
     "fields": {
         "name": "name",
+        "description_text": "",
         "workflow": 1,
         "data_type": "string",
         "is_key": false,
         "position": 5,
-        "categories": []
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
@@ -632,11 +640,15 @@
     "pk": 3,
     "fields": {
         "name": "email",
+        "description_text": "",
         "workflow": 1,
         "data_type": "string",
         "is_key": true,
         "position": 2,
-        "categories": []
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
@@ -644,11 +656,15 @@
     "pk": 4,
     "fields": {
         "name": "age",
+        "description_text": "",
         "workflow": 1,
         "data_type": "double",
         "is_key": true,
         "position": 1,
-        "categories": []
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
@@ -656,11 +672,15 @@
     "pk": 5,
     "fields": {
         "name": "registered",
+        "description_text": "",
         "workflow": 1,
         "data_type": "boolean",
         "is_key": false,
         "position": 7,
-        "categories": []
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
@@ -668,11 +688,15 @@
     "pk": 6,
     "fields": {
         "name": "when",
+        "description_text": "",
         "workflow": 1,
         "data_type": "datetime",
         "is_key": false,
         "position": 8,
-        "categories": []
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
@@ -680,11 +704,15 @@
     "pk": 7,
     "fields": {
         "name": "one",
+        "description_text": "",
         "workflow": 1,
         "data_type": "string",
         "is_key": false,
         "position": 6,
-        "categories": []
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
@@ -692,11 +720,15 @@
     "pk": 8,
     "fields": {
         "name": "another",
+        "description_text": "",
         "workflow": 1,
         "data_type": "string",
         "is_key": false,
         "position": 4,
-        "categories": []
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
     }
 },
 {
@@ -707,9 +739,13 @@
             "idesigner1@bogus.com"
         ],
         "created": "2017-11-08T00:12:08.648Z",
+        "modified": "2018-09-06T00:14:17.436Z",
         "name": "workflow_update",
         "workflow": 1,
-        "payload": "{\"id\": 1, \"name\": \"wflow1\"}"
+        "payload": {
+            "id": 1,
+            "name": "wflow1"
+        }
     }
 },
 {
@@ -720,9 +756,39 @@
             "idesigner1@bogus.com"
         ],
         "created": "2017-11-08T00:12:25.964Z",
+        "modified": "2018-09-06T00:14:17.436Z",
         "name": "workflow_data_upload",
         "workflow": 1,
-        "payload": "{\"column_names\": [\"age\", \"email\", \"sid\", \"name\", \"registered\", \"when\"], \"name\": \"wflow1\", \"column_types\": [\"double\", \"string\", \"integer\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 0, \"num_rows\": 0, \"column_unique\": [true, true, true, false, false, false], \"id\": 1}"
+        "payload": {
+            "column_names": [
+                "age",
+                "email",
+                "sid",
+                "name",
+                "registered",
+                "when"
+            ],
+            "name": "wflow1",
+            "column_types": [
+                "double",
+                "string",
+                "integer",
+                "string",
+                "boolean",
+                "datetime"
+            ],
+            "num_cols": 0,
+            "num_rows": 0,
+            "column_unique": [
+                true,
+                true,
+                true,
+                false,
+                false,
+                false
+            ],
+            "id": 1
+        }
     }
 },
 {
@@ -733,9 +799,45 @@
             "idesigner1@bogus.com"
         ],
         "created": "2017-11-08T00:13:01.151Z",
+        "modified": "2018-09-06T00:14:17.436Z",
         "name": "workflow_data_merge",
         "workflow": 1,
-        "payload": "{\"column_names\": [\"age\", \"email\", \"sid\", \"another\", \"name\", \"one\", \"registered\", \"when\"], \"name\": \"wflow1\", \"column_types\": [\"double\", \"string\", \"integer\", \"string\", \"string\", \"string\", \"boolean\", \"datetime\"], \"num_cols\": 6, \"num_rows\": 3, \"column_unique\": [true, true, true, false, false, false, false, false], \"id\": 1}"
+        "payload": {
+            "column_names": [
+                "age",
+                "email",
+                "sid",
+                "another",
+                "name",
+                "one",
+                "registered",
+                "when"
+            ],
+            "name": "wflow1",
+            "column_types": [
+                "double",
+                "string",
+                "integer",
+                "string",
+                "string",
+                "string",
+                "boolean",
+                "datetime"
+            ],
+            "num_cols": 6,
+            "num_rows": 3,
+            "column_unique": [
+                true,
+                true,
+                true,
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "id": 1
+        }
     }
 }
 ]
