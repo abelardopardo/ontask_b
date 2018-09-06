@@ -87,8 +87,8 @@
     "model": "sites.site",
     "pk": 1,
     "fields": {
-        "domain": "example.com",
-        "name": "example.com"
+        "domain": "127.0.0.1:8000",
+        "name": "127.0.0.1:8000"
     }
 },
 {
@@ -150,7 +150,7 @@
         "password": "pbkdf2_sha256$36000$7IWHqHRmEqHJ$MACKzkY9ez1AP8w+m6vBWJDgnBB63qiZ8ltnHRgp9DA=",
         "last_login": "2017-12-21T09:57:47.744Z",
         "is_superuser": false,
-        "email": "instructor01@bogus.com",
+        "email": "instructor1@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-13T10:44:13.687Z",
@@ -200,6 +200,246 @@
                 "instructor"
             ]
         ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 7,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$eXJwRmJicDYwcHU1$tJYVEA4dBIhq+omKBn1HpA",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "instructor07@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:04:21.086Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 8,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$Sm5UeTd1bG1FUHc3$WE0GaSoGxSN9AUVsRSNQug",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "instructor08@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:04:21.098Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 9,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$d3hER1hzQUJMR0xS$RQwwGjwo0g22K2BF78LZRw",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "instructor09@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:04:21.108Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 10,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$cDN0NmoxTVI5N29s$2jIMIc0whlpTfjxVY+erzg",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "instructor10@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:04:21.119Z",
+        "name": "User Name",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 11,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$R1BrakdHelVRZVZH$ZtAwyWBAIaFWJpODLa9dRA",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student01@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:04:24.649Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 12,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$ZGRjS2hybjQ3Q3RB$AvsAPt+oD7hg4WwdCW6+IQ",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student02@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:04:24.680Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 13,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$S1lucHVqdmJLR1Bi$3sNLhSEP2jGCzF0HTMry9A",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student03@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:04:24.688Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 14,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$UmdMYmdwcXZ3ZVV6$WS7o3bd/rHHrLCQwja5uLg",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student04@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:04:24.695Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 15,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$eFZCZ2hTbEU0ZGN6$DQSIORrpzxNRJfh4fX9vAA",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student05@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:04:24.707Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 16,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$U2lseGFDTWJZWGtN$gohHr+Sg9fZwCIdzMQi34g",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student06@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:04:24.722Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 17,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$dDRLeGlCY09mVHlI$TMH4zLYd+nsZRHXmxC2F/Q",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student07@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:04:24.741Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 18,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$enlOOHZ0NXNhcVZK$9VA46zQlow694u62kV8+Ag",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student08@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:04:24.748Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 19,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$ZEdQd044WFdHc1ZW$/Gl2/s2PGCbc+13+vhksLg",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student09@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:04:24.761Z",
+        "name": "User Name",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 20,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$YTJuT2lTVXpGdUtD$tGol/mX/LaEuGr+QXH/Ztg",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student10@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-09-06T00:04:24.769Z",
+        "name": "User Name",
+        "groups": [],
         "user_permissions": []
     }
 },
@@ -1807,7 +2047,7 @@
     "pk": 149,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "name": "sss",
         "description_text": "",
@@ -1870,6 +2110,7 @@
         "data_type": "integer",
         "is_key": true,
         "position": 2,
+        "in_viz": true,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1885,6 +2126,7 @@
         "data_type": "string",
         "is_key": false,
         "position": 4,
+        "in_viz": true,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1900,6 +2142,7 @@
         "data_type": "string",
         "is_key": true,
         "position": 1,
+        "in_viz": true,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1915,6 +2158,7 @@
         "data_type": "double",
         "is_key": false,
         "position": 3,
+        "in_viz": true,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1930,6 +2174,7 @@
         "data_type": "boolean",
         "is_key": false,
         "position": 5,
+        "in_viz": true,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1945,6 +2190,7 @@
         "data_type": "datetime",
         "is_key": false,
         "position": 6,
+        "in_viz": true,
         "categories": [],
         "active_from": null,
         "active_to": null
@@ -1958,12 +2204,15 @@
         "name": "action in",
         "description_text": "",
         "created": "2017-12-20T18:32:48.462Z",
-        "modified": "2017-12-21T10:08:31.392Z",
-        "is_out": false,
+        "modified": "2018-09-06T00:05:03.272Z",
+        "last_executed_log": null,
+        "action_type": "personalized_text",
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
         "content": "{% comment %}Your action content here{% endcomment %}",
+        "target_url": "",
+        "shuffle": false,
         "columns": [
             4786,
             4784
@@ -1978,12 +2227,15 @@
         "name": "action_out",
         "description_text": "",
         "created": "2017-12-20T18:36:19.151Z",
-        "modified": "2017-12-21T10:09:20.355Z",
-        "is_out": true,
+        "modified": "2018-09-06T00:05:03.274Z",
+        "last_executed_log": null,
+        "action_type": "personalized_text",
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
         "content": "<p><br></p>",
+        "target_url": "",
+        "shuffle": false,
         "columns": []
     }
 }
