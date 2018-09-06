@@ -2,19 +2,18 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.3
--- Dumped by pg_dump version 9.6.3
+-- Dumped from database version 10.4
+-- Dumped by pg_dump version 10.4
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
-
-SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
 
@@ -24,7 +23,7 @@ SET default_with_oids = false;
 -- Name: __ONTASK_WORKFLOW_TABLE_140; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE "__ONTASK_WORKFLOW_TABLE_140" (
+CREATE TABLE public."__ONTASK_WORKFLOW_TABLE_140" (
     email text,
     sid bigint,
     "WAM" double precision,
@@ -60,7 +59,7 @@ CREATE TABLE "__ONTASK_WORKFLOW_TABLE_140" (
 -- Data for Name: __ONTASK_WORKFLOW_TABLE_140; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY "__ONTASK_WORKFLOW_TABLE_140" (email, sid, "WAM", credits, days_online, difficult_week01, difficult_week02, first_name, first_session, gender, "group", induction, last_name, mt_total, q01, q02, q03, q04, q05, q06, q07, q08, q09, q10, took_mt, video_1, video_2, video_3) FROM stdin;
+COPY public."__ONTASK_WORKFLOW_TABLE_140" (email, sid, "WAM", credits, days_online, difficult_week01, difficult_week02, first_name, first_session, gender, "group", induction, last_name, mt_total, q01, q02, q03, q04, q05, q06, q07, q08, q09, q10, took_mt, video_1, video_2, video_3) FROM stdin;
 ydtd7245@bogus.com	322843525	60.2000000000000028	120	2			Alica	2017-08-01 12:00:00	female	GR01	t	Aarons	6	1	1	1	0	0	1	0	0	1	1	t	1	1	0
 sufd4890@bogus.com	353424637	55.2000000000000028	124	6			Cai	2017-08-01 12:00:00	female	GR03	t	Chia	5	1	1	0	1	0	0	1	0	0	1	t	1	0	0
 mqjf6366@bogus.com	353125038	77.2000000000000028	124	9			Sean	2017-08-08 12:00:00	male	GR04	f	De Gruchy	0	0	0	0	0	0	0	0	0	0	0	f	0	1	0
