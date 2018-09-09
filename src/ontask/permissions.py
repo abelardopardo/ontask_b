@@ -25,7 +25,7 @@ def is_instructor(user):
     :return: Boolean stating if user belongs to the group
     """
     return user.is_authenticated and \
-        user.groups.filter(name='instructor').exists()
+           (user.groups.filter(name='instructor').exists() or user.is_superuser)
 
 
 def is_admin(user):
