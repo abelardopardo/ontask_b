@@ -150,7 +150,7 @@
         "password": "pbkdf2_sha256$36000$7IWHqHRmEqHJ$MACKzkY9ez1AP8w+m6vBWJDgnBB63qiZ8ltnHRgp9DA=",
         "last_login": "2017-12-07T21:59:28.562Z",
         "is_superuser": false,
-        "email": "instructor1@bogus.com",
+        "email": "instructor01@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-13T10:44:13.687Z",
@@ -170,7 +170,7 @@
         "password": "pbkdf2_sha256$36000$Vi2lBnr5h5ee$awxW9s042y23fISIZHks3h1hHieogLXXroObZsqGv0c=",
         "last_login": "2017-11-30T10:14:47.997Z",
         "is_superuser": false,
-        "email": "instructor2@bogus.com",
+        "email": "instructor02@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-13T10:44:13.724Z",
@@ -190,7 +190,7 @@
         "password": "pbkdf2_sha256$36000$QW3s2sNU1cL2$C/soQ1isU0Ogiehr627viw0zHugND6IyrTb/C1JrcXs=",
         "last_login": null,
         "is_superuser": false,
-        "email": "instructor3@bogus.com",
+        "email": "instructor03@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-13T10:44:13.739Z",
@@ -2053,7 +2053,7 @@
     "pk": 108,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "name": "wflow2",
         "description_text": "Simple workflow structure with two type of actions",
@@ -2308,7 +2308,7 @@
     "pk": 1450,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:25:32.164Z",
         "modified": "2018-09-05T02:55:52.493Z",
@@ -2325,7 +2325,7 @@
     "pk": 1451,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:28:52.686Z",
         "modified": "2018-09-05T02:55:52.493Z",
@@ -2368,7 +2368,7 @@
     "pk": 1452,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:29:06.545Z",
         "modified": "2018-09-05T02:55:52.493Z",
@@ -2411,7 +2411,7 @@
     "pk": 1453,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:29:16.583Z",
         "modified": "2018-09-05T02:55:52.493Z",
@@ -2454,7 +2454,7 @@
     "pk": 1454,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:29:23.846Z",
         "modified": "2018-09-05T02:55:52.493Z",
@@ -2497,7 +2497,7 @@
     "pk": 1455,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:29:40.528Z",
         "modified": "2018-09-05T02:55:52.493Z",
@@ -2516,7 +2516,7 @@
     "pk": 1456,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:29:51.441Z",
         "modified": "2018-09-05T02:55:52.493Z",
@@ -2540,7 +2540,7 @@
     "pk": 1457,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:30:04.948Z",
         "modified": "2018-09-05T02:55:52.493Z",
@@ -2564,7 +2564,7 @@
     "pk": 1458,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:30:23.063Z",
         "modified": "2018-09-05T02:55:52.493Z",
@@ -2583,7 +2583,7 @@
     "pk": 1459,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:32:44.826Z",
         "modified": "2018-09-05T02:55:52.493Z",
@@ -2603,7 +2603,7 @@
     "pk": 1460,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:32:52.793Z",
         "modified": "2018-09-05T02:55:52.493Z",
@@ -2622,7 +2622,7 @@
     "pk": 1461,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:33:21.695Z",
         "modified": "2018-09-05T02:55:52.493Z",
@@ -2646,7 +2646,7 @@
     "pk": 1462,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:34:46.118Z",
         "modified": "2018-09-05T02:55:52.493Z",
@@ -2666,7 +2666,7 @@
     "pk": 1463,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-08T01:34:56.315Z",
         "modified": "2018-09-05T02:55:52.493Z",
@@ -2685,7 +2685,7 @@
     "pk": 1464,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-31T02:33:12.655Z",
         "modified": "2018-09-05T02:55:52.493Z",
@@ -2704,7 +2704,7 @@
     "pk": 1465,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-31T02:33:15.092Z",
         "modified": "2018-09-05T02:55:52.493Z",
@@ -2724,7 +2724,7 @@
     "pk": 1466,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "created": "2017-12-31T02:33:50.162Z",
         "modified": "2018-09-05T02:55:52.493Z",

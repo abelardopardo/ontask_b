@@ -114,7 +114,7 @@
         "password": "pbkdf2_sha256$36000$46jLVZSRXzsz$yMjjEvf3RV/cqewzfD3DgE6K6v8Vl8zlFIkazalmLwo=",
         "last_login": null,
         "is_superuser": false,
-        "email": "instructor2@bogus.com",
+        "email": "instructor02@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-04T05:32:54.797Z",
@@ -154,7 +154,7 @@
         "password": "pbkdf2_sha256$36000$Iha3zjN1yT0C$4UCn675ps9GJ6n0ZX2zz39+kyNH8GSraI2ro1gVcy2g=",
         "last_login": null,
         "is_superuser": false,
-        "email": "ainstructor2@bogus.com",
+        "email": "ainstructor02@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-04T05:32:54.884Z",
@@ -586,7 +586,7 @@
     "pk": "a7cffaeb56732ccfd0707e0bef0bfc302832d9b1",
     "fields": {
         "user": [
-            "instructor2@bogus.com"
+            "instructor02@bogus.com"
         ],
         "created": "2017-11-08T01:29:29.742Z"
     }
@@ -636,7 +636,7 @@
     "pk": "cf22064a4a103202e7e2c5d1fd214abcadd71504",
     "fields": {
         "user": [
-            "ainstructor2@bogus.com"
+            "ainstructor02@bogus.com"
         ],
         "created": "2017-11-08T01:29:29.739Z"
     }
