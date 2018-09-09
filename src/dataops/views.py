@@ -76,7 +76,14 @@ class PluginRegistryTable(tables.Table):
 @cache_page(60 * 15)
 @user_passes_test(is_instructor)
 def uploadmerge(request):
-    return render(request, 'dataops/uploadmerge.html', {})
+    # Get the workflow that is being used
+    workflow = get_workflow(request)
+    if not workflow:
+        return redirect('workflow:index')
+
+    return render(request,
+                  'dataops/uploadmerge.html',
+                  {'nrows': workflow.nrows})
 
 
 @user_passes_test(is_instructor)

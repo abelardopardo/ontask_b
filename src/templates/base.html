@@ -90,31 +90,20 @@
               <li {% if '/workflow/' in request.path %}class="active"{% endif %}><a
                   href="{{ workflow_url }}">{% trans 'Details' %}</a></li>
 
-              <li {% if '/dataops/' in request.path %}class="dropdown active"{% else %}class="dropdown"{% endif %}>
-                <a class="dropdown-toggle" data-toggle="dropdown">{% trans 'Dataops' %}
-                  <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  <li><a href="{% url 'dataops:uploadmerge' %}">{% trans 'Data Upload/Merge' %}</a></li>
-                  <li><a href="{% url 'dataops:transform' %}">{% trans 'Transform' %}</a></li>
-                </ul>
-              </li>
 
-              {% url 'table:display' as table_display %}
-              <li {% if '/table/' in request.path %}class="active"{% endif %}><a
+              <li {% if '/table/' in request.path  or '/dataops' in request.path%}class="active"{% endif %}><a
                   href="{% url 'table:display' %}">{% trans 'Table' %}</a>
               </li>
 
-              {% url 'action:index' as actions_url %}
-              <li {% if '/action/' in request.path %}class="active"{% endif %}><a
-                  href="{{ actions_url }}">{% trans 'Actions' %}</a></li>
+              <li {% if '/action/' in request.path %}class="active"{% endif %}>
+                <a href="{% url 'action:index' %}">{% trans 'Actions' %}</a>
+              </li>
 
-              {% url 'scheduler:index' as scheduler_url %}
               <li {% if '/scheduler/' in request.path %}class="active"{% endif %}><a
-                  href="{{ scheduler_url }}">{% trans 'Scheduler' %}</a></li>
+                  href="{% url 'scheduler:index' %}">{% trans 'Scheduler' %}</a></li>
 
-              {% url 'logs:index' as logs_url %}
               <li {% if '/logs/' in request.path %}class="active"{% endif %}><a
-                  href="{{ logs_url }}">{% trans 'Logs' %}</a>
+                  href="{% url 'logs:index' %}">{% trans 'Logs' %}</a>
               </li>
             {% else %}
               <li><a href="https://ontasklearning.org" target="blank">{% trans 'About' %}</a></li>

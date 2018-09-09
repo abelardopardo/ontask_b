@@ -12,6 +12,8 @@ app_name = 'workflow'
 urlpatterns = [
     url(r'^$', views.workflow_index, name='index'),
 
+    url(r'^sql_connections', views.sql_connections, name='sql_connections'),
+
     url(r'^create/$', views.WorkflowCreateView.as_view(), name='create'),
 
     url(r'^(?P<pk>\d+)/clone/$', views.clone, name='clone'),
@@ -30,7 +32,9 @@ urlpatterns = [
 
     # Import Export
 
-    url(r'^export_ask/$', import_export_views.export_ask, name='export_ask'),
+    url(r'^(?P<pk>\d+)/export_ask/$',
+        import_export_views.export_ask,
+        name='export_ask'),
 
     url(r'^(?P<data>(\d+(,\d+)*)?)/export/$',
         import_export_views.export,
@@ -56,7 +60,7 @@ urlpatterns = [
 
     # Sharing
 
-    url(r'^share/$', share_views.share, name='share'),
+    url(r'^(?P<pk>\d+)/share/$', share_views.share, name='share'),
 
     url(r'^share_create/$',
         share_views.share_create,

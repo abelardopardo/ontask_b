@@ -63,13 +63,13 @@
 {% block title %}{{ block.super }}{% trans 'Details' %}{% endblock %}
 {% block container %}
 <div class="container-fluid text-center">
-  <h1 class="page-header">{% trans 'Workflow Details' %}</h1>
+  <h1 class="page-header">{{ workflow.name }}</h1>
   {% if workflow %}
     <div style="display: inline-block;" id="workflow-area">
       {% if not table_info %}
-        <p><strong>{% trans 'The workflow does not have data.' %}</strong></p>
-        <h4>{% trans 'Go to' %} <a href="{% url 'dataops:uploadmerge' %}">
-          {% trans 'Dataops' %}</a> {% trans 'to upload data' %}</h4>
+        {% include 'workflow/includes/no_data.html' %}
+      {% elif not table_info.num_actions %}
+        {% include 'workflow/includes/no_actions.html' %}
       {% endif %}
       {% include 'workflow/includes/workflow_detail_buttons.html' %}
       <p class="help-block"

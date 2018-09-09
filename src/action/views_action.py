@@ -272,6 +272,7 @@ def action_index(request):
 
     context['table'] = \
         ActionTable(qset, orderable=False)
+    context['no_actions'] = len(qset) == 0
 
     return render(request, 'action/index.html', context)
 
@@ -441,7 +442,7 @@ def edit_action(request, pk):
     if workflow.nrows == 0:
         messages.error(
             request,
-            _('Workflow has no data. Go to Dataops to upload data.')
+            _('Workflow has no data. Go to "Manage table data" to upload data.')
         )
         return redirect(reverse('action:index'))
 
@@ -740,7 +741,7 @@ def select_column_action(request, apk, cpk, key=None):
     if workflow.nrows == 0:
         messages.error(
             request,
-            _('Workflow has no data. Go to Dataops to upload data.')
+            _('Workflow has no data. Go to "Manage table data" to upload data.')
         )
         return JsonResponse({'html_redirect': reverse('action:index')})
 
@@ -789,7 +790,7 @@ def unselect_column_action(request, apk, cpk):
     if workflow.nrows == 0:
         messages.error(
             request,
-            _('Workflow has no data. Go to Dataops to upload data.')
+            _('Workflow has no data. Go to "Manage table data" to upload data.')
         )
         return redirect(reverse('action:index'))
 
@@ -831,7 +832,7 @@ def shuffle_questions(request, pk):
     if workflow.nrows == 0:
         messages.error(
             request,
-            _('Workflow has no data. Go to Dataops to upload data.')
+            _('Workflow has no data. Go to "Manage table data" to upload data.')
         )
         return redirect(reverse('action:index'))
 
@@ -1027,7 +1028,7 @@ def run(request, pk):
     if workflow.nrows == 0:
         messages.error(request,
                        'Workflow has no data. '
-                       'Go to Dataops to upload data.')
+                       'Go to "Manage table data" to upload data.')
         return redirect(reverse('action:index'))
 
     # Get the action
@@ -1198,7 +1199,7 @@ def run_survey_row(request, pk):
     if workflow.nrows == 0:
         messages.error(
             request,
-            _('Workflow has no data. Go to Dataops to upload data.')
+            _('Workflow has no data. Go to "Manage table data" to upload data.')
         )
         return redirect(reverse('action:index'))
 

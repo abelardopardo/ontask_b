@@ -11,6 +11,7 @@ from django.contrib.postgres.fields import JSONField
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.core.cache import cache
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
@@ -89,13 +90,17 @@ class Workflow(models.Model):
         :param wid: Workflow id
         :return:
         """
-        try:
-            workflow = Workflow.objects.get(id=wid)
-        except ObjectDoesNotExist:
-            return
+        with cache.lock('ONTASK_WORKFLOW_{0}'.format(wid)):
+            try:
+                workflow = Workflow.objects.get(id=wid)
 
-        # Workflow exists, unlock
-        workflow.unlock()
+                # Workflow exists, unlock
+                workflow.unlock()
+            except ObjectDoesNotExist:
+                return
+            except:
+                raise Exception('Unable to unlock workflow {0}'.format(wid))
+
 
     def get_columns(self):
         """

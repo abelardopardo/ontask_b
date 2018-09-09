@@ -18,9 +18,9 @@ from .ops import (do_import_workflow,
 
 
 @user_passes_test(is_instructor)
-def export_ask(request, format=None):
+def export_ask(request, pk):
     # Get the workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, pk)
     if not workflow:
         return redirect('workflow:index')
 

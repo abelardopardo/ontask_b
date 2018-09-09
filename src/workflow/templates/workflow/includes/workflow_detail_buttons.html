@@ -1,6 +1,7 @@
 {% load i18n %}
 <div class="dropdown">
   {% if workflow.nrows != 0 %}
+    {% include 'workflow/includes/add_column_menu.html' %}
     <div class="dropdown" style="display: inline-table;">
       <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
               data-toggle="dropdown"> {% trans 'Add Column' %}
@@ -13,7 +14,7 @@
                   data-url="{% url 'workflow:column_add' %}"
                   data-toggle="tooltip"
                   title="{% trans 'Add a new column to the table' %}">
-            {% trans 'Add regular column' %}
+            {% trans 'Regular column' %}
           </button>
         </li>
         <li>
@@ -22,7 +23,7 @@
                   data-url="{% url 'workflow:formula_column_add' %}"
                   data-toggle="tooltip"
                   title="{% trans 'Add a new column combining columns with a formula' %}">
-            {% trans 'Add formula-derived column' %}
+            {% trans 'Formula-derived column' %}
           </button>
         </li>
         <li>
@@ -31,15 +32,16 @@
                   data-url="{% url 'workflow:random_column_add' %}"
                   data-toggle="tooltip"
                   title="{% trans 'Add a new column with ramdom values' %}">
-            {% trans 'Add column with random values' %}
+            {% trans 'Column with random values' %}
           </button>
         </li>
       </ul>
     </div>
   {% endif %}
+  {% include 'workflow/includes/manage_table_data.html' %}
   <div class="dropdown" style="display: inline-table;">
     <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-            data-toggle="dropdown"> {% trans 'More' %}
+            data-toggle="dropdown"> {% trans 'More workflow operations' %}
       <span class="caret"></span>
     </button>
     <ul role="menu" class="dropdown-menu">
@@ -48,7 +50,7 @@
            class="btn btn-default btn-sm"
            data-toggle="tooltip"
            title="{% trans 'List of name=value pairs to use in the actions' %}">
-          <span class="glyphicon glyphicon-list"></span> {% trans 'Attributes' %}
+          <span class="glyphicon glyphicon-list"></span> {% trans 'Workflow attributes' %}
         </a>
       </li>
       <li>
@@ -56,44 +58,49 @@
            class="btn btn-default btn-sm"
            data-toggle="tooltip"
            title="{% trans 'Export the workflow and its actions' %}">
-          <span class="glyphicon glyphicon-export"></span> {% trans 'Export' %}
+          <span class="glyphicon glyphicon-export"></span> {% trans 'Export workflow' %}
         </a>
       </li>
       {% if request.user == workflow.user %}
         <li>
           <button type="button" style="width:100%;"
                   class="btn btn-default btn-sm js-workflow-update align-middle"
-                  data-url="{% url 'workflow:update' workflow.id %}">
-              <span class="glyphicon glyphicon-pencil"></span> {% trans 'Rename' %}
+                  data-url="{% url 'workflow:update' workflow.id %}" data-toggle="tooltip"
+            title="{% trans 'Change the name and description of this workflow' %}">
+              <span class="glyphicon glyphicon-pencil"></span> {% trans 'Rename workflow' %}
           </button>
-        </li>     <li>
-          <a href="{% url 'workflow:share' %}" class="btn btn-default btn-sm"
+        </li>
+        <li>
+          <a href="{% url 'workflow:share' workflow.id %}" class="btn btn-default btn-sm"
              data-toggle="tooltip"
              title="{% trans 'Allow other users to access the workflow' %}">
-            <span class="glyphicon glyphicon-share"></span> {% trans 'Share' %}
+            <span class="glyphicon glyphicon-share"></span> {% trans 'Share workflow' %}
           </a>
         </li>
         <li>
           <button type="button" style="width:100%;"
-             class="btn btn-default btn-sm js-workflow-clone align-middle"
-                  data-url="{% url 'workflow:clone' workflow.id %}">
+                  class="btn btn-default btn-sm js-workflow-clone align-middle"
+                  data-url="{% url 'workflow:clone' workflow.id %}" data-toggle="tooltip"
+                  title="{% trans 'Create a duplicate of this workflow' %}">
             <span class="glyphicon glyphicon-duplicate"></span>
-            {% trans 'Clone' %}
+            {% trans 'Clone workflow' %}
           </button>
         </li>
         <li>
           <button type="button" style="width:100%;"
                   class="btn btn-default btn-sm js-workflow-flush"
-                  data-url="{% url 'workflow:flush' workflow.id %}">
+                  data-url="{% url 'workflow:flush' workflow.id %}" data-toggle="tooltip"
+                  title="{% trans 'Delete the data in the table of this workflow' %}">
             <span class="glyphicon glyphicon-floppy-remove"></span>
-            {% trans 'Flush Data' %}
+            {% trans 'Flush data table' %}
           </button>
         </li>
         <li>
           <button type="button" style="width:100%;"
                   class="btn btn-default btn-sm js-workflow-delete"
-                  data-url="{% url 'workflow:delete' workflow.id %}">
-            <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
+                  data-url="{% url 'workflow:delete' workflow.id %}" data-toggle="tooltip"
+                  title="{% trans 'Delete this workflow' %}">
+            <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete workflow' %}
           </button>
         </li>
       {% endif %}

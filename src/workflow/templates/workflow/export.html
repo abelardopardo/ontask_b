@@ -11,7 +11,7 @@
 {% block container %}
   <div align="center" class="container">
     <h1 class="page-header">{% trans 'Export Workflow' %}</h1>
-      <form action="{% url 'workflow:export_ask' %}" method="post"
+      <form action="{% url 'workflow:export_ask' wid %}" method="post"
             enctype="multipart/form-data">
         {% csrf_token %}
         <div class="modal-body">

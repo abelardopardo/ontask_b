@@ -67,41 +67,23 @@
     {% else %}
       <h1>{% trans 'Table View' %}</h1>
     {% endif %}
-    {% if columns %}
-      <div style="padding-bottom: 2ex;">
-        <div class="dropdown" style="display:inline;">
-          <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                  data-toggle="dropdown">Add <span class="caret"></span>
-          </button>
-          <ul role="menu" class="dropdown-menu">
-            <li>
-              <a href="{% url 'dataops:rowcreate' %}"
-                 class="btn btn-sm btn-defult"
-                 data-toggle="tooltip"
-                 title="{% trans 'Add an extra row to the table' %}">
-                <span class="glyphicon glyphicon-plus"></span> {% trans 'Add row' %}
-              </a>
-            </li>
-            <li>
-              <button type="button"
-                      class="btn btn-default btn-sm js-workflow-column-add"
-                      data-url="{% url 'workflow:column_add' %}"
-                      data-toggle="tooltip"
-                      title="{% trans 'Add a column to the table' %}">
-                <span class="glyphicon glyphicon-plus"></span> {% trans 'Add column' %}
-              </button>
-            </li>
-            <li>
-              <button type="button"
-                      class="btn btn-default btn-sm js-workflow-formula-column-add"
-                      data-url="{% url 'workflow:formula_column_add' %}"
-                      data-toggle="tooltip"
-                      title="{% trans 'Add a column operating with the current values' %}">
-                <span class="glyphicon glyphicon-plus"></span> {% trans 'Add derived column' %}
-              </button>
-            </li>
-          </ul>
-        </div>
+    {% if not columns %}
+      {% include 'workflow/includes/no_data.html' %}
+    {% elif no_actions %}
+      {% include 'workflow/includes/no_actions.html' %}
+    {% endif %}
+    <div style="padding-bottom: 2ex;">
+      {% if columns %}
+        <a href="{% url 'dataops:rowcreate' %}"
+           class="btn btn-sm btn-primary"
+           data-toggle="tooltip"
+           title="{% trans 'Add a new row to the table' %}">
+          <span class="glyphicon glyphicon-plus"></span> {% trans 'Add row' %}
+        </a>
+        {% include 'workflow/includes/add_column_menu.html' %}
+      {% endif %}
+      {% include 'workflow/includes/manage_table_data.html' %}
+      {% if columns %}
         <div class="dropdown btn-group">
           <a href="{% url 'table:view_index' %}"
              class="btn btn-primary btn-sm"
@@ -123,6 +105,8 @@
             </ul>
           {% endif %}
         </div>
+      {% endif %}
+      {% if columns %}
         {% if view %}
           <button type="button"
                   class="btn btn-primary btn-sm js-view-edit align-middle"
@@ -160,7 +144,9 @@
             <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
           </a>
         {% endif %}
-      </div>
+      {% endif %}
+    </div>
+    {% if columns %}
       <table class="table display dataTable no-footer cell-border table-bordered"
              id="table-data">
         <thead>
@@ -259,10 +245,6 @@
           </tr>
         </thead>
       </table>
-    {% else %}
-      <p>{% trans 'The workflow does not have data.' %}</p>
-      {% url 'dataops:uploadmerge' as dops %}
-      <p>{% blocktrans %}To upload data go to <a href="{{ dops }}">Dataops</a>{% endblocktrans %}</p>
     {% endif %}
     <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog">

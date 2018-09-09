@@ -22,6 +22,13 @@
 
 ## 2.8.3 (2018-08-21)
 
+### Changed
+
+- Several UI changes after the review provided by University of Auckland
+  
+  - About and Contacts link in the main page now open in separated windows (2B)
+  
+  
 ### Fixed
 
 - Fixed bug accidentally introduced when committing code.

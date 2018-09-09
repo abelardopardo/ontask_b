@@ -9,6 +9,9 @@
 <div align="center" class="container">
   <h1 class="page-header">{% trans 'Data upload/merge operations' %}</h1>
 
+  {% if not nrows %}
+    {% include 'workflow/includes/no_data.html' %}
+  {% endif %}
   <div align="center" class="container">
     <table class="table-condensed table-bordered" id="dataops-table">
       <thead>

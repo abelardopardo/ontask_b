@@ -131,7 +131,8 @@ def render_table_display_page(request, workflow, view, columns, ajax_url):
     context = {
         'query_builder_ops': workflow.get_query_builder_ops_as_str(),
         'ajax_url': ajax_url,
-        'views': workflow.views.all()
+        'views': workflow.views.all(),
+        'no_actions': workflow.actions.count() == 0
     }
 
     # If there is a DF, add the columns

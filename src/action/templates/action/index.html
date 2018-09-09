@@ -41,8 +41,15 @@
 {% block container %}
 <div align="center" class="container">
   <h1 class="page-header">{% trans 'Actions' %}</h1>
-  <div class="dropdown">
-    <button type="button" class="btn btn-primary js-create-action"
+  {% if not has_table %}
+    {% include 'workflow/includes/no_data.html' %}
+  {% elif no_actions %}
+    <p class="lead">{% blocktrans %}<strong>Next Step:</strong> Click in the <i>New Action</i> below to create a new
+    action to execute based on the data stored in the table.{% endblocktrans %}</p>
+  {% endif %}
+  <div style="padding-bottom: 2ex;">
+    {% include 'workflow/includes/manage_table_data.html' %}
+    <button type="button" class="btn btn-sm btn-primary js-create-action"
        data-url="{% url 'action:create' %}"
        data-toggle="tooltip"
        title="New action to collect data from learners">
@@ -50,7 +57,7 @@
     </button>
     {% if has_table %}
       <a href="{% url 'action:import' %}"
-         class="btn btn-primary"
+         class="btn btn-sm btn-primary"
          data-toggle="tooltip" title="Import action previously exported">
         <span class="glyphicon glyphicon-import"></span> {% trans 'Import action' %}</a>
     {% endif %}

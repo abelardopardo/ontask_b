@@ -431,7 +431,9 @@ def index(request):
 
     return render(request,
                   'scheduler/index.html',
-                  {'table': ScheduleActionTable(s_items, orderable=False)})
+                  {'table': ScheduleActionTable(s_items, orderable=False),
+                   'no_data': workflow.nrows == 0,
+                   'no_actions': workflow.actions.count() == 0})
 
 
 @user_passes_test(is_instructor)

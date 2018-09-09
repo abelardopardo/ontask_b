@@ -17,7 +17,7 @@
   <h1 class="page-header">{% trans 'Schedule Action Execution' %}</h1>
   <div class="container">
     <p>{% blocktrans with n=now %}Time now is {{ n }}{% endblocktrans %}</p>
-    <p class="lead">Action: {{ action.name }}</p>
+    <p class="lead">{% blocktrans %}Action: {{ action.name }}{% endblocktrans %}</p>
     <form action="" method="post">
       {% csrf_token %}
       {{ form|crispy }}

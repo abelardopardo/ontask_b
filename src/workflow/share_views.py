@@ -19,9 +19,10 @@ from .ops import get_workflow
 
 
 @user_passes_test(is_instructor)
-def share(request):
+def share(request, pk):
+
     # Get the workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, pk)
     if not workflow:
         return redirect('workflow:index')
 
@@ -72,7 +73,8 @@ def share_create(request):
                                   'user_email': form.user_obj.email})
 
             data['form_is_valid'] = True
-            data['html_redirect'] = reverse('workflow:share')
+            data['html_redirect'] = reverse('workflow:share',
+                                            kwargs={'pk': workflow.id})
             return JsonResponse(data)
 
     data['html_form'] = render_to_string(
@@ -112,7 +114,8 @@ def share_delete(request, pk):
                               'user_email': user.email})
 
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:share')
+        data['html_redirect'] = reverse('workflow:share',
+                                        kwargs={'pk': workflow.id})
 
     data['html_form'] = render_to_string(
         'workflow/includes/partial_share_delete.html',
