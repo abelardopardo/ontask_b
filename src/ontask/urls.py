@@ -23,15 +23,15 @@ import workflow.urls
 from dataops import pandas_db
 from templatetags.settings import ontask_version
 from . import views
+import workflow.views
 
 api_description = ugettext("""The OnTask API offers functionality to manipulate 
 workflows, tables and logs. The interface provides CRUD operations over 
 these objects.""")
 
 urlpatterns = [
-    url(r'^$', views.HomePage.as_view(), name='home'),
-
-    url(r'^entry$', views.entry, name='entry'),
+    # Home Page!
+    url(r'^$', workflow.views.workflow_index, name='home'),
 
     url(r'^lti_entry$', views.lti_entry, name='lti_entry'),
 
