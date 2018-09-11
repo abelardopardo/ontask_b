@@ -23,11 +23,9 @@
         <a type="button" class="btn btn-default spin"
            href="{% url 'action:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
         </a>
-        <button type="button" class="btn btn-primary spin" style="margin-right:2ex;"
-                onclick="location.href='{{ prev_step }}'">
-          <span class="glyphicon glyphicon-triangle-left"></span>
-          {% trans 'Back' %}
-        </button>
+        <a class="btn btn-primary spin" style="margin-right:2ex;" href="location.href='{{ prev_step }}'">
+          <span class="glyphicon glyphicon-triangle-left"></span> {% trans 'Back' %}
+        </a>
         <button type="Submit" name="Submit" value="Submit"
                 style="margin-right:2ex;"
                 class="btn btn-primary btn-space">

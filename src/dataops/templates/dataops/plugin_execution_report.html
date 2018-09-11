@@ -42,9 +42,8 @@
         </table>
       </div>
     {% endif %}
-    <button type="button" class="btn btn-default" style="margin-top:2ex;"
-      onclick="location.href='{% url 'workflow:detail' id %}'">
+    <a class="btn btn-default" style="margin-top:2ex;" href="{% url 'workflow:detail' id %}">
       {% trans 'Continue' %}
-    </button>
+    </a>
   </div>
 {% endblock container %}

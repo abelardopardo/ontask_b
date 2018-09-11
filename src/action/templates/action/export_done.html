@@ -12,8 +12,6 @@
   <div class="container-fluid" style="text-align:center;">
     <h1 class="page-header text-center">{% trans 'Action export' %}</h1>
     <p class="text-center">{% trans 'Done!' %}</p>
-    <button type="button" class="btn btn-default spin"
-      onclick="location.href='{% url 'action:index' %}'"> {% trans 'Back' %}
-    </button>
+    <a class="btn btn-default spin" href="{% url 'action:index' %}"> {% trans 'Back' %}</a>
   </div>
 {% endblock container %}

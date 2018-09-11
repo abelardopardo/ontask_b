@@ -16,9 +16,8 @@
         {% csrf_token %}
         <div class="text-center input-group input-group-lg">
           {{ form|crispy }}
-          <button type="button" class="btn btn-default"
-                  style="margin-right:2ex;"
-                  onclick="location.href='{% url 'workflow:index' %}'">{% trans 'Cancel' %}</button>
+          <a class="btn btn-default spin" style="margin-right:2ex;"
+             href="{% url 'workflow:index' %}">{% trans 'Cancel' %}</a>
           <button class="btn btn-primary btn-space"
                   type="Submit" name="Submit" value="Submit">
             <span class="glyphicon glyphicon-import"></span> {% trans 'Import' %}</button>

@@ -60,9 +60,8 @@
         </tr>
       </thead>
     </table>
-    <button type="button" class="btn btn-default spin" style="margin-right:2ex;"
-            onclick="location.href='{% url 'action:index' %}'"> {% trans 'Back' %}
-    </button>
+    <a class="btn btn-default spin" style="margin-right:2ex;"
+       href="{% url 'action:index' %}"> {% trans 'Back' %}</a>
     <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog">
         <div class="modal-content">

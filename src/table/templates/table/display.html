@@ -114,10 +114,7 @@
                   data-toggle="tooltip" title="{% trans 'Change elements in view' %}">
             <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit view' %}
           </button>
-          <button type="button" class="btn btn-sm btn-default spin"
-                  onclick="location.href='{% url 'table:display' %}'">
-            Full table
-          </button>
+          <a class="btn btn-sm btn-default spin" href="{% url 'table:display' %}">Full table</a>
           <a href="{% url 'table:stat_table_view' view.id %}"
              class="btn btn-primary btn-sm spin"
              data-toggle="tooltip"

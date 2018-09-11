@@ -110,7 +110,7 @@ class WorkflowImport(test.OntaskLiveTestCase):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.XPATH, "//table['workflow-table']/tbody/tr/td/a"),
+                (By.XPATH, "//table['workflow-table']/tbody/tr/td"),
                 'newwf')
         )
 

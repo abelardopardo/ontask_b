@@ -21,9 +21,7 @@
       {% endif %}
     </div>
     <div class="modal-footer" style="text-align: center;">
-      <button type="button" class="btn btn-default spin"
-              onclick="location.href='{% url 'action:index' %}'">{% trans 'Back' %}
-      </button>
+      <a class="btn btn-default spin" href="{% url 'action:index' %}">{% trans 'Back' %}</a>
       <a href="{% url 'action:export_done' action.id %}"
          class="btn btn-primary btn-sm"
          data-toggle="tooltip" title="Proceed with the export operation">

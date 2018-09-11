@@ -114,7 +114,7 @@ class ActionSerializer(serializers.ModelSerializer):
                 active_to=validated_data['active_to'],
                 content=validated_data.get('content', None),
                 target_url=validated_data.get('target_url', None),
-                shuffle=validated_data.get('shuffle', None)
+                shuffle=validated_data.get('shuffle', False)
             )
 
             action_obj.save()
@@ -226,7 +226,7 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
                 active_to=validated_data['active_to'],
                 content=validated_data.get('content', ''),
                 target_url=validated_data.get('target_url', None),
-                shuffle=validated_data.get('shuffle', None)
+                shuffle=validated_data.get('shuffle', False)
             )
 
             action_obj.save()
