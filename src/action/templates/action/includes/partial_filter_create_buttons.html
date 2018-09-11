@@ -1,5 +1,10 @@
 {% load i18n %}
-<h4 id="filter-set" style="border-top: none;">{% trans 'Filter learners' %}
+<h4 id="filter-set" style="border-top: none;">
+  <span class="fa-stack">
+    <span class="fa fa-circle fa-stack-2x"></span>
+    <strong class="fa-stack-1x" style="color:white;">1</strong>
+  </span>
+  {% trans 'Filter learners' %}
 <div class="btn-group">
   {% if filter_condition %}
     <button type="button"

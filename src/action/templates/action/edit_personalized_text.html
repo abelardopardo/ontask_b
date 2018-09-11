@@ -42,6 +42,13 @@
     <div class="container-fluid">
       {% include 'action/includes/partial_condition_buttons.html' %}
       <div id="html-editor">
+        <h4 class="text-center">
+          <span class="fa-stack">
+            <span class="fa fa-circle fa-stack-2x"></span>
+            <strong class="fa-stack-1x" style="color:white;">3</strong>
+          </span>
+          <strong>{% trans 'Personalized Text' %}</strong></h4>
+
         {% include 'action/includes/partial_action_edit_out_attributes_columns.html' %}
         <form action="" enctype="multipart/form-data" method="POST">
           {% csrf_token %}

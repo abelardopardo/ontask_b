@@ -11,9 +11,10 @@
     <meta name="description" content="{% block description %}{% endblock description %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'site/ico/favicon.ico' %}" type="favicon/ico">
     <title>{% block title %}{% include "_brandname.html" %} :: {% endblock %}</title>
-    <!-- Bootstrap core CSS -->
+    <!-- Bootstrap core and fontawesome CSS -->
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
-    <!-- Custom styles for this site -->
+    <link rel="stylesheet" href="http://use.fontawesome.com/releases/v5.3.1/css/all.css"
+       integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">    <!-- Custom styles for this site -->
     {% block styles %}
     <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
     {% endblock styles %}
