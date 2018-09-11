@@ -18,6 +18,7 @@ from celery.schedules import crontab
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.messages import constants as message_constants
 
 # import ldap
 # from django_auth_ldap.config import (
@@ -138,6 +139,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.RemoteUserMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
@@ -281,6 +283,8 @@ STATIC_URL = BASE_URL + '/static/'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # For Bootstrap 3, change error alert to 'danger'
+MESSAGE_STORE = 'django.contrib.messages.storage.session.SessionStorage'
+MESSAGE_LEVEL = message_constants.DEBUG
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
