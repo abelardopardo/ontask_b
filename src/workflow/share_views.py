@@ -39,6 +39,7 @@ def share(request, pk):
         workflow.shared.values('email', 'id').order_by('email')
     )
     context = {'table': table,
+               'not_shared': len(table.rows) == 0,
                'workflow': workflow}
     return render(request, 'workflow/share.html', context)
 
