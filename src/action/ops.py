@@ -99,7 +99,8 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
                'action': action,
                'cancel_url': cancel_url}
 
-    if request.method == 'GET' or not form.is_valid():
+    if request.method == 'GET' or not form.is_valid() or \
+        request.POST.get('lti_version', None):
         return render(request, 'action/run_survey_row.html', context)
 
     # Post with different data. # Update content in the DB
