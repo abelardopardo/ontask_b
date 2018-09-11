@@ -8,6 +8,8 @@
 
 - Added functionality to create a column with either a random integer 
   (between 1 and a given number) or with a random category value.
+  
+- EMAIL configuration can now be done through environment variables (Issue #84)
 
 ### Changed
 
