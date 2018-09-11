@@ -20,10 +20,10 @@
       {% csrf_token %}
       {{ form|crispy }}
       <div class="text-center" style="margin: 1ex 0 1ex 0;">
-        <a type="button" class="btn btn-default"
+        <a type="button" class="btn btn-default spin"
            href="{% url 'action:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
         </a>
-        <button type="button" class="btn btn-primary" style="margin-right:2ex;"
+        <button type="button" class="btn btn-primary spin" style="margin-right:2ex;"
                 onclick="location.href='{{ prev_step }}'">
           <span class="glyphicon glyphicon-triangle-left"></span>
           {% trans 'Back' %}

@@ -60,7 +60,8 @@ var insertColumnInActionIn = function () {
       sel.children("option[value='']").remove();
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      location.reload();
+      $('#div-spinner').show();
+      location.reload(true);
     }
   });
   $('#div-spinner').hide();
@@ -79,7 +80,8 @@ var toggleShuffleQuestion = function () {
         }
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      location.reload();
+      $('#div-spinner').show();
+      location.reload(true);
     }
   });
   $('#div-spinner').hide();
@@ -97,6 +99,7 @@ var loadFormPost = function () {
       success: function(data) {
         if (data.form_is_valid) {
           if (data.html_redirect == "") {
+            $('#div-spinner').show();
             window.location.reload(true);
           } else {
             location.href = data.html_redirect;
@@ -106,7 +109,8 @@ var loadFormPost = function () {
         $("#modal-item .modal-content").html(data.html_form);
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        location.reload();
+        $('#div-spinner').show();
+        location.reload(true);
       }
     });
 }
@@ -117,7 +121,8 @@ var saveActionText = function() {
       type: 'post',
       dataType: 'json',
       error: function(jqXHR, textStatus, errorThrown) {
-        location.reload();
+        $('#div-spinner').show();
+        location.reload(true);
       },
     });
     return true;

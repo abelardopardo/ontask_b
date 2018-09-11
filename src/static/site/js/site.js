@@ -55,6 +55,7 @@ var loadForm = function () {
       success: function(data) {
         if (data.form_is_valid) {
           if (data.html_redirect == "") {
+            $('#div-spinner').show();
             window.location.reload(true);
           } else {
             location.href = data.html_redirect;
@@ -70,7 +71,8 @@ var loadForm = function () {
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        location.reload();
+        $('#div-spinner').show();
+        location.reload(true);
       }
     });
 }
@@ -98,6 +100,7 @@ var saveForm = function () {
       success: function (data) {
         if (data.form_is_valid) {
           if (data.html_redirect == "") {
+            $('#div-spinner').show();
             window.location.reload(true);
           } else {
             location.href = data.html_redirect;
@@ -114,20 +117,22 @@ var saveForm = function () {
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        location.reload();
+        $('#div-spinner').show();
+        location.reload(true);
       }
     });
     return false;
 }
 $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip({
-      trigger: "hover",
-      placement: "auto",
-      container: "body"
-    });
-
+  $('[data-toggle="tooltip"]').tooltip({
+    trigger: "hover",
+    placement: "auto",
+    container: "body"
+  });
+  $("body").on("click", ".spin", function () {
+    $('#div-spinner').show();
+  });
 });
 $(window).bind("load", function() {
    $('#div-spinner').hide();
 });
-

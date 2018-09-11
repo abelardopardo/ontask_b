@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.db.models import F, Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse, render
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
@@ -83,12 +83,12 @@ def display_ss(request):
     final_qs = []
     for item in qs[start:start + length]:
         row = [
-            """<a href="{0}" class="btn btn-primary"
+            """<a href="{0}" class="btn btn-primary spin"
                   data-toggle="tooltip" title="{1}">
                   <span class="glyphicon glyphicon-eye-open"></span> {2}
                 </a>""".format(
                 reverse('logs:view', kwargs={'pk': item[0]}),
-                _('View log content'),
+                ugettext('View log content'),
                 item[0]
             ),
             item[1].astimezone(pytz.timezone(ontask_settings.TIME_ZONE)),

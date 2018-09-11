@@ -53,15 +53,19 @@
               });
         });
     }
+    $('#modal-item').on('hide.bs.modal', function (e) {
+      $('#div-spinner').show();
+      location.reload();
+    })
   </script>
 {% endblock %}
 {% block title %}{{ block.super }}{% trans 'Workflows' %}{% endblock %}
 {% block container %}
   <div align="center" class="container" id="workflow-area">
     {% if table %}
-      <h1 class="page-header">{% trans 'Workflows<super>*</super>' %}</h1>
+      <h1 class="page-header">{% trans 'Open or create a workflow' %}<super>*</super></h1>
     {% else %}
-      <h1 class="page-header">{% trans 'Create a workflow' %}</h1>
+      <h1 class="page-header">{% trans 'Create a workflow' %}<super>*</super></h1>
     {% endif %}
     {% if not nwflows %}
       <p class="lead"><strong>Next Step:</strong> The main element in OnTask is a <i>Workflow<super>*</super></i>. Start by first creating a workflow element using the <i>New Workflow</i> button below,
@@ -83,7 +87,7 @@
       </a>
     </p>
     {% render_table table %}
-    <p class="text-left">{% blocktrans %}<strong><super>*</super>Workflow:</strong> A workflow contains <i>table
+    <p class="text-left">{% blocktrans %}<strong><super>*</super></strong>A workflow contains a <i>table
     </i> with data about a set of learners and <i>a
       collection of actions</i>. The table is organised by <i>columns</i> and the information in each row corresponds
       to one learner. The actions will behave differently depending on the values stored for every learner and a set
@@ -94,7 +98,8 @@
       page can either be sent to the learner through email, shown through a HTML address, or sent to another
       machine.{% endblocktrans %}
     </p>
-    <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
+    <div class="modal fade" id="modal-item" data-backdrop="static"
+         data-keyboard="false" data-event="hello">
       <div class="modal-dialog">
         <div class="modal-content">
         </div>

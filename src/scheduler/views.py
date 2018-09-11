@@ -91,7 +91,7 @@ class ScheduleActionTable(tables.Table):
 
     def render_action(self, record):
         return format_html(
-            '<a href="{0}">{1}</a>'.format(
+            '<a class="spin" href="{0}">{1}</a>'.format(
                 reverse('action:edit',
                         kwargs={'pk': record.action.id}),
                 record.action.name
@@ -124,7 +124,7 @@ class ScheduleActionTable(tables.Table):
         if not log_item:
             return "---"
         return format_html(
-            """<a href="{0}">{1}</a>""".format(
+            """<a class="spin" href="{0}">{1}</a>""".format(
                 reverse('logs:view', kwargs={'pk': log_item.id}),
                 log_item.modified.astimezone(
                     pytz.timezone(settings.TIME_ZONE)

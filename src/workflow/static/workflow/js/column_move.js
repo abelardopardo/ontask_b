@@ -6,11 +6,12 @@ var column_move = function () {
         if ('html_redirect' in data) {
           location.href = data.html_redirect;
         } else {
-          location.reload();
+          location.reload(true);
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        location.reload();
+        $('#div-spinner').show();
+        location.reload(true);
       }
     });
     return false;

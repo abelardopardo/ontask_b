@@ -47,7 +47,7 @@
     <ul role="menu" class="dropdown-menu">
       <li>
         <a href="{% url 'workflow:attributes' %}"
-           class="btn btn-default btn-sm"
+           class="btn btn-default btn-sm spin"
            data-toggle="tooltip"
            title="{% trans 'List of name=value pairs to use in the actions' %}">
           <span class="glyphicon glyphicon-list"></span> {% trans 'Workflow attributes' %}
@@ -55,7 +55,7 @@
       </li>
       <li>
         <a href="{% url 'workflow:export_ask' workflow.id %}"
-           class="btn btn-default btn-sm"
+           class="btn btn-default btn-sm spin"
            data-toggle="tooltip"
            title="{% trans 'Export the workflow and its actions' %}">
           <span class="glyphicon glyphicon-export"></span> {% trans 'Export workflow' %}
@@ -71,7 +71,7 @@
           </button>
         </li>
         <li>
-          <a href="{% url 'workflow:share' workflow.id %}" class="btn btn-default btn-sm"
+          <a href="{% url 'workflow:share' workflow.id %}" class="btn btn-default btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Allow other users to access the workflow' %}">
             <span class="glyphicon glyphicon-share"></span> {% trans 'Share workflow' %}

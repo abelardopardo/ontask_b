@@ -88,7 +88,7 @@ class ActionTable(tables.Table):
             return "---"
 
         return format_html(
-            """<a href="{0}">{1}</a>""".format(
+            """<a class="spin" href="{0}">{1}</a>""".format(
                 reverse('logs:view', kwargs={'pk': log_item.id}),
                 log_item.modified.astimezone(
                     pytz.timezone(settings.TIME_ZONE)

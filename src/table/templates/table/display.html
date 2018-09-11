@@ -86,7 +86,7 @@
       {% if columns %}
         <div class="dropdown btn-group">
           <a href="{% url 'table:view_index' %}"
-             class="btn btn-primary btn-sm"
+             class="btn btn-primary btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Views available for this table' %}">
             <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Views' %}
@@ -99,7 +99,7 @@
             {% for v in views %}
               <li>
                 <a href="{% url 'table:display_view' v.id %}"
-                   class="btn btn-default btn-sm">{{ v.name }}</a>
+                   class="btn btn-default btn-sm spin">{{ v.name }}</a>
               </li>
             {% endfor %}
             </ul>
@@ -114,31 +114,31 @@
                   data-toggle="tooltip" title="{% trans 'Change elements in view' %}">
             <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit view' %}
           </button>
-          <button type="button" class="btn btn-sm btn-default"
+          <button type="button" class="btn btn-sm btn-default spin"
                   onclick="location.href='{% url 'table:display' %}'">
             Full table
           </button>
           <a href="{% url 'table:stat_table_view' view.id %}"
-             class="btn btn-primary btn-sm"
+             class="btn btn-primary btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Dashboard created with the view data' %}">
             <span class="glyphicon glyphicon-dashboard"></span> {% trans 'Dashboard' %}
           </a>
           <a href="{% url 'table:csvdownload_view' view.id %}" download
-             class="btn btn-primary btn-sm js-logs-download"
+             class="btn btn-primary btn-sm js-logs-download spin"
              data-toggle="tooltip"
              title="{% trans 'Download a CSV file containing this table' %}">
             <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
           </a>
         {% else %}
           <a href="{% url 'table:stat_table' %}"
-             class="btn btn-primary btn-sm"
+             class="btn btn-primary btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Dashboard created with the table data' %}">
             <span class="glyphicon glyphicon-dashboard"></span> {% trans 'Dashboard' %}
           </a>
           <a href="{% url 'table:csvdownload' %}"
-             class="btn btn-primary btn-sm"
+             class="btn btn-primary btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Download a CSV file containing this table' %}">
             <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
@@ -164,7 +164,7 @@
                     {% if not col.is_key %}
                       <li>
                         <a href="{% url 'table:stat_column' col.id %}"
-                           class="btn btn-default btn-sm align-middle"
+                           class="btn btn-default btn-sm align-middle spin"
                            data-toggle="tooltip"
                            title="{% trans 'Stats and visualizations about this column' %}">
                           <span class="glyphicon glyphicon-stats"></span> {% trans 'Stats' %}
