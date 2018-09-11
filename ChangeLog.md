@@ -11,10 +11,12 @@
 
 ### Changed
 
-- Log objects have been reencoded to use enumeration types.
+- Log objects have been re-encoded to use enumeration types.
 
 - Steps to create the actions have changed. Whe an action is created a set of
   choices is presented.
+  
+- Significant changes in the tests to adapt to the new UI
 
 ### Fixed
 
