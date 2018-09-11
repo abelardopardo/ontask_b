@@ -1,7 +1,7 @@
 {% load i18n %}
-<div style="display: inline-table;">
+<div>
   <a href="{% url 'workflow:detail' workflow.id %}"
-     class="btn btn-primary btn-sm" data-toggle="tooltip"
+     class="btn btn-primary btn-sm spin" data-toggle="tooltip"
      title="{% trans 'Open the workflow to manipulate its data and actions' %}">
       <span class="glyphicon glyphicon-book"></span> {% trans 'Open' %}
   </a>
@@ -19,13 +19,8 @@
       <span class="glyphicon glyphicon-duplicate"></span>
       {% trans 'Clone' %}
     </button>
-    <a href="{% url 'workflow:share' workflow.id %}" class="btn btn-default btn-sm"
-       data-toggle="tooltip"
-       title="{% trans 'Allow other users to access and use the workflow' %}">
-      <span class="glyphicon glyphicon-share"></span> {% trans 'Share' %}
-    </a>
     <button type="button"
-            class="btn btn-default btn-sm js-workflow-flush"
+            class="btn btn-default btn-sm js-workflow-flush{% if workflow.nrows == 0 %} disabled{% endif %}"
             data-url="{% url 'workflow:flush' workflow.id %}" data-toggle="tooltip"
             title="{% trans 'Delete the data in the table of this workflow' %}">
       <span class="glyphicon glyphicon-floppy-remove"></span>
@@ -38,10 +33,4 @@
       <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
     </button>
   {% endif %}
-  <a href="{% url 'workflow:export_ask' workflow.id %}"
-     class="btn btn-default btn-sm"
-     data-toggle="tooltip"
-     title="{% trans 'Export the workflow and its actions' %}">
-    <span class="glyphicon glyphicon-export"></span> {% trans 'Export' %}
-  </a>
 </div>

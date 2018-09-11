@@ -42,7 +42,7 @@
 {% block title %}{{ block.super }}{% trans 'Logs' %}{% endblock %}
 {% block container %}
 <div align="center" class="container">
-  <h1 class="page-header">{% trans 'Logs<super>*</super>' %}</h1>
+  <h1 class="page-header">{% trans 'Logs' %}<super>*</super></h1>
   <div class="container" id="csv-download">
     <a href="{% url 'logs:export' workflow.id %}" download
        class="btn btn-primary btn-sm js-logs-download"
@@ -61,10 +61,9 @@
       </tr>
     </thead>
   </table>
-  <p class="text-left">{% blocktrans %}<strong><super>*</super>Logs:</strong> The platform records all operations
-    performed on the
-    workflow as <i>Logs</i>. These elements are shown in the table above. You can view its content by clicking on its
-    number.{% endblocktrans %}</p>
+  <p class="text-left">{% blocktrans %}<strong><super>*</super></strong>The platform records all operations
+    performed on the workflow as <i>Logs</i>. These elements are shown in the table above. You can view its content
+    by clicking on its number.{% endblocktrans %}</p>
   <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">

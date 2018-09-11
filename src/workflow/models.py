@@ -388,7 +388,8 @@ class Workflow(models.Model):
 
     def lock(self, request, create_new_session=False):
         """
-        Function that sets the session key in the workflow to flag that is locked.
+        Function that sets the session key in the workflow to flag that is
+        locked.
         :param request: HTTP request
         :param create_new_session: Boolean to flag if a new session has to be
                created.

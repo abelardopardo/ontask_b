@@ -99,16 +99,8 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
                'action': action,
                'cancel_url': cancel_url}
 
-    # request_csrf_token = request.POST.get('csrfmiddlewaretokenone')
     if request.method == 'GET' or not form.is_valid():
         return render(request, 'action/run_survey_row.html', context)
-
-    # Correct POST request!
-    # if not form.has_changed():
-    #     if not is_inst:
-    #         return redirect(reverse('action:thanks'))
-    #
-    #     return redirect(reverse('action:run', kwargs={'pk': action.id}))
 
     # Post with different data. # Update content in the DB
     set_fields = []

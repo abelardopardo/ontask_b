@@ -36,7 +36,7 @@
 {% block title %}{{ block.super }}{% trans 'Scheduled operations' %}{% endblock %}
 {% block container %}
 <div align="center" class="container-fluid">
-  <h1 class="page-header">{% trans 'Scheduled Operations<super>*</super>' %}</h1>
+  <h1 class="page-header">{% trans 'Scheduled Operations' %}<super>*</super></h1>
   {% if no_data %}
     {% include 'workflow/includes/no_data.html' %}
   {% elif no_actions %}
@@ -44,7 +44,7 @@
   {% endif %}
   {% render_table table %}
   {% url 'action:index' as actionindex %}
-  <p class="text-left">{% blocktrans %}<strong><super>*</super>Scheduled actions:</strong> The execution of some of
+  <p class="text-left">{% blocktrans %}<strong><super>*</super></strong>The execution of some of
     the actions can be scheduled for a time in the future. This page shows those planned executions. To schedule the
     execution of one action, go to the <a href="{{ actionindex }}">Actions</a> menu and select the operation <i>Schedule
     </i> for an
