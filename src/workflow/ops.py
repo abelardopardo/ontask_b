@@ -5,9 +5,9 @@ import gzip
 from datetime import datetime
 from io import BytesIO
 
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.http import HttpResponse
 from django.utils import timezone
@@ -23,6 +23,7 @@ from logs.models import Log
 from workflow.serializers import (WorkflowExportSerializer,
                                   WorkflowImportSerializer)
 from .models import Workflow, Column
+
 
 def store_workflow_in_session(request, obj):
     """
@@ -83,6 +84,7 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
 
             if not workflow:
                 # The object was not found.
+                messages.error(request, _('Incorrect workflow request'))
                 return None
 
             # Apply select if given
@@ -93,8 +95,8 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
             if prefetch_related:
                 workflow = workflow.prefetch_related(prefetch_related)
 
-            # Step 2: If the workflow is locked by this user session, return correct
-            # result (the session_key may be None if using the API)
+            # Step 2: If the workflow is locked by this user session, return
+            # correct result (the session_key may be None if using the API)
             if request.session.session_key == workflow.session_key:
                 return workflow
 
@@ -139,6 +141,12 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
             # Step 6: The workflow is locked by an existing session. See if the
             # session is valid
             if session.expire_date >= timezone.now():
+                messages.error(
+                    request,
+                    _('The workflow is being modified by user {0}').format(
+                        owner.email
+                    )
+                )
                 # The session currently locking the workflow
                 # has an expire date in the future from now. So, no access is granted.
                 return None
@@ -151,6 +159,8 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
                 store_workflow_in_session(request, workflow)
         except:
             # Something went wrong when fetching the object
+            messages.error(request,
+                           _('The workflow could not be accessed'))
             return None
 
         # All good. Return workflow.
