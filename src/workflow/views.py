@@ -279,23 +279,6 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
         # Check if the workflow is locked
         obj = get_workflow(self.request, old_obj.id)
-        if not obj:
-            user = old_obj.get_user_locking_workflow()
-            if user != self.request.user:
-                messages.error(
-                    self.request,
-                    _('The workflow is being modified by user {0}').format(
-                        user.email
-                    )
-                )
-            else:
-                messages.error(
-                    self.request,
-                    _('There is another session still open with your account. '
-                      'Log that session out or wait for it to expire.')
-                )
-            return None
-
         return obj
 
     def get_context_data(self, **kwargs):
@@ -356,7 +339,9 @@ def update(request, pk):
 
     workflow = get_workflow(request, pk)
     if not workflow:
-        return redirect('workflow:index')
+        # Workflow is not accessible. Go back to index page.
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('workflow:index')})
 
     form = WorkflowForm(request.POST or None, instance=workflow)
 
@@ -371,19 +356,18 @@ def update(request, pk):
     # index
     messages.error(request,
                    _('You can only rename workflows you created.'))
-    if request.is_ajax():
-        data = {'form_is_valid': True,
-                'html_redirect': ''}
-        return JsonResponse(data)
-
-    return redirect('workflow:detail', kwargs={'pk': workflow.id})
+    data = {'form_is_valid': True,
+            'html_redirect': ''}
+    return JsonResponse(data)
 
 
 @user_passes_test(is_instructor)
 def flush(request, pk):
     workflow = get_workflow(request, pk)
     if not workflow:
-        return redirect('workflow:index')
+        # Workflow is not accessible. Go back to index page.
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('workflow:index')})
 
     data = dict()
 
@@ -428,7 +412,9 @@ def flush(request, pk):
 def delete(request, pk):
     workflow = get_workflow(request, pk)
     if not workflow:
-        return redirect('workflow:index')
+        # Workflow is not accessible. Go back to index page.
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('workflow:index')})
 
     # Ajax result
     data = dict()
@@ -485,7 +471,7 @@ def column_ss(request, pk):
     workflow = get_workflow(request)
     if not workflow:
         return JsonResponse(
-            {'error': _('Incorrect request. Unlable to process')}
+            {'error': _('Incorrect request. Unable to process')}
         )
 
     # If there is no DF, there are no columns to show, this should be
