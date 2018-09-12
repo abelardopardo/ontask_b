@@ -2232,7 +2232,7 @@
         "created": "2017-12-08T01:34:56.311Z",
         "modified": "2018-09-05T02:55:52.786Z",
         "last_executed_log": null,
-        "action_type": "personalized_text",
+        "action_type": "survey",
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,

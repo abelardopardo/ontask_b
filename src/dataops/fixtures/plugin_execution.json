@@ -1654,7 +1654,7 @@
         "created": "2018-05-03T23:24:31.031Z",
         "modified": "2018-09-06T00:02:34.240Z",
         "last_executed_log": null,
-        "action_type": "personalized_text",
+        "action_type": "survey",
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,

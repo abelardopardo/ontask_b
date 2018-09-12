@@ -2540,7 +2540,7 @@
         "created": "2017-12-16T02:25:39.324Z",
         "modified": "2018-09-06T00:16:15.493Z",
         "last_executed_log": null,
-        "action_type": "personalized_text",
+        "action_type": "survey",
         "serve_enabled": true,
         "active_from": null,
         "active_to": null,

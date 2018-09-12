@@ -2206,7 +2206,7 @@
         "created": "2017-12-20T18:32:48.462Z",
         "modified": "2018-09-06T00:05:03.272Z",
         "last_executed_log": null,
-        "action_type": "personalized_text",
+        "action_type": "survey",
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
