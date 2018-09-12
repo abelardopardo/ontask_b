@@ -20,9 +20,9 @@ def change_action_type(apps, schema_editor):
     Action = apps.get_model('action', 'Action')
     for item in Action.objects.all():
         if item.is_out:
-            item.content_type = 'personal_text'
+            item.action_type = 'personal_text'
         else:
-            item.content_type = 'survey'
+            item.action_type = 'survey'
         item.save()
 
 
