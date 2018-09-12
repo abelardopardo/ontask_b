@@ -31,11 +31,11 @@ these objects.""")
 
 urlpatterns = [
     # Home Page!
-    url(r'^$', workflow.views.workflow_index, name='home'),
+    url(r'^$', views.home, name='home'),
 
     url(r'^lti_entry$', views.lti_entry, name='lti_entry'),
 
-    url(r'^not_authorized$', views.HomePage.as_view(), name='not_authorized'),
+    url(r'^not_authorized$', views.home, name='not_authorized'),
 
     url(r'^about/$', views.AboutPage.as_view(), name='about'),
 
