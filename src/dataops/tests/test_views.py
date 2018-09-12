@@ -40,21 +40,8 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         # Login
         self.login('instructor1@bogus.com')
 
-        self.open(reverse('workflow:index'))
-
-        # GO TO THE WORKFLOW PAGE
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Workflows'))
-        self.assertIn('New workflow', self.selenium.page_source)
-        self.assertIn('Import workflow', self.selenium.page_source)
-
-        # Open the workflow
-        wf_link = self.selenium.find_element_by_link_text('sss')
-        wf_link.click()
-        # Wait for the table to be refreshed
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'column-table_previous'))
-        )
+        # Go to the details page
+        self.access_workflow_from_home_page('sss')
 
         # Edit the name column
         self.selenium.find_element_by_xpath(
@@ -75,19 +62,16 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         # Click in the submit/save button
         self.selenium.find_element_by_xpath("//button[@type='submit']").click()
         # MODAL WAITING
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for the table to be refreshed
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'column-table_previous'))
-        )
+        self.wait_close_modal_refresh_table('column-table_previous')
 
-        # Click in the New Column button
-        self.selenium.find_element_by_class_name(
-            'js-workflow-column-add'
+        # Click on the Add Column button
+        self.selenium.find_element_by_xpath(
+            "//div[@id='workflow-area']/div/div/button"
+        ).click()
+
+        # Click on the Regular Column
+        self.selenium.find_element_by_xpath(
+            "//div[@id='workflow-area']/div/div/ul/li"
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
@@ -124,13 +108,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.wait_close_modal_refresh_table('column-table_previous')
 
         # Click in the attributes section
-        self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-area']/div/button[3]"
-        ).click()
-        self.selenium.find_element_by_link_text('Attributes').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'js-attribute-create'))
-        )
+        self.go_to_attribute_page()
 
         # Delete the existing one and confirm deletion
         self.selenium.find_element_by_xpath(
@@ -146,39 +124,10 @@ class DataopsSymbols(test.OntaskLiveTestCase):
             "//div[@class='modal-footer']/button[2]"
         ).click()
         # MODAL WAITING
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for the table to be refreshed
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'attribute-table_previous'))
-        )
+        self.wait_close_modal_refresh_table('attribute-table_previous')
 
         # Add a new attribute and insert key (symbols) and value
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[2]").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Create attribute')
-        )
-
-        # Add key and value
-        self.selenium.find_element_by_id("id_key").click()
-        self.selenium.find_element_by_id("id_key").clear()
-        self.selenium.find_element_by_id("id_key").send_keys(symbols + '3')
-        self.selenium.find_element_by_id("id_value").click()
-        self.selenium.find_element_by_id("id_value").clear()
-        self.selenium.find_element_by_id("id_value").send_keys("vvv")
-
-        # Submit new attribute
-        self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[2]"
-        ).click()
-        # MODAL WAITING
-        self.wait_close_modal_refresh_table('attribute-table_previous')
+        self.create_attribute(symbols + '3', 'vvv')
 
         # Save and close the attribute page
         self.selenium.find_element_by_link_text('Back').click()
@@ -186,18 +135,14 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.wait_close_modal_refresh_table('column-table_previous')
 
         # Click in the TABLE link
-        self.selenium.find_element_by_link_text("Table").click()
-        # Wait for paging widget
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'table-data_previous'))
-        )
+        self.go_to_table()
 
         # Verify that everything appears normally
         self.assertIn(escape(symbols), self.selenium.page_source)
         self.assertIn(escape(symbols + '2'), self.selenium.page_source)
 
         # Click in the Actions navigation menu
-        self.selenium.find_element_by_link_text("Actions").click()
+        self.go_to_actions()
 
         # Edit the action-in
         self.selenium.find_element_by_link_text("Edit").click()

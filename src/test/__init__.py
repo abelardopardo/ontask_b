@@ -12,8 +12,10 @@ from rest_framework.test import APITransactionTestCase
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.common.keys import Keys
 
+from action.models import Action
 from dataops import pandas_db
 from ontask.permissions import group_names
 
@@ -159,13 +161,19 @@ class OntaskLiveTestCase(LiveServerTestCase):
         self.selenium.find_element_by_id('submit-id-sign_in').click()
         # Wait for the user profile page
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is("OnTask :: Profile")
+            EC.title_is("OnTask :: Workflows")
         )
 
-        self.assertIn('Edit Profile', self.selenium.page_source)
+        self.assertIn('Open or create a workflow', self.selenium.page_source)
 
     def logout(self):
         self.open(reverse('accounts:logout'))
+
+    def wait_for_datatable(self, table_id):
+        # Wait for the table to be refreshed
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, table_id))
+        )
 
     def wait_close_modal_refresh_table(self, table_id):
         """
@@ -182,6 +190,221 @@ class OntaskLiveTestCase(LiveServerTestCase):
             )
         )
         # Wait for the table to be refreshed
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, table_id))
+        self.wait_for_datatable(table_id)
+
+    def search_table_row_by_string(self, table_id, colidx, value):
+        """
+        Given a table id and a column index, it traverses the table searching
+        for the given value in the column.
+        :param table_id: ID of the HTML table element
+        :param colidx: Column index
+        :param value: Value to search
+        :return: Row Element
+        """
+        # Table ID must be in the page
+        self.assertIn(table_id, self.selenium.page_source)
+
+        rows = self.selenium.find_elements_by_xpath(
+            "//table[@id='{0}']/tbody/tr/td[{1}]".format(table_id, colidx)
         )
+        self.assertTrue(rows, 'No rows found in table {0}'.format(table_id))
+
+        names = [x.text for x in rows]
+        self.assertTrue(value in names,
+                        "{0} not in table {1}.".format(value, table_id))
+        return self.selenium.find_element_by_xpath(
+            "//table[@id='{0}']/tbody/tr[{1}]".format(
+                table_id, names.index(value) + 1
+            )
+        )
+
+
+    def create_new_workflow(self, wname, wdesc=''):
+        # Create the workflow
+        self.selenium.find_element_by_class_name(
+            'js-create-workflow').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'id_name'))
+        )
+
+        self.selenium.find_element_by_id('id_name').send_keys(wname)
+        desc = self.selenium.find_element_by_id('id_description_text')
+        desc.send_keys(wdesc)
+        desc.send_keys(Keys.RETURN)
+
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('OnTask :: Data Upload/Merge')
+        )
+
+    def access_workflow_from_home_page(self, wname):
+        # Verify that this is the right page
+        self.assertIn('New workflow', self.selenium.page_source)
+        self.assertIn('Import workflow', self.selenium.page_source)
+
+        row_element = self.search_table_row_by_string('workflow-table',
+                                                      1,
+                                                      wname)
+        row_element.find_element_by_xpath("td[5]/div/a").click()
+
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, 'success'))
+        )
+
+    def go_to_upload_merge(self):
+        self.open(reverse('dataops:uploadmerge'))
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('OnTask :: Data Upload/Merge')
+        )
+
+    def go_to_csv_upload_merge_step_1(self):
+        self.go_to_upload_merge()
+
+        # Go to CSV Upload/Merge
+        self.selenium.find_element_by_xpath(
+            "//tbody/tr/td/a[1]"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('OnTask :: Upload/Merge CSV')
+        )
+
+    def go_to_attribute_page(self):
+        self.selenium.find_element_by_xpath(
+            "//div[@id='workflow-area']/div/div[3]/button"
+        ).click()
+        self.selenium.find_element_by_link_text('Workflow attributes').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'js-attribute-create')))
+
+    def go_to_share(self):
+        # Click on the share
+        self.selenium.find_element_by_xpath(
+            "//div[@id='workflow-area']/div/div[3]/button"
+        ).click()
+        self.selenium.find_element_by_link_text('Share workflow').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'js-share-create')))
+
+    def go_to_actions(self):
+        # Goto the action page
+        self.selenium.find_element_by_link_text('Actions').click()
+        # Wait for page to refresh
+        self.wait_for_datatable('action-table_previous')
+        self.assertIn('New Action', self.selenium.page_source)
+
+    def go_to_table(self):
+        self.selenium.find_element_by_link_text("Table").click()
+        self.wait_for_datatable('table-data_previous')
+        self.assertIn('Table View', self.selenium.page_source)
+
+    def add_column(self,
+                   col_name,
+                   col_type,
+                   col_categories='',
+                   col_init='',
+                   index=None):
+        # Click on the Add Column button
+        self.selenium.find_element_by_xpath(
+            "//div[@id='workflow-area']/div/div/button"
+        ).click()
+
+        # Click on the Regular Column
+        self.selenium.find_element_by_xpath(
+            "//div[@id='workflow-area']/div/div/ul/li"
+        ).click()
+
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.ID, 'id_name'))
+        )
+        # Set the fields
+        self.selenium.find_element_by_id('id_name').send_keys(col_name)
+        select = Select(self.selenium.find_element_by_id(
+            'id_data_type'))
+        select.select_by_value(col_type)
+        if col_categories:
+            self.selenium.find_element_by_id(
+                'id_raw_categories').send_keys(col_categories)
+        if col_init:
+            self.selenium.find_element_by_id(
+                'id_initial_value'
+            ).send_keys(col_init)
+        if index:
+            self.selenium.find_element_by_id('id_position').send_keys(
+                str(index)
+            )
+
+        # Click on the Submit button
+        self.selenium.find_element_by_xpath(
+            "//div[@id='modal-item']/div/div/form/div[@class='modal-footer']/button[@type='submit']"
+        ).click()
+        self.wait_close_modal_refresh_table('column-table_previous')
+
+    def delete_column(self, col_name):
+        element = self.search_table_row_by_string('column-table', 2, col_name)
+        element.find_element_by_xpath("td[5]/div/button[1]").click()
+        element.find_element_by_xpath("td[5]/div/ul/li[4]/button").click()
+
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//form/div/h4[@class='modal-title']"),
+                'Confirm column deletion')
+        )
+        self.selenium.find_element_by_xpath(
+            "//div[@id='modal-item']//button[@type='submit']"
+        ).click()
+
+        # Wait for modal to close and refresh the table
+        self.wait_close_modal_refresh_table('column-table_previous')
+
+    def create_new_personalized_text_action(self, aname, adesc=''):
+        # click in the create action button
+        self.selenium.find_element_by_class_name('js-create-action').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'id_name')))
+
+        # Set the name, description and type of the action
+        self.selenium.find_element_by_id('id_name').send_keys(aname)
+        desc = self.selenium.find_element_by_id('id_description_text')
+        # Select the action type
+        select = Select(self.selenium.find_element_by_id('id_action_type'))
+        select.select_by_value(Action.PERSONALIZED_TEXT)
+        desc.send_keys(adesc)
+        desc.send_keys(Keys.RETURN)
+        # Wait for the spinner to disappear, and then for the button to be
+        # clickable
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//h4[@id='filter-set']/div/button")
+            )
+        )
+        WebDriverWait(self.selenium,10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
+
+    def create_attribute(self, attribute_key, attribute_value):
+        # Click in the new attribute dialog
+        self.selenium.find_element_by_class_name('js-attribute-create').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),
+                                             'Create attribute')
+        )
+
+        # Fill out the form
+        element = self.selenium.find_element_by_id('id_key')
+        element.clear()
+        element.send_keys(attribute_key)
+        element = self.selenium.find_element_by_id('id_value')
+        element.clear()
+        element.send_keys(attribute_value)
+
+        # Click in the create attribute button
+        self.selenium.find_element_by_xpath(
+            "//div[@class='modal-footer']/button[2]"
+        ).click()
+
+        # Wait for modal to close and for table to refresh
+        self.wait_close_modal_refresh_table('attribute-table_previous')
+
+    def create_condition(self, cname, ):
+        pass

@@ -19,36 +19,11 @@ class LoginView(bracesviews.AnonymousRequiredMixin,
 
     def form_valid(self, form):
         redirect = super(LoginView, self).form_valid(form)
-        # remember_me = form.cleaned_data.get('remember_me')
-        # if remember_me is True:
-        #     ONE_MONTH = 30*24*60*60
-        #     expiry = getattr(settings, "KEEP_LOGGED_DURATION", ONE_MONTH)
-        #     self.request.session.set_expiry(expiry)
         return redirect
 
 
 class LogoutView(authviews.LogoutView):
     url = reverse_lazy('home')
-
-
-#
-#
-# class SignUpView(bracesviews.AnonymousRequiredMixin,
-#                  bracesviews.FormValidMessageMixin,
-#                  generic.CreateView):
-#     form_class = forms.SignupForm
-#     model = User
-#     template_name = 'accounts/signup.html'
-#     success_url = reverse_lazy('home')
-#     form_valid_message = "You're signed up!"
-#
-#     def form_valid(self, form):
-#         r = super(SignUpView, self).form_valid(form)
-#         username = form.cleaned_data["email"]
-#         password = form.cleaned_data["password1"]
-#         user = auth.authenticate(email=username, password=password)
-#         auth.login(self.request, user)
-#         return r
 
 
 class PasswordChangeView(authviews.PasswordChangeView):
