@@ -34,14 +34,14 @@ var insertConditionInContent = function() {
   }
   insert_text = "{% if " + btn.attr('data-name') +
       " %}" + condition_text + "{% endif %}";
-  insertText('id_content', insert_text);
+  insertText('#id_content', insert_text);
 };
 var insertAttributeInContent = function() {
   var val = $(this).val();
   if (val == '') {
     return;
   }
-  insertText('id_content', "{{ " + val + " }}");
+  insertText('#id_content', "{{ " + val + " }}");
   $(this).val(this.defaultSelected);
 }
 var insertColumnInActionIn = function () {
