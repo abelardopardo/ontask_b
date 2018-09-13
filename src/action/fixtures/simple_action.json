@@ -78,7 +78,7 @@
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$Y25uQ3NERU1LVVlr$Y0ZqAnyp83/Hcu6cwcylyA",
         "last_login": "2018-09-04T22:01:58.043Z",
         "is_superuser": false,
-        "email": "instructor01@bogus.com",
+        "email": "instructor1@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-04T05:32:54.755Z",
@@ -411,7 +411,7 @@
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$a1ljNEY0dExYZjBu$QdeMlbT5puHhZangvv7a0Q",
         "last_login": null,
         "is_superuser": false,
-        "email": "instructor02@bogus.com",
+        "email": "instructor2@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2018-09-04T22:00:30.911Z",
@@ -959,7 +959,7 @@
     "pk": 5,
     "fields": {
         "user": [
-            "instructor01@bogus.com"
+            "instructor1@bogus.com"
         ],
         "name": "wflow1",
         "description_text": "description text for workflow 1",
