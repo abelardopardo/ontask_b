@@ -145,7 +145,10 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.go_to_actions()
 
         # Edit the action-in
-        self.selenium.find_element_by_link_text("Edit").click()
+        element = self.search_table_row_by_string('action-table',
+                                                  1,
+                                                  'action in')
+        element.find_element_by_link_text("Edit").click()
 
         # Set the right columns to process
         select = Select(self.selenium.find_element_by_id(
@@ -198,13 +201,15 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Save action-in
         self.selenium.find_element_by_link_text('Done').click()
-        # Wait for paging widget
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'action-table_previous'))
-        )
+
+        # Wait for action page
+        self.wait_for_datatable('action-table_previous')
 
         # Click in the RUN link of the action in
-        self.selenium.find_element_by_link_text("Run").click()
+        element = self.search_table_row_by_string('action-table',
+                                                  1,
+                                                  'action in')
+        element.find_element_by_link_text("Run").click()
         # Wait for paging widget
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'actioninrun-data_previous'))
@@ -232,15 +237,16 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Go Back to the action table
         self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[2]").click()
+            "//div[@id='table-content']/a"
+        ).click()
         # Wait for paging widget
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'action-table_previous'))
-        )
+        self.wait_for_datatable('action-table_previous')
 
         # Edit the action out
-        self.selenium.find_element_by_xpath(
-            "//table[@id='action-table']/tbody/tr[2]/td[5]/div/a").click()
+        element = self.search_table_row_by_string('action-table',
+                                                  1,
+                                                  'action_out')
+        element.find_element_by_link_text("Edit").click()
 
         # Insert attribute
         self.selenium.find_element_by_id("select-attribute-name").click()
@@ -258,32 +264,36 @@ class DataopsSymbols(test.OntaskLiveTestCase):
             "select-column-name")).select_by_visible_text(symbols + '2')
 
         # Create new condition
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[3]").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'id_description_text')))
+        self.create_condition(symbols + "4",
+                              '',
+                              [(symbols, "begins with", "C")])
 
-        # Set the values of the condition
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys(symbols + "4")
-        self.selenium.find_element_by_id("id_description_text").click()
-        self.selenium.find_element_by_name("builder_rule_0_filter").click()
-        Select(self.selenium.find_element_by_name(
-            "builder_rule_0_filter")).select_by_visible_text(symbols)
-        self.selenium.find_element_by_name("builder_rule_0_operator").click()
-        Select(self.selenium.find_element_by_name(
-            "builder_rule_0_operator")).select_by_visible_text(
-            "begins with")
-        self.selenium.find_element_by_name("builder_rule_0_value_0").click()
-        self.selenium.find_element_by_name("builder_rule_0_value_0").clear()
-        self.selenium.find_element_by_name("builder_rule_0_value_0").send_keys(
-            "C")
-
-        # Save the condition
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='submit'])[2]").click()
-        self.wait_close_modal_refresh_table('html-editor')
+        # self.selenium.find_element_by_xpath(
+        #     "(//button[@type='button'])[3]").click()
+        # WebDriverWait(self.selenium, 10).until(
+        #     EC.presence_of_element_located((By.ID, 'id_description_text')))
+        #
+        # # Set the values of the condition
+        # self.selenium.find_element_by_id("id_name").click()
+        # self.selenium.find_element_by_id("id_name").clear()
+        # self.selenium.find_element_by_id("id_name").send_keys(symbols + "4")
+        # self.selenium.find_element_by_id("id_description_text").click()
+        # self.selenium.find_element_by_name("builder_rule_0_filter").click()
+        # Select(self.selenium.find_element_by_name(
+        #     "builder_rule_0_filter")).select_by_visible_text(symbols)
+        # self.selenium.find_element_by_name("builder_rule_0_operator").click()
+        # Select(self.selenium.find_element_by_name(
+        #     "builder_rule_0_operator")).select_by_visible_text(
+        #     "begins with")
+        # self.selenium.find_element_by_name("builder_rule_0_value_0").click()
+        # self.selenium.find_element_by_name("builder_rule_0_value_0").clear()
+        # self.selenium.find_element_by_name("builder_rule_0_value_0").send_keys(
+        #     "C")
+        #
+        # # Save the condition
+        # self.selenium.find_element_by_xpath(
+        #     "(//button[@type='submit'])[2]").click()
+        # self.wait_close_modal_refresh_table('html-editor')
 
         # Create a filter
         self.selenium.find_element_by_xpath(

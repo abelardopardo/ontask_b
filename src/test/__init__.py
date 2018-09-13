@@ -406,5 +406,52 @@ class OntaskLiveTestCase(LiveServerTestCase):
         # Wait for modal to close and for table to refresh
         self.wait_close_modal_refresh_table('attribute-table_previous')
 
-    def create_condition(self, cname, ):
-        pass
+    def create_condition(self, cname, cdesc, rule_tuples):
+        # Click on the NEW button
+        self.selenium.find_element_by_xpath(
+            "//div[@id='condition-set']/h4/button[@type='button']").click()
+        # Wait for the modal to open
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'id_name')))
+
+        # Set the values of the condition
+        form_field = self.selenium.find_element_by_id("id_name")
+        form_field.click()
+        form_field.clear()
+        form_field.send_keys(cname)
+        if cdesc:
+            form_field = self.selenium.find_element_by_id("id_description_text")
+            form_field.click()
+            form_field.clear()
+            form_field.send_keys(cname)
+
+        idx = 0
+        for rule_filter, rule_operator, rule_value in rule_tuples:
+            # Set the FILTER
+            form_field = self.selenium.find_element_by_name(
+                'builder_rule_{0}_filter'.format(idx)
+            )
+            form_field.click()
+            form_field.select_by_visible_text(rule_filter)
+
+            # Set the operator
+            form_field = self.selenium.find_element_by_name(
+                "builder_rule_{0}_operator".format(idx)
+            )
+            form_field.click()
+            Select(form_field.select_by_visible_text(rule_operator))
+
+            # Set the value
+            form_item = self.selenium.find_element_by_name(
+                "builder_rule_{0}_value_0".format(idx)
+            )
+            form_item.click()
+            form_item.clear()
+            form_item.send_keys(rule_value)
+            idx += 1
+
+        # Save the condition
+        self.selenium.find_element_by_xpath(
+            "//div[@id='modal-item']//button[@type='submit']"
+        ).click()
+        self.wait_close_modal_refresh_table('html-editor')
