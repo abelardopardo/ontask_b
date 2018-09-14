@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from action.models import Condition
+from action.models import Condition, Action
 from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
@@ -120,6 +120,10 @@ def save_attribute_form(request, workflow, template, form, key_idx):
     if key_idx != -1:
         key = sorted(wf_attributes.keys())[key_idx]
         wf_attributes.pop(key)
+
+        # Rename the appearances of the variable in all actions
+        for action_item in Action.objects.filter(workflow=workflow):
+            action_item.rename_variable(key, form.cleaned_data['key'])
 
     # Update value
     wf_attributes[form.cleaned_data['key']] = form.cleaned_data['value']
