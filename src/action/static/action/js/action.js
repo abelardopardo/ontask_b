@@ -13,8 +13,8 @@ function insertAtCaret(areaId, text) {
     txtarea.scrollTop = scrollPos;
 }
 var insertText = function(areaId, insert_text) {
-  if (typeof $(areaId).summernote != 'undefined') {
-    $(areaId).summernote('editor.insertText', insert_text);
+  if (typeof $('#' + areaId).summernote != 'undefined') {
+    $('#' + areaId).summernote('editor.insertText', insert_text);
   } else {
     insertAtCaret(areaId, insert_text);
   }
@@ -34,14 +34,14 @@ var insertConditionInContent = function() {
   }
   insert_text = "{% if " + btn.attr('data-name') +
       " %}" + condition_text + "{% endif %}";
-  insertText('#id_content', insert_text);
+  insertText('id_content', insert_text);
 };
 var insertAttributeInContent = function() {
   var val = $(this).val();
   if (val == '') {
     return;
   }
-  insertText('#id_content', "{{ " + val + " }}");
+  insertText('id_content', "{{ " + val + " }}");
   $(this).val(this.defaultSelected);
 }
 var insertColumnInActionIn = function () {
@@ -56,15 +56,15 @@ var insertColumnInActionIn = function () {
     success: function (data) {
       if (typeof data.html_redirect != 'undefined') {
         location.href = data.html_redirect;
+      } else {
+        $('#div-spinner').hide();
       }
       sel.children("option[value='']").remove();
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      $('#div-spinner').show();
       location.reload(true);
     }
   });
-  $('#div-spinner').hide();
 }
 var toggleShuffleQuestion = function () {
   $('#div-spinner').show();
