@@ -26,7 +26,7 @@
       <strong>{% trans 'Subject:' %}</strong> {{ prelude }}
     </div>
   {% endif %}
-  <div class="modal-body"
+  <div id="preview-body" class="modal-body"
        style="text-align: left; border: solid 1px black;margin: 0 2ex 2ex 2ex;">
     {% if action.action_type == 'personalized_json' %}
       <pre>{{ action_content }}</pre>
@@ -35,7 +35,7 @@
     {% endif %}
   </div>
   {% if action.is_out and show_values %}
-    <div class="modal-body"
+    <div id="preview-variables" class="modal-body"
          style="text-align: left; border: solid 1px black;margin: 0 2ex 2ex 2ex;">
       <strong>{% trans 'Values:' %}</strong> {{ show_values }}
     </div>
