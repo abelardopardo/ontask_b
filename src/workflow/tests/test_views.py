@@ -48,8 +48,15 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         # Create the workflow
         self.create_new_workflow(test.wflow_name, test.wflow_desc)
 
-        # Go to the CSV upload step 1
-        self.go_to_csv_upload_merge_step_1()
+        # Go to CSV Upload/Merge
+        self.selenium.find_element_by_xpath(
+            "//tbody/tr[1]/td[1]/a[1]"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//form")
+            )
+        )
 
         # Set the file name
         self.selenium.find_element_by_id('id_file').send_keys(
@@ -132,9 +139,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
                          'datetime')
 
         # Number of key columns
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-area']/p[@class='help-block']/mark").text,
-                         '3 Key columns')
+        self.assertIn('3 Key columns', self.selenium.page_source)
 
         # Go to CSV Upload/Merge Step 1
         self.go_to_csv_upload_merge_step_1()
@@ -219,9 +224,8 @@ class WorkflowInitial(test.OntaskLiveTestCase):
                          'string')
 
         # Number of key columns
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-area']/p[@class='help-block']/mark").text,
-                         '3 Key columns')
+        self.assertIn('3 Key columns', self.selenium.page_source)
+
         # End of session
         self.logout()
 
@@ -241,7 +245,14 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         self.create_new_workflow(test.wflow_name, test.wflow_desc)
 
         # Go to the CSV upload step 1
-        self.go_to_csv_upload_merge_step_1()
+        self.selenium.find_element_by_xpath(
+            "//tbody/tr[1]/td[1]/a[1]"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//form")
+            )
+        )
 
         # Set the file name
         self.selenium.find_element_by_id('id_file').send_keys(
@@ -318,14 +329,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
         self.access_workflow_from_home_page(test.wflow_name)
 
         # Edit the age column
-        self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[1]/td[5]/div/button[1]"
-        ).click()
-        self.selenium.find_element_by_class_name(
-            'js-workflow-column-edit').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'modal-title'))
-        )
+        self.open_column_edit('age')
 
         # Untick the is_key option
         is_key = self.selenium.find_element_by_id('id_is_key')
@@ -397,12 +401,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
         self.access_workflow_from_home_page(test.wflow_name)
 
         # Edit the another column and change the name
-        element = self.search_table_row_by_string('column-table', 2, 'another')
-        element.find_element_by_xpath("td[5]/div/button[1]").click()
-        element.find_element_by_xpath("td[5]/div/ul/li[1]/button").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'modal-title'))
-        )
+        self.open_column_edit('another')
 
         # Change the name of the column
         self.selenium.find_element_by_id('id_name').send_keys('2')
@@ -432,9 +431,9 @@ class WorkflowModify(test.OntaskLiveTestCase):
             "//h4[@id='filter-set']/div/button"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']//h4[@class='modal-title']"),
-                 'Create action filter')
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[@id='modal-item']//form")
+            )
         )
 
         # Select the another2 column (with new name

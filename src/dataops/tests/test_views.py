@@ -131,55 +131,29 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         select = Select(self.selenium.find_element_by_id(
             'select-column-name'))
         select.select_by_visible_text('!#$%&()*+,-./:;<=>?@[\]^_`{|}~2')
-        time.sleep(2)
-        # # Table disappears (page is updating)
-        # WebDriverWait(self.selenium, 10).until_not(
-        #     EC.presence_of_element_located(
-        #         (By.ID, 'column-selected-table_previous')
-        #     )
-        # )
-        # Table appears (page refreshed)
+        self.wait_for_datatable('column-selected-table_previous')
+        # Wait for the table to be refreshed
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
                 (By.ID, 'column-selected-table_previous')
             )
         )
+
         select = Select(self.selenium.find_element_by_id(
             'select-key-column-name'))
         select.select_by_visible_text('sid')
-        # Table disappears (page is updating)
-        # WebDriverWait(self.selenium, 10).until_not(
-        #     EC.presence_of_element_located(
-        #         (By.ID, 'column-selected-table_previous')
-        #     )
-        # )
-        time.sleep(2)
-        # Table appears (page refreshed)
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.ID, 'column-selected-table_previous')
-            )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
         select = Select(self.selenium.find_element_by_id(
             'select-key-column-name'))
         select.select_by_visible_text('email')
-        # Table disappears (page is updating)
         WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.ID, 'column-selected-table_previous')
-            )
-        )
-        # Table appears (page refreshed)
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.ID, 'column-selected-table_previous')
-            )
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
         # Save action-in
         self.selenium.find_element_by_link_text('Done').click()
-
-        # Wait for action page
         self.wait_for_datatable('action-table_previous')
 
         # Click in the RUN link of the action in
@@ -319,17 +293,13 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         ))
         select.select_by_visible_text('email' + symbols)
         # This wait is incorrect. Don't know how to wait for an AJAX call.
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME,
-                                        'js-workflow-column-edit'))
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
         # Done editing the action in
         self.selenium.find_element_by_link_text('Done').click()
-        # Wait for paging widget
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'action-table_previous'))
-        )
+        self.wait_for_datatable('action-table_previous')
 
         # Click in the run link
         self.open_action_run('action in')
@@ -409,7 +379,7 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
         self.login('instructor1@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page('wflow1')
+        self.access_workflow_from_home_page('wflow1', False)
 
         # Go to Excel upload/merge
         self.go_to_excel_upload_merge_step_1()
@@ -504,8 +474,15 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
 
         self.create_new_workflow('NaN')
 
-        # Go to CSV upload
-        self.go_to_csv_upload_merge_step_1()
+        # Go to CSV Upload/Merge
+        self.selenium.find_element_by_xpath(
+            "//tbody/tr[1]/td[1]/a[1]"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//form")
+            )
+        )
 
         # Select file and upload
         self.selenium.find_element_by_id("id_file").send_keys(

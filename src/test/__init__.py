@@ -161,7 +161,9 @@ class OntaskLiveTestCase(LiveServerTestCase):
         self.selenium.find_element_by_id('submit-id-sign_in').click()
         # Wait for the user profile page
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is("OnTask :: Workflows")
+            EC.visibility_of_element_located(
+                (By.XPATH, "//a[normalize-space()='Import workflow']")
+            )
         )
 
         self.assertIn('Open or create a workflow', self.selenium.page_source)
@@ -224,6 +226,9 @@ class OntaskLiveTestCase(LiveServerTestCase):
     def search_action(self, action_name):
         return self.search_table_row_by_string('action-table', 1, action_name)
 
+    def search_column(self, column_name):
+        return self.search_table_row_by_string('column-table', 2, column_name)
+
     def create_new_workflow(self, wname, wdesc=''):
         # Create the workflow
         self.selenium.find_element_by_class_name(
@@ -238,7 +243,9 @@ class OntaskLiveTestCase(LiveServerTestCase):
         desc.send_keys(Keys.RETURN)
 
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Data Upload/Merge')
+            EC.visibility_of_element_located(
+                (By.XPATH, "//table[@id='dataops-table']")
+            )
         )
 
     def access_workflow_from_home_page(self, wname, wait=True):
@@ -258,9 +265,11 @@ class OntaskLiveTestCase(LiveServerTestCase):
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Manage table data']"
         ).click()
-        self.selenium.find_element_by_link_text('Upload or merge data')
+        self.selenium.find_element_by_link_text('Upload or merge data').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Data Upload/Merge')
+            EC.visibility_of_element_located(
+                (By.XPATH, "//table[@id='dataops-table']")
+            )
         )
 
     def go_to_csv_upload_merge_step_1(self):
@@ -271,7 +280,9 @@ class OntaskLiveTestCase(LiveServerTestCase):
             "//tbody/tr[1]/td[1]/a[1]"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Upload/Merge CSV')
+            EC.visibility_of_element_located(
+                (By.XPATH, "//form")
+            )
         )
 
     def go_to_excel_upload_merge_step_1(self):
@@ -282,7 +293,9 @@ class OntaskLiveTestCase(LiveServerTestCase):
             "//tbody/tr[2]/td[1]/a[1]"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Upload/Merge Excel')
+            EC.visibility_of_element_located(
+                (By.XPATH, "//form")
+            )
         )
 
     def go_to_transform(self):
@@ -294,7 +307,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
 
     def go_to_attribute_page(self):
         self.selenium.find_element_by_xpath(
-            "//buton[normalize-space()='More workflow operations']"
+            "//button[normalize-space()='More workflow operations']"
         ).click()
         self.selenium.find_element_by_link_text('Workflow attributes').click()
         WebDriverWait(self.selenium, 10).until(
@@ -304,7 +317,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
     def go_to_share(self):
         # Click on the share
         self.selenium.find_element_by_xpath(
-            "//buton[normalize-space()='More workflow operations']"
+            "//button[normalize-space()='More workflow operations']"
         ).click()
         self.selenium.find_element_by_link_text('Share workflow').click()
         WebDriverWait(self.selenium, 10).until(
@@ -351,23 +364,23 @@ class OntaskLiveTestCase(LiveServerTestCase):
 
         # Click on the Submit button
         self.selenium.find_element_by_xpath(
-            "//buton[normalize-space()='Add column']"
+            "//div[@id='modal-item']//button[normalize-space()='Add column']"
         ).click()
         self.wait_close_modal_refresh_table('column-table_previous')
 
     def delete_column(self, col_name):
         element = self.search_table_row_by_string('column-table', 2, col_name)
         element.find_element_by_xpath(
-            "button[normalize-space()='More Operations']"
+            "td//button[normalize-space()='More Operations']"
         ).click()
         element.find_element_by_xpath(
-            "button[normalize-space()='Delete this column']"
+            "td//button[normalize-space()='Delete this column']"
         ).click()
 
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//form/div/h4[@class='modal-title']"),
-                'Confirm column deletion')
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[@id='modal-item']//form")
+            )
         )
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']//button[@type='submit']"
@@ -513,7 +526,23 @@ class OntaskLiveTestCase(LiveServerTestCase):
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']//button[@type='submit']"
         ).click()
-        self.wait_close_modal_refresh_table('html-editor')
+
+        # Close modal (wail until the modal-open element disappears)
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
+        # Preview button clickable
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//button[contains(@class, 'js-action-preview')]"),
+            )
+        )
+        # Spinner not visible
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
 
     def open_add_regular_column(self):
         # Click on the Add Column button
@@ -526,7 +555,9 @@ class OntaskLiveTestCase(LiveServerTestCase):
             "//button[normalize-space()='Regular column']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'modal-open'))
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[@id='modal-item']//form")
+            )
         )
 
     def open_add_derived_column(self):
@@ -540,15 +571,23 @@ class OntaskLiveTestCase(LiveServerTestCase):
             "//button[normalize-space()='Formula-derived column']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'modal-open'))
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[@id='modal-item']//form")
+            )
         )
 
     def open_column_edit(self, name):
-        row = self.search_table_row_by_string('column-table', 2, name)
-        row.find_element_by_xpath("td[5]/div/button").click()
-        row.find_element_by_xpath("td[5]/div/ul/li[1]/button").click()
+        row = self.search_column(name)
+        row.find_element_by_xpath(
+            "td//button[normalize-space()='More Operations']"
+        ).click()
+        row.find_element_by_xpath(
+            "td//button[normalize-space()='Edit column']"
+        ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located((By.ID, 'id_name'))
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[@id='modal-item']//form")
+            )
         )
 
     def open_action_edit(self, name):
@@ -571,7 +610,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
         # Wait for the modal to appear
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
+                (By.ID, "preview-body")
             )
         )
 
@@ -579,6 +618,12 @@ class OntaskLiveTestCase(LiveServerTestCase):
             self.selenium.find_element_by_xpath(
                 "//div[@id='modal-item']/div/div/div/div[2]/button[3]/span"
             ).click()
+            # Wait for the modal to appear
+            WebDriverWait(self.selenium, 10).until(
+                EC.presence_of_element_located(
+                    (By.ID, "preview-body")
+                )
+            )
 
         if close:
             self.selenium.find_element_by_xpath(
@@ -634,5 +679,40 @@ class OntaskLiveTestCase(LiveServerTestCase):
         # Click in the "delete filter"
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']//button[normalize-space()='Delete filter']"
+        ).click()
+        self.wait_close_modal_refresh_table('html-editor')
+
+    def delete_condition(self, cname):
+        """
+        Given a condition name, search for it in the right DIV and click the
+        buttons to remove it.
+        :param cname: Condition name
+        :return:
+        """
+        # Get the button for the condition
+        element = self.selenium.find_element_by_xpath(
+            "//div[@id='condition-set']/div/div/button[normalise-space()='{0}'".format(cname)
+        )
+        # Get the arrow element
+        element = self.selenium.find_element_by_xpath('..')
+        element.find_element_by_xpath('button[2]').click()
+        element.click()
+
+        # Click in the delete button
+        element.find_element_by_xpath(
+            "ul/li/button[normalize-space()='Delete']"
+        ).click()
+
+        # Wait for the screen to delete the filter
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
+                'Confirm condition deletion')
+        )
+
+        # Click in the "delete filter"
+        self.selenium.find_element_by_xpath(
+            "//div[@id='modal-item']//button[normalize-space()='Delete "
+            "condition']"
         ).click()
         self.wait_close_modal_refresh_table('html-editor')
