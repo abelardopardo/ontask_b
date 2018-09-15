@@ -114,7 +114,6 @@ class ActionTable(tables.Table):
 
         row_attrs = {
             'style': 'text-align:center;',
-            'class': lambda record: 'success' if record['is_out'] else ''
         }
 
 
@@ -220,7 +219,9 @@ def save_action_form(request, form, template_name):
                 'action:edit', kwargs={'pk': action_item.id}
             )
         elif action_item.action_type == Action.PERSONALIZED_JSON:
-            data['html_redirect'] = reverse('action:index')
+            data['html_redirect'] = reverse(
+                'action:edit', kwargs={'pk': action_item.id}
+            )
         elif action_item.action_type == Action.SURVEY:
             data['html_redirect'] = reverse(
                 'action:edit', kwargs={'pk': action_item.id}
@@ -764,12 +765,14 @@ def select_column_action(request, apk, cpk, key=None):
     if key:
         current_key = action.columns.filter(is_key=True).first()
         if current_key:
+            # Remove the existing one
             action.columns.remove(current_key)
         if column.is_key:
             action.columns.add(column)
-    else:
-        action.columns.add(column)
+        return JsonResponse({})
 
+    action.columns.add(column)
+    # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})
 
 
