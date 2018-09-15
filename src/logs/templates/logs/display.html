@@ -43,7 +43,7 @@
 {% block container %}
 <div align="center" class="container">
   <h1 class="page-header">{% trans 'Logs' %}<super>*</super></h1>
-  <div class="container" id="csv-download">
+  <div class="container" id="log-table-page">
     <a href="{% url 'logs:export' workflow.id %}" download
        class="btn btn-primary btn-sm js-logs-download"
        data-toggle="tooltip"
