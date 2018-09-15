@@ -237,18 +237,19 @@ td.dt-body-center {
     }
 
 table td,
-#table-data td,
 #actioninrun-data td,
-#workflow-table td,
 #action-table td,
-#log-table td,
-#scheduler-table td,
+#attribute-table td,
 #column-selected-table td,
 #column-table td,
-#view-table td,
-#transform-table td,
+#log-table td,
+#scheduler-table td,
+#sqlconn-table td,
+#table-data td,
 #transform-diagnostics-table td,
-#sqlconn-table td {
+#transform-table td,
+#view-table td,
+#workflow-table td {
     vertical-align: middle;
 }
 

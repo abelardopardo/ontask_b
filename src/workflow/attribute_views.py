@@ -36,6 +36,10 @@ class AttributeTable(tables.Table):
             'id': 'attribute-table'
         }
 
+        row_attrs = {
+            'style': 'text-align:center;',
+        }
+
 
 @user_passes_test(is_instructor)
 def attributes(request):

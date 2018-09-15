@@ -45,11 +45,6 @@
                       {"orderable": false, "targets": "_all"},
                       {"searchable": false, "targets": "operations"},
                   ],
-                  "createdRow": function(row, data, dataIndex) {
-                      if (data['key'] == '<span class="true">✔</span>') {
-                        $(row).addClass('success');
-                      }
-                  },
                   "drawCallback": function(settings) {
                      // Needed to enable tooltips in ajax produced content
                      $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
@@ -62,10 +57,10 @@
 {% endblock %}
 {% block title %}{{ block.super }}{% trans 'Details' %}{% endblock %}
 {% block container %}
-<div class="container-fluid text-center">
+<div class="container text-center">
   <h1 class="page-header">{{ workflow.name }}</h1>
   {% if workflow %}
-    <div style="display: inline-block;" id="workflow-area">
+    <div class="container" id="workflow-area">
       {% if not table_info %}
         {% include 'workflow/includes/no_data.html' %}
       {% elif not table_info.num_actions %}
@@ -80,7 +75,7 @@
         <p class="help-block">
           {% blocktrans with num=table_info.num_rows count counter=table_info.num_rows %}{{ num }} row{% plural %}{{ num }} rows,{% endblocktrans %}
           {% blocktrans with num=table_info.num_cols count counter=table_info.num_cols %}{{ num }} column{% plural %}{{ num }} columns{% endblocktrans %}
-          (<mark>{% blocktrans with num=num_key_columns count counter=num_key_columns %}{{ num }} Key column{% plural %}{{ num }} Key columns{% endblocktrans %}</mark>),
+          ({% blocktrans with num=num_key_columns count counter=num_key_columns %}{{ num }} Key column{% plural %}{{ num }} Key columns{% endblocktrans %}),
           {% blocktrans with num=table_info.num_actions count counter=table_info.num_actions %}{{ num }} action{% plural %}{{ num }} actions,{% endblocktrans %}
           {% blocktrans with num=table_info.num_attributes count counter=table_info.num_attributes %}{{ num }} attribute{% plural %} {{ num }} attributes{% endblocktrans %}.
         <h4 class="modal-title">Columns</h4>

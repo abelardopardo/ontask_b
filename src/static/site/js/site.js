@@ -92,6 +92,7 @@ var saveForm = function () {
       data.push({'name': 'action_content',
                  'value': value});
     }
+    $("#modal-item .modal-content").html('');
     $.ajax({
       url: form.attr("action"),
       data: data,
