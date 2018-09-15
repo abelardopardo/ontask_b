@@ -35,6 +35,7 @@ var get_id_content = function() {
   return value;
 }
 var loadForm = function () {
+    $("#modal-item .modal-content").html('');
     var btn = $(this);
     if ($(this).is('[class*="disabled"]')) {
       return;
