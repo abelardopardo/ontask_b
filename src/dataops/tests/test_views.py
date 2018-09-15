@@ -38,7 +38,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         symbols = '!#$%&()*+,-./:;<=>?@[\]^_`{|}~'
 
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # Go to the details page
         self.access_workflow_from_home_page('sss')
@@ -165,7 +165,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         )
 
         # Enter data using the RUN menu. Select one entry to populate
-        self.selenium.find_element_by_link_text("student1@bogus.com").click()
+        self.selenium.find_element_by_link_text("student01@bogus.com").click()
         self.selenium.find_element_by_id("id____ontask___select_2").click()
         self.selenium.find_element_by_id("id____ontask___select_2").clear()
         self.selenium.find_element_by_id("id____ontask___select_2").send_keys(
@@ -241,7 +241,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         symbols = '!#$%&()*+,-./:;<=>?@[\]^_`{|}~'
 
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page('sss')
@@ -305,7 +305,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.open_action_run('action in')
 
         # Click on the first value
-        self.selenium.find_element_by_link_text("student1@bogus.com").click()
+        self.selenium.find_element_by_link_text("student01@bogus.com").click()
 
         # Modify the value of the column
         self.selenium.find_element_by_id("id____ontask___select_1").click()
@@ -320,7 +320,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.wait_for_datatable('actioninrun-data_previous')
 
         # Click on the second value
-        self.selenium.find_element_by_link_text("student2@bogus.com").click()
+        self.selenium.find_element_by_link_text("student02@bogus.com").click()
 
         # Modify the value of the column
         self.selenium.find_element_by_id("id____ontask___select_1").clear()
@@ -334,7 +334,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.wait_for_datatable('actioninrun-data_previous')
 
         # Click on the third value
-        self.selenium.find_element_by_link_text("student3@bogus.com").click()
+        self.selenium.find_element_by_link_text("student03@bogus.com").click()
 
         # Modify the value of the column
         self.selenium.find_element_by_id("id____ontask___select_1").click()
@@ -376,7 +376,7 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
 
     def test_01_excelupload(self):
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page('wflow1', False)
@@ -420,7 +420,7 @@ class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
 
     def test_01_excelupload_sheet(self):
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page('wflow1', False)
@@ -470,7 +470,7 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
 
     def test_01_nan_manipulation(self):
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         self.create_new_workflow('NaN')
 
@@ -587,7 +587,7 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
 
     def test_01_first_plugin(self):
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page('Plugin test')
@@ -694,7 +694,7 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
 
     def test_02_second_plugin(self):
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page('Plugin test')

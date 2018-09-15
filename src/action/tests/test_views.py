@@ -41,7 +41,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
     # Test operations with the filter
     def test_action_01_filter(self):
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page(self.wflow_name)
@@ -179,7 +179,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
     # Test operations with the conditions and the email preview
     def test_action_02_condition(self):
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page(self.wflow_name)
@@ -233,7 +233,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
     # Test send_email operation
     def test_action_03_send_email(self):
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page(self.wflow_name)
@@ -295,7 +295,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
 
     def test_action_04_save_action_with_buttons(self):
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page(self.wflow_name)
@@ -453,7 +453,7 @@ class ActionActionInCreate(test.OntaskLiveTestCase):
     # Test operations with the filter
     def test_action_01_data_entry(self):
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page(self.wflow_name)
@@ -501,11 +501,11 @@ class ActionActionInCreate(test.OntaskLiveTestCase):
         element.find_element_by_link_text("Run").click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.LINK_TEXT, "student2@bogus.com")
+                (By.LINK_TEXT, "student02@bogus.com")
             )
         )
         # Enter data for the remaining user
-        self.selenium.find_element_by_link_text("student2@bogus.com").click()
+        self.selenium.find_element_by_link_text("student02@bogus.com").click()
         # Mark as registered
         self.selenium.find_element_by_id("id____ontask___select_1").click()
         # Submit form
@@ -589,7 +589,7 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
         self.assertTrue(has_variable(filter_obj.formula, 'age'))
 
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # Go to the details page
         self.access_workflow_from_home_page(self.wflow_name)

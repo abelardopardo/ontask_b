@@ -21,12 +21,12 @@ from ontask.permissions import group_names
 
 # email, [groups], Superuser?
 user_info = [
-    ('Student One', 'student1@bogus.com', [group_names[0]], False),
-    ('Student Two', 'student2@bogus.com', [group_names[0]], False),
-    ('Student Three', 'student3@bogus.com', [group_names[0]], False),
-    ('Instructor One', 'instructor1@bogus.com', [group_names[1]], False),
-    ('Instructor Two', 'instructor2@bogus.com', [group_names[1]], False),
-    ('Instructor Three', 'instructor3@bogus.com', [group_names[1]], False),
+    ('Student One', 'student01@bogus.com', [group_names[0]], False),
+    ('Student Two', 'student02@bogus.com', [group_names[0]], False),
+    ('Student Three', 'student03@bogus.com', [group_names[0]], False),
+    ('Instructor One', 'instructor01@bogus.com', [group_names[1]], False),
+    ('Instructor Two', 'instructor02@bogus.com', [group_names[1]], False),
+    ('Instructor Three', 'instructor03@bogus.com', [group_names[1]], False),
     ('Super User', 'superuser@bogus.com', group_names, True)]
 
 boguspwd = 'boguspwd'
@@ -134,6 +134,13 @@ class OntaskApiTestCase(APITransactionTestCase):
 
 
 class OntaskLiveTestCase(LiveServerTestCase):
+
+    xpath = ''
+    screenshot_filename = ''
+
+    def element_ss(self):
+        pass
+
     @classmethod
     def setUpClass(cls):
         super(OntaskLiveTestCase, cls).setUpClass()
@@ -162,9 +169,10 @@ class OntaskLiveTestCase(LiveServerTestCase):
         # Wait for the user profile page
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
-                (By.XPATH, "//a[normalize-space()='Import workflow']")
+                (By.XPATH, "//table[@id='workflow-table']/tbody/tr/td")
             )
         )
+        self.element_ss()
 
         self.assertIn('Open or create a workflow', self.selenium.page_source)
 
@@ -240,6 +248,10 @@ class OntaskLiveTestCase(LiveServerTestCase):
         self.selenium.find_element_by_id('id_name').send_keys(wname)
         desc = self.selenium.find_element_by_id('id_description_text')
         desc.send_keys(wdesc)
+
+        # Take picture of the modal
+        self.element_ss()
+
         desc.send_keys(Keys.RETURN)
 
         WebDriverWait(self.selenium, 10).until(
@@ -260,6 +272,31 @@ class OntaskLiveTestCase(LiveServerTestCase):
 
         if wait:
             self.wait_for_datatable('column-table_previous')
+        self.element_ss()
+
+    def go_to_details(self):
+        # Goto the details page
+        self.selenium.find_element_by_link_text('Details').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'workflow-area'))
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
+        self.element_ss()
+        self.assertIn('More workflow operations', self.selenium.page_source)
+
+    def go_to_sql_connections(self):
+        # Goto the details page
+        self.selenium.find_element_by_link_text('SQL connections').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'sqlconn-table'))
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
+        self.element_ss()
+        self.assertIn('New SQL connection', self.selenium.page_source)
 
     def go_to_upload_merge(self):
         self.selenium.find_element_by_xpath(
@@ -313,8 +350,9 @@ class OntaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'js-attribute-create')))
+        self.element_ss()
 
-    def go_to_share(self):
+    def go_to_workflow_share(self):
         # Click on the share
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='More workflow operations']"
@@ -323,6 +361,72 @@ class OntaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'js-share-create')))
+        self.element_ss()
+
+    def go_to_workflow_export(self):
+        # Click on the share
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='More workflow operations']"
+        ).click()
+        self.selenium.find_element_by_link_text('Export workflow').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, '//form')))
+        self.element_ss()
+
+    def go_to_workflow_rename(self):
+        # Click on the share
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='More workflow operations']"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Rename workflow']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[@id='modal-item']//form")
+            )
+        )
+        WebDriverWait(self.selenium, 10).until(
+            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
+        )
+        self.element_ss()
+
+    def go_to_workflow_flush(self):
+        # Click on the share
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='More workflow operations']"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Flush data table']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[@id='modal-item']//form")
+            )
+        )
+        WebDriverWait(self.selenium, 10).until(
+            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
+        )
+        self.element_ss()
+
+    def go_to_workflow_delete(self):
+        # Click on the share
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='More workflow operations']"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Delete workflow']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[@id='modal-item']//form")
+            )
+        )
+        WebDriverWait(self.selenium, 10).until(
+            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
+        )
+        self.element_ss()
 
     def go_to_actions(self):
         # Goto the action page
@@ -559,6 +663,10 @@ class OntaskLiveTestCase(LiveServerTestCase):
                 (By.XPATH, "//div[@id='modal-item']//form")
             )
         )
+        WebDriverWait(self.selenium, 10).until(
+            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
+        )
+        self.element_ss()
 
     def open_add_derived_column(self):
         # Click on the Add Column button
@@ -588,6 +696,9 @@ class OntaskLiveTestCase(LiveServerTestCase):
             EC.presence_of_element_located(
                 (By.XPATH, "//div[@id='modal-item']//form")
             )
+        )
+        WebDriverWait(self.selenium, 10).until(
+            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
         )
 
     def open_action_edit(self, name):
@@ -703,16 +814,35 @@ class OntaskLiveTestCase(LiveServerTestCase):
             "ul/li/button[normalize-space()='Delete']"
         ).click()
 
-        # Wait for the screen to delete the filter
+        # Wait for the screen to delete the condition
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
                 'Confirm condition deletion')
         )
 
-        # Click in the "delete filter"
+        # Click in the "delete condition"
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']//button[normalize-space()='Delete "
             "condition']"
         ).click()
         self.wait_close_modal_refresh_table('html-editor')
+
+
+class element_has_full_opacity(object):
+    """
+    Detect when an element has opacity equal to 1
+
+    locator - used to find the element
+    returns the WebElement once opacity is equal to 1
+    """
+
+    def __init__(self, locator):
+        self.locator = locator
+
+    def __call__(self, driver):
+        element = driver.find_element(*self.locator)
+        if element.value_of_css_property('opacity') == '1':
+            return element
+        else:
+            return False

@@ -41,9 +41,9 @@ ALTER TABLE "__ONTASK_WORKFLOW_TABLE_149" OWNER TO ontask;
 --
 
 COPY "__ONTASK_WORKFLOW_TABLE_149" (email, sid, age, name, registered, "when") FROM stdin;
-student1@bogus.com	1	12	Carmelo Coton	t	2017-10-11 00:33:44
-student2@bogus.com	2	12.0999999999999996	Carmelo Coton	f	2017-10-11 00:32:44
-student3@bogus.com	3	13.1999999999999993	Carmelo Coton22	t	2017-10-11 00:32:44
+student01@bogus.com	1	12	Carmelo Coton	t	2017-10-11 00:33:44
+student02@bogus.com	2	12.0999999999999996	Carmelo Coton	f	2017-10-11 00:32:44
+student03@bogus.com	3	13.1999999999999993	Carmelo Coton22	t	2017-10-11 00:32:44
 \.
 
 

@@ -118,11 +118,11 @@
         "password": "pbkdf2_sha256$36000$yyR4qJnt4C68$u5UIYoLDOo5z7pJ9LEQ5xE/Wg3nw/cyIzKoh4tkP4ZQ=",
         "last_login": "2017-12-07T04:52:28.393Z",
         "is_superuser": false,
-        "email": "student1@bogus.com",
+        "email": "student01@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-12T19:44:27.631Z",
-        "name": "student1@bogus.com",
+        "name": "student01@bogus.com",
         "groups": [],
         "user_permissions": []
     }
@@ -134,11 +134,11 @@
         "password": "pbkdf2_sha256$36000$udn5nz4eFAvU$hj5La0k48upa6trsCv9TOb2LFOM6Iad3gv5Z8r2OtZ8=",
         "last_login": "2017-12-06T02:59:02.719Z",
         "is_superuser": false,
-        "email": "student2@bogus.com",
+        "email": "student02@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-12T19:44:33.927Z",
-        "name": "student2@bogus.com",
+        "name": "student02@bogus.com",
         "groups": [],
         "user_permissions": []
     }
@@ -150,7 +150,7 @@
         "password": "pbkdf2_sha256$36000$7IWHqHRmEqHJ$MACKzkY9ez1AP8w+m6vBWJDgnBB63qiZ8ltnHRgp9DA=",
         "last_login": "2017-12-21T09:57:47.744Z",
         "is_superuser": false,
-        "email": "instructor1@bogus.com",
+        "email": "instructor01@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-13T10:44:13.687Z",
@@ -170,7 +170,7 @@
         "password": "pbkdf2_sha256$36000$Vi2lBnr5h5ee$awxW9s042y23fISIZHks3h1hHieogLXXroObZsqGv0c=",
         "last_login": "2017-11-30T10:14:47.997Z",
         "is_superuser": false,
-        "email": "instructor2@bogus.com",
+        "email": "instructor02@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-13T10:44:13.724Z",
@@ -190,7 +190,7 @@
         "password": "pbkdf2_sha256$36000$QW3s2sNU1cL2$C/soQ1isU0Ogiehr627viw0zHugND6IyrTb/C1JrcXs=",
         "last_login": null,
         "is_superuser": false,
-        "email": "instructor3@bogus.com",
+        "email": "instructor03@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-13T10:44:13.739Z",
@@ -787,7 +787,7 @@
     "pk": 149,
     "fields": {
         "user": [
-            "instructor1@bogus.com"
+            "instructor01@bogus.com"
         ],
         "name": "sss",
         "description_text": "",

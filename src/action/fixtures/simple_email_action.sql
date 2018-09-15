@@ -41,9 +41,9 @@ CREATE TABLE public."__ONTASK_WORKFLOW_TABLE_5" (
 --
 
 COPY public."__ONTASK_WORKFLOW_TABLE_5" (age, email, sid, "EmailRead_1", another, name, one, registered, "when") FROM stdin;
-12	student1@bogus.com	1	0	bbb	Carmelo Coton	aaa	t	2017-10-11 00:33:44
-12.0999999999999996	student2@bogus.com	2	0	aaa	Carmelo Coton	bbb	f	2017-10-11 00:32:44
-13.1999999999999993	student3@bogus.com	3	0	bbb	Carmelo Coton2	aaa	t	2017-10-11 00:32:44
+12	student01@bogus.com	1	0	bbb	Carmelo Coton	aaa	t	2017-10-11 00:33:44
+12.0999999999999996	student02@bogus.com	2	0	aaa	Carmelo Coton	bbb	f	2017-10-11 00:32:44
+13.1999999999999993	student03@bogus.com	3	0	bbb	Carmelo Coton2	aaa	t	2017-10-11 00:32:44
 \.
 
 

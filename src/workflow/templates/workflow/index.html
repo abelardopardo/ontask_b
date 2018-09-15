@@ -23,34 +23,13 @@
                 },
                 "order": [[0, "asc"]],
                 "language": {
-                    "emptyTable": "{% trans 'No workflows available.' %}",
-                    "url": getLanguage()
+                  "emptyTable": "{% trans 'No workflows available' %}",
+                  "url": getLanguage()
                 },
                 "columnDefs": [
                         {"className": "dt-center", "targets": "_all"}
                 ],
             });
-        });
-    }
-    if (document.getElementById("sqlconn-table") != null) {
-        // Required for DataTables
-        $(document).ready(function() {
-            $('#sqlconn-table').DataTable({
-                "stateSave": true,
-                "search": {
-                  "caseInsensitive": true,
-                },
-                "order": [[0, "asc"]],
-                "language": {
-                    "emptyTable": "{% trans 'No SQL connections defined.' %}",
-                    "url": getLanguage()
-                },
-                "columnDefs": [
-                    {"className": "dt-center", "targets": "_all"},
-                    {"orderable": false, "targets": 10},
-                    {"searchable": false, "targets": 10},
-                ],
-              });
         });
     }
     $('#modal-item').on('hide.bs.modal', function (e) {

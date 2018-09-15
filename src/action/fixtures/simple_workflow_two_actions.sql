@@ -38,9 +38,9 @@ CREATE TABLE public."__ONTASK_WORKFLOW_TABLE_108" (
 --
 
 COPY public."__ONTASK_WORKFLOW_TABLE_108" (age, email, sid, name, registered, "when") FROM stdin;
-12	student1@bogus.com	1	Student One	t	2017-10-10 13:33:44
-12.0999999999999996	student2@bogus.com	2	Student Two	f	2017-10-10 13:32:44
-13.1999999999999993	student3@bogus.com	3	Student Three	t	2017-10-10 13:32:44
+12	student01@bogus.com	1	Student One	t	2017-10-10 13:33:44
+12.0999999999999996	student02@bogus.com	2	Student Two	f	2017-10-10 13:32:44
+13.1999999999999993	student03@bogus.com	3	Student Three	t	2017-10-10 13:32:44
 \.
 
 

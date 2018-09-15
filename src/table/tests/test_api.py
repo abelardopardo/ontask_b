@@ -25,9 +25,9 @@ class TableApiBase(test.OntaskApiTestCase):
     )
 
     new_table = {
-        "email": ["student4@bogus.com",
-                  "student5@bogus.com",
-                  "student6@bogus.com"
+        "email": ["student04@bogus.com",
+                  "student05@bogus.com",
+                  "student06@bogus.com"
                   ],
         "sid": [4, 5, 6],
         "age": [122.0, 122.1, 132.2],
@@ -54,7 +54,7 @@ class TableApiBase(test.OntaskApiTestCase):
     def setUp(self):
         super(TableApiBase, self).setUp()
         # Get the token for authentication and set credentials in client
-        token = Token.objects.get(user__email='instructor1@bogus.com')
+        token = Token.objects.get(user__email='instructor01@bogus.com')
         auth = 'Token ' + token.key
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
         pandas_db.pg_restore_table(self.filename)

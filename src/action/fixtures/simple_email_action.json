@@ -54,7 +54,7 @@
         "password": "pbkdf2_sha256$36000$n34q6KM9uw3J$KqTx4Bc8X1mwZVRZjnTdUfrZ5xC0jN6JYlQ6sWY2yU4=",
         "last_login": null,
         "is_superuser": false,
-        "email": "student1@bogus.com",
+        "email": "student01@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-04T05:32:54.681Z",
@@ -74,7 +74,7 @@
         "password": "pbkdf2_sha256$36000$1dlrxKGpgqOn$+REnnduyx2hgZpqX1q3mhVd6ZDIHTFFT3DvJmsnIfkc=",
         "last_login": null,
         "is_superuser": false,
-        "email": "student2@bogus.com",
+        "email": "student02@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-04T05:32:54.718Z",
@@ -286,7 +286,7 @@
         "password": "pbkdf2_sha256$36000$xaq4GGi9jBBR$936kiJwkHGvAEMiNC/OiI2+fMf+KbK717SwcO27qfhA=",
         "last_login": null,
         "is_superuser": false,
-        "email": "student3@bogus.com",
+        "email": "student03@bogus.com",
         "is_staff": false,
         "is_active": true,
         "date_joined": "2017-11-08T01:29:29.586Z",
@@ -566,7 +566,7 @@
     "pk": "69f58269d85662c4a0ae7150823b6ef850dcecbd",
     "fields": {
         "user": [
-            "student3@bogus.com"
+            "student03@bogus.com"
         ],
         "created": "2017-11-08T01:29:29.744Z"
     }
@@ -616,7 +616,7 @@
     "pk": "bf3069552c2a2ead160ecb2734c6262af99a96e2",
     "fields": {
         "user": [
-            "student1@bogus.com"
+            "student01@bogus.com"
         ],
         "created": "2017-11-08T01:29:29.742Z"
     }
@@ -646,7 +646,7 @@
     "pk": "e8197c046bb9e341d7f173b28e2283a06fcbfe3b",
     "fields": {
         "user": [
-            "student2@bogus.com"
+            "student02@bogus.com"
         ],
         "created": "2017-11-08T01:29:29.743Z"
     }
@@ -2242,7 +2242,7 @@
         "payload": {
             "body": "<p>High age</p><img src=\"https://example.com//trck/?v=eyJhY3Rpb24iOjIsInRvIjoic3R1ZGVudDFAYm9ndXMuY29tIiwiY29sdW1uX2RzdCI6IkVtYWlsUmVhZF8xIiwic2VuZGVyIjoiaWRlc2lnbmVyMUBib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCJ9:1eBtw5:MwH1axNDQq9HpgcP6jRvp7cAFmI\" alt=\"\" \n                    style=\"position:absolute; visibility:hidden\"/>",
             "to_email": [
-                "student1@bogus.com"
+                "student01@bogus.com"
             ],
             "email_sent_datetime": "2017-11-07 13:48:21.940473+11:00",
             "from_email": "idesigner1@bogus.com",
@@ -2266,7 +2266,7 @@
         "payload": {
             "body": "<p>High age</p><img src=\"https://example.com//trck/?v=eyJhY3Rpb24iOjIsInRvIjoic3R1ZGVudDJAYm9ndXMuY29tIiwiY29sdW1uX2RzdCI6IkVtYWlsUmVhZF8xIiwic2VuZGVyIjoiaWRlc2lnbmVyMUBib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCJ9:1eBtw5:FFS1EXjdgJjc37ZVOcW22aIegR4\" alt=\"\" \n                    style=\"position:absolute; visibility:hidden\"/>",
             "to_email": [
-                "student2@bogus.com"
+                "student02@bogus.com"
             ],
             "email_sent_datetime": "2017-11-07 13:48:21.940473+11:00",
             "from_email": "idesigner1@bogus.com",
@@ -2290,7 +2290,7 @@
         "payload": {
             "body": "<p>Low age</p><img src=\"https://example.com//trck/?v=eyJhY3Rpb24iOjIsInRvIjoic3R1ZGVudDNAYm9ndXMuY29tIiwiY29sdW1uX2RzdCI6IkVtYWlsUmVhZF8xIiwic2VuZGVyIjoiaWRlc2lnbmVyMUBib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCJ9:1eBtw5:V0KhNWbcY3YPTfJXRagPaeJae4M\" alt=\"\" \n                    style=\"position:absolute; visibility:hidden\"/>",
             "to_email": [
-                "student3@bogus.com"
+                "student03@bogus.com"
             ],
             "email_sent_datetime": "2017-11-07 13:48:21.940473+11:00",
             "from_email": "idesigner1@bogus.com",

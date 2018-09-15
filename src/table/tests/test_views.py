@@ -37,7 +37,7 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
     def test_table_create_derived_columns(self):
 
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page(self.wflow_name)
@@ -370,7 +370,7 @@ class TableViews(test.OntaskLiveTestCase):
     # Test operations with all derived columns
     def test_table_views(self):
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page(self.wflow_name)
@@ -577,7 +577,7 @@ class TableInsertRow(test.OntaskLiveTestCase):
     # Test operations with all derived columns
     def test_table_insert_row(self):
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page(self.wflow_name)

@@ -22,8 +22,8 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         test.create_users()
 
     def test_00_home_view(self):
-        for uemail, ucode in [('student1@bogus.com', 302),
-                              ('instructor1@bogus.com', 200),
+        for uemail, ucode in [('student01@bogus.com', 302),
+                              ('instructor01@bogus.com', 200),
                               ('superuser@bogus.com', 200)]:
             user_login = self.client.login(email=uemail,
                                            password=test.boguspwd)
@@ -43,7 +43,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         """
 
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # Create the workflow
         self.create_new_workflow(test.wflow_name, test.wflow_desc)
@@ -239,7 +239,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         """
 
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # Create the workflow
         self.create_new_workflow(test.wflow_name, test.wflow_desc)
@@ -323,7 +323,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
         ]
 
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # Go to the details page
         self.access_workflow_from_home_page(test.wflow_name)
@@ -395,7 +395,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
         action_desc = 'action description text'
 
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # Go to the details page
         self.access_workflow_from_home_page(test.wflow_name)
@@ -486,7 +486,7 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         action_desc = 'action description text'
 
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page(test.wflow_name)
@@ -596,7 +596,7 @@ class WorkflowShare(test.OntaskLiveTestCase):
 
     def test_workflow_share(self):
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page(test.wflow_name)
@@ -613,7 +613,7 @@ class WorkflowShare(test.OntaskLiveTestCase):
 
         # Fill out the form
         self.selenium.find_element_by_id('id_user_email').send_keys(
-            'instructor2@bogus.com')
+            'instructor02@bogus.com')
 
         # Click in the share button
         self.selenium.find_element_by_xpath(
@@ -634,7 +634,7 @@ class WorkflowShare(test.OntaskLiveTestCase):
         # Value now should be in the table
         self.search_table_row_by_string('share-table',
                                         1,
-                                        'instructor2@bogus.com')
+                                        'instructor02@bogus.com')
 
         # Click in the create share dialog again
         self.selenium.find_element_by_class_name('js-share-create').click()
@@ -661,7 +661,7 @@ class WorkflowShare(test.OntaskLiveTestCase):
         # Value now should be in the table
         self.search_table_row_by_string('share-table',
                                         1,
-                                        'instructor2@bogus.com')
+                                        'instructor02@bogus.com')
 
         # Click in the save and close
         self.selenium.find_element_by_link_text('Back').click()
@@ -673,7 +673,7 @@ class WorkflowShare(test.OntaskLiveTestCase):
         workflow = Workflow.objects.all()[0]
         self.assertEqual(workflow.shared.all().count(), 2)
         users = workflow.shared.all().values_list('email', flat=True)
-        self.assertTrue('instructor2@bogus.com' in users)
+        self.assertTrue('instructor02@bogus.com' in users)
         self.assertTrue('superuser@bogus.com' in users)
 
         # Go back to the share page
@@ -713,7 +713,7 @@ class WorkflowShare(test.OntaskLiveTestCase):
         workflow = Workflow.objects.all()[0]
         self.assertEqual(workflow.shared.all().count(), 1)
         users = workflow.shared.all().values_list('email', flat=True)
-        self.assertTrue('instructor2@bogus.com' in users)
+        self.assertTrue('instructor02@bogus.com' in users)
 
         # End of session
         self.logout()

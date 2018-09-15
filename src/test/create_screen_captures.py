@@ -14,25 +14,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 import test
 from dataops import pandas_db
-
-
-class element_has_full_opacity(object):
-    """
-    Detect when an element has opacity equal to 1
-
-    locator - used to find the element
-    returns the WebElement once opacity is equal to 1
-    """
-
-    def __init__(self, locator):
-        self.locator = locator
-
-    def __call__(self, driver):
-        element = driver.find_element(*self.locator)
-        if element.value_of_css_property('opacity') == '1':
-            return element
-        else:
-            return False
+from test import element_has_full_opacity
 
 
 class ScreenTests(test.OntaskLiveTestCase):
@@ -43,6 +25,9 @@ class ScreenTests(test.OntaskLiveTestCase):
     description = 'Course on Cell Biology'
     modal_xpath = "//div[@id='modal-item']/div[@class='modal-dialog']/div[" \
                   "@class='modal-content']"
+
+    xpath = ''
+    screenshot_filename = ''
 
     @staticmethod
     def img_path(f):
@@ -70,17 +55,21 @@ class ScreenTests(test.OntaskLiveTestCase):
                 EC.presence_of_element_located((By.ID, element_id))
             )
 
-    def element_ss(self, xpath, fname):
+    def element_ss(self):
         """
-        Take the snapshot of the element given by xpath and stores it in the
-        file with name fname
-        :param xpath: Xpath to access one element of the html page
-        :param fname: file to store the result
+        Take the snapshot of the element with the xpath in the object and to
+        the filename specified in the object.
         :return: Nothing
         """
-        Image.open(StringIO.StringIO(
-            self.selenium.find_element_by_xpath(xpath).screenshot_as_png)
-        ).save(self.img_path(self.prefix + fname))
+
+        if self.xpath and self.screenshot_filename:
+            Image.open(StringIO.StringIO(
+                self.selenium.find_element_by_xpath(
+                    self.xpath
+                ).screenshot_as_png)
+            ).save(self.img_path(self.prefix + self.screenshot_filename))
+            self.xpath = ''
+            self.screenshot_filename = ''
 
     @classmethod
     def setUpClass(cls):
@@ -101,49 +90,21 @@ class ScreenTutorialTest(ScreenTests):
         """
 
         # Login
-        self.login('instructor1@bogus.com')
-
-        # Open Workflows page
-        self.open(reverse('workflow:index'))
-        self.wait_for_page(title='OnTask :: Workflows',
-                           element_id='workflow-table_previous')
-
-        #
-        # Empty list of workflows
-        #
-        self.element_ss("//body", 'workflow_index_empty.png')
+        self.xpath = '//body'
+        self.screenshot_filename = 'workflow_index_empty.png'
+        self.login('instructor01@bogus.com')
 
         #
         # Create new workflow
         #
-        self.selenium.find_element_by_class_name(
-            'js-create-workflow').click()
-        WebDriverWait(self.selenium, 10).until(
-            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
-        )
-        self.selenium.find_element_by_id('id_name').send_keys(
-            self.workflow_name
-        )
-        self.selenium.find_element_by_id(
-            'id_description_text'
-        ).send_keys(self.description)
+        self.xpath = self.modal_xpath
+        self.screenshot_filename = 'workflow_create.png'
+        self.create_new_workflow(self.workflow_name, self.description)
 
-        # Take picture of the modal
-        self.element_ss(self.modal_xpath, 'workflow_create.png')
-
-        # click in the OK button to return
-        self.selenium.find_element_by_xpath(
-            "//button[@type='submit']"
-        ).click()
-        # Wait for the next page to load
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.ID, 'workflow-area')
-            )
-        )
-
-        # Take a picture of the empty details
-        self.element_ss("//body", 'workflow_details_empty.png')
+        #
+        self.xpath = ''
+        self.screenshot_filename = ''
+        self.go_to_details()
 
         # End of session
         self.logout()
@@ -165,11 +126,14 @@ class ScreenImportTest(ScreenTests):
         """
 
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
         # Open Import page
-        self.open(reverse('workflow:import'))
-        self.wait_for_page('OnTask :: Import workflows')
+        self.selenium.find_element_by_link_text('Import workflow').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+                                             'Import workflow')
+        )
 
         #
         # Import workflow
@@ -184,7 +148,8 @@ class ScreenImportTest(ScreenTests):
         )
 
         # Picture of the body
-        self.element_ss("//body", 'workflow_import.png')
+        self.xpath = "//body"
+        self.screenshot_filename = 'workflow_import.png'
 
         # Click the import button
         self.selenium.find_element_by_xpath(
@@ -235,24 +200,18 @@ class ScreenTestFixture(ScreenTests):
 
     def test_sql_admin(self):
         # Login
+        self.xpath = "//body"
+        self.screenshot_filename = 'workflow_superuser_index.png'
         self.login('superuser@bogus.com')
 
-        # Open Workflows page
-        self.open(reverse('workflow:index'))
-        self.wait_for_page(title='OnTask :: Workflows',
-                           element_id='workflow-table_previous')
+        #
+        # Open SQL Connection
+        #
+        self.xpath="//body"
+        self.screenshot_filename = 'workflow_sql_connections_index.png'
+        self.go_to_sql_connections()
 
-        #
-        # List of workflows, navigation
-        #
-        self.element_ss("//body", 'workflow_superuser_index.png')
-
-        #
-        # Ops/Edit column
-        #
-        self.selenium.find_element_by_xpath(
-            "//table[@id='sqlconn-table']/tbody/tr[1]/td[11]/div/button[1]"
-        ).click()
+        # click in the edit element (there is only one)
         self.selenium.find_element_by_class_name(
             'js-sqlconn-edit'
         ).click()
@@ -261,7 +220,9 @@ class ScreenTestFixture(ScreenTests):
         )
 
         # Take picture of the modal
-        self.element_ss(self.modal_xpath, 'workflow_superuser_sql_edit.png')
+        self.xpath = self.modal_xpath
+        self.screenshot_filename = 'workflow_superuser_sql_edit.png'
+        self.element_ss()
 
         # Click in the cancel button
         self.selenium.find_element_by_xpath(
@@ -284,40 +245,29 @@ class ScreenTestFixture(ScreenTests):
         # Login
         self.login('instructor01@bogus.com')
 
-        # Open Workflows page
-        self.open(reverse('workflow:index'))
-        self.wait_for_page(title='OnTask :: Workflows',
-                           element_id='workflow-table_previous')
-
-        #
         # List of workflows, navigation
-        #
-        self.element_ss("//body", 'workflow_index.png')
+        self.xpath = "//body"
+        self.screenshot_filename = 'workflow_index.png'
+        self.element_ss()
 
         #
         # Navigation bar, details
         #
-        self.selenium.find_element_by_link_text(self.workflow_name).click()
-        self.wait_for_page(title='OnTask :: Details',
-                           element_id='column-table_previous')
+        self.xpath = "//body"
+        self.screenshot_filename = 'workflow_details.png'
+        self.access_workflow_from_home_page(self.workflow_name)
 
         # Take picture of the navigation bar
-        self.element_ss("//body/div[3]", 'navigation_bar.png')
-
-        # Take picture of the body
-        self.element_ss("//body", 'workflow_details.png')
+        self.xpath = "//body/div[3]"
+        self.screenshot_filename = 'navigation_bar.png'
+        self.element_ss()
 
         #
         # New column modal
         #
-        self.selenium.find_element_by_class_name(
-            'js-workflow-column-add'
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
-        )
-        # Take picture of the modal
-        self.element_ss(self.modal_xpath, 'workflow_add_column.png')
+        self.xpath = self.modal_xpath
+        self.screenshot_filename = 'workflow_add_column.png'
+        self.open_add_regular_column()
 
         # Click in the cancel button
         self.selenium.find_element_by_xpath(
@@ -333,71 +283,46 @@ class ScreenTestFixture(ScreenTests):
         #
         # Attributes
         #
-        self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-area']/div/button[3]"
-        ).click()
-        self.selenium.find_element_by_link_text('Attributes').click()
-        self.wait_for_page(title='OnTask :: Attributes')
-
-        # Take picture of the attribute page.
-        self.element_ss("//body", 'workflow_attributes.png')
+        self.xpath = "//body"
+        self.screenshot_filename = 'workflow_attributes.png'
+        self.go_to_attribute_page()
 
         # Click back to the details page
-        self.selenium.find_element_by_link_text('Back').click()
-        self.wait_for_page(title='OnTask :: Details',
-                           element_id='column-table_previous')
+        self.go_to_details()
 
         #
         # Share
         #
-        self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-area']/div/button[3]"
-        ).click()
-        self.selenium.find_element_by_link_text('Share').click()
-        self.wait_for_page(title='OnTask :: Share')
-
-        # Take picture of the attribute page.
-        self.element_ss("//body", 'workflow_share.png')
+        self.xpath = '//body'
+        self.screenshot_filename = 'workflow_share.png'
+        self.go_to_workflow_share()
 
         # Click back to the details page
         self.selenium.find_element_by_link_text('Back').click()
-        self.wait_for_page(title='OnTask :: Details',
-                           element_id='column-table_previous')
+        self.wait_for_datatable('column-table_previous')
+
+        # Click back to the details page
+        self.go_to_details()
 
         #
         # EXPORT
         #
-        self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-area']/div/button[3]"
-        ).click()
-        self.selenium.find_element_by_link_text('Export').click()
-        self.wait_for_page(title='OnTask :: Export Workflow')
-
-        # Take picture of the export page.
-        self.element_ss("//body", 'workflow_export.png')
+        self.xpath = "//body"
+        self.screenshot_filename = 'workflow_export.png'
+        self.go_to_workflow_export()
 
         # Click back to the details page
         self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[@type='button']"
+            "//div[@class='modal-footer']/a[normalize-space()='Cancel']"
         ).click()
-        self.wait_for_page(title='OnTask :: Details',
-                           element_id='column-table_previous')
+        self.wait_for_datatable('column-table_previous')
 
         #
         # RENAME
         #
-        self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-area']/div/button[3]"
-        ).click()
-        self.selenium.find_element_by_xpath(
-            "//button[contains(@class, 'js-workflow-update')]"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
-        )
-
-        # Take picture of the modal
-        self.element_ss(self.modal_xpath, 'workflow_rename.png')
+        self.xpath = self.modal_xpath
+        self.screenshot_filename = 'workflow_rename.png'
+        self.go_to_workflow_rename()
 
         # Click in the cancel button
         self.selenium.find_element_by_xpath(
@@ -413,18 +338,9 @@ class ScreenTestFixture(ScreenTests):
         #
         # FLUSH DATA
         #
-        self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-area']/div/button[3]"
-        ).click()
-        self.selenium.find_element_by_xpath(
-            "//button[contains(@class, 'js-workflow-flush')]"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
-        )
-
-        # Take picture of the modal
-        self.element_ss(self.modal_xpath, 'workflow_flush.png')
+        self.xpath = self.modal_xpath
+        self.screenshot_filename = 'workflow_flush.png'
+        self.go_to_workflow_flush()
 
         # Click in the cancel button
         self.selenium.find_element_by_xpath(
@@ -440,18 +356,9 @@ class ScreenTestFixture(ScreenTests):
         #
         # DELETE
         #
-        self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-area']/div/button[3]"
-        ).click()
-        self.selenium.find_element_by_xpath(
-            "//button[contains(@class, 'js-workflow-delete')]"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
-        )
-
-        # Take picture of the modal
-        self.element_ss(self.modal_xpath, 'workflow_delete.png')
+        self.xpath = self.modal_xpath
+        self.screenshot_filename = 'workflow_delete.png'
+        self.go_to_workflow_delete()
 
         # Click in the cancel button
         self.selenium.find_element_by_xpath(
