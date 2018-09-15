@@ -603,16 +603,6 @@
     }
 },
 {
-    "model": "profiles.profile",
-    "pk": 27,
-    "fields": {
-        "slug": "66816e31-b582-401e-94e0-702d101a5413",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
     "model": "workflow.workflow",
     "pk": 108,
     "fields": {
