@@ -135,12 +135,6 @@ class OntaskApiTestCase(APITransactionTestCase):
 
 class OntaskLiveTestCase(LiveServerTestCase):
 
-    xpath = ''
-    screenshot_filename = ''
-
-    def element_ss(self):
-        pass
-
     @classmethod
     def setUpClass(cls):
         super(OntaskLiveTestCase, cls).setUpClass()
@@ -172,12 +166,19 @@ class OntaskLiveTestCase(LiveServerTestCase):
                 (By.XPATH, "//table[@id='workflow-table']/tbody/tr/td")
             )
         )
-        self.element_ss()
 
         self.assertIn('Open or create a workflow', self.selenium.page_source)
 
     def logout(self):
         self.open(reverse('accounts:logout'))
+
+    def wait_for_modal_open(self, xpath="//div[@id='modal-item']//form"):
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.XPATH, xpath))
+        )
+        WebDriverWait(self.selenium, 10).until(
+            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
+        )
 
     def wait_for_datatable(self, table_id):
         # Wait for the table to be refreshed
@@ -204,6 +205,18 @@ class OntaskLiveTestCase(LiveServerTestCase):
         )
         # Wait for the table to be refreshed
         self.wait_for_datatable(table_id)
+
+    def cancel_modal(self):
+        # Click in the cancel button
+        self.selenium.find_element_by_xpath(
+            "//div[@id='modal-item']//button[@data-dismiss='modal']"
+        ).click()
+        # Wail until the modal-open element disappears
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
 
     def search_table_row_by_string(self, table_id, colidx, value):
         """
@@ -241,17 +254,11 @@ class OntaskLiveTestCase(LiveServerTestCase):
         # Create the workflow
         self.selenium.find_element_by_class_name(
             'js-create-workflow').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'id_name'))
-        )
+        self.wait_for_modal_open()
 
         self.selenium.find_element_by_id('id_name').send_keys(wname)
         desc = self.selenium.find_element_by_id('id_description_text')
         desc.send_keys(wdesc)
-
-        # Take picture of the modal
-        self.element_ss()
-
         desc.send_keys(Keys.RETURN)
 
         WebDriverWait(self.selenium, 10).until(
@@ -272,7 +279,6 @@ class OntaskLiveTestCase(LiveServerTestCase):
 
         if wait:
             self.wait_for_datatable('column-table_previous')
-        self.element_ss()
 
     def go_to_details(self):
         # Goto the details page
@@ -283,7 +289,6 @@ class OntaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
-        self.element_ss()
         self.assertIn('More workflow operations', self.selenium.page_source)
 
     def go_to_sql_connections(self):
@@ -295,8 +300,6 @@ class OntaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
-        self.element_ss()
-        self.assertIn('New SQL connection', self.selenium.page_source)
 
     def go_to_upload_merge(self):
         self.selenium.find_element_by_xpath(
@@ -335,6 +338,15 @@ class OntaskLiveTestCase(LiveServerTestCase):
             )
         )
 
+    def go_to_sql_upload_merge(self):
+        self.go_to_upload_merge()
+
+        # Goto SQL option
+        self.selenium.find_element_by_xpath(
+            "//table[@id='dataops-table']//a[normalize-space()='SQL "
+            "Connections']").click()
+        self.wait_for_datatable('sqlconn-table_previous')
+
     def go_to_transform(self):
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Manage table data']"
@@ -350,7 +362,6 @@ class OntaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'js-attribute-create')))
-        self.element_ss()
 
     def go_to_workflow_share(self):
         # Click on the share
@@ -361,7 +372,6 @@ class OntaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'js-share-create')))
-        self.element_ss()
 
     def go_to_workflow_export(self):
         # Click on the share
@@ -372,7 +382,6 @@ class OntaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
                 (By.XPATH, '//form')))
-        self.element_ss()
 
     def go_to_workflow_rename(self):
         # Click on the share
@@ -390,7 +399,6 @@ class OntaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
         )
-        self.element_ss()
 
     def go_to_workflow_flush(self):
         # Click on the share
@@ -408,7 +416,6 @@ class OntaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
         )
-        self.element_ss()
 
     def go_to_workflow_delete(self):
         # Click on the share
@@ -426,7 +433,6 @@ class OntaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
         )
-        self.element_ss()
 
     def go_to_actions(self):
         # Goto the action page
@@ -439,6 +445,30 @@ class OntaskLiveTestCase(LiveServerTestCase):
         self.selenium.find_element_by_link_text("Table").click()
         self.wait_for_datatable('table-data_previous')
         self.assertIn('Table View', self.selenium.page_source)
+
+    def go_to_scheduler(self):
+        # Goto the action page
+        self.selenium.find_element_by_link_text('Scheduler').click()
+        # Wait for page to refresh
+        self.wait_for_datatable('scheduler-table_previous')
+        self.assertIn('Scheduled Operations', self.selenium.page_source)
+
+    def go_to_logs(self):
+        # Goto the action page
+        self.selenium.find_element_by_link_text('Logs').click()
+        # Wait for page to refresh
+        self.wait_for_datatable('log-table_previous')
+        self.assertIn('Logs', self.selenium.page_source)
+
+    def go_to_table_views(self):
+        self.go_to_table()
+
+        self.selenium.find_element_by_link_text("Table").click()
+        self.wait_for_datatable('table-data_previous')
+        self.assertIn('Table View', self.selenium.page_source)
+
+        self.selenium.find_element_by_link_text('Views').click()
+        self.wait_for_datatable('view-table_previous')
 
     def add_column(self,
                    col_name,
@@ -666,7 +696,6 @@ class OntaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
         )
-        self.element_ss()
 
     def open_add_derived_column(self):
         # Click on the Add Column button
@@ -710,10 +739,33 @@ class OntaskLiveTestCase(LiveServerTestCase):
             )
         )
 
+    def open_action_email(self, name):
+        element = self.search_action(name)
+        element.find_element_by_link_text("Email").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//button[contains(@class, 'js-email-preview')]"),
+            )
+        )
+
     def open_action_run(self, name):
         element = self.search_action(name)
         element.find_element_by_link_text("Run").click()
         self.wait_for_datatable('actioninrun-data_previous')
+
+    def open_action_schedule(self, name):
+        row = self.search_action(name)
+        row.find_element_by_xpath(
+            "td//button[normalize-space()='More']"
+        ).click()
+        row.find_element_by_xpath(
+            "td//a[normalize-space()='Schedule']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//button[normalize-space()='Next']")
+            )
+        )
 
     def open_browse_preview(self, n=0, close=True):
         self.selenium.find_element_by_xpath(
