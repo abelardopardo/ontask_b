@@ -1,4 +1,4 @@
-## 3.0.0 (2018-)
+## 3.0.0 (2018-09-)
 
 ### Added
 
@@ -16,9 +16,14 @@
 - Log objects have been re-encoded to use enumeration types.
 
 - Steps to create the actions have changed. Whe an action is created a set of
-  choices is presented.
+  action types are presented.
   
-- Significant changes in the tests to adapt to the new UI
+- Significant changes to the UI as suggested by University of Auckland's group:
+
+  - Merged the home page into the login, and the workflow index is now the home
+    page
+    
+  - ... 
 
 ### Fixed
 
@@ -30,8 +35,7 @@
 
 - Several UI changes after the review provided by University of Auckland
   
-  - About and Contacts link in the main page now open in separated windows (2B)
-  
+- About and Contacts link in the main page now open in separated windows (2B)
   
 ### Fixed
 
