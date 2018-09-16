@@ -82,7 +82,7 @@
             {% if user.is_authenticated %}
               <li><a class="nav navbar-nav spin" href="{% url 'home' %}">Workflows</a></li>
               {% if user.is_superuser %}
-                <li><a class="nav navbar-nav spin" href="{% url 'workflow:sql_connections' %}">SQL connections</a></li>
+                <li><a class="nav navbar-nav spin" href="{% url 'workflow:sql_connections' %}">SQL Connections</a></li>
               {% endif %}
             {% endif %}
             {% if request.session.ontask_workflow_id %}
@@ -192,12 +192,14 @@
           message: "{% trans 'Your session is about to expire.' %}",
           logoutButton: "{% trans 'Logout' %}",
           ignoreUserActivity: true,
+          keepAlive: false,
           keepAliveButton: "{% trans 'Remain Connected' %}",
           keepAliveUrl: "{% url 'keep_alive' %}",
           logoutUrl: "{% url 'accounts:logout' %}",
           redirUrl: "{% url 'accounts:logout' %}",
           warnAfter: ({{ ONTASK_TIMEOUT }} - 60) * 1000,
-          redirAfter: {{ ONTASK_TIMEOUT }} * 1000
+          redirAfter: {{ ONTASK_TIMEOUT }} * 1000,
+          onStart: false
         });
       </script>
     {% endif %}
