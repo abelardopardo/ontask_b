@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+import StringIO
+import os
+
 import pandas as pd
+from PIL import Image
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
@@ -14,6 +19,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.wait import WebDriverWait
 
 from action.models import Action
 from dataops import pandas_db
@@ -73,6 +79,25 @@ def create_users():
     # Create the tokens for all the users
     for usr in get_user_model().objects.all():
         Token.objects.create(user=usr)
+
+
+class ElementHasFullOpacity(object):
+    """
+    Detect when an element has opacity equal to 1
+
+    locator - used to find the element
+    returns the WebElement once opacity is equal to 1
+    """
+
+    def __init__(self, locator):
+        self.locator = locator
+
+    def __call__(self, driver):
+        element = driver.find_element(*self.locator)
+        if element.value_of_css_property('opacity') == '1':
+            return element
+        else:
+            return False
 
 
 class OntaskTestCase(TestCase):
@@ -182,7 +207,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
             EC.presence_of_element_located((By.XPATH, xpath))
         )
         WebDriverWait(self.selenium, 10).until(
-            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
+            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
         )
 
     def wait_for_datatable(self, table_id):
@@ -402,7 +427,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
             )
         )
         WebDriverWait(self.selenium, 10).until(
-            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
+            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
         )
 
     def go_to_workflow_flush(self):
@@ -419,7 +444,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
             )
         )
         WebDriverWait(self.selenium, 10).until(
-            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
+            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
         )
 
     def go_to_workflow_delete(self):
@@ -436,7 +461,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
             )
         )
         WebDriverWait(self.selenium, 10).until(
-            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
+            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
         )
 
     def go_to_actions(self):
@@ -510,10 +535,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
     def delete_column(self, col_name):
         element = self.search_table_row_by_string('column-table', 2, col_name)
         element.find_element_by_xpath(
-            "td//button[normalize-space()='More Operations']"
-        ).click()
-        element.find_element_by_xpath(
-            "td//button[normalize-space()='Delete this column']"
+            "td//button[normalize-space()='Delete']"
         ).click()
 
         WebDriverWait(self.selenium, 10).until(
@@ -603,12 +625,161 @@ class OntaskLiveTestCase(LiveServerTestCase):
         # Wait for modal to close and for table to refresh
         self.wait_close_modal_refresh_table('attribute-table_previous')
 
-    def create_condition_base(self, zone_xpath, cname, cdesc, rule_tuples):
+    def open_add_regular_column(self):
+        # Click on the Add Column button
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Add Column']"
+        ).click()
+
+        # Click on the Regular Column
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Regular column']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[@id='modal-item']//form")
+            )
+        )
+        WebDriverWait(self.selenium, 10).until(
+            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
+        )
+
+    def open_add_derived_column(self):
+        # Click on the Add Column button
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Add Column']"
+        ).click()
+
+        # Click on the Regular Column
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Formula-derived column']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[@id='modal-item']//form")
+            )
+        )
+
+    def open_column_edit(self, name):
+        row = self.search_column(name)
+        row.find_element_by_xpath(
+            "td//button[normalize-space()='Edit']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[@id='modal-item']//form")
+            )
+        )
+        WebDriverWait(self.selenium, 10).until(
+            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
+        )
+
+    def open_action_edit(self, name):
+        element = self.search_action(name)
+        element.find_element_by_link_text("Edit").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//button[contains(@class, 'js-action-preview')]"),
+            )
+        )
+
+    def open_action_email(self, name):
+        element = self.search_action(name)
+        element.find_element_by_link_text("Email").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//button[contains(@class, 'js-email-preview')]"),
+            )
+        )
+
+    def open_action_run(self, name):
+        element = self.search_action(name)
+        element.find_element_by_link_text("Run").click()
+        self.wait_for_datatable('actioninrun-data_previous')
+
+    def open_action_schedule(self, name):
+        row = self.search_action(name)
+        row.find_element_by_xpath(
+            "td//button[normalize-space()='More']"
+        ).click()
+        row.find_element_by_xpath(
+            "td//a[normalize-space()='Schedule']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//button[normalize-space()='Next']")
+            )
+        )
+
+    def open_preview(self):
+        self.selenium.find_element_by_xpath(
+            "//button[contains(@class, 'js-action-preview')]").click()
+        # Wait for the modal to appear
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.ID, "preview-body")
+            )
+        )
+        WebDriverWait(self.selenium, 10).until(
+            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
+        )
+
+    def open_browse_preview(self, n=0, close=True):
+        self.open_preview()
+
+        for x in range(n):
+            self.selenium.find_element_by_xpath(
+                "//div[@id='modal-item']/div/div/div/div[2]/button[3]/span"
+            ).click()
+            # Wait for the modal to appear
+            WebDriverWait(self.selenium, 10).until(
+                EC.presence_of_element_located(
+                    (By.ID, "preview-body")
+                )
+            )
+
+        if close:
+            self.selenium.find_element_by_xpath(
+                "//div[@id='modal-item']/div/div/div/div[2]/button[2]"
+            ).click()
+            # Close modal (wail until the modal-open element disappears)
+            WebDriverWait(self.selenium, 10).until_not(
+                EC.presence_of_element_located(
+                    (By.CLASS_NAME, 'modal-open')
+                )
+            )
+
+    def open_condition(self, cname):
         # Click on the right button
-        self.selenium.find_element_by_xpath(zone_xpath).click()
+        self.selenium.find_element_by_xpath(
+            "//div[@id='condition-set']"
+            "/div[1]/div/button"
+            "[contains(normalize-space(), '{0}')]".format(cname)
+        ).click()
+
         # Wait for the modal to open
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'id_name')))
+        WebDriverWait(self.selenium, 10).until(
+            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
+        )
+
+    def open_filter(self):
+        # Click on the right button
+        self.selenium.find_element_by_xpath(
+            "//button[contains(@class, 'js-filter-edit')]",
+        ).click()
+
+        # Wait for the modal to open
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'id_name')))
+        WebDriverWait(self.selenium, 10).until(
+            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
+        )
+
+    def create_condition_base(self, zone_xpath, cname, cdesc, rule_tuples):
+        # Open the right modal
+        self.open_condition_base(zone_xpath, cname)
 
         # Set the values of the condition
         form_field = self.selenium.find_element_by_id("id_name")
@@ -683,127 +854,6 @@ class OntaskLiveTestCase(LiveServerTestCase):
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
-    def open_add_regular_column(self):
-        # Click on the Add Column button
-        self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Add Column']"
-        ).click()
-
-        # Click on the Regular Column
-        self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Regular column']"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//div[@id='modal-item']//form")
-            )
-        )
-        WebDriverWait(self.selenium, 10).until(
-            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
-        )
-
-    def open_add_derived_column(self):
-        # Click on the Add Column button
-        self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Add Column']"
-        ).click()
-
-        # Click on the Regular Column
-        self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Formula-derived column']"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//div[@id='modal-item']//form")
-            )
-        )
-
-    def open_column_edit(self, name):
-        row = self.search_column(name)
-        row.find_element_by_xpath(
-            "td//button[normalize-space()='More Operations']"
-        ).click()
-        row.find_element_by_xpath(
-            "td//button[normalize-space()='Edit column']"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//div[@id='modal-item']//form")
-            )
-        )
-        WebDriverWait(self.selenium, 10).until(
-            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
-        )
-
-    def open_action_edit(self, name):
-        element = self.search_action(name)
-        element.find_element_by_link_text("Edit").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//button[contains(@class, 'js-action-preview')]"),
-            )
-        )
-
-    def open_action_email(self, name):
-        element = self.search_action(name)
-        element.find_element_by_link_text("Email").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//button[contains(@class, 'js-email-preview')]"),
-            )
-        )
-
-    def open_action_run(self, name):
-        element = self.search_action(name)
-        element.find_element_by_link_text("Run").click()
-        self.wait_for_datatable('actioninrun-data_previous')
-
-    def open_action_schedule(self, name):
-        row = self.search_action(name)
-        row.find_element_by_xpath(
-            "td//button[normalize-space()='More']"
-        ).click()
-        row.find_element_by_xpath(
-            "td//a[normalize-space()='Schedule']"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//button[normalize-space()='Next']")
-            )
-        )
-
-    def open_browse_preview(self, n=0, close=True):
-        self.selenium.find_element_by_xpath(
-            "//button[contains(@class, 'js-action-preview')]").click()
-        # Wait for the modal to appear
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.ID, "preview-body")
-            )
-        )
-
-        for x in range(n):
-            self.selenium.find_element_by_xpath(
-                "//div[@id='modal-item']/div/div/div/div[2]/button[3]/span"
-            ).click()
-            # Wait for the modal to appear
-            WebDriverWait(self.selenium, 10).until(
-                EC.presence_of_element_located(
-                    (By.ID, "preview-body")
-                )
-            )
-
-        if close:
-            self.selenium.find_element_by_xpath(
-                "//div[@id='modal-item']/div/div/div/div[2]/button[2]"
-            ).click()
-            # Close modal (wail until the modal-open element disappears)
-            WebDriverWait(self.selenium, 10).until_not(
-                EC.presence_of_element_located(
-                    (By.CLASS_NAME, 'modal-open')
-                )
-            )
-
     def create_condition(self, cname, cdesc, rule_tuples):
         self.create_condition_base(
             "//button[contains(@class, 'js-condition-create')]",
@@ -813,7 +863,8 @@ class OntaskLiveTestCase(LiveServerTestCase):
 
     def edit_condition(self, cname, cdesc, rule_tuples):
         self.create_condition_base(
-            "//button[contains(@class, 'js-condition-edit')]",
+            "//div[@id='condition-set']"
+            "/div[1]/div/button[normalize-space()='{0}']".format(cname),
             cname,
             cdesc,
             rule_tuples)
@@ -859,10 +910,11 @@ class OntaskLiveTestCase(LiveServerTestCase):
         """
         # Get the button for the condition
         element = self.selenium.find_element_by_xpath(
-            "//div[@id='condition-set']/div/div/button[normalise-space()='{0}'".format(cname)
+            "//div[@id='condition-set']/div/div/"
+            "button[normalise-space()='{0}'".format(cname)
         )
         # Get the arrow element
-        element = self.selenium.find_element_by_xpath('..')
+        element = element.selenium.find_element_by_xpath('..')
         element.find_element_by_xpath('button[2]').click()
         element.click()
 
@@ -886,20 +938,58 @@ class OntaskLiveTestCase(LiveServerTestCase):
         self.wait_close_modal_refresh_table('html-editor')
 
 
-class element_has_full_opacity(object):
-    """
-    Detect when an element has opacity equal to 1
+class ScreenTests(OntaskLiveTestCase):
+    weight = 1024
+    height = 1800
+    prefix = ''
+    workflow_name = 'BIOL1011'
+    description = 'Course on Cell Biology'
+    modal_xpath = "//div[@id='modal-item']/div[@class='modal-dialog']/div[" \
+                  "@class='modal-content']"
 
-    locator - used to find the element
-    returns the WebElement once opacity is equal to 1
-    """
+    @staticmethod
+    def img_path(f):
+        return os.path.join(settings.BASE_DIR(), 'test', 'images', f)
 
-    def __init__(self, locator):
-        self.locator = locator
+    def wait_for_page(self, title=None, element_id=None):
+        if title:
+            WebDriverWait(self.selenium, 10).until(
+                EC.title_is(title)
+            )
 
-    def __call__(self, driver):
-        element = driver.find_element(*self.locator)
-        if element.value_of_css_property('opacity') == '1':
-            return element
-        else:
-            return False
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'div-spinner'))
+        )
+        WebDriverWait(self.selenium, 10).until(
+            EC.invisibility_of_element_located((By.ID, 'img-spinner'))
+        )
+
+        if element_id:
+            WebDriverWait(self.selenium, 10).until(
+                EC.presence_of_element_located((By.ID, element_id))
+            )
+
+    def element_ss(self, xpath, ss_filename):
+        """
+        Take the snapshot of the element with the given xpath and store it in
+        the given filename
+        :return: Nothing
+        """
+
+        if xpath and ss_filename:
+            Image.open(StringIO.StringIO(
+                self.selenium.find_element_by_xpath(
+                    xpath
+                ).screenshot_as_png)
+            ).save(self.img_path(self.prefix + ss_filename))
+
+    def modal_ss(self, ss_filename):
+        self.element_ss(self.modal_xpath, ss_filename)
+
+    def body_ss(self, ss_filename):
+        self.element_ss('//body', ss_filename)
+
+    @classmethod
+    def setUpClass(cls):
+        super(ScreenTests, cls).setUpClass()
+        cls.selenium.set_window_size(cls.weight, cls.height)

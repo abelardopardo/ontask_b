@@ -6,7 +6,6 @@ import os
 
 from PIL import Image
 from django.conf import settings
-from django.shortcuts import reverse
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
@@ -15,69 +14,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 import test
 from dataops import pandas_db
-from test import element_has_full_opacity
-
-
-class ScreenTests(test.OntaskLiveTestCase):
-    weight = 1024
-    height = 1800
-    prefix = ''
-    workflow_name = 'BIOL1011'
-    description = 'Course on Cell Biology'
-    modal_xpath = "//div[@id='modal-item']/div[@class='modal-dialog']/div[" \
-                  "@class='modal-content']"
-
-    @staticmethod
-    def img_path(f):
-        return os.path.join(
-            settings.BASE_DIR(),
-            'test',
-            'images',
-            f)
-
-    def wait_for_page(self, title=None, element_id=None):
-        if title:
-            WebDriverWait(self.selenium, 10).until(
-                EC.title_is(title)
-            )
-
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'div-spinner'))
-        )
-        WebDriverWait(self.selenium, 10).until(
-            EC.invisibility_of_element_located((By.ID, 'img-spinner'))
-        )
-
-        if element_id:
-            WebDriverWait(self.selenium, 10).until(
-                EC.presence_of_element_located((By.ID, element_id))
-            )
-
-    def element_ss(self, xpath, ss_filename):
-        """
-        Take the snapshot of the element with the given xpath and store it in
-        the given filename
-        :return: Nothing
-        """
-
-        if xpath and ss_filename:
-            Image.open(StringIO.StringIO(
-                self.selenium.find_element_by_xpath(
-                    xpath
-                ).screenshot_as_png)
-            ).save(self.img_path(self.prefix + ss_filename))
-
-    def modal_ss(self, ss_filename):
-        self.element_ss(self.modal_xpath, ss_filename)
-
-    def body_ss(self, ss_filename):
-        self.element_ss('//body', ss_filename)
-
-    @classmethod
-    def setUpClass(cls):
-        super(ScreenTests, cls).setUpClass()
-        cls.selenium.set_window_size(cls.weight, cls.height)
-
+from test import ElementHasFullOpacity, ScreenTests
 
 class ScreenTutorialTest(ScreenTests):
 
@@ -539,9 +476,6 @@ class ScreenTestFixture(ScreenTests):
         self.go_to_table_views()
         element = self.search_table_row_by_string('view-table', 1, 'Midterm')
         element.find_element_by_xpath(
-            "td//button[normalize-space()='More']"
-        ).click()
-        element.find_element_by_xpath(
             "td//button[normalize-space()='Edit']"
         ).click()
         self.wait_for_modal_open()
@@ -578,6 +512,16 @@ class ScreenTestFixture(ScreenTests):
 
         # Picture of the body
         self.body_ss('action_edit_action_in.png')
+
+        # Open the preview
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Preview']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
+        )
+        self.modal_ss('action_action_in_preview.png')
+        self.cancel_modal()
 
         #
         # Run Action In
@@ -639,7 +583,7 @@ class ScreenTestFixture(ScreenTests):
         self.selenium.find_element_by_class_name('js-filter-edit').click()
         # Wait for the form to modify the filter
         WebDriverWait(self.selenium, 10).until(
-            element_has_full_opacity((By.XPATH, "//div[@id='modal-item']"))
+            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
         )
 
         # Take picture of the modal
@@ -662,6 +606,16 @@ class ScreenTestFixture(ScreenTests):
         self.element_ss("//div[@id='html-editor']",
                         'action_action_out_editorpart.png')
 
+        # Open the preview
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Preview']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
+        )
+        self.modal_ss('action_action_out_preview.png')
+        self.cancel_modal()
+
         #
         # Action row
         #
@@ -669,7 +623,8 @@ class ScreenTestFixture(ScreenTests):
 
         # Picture of the action row
         self.element_ss(
-            "//table[@id='action-table']/tbody/tr[3]",
+            "//table[@id='action-table']/tbody/tr/td[normalize-space("
+            ")='Midterm comments']/..",
             'action_action_ops.png'
         )
 
