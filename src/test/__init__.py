@@ -171,6 +171,11 @@ class OntaskLiveTestCase(LiveServerTestCase):
 
     def logout(self):
         self.open(reverse('accounts:logout'))
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//div[@id='div_id_username']")
+            )
+        )
 
     def wait_for_modal_open(self, xpath="//div[@id='modal-item']//form"):
         WebDriverWait(self.selenium, 10).until(
@@ -293,7 +298,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
 
     def go_to_sql_connections(self):
         # Goto the details page
-        self.selenium.find_element_by_link_text('SQL connections').click()
+        self.selenium.find_element_by_link_text('SQL Connections').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'sqlconn-table'))
         )
