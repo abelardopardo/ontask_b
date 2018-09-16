@@ -184,14 +184,16 @@ body>.navbar-transparent {
   font-size: 16px;
 }
 
-.form-box form .form-control:focus {
-  z-index: 2;
+.row-top-border {
+    border-top: 1px solid #bbb;
 }
 
-div#action-in-editor h4,
-div#action-out-editor h4 {
-    border-top: solid 1px #eee;
-    padding-top:1ex
+.row-bottom-border {
+    border-bottom: 1px solid #bbb;
+}
+
+.form-box form .form-control:focus {
+  z-index: 2;
 }
 
 /* For the Action Edit */
