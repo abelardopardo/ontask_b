@@ -23,7 +23,10 @@ These three sources are combined and stored in the second entity in OnTask: the 
 
 The third entity in OnTask is the *personalized action* that is a text with elements that are selected and adapted to each learner based on a set of basic rules that depend on the student features stored in the table. This text can be included in an email, made available through a web page, or forwarded to another system for further processing.
 
-A workflow in OnTask contains a single table (rows and columns) and a set of actions. This container is conceived to manage the data and actions related to a learning experience. You may use the workflow shown in the documentation importing  the :download:`ELON3509 workflow <../../initial_workflow.gz>`.
+A workflow in OnTask contains a single table (rows and columns) and a set of
+actions. This container is conceived to manage the data and actions related
+to a learning experience. You may use the workflow shown in the documentation
+ importing  the :download:`initial workflow <../../initial_workflow.gz>`.
 
 The following sections offer a more in-depth description of all these elements as well as examples with real scenarios.
 
@@ -45,16 +48,16 @@ workflows as shown in the following figure.
    :align: center
    :width: 100%
 
-Clicking in the home icon in the upper left corner brings you back to the
-list of workflows from any page in the application. Clicking in the icon in
-the upper right corner opens the documentation page.
+Clicking in the word *Workflows* in the top menu brings you back to the
+list of workflows from any page in the application. Clicking in the book icon in
+the upper right side of the menu bar opens the documentation page.
 
 The screen includes the following operations:
 
 .. sidebar:: Going back
 
-   Remember that clicking in the home icon in the upper left corner *closes* the
-   workflow and you see the list of available workflows again.
+   Remember that clicking in the *Workflow* word in the top menu corner
+   *closes* the workflow and you see the list of available workflows again.
 
 1. Create a new workflow: Clicking in the *New Workflow* button will ask you
    for the name and description of the element.
@@ -71,14 +74,24 @@ The screen includes the following operations:
       :width: 100%
 
 3. Open a workflow to work on it. This is perhaps the most common initial step.
-   Once you open or *enter* a workflow, all the operations are applied to that
-   context. The platform will remind you in which workflow you are working by
-   inserting its name right under the top navigation bar as shown in the
-   following figure.
+   Once you open a workflow, all the operations are applied to it. The
+   name of the current workflow is shown right under the top navigation bar as
+   shown in the following figure.
 
    .. figure:: ../scaptures/navigation_bar.png
       :align: center
       :width: 100%
+
+4. Rename the workflow (change either its name or its description).
+
+5. Clone a workflow. This operation will create an exact copy of the workflow
+   with a name created by adding the previx *Copy_of_* to the current
+   workflow name.
+
+6. Flush all the data in the workflow. This operation maintains the workflow
+   but it wipes out the data in the table.
+
+7. Delete the workflow.
 
 Once you open a workflow, it is locked and no other user can manipulate it (see
 :ref:`sharing a workflow <details_sharing>`). If you access a workflow and
@@ -103,48 +116,57 @@ columns, etc. The page contains the information shown in the following figure.
 .. figure:: ../scaptures/workflow_details.png
    :align: center
 
-The name of the workflow is shown below the navigation bar. The page includes
+The name of the workflow is shown at the top of the page. The page includes
 links to additional menus with various operations on the selected workflow (some
 of them will be available depending on your user profile). Under the title
 *Workflow Details* there are buttons to access the following operations:
 
 .. _details_add_column:
 
-Add a new column
-  Opens a dialog to create a new column in the table with the following
-  fields:
+Add a column
+  This menu opens three options: create a regular column, create a column
+  combining the values of two existing columns, or create a new column with
+  random values.
 
-  - Name (mandatory): column name (shown in the table)
+  Add a regular column
+    Opens a dialog to create a new column in the table with the following
+    fields:
 
-  - Description: text that will be shown to the learners if the column is
-    part of a survey action.
+    - Name (mandatory): column name (shown in the table)
 
-  - Data type (mandatory: The possible data types are *number* (representing both
-    integers or real numbers), *string*, *boolean* (only possible values are *true*
-    and *false*), and *datetime* (a date and time together).
+    - Description: text that will be shown to the learners if the column is
+      part of a survey action.
 
-  - An integer (mandatory) representing the position of the column in the table
-    (a value zero will insert it at the end of the table).
+    - Data type (mandatory: The possible data types are *number* (representing both
+      integers or real numbers), *string*, *boolean* (only possible values are *true*
+      and *false*), and *datetime* (a date and time together).
 
-  - Two date/time values to control the visibility of the column.
+    - An integer (mandatory) representing the position of the column in the table
+      (a value zero will insert it at the end of the table).
 
-  - Comma-separated list of possible values. This field is to restrict the
-    values in the column. The values have to be compatible with the specified
-    data type.
+    - Two date/time values to control the visibility of the column.
 
-  - Initial value to assign to all cells in the column.
+    - Comma-separated list of possible values. This field is to restrict the
+      values in the column. The values have to be compatible with the specified
+      data type.
 
-  .. figure:: ../scaptures/workflow_add_column.png
-     :align: center
+    - Initial value to assign to all cells in the column.
 
-.. _details_add_derived_column:
+    .. figure:: ../scaptures/workflow_add_column.png
+       :align: center
 
-Add a derived column
-  A derived column is a column created as a result of combining values from
-  several existing columns using basic mathematical operations such as
-  maximum, minimum, etc. The operation is executed **only** upon column
-  creation. Changes in the source columns **will not be propagated** to the
-  resulting combined column.
+  Add a formula-derived column
+    This column is created by combining the values of existing columns using
+    one of the operations addition, product, maximum, minimum, mean, median,
+    standard deviation, conjunction or disjunction. The formula is only
+    applied when the column is
+    created the current values of the other columns. The column is not
+    refreshed if the operand change in the future.
+
+  Add a column with random values
+    This is useful to create columns for A/B testing. The new column is
+    created with a random value from either a numeric range (starting at 0)
+    or a set of strings.
 
 .. _details_attributes:
 
@@ -186,7 +208,7 @@ Export
 Clone
   This function creates a new workflow duplicating the data, actions and
   conditions of the current workflow. The new workflow will have the same
-  name with the prefix "*Copy of *".
+  name with the prefix *Copy of *.
 
 .. _details_rename:
 
@@ -267,15 +289,15 @@ Restrict
   limited to the current ones.
 
 Clone
-  Clones the column in the workflow changing its name adding the prefix "*Copy
-  of *" to the name.
+  Clones the column in the workflow changing its name adding the prefix *Copy
+  of * to the name.
 
 Delete
   Deletes the column from the workflow. If there are conditions inside
   *actions out* that use this column, those conditions will be removed from
   the action.
 
-Stats
+Statistics
   Shows a statistical summary of the values in the column. If the data type
   is *number*, the summary includes information about quartiles, a boxplot, and
    a histogram. For the rest of data types, the summary only includes the
@@ -283,8 +305,8 @@ Stats
 
 .. _dataops:
 
-Data Sources
-============
+Data Table
+==========
 
     "May be stories are are just data without a soul"
     -- Brené Brown
@@ -295,9 +317,19 @@ It may be the case that this task is already done, or it is done
 automatically before you work with a workflow. If this is the case, you may
 skip this section. The data operations page offers various options to upload
 and merge data to the table and the process is divided into several steps.
+This functionality is available from the *Details*, *Table* or *Actions*
+screens.
+
+Upload/Merge Data
+-----------------
+
+This functionality is used to upload new data in to the table, or merge new
+data with the one already existing in the table. There are three types of
+operations depending if the data is obtained form a CSV file, an Excel file,
+or a connection to a remote database.
 
 Upload CSV Files
-----------------
+^^^^^^^^^^^^^^^^
 
 CSV or "comma separated value" files are plain text files in which the first line contains a comma-separated list of column names, and every subsequent line contains the values of these columns for each row. It is a popular format to exchange data that can be represented as a table, and it is for this reason that OnTask allows to upload data in this format.
 
@@ -313,7 +345,7 @@ CSV file allows you to specify the number of lines to ignore at the start
 and end of the file.
 
 Upload Excel Files
-------------------
+^^^^^^^^^^^^^^^^^^
 
 OnTask also supports the upload of data from Excel files.
 
@@ -326,7 +358,7 @@ has to be selected to upload the data.
 .. _sql_connection_run:
 
 SQL connection
---------------
+^^^^^^^^^^^^^^
 
 The third method to upload data into the current workflow is through a SQL
 connection to a remote database. These connections have to be
@@ -518,192 +550,197 @@ The Actions
     vision"
     -- Dalai Lama
 
-This is the most important functionality of the platform. Actions are exchange
-of information with the learners. There are two types: actions in, and actions
-out. A workflow contains an arbitrary number of these actions. The *action*
-page shows a table with the actions in the selected workflow.
+This is the most important functionality of the platform. Actions are
+used exchange information with the learners, either offering a personalized
+document, or requesting data. A workflow contains an arbitrary number of
+actions shown in the *Table* page.
 
 .. figure:: ../scaptures/actions.png
    :align: center
    :width: 100%
 
-Similarly to the case of the workflow, each action is identified by a name
-(unique) and an optional description. There are several operations supported
-for each action (right most column in the table shown in the previous figure).
+Each action is identified by a name (unique) and an optional description.
+OnTask currently offers the following types of actions: personalized text,
+personalized JSON, and surveys. The action table shows also the operations
+available for each of them (right most column in the table shown in the
+previous figure).
 
-Actions In
-----------
+Personalized Content
+--------------------
 
-These actions allow you either instructors or students to introduce
-information in the table stored in a workflow. When providing information, you
-typically are interested in a subset of the rows (some of the learners) and a
-subset of the columns. For example, an instructor may like to check if a group of students is attending a face-to-face session, or if a group of students is engaging in a project discussion.
-
-These actions are edited using the screen shown in the following figure:
-
-.. figure:: ../scaptures/action_edit_action_in.png
-   :align: center
-   :width: 100%
-
-The page has several elements. From top to bottom, the first one is a filter to restrict the rows in the table considered for data entry. Those rows
-that satisfy the condition are prepared for data entry. The second part of the
-screen is a description that will be shown at the top of the page as a prelude for the fields to enter the data. The next section is they key column that will be used to match the data entry. The last section of the screen is a set of non-key columns to use to ask the questions. The *Preview* button at the bottom of the page shows the page that will be shown to the students.
-
-Once an *Action In* has been selected, there are two operations available
-represented by the buttons with labels *Run* and *URL*. The *Run* operation is
-intended for the instructors to enter the data for a set of learners. After
-clicking the link the platform shows a table with the data about the learners.
-The table has a search box in the upper left corner to quickly find a person
-as illustrated in the next figure.
-
-.. figure:: ../scaptures/action_run_action_in.png
-   :align: center
-   :width: 100%
-
-An instructor may click in the link available in the right column and it is
-offered the possibility of modifying the information in the preselected
-columns for that learner.
-
-.. figure:: ../scaptures/action_enter_data_action_in.png
-   :align: center
-   :width: 100%
-
-After entering the information the platform refreshes the list of students for
-which the data entry is still allowed. The second operation available for
-*Actions In* is to make available the URL to learners so that they
-individually enter the information themselves. If you go back to the table
-showing all the actions and click in the icon with label *URL* you are given
-the choice to enable/disable a specific URL for the students to access the
-data entry screen.
-
-.. figure:: ../scaptures/action_action_in_URL.png
-   :align: center
-   :width: 80%
-
-You then may send or make available this URL and, after authentication,
-students will be able to enter the information requested and the values are
-automatically stored in the right row and column in the table. These actions
-offer an ideal procedure to collect information about any aspect of a course
-in a way that is centralized and available for further processing. The power
-of these actions is complemented when combined with *Actions Out*, in which
-personalized content is made available to the learners.
-
-Actions Out
------------
-
-These actions allow to create a resource (in a format close to HTML) and mark certain elements with conditions that will control its appearance in the final view. Think of these *actions out* as a resource (item, message, tip, comment) you would give learners during a experience. You may have several of these items prepared to be used at different points during the experience. The action is manipulated with the screen shown in the following figure
+These actions allow to create a resource (similar to a HTML page) and mark
+certain elements with *conditions* that will control if they are included or
+ignored when showing the document. Think of this personalized content as a
+resource (message, tip, comment) you would offer learners but with content
+that is different depending on the data stored in the table. You may have
+several of these items prepared to be used at different points during the
+experience. The personalized content action is manipulated with the screen
+shown in the following figure:
 
 .. figure:: ../scaptures/action_edit_action_out.png
    :align: center
    :width: 100%
 
-Before describing in detail the structure of this screen let's digress for a
-second and explore the concept of *condition*. A condition in OnTask is  a
-Boolean expression, or if you prefer, an expression that when evaluated will
-return either **True** or **False**. These expressions are commonly used in
-other applications such as spreadsheets or programming languages. The
-following image shows an example of this condition.
+Before describing in detail the structure of this screen let's explore the
+concept of *condition*. A condition is an
+expression that when evaluated will either be **True** or **False**.
+These expressions are commonly used in other applications such as
+spreadsheets or programming languages. The following image shows an example
+of this condition.
 
 .. figure:: ../scaptures/action_action_out_edit_filter.png
    :align: center
 
-The Boolean expression is contained under the title **Formula**. The
-expression can be alternatively read as::
+The expression in the previous figure is contained under the title
+**Formula** and can be read as:
 
-  Days online = 0
+  Video_1_W4 = 0 or Video_2_W4 = 0
 
-The first element of the expression is the variable ``Days online_``. The
-second element is the equal sign, and the third component is the constant
-zero. The variable ``Days online`` may be replaced by any value in a
-procedure we call *evaluation*. So, if the expression is evaluated replacing
-the variable by the value 3, it results in :math:`3 = 0` which is false.
-Alternatively, if we evaluate the expression replacing ``Days_online_2`` with
-the value 0, then the expression becomes :math:`0 = 0`, which is trivially
-true. With this structure, any expression then is evaluated by replacing the
-variables by values and deciding if the resulting expression is true or false.
+The first element of the expression is the sub-expression ``Video_1_W4 = 0``
+which contains the variable ``Video_1_W4``, the equal sign, and the constant
+zero. The second element is a sub-expression with the variable
+``Video_2_W4``, the equal sign, and the constant 0. These two
+sub-expresssions are connected through the **OR** operator, which means
+that the expression will be **True** if either of the sub-expressions are
+**True**, and **False** in any other case. When evaluating this expression,
+the variables are replaced by concrete values (numbers). For example, if
+``Video_1_W4`` is replaced by 3, and ``Video_2_W4`` is replaced by 4, the
+evaluation will transform the expression into :math:`3 = 0 or 4 = 0`. The
+sub-expression :math:`3 = 0` is clearly **False** and so is the other
+sub-expression :math:`4 = 0`. This means the initial expression is **False**.
+result is either **True** or **False**. Another possible evaluation is if
+``Video_1_W4`` is equal to zero (and ``Video_2_W4`` remains equal to 4). In
+this case the resulting expression is :math:`0 = 0 or 4 = 0`. In this case,
+the first sub-expression is **True**, and although the second is **False**,
+only one is needed for the overall expression to be **True**.
 
 These conditions can have nested sub-expressions and get complex fairly quickly.
 However, the underlying mechanism to evaluate them remains the same: replace
-variables with values and decide the result (true or false). OnTask relies on
-these expressions to personalize the content of the actions. Let's now go
-back to the screen to edit an action. The area has four components
+variables with values and decide the result (**True** or **False**). OnTask
+relies on these expressions to personalize the content of the actions. Let's
+now go back to the screen to edit an action. The area has four components
 
 The filter
   The top area contains a *filter*. This element is an expression used to
-  decide which table rows will be selected and used with this condition.
+  decide which learners (or more precisely, the corresponding rowsin the data
+  table that) will be selected and used in this action.
 
   .. figure:: ../scaptures/action_action_out_filterpart.png
      :align: center
      :width: 100%
 
-  The name given to the expression is followed by how many table
-  rows satisfy the filter condition (and therefore are selected). In
-  practice, this is as if you dropped from the table some of the rows (it is
-  just that they are ignored, not dropped.
+  In the example above, the expression selects 3 out of all 14 learners in
+  the data table. This filter is useful when you want to provide the
+  personalized text to a sub-set of the learners. For example, you may want
+  to send a reminder about the submission deadline the day before but only to
+  those students that haven't connected to the system. If you have that
+  informatio in a column of the data table, you may create the condition
+  that selects only those learners.
 
 The conditions
-  This is the area immediately below the filter. Each condition allows you to
-  edit its expression (first block with the pencil), use it in the text
-  blow (block with the arrow), or delete it (trash can icon) as shown in the
-  figure below
+  This area contains additional expressions called *conditions*.
 
   .. figure:: ../scaptures/action_action_out_conditionpart.png
      :align: center
      :width: 100%
 
-The HTML text
+  A condition is another expression (identical to the filter) but it will be
+  used in the middle of the text to decide if a portion of the text will be
+  shown or ignored. The buttons in the screen allow you to edit the expression,
+  insert the condition to control the appearance of text in the editor
+  (below), clone the condition, or delete it from the action.
+
+  For each condition, the button shows the number of learners for which the
+  expression in that condition evaluates to **True**. If this value is zero,
+  it means that any text you include in the editor surrounded by this
+  condition will not appear for any of the learners.
+
+The HTML text editor
   This is the area to create the personalized document. It is a conventional
   HTML editor offering the usual functionalities (inserting text in
   various forms, headings, lists, links, images, etc.) Right above the editor
   window you have two choice menus that you can use to insert either a
   :ref:`workflow attribute <details_attributes>` or a column name that will
-  be replaced by the corresponding value for each row.
+  be replaced by the corresponding value.
 
   .. figure:: ../scaptures/action_action_out_editorpart.png
      :align: center
      :width: 100%
 
-The preview/save buttons
-  The *Save* button saves the content of the text editor, the *Save & Close*
-  saves the content of the text editor and returns to the list of actions,
-  and the *Preview* button shows how the text is rendered for every row in
-  the table.
+The Preview button
+  The Preview button shows how the text in the editor is shown for those
+  learners selected by the filter (if any). After clicking in the button you
+  will see a window with the resulting text. If there are any elements in the
+  text that are controlled by any condition, the bottom area will show their
+  values.
 
-Using column values, attributes and conditions in an Action Out
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  .. figure:: ../scaptures/action_action_out_preview.png
+     :align: center
+     :width: 100%
 
-The purpose of this page is to allow you to create a text in the editor that
-may include three types of elements that are personalized for each row: an
-attribute name, a column name or a condition.
+  Use the arrow buttons to see all the different versions of the text
+  depending on the values stored in the table for each learner.
 
-To insert an attribute name simply place the cursor in the text editor in the
-location where you want the value of that attribute to appear. Then, select
-the attribute from the area above the editor and you will see how the name
-of the attribute surrounded by double curly braces appears in the text (for
-example ``{{ course_name }}``. Only :ref:`the attributes <details_attributes>`
-you previously created in the details page are available.
+The Save button
+  This button saves the content of the text editor and returns to the page
+  showing all the actions in the workflow.
 
-To insert a column name, you follow the same steps but this time you select
-one of the elements next to the text *Insert column value*. Place the cursor
-in the location in which you want that value to appear, select the column
-name from the pull-down menu, and the name appears in the text surrounded by
-double curly braces (for example ``Hi {{ GivenName }}``.
+Using column values, attributes and conditions in a Personalized Text
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-These two elements will be included in the text with the corresponding values
-(the same for all rows in the case of the attribute, and the value of the
-corresponding row in the case of the column name. Inserting a condition is
-different. Highlight the text in the editor and then click in the arrow of
-one of the conditions. The text will be surrounded by two marks. For example
-if the condition name is ``Video_active``, the text in the editor will appear
-as:
+The text in these actions may include three types of elements that
+are personalized for each learner: an attribute name, a column name or a
+portion of text marked with a condition.
 
-  {% if Video_active %}Good work with this week's video{% endif %}
+Attributes
+  Attributes are simply synonyms that you may want to use in more than one
+  action. For example, if you have several actions that include the name of a
+  course, instead of including that name if all actions, you may define an
+  *attribute* with name *course name* and value *Biology 101* and include in
+  the actions the attribute name. OnTask will replace that attribute with its
+  value when showing the text to the learners. If you then change the name of
+  the course (or you export this workflow and import it to be used in
+  anotehr course), you only need to change the attribute and the name of the
+  course will appear correctly in all actions (in what is called a *single
+  point of change*).
 
-This format states that the message *Good work with this week's video* should
-appear only if the condition ``Video_active`` is true. If not, the text
-should be ignored. The following figure illustrates this process.
+  To insert an attribute name in the text simply place the cursor in the
+  editor where you want the value of that attribute to appear and select
+  the attribute from the area above the editor. The name of the attribute
+  will be inserted in the text surrounded by double curly braces, (for
+  example ``{{ course_name }}``. Only :ref:`the attributes <details_attributes>`
+  you previously created in the details page are available.
 
-  .. figure:: ../scaptures/OnTask___howtocreatetext.gif
+Column names
+  The other element that can be personalized is a column name. For example,
+  suppose you have a column in your table with the first name of the learners.
+  You can use the column name to personalize the greeting in the text.
+  To insert a column name, you follow the same steps used for the attribute but
+  this time you select the column name from the pull-down menu. You will see
+  that the name of the column appears in the text also surrounded by
+  double curly braces (for example ``Hi {{ GivenName }}``. The double curly
+  braces is the way OnTask has to mark that text to be personalized or
+  replaced by the corresponding value for each learner extracted from the data
+  table.
+
+Conditional text
+  Using a condition to control if a portion of the text is shown or
+  ignored is slightly different. First highlight the text you want to appear
+  depending on the condition in the
+  editor. Then go to the corresponding button for the condition, click in the
+  arrow next to its name, and select *Insert in text*. The text will be
+  surrounded by two marks. For example
+  if the condition name is ``Video_active``, the text you highlighted will
+  appear in the editor afer clicking in the *Insert in text* as::
+
+    {% if Video_active %}Good work with this week's video{% endif %}
+
+  This format marks the message *Good work with this week's video* to
+  appear only for those learners for which the condition ``Video_active``
+  evaluates to **True** with their current values in the data table.
+  Otherwise, the text will be ignored. The following figure illustrates this process.
+
+  .. figure:: ../scaptures/Ontask____howtocreatetext.gif
      :align: center
      :width: 100%
 
@@ -714,24 +751,21 @@ Once a text is created, you need to verify that all the elements are properly
 visualized for each of the rows. This is the purpose of the ``Preview``
 button at the bottom of the page.
 
-  .. figure:: ../scaptures/OnTask___howtopreviewtext.gif
+  .. figure:: ../scaptures/Ontask____howtopreviewtext.gif
      :align: center
-     :width: 100%
 
 Sending personalized emails
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You now have created an action and verified its content using the
-*Preview* button. Go back to the *Actions* screen (showing the table with
-the actions you created in the workflow). The right-most column shows a
-button that reads *Email*.
+Once you created a personalized text action and verified its content using the
+*Preview* button, save its content. The right-most column shows a button with
+name *Email*. Click on that button.
 
 .. figure:: ../scaptures/action_action_ops.png
    :align: center
 
-This functionality process the text in the
-action for each learner and sends the resulting text as an email. If you
-click in that button the platform asks you for additional information:
+The following screen shows a form to introduce the required parameters to
+send the personalized text to each learner by email.
 
 .. figure:: ../scaptures/action_email_request_data.png
    :align: center
@@ -744,10 +778,25 @@ The column with the email address
   column containing that information for each learner and it needs you to
   select that column.
 
-Send summary message
+List of emails in CC
+  A comma-separated list of emails to include in the *carbon copy* or *CC*
+  email field.
+
+List of emails in BCC
+  A comma-separated list of emails to include in the *blind carbon copy* or
+  *BCC* email field.
+
+Send a summary message
   If you select this option OnTask will send you an email with the summary of
   this operation (number of rows in the table that were selected by the
   filter, number of emails sent, date/time of the operation, etc.
+
+Track email reading
+  Include in the messages a HTML snipped to detect if the email is read.
+  OnTask adds an extra column to the table to store the number of times the
+  message is opened. This detection relies on how the email client opens the
+  message and processes the included images, therefore, the information in
+  this column may not accurately reflect this information.
 
 Snapshot of the workflow
   If you select this option, after the emails are sent, the platform returns
@@ -757,30 +806,121 @@ Snapshot of the workflow
   In this new workflow you can check the values and messages at the time the
   operation was executed.
 
+Check/exclude emails
+  If selected, this option inserts an extra step in which you can eliminate
+  certain emails form the action. This feature is useful to remove certain
+  emails that cannot be removed with the filter.
+
 Making personalized content available to learners
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Sending a personalized email is just one of various possible actions to do
-with a personalized text. Another one is to make the content available
-through a URL that can then be given to the learners. OnTask offers this
-possibility through the button labeled ``URL`` followed by either the word
-``(Off)`` or ``(On)``.
+Sending a personalized email is just one possible way to make this content
+available to learner. Another one is to offer the content
+through a URL that can be given to the learners. To enable such URL click in
+the button labeled ``URL`` followed by either the word ``(Off)`` or ``(On)``.
 
 .. figure:: ../scaptures/action_action_ops.png
    :align: center
 
-If you select this option, the platform will show you the URL providing
-access, the choice of making it available, and the possibility of using an
-alternative column containing the email address.
+The following window shows the URL in which the content is available as well
+as the field to enable/disable it.
 
 .. figure:: ../scaptures/action_URL_on.png
    :align: center
    :width: 60%
 
-You may enable/disable this URL at any time. If a learner tries to access
-this URL and it is disabled, the platform informs the user that the
-information is not available.
+In order for the learners to be able to view their personalized content,
+they have to be users of the OnTask platform. This functionality is
+conceived for a context in which OnTask authenticates users either through
+a corporate Single-sign on layer, or learners access the OnTask through the
+Learning Management System with a LTI interface (see :ref:`authentication`).
 
+Surveys
+-------
+
+The personalized text actions described in the previous section is
+information made available to the learners. The *survey* actions collect
+information from the learners and store it in the table. This functionality
+is a simplified version of other survey engines such as Google Forms,
+SurveyMonkey or Quantrix. In a learning context a survey can be used equally
+to ask students to submit certain data, or for an instructor to collect
+annotations about learners throughout the experience.
+
+When you edit a survey action, the editor contains the elements shown in the
+following figure:
+
+.. figure:: ../scaptures/action_edit_action_in.png
+   :align: center
+   :width: 100%
+
+From top to botton, the first area in the screen is a filter to restrict the
+learners in the table considered for data entry. This functionality is
+identical to the one described for the personalized text. Those learners for
+which the condition in the filter is true, area considered for data entry. The
+second area is text that will be shown at the top of the page requesting
+the data. The next section is they key column used to match the data entry
+with the user authentication, typically the column that contains the user
+email. The last section of the screen is a set of non-key table columns, each
+one of them corresponding to one question in the survey. If a column is
+included in the survey, its description text is shown as the *question text*.
+The *Preview* button at the bottom of the page shows the content as it will be
+shown to the learners.
+
+.. figure:: ../scaptures/action_action_out_preview.png
+ :align: center
+ :width: 100%
+
+Running a survey action
+^^^^^^^^^^^^^^^^^^^^^^^
+
+After creating a *survey action* there are two operations available
+represented by the buttons with labels *Run* and *URL*. The *Run* is intended
+for the instructors to enter the data for each learner. After
+clicking the link, the platform shows a table with the learners considered
+for the survey action as well as the data collected so far. Each row contains
+a link to access the data entry screen. The table has a search box in the
+upper left corner to quickly find a person.
+
+.. figure:: ../scaptures/action_run_action_in.png
+   :align: center
+   :width: 100%
+
+Instructors may click in the link available in the right-most column to
+either enter new information or modify the already existing information for
+that learner.
+
+.. figure:: ../scaptures/action_enter_data_action_in.png
+   :align: center
+   :width: 100%
+
+After entering the information the list of students for
+which the data entry is still allowed.
+
+Offering the survey to the learners
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The second operation available for *survey* actions is to make available the
+URL to learners so that theyindividually enter the information themselves. In
+the action table each survey action has a button labeled *URL*. If you click
+in this button the screen shows the URL for the survey and the possibility of
+enable/disable it or even provide a date/time window for its availability.
+
+.. figure:: ../scaptures/action_action_in_URL.png
+   :align: center
+   :width: 80%
+
+Once enabled, you may send the URL to the students (you may even use a
+personalized text action for that). Once the students click in the action,
+after authenticaiton, and if their email is part of hte table, they will be
+able to enter the information and the values are automatically stored in the
+right row and column in the table.
+
+These survey actions are ideal to collect information about any aspect of a
+course in a way that is centralized and available for further processing
+through personalized text actions. For example, users may choose from a
+pre-defined set of topics those that were more challenging. This information
+can then be used in a personalized text action to provide the adequate
+resources to each learner.
 
 .. _scheduler:
 
@@ -790,21 +930,56 @@ The Scheduler
    "I have no regular schedule. I get up whenever I can."
    -- Jimmy Wales
 
-The *actions out* that are used to send emails can be *scheduled* to
-execute at some point in the future. The *Schedule* operation in these
-actions opens a dialog like the one shown in the following figure:
+The *personalized text actions* sending emails can be
+*scheduled* to execute at some point in the future. The *Schedule* operation
+for these actions opens a dialog like the one shown in the following figure:
 
 .. figure:: ../scaptures/schedule_action_email.png
    :align: center
 
-The action (sending the emails with the personalized text) is executed at the
-selected time. This functionality requires the server to be configured to
-check the list of pending tasks and execute them at the appropriate time (see
-:ref:`scheduling_tasks`)
+Name
+  A name to identify this scheduling (a user may have several of these
+  actions pending in a workflow)
 
-The *Schedule* item in the navigation menu shows all the scheduled tasks for
-the current workflow. The left-most column offers the operations to edit the
-task or delete it.
+Description
+  A brief description explaining this scheduled action.
+
+Column containing email
+  The column in the table used to fill out the destination email. OnTask will
+  check that the data in that column has the right format.
+
+When to execute the action
+  A date/time in the future when the action will be executed.
+
+Email subject
+  The text to be included in the email subjects.
+
+Comma separated list of CC emails
+  A comma separated list of emails to include in the *carbon copy* (or CC)
+  field of the email.
+
+Comma separated list of BCC emails
+  A comma separated list of emails to include in the *blind carbon copy* (or
+  BCC) field of the email.
+
+Send confirmation email
+  Select this option if you want a confirmation email sent to you.
+
+Track when emails are read
+  Include in the messages a HTML snipped to detect if the email is read.
+  OnTask adds an extra column to the table to store the number of times the
+  message is opened. This detection relies on how the email client opens the
+  message and processes the included images, therefore, the information in
+  this column may not accurately reflect this information.
+
+Check/exclude emails
+  If selected, this option inserts an extra step in which you can eliminate
+  certain emails form the action. This feature is useful to remove certain
+  emails that cannot be removed with the filter.
+
+The *Schedule* in the top menu shows the page with the scheduled tasks for
+the current workflow. The left-most column offers the operations to edit or
+delete the scheduled execution.
 
 .. figure:: ../scaptures/schedule.png
    :align: center

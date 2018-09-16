@@ -98,84 +98,6 @@ interpreter and you can execute the python interpreter.
    ``python-pip``). This tool will be used by both Python and Django to install
    additional libraries required to execute OnTask.
 
-.. _scheduling_tasks:
-
-Configure the Distributed Task Queue Celery
--------------------------------------------
-
-There are various tasks that need to be executed by OnTask outside the web
-server. The solution adopted is to use `Celery
-<http://www.celeryproject.org/>`_, `Supervisor <http://supervisord.org/>`_ (a
-prcocess control system) and `Redis <https://redis.io/>`_. Redis
-has been configured in a previous step. This section explains how to set
-up the distributed task queue and make sure it is continuously executing in
-parallel with the web server.
-
-1. Make sure the binaries ``supervisord``, ``supervisorctl`` and ``celery``
-   are installed in your system.
-
-2. Go to the folder ``supervisor`` in the top of the project and edit the file
-   ``supervisor.conf``.
-
-3. The file configures ``supervisord`` to run in the background and prepare
-   two sets of processes for OnTask. You have two options to use this file:
-
-   a) Use environment variables.
-
-      The file uses internally the value of two environment variables:
-
-      * ``PROJECT_PATH``: Full path to the root of the project (the top
-        folder containing the file ``LICENSE``.
-
-      * ``CELERY_BIN``: Full path to the executable ``celery`` in your system
-        (typically ``/usr/local/bin/celery`` or similar).
-
-      * Set these variables in your environment to the correct values and make
-        sure they are properly exported and visible when running other
-        commands. For example, in ``bash``, this operation would be achieve
-        by two commands similar to::
-
-          $ export PROJECT_PATH=/full/path/to/OnTask/root/folder
-          $ export CELERY_BIN=/full/path/to/celery/executable
-
-   b) Change the file ``supervisor.conf``.
-
-      * replace any appearance of the string ``%(ENV_PROJECT_PATH)s`` by the
-        full path to the project folder.
-
-      * replace any appearance of the string ``%(ENV_CELERY_BIN)s`` by the
-        full path to the ``celery`` binary program.
-
-4. Start the process control system with the command::
-
-     $ supervisord -c supervisor.conf
-
-   The command starts the process control application ``supervisord``
-   which executes a set of process in the background.
-
-5. Check that the process control system is working with the command
-   (executed from the ``supervisor`` folder)::
-
-     $ supervisorctl -c supervisor.conf status
-
-   The output of this command should show a message similar to::
-
-     ontask-beat-celery               RUNNING   pid 28579, uptime 1 day, 0:07:36
-     ontask-celery                    RUNNING   pid 28578, uptime 1 day, 0:07:36
-
-   If the status of the two processes is ``STARTING`` wait a few seconds and
-   execute the command again. The names ``ontask-beat-celery`` and
-   ``ontask-celery`` are the names of the two processes that OnTask uses for
-   asynchronous task execution.
-
-   You may use this command to check if ``supervisord`` is still running. The
-   application is configured to write its messages to the file ``celery.log``
-   in the logs folder at the top of the project.
-
-6. If you are upgrading OnTask from a previous version (less than 2.8), you
-   need to edit the ``crontab`` entry and remove the command to execute the
-   script ``scheduler_script.py``.
-
 Download, install and configure OnTask
 --------------------------------------
 
@@ -344,6 +266,84 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
       The development version of OnTask is **not suited** to be used in
       production because it disables several security features. Make sure you
       only deploy a **production** version.
+
+.. _scheduling_tasks:
+
+Configure the Distributed Task Queue Celery
+-------------------------------------------
+
+There are various tasks that need to be executed by OnTask outside the web
+server. The solution adopted is to use `Celery
+<http://www.celeryproject.org/>`_, `Supervisor <http://supervisord.org/>`_ (a
+prcocess control system) and `Redis <https://redis.io/>`_. Redis
+has been configured in a previous step. This section explains how to set
+up the distributed task queue and make sure it is continuously executing in
+parallel with the web server.
+
+1. Make sure the binaries ``supervisord``, ``supervisorctl`` and ``celery``
+   are installed in your system.
+
+2. Go to the folder ``supervisor`` in the top of the project and edit the file
+   ``supervisor.conf``.
+
+3. The file configures ``supervisord`` to run in the background and prepare
+   two sets of processes for OnTask. You have two options to use this file:
+
+   a) Use environment variables.
+
+      The file uses internally the value of two environment variables:
+
+      * ``PROJECT_PATH``: Full path to the root of the project (the top
+        folder containing the file ``LICENSE``.
+
+      * ``CELERY_BIN``: Full path to the executable ``celery`` in your system
+        (typically ``/usr/local/bin/celery`` or similar).
+
+      * Set these variables in your environment to the correct values and make
+        sure they are properly exported and visible when running other
+        commands. For example, in ``bash``, this operation would be achieve
+        by two commands similar to::
+
+          $ export PROJECT_PATH=/full/path/to/OnTask/root/folder
+          $ export CELERY_BIN=/full/path/to/celery/executable
+
+   b) Change the file ``supervisor.conf``.
+
+      * replace any appearance of the string ``%(ENV_PROJECT_PATH)s`` by the
+        full path to the project folder.
+
+      * replace any appearance of the string ``%(ENV_CELERY_BIN)s`` by the
+        full path to the ``celery`` binary program.
+
+4. Start the process control system with the command::
+
+     $ supervisord -c supervisor.conf
+
+   The command starts the process control application ``supervisord``
+   which executes a set of process in the background.
+
+5. Check that the process control system is working with the command
+   (executed from the ``supervisor`` folder)::
+
+     $ supervisorctl -c supervisor.conf status
+
+   The output of this command should show a message similar to::
+
+     ontask-beat-celery               RUNNING   pid 28579, uptime 1 day, 0:07:36
+     ontask-celery                    RUNNING   pid 28578, uptime 1 day, 0:07:36
+
+   If the status of the two processes is ``STARTING`` wait a few seconds and
+   execute the command again. The names ``ontask-beat-celery`` and
+   ``ontask-celery`` are the names of the two processes that OnTask uses for
+   asynchronous task execution.
+
+   You may use this command to check if ``supervisord`` is still running. The
+   application is configured to write its messages to the file ``celery.log``
+   in the logs folder at the top of the project.
+
+6. If you are upgrading OnTask from a previous version (less than 2.8), you
+   need to edit the ``crontab`` entry and remove the command to execute the
+   script ``scheduler_script.py``.
 
 .. _upgrading:
 
