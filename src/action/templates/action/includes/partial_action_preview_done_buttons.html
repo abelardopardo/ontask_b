@@ -1,7 +1,7 @@
 {% load i18n %}
 <div class="text-center" style="margin: 1ex 0 1ex 0;">
   <button type="button"
-          class="btn btn-info js-action-preview {% if selected_rows == 0 %}disabled{% endif %}"
+          class="btn btn-primary js-action-preview {% if selected_rows == 0 %}disabled{% endif %}"
           style="margin-right:2ex;"
           data-url="{% url 'action:preview' action.id 1 %}"
           data-toggle="tooltip"
@@ -12,6 +12,6 @@
           class="btn btn-primary spin"
           data-toggle="tooltip"
           title="{% trans 'Save and go back' %}">
-    <span class="glyphicon glyphicon-ok"></span> {% trans 'Done' %}</button>
+    <span class="glyphicon glyphicon-ok"></span> {% trans 'Save' %}</button>
 </div>
 

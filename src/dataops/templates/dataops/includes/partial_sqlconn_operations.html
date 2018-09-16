@@ -15,7 +15,7 @@
     </li>
     <li>
       <button type="button"
-              class="btn btn-default btn-sm js-sqlconn-clone align-middle"
+              class="btn btn-danger btn-sm js-sqlconn-clone align-middle"
               data-url="{% url 'dataops:sqlconn_clone' id %}"
               data-toggle="tooltip" 
               title="{% trans 'Create an exact duplicate of this connection' %}">
@@ -24,7 +24,7 @@
     </li>
     <li>
       <button type="button"
-              class="btn btn-default btn-sm js-sqlconn-delete"
+              class="btn btn-danger btn-sm js-sqlconn-delete"
               data-url="{% url 'dataops:sqlconn_delete' id %}"
               data-toggle="tooltip" 
               title="{% trans 'Delete SQL connection' %}">

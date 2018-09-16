@@ -20,14 +20,14 @@
       {% trans 'Clone' %}
     </button>
     <button type="button"
-            class="btn btn-default btn-sm js-workflow-flush{% if workflow.nrows == 0 %} disabled{% endif %}"
+            class="btn btn-danger btn-sm js-workflow-flush{% if workflow.nrows == 0 %} disabled{% endif %}"
             data-url="{% url 'workflow:flush' workflow.id %}" data-toggle="tooltip"
             title="{% trans 'Delete the data in the table of this workflow' %}">
       <span class="glyphicon glyphicon-floppy-remove"></span>
       {% trans 'Flush Data' %}
     </button>
     <button type="button"
-            class="btn btn-default btn-sm js-workflow-delete"
+            class="btn btn-danger btn-sm js-workflow-delete"
             data-url="{% url 'workflow:delete' workflow.id %}" data-toggle="tooltip"
             title="{% trans 'Delete this workflow' %}">
       <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}

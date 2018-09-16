@@ -1,12 +1,12 @@
 {% load i18n %}
 <div class="condition-btn" role="group">
   <a href="{% url 'action:edit' id %}"
-     class="btn btn-primary btn-sm align-middle spin"
+     class="btn btn-default btn-sm align-middle spin"
      data-toggle="tooltip"
      title="{% trans 'Edit the text, conditions and filter' %}">
     <span class="glyphicon glyphicon-folder-open"></span> {% trans 'Edit' %}</a>
   <button type="button"
-          class="btn btn-primary btn-sm js-action-showurl"
+          class="btn btn-default btn-sm js-action-showurl"
           data-url="{% url 'action:showurl' id %}"
           data-toggle="tooltip"
           {% if is_out %}
@@ -20,17 +20,17 @@
   </button>
   {% if action_tval == 'personalized_text' %}
     <a href="{% url 'action:run' id %}"
-       class="btn btn-primary btn-sm spin"
+       class="btn btn-default btn-sm spin"
         data-toggle="tooltip" title="{% trans 'Send personalised emails' %}">
       <span class="glyphicon glyphicon-envelope"></span> {% trans 'Email' %}</a>
   {% elif action_tval == 'personalized_json' %}
     <a href="{% url 'action:run' id %}"
-       class="btn btn-primary btn-sm spin {% if not is_executable %}disabled{% endif %}"
+       class="btn btn-default btn-sm spin {% if not is_executable %}disabled{% endif %}"
         data-toggle="tooltip" title="{% trans 'Send personalised JSONs' %}">
       <span class="glyphicon glyphicon-off"></span> {% trans 'Run' %}</a>
   {% elif action_tval == 'survey' or action_tval == 'todo_list' %}
     <a href="{% url 'action:run' id %}"
-       class="btn btn-primary btn-sm spin {% if not is_executable %}disabled{% endif %}"
+       class="btn btn-default btn-sm spin {% if not is_executable %}disabled{% endif %}"
        data-toggle="tooltip"
        title="{% trans 'Enter data manually' %}">
       <span class="glyphicon glyphicon-off"></span> {% trans 'Run' %}</a>
@@ -76,7 +76,7 @@
       </li>
       <li>
         <button type="button"
-                class="btn btn-default btn-sm js-action-delete"
+                class="btn btn-danger btn-sm js-action-delete"
                 data-url="{% url 'action:delete' id %}"
                 data-toggle="tooltip"
                 title="{% trans 'Delete the action' %}">

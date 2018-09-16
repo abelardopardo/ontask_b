@@ -1,55 +1,42 @@
 {% load i18n %}
 <div class="dropdown">
+  <button type="button"
+          class="btn btn-default btn-sm js-workflow-column-edit"
+          data-url="{% url 'workflow:column_edit' id %}"
+          data-toggle="tooltip"
+          title="{% trans 'Edit column name, description, type, values, etc.' %}">
+    <span class="glyphicon glyphicon-pencil"></span>
+    {% trans 'Edit' %}
+  </button>
+  <button type="button"
+          class="btn btn-default btn-sm js-column-restrict"
+          data-url="{% url 'workflow:column_restrict' id %}"
+          data-toggle="tooltip"
+          title="{% trans 'Restrict the values allowed in the column' %}">
+    <span class="glyphicon glyphicon-resize-small"></span>
+    {% trans 'Restrict values' %}
+  </button>
+  <button type="button"
+          class="btn btn-default btn-sm js-column-clone align-middle"
+          data-url="{% url 'workflow:column_clone' id %}"
+          data-toggle="tooltip"
+          title="{% trans 'Create an exact duplicate of this column' %}">
+      <span class="glyphicon glyphicon-duplicate"></span>
+    {% trans 'Clone' %}
+  </button>
   {% if not is_key %}
     <a href="{% url 'table:stat_column' id %}"
-       class="btn btn-primary btn-sm align-middle"
-       data-toggle="tooltip" 
+       class="btn btn-default btn-sm align-middle"
+       data-toggle="tooltip"
        title="{% trans 'Statistics about this column' %}">
       <span class="glyphicon glyphicon-stats"></span>
-      {% trans 'Column Statistics' %}</a>
+      {% trans 'Statistics' %}</a>
   {% endif %}
-  <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-          data-toggle="dropdown"> {% trans 'More Operations' %} <span class="caret"></span>
+  <button type="button"
+          class="btn btn-danger btn-sm js-column-delete"
+          data-url="{% url 'workflow:column_delete' id %}"
+          data-toggle="tooltip"
+          title="{% trans 'Delete column' %}">
+    <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
   </button>
-  <ul role="menu" class="dropdown-menu">
-    <li>
-      <button type="button"
-              class="btn btn-default btn-sm js-workflow-column-edit"
-              data-url="{% url 'workflow:column_edit' id %}"
-              data-toggle="tooltip"
-              title="{% trans 'Edit column name, description, type, values, etc.' %}">
-        <span class="glyphicon glyphicon-pencil"></span>
-        {% trans 'Edit column' %}
-      </button>
-    </li>
-    <li>
-      <button type="button"
-              class="btn btn-default btn-sm js-column-restrict"
-              data-url="{% url 'workflow:column_restrict' id %}"
-              data-toggle="tooltip" 
-              title="{% trans 'Restrict the values in column' %}">
-        <span class="glyphicon glyphicon-resize-small"></span>
-        {% trans 'Restrict values in column' %}
-      </button>
-    </li>
-    <li>
-      <button type="button"
-              class="btn btn-default btn-sm js-column-clone align-middle"
-              data-url="{% url 'workflow:column_clone' id %}"
-              data-toggle="tooltip" 
-              title="{% trans 'Create an exact duplicate of this column' %}">
-          <span class="glyphicon glyphicon-duplicate"></span>
-        {% trans 'Clone this column' %}
-      </button>
-    </li>
-    <li>
-      <button type="button"
-              class="btn btn-default btn-sm js-column-delete"
-              data-url="{% url 'workflow:column_delete' id %}"
-              data-toggle="tooltip" 
-              title="{% trans 'Delete column' %}">
-        <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete this column' %}
-      </button>
-    </li>
-  </ul>
 </div>
