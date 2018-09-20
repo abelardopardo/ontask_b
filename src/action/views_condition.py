@@ -287,11 +287,11 @@ def delete_filter(request, pk):
     """
     # Get the filter
     try:
-        cond_filter = Condition.objects.get(
-            pk=pk,
-            action__workflow__user=request.user,
+        cond_filter = Condition.objects.filter(
+            Q(action__workflow__user=request.user) |
+            Q(action__workflow__shared=request.user),
             is_filter=True
-        )
+        ).distinct().get(pk=pk)
     except (KeyError, ObjectDoesNotExist):
         return redirect('workflow:index')
 
