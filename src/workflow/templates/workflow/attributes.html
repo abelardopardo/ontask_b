@@ -6,12 +6,12 @@
 {% load crispy_forms_tags %}
 {% load django_tables2 %}
 {% block extrahead %}
-  <link rel="stylesheet" href="http://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 {% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'workflow/js/workflow.js' %}{% otv %}"></script>
-  <script src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-  <script src="http://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
   <script type="text/javascript">
     if (document.getElementById("attribute-table") != null) {
         $(document).ready(function() {

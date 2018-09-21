@@ -6,15 +6,15 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block extrahead %}
-  <link rel="stylesheet" href="http://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
   <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
   <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
-  <script src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-  <script src="http://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
   <script src="{% static 'site/js/sol.js' %}"></script>
   <script src="{% static 'table/js/table.js' %}{% otv %}"></script>
@@ -164,7 +164,7 @@
                            class="btn btn-default btn-sm align-middle spin"
                            data-toggle="tooltip"
                            title="{% trans 'Stats and visualizations about this column' %}">
-                          <span class="glyphicon glyphicon-stats"></span> {% trans 'Stats' %}
+                          <span class="glyphicon glyphicon-stats"></span> {% trans 'Statistics' %}
                         </a>
                       </li>
                     {% endif %}

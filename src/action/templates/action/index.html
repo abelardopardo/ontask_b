@@ -6,14 +6,14 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block extrahead %}
-  <link rel="stylesheet" href="http://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
   <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
-  <script src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-  <script src="http://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
       if (document.getElementById("action-table") != null) {
