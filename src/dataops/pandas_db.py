@@ -740,8 +740,10 @@ def get_filter_query(table_name, column_names, filter_exp):
 
     fields = []
     # If there has been a suffix from the filter, add it.
-    if filter_txt and filter_fields:
+    if filter_txt:
         query += filter_txt
+
+    if filter_fields:
         fields.extend(filter_fields)
 
     return (query, fields)
