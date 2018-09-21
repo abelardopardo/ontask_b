@@ -165,7 +165,7 @@ $(function () {
   $("#modal-item").on("submit", ".js-filter-delete-form", saveForm);
 
   // Create Condition
-  $("#condition-set").on("click", ".js-condition-create", loadForm);
+  $("#condition-set-header").on("click", ".js-condition-create", loadForm);
   $("#modal-item").on("submit", ".js-condition-create-form", saveForm);
 
   // Edit Condition

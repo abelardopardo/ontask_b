@@ -99,7 +99,7 @@ class ScheduledActionSerializer(serializers.ModelSerializer):
 
         # Exclude_values can only have content if item_column is given.
         if not item_column and exclude_values:
-            raise APIException(_('Exclude values needs a value in item_column'))
+            raise APIException(_('Exclude items needs a value in item_column'))
 
         # Check that the received object has a payload
         payload = validated_data.get('payload', {})

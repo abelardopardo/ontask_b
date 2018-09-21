@@ -280,23 +280,6 @@ class OntaskLiveTestCase(LiveServerTestCase):
     def search_column(self, column_name):
         return self.search_table_row_by_string('column-table', 2, column_name)
 
-    def create_new_workflow(self, wname, wdesc=''):
-        # Create the workflow
-        self.selenium.find_element_by_class_name(
-            'js-create-workflow').click()
-        self.wait_for_modal_open()
-
-        self.selenium.find_element_by_id('id_name').send_keys(wname)
-        desc = self.selenium.find_element_by_id('id_description_text')
-        desc.send_keys(wdesc)
-        desc.send_keys(Keys.RETURN)
-
-        WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located(
-                (By.XPATH, "//table[@id='dataops-table']")
-            )
-        )
-
     def access_workflow_from_home_page(self, wname, wait=True):
         # Verify that this is the right page
         self.assertIn('New workflow', self.selenium.page_source)
@@ -550,6 +533,23 @@ class OntaskLiveTestCase(LiveServerTestCase):
         # Wait for modal to close and refresh the table
         self.wait_close_modal_refresh_table('column-table_previous')
 
+    def create_new_workflow(self, wname, wdesc=''):
+        # Create the workflow
+        self.selenium.find_element_by_class_name(
+            'js-create-workflow').click()
+        self.wait_for_modal_open()
+
+        self.selenium.find_element_by_id('id_name').send_keys(wname)
+        desc = self.selenium.find_element_by_id('id_description_text')
+        desc.send_keys(wdesc)
+        desc.send_keys(Keys.RETURN)
+
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//table[@id='dataops-table']")
+            )
+        )
+
     def create_new_personalized_text_action(self, aname, adesc=''):
         # click in the create action button
         self.selenium.find_element_by_class_name('js-create-action').click()
@@ -624,6 +624,46 @@ class OntaskLiveTestCase(LiveServerTestCase):
 
         # Wait for modal to close and for table to refresh
         self.wait_close_modal_refresh_table('attribute-table_previous')
+
+    def create_view(self, vname, vdesc, cols):
+        self.go_to_table_views()
+
+        # Button to add a view
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Add View']"
+        ).click()
+        # Wait for the form to create the derived column
+        self.wait_for_modal_open()
+
+        # Insert data to create the view
+        element = self.selenium.find_element_by_id("id_name")
+        element.click()
+        element.clear()
+        element.send_keys(vname)
+        if vdesc:
+            element = self.selenium.find_element_by_id("id_description_text")
+            element.click()
+            element.clear()
+            element.send_keys(vdesc)
+
+        # Focus on the column area
+        self.selenium.find_element_by_xpath(
+            "//*[@placeholder='Click here to search']").click()
+        options = self.selenium.find_element_by_xpath(
+            '//*[@id="div_id_columns"]//div[@class="sol-selection"]'
+        )
+        for cname in cols:
+            element = options.find_element_by_xpath(
+                'div/label/div[normalize-space()="{0}"]'.format(cname)
+            ).click()
+
+        self.selenium.find_element_by_css_selector("div.modal-title").click()
+
+        # Save the view
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Add view']"
+        ).click()
+        self.wait_close_modal_refresh_table('view-table_previous')
 
     def open_add_regular_column(self):
         # Click on the Add Column button
@@ -749,13 +789,15 @@ class OntaskLiveTestCase(LiveServerTestCase):
                 )
             )
 
-    def open_condition(self, cname):
+    def open_condition(self, cname, xpath=None):
         # Click on the right button
-        self.selenium.find_element_by_xpath(
-            "//div[@id='condition-set']"
-            "/div[1]/div/button"
-            "[contains(normalize-space(), '{0}')]".format(cname)
-        ).click()
+        if xpath:
+            self.selenium.find_element_by_xpath(xpath).click()
+        else:
+            self.selenium.find_element_by_xpath(
+                "//div[@id='condition-set']"
+                "/div/button[contains(normalize-space(), '{0}')]".format(cname)
+            ).click()
 
         # Wait for the modal to open
         WebDriverWait(self.selenium, 10).until(
@@ -777,9 +819,19 @@ class OntaskLiveTestCase(LiveServerTestCase):
             ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
         )
 
+    def open_view(self, vname):
+        # Go to views first
+        self.go_to_table_views()
+
+        element = self.search_table_row_by_string('view-table', 1, vname)
+        element.find_element_by_xpath(
+            "td//a[normalize-space()='Table']"
+        ).click()
+        self.wait_for_datatable('table-data_previous')
+
     def create_condition_base(self, zone_xpath, cname, cdesc, rule_tuples):
         # Open the right modal
-        self.open_condition_base(zone_xpath, cname)
+        self.open_condition(cname, zone_xpath)
 
         # Set the values of the condition
         form_field = self.selenium.find_element_by_id("id_name")

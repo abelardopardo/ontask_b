@@ -216,7 +216,7 @@ def run_json_action(request, workflow, action):
         messages.error(
             request,
             _('Unable to send json objects due to a misconfiguration. '
-              'Ask your system administrator to enable json queueing.'))
+              'Ask your system administrator to enable JSON queueing.'))
         return redirect(reverse('action:index'))
 
     # Create the form to ask for the email subject and other information

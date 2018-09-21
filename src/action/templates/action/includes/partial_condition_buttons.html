@@ -1,12 +1,9 @@
 {% load i18n %}
-<div class="row row-top-border" id="condition-set" style="padding-bottom: 0.5ex;">
+<div class="row row-top-border" style="padding-bottom: 0.5ex;">
   <div class="col-xs-1 col-md-1">
-    <span class="fa-stack">
-      <span class="fa fa-circle fa-stack-2x"></span>
-      <strong class="fa-stack-1x" style="color:white;">2</strong>
-    </span>
+    <div class="numberCircle"><b>2</b></div>
   </div>
-  <div class="col-xs-11 col-md-11">
+  <div id="condition-set-header" class="col-xs-11 col-md-11">
     <h4 class="text-center">
       <strong>{% trans 'Text Conditions' %}</strong>
       <button type="button"
@@ -18,7 +15,7 @@
         <span class="glyphicon glyphicon-plus"></span> {% trans 'New' %}</button></h4>
   </div>
 </div>
-<div class="row conditions">
+<div id="condition-set" class="row conditions">
   {% for condition in conditions %}
     <div class="condition-btn btn-group">
       <button type="button"

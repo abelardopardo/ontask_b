@@ -446,8 +446,7 @@ def view_index(request):
     }
 
     # Build the table only if there is anything to show (prevent empty table)
-    if views.count() > 0:
-        context['table'] = ViewTable(views, orderable=False)
+    context['table'] = ViewTable(views, orderable=False)
 
     return render(request, 'table/view_index.html', context)
 
