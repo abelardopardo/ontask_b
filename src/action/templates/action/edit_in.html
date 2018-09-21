@@ -10,7 +10,7 @@
 {% endblock styles %}
 {% block extrahead %}
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
-  <link rel="stylesheet" href="http://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
   <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
@@ -18,8 +18,8 @@
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
   <script src="{% static 'site/js/sol.js' %}"></script>
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
-  <script src="http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-  <script src="http://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
   <script type="text/javascript">
     var qbuilder_options = {
       plugins: ['bt-tooltip-errors', 'not-group'],
@@ -59,10 +59,7 @@
     {% include 'action/includes/partial_filter_create_buttons.html' %}
     <div class="row row-top-border">
       <div class="col-xs-1 col-md-1">
-        <span class="fa-stack">
-          <span class="fa fa-circle fa-stack-2x"></span>
-          <strong class="fa-stack-1x" style="color:white;">2</strong>
-        </span>
+        <div class="numberCircle"><b>2</b></div>
       </div>
       <div class="col-xs-11 col-md-11">
         <h4>
@@ -86,10 +83,7 @@
     </div>
     <div class="row row-top-border">
       <div class="col-xs-1 col-md-1">
-        <span class="fa-stack">
-          <span class="fa fa-circle fa-stack-2x"></span>
-          <strong class="fa-stack-1x" style="color:white;">3</strong>
-        </span>
+        <div class="numberCircle"><b>3</b></div>
       </div>
       <div class="col-xs-11 col-md-11">
         <h4>
@@ -120,10 +114,7 @@
     {% endif %}
     <div class="row row-top-border">
       <div class="col-xs-1 col-md-1">
-        <span class="fa-stack">
-          <span class="fa fa-circle fa-stack-2x"></span>
-          <strong class="fa-stack-1x" style="color:white;">4</strong>
-        </span>
+        <div class="numberCircle"><b>4</b></div>
       </div>
       <div class="col-xs-11 col-md-11">
         <h4>
@@ -140,10 +131,7 @@
     </div>
     <div class="row row-top-border">
       <div class="col-xs-1 col-md-1">
-        <span class="fa-stack">
-          <span class="fa fa-circle fa-stack-2x"></span>
-          <strong class="fa-stack-1x" style="color:white;">5</strong>
-        </span>
+        <div class="numberCircle"><b>5</b></div>
       </div>
       <div class="col-xs-11 col-md-11">
         <h4>{% trans 'Columns to obtain and store the data' %}</h4>
