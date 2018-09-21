@@ -86,7 +86,7 @@ class Scenario2Captures(ScreenTests):
         self.open_preview()
 
         # Picture of the body
-        self.modal_ss('scenario_02_text_all_conditions.png')
+        self.modal_ss('scenario_02_preview.png')
 
         # Close the modal
         self.cancel_modal()

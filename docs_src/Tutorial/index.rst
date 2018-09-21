@@ -86,18 +86,32 @@ create a new workflow as shown in the following figure.
 .. figure:: ../scaptures/workflow_index_empty.png
    :align: center
 
-The icon in the top right corner next to your profile image is a link to the OnTask documentation. Click in the button to create a new workflow and enter its name and a description.
+The icon in the top right corner next to your profile image is a link to the
+OnTask documentation. Click in the button to create a new workflow and enter
+its name and a description.
 
 .. figure:: ../scaptures/workflow_create.png
    :align: center
 
-Once you created the workflow the platform shows the list of all the
-workflows available.
+After creating the workflow opens it and shows the screen to
+upload data to the table. The current workflow is shown underneath the top
+menu as shown in the following figure (the string *BIOL1011* with a blue
+background).
 
-.. figure:: ../scaptures/workflow_index.png
+.. figure:: ../scaptures/dataops_datauploadmerge.png
    :align: center
 
-The first step is to select or *open* a workflow by clicking on the name to manipulate it. Once this operation is done, the access to the element is blocked for any other users (in case the workflow is being shared) to prevent two users changing the data or the actions simultaneously. The following screens will show the name of the selected workflow at the top. If you want to select another workflow to manipulate, you simply click in the OnTask icon at the top left corner of the screen to go back to the initial table.
+You can always click in the *Workflows* item at the top menu to go back to
+the home page and select a different workflow to open (or create a new one).
+
+.. figure:: ../scaptures/workflow_index.png
+
+From the home page you can also perform some additional operations in the
+worklow such as :ref:`rename and change the workflow
+description<details_rename>`, :ref:`cloning (or creating and
+exact replica of this workflow with another name)<details_clone>`,
+:ref:`delete all data in the workflow table<details_flush_data>`, or
+:ref:`delete the workflow<details_delete>`.
 
 Open a workflow
 ---------------
@@ -108,213 +122,316 @@ the following figure
 .. figure:: ../scaptures/workflow_details_empty.png
    :align: center
 
-You can see the icon on the top right corner that links to the initial
-page, and the icon in the top left corner that links to the documentation.
-So far the page only shows the description of the workflow and the last
-time it was modified because no data has been uploaded.
-
-The top of the screen now shows the sections offering different operations
-over the workflow:
+In this case the page only shows basic details because the workflow does not
+have any data stored in its table. While the workflow is open, the top menu
+contains the following links:
 
 Details
-  Is the current page with information about the columns, data types,
-  number of actions, etc.
+  Is the current page that shows information about the columns, data types,
+  number of actions, etc. contained in the workflow (empty now because we
+  haven't populated it)
 
 Table
-  Operations to visualize and manipulate the table (search for values, add a row, add a column)
+  Operations to visualize and manipulate the table (search for values, add a
+  row, add a column)
 
 Actions
-  Operations to create the actions and conditions.
+  Create, edit and execute actions.
 
 Logs
   A table showing the history of operations performed on this workflow
 
-The buttons immediately under title *Workflow Details* show some of the operations available at this point:
+In the current *Details* page, immediately under the title there are buttons
+to perform the following operations:
 
-- :ref:`New column <details_add_column>`
+- Manage table data
 
-- :ref:`Attributes <details_attributes>`
+  - :ref:`Upload or merge data to the table <data_upload>`
 
-- :ref:`Share <details_sharing>`
+  - :ref:`Run a plugin to transform the data in the table <plugin_run>`
 
-- :ref:`Export <details_export>`
+- Workflow operations:
 
-- :ref:`Rename <details_rename>`
+  - :ref:`Edit the attributes <details_attributes>`
 
-- :ref:`Delete <details_rename>`
+  - :ref:`Export the workflow <details_export>`
+
+  - :ref:`Rename or change the workflow description <details_rename>`
+
+  - :ref:`Share the workflow with other users in the platform <details_sharing>`
+
+  - :ref:`Clone the workflow <details_clone>`
+
+  - :ref:`Flush the data in the table <details_flush_data>`
+
+  - :ref:`Delete the workflow <details_delete>`
+
+.. _data_upload:
 
 Data Upload
 ===========
 
-We now will upload the data included in the file :download:`learner_information
-.csv <../Dataset/learner_information.csv>`. Click in the *Dataops* menu, and then in the option to *Data Upload/Merge* to see the following page:
+We now will upload the data included in the file
+:download:`student_list.csv <../Dataset/student_list.csv>`.
+From the page showing the *Details* of the workflow, click in the *Manage
+table data* button and select the option *Upload or merge data*:
 
 .. figure:: ../scaptures/dataops_datauploadmerge.png
    :align: center
 
-The next screen asks you to choose a file to upload the data. You can optionally specify a number of lines to skip at the top or bottom of your data file. This is useful when the CSV file is produced by another tool and contains some of these lines that have to be ignored.
+Click in the *CSV Upload/Merge* button. The next screen asks you to choose a
+file to upload the data. A CSV file is a text file in which the data is
+organized by lines, and the data in the lines are separated by commas. A
+conventional spreadsheet program can save the data in this format. When
+uploading the file you can optionally specify a number of lines to skip at
+the top or bottom of your data file. This is useful when the CSV file is
+produced by another tool and contains some of these lines that have to be
+ignored.
 
 .. figure:: ../scaptures/dataops_csvupload.png
    :align: center
 
-Choose the file :download:`learner_information.csv <../Dataset/learner_information.csv>` and proceed to the next step. The next screen shows the name of the columns detected in the file, the type (also automatically detected), a pre-filled field with the column name (in case you want to change it), and if it is a *key column* (there are no repeated values in all the rows).
+Choose the file :download:`student_list.csv
+<../Dataset/student_list.csv>` and proceed to the next step. The next
+screen shows the name of the columns detected in the file, the type (also
+automatically detected), a pre-filled field with the column name (in case you
+want to change it), and if it is a *key column* (there are no repeated
+values in all the rows).
 
-.. figure:: ../scaptures/06_data_csvupload_student_list.png
+.. figure:: ../scaptures/tutorial_csv_upload_learner_information.png
    :align: center
 
-The *key* columns are highlighted because a workflow must have at least one column of this type in its table. Select all the column (clicking in the top element labeled *load*) and click on the *Finish* button, and then back to the
-*Details* page to see the summary of the information in the workflow.
-
-You can now see the information about the columns present in the workflow as shown in the following figure
-
-.. figure:: ../scaptures/07_data_view_student_external.png
-   :align: center
-
-For each column you can change its name, description, type, position in the table and key attributes, or delete it from the workflow (icons in the left most column of the table). You can also use the arrows in the first column to adjust the order in which the columns are stored. For example, the following figure shows the information after relocating the columns in position 3-8.
-
-.. figure:: ../scaptures/07_b_data_view_student_external.png
-   :align: center
+The *key* columns are highlighted because a workflow must have at least one
+column of this type. Select all the column (clicking in the top
+element labeled *load*) and click on the *Finish* button.
 
 Workflow Details
 ================
 
-There are several operations available at the details page.
+The details page now shows the information about the columns as well as some
+additional operations for the workflow.
+You can now see the information about the columns present in the workflow as
+shown in the following figure:
 
-Attributes
-----------
-
-If you click again in the *Details* link at the top of the screen you will see again the page with the workflow details, but this time it will include the information about the columns just loaded.
-
-You can define a set of *attributes* in the workflow. This is simply a set of pairs *name, value* that you can use to have a single place where a value is defined and then reused in several other locations. For example, the name of the course is probably going to appear in various communications with the learners. If you define the attribute *Course_name* with that value, you can then refer to the attribute and it will be replaced by its value.
-
-.. figure:: ../scaptures/20_table_custom_attributes_initial.png
+.. figure:: ../scaptures/tutorial_details_1.png
    :align: center
 
-Share
------
+.. _tutorial_add_columns:
 
-You may share a workflow with other instructors in the platform. The *Share* button will allow you to add/remove other users to this list.
+Adding columns
+--------------
 
-.. figure:: ../scaptures/21_workflow_share.png
-   :align: center
+The left button in the area right below the title with name *Add Column*
+allows you to perform the following three operation.
 
-Remember that whenever you open a workflow, it becomes unavailable for the other users with whom it is being shared.
+:ref:`Add a new column <details_add_column>`
+  Use this function to add a new column to the data table manualy (as opposed
+  to the ones that were automatically derived from the CSV file you uploaded.
 
-Export
-------
+:ref:`Add a formula-based column <details_add_formula_column>`
+  This function is to create a new column containing the result of the data
+  from existing columns combined with certain basic operands.
 
-This functionality allows you to take all the information included in a workflow and export it. The functionality offers the option of including in the export only the data, or the data and the actions.
+:ref:`Add a column with random values <details_add_random_column>`
+  This function is to populate a new column with values randomly taken from a
+   pre-defined collection.
 
-.. figure:: ../scaptures/22_workflow_export.png
-   :align: center
+Uploading or Merging additional data
+------------------------------------
 
-Clone
------
+The button labeled *Manage table data* allows to execute the operation to
+upload/merge new data to the table, or to execute an existing plugin.
 
-This button creates a clone of the workflow with the a name containing the prefix "*Copy of*". Once the operation is executed, the workflow is available in the home screen (link in the upper left corner of the screen).
+Workflow operations
+-------------------
 
-Rename
-------
+The button with name *More workflow operations* offers the following
+additional operations in the current workflow.
 
-Use this function to change the name and description of the workflow
+Workflow attributes
+  You can define a set of *attributes* in the workflow. This is simply a set of
+  pairs *name, value* that you can use to have a single place where a value is
+  defined and then reused in several other locations. For example, the name
+  of the course is probably going to appear in various communications with
+  the learners. If you define the attribute *Course_name* with that value,
+  you can then refer to the attribute and it will be replaced by its value.
+
+Export workflow
+  This functionality allows you to take all the information included in a
+  workflow and export it. The functionality offers the option of including in
+  the export only the data, or the data and the actions.
+
+Rename workflow
+  Use this function to change the name and description of the workflow.
+
+Share workflow
+  You may share a workflow with other instructors in the platform. The *Share*
+  button will allow you to add/remove other users to this list. The other
+  users will not be able to flush the data or delete the workflow. Whenever
+  you open a workflow, it becomes unavailable for the other users with whom
+  it is being shared until you either select another workflow or your session
+   expires.
+
+Clone workflow
+  This button creates a clone of the workflow with the a name containing the
+  prefix *Copy of*. Once the operation is executed, the workflow is
+  available in the home screen (link in the upper left corner of the screen).
 
 Flush Data
-----------
+  This function deletes the data associated with the workflow. It maintains the
+  set of attributes and the actions, but it removes the conditions and filters
+  from all the actions.
 
-This function deletes the data associated with the workflow. It maintains the
-set of attributes and the actions, but it removes the conditions and filters
-from all the actions.
-
-Delete
-------
-
-This function deletes completely the workflow from the platform.
+Delete workflow
+  This function deletes completely the workflow from the platform.
 
 Browsing the table
 ==================
 
-Once the data has been uploaded, click in the *Table* link at the top of the screen. The following screen shows the values stored in the table
+Once the data has been uploaded, click in the *Table* link at the top of the
+screen to see the stored data:
 
-.. figure:: ../scaptures/18_table_initial.png
+.. figure:: ../scaptures/tutorial_initial_table.png
   :align: center
+
+The buttons at the top of the page offer the following functionaity:
+
+Add row
+  It offers a page with a form to enter the data for a new row in the table.
+
+Add column
+  These operations are the ones discussed in the section
+  :ref:`tutorial_add_columns`.
+
+Manage table data
+  The operations to either upload/merge new data on the table, or transform
+  its content executing pre-installed program in the platform (plugin).
+
+Dashboard
+  This button leads to a page summarizing the content in each of the columns
+  in the table. The values are shown as a histogram. For the columns with
+  numeric values, a boxplot, minmum, maximum, mean, standard deviation and
+  quartiles is also shown.
+
+CSV Download
+  Allows to download a CSV file with the information currently shown in the
+  screen.
 
 Table Views
 -----------
+For tables with a large number of columns and/or rows OnTask allows you to
+define a *view* of the table that shows only a subset of it. To create a view
+click first in the *Views* button at the top of the page and then the *Add
+View* in the next page. Insert a name, description and select some of the
+columns a shown in the following figure.
 
-For tables with large number of columns and/or rows OnTask allows you to define a *view* of the table that shows only a subset of the rows and/or a subset of the columns. To create a view click first in the *Views* button at the top of the page showing the table and then the button to add a view. Insert a name, description and select some of the columns a shown in the following figure.
+.. figure:: ../scaptures/tutorial_table_view_create.png
+   :align: center
 
-.. figure:: ../scaptures/27_table_view.png
-  :align: center
+Save the definition of the view and now click in the *Table* button in the
+operations for a vew. The appropriate table subset is shown. The buttons at the
+top of the page allow you to edit the view (change the rows and columns
+selected), or select another available view.
 
-Save the definition of the view and now click in the *Table* button that appears in the page showing all the available views. The table is shown but only with the selected columns. The buttons at the top of the page allow you to edit the view (change the rows and columns selected), or select another available view.
+.. figure:: ../scaptures/tutorial_table_view.png
+   :align: center
 
 Column and Row Statistics
 -------------------------
 
-If you click in the button with the column name and select the *Stats* link, OnTask shows a page with an statistical description of the values in that column. The analogous option is available as part of the operations (button *Ops*) in the row. The page shows identical representations than in the case of the column stats, but for each of the columns, the words *Your value* appear in the location corresponding to the values of the selected row (that typically correspond to one learner).
+If you click in the button with the column name in any of the table view and
+select the *Statistics*, OnTask shows a page with an statistical description
+of the values in that column. The analogous option is available through the
+*Operations* button in the row (left side of the table view). The page shows
+identical representations than in the case of the column stats, but for each
+column the words *Your value* appear in the location corresponding to the value
+in the row.
 
-.. figure:: ../scaptures/28_row_stats.png
+.. figure:: ../scaptures/tutorial_row_statistics.png
    :align: center
 
 Actions
 =======
 
-Click in the *Actions* link at the top of the screen. The next screen shows
-the list of actions that are part of the workflow, and if there is none, you
-will only see the buttons to crate a new ones.
+Access the *Actions* page clicking in the link with the same name in the  top
+of the screen. The next screen shows the list of actions that are part of
+the workflow, and the buttons to create a new one, import, or manage the data
+table.
 
-.. figure:: ../scaptures/22_rule_initial.png
+.. figure:: ../scaptures/tutorial_action_index.png
    :align: center
 
-Actions Out
------------
+Personalized text action
+------------------------
 
-Click on the button to create a new *Action Out* and provide a name and a
-description.
+Click on the button to create a *New Action*, provide a name, a description
+(optional) and select the type *Personalized text*.
 
-.. figure:: ../scaptures/23_action_create.png
+.. figure:: ../scaptures/tutorial_personalized_text_create.png
    :align: center
 
-The next screen is the *action editor*. The functions are divided into three areas. The one at the top allows you to specify a condition to select or filter a subset of students. The second contains the conditions to be used in the personalized text. The third is a HTML text editor with the content to personalize.
+The next screen is the *personalized text action editor*. The functions are
+divided into three areas.
 
-.. figure:: ../scaptures/24_action_edit.png
+.. figure:: ../scaptures/tutorial_personalized_text_editor.png
    :align: center
 
-Place the cursor in the text area and start the text with a salutation, then select the name of a column from the pull-down menu right above the text editor and select the column *GivenName*. The string `{{ GivenName}}` appears in the text area. This notation is to instruct the next steps to replace the value among double curly braces with the name of each student.
+1. This section allows to define a *filter*, or a condition to select a subset
+   of the learners for which this action will be considered.
+
+2. This section contains the conditions to be used in the personalized text.
+
+3. This area is the HTML text editor to write the content to personalize.
+
+Place the cursor in the text area and start the text with a salutation. Then
+click in the pull down menu next to *Insert* with the value *Column name*.
+Select the column *GivenName*. The string `{{ GivenName}}` appears
+in the text area. This notation is to instruct the next steps to replace the
+value among double curly braces with the name of each student.
+
+.. figure:: ../scaptures/tutorial_personalized_text_editor_with_column.png
+   :align: center
 
 Click now in the button *New* in the condition area. A form appears to
 introduce the name, description and formula. The formula may contain any
 combination of Boolean operators with respect to the column values. For
 example, the condition::
 
-  Q01 is equal to 0 AND Q02 is equal to 0
+  Program equal to FASS
 
 can be encoded in the formula widget as shown in the following figure
 
-.. figure:: ../scaptures/25_action_condition_edit.png
+.. figure:: ../scaptures/tutorial_condition_program_FASS.png
    :align: center
 
-We can now use this condition to control the appearance of text in the text
-area. Write a sentence that you would like to appear, select it and then
-click in the arrow button in the condition.
+We now use this condition to control the appearance of text in the editor.
 
-.. figure:: ../scaptures/26_action_condition_insert.png
+- Write a sentence in the editor below the greeting.
+
+- Select it
+
+- Click in the arrow button next to the condition name and select *Insert in
+  text*.
+
+.. figure:: ../scaptures/tutorial_personalized_text_condition_inserted.png
    :align: center
 
 The text area is then surrounded by two marks::
 
-  {% if Todo_review_T1 %}You need to review Topic 1{% endif %}
+  {% if Program is FASS %}Here are some suggestions for FASS{% endif %}
 
-This is the encoding to instruct the processing step to check the value of
-the condition ``Topic 1 incorrect`` and include the surrounded text only if
+This is the format to instruct the processing step to check the value of
+the condition ``Program is FASS`` and include the surrounded text only if
 the condition is true.
 
-You may also insert any attributes attached to the workflow. The attribute
-name will be replaced by its value when processing the text.
+Selecting only a subset of learners
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In some cases, you may want to create an action only for a subset of the learners. OnTask allows this functionality by defining a *Filter* at the top of the action-out editor. For example, the following filter 
+In some cases, you may want to create an action only for a subset of the
+learners. OnTask allows this by defining a *Filter* at the top
+of the editor. For example, the following filter:
 
-.. figure:: ../scaptures/29_action_out_filter.png
+.. figure:: ../scaptures/tutorial_personalized_text_filter.png
    :align: center
 
 Once the filter is saved, the application informs how many rows in the table are selected by the expression written in the filter.

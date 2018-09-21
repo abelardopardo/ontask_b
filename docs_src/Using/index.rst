@@ -26,7 +26,7 @@ The third entity in OnTask is the *personalized action* that is a text with elem
 A workflow in OnTask contains a single table (rows and columns) and a set of
 actions. This container is conceived to manage the data and actions related
 to a learning experience. You may use the workflow shown in the documentation
- importing  the :download:`initial workflow <../../initial_workflow.gz>`.
+importing  the :download:`initial workflow <../../initial_workflow.gz>`.
 
 The following sections offer a more in-depth description of all these elements as well as examples with real scenarios.
 
@@ -121,12 +121,12 @@ links to additional menus with various operations on the selected workflow (some
 of them will be available depending on your user profile). Under the title
 *Workflow Details* there are buttons to access the following operations:
 
-.. _details_add_column:
-
 Add a column
   This menu opens three options: create a regular column, create a column
   combining the values of two existing columns, or create a new column with
   random values.
+
+.. _details_add_column:
 
   Add a regular column
     Opens a dialog to create a new column in the table with the following
@@ -155,6 +155,8 @@ Add a column
     .. figure:: ../scaptures/workflow_add_column.png
        :align: center
 
+.. _details_add_formula_column:
+
   Add a formula-derived column
     This column is created by combining the values of existing columns using
     one of the operations addition, product, maximum, minimum, mean, median,
@@ -162,6 +164,8 @@ Add a column
     applied when the column is
     created the current values of the other columns. The column is not
     refreshed if the operand change in the future.
+
+.. _details_add_random_column:
 
   Add a column with random values
     This is useful to create columns for A/B testing. The new column is
@@ -208,7 +212,7 @@ Export
 Clone
   This function creates a new workflow duplicating the data, actions and
   conditions of the current workflow. The new workflow will have the same
-  name with the prefix *Copy of *.
+  name with the prefix *Copy of*.
 
 .. _details_rename:
 
@@ -290,7 +294,7 @@ Restrict
 
 Clone
   Clones the column in the workflow changing its name adding the prefix *Copy
-  of * to the name.
+  of* to the name.
 
 Delete
   Deletes the column from the workflow. If there are conditions inside
@@ -300,8 +304,8 @@ Delete
 Statistics
   Shows a statistical summary of the values in the column. If the data type
   is *number*, the summary includes information about quartiles, a boxplot, and
-   a histogram. For the rest of data types, the summary only includes the
-   histogram.
+  a histogram. For the rest of data types, the summary only includes the
+  histogram.
 
 .. _dataops:
 
@@ -372,7 +376,8 @@ a SQL connection shows the available connections and the possibility to
    :align: center
 
 When *running* a SQL connection the platform shows the configuration
-parameters and requests the password to access the remote database (if required).
+parameters and requests the password to access the remote database (if
+required).
 
 .. figure:: ../scaptures/dataops_SQL_run.png
    :align: center
@@ -383,7 +388,7 @@ the platform first automatically detects those columns that have unique
 values (no repetitions) and marks them as *keys*. Key columns are very
 important because the values (as they are different for
 every row) are used for various operation. There must be **at least one key
-column* in the workflow and it is possible to remove the *key* mark from any
+column** in the workflow and it is possible to remove the *key* mark from any
 column and only possible to mark a column as key if the values are all
 different. Before assigning the data to the table, the platform also allows
 to change the name of the columns as shown in the Step 2 of the upload process.
@@ -487,10 +492,10 @@ Add row
   A form appears with as many fields as columns to introduce a new row in the table.
 
 Add column
-  See :ref:`details_add_column`
+  See :ref:`Adding a column <details_add_column>`
 
 Add derived column
-  See :ref:`details_add_derived_column`
+  See :ref:`Adding a formula-derived column <details_add_formula_column>`
 
 Dashboard
   The dashboard is a page that shows a statistical summary for the columns
@@ -996,6 +1001,8 @@ the navigation bar at the top of the screen.
 .. figure:: ../scaptures/logs.png
 
 You may review the events and download them as a CSV file.
+
+.. _plugin_run:
 
 Plugins -- Transforming the data with your own code
 ===================================================
