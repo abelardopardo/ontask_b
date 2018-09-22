@@ -4525,26 +4525,6 @@
 },
 {
     "model": "logs.log",
-    "pk": 1795,
-    "fields": {
-        "user": [
-            "instructor10@bogus.com"
-        ],
-        "created": "2017-12-16T01:53:33.549Z",
-        "modified": "2018-09-06T00:16:15.246Z",
-        "name": "action_update",
-        "workflow": 140,
-        "payload": {
-            "content": "<p>Dear&nbsp;{{ first_name }}</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>{{ Coordinator_name }}</p><p>{{ course_name }}</p>",
-            "workflow_id": 140,
-            "id": 308,
-            "workflow_name": "ELON5839",
-            "name": "Reminder to post in the forum"
-        }
-    }
-},
-{
-    "model": "logs.log",
     "pk": 1796,
     "fields": {
         "user": [
