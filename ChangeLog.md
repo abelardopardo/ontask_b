@@ -2,12 +2,19 @@
 
 ### Added
 
-- Added screen to exclude emails before sending messages.
+- Added screen to exclude emails before sending messages (Issue #66)
 
 - Added API entry point to schedule action execution (Issue #53)
 
+- Added operators to filter data if the cell is empty/non empty (Issue #60)
+
+- Added additional code to remove Word markup when copy/pasting (Issue #63)
+
 - Added functionality to create a column with either a random integer 
   (between 1 and a given number) or with a random category value.
+  
+- Column in action index showing when was the last time an action has been 
+  executed (Issue #71) 
   
 - EMAIL configuration can now be done through environment variables (Issue #84)
 
@@ -16,18 +23,44 @@
 - Log objects have been re-encoded to use enumeration types.
 
 - Steps to create the actions have changed. Whe an action is created a set of
-  action types are presented.
+  action types are presented (Issue #72)
   
-- Significant changes to the UI as suggested by University of Auckland's group:
+- Significant changes to the UI as suggested by University of Auckland's 
+  group (Issue #74, #77):
 
   - Merged the home page into the login, and the workflow index is now the home
     page
     
-  - ... 
+  - Simplified the top menu removing the dataops item. It is now part of 
+    every main level screen.
+    
+  - Actions are created now by choosing the type
+  
+  - New action type to send a JSON object. It will eventually evolve into one
+    going through the Oauth2 cycle first.
+    
+  - Restructuring of the action edit pages.
+  
+  - Restructuring of the operations shown in the workflow index. 
 
 ### Fixed
 
 - Bug preventing the visualisation of the API documentation.
+
+- Fixed bug opening preview in personalized text when number of learners is 
+  equal to zero (Issue #70)
+  
+- Fixed bug that provoked some of the scheduled actions not to be picked 
+  (Issue #79)
+  
+- Replaced all http by https in URLs for libraries (Issue #85)
+
+- Unable to delete filters by users sharing workflows (Issue #86 #87)
+
+- Fixed two errors while evaluating some of the operands in the conditions 
+  (Issue #88)
+  
+- Removed duplicate Middleware (Issue #89)
 
 ## 2.8.3 (2018-08-21)
 
