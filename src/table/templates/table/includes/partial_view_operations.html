@@ -1,5 +1,10 @@
 {% load i18n %}
 <div class="condition-btn" role="group">
+  <a href="{% url 'table:display_view' id %}"
+     class="btn btn-default btn-sm"
+     data-toggle="tooltip"
+     title="{% trans 'Access the table with this view' %}">
+    <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Table' %}</a>
   <button type="button"
           class="btn btn-default btn-sm js-view-edit align-middle"
           data-url="{% url 'table:view_edit' id %}"
@@ -7,11 +12,6 @@
           title="{% trans 'Change elements in view' %}">
       <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
   </button>
-  <a href="{% url 'table:display_view' id %}"
-     class="btn btn-default btn-sm"
-     data-toggle="tooltip"
-     title="{% trans 'Access the table with this view' %}">
-    <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Table' %}</a>
   <button type="button"
           class="btn btn-default btn-sm js-view-clone align-middle"
           data-url="{% url 'table:view_clone' id %}"
