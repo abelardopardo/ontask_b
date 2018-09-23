@@ -452,7 +452,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
         self.selenium.find_element_by_link_text('Actions').click()
         # Wait for page to refresh
         self.wait_for_datatable('action-table_previous')
-        self.assertIn('New Action', self.selenium.page_source)
+        self.assertIn('New action', self.selenium.page_source)
 
     def go_to_table(self):
         self.selenium.find_element_by_link_text("Table").click()
@@ -575,6 +575,31 @@ class OntaskLiveTestCase(LiveServerTestCase):
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
+    def create_attribute(self, attribute_key, attribute_value):
+        # Click in the new attribute dialog
+        self.selenium.find_element_by_class_name('js-attribute-create').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),
+                                             'Create attribute')
+        )
+
+        # Fill out the form
+        element = self.selenium.find_element_by_id('id_key')
+        element.clear()
+        element.send_keys(attribute_key)
+        element = self.selenium.find_element_by_id('id_value')
+        element.clear()
+        element.send_keys(attribute_value)
+
+        # Click in the create attribute button
+        self.selenium.find_element_by_xpath(
+            "//div[@class='modal-footer']/button[normalize-space()='Create "
+            "attribute']"
+        ).click()
+
+        # Wait for modal to close and for table to refresh
+        self.wait_close_modal_refresh_table('attribute-table_previous')
+
     def create_new_survey_action(self, aname, adesc=''):
         # click in the create action button
         self.selenium.find_element_by_class_name('js-create-action').click()
@@ -600,30 +625,96 @@ class OntaskLiveTestCase(LiveServerTestCase):
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
-    def create_attribute(self, attribute_key, attribute_value):
-        # Click in the new attribute dialog
-        self.selenium.find_element_by_class_name('js-attribute-create').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),
-                                             'Create attribute')
-        )
+    def create_filter(self, cname, cdesc, rule_tuples):
+        self.create_condition_base(
+            "//button[contains(@class, 'js-filter-create')]",
+            cname,
+            cdesc,
+            rule_tuples)
 
-        # Fill out the form
-        element = self.selenium.find_element_by_id('id_key')
-        element.clear()
-        element.send_keys(attribute_key)
-        element = self.selenium.find_element_by_id('id_value')
-        element.clear()
-        element.send_keys(attribute_value)
+    def create_condition(self, cname, cdesc, rule_tuples):
+        self.create_condition_base(
+            "//button[contains(@class, 'js-condition-create')]",
+            cname,
+            cdesc,
+            rule_tuples)
 
-        # Click in the create attribute button
+    def create_condition_base(self, zone_xpath, cname, cdesc, rule_tuples):
+        # Open the right modal
+        self.open_condition(cname, zone_xpath)
+
+        # Set the values of the condition
+        form_field = self.selenium.find_element_by_id("id_name")
+        form_field.click()
+        form_field.clear()
+        form_field.send_keys(cname)
+        if cdesc:
+            form_field = self.selenium.find_element_by_id("id_description_text")
+            form_field.click()
+            form_field.clear()
+            form_field.send_keys(cdesc)
+
+        idx = 0
+        for rule_filter, rule_operator, rule_value in rule_tuples:
+            # Set the FILTER
+            form_field = self.selenium.find_element_by_name(
+                'builder_rule_{0}_filter'.format(idx)
+            )
+            form_field.click()
+            Select(form_field).select_by_visible_text(rule_filter)
+
+            # Set the operator
+            if rule_operator:
+                form_field = self.selenium.find_element_by_name(
+                    "builder_rule_{0}_operator".format(idx)
+                )
+                form_field.click()
+                Select(form_field).select_by_visible_text(rule_operator)
+
+            # Set the value
+            if rule_operator:
+                form_item = self.selenium.find_element_by_name(
+                    "builder_rule_{0}_value_0".format(idx)
+                )
+                form_item.click()
+                form_item.clear()
+                form_item.send_keys(rule_value)
+            else:
+                # This is the case in which the operator is implicit (boolean)
+                if rule_value:
+                    value_idx = 2
+                else:
+                    value_idx = 1
+                self.selenium.find_element_by_xpath(
+                    "(//input[@name='builder_rule_{0}_value_0'])[{1}]".format(
+                        idx,
+                        value_idx
+                    )
+                ).click()
+
+            idx += 1
+
+        # Save the condition
         self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[normalize-space()='Create "
-            "attribute']"
+            "//div[@id='modal-item']//button[@type='submit']"
         ).click()
 
-        # Wait for modal to close and for table to refresh
-        self.wait_close_modal_refresh_table('attribute-table_previous')
+        # Close modal (wail until the modal-open element disappears)
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
+        # Preview button clickable
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//button[contains(@class, 'js-action-preview')]"),
+            )
+        )
+        # Spinner not visible
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
 
     def create_view(self, vname, vdesc, cols):
         self.go_to_table_views()
@@ -829,101 +920,10 @@ class OntaskLiveTestCase(LiveServerTestCase):
         ).click()
         self.wait_for_datatable('table-data_previous')
 
-    def create_condition_base(self, zone_xpath, cname, cdesc, rule_tuples):
-        # Open the right modal
-        self.open_condition(cname, zone_xpath)
-
-        # Set the values of the condition
-        form_field = self.selenium.find_element_by_id("id_name")
-        form_field.click()
-        form_field.clear()
-        form_field.send_keys(cname)
-        if cdesc:
-            form_field = self.selenium.find_element_by_id("id_description_text")
-            form_field.click()
-            form_field.clear()
-            form_field.send_keys(cdesc)
-
-        idx = 0
-        for rule_filter, rule_operator, rule_value in rule_tuples:
-            # Set the FILTER
-            form_field = self.selenium.find_element_by_name(
-                'builder_rule_{0}_filter'.format(idx)
-            )
-            form_field.click()
-            Select(form_field).select_by_visible_text(rule_filter)
-
-            # Set the operator
-            if rule_operator:
-                form_field = self.selenium.find_element_by_name(
-                    "builder_rule_{0}_operator".format(idx)
-                )
-                form_field.click()
-                Select(form_field).select_by_visible_text(rule_operator)
-
-            # Set the value
-            if rule_operator:
-                form_item = self.selenium.find_element_by_name(
-                    "builder_rule_{0}_value_0".format(idx)
-                )
-                form_item.click()
-                form_item.clear()
-                form_item.send_keys(rule_value)
-            else:
-                # This is the case in which the operator is implicit (boolean)
-                if rule_value:
-                    value_idx = 2
-                else:
-                    value_idx = 1
-                self.selenium.find_element_by_xpath(
-                    "(//input[@name='builder_rule_{0}_value_0'])[{1}]".format(
-                        idx,
-                        value_idx
-                    )
-                ).click()
-
-            idx += 1
-
-        # Save the condition
-        self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']//button[@type='submit']"
-        ).click()
-
-        # Close modal (wail until the modal-open element disappears)
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Preview button clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//button[contains(@class, 'js-action-preview')]"),
-            )
-        )
-        # Spinner not visible
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
-
-    def create_condition(self, cname, cdesc, rule_tuples):
-        self.create_condition_base(
-            "//button[contains(@class, 'js-condition-create')]",
-            cname,
-            cdesc,
-            rule_tuples)
-
     def edit_condition(self, oldname, cname, cdesc, rule_tuples):
         self.create_condition_base(
             "//div[@id='condition-set']"
             "/div/button[contains(normalize-space(), '{0}')]".format(oldname),
-            cname,
-            cdesc,
-            rule_tuples)
-
-    def create_filter(self, cname, cdesc, rule_tuples):
-        self.create_condition_base(
-            "//button[contains(@class, 'js-filter-create')]",
             cname,
             cdesc,
             rule_tuples)
