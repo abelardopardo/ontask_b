@@ -769,7 +769,7 @@ def select_column_action(request, apk, cpk, key=None):
             action.columns.remove(current_key)
         if column.is_key:
             action.columns.add(column)
-        return JsonResponse({})
+        return JsonResponse({'html_redirect': ''})
 
     action.columns.add(column)
     # Refresh the page to show the column in the list.
