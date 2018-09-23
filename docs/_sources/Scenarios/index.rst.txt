@@ -4,7 +4,15 @@
 Use Scenarios
 *************
 
-This section contains a set of examples or *scenarios* to illustrate the different ways in which OnTask can be used. If you prefer to read about use cases instead of the manual, this is your place. But before reading any of them, you can identify if OnTask is useful in your case by asking these questions in order:
+This section contains a set of examples or *scenarios* showing how OnTask can
+ be used. If you prefer to read about use cases instead of the manual, this is your place.
+
+Do I really need this tool?
+===========================
+
+The first question you have to answer is if it really makes sense to use this
+tool in your context or is this yet another useless software application.
+To identify if OnTask is useful answer the following questions:
 
 1. Is there a moment during the deployment of a learning experience in which it makes sense to either gather or provide students with personalised information about their experience?
 
@@ -12,10 +20,16 @@ This section contains a set of examples or *scenarios* to illustrate the differe
 
 3. Do I know what I would like to do once I got both the moment and the data identified? For example, I would like to write certain students a message, or provide them some specific resources, or give them some suggestions.
 
-OnTask will be useful to you if you answer **yes** to all three questions. It is very important that you start your process from the learning design, that is, from where in the experience you think makes sense to provide some personalised resource to the students. In the remaining of this section we have included a set of scenarios that range from very simple to very complex. Each of them has two files available for you to download:
+OnTask will likely be useful to you if you answer **yes** to all three
+questions. It is very important that you start your process from the learning
+design, that is, from where in the experience you think makes sense to
+provide some personalised resource to the students. In the remaining of this
+section we have included a set of scenarios that range from very simple to
+very complex. Each of them has two files available for you to download:
 
-1. The CSV file with the data used in the example
-2. The complete workflow (data and actions)
+1. The CSV file with the data used in the example.
+
+2. The complete workflow (data and actions).
 
 Create a new workflow and use the first file to upload the data and try to replicate the steps described in each scenario, or use the second file to import the complete workflow and browse through its elements.
 

@@ -98,6 +98,185 @@ interpreter and you can execute the python interpreter.
    ``python-pip``). This tool will be used by both Python and Django to install
    additional libraries required to execute OnTask.
 
+Download, install and configure OnTask
+--------------------------------------
+
+1. Download or clone a copy of `OnTask <https://github.com/abelardopardo/ontask_b>`_.
+
+#. Using a command interpreter, go to the OnTask folder and locate a folder
+   inside it with name ``requirements``. Verify that it
+   contains the files ``base.txt``, ``production.txt`` and
+   ``development.txt``. The first file contains a list of python modules that
+   are required by OnTask. The second is a set of additional modules to run a
+   *production* instance, and the third is the same list if you intend to run a
+   *development* instance.
+
+#. If you plan to run a production instance of OnTask execute the command (you may need administrative privileges to execute this command)::
+
+     pip install -r requirements/production.txt
+
+   Alternatively, if you plan to run a development instance of OnTask,
+   execute the command::
+
+     pip install -r requirements/development.txt
+
+   This command downloads  a set of libraries and modules and installs them as
+   part of the python libraries in the system. 
+
+At this point you have the major modules in place. The next steps include the configuration of the Django environment to run OnTask. If you plan to install a production instance of OnTask, using a plain text editor (nano, vim, Emacs or similar) in a command line interpreter, open the file ``manage.py`` in the ``src`` folder of the project. Modify line 10 replacing the value ``"ontask.settings.development"`` by ``"ontask.settings.production"``. Save and close the file.
+
+Using the same plain text editor create a file with name ``local.env`` in the folder ``src/ontask/settings`` with the following content (note there is no space between variable names and the equal sign)::
+
+   DEBUG=False
+   TIME_ZONE=[YOUR LOCAL PYTHON TIME ZONE]
+   BASE_URL=''
+   DOMAIN_NAME=[YOUR DOMAIN NAME]
+   SHOW_HOME_FOOTER_IMAGE=True
+   # syntax: DATABASE_URL=postgres://username:password@127.0.0.1:5432/database
+   DATABASE_URL=postgres://[PSQLUSERNAME]:[PSQLPWD]@127.0.0.1:5432/ontask
+   REDIS_URL=[YOUR REDIS URL]
+   SECRET_KEY=
+   LTI_OAUTH_CREDENTIALS=key1=secret1,key2=secret2
+
+#. Open a command interpreter and execute the following python command::
+
+     python -c 'import tzlocal; print(tzlocal.get_localzone().zone)'
+
+   Replace ``[YOUR LOCAL PYTHON TIME ZONE]`` in the ``local.env`` file by the
+   description of your time zone produced by the previous command.
+
+#. If OnTask is going to be served from a location different from the root of your server (for example ``myhost.com/ontask``, then modify the value of the variable ``BASE_URL`` with the suffix that should follow the domain name (in the example, ``/ontask``).
+
+#. Modify the line starting with ``DOMAIN_NAME=`` and change the field
+``[YOUR DOMAIN NAME``] with the domain name of the machine hosting OnTask.
+
+#. If you want to disable the appearance of the banner image in the login
+   page set the value of the variable ``SHOW_HOME_FOOTER_IMAGE`` to False.
+
+#. Modify the line starting with ``DATABASE_URL=`` and change the
+   field ``[PSQLUSERNAME]`` with the name of the Postgresql user created in the
+   previous step (the one that could access the ontask database and run
+   queries). If you decided to use a different name for the database, adjust
+   the last part of the line accordingly (replace *ontask* by the name of
+   your database).
+
+#. Replace the string ``[YOUR REDIS URL]`` with the URL where Redis can be
+   accessed. This is typically something similar to
+   ``redis://127.0.0.1:6379/1``.
+
+#. Open a command interpreter and execute the following python command::
+
+     python -c 'import random; import string; print("".join([random.SystemRandom().choice(string.digits + string.ascii_letters + string.punctuation) for i in range(100)]))'
+
+   Copy the long string produced as output and add it at the end of the last
+   line of the file ``local.env``. It should look something like (with
+   different content after the equal sign)::
+
+     SECRET_KEY=4o93jf0572094jv...
+
+#. Modify the line starting with ``LTI_OAUTH_CREDENTIALS`` and include a
+   comma-separated list of pairs key=secret for LTI authentication. See the
+   section  :ref:`authentication` for more details about this type of
+   authentication.
+
+#. Create a new folder with name ``logs`` in the OnTask top folder (next to the ``requirements`` folder). This folder **is different** from the folder with the same name in the ``src`` folder.
+
+#. If at some point during the following steps you want to reset the content of the database, run the commands ``dropdb`` and ``createdb`` explained in :ref:`install_postgresql`.
+
+#. Execute the following commands from the ``src`` folder to prepare the
+   database initialization::
+
+     python manage.py makemigrations profiles accounts workflow dataops
+     python manage.py makemigrations table action logs scheduler table
+
+#. Execute the following command to create the database internal structure::
+
+     python manage.py migrate
+
+   A few messages should appear on the screen related to the initialization
+   of the database.
+
+#. Execute the following command to upload to the platform some initial data
+   structures::
+
+     python manage.py runscript -v1 --traceback initial_data
+
+   The command should run without any error or exception. If you need to
+   create additional users before deploying the platform, read the section
+   :ref:`bulk_user_creation`.
+
+#. Execute the command to create a superuser account in OnTask::
+
+     python manage.py createsuperuser
+
+   Remember the data that you enter in this step so that you use it when you
+   enter OnTask with your browser.
+
+#. Go to the ``docs`` folder to generate the documentation. Make sure this
+   folder contains the sub-folders with name ``_static`` and ``_templates``.
+   Execute the command::
+
+     make html
+
+   The documentation is produced by the ``sphinx-doc`` application and
+   generates the directory ``_build``. The documentation for the platform is in
+   the folder ``_build/html``.
+
+#. Copy the entire ``html`` folder (inside ``_build``) over to the
+   ``src/static`` folder (in Unix ``cp -r _build/html ../src/static``).
+
+#. From the ``src`` folder execute the following command to collect and install
+   the static content::
+
+     python manage.py collectstatic
+
+#. If you are running a production instance, execute the following
+   command to check the status of the platform::
+
+     python manage.py check --deploy
+
+   The command should print just one warning about the configuration variable
+   X_FRAME_OPTIONS. If you are running a development instance, you will get
+   various additional warning that are derived most of them from running the
+   instance without HTTPS.
+
+#. Execute the following command to start the OnTask server::
+
+     python manage.py runserver
+
+   If there are no errors, the message on the screen should say that your
+   server is running in the url 127.0.0.1:800. However, if you open your
+   browser in that URL, an error will be shown. This error is normal and it
+   is because the production version requires the pages to be served through
+   SSL with a valid certificate in a conventional server.
+
+#. If OnTask is going to be accessed through a web server like Apache or Nginx,
+   stop the application and configure the web server accordingly.
+
+#. If you want to use the server in development mode through the URL
+   ``127.0.0.1:8000`` you have to perform two more steps. First, edit the file
+   ``manage.py`` and change these three lines to look like::
+
+         os.environ.setdefault("DJANGO_SETTINGS_MODULE",
+                          "ontask.settings.development")
+
+   Second, execute the following command from the ``src`` folder::
+
+     pip install -r requirements/development.txt
+
+   Now, the command::
+
+     python manage.py runserver
+
+   will start the server in the URL 127.0.0.1:8000 and you should be able to
+   access it normally with the browser.
+
+   .. admonition:: Warning
+
+      The development version of OnTask is **not suited** to be used in
+      production because it disables several security features. Make sure you
+      only deploy a **production** version.
+
 .. _scheduling_tasks:
 
 Configure the Distributed Task Queue Celery
@@ -176,172 +355,64 @@ parallel with the web server.
    need to edit the ``crontab`` entry and remove the command to execute the
    script ``scheduler_script.py``.
 
-Download, install and configure OnTask
---------------------------------------
+.. _upgrading:
 
-1. Download or clone a copy of `OnTask <https://github.com/abelardopardo/ontask_b>`_.
+Upgrading OnTask
+================
 
-#. Using a command interpreter, go to the OnTask folder and locate a folder
-   inside it with name ``requirements``. Verify that it
-   contains the files ``base.txt``, ``production.txt`` and
-   ``development.txt``. The first file contains a list of python modules that
-   are required by OnTask. The second is a set of additional modules to run a
-   *production* instance, and the third is the same list if you intend to run a
-   *development* instance.
+If you have OnTask already configured and running, here are the steps to
+follow to upgrade to a new version (if you are upgrading from a version below
+2.8 to 2.8 or higher read :ref:`scheduling_tasks`).
 
-#. If you plan to run a production instance of OnTask execute the command (you may need administrative privileges to execute this command)::
+- Create a backup of the database to be able to restore the state of the tool
+  before the upgrade process.
 
-     pip install -r requirements/production.txt
+- Stop the apache web server.
 
-   Alternatively, if you plan to run a development instance of OnTask,
-   execute the command::
+- Open a terminal and use a command interpreter to execute the following
+  commands.
 
-     pip install -r requirements/development.txt
+- Place the interpreter in the project folder (the one with the folder
+  ``src`` in it)
 
-   This command downloads  a set of libraries and modules and installs them as
-   part of the python libraries in the system. 
+- Pull the code for the new version from the repository::
 
-At this point you have the major modules in place. The next steps include the configuration of the Django environment to run OnTask. If you plan to install a production instance of OnTask, using a plain text editor (nano, vim, Emacs or similar) in a command line interpreter, open the file ``manage.py`` in the ``src`` folder of the project. Modify line 10 replacing the value ``"ontask.settings.development"`` by ``"ontask.settings.production"``. Save and close the file.
+    git pull
 
-Using the same plain text editor create a file with name ``local.env`` in the folder ``src/ontask/settings`` with the following content (note there is no space between variable names and the equal sign)::
+- Refresh the list of requirements::
 
-   TIME_ZONE='[YOUR LOCAL PYTHON TIME ZONE]'
-   BASE_URL=''
-   DOMAIN_NAME='[YOUR DOMAIN NAME]'
-   # syntax: DATABASE_URL=postgres://username:password@127.0.0.1:5432/database
-   DATABASE_URL=postgres://[PSQLUSERNAME]:[PSQLPWD]@127.0.0.1:5432/ontask
-   SECRET_KEY=
-   LTI_OAUTH_CREDENTIALS=key1=secret1,key2=secret2
+    pip install -r requirements/production.txt
 
-#. Open a command interpreter and execute the following python command::
+- Go to the sub-folder containing the tool documentation::
 
-     python -c 'import tzlocal; print(tzlocal.get_localzone().zone)'
+    cd docs_src
 
-   Replace ``[YOUR LOCAL PYTHON TIME ZONE]`` in the ``local.env`` file by the
-   description of your time zone produced by the previous command.
+- Re-create the tool documentation and place it in the appropriate folder::
 
-#. If OnTask is going to be served from a location different from the root of your server (for example ``myhost.com/ontask``, then modify the value of the variable ``BASE_URL`` with the suffix that should follow the domain name (in the example, ``/ontask``).
+    make clean html copy_to_docs
 
-#. Modify the line starting with ``DOMAIN_NAME=`` and change the field
-``[YOUR DOMAIN NAME``] with the domain name of the machine hosting OnTask.
+- Go to the sub-folder containing the apps::
 
-#. Modify the line starting with ``DATABASE_URL=`` and change the
-   field ``[PSQLUSERNAME]`` with the name of the Postgresql user created in the
-   previous step (the one that could access the ontask database and run
-   queries). If you decided to use a different name for the database, adjust
-   the last part of the line accordingly (replace *ontask* by the name of
-   your database).
+    cd ../src
 
-#. Open a command interpreter and execute the following python command::
+- Collect all files to be served statically::
 
-     python -c 'import random; import string; print("".join([random.SystemRandom().choice(string.digits + string.ascii_letters + string.punctuation) for i in range(100)]))'
+    python manage.py collectstatic
 
-   Copy the long string produced as output and add it at the end of the last
-   line of the file ``local.env``. It should look something like (with
-   different content after the equal sign)::
+- Apply the migrations to the database::
 
-     SECRET_KEY=4o93jf0572094jv...
+    python manage.py migrate
 
-#. Modify the line starting with ``LTI_OAUTH_CREDENTIALS`` and include a
-   comma-separated list of pairs key=secret for LTI authentication. See the
-   section  :ref:`authentication` for more details about this type of
-   authentication.
+- Check that the configuration is ready to run::
 
-#. Create a new folder with name ``logs`` in the OnTask top folder (next to the ``requirements`` folder). This folder **is different** from the folder with the same name in the ``src`` folder.
+    python manage.py check --deploy
 
-#. If at some point during the following steps you want to reset the content of the database, run the commands ``dropdb`` and ``createdb`` explained in :ref:`install_postgresql`.
+- Restart the ``supervisord`` configuration::
 
-#. Execute the following commands from the ``src`` folder to prepare the
-   database initialization::
+    supervisorctl -c ../supervisor.conf reload
 
-     python manage.py makemigrations profiles accounts workflow dataops
-     python manage.py makemigrations table action logs scheduler table
-
-#. Execute the following command to create the database internal structure::
-
-     python manage.py migrate
-
-   A few messages should appear on the screen related to the initialization
-   of the database.
-
-#. Execute the following command to upload to the platform some initial data
-   structures::
-
-     python manage.py runscript -v1 --traceback initial_data
-
-   The command should run without any error or exception.
-
-#. Execute the command to create a superuser account in OnTask::
-
-     python manage.py createsuperuser
-
-   Remember the data that you enter in this step so that you use it when you
-   enter OnTask with your browser.
-
-#. Go to the ``docs`` folder to generate the documentation. Make sure this
-   folder contains the sub-folders with name ``_static`` and ``_templates``.
-   Execute the command::
-
-     make html
-
-   The documentation is produced by the ``sphinx-doc`` application and
-   generates the directory ``_build``. The documentation for the platform is in
-   the folder ``_build/html``.
-
-#. Copy the entire ``html`` folder (inside ``_build``) over to the
-   ``src/static`` folder (in Unix ``cp -r _build/html ../src/static``).
-
-#. From the ``src`` folder execute the following command to collect and install
-   the static content::
-
-     python manage.py collectstatic
-
-#. If you are running a production instance, execute the following
-   command to check the status of the platform::
-
-     python manage.py check --deploy
-
-   The command should print just one warning about the configuration variable
-   X_FRAME_OPTIONS. If you are running a development instance, you will get
-   various additional warning that are derived most of them from running the
-   instance without HTTPS.
-
-#. Execute the following command to start the OnTask server::
-
-     python manage.py runserver
-
-   If there are no errors, the message on the screen should say that your
-   server is running in the url 127.0.0.1:800. However, if you open your
-   browser in that URL, an error will be shown. This error is normal and it
-   is because the production version requires the pages to be served through
-   SSL with a valid certificate in a conventional server.
-
-#. If OnTask is going to be accessed through a web server like Apache or Nginx,
-   stop the application and configure the web server accordingly.
-
-#. If you want to use the server in development mode through the URL
-   ``127.0.0.1:8000`` you have to perform two more steps. First, edit the file
-   ``manage.py`` and change these three lines to look like::
-
-         os.environ.setdefault("DJANGO_SETTINGS_MODULE",
-                          "ontask.settings.development")
-
-   Second, execute the following command from the ``src`` folder::
-
-     pip install -r requirements/development.txt
-
-   Now, the command::
-
-     python manage.py runserver
-
-   will start the server in the URL 127.0.0.1:8000 and you should be able to
-   access it normally with the browser.
-
-   .. admonition:: Warning
-
-      The development version of OnTask is **not suited** to be used in
-      production because it disables several security features. Make sure you
-      only deploy a **production** version.
+- Restart the apache web server and check the new version is properly
+  installed.
 
 The Administration Pages
 ========================
@@ -552,12 +623,12 @@ One of the key functionalities of OnTask is to be able to merge data from multip
 
 The definition of these connections is done from the platform's home page, right after the table showing the available workflows.
 
-.. figure:: ../Using/images/Ontask____SQLtable.png
+.. figure:: ../scaptures/workflow_superuser_index.png
    :align: center
 
 Each connection can be defined with the following parameters:
 
-.. figure:: ../Using/images/Ontask___SQLcreate.png
+.. figure:: ../scaptures/workflow_superuser_sql_edit.png
    :align: center
 
 Name (required)
@@ -632,61 +703,3 @@ data in a CSV file through the following steps:
      $ python manage.py runscript initial_data --script-args "-d -e your_email_column_name -i scripts/initial_learners.csv"
 
 
-.. _upgrading:
-
-Upgrading OnTask
-================
-
-If you have OnTask already configured and running, here are the steps to
-follow to upgrade to a new version (if you are upgrading from a version below
-2.8 to 2.8 or higher read :ref:`scheduling_tasks`).
-
-- Create a backup of the database to be able to restore the state of the tool
-  before the upgrade process.
-
-- Stop the apache web server.
-
-- Open a terminal and use a command interpreter to execute the following
-  commands.
-
-- Place the interpreter in the project folder (the one with the folder
-  ``src`` in it)
-
-- Pull the code for the new version from the repository::
-
-    git pull
-
-- Refresh the list of requirements::
-
-    pip install -r requirements/production.txt
-
-- Go to the sub-folder containing the tool documentation::
-
-    cd docs_src
-
-- Re-create the tool documentation and place it in the appropriate folder::
-
-    make clean html copy_to_docs
-
-- Go to the sub-folder containing the apps::
-
-    cd ../src
-
-- Collect all files to be served statically::
-
-    python manage.py collectstatic
-
-- Apply the migrations to the database::
-
-    python manage.py migrate
-
-- Check that the configuration is ready to run::
-
-    python manage.py check --deploy
-
-- Restart the ``supervisord`` configuration::
-
-    supervisorctl -c ../supervisor.conf reload
-
-- Restart the apache web server and check the new version is properly
-  installed.
