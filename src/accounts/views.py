@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 from . import forms
 
@@ -16,6 +17,12 @@ class LoginView(bracesviews.AnonymousRequiredMixin,
                 authviews.LoginView):
     template_name = "accounts/login.html"
     form_class = forms.LoginForm
+
+    def get_context_data(self, **kwargs):
+        context = super(LoginView, self).get_context_data(**kwargs)
+        context['ONTASK_SHOW_HOME_FOOTER_IMAGE'] = \
+            settings.SHOW_HOME_FOOTER_IMAGE
+        return context
 
     def form_valid(self, form):
         redirect = super(LoginView, self).form_valid(form)

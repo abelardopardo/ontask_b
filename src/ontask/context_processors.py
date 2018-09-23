@@ -14,7 +14,5 @@ def conf_to_context(request):
     """
 
     return {'ONTASK_HELP_URL': getattr(settings, 'ONTASK_HELP_URL', ''),
-            'ONTASK_TIMEOUT': getattr(settings, 'SESSION_COOKIE_AGE', 1800),
-            'ONTASK_SHOW_HOME_FOOTER_IMAGE':
-                getattr(settings, 'SHOW_HOME_FOOTER_IMAGE', False)}
+            'ONTASK_TIMEOUT': getattr(settings, 'SESSION_COOKIE_AGE', 1800)}
 
