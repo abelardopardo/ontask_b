@@ -30,6 +30,7 @@ from django.contrib.messages import constants as message_constants
 # Use 12factor inspired environment variables or from a file and define defaults
 env = environ.Env(
     DEBUG=(bool, False),
+    SHOW_HOME_FOOTER_IMAGE=(bool, True),
     LTI_OAUTH_CREDENTIALS=(dict, {})
 )
 

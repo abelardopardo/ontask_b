@@ -127,11 +127,14 @@ At this point you have the major modules in place. The next steps include the co
 
 Using the same plain text editor create a file with name ``local.env`` in the folder ``src/ontask/settings`` with the following content (note there is no space between variable names and the equal sign)::
 
-   TIME_ZONE='[YOUR LOCAL PYTHON TIME ZONE]'
+   DEBUG=False
+   TIME_ZONE=[YOUR LOCAL PYTHON TIME ZONE]
    BASE_URL=''
-   DOMAIN_NAME='[YOUR DOMAIN NAME]'
+   DOMAIN_NAME=[YOUR DOMAIN NAME]
+   SHOW_HOME_FOOTER_IMAGE=True
    # syntax: DATABASE_URL=postgres://username:password@127.0.0.1:5432/database
    DATABASE_URL=postgres://[PSQLUSERNAME]:[PSQLPWD]@127.0.0.1:5432/ontask
+   REDIS_URL=[YOUR REDIS URL]
    SECRET_KEY=
    LTI_OAUTH_CREDENTIALS=key1=secret1,key2=secret2
 
@@ -147,12 +150,19 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
 #. Modify the line starting with ``DOMAIN_NAME=`` and change the field
 ``[YOUR DOMAIN NAME``] with the domain name of the machine hosting OnTask.
 
+#. If you want to disable the appearance of the banner image in the login
+   page set the value of the variable ``SHOW_HOME_FOOTER_IMAGE`` to False.
+
 #. Modify the line starting with ``DATABASE_URL=`` and change the
    field ``[PSQLUSERNAME]`` with the name of the Postgresql user created in the
    previous step (the one that could access the ontask database and run
    queries). If you decided to use a different name for the database, adjust
    the last part of the line accordingly (replace *ontask* by the name of
    your database).
+
+#. Replace the string ``[YOUR REDIS URL]`` with the URL where Redis can be
+   accessed. This is typically something similar to
+   ``redis://127.0.0.1:6379/1``.
 
 #. Open a command interpreter and execute the following python command::
 
