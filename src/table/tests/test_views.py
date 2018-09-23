@@ -521,10 +521,7 @@ class TableViews(test.OntaskLiveTestCase):
         # Click in the clone link of the first view
         element = self.search_table_row_by_string('view-table', 1, 'v1')
         element.find_element_by_xpath(
-            "//button[normalize-space()='More']"
-        ).click()
-        element.find_element_by_xpath(
-            "//button[normalize-space()='Clone']"
+            "td//button[normalize-space()='Clone']"
         ).click()
         # Wait for the modal to open
         WebDriverWait(self.selenium, 10).until(

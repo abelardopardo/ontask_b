@@ -17,6 +17,26 @@
 },
 {
     "model": "authtools.user",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$7IWHqHRmEqHJ$MACKzkY9ez1AP8w+m6vBWJDgnBB63qiZ8ltnHRgp9DA=",
+        "last_login": "2017-12-21T09:57:47.744Z",
+        "is_superuser": false,
+        "email": "instructor01@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-13T10:44:13.687Z",
+        "name": "Instructor One",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
     "pk": 2,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$bk9KRTlKZ2xxbDlB$cAe2f8x6BpprOod9BCaOKg",
@@ -196,286 +216,6 @@
         "app": "logs",
         "name": "max_list_size",
         "text": "200"
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 8,
-    "fields": {
-        "slug": "661e2408-f965-498a-83ca-2cccec5070e6",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 9,
-    "fields": {
-        "slug": "de800ca9-f42f-4463-90d4-6b0f9bb6176c",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 10,
-    "fields": {
-        "slug": "3e3824ef-5747-4a02-8fa9-28b7d05a1add",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 11,
-    "fields": {
-        "slug": "7341a936-0d6a-4a4c-8fbf-3c7043e38d89",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 12,
-    "fields": {
-        "slug": "e4e5904d-e4db-42af-9ee1-ba3aebf03e98",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 13,
-    "fields": {
-        "slug": "3158e016-41d7-4f8d-9d62-50081a84e4d1",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 1,
-    "fields": {
-        "slug": "de40f029-dcb0-47cf-a23b-f25018fc7827",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 14,
-    "fields": {
-        "slug": "9236f0b7-3fec-44b8-b72c-60f78037e8ba",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 25,
-    "fields": {
-        "slug": "08370382-bdbc-43cc-91b6-1514021bf03f",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 32,
-    "fields": {
-        "slug": "5b134353-e8eb-4884-b38c-1b45bcd99337",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 24,
-    "fields": {
-        "slug": "b2ed18fe-c295-4ccf-8779-0cd9a259f652",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 15,
-    "fields": {
-        "slug": "310aff0d-1376-4515-a5f8-c35a2a0b1a26",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 21,
-    "fields": {
-        "slug": "f201e727-6a47-40e5-9a41-84eb45529fd1",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 23,
-    "fields": {
-        "slug": "973ed6d1-8c8a-48f9-8ca5-bd4fe2769680",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 28,
-    "fields": {
-        "slug": "ed12af4a-525c-4d2f-bc08-346074188f83",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 22,
-    "fields": {
-        "slug": "95d2766d-94a8-498b-8de5-2b6227f40ab8",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 33,
-    "fields": {
-        "slug": "589e1327-7c1a-4741-8034-4a7570251674",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 27,
-    "fields": {
-        "slug": "56027658-1fb5-4f65-b924-64fb0e2da529",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 17,
-    "fields": {
-        "slug": "87e2a265-f73d-4326-869d-6dc8914974ff",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 16,
-    "fields": {
-        "slug": "638bd390-0210-4c2a-952c-81505cedd360",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 34,
-    "fields": {
-        "slug": "68301d4a-6b75-4e08-acb9-36b7c1113040",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 20,
-    "fields": {
-        "slug": "3b9b9f42-6022-41ea-a377-540f47d8b693",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 30,
-    "fields": {
-        "slug": "bfd3622c-192d-4b39-8e42-0ed05a47658a",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 26,
-    "fields": {
-        "slug": "20ffe752-924f-4a9d-af39-1c3a1d4754b4",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 31,
-    "fields": {
-        "slug": "0898b993-f5c0-4def-ac8f-3b8751da2dc2",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 19,
-    "fields": {
-        "slug": "c427a656-c47f-4810-9b6b-406c20018b71",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 29,
-    "fields": {
-        "slug": "c1b08a27-84ce-45ca-8683-477687d005cb",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
-    }
-},
-{
-    "model": "profiles.profile",
-    "pk": 18,
-    "fields": {
-        "slug": "0acba95a-b69b-4086-a63e-8da0a66bbd3a",
-        "picture": "",
-        "bio": null,
-        "email_verified": false
     }
 },
 {

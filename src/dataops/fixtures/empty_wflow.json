@@ -285,22 +285,6 @@
 },
 {
     "model": "authtools.user",
-    "pk": 11,
-    "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$MGs2dU9SM1NEajRM$lqd1Aakc7a7ax64BDspmuQ",
-        "last_login": null,
-        "is_superuser": false,
-        "email": "student01@bogus.com",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2018-09-05T03:51:22.470Z",
-        "name": "User Name",
-        "groups": [],
-        "user_permissions": []
-    }
-},
-{
-    "model": "authtools.user",
     "pk": 27,
     "fields": {
         "password": "",

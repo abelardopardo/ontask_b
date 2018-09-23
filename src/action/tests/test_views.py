@@ -2,10 +2,8 @@
 from __future__ import unicode_literals, print_function
 
 import os
-import time
 
 from django.conf import settings
-from django.shortcuts import reverse
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait, Select
@@ -383,7 +381,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         )
 
         # Modify the condition. Click in the condition edit button
-        self.edit_condition('fname2', '', [])
+        self.edit_condition('fname', 'fname2', '', [])
 
         # Make sure the content has the correct text
         self.assertIn(
@@ -398,24 +396,8 @@ class ActionActionEdit(test.OntaskLiveTestCase):
             """$('#id_content').summernote('editor.insertText', "cmark3");"""
         )
 
-        # Click in the delete condition button
-        self.selenium.find_element_by_xpath(
-            "//div[@id='condition-set']/div/div/button[2]"
-        ).click()
-        self.selenium.find_element_by_class_name('js-condition-delete').click()
-        # Wait for the screen to delete the condition
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//div[@id='modal-item']//form")
-            )
-        )
-
-        # Click in the "delete condition"
-        self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']/div/div/form/div/button[2]"
-        ).click()
-        # MODAL WAITING
-        self.wait_close_modal_refresh_table('html-editor')
+        # Delete the condition
+        self.delete_condition('fname2')
 
         # Make sure the content has the correct text
         self.assertIn(

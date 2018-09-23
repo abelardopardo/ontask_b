@@ -11,7 +11,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import reverse
-from django.test import TestCase, LiveServerTestCase
+from django.test import TransactionTestCase, LiveServerTestCase
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITransactionTestCase
 from selenium import webdriver
@@ -100,7 +100,7 @@ class ElementHasFullOpacity(object):
             return False
 
 
-class OntaskTestCase(TestCase):
+class OntaskTestCase(TransactionTestCase):
     @classmethod
     def tearDownClass(cls):
         # Close the db_engine
@@ -913,10 +913,10 @@ class OntaskLiveTestCase(LiveServerTestCase):
             cdesc,
             rule_tuples)
 
-    def edit_condition(self, cname, cdesc, rule_tuples):
+    def edit_condition(self, oldname, cname, cdesc, rule_tuples):
         self.create_condition_base(
             "//div[@id='condition-set']"
-            "/div[1]/div/button[normalize-space()='{0}']".format(cname),
+            "/div/button[contains(normalize-space(), '{0}')]".format(oldname),
             cname,
             cdesc,
             rule_tuples)
@@ -962,13 +962,12 @@ class OntaskLiveTestCase(LiveServerTestCase):
         """
         # Get the button for the condition
         element = self.selenium.find_element_by_xpath(
-            "//div[@id='condition-set']/div/div/"
-            "button[normalise-space()='{0}'".format(cname)
+            "//div[@id='condition-set']/div/"
+            "button[contains(normalize-space(), '{0}')]".format(cname)
         )
         # Get the arrow element
-        element = element.selenium.find_element_by_xpath('..')
+        element = element.find_element_by_xpath('..')
         element.find_element_by_xpath('button[2]').click()
-        element.click()
 
         # Click in the delete button
         element.find_element_by_xpath(

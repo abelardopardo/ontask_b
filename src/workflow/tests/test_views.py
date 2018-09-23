@@ -602,7 +602,7 @@ class WorkflowShare(test.OntaskLiveTestCase):
         self.access_workflow_from_home_page(test.wflow_name)
 
         # Click on the share
-        self.go_to_share()
+        self.go_to_workflow_share()
 
         # Click in the add user button
         self.selenium.find_element_by_class_name('js-share-create').click()
@@ -677,7 +677,7 @@ class WorkflowShare(test.OntaskLiveTestCase):
         self.assertTrue('superuser@bogus.com' in users)
 
         # Go back to the share page
-        self.go_to_share()
+        self.go_to_workflow_share()
 
         # click the delete button in the superuser@bogus.com row
         element = self.search_table_row_by_string('share-table',

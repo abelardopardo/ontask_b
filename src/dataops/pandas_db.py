@@ -144,13 +144,14 @@ def delete_all_tables():
     """
 
     cursor = connection.cursor()
-    table_list = \
-        connection.introspection.get_table_list(cursor)
+    table_list = connection.introspection.get_table_list(cursor)
     for tinfo in table_list:
         if not tinfo.name.startswith(table_prefix):
             continue
         cursor.execute('DROP TABLE "{0}";'.format(tinfo.name))
 
+    # To make sure the table is dropped.
+    connection.commit()
     return
 
 
