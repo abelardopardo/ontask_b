@@ -293,6 +293,11 @@ class ActionCreateView(UserIsInstructor, generic.TemplateView):
 
     def post(self, request):
         form = self.form_class(request.POST)
+        if form.cleaned_data['action_type'] == Action.TODO_LIST:
+            return JsonResponse(
+                {'html_redirect': reverse('under_construction'),
+                 'form_is_valid':True}
+            )
         return save_action_form(request,
                                 form,
                                 self.template_name)
@@ -466,7 +471,8 @@ def edit_action(request, pk):
         return edit_action_in(request, workflow, action)
 
     if action.action_type == Action.TODO_LIST:
-        return edit_action_in(request, workflow, action)
+        return redirect(reverse('under_construction'), {})
+        # return edit_action_in(request, workflow, action)
 
 
 def edit_action_out(request, workflow, action):

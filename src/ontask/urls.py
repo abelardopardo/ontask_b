@@ -39,6 +39,10 @@ urlpatterns = [
 
     url(r'^about/$', views.AboutPage.as_view(), name='about'),
 
+    url(r'^under_construction/$',
+        views.under_construction,
+        name='under_construction'),
+
     url(r'^users/', include(profiles.urls, namespace='profiles')),
 
     url(r'^admin/', include(admin.site.urls)),
