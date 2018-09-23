@@ -44,7 +44,7 @@
   {% if not has_table %}
     {% include 'workflow/includes/no_data.html' %}
   {% elif no_actions %}
-    <p class="lead">{% blocktrans %}<strong>Next Step:</strong> Click in the <i>New Action</i> below to create a new
+    <p class="lead">{% blocktrans %}<strong>Next Step:</strong> Click in the <i>New action</i> below to create a new
     action to execute based on the data stored in the table.{% endblocktrans %}</p>
   {% endif %}
   <div style="padding-bottom: 2ex;">
@@ -52,7 +52,7 @@
        data-url="{% url 'action:create' %}"
        data-toggle="tooltip"
        title="New action to collect data from learners">
-      <span class="glyphicon glyphicon-plus"></span> {% trans 'New Action' %}
+      <span class="glyphicon glyphicon-plus"></span> {% trans 'New action' %}
     </button>
     {% if has_table %}
       <a href="{% url 'action:import' %}"

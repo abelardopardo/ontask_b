@@ -231,7 +231,7 @@ class EmailActionForm(forms.Form):
     export_wf = forms.BooleanField(
         initial=False,
         required=False,
-        label=_('Download a snapshot of the current state of the workflow?'),
+        label=_('Download a snapshot of the workflow?'),
         help_text=_('A zip file useful to review the emails sent.')
     )
 
