@@ -270,7 +270,7 @@ Share workflow
   users will not be able to flush the data or delete the workflow. Whenever
   you open a workflow, it becomes unavailable for the other users with whom
   it is being shared until you either select another workflow or your session
-   expires.
+  expires.
 
 Clone workflow
   This button creates a clone of the workflow with the a name containing the
@@ -424,101 +424,232 @@ This is the format to instruct the processing step to check the value of
 the condition ``Program is FASS`` and include the surrounded text only if
 the condition is true.
 
+Repeat the procedure and create three more conditions such that they are true
+if the value of the *Program* columns is equal to *FSCI*, *FEIT*, and *SMED*
+respectively. Insert three more messages in the text area that are controled
+by their respective conditions. At the end, each sentence will be surrounded
+by text referring to each of the four conditions you created:
+
+.. figure:: ../scaptures/tutorial_personalized_text_condition_inserted2.png
+   :align: center
+
 Selecting only a subset of learners
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In some cases, you may want to create an action only for a subset of the
-learners. OnTask allows this by defining a *Filter* at the top
-of the editor. For example, the following filter:
+In some cases, you may want to create a personalized text only for a subset of
+the learners. This can be done defining a *Filter* at the top of the screen
+(area 1). For example, the following filter:
 
 .. figure:: ../scaptures/tutorial_personalized_text_filter.png
    :align: center
 
-Once the filter is saved, the application informs how many rows in the table are selected by the expression written in the filter.
+selects only those learners for which the column *Attendance* in the table
+has the value *Full Time*. Upon closing the small window with the filter
+data, the editor screen contains information about how many learners are
+being selected by that filter.
 
-The text in the action will be instantiated for each row in the table (or the subset specified by the filter) and all conditions and fields will be evaluated in the context of the values stored in the table. In other words, if a sentence is surrounded by one of the conditions, its text will appear in the final text if the condition evaluates to true with the values stored in the table for that particular row.
-
-Within the action-out editor you may see the appearance of the text for each of the entries in the table by clicking in the *Preview* button at the bottom of the screen.
-
-.. figure:: ../scaptures/30_action_out_preview.png
+.. figure:: ../scaptures/tutorial_personalized_text_editor2.png
    :align: center
+
+The application will show a message if the filter excludes all the learners
+(none of them satisfy the condition given in the filter).
+
+The text in the editor will be processed for each row in the table (or the
+subset specified by the filter) and all conditions and fields will be evaluated
+with the values in that row. In other words, if a sentence is
+surrounded by one condition, the condition is evaluated replacing the column
+names by the values in the row. If the condition is *True*, the text will
+appear, and if not, it will be ignored.
+
+The botton with name *Preview* at the bottom of the editor allows you to see
+the text resulting from the evaluation of each row.
+
+.. figure:: ../scaptures/tutorial_personalized_text_preview.png
+   :align: center
+
+The bottom part of the screen shows the values of those columns that were
+used to evaluate the conditions required in the text. You may use the arrows
+at the top of the screen to review the message and see how it is changing
+from learner to learner.
 
 Sending Emails
 ^^^^^^^^^^^^^^
 
-Once you define an action-out, you may send emails to the learners in the table (or the subset selected by the filter, if defined). From the page that shows all the actions in the workflow (*Actions* link in the navigation menu at the top of the page), click in the *Email* button for the corresponding action. The form in the following screen allows you to select several additional features.
+Once you have created a personalized text, you may want to send emails to the
+learners (or the subset selected by the filter, if defined). First click in
+the *Save* button to store the content of the the personalized text. The
+platform shows the page with all the actions in the workflow. Click in the
+button with name *Email* in the operations of the action you just created. The
+following form appears in the screen:
 
-.. figure:: ../scaptures/31_action_out_email.png
+.. figure:: ../scaptures/action_personalized_text_email.png
    :align: center
 
-The button *Preview* at the bottom of the page allows to check again the final appearance of the message that will be sent to the users.
+The form allows you to specify eight fields:
 
-.. figure:: ../scaptures/31_action_out_email_preview.png
-   :align: center
+Email subject
+  String to use as subject for all the emails.
 
-If selected, once. the email messages are sent, a summary message is sent to the email address of the user account, and a snapshot of the workflow is downloaded. This workflow snapshot can be imported through the home page and create an exact replica of the workflow when the messages were sent, for future reference.
+Column to use as email address
+  This is the name of the column in the table from where to extract the email
+  address to use in the *To* field of the email.
+
+Comma separated list of CC emails
+  This is useful when you want to send the emails with copy to other users.
+  The CC emails must be separated by commas (e.g. *user1@bogus.com,
+  user2@bogus.com*)
+
+Comma separated list of BCC emails
+  Field analogous to the previous one except that the values are used in the
+  blind copy of the email.
+
+Send you a summary message?
+  If selected platform will send you (the email you used to log in) a message
+  with a summary of the operation once all emails are sent.
+
+Track email reading in an extra column?
+  If selected the platform will insert an extra column in the table
+  containing the number of times each email has been opened (this counter,
+  though, may not have a correct value as it depends on the configuration of
+  external programs)
+
+Download a snapshop of the worfklow
+  When selected, the platform saves the workflow in its current state. This
+  function is useful to keep an exact replica of the state of the actions,
+  conditions and data when the data was sent. The resulting file can then be
+  imported (see the *Import workflow* in the home page) to check the content
+  of the emails.
+
+Check/exclude email addresses before sending
+  If selected the platform will offer you a last chance to specify some email
+   addresses to *exclude* from the emails. This may be useful if you want to
+   remove a small amount of addresses that you know they should not be
+   considered but they cannot be easily removed with the use of the action
+   filter.
+
+The button *Preview* at the bottom of the page offers the same functionality
+than in the editor, preview the final appearance of the messages that will be
+sent out to the learners (with the subject).
 
 Making content available through OnTask
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Sending an email through OnTask is one possible way to offer the personalized content to the learners. Alternatively, OnTask assigns a unique URL to each action that can be given to the learners and (if the authentication layer of the application verifies learner requests appropriately) shows the corresponding personalized text to the learners. The URL, the option to enable/disable it and an optional time window validity is available through the link *URL*. 
+An alternative to send an email is to make the personalized text available
+through a URL that is provided by OnTask. This URL can be enabled by clicking
+in the *URL* button of the action operations.
 
-.. figure:: ../scaptures/32_action_out_url.png
+.. figure:: ../scaptures/tutorial_personalzed_text_URL.png
    :align: center
 
-Actions In
-----------
 
-These actions offer the possibility of collecting data by directly asking students a set of questions. This functionality could be considered as a *simplified survey engime*. The action consists of a document with a paragraph introducing a set of questions. Each  question corresponds with a column in the workflow, and the text describing that columns is used as the question text. To create one of these actions click in the button *New Action In*. The description of the action will be used as the introductory text for the survey.
+If learners are allowed to connect to OnTask (they have an account), their
+email is part of the data stored in the workflow,  and the access to the
+platform can be done through a Single Sign-on system (e.g. LTI through a
+learning management system), the URL shown in the  previous figure will allow
+them to access the personalized text.
 
-.. figure:: ../scaptures/33_action_in_create.png
+Surveys and/or Polls
+--------------------
+
+Personalized texts can be very powerful to offer students content, comments,
+or point them to resources selected based on the available data. This data
+may come from sources such as student information systems or the learning
+management system. However, in some cases we would like to obtain data either
+directly from the students, or perhaps from the instructors through
+observation. This functionality is offered in OnTask through the actions
+called *Surveys*. These surveys collect information from the students (or the
+instructors) through conventional web forms and the data is automatically
+added to the workflow table and available to be explored through the
+dashboard or statistics.
+
+The first step to create a survey is to go to the *Actions* page, click in
+the *New action* button, provide a name, a description (optional) and select
+the action type *Survey*:
+
+.. figure:: ../scaptures/tutorial_survey_create.png
    :align: center
 
-After the action is created, an editor similar to the action out is shown.
+After the survey is created, the following screen is shown
 
-.. figure:: ../scaptures/34_action_in_edit.png
+.. figure:: ../scaptures/tutorial_survey_editor.png
+   :align: center
 
-This editor allows you to specify several elements of the action, more precisely:
+The editor is divided into five areas:
 
 Filter learners
-  An expression to select a subset of the learners for which the action (or survey) will be offered.
+  An expression identical to the one used in the personalized text to select a
+  subset of the learners for which the will be available.
 
 Description
-  A text used to describe the set of questions.
+  Text describing the survey that is shown to the learners.
 
 Key column to identify learners
-  The column in the table that will be used to identify the users when submitting their answers. This is typically the column that contains the user email.
+  The key column in the table that will be used to identify the users when
+  submitting their answers. This is typically the column that contains the
+  user email.
 
-Columns to obtain data
-  The columns that will be used to collect the data. You may choose an existing column, create a new one, or create a new derived one (the values are crated by combining values from other columns and an operator).
+Shuffle questions
+  If selected, the questions in the survey will be shuffled when shown to the
+  learners.
 
-The editor will remind you that you need to choose one key column before the action is ready to be used, and that it would be desirable to have a description (or question text) for each of the columns. Let's suppose you want to ask the learners two questions:
+Columns to obtain and store the data
+  The columns used to collect the data. In this action, a column is
+  equivalent to a question. The description of the column is the text of the
+  question. In this part of the editor you may either use one of the
+  existing columns as question, create a new column (or
+  question), or create a new derived one (the initial values are created by
+  combining values from other columns).
+
+This page will show you a warning message if any of the columns used in the
+survey has an empty description. Let's suppose you want to ask the learners
+two questions:
 
 - What was the most challenging topic for you this week? 
 
 - What was your dedication to the course this week?
 
-And in order to make the data suitable for further processing, we would like to define a set of pre-defined answers. You can easily define this by creating a new column
+To make the data suitable for further processing, we will create the two
+questions/columns with a set of pre-defined answers. Use the *Add new column*
+button to create two columns of type string and provide the allowed answer
+values as a comma-separated list.
 
-.. figure:: ../scaptures/35_action_in_new_column.png
+.. figure:: ../scaptures/tutorial_survey_column_creation.png
    :align: center
 
-and analogously, the second column
+After creating the column, insert it in the survey by selecting it with the
+pull down menu. Repeat the procedure for the second question/column. You can
+now add these columns to the action and the editor will show them in the
+table at the bottom as shown in the following figure:
 
-.. figure:: ../scaptures/35_action_in_new_column2.png
+.. figure:: ../scaptures/tutorial_survey_editor2.png
    :align: center
 
-You can now add these columns to the action and the editor will show them in the table at the bottom as shown in the following figure
+As in the case of the personalized text action, the *Preview* button allows
+you to verify how will the learners see the content:
 
-.. figure:: ../scaptures/36_action_in_edit_complete.png
+.. figure:: ../scaptures/tutorial_survey_preview.png
    :align: center
 
-You may see how these questions will be shown to the users with the *Preview* button.
+Once created, you may select the URL from the action as it was described for
+the personalized text and make it available for learners to enter their
+answers. The data will be automatically added to the table.
 
-.. figure:: ../scaptures/37_action_in_preview.png
-   :align: center
+The *Run* button in the survey actions allows an instructor to introduce the
+survey answers for multiple learners. This functionality is used for
+instructors to enter observations when interacting with learners. The table
+search functionality allows to find the learners quickly and then click in
+their survey execution and enter the data.
 
-Once created, you may select the URL from the action table and make it available for learners to enter their answers, which will be automatically added to the table in the workflow and ready to be used as part of the conditions to create personalized content.
+Combining personalized text and surveys
+---------------------------------------
+
+The information collected through surveys can be used in a personalized text
+action. The survey data is stored in regular columns in the table. These
+columns can then be used as part of the conditions or filter in a
+personalized text. For example, the information collected as answers to the
+question *What was the most challenging topic for you this week?* can be used
+to select a set of adequate links to resources to help learners with the
+given topic.
 
 Scheduling Emails
 =================
