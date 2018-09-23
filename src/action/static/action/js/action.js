@@ -87,6 +87,10 @@ var toggleShuffleQuestion = function () {
   $('#div-spinner').hide();
 }
 var loadFormPost = function () {
+    var btn = $(this);
+    if ($(this).is('[class*="disabled"]')) {
+      return;
+    }
     $.ajax({
       url: $(this).attr("data-url"),
       data: [{'name': 'action_content', 'value': get_id_content()}],
