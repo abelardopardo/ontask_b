@@ -45,6 +45,7 @@ if exists(env_file):
 BASE_URL = env('BASE_URL')
 DOMAIN_NAME = env('DOMAIN_NAME')
 DEBUG = env('DEBUG')
+SHOW_HOME_FOOTER_IMAGE = env('SHOW_HOME_FOOTER_IMAGE')
 
 # Build paths inside the project like this: join(BASE_DIR(), "directory")
 BASE_DIR = environ.Path(__file__) - 3
