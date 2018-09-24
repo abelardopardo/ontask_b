@@ -170,6 +170,12 @@ def save_action_form(request, form, template_name):
         return JsonResponse(data)
 
     # Process the POST request
+    if form.cleaned_data['action_type'] == Action.TODO_LIST:
+        # To be implemented
+        return JsonResponse(
+            {'html_redirect': reverse('under_construction'),
+             'form_is_valid': True}
+        )
 
     # Fill in the fields of the action (without saving to DB)_
     action_item = form.save(commit=False)
@@ -293,11 +299,6 @@ class ActionCreateView(UserIsInstructor, generic.TemplateView):
 
     def post(self, request):
         form = self.form_class(request.POST)
-        if form.cleaned_data['action_type'] == Action.TODO_LIST:
-            return JsonResponse(
-                {'html_redirect': reverse('under_construction'),
-                 'form_is_valid':True}
-            )
         return save_action_form(request,
                                 form,
                                 self.template_name)
