@@ -1,3 +1,9 @@
+## 3.0.1 (2018-09-25)
+
+### Fixed
+
+- Bug preventing action creation (divergence between debug/production instance)
+
 ## 3.0.0 (2018-09-24)
 
 ### Added
