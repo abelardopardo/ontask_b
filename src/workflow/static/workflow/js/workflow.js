@@ -49,6 +49,11 @@ $(function () {
   $("#modal-item").on("submit", ".js-workflow-formula-column-add-form",
   saveForm);
 
+  // Random column add
+  $("#workflow-area").on("click", ".js-workflow-random-column-add", loadForm);
+  $("#modal-item").on("submit", ".js-workflow-random-column-add-form",
+  saveForm);
+
   // Column Edit
   $("#column-table").on("click", ".js-workflow-column-edit", loadForm);
   $("#modal-item").on("submit", ".js-column-edit-form", saveForm);

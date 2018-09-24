@@ -59,7 +59,7 @@ window.onload = function(){
     show_merge_figure.call($("#id_how_merge"));
   }
   if (document.getElementById("id_columns") != null) {
-    set_column_select("#id_columns");
+    set_element_select("#id_columns");
   }
 };
 

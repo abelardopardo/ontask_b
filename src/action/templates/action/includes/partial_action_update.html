@@ -1,5 +1,5 @@
 {% load i18n %}
-<form method="post" action="{% url 'action:update' form.instance.pk is_out %}"
+<form method="post" action="{% url 'action:update' form.instance.pk %}"
       class="js-action-update-form">
   {% csrf_token %}
   <div class="modal-header">

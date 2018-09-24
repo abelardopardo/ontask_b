@@ -9,8 +9,8 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-import logs.ops
-from action.models import Condition
+from action.models import Condition, Action
+from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from .forms import (AttributeItemForm)
@@ -24,7 +24,7 @@ class AttributeTable(tables.Table):
     name = tables.Column(verbose_name=_('Name'))
     value = tables.Column(verbose_name=_('Value'))
     operations = OperationsColumn(
-        verbose_name='Ops',
+        verbose_name='Operations',
         template_file='workflow/includes/partial_attribute_operations.html',
         template_context=lambda record: {'id': record['id'], }
     )
@@ -34,6 +34,10 @@ class AttributeTable(tables.Table):
         attrs = {
             'class': 'table display table-bordered',
             'id': 'attribute-table'
+        }
+
+        row_attrs = {
+            'style': 'text-align:center;',
         }
 
 
@@ -121,6 +125,10 @@ def save_attribute_form(request, workflow, template, form, key_idx):
         key = sorted(wf_attributes.keys())[key_idx]
         wf_attributes.pop(key)
 
+        # Rename the appearances of the variable in all actions
+        for action_item in Action.objects.filter(workflow=workflow):
+            action_item.rename_variable(key, form.cleaned_data['key'])
+
     # Update value
     wf_attributes[form.cleaned_data['key']] = form.cleaned_data['value']
 
@@ -128,13 +136,13 @@ def save_attribute_form(request, workflow, template, form, key_idx):
     workflow.save()
 
     # Log the event
-    logs.ops.put(request.user,
-                 'workflow_attribute_create',
-                 workflow,
-                 {'id': workflow.id,
-                  'name': workflow.name,
-                  'attr_key': form.cleaned_data['key'],
-                  'attr_val': form.cleaned_data['value']})
+    Log.objects.register(request.user,
+                         Log.WORKFLOW_ATTRIBUTE_CREATE,
+                         workflow,
+                         {'id': workflow.id,
+                          'name': workflow.name,
+                          'attr_key': form.cleaned_data['key'],
+                          'attr_val': form.cleaned_data['value']})
 
     data['form_is_valid'] = True
     data['html_redirect'] = reverse('workflow:attributes')
@@ -220,12 +228,12 @@ def attribute_delete(request, pk):
         workflow.attributes = wf_attributes
 
         # Log the event
-        logs.ops.put(request.user,
-                     'workflow_attribute_delete',
-                     workflow,
-                     {'id': workflow.id,
-                      'attr_key': key,
-                      'attr_val': val})
+        Log.objects.register(request.user,
+                             Log.WORKFLOW_ATTRIBUTE_DELETE,
+                             workflow,
+                             {'id': workflow.id,
+                              'attr_key': key,
+                              'attr_val': val})
 
         workflow.save()
 

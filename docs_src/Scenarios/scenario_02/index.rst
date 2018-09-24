@@ -29,43 +29,37 @@ Suppose now that you :download:`do have the class listing in an excel sheet <sce
 
    #. The next page is the action out editor. In the second area from the top you will see a button to create a new condition (*Conditions + New*). Click the button and a new window opens to specify a condition. Enter the following data:
 
-      .. figure:: scenario_02_condition_FASS.png
+      .. figure:: ../../scaptures/scenario_02_condition_FASS.png
          :align: center
 
    The formula states that the condition will be satisfied when the column *Program* has the value *FASS*. Click the button to save the condition.
 
-   #. Create three additional conditions that are analogous to this one but are true when the *Program* column is equal to *FEIT*, *FSCI* and *SMED* respectively. The area in the *Action Out* editor should look like:
-
-      .. figure:: scenario_02_conditions.png
-         :align: center
+   #. Create three additional conditions that are analogous to this one but are true when the *Program* column is equal to *FEIT*, *FSCI* and *SMED* respectively.
 
    #. Write the text of the email starting with a greeting. Immediately after the greeting select from the pull down menu titled ``Insert column value`` the column ``GivenName``. You will see how the string ``{{ GivenName }}`` is inserted in the text. This is the way OnTask has to mark that the string with the double curly braces should be replaced by the value of the column *GivenName*.
 
-   #. Next, write the paragraph that is common to all the students suggesting to read the course syllabus. The following figure shows a possible text:
-
-      .. figure:: scenario_02_text_top.png
-         :align: center
-
    #. Next, write the four paragraphs that you would write to the students in each of the programs (FEIT, FSCI, FASS and SMED). Separate them with an empty line.
 
-   #. Now, and this is the crucial step, we are going to mark these paragraphs with one of the previously defined conditions. Select and highlight the paragraph to the students in the FASS program. Then click in the arrow next to the condition named *Student in FASS* and select the option *Insert in text*. The text should now be surrounded by the strings ``{% if Student in FASS %}`` and ``{% endif %}`` as shown in the following figure.
-
-      .. figure:: scenario_02_text_condition.png
-         :align: center
+   #. Now, and this is the crucial step, we are going to mark these
+      paragraphs with one of the previously defined conditions. Select and
+      highlight the paragraph to the students in the FASS program. Then click in
+      the arrow next to the condition named *Student in FASS* and select the
+      option *Insert in text*. The text should now be surrounded by the strings
+      ``{% if Student in FASS %}`` and ``{% endif %}``.
 
    #. Repeat the same procedure now with the three remaining paragraphs. Select the text and then click in the appropriate condition. The final result should be similar to the one shown in the following figure.
 
-      .. figure:: scenario_02_text_all_conditions.png
+      .. figure:: ../../scaptures/scenario_02_text_all_conditions.png
          :align: center
 
    #. Add the signature at the end of the text. Use the button named *Preview* at the bottom and use the arrows in the emerging window to browse through the different messages created for each user.
 
-      .. figure:: scenario_02_preview.png
+      .. figure:: ../../scaptures/scenario_02_preview.png
          :align: center
 
    #. Save and close the *Action Out*. You now are back to the screen showing the actions in the workflow (you can see the one we just created). If you click in the *Email* button, you will be asked for some extra data such as the email subject, the column to use as email address and some options to track email reading or even obtain a snapshot (duplicate) of the workflow as it is right now for future reference.
 
-     .. figure:: scenario_02_action_email.png
+     .. figure:: ../../scaptures/scenario_02_action_email.png
         :align: center
 
    #. That's it! Each student will receive a message with the content of the second paragraph different depending on the program.

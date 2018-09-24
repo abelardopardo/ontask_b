@@ -11,4 +11,4 @@ class ProfileConfig(AppConfig):
 
     def ready(self):
         # Needed so that the signal registration is done
-        pass
+        from . import signals  # noqa

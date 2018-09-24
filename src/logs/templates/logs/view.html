@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}{{ block.super }}{% trans 'Log View' %}{% endblock %}
+{% block container %}
+<div align="center" class="container">
+  <h1 class="modal-header">{% trans 'Log' %} {{ log_item.id }}: {{ log_item.name }}</h1>
+  <p>{% trans 'Last modified' %}: {{ log_item.modified }}</p>
+  <div class="modal-body" style="text-align: left;">
+    <h4>{% trans 'Payload:' %}</h4>
+    <pre>{{ json_pretty }}</pre>
+  </div>
+  <div class="modal-footer" style="text-align: center;">
+    <a href="{% url 'logs:index' %}" class="btn btn-default align-middle spin"> {% trans 'Back' %}</a>
+    </div>
+</div>
+{% endblock container %}
+

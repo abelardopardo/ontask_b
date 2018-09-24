@@ -472,10 +472,7 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
         # compatible with them.
         if col.categories and not all([x in col.categories
                                        for x in new_df[col.name]
-                                       if x != None and
-                                          x != '' and
-                                          not np.isnan(x) and
-                                          not pd.isnull(x)]):
+                                       if x and not pd.isnull(x)]):
             return \
                 _('New values in column {0} are not in categories {1}').format(
                     col.name,

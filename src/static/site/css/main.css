@@ -57,12 +57,15 @@ body>.navbar-transparent {
 }
 
 .navbar-brand {
-    font-weight: bold;
-    padding: 15px 10px 15px 10px;
+    padding:0px;
 }
 
 .navbar-brand > img {
     float: left;
+}
+
+.navbar-right {
+    margin-right: 0;
 }
 
 .btn {
@@ -181,14 +184,16 @@ body>.navbar-transparent {
   font-size: 16px;
 }
 
-.form-box form .form-control:focus {
-  z-index: 2;
+.row-top-border {
+    border-top: 1px solid #bbb;
 }
 
-div#action-in-editor h4,
-div#action-out-editor h4 {
-    border-top: solid 1px #eee;
-    padding-top:1ex
+.row-bottom-border {
+    border-bottom: 1px solid #bbb;
+}
+
+.form-box form .form-control:focus {
+  z-index: 2;
 }
 
 /* For the Action Edit */
@@ -234,18 +239,19 @@ td.dt-body-center {
     }
 
 table td,
-#table-data td,
 #actioninrun-data td,
-#workflow-table td,
 #action-table td,
-#log-table td,
-#scheduler-table td,
+#attribute-table td,
 #column-selected-table td,
 #column-table td,
-#view-table td,
-#transform-table td,
+#log-table td,
+#scheduler-table td,
+#sqlconn-table td,
+#table-data td,
 #transform-diagnostics-table td,
-#sqlconn-table td {
+#transform-table td,
+#view-table td,
+#workflow-table td {
     vertical-align: middle;
 }
 
@@ -362,4 +368,13 @@ a.column-move-bottom> span {
 td.operations a,
 td.operations button {
     margin-top: 0.5ex;
+}
+
+.numberCircle {
+    width: 30px;
+    line-height: 25px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 16px;
+    border: 2px solid black;
 }

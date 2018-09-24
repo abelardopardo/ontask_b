@@ -20,8 +20,9 @@ from django.utils.translation import ugettext_lazy as _
 
 import logs
 from core import settings as core_settings
+from logs.models import Log
 from ontask.tasks import send_email_messages
-from scheduler.models import ScheduledEmailAction
+from scheduler.models import ScheduledAction
 
 # Get the logger object
 logger = logging.getLogger(__name__)
@@ -46,7 +47,7 @@ def execute_email_actions(debug):
     before = now + datetime.timedelta(minutes=(float(minute_step) + 5) / 2)
     # Get all the actions that are with state pending and before the current
     # date/time
-    s_items = ScheduledEmailAction.objects.filter(
+    s_items = ScheduledAction.objects.filter(
         type='email_send',
         status=0,  # Pending
         execute__lt=before,
@@ -84,39 +85,40 @@ def execute_email_actions(debug):
         # - send_confirmation
         # - track_read
 
-        # Get additional parameters for the log
-        cc_email = [x.strip() for x in cc_email.split(',') if x]
-        bcc_email = [x.strip() for x in bcc_email.split(',') if x]
-
         # Log the event
-        log_id = logs.ops.put(item.user,
-                              'schedule_email_execute',
-                              item.action.workflow,
-                              {'action': item.action.name,
-                               'action_id': item.action.id,
-                               'execute': item.execute.isoformat(),
-                               'subject': item.subject,
-                               'email_column': item.email_column.name,
-                               'cc_email': cc_email,
-                               'bcc_email': bcc_email,
-                               'send_confirmation': item.send_confirmation,
-                               'track_read': item.track_read,
-                               'status': 'pre-execution'})
+        log_item = Log.objects.register(
+            item.user,
+            Log.SCHEDULE_EMAIL_EXECUTE,
+            item.action.workflow,
+            {'action': item.action.name,
+             'action_id': item.action.id,
+             'execute': item.execute.isoformat(),
+             'subject': item.subject,
+             'email_column': item.item_column.name,
+             'cc_email': item.cc_email,
+             'bcc_email': item.bcc_email,
+             'send_confirmation': item.send_confirmation,
+             'track_read': item.track_read,
+             'status': 'pre-execution'}
+        )
 
         send_email_messages(item.user.id,
                             item.action.id,
                             item.subject,
-                            item.email_column.name,
+                            item.item_column.name,
                             item.user.email,
-                            cc_email,
-                            bcc_email,
+                            item.cc_email,
+                            item.bcc_email,
                             item.send_confirmation,
                             item.track_read,
-                            log_id)
+                            item.exclude_values,
+                            log_item.id)
 
         # Store the resulting message in the record
         item.message = \
-            _('Operation executed. Status available in Log {0}').format(log_id)
+            _('Operation executed. Status available in Log {0}').format(
+                log_item.id
+            )
 
         # Save the new status in the DB
         item.save()

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load settings %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block scripts %}
+  <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
+{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Enter Data' %}{% endblock %}
+{% block container %}
+<div align="center" class="container">
+  <h4 class="page-header"><strong>{{ action.name }}</strong></h4>
+  <p class="lead">{{ action.description_text }}</p>
+  <div class="container-fluid">
+    <form action="" method="post">
+      {% csrf_token %}
+      <div class="input-group input-group-lg" style="padding-bottom:1.5ex;">
+        {{ form|crispy }}
+      </div>
+      {% if cancel_url %}
+        <a type="button" class="btn btn-default spin"
+           href="{{ cancel_url }}"> {% trans 'Back' %}
+        </a>
+      {% endif %}
+      <button type="submit" name="submit" value="update"
+              class="btn btn-primary">
+        <span class="glyphicon glyphicon-ok"></span> {% trans 'Update' %}
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock container %}

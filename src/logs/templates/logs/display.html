@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load settings %}
+{% load static %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block extrahead %}
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+{% endblock extrahead %}
+{% block scripts %}
+  <script src="{% static 'logs/js/logs.js' %}{% otv %}"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+        $('#log-table').DataTable({
+          stateSave: true,
+          processing: true,
+          serverSide: true,
+          ajax: {
+            url: "{% url 'logs:display_ss' %}",
+            type: 'POST',
+          },
+          ordering: false,
+          "columnDefs": [
+              {"className": "dt-center", "targets": "_all"},
+          ],
+          "language": {
+              "emptyTable": "{% trans 'No logs recorded for this workflow.' %}",
+              "url": getLanguage()
+          },
+          "searchDelay": 500,
+          "drawCallback": function(settings) {
+             // Needed to enable tooltips in ajax produced content
+             $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+          },
+        });
+    });
+  </script>
+{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Logs' %}{% endblock %}
+{% block container %}
+<div align="center" class="container">
+  <h1 class="page-header">{% trans 'Logs' %}<super>*</super></h1>
+  <div class="container" id="log-table-page">
+    <a href="{% url 'logs:export' workflow.id %}" download
+       class="btn btn-primary btn-sm js-logs-download"
+       data-toggle="tooltip"
+       title="{% trans 'Download a CSV file containing these logs' %}">
+      <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
+    </a>
+  </div>
+  <table class="table display dataTable no-footer cell-border table-bordered"
+         id="log-table">
+    <thead>
+      <tr>
+        {% for cname in column_names %}
+          <th>{{ cname }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+  </table>
+  <p class="text-left">{% blocktrans %}<strong><super>*</super></strong>The platform records all operations
+    performed on the workflow as <i>Logs</i>. These elements are shown in the table above. You can view its content
+    by clicking on its number.{% endblocktrans %}</p>
+  <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock container %}

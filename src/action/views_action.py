@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+import pytz
 from django.db import IntegrityError
+from django.utils.html import format_html
 
+from action.views_out import run_json_action, run_email_action, \
+    session_dictionary_name
+from logs.models import Log
 from visualizations.plotly import PlotlyHandler
 
 try:
@@ -25,24 +30,27 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
-import logs.ops
-from action.evaluate import (
-    evaluate_row_action_out,
-    evaluate_row_action_in,
-    render_template,
-    get_row_values)
+from action.evaluate import render_template
 from dataops import ops, pandas_db
 from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
 from workflow.ops import get_workflow
 from .forms import (
+    ActionUpdateForm,
     ActionForm,
     EditActionOutForm,
     EnableURLForm,
-    ActionDescriptionForm, ActionImportForm)
-from action.ops import serve_action_in, serve_action_out, clone_action, \
-    do_export_action, do_import_action
+    ActionDescriptionForm, ActionImportForm
+)
+from action.ops import (
+    serve_action_in,
+    serve_action_out,
+    clone_action,
+    do_export_action,
+    do_import_action
+)
 from .models import Action, Condition
 
 
@@ -57,34 +65,45 @@ class ActionTable(tables.Table):
 
     name = tables.Column(verbose_name=_('Name'))
 
-    is_out = tables.Column(verbose_name=_('Type'))
-
     description_text = tables.Column(verbose_name=_('Description'))
 
-    modified = tables.DateTimeColumn(verbose_name=_('Modified'))
+    action_type = tables.Column(verbose_name=_('Type'))
+
+    last_executed_log = tables.Column(verbose_name=_('Last executed'))
 
     operations = OperationsColumn(
         verbose_name=_('Operations'),
         template_file='action/includes/partial_action_operations.html',
         template_context=lambda record: {
             'id': record['id'],
+            'action_tval': record['action_tval'],
             'is_out': int(record['is_out']),
-            'is_correct': record['is_correct'],
+            'is_executable': record['is_executable'],
             'serve_enabled': record['serve_enabled']}
     )
 
-    def render_is_out(self, record):
-        if record['is_out']:
-            return "OUT"
-        else:
-            return "IN"
+    def render_last_executed_log(self, record):
+        log_item = record['last_executed_log']
+        if not log_item:
+            return "---"
+
+        return format_html(
+            """<a class="spin" href="{0}">{1}</a>""".format(
+                reverse('logs:view', kwargs={'pk': log_item.id}),
+                log_item.modified.astimezone(
+                    pytz.timezone(settings.TIME_ZONE)
+                )
+            )
+        )
 
     class Meta:
         model = Action
 
-        fields = ('name', 'description_text', 'is_out', 'modified')
+        fields = ('name', 'description_text', 'action_type',
+                  'last_executed_log')
 
-        sequence = ('name', 'description_text', 'is_out', 'modified')
+        sequence = ('name', 'description_text', 'action_type',
+                    'last_executed_log')
 
         exclude = ('content', 'serve_enabled', 'columns', 'filter')
 
@@ -95,7 +114,6 @@ class ActionTable(tables.Table):
 
         row_attrs = {
             'style': 'text-align:center;',
-            'class': lambda record: 'success' if record['is_out'] else ''
         }
 
 
@@ -126,14 +144,14 @@ class ColumnSelectedTable(tables.Table):
         }
 
 
-def save_action_form(request, form, is_out, template_name):
+def save_action_form(request, form, template_name):
     """
     Function to process JSON POST requests when creating a new action. It
     simply processes name and description and sets the other fields in the
     record.
     :param request: Request object
     :param form: Form to be used in the request/render
-    :param is_out: Boolean stating if the formula is of type out or in
+    :param action_type: Type of action
     :param template_name: Template for rendering the content
     :return: JSON response
     """
@@ -144,77 +162,76 @@ def save_action_form(request, form, is_out, template_name):
     # By default, we assume that the POST is not correct.
     data['form_is_valid'] = False
 
-    # Process the POST
-    if request.method == 'POST':
-        if form.is_valid():
-            # Partial validity. Additional checks
+    # Process the GET request
+    if request.method == 'GET' or not form.is_valid():
+        data['html_form'] = render_to_string(template_name,
+                                             {'form': form},
+                                             request=request)
+        return JsonResponse(data)
 
-            # Fill in the fields of the action (without saving to DB)_
-            action_item = form.save(commit=False)
+    # Process the POST request
 
-            # Type of action
-            action_item.is_out = is_out
+    # Fill in the fields of the action (without saving to DB)_
+    action_item = form.save(commit=False)
 
-            # Is this a new action?
-            is_new = action_item.pk is None
+    # Is this a new action?
+    is_new = action_item.pk is None
 
-            # Get the corresponding workflow
-            workflow = get_workflow(request)
-            if not workflow:
-                redirect('workflow:index')
+    # Get the corresponding workflow
+    workflow = get_workflow(request)
+    if not workflow:
+        redirect('workflow:index')
 
-            if is_new:  # Action is New. Update user and workflow fields
-                action_item.user = request.user
-                action_item.workflow = workflow
+    if is_new:  # Action is New. Update user and workflow fields
+        action_item.user = request.user
+        action_item.workflow = workflow
 
-            # Verify that that action does comply with the name uniqueness
-            # property (only with respec to other actions)
-            try:
-                action_item.save()
-                form.save_m2m()  # Propagate the save effect to M2M relations
-            except IntegrityError as e:
-                # There is an action with this name already
-                form.add_error('name',
-                               _('An action with that name already exists'))
-                data['html_form'] = render_to_string(
-                    template_name,
-                    {'form': form,
-                     'is_out': int(is_out)},
-                    request=request)
-                return JsonResponse(data)
+    # Verify that that action does comply with the name uniqueness
+    # property (only with respec to other actions)
+    try:
+        action_item.save()
+        form.save_m2m()  # Propagate the save effect to M2M relations
+    except IntegrityError as e:
+        # There is an action with this name already
+        form.add_error('name',
+                       _('An action with that name already exists'))
+        data['html_form'] = render_to_string(
+            template_name,
+            {'form': form},
+            request=request)
+        return JsonResponse(data)
 
-            # Log the event
-            logs.ops.put(request.user,
-                         'action_create' if is_new else 'action_update',
+    # Log the event
+    Log.objects.register(request.user,
+                         Log.ACTION_CREATE if is_new else Log.ACTION_UPDATE,
                          action_item.workflow,
                          {'id': action_item.id,
                           'name': action_item.name,
                           'workflow_id': workflow.id,
                           'workflow_name': workflow.name})
 
-            # Request is correct
-            data['form_is_valid'] = True
-            if is_new:
-                # If a new action is created, jump to the action edit page.
-                # This could be changed to go back to the action:index
-                if is_out:
-                    data['html_redirect'] = reverse(
-                        'action:edit_out', kwargs={'pk': action_item.id}
-                    )
-                else:
-                    data['html_redirect'] = reverse(
-                        'action:edit_in', kwargs={'pk': action_item.id}
-                    )
-            else:
-                data['html_redirect'] = reverse('action:index')
+    # Request is correct
+    data['form_is_valid'] = True
+    if is_new:
+        # If a new action is created, jump to the action edit page.
+        if action_item.action_type == Action.PERSONALIZED_TEXT:
+            data['html_redirect'] = reverse(
+                'action:edit', kwargs={'pk': action_item.id}
+            )
+        elif action_item.action_type == Action.PERSONALIZED_JSON:
+            data['html_redirect'] = reverse(
+                'action:edit', kwargs={'pk': action_item.id}
+            )
+        elif action_item.action_type == Action.SURVEY:
+            data['html_redirect'] = reverse(
+                'action:edit', kwargs={'pk': action_item.id}
+            )
+        elif action_item.action_type == Action.TODO_LIST:
+            data['html_redirect'] = reverse('action:index')
+    else:
+        data['html_redirect'] = reverse('action:index')
 
-            # Enough said. Respond.
-            return JsonResponse(data)
-
-    data['html_form'] = render_to_string(template_name,
-                                         {'form': form,
-                                          'is_out': int(is_out)},
-                                         request=request)
+    # Enough said. Respond.
     return JsonResponse(data)
 
 
@@ -231,9 +248,12 @@ def action_index(request):
     if not workflow:
         return redirect('workflow:index')
 
+    # Reset object to carry action info throughout dialogs
+    request.session[session_dictionary_name] = {}
+    request.session.save()
+
     # Get the actions
-    actions = Action.objects.filter(
-        workflow__id=workflow.id)
+    actions = Action.objects.filter(workflow__id=workflow.id)
 
     # Context to render the template
     context = {'has_table': ops.workflow_has_table(workflow)}
@@ -244,12 +264,16 @@ def action_index(request):
         qset.append({'id': action.id,
                      'name': action.name,
                      'description_text': action.description_text,
+                     'action_type': action.get_action_type_display(),
+                     'action_tval': action.action_type,
                      'is_out': action.is_out,
-                     'is_correct': action.is_correct,
-                     'modified': action.modified,
+                     'is_executable': action.is_executable,
+                     'last_executed_log': action.last_executed_log,
                      'serve_enabled': action.serve_enabled})
 
-    context['table'] = ActionTable(qset, orderable=False)
+    context['table'] = \
+        ActionTable(qset, orderable=False)
+    context['no_actions'] = len(qset) == 0
 
     return render(request, 'action/index.html', context)
 
@@ -265,14 +289,17 @@ class ActionCreateView(UserIsInstructor, generic.TemplateView):
         form = self.form_class()
         return save_action_form(request,
                                 form,
-                                self.kwargs['type'] == '1',
                                 self.template_name)
 
-    def post(self, request, type):
+    def post(self, request):
         form = self.form_class(request.POST)
+        if form.cleaned_data['action_type'] == Action.TODO_LIST:
+            return JsonResponse(
+                {'html_redirect': reverse('under_construction'),
+                 'form_is_valid':True}
+            )
         return save_action_form(request,
                                 form,
-                                self.kwargs['type'] == '1',
                                 self.template_name)
 
 
@@ -284,7 +311,7 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
     model = Action
     template_name = 'action/includes/partial_action_update.html'
     context_object_name = 'action'
-    form_class = ActionForm
+    form_class = ActionUpdateForm
 
     def get_object(self, queryset=None):
         obj = super(ActionUpdateView, self).get_object(queryset=queryset)
@@ -297,15 +324,13 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
         form = self.form_class(instance=Action.objects.get(pk=kwargs['pk']))
         return save_action_form(request,
                                 form,
-                                self.kwargs['type'] == '1',
                                 self.template_name)
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, **kwargs):
         form = self.form_class(request.POST,
                                instance=Action.objects.get(pk=kwargs['pk']))
         return save_action_form(request,
                                 form,
-                                self.kwargs['type'] == '1',
                                 self.template_name)
 
 
@@ -347,13 +372,13 @@ def edit_description(request, pk):
         action.save()
 
         # Log the event
-        logs.ops.put(request.user,
-                     'action_update',
-                     action.workflow,
-                     {'id': action.id,
-                      'name': action.name,
-                      'workflow_id': workflow.id,
-                      'workflow_name': workflow.name})
+        Log.objects.register(request.user,
+                             Log.ACTION_UPDATE,
+                             action.workflow,
+                             {'id': action.id,
+                              'name': action.name,
+                              'workflow_id': workflow.id,
+                              'workflow_name': workflow.name})
 
         # Request is correct
         data['form_is_valid'] = True
@@ -394,7 +419,7 @@ def action_out_save_content(request, pk):
         return JsonResponse({})
 
     # Wrong type of action.
-    if not action.is_out:
+    if action.is_in:
         return JsonResponse({})
 
     # If the request has the 'action_content', update the action
@@ -407,13 +432,12 @@ def action_out_save_content(request, pk):
 
 
 @user_passes_test(is_instructor)
-def edit_action_out(request, pk):
+def edit_action(request, pk):
     """
-    View to handle the AJAX form to edit an action (editor, conditions,
-    filters, etc).
+    View to select the right action edit procedure
     :param request: Request object
     :param pk: Action PK
-    :return: JSON response
+    :return: HTML response
     """
 
     # Try to get the workflow first
@@ -421,33 +445,52 @@ def edit_action_out(request, pk):
     if not workflow:
         return redirect('workflow:index')
 
-    # Get the action and create the form
+    if workflow.nrows == 0:
+        messages.error(
+            request,
+            _('Workflow has no data. Go to "Manage table data" to upload data.')
+        )
+        return redirect(reverse('action:index'))
+
+    # Get the action and the columns
     try:
         action = Action.objects.filter(
             Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
+            Q(workflow__shared=request.user)
+        ).distinct().prefetch_related('columns').get(pk=pk)
     except ObjectDoesNotExist:
         return redirect('action:index')
 
-    if not action.is_out:
-        # Trying to edit an incorrect action. Redirect to index
-        return redirect('action:index')
+    if action.action_type == Action.PERSONALIZED_TEXT:
+        return edit_action_out(request, workflow, action)
+
+    if action.action_type == Action.PERSONALIZED_JSON:
+        return edit_action_out(request, workflow, action)
+
+    if action.action_type == Action.SURVEY:
+        return edit_action_in(request, workflow, action)
+
+    if action.action_type == Action.TODO_LIST:
+        return redirect(reverse('under_construction'), {})
+        # return edit_action_in(request, workflow, action)
+
+
+def edit_action_out(request, workflow, action):
+    """
+    View to handle the form to edit an action OUT (editor, conditions,
+    filters, etc).
+    :param request: Request object
+    :param action: Action
+    :return: HTML response
+    """
 
     # Create the form
     form = EditActionOutForm(request.POST or None, instance=action)
 
-    # See if the action has a filter or not
-    try:
-        filter_condition = Condition.objects.get(action=action, is_filter=True)
-    except Condition.DoesNotExist:
-        filter_condition = None
-    except Condition.MultipleObjectsReturned:
-        return render(
-            request, 'error.html',
-            {'message': _('Malfunction detected when retrieving filter '
-                          '(action: {0})').format(action.id)})
+    # Get the filter or None
+    filter_condition = action.get_filter()
 
-    # Conditions to show in the page as well.
+    # Conditions to show in the page.
     conditions = Condition.objects.filter(
         action=action, is_filter=False
     ).order_by('created')
@@ -467,25 +510,32 @@ def edit_action_out(request, pk):
                'vis_scripts': PlotlyHandler.get_engine_scripts()
                }
 
+    # Template to use
+    template = 'action/edit_personalized_text.html'
+    if action.action_type == Action.PERSONALIZED_JSON:
+        template = 'action/edit_personalized_json.html'
+
     # Processing the request after receiving the text from the editor
-    if request.method == 'POST':
+    if request.method == 'GET' or not form.is_valid():
+        # Return the same form in the same page
+        return render(request, template, context=context)
 
-        if form.is_valid():
-            content = form.cleaned_data.get('content', None)
-            # TODO: Can we detect unused vars only for this invocation?
-            # Render the content as a template and catch potential problems.
-            # This seems to be only possible if dealing directly with Jinja2
-            # instead of Django.
-            try:
-                render_template(content, {}, action)
-            except Exception as e:
-                # Pass the django exception to the form (fingers crossed)
-                form.add_error(None, e.message)
-                return render(request, 'action/edit_out.html', context)
+    # Get content
+    content = form.cleaned_data.get('content', None)
 
-            # Log the event
-            logs.ops.put(request.user,
-                         'action_update',
+    # Render the content as a template and catch potential problems.
+    # This seems to be only possible if dealing directly with Jinja2
+    # instead of Django.
+    try:
+        render_template(content, {}, action)
+    except Exception as e:
+        # Pass the django exception to the form (fingers crossed)
+        form.add_error(None, e.message)
+        return render(request, template, context)
+
+    # Log the event
+    Log.objects.register(request.user,
+                         Log.ACTION_UPDATE,
                          action.workflow,
                          {'id': action.id,
                           'name': action.name,
@@ -493,65 +543,29 @@ def edit_action_out(request, pk):
                           'workflow_name': workflow.name,
                           'content': content})
 
-            # Text is good. Update the content of the action
-            action.set_content(content)
-            action.save()
+    # Text is good. Update the content of the action
+    action.set_content(content)
 
-            # Closing, return to index if save-and-close is given
-            if request.POST['Submit'] == 'Save-and-close':
-                return redirect('action:index')
+    # Update additional fields
+    if action.action_type == Action.PERSONALIZED_JSON:
+        action.target_url = form.cleaned_data['target_url']
 
-    # Return the same form in the same page
-    return render(request, 'action/edit_out.html', context=context)
+    action.save()
+
+    return redirect('action:index')
 
 
-@user_passes_test(is_instructor)
-def edit_action_in(request, pk):
+def edit_action_in(request, workflow, action):
     """
     View to handle the AJAX form to edit an action in (filter + columns).
     :param request: Request object
-    :param pk: Action PK
+    :param workflow: workflow
+    :param action: Action
     :return: HTTP response
     """
 
-    # Check if the workflow is locked
-    workflow = get_workflow(request)
-    if not workflow:
-        return redirect('workflow:index')
-
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _('Workflow has no data. Go to Dataops to upload data.')
-        )
-        return redirect(reverse('action:index'))
-
-    # Get the action and the columns
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)
-        ).distinct().prefetch_related('columns').get(pk=pk)
-    except ObjectDoesNotExist:
-        return redirect('action:index')
-
-    if action.is_out:
-        # Trying to edit an incorrect action. Redirect to index
-        return redirect('action:index')
-
-    # See if the action has a filter or not
-    try:
-        filter_condition = Condition.objects.get(
-            action=action, is_filter=True
-        )
-    except Condition.DoesNotExist:
-        filter_condition = None
-    except Condition.MultipleObjectsReturned:
-        return render(
-            request, 'error.html',
-            {'message': _('Malfunction detected when retrieving filter '
-                          '(action: {0})').format(action.id)}
-        )
+    # Get filter or None
+    filter_condition = action.get_filter()
 
     # Get the number of rows in DF selected by filter.
     if filter_condition:
@@ -734,7 +748,7 @@ def select_column_action(request, apk, cpk, key=None):
     if workflow.nrows == 0:
         messages.error(
             request,
-            _('Workflow has no data. Go to Dataops to upload data.')
+            _('Workflow has no data. Go to "Manage table data" to upload data.')
         )
         return JsonResponse({'html_redirect': reverse('action:index')})
 
@@ -757,12 +771,14 @@ def select_column_action(request, apk, cpk, key=None):
     if key:
         current_key = action.columns.filter(is_key=True).first()
         if current_key:
+            # Remove the existing one
             action.columns.remove(current_key)
         if column.is_key:
             action.columns.add(column)
-    else:
-        action.columns.add(column)
+        return JsonResponse({'html_redirect': ''})
 
+    action.columns.add(column)
+    # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})
 
 
@@ -783,7 +799,7 @@ def unselect_column_action(request, apk, cpk):
     if workflow.nrows == 0:
         messages.error(
             request,
-            _('Workflow has no data. Go to Dataops to upload data.')
+            _('Workflow has no data. Go to "Manage table data" to upload data.')
         )
         return redirect(reverse('action:index'))
 
@@ -805,7 +821,7 @@ def unselect_column_action(request, apk, cpk):
     # Parameters are correct, so add the column to the action.
     action.columns.remove(column)
 
-    return redirect(reverse('action:edit_in', kwargs={'pk': action.id}))
+    return redirect(reverse('action:edit', kwargs={'pk': action.id}))
 
 
 @user_passes_test(is_instructor)
@@ -825,7 +841,7 @@ def shuffle_questions(request, pk):
     if workflow.nrows == 0:
         messages.error(
             request,
-            _('Workflow has no data. Go to Dataops to upload data.')
+            _('Workflow has no data. Go to "Manage table data" to upload data.')
         )
         return redirect(reverse('action:index'))
 
@@ -842,135 +858,6 @@ def shuffle_questions(request, pk):
     action.save()
 
     return JsonResponse({'shuffle': action.shuffle})
-
-
-def preview_response(request, pk, idx, template, prelude=None):
-    """
-    HTML request and the primary key of an action to preview one of its
-    instances. The request must provide and additional parameter idx to
-    denote which instance to show.
-
-    :param request: HTML request object
-    :param pk: Primary key of the an action for which to do the preview
-    :param idx: Index of the reponse to preview
-    :param template: Path to the template to use for the render.
-    :param prelude: Optional text to include at the top of the rencering
-    :return:
-    """
-
-    # To include in the JSON response
-    data = dict()
-
-    # Action being used
-    try:
-        action = Action.objects.get(id=pk)
-    except ObjectDoesNotExist:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
-        return JsonResponse(data)
-
-    # Get the workflow to obtain row numbers
-    workflow = get_workflow(request, action.workflow.id)
-    if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
-        return JsonResponse(data)
-
-    # If the request has the 'action_content', update the action
-    action_content = request.POST.get('action_content', None)
-    if action_content:
-        action.set_content(action_content)
-        action.save()
-
-    # Turn the parameter into an integer
-    idx = int(idx)
-
-    # Get the total number of items
-    cfilter = action.conditions.filter(is_filter=True).first()
-    n_items = cfilter.n_rows_selected if cfilter else -1
-    if n_items == -1:
-        n_items = workflow.nrows
-
-    # Set the idx to a legal value just in case
-    if not 1 <= idx <= n_items:
-        idx = 1
-
-    prv = idx - 1
-    if prv <= 0:
-        prv = n_items
-
-    nxt = idx + 1
-    if nxt > n_items:
-        nxt = 1
-
-    row_values = get_row_values(action, idx)
-
-    # Get the dictionary containing column names, attributes and condition
-    # valuations:
-    context = action.get_evaluation_context(row_values)
-
-    # Evaluate the action content.
-    show_values = ''
-    if action.is_out:
-        action_content = evaluate_row_action_out(action, context)
-    else:
-        action_content = evaluate_row_action_in(action, context)
-    if action_content:
-        # Get the conditions used in the action content
-        act_cond = action.get_action_conditions()
-        # Get the variables/columns from the conditions
-        act_vars = set().union(
-            *[x.columns.all()
-              for x in action.conditions.filter(name__in=act_cond)
-              ]
-        )
-        # Sort the variables/columns  by position and get the name
-        show_values = ', '.join(
-            ["{0} = {1}".format(x.name, row_values[x.name]) for x in act_vars]
-        )
-    else:
-        action_content = \
-            _("Error while retrieving content for student {0}").format(idx)
-
-    # Process the prelude?
-    if prelude:
-        prelude = evaluate_row_action_out(action, context, prelude)
-
-    data['html_form'] = \
-        render_to_string(template,
-                         {'action': action,
-                          'action_content': action_content,
-                          'index': idx,
-                          'n_items': n_items,
-                          'nxt': nxt,
-                          'prv': prv,
-                          'prelude': prelude,
-                          'show_values': show_values},
-                         request=request)
-
-    return JsonResponse(data)
-
-
-@csrf_exempt
-@user_passes_test(is_instructor)
-def preview(request, pk, idx):
-    """
-    HTML request and the primary key of an action to preview one of its
-    instances. The request must provide and additional parameter idx to
-    denote which instance to show. The request must be POST because it may
-    include the current text in the action (with changes) and it needs to be
-    updated in the database.
-
-    :param request: HTML request object
-    :param pk: Primary key of the an action for which to do the preview
-    :param idx: Index of the element to preview (from the queryset)
-    :return:
-    """
-
-    return preview_response(request,
-                            pk,
-                            idx,
-                            'action/includes/partial_action_preview.html')
 
 
 @user_passes_test(is_instructor)
@@ -1004,13 +891,12 @@ def showurl(request, pk):
             form.save()
 
             # Recording the event
-            logs.ops.put(
-                request.user,
-                'action_serve_toggled',
-                action.workflow,
-                {'id': action.id,
-                 'name': action.name,
-                 'serve_enabled': action.serve_enabled})
+            Log.objects.register(request.user,
+                                 Log.ACTION_SERVE_TOGGLED,
+                                 action.workflow,
+                                 {'id': action.id,
+                                  'name': action.name,
+                                  'serve_enabled': action.serve_enabled})
 
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('action:index')
@@ -1107,13 +993,13 @@ def delete_action(request, pk):
 
     if request.method == 'POST':
         # Log the event
-        logs.ops.put(request.user,
-                     'action_delete',
-                     action.workflow,
-                     {'id': action.id,
-                      'name': action.name,
-                      'workflow_name': action.workflow.name,
-                      'workflow_id': action.workflow.id})
+        Log.objects.register(request.user,
+                             Log.ACTION_DELETE,
+                             action.workflow,
+                             {'id': action.id,
+                              'name': action.name,
+                              'workflow_name': action.workflow.name,
+                              'workflow_id': action.workflow.id})
 
         # Perform the delete operation
         action.delete()
@@ -1151,7 +1037,7 @@ def run(request, pk):
     if workflow.nrows == 0:
         messages.error(request,
                        'Workflow has no data. '
-                       'Go to Dataops to upload data.')
+                       'Go to "Manage table data" to upload data.')
         return redirect(reverse('action:index'))
 
     # Get the action
@@ -1162,22 +1048,41 @@ def run(request, pk):
     except ObjectDoesNotExist:
         return redirect('action:index')
 
-    # If the action is an "out" action, return to index
-    if action.is_out:
-        return redirect('action:index')
+    if action.action_type == Action.PERSONALIZED_TEXT:
+        return run_email_action(request, workflow, action)
 
-    # Get the active columns attached to the action
-    columns = [c for c in action.columns.all() if c.is_active]
+    if action.action_type == Action.PERSONALIZED_JSON:
+        return run_json_action(request, workflow, action)
 
+    if action.action_type == Action.SURVEY:
+        return run_action_in(request, action)
+
+    if action.action_type == Action.TODO_LIST:
+        return run_action_in(request, action)
+
+
+def run_action_in(request, action):
+    """
+    Function that runs the action in. Mainly, it renders a table with
+    all rows that satisfy the filter condition and includes a link to
+    enter data for each of them.
+
+    :param request:
+    :param pk: Action id. It is assumed to be an action In
+    :return:
+    """
+
+    # Render template with active columns.
     return render(request,
-                  'action/run.html',
-                  {'columns': columns, 'action': action})
+                  'action/run_survey.html',
+                  {'columns': [c for c in action.columns.all() if c.is_active],
+                   'action': action})
 
 
 @user_passes_test(is_instructor)
 @csrf_exempt
 @require_http_methods(['POST'])
-def run_ss(request, pk):
+def run_survey_ss(request, pk):
     """
     Serve the AJAX requests to show the elements in the table that satisfy
     the filter and between the given limits.
@@ -1234,7 +1139,7 @@ def run_ss(request, pk):
         cv_tuples = [(c.name, search_value, c.data_type) for c in columns]
 
     # Filter
-    cfilter = action.conditions.filter(is_filter=True).first()
+    cfilter = action.get_filter()
 
     # Get the query set (including the filter in the action)
     qs = pandas_db.search_table_rows(
@@ -1255,7 +1160,7 @@ def run_ss(request, pk):
 
         # Render the first element (the key) as the link to the page to update
         # the content.
-        dst_url = reverse('action:run_row', kwargs={'pk': action.id})
+        dst_url = reverse('action:run_survey_row', kwargs={'pk': action.id})
         url_parts = list(urlparse.urlparse(dst_url))
         query = dict(urlparse.parse_qs(url_parts[4]))
         query.update({'uatn': column_names[key_idx], 'uatv': row[key_idx]})
@@ -1284,7 +1189,7 @@ def run_ss(request, pk):
 
 
 @user_passes_test(is_instructor)
-def run_row(request, pk):
+def run_survey_row(request, pk):
     """
     Function that runs the action in for a single row. The request
     must have query parameters uatn = key name and uatv = key value to
@@ -1303,7 +1208,7 @@ def run_row(request, pk):
     if workflow.nrows == 0:
         messages.error(
             request,
-            _('Workflow has no data. Go to Dataops to upload data.')
+            _('Workflow has no data. Go to "Manage table data" to upload data.')
         )
         return redirect(reverse('action:index'))
 
@@ -1381,13 +1286,13 @@ def clone(request, pk):
     action = clone_action(action, new_workflow=None, new_name=new_name)
 
     # Log event
-    logs.ops.put(request.user,
-                 'action_clone',
-                 workflow,
-                 {'id_old': old_id,
-                  'id_new': action.id,
-                  'name_old': old_name,
-                  'name_new': action.name})
+    Log.objects.register(request.user,
+                         Log.ACTION_CLONE,
+                         workflow,
+                         {'id_old': old_id,
+                          'id_new': action.id,
+                          'name_old': old_name,
+                          'name_new': action.name})
     data['form_is_valid'] = True
     data['html_redirect'] = reverse('action:index')
 

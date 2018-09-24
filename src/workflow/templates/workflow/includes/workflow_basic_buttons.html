@@ -1,0 +1,36 @@
+{% load i18n %}
+<div>
+  <a href="{% url 'workflow:detail' workflow.id %}"
+     class="btn btn-primary btn-sm spin" data-toggle="tooltip"
+     title="{% trans 'Open the workflow to manipulate its data and actions' %}">
+      <span class="glyphicon glyphicon-book"></span> {% trans 'Open' %}
+  </a>
+  {% if request.user == workflow.user %}
+    <button type="button"
+            class="btn btn-default btn-sm js-workflow-update align-middle"
+            data-url="{% url 'workflow:update' workflow.id %}" data-toggle="tooltip"
+            title="{% trans 'Change the name and description of this workflow' %}">
+        <span class="glyphicon glyphicon-pencil"></span> {% trans 'Rename' %}
+    </button>
+    <button type="button"
+       class="btn btn-default btn-sm js-workflow-clone align-middle"
+            data-url="{% url 'workflow:clone' workflow.id %}" data-toggle="tooltip"
+            title="{% trans 'Create a duplicate of this workflow' %}">
+      <span class="glyphicon glyphicon-duplicate"></span>
+      {% trans 'Clone' %}
+    </button>
+    <button type="button"
+            class="btn btn-danger btn-sm js-workflow-flush{% if workflow.nrows == 0 %} disabled{% endif %}"
+            data-url="{% url 'workflow:flush' workflow.id %}" data-toggle="tooltip"
+            title="{% trans 'Delete the data in the table of this workflow' %}">
+      <span class="glyphicon glyphicon-floppy-remove"></span>
+      {% trans 'Flush Data' %}
+    </button>
+    <button type="button"
+            class="btn btn-danger btn-sm js-workflow-delete"
+            data-url="{% url 'workflow:delete' workflow.id %}" data-toggle="tooltip"
+            title="{% trans 'Delete this workflow' %}">
+      <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
+    </button>
+  {% endif %}
+</div>

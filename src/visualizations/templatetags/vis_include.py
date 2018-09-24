@@ -44,19 +44,13 @@ def vis_html_content(context, column_name):
         viz_ctx['individual_value'] = ivalue
 
     # Get the condition filter
-    try:
-        cond_filter = Condition.objects.get(action__id=action.id,
-                                            is_filter=True)
-    except ObjectDoesNotExist:
-        cond_filter = None
+    cond_filter = action.get_filter()
 
     # Get the data from the data frame
-    df = pandas_db.get_subframe(workflow.id,
-                                cond_filter,
-                                [column_name])
+    df = pandas_db.get_subframe(workflow.id, cond_filter, [column_name])
+
     # Get the visualisation
-    viz = PlotlyColumnHistogram(data=df,
-                                context=viz_ctx)
+    viz = PlotlyColumnHistogram(data=df, context=viz_ctx)
 
     prefix = ''
     if viz_number == 0:

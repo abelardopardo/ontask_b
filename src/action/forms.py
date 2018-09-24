@@ -5,9 +5,11 @@ import json
 
 from datetimewidget.widgets import DateTimeWidget
 from django import forms
-from django_summernote.widgets import SummernoteInplaceWidget
 from django.utils.translation import ugettext_lazy as _
+from django_summernote.widgets import SummernoteInplaceWidget
+from validate_email import validate_email
 
+from dataops.pandas_db import execute_select_on_table, get_table_cursor
 from ontask import ontask_prefs, is_legal_name
 from ontask.forms import column_to_field, dateTimeOptions, RestrictedFileField
 from .models import Action, Condition
@@ -17,15 +19,21 @@ from .models import Action, Condition
 field_prefix = '___ontask___select_'
 
 
-class ActionForm(forms.ModelForm):
+class ActionUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop(str('workflow_user'), None)
         self.workflow = kwargs.pop(str('action_workflow'), None)
-        super(ActionForm, self).__init__(*args, **kwargs)
+        super(ActionUpdateForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = Action
-        fields = ('name', 'description_text',)
+        fields = ('name', 'description_text')
+
+
+class ActionForm(ActionUpdateForm):
+    class Meta:
+        model = Action
+        fields = ('name', 'description_text', 'action_type')
 
 
 class ActionDescriptionForm(forms.ModelForm):
@@ -36,13 +44,38 @@ class ActionDescriptionForm(forms.ModelForm):
 
 class EditActionOutForm(forms.ModelForm):
     """
-    Main class to edit an action out. The main element is the text editor (
-    currently using summernote).
+    Main class to edit an action out.
     """
-    content = forms.CharField(
-        widget=SummernoteInplaceWidget(),
-        label='',
-        required=False)
+    content = forms.CharField(label='', required=False)
+
+    def __init__(self, *args, **kargs):
+
+        super(EditActionOutForm, self).__init__(*args, **kargs)
+
+        if self.instance.action_type == Action.PERSONALIZED_TEXT:
+            self.fields['content'].widget = SummernoteInplaceWidget()
+        else:
+            # Add the target_url field
+            self.fields['target_url'] = forms.CharField(
+                initial=self.instance.target_url,
+                label=_('Target URL'),
+                strip=True,
+                required=False,
+                widget=forms.Textarea(
+                    attrs={
+                        'rows': 1,
+                        'cols': 120,
+                        'placeholder': _('URL to send the personalized JSON')
+                    }
+                )
+            )
+
+            # Modify the content field so that it uses the TextArea
+            self.fields['content'].widget = forms.Textarea(
+                attrs={'cols': 80,
+                       'rows': 15,
+                       'placeholder': _('Write a JSON object')}
+            )
 
     class Meta:
         model = Action
@@ -163,7 +196,7 @@ class EnableURLForm(forms.ModelForm):
         }
 
 
-class EmailActionBasicForm(forms.Form):
+class EmailActionForm(forms.Form):
     subject = forms.CharField(max_length=1024,
                               strip=True,
                               required=True,
@@ -178,7 +211,7 @@ class EmailActionBasicForm(forms.Form):
         label=_('Comma separated list of CC emails'),
         required=False
     )
-    bcc_email = forms.ChoiceField(
+    bcc_email = forms.CharField(
         label=_('Comma separated list of BCC emails'),
         required=False
     )
@@ -195,35 +228,160 @@ class EmailActionBasicForm(forms.Form):
         label=_('Track email reading in an extra column?')
     )
 
+    export_wf = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Download a snapshot of the workflow?'),
+        help_text=_('A zip file useful to review the emails sent.')
+    )
+
+    confirm_emails = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Check/exclude email addresses before sending?')
+    )
+
     def __init__(self, *args, **kargs):
         self.column_names = kargs.pop('column_names')
+        self.action = kargs.pop('action')
+        self.op_payload = kargs.pop('op_payload')
 
-        super(EmailActionBasicForm, self).__init__(*args, **kargs)
+        super(EmailActionForm, self).__init__(*args, **kargs)
 
-        # Try to guess if there is an "email" column
-        initial_choice = next((x for x in self.column_names
-                               if 'email' == x.lower()), None)
+        # Set the initial values from the payload
+        self.fields['subject'].initial = self.op_payload.get('subject', '')
+        email_column = self.op_payload.get('item_column', None)
+        self.fields['cc_email'].initial = self.op_payload.get('cc_email', '')
+        self.fields['bcc_email'].initial = self.op_payload.get('bcc_email', '')
+        self.fields['confirm_emails'].initial = self.op_payload.get(
+            'confirm_emails', False)
+        self.fields['send_confirmation'].initial = self.op_payload.get(
+            'send_confirmation', False)
+        self.fields['track_read'].initial = self.op_payload.get('track_read',
+                                                                False)
+        self.fields['export_wf'].initial = self.op_payload.get('export_wf',
+                                                               False)
 
-        if initial_choice is None:
-            initial_choice = ('', '---')
+        if email_column is None:
+            # Try to guess if there is an "email" column
+            email_column = next((x for x in self.column_names
+                                 if 'email' == x.lower()), None)
+
+        if email_column is None:
+            email_column = ('', '---')
         else:
-            initial_choice = (initial_choice, initial_choice)
-
-        self.fields['email_column'].initial = initial_choice,
+            email_column = (email_column, email_column)
+        self.fields['email_column'].initial = email_column
         self.fields['email_column'].choices = \
             [(x, x) for x in self.column_names]
+
+    def clean(self):
+        data = super(EmailActionForm, self).clean()
+
+        email_column = self.cleaned_data['email_column']
+
+        # Check if the values in the email column are correct emails
+        try:
+            column_data = execute_select_on_table(self.action.workflow.id,
+                                                  [],
+                                                  [],
+                                                  column_names=[email_column])
+            if not all([validate_email(x[0]) for x in column_data]):
+                # column has incorrect email addresses
+                self.add_error(
+                    'email_column',
+                    _('The column with email addresses has incorrect values.')
+                )
+        except TypeError:
+            self.add_error(
+                'email_column',
+                _('The column with email addresses has incorrect values.')
+            )
+
+        if not all([validate_email(x)
+                    for x in self.cleaned_data['cc_email'].split(',') if x]):
+            self.add_error(
+                'cc_email',
+                _('Field needs a comma-separated list of emails.')
+            )
+
+        if not all([validate_email(x)
+                    for x in self.cleaned_data['bcc_email'].split(',') if x]):
+            self.add_error(
+                'bcc_email',
+                _('Field needs a comma-separated list of emails.')
+            )
+
+        return data
 
     class Meta:
         widgets = {'subject': forms.TextInput(attrs={'size': 256})}
 
 
-class EmailActionForm(EmailActionBasicForm):
-    export_wf = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_('Download a snapshot of the current state of the workflow?'),
-        help_text=_('A zip file useful to review the emails sent.')
+class EmailExcludeForm(forms.Form):
+    # Email fields to exclude
+    exclude_values = forms.MultipleChoiceField([],
+                                               required=False,
+                                               label=_('Values to exclude'))
+
+    def __init__(self, data, *args, **kwargs):
+        self.action = kwargs.pop('action', None)
+        self.column_name = kwargs.pop('column_name', None)
+        self.exclude_init = kwargs.pop('exclude_values', list)
+
+        super(EmailExcludeForm, self).__init__(data, *args, **kwargs)
+
+        self.fields['exclude_values'].choices = \
+            get_table_cursor(self.action.workflow.pk,
+                             self.action.get_filter(),
+                             [self.column_name, self.column_name]).fetchall()
+        self.fields['exclude_values'].initial = self.exclude_init
+
+
+class JSONActionForm(forms.Form):
+
+    # Column with unique key to review objects to consider
+    key_column = forms.ChoiceField(
+        label=_('Column to exclude objects to send (empty to skip step)'),
+        required=False
     )
+
+    # Token to use when sending the JSON request
+    token = forms.CharField(
+        initial='',
+        label=_('Authentication Token'),
+        strip=True,
+        required=True,
+        help_text=_('Authentication token provided by the external platform.'),
+        widget=forms.Textarea(
+            attrs={
+                'rows': 1,
+                'cols': 120,
+                'placeholder': _('Authentication token to be sent with the '
+                                 'JSON object.')
+            }
+        )
+    )
+
+    def __init__(self, *args, **kargs):
+
+        self.column_names = kargs.pop('column_names')
+        self.op_payload = kargs.pop('op_payload')
+
+        super(JSONActionForm, self).__init__(*args, **kargs)
+
+        # Handle the key column setting the initial value if given and
+        # selecting the choices
+        key_column = self.op_payload.get('key_column', None)
+        if key_column is None:
+            key_column = ('', '---')
+        else:
+            key_column = (key_column, key_column)
+        self.fields['key_column'].initial = key_column
+        self.fields['key_column'].choices = [('', '---')] + \
+            [(x, x) for x in self.column_names]
+
+        self.fields['token'].initial = self.op_payload.get('token', '')
 
 
 class ActionImportForm(forms.Form):

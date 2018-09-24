@@ -8,7 +8,7 @@ import ontask
 register = template.Library()
 
 
-# settings value
+# Tag to get ontask_version
 @register.simple_tag
 def ontask_version():
     return ontask.__version__

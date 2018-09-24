@@ -133,7 +133,7 @@ def evaluate_node(node, given_variables):
     # If the operator is between or not_between, there is a special case,
     # the constant cannot be computed because the node['value'] is a pair
     constant = None
-    if 'between' not in operator:
+    if node['value'] is not None and not isinstance(node['value'], list):
         # Calculate the constant value depending on the type
         if node['type'] == 'integer':
             constant = int(node['value'])
@@ -172,7 +172,7 @@ def evaluate_node(node, given_variables):
     elif operator == 'ends_with' and node['type'] == 'string':
         result = (varvalue is not None) and varvalue.endswith(constant)
 
-    elif operator == 'not_ends_width' and node['type'] == 'string':
+    elif operator == 'not_ends_with' and node['type'] == 'string':
         result = (varvalue is None) or (not varvalue.endswith(constant))
 
     elif operator == 'is_empty' and node['type'] == 'string':
@@ -282,14 +282,14 @@ def evaluate_node_sql(node):
     # If the operator is between or not_between, there is a special case,
     # the constant cannot be computed because the node['value'] is a pair
     constant = None
-    if node['value'] is not None:
+    if node['value'] is not None and not isinstance(node['value'], list):
         # Calculate the constant value depending on the type
         if node['type'] == 'integer':
             constant = int(node['value'])
         elif node['type'] == 'double':
             constant = float(node['value'])
         elif node['type'] == 'boolean':
-            constant = int(node['value'] == '1')
+            constant = node['value'] == '1'
         elif node['type'] == 'string':
             constant = node['value']
         elif node['type'] == 'datetime':
@@ -336,7 +336,7 @@ def evaluate_node_sql(node):
                  ' LIKE %s) AND ("{0}" is not null)'.format(varname)
         result_fields = ["%" + node['value']]
 
-    elif operator == 'not_ends_width' and node['type'] == 'string':
+    elif operator == 'not_ends_with' and node['type'] == 'string':
         result = '("{0}"'.format(varname) + \
                  ' NOT LIKE %s) OR ("{0}" is null)'.format(varname)
         result_fields = ["%" + node['value']]
@@ -345,9 +345,15 @@ def evaluate_node_sql(node):
         result = '("{0}"'.format(varname) + \
                  " = '') OR (\"{0}\" is null)".format(varname)
 
+    elif operator == 'is_empty' and node['type'] != 'string':
+        result = "(\"{0}\" is null)".format(varname)
+
     elif operator == 'is_not_empty' and node['type'] == 'string':
         result = '("{0}"'.format(varname) + \
                  " != '') AND (\"{0}\" is not null)".format(varname)
+
+    elif operator == 'is_not_empty' and node['type'] != 'string':
+        result = "(\"{0}\" is not null)".format(varname)
 
     elif operator == 'less' and \
             (node['type'] == 'integer' or node['type'] == 'double'

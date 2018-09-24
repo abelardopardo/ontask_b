@@ -144,13 +144,14 @@ def delete_all_tables():
     """
 
     cursor = connection.cursor()
-    table_list = \
-        connection.introspection.get_table_list(cursor)
+    table_list = connection.introspection.get_table_list(cursor)
     for tinfo in table_list:
         if not tinfo.name.startswith(table_prefix):
             continue
         cursor.execute('DROP TABLE "{0}";'.format(tinfo.name))
 
+    # To make sure the table is dropped.
+    connection.commit()
     return
 
 
@@ -740,8 +741,10 @@ def get_filter_query(table_name, column_names, filter_exp):
 
     fields = []
     # If there has been a suffix from the filter, add it.
-    if filter_txt and filter_fields:
+    if filter_txt:
         query += filter_txt
+
+    if filter_fields:
         fields.extend(filter_fields)
 
     return (query, fields)
@@ -813,7 +816,7 @@ def search_table_rows(workflow_id,
 
     fields = []
     # If there has been a suffix from the filter, add it.
-    if filter_txt and filter_fields:
+    if filter_txt:
         query += filter_txt
         fields.extend(filter_fields)
 

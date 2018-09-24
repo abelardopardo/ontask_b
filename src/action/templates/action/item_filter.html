@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load settings %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block extrahead %}
+  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
+{% endblock extrahead %}
+{% block scripts %}
+  <script src="{% static 'site/js/sol.js' %}"></script>
+  <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
+{% endblock scripts %}
+{% block title %}{{ block.super }}{% trans 'Exclude items from action' %}{% endblock %}
+{% block container %}
+<div align="center" class="container-fluid" id="email-action-request-data">
+  <h1 class="page-header">{% blocktrans with n=action.name %}Select items to exclude from action{% endblocktrans %}</h1>
+  <div class="container">
+    <form action="" method="post">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <div class="text-center" style="margin: 1ex 0 1ex 0;">
+        <a type="button" class="btn btn-default spin"
+           href="{% url 'action:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
+        </a>
+        <a class="btn btn-primary spin" style="margin-right:2ex;" href="location.href='{{ prev_step }}'">
+          <span class="glyphicon glyphicon-triangle-left"></span> {% trans 'Back' %}
+        </a>
+        <button type="Submit" name="Submit" value="Submit"
+                style="margin-right:2ex;"
+                class="btn btn-primary btn-space">
+          <span class="glyphicon glyphicon-triangle-right"></span> {{ button_label }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock container %}

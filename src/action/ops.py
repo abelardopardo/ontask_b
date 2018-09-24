@@ -8,10 +8,12 @@ from __future__ import unicode_literals, print_function
 
 import datetime
 import gzip
+import json
 import random
 from io import BytesIO
 
 import pytz
+import requests
 from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.sites.models import Site
@@ -30,14 +32,14 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from validate_email import validate_email
 
-import logs.ops
 from action.evaluate import evaluate_row_action_out, evaluate_action, \
     get_row_values
 from action.forms import EnterActionIn, field_prefix
 from action.models import Action
+from action.serializers import ActionSelfcontainedSerializer
 from dataops import pandas_db, ops
+from logs.models import Log
 from workflow.models import Column
-from workflow.serializers import ActionSelfcontainedSerializer
 from . import settings
 
 
@@ -97,15 +99,9 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
                'action': action,
                'cancel_url': cancel_url}
 
-    if request.method == 'GET' or not form.is_valid():
-        return render(request, 'action/run_row.html', context)
-
-    # Correct POST request!
-    if not form.has_changed():
-        if not is_inst:
-            return redirect(reverse('action:thanks'))
-
-        return redirect(reverse('action:run', kwargs={'pk': action.id}))
+    if request.method == 'GET' or not form.is_valid() or \
+        request.POST.get('lti_version', None):
+        return render(request, 'action/run_survey_row.html', context)
 
     # Post with different data. # Update content in the DB
     set_fields = []
@@ -140,13 +136,17 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
     for act in action.workflow.actions.all():
         act.update_n_rows_selected()
 
-    # Log the event
-    logs.ops.put(request.user,
-                 'tablerow_update',
-                 action.workflow,
-                 {'id': action.workflow.id,
-                  'name': action.workflow.name,
-                  'new_values': log_payload})
+    # Log the event and update its content in the action
+    log_item = Log.objects.register(request.user,
+                                    Log.TABLEROW_UPDATE,
+                                    action.workflow,
+                                    {'id': action.workflow.id,
+                                     'name': action.workflow.name,
+                                     'new_values': log_payload})
+
+    # Modify the time of execution for the action
+    action.last_executed_log = log_item
+    action.save()
 
     # If not instructor, just thank the user!
     if not is_inst:
@@ -184,12 +184,10 @@ def serve_action_out(user, action, user_attribute_name):
                 user.email
             )
         # Log the event
-        logs.ops.put(
-            user,
-            'action_served_execute',
-            workflow=action.workflow,
-            payload=payload
-        )
+        Log.objects.register(user,
+                             Log.ACTION_SERVED_EXECUTE,
+                             workflow=action.workflow,
+                             payload=payload)
         return HttpResponse(render_to_string('action/action_unavailable.html',
                                              {}))
 
@@ -205,12 +203,10 @@ def serve_action_out(user, action, user_attribute_name):
         )
 
     # Log the event
-    logs.ops.put(
-        user,
-        'action_served_execute',
-        workflow=action.workflow,
-        payload=payload
-    )
+    Log.objects.register(user,
+                         Log.ACTION_SERVED_EXECUTE,
+                         workflow=action.workflow,
+                         payload=payload)
 
     # Respond the whole thing
     return HttpResponse(response)
@@ -278,7 +274,7 @@ def clone_action(action, new_workflow=None, new_name=None):
     old_action = Action.objects.get(id=old_id)
 
     # Clone the columns field (in case of an action in).
-    if not action.is_out:
+    if action.is_in:
         column_names = old_action.columns.all().values_list('name', flat=True)
         action.columns.clear()
         action.columns.add(
@@ -307,230 +303,6 @@ def clone_actions(actions, new_workflow):
     # Iterate over the actions and clone each of them
     for action in actions:
         clone_action(action, new_workflow)
-
-
-def send_messages(user,
-                  action,
-                  subject,
-                  email_column,
-                  from_email,
-                  cc_email_list,
-                  bcc_email_list,
-                  send_confirmation,
-                  track_read):
-    """
-    Performs the submission of the emails for the given action and with the
-    given subject. The subject will be evaluated also with respect to the
-    rows, attributes, and conditions.
-    :param user: User object that executed the action
-    :param action: Action from where to take the messages
-    :param subject: Email subject
-    :param email_column: Name of the column from which to extract emails
-    :param from_email: Email of the sender
-    :param cc_email_list: List of emails to include in the CC
-    :param bcc_email_list: List of emails to include in the BCC
-    :param send_confirmation: Boolean to send confirmation to sender
-    :param track_read: Should read tracking be included?
-    :return: Send the emails
-    """
-
-    # Evaluate the action string, evaluate the subject, and get the value of
-    # the email column.
-    result = evaluate_action(action,
-                             extra_string=subject,
-                             column_name=email_column)
-
-    # Check the type of the result to see if it was successful
-    if not isinstance(result, list):
-        # Something went wrong. The result contains a message
-        return result
-
-    track_col_name = ''
-    data_frame = None
-    if track_read:
-        data_frame = pandas_db.load_from_db(action.workflow.id)
-        # Make sure the column name does not collide with an existing one
-        i = 0  # Suffix to rename
-        while True:
-            i += 1
-            track_col_name = 'EmailRead_{0}'.format(i)
-            if track_col_name not in data_frame.columns:
-                break
-
-    # Update the number of filtered rows if the action has a filter (table
-    # might have changed)
-    cfilter = action.conditions.filter(is_filter=True).first()
-    if cfilter and cfilter.n_rows_selected != len(result):
-        cfilter.n_rows_selected = len(result)
-        cfilter.save()
-
-    # Set the cc_email_list and bcc_email_list to the right values
-    if not cc_email_list:
-        cc_email_list = []
-    if not bcc_email_list:
-        bcc_email_list = []
-
-    # Check that cc and bcc contain list of valid email addresses
-    if not all([validate_email(x) for x in cc_email_list]):
-        return _('Invalid email address in cc email')
-    if not all([validate_email(x) for x in bcc_email_list]):
-        return _('Invalid email address in bcc email')
-
-    # Everything seemed to work to create the messages.
-    msgs = []
-    for msg_body, msg_subject, msg_to in result:
-
-        # If read tracking is on, add suffix for message (or empty)
-        if track_read:
-            # The track id must identify: action & user
-            track_id = {
-                'action': action.id,
-                'sender': user.email,
-                'to': msg_to,
-                'column_to': email_column,
-                'column_dst': track_col_name
-            }
-
-            track_str = \
-                """<img src="https://{0}{1}{2}?v={3}" alt="" 
-                    style="position:absolute; visibility:hidden"/>""".format(
-                    Site.objects.get_current().domain,
-                    ontask_settings.BASE_URL,
-                    reverse('trck'),
-                    signing.dumps(track_id)
-                )
-        else:
-            track_str = ''
-
-        # Get the plain text content and bundle it together with the HTML in
-        # a message to be added to the list.
-        text_content = strip_tags(msg_body)
-        msg = EmailMultiAlternatives(
-            msg_subject,
-            text_content,
-            from_email,
-            [msg_to],
-            bcc_email_list,
-            cc=cc_email_list
-        )
-        msg.attach_alternative(msg_body + track_str, "text/html")
-        msgs.append(msg)
-
-    # Mass mail!
-    try:
-        connection = mail.get_connection()
-        connection.send_messages(msgs)
-    except Exception as e:
-        # Something went wrong, notify above
-        return str(e)
-
-    # Add the column if needed
-    if track_read:
-        # Create the new column and store
-        d_str = 'Emails sent with action {0} on {1}'.format(
-            action.name,
-            str(timezone.now())
-        )
-        column = Column(
-            name=track_col_name,
-            description_text=d_str,
-            workflow=action.workflow,
-            data_type='integer',
-            is_key=False,
-            position=action.workflow.ncols + 1
-        )
-        column.save()
-
-        # Increase the number of columns in the workflow
-        action.workflow.ncols += 1
-        action.workflow.save()
-
-        # Initial value in the data frame and store the table
-        data_frame[track_col_name] = 0
-        ops.store_dataframe_in_db(data_frame, action.workflow.id)
-
-    # Log the events (one per email)
-    now = datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
-    context = {
-        'user': user.id,
-        'action': action.id,
-        'email_sent_datetime': str(now),
-    }
-    for msg in msgs:
-        context['subject'] = msg.subject
-        context['body'] = msg.body
-        context['from_email'] = msg.from_email
-        context['to_email'] = msg.to[0]
-        logs.ops.put(user, 'action_email_sent', action.workflow, context)
-
-    # Log the event
-    logs.ops.put(
-        user,
-        'action_email_sent',
-        action.workflow,
-        {'user': user.id,
-         'action': action.name,
-         'num_messages': len(msgs),
-         'email_sent_datetime': str(now),
-         'filter_present': cfilter is not None,
-         'num_rows': action.workflow.nrows,
-         'subject': subject,
-         'from_email': user.email,
-         'cc_email': cc_email_list,
-         'bcc_email': bcc_email_list})
-
-    # If no confirmation email is required, done
-    if not send_confirmation:
-        return None
-
-    # Creating the context for the personal email
-    context = {
-        'user': user,
-        'action': action,
-        'num_messages': len(msgs),
-        'email_sent_datetime': now,
-        'filter_present': cfilter is not None,
-        'num_rows': action.workflow.nrows,
-        'num_selected': cfilter.n_rows_selected if cfilter else -1}
-
-    # Create template and render with context
-    try:
-        html_content = Template(
-            str(getattr(settings, 'NOTIFICATION_TEMPLATE'))
-        ).render(Context(context))
-        text_content = strip_tags(html_content)
-    except TemplateSyntaxError as e:
-        return _('Syntax error detected in OnTask notification template '
-                 '({0})').format(e.message)
-
-    # Log the event
-    logs.ops.put(
-        user,
-        'action_email_notify', action.workflow,
-        {'user': user.id,
-         'action': action.id,
-         'num_messages': len(msgs),
-         'email_sent_datetime': str(now),
-         'filter_present': cfilter is not None,
-         'num_rows': action.workflow.nrows,
-         'subject': str(getattr(settings, 'NOTIFICATION_SUBJECT')),
-         'body': text_content,
-         'from_email': str(getattr(settings, 'NOTIFICATION_SENDER')),
-         'to_email': [user.email]})
-
-    # Send email out
-    try:
-        send_mail(
-            str(getattr(settings, 'NOTIFICATION_SUBJECT')),
-            text_content,
-            str(getattr(settings, 'NOTIFICATION_SENDER')),
-            [user.email],
-            html_message=html_content)
-    except Exception as e:
-        return _('An error occurred when sending your notification: '
-                 '{0}').format(e.message)
-
-    return None
 
 
 def do_export_action(action):
@@ -606,9 +378,336 @@ def do_import_action(user, workflow, name, file_item):
         return _('Unable to import action: {0}').format(e.message)
 
     # Success, log the event
-    logs.ops.put(user,
-                 'action_import',
-                 workflow,
-                 {'id': action.id,
-                  'name': action.name})
+    Log.objects.register(user,
+                         Log.ACTION_IMPORT,
+                         workflow,
+                         {'id': action.id,
+                          'name': action.name})
+    return None
+
+
+def send_messages(user,
+                  action,
+                  subject,
+                  email_column,
+                  from_email,
+                  cc_email_list,
+                  bcc_email_list,
+                  send_confirmation,
+                  track_read,
+                  exclude_values,
+                  log_item):
+    """
+    Performs the submission of the emails for the given action and with the
+    given subject. The subject will be evaluated also with respect to the
+    rows, attributes, and conditions.
+    :param user: User object that executed the action
+    :param action: Action from where to take the messages
+    :param subject: Email subject
+    :param email_column: Name of the column from which to extract emails
+    :param from_email: Email of the sender
+    :param cc_email_list: List of emails to include in the CC
+    :param bcc_email_list: List of emails to include in the BCC
+    :param send_confirmation: Boolean to send confirmation to sender
+    :param track_read: Should read tracking be included?
+    :param exclude_values: List of values to exclude from the mailing
+    :param log_item: Log object to store results
+    :return: Send the emails
+    """
+
+    # Evaluate the action string, evaluate the subject, and get the value of
+    # the email column.
+    result = evaluate_action(action,
+                             extra_string=subject,
+                             column_name=email_column,
+                             exclude_values=exclude_values)
+
+    # Check the type of the result to see if it was successful
+    if not isinstance(result, list):
+        # Something went wrong. The result contains a message
+        return result
+
+    track_col_name = ''
+    data_frame = None
+    if track_read:
+        data_frame = pandas_db.load_from_db(action.workflow.id)
+        # Make sure the column name does not collide with an existing one
+        i = 0  # Suffix to rename
+        while True:
+            i += 1
+            track_col_name = 'EmailRead_{0}'.format(i)
+            if track_col_name not in data_frame.columns:
+                break
+
+        # Get the log item payload to store the tracking column
+        log_item.payload['track_column'] = track_col_name
+        log_item.save()
+
+    # Update the number of filtered rows if the action has a filter (table
+    # might have changed)
+    cfilter = action.get_filter()
+    if cfilter and cfilter.n_rows_selected != len(result):
+        cfilter.n_rows_selected = len(result)
+        cfilter.save()
+
+    # Set the cc_email_list and bcc_email_list to the right values
+    if not cc_email_list:
+        cc_email_list = []
+    if not bcc_email_list:
+        bcc_email_list = []
+
+    # Check that cc and bcc contain list of valid email addresses
+    if not all([validate_email(x) for x in cc_email_list]):
+        return _('Invalid email address in cc email')
+    if not all([validate_email(x) for x in bcc_email_list]):
+        return _('Invalid email address in bcc email')
+
+    # Everything seemed to work to create the messages.
+    msgs = []
+    track_ids = []
+    for msg_body, msg_subject, msg_to in result:
+
+        # If read tracking is on, add suffix for message (or empty)
+        if track_read:
+            # The track id must identify: action & user
+            track_id = {
+                'action': action.id,
+                'sender': user.email,
+                'to': msg_to,
+                'column_to': email_column,
+                'column_dst': track_col_name
+            }
+
+            track_str = \
+                """<img src="https://{0}{1}{2}?v={3}" alt="" 
+                    style="position:absolute; visibility:hidden"/>""".format(
+                    Site.objects.get_current().domain,
+                    ontask_settings.BASE_URL,
+                    reverse('trck'),
+                    signing.dumps(track_id)
+                )
+        else:
+            track_str = ''
+
+        # Get the plain text content and bundle it together with the HTML in
+        # a message to be added to the list.
+        text_content = strip_tags(msg_body)
+        msg = EmailMultiAlternatives(
+            msg_subject,
+            text_content,
+            from_email,
+            [msg_to],
+            bcc=bcc_email_list,
+            cc=cc_email_list
+        )
+        msg.attach_alternative(msg_body + track_str, "text/html")
+        msgs.append(msg)
+        track_ids.append(track_str)
+
+    # Add the column if needed (before the mass email to avoid overload
+    if track_read:
+        # Create the new column and store
+        column = Column(
+            name=track_col_name,
+            description_text='Emails sent with action {0} on {1}'.format(
+                action.name,
+                str(timezone.now())
+            ),
+            workflow=action.workflow,
+            data_type='integer',
+            is_key=False,
+            position=action.workflow.ncols + 1
+        )
+        column.save()
+
+        # Increase the number of columns in the workflow
+        action.workflow.ncols += 1
+        action.workflow.save()
+
+        # Initial value in the data frame and store the table
+        data_frame[track_col_name] = 0
+        ops.store_dataframe_in_db(data_frame, action.workflow.id)
+
+    # Mass mail!
+    try:
+        connection = mail.get_connection()
+        connection.send_messages(msgs)
+    except Exception as e:
+        # Something went wrong, notify above
+        return str(e)
+
+    # Log the events (one per email)
+    now = datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
+    context = {
+        'user': user.id,
+        'action': action.id,
+        'email_sent_datetime': str(now),
+    }
+    for msg, track_id in zip(msgs, track_ids):
+        context['subject'] = msg.subject
+        context['body'] = msg.body
+        context['from_email'] = msg.from_email
+        context['to_email'] = msg.to[0]
+        if track_id:
+            context['track_id'] = track_id
+        Log.objects.register(user,
+                             Log.ACTION_EMAIL_SENT,
+                             action.workflow,
+                             context)
+
+    # Update data in the log item
+    log_item.payload['objects_sent'] = len(result)
+    log_item.payload['filter_present'] = cfilter is not None
+    log_item.payload['datetime'] = str(datetime.datetime.now(pytz.timezone(
+        ontask_settings.TIME_ZONE
+    )))
+    log_item.save()
+
+    # If no confirmation email is required, done
+    if not send_confirmation:
+        return None
+
+    # Creating the context for the confirmation email
+    context = {
+        'user': user,
+        'action': action,
+        'num_messages': len(msgs),
+        'email_sent_datetime': now,
+        'filter_present': cfilter is not None,
+        'num_rows': action.workflow.nrows,
+        'num_selected': cfilter.n_rows_selected if cfilter else -1
+    }
+
+    # Create template and render with context
+    try:
+        html_content = Template(
+            str(getattr(settings, 'NOTIFICATION_TEMPLATE'))
+        ).render(Context(context))
+        text_content = strip_tags(html_content)
+    except TemplateSyntaxError as e:
+        return _('Syntax error detected in OnTask notification template '
+                 '({0})').format(e.message)
+
+    # Log the event
+    Log.objects.register(
+        user,
+        Log.ACTION_EMAIL_NOTIFY,
+        action.workflow,
+        {'user': user.id,
+         'action': action.id,
+         'num_messages': len(msgs),
+         'email_sent_datetime': str(now),
+         'filter_present': cfilter is not None,
+         'num_rows': action.workflow.nrows,
+         'subject': str(getattr(settings, 'NOTIFICATION_SUBJECT')),
+         'body': text_content,
+         'from_email': str(getattr(settings, 'NOTIFICATION_SENDER')),
+         'to_email': [user.email]}
+    )
+
+    # Send email out
+    try:
+        send_mail(
+            str(getattr(settings, 'NOTIFICATION_SUBJECT')),
+            text_content,
+            str(getattr(settings, 'NOTIFICATION_SENDER')),
+            [user.email],
+            html_message=html_content)
+    except Exception as e:
+        return _('An error occurred when sending your notification: '
+                 '{0}').format(e.message)
+
+    return None
+
+
+def send_json(user, action, token, key_column, exclude_values, log_item):
+    """
+    Performs the submission of the emails for the given action and with the
+    given subject. The subject will be evaluated also with respect to the
+    rows, attributes, and conditions.
+    :param user: User object that executed the action
+    :param action: Action from where to take the messages
+    :param token: String to include as authorisation token
+    :param key_column: Key column name to use to exclude elements (if needed)
+    :param exclude_values: List of values to exclude from the mailing
+    :param log_item: Log object to store results
+    :return: Send the json objects
+    """
+
+    # Evaluate the action string and obtain the list of list of JSON objects
+    result = evaluate_action(action,
+                             column_name=key_column,
+                             exclude_values=exclude_values)
+
+    # Check the type of the result to see if it was successful
+    if not isinstance(result, list):
+        # Something went wrong. The result contains a message
+        return result
+
+    # Update the number of filtered rows if the action has a filter (table
+    # might have changed)
+    cfilter = action.get_filter()
+    if cfilter and cfilter.n_rows_selected != len(result):
+        cfilter.n_rows_selected = len(result)
+        cfilter.save()
+
+    # Create the headers to use for all requests
+    headers = {
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Authorization': 'Bearer {0}'.format(token),
+    }
+
+    # Iterate over all json objects to create the strings and check for
+    # correctness
+    json_objects = []
+    idx = 0
+    for json_string in result:
+        idx += 1
+        try:
+            json_obj = json.loads(json_string[0])
+        except:
+            return _('Incorrect JSON string in element number {0}').format(idx)
+        json_objects.append(json_obj)
+
+    # Send the objects to the given URL
+    status_vals = []
+    for json_obj in json_objects:
+        if ontask_settings.DEBUG:
+            print('SEND JSON: ' + json.dumps(json_obj))
+            status = 200
+        else:
+            response = requests.post(url=action.target_url,
+                                     data=json_obj,
+                                     headers=headers)
+            status = response.status_code
+        status_vals.append(
+            (status,
+             datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)),
+             json_obj)
+        )
+
+    # Create the context for the log events
+    context = {
+        'user': user.id,
+        'action': action.id,
+    }
+
+    # Log all OBJ sent
+    for status, dt, json_obj in status_vals:
+        context['object'] = json.dumps(json_obj)
+        context['status'] = status
+        context['json_sent_datetime'] = str(dt)
+        Log.objects.register(user,
+                             Log.ACTION_JSON_SENT,
+                             action.workflow,
+                             context)
+
+    # Update data in the log item
+    log_item.payload['objects_sent'] = len(result)
+    log_item.payload['filter_present'] = cfilter is not None
+    log_item.payload['datetime'] = str(datetime.datetime.now(pytz.timezone(
+        ontask_settings.TIME_ZONE
+    )))
+    log_item.save()
+
     return None

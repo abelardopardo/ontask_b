@@ -6,14 +6,14 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block extrahead %}
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
   <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
-  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
       if (document.getElementById("action-table") != null) {
@@ -41,28 +41,27 @@
 {% block container %}
 <div align="center" class="container">
   <h1 class="page-header">{% trans 'Actions' %}</h1>
-  <p>
-    <button type="button" class="btn btn-primary js-create-action"
-            data-url="{% url 'action:create' 0 %}"
-            data-toggle="tooltip"
-            title="New action to collect data from learners">
-      <span class="glyphicon glyphicon-plus"></span>
-        {% trans 'New Action In' %}
-    </button>
-    <button type="button" class="btn btn-primary js-create-action"
-            data-url="{% url 'action:create' 1 %}"
-            data-toggle="tooltip"
-            title="New action to provide personalised content">
-      <span class="glyphicon glyphicon-plus"></span>
-        {% trans 'New Action Out' %}
+  {% if not has_table %}
+    {% include 'workflow/includes/no_data.html' %}
+  {% elif no_actions %}
+    <p class="lead">{% blocktrans %}<strong>Next Step:</strong> Click in the <i>New action</i> below to create a new
+    action to execute based on the data stored in the table.{% endblocktrans %}</p>
+  {% endif %}
+  <div style="padding-bottom: 2ex;">
+    <button type="button" class="btn btn-sm btn-primary js-create-action"
+       data-url="{% url 'action:create' %}"
+       data-toggle="tooltip"
+       title="New action to collect data from learners">
+      <span class="glyphicon glyphicon-plus"></span> {% trans 'New action' %}
     </button>
     {% if has_table %}
       <a href="{% url 'action:import' %}"
-         class="btn btn-primary"
+         class="btn btn-sm btn-primary"
          data-toggle="tooltip" title="Import action previously exported">
         <span class="glyphicon glyphicon-import"></span> {% trans 'Import action' %}</a>
     {% endif %}
-  </p>
+    {% include 'workflow/includes/manage_table_data.html' %}
+  </div>
   {% render_table table %}
   <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">

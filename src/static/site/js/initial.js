@@ -5,5 +5,8 @@ var langMap = {
 
 function getLanguage() {
     var lang = navigator.language || navigator.userLanguage;
+    if (!(lang in langMap)) {
+      lang = 'en';
+    }
     return '//cdn.datatables.net/plug-ins/1.10.19/i18n/'+langMap[lang]+'.json'
 }

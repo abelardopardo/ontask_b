@@ -8,8 +8,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.utils.html import escape
-from validate_email import validate_email
 from django.utils.translation import ugettext_lazy as _
+from validate_email import validate_email
 
 import dataops.formula_evaluation
 from action.forms import EnterActionIn
@@ -173,7 +173,9 @@ def render_template(template_text, context_dict, action=None):
     return Template(new_template_text).render(Context(new_context))
 
 
-def evaluate_action(action, extra_string, column_name):
+def evaluate_action(action, extra_string=None,
+                    column_name=None,
+                    exclude_values=None):
     """
     Given an action object and an optional string:
     1) Access the attached workflow
@@ -195,6 +197,7 @@ def evaluate_action(action, extra_string, column_name):
            subject line) with the same dictionary as the text in the action.
     :param column_name: Column from where to extract the special value (
            typically the email address) and include it in the result.
+    :param exclude_values: List of values in the column to exclude
     :return: list of lists resulting from the evaluation of the action
     """
 
@@ -206,30 +209,21 @@ def evaluate_action(action, extra_string, column_name):
         col_idx = col_names.index(column_name)
 
     # Step 2: Get the row of data from the DB
-    try:
-        cond_filter = Condition.objects.get(action__id=action.id,
-                                            is_filter=True)
-    except ObjectDoesNotExist:
-        cond_filter = None
+    cond_filter = action.get_filter()
 
     # Step 3: Get the table data
     result = []
     data_frame = pandas_db.get_subframe(workflow.id, cond_filter)
 
-    # Check if the values in the email column are correct emails
-    try:
-        correct_emails = all([validate_email(x)
-                              for x in data_frame[column_name]])
-        if not correct_emails:
-            # column has incorrect email addresses
-            return _('The column with email addresses has incorrect values.')
-    except TypeError:
-        return _('The column with email addresses has incorrect values.')
-
     for __, row in data_frame.iterrows():
 
         # Get the dict(col_name, value)
         row_values = dict(zip(col_names, row))
+
+        if exclude_values and col_idx != -1 and \
+                str(row_values[column_name]) in exclude_values:
+            # Skip the row with the col_idx value in exclude values
+            continue
 
         # Step 3: Evaluate all the conditions
         condition_eval = {}
@@ -294,8 +288,7 @@ def get_row_values(action, row_idx):
     """
 
     # Step 1: Get the row of data from the DB
-    cond_filter = Condition.objects.filter(action__id=action.id,
-                                           is_filter=True).first()
+    cond_filter = action.get_filter()
 
     # If row_idx is an integer, get the data by index, otherwise, by key
     if isinstance(row_idx, int):
@@ -332,7 +325,7 @@ def evaluate_row_action_out(action, context, text=None):
         return None
 
     # Invoke the appropriate function depending on the action type
-    if not action.is_out:
+    if action.is_in:
         raise Exception(_('Incorrect type of action'))
 
     if text is None:

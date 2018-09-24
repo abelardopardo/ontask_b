@@ -1,35 +1,37 @@
 {% load i18n %}
-<div class="condition-btn btn-group" role="group">
-  <button type="button"
-          class="btn btn-primary btn-sm js-workflow-column-edit"
-          data-url="{% url 'workflow:column_edit' id %}"
-          data-toggle="tooltip"
-          title="{% trans 'Edit column name, description, type, values, etc.' %}">
-    <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
-  </button>
-  <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
-          data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
-    <span class="caret"></span>
-    <span class="sr-only">{% trans 'Toggle Dropdown' %}</span>
-  </button>
-  <ul role="menu" class="dropdown-menu">
-    <li>
-      <a href="{% url 'action:unselect_column_action' aid id  %}"
-         class="btn btn-default btn-sm"
-         data-toggle="tooltip" 
-         title="{% trans 'Remove column from action' %}">
-        <span class="glyphicon glyphicon-trash"></span> {% trans 'Remove from action' %}
-      </a>
-    </li>
-    <li>
-      <button type="button"
-              class="btn btn-default btn-sm js-column-clone align-middle"
-              data-url="{% url 'workflow:column_clone' id %}"
-              data-toggle="tooltip" 
-              title="{% trans 'Create an exact duplicate of this column' %}">
-          <span class="glyphicon glyphicon-duplicate"></span> {% trans 'Clone' %}
-      </button>
-    </li>
-  </ul>
+<div class="dropdown">
+  <div class="condition-btn btn-group" role="group">
+    <button type="button"
+            class="btn btn-primary btn-sm js-workflow-column-edit"
+            data-url="{% url 'workflow:column_edit' id %}"
+            data-toggle="tooltip"
+            title="{% trans 'Edit column name, description, type, values, etc.' %}">
+      <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
+    </button>
+    <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+            data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+      <span class="caret"></span>
+      <span class="sr-only">{% trans 'Toggle Dropdown' %}</span>
+    </button>
+    <ul role="menu" class="dropdown-menu">
+      <li>
+        <a href="{% url 'action:unselect_column_action' aid id  %}"
+           class="btn btn-default btn-sm spin"
+           data-toggle="tooltip"
+           title="{% trans 'Remove column from action' %}">
+          <span class="glyphicon glyphicon-trash"></span> {% trans 'Remove from action' %}
+        </a>
+      </li>
+      <li>
+        <button type="button"
+                class="btn btn-default btn-sm js-column-clone align-middle"
+                data-url="{% url 'workflow:column_clone' id %}"
+                data-toggle="tooltip"
+                title="{% trans 'Create an exact duplicate of this column' %}">
+            <span class="glyphicon glyphicon-duplicate"></span> {% trans 'Clone' %}
+        </button>
+      </li>
+    </ul>
+  </div>
 </div>

@@ -1,5 +1,5 @@
 {% load i18n %}
-<form method="post" action="{% url 'scheduler:delete_email' s_item.id %}"
+<form method="post" action="{% url 'scheduler:delete' s_item.id %}"
       class="js-scheduleremail-delete-form">
   {% csrf_token %}
   <div class="modal-header">

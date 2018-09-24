@@ -15,8 +15,8 @@ OnTask documentation (Ver. |ontask_version|)
    Introduction/index
    Install/index
    Using/index
-   Tutorial/index
    Scenarios/index
+   Tutorial/index
    Advanced/index
 
 `Changelog <https://github.com/abelardopardo/ontask_b/blob/master/ChangeLog.md>`_

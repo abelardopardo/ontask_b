@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
-from logs import ops
+from logs.models import Log
 from . import plugin, settings
 from .models import PluginRegistry
 
@@ -108,10 +108,9 @@ def verify_plugin_elements(plugin_instance):
             # should be empty
             if p_type == 'datetime' and p_allowed:
                 result[check_idx] = \
-                    _('Parameter of type datetime cannot have ' \
+                    _('Parameter of type datetime cannot have '
                       'list of allowed values')
                 return result
-
 
             # Translate all values to the right type
             result[check_idx] = _('Incorrect list of allowed value')
@@ -282,10 +281,10 @@ def refresh_plugin_data(request, workflow):
             # A plugin has vanished. Delete
 
             # Log the event
-            ops.put(request.user,
-                    'plugin_delete',
-                    workflow,
-                    {'id': rpin.id, 'name': rpin.filename})
+            Log.objects.register(request.user,
+                                 Log.PLUGIN_DELETE,
+                                 workflow,
+                                 {'id': rpin.id, 'name': rpin.filename})
 
             rpin.delete()
             continue
@@ -298,11 +297,11 @@ def refresh_plugin_data(request, workflow):
             pinstance = load_plugin_info(rpin.filename, rpin)
 
             # Log the event
-            ops.put(request.user,
-                    'plugin_update',
-                    workflow,
-                    {'id': rpin.id,
-                     'name': rpin.filename})
+            Log.objects.register(request.user,
+                                 Log.PLUGIN_UPDATE,
+                                 workflow,
+                                 {'id': rpin.id,
+                                  'name': rpin.filename})
 
         pfolders.remove(rpin.filename)
 
@@ -324,10 +323,10 @@ def refresh_plugin_data(request, workflow):
             continue
 
         # Log the event
-        ops.put(request.user,
-                'plugin_create', workflow,
-                {'id': rpin.id,
-                 'name': rpin.filename})
+        Log.objects.register(request.user,
+                             Log.PLUGIN_CREATE,
+                             workflow,
+                             {'id': rpin.id, 'name': rpin.filename})
 
 
 def run_plugin(plugin_instance, df, merge_key, params):

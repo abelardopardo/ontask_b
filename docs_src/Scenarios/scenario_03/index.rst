@@ -27,38 +27,35 @@ Suppose you have a course with 500 students and they took a pre-test in the firs
 
    #. The next page is the action out editor. The are at the has the name *Filter* and is to define a condition to filter only a subset of the students. In this scenario, for this action, we want to consider only those students that have failed the pretest, or in other words, the pretest score is below 50. Click the *Add Filter* button and introduce this condition as shown in the following figure:
 
-      .. figure:: scenario_03_filter.png
+      .. figure:: ../../scaptures/scenario_03_filter.png
       	 :align: center
 
    #. The next step is to define a condition to identify those students for which the score in the pretest is less than 30. In the second area from there is a button to create a new condition (*Conditions + New*). Click the button and a new window opens to specify a condition. Enter the condition as shown in the following picture:
 
-      .. figure:: scenario_03_condition_one.png
+      .. figure:: ../../scaptures/scenario_03_condition_one.png
       	 :align: center
 
    #. Repeat the same operation (add another condition), but this time the condition is that the pretest score is larger or equal to 30 **and** lower than 40. The second condition can be added clicking in the *Add Rule* button. The result should be like the one shown in the following figure:
 
-      .. figure:: scenario_03_condition_two.png
+      .. figure:: ../../scaptures/scenario_03_condition_two.png
          :align: center
 
-   #. Create a third condition, but this time the rule should state that the pretest condition is larger or equal to 40. After creating these three rules, the condition area in the editor should look like the following figure.
+   #. Create a third condition, but this time the rule should state that the pretest condition is larger or equal to 40.
 
-      .. figure:: scenario_03_conditions.png
-      	 :align: center
-
-   #. The next step is to write the body of the email starting with a greeting that includes the student's name and a sentence communicating the pretest score. Use the pull down menu labelled *Insert column name* to insert the column name:
-
-      .. figure:: scenario_03_text_top.png
-         :align: center
+   #. The next step is to write the body of the email starting with a
+      greeting that includes the student's name and a sentence communicating the
+      pretest score. Use the pull down menu labelled *Insert column name* to
+      insert the column name.
 
    #. Write three paragraphs for each of the categories of score. For each of them, select it, select the pull down menu of the appropriate condition, and click the option *Insert in text*. The text should be surrounded with some special mark-up such as ``{% if Bottom third (0-30) %}`` as shown in the following figure:
 
-      .. figure:: scenario_03_text.png
+      .. figure:: ../../scaptures/scenario_03_text.png
          :align: center
 
    #. Use the preview button with the arrows to see how the different emails are shown (only for the students that satisfy the condition of the filter).
 
    #. Save and close the *Action Out*. You now are back to the screen showing the actions in the workflow (you can see the one we just created). If you click in the *Email* button, you will be asked for some extra data such as the email subject, the column to use as email address and some options to track email reading or even obtain a snapshot (duplicate) of the workflow as it is right now for future reference.
 
-      .. figure:: scenario_03_email.png
+      .. figure:: ../../scaptures/scenario_03_email.png
 
    #. That's it! Those students that failed the pretest will receive a message with some suggestions framed according to their score.

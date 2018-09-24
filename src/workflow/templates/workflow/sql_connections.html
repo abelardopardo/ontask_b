@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load settings %}
+{% load static %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block extrahead %}
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+{% endblock extrahead %}
+{% block scripts %}
+  <script src="{% static 'workflow/js/workflow.js' %}{% otv %}"></script>
+  <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script type="text/javascript">
+    if (document.getElementById("sqlconn-table") != null) {
+        // Required for DataTables
+        $(document).ready(function() {
+            $('#sqlconn-table').DataTable({
+                "stateSave": true,
+                "search": {
+                  "caseInsensitive": true,
+                },
+                "order": [[0, "asc"]],
+                "language": {
+                    "emptyTable": "{% trans 'No SQL connections defined.' %}",
+                    "url": getLanguage()
+                },
+                "columnDefs": [
+                    {"className": "dt-center", "targets": "_all"},
+                    {"orderable": false, "targets": 10},
+                    {"searchable": false, "targets": 10},
+                ],
+              });
+        });
+    }
+  </script>
+{% endblock %}
+{% block title %}{{ block.super }}{% trans 'SQL Connections' %}{% endblock %}
+{% block container %}
+  <div align="center" class="container">
+    <h1 class="page-header">{% trans 'SQL Connections' %}</h1>
+    <p>
+      <button type="button" class="btn btn-primary js-create-workflow"
+              data-url="{% url 'dataops:sqlconn_add' %}"
+                data-toggle="tooltip"
+                title="{% trans 'Add a new SQL database connection' %}">
+        <span class="glyphicon glyphicon-plus"></span>
+          {% trans 'New SQL connection' %}
+      </button>
+    </p>
+    {% render_table table %}
+    <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock container %}

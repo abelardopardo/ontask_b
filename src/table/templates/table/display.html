@@ -6,15 +6,15 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block extrahead %}
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
   <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
   <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
-  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
   <script src="{% static 'site/js/sol.js' %}"></script>
   <script src="{% static 'table/js/table.js' %}{% otv %}"></script>
@@ -61,49 +61,32 @@
 {% endblock %}
 {% block title %}{{ block.super }}{% trans 'Table' %}{% endblock %}
 {% block container %}
-  <div id="table-content" align="center" class="container-fluid"
-       style="padding-top:2ex;">
+  <div id="table-content" align="center" class="container-fluid">
     {% if view %}
-      <h4>{% blocktrans %}Table view <strong>{{ view.name }}</strong>{% endblocktrans %}</h4>
+      <h4>{% blocktrans %}View <strong>{{ view.name }}</strong>{% endblocktrans %}</h4>
+    {% else %}
+      <h1>{% trans 'Table View' %}</h1>
     {% endif %}
-    {% if columns %}
-      <div style="padding-bottom: 2ex;">
-        <div class="dropdown" style="display:inline;">
-          <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                  data-toggle="dropdown">Add <span class="caret"></span>
-          </button>
-          <ul role="menu" class="dropdown-menu">
-            <li>
-              <a href="{% url 'dataops:rowcreate' %}"
-                 class="btn btn-sm btn-defult"
-                 data-toggle="tooltip"
-                 title="{% trans 'Add an extra row to the table' %}">
-                <span class="glyphicon glyphicon-plus"></span> {% trans 'Add row' %}
-              </a>
-            </li>
-            <li>
-              <button type="button"
-                      class="btn btn-default btn-sm js-workflow-column-add"
-                      data-url="{% url 'workflow:column_add' %}"
-                      data-toggle="tooltip"
-                      title="{% trans 'Add a column to the table' %}">
-                <span class="glyphicon glyphicon-plus"></span> {% trans 'Add column' %}
-              </button>
-            </li>
-            <li>
-              <button type="button"
-                      class="btn btn-default btn-sm js-workflow-formula-column-add"
-                      data-url="{% url 'workflow:formula_column_add' %}"
-                      data-toggle="tooltip"
-                      title="{% trans 'Add a column operating with the current values' %}">
-                <span class="glyphicon glyphicon-plus"></span> {% trans 'Add derived column' %}
-              </button>
-            </li>
-          </ul>
-        </div>
+    {% if not columns %}
+      {% include 'workflow/includes/no_data.html' %}
+    {% elif no_actions %}
+      {% include 'workflow/includes/no_actions.html' %}
+    {% endif %}
+    <div style="padding-bottom: 2ex;">
+      {% if columns %}
+        <a href="{% url 'dataops:rowcreate' %}"
+           class="btn btn-sm btn-primary"
+           data-toggle="tooltip"
+           title="{% trans 'Add a new row to the table' %}">
+          <span class="glyphicon glyphicon-plus"></span> {% trans 'Add row' %}
+        </a>
+        {% include 'workflow/includes/add_column_menu.html' %}
+      {% endif %}
+      {% include 'workflow/includes/manage_table_data.html' %}
+      {% if columns %}
         <div class="dropdown btn-group">
           <a href="{% url 'table:view_index' %}"
-             class="btn btn-primary btn-sm"
+             class="btn btn-primary btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Views available for this table' %}">
             <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Views' %}
@@ -116,12 +99,14 @@
             {% for v in views %}
               <li>
                 <a href="{% url 'table:display_view' v.id %}"
-                   class="btn btn-default btn-sm">{{ v.name }}</a>
+                   class="btn btn-default btn-sm spin">{{ v.name }}</a>
               </li>
             {% endfor %}
             </ul>
           {% endif %}
         </div>
+      {% endif %}
+      {% if columns %}
         {% if view %}
           <button type="button"
                   class="btn btn-primary btn-sm js-view-edit align-middle"
@@ -129,37 +114,36 @@
                   data-toggle="tooltip" title="{% trans 'Change elements in view' %}">
             <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit view' %}
           </button>
-          <button type="button" class="btn btn-sm btn-default"
-                  onclick="location.href='{% url 'table:display' %}'">
-            Full table
-          </button>
-          <a href="{% url 'table:csvdownload_view' view.id %}" download
-             class="btn btn-primary btn-sm js-logs-download"
-             data-toggle="tooltip"
-             title="{% trans 'Download a CSV file containing this table' %}">
-            <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
-          </a>
+          <a class="btn btn-sm btn-default spin" href="{% url 'table:display' %}">Full table</a>
           <a href="{% url 'table:stat_table_view' view.id %}"
-             class="btn btn-primary btn-sm"
+             class="btn btn-primary btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Dashboard created with the view data' %}">
             <span class="glyphicon glyphicon-dashboard"></span> {% trans 'Dashboard' %}
           </a>
-        {% else %}
-          <a href="{% url 'table:csvdownload' %}"
-             class="btn btn-primary btn-sm"
+          <a href="{% url 'table:csvdownload_view' view.id %}" download
+             class="btn btn-primary btn-sm js-logs-download spin"
              data-toggle="tooltip"
              title="{% trans 'Download a CSV file containing this table' %}">
             <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
           </a>
+        {% else %}
           <a href="{% url 'table:stat_table' %}"
-             class="btn btn-primary btn-sm"
+             class="btn btn-primary btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Dashboard created with the table data' %}">
             <span class="glyphicon glyphicon-dashboard"></span> {% trans 'Dashboard' %}
           </a>
+          <a href="{% url 'table:csvdownload' %}"
+             class="btn btn-primary btn-sm spin"
+             data-toggle="tooltip"
+             title="{% trans 'Download a CSV file containing this table' %}">
+            <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
+          </a>
         {% endif %}
-      </div>
+      {% endif %}
+    </div>
+    {% if columns %}
       <table class="table display dataTable no-footer cell-border table-bordered"
              id="table-data">
         <thead>
@@ -167,7 +151,7 @@
             <th rowspan="2"></th>
             {% for col in columns %}
               <th class="text-center">
-                <div class="dropdown">
+                <div class="dropdown" style="display: inline-table;">
                   <button class="btn btn-primary btn-sm dropdown-toggle"
                           type="button"
                           data-toggle="dropdown">{{ col.name }}
@@ -177,10 +161,10 @@
                     {% if not col.is_key %}
                       <li>
                         <a href="{% url 'table:stat_column' col.id %}"
-                           class="btn btn-default btn-sm align-middle"
+                           class="btn btn-default btn-sm align-middle spin"
                            data-toggle="tooltip"
                            title="{% trans 'Stats and visualizations about this column' %}">
-                          <span class="glyphicon glyphicon-stats"></span> {% trans 'Stats' %}
+                          <span class="glyphicon glyphicon-stats"></span> {% trans 'Statistics' %}
                         </a>
                       </li>
                     {% endif %}
@@ -204,7 +188,7 @@
                     </li>
                     <li>
                       <button type="button"
-                              class="btn btn-default btn-sm js-column-delete"
+                              class="btn btn-danger btn-sm js-column-delete"
                               data-url="{% url 'workflow:column_delete' col.id %}"
                               data-toggle="tooltip"
                               title="{% trans 'Delete column' %}">
@@ -258,10 +242,6 @@
           </tr>
         </thead>
       </table>
-    {% else %}
-      <p>{% trans 'The workflow does not have data.' %}</p>
-      {% url 'dataops:uploadmerge' as dops %}
-      <p>{% blocktrans %}To upload data go to <a href="{{ dops }}">Dataops</a>{% endblocktrans %}</p>
     {% endif %}
     <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog">

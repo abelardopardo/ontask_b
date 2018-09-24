@@ -1,7 +1,7 @@
 {% load i18n %}
 <div class="dropdown">
   {% if is_verified %}
-    <a href="{% url 'dataops:plugin_invoke' id %}" class="btn btn-primary btn-sm"
+    <a href="{% url 'dataops:plugin_invoke' id %}" class="btn btn-primary btn-sm spin"
        data-toggle="tooltip" title="{% trans 'Execute the transformation' %}">
       <span class="glyphicon glyphicon-off"></span> {% trans 'Run' %}</a>
   {% else %}

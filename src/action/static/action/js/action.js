@@ -1,26 +1,49 @@
+function insertAtCaret(areaId, text) {
+    var txtarea = document.getElementById(areaId);
+    var scrollPos = txtarea.scrollTop;
+    var caretPos = txtarea.selectionStart;
+
+    var front = (txtarea.value).substring(0, caretPos);
+    var back = (txtarea.value).substring(txtarea.selectionEnd, txtarea.value.length);
+    txtarea.value = front + text + back;
+    caretPos = caretPos + text.length;
+    txtarea.selectionStart = caretPos;
+    txtarea.selectionEnd = caretPos;
+    txtarea.focus();
+    txtarea.scrollTop = scrollPos;
+}
+var insertText = function(areaId, insert_text) {
+  if (typeof $('#' + areaId).summernote != 'undefined') {
+    $('#' + areaId).summernote('editor.insertText', insert_text);
+  } else {
+    insertAtCaret(areaId, insert_text);
+  }
+
+}
 var insertConditionInContent = function() {
   var btn = $(this);
-  var range = $("#id_content").summernote('createRange');
-  condition_text = gettext('YOUR TEXT HERE');
-  range_text = range.toString();
-  if (range_text != '') {
-    condition_text = range_text;
+  if (typeof $('#id_content').summernote != 'undefined') {
+    var range = $("#id_content").summernote('createRange');
+    condition_text = gettext('YOUR TEXT HERE');
+    range_text = range.toString();
+    if (range_text != '') {
+      condition_text = range_text;
+    }
+  } else {
+      condition_text = '';
   }
   insert_text = "{% if " + btn.attr('data-name') +
       " %}" + condition_text + "{% endif %}";
-  $('#id_content').summernote('editor.insertText', insert_text);
+  insertText('id_content', insert_text);
 };
-
 var insertAttributeInContent = function() {
   var val = $(this).val();
   if (val == '') {
     return;
   }
-  insert_text = "{{ " + val + " }}";
-  $('#id_content').summernote('editor.insertText', insert_text);
+  insertText('id_content', "{{ " + val + " }}");
   $(this).val(this.defaultSelected);
 }
-
 var insertColumnInActionIn = function () {
   var val = $(this).val();
   var sel = $(this)
@@ -33,16 +56,16 @@ var insertColumnInActionIn = function () {
     success: function (data) {
       if (typeof data.html_redirect != 'undefined') {
         location.href = data.html_redirect;
+      } else {
+        $('#div-spinner').hide();
       }
       sel.children("option[value='']").remove();
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      location.reload();
+      location.reload(true);
     }
   });
-  $('#div-spinner').hide();
 }
-
 var toggleShuffleQuestion = function () {
   $('#div-spinner').show();
   $.ajax({
@@ -57,17 +80,20 @@ var toggleShuffleQuestion = function () {
         }
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      location.reload();
+      $('#div-spinner').show();
+      location.reload(true);
     }
   });
   $('#div-spinner').hide();
 }
-
 var loadFormPost = function () {
+    var btn = $(this);
+    if ($(this).is('[class*="disabled"]')) {
+      return;
+    }
     $.ajax({
       url: $(this).attr("data-url"),
-      data: [{'name': 'action_content',
-              'value': $("#id_content").summernote('code')}],
+      data: [{'name': 'action_content', 'value': get_id_content()}],
       type: 'post',
       dataType: 'json',
       beforeSend: function() {
@@ -77,6 +103,7 @@ var loadFormPost = function () {
       success: function(data) {
         if (data.form_is_valid) {
           if (data.html_redirect == "") {
+            $('#div-spinner').show();
             window.location.reload(true);
           } else {
             location.href = data.html_redirect;
@@ -86,19 +113,20 @@ var loadFormPost = function () {
         $("#modal-item .modal-content").html(data.html_form);
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        location.reload();
+        $('#div-spinner').show();
+        location.reload(true);
       }
     });
 }
 var saveActionText = function() {
     $.ajax({
       url: $(this).attr("data-url"),
-      data: [{'name': 'action_content',
-              'value': $("#id_content").summernote('code')}],
+      data: [{'name': 'action_content', 'value': get_id_content()}],
       type: 'post',
       dataType: 'json',
       error: function(jqXHR, textStatus, errorThrown) {
-        location.reload();
+        $('#div-spinner').show();
+        location.reload(true);
       },
     });
     return true;
@@ -141,7 +169,7 @@ $(function () {
   $("#modal-item").on("submit", ".js-filter-delete-form", saveForm);
 
   // Create Condition
-  $("#condition-set").on("click", ".js-condition-create", loadForm);
+  $("#condition-set-header").on("click", ".js-condition-create", loadForm);
   $("#modal-item").on("submit", ".js-condition-create-form", saveForm);
 
   // Edit Condition
@@ -182,9 +210,11 @@ $(function () {
   $("#action-in-editor").on("change",
                        "#shuffle-questions",
                        toggleShuffleQuestion);
+
   // Preview
   $("#html-editor").on("click", ".js-action-preview", loadFormPost);
   $("#email-action-request-data").on("click", ".js-email-preview", loadForm);
+  $("#json-action-request-data").on("click", ".js-json-preview", loadForm);
   $("#action-in-editor").on("click", ".js-action-preview", loadForm);
   $(".modal-content").on("click", ".js-action-preview-nxt", loadForm);
   $(".modal-content").on("click", ".js-action-preview-prv", loadForm);
@@ -216,7 +246,11 @@ $(function () {
   // Clone column
   $("#column-selected-table").on("click", ".js-column-clone", loadForm);
   $("#modal-item").on("submit", ".js-column-clone-form", saveForm);
-
 });
 
+window.onload = function(){
+  if (document.getElementById("id_exclude_values") != null) {
+    set_element_select("#id_exclude_values");
+  }
+};
 

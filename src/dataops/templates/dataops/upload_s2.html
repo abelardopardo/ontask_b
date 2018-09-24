@@ -11,7 +11,6 @@
 {% block container %}
 <div align="center" class="container">
   <h1 class="page-header">{% trans 'Step 2: Select Columns' %}</h1>
-
   <form method="POST" action="">
     {% csrf_token %}
     {% include 'dataops/includes/upload_buttons.html' %}

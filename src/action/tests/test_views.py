@@ -2,10 +2,8 @@
 from __future__ import unicode_literals, print_function
 
 import os
-import time
 
 from django.conf import settings
-from django.shortcuts import reverse
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait, Select
@@ -23,7 +21,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         settings.BASE_DIR(),
         'action',
         'fixtures',
-        'simple_action_df.sql'
+        'simple_action.sql'
     )
 
     wflow_name = 'wflow1'
@@ -41,34 +39,16 @@ class ActionActionEdit(test.OntaskLiveTestCase):
     # Test operations with the filter
     def test_action_01_filter(self):
         # Login
-        self.login('instructor1@bogus.com')
-
-        self.open(reverse('workflow:index'))
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Workflows'))
-        self.assertIn('New workflow', self.selenium.page_source)
-        self.assertIn('Import workflow', self.selenium.page_source)
-
-        # Open the workflow
-        wf_link = self.selenium.find_element_by_link_text(self.wflow_name)
-        wf_link.click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'wflow-name')))
+        self.access_workflow_from_home_page(self.wflow_name)
 
         # Goto the action page
-        self.selenium.find_element_by_link_text('Actions').click()
-        self.assertIn('New Action', self.selenium.page_source)
+        self.go_to_actions()
 
-        # click in the action page
-        self.selenium.find_element_by_link_text('Edit').click()
-        # Wait for the action page
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//h4[@id='filter-set']/div/button")
-            )
-        )
+        # click in EDIT action link
+        self.open_action_edit('simple action')
 
         # Click in the add filter button
         self.selenium.find_element_by_xpath(
@@ -76,9 +56,9 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         ).click()
         # Wait for the form to appear
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Create action filter')
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[@id='modal-item']//form")
+            )
         )
 
         # Add the name and description
@@ -137,9 +117,9 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.selenium.find_element_by_class_name('js-filter-edit').click()
         # Wait for the form to modify the filter
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Edit filter')
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[@id='modal-item']//form")
+            )
         )
 
         # Click in the Add rule of the filter builder button
@@ -197,134 +177,26 @@ class ActionActionEdit(test.OntaskLiveTestCase):
     # Test operations with the conditions and the email preview
     def test_action_02_condition(self):
         # Login
-        self.login('instructor1@bogus.com')
-
-        self.open(reverse('workflow:index'))
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Workflows'))
-        self.assertIn('New workflow', self.selenium.page_source)
-        self.assertIn('Import workflow', self.selenium.page_source)
-
-        # Open the workflow
-        wf_link = self.selenium.find_element_by_link_text(self.wflow_name)
-        wf_link.click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'wflow-name')))
+        self.access_workflow_from_home_page(self.wflow_name)
 
         # Goto the action page
-        self.selenium.find_element_by_link_text('Actions').click()
-        # Wait for page to refresh (FLAKY)
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'js-create-action')
-            )
-        )
-        self.assertIn('New Action', self.selenium.page_source)
+        self.go_to_actions()
 
         # click in the action page
-        self.selenium.find_element_by_link_text('Edit').click()
-        # Wait for the action page
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//h4[@id='filter-set']/div/button")
-            )
-        )
+        self.open_action_edit('simple action')
 
-        # Click in the add condition button
-        self.selenium.find_element_by_xpath(
-            "//div[@id='condition-set']/h4/button"
-        ).click()
-        # Wait for the form to appear
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Create condition')
-        )
-
-        # Add the name and description
-        self.selenium.find_element_by_id('id_name').send_keys('c1')
-        self.selenium.find_element_by_id(
-            'id_description_text').send_keys('cdesc1')
-
-        # Select the age filter
-        sel = Select(self.selenium.find_element_by_name(
-            'builder_rule_0_filter'))
-        sel.select_by_value('age')
-        # Wait for the select elements to be clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//select[@name='builder_rule_0_filter']")
-            )
-        )
-
-        # Set the operator to less or equal
-        sel = Select(self.selenium.find_element_by_name(
-            'builder_rule_0_operator'))
-        sel.select_by_value('less_or_equal')
-
-        # Set the value to 12.1
-        self.selenium.find_element_by_name(
-            'builder_rule_0_value_0').send_keys('12.1')
-
-        # Click in the "update condition"
-        self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']/div/div/form/div/button[2]"
-        ).click()
-        # Wait for page to refresh (FLAKY)
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'js-condition-edit')
-            )
-        )
+        # Add condition
+        self.create_condition('c1',
+                              'cdesc1',
+                              [('age', 'less or equal', '12.1')])
 
         # Click in the add a second condition
-        self.selenium.find_element_by_xpath(
-            "//div[@id='condition-set']/h4/button"
-        ).click()
-        # Wait for the form to appear
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Create condition')
-        )
-
-        # Add the name and description
-        self.selenium.find_element_by_id('id_name').send_keys('c2')
-        self.selenium.find_element_by_id(
-            'id_description_text').send_keys('cdesc2')
-
-        # Select the age filter
-        sel = Select(self.selenium.find_element_by_name(
-            'builder_rule_0_filter'))
-        sel.select_by_value('age')
-        # Wait for the select elements to be clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//select[@name='builder_rule_0_filter']")
-            )
-        )
-
-        # Set the operator to less or equal
-        sel = Select(self.selenium.find_element_by_name(
-            'builder_rule_0_operator'))
-        sel.select_by_value('greater')
-
-        # Set the value to 12.1
-        self.selenium.find_element_by_name(
-            'builder_rule_0_value_0').send_keys('12.1')
-
-        # Click in the "update condition"
-        self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']/div/div/form/div/button[2]"
-        ).click()
-        # Wait for page to refresh (FLAKY)
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'js-condition-edit')
-            )
-        )
+        self.create_condition('c2',
+                              'cdesc2',
+                              [('age', 'greater', '12.1')])
 
         # Action now has two complementary conditions, add the conditions to
         # the message
@@ -334,14 +206,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
                    "{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}")""")
 
         # Click the preview button
-        self.selenium.find_element_by_xpath(
-            "//div[@id='html-editor']/form/div[3]/button[1]"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'js-action-preview-nxt')
-            )
-        )
+        self.open_browse_preview(close=False)
 
         # First value should be high age
         self.assertIn('Low', self.selenium.page_source)
@@ -366,33 +231,17 @@ class ActionActionEdit(test.OntaskLiveTestCase):
     # Test send_email operation
     def test_action_03_send_email(self):
         # Login
-        self.login('instructor1@bogus.com')
-
-        self.open(reverse('workflow:index'))
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Workflows'))
-        self.assertIn('New workflow', self.selenium.page_source)
-        self.assertIn('Import workflow', self.selenium.page_source)
-
-        # Open the workflow
-        wf_link = self.selenium.find_element_by_link_text(self.wflow_name)
-        wf_link.click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
-                                             'Workflow Details')
-        )
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
-        )
+        self.access_workflow_from_home_page(self.wflow_name)
 
         # Goto the action page
-        self.selenium.find_element_by_link_text('Actions').click()
-        self.assertIn('New Action', self.selenium.page_source)
+        self.go_to_actions()
 
         # Click in the page to send email
-        self.selenium.find_element_by_link_text('Email').click()
+        element = self.search_action('simple action')
+        element.find_element_by_link_text("Email").click()
 
         # Set the subject of the email
         self.selenium.find_element_by_id('id_subject').send_keys('Subject TXT')
@@ -411,24 +260,25 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.selenium.find_element_by_id('id_track_read').click()
 
         # Click the send button
-        self.selenium.find_element_by_class_name('btn-success').click()
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Next']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.CLASS_NAME, 'page-header'),
-                'Email action')
+                'Action scheduled for execution')
         )
 
         # There should be a message on that page
-        self.assertIn(
-            'Emails being processed. You may check the status in',
-            self.selenium.page_source)
+        self.assertTrue(
+            self.selenium.find_element_by_xpath(
+                "//body/div[4]/div/a"
+            ).text.startswith(
+                'You may check the status in log record number'
+            )
+        )
 
         # Go to the table page
-        self.open(reverse('table:display'))
-        # Wait for
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'table-data_previous'))
-        )
+        self.go_to_table()
 
         # There should be a column for the email tracking
         # This column is now added by Celery which needs to be running
@@ -443,34 +293,16 @@ class ActionActionEdit(test.OntaskLiveTestCase):
 
     def test_action_04_save_action_with_buttons(self):
         # Login
-        self.login('instructor1@bogus.com')
-
-        self.open(reverse('workflow:index'))
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Workflows'))
-        self.assertIn('New workflow', self.selenium.page_source)
-        self.assertIn('Import workflow', self.selenium.page_source)
-
-        # Open the workflow
-        wf_link = self.selenium.find_element_by_link_text(self.wflow_name)
-        wf_link.click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'wflow-name')))
+        self.access_workflow_from_home_page(self.wflow_name)
 
         # Goto the action page
-        self.selenium.find_element_by_link_text('Actions').click()
-        self.assertIn('New Action', self.selenium.page_source)
+        self.go_to_actions()
 
         # click in the action page
-        self.selenium.find_element_by_link_text('Edit').click()
-        # Wait for the action page
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//h4[@id='filter-set']/div/button")
-            )
-        )
+        self.open_action_edit('simple action')
 
         # Make sure the content has the correct text
         self.assertEqual(
@@ -485,52 +317,8 @@ class ActionActionEdit(test.OntaskLiveTestCase):
             """$('#id_content').summernote('editor.insertText', "mark1");"""
         )
 
-        # Create filter. Click in the add filter button
-        self.selenium.find_element_by_xpath(
-            "//h4[@id='filter-set']/div/button"
-        ).click()
-        # Wait for the form to appear
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Create action filter')
-        )
-
-        # Add the name and description
-        self.selenium.find_element_by_id('id_name').send_keys('fname')
-        self.selenium.find_element_by_id(
-            'id_description_text').send_keys('fdesc')
-
-        # Select the age filter
-        sel = Select(self.selenium.find_element_by_name(
-            'builder_rule_0_filter'))
-        sel.select_by_value('age')
-        # Wait for the select elements to be clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//select[@name='builder_rule_0_filter']")
-            )
-        )
-
-        # Set the operator to less or equal
-        sel = Select(self.selenium.find_element_by_name(
-            'builder_rule_0_operator'))
-        sel.select_by_value('less_or_equal')
-
-        # Set the value to 12.1
-        self.selenium.find_element_by_name(
-            'builder_rule_0_value_0').send_keys('12.1')
-
-        # Click in the "update filter"
-        self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']/div/div/form/div/button[2]"
-        ).click()
-        # Wait for page to refresh (FLAKY)
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'js-filter-edit')
-            )
-        )
+        # Create filter.
+        self.create_filter('fname', 'fdesc', [('age', 'less or equal', '12.1')])
 
         # Make sure the content has the correct text
         self.assertIn(
@@ -546,27 +334,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         )
 
         # Modify the filter. Click in the edit filter button
-        self.selenium.find_element_by_class_name('js-filter-edit').click()
-        # Wait for the form to modify the filter
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Edit filter')
-        )
-
-        # Modify its name
-        self.selenium.find_element_by_id('id_name').send_keys('2')
-
-        # Click in the "update filter"
-        self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']/div/div/form/div/button[2]"
-        ).click()
-        # Wait for page to refresh (FLAKY)
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'js-filter-edit')
-            )
-        )
+        self.edit_filter('fname2', '', [])
 
         # Make sure the content has the correct text
         self.assertIn(
@@ -582,24 +350,8 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         )
 
         # Click in the more ops and then the delete filter button
-        self.selenium.find_element_by_xpath(
-            "//h4[@id='filter-set']/div/button[2]"
-        ).click()
-        self.selenium.find_element_by_class_name('js-filter-delete').click()
-        # Wait for the screen to delete the filter
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Confirm filter deletion')
-        )
+        self.delete_filter()
 
-        # Click in the "delete filter"
-        self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']/div/div/form/div/button[2]"
-        ).click()
-        self.wait_close_modal_refresh_table('html-editor')
-
-        # Make sure the content has the correct text
         self.assertIn(
             "mark3",
             self.selenium.execute_script(
@@ -612,48 +364,10 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         )
 
         # Create condition. Click in the add condition button
-        self.selenium.find_element_by_xpath(
-            "//div[@id='condition-set']/h4/button"
-        ).click()
-        # Wait for the form to appear
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Create condition')
-        )
+        self.create_condition('fname',
+                              'fdesc',
+                              [('age', 'less or equal', '12.1')])
 
-        # Add the name and description
-        self.selenium.find_element_by_id('id_name').send_keys('fname')
-        self.selenium.find_element_by_id(
-            'id_description_text').send_keys('fdesc')
-
-        # Select the age filter
-        sel = Select(self.selenium.find_element_by_name(
-            'builder_rule_0_filter'))
-        sel.select_by_value('age')
-        # Wait for the select elements to be clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//select[@name='builder_rule_0_filter']")
-            )
-        )
-
-        # Set the operator to less or equal
-        sel = Select(self.selenium.find_element_by_name(
-            'builder_rule_0_operator'))
-        sel.select_by_value('less_or_equal')
-
-        # Set the value to 12.1
-        self.selenium.find_element_by_name(
-            'builder_rule_0_value_0').send_keys('12.1')
-
-        # Click in the "create condition"
-        self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']/div/div/form/div/button[2]"
-        ).click()
-        self.wait_close_modal_refresh_table('html-editor')
-
-        # Make sure the content has the correct text
         self.assertIn(
             "cmark1",
             self.selenium.execute_script(
@@ -666,23 +380,8 @@ class ActionActionEdit(test.OntaskLiveTestCase):
             """$('#id_content').summernote('editor.insertText', "cmark2");"""
         )
 
-        # Modify the filter. Click in the edit filter button
-        self.selenium.find_element_by_class_name('js-condition-edit').click()
-        # Wait for the form to modify the filter
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Edit condition')
-        )
-
-        # Modify its name
-        self.selenium.find_element_by_id('id_name').send_keys('2')
-
-        # Click in the "update condition"
-        self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']/div/div/form/div/button[2]"
-        ).click()
-        self.wait_close_modal_refresh_table('html-editor')
+        # Modify the condition. Click in the condition edit button
+        self.edit_condition('fname', 'fname2', '', [])
 
         # Make sure the content has the correct text
         self.assertIn(
@@ -697,24 +396,8 @@ class ActionActionEdit(test.OntaskLiveTestCase):
             """$('#id_content').summernote('editor.insertText', "cmark3");"""
         )
 
-        # Click in the delete condition button
-        self.selenium.find_element_by_xpath(
-            "//div[@id='condition-set']/div/div/button[2]"
-        ).click()
-        self.selenium.find_element_by_class_name('js-condition-delete').click()
-        # Wait for the screen to delete the condition
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Confirm condition deletion')
-        )
-
-        # Click in the "delete condition"
-        self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']/div/div/form/div/button[2]"
-        ).click()
-        # MODAL WAITING
-        self.wait_close_modal_refresh_table('html-editor')
+        # Delete the condition
+        self.delete_condition('fname2')
 
         # Make sure the content has the correct text
         self.assertIn(
@@ -752,83 +435,20 @@ class ActionActionInCreate(test.OntaskLiveTestCase):
     # Test operations with the filter
     def test_action_01_data_entry(self):
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
-        self.open(reverse('workflow:index'))
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
 
-        # Select the workflow
-        self.selenium.find_element_by_link_text("wflow2").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
-        )
-
-        # Open the actions page
-        self.selenium.find_element_by_link_text("Actions").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
-        )
+        # Goto the action page
+        self.go_to_actions()
 
         # Create new action
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[2]"
-        ).click()
-        # Wait for the modal to open
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'js-action-create-form'))
-        )
-
-        # Introduce information about the action in the form
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("new action in")
-        self.selenium.find_element_by_xpath("//button[@type='submit']").click()
-        # Wait for actions page
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'action-in-editor'))
-        )
+        self.create_new_survey_action('new action in', '')
 
         # Click in the add rule button (the filter is initially empty)
-        self.selenium.find_element_by_xpath(
-            "//h4[@id='filter-set']/div/button"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),
-                                             'Create action filter')
-        )
-
-        # Introducing the information in the action editor
-        self.selenium.find_element_by_id('id_name').send_keys('filter name')
-        self.selenium.find_element_by_name("builder_rule_0_filter").click()
-        Select(self.selenium.find_element_by_name(
-            "builder_rule_0_filter")).select_by_visible_text("registered")
-        self.selenium.find_element_by_name("builder_rule_0_value_0").click()
-
-
-        # Click in the create filter button
-        self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[2]"
-        ).click()
-
-        # MODAL WAITING
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        time.sleep(2)
-        # # ID disappears (page is updating)
-        # WebDriverWait(self.selenium, 10).until_not(
-        #     EC.presence_of_element_located(
-        #         (By.ID, 'column-selected-table_previous')
-        #     )
-        # )
-        # ID appears (page refreshed)
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.ID, 'column-selected-table_previous')
-            )
-        )
+        self.create_filter('filter name', '', [('registered', None, False)])
+        self.wait_close_modal_refresh_table('column-selected-table_previous')
 
         # Check that the filter is working properly
         self.assertIn('1 learner of 3', self.selenium.page_source)
@@ -837,52 +457,37 @@ class ActionActionInCreate(test.OntaskLiveTestCase):
         select = Select(self.selenium.find_element_by_id(
             'select-key-column-name'))
         select.select_by_visible_text('email')
-        # Table disappears (page is updating)
+        # Table disappears (page is updating) -- Wait for spinner, and then
+        # refresh
         WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.ID, 'column-selected-table_previous')
-            )
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
-        # Table appears (page refreshed)
+
+        # Select a new table element
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.ID, 'column-selected-table_previous')
+            EC.element_to_be_clickable(
+                (By.ID, 'select-column-name')
             )
         )
         select = Select(self.selenium.find_element_by_id(
             'select-column-name'))
         select.select_by_visible_text('registered')
-        # Table disappears (page is updating)
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.ID, 'column-selected-table_previous')
-            )
-        )
-        # Table appears (page refreshed)
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.ID, 'column-selected-table_previous')
-            )
-        )
+        self.wait_for_datatable('column-selected-table_previous')
 
         # Submit the action
         self.selenium.find_element_by_link_text('Done').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'js-action-showurl'))
-        )
-
+        self.wait_for_datatable('action-table_previous')
 
         # Run the action
-        self.selenium.find_element_by_xpath(
-            "//table[@id='action-table']/tbody/tr[3]/td[5]/div/a[2]"
-        ).click()
+        element = self.search_action('new action in')
+        element.find_element_by_link_text("Run").click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.LINK_TEXT, "student2@bogus.com")
+                (By.LINK_TEXT, "student02@bogus.com")
             )
         )
         # Enter data for the remaining user
-        self.selenium.find_element_by_link_text("student2@bogus.com").click()
+        self.selenium.find_element_by_link_text("student02@bogus.com").click()
         # Mark as registered
         self.selenium.find_element_by_id("id____ontask___select_1").click()
         # Submit form
@@ -895,9 +500,7 @@ class ActionActionInCreate(test.OntaskLiveTestCase):
                 (By.ID, 'actioninrun-data_previous'))
         )
         self.assertIn('No matching records found', self.selenium.page_source)
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[2]"
-        ).click()
+        self.selenium.find_element_by_link_text('Back').click()
 
         # End of session
         self.logout()
@@ -929,6 +532,7 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
 
     # Test operations with the filter
     def test_action_01_rename_column_condition_attribute(self):
+
         # First get objects for future checks
         workflow = Workflow.objects.get(name=self.wflow_name)
         column = Column.objects.get(
@@ -948,7 +552,7 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
             name='Registered',
             action=action_out,
         )
-        filter = Condition.objects.get(action=action_out, is_filter=True)
+        filter_obj = action_out.get_filter()
 
         # pre-conditions
         # Column name is the correct one
@@ -964,95 +568,50 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
         # Attribute name is present in action_out text
         self.assertTrue('{{ attribute name }}' in action_out.content)
         # Column name is present in action-in filter
-        self.assertTrue(has_variable(filter.formula, 'age'))
+        self.assertTrue(has_variable(filter_obj.formula, 'age'))
 
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
-        self.open(reverse('workflow:index'))
-
-        # Select the workflow
-        self.selenium.find_element_by_link_text("wflow2").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
-        )
+        # Go to the details page
+        self.access_workflow_from_home_page(self.wflow_name)
 
         # Click the button to rename the "registered" column
-        self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[5]/td[5]/div/button"
-        ).click()
-        self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[5]/td[5]/div/ul/li[1]/button"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'modal-title'), 'Edit column')
-        )
-        # Wait for the table to be refreshed
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'column-table_previous'))
-        )
+        self.open_column_edit('registered')
 
         # Introduce the new column name and submit
         self.selenium.find_element_by_id("id_name").click()
         self.selenium.find_element_by_id("id_name").clear()
         self.selenium.find_element_by_id("id_name").send_keys("registered new")
         self.selenium.find_element_by_xpath("//button[@type='submit']").click()
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for the page to reload
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
-        )
+
+        self.wait_close_modal_refresh_table('column-table_previous')
 
         # Click the button to rename the "age" column
-        self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[1]/td[5]/div/button"
-        ).click()
-        self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[1]/td[5]/div/ul/li[1]/button"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'modal-title'), 'Edit column')
-        )
-        # Wait for the table to be refreshed
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'column-table_previous'))
-        )
+        self.open_column_edit('age')
 
         # Introduce the new column name and submit
         self.selenium.find_element_by_id("id_name").click()
         self.selenium.find_element_by_id("id_name").clear()
         self.selenium.find_element_by_id("id_name").send_keys("age new")
         self.selenium.find_element_by_xpath("//button[@type='submit']").click()
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for the page to reload
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'success'))
-        )
 
-        # Click in the more ops button and then attribute
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[4]"
-        ).click()
-        self.selenium.find_element_by_link_text("Attributes").click()
+        self.wait_close_modal_refresh_table('column-table_previous')
+
+        # Go to the attribute page
+        self.go_to_attribute_page()
 
         # Change the name of the attribute and submit
-        self.selenium.find_element_by_xpath(
-            "//table[@id='attribute-table']/tbody/tr[1]/td[3]/button[1]"
-        ).click()
+        element = self.search_table_row_by_string('attribute-table',
+                                                  1,
+                                                  'attribute name')
+        element.find_element_by_xpath("td[3]/button[1]").click()
+
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'modal-title'),
-                'Edit attribute'))
+                (By.CLASS_NAME, 'modal-title'), 'Edit attribute'
+            )
+        )
         self.selenium.find_element_by_id('id_key').clear()
         self.selenium.find_element_by_id('id_key').send_keys(
             'attribute name new'
@@ -1065,31 +624,22 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//div[@class='modal-footer']/button[2]"
         ).click()
-        # MODAL WAITING
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for the page to reload
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'dataTables_paginate'))
-        )
+        # Go back to the attribute table page
+        self.wait_close_modal_refresh_table('attribute-table_previous')
 
         # Go to the actions and select the edit button of the action out
-        self.selenium.find_element_by_link_text("Actions").click()
-        self.selenium.find_element_by_xpath(
-            "//table[@id='action-table']/tbody/tr[2]/td[5]/div/a"
-        ).click()
+        self.go_to_actions()
+        self.open_action_edit('Detecting age')
 
         # Click the button to edit a condition and change its name
         self.selenium.find_element_by_xpath(
             "//button[contains(@class, 'js-condition-edit')]"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Edit condition'))
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[@id='modal-item']//form")
+            )
+        )
         self.selenium.find_element_by_id("id_name").click()
         self.selenium.find_element_by_id("id_name").clear()
         self.selenium.find_element_by_id("id_name").send_keys("Registered new")
@@ -1106,10 +656,9 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
         workflow = Workflow.objects.get(pk=workflow.id)
         column = Column.objects.get(pk=column.id)
         attributes = workflow.attributes
-        action_in = Action.objects.get(pk=action_in.id)
         action_out = Action.objects.get(pk=action_out.id)
         condition = Condition.objects.get(pk=condition.id)
-        filter = Condition.objects.get(action=action_out, is_filter=True)
+        filter_obj = action_out.get_filter()
 
         # Post conditions
         # Column name is the correct one
@@ -1121,16 +670,16 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
                          'attribute value')
         # Column name is present in condition formula
         self.assertFalse(has_variable(condition.formula,
-                                     'registered'))
+                                      'registered'))
         self.assertTrue(has_variable(condition.formula,
                                      'registered new'))
         # Column name is present in action_out text
         self.assertTrue('{{ registered new }}' in action_out.content)
         # Attribute name is present in action_out text
-        #self.assertTrue('{{ attribute name new }}' in action_out.content)
+        self.assertTrue('{{ attribute name new }}' in action_out.content)
         # Column age is present in action-in filter
-        self.assertFalse(has_variable(filter.formula, 'age'))
-        self.assertTrue(has_variable(filter.formula, 'age new'))
+        self.assertFalse(has_variable(filter_obj.formula, 'age'))
+        self.assertTrue(has_variable(filter_obj.formula, 'age new'))
 
         # End of session
         self.logout()

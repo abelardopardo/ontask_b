@@ -149,7 +149,7 @@ class ColumnBasicForm(forms.ModelForm):
                     self.add_error(
                         'raw_categories',
                         _('The values in the column are not compatible ' +
-                           ' with these ones.')
+                          ' with these ones.')
                     )
                     return data
             else:
@@ -232,7 +232,7 @@ class ColumnAddForm(ColumnBasicForm):
                 )
 
         # Check and force a correct column index
-        ncols = Column.objects.filter(workflow__id = self.workflow.id).count()
+        ncols = Column.objects.filter(workflow__id=self.workflow.id).count()
         if data['position'] < 1 or data['position'] > ncols:
             data['position'] = ncols + 1
 
@@ -280,7 +280,7 @@ class ColumnRenameForm(ColumnBasicForm):
                 return data
 
         # Check and force a correct column index
-        ncols = Column.objects.filter(workflow__id = self.workflow.id).count()
+        ncols = Column.objects.filter(workflow__id=self.workflow.id).count()
         if data['position'] < 1 or data['position'] > ncols:
             data['position'] = ncols
 
@@ -295,7 +295,7 @@ class FormulaColumnAddForm(forms.ModelForm):
     # Columns to combine
     columns = forms.MultipleChoiceField([],
                                         required=False,
-                                        label='Columns to combine*')
+                                        label=_('Columns to combine*'))
 
     # Type of operation
     op_type = forms.ChoiceField(
@@ -318,7 +318,6 @@ class FormulaColumnAddForm(forms.ModelForm):
         # Populate the operand choices
         self.fields['op_type'].choices = [('', '---')] \
                                          + [(a, b) for a, b, _ in self.operands]
-
 
     def clean(self):
         data = super(FormulaColumnAddForm, self).clean()
@@ -364,6 +363,23 @@ class FormulaColumnAddForm(forms.ModelForm):
                   'position',
                   'op_type',
                   'columns',
+                  'active_from',
+                  'active_to']
+
+
+class RandomColumnAddForm(forms.ModelForm):
+    # Columns to combine
+    values = forms.CharField(
+        strip=True,
+        required=True,
+        label=_('Number (values from 1 to N) or comma separated list of '
+                'values.')
+    )
+
+    class Meta(ColumnBasicForm.Meta):
+        fields = ['name',
+                  'description_text',
+                  'position',
                   'active_from',
                   'active_to']
 

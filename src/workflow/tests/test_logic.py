@@ -24,7 +24,7 @@ class WorkflowImportExport(test.OntaskTestCase):
         settings.BASE_DIR(),
         'workflow',
         'fixtures',
-        'simple_workflow_export_df.sql'
+        'simple_workflow_export.sql'
     )
 
     def test_export(self):
@@ -65,7 +65,7 @@ class WorkflowImport(test.OntaskLiveTestCase):
         settings.BASE_DIR(),
         'workflow',
         'fixtures',
-        'simple_workflow_export_df.sql'
+        'simple_workflow_export.sql'
     )
 
     def setUp(self):
@@ -79,14 +79,7 @@ class WorkflowImport(test.OntaskLiveTestCase):
     def test_import_complete(self):
 
         # Login and wait for the table of workflows
-        self.login('instructor1@bogus.com')
-
-        self.open(reverse('workflow:index'))
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//body/div/p/a"),
-                'Import')
-        )
+        self.login('instructor01@bogus.com')
 
         # Click in the import button and wait
         self.selenium.find_element_by_link_text('Import workflow').click()
@@ -110,7 +103,7 @@ class WorkflowImport(test.OntaskLiveTestCase):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.XPATH, "//table['workflow-table']/tbody/tr/td/a"),
+                (By.XPATH, "//table['workflow-table']/tbody/tr/td"),
                 'newwf')
         )
 

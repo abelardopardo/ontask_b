@@ -11,8 +11,8 @@
     <meta name="description" content="{% block description %}{% endblock description %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'site/ico/favicon.ico' %}" type="favicon/ico">
     <title>{% block title %}{% include "_brandname.html" %} :: {% endblock %}</title>
-    <!-- Bootstrap core CSS -->
-    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap core  -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
     <!-- Custom styles for this site -->
     {% block styles %}
     <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
@@ -26,8 +26,8 @@
     {% block extrahead %}{% endblock extrahead %}
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+      <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
   </head>
   <body style="">
@@ -44,79 +44,70 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{% url 'home' %}">
-          {% block navbar-brand %}
-            <img src="{% static 'site/img/logo.png' %}" alt="logo">
-          {% endblock %}
-        </a>
-        {% if user.is_authenticated %}
-          <a class="navbar-brand" href="{% url 'entry' %}">
-            <span class="glyphicon glyphicon-home"></span>
-          </a>
-        {% endif %}
+        {% block navbar-brand %}
+          <img class="navbar-brand" src="{% static 'site/img/logo.png' %}" alt="logo">
+        {% endblock %}
       </div>
       {% block navbar-menu %}
       <div class="collapse navbar-collapse">
-        <ul class="nav navbar-nav">
-          {% block navbar-left %}
-            {% if request.session.ontask_workflow_id %}
-              {% url 'workflow:detail' request.session.ontask_workflow_id as workflow_url %}
-              <li {% if '/workflow/' in request.path %}class="active"{% endif %}><a
-                  href="{{ workflow_url }}">{% trans 'Details' %}</a></li>
-
-              <li {% if '/dataops/' in request.path %}class="dropdown active"{% else %}class="dropdown"{% endif %}>
-                <a class="dropdown-toggle" data-toggle="dropdown">{% trans 'Dataops' %}
-                  <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  <li><a href="{% url 'dataops:uploadmerge' %}">{% trans 'Data Upload/Merge' %}</a></li>
-                  <li><a href="{% url 'dataops:transform' %}">{% trans 'Transform' %}</a></li>
-                </ul>
-              </li>
-
-              {% url 'table:display' as table_display %}
-              <li {% if '/table/' in request.path %}class="active"{% endif %}><a
-                  href="{% url 'table:display' %}">{% trans 'Table' %}</a>
-              </li>
-
-              {% url 'action:index' as actions_url %}
-              <li {% if '/action/' in request.path %}class="active"{% endif %}><a
-                  href="{{ actions_url }}">{% trans 'Actions' %}</a></li>
-
-              {% url 'scheduler:index' as scheduler_url %}
-              <li {% if '/scheduler/' in request.path %}class="active"{% endif %}><a
-                  href="{{ scheduler_url }}">{% trans 'Scheduler' %}</a></li>
-
-              {% url 'logs:show' as logs_url %}
-              <li {% if '/logs/' in request.path %}class="active"{% endif %}><a
-                  href="{{ logs_url }}">{% trans 'Logs' %}</a>
-              </li>
-            {% else %}
-              <li><a href="https://ontasklearning.org">{% trans 'About' %}</a></li>
-              <li><a href="https://www.ontasklearning.org/contact/">
-                {% trans 'Contact' %}</a></li>
-            {% endif %}
-          {% endblock %}
-        </ul>
         <ul class="nav navbar-nav navbar-right">
           {% block navbar-right %}
-            <a href="{% static ONTASK_HELP_URL %}" class="btn btn-info"
-               data-toggle="tooltip"
-               data-placement="bottom"
-               title="{% trans 'Read the manual' %}">
-              <span class="glyphicon glyphicon-book"></span></a>
+            <li>
+              <a href="{% static ONTASK_HELP_URL %}" class="btn btn-default btn-sm spin"
+                 data-toggle="tooltip"
+                 data-placement="bottom"
+                 title="{% trans 'Read the manual' %}"
+                 style="display: table-cell;padding: 14px 10px 14px 10px;">
+                <span class="glyphicon glyphicon-book"></span></a>
+            </li>
             {% if user.is_authenticated %}
               {% if user.is_staff %}
-                <li><a href="{% url 'admin:index' %}">{% trans 'Admin' %}</a></li>
+                <li><a class="spin" href="{% url 'admin:index' %}">{% trans 'Admin' %}</a></li>
               {% endif %}
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle profile-menu" data-toggle="dropdown">
                  <img src="{% thumbnail user.profile.picture|default:'default_profile.png' 30x30 crop %}" alt="" />
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="{% url 'profiles:show_self' %}">{% trans 'Profile' %}</a></li>
-                  <li><a href="{% url 'accounts:logout' %}">{% trans 'Logout' %}</a></li>
+                  <li><a class="spin" href="{% url 'profiles:show_self' %}">{% trans 'Profile' %}</a></li>
+                  <li><a class="spin" href="{% url 'accounts:logout' %}">{% trans 'Logout' %}</a></li>
                 </ul>
               </li>
+            {% endif %}
+          {% endblock %}
+        </ul>
+        <ul class="nav navbar-nav">
+          {% block navbar-left %}
+            {% if user.is_authenticated %}
+              <li><a class="nav navbar-nav spin" href="{% url 'home' %}">Workflows</a></li>
+              {% if user.is_superuser %}
+                <li><a class="nav navbar-nav spin" href="{% url 'workflow:sql_connections' %}">SQL Connections</a></li>
+              {% endif %}
+            {% endif %}
+            {% if request.session.ontask_workflow_id %}
+              {% url 'workflow:detail' request.session.ontask_workflow_id as workflow_url %}
+              <li {% if '/workflow/' in request.path %}class="active"{% endif %}><a
+                  class="spin" href="{{ workflow_url }}">{% trans 'Details' %}</a></li>
+
+
+              <li {% if '/table/' in request.path  or '/dataops' in request.path%}class="active"{% endif %}><a
+                  class="spin" href="{% url 'table:display' %}">{% trans 'Table' %}</a>
+              </li>
+
+              <li {% if '/action/' in request.path %}class="active"{% endif %}>
+                <a class="spin" href="{% url 'action:index' %}">{% trans 'Actions' %}</a>
+              </li>
+
+              <li {% if '/scheduler/' in request.path %}class="active"{% endif %}><a
+                  class="spin" href="{% url 'scheduler:index' %}">{% trans 'Scheduler' %}</a></li>
+
+              <li {% if '/logs/' in request.path %}class="active"{% endif %}><a
+                  class="spin" href="{% url 'logs:index' %}">{% trans 'Logs' %}</a>
+              </li>
+            {% else %}
+              <li><a href="https://ontasklearning.org" target="blank">{% trans 'About' %}</a></li>
+              <li><a href="https://www.ontasklearning.org/contact/" target="blank">
+                {% trans 'Contact' %}</a></li>
             {% endif %}
           {% endblock %}
         </ul>
@@ -189,7 +180,7 @@
         </div>
       </div>
     {% endblock %}
-    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>
     <script src="{% static 'site/js/site.js' %}{% otv %}"></script>
     {% block scripts %}
     {% endblock scripts %}
@@ -200,12 +191,14 @@
           message: "{% trans 'Your session is about to expire.' %}",
           logoutButton: "{% trans 'Logout' %}",
           ignoreUserActivity: true,
+          keepAlive: false,
           keepAliveButton: "{% trans 'Remain Connected' %}",
           keepAliveUrl: "{% url 'keep_alive' %}",
           logoutUrl: "{% url 'accounts:logout' %}",
           redirUrl: "{% url 'accounts:logout' %}",
           warnAfter: ({{ ONTASK_TIMEOUT }} - 60) * 1000,
-          redirAfter: {{ ONTASK_TIMEOUT }} * 1000
+          redirAfter: {{ ONTASK_TIMEOUT }} * 1000,
+          onStart: false
         });
       </script>
     {% endif %}

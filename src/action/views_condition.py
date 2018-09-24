@@ -8,13 +8,12 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse
 from django.template.loader import render_to_string
-from django.views import generic
 from django.utils.translation import ugettext_lazy as _
+from django.views import generic
 
-import logs
-import logs.ops
 from action import ops
 from dataops.formula_evaluation import evaluate_node_sql, get_variables
+from logs.models import Log
 from ontask.permissions import is_instructor, UserIsInstructor
 from workflow.ops import get_workflow
 from .forms import ConditionForm, FilterForm
@@ -75,14 +74,11 @@ def save_condition_form(request,
         # Process the filter form
         # If this is a create filter operation, but the action has one,
         # flag the error
-        if is_new and Condition.objects.filter(action=action,
-                                               is_filter=True).exists():
+        if is_new and action.get_filter():
             # Should not happen. Go back to editing the action
             data['form_is_valid'] = True
             data['html_redirect'] = ''
             return JsonResponse(data)
-
-        log_type = 'filter'
     else:
         # Verify that the condition name does not exist yet (Uniqueness FIX)
         qs = Condition.objects.filter(
@@ -148,8 +144,6 @@ def save_condition_form(request,
                 replacing.format(condition.name))
             action.save()
 
-        log_type = 'condition'
-
     # Ok, here we can say that the data in the form is correct.
     data['form_is_valid'] = True
 
@@ -179,18 +173,24 @@ def save_condition_form(request,
     # Log the event
     formula, _ = evaluate_node_sql(condition.formula)
     if is_new:
-        log_type += '_create'
+        if is_filter:
+            log_type = Log.FILTER_CREATE
+        else:
+            log_type = Log.CONDITION_CREATE
     else:
-        log_type += '_update'
+        if is_filter:
+            log_type = Log.FILTER_UPDATE
+        else:
+            log_type = Log.CONDITION_UPDATE
 
     # Log the event
-    logs.ops.put(request.user,
-                 log_type,
-                 condition.action.workflow,
-                 {'id': condition.id,
-                  'name': condition.name,
-                  'selected_rows': condition.n_rows_selected,
-                  'formula': formula})
+    Log.objects.register(request.user,
+                         log_type,
+                         condition.action.workflow,
+                         {'id': condition.id,
+                          'name': condition.name,
+                          'selected_rows': condition.n_rows_selected,
+                          'formula': formula})
 
     data['html_redirect'] = ''
     return JsonResponse(data)
@@ -287,11 +287,11 @@ def delete_filter(request, pk):
     """
     # Get the filter
     try:
-        cond_filter = Condition.objects.get(
-            pk=pk,
-            action__workflow__user=request.user,
+        cond_filter = Condition.objects.filter(
+            Q(action__workflow__user=request.user) |
+            Q(action__workflow__shared=request.user),
             is_filter=True
-        )
+        ).distinct().get(pk=pk)
     except (KeyError, ObjectDoesNotExist):
         return redirect('workflow:index')
 
@@ -309,14 +309,14 @@ def delete_filter(request, pk):
 
         # Log the event
         formula, fields = evaluate_node_sql(cond_filter.formula)
-        logs.ops.put(request.user,
-                     'filter_delete',
-                     cond_filter.action.workflow,
-                     {'id': cond_filter.id,
-                      'name': cond_filter.name,
-                      'selected_rows': cond_filter.n_rows_selected,
-                      'formula': formula,
-                      'formula_fields': fields}, )
+        Log.objects.register(request.user,
+                             Log.FILTER_DELETE,
+                             cond_filter.action.workflow,
+                             {'id': cond_filter.id,
+                              'name': cond_filter.name,
+                              'selected_rows': cond_filter.n_rows_selected,
+                              'formula': formula,
+                              'formula_fields': fields})
 
         # Get the action object for further processing
         action = cond_filter.action
@@ -452,18 +452,18 @@ def delete_condition(request, pk):
             condition.action.save()
 
         formula, fields = evaluate_node_sql(condition.formula)
-        logs.ops.put(request.user,
-                     'condition_delete',
-                     condition.action.workflow,
-                     {'id': condition.id,
-                      'name': condition.name,
-                      'formula': formula,
-                      'formula_fields': fields})
+        Log.objects.register(request.user,
+                             Log.CONDITION_DELETE,
+                             condition.action.workflow,
+                             {'id': condition.id,
+                              'name': condition.name,
+                              'formula': formula,
+                              'formula_fields': fields})
 
         # Perform the delete operation
         condition.delete()
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('action:edit_out',
+        data['html_redirect'] = reverse('action:edit',
                                         kwargs={'pk': condition.action.id})
         return JsonResponse(data)
 
@@ -509,15 +509,15 @@ def clone(request, pk):
                                     new_name=new_name)
 
     # Log event
-    logs.ops.put(request.user,
-                 'condition_clone',
-                 condition.action.workflow,
-                 {'id_old': old_id,
-                  'id_new': condition.id,
-                  'name_old': old_name,
-                  'name_new': condition.name})
+    Log.objects.register(request.user,
+                         Log.CONDITION_CLONE,
+                         condition.action.workflow,
+                         {'id_old': old_id,
+                          'id_new': condition.id,
+                          'name_old': old_name,
+                          'name_new': condition.name})
 
     messages.success(request,
                      _('Action successfully cloned.'))
-    return redirect(reverse('action:edit_out',
+    return redirect(reverse('action:edit',
                             kwargs={'pk': condition.action.id}))

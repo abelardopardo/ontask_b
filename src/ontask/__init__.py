@@ -4,13 +4,15 @@ Basic functions and definitions used all over the platform.
 """
 from __future__ import unicode_literals, print_function, absolute_import
 
+import json
+
 from ontask.celery import app as celery_app
 
-__all__ = ['celery_app']
+__all__ = ['celery_app', 'OntaskException']
 
 from django.utils.translation import ugettext_lazy as _
 
-__version__ = 'B.2.8.3'
+__version__ = 'B.3.0.0'
 
 
 def is_legal_name(val):
@@ -55,6 +57,14 @@ def fix_pctg_in_name(val):
     return val.replace('%', '%%')
 
 
+def is_json(text):
+    try:
+        _ = json.loads(text)
+    except ValueError:
+        return False
+    return True
+
+
 class OntaskException(Exception):
     """
     Generic class in OnTask for our own exception
@@ -66,4 +76,3 @@ class OntaskException(Exception):
 
     def __str__(self):
         return repr(self.value)
-

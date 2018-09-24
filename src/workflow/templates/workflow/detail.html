@@ -6,7 +6,7 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block extrahead %}
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
   <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
   <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
@@ -16,8 +16,8 @@
     <script src="{% static 'site/js/sol.js' %}"></script>
     <script src="{% static 'workflow/js/workflow.js' %}{% otv %}"></script>
     <script src="{% static 'workflow/js/column_move.js' %}{% otv %}"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
     <script type="text/javascript">
       if (document.getElementById("column-table") != null) {
           // Required for DataTables
@@ -45,11 +45,6 @@
                       {"orderable": false, "targets": "_all"},
                       {"searchable": false, "targets": "operations"},
                   ],
-                  "createdRow": function(row, data, dataIndex) {
-                      if (data['key'] == '<span class="true">✔</span>') {
-                        $(row).addClass('success');
-                      }
-                  },
                   "drawCallback": function(settings) {
                      // Needed to enable tooltips in ajax produced content
                      $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
@@ -62,14 +57,14 @@
 {% endblock %}
 {% block title %}{{ block.super }}{% trans 'Details' %}{% endblock %}
 {% block container %}
-<div class="container-fluid text-center">
-  <h1 class="page-header">{% trans 'Workflow Details' %}</h1>
+<div class="container text-center">
+  <h1 class="page-header">{{ workflow.name }}</h1>
   {% if workflow %}
-    <div style="display: inline-block;" id="workflow-area">
+    <div class="container" id="workflow-area">
       {% if not table_info %}
-        <p><strong>{% trans 'The workflow does not have data.' %}</strong></p>
-        <h4>{% trans 'Go to' %} <a href="{% url 'dataops:uploadmerge' %}">
-          {% trans 'Dataops' %}</a> {% trans 'to upload data' %}</h4>
+        {% include 'workflow/includes/no_data.html' %}
+      {% elif not table_info.num_actions %}
+        {% include 'workflow/includes/no_actions.html' %}
       {% endif %}
       {% include 'workflow/includes/workflow_detail_buttons.html' %}
       <p class="help-block"
@@ -78,11 +73,12 @@
       <p class="help-block">{% trans 'Last modified' %}: {{ workflow.modified }}</p>
       {% if table_info %}
         <p class="help-block">
-          {% blocktrans with num=table_info.num_rows count counter=table_info.num_rows %}{{ num }} row{% plural %}{{ num }} rows,{% endblocktrans %},
+          {% blocktrans with num=table_info.num_rows count counter=table_info.num_rows %}{{ num }} row{% plural %}{{ num }} rows,{% endblocktrans %}
           {% blocktrans with num=table_info.num_cols count counter=table_info.num_cols %}{{ num }} column{% plural %}{{ num }} columns{% endblocktrans %}
-          (<mark>{% blocktrans with num=num_key_columns count counter=num_key_columns %}{{ num }} Key column{% plural %}{{ num }} Key columns{% endblocktrans %}</mark>),
-          {% blocktrans with num=table_info.num_actions count counter=table_info.num_actions %}{{ num }} action{% plural %}{{ num }} actions,{% endblocktrans %},
+          ({% blocktrans with num=num_key_columns count counter=num_key_columns %}{{ num }} Key column{% plural %}{{ num }} Key columns{% endblocktrans %}),
+          {% blocktrans with num=table_info.num_actions count counter=table_info.num_actions %}{{ num }} action{% plural %}{{ num }} actions,{% endblocktrans %}
           {% blocktrans with num=table_info.num_attributes count counter=table_info.num_attributes %}{{ num }} attribute{% plural %} {{ num }} attributes{% endblocktrans %}.
+        <h4 class="modal-title">Columns</h4>
         <table class="table display dataTable no-footer cell-border table-bordered"
                id="column-table">
           <thead>

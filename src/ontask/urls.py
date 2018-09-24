@@ -7,7 +7,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sites.models import Site
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.cache import cache_page
 from django.views.i18n import JavaScriptCatalog
 from rest_framework.documentation import include_docs_urls
@@ -23,21 +23,25 @@ import workflow.urls
 from dataops import pandas_db
 from templatetags.settings import ontask_version
 from . import views
+import workflow.views
 
-api_description = _("""The OnTask API offers functionality to manipulate 
+api_description = ugettext("""The OnTask API offers functionality to manipulate 
 workflows, tables and logs. The interface provides CRUD operations over 
 these objects.""")
 
 urlpatterns = [
-    url(r'^$', views.HomePage.as_view(), name='home'),
-
-    url(r'^entry$', views.entry, name='entry'),
+    # Home Page!
+    url(r'^$', views.home, name='home'),
 
     url(r'^lti_entry$', views.lti_entry, name='lti_entry'),
 
-    url(r'^not_authorized$', views.HomePage.as_view(), name='not_authorized'),
+    url(r'^not_authorized$', views.home, name='not_authorized'),
 
     url(r'^about/$', views.AboutPage.as_view(), name='about'),
+
+    url(r'^under_construction/$',
+        views.under_construction,
+        name='under_construction'),
 
     url(r'^users/', include(profiles.urls, namespace='profiles')),
 
@@ -115,7 +119,7 @@ try:
     site = Site.objects.get(pk=settings.SITE_ID)
     site.domain = settings.DOMAIN_NAME
     site.name = settings.DOMAIN_NAME
-    site.savse()
+    site.save()
 except Exception:
     # To bypass the migrate command execution that fails because the Site
     # table is not created yet.

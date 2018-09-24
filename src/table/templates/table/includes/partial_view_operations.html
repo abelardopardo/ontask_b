@@ -1,39 +1,28 @@
 {% load i18n %}
-<div class="dropdown">
+<div class="condition-btn" role="group">
   <a href="{% url 'table:display_view' id %}"
-     class="btn btn-primary btn-sm"
-     data-toggle="tooltip" 
+     class="btn btn-default btn-sm"
+     data-toggle="tooltip"
      title="{% trans 'Access the table with this view' %}">
     <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Table' %}</a>
-  <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-          data-toggle="dropdown"> {% trans 'More' %}<span class="caret"></span>
+  <button type="button"
+          class="btn btn-default btn-sm js-view-edit align-middle"
+          data-url="{% url 'table:view_edit' id %}"
+          data-toggle="tooltip"
+          title="{% trans 'Change elements in view' %}">
+      <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
   </button>
-  <ul role="menu" class="dropdown-menu">
-    <li>
-      <button type="button"
-              class="btn btn-default btn-sm js-view-edit align-middle"
-              data-url="{% url 'table:view_edit' id %}"
-              data-toggle="tooltip" 
-              title="{% trans 'Change elements in view' %}">
-          <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
-      </button>
-    </li>
-    <li>
-      <button type="button"
-              class="btn btn-default btn-sm js-view-clone align-middle"
-              data-url="{% url 'table:view_clone' id %}"
-              data-toggle="tooltip" 
-              title="{% trans 'Create an identical view' %}">
-        <span class="glyphicon glyphicon-duplicate"></span> {% trans 'Clone' %}
-      </button>
-    </li>
-    <li>
-      <button type="button"
-              class="btn btn-default btn-sm js-view-delete"
-              data-url="{% url 'table:view_delete' id %}"
-              data-toggle="tooltip" 
-              title="{% trans 'Delete the view' %}">
-        <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}</button>
-    </li>
-  </ul>
+  <button type="button"
+          class="btn btn-default btn-sm js-view-clone align-middle"
+          data-url="{% url 'table:view_clone' id %}"
+          data-toggle="tooltip"
+          title="{% trans 'Create an identical view' %}">
+    <span class="glyphicon glyphicon-duplicate"></span> {% trans 'Clone' %}
+  </button>
+  <button type="button"
+          class="btn btn-danger btn-sm js-view-delete"
+          data-url="{% url 'table:view_delete' id %}"
+          data-toggle="tooltip"
+          title="{% trans 'Delete the view' %}">
+    <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}</button>
 </div>

@@ -8,12 +8,14 @@ import re
 import pytz
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
+from django.core.validators import URLValidator
 from django.db import models
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
 from dataops import formula_evaluation, pandas_db
 from dataops.formula_evaluation import get_variables, evaluate_top_node
+from logs.models import Log
 from ontask import OntaskException
 from workflow.models import Workflow, Column
 
@@ -30,6 +32,18 @@ class Action(models.Model):
     @DynamicAttrs
     """
 
+    PERSONALIZED_TEXT = 'personalized_text'
+    PERSONALIZED_JSON = 'personalized_json'
+    SURVEY = 'survey'
+    TODO_LIST = 'todo_list'
+
+    ACTION_TYPES = [
+        (PERSONALIZED_TEXT, _('Personalized text')),
+        (PERSONALIZED_JSON, _('Personalized JSON')),
+        (SURVEY, _('Survey')),
+        (TODO_LIST, _('TODO List'))
+    ]
+
     workflow = models.ForeignKey(
         Workflow,
         db_index=True,
@@ -38,7 +52,10 @@ class Action(models.Model):
         on_delete=models.CASCADE,
         related_name='actions')
 
-    name = models.CharField(max_length=256, blank=False, verbose_name=_('name'))
+    name = models.CharField(max_length=256,
+                            blank=False,
+                            null=False,
+                            verbose_name=_('name'))
 
     description_text = models.CharField(max_length=512,
                                         default='',
@@ -49,12 +66,20 @@ class Action(models.Model):
 
     modified = models.DateTimeField(auto_now=True, null=False)
 
-    # If the action is to provide information to learners
-    is_out = models.BooleanField(
-        default=True,
-        verbose_name=_('Action to provide personalized information'),
-        null=False,
-        blank=False)
+    # Reference to the record of the last execution
+    last_executed_log = models.ForeignKey(
+        Log,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+
+    # Action type
+    action_type = models.CharField(
+        max_length=64,
+        choices=ACTION_TYPES,
+        default=PERSONALIZED_TEXT
+    )
 
     # Boolean that enables the URL to be visible ot the outside.
     serve_enabled = models.BooleanField(
@@ -79,16 +104,16 @@ class Action(models.Model):
     columns = models.ManyToManyField(Column, related_name='actions_in')
 
     #
-    # Field for action OUT
+    # Field for actions PERSONALIZED_TEXT and PERSONALIZED_JSON
     #
     # Text to be personalised for action OUT
-    content = models.TextField(
-        default='',
-        null=False,
-        blank=True)
+    content = models.TextField(default='', null=False, blank=True)
+
+    # Text to be personalised for action OUT
+    target_url = models.TextField(default='', null=True, blank=True)
 
     #
-    # Fields for action IN
+    # Fields for action SURVEY and TODO_LIST
     #
     # Shuffle column order when creating the page to serve
     shuffle = models.BooleanField(default=False,
@@ -111,7 +136,7 @@ class Action(models.Model):
                     (self.active_to and self.active_to < now))
 
     @property
-    def is_correct(self):
+    def is_executable(self):
         """
         Function to ask if an action is correct. All actions out are correct,
         and action ins are correct if they have at least one key column and one
@@ -119,8 +144,42 @@ class Action(models.Model):
         :return: Boolean stating correctness
         """
 
-        return self.columns.filter(is_key=True).exists() and \
-               self.columns.filter(is_key=False).exists()
+        if self.action_type == Action.PERSONALIZED_TEXT:
+            return True
+
+        if self.action_type == Action.PERSONALIZED_JSON:
+            # If None or empty, return false
+            if not self.target_url:
+                return False
+
+            # Validate the URL
+            validator = URLValidator()
+            valid_url = True
+            try:
+                validator(self.target_url)
+            except Exception:
+                valid_url = False
+            return valid_url
+
+        if self.action_type == Action.SURVEY or self.action_type == \
+                Action.TODO_LIST:
+            return self.columns.filter(is_key=True).exists() and \
+                   self.columns.filter(is_key=False).exists()
+
+        raise Exception('Function is_executable not implemented for action '
+                        '{0}'.format(self.get_action_type_display()))
+
+    @property
+    def is_in(self):
+        return self.action_type == Action.SURVEY or \
+               self.action_type == Action.TODO_LIST
+
+    @property
+    def is_out(self):
+        return not self.is_in
+
+    def get_filter(self):
+        return self.conditions.filter(is_filter=True).first()
 
     def get_content(self):
         """
@@ -186,8 +245,9 @@ class Action(models.Model):
         :return: Updates the current object
         """
 
-        if self.is_out:
-            # Action out: Need to change name appearances in content
+        if self.action_type == self.PERSONALIZED_TEXT or \
+                self.action_type == self.PERSONALIZED_JSON:
+            # Need to change name appearances in content
             new_text = var_use_res[0].sub(
                 lambda m: '{{ ' +
                           (new_name if m.group('vname') == escape(old_name)
@@ -197,7 +257,7 @@ class Action(models.Model):
             self.content = new_text
         else:
             # Action in: Need to change name appearances in filter
-            fcond = self.conditions.filter(is_filter=True).first()
+            fcond = self.get_filter()
             if fcond:
                 fcond.formula = formula_evaluation.rename_variable(
                     fcond.formula, old_name, new_name
@@ -219,11 +279,11 @@ class Action(models.Model):
         """
 
         # Get the filter, if it exists.
-        filter = self.conditions.filter(is_filter=True).first()
-        if filter:
+        filter_obj = self.get_filter()
+        if filter_obj:
             # If there is a filter, update the filter and this call
             # propagates to the other conditions. Nothing else is needed.
-            filter.update_n_rows_selected(column=column)
+            filter_obj.update_n_rows_selected(column=column)
             return
 
         # This action does not have a filter, so simply recalculate the value
@@ -257,7 +317,6 @@ class Action(models.Model):
         Given an action and a set of row_values, prepare the dictionary with the
         condition names, attribute names and column names and their
         corresponding values.
-        :param action: Action object for which the conditions need to be taken.
         :param row_values: Values to use in the evaluation of conditions.
         :return: Context dictionary, or None if there has been some anomaly
         """
@@ -269,7 +328,6 @@ class Action(models.Model):
 
         # Step 1: Evaluate all the conditions
         condition_eval = {}
-        condition_anomalies = []
         for condition in self.conditions.filter(is_filter=False).values(
                 'name', 'is_filter', 'formula'):
             # Evaluate the condition

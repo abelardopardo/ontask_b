@@ -11,7 +11,8 @@ var loadLogView = function () {
         $("#modal-item .modal-content").html(data.html_form);
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        location.reload();
+        $('#div-spinner').show();
+        location.reload(true);
       }
     });
 }

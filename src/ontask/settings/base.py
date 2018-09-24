@@ -18,6 +18,7 @@ from celery.schedules import crontab
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.messages import constants as message_constants
 
 # import ldap
 # from django_auth_ldap.config import (
@@ -29,6 +30,7 @@ from django.utils.translation import ugettext_lazy as _
 # Use 12factor inspired environment variables or from a file and define defaults
 env = environ.Env(
     DEBUG=(bool, False),
+    SHOW_HOME_FOOTER_IMAGE=(bool, True),
     LTI_OAUTH_CREDENTIALS=(dict, {})
 )
 
@@ -44,6 +46,7 @@ if exists(env_file):
 BASE_URL = env('BASE_URL')
 DOMAIN_NAME = env('DOMAIN_NAME')
 DEBUG = env('DEBUG')
+SHOW_HOME_FOOTER_IMAGE = env('SHOW_HOME_FOOTER_IMAGE')
 
 # Build paths inside the project like this: join(BASE_DIR(), "directory")
 BASE_DIR = environ.Path(__file__) - 3
@@ -281,13 +284,15 @@ STATIC_URL = BASE_URL + '/static/'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # For Bootstrap 3, change error alert to 'danger'
+MESSAGE_STORE = 'django.contrib.messages.storage.session.SessionStorage'
+MESSAGE_LEVEL = message_constants.DEBUG
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
 
 # Authentication Settings
 AUTH_USER_MODEL = 'authtools.User'
-LOGIN_REDIRECT_URL = reverse_lazy("profiles:show_self")
+LOGIN_REDIRECT_URL = reverse_lazy("home")
 LOGIN_URL = reverse_lazy("accounts:login")
 
 THUMBNAIL_EXTENSION = 'png'     # Or any extn for your thumbnails
@@ -328,12 +333,12 @@ DATAOPS_MAX_UPLOAD_SIZE = 209715200  # 200 MB
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
 # Email sever configuration
-EMAIL_HOST = ''
-EMAIL_PORT = ''
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = ''
-EMAIL_USE_SSL = ''
+EMAIL_HOST = env.str('EMAIL_HOST', '')
+EMAIL_PORT = env.str('EMAIL_PORT', '')
+EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_TLS = env.str('EMAIL_HOST_TLS', '')
+EMAIL_USE_SSL = env.str('EMAIL_HOST_SSL', '')
 
 # Additional email related variables
 EMAIL_ACTION_NOTIFICATION_TEMPLATE = """
@@ -359,7 +364,8 @@ The OnTask Support Team
 
 
 EMAIL_ACTION_NOTIFICATION_SUBJECT = _("OnTask: Action executed")
-EMAIL_ACTION_NOTIFICATION_SENDER = 'ontask@ontasklearning.org'
+EMAIL_ACTION_NOTIFICATION_SENDER = env.str('EMAIL_ACTION_NOTIFICATION_SENDER',
+                                           '')
 EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII='
 
 LOGS_MAX_LIST_SIZE = 200
@@ -377,7 +383,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_BEAT_SCHEDULE = {
     'ontask_scheduler': {
-        'task': 'ontask.tasks.execute_email_actions',
+        'task': 'ontask.tasks.execute_scheduled_actions',
         'schedule': crontab(minute='*/{0}'.format(SCHEDULER_MINUTE_STEP)),
         'args': (DEBUG,)
     }

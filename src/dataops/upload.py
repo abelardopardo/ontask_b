@@ -7,8 +7,8 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
-import logs.ops
 from dataops import ops, pandas_db
+from logs.models import Log
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
 from .forms import SelectColumnUploadForm, SelectKeysForm
@@ -176,20 +176,19 @@ def upload_s2(request):
 
     # Log the event
     col_info = workflow.get_column_info()
-    logs.ops.put(request.user,
-                 'workflow_data_upload',
-                 workflow,
-                 {'id': workflow.id,
-                  'name': workflow.name,
-                  'num_rows': workflow.nrows,
-                  'num_cols': workflow.ncols,
-                  'column_names': col_info[0],
-                  'column_types': col_info[1],
-                  'column_unique': col_info[2]})
+    Log.objects.register(request.user,
+                         Log.WORKFLOW_DATA_UPLOAD,
+                         workflow,
+                         {'id': workflow.id,
+                          'name': workflow.name,
+                          'num_rows': workflow.nrows,
+                          'num_cols': workflow.ncols,
+                          'column_names': col_info[0],
+                          'column_types': col_info[1],
+                          'column_unique': col_info[2]})
 
     # Go back to show the workflow detail
-    return redirect(reverse('workflow:detail',
-                            kwargs={'pk': workflow.id}))
+    return redirect(reverse('workflow:detail', kwargs={'pk': workflow.id}))
 
 
 @user_passes_test(is_instructor)
@@ -389,33 +388,33 @@ def upload_s4(request):
 
         col_info = workflow.get_column_info()
         if status:
-            logs.ops.put(request.user,
-                         'workflow_data_failedmerge',
-                         workflow,
-                         {'id': workflow.id,
-                          'name': workflow.name,
-                          'num_rows': workflow.nrows,
-                          'num_cols': workflow.ncols,
-                          'column_names': col_info[0],
-                          'column_types': col_info[1],
-                          'column_unique': col_info[2],
-                          'error_msg': status})
+            Log.objects.register(request.user,
+                                 Log.WORKFLOW_DATA_FAILEDMERGE,
+                                 workflow,
+                                 {'id': workflow.id,
+                                  'name': workflow.name,
+                                  'num_rows': workflow.nrows,
+                                  'num_cols': workflow.ncols,
+                                  'column_names': col_info[0],
+                                  'column_types': col_info[1],
+                                  'column_unique': col_info[2],
+                                  'error_msg': status})
 
             messages.error(request,
                            _('Merge operation failed.') + ' (' + status + ')'),
             return redirect(reverse('dataops:uploadmerge'))
 
         # Log the event
-        logs.ops.put(request.user,
-                     'workflow_data_merge',
-                     workflow,
-                     {'id': workflow.id,
-                      'name': workflow.name,
-                      'num_rows': workflow.nrows,
-                      'num_cols': workflow.ncols,
-                      'column_names': col_info[0],
-                      'column_types': col_info[1],
-                      'column_unique': col_info[2]})
+        Log.objects.register(request.user,
+                             Log.WORKFLOW_DATA_MERGE,
+                             workflow,
+                             {'id': workflow.id,
+                              'name': workflow.name,
+                              'num_rows': workflow.nrows,
+                              'num_cols': workflow.ncols,
+                              'column_names': col_info[0],
+                              'column_types': col_info[1],
+                              'column_unique': col_info[2]})
 
         # Remove the csvupload from the session object
         request.session.pop('upload_data', None)

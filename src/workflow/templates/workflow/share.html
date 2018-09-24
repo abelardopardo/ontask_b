@@ -12,6 +12,10 @@
 {% block container %}
 <div align="center" class="container">
   <h1 class="page-header">{% trans 'Users with access to this workflow' %}</h1>
+  {% if not_shared %}
+    <p class="lead">{% blocktrans %}Click in the <i>Add User</i> button below and provide the email for the user
+      with whom you want to share the workflow.{% endblocktrans %}</p>
+  {% endif %}
   <div style="display: inline-block;" id="workflow-shared">
     <a href="{% url 'workflow:detail' workflow.id %}"
        class="btn btn-default btn-sm">Back</a>

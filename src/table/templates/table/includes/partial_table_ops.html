@@ -1,15 +1,15 @@
 {% load i18n %}
 <div class="dropdown">
   <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-          data-toggle="dropdown"> {% trans 'Ops' %} <span class="caret"></span>
+          data-toggle="dropdown"> {% trans 'Operations' %} <span class="caret"></span>
   </button>
   <ul role="menu" class="dropdown-menu">
     <li>
       <a href="{{ stat_url }}"
-         class="btn btn-default btn-sm align-middle"
+         class="btn btn-default btn-sm align-middle spin"
             data-toggle="tooltip" 
             title="{% trans 'Statistics about this column' %}">
-        <span class="glyphicon glyphicon-stats"></span> {% trans 'Stats' %}
+        <span class="glyphicon glyphicon-stats"></span> {% trans 'Statistics' %}
       </a>
     </li>
     <li>
@@ -21,7 +21,7 @@
     </li>
     <li>
       <button type="button"
-              class="btn btn-default btn-sm js-row-delete"
+              class="btn btn-danger btn-sm js-row-delete"
               data-url="{% url 'table:row_delete' %}{{ delete_key }}"
               data-toggle="tooltip" 
               title="{% trans 'Delete this row' %}">

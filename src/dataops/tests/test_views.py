@@ -23,7 +23,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         settings.BASE_DIR(),
         'dataops',
         'fixtures',
-        'wflow_symbols_df.sql'
+        'wflow_symbols.sql'
     )
 
     def setUp(self):
@@ -38,34 +38,13 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         symbols = '!#$%&()*+,-./:;<=>?@[\]^_`{|}~'
 
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
-        self.open(reverse('workflow:index'))
-
-        # GO TO THE WORKFLOW PAGE
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Workflows'))
-        self.assertIn('New workflow', self.selenium.page_source)
-        self.assertIn('Import workflow', self.selenium.page_source)
-
-        # Open the workflow
-        wf_link = self.selenium.find_element_by_link_text('sss')
-        wf_link.click()
-        # Wait for the table to be refreshed
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'column-table_previous'))
-        )
+        # Go to the details page
+        self.access_workflow_from_home_page('sss')
 
         # Edit the name column
-        self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[5]/div/button"
-        ).click()
-        self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[5]/div/ul/li[1]/button"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located((By.ID, 'id_name'))
-        )
+        self.open_column_edit('name')
 
         # Replace name by symbols
         self.selenium.find_element_by_id("id_name").click()
@@ -75,25 +54,10 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         # Click in the submit/save button
         self.selenium.find_element_by_xpath("//button[@type='submit']").click()
         # MODAL WAITING
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for the table to be refreshed
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'column-table_previous'))
-        )
+        self.wait_close_modal_refresh_table('column-table_previous')
 
-        # Click in the New Column button
-        self.selenium.find_element_by_class_name(
-            'js-workflow-column-add'
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Add column')
-        )
+        # Click on the Add Column button
+        self.open_add_regular_column()
 
         # Set name to symbols (new column) and type to string
         self.selenium.find_element_by_id("id_name").click()
@@ -124,13 +88,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.wait_close_modal_refresh_table('column-table_previous')
 
         # Click in the attributes section
-        self.selenium.find_element_by_xpath(
-            "//div[@id='workflow-area']/div/button[3]"
-        ).click()
-        self.selenium.find_element_by_link_text('Attributes').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'js-attribute-create'))
-        )
+        self.go_to_attribute_page()
 
         # Delete the existing one and confirm deletion
         self.selenium.find_element_by_xpath(
@@ -146,39 +104,10 @@ class DataopsSymbols(test.OntaskLiveTestCase):
             "//div[@class='modal-footer']/button[2]"
         ).click()
         # MODAL WAITING
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for the table to be refreshed
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'attribute-table_previous'))
-        )
+        self.wait_close_modal_refresh_table('attribute-table_previous')
 
         # Add a new attribute and insert key (symbols) and value
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[2]").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Create attribute')
-        )
-
-        # Add key and value
-        self.selenium.find_element_by_id("id_key").click()
-        self.selenium.find_element_by_id("id_key").clear()
-        self.selenium.find_element_by_id("id_key").send_keys(symbols + '3')
-        self.selenium.find_element_by_id("id_value").click()
-        self.selenium.find_element_by_id("id_value").clear()
-        self.selenium.find_element_by_id("id_value").send_keys("vvv")
-
-        # Submit new attribute
-        self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[2]"
-        ).click()
-        # MODAL WAITING
-        self.wait_close_modal_refresh_table('attribute-table_previous')
+        self.create_attribute(symbols + '3', 'vvv')
 
         # Save and close the attribute page
         self.selenium.find_element_by_link_text('Back').click()
@@ -186,87 +115,57 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.wait_close_modal_refresh_table('column-table_previous')
 
         # Click in the TABLE link
-        self.selenium.find_element_by_link_text("Table").click()
-        # Wait for paging widget
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'table-data_previous'))
-        )
+        self.go_to_table()
 
         # Verify that everything appears normally
         self.assertIn(escape(symbols), self.selenium.page_source)
         self.assertIn(escape(symbols + '2'), self.selenium.page_source)
 
         # Click in the Actions navigation menu
-        self.selenium.find_element_by_link_text("Actions").click()
+        self.go_to_actions()
 
         # Edit the action-in
-        self.selenium.find_element_by_link_text("Edit").click()
+        self.open_action_edit('action in')
 
         # Set the right columns to process
         select = Select(self.selenium.find_element_by_id(
             'select-column-name'))
         select.select_by_visible_text('!#$%&()*+,-./:;<=>?@[\]^_`{|}~2')
-        time.sleep(2)
-        # # Table disappears (page is updating)
-        # WebDriverWait(self.selenium, 10).until_not(
-        #     EC.presence_of_element_located(
-        #         (By.ID, 'column-selected-table_previous')
-        #     )
-        # )
-        # Table appears (page refreshed)
+        self.wait_for_datatable('column-selected-table_previous')
+        # Wait for the table to be refreshed
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
                 (By.ID, 'column-selected-table_previous')
             )
         )
+
         select = Select(self.selenium.find_element_by_id(
             'select-key-column-name'))
         select.select_by_visible_text('sid')
-        # Table disappears (page is updating)
-        # WebDriverWait(self.selenium, 10).until_not(
-        #     EC.presence_of_element_located(
-        #         (By.ID, 'column-selected-table_previous')
-        #     )
-        # )
-        time.sleep(2)
-        # Table appears (page refreshed)
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.ID, 'column-selected-table_previous')
-            )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
         select = Select(self.selenium.find_element_by_id(
             'select-key-column-name'))
         select.select_by_visible_text('email')
-        # Table disappears (page is updating)
         WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.ID, 'column-selected-table_previous')
-            )
-        )
-        # Table appears (page refreshed)
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.ID, 'column-selected-table_previous')
-            )
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
         # Save action-in
         self.selenium.find_element_by_link_text('Done').click()
-        # Wait for paging widget
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'action-table_previous'))
-        )
+        self.wait_for_datatable('action-table_previous')
 
         # Click in the RUN link of the action in
-        self.selenium.find_element_by_link_text("Run").click()
+        element = self.search_action('action in')
+        element.find_element_by_link_text("Run").click()
         # Wait for paging widget
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'actioninrun-data_previous'))
         )
 
         # Enter data using the RUN menu. Select one entry to populate
-        self.selenium.find_element_by_link_text("student1@bogus.com").click()
+        self.selenium.find_element_by_link_text("student01@bogus.com").click()
         self.selenium.find_element_by_id("id____ontask___select_2").click()
         self.selenium.find_element_by_id("id____ontask___select_2").clear()
         self.selenium.find_element_by_id("id____ontask___select_2").send_keys(
@@ -287,15 +186,14 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Go Back to the action table
         self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[2]").click()
+            "//div[@id='table-content']/a"
+        ).click()
         # Wait for paging widget
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'action-table_previous'))
-        )
+        self.wait_for_datatable('action-table_previous')
 
         # Edit the action out
-        self.selenium.find_element_by_xpath(
-            "//table[@id='action-table']/tbody/tr[2]/td[5]/div/a").click()
+        element = self.search_action('action_out')
+        element.find_element_by_link_text("Edit").click()
 
         # Insert attribute
         self.selenium.find_element_by_id("select-attribute-name").click()
@@ -313,70 +211,16 @@ class DataopsSymbols(test.OntaskLiveTestCase):
             "select-column-name")).select_by_visible_text(symbols + '2')
 
         # Create new condition
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[3]").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'id_description_text')))
+        self.create_condition(symbols + "4",
+                              '',
+                              [(symbols, "begins with", "C")])
 
-        # Set the values of the condition
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys(symbols + "4")
-        self.selenium.find_element_by_id("id_description_text").click()
-        self.selenium.find_element_by_name("builder_rule_0_filter").click()
-        Select(self.selenium.find_element_by_name(
-            "builder_rule_0_filter")).select_by_visible_text(symbols)
-        self.selenium.find_element_by_name("builder_rule_0_operator").click()
-        Select(self.selenium.find_element_by_name(
-            "builder_rule_0_operator")).select_by_visible_text(
-            "begins with")
-        self.selenium.find_element_by_name("builder_rule_0_value_0").click()
-        self.selenium.find_element_by_name("builder_rule_0_value_0").clear()
-        self.selenium.find_element_by_name("builder_rule_0_value_0").send_keys(
-            "C")
+        # Create the filter
+        self.create_filter(symbols,
+                           '',
+                           [(symbols + "2", "doesn't begin with", "x")])
 
-        # Save the condition
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='submit'])[2]").click()
-        self.wait_close_modal_refresh_table('html-editor')
-
-        # Create a filter
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[2]").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'id_description_text')))
-
-        # Fill in the details
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys(symbols)
-        self.selenium.find_element_by_name("builder_rule_0_filter").click()
-        Select(self.selenium.find_element_by_name(
-            "builder_rule_0_filter")).select_by_visible_text(symbols + "2")
-        self.selenium.find_element_by_name("builder_rule_0_operator").click()
-        Select(self.selenium.find_element_by_name(
-            "builder_rule_0_operator")).select_by_visible_text(
-            "doesn't begin with")
-        self.selenium.find_element_by_name("builder_rule_0_value_0").click()
-        self.selenium.find_element_by_name("builder_rule_0_value_0").clear()
-        self.selenium.find_element_by_name("builder_rule_0_value_0").send_keys(
-            "x")
-        # Save the filter
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='submit'])[2]").click()
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for page to reload
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//h4[@id='filter-set']/div/button")
-            )
-        )
-
-        # Click the preview button
+       # Click the preview button
         self.selenium.find_element_by_xpath(
             "//div[@id='html-editor']/form/div[3]/button").click()
         WebDriverWait(self.selenium, 10).until(
@@ -397,36 +241,13 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         symbols = '!#$%&()*+,-./:;<=>?@[\]^_`{|}~'
 
         # Login
-        self.login('instructor1@bogus.com')
-
-        self.open(reverse('workflow:index'))
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Workflows'))
-        self.assertIn('New workflow', self.selenium.page_source)
-        self.assertIn('Import workflow', self.selenium.page_source)
+        self.access_workflow_from_home_page('sss')
 
-        # Open the workflow
-        wf_link = self.selenium.find_element_by_link_text('sss')
-        wf_link.click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'column-table_previous'))
-        )
-
-        # Select the email column and click in the edit button
-        self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[3]/td[5]/div/button"
-        ).click()
-        self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[3]/td[5]/div/ul/li[1]/button"
-        ).click()
-        # Wait for the form to create the derived column
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Edit column')
-        )
+        # Edit the email column
+        self.open_column_edit('email')
 
         # Append symbols to the name
         self.selenium.find_element_by_id("id_name").click()
@@ -437,18 +258,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.wait_close_modal_refresh_table('column-table_previous')
 
         # Select the age column and click in the edit button
-        self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[5]/div/button"
-        ).click()
-        self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[5]/div/ul/li[1]/button"
-        ).click()
-        # Wait for the modal to open
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Edit column')
-        )
+        self.open_column_edit('age')
 
         # Append symbols to the name
         self.selenium.find_element_by_id("id_name").click()
@@ -459,10 +269,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.wait_close_modal_refresh_table('column-table_previous')
 
         # Go to the table link
-        self.selenium.find_element_by_link_text("Table").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'table-data_previous'))
-        )
+        self.go_to_table()
 
         # Verify that everything appears normally
         self.assertIn(escape(symbols), self.selenium.page_source)
@@ -474,40 +281,31 @@ class DataopsSymbols(test.OntaskLiveTestCase):
                       self.selenium.page_source)
 
         # Go to the actions page
-        self.selenium.find_element_by_link_text("Actions").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'action-table_previous'))
-        )
+        self.go_to_actions()
 
         # Edit the action-in at the top of the table
-        self.selenium.find_element_by_link_text("Edit").click()
+        self.open_action_edit('action in')
 
         # Set the correct values for an action-in
         # Set the right columns to process
         select = Select(self.selenium.find_element_by_id(
-            'select-key-column-name'))
-        select.select_by_visible_text('email')
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME,
-                                        'js-workflow-column-edit'))
+            'select-key-column-name'
+        ))
+        select.select_by_visible_text('email' + symbols)
+        # This wait is incorrect. Don't know how to wait for an AJAX call.
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
         # Done editing the action in
         self.selenium.find_element_by_link_text('Done').click()
-        # Wait for paging widget
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'action-table_previous'))
-        )
+        self.wait_for_datatable('action-table_previous')
 
         # Click in the run link
-        self.selenium.find_element_by_link_text("Run").click()
-        # Wait for paging widget
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'actioninrun-data_previous'))
-        )
+        self.open_action_run('action in')
 
         # Click on the first value
-        self.selenium.find_element_by_link_text("student1@bogus.com").click()
+        self.selenium.find_element_by_link_text("student01@bogus.com").click()
 
         # Modify the value of the column
         self.selenium.find_element_by_id("id____ontask___select_1").click()
@@ -519,12 +317,10 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "(//button[@name='submit'])[1]"
         ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'actioninrun-data_previous'))
-        )
+        self.wait_for_datatable('actioninrun-data_previous')
 
         # Click on the second value
-        self.selenium.find_element_by_link_text("student2@bogus.com").click()
+        self.selenium.find_element_by_link_text("student02@bogus.com").click()
 
         # Modify the value of the column
         self.selenium.find_element_by_id("id____ontask___select_1").clear()
@@ -535,12 +331,10 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "(//button[@name='submit'])[1]"
         ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'actioninrun-data_previous'))
-        )
+        self.wait_for_datatable('actioninrun-data_previous')
 
         # Click on the third value
-        self.selenium.find_element_by_link_text("student3@bogus.com").click()
+        self.selenium.find_element_by_link_text("student03@bogus.com").click()
 
         # Modify the value of the column
         self.selenium.find_element_by_id("id____ontask___select_1").click()
@@ -552,25 +346,14 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "(//button[@name='submit'])[1]"
         ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'actioninrun-data_previous'))
-        )
+        self.wait_for_datatable('actioninrun-data_previous')
 
         # Click in the back link!
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[2]"
-        ).click()
-        # Wait for page to refresh
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'action-table_previous'))
-        )
+        self.selenium.find_element_by_link_text('Back').click()
+        self.wait_for_datatable('action-table_previous')
 
         # Go to the table page
-        self.selenium.find_element_by_link_text("Table").click()
-        # Wait for paging widget
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'table-data_previous'))
-        )
+        self.go_to_table()
 
         # Assert the new values
         self.assertIn('<td class=" dt-center">14</td>',
@@ -593,27 +376,15 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
 
     def test_01_excelupload(self):
         # Login
-        self.login('instructor1@bogus.com')
-
-        self.open(reverse('workflow:index'))
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Workflows'))
-        self.assertIn('New workflow', self.selenium.page_source)
-        self.assertIn('Import workflow', self.selenium.page_source)
+        self.access_workflow_from_home_page('wflow1', False)
 
-        # Open the workflow
-        wf_link = self.selenium.find_element_by_link_text('wflow1')
-        wf_link.click()
+        # Go to Excel upload/merge
+        self.go_to_excel_upload_merge_step_1()
 
-        self.selenium.find_element_by_link_text("Dataops").click()
-        self.selenium.find_element_by_link_text("Data Upload/Merge").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Data Upload/Merge')
-        )
-
-        self.selenium.find_element_by_link_text("Excel Upload/Merge").click()
+        # Upload file
         self.selenium.find_element_by_id("id_file").send_keys(
             os.path.join(settings.BASE_DIR(),
                          'dataops',
@@ -629,9 +400,7 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
                 (By.ID, 'checkAll'))
         )
         self.selenium.find_element_by_name("Submit").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Details')
-        )
+        self.wait_for_datatable('column-table_previous')
 
         # The number of rows must be 29
         wflow = Workflow.objects.all()[0]
@@ -651,26 +420,15 @@ class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
 
     def test_01_excelupload_sheet(self):
         # Login
-        self.login('instructor1@bogus.com')
-
-        self.open(reverse('workflow:index'))
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Workflows'))
-        self.assertIn('New workflow', self.selenium.page_source)
-        self.assertIn('Import workflow', self.selenium.page_source)
+        self.access_workflow_from_home_page('wflow1', False)
 
-        # Open the workflow
-        wf_link = self.selenium.find_element_by_link_text('wflow1')
-        wf_link.click()
+        # Go to Excel upload/merge
+        self.go_to_excel_upload_merge_step_1()
 
-        self.selenium.find_element_by_link_text("Dataops").click()
-        self.selenium.find_element_by_link_text("Data Upload/Merge").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Data Upload/Merge')
-        )
-        self.selenium.find_element_by_link_text("Excel Upload/Merge").click()
+        # Upload the file
         self.selenium.find_element_by_id("id_file").send_keys(
             os.path.join(settings.BASE_DIR(),
                          'dataops',
@@ -686,9 +444,7 @@ class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
                 (By.ID, 'checkAll'))
         )
         self.selenium.find_element_by_name("Submit").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Details')
-        )
+        self.wait_for_datatable('column-table_previous')
 
         # The number of rows must be 19
         wflow = Workflow.objects.all()[0]
@@ -714,36 +470,19 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
 
     def test_01_nan_manipulation(self):
         # Login
-        self.login('instructor1@bogus.com')
+        self.login('instructor01@bogus.com')
 
-        self.open(reverse('workflow:index'))
+        self.create_new_workflow('NaN')
 
-        # Create new workflow
+        # Go to CSV Upload/Merge
         self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[2]").click()
+            "//tbody/tr[1]/td[1]/a[1]"
+        ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'id_name'))
+            EC.visibility_of_element_located(
+                (By.XPATH, "//form")
+            )
         )
-
-        # Insert name and click create
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("NaN")
-        self.selenium.find_element_by_xpath("//button[@type='submit']").click()
-        # Wait for details page
-        WebDriverWait(self.selenium, 20).until(
-            EC.title_is('OnTask :: Details')
-        )
-
-        # Open the Dataops page
-        self.selenium.find_element_by_link_text("Dataops").click()
-        self.selenium.find_element_by_link_text("Data Upload/Merge").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Data Upload/Merge')
-        )
-
-        # Start the upload process: Select upload
-        self.selenium.find_element_by_link_text("CSV Upload/Merge").click()
 
         # Select file and upload
         self.selenium.find_element_by_id("id_file").send_keys(
@@ -762,18 +501,10 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "(//button[@name='Submit'])[2]"
         ).click()
-        # Wait for the upload/merge
-        WebDriverWait(self.selenium, 20).until(
-            EC.title_is('OnTask :: Details')
-        )
+        self.wait_for_datatable('column-table_previous')
 
         # Select again the upload/merge function
-        self.selenium.find_element_by_link_text("Dataops").click()
-        self.selenium.find_element_by_link_text("Data Upload/Merge").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Data Upload/Merge')
-        )
-        self.selenium.find_element_by_link_text("CSV Upload/Merge").click()
+        self.go_to_csv_upload_merge_step_1()
 
         # Select the second file and submit
         self.selenium.find_element_by_id("id_file").send_keys(
@@ -811,160 +542,18 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
         # Check the merge summary and proceed
         self.selenium.find_element_by_name("Submit").click()
         # Wait for the upload/merge to finish
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
-                                             'Workflow Details')
-        )
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'success'))
-        )
+        self.wait_for_datatable('column-table_previous')
 
         # Go to the actions page
-        self.selenium.find_element_by_link_text("Actions").click()
+        self.go_to_actions()
 
         # Create a new action
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[3]"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'id_name'))
-        )
+        self.create_new_personalized_text_action("action out", '')
 
-        # Type action name and click complete to edit
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("action out")
-        self.selenium.find_element_by_xpath("//button[@type='submit']").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//h4[@id='filter-set']/div/button")
-            )
-        )
-
-        # Create the first condition.
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[3]"
-        ).click()
-        # Wait for the form to appear
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Create condition')
-        )
-
-        # Add name and condition
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("bool1 cond")
-        self.selenium.find_element_by_name("builder_rule_0_filter").click()
-        Select(self.selenium.find_element_by_name(
-            "builder_rule_0_filter")).select_by_visible_text("bool1")
-        # Wait for the select elements to be clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//input[@name='builder_rule_0_value_0']")
-            )
-        )
-        self.selenium.find_element_by_xpath(
-            "(//input[@name='builder_rule_0_value_0'])[2]").click()
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='submit'])[2]"
-        ).click()
-        # MODAL WAITING
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for page to refresh
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'js-condition-edit')
-            )
-        )
-
-        # Create the second condition
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[3]"
-        ).click()
-        # Wait for the form to appear
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Create condition')
-        )
-
-        # Add name and condition
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("bool2 cond")
-        self.selenium.find_element_by_name("builder_rule_0_filter").click()
-        Select(self.selenium.find_element_by_name(
-            "builder_rule_0_filter")).select_by_visible_text("bool2")
-        # Wait for the select elements to be clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//input[@name='builder_rule_0_value_0']")
-            )
-        )
-        self.selenium.find_element_by_xpath(
-            "(//input[@name='builder_rule_0_value_0'])[2]").click()
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='submit'])[2]"
-        ).click()
-        # MODAL WAITING
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for page to refresh
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'js-condition-edit')
-            )
-        )
-
-        # Create the third condition
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[3]"
-        ).click()
-        # Wait for the form to appear
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/form/div/h4"),
-                'Create condition')
-        )
-
-        # Add name and condition
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("bool3 cond")
-        self.selenium.find_element_by_name("builder_rule_0_filter").click()
-        Select(self.selenium.find_element_by_name(
-            "builder_rule_0_filter")).select_by_visible_text("bool3")
-        # Wait for the select elements to be clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//input[@name='builder_rule_0_value_0']")
-            )
-        )
-        self.selenium.find_element_by_xpath(
-            "(//input[@name='builder_rule_0_value_0'])[2]").click()
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='submit'])[2]").click()
-        # MODAL WAITING
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for page to refresh
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'js-condition-edit')
-            )
-        )
+        # Create three conditions
+        self.create_condition("bool1 cond", '', [('bool1', None, True)])
+        self.create_condition("bool 2 cond", '', [('bool2', None, True)])
+        self.create_condition('bool3 cond', '', [('bool3', None, True)])
 
         # insert the action text
         self.selenium.execute_script(
@@ -973,19 +562,7 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
         )
 
         # Click in the preview and circle around the 12 rows
-        self.selenium.find_element_by_xpath(
-            "//button[contains(@class, 'js-action-preview')]").click()
-        # Wait for the modal to appear
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='modal-item']/div/div/div/div/h4"),
-                'Action Preview 1')
-        )
-
-        for x in range(11):
-            self.selenium.find_element_by_xpath(
-                "//div[@id='modal-item']/div/div/div/div[2]/button[3]/span"
-            ).click()
+        self.open_browse_preview(11)
 
         # End of session
         self.logout()
@@ -1010,34 +587,19 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
 
     def test_01_first_plugin(self):
         # Login
-        self.login('instructor1@bogus.com')
-
-        self.open(reverse('workflow:index'))
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Workflows'))
-        self.assertIn('New workflow', self.selenium.page_source)
-        self.assertIn('Import workflow', self.selenium.page_source)
-
-        # Open the workflow
-        wf_link = self.selenium.find_element_by_link_text('Plugin test')
-        wf_link.click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'column-table_previous'))
-        )
+        self.access_workflow_from_home_page('Plugin test')
 
         # Open the transform page
-        self.selenium.find_element_by_link_text("Dataops").click()
-        self.selenium.find_element_by_link_text("Transform").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'transform-table_previous'))
-        )
+        self.go_to_transform()
 
         # Click in the first plugin
-        self.selenium.find_element_by_xpath(
-            "//table[@id='transform-table']/tbody/tr[4]/td[7]/div/a"
-        ).click()
+        element = self.search_table_row_by_string('transform-table',
+                                                  1,
+                                                  'test_plugin_1')
+        element.find_element_by_link_text('Run').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -1065,12 +627,8 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
         )
 
         # Done. Click continue.
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[2]"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'column-table_previous'))
-        )
+        self.selenium.find_element_by_link_text('Continue').click()
+        self.wait_for_datatable('column-table_previous')
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name='Plugin test')
@@ -1081,17 +639,13 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
         self.assertTrue(all([x == 2 for x in df['RESULT 2']]))
 
         # Second execution, this time adding a suffix to the column
-        # Open the transform page
-        self.selenium.find_element_by_link_text("Dataops").click()
-        self.selenium.find_element_by_link_text("Transform").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'transform-table_previous'))
-        )
+        self.go_to_transform()
 
         # Click in the first plugin
-        self.selenium.find_element_by_xpath(
-            "//table[@id='transform-table']/tbody/tr[4]/td[7]/div/a"
-        ).click()
+        element = self.search_table_row_by_string('transform-table',
+                                                  1,
+                                                  'test_plugin_1')
+        element.find_element_by_link_text('Run').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -1123,12 +677,8 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
         )
 
         # Done. Click continue.
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[2]"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'column-table_previous'))
-        )
+        self.selenium.find_element_by_link_text('Continue').click()
+        self.wait_for_datatable('column-table_previous')
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name='Plugin test')
@@ -1144,34 +694,21 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
 
     def test_02_second_plugin(self):
         # Login
-        self.login('instructor1@bogus.com')
-
-        self.open(reverse('workflow:index'))
+        self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        WebDriverWait(self.selenium, 10).until(
-            EC.title_is('OnTask :: Workflows'))
-        self.assertIn('New workflow', self.selenium.page_source)
-        self.assertIn('Import workflow', self.selenium.page_source)
-
-        # Open the workflow
-        wf_link = self.selenium.find_element_by_link_text('Plugin test')
-        wf_link.click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'column-table_previous'))
-        )
+        self.access_workflow_from_home_page('Plugin test')
 
         # Open the transform page
-        self.selenium.find_element_by_link_text("Dataops").click()
-        self.selenium.find_element_by_link_text("Transform").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'transform-table_previous'))
-        )
+        self.go_to_transform()
+
 
         # Click in the second plugin
-        self.selenium.find_element_by_xpath(
-            "//table[@id='transform-table']/tbody/tr[5]/td[7]/div/a"
-        ).click()
+        # Click in the first plugin
+        element = self.search_table_row_by_string('transform-table',
+                                                  1,
+                                                  'test_plugin_2')
+        element.find_element_by_link_text('Run').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -1188,12 +725,8 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
         )
 
         # Done. Click continue.
-        self.selenium.find_element_by_xpath(
-            "(//button[@type='button'])[2]"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'column-table_previous'))
-        )
+        self.selenium.find_element_by_link_text('Continue').click()
+        self.wait_for_datatable('column-table_previous')
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name='Plugin test')

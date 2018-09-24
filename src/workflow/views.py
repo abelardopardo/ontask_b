@@ -18,28 +18,31 @@ from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
 
 import action
-import logs.ops
 from dataops import ops, pandas_db
 from dataops.models import SQLConnection
 from dataops.sqlcon_views import SQLConnectionTableAdmin
-from ontask.permissions import is_instructor, UserIsInstructor
+from logs.models import Log
+from ontask.permissions import is_instructor, UserIsInstructor, is_admin
 from ontask.tables import OperationsColumn
 from .forms import WorkflowForm
 from .models import Workflow, Column
-from .ops import (get_workflow)
+from .ops import (get_workflow, store_workflow_in_session)
 
 
 class WorkflowTable(tables.Table):
     name = tables.Column(verbose_name=_('Name'))
+
     description_text = tables.Column(
         empty_values=[],
         verbose_name=_('Description')
     )
+
     nrows_cols = tables.Column(
         empty_values=[],
         verbose_name=_('Rows/Columns'),
         default=_('No data')
     )
+
     modified = tables.DateTimeColumn(verbose_name=_('Last modified'))
 
     def __init__(self, data, *args, **kwargs):
@@ -50,19 +53,18 @@ class WorkflowTable(tables.Table):
         if table_id:
             self.attrs['id'] = table_id
 
-    def render_name(self, record):
-        return format_html(
-            """<a href="{0}">{1}</a>""".format(
-                reverse('workflow:detail', kwargs={'pk': record['id']}),
-                record['name']
-            )
-        )
-
     def render_nrows_cols(self, record):
         if record['nrows'] == 0 and record['ncols'] == 0:
             return "No data"
 
         return format_html("{0}/{1}".format(record['nrows'], record['ncols']))
+
+    operations = OperationsColumn(
+        verbose_name=_('Operations'),
+        attrs={'td': {'class': 'dt-body-center'}},
+        template_file='workflow/includes/workflow_basic_buttons.html',
+        template_context=lambda record: {'workflow': record}
+    )
 
     class Meta:
         model = Workflow
@@ -125,15 +127,16 @@ def save_workflow_form(request, form, template_name):
         form.instance.user = request.user
         form.instance.nrows = 0
         form.instance.ncols = 0
-        form.instance.session_key = request.session.session_key
-        log_type = 'workflow_create'
+        log_type = Log.WORKFLOW_CREATE
+        redirect = reverse('dataops:uploadmerge')
     else:
-        log_type = 'workflow_update'
+        log_type = Log.WORKFLOW_UPDATE
+        redirect = ''
 
     # Save the instance
     try:
         workflow_item = form.save()
-    except IntegrityError as e:
+    except IntegrityError:
         form.add_error('name',
                        _('A workflow with that name already exists'))
         context = {'form': form}
@@ -143,16 +146,21 @@ def save_workflow_form(request, form, template_name):
         return JsonResponse(data)
 
     # Log event
-    logs.ops.put(request.user,
-                 log_type,
-                 workflow_item,
-                 {'id': workflow_item.id,
-                  'name': workflow_item.name})
+    Log.objects.register(request.user,
+                         log_type,
+                         workflow_item,
+                         {'id': workflow_item.id,
+                          'name': workflow_item.name})
+
+    # Set the new workflow as the current one
+    workflow_item = get_workflow(request, workflow_item.id)
+    if not workflow_item:
+        messages.error(request,
+                       _('The newly created workflow could not be accessed'))
 
     # Here we can say that the form processing is done.
     data['form_is_valid'] = True
-    data['html_redirect'] = reverse('workflow:detail',
-                                    kwargs={'pk': form.instance.id})
+    data['html_redirect'] = redirect
 
     return JsonResponse(data)
 
@@ -178,31 +186,15 @@ def workflow_index(request):
     )
 
     # We include the table only if it is not empty.
-    context = {}
-    context['table'] = WorkflowTable(workflows,
-                                     id='workflow-table',
-                                     orderable=False)
+    context = {
+        'table': WorkflowTable(workflows,
+                               id='workflow-table',
+                               orderable=False),
+        'nwflows': len(workflows)
+    }
 
-    # Add the SQL connection table only if appropriate
+    # Report if Celery is not running properly
     if request.user.is_superuser:
-        conns = SQLConnection.objects.all().values(
-            'id',
-            'name',
-            'description_txt',
-            'conn_type',
-            'conn_driver',
-            'db_user',
-            'db_password',
-            'db_host',
-            'db_port',
-            'db_name',
-            'db_table'
-        )
-
-        context['table2'] = SQLConnectionTableAdmin(conns,
-                                                    id='sqlconn-table',
-                                                    orderable=False)
-
         # Verify that celery is running!
         celery_stats = None
         try:
@@ -213,10 +205,46 @@ def workflow_index(request):
             messages.error(
                 request,
                 _('WARNING: Celery is not currently running. '
-                'Please configure it correctly.')
+                  'Please configure it correctly.')
             )
 
     return render(request, 'workflow/index.html', context)
+
+
+@user_passes_test(is_admin)
+def sql_connections(request):
+    """
+    Page to show and handle the SQL connections
+    :param request: Request
+    :return: Render the appropriate page.
+    """
+    wid = request.session.pop('ontask_workflow_id', None)
+    # If removing workflow from session, mark it as available for sharing
+    if wid:
+        Workflow.unlock_workflow_by_id(wid)
+    request.session.pop('ontask_workflow_name', None)
+
+    context = {}
+
+    conns = SQLConnection.objects.all().values(
+        'id',
+        'name',
+        'description_txt',
+        'conn_type',
+        'conn_driver',
+        'db_user',
+        'db_password',
+        'db_host',
+        'db_port',
+        'db_name',
+        'db_table'
+    )
+
+    context['table'] = SQLConnectionTableAdmin(conns,
+                                               id='sqlconn-table',
+                                               orderable=False)
+
+    return render(request, 'workflow/sql_connections.html', context)
 
 
 class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
@@ -251,28 +279,6 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
         # Check if the workflow is locked
         obj = get_workflow(self.request, old_obj.id)
-        if not obj:
-            user = old_obj.get_user_locking_workflow()
-            if user != self.request.user:
-                messages.error(
-                    self.request,
-                    _('The workflow is being modified by user {0}').format(
-                        user.email
-                    )
-                )
-            else:
-                messages.error(
-                    self.request,
-                    _('There is another session still open with your account. '
-                      'Log that session out or wait for it to expire.')
-                )
-            return None
-
-        # Remember the current workflow
-        self.request.session['ontask_workflow_id'] = obj.id
-
-        # Store the current workflow
-        self.request.session['ontask_workflow_name'] = obj.name
         return obj
 
     def get_context_data(self, **kwargs):
@@ -333,7 +339,9 @@ def update(request, pk):
 
     workflow = get_workflow(request, pk)
     if not workflow:
-        return redirect('workflow:index')
+        # Workflow is not accessible. Go back to index page.
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('workflow:index')})
 
     form = WorkflowForm(request.POST or None, instance=workflow)
 
@@ -348,20 +356,18 @@ def update(request, pk):
     # index
     messages.error(request,
                    _('You can only rename workflows you created.'))
-    if request.is_ajax():
-        data = {'form_is_valid': True,
-                'html_redirect': reverse('workflow:detail',
-                                         kwargs={'pk': workflow.id})}
-        return JsonResponse(data)
-
-    return redirect('workflow:detail', kwargs={'pk': workflow.id})
+    data = {'form_is_valid': True,
+            'html_redirect': ''}
+    return JsonResponse(data)
 
 
 @user_passes_test(is_instructor)
 def flush(request, pk):
     workflow = get_workflow(request, pk)
     if not workflow:
-        return redirect('workflow:index')
+        # Workflow is not accessible. Go back to index page.
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('workflow:index')})
 
     data = dict()
 
@@ -384,15 +390,15 @@ def flush(request, pk):
         workflow.flush()
 
         # Log the event
-        logs.ops.put(request.user,
-                     'workflow_data_flush',
-                     workflow,
-                     {'id': workflow.id,
-                      'name': workflow.name})
+        Log.objects.register(request.user,
+                             Log.WORKFLOW_DATA_FLUSH,
+                             workflow,
+                             {'id': workflow.id,
+                              'name': workflow.name})
 
         # In this case, the form is valid
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:detail', kwargs={'pk': pk})
+        data['html_redirect'] = ''
     else:
         data['html_form'] = \
             render_to_string('workflow/includes/partial_workflow_flush.html',
@@ -406,7 +412,9 @@ def flush(request, pk):
 def delete(request, pk):
     workflow = get_workflow(request, pk)
     if not workflow:
-        return redirect('workflow:index')
+        # Workflow is not accessible. Go back to index page.
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('workflow:index')})
 
     # Ajax result
     data = dict()
@@ -425,11 +433,11 @@ def delete(request, pk):
 
     if request.method == 'POST':
         # Log the event
-        logs.ops.put(request.user,
-                     'workflow_delete',
-                     workflow,
-                     {'id': workflow.id,
-                      'name': workflow.name})
+        Log.objects.register(request.user,
+                             Log.WORKFLOW_DELETE,
+                             workflow,
+                             {'id': workflow.id,
+                              'name': workflow.name})
 
         # And drop the table
         if pandas_db.is_wf_table_in_db(workflow):
@@ -463,7 +471,7 @@ def column_ss(request, pk):
     workflow = get_workflow(request)
     if not workflow:
         return JsonResponse(
-            {'error': _('Incorrect request. Unlable to process')}
+            {'error': _('Incorrect request. Unable to process')}
         )
 
     # If there is no DF, there are no columns to show, this should be
@@ -518,13 +526,12 @@ def column_ss(request, pk):
 
         final_qs.append({
             'number': render_to_string(
-                 'workflow/includes/workflow_column_movement.html',
-                 {'column': col}
-             ),
+                'workflow/includes/workflow_column_movement.html',
+                {'column': col}
+            ),
             'name': col.name,
             'type': col_data_type,
-            'key': '<span class="true">✔</span>' \
-                if col.is_key else '<span class="true">✘</span>',
+            'key': '<span class="true">✔</span>' if col.is_key else '',
             'operations': ops_string
         })
 
@@ -587,8 +594,7 @@ def clone(request, pk):
         workflow.save()
     except IntegrityError:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:detail',
-                                        kwargs={'pk': workflow.id})
+        data['html_redirect'] = ''
         messages.error(request, _('Unable to clone workflow'))
         return JsonResponse(data)
 
@@ -607,13 +613,13 @@ def clone(request, pk):
     workflow_new.save()
 
     # Log event
-    logs.ops.put(request.user,
-                 'workflow_clone',
-                 workflow_new,
-                 {'id_old': workflow_new.id,
-                  'id_new': workflow.id,
-                  'name_old': workflow_new.name,
-                  'name_new': workflow.name})
+    Log.objects.register(request.user,
+                         Log.WORKFLOW_CLONE,
+                         workflow_new,
+                         {'id_old': workflow_new.id,
+                          'id_new': workflow.id,
+                          'name_old': workflow_new.name,
+                          'name_new': workflow.name})
 
     messages.success(request,
                      _('Workflow successfully cloned.'))

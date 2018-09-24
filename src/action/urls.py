@@ -3,7 +3,7 @@ from __future__ import unicode_literals, print_function
 
 from django.conf.urls import url
 
-from . import views_action, views_condition, views_email
+from . import views_action, views_condition, views_out
 
 app_name = 'action'
 
@@ -15,23 +15,16 @@ urlpatterns = [
     url(r'^$', views_action.action_index, name='index'),
 
     # Create an action of type 0: in, 1: Out
-    url(r'^(?P<type>[01])/create/$',
+    url(r'^create/$',
         views_action.ActionCreateView.as_view(), name='create'),
 
     # Edit action Out
-    url(r'^(?P<pk>\d+)/edit_out/$',
-        views_action.edit_action_out,
-        name='edit_out'),
+    url(r'^(?P<pk>\d+)/edit/$', views_action.edit_action, name='edit'),
 
     # Save action out content
     url(r'^(?P<pk>\d+)/action_out_save_content/$',
         views_action.action_out_save_content,
         name='action_out_save_content'),
-
-    # Edit action In
-    url(r'^(?P<pk>\d+)/edit_in/$',
-        views_action.edit_action_in,
-        name='edit_in'),
 
     # Action export ask
     url(r'^(?P<pk>\d+)/export_ask/$',
@@ -51,6 +44,32 @@ urlpatterns = [
     # Action import
     url(r'^import/$', views_action.action_import, name='import'),
 
+    # Update an action
+    url(r'^(?P<pk>\d+)/update/$',
+        views_action.ActionUpdateView.as_view(),
+        name='update'),
+
+    # Clone the action
+    url(r'^(?P<pk>\d+)/clone/$', views_action.clone, name='clone'),
+
+    # Nuke the action
+    url(r'^(?P<pk>\d+)/delete/$', views_action.delete_action, name='delete'),
+
+    # Run action
+    url(r'^(?P<pk>\d+)/run/$', views_action.run, name='run'),
+
+    #
+    # Email action steps
+    #
+    url(r'^item_filter/$',
+        views_out.run_action_item_filter,
+        name='item_filter'),
+    url(r'^email_done/$', views_out.run_email_action_done, name='email_done'),
+    url(r'^json_done/$', views_out.json_done, name='json_done'),
+
+    #
+    # ACTION IN EDIT PAGE
+    #
     # Select key column for action in
     url(r'^(?P<apk>\d+)/(?P<cpk>\d+)/(?P<key>\d+)/select_column_action/$',
         views_action.select_column_action,
@@ -71,33 +90,28 @@ urlpatterns = [
         views_action.shuffle_questions,
         name='shuffle_questions'),
 
-    # Update an action of type 0: in, 1: Out
-    url(r'^(?P<pk>\d+)/(?P<type>[01])/update/$',
-        views_action.ActionUpdateView.as_view(),
-        name='update'),
-
-    # Clone the action
-    url(r'^(?P<pk>\d+)/clone/$', views_action.clone, name='clone'),
-
-    # Nuke the action
-    url(r'^(?P<pk>\d+)/delete/$', views_action.delete_action, name='delete'),
-
-    # Run action in
-    url(r'^(?P<pk>\d+)/run/$', views_action.run, name='run'),
-
-    # Server side update of the run page for action in
-    url(r'^(?P<pk>\d+)/run_ss/$', views_action.run_ss, name='run_ss'),
+    #
+    # RUN SURVEY
+    #
+    # Server side update of the run survey page for action in
+    url(r'^(?P<pk>\d+)/run_survey_ss/$',
+        views_action.run_survey_ss,
+        name='run_survey_ss'),
 
     # Run action in a row. Can be executed by the instructor or the
     # learner!!
-    url(r'^(?P<pk>\d+)/run_row/$', views_action.run_row, name='run_row'),
+    url(r'^(?P<pk>\d+)/run_survey_row/$',
+        views_action.run_survey_row,
+        name='run_survey_row'),
 
     # Say thanks
     url(r'thanks/$', views_action.thanks, name='thanks'),
 
-    # Preview content of the action
+    #
+    # Preview action out
+    #
     url(r'^(?P<pk>\d+)/(?P<idx>\d+)/preview/$',
-        views_action.preview,
+        views_out.preview_response,
         name='preview'),
 
     # Allow url on/off toggle
@@ -149,18 +163,5 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/clone_condition/$',
         views_condition.clone,
         name='clone_condition'),
-
-    #
-    # Email
-    #
-    # Request data to send email
-    url(r'^(?P<pk>\d+)/send_email/$',
-        views_email.request_data,
-        name="send_email"),
-
-    # Preview emails
-    url(r'^(?P<pk>\d+)/(?P<idx>\d+)/email_preview/$',
-        views_email.preview,
-        name='email_preview'),
 
 ]

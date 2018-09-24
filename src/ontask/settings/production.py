@@ -112,6 +112,19 @@ LOGGING = {
             'propagate': True,
             'level': 'DEBUG',
         },
+        'django.security.DisallowedHost': {
+            'handlers': ['proj_log_file'],
+            'propagate': True,
+            'level': 'DEBUG',
+        },
+        'django_auth_lti.backends': {
+            'handlers': ['proj_log_file'],
+            'level': 'DEBUG',
+        },
+        'django_auth_lti.middleware_patched': {
+            'handlers': ['proj_log_file'],
+            'level': 'DEBUG',
+        },
     }
 }
 
