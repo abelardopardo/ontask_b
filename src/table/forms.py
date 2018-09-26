@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import next
+from builtins import object
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
@@ -49,7 +51,7 @@ class ViewAddForm(forms.ModelForm):
 
         return data
 
-    class Meta:
+    class Meta(object):
         model = View
         fields = ['name',
                   'description_text',

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+
 
 from django.conf import settings
 from django.conf.urls import include
@@ -52,7 +52,7 @@ urlpatterns = [
 
     path('keep_alive', views.keep_alive, name='keep_alive'),
 
-    path('/', include(accounts.urls, namespace='accounts')),
+    path('', include(accounts.urls, namespace='accounts')),
 
     path('workflow/', include(workflow.urls, namespace='workflow')),
 

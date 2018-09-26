@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import zip
 import numpy as np
 import pandas as pd
 from django.conf import settings
@@ -187,7 +188,7 @@ def get_table_row_by_index(workflow, cond_filter, idx):
     if idx > len(data):
         return None
 
-    return dict(zip(workflow.get_column_names(), data[idx - 1]))
+    return dict(list(zip(workflow.get_column_names(), data[idx - 1])))
 
 
 def workflow_has_table(workflow_item):
@@ -353,8 +354,8 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
 
     # STEP 1 Rename the column names.
     src_df = src_df.rename(
-        columns=dict(zip(merge_info['initial_column_names'],
-                         merge_info['rename_column_names'])))
+        columns=dict(list(zip(merge_info['initial_column_names'],
+                         merge_info['rename_column_names']))))
 
     # STEP 2 Drop the columns not selected
     columns_to_upload = merge_info['columns_to_upload']

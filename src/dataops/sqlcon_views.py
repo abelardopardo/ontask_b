@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from builtins import object
 from collections import Counter
 
 import django_tables2 as tables
@@ -37,7 +38,7 @@ class SQLConnectionTableAdmin(tables.Table):
         if table_id:
             self.attrs['id'] = table_id
 
-    class Meta:
+    class Meta(object):
         model = SQLConnection
 
         fields = ('name', 'description_txt', 'conn_type', 'conn_driver',
@@ -70,7 +71,7 @@ class SQLConnectionTableRun(tables.Table):
         if table_id:
             self.attrs['id'] = table_id
 
-    class Meta:
+    class Meta(object):
         model = SQLConnection
 
         fields = ('name', 'description_txt', 'conn_type', 'conn_driver',

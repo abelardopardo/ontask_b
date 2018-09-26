@@ -2,7 +2,7 @@
 """
 Basic functions and definitions used all over the platform.
 """
-from __future__ import unicode_literals, print_function, absolute_import
+
 
 import json
 

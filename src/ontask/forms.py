@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import next
+from builtins import str
 from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.template.defaultfilters import filesizeformat

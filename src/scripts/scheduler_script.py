@@ -6,8 +6,11 @@ the presence of operations that have to be executed, and runs them. This
 script is not intended to manage the execution of repeating tasks,
 but instead, those actions that are programmed to execute at a certain point
 in time."""
-from __future__ import unicode_literals, print_function
 
+
+
+from builtins import str
+from past.utils import old_div
 import datetime
 import getopt
 import logging
@@ -43,8 +46,8 @@ def execute_email_actions(debug):
 
     # Calculate a window with half the interval in the past and half in the
     # future to reduce latency of execution.
-    after = now - datetime.timedelta(minutes=(float(minute_step) + 5) / 2)
-    before = now + datetime.timedelta(minutes=(float(minute_step) + 5) / 2)
+    after = now - datetime.timedelta(minutes=old_div((float(minute_step) + 5), 2))
+    before = now + datetime.timedelta(minutes=old_div((float(minute_step) + 5), 2))
     # Get all the actions that are with state pending and before the current
     # date/time
     s_items = ScheduledAction.objects.filter(

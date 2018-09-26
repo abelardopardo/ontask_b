@@ -1,4 +1,5 @@
-from __future__ import unicode_literals
+
+from builtins import object
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field
@@ -19,7 +20,7 @@ class UserForm(forms.ModelForm):
             Field('name'),
             )
 
-    class Meta:
+    class Meta(object):
         model = User
         fields = ['name']
 
@@ -36,6 +37,6 @@ class ProfileForm(forms.ModelForm):
             Submit('update', 'Update', css_class="btn-success"),
             )
 
-    class Meta:
+    class Meta(object):
         model = models.Profile
         fields = ['picture', 'bio']

@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from future import standard_library
+standard_library.install_aliases()
+from builtins import next
+from builtins import object
 import pytz
 from django.db import IntegrityError
 from django.utils.html import format_html
@@ -10,12 +14,8 @@ from action.views_out import run_json_action, run_email_action, \
 from logs.models import Log
 from visualizations.plotly import PlotlyHandler
 
-try:
-    import urlparse
-    from urllib import urlencode
-except:  # For Python 3
-    import urllib.parse as urlparse
-    from urllib.parse import urlencode
+import urllib.parse as urlparse
+from urllib.parse import urlencode
 
 import django_tables2 as tables
 from django.contrib import messages
@@ -96,7 +96,7 @@ class ActionTable(tables.Table):
             )
         )
 
-    class Meta:
+    class Meta(object):
         model = Action
 
         fields = ('name', 'description_text', 'action_type',
@@ -130,7 +130,7 @@ class ColumnSelectedTable(tables.Table):
     # Template to render the extra column created dynamically
     ops_template = 'action/includes/partial_column_selected_operations.html'
 
-    class Meta:
+    class Meta(object):
         fields = ('name', 'description_text', 'operations')
         attrs = {
             'class': 'table display table-bordered',
@@ -501,7 +501,7 @@ def edit_action_out(request, workflow, action):
                'action': action,
                'conditions': conditions,
                'query_builder_ops': workflow.get_query_builder_ops_as_str(),
-               'attribute_names': [x for x in workflow.attributes.keys()],
+               'attribute_names': [x for x in list(workflow.attributes.keys())],
                'column_names': workflow.get_column_names(),
                'selected_rows':
                    filter_condition.n_rows_selected if filter_condition else -1,
@@ -1162,12 +1162,12 @@ def run_survey_ss(request, pk):
         # Render the first element (the key) as the link to the page to update
         # the content.
         dst_url = reverse('action:run_survey_row', kwargs={'pk': action.id})
-        url_parts = list(urlparse.urlparse(dst_url))
-        query = dict(urlparse.parse_qs(url_parts[4]))
+        url_parts = list(urllib.parse.urlparse(dst_url))
+        query = dict(urllib.parse.parse_qs(url_parts[4]))
         query.update({'uatn': column_names[key_idx], 'uatv': row[key_idx]})
         url_parts[4] = urlencode(query)
         link_item = '<a href="{0}">{1}</a>'.format(
-            urlparse.urlunparse(url_parts), row[key_idx]
+            urllib.parse.urlunparse(url_parts), row[key_idx]
         )
         row = list(row)
         row[key_idx] = link_item

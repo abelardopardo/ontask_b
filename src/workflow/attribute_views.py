@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import object
 import django_tables2 as tables
 from django.contrib.auth.decorators import user_passes_test
 from django.http import JsonResponse
@@ -29,7 +30,7 @@ class AttributeTable(tables.Table):
         template_context=lambda record: {'id': record['id'], }
     )
 
-    class Meta:
+    class Meta(object):
         fields = ('name', 'value', 'operations')
         attrs = {
             'class': 'table display table-bordered',
@@ -158,7 +159,7 @@ def attribute_create(request):
 
     # Create the form object with the form_fields just computed
     form = AttributeItemForm(request.POST or None,
-                             keys=workflow.attributes.keys())
+                             keys=list(workflow.attributes.keys()))
 
     return save_attribute_form(
         request,

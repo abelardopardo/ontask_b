@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import object
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -44,7 +45,7 @@ class PluginRegistry(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
+    class Meta(object):
         """
         Define the criteria for ordering
         """
@@ -138,7 +139,7 @@ class SQLConnection(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
+    class Meta(object):
         """
         Define the criteria for ordering
         """

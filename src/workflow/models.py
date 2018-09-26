@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import str
+from builtins import object
 import datetime
 import json
 
@@ -526,7 +528,7 @@ class Workflow(models.Model):
     def __unicode__(self):
         return self.name
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'workflow'
         verbose_name_plural = 'workflows'
         unique_together = ('user', 'name')
@@ -573,7 +575,7 @@ class Column(models.Model):
         max_length=512,
         blank=False,
         null=False,
-        choices=[(x, x) for __, x in pandas_db.pandas_datatype_names.items()],
+        choices=[(x, x) for __, x in list(pandas_db.pandas_datatype_names.items())],
         verbose_name=_('type of data to store in the column')
     )
 
@@ -724,7 +726,7 @@ class Column(models.Model):
     def __unicode__(self):
         return self.name
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'column'
         verbose_name_plural = 'columns'
         unique_together = ('name', 'workflow')

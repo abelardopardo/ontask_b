@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.core.exceptions import PermissionDenied
-from ims_lti_py.tool_provider import DjangoToolProvider
+from ontask_lti.tool_provider import DjangoToolProvider
 from django.utils.translation import ugettext_lazy as _
 
 logger = logging.getLogger(__name__)
@@ -25,7 +25,7 @@ class LTIAuthBackend(ModelBackend):
     # Username prefix for users without an sis source id
     unknown_user_prefix = "cuid:"
 
-    def authenticate(self, request):
+    def authenticate(self, request, username=None, password=None, **kwargs):
 
         logger.info(_("about to begin authentication process"))
 
@@ -88,7 +88,7 @@ class LTIAuthBackend(ModelBackend):
 
         logger.info(
             _("about to check the timestamp: {0}").format(int(
-            tool_provider.oauth_timestamp
+                tool_provider.oauth_timestamp
             ))
         )
 
@@ -106,9 +106,13 @@ class LTIAuthBackend(ModelBackend):
 
         user = None
 
-        # Retrieve username from LTI parameter or default to an overridable function return value
-        username = tool_provider.lis_person_sourcedid or self.get_default_username(
-            tool_provider, prefix=self.unknown_user_prefix)
+        # Retrieve username from LTI parameter or default to an overridable
+        # function return value
+        username = tool_provider.lis_person_sourcedid or \
+                   self.get_default_username(
+                       tool_provider,
+                       prefix=self.unknown_user_prefix
+                   )
         username = self.clean_username(username)  # Clean it
 
         email = tool_provider.lis_person_contact_email_primary

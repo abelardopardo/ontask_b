@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+
 
 import django_tables2 as tables
 from django.template.loader import render_to_string

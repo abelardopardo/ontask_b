@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import object
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
@@ -15,7 +16,7 @@ class ColumnSerializer(serializers.ModelSerializer):
         # Preliminary checks
         data_type = validated_data.get('data_type', None)
         if data_type is None or \
-                data_type not in pandas_datatype_names.values():
+                data_type not in list(pandas_datatype_names.values()):
             # The data type is not legal
             raise Exception(_('Incorrect data type {0}.').format(data_type))
 
@@ -52,6 +53,6 @@ class ColumnSerializer(serializers.ModelSerializer):
 
         return column_obj
 
-    class Meta:
+    class Meta(object):
         model = Column
         exclude = ('id', 'workflow')

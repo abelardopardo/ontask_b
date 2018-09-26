@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import next
+from builtins import str
+from builtins import object
 import json
 
 from datetimewidget.widgets import DateTimeWidget
@@ -25,19 +28,19 @@ class ActionUpdateForm(forms.ModelForm):
         self.workflow = kwargs.pop(str('action_workflow'), None)
         super(ActionUpdateForm, self).__init__(*args, **kwargs)
 
-    class Meta:
+    class Meta(object):
         model = Action
         fields = ('name', 'description_text')
 
 
 class ActionForm(ActionUpdateForm):
-    class Meta:
+    class Meta(object):
         model = Action
         fields = ('name', 'description_text', 'action_type')
 
 
 class ActionDescriptionForm(forms.ModelForm):
-    class Meta:
+    class Meta(object):
         model = Action
         fields = ('description_text',)
 
@@ -77,7 +80,7 @@ class EditActionOutForm(forms.ModelForm):
                        'placeholder': _('Write a JSON object')}
             )
 
-    class Meta:
+    class Meta(object):
         model = Action
         fields = ('content',)
 
@@ -131,7 +134,7 @@ class FilterForm(forms.ModelForm):
         # Filter should be hidden.
         self.fields['formula'].widget = forms.HiddenInput()
 
-    class Meta:
+    class Meta(object):
         model = Condition
         fields = ('name', 'description_text', 'formula')
 
@@ -182,7 +185,7 @@ class EnableURLForm(forms.ModelForm):
 
         return data
 
-    class Meta:
+    class Meta(object):
         model = Action
         fields = ('serve_enabled', 'active_from', 'active_to')
 
@@ -314,7 +317,7 @@ class EmailActionForm(forms.Form):
 
         return data
 
-    class Meta:
+    class Meta(object):
         widgets = {'subject': forms.TextInput(attrs={'size': 256})}
 
 

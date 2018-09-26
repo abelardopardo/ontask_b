@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import zip
+from builtins import range
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
@@ -477,7 +479,7 @@ def upload_s4(request):
             continue
 
         # Case 2: Column is in DST and left untouched (no counter part in SRC)
-        if colname not in src_info.keys():
+        if colname not in list(src_info.keys()):
             info.append((colname, False, ''))
             continue
 

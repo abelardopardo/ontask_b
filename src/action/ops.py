@@ -4,8 +4,10 @@ File with auxiliary operations needed to handle the actions, namely:
 functions to process request when receiving a "serve" action, cloning
 operations when cloning conditions and actions, and sending messages.
 """
-from __future__ import unicode_literals, print_function
 
+
+from builtins import zip
+from builtins import str
 import datetime
 import gzip
 import json
@@ -87,7 +89,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
     # Bind the form with the existing data
     form = EnterActionIn(request.POST or None,
                          columns=columns,
-                         values=row_pairs.values(),
+                         values=list(row_pairs.values()),
                          show_key=is_inst)
 
     cancel_url = None
@@ -673,7 +675,7 @@ def send_json(user, action, token, key_column, exclude_values, log_item):
     status_vals = []
     for json_obj in json_objects:
         if ontask_settings.DEBUG:
-            print('SEND JSON: ' + json.dumps(json_obj))
+            print(('SEND JSON: ' + json.dumps(json_obj)))
             status = 200
         else:
             response = requests.post(url=action.target_url,

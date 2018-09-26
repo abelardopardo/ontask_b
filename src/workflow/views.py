@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import str
+from builtins import range
+from builtins import object
 import django_tables2 as tables
 from celery.task.control import inspect
 from django.conf import settings
@@ -66,7 +69,7 @@ class WorkflowTable(tables.Table):
         template_context=lambda record: {'workflow': record}
     )
 
-    class Meta:
+    class Meta(object):
         model = Workflow
 
         fields = ('name', 'description_text', 'nrows_cols', 'modified')
@@ -97,7 +100,7 @@ class WorkflowShareTable(tables.Table):
         template_context=lambda x: {'id': x['id']}
     )
 
-    class Meta:
+    class Meta(object):
         fields = ('email', 'id')
 
         sequence = ('email', 'operations')
@@ -323,7 +326,7 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
             cpos = Column.objects.filter(
                 workflow__id=workflow_id
             ).values_list('position', flat=True)
-            assert sorted(cpos) == range(1, len(cpos) + 1)
+            assert sorted(cpos) == list(range(1, len(cpos) + 1))
 
         return context
 

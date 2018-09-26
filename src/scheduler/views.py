@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
+
+
+from builtins import str
+from past.utils import old_div
+from builtins import object
 import datetime
 
 import django_tables2 as tables
@@ -132,7 +136,7 @@ class ScheduleActionTable(tables.Table):
             )
         )
 
-    class Meta:
+    class Meta(object):
         model = ScheduledAction
 
         fields = ('name', 'description_text', 'action', 'execute',
@@ -399,10 +403,10 @@ def finish_scheduling(request, schedule_item=None, payload=None):
     delta_string = ''
     if tdelta.days != 0:
         delta_string += ugettext('{0} days').format(tdelta.days)
-    hours = tdelta.seconds / 3600
+    hours = old_div(tdelta.seconds, 3600)
     if hours != 0:
         delta_string += ugettext(', {0} hours').format(hours)
-    minutes =  (tdelta.seconds % 3600) / 60
+    minutes =  old_div((tdelta.seconds % 3600), 60)
     if minutes != 0:
         delta_string += ugettext(', {0} minutes').format(minutes)
 

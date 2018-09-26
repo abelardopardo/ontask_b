@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import next
+from builtins import zip
 import logging
 import os.path
 import subprocess
@@ -533,7 +535,7 @@ def query_to_dicts(query_string, *query_args):
         row = cursor.fetchone()
         if row is None:
             break
-        row_dict = OrderedDict(zip(col_names, row))
+        row_dict = OrderedDict(list(zip(col_names, row)))
         yield row_dict
     return
 
@@ -645,7 +647,7 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names=None):
     qs = qs[0]
 
     # ZIP the values to create a dictionary
-    return OrderedDict(zip(workflow.get_column_names(), qs))
+    return OrderedDict(list(zip(workflow.get_column_names(), qs)))
 
 
 def get_column_stats_from_df(df_column):

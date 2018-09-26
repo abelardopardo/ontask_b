@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import str
+from builtins import object
 import datetime
 
 import pytz
@@ -51,7 +53,7 @@ class ScheduleForm(forms.ModelForm):
 
         return data
 
-    class Meta:
+    class Meta(object):
         model = ScheduledAction
         fields = ('name', 'description_text', 'item_column', 'execute')
 

@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import next
+from builtins import str
+from builtins import object
 import json
 
 import pandas as pd
@@ -24,7 +27,7 @@ class WorkflowForm(forms.ModelForm):
         self.user = kwargs.pop('workflow_user', None)
         super(WorkflowForm, self).__init__(*args, **kwargs)
 
-    class Meta:
+    class Meta(object):
         model = Workflow
         fields = ('name', 'description_text',)
 
@@ -172,7 +175,7 @@ class ColumnBasicForm(forms.ModelForm):
 
         return data
 
-    class Meta:
+    class Meta(object):
         model = Column
         fields = ['name', 'description_text', 'data_type',
                   'position', 'raw_categories',

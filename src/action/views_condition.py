@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -119,7 +119,7 @@ def save_condition_form(request,
             return JsonResponse(data)
 
         # New condition name does not collide with attribute names
-        if form.cleaned_data['name'] in workflow.attributes.keys():
+        if form.cleaned_data['name'] in list(workflow.attributes.keys()):
             form.add_error(
                 'name',
                 _('The workflow has an attribute with this name.')

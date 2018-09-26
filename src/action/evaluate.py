@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import str
+from builtins import map
+from builtins import zip
 import re
 import string
 
@@ -153,7 +156,7 @@ def render_template(template_text, context_dict, action=None):
 
     # Step 3. Apply the translation process to the context keys
     new_context = dict([(translate(escape(x)), y)
-                        for x, y in context_dict.items()])
+                        for x, y in list(context_dict.items())])
 
     # If the number of elements in the two dictionaries is different, we have
     #  a case of collision in the translation. Need to stop immediately.
@@ -218,7 +221,7 @@ def evaluate_action(action, extra_string=None,
     for __, row in data_frame.iterrows():
 
         # Get the dict(col_name, value)
-        row_values = dict(zip(col_names, row))
+        row_values = dict(list(zip(col_names, row)))
 
         if exclude_values and col_idx != -1 and \
                 str(row_values[column_name]) in exclude_values:
@@ -400,7 +403,7 @@ def run(*script_args):
     --{{ OT_The prefix 2 }}--
     """
 
-    template = u'<p>Hi&nbsp;{{ !"#$%&amp;()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~ }}</p>'
+    template = '<p>Hi&nbsp;{{ !"#$%&amp;()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~ }}</p>'
 
     context = {
         'one': 1,
@@ -422,8 +425,8 @@ def run(*script_args):
         'The prefix 2': 'This should NOT appear. ERROR',
     }
     context = {
-        u'!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~': u'Carmelo Coton',
+        '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~': 'Carmelo Coton',
     }
 
-    print(escape(context.items()[0][0]))
-    print(render_template(template, context))
+    print((escape(list(context.items())[0][0])))
+    print((render_template(template, context)))

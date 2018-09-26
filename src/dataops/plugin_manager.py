@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import zip
+from builtins import map
 import os
 import time
 
@@ -114,7 +116,7 @@ def verify_plugin_elements(plugin_instance):
 
             # Translate all values to the right type
             result[check_idx] = _('Incorrect list of allowed value')
-            __ = map(t_func, p_allowed)
+            __ = list(map(t_func, p_allowed))
 
             # And translate the initial value to the right type
             result[check_idx] = _('Incorrect initial value')
@@ -194,7 +196,7 @@ def verify_plugin(plugin_instance):
           'and a help string to be shown when requesting this parameter.')
     ]
 
-    return zip(verify_plugin_elements(plugin_instance), checks)
+    return list(zip(verify_plugin_elements(plugin_instance), checks))
 
 
 def load_plugin(foldername):

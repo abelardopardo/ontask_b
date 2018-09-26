@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import object
 import datetime
 import itertools
 import re
@@ -346,7 +347,7 @@ class Action(models.Model):
 
         return dict(dict(row_values, **condition_eval), **attributes)
 
-    class Meta:
+    class Meta(object):
         """
         Define the criteria of uniqueness with name in workflow and order by
         name
@@ -467,7 +468,7 @@ class Condition(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
+    class Meta(object):
         """
         The unique criteria here is within the action, the name and being a
         filter. We may choose to name a filter and a condition with the same

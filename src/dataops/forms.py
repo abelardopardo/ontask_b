@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import next
+from builtins import str
+from builtins import zip
+from builtins import range
+from builtins import object
 import json
 
 from datetimewidget.widgets import DateTimeWidget
@@ -232,7 +237,7 @@ class SQLConnectionForm(forms.ModelForm):
     dialect[+driver]://user:password@host/dbname[?key=value..]
     """
 
-    class Meta:
+    class Meta(object):
         model = SQLConnection
 
         fields = [

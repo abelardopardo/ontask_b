@@ -1,3 +1,5 @@
+
+from builtins import object
 import json
 import logging
 from collections import OrderedDict
@@ -7,7 +9,7 @@ from django.contrib import auth
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 
-from timer import Timer
+from .timer import Timer
 from .thread_local import set_current_request
 
 logger = logging.getLogger(__name__)
@@ -31,6 +33,16 @@ class MultiLTILaunchAuthMiddleware(object):
     monkey-patching of django's reverse() function (see ./__init__.py) can access
     it in order to retrieve the current resource_link_id.
     """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+
+        self.process_request(request)
+
+        return response
 
     def process_request(self, request):
         logger.debug(_('inside process_request %s') % request.path)
@@ -150,8 +162,7 @@ class MultiLTILaunchAuthMiddleware(object):
                 if hasattr(settings, 'LTI_CUSTOM_ROLE_KEY'):
                     custom_roles = request.POST.get(
                         settings.LTI_CUSTOM_ROLE_KEY, '').split(',')
-                    lti_launch['roles'] += filter(None,
-                                                  custom_roles)  # Filter out any empty roles
+                    lti_launch['roles'] += [_f for _f in custom_roles if _f]  # Filter out any empty roles
 
                 lti_launches = request.session.get('LTI_LAUNCH')
                 if not lti_launches or not isinstance(lti_launches,
@@ -162,8 +173,8 @@ class MultiLTILaunchAuthMiddleware(object):
                 # Limit the number of LTI launches stored in the session
                 max_launches = getattr(settings, 'LTI_AUTH_MAX_LAUNCHES', 10)
                 logger.info("LTI launch count %s [max=%s]" % (
-                    len(lti_launches.keys()), max_launches))
-                if len(lti_launches.keys()) >= max_launches:
+                    len(list(lti_launches.keys())), max_launches))
+                if len(list(lti_launches.keys())) >= max_launches:
                     invalidated_launch = lti_launches.popitem(last=False)
                     logger.info(_("LTI launch invalidated: {0}").format(
                         json.dumps(invalidated_launch, indent=4))

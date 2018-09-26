@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import object
 from abc import ABCMeta
 from django.utils.translation import ugettext_lazy as _
+from future.utils import with_metaclass
 
 class_name = 'OntaskPlugin'
 
 
-class OntaskPluginAbstract(object):
+class OntaskPluginAbstract(with_metaclass(ABCMeta, object)):
     """
     Abstract class to instantiate to create an OnTask plugin.
     """
-
-    __metaclass__ = ABCMeta
 
     name = ''
 

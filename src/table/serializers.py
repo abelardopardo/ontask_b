@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 from io import StringIO
 import base64
 import json
@@ -157,7 +160,7 @@ class ViewSerializer(serializers.ModelSerializer):
 
         return view_obj
 
-    class Meta:
+    class Meta(object):
         model = View
 
         exclude = ('id',

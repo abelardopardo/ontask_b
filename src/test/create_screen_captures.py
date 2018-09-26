@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
-import StringIO
+
+from future import standard_library
+standard_library.install_aliases()
+import io
 import os
 
 from PIL import Image

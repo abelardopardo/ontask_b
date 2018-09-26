@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import zip
+from builtins import range
+from builtins import object
 from datetime import datetime
 
 import django_tables2 as tables
@@ -54,7 +57,7 @@ class PluginRegistryTable(tables.Table):
                                          'is_verified': record.is_verified}
     )
 
-    class Meta:
+    class Meta(object):
         model = PluginRegistry
 
         fields = ('filename', 'name', 'description_txt', 'modified',
@@ -298,7 +301,7 @@ def row_create(request):
         act.update_n_rows_selected()
 
     # Log the event
-    log_payload = zip(column_names, [str(x) for x in row_vals])
+    log_payload = list(zip(column_names, [str(x) for x in row_vals]))
     Log.objects.register(request.user,
                          Log.TABLEROW_CREATE,
                          workflow,
@@ -496,9 +499,9 @@ def run(request, pk):
 
     # List of pairs (column name, column type) in the result to create the
     # log event
-    result_columns = zip(
+    result_columns = list(zip(
         list(result_df.columns),
-        pandas_db.df_column_types_rename(result_df))
+        pandas_db.df_column_types_rename(result_df)))
 
     # Log the event
     Log.objects.register(request.user,

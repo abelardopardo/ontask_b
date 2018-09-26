@@ -2,7 +2,7 @@
 """
 Implementation of views providing visualisation and stats
 """
-from __future__ import unicode_literals, print_function
+
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test

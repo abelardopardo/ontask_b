@@ -2,8 +2,11 @@
 """
 File containing functions to implement all views related to the table element.
 """
-from __future__ import unicode_literals, print_function
 
+
+from builtins import next
+from builtins import str
+from builtins import object
 from datetime import datetime
 
 import django_tables2 as tables
@@ -44,7 +47,7 @@ class ViewTable(tables.Table):
         template_context=lambda record: {'id': record['id']}
     )
 
-    class Meta:
+    class Meta(object):
         """
         Select the model and specify fields, sequence and attributes
         """
@@ -229,8 +232,8 @@ def render_table_display_data(request, workflow, columns, formula,
         new_element = [ops_string] + list(row)
 
         # Tweak the date time format
-        new_element = map(lambda x: x.strftime('%Y-%m-%d %H:%M:%S %z')
-        if isinstance(x, datetime) else x, new_element)
+        new_element = [x.strftime('%Y-%m-%d %H:%M:%S %z')
+        if isinstance(x, datetime) else x for x in new_element]
 
         # Create the list of elements to display and add it ot the final QS
         final_qs.append(new_element)

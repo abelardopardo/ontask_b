@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
-import StringIO
+
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
+from builtins import object
+import io
 import os
 
 import pandas as pd
@@ -1028,7 +1033,7 @@ class ScreenTests(OntaskLiveTestCase):
         """
 
         if xpath and ss_filename:
-            Image.open(StringIO.StringIO(
+            Image.open(io.StringIO(
                 self.selenium.find_element_by_xpath(
                     xpath
                 ).screenshot_as_png)
