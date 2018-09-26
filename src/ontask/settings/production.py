@@ -16,7 +16,7 @@ TEMPLATE_DEBUG = False
 ALLOWED_HOSTS = [os.environ['DOMAIN_NAME']]
 
 # Additional middleware introduced by debug toolbar
-MIDDLEWARE_CLASSES += (
+MIDDLEWARE  += (
    'django.middleware.security.SecurityMiddleware',)
 
 #

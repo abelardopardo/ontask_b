@@ -293,7 +293,7 @@ class ColumnRenameForm(ColumnBasicForm):
 
 class FormulaColumnAddForm(forms.ModelForm):
     # Columns to combine
-    columns = forms.MultipleChoiceField([],
+    columns = forms.MultipleChoiceField(choices=[],
                                         required=False,
                                         label=_('Columns to combine*'))
 

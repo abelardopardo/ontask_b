@@ -21,7 +21,7 @@ from django_tables2 import A
 
 from action.models import Action
 from action.views_out import session_dictionary_name
-from forms import EmailScheduleForm, JSONScheduleForm
+from scheduler.forms import EmailScheduleForm, JSONScheduleForm
 from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn

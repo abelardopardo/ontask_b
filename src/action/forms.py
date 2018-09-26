@@ -320,7 +320,7 @@ class EmailActionForm(forms.Form):
 
 class EmailExcludeForm(forms.Form):
     # Email fields to exclude
-    exclude_values = forms.MultipleChoiceField([],
+    exclude_values = forms.MultipleChoiceField(choices=[],
                                                required=False,
                                                label=_('Values to exclude'))
 

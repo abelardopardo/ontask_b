@@ -5,7 +5,6 @@ import logging
 import os.path
 import subprocess
 from collections import OrderedDict
-from itertools import izip
 
 import numpy as np
 import pandas as pd
@@ -534,7 +533,7 @@ def query_to_dicts(query_string, *query_args):
         row = cursor.fetchone()
         if row is None:
             break
-        row_dict = OrderedDict(izip(col_names, row))
+        row_dict = OrderedDict(zip(col_names, row))
         yield row_dict
     return
 
