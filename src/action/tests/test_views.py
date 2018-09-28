@@ -215,12 +215,20 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.selenium.find_element_by_class_name(
             'js-action-preview-nxt').click()
 
+        self.wait_for_modal_open(
+            "//div[@id='modal-item']//div[@id='preview-body']"
+        )
+
         # First value should be high age
         self.assertIn('Low', self.selenium.page_source)
 
         # Click in the next button
         self.selenium.find_element_by_class_name(
             'js-action-preview-nxt').click()
+
+        self.wait_for_modal_open(
+            "//div[@id='modal-item']//div[@id='preview-body']"
+        )
 
         # First value should be high age
         self.assertIn('High', self.selenium.page_source)
@@ -242,6 +250,13 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         # Click in the page to send email
         element = self.search_action('simple action')
         element.find_element_by_link_text("Email").click()
+
+        # Wait for the send emails page
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//div[@id='email-action-request-data']")
+            )
+        )
 
         # Set the subject of the email
         self.selenium.find_element_by_id('id_subject').send_keys('Subject TXT')
