@@ -14,7 +14,7 @@ from action.views_out import run_json_action, run_email_action, \
 from logs.models import Log
 from visualizations.plotly import PlotlyHandler
 
-import urllib.parse as urlparse
+import urllib.parse
 from urllib.parse import urlencode
 
 import django_tables2 as tables
