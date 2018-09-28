@@ -88,7 +88,7 @@ def translate(varname):
 
     # If the variable name starts with a non-letter or the prefix used to
     # force letter start, add a prefix.
-    if not varname[0] in string.letters or varname.startswith('OT_'):
+    if not varname[0] in string.ascii_letters or varname.startswith('OT_'):
         varname = 'OT_' + varname
 
     # Return the new variable name surrounded by the detected marks.
