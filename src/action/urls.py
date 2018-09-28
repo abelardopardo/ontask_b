@@ -51,7 +51,7 @@ urlpatterns = [
     path('<int:pk>/delete/', views_action.delete_action, name='delete'),
 
     # Run action
-    path('<int>pk>/run/', views_action.run, name='run'),
+    path('<int:pk>/run/', views_action.run, name='run'),
 
     #
     # Email action steps
