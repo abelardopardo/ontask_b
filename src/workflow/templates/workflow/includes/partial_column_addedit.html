@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-<form method="post" 
+<form method="post"
   {% if add %}
     action="{% url 'workflow:column_add' %}"
     class="js-workflow-column-add-form">
