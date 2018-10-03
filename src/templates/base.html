@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
-  {% load settings %}
-  {% load staticfiles %}
-  {% load thumbnail %}
-  {% load i18n %}
+{% load settings %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load i18n %}
+<html{% if LANGUAGE_CODE %} lang="{{ LANGUAGE_CODE }}"{% endif %}>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
