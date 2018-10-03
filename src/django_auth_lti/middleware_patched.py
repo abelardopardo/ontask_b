@@ -38,9 +38,10 @@ class MultiLTILaunchAuthMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
-        response = self.get_response(request)
 
         self.process_request(request)
+
+        response = self.get_response(request)
 
         return response
 

@@ -29,6 +29,12 @@ class LTIAuthBackend(ModelBackend):
 
         logger.info(_("about to begin authentication process"))
 
+        if not request:
+            logger.error(
+                _("No request object in authenticaiton")
+            )
+            return None
+
         request_key = request.POST.get('oauth_consumer_key', None)
 
         if request_key is None:
