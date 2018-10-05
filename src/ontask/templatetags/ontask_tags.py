@@ -8,13 +8,12 @@ import ontask
 
 register = template.Library()
 
-jquery = """<script src="//code.jquery.com/jquery-3.1.0.min.js"></script>"""
+jquery = """<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>"""
 
 bootstrap_css = \
-    """<link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css" 
- rel="stylesheet">"""
+    """<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">"""
 bootstrap_js = \
-    """<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>"""
+    """<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>"""
 
 shim_and_respond = \
     """<!--[if lt IE 9]>
@@ -23,13 +22,13 @@ shim_and_respond = \
 <![endif]-->"""
 
 datatables_bootstrap_css = \
-    """<link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">"""
+    """<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">"""
 
 datatables_jquery_js = \
-    """<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>"""
+    """<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>"""
 
 datatables_bootstrap_js = \
-    """<script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>"""
+    """<script src="//cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>"""
 
 # Tag to get ontask_version
 @register.simple_tag

@@ -14,11 +14,11 @@
     <!-- Bootstrap core  -->
     {% ontask_bootstrap_css %}
     <!-- Custom styles for this site -->
-    <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
     {% block styles %}
     {% endblock styles %}
     <!-- Custom tags for the head tag -->
     {% block extrahead %}{% endblock extrahead %}
+    <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     {% ontask_shim_respond %}
   </head>
