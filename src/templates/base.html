@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
-  {% load settings %}
-  {% load staticfiles %}
-  {% load thumbnail %}
-  {% load i18n %}
+{% load settings %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load i18n %}
+<html{% if LANGUAGE_CODE %} lang="{{ LANGUAGE_CODE }}"{% endif %}>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,11 +17,6 @@
     <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
     {% block styles %}
     {% endblock styles %}
-    <script src="{% static 'site/js/initial.js' %}{% otv %}"></script>
-    <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
-    <script type="text/javascript"
-            src="{% static 'site/js/bootstrap-session-timeout.min.js' %}"></script>
     <!-- Custom tags for the head tag -->
     {% block extrahead %}{% endblock extrahead %}
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -130,8 +125,6 @@
         {% endfor %}
       {% endif %}
     {% endblock %}
-    {% block splash %}
-    {% endblock splash %}
     {% block container %}
     <div class="container">
       <div class="starter-template">
@@ -180,12 +173,17 @@
         </div>
       </div>
     {% endblock %}
+    <script src="{% static 'site/js/initial.js' %}{% otv %}"></script>
+    <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>
     <script src="{% static 'site/js/site.js' %}{% otv %}"></script>
     {% block scripts %}
     {% endblock scripts %}
     {% if user.is_authenticated %}
-      <script  type="text/javascript">
+      <script type="text/javascript"
+              src="{% static 'site/js/bootstrap-session-timeout.min.js' %}"></script>
+      <script type="text/javascript">
         $.sessionTimeout({
           title: 'OnTask',
           message: "{% trans 'Your session is about to expire.' %}",
