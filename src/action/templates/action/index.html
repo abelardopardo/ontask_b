@@ -1,20 +1,20 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load settings %}
+{% load ontask_tags %}
 {% load static %}
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Actions' %}{% endblock %}
 {% block extrahead %}
-  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  {% ontask_datatables_bootstrap_css %}
   <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
-  <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
-  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-  <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
+  {% ontask_datatables_jquery_js %}
+  {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
     $(document).ready(function() {
       if (document.getElementById("action-table") != null) {

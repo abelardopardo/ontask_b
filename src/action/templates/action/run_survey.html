@@ -1,21 +1,18 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load settings %}
+{% load ontask_tags %}
 {% load static %}
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Run Action In' %}{% endblock %}
 {% block extrahead %}
- {% comment %}
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
-  {% endcomment %}
-  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  {% ontask_datatables_bootstrap_css %}
 {% endblock extrahead %}
 {% block scripts %}
-  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-  <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
-  <script src="{% static 'table/js/table.js' %}{% otv %}"></script>
+  {% ontask_datatables_jquery_js %}
+  {% ontask_datatables_bootstrap_js %}
+  <script src="{% static 'table/js/table.js' %}?v={% ontask_version %}"></script>
   <script type="text/javascript">
     if (document.getElementById("actioninrun-data") != null) {
         // Required for DataTables

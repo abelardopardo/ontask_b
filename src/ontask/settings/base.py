@@ -81,7 +81,7 @@ TEMPLATES = [
                 'ontask.context_processors.conf_to_context',
             ],
             'libraries': {
-                'settings': 'ontask.templatetags.settings',
+                'ontask_tags': 'ontask.templatetags.ontask_tags',
                 'vis_include': 'visualizations.templatetags.vis_include',
             }
         },

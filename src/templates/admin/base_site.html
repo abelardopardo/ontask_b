@@ -1,5 +1,5 @@
 {% extends "admin/base.html" %}
-{% load settings %}
+{% load ontask_tags %}
 {% load i18n %}
 {% load admin_static %}
 {% block title %}{% include "_brandname.html" %} {% trans 'Admin' %} {% endblock %}
@@ -11,6 +11,6 @@
                                                            aria-hidden="true"></span> {% trans 'Switch to Site' %}</a>
 {% endblock %}
 {% block extrahead %}{{ block.super }}
-  <link href="{% static 'site/css/main.css' %}{% otv %}" rel="stylesheet">
+  <link href="{% static 'site/css/main.css' %}?v={% ontask_version %}" rel="stylesheet">
 {% endblock %}
 

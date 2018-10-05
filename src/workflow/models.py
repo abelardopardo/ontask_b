@@ -16,7 +16,7 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
-import ontask.templatetags.settings
+import ontask.templatetags.ontask_tags
 from dataops import pandas_db
 
 
@@ -199,7 +199,7 @@ class Workflow(models.Model):
         the serializer
         :return: the platform version
         """
-        return ontask.templatetags.settings.ontask_version()
+        return ontask.templatetags.ontask_tags.ontask_version()
 
     def has_data_frame(self):
         """

@@ -12,7 +12,7 @@ pandas==0.23.0
 numpy==1.14.3
 django-tables2==1.21.2
 django-summernote==0.8.8.4
-django-import-export==1.0.1
+django-import-export==1.1.0
 django-redis==4.9.0
 djangorestframework==3.8.2
 future==0.16.0

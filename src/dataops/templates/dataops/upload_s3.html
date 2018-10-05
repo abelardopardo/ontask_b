@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load settings %}
+{% load ontask_tags %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Upload/Merge' %}{% endblock %}
 {% block scripts %}
-  <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
+  <script src="{% static 'dataops/js/dataops.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
 <div align="center" class="container-fluid">

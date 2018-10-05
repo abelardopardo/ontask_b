@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load settings %}
+{% load ontask_tags %}
 {% load static %}
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
@@ -13,7 +13,7 @@
 {% endblock %}
 {% block scripts %}
   <script src="{% static 'site/js/sol.js' %}"></script>
-  <script src="{% static 'table/js/table.js' %}{% otv %}"></script>
+  <script src="{% static 'table/js/table.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
   <div class="container-fluid text-center">

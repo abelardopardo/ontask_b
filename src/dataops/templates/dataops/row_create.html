@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load settings %}
+{% load ontask_tags %}
 {% load static %}
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
@@ -11,7 +11,7 @@
   <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
 {% endblock extrahead %}
 {% block scripts %}
-  <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
+  <script src="{% static 'dataops/js/dataops.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
 <div align="center" class="container">

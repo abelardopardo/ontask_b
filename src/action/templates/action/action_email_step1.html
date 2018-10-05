@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load settings %}
+{% load ontask_tags %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Email action' %}{% endblock %}
 {% block scripts %}
-  <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
+  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
 {% endblock scripts %}
 {% block container %}
 <div align="center" class="container" id="email-action-request-data">

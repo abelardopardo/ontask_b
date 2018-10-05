@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load settings %}
+{% load ontask_tags %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
@@ -17,7 +17,7 @@
 {% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}"></script>
-  <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
+  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
   <script type="text/javascript">
     var qbuilder_options = {
       plugins: ['bt-tooltip-errors', 'not-group'],

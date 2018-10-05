@@ -1,25 +1,25 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load settings %}
+{% load ontask_tags %}
 {% load static %}
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Table' %}{% endblock %}
 {% block extrahead %}
-  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  {% ontask_datatables_bootstrap_css %}
   <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
   <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
-  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-  <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  {% ontask_datatables_jquery_js %}
+  {% ontask_datatables_bootstrap_js %}
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
   <script src="{% static 'site/js/sol.js' %}"></script>
-  <script src="{% static 'table/js/table.js' %}{% otv %}"></script>
-  <script src="{% static 'workflow/js/column_move.js' %}{% otv %}"></script>
+  <script src="{% static 'table/js/table.js' %}?v={% ontask_version %}"></script>
+  <script src="{% static 'workflow/js/column_move.js' %}?v={% ontask_version %}"></script>
   <script type="text/javascript">
     if (document.getElementById("table-data") != null) {
         // Required for DataTables
