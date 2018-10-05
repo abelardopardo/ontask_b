@@ -1,3 +1,11 @@
+var dtp_opts = {
+    format:'YYYY-MM-DD HH:mm',
+    stepping: 1,
+    toolbarPlacement: 'top',
+    showTodayButton: true,
+    showClear: true,
+    showClose: true,
+    sideBySide: true};
 var set_qbuilder = function (element_id, qbuilder_options) {
     id_formula_value = $(element_id).val();
     if (id_formula_value != "null" && id_formula_value != "{}") {
@@ -64,6 +72,7 @@ var loadForm = function () {
           return;
         }
         $("#modal-item .modal-content").html(data.html_form);
+        $('#modal-item .ontask-datetimepicker').datetimepicker(dtp_opts);
         if (document.getElementById("id_formula") != null) {
           set_qbuilder('#id_formula', qbuilder_options);
         }
@@ -125,6 +134,9 @@ var saveForm = function () {
     });
     return false;
 }
+var setDateTimePickers = function() {
+  $('.ontask-datetimepicker').datetimepicker(dtp_opts);
+};
 $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip({
     trigger: "hover",

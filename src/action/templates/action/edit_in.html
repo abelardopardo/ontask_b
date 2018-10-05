@@ -4,22 +4,21 @@
 {% load static %}
 {% load widget_tweaks %}
 {% load django_tables2 %}
-{% block styles %}
-  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
-  <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
-{% endblock styles %}
+{% block title %}{{ block.super }}{% trans 'Edit Action In' %}{% endblock %}
 {% block extrahead %}
+  <link href="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
   <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
-  <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
-  <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+  <script src="//cdn.bootcss.com/moment.js/2.17.1/moment-with-locales.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
   <script src="{% static 'site/js/sol.js' %}"></script>
-  <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
   <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
   <script type="text/javascript">
     var qbuilder_options = {
       plugins: ['bt-tooltip-errors', 'not-group'],
@@ -52,7 +51,6 @@
     }
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Edit Action In' %}{% endblock %}
 {% block container %}
   <div align="center" class="container" id="action-in-editor">
     <h1 class="page-header"><strong>{{ action.name }}</strong> <small>({{ action.get_action_type_display }})</small></h1>

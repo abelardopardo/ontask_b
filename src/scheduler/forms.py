@@ -6,13 +6,12 @@ from builtins import object
 import datetime
 
 import pytz
-from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from validate_email import validate_email
 
-from core import settings as core_settings
+from core.widgets import OnTaskDateTimeInput
 from dataops.pandas_db import execute_select_on_table
 from workflow.models import Column
 from .models import ScheduledAction
@@ -58,12 +57,13 @@ class ScheduleForm(forms.ModelForm):
         fields = ('name', 'description_text', 'item_column', 'execute')
 
         widgets = {
-            'execute': DateTimeWidget(
-                options={'weekStart': 1,
-                         'minuteStep': str(getattr(core_settings,
-                                                   'MINUTE_STEP'))},
-                usel10n=True,
-                bootstrap_version=3),
+            'execute': OnTaskDateTimeInput()
+            # 'execute': DateTimeWidget(
+            #     options={'weekStart': 1,
+            #              'minuteStep': str(getattr(core_settings,
+            #                                        'MINUTE_STEP'))},
+            #     usel10n=True,
+            #     bootstrap_version=3),
         }
 
 

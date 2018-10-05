@@ -8,14 +8,15 @@ from builtins import range
 from builtins import object
 import json
 
-from datetimewidget.widgets import DateTimeWidget
+# from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
 import ontask.ontask_prefs
+from core.widgets import OnTaskDateTimeInput
 from dataops.models import SQLConnection
-from ontask.forms import RestrictedFileField, column_to_field, dateTimeOptions
+from ontask.forms import RestrictedFileField, column_to_field
 
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)
@@ -120,10 +121,11 @@ class SelectColumnForm(forms.Form):
                 new_field = forms.DateTimeField(
                     required=False,
                     label=k,
-                    widget=DateTimeWidget(
-                        options=dateTimeOptions,
-                        usel10n=True,
-                        bootstrap_version=3),
+                    widget=OnTaskDateTimeInput(),
+                    # widget=DateTimeWidget(
+                    #     options=dateTimeOptions,
+                    #     usel10n=True,
+                    #     bootstrap_version=3),
                     help_text=p_help
                 )
 

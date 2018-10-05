@@ -3,17 +3,18 @@
 
 from builtins import next
 from builtins import str
-from datetimewidget.widgets import DateTimeWidget
+# from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.template.defaultfilters import filesizeformat
 from django.utils.translation import ugettext_lazy as _
 
 import ontask.ontask_prefs
+from core.widgets import OnTaskDateTimeInput
 
-dateTimeOptions = {
-    'weekStart': 1,  # Start week on Monday
-    'minuteStep': 5,  # Minute step
-}
+# dateTimeOptions = {
+#     'weekStart': 1,  # Start week on Monday
+#     'minuteStep': 5,  # Minute step
+# }
 
 
 class RestrictedFileField(forms.FileField):
@@ -71,7 +72,7 @@ def column_to_field(col, initial=None, required=False, label=None):
         if col.data_type == 'string':
             choices.insert(0, ('', '---'))
 
-        return forms.ChoiceField(choices,
+        return forms.ChoiceField(choices=choices,
                                  required=required,
                                  initial=initial,
                                  label=label)
@@ -106,9 +107,10 @@ def column_to_field(col, initial=None, required=False, label=None):
             initial=initial,
             label=label,
             required=required,
-            widget=DateTimeWidget(options=dateTimeOptions,
-                                  usel10n=True,
-                                  bootstrap_version=3),
+            widget=OnTaskDateTimeInput()
+            # widget=DateTimeWidget(options=dateTimeOptions,
+            #                       usel10n=True,
+            #                       bootstrap_version=3),
         )
     else:
         raise Exception(_('Unable to process datatype '), col.data_type)

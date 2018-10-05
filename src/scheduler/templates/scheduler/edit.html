@@ -4,32 +4,38 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-{% block scripts %}
-  <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
-{% endblock scripts %}
 {% block title %}{{ block.super }}{% trans 'Schedule Action Execution' %}{% endblock %}
 {% block extrahead %}
-  <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
-  <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 {% endblock extrahead %}
+{% block scripts %}
+  <script src="//cdn.bootcss.com/moment.js/2.17.1/moment-with-locales.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+  <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
+{% endblock scripts %}
 {% block container %}
-<div align="center" class="container" id="email-schedule-send">
-  <h1 class="page-header">{% trans 'Schedule Action Execution' %}</h1>
-  <div class="container">
-    <p>{% blocktrans with n=now %}Time now is {{ n }}{% endblocktrans %}</p>
-    <p class="lead">{% blocktrans %}Action: {{ action.name }}{% endblocktrans %}</p>
-    <form action="" method="post">
-      {% csrf_token %}
-      {{ form|crispy }}
-      <div style="margin: 1ex 0 1ex 0;">
-        <a type="button" class="btn btn-default"
-           href="{% url 'scheduler:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
-        </a>
-        <button type="Submit" name="Submit" value="Send"
-                style="margin-right:2ex;"
-                class="btn btn-primary">{% trans 'Next' %}</button>
-      </div>
-    </form>
+  <div align="center" class="container" id="email-schedule-send">
+    <h1 class="page-header">{% trans 'Schedule Action Execution' %}</h1>
+    <div class="container">
+      <p>{% blocktrans with n=now %}Time now is {{ n }}{% endblocktrans %}</p>
+      <p class="lead">{% blocktrans %}Action: {{ action.name }}{% endblocktrans %}</p>
+      <form action="" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div style="margin: 1ex 0 1ex 0;">
+          <a type="button" class="btn btn-default"
+             href="{% url 'scheduler:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
+          </a>
+          <button type="Submit" name="Submit" value="Send"
+                  style="margin-right:2ex;"
+                  class="btn btn-primary">{% trans 'Next' %}</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 {% endblock container %}
+
+
+
+
+

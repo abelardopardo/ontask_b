@@ -4,30 +4,33 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Enter Data' %}{% endblock %}
+{% block extrahead %}
+  <link href="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+{% endblock extrahead %}
 {% block scripts %}
+  <script src="//cdn.bootcss.com/moment.js/2.17.1/moment-with-locales.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Enter Data' %}{% endblock %}
 {% block container %}
-<div align="center" class="container">
-  <h4 class="page-header"><strong>{{ action.name }}</strong></h4>
-  <p class="lead">{{ action.description_text }}</p>
-  <div class="container-fluid">
-    <form action="" method="post">
-      {% csrf_token %}
-      <div class="input-group input-group-lg" style="padding-bottom:1.5ex;">
-        {{ form|crispy }}
-      </div>
-      {% if cancel_url %}
-        <a type="button" class="btn btn-default spin"
-           href="{{ cancel_url }}"> {% trans 'Back' %}
-        </a>
-      {% endif %}
-      <button type="submit" name="submit" value="update"
-              class="btn btn-primary">
-        <span class="glyphicon glyphicon-ok"></span> {% trans 'Update' %}
-      </button>
-    </form>
+  <div align="center" class="container">
+    <h4 class="page-header"><strong>{{ action.name }}</strong></h4>
+    <p class="lead">{{ action.description_text }}</p>
+    <div class="container-fluid">
+      <form action="" method="post">
+        {% csrf_token %}
+        <div class="input-group input-group-lg" style="padding-bottom:1.5ex;">
+          {{ form|crispy }}
+        </div>
+        {% if cancel_url %}
+          <a type="button" class="btn btn-default spin"
+             href="{{ cancel_url }}"> {% trans 'Back' %}</a>
+        {% endif %}
+        <button type="submit" name="submit" value="update"
+                class="btn btn-primary">
+          <span class="glyphicon glyphicon-ok"></span> {% trans 'Update' %}</button>
+      </form>
+    </div>
   </div>
-</div>
 {% endblock container %}

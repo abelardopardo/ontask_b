@@ -41,3 +41,6 @@ $(function () {
   $("#view-content").on("click", ".js-view-clone", loadForm);
   $("#modal-item").on("click", ".js-view-clone-form", saveForm);
 });
+window.onload = function(){
+  setDateTimePickers();
+};

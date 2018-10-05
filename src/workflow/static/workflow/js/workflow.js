@@ -70,4 +70,6 @@ $(function () {
   $("#column-table").on("click", ".js-column-restrict", loadForm);
   $("#modal-item").on("submit", ".js-column-restrict-form", saveForm);
 });
-
+window.onload = function(){
+  setDateTimePickers();
+};

@@ -5,14 +5,15 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Add row' %}{% endblock %}
 {% block extrahead %}
-  <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
-  <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
+  <script src="//cdn.bootcss.com/moment.js/2.17.1/moment-with-locales.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
   <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Add row' %}{% endblock %}
 {% block container %}
 <div align="center" class="container">
   <h1 class="page-header">{% trans 'Add row' %}</h1>

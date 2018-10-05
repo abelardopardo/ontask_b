@@ -314,7 +314,7 @@ def row_create(request):
 
 
 @user_passes_test(is_instructor)
-def run(request, pk):
+def plugin_invoke(request, pk):
     """
     View provided as the first step to execute a plugin.
     :param request: HTTP request received

@@ -7,7 +7,7 @@ from builtins import object
 import json
 
 import pandas as pd
-from datetimewidget.widgets import DateTimeWidget
+# from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
@@ -15,7 +15,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from dataops import pandas_db, ops
 from ontask import ontask_prefs, is_legal_name
-from ontask.forms import RestrictedFileField, dateTimeOptions
+from ontask.forms import RestrictedFileField
+from core.widgets import OnTaskDateTimeInput
 from .models import Workflow, Column
 
 
@@ -182,12 +183,14 @@ class ColumnBasicForm(forms.ModelForm):
                   'active_from', 'active_to']
 
         widgets = {
-            'active_from': DateTimeWidget(options=dateTimeOptions,
-                                          usel10n=True,
-                                          bootstrap_version=3),
-            'active_to': DateTimeWidget(options=dateTimeOptions,
-                                        usel10n=True,
-                                        bootstrap_version=3)
+            'active_from': OnTaskDateTimeInput(),
+            'active_to': OnTaskDateTimeInput()
+            # 'active_from': DateTimeWidget(options=dateTimeOptions,
+            #                               usel10n=True,
+            #                               bootstrap_version=3),
+            # 'active_to': DateTimeWidget(options=dateTimeOptions,
+            #                             usel10n=True,
+            #                             bootstrap_version=3)
         }
 
 

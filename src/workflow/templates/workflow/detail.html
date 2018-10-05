@@ -5,14 +5,16 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Details' %}{% endblock %}
 {% block extrahead %}
   <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
-  <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
   <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
   {% if workflow %}
-    <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+    <script src="//cdn.bootcss.com/moment.js/2.17.1/moment-with-locales.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
     <script src="{% static 'site/js/sol.js' %}"></script>
     <script src="{% static 'workflow/js/workflow.js' %}{% otv %}"></script>
     <script src="{% static 'workflow/js/column_move.js' %}{% otv %}"></script>
@@ -55,55 +57,54 @@
     </script>
   {% endif %}
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Details' %}{% endblock %}
 {% block container %}
-<div class="container text-center">
-  <h1 class="page-header">{{ workflow.name }}</h1>
-  {% if workflow %}
-    <div class="container" id="workflow-area">
-      {% if not table_info %}
-        {% include 'workflow/includes/no_data.html' %}
-      {% elif not table_info.num_actions %}
-        {% include 'workflow/includes/no_actions.html' %}
-      {% endif %}
-      {% include 'workflow/includes/workflow_detail_buttons.html' %}
-      <p class="help-block"
-         style="text-align:center;"><strong>{% trans 'Description' %}
-        </strong>: {{ workflow.description_text }}</p>
-      <p class="help-block">{% trans 'Last modified' %}: {{ workflow.modified }}</p>
-      {% if table_info %}
-        <p class="help-block">
-          {% blocktrans with num=table_info.num_rows count counter=table_info.num_rows %}{{ num }} row{% plural %}{{ num }} rows,{% endblocktrans %}
-          {% blocktrans with num=table_info.num_cols count counter=table_info.num_cols %}{{ num }} column{% plural %}{{ num }} columns{% endblocktrans %}
-          ({% blocktrans with num=num_key_columns count counter=num_key_columns %}{{ num }} Key column{% plural %}{{ num }} Key columns{% endblocktrans %}),
-          {% blocktrans with num=table_info.num_actions count counter=table_info.num_actions %}{{ num }} action{% plural %}{{ num }} actions,{% endblocktrans %}
-          {% blocktrans with num=table_info.num_attributes count counter=table_info.num_attributes %}{{ num }} attribute{% plural %} {{ num }} attributes{% endblocktrans %}.
-        <h4 class="modal-title">Columns</h4>
-        <table class="table display dataTable no-footer cell-border table-bordered"
-               id="column-table">
-          <thead>
-            <tr>
-              <th class="number">#</th>
-              <th class="name">{% trans 'Name' %}</th>
-              <th class="type">{% trans 'Type' %}</th>
-              <th class="key">{% trans 'Key?' %}</th>
-              <th class="operations">{% trans 'Operations' %}</th>
-            </tr>
-          </thead>
-        </table>
-      {% endif %}
-    </div>
-    <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
-      <div class="modal-dialog">
-        <div class="modal-content">
+  <div class="container text-center">
+    <h1 class="page-header">{{ workflow.name }}</h1>
+    {% if workflow %}
+      <div class="container" id="workflow-area">
+        {% if not table_info %}
+          {% include 'workflow/includes/no_data.html' %}
+        {% elif not table_info.num_actions %}
+          {% include 'workflow/includes/no_actions.html' %}
+        {% endif %}
+        {% include 'workflow/includes/workflow_detail_buttons.html' %}
+        <p class="help-block"
+           style="text-align:center;"><strong>{% trans 'Description' %}
+          </strong>: {{ workflow.description_text }}</p>
+        <p class="help-block">{% trans 'Last modified' %}: {{ workflow.modified }}</p>
+        {% if table_info %}
+          <p class="help-block">
+            {% blocktrans with num=table_info.num_rows count counter=table_info.num_rows %}{{ num }} row{% plural %}{{ num }} rows,{% endblocktrans %}
+            {% blocktrans with num=table_info.num_cols count counter=table_info.num_cols %}{{ num }} column{% plural %}{{ num }} columns{% endblocktrans %}
+            ({% blocktrans with num=num_key_columns count counter=num_key_columns %}{{ num }} Key column{% plural %}{{ num }} Key columns{% endblocktrans %}),
+            {% blocktrans with num=table_info.num_actions count counter=table_info.num_actions %}{{ num }} action{% plural %}{{ num }} actions,{% endblocktrans %}
+            {% blocktrans with num=table_info.num_attributes count counter=table_info.num_attributes %}{{ num }} attribute{% plural %} {{ num }} attributes{% endblocktrans %}.
+          <h4 class="modal-title">Columns</h4>
+          <table class="table display dataTable no-footer cell-border table-bordered"
+                 id="column-table">
+            <thead>
+              <tr>
+                <th class="number">#</th>
+                <th class="name">{% trans 'Name' %}</th>
+                <th class="type">{% trans 'Type' %}</th>
+                <th class="key">{% trans 'Key?' %}</th>
+                <th class="operations">{% trans 'Operations' %}</th>
+              </tr>
+            </thead>
+          </table>
+        {% endif %}
+      </div>
+      <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+          <div class="modal-content">
+          </div>
         </div>
       </div>
-    </div>
-  {% else %}
-    {% url 'workflow:index' as windex %}
-    {% blocktrans %}Go to <a href="{{ windex }}">your list of workflows</a>{% endblocktrans %}
-  {% endif %}
-</div>
+    {% else %}
+      {% url 'workflow:index' as windex %}
+      {% blocktrans %}Go to <a href="{{ windex }}">your list of workflows</a>{% endblocktrans %}
+    {% endif %}
+  </div>
 {% endblock container %}
 
 

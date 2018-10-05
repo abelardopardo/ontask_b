@@ -6,15 +6,16 @@ from builtins import str
 from builtins import object
 import json
 
-from datetimewidget.widgets import DateTimeWidget
+# from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteInplaceWidget
 from validate_email import validate_email
 
+from core.widgets import OnTaskDateTimeInput
 from dataops.pandas_db import execute_select_on_table, get_table_cursor
 from ontask import ontask_prefs, is_legal_name
-from ontask.forms import column_to_field, dateTimeOptions, RestrictedFileField
+from ontask.forms import column_to_field, RestrictedFileField
 from .models import Action, Condition
 
 # Field prefix to use in forms to avoid using column names (they are given by
@@ -190,12 +191,14 @@ class EnableURLForm(forms.ModelForm):
         fields = ('serve_enabled', 'active_from', 'active_to')
 
         widgets = {
-            'active_from': DateTimeWidget(options=dateTimeOptions,
-                                          usel10n=True,
-                                          bootstrap_version=3),
-            'active_to': DateTimeWidget(options=dateTimeOptions,
-                                        usel10n=True,
-                                        bootstrap_version=3)
+            'active_from': OnTaskDateTimeInput(),
+            'active_to': OnTaskDateTimeInput()
+            # 'active_from': DateTimeWidget(options=dateTimeOptions,
+            #                               usel10n=True,
+            #                               bootstrap_version=3),
+            # 'active_to': DateTimeWidget(options=dateTimeOptions,
+            #                             usel10n=True,
+            #                             bootstrap_version=3)
         }
 
 

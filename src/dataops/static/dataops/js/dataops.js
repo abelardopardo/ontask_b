@@ -61,5 +61,6 @@ window.onload = function(){
   if (document.getElementById("id_columns") != null) {
     set_element_select("#id_columns");
   }
+  setDateTimePickers();
 };
 

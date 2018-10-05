@@ -5,42 +5,43 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Edit learner data' %}{% endblock %}
 {% block extrahead %}
-  <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
-  <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
+  <script src="//cdn.bootcss.com/moment.js/2.17.1/moment-with-locales.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
   <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Edit learner data' %}{% endblock %}
 {% block container %}
-<div align="center" class="container">
-  <h1 class="page-header">{% trans 'Edit learner data' %}</h1>
-  {% if row_form %}
-    <div class="container">
-      <form action="" method="post">
-        {% csrf_token %}
-        {% if cancel_url %}
-          <a class="btn btn-default" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
-        {% endif %}
-        <button type="submit" name="submit" value="update"
-                class="btn btn-primary">
-          <span class="glyphicon glyphicon-ok"></span> {% trans 'Update' %}
-        </button>
-        <div class="input-group input-group-lg">
-          {{ row_form|crispy }}
-        </div>
-        {% if cancel_url %}
-          <a class="btn btn-default" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
-        {% endif %}
-        <button type="submit" name="submit" value="update"
-                class="btn btn-primary">
-          <span class="glyphicon glyphicon-ok"></span> {% trans 'Update' %}
-        </button>
-      </form>
-    </div>
-  {% else %}
-    <p><strong>{% trans 'No data available for this workflow' %}</strong></p>
-  {% endif %}
-</div>
+  <div align="center" class="container">
+    <h1 class="page-header">{% trans 'Edit learner data' %}</h1>
+    {% if row_form %}
+      <div class="container">
+        <form action="" method="post">
+          {% csrf_token %}
+          {% if cancel_url %}
+            <a class="btn btn-default" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
+          {% endif %}
+          <button type="submit" name="submit" value="update"
+                  class="btn btn-primary">
+            <span class="glyphicon glyphicon-ok"></span> {% trans 'Update' %}
+          </button>
+          <div class="input-group input-group-lg">
+            {{ row_form|crispy }}
+          </div>
+          {% if cancel_url %}
+            <a class="btn btn-default" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
+          {% endif %}
+          <button type="submit" name="submit" value="update"
+                  class="btn btn-primary">
+            <span class="glyphicon glyphicon-ok"></span> {% trans 'Update' %}
+          </button>
+        </form>
+      </div>
+    {% else %}
+      <p><strong>{% trans 'No data available for this workflow' %}</strong></p>
+    {% endif %}
+  </div>
 {% endblock container %}

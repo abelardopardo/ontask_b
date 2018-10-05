@@ -22,7 +22,7 @@ urlpatterns = [
         name="plugin_diagnose"),
 
     # Plugin invocation
-    path('<int:pk>/plugin_invoke/', views.run,
+    path('<int:pk>/plugin_invoke/', views.plugin_invoke,
         name='plugin_invoke'),
 
     # Manual Data Entry

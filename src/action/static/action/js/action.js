@@ -252,5 +252,6 @@ window.onload = function(){
   if (document.getElementById("id_exclude_values") != null) {
     set_element_select("#id_exclude_values");
   }
+  setDateTimePickers();
 };
 
