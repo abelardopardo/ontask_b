@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
+{% block title %}{% trans 'Action export' %}{% endblock %}
 {% block scripts %}
   <script>
     location.href="{% url 'action:export_download' action.id %}";
     $('#div-spinner').hide();
   </script>
 {% endblock scripts %}
-{% block title %}{% trans 'Action export' %}{% endblock %}
 {% block container %}
   <div class="container-fluid" style="text-align:center;">
     <h1 class="page-header text-center">{% trans 'Action export' %}</h1>

@@ -66,6 +66,9 @@ Desktop.ini
 # Kdiff3 remains
 *.orig
 
+# 2to3 baks
+*.bak
+
 /logs
 .idea
 .git_OLD

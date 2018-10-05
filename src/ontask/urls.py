@@ -22,7 +22,7 @@ import scheduler.urls
 import table.urls
 import workflow.urls
 from dataops import pandas_db
-from ontask.templatetags.settings import ontask_version
+from ontask.templatetags.ontask_tags import ontask_version
 from . import views
 import workflow.views
 

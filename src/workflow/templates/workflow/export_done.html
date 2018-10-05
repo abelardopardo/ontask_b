@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
+{% block title %}Done!{% endblock %}
 {% block scripts %}
   <script>
     location.href="{% url 'workflow:export' include %}";
     $('#div-spinner').hide();
   </script>
 {% endblock scripts %}
-{% block title %}Done!{% endblock %}
 {% block container %}
   <div class="container-fluid" style="text-align:center;">
     <h1 class="page-header text-center">{% trans 'Workflow export' %}</h1>

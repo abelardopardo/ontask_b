@@ -1,24 +1,25 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load settings %}
+{% load ontask_tags %}
 {% load static %}
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Table Views' %}{% endblock %}
 {% block styles %}
   <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
   <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
 {% endblock styles %}
 {% block extrahead %}
-  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  {% ontask_datatables_bootstrap_css %}
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
   <script src="{% static 'site/js/sol.js' %}"></script>
-  <script src="{% static 'table/js/table.js' %}{% otv %}"></script>
-  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-  <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script src="{% static 'table/js/table.js' %}?v={% ontask_version %}"></script>
+  {% ontask_datatables_jquery_js %}
+  {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
     $(document).ready(function() {
       if (document.getElementById("view-table") != null) {
@@ -52,7 +53,6 @@
     };
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Table Views' %}{% endblock %}
 {% block container %}
 <div id="view-content" align="center" class="container-fluid">
   <h1 class="page-header">{% trans 'Table Views' %}</h1>

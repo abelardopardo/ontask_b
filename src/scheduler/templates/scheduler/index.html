@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load settings %}
+{% load ontask_tags %}
 {% load static %}
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Scheduled operations' %}{% endblock %}
 {% block extrahead %}
-  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  {% ontask_datatables_bootstrap_css %}
 {% endblock extrahead %}
 {% block scripts %}
-  <script src="{% static 'scheduler/js/scheduler.js' %}{% otv %}"></script>
-  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-  <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script src="{% static 'scheduler/js/scheduler.js' %}?v={% ontask_version %}"></script>
+  {% ontask_datatables_jquery_js %}
+  {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
     $(document).ready(function() {
       if (document.getElementById("scheduler-table") != null) {
@@ -33,7 +34,6 @@
     });
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Scheduled operations' %}{% endblock %}
 {% block container %}
 <div align="center" class="container-fluid">
   <h1 class="page-header">{% trans 'Scheduled Operations' %}<super>*</super></h1>

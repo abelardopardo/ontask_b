@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load settings %}
+{% load ontask_tags %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
@@ -11,7 +11,6 @@
 {% block scripts %}
   <script src="//cdn.bootcss.com/moment.js/2.17.1/moment-with-locales.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-  <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
 {% endblock %}
 {% block container %}
   <div align="center" class="container">

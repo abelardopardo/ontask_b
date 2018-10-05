@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load settings %}
+{% load ontask_tags %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-{% block scripts %}
-  <script src="{% static 'workflow/js/workflow.js' %}{% otv %}"></script>
-{% endblock %}
 {% block title %}{{ block.super }}{% trans 'Import workflows' %}{% endblock %}
+{% block scripts %}
+  <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
+{% endblock %}
 {% block container %}
   <div align="center" class="container">
     <h1 class="page-header">{% trans 'Import workflow' %}</h1>

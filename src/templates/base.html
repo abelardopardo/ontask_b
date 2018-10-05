@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load settings %}
+{% load ontask_tags %}
 {% load staticfiles %}
 {% load thumbnail %}
 {% load i18n %}
@@ -12,18 +12,15 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'site/ico/favicon.ico' %}" type="favicon/ico">
     <title>{% block title %}{% include "_brandname.html" %} :: {% endblock %}</title>
     <!-- Bootstrap core  -->
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
+    {% ontask_bootstrap_css %}
     <!-- Custom styles for this site -->
-    <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
     {% block styles %}
     {% endblock styles %}
     <!-- Custom tags for the head tag -->
     {% block extrahead %}{% endblock extrahead %}
+    <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
+    {% ontask_shim_respond %}
   </head>
   <body style="">
     <div id="div-spinner">
@@ -173,11 +170,11 @@
         </div>
       </div>
     {% endblock %}
-    <script src="{% static 'site/js/initial.js' %}{% otv %}"></script>
+    <script src="{% static 'site/js/initial.js' %}?v={% ontask_version %}"></script>
     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>
-    <script src="{% static 'site/js/site.js' %}{% otv %}"></script>
+    {% ontask_jquery %}
+    {% ontask_bootstrap_js %}
+    <script src="{% static 'site/js/site.js' %}?v={% ontask_version %}"></script>
     {% block scripts %}
     {% endblock scripts %}
     {% if user.is_authenticated %}

@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load settings %}
+{% load ontask_tags %}
 {% load static %}
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Logs' %}{% endblock %}
 {% block extrahead %}
-  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  {% ontask_datatables_bootstrap_css %}
 {% endblock extrahead %}
 {% block scripts %}
-  <script src="{% static 'logs/js/logs.js' %}{% otv %}"></script>
-  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-  <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script src="{% static 'logs/js/logs.js' %}?v={% ontask_version %}"></script>
+  {% ontask_datatables_jquery_js %}
+  {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
     $(document).ready(function() {
         $('#log-table').DataTable({
@@ -39,7 +40,6 @@
     });
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Logs' %}{% endblock %}
 {% block container %}
 <div align="center" class="container">
   <h1 class="page-header">{% trans 'Logs' %}<super>*</super></h1>

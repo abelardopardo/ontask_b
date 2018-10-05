@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load settings %}
+{% load ontask_tags %}
 {% load static %}
 {% load widget_tweaks %}
 {% load django_tables2 %}
@@ -9,15 +9,16 @@
   <link href="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
   <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
-  <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+  {% ontask_datatables_bootstrap_css %}
 {% endblock extrahead %}
 {% block scripts %}
   <script src="//cdn.bootcss.com/moment.js/2.17.1/moment-with-locales.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
   <script src="{% static 'site/js/sol.js' %}"></script>
-  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-  <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
+  {% ontask_datatables_jquery_js %}
+  {% ontask_datatables_bootstrap_js %}
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
   <script type="text/javascript">
     var qbuilder_options = {
