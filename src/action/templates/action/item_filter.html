@@ -4,6 +4,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Exclude items from action' %}{% endblock %}
 {% block extrahead %}
   <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
@@ -11,7 +12,6 @@
   <script src="{% static 'site/js/sol.js' %}"></script>
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
 {% endblock scripts %}
-{% block title %}{{ block.super }}{% trans 'Exclude items from action' %}{% endblock %}
 {% block container %}
 <div align="center" class="container-fluid" id="email-action-request-data">
   <h1 class="page-header">{% blocktrans with n=action.name %}Select items to exclude from action{% endblocktrans %}</h1>

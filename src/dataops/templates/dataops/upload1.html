@@ -4,10 +4,10 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Upload/Merge' %} {{ dtype }}{% endblock %}
 {% block scripts %}
   <script src="{% static 'dataops/js/dataops.js' %}{% otv %}"></script>
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Upload/Merge' %} {{ dtype }}{% endblock %}
 {% block container %}
 <div align="center" class="container-fluid">
   <h1 class="page-header">{% trans 'Step 1: Select' %} {{ dtype_select }}</h1>

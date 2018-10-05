@@ -14,8 +14,8 @@
     <!-- Bootstrap core  -->
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
     <!-- Custom styles for this site -->
-    {% block styles %}
     <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
+    {% block styles %}
     {% endblock styles %}
     <script src="{% static 'site/js/initial.js' %}{% otv %}"></script>
     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>

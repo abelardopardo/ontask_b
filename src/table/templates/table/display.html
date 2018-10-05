@@ -5,6 +5,7 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Table' %}{% endblock %}
 {% block extrahead %}
   <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
   <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
@@ -59,7 +60,6 @@
     };
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Table' %}{% endblock %}
 {% block container %}
   <div id="table-content" align="center" class="container-fluid">
     {% if view %}

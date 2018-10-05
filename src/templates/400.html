@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
+{% block title %}{% trans 'OnTask Bad request' %}{% endblock %}
 {% block extrahead %}
   <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 {% endblock extrahead %}
@@ -8,8 +9,6 @@
   <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 {% endblock %}
-{% block title %}{% trans 'OnTask Bad request' %}{% endblock %}
-
 {% block container %}
 <div class="container" style="margin-top:50px;">
   <h1 class="page-header text-center">{% trans 'Bad request received' %}</h1>

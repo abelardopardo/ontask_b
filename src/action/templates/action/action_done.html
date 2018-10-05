@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
+{% block title %}{% trans 'Action execution' %}{% endblock %}
 {% block scripts %}
   {% if download %}
     <script>location.href="{% url 'workflow:export' 1 %}";</script>
   {% endif %}
 {% endblock scripts %}
-{% block title %}{% trans 'Action execution' %}{% endblock %}
 {% block container %}
   {% url 'logs:view' log_id as record_url %}
   <div class="container-fluid" style="text-align:center;">

@@ -5,6 +5,7 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Table Views' %}{% endblock %}
 {% block styles %}
   <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
   <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
@@ -52,7 +53,6 @@
     };
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Table Views' %}{% endblock %}
 {% block container %}
 <div id="view-content" align="center" class="container-fluid">
   <h1 class="page-header">{% trans 'Table Views' %}</h1>

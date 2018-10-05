@@ -4,10 +4,10 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Schedule Action Execution' %}{% endblock %}
 {% block scripts %}
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
 {% endblock scripts %}
-{% block title %}{{ block.super }}{% trans 'Schedule Action Execution' %}{% endblock %}
 {% block extrahead %}
   <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
   <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>

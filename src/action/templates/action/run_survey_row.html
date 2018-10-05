@@ -4,10 +4,10 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Enter Data' %}{% endblock %}
 {% block scripts %}
   <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Enter Data' %}{% endblock %}
 {% block container %}
 <div align="center" class="container">
   <h4 class="page-header"><strong>{{ action.name }}</strong></h4>

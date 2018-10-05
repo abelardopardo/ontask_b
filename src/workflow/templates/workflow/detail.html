@@ -5,6 +5,7 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Details' %}{% endblock %}
 {% block extrahead %}
   <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
   <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
@@ -55,7 +56,6 @@
     </script>
   {% endif %}
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Details' %}{% endblock %}
 {% block container %}
 <div class="container text-center">
   <h1 class="page-header">{{ workflow.name }}</h1>

@@ -4,6 +4,7 @@
 {% load static %}
 {% load widget_tweaks %}
 {% load django_tables2 %}
+{% block title %}{{ block.super }}{% trans 'Edit Action In' %}{% endblock %}
 {% block styles %}
   <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
   <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
@@ -52,7 +53,6 @@
     }
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Edit Action In' %}{% endblock %}
 {% block container %}
   <div align="center" class="container" id="action-in-editor">
     <h1 class="page-header"><strong>{{ action.name }}</strong> <small>({{ action.get_action_type_display }})</small></h1>

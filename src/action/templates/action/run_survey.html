@@ -5,6 +5,7 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Run Action In' %}{% endblock %}
 {% block extrahead %}
  {% comment %}
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
@@ -39,7 +40,6 @@
     }
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Run Action In' %}{% endblock %}
 {% block container %}
   <div id="table-content" align="center" class="container"
        style="padding-top:2ex;">

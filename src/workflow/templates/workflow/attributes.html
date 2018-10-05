@@ -5,6 +5,7 @@
 {% load widget_tweaks %}
 {% load crispy_forms_tags %}
 {% load django_tables2 %}
+{% block title %}{{ block.super }}{% trans 'Attributes' %}{% endblock %}
 {% block extrahead %}
   <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 {% endblock extrahead %}
@@ -35,7 +36,6 @@
     }
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Attributes' %}{% endblock %}
 {% block container %}
 <div align="center" class="container">
   <h1 class="page-header">{% trans 'Workflow Attributes' %}</h1>

@@ -5,6 +5,7 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'SQL Connections' %}{% endblock %}
 {% block extrahead %}
   <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 {% endblock extrahead %}
@@ -37,7 +38,6 @@
     }
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'SQL Connections' %}{% endblock %}
 {% block container %}
   <div align="center" class="container">
     <h1 class="page-header">{% trans 'SQL Connections' %}</h1>

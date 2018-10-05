@@ -4,6 +4,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Edit Personalized Text' %}{% endblock %}
 {% block extrahead %}
   <link href="{% static 'site/css/query-builder.default.min.css' %}"
         rel="stylesheet">
@@ -29,7 +30,6 @@
     };
   </script>
 {% endblock %}
-{% block title %}{{ block.super }}{% trans 'Edit Personalized Text' %}{% endblock %}
 {% block container %}
   <div align="center" class="container" id="action-out-editor">
     <h1 class="page-header">{% trans 'Personalized JSON:' %} <strong>{{ action.name }}</strong></h1>
