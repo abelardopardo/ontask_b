@@ -8,14 +8,10 @@
 {% block extrahead %}
   <link href="{% static 'site/css/query-builder.default.min.css' %}"
         rel="stylesheet">
-  {{ form.media }}
-  {% comment %}
-  {% for script_src in vis_scripts %}
-    <script src="{{ script_src|safe }}"></script>
-  {% endfor %}
-  {% endcomment %}
+  {{ form.media.css }}
 {% endblock extrahead %}
 {% block scripts %}
+  {{ form.media.js }}
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}"></script>
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
   <script type="text/javascript">
