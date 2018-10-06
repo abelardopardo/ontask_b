@@ -66,9 +66,6 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
             "(//input[@name='columns'])[3]"
         ).click()
         self.selenium.find_element_by_css_selector(
-            "div.sol-current-selection"
-        ).click()
-        self.selenium.find_element_by_css_selector(
             "div.modal-footer > button.btn.btn-primary"
         ).click()
         # MODAL WAITING
@@ -98,9 +95,6 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
             "(//input[@name='columns'])[5]"
         ).click()
         self.selenium.find_element_by_css_selector(
-            "div.sol-current-selection"
-        ).click()
-        self.selenium.find_element_by_css_selector(
             "div.modal-footer > button.btn.btn-primary"
         ).click()
         # MODAL WAITING
@@ -126,7 +120,6 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "(//input[@name='columns'])[7]"
         ).click()
-        self.selenium.find_element_by_css_selector("div.modal-body").click()
         self.selenium.find_element_by_css_selector(
             "div.modal-footer > button.btn.btn-primary"
         ).click()
@@ -153,7 +146,6 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "(//input[@name='columns'])[9]"
         ).click()
-        self.selenium.find_element_by_css_selector("div.modal-body").click()
         self.selenium.find_element_by_css_selector(
             "div.modal-footer > button.btn.btn-primary"
         ).click()
@@ -182,9 +174,6 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
         ).click()
         self.selenium.find_element_by_xpath(
             "(//input[@name='columns'])[3]"
-        ).click()
-        self.selenium.find_element_by_css_selector(
-            "div.sol-current-selection"
         ).click()
         self.selenium.find_element_by_css_selector(
             "div.modal-footer > button.btn.btn-primary"
@@ -216,9 +205,6 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
             "(//input[@name='columns'])[5]"
         ).click()
         self.selenium.find_element_by_css_selector(
-            "div.sol-current-selection"
-        ).click()
-        self.selenium.find_element_by_css_selector(
             "div.modal-footer > button.btn.btn-primary"
         ).click()
         # MODAL WAITING
@@ -246,7 +232,6 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "(//input[@name='columns'])[7]"
         ).click()
-        self.selenium.find_element_by_css_selector("div.modal-body").click()
         self.selenium.find_element_by_css_selector(
             "div.modal-footer > button.btn.btn-primary"
         ).click()
@@ -280,7 +265,6 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "(//input[@name='columns'])[12]"
         ).click()
-        self.selenium.find_element_by_css_selector("div.modal-body").click()
         self.selenium.find_element_by_css_selector(
             "div.modal-footer > button.btn.btn-primary"
         ).click()
@@ -314,7 +298,6 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "(//input[@name='columns'])[12]"
         ).click()
-        self.selenium.find_element_by_css_selector("div.modal-body").click()
         self.selenium.find_element_by_css_selector(
             "div.modal-footer > button.btn.btn-primary"
         ).click()

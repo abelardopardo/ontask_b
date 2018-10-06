@@ -659,7 +659,7 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
         self.selenium.find_element_by_id("id_name").clear()
         self.selenium.find_element_by_id("id_name").send_keys("Registered new")
         self.selenium.find_element_by_xpath(
-            "(//button[@type='submit'])[2]"
+            "//div[@id='modal-item']//button[@type='submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until_not(
             EC.presence_of_element_located(
