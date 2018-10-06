@@ -612,9 +612,7 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
         ).click()
 
         # Click outside the SOL widget
-        self.selenium.find_element_by_class_name(
-            'sol-current-selection'
-        ).click()
+        self.selenium.find_element_by_id('div_id_merge_key').click()
 
         self.selenium.find_element_by_id("id_merge_key").click()
         Select(self.selenium.find_element_by_id(
