@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
-import StringIO
+
+import io
 import datetime
 
 import numpy as np
@@ -9,7 +9,7 @@ import pandas as pd
 
 import test
 from dataops import pandas_db
-from dataops.formula_evaluation import evaluate_top_node, evaluate_node_sql
+from dataops.formula_evaluation import evaluate_top_node
 from dataops.ops import perform_dataframe_upload_merge
 from dataops.pandas_db import get_filter_query
 
@@ -51,11 +51,11 @@ class DataopsMatrixManipulation(test.OntaskTestCase):
     def parse_data_frames(self):
         # Parse the two CSV strings and return as data frames
         df_dst = pandas_db.load_df_from_csvfile(
-            StringIO.StringIO(self.csv1),
+            io.StringIO(self.csv1),
             0,
             0)
         df_src = pandas_db.load_df_from_csvfile(
-            StringIO.StringIO(self.csv2),
+            io.StringIO(self.csv2),
             0,
             0
         )
@@ -78,14 +78,12 @@ class DataopsMatrixManipulation(test.OntaskTestCase):
                                                 self.merge_info)
 
         # Result must be correct (None)
-        self.assertEquals(result, None)
-
-        result_df = pandas_db.load_from_db(self.pk)
+        self.assertEqual(result, None)
 
     def df_equivalent_after_sql(self):
         # Parse the CSV
         df_source = pandas_db.load_df_from_csvfile(
-            StringIO.StringIO(self.csv1),
+            io.StringIO(self.csv1),
             0,
             0)
 
@@ -99,23 +97,23 @@ class DataopsMatrixManipulation(test.OntaskTestCase):
         # different)
         for x in df_source.columns:
             np.testing.assert_array_equal(
-                np.array(df_source[x], dtype=unicode),
-                np.array(df_dst[x], dtype=unicode)
+                np.array(df_source[x], dtype=str),
+                np.array(df_dst[x], dtype=str)
             )
 
 
 class FormulaEvaluation(test.OntaskTestCase):
     skel = {
-        u'condition': u'AND',
-        u'not': False,
-        u'rules': [{
-            u'field': u'variable',
-            u'id': u'variable',
-            u'input': u'{0}',  # Number/Text/
-            u'operator': u'{1}',  # Operator
-            u'type': u'{2}',  # Data type: integer, double, text, ...
-            u'value': u'{3}'}],  # The constant
-        u'valid': True
+        'condition': 'AND',
+        'not': False,
+        'rules': [{
+            'field': 'variable',
+            'id': 'variable',
+            'input': '{0}',  # Number/Text/
+            'operator': '{1}',  # Operator
+            'type': '{2}',  # Data type: integer, double, text, ...
+            'value': '{3}'}],  # The constant
+        'valid': True
     }
     test_table = 'TEST_TABLE'
 
@@ -188,7 +186,6 @@ class FormulaEvaluation(test.OntaskTestCase):
         query, fields = get_filter_query(self.test_table, None, self.skel)
         result = pd.read_sql_query(query, pandas_db.engine, params=fields)
         self.assertEqual(len(result), 1)
-
 
     def test_eval_node(self):
         #
@@ -320,8 +317,7 @@ class FormulaEvaluation(test.OntaskTestCase):
 
         # Create the dataframe with the variables
         df = pd.DataFrame(
-            [(1, 2.0, True, 'xxx', datetime.datetime(2018, 01, 01, 00, 00,
-                                                     00)),
+            [(1, 2.0, True, 'xxx', datetime.datetime(2018, 1, 1, 0, 0, 0)),
              (None, None, None, None, None)],
             columns=['v_integer',
                      'v_double',
