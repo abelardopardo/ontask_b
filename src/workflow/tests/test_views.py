@@ -21,22 +21,6 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         super(WorkflowInitial, self).setUp()
         test.create_users()
 
-    def test_00_home_view(self):
-        for uemail, ucode in [('student01@bogus.com', 302),
-                              ('instructor01@bogus.com', 200),
-                              ('superuser@bogus.com', 200)]:
-            user_login = self.client.login(email=uemail,
-                                           password=test.boguspwd)
-            self.assertTrue(user_login)
-
-            response = self.client.get(reverse('workflow:index'))
-
-            # Should redirect to a page with the profile (it is not staff).
-            self.assertEqual(response.status_code, ucode)
-
-            # End of session
-            self.logout()
-
     def test_01_workflow_create_upload_merge_column_edit(self):
         """
         Create a workflow, upload data and merge
