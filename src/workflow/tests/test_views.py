@@ -34,7 +34,8 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             # Should redirect to a page with the profile (it is not staff).
             self.assertEqual(response.status_code, ucode)
 
-            self.client.logout()
+            # End of session
+            self.logout()
 
     def test_01_workflow_create_upload_merge_column_edit(self):
         """
@@ -210,7 +211,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         # Fourth column must be: another, string
         self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[7]/td[2]").text,
-                         'another')
+                         'one')
         self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[7]/td[3]").text,
                          'string')
@@ -218,7 +219,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         # Sixth column must be one string
         self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[8]/td[2]").text,
-                         'one')
+                         'another')
         self.assertEqual(self.selenium.find_element_by_xpath(
             "//table[@id='column-table']/tbody/tr[8]/td[3]").text,
                          'string')
