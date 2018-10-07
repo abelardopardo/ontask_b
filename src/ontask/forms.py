@@ -2,8 +2,6 @@
 
 
 from builtins import next
-from builtins import str
-# from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.template.defaultfilters import filesizeformat
 from django.utils.translation import ugettext_lazy as _
@@ -11,19 +9,13 @@ from django.utils.translation import ugettext_lazy as _
 import ontask.ontask_prefs
 from core.widgets import OnTaskDateTimeInput
 
-# dateTimeOptions = {
-#     'weekStart': 1,  # Start week on Monday
-#     'minuteStep': 5,  # Minute step
-# }
-
-
 class RestrictedFileField(forms.FileField):
 
     def __init__(self, *args, **kwargs):
         self.content_types = kwargs.pop('content_types', None)
         self.max_upload_size = kwargs.pop('max_upload_size', None)
         if not self.max_upload_size:
-            self.max_upload_size = str(ontask.ontask_prefs.MAX_UPLOAD_SIZE)
+            self.max_upload_size = int(ontask.ontask_prefs.MAX_UPLOAD_SIZE)
         super(RestrictedFileField, self).__init__(*args, **kwargs)
 
     def clean(self, *args, **kwargs):

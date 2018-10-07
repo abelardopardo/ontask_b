@@ -399,7 +399,7 @@ class ActionImportForm(forms.Form):
         label='Name')
 
     file = RestrictedFileField(
-        max_upload_size=str(ontask_prefs.MAX_UPLOAD_SIZE),
+        max_upload_size=int(ontask_prefs.MAX_UPLOAD_SIZE),
         content_types=json.loads(str(ontask_prefs.CONTENT_TYPES)),
         allow_empty_file=False,
         label=_('File'),
