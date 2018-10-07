@@ -163,7 +163,7 @@ class UploadCSVFileForm(forms.Form):
     by the underlyng function read_csv in Pandas
     """
     file = RestrictedFileField(
-        max_upload_size=str(ontask.ontask_prefs.MAX_UPLOAD_SIZE),
+        max_upload_size=int(ontask.ontask_prefs.MAX_UPLOAD_SIZE),
         content_types=json.loads(str(ontask.ontask_prefs.CONTENT_TYPES)),
         allow_empty_file=False,
         label="",
@@ -215,7 +215,7 @@ class UploadExcelFileForm(forms.Form):
     Form to read an Excel file.
     """
     file = RestrictedFileField(
-        max_upload_size=str(ontask.ontask_prefs.MAX_UPLOAD_SIZE),
+        max_upload_size=int(ontask.ontask_prefs.MAX_UPLOAD_SIZE),
         content_types=[
             'application/vnd.ms-excel',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
