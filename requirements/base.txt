@@ -26,7 +26,7 @@ django-jquery==3.1.0
 django-modeltranslation==0.12.2
 django-import-export==1.1.0
 django-redis==4.9.0
-django-siteprefs==0.8.0
+django-siteprefs==0.8.1
 django-summernote==0.8.10.0
 django-tables2==2.0.1
 django-widget-tweaks==1.4.3
