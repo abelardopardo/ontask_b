@@ -149,7 +149,7 @@ class TablePandasOps(TableBasicOps):
     import base64
     import pandas
 
-    out_file = StringIO.StringIO()
+    out_file = StringIO()
     pandas.to_pickle(data_frame, out_file)
     result = base64.b64encode(out_file.getvalue())
 
@@ -159,7 +159,7 @@ class TablePandasOps(TableBasicOps):
     import base64
     import pandas
 
-    output = StringIO.StringIO()
+    output = StringIO()
     output.write(base64.b64decode(encoded_dataframe))
     result = pandas.read_pickle(output)
 
@@ -333,7 +333,7 @@ class TablePandasMerge(TableBasicMerge):
     import base64
     import pandas
 
-    out_file = StringIO.StringIO()
+    out_file = StringIO()
     pandas.to_pickle(data_frame, out_file)
     result = base64.b64encode(out_file.getvalue())
     </pre>
@@ -346,7 +346,7 @@ class TablePandasMerge(TableBasicMerge):
     import base64
     import pandas
 
-    output = StringIO.StringIO()
+    output = StringIO()
     output.write(base64.b64decode(encoded_dataframe))
     result = pandas.read_pickle(output)
     </pre>
