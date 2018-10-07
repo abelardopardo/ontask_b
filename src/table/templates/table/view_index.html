@@ -6,15 +6,14 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Table Views' %}{% endblock %}
-{% block styles %}
-  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
-  <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
-{% endblock styles %}
 {% block extrahead %}
-  {% ontask_datatables_bootstrap_css %}
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
+  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
+  <script src="//cdn.bootcss.com/moment.js/2.17.1/moment-with-locales.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
   <script src="{% static 'site/js/sol.js' %}"></script>
   <script src="{% static 'table/js/table.js' %}?v={% ontask_version %}"></script>
