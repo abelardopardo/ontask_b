@@ -43,6 +43,7 @@ class Log(models.Model):
     WORKFLOW_IMPORT = 'workflow_import'
     WORKFLOW_CLONE = 'workflow_clone'
     COLUMN_ADD = 'column_add'
+    QUESTION_ADD = 'question_add'
     COLUMN_ADD_FORMULA = 'column_add_formula'
     COLUMN_ADD_RANDOM = 'column_add_random'
     COLUMN_RENAME = 'column_rename'

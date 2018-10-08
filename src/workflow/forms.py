@@ -188,6 +188,37 @@ class ColumnBasicForm(forms.ModelForm):
         }
 
 
+class QuestionAddForm(ColumnBasicForm):
+
+    def __init__(self, *args, **kwargs):
+
+        super(QuestionAddForm, self).__init__(*args, **kwargs)
+
+        self.fields['name'].label = _('Question name')
+        self.fields['description_text'].label = \
+            _('Description (shown to the learners)')
+        self.fields['position'].label = \
+            _('Question position (zero to insert last)')
+        self.fields['active_from'].label = _('Question active from')
+        self.fields['active_to'].label = _('Question active until')
+
+    def clean(self):
+
+        data = super(QuestionAddForm, self).clean()
+
+        # Check and force a correct column index
+        ncols = Column.objects.filter(workflow__id=self.workflow.id).count()
+        if data['position'] < 1 or data['position'] > ncols:
+            data['position'] = ncols + 1
+
+        return data
+
+    class Meta(ColumnBasicForm.Meta):
+        fields = ['name', 'description_text', 'data_type',
+                  'position', 'active_from',
+                  'active_to']
+
+
 class ColumnAddForm(ColumnBasicForm):
     # initial value
     initial_value = forms.CharField(
@@ -242,6 +273,36 @@ class ColumnAddForm(ColumnBasicForm):
         fields = ['name', 'description_text', 'data_type',
                   'position', 'active_from',
                   'active_to']
+
+
+class QuestionRenameForm(ColumnBasicForm):
+
+    def __init__(self, *args, **kwargs):
+
+        super(QuestionRenameForm, self).__init__(*args, **kwargs)
+
+        self.fields['name'].label = _('Question name')
+        self.fields['description_text'].label = \
+            _('Description (shown to the learners)')
+        self.fields['position'].label = \
+            _('Question position (zero to insert last)')
+        self.fields['active_from'].label = _('Question active from')
+        self.fields['active_to'].label = _('Question active until')
+
+    def clean(self):
+
+        data = super(QuestionRenameForm, self).clean()
+
+        # Check and force a correct column index
+        ncols = Column.objects.filter(workflow__id=self.workflow.id).count()
+        if data['position'] < 1 or data['position'] > ncols:
+            data['position'] = ncols
+
+        return data
+
+    class Meta(ColumnBasicForm.Meta):
+        fields = ['name', 'description_text', 'data_type', 'position',
+                  'active_from', 'active_to']
 
 
 class ColumnRenameForm(ColumnBasicForm):

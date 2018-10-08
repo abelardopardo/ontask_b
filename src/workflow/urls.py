@@ -74,6 +74,8 @@ urlpatterns = [
 
     url(r'^column_add/$', column_views.column_add, name='column_add'),
 
+    url(r'^question_add/$', column_views.column_add, name='question_add'),
+
     url(r'^formula_column_add/$',
         column_views.formula_column_add,
         name='formula_column_add'),
@@ -89,6 +91,10 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/column_edit/$',
         column_views.column_edit,
         name='column_edit'),
+
+    url(r'^(?P<pk>\d+)/question_edit/$',
+        column_views.column_edit,
+        name='question_edit'),
 
     url(r'^(?P<pk>\d+)/column_clone/$',
         column_views.column_clone,
