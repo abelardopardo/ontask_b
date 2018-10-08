@@ -1,3 +1,17 @@
+## 4.0.0 ()
+
+### Fixed
+
+- Various bugs due to the incompatibility with Python3/Django2
+
+### Added
+
+- Support for Python3/Django2
+
+### Changed
+
+- Datetimepicker widget changed due to incompatibilities with Django 2
+
 ## 3.0.1 (2018-09-25)
 
 ### Fixed
