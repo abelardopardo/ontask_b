@@ -47,8 +47,8 @@
     <p class="lead">{% blocktrans %}<strong>Next Step:</strong> Click in the <i>New action</i> below to create a new
     action to execute based on the data stored in the table.{% endblocktrans %}</p>
   {% endif %}
-  <div style="padding-bottom: 2ex;">
-    <button type="button" class="btn btn-sm btn-primary js-create-action"
+  <div class="btn-group" style="padding-bottom: 2ex;" role="group">
+    <button type="button" class="btn btn-sm btn-default js-create-action"
        data-url="{% url 'action:create' %}"
        data-toggle="tooltip"
        title="New action to collect data from learners">
@@ -56,7 +56,7 @@
     </button>
     {% if has_table %}
       <a href="{% url 'action:import' %}"
-         class="btn btn-sm btn-primary"
+         class="btn btn-sm btn-default"
          data-toggle="tooltip" title="Import action previously exported">
         <span class="glyphicon glyphicon-import"></span> {% trans 'Import action' %}</a>
     {% endif %}

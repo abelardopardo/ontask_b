@@ -530,6 +530,7 @@ def column_ss(request, pk):
                 {'column': col}
             ),
             'name': col.name,
+            'description': col.description_text,
             'type': col_data_type,
             'key': '<span class="true">✔</span>' if col.is_key else '',
             'operations': ops_string

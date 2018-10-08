@@ -45,7 +45,7 @@
   <h1 class="page-header">{% trans 'Logs' %}<super>*</super></h1>
   <div class="container" id="log-table-page">
     <a href="{% url 'logs:export' workflow.id %}" download
-       class="btn btn-primary btn-sm js-logs-download"
+       class="btn btn-default btn-sm js-logs-download"
        data-toggle="tooltip"
        title="{% trans 'Download a CSV file containing these logs' %}">
       <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
