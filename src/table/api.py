@@ -30,20 +30,6 @@ class TableBasicOps(APIView):
     permission_classes = (UserIsInstructor,)
 
     def get_object(self, pk):
-        # try:
-        #     if self.request.user.is_superuser:
-        #         workflow = Workflow.objects.get(pk=pk)
-        #     else:
-        #         workflow = Workflow.objects.filter(
-        #             Q(user=self.request.user) |
-        #             Q(shared__id=self.request.user.id)
-        #         ).distinct().get(id=pk)
-        # except Workflow.DoesNotExist:
-        #     raise APIException('Incorrect object')
-        #
-        # if workflow.is_locked():
-        #     raise APIException('Workflow is locked by another user')
-        #
         workflow = get_workflow(self.request, pk)
         if workflow is None:
             raise APIException(_('Unable to access the workflow'))

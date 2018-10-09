@@ -11,7 +11,7 @@
   {% ontask_datetimepicker_css %}
 {% endblock extrahead %}
 {% block scripts %}
-  <script src="//cdn.bootcss.com/moment.js/2.17.1/moment-with-locales.min.js"></script>
+  {% ontask_datetimepicker_js %}
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}

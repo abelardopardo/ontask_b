@@ -34,7 +34,8 @@ datetimepicker_css = \
     """<link href="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">"""
 
 datetimepicker_js = \
-    """<script src="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>"""
+    """<script src="//cdn.bootcss.com/moment.js/2.17.1/moment-with-locales.min.js"></script>
+       <script src="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>"""
 
 # Tag to get ontask_version
 @register.simple_tag
