@@ -135,42 +135,32 @@
         <h4>{% trans 'Columns to obtain and store the data' %}</h4>
       </div>
     </div>
-    <div class="row row-bottom-border">
+    <div class="row row-bottom-border" id="column-names">
       {% if not has_no_key %}
         <p class="alert-danger">{% trans 'There must be at least one non-key column.' %}</p>
       {% endif %}
       {% if has_empty_description %}
         <p class="alert-danger">{% trans 'All items should have non-empty descriptions.' %}</p>
       {% endif %}
-      <div id="column-names">
-        <div style="display: table-cell; padding-right: 1ex;">Insert</div>
-        <div style="display: table-cell; padding-right: 1ex;">
-            <select id="select-column-name">
-              <option value="">- {% trans 'Column' %} -</option>
-              {% for col in columns_to_insert %}
-                <option
-                  value="{% url 'action:select_column_action' action.id col.id %}">{{ col.name }}</option>
-              {% endfor %}
-            </select>
-        </div>
-        <div style="display: table-cell; padding-right: 1ex;">
-          <button type="button"
-                  class="btn btn-primary btn-sm js-workflow-column-add"
-                  data-url="{% url 'workflow:column_add' %}"
-                  data-toggle="tooltip"
-                  title="{% trans 'Add a new column to the workflow' %}">
-            <span class="glyphicon glyphicon-plus"></span> {% trans 'Add column' %}
-          </button>
-        </div>
-        <div style="display: table-cell; padding-right: 1ex;">
-          <button type="button"
-                  class="btn btn-primary btn-sm js-workflow-formula-column-add"
-                  data-url="{% url 'workflow:formula_column_add' %}"
-                  data-toggle="tooltip"
-                  title="{% trans 'Add a new derived column to the workflow' %}">
-            <span class="glyphicon glyphicon-plus"></span> {% trans 'Add formula-derived column' %}
-          </button>
-        </div>
+      <div>Insert existing question (choose it and will be automatically added)</div>
+      <div>
+          <select id="select-column-name">
+            <option value="">- {% trans 'Question' %} -</option>
+            {% for col in columns_to_insert %}
+              <option
+                value="{% url 'action:select_column_action' action.id col.id %}">{{ col.name }}</option>
+            {% endfor %}
+          </select>
+      </div>
+      <div><p>or</p></div>
+      <div>
+        <button type="button"
+                class="btn btn-primary btn-sm js-workflow-question-add"
+                data-url="{% url 'workflow:question_add' %}"
+                data-toggle="tooltip"
+                title="{% trans 'Add a new question to the action' %}">
+          <span class="glyphicon glyphicon-plus"></span> {% trans 'Create new question' %}
+        </button>
       </div>
       <div class="container-fluid" id="column-selection"
            style="display: table-cell; padding-right: 1ex;padding-top:1ex;">

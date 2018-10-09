@@ -224,20 +224,14 @@ $(function () {
   $("#modal-item").on("submit", ".js-action-showurl-form", saveForm);
 
   // Column Add
-  $("#column-names").on("click", ".js-workflow-column-add", loadForm);
-  $("#modal-item").on("submit", ".js-workflow-column-add-form", saveForm);
+  $("#column-names").on("click", ".js-workflow-question-add", loadForm);
+  $("#modal-item").on("submit", ".js-workflow-question-add-form", saveForm);
 
-  // Derived column add
-  $("#column-names").on("click",
-                        ".js-workflow-formula-column-add",
-                        loadForm);
-  $("#modal-item").on("submit",
-                      ".js-workflow-formula-column-add-form",
-                      saveForm);
-
-  // Column Edit
-  $("#column-selected-table").on("click", ".js-workflow-column-edit", loadForm);
-  $("#modal-item").on("submit", ".js-column-edit-form", saveForm);
+  // Column Selected Edit
+  $("#column-selected-table").on("click",
+    ".js-workflow-question-edit",
+    loadForm);
+  $("#modal-item").on("submit", ".js-question-edit-form", saveForm);
 
   // Delete column
   $("#column-selected-table").on("click", ".js-column-delete", loadForm);

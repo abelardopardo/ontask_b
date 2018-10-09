@@ -64,7 +64,7 @@
 {% block container %}
   <div id="table-content" align="center" class="container-fluid">
     {% if view %}
-      <h4>{% blocktrans %}View <strong>{{ view.name }}</strong>{% endblocktrans %}</h4>
+      <h4><strong>{{ view.name }}</strong></h4>
     {% else %}
       <h1>{% trans 'Table View' %}</h1>
     {% endif %}
@@ -73,10 +73,10 @@
     {% elif no_actions %}
       {% include 'workflow/includes/no_actions.html' %}
     {% endif %}
-    <div style="padding-bottom: 2ex;">
+    <div class="btn-group" style="padding-bottom: 2ex;" role="group">
       {% if columns %}
         <a href="{% url 'dataops:rowcreate' %}"
-           class="btn btn-sm btn-primary"
+           class="btn btn-sm btn-default"
            data-toggle="tooltip"
            title="{% trans 'Add a new row to the table' %}">
           <span class="glyphicon glyphicon-plus"></span> {% trans 'Add row' %}
@@ -85,15 +85,15 @@
       {% endif %}
       {% include 'workflow/includes/manage_table_data.html' %}
       {% if columns %}
-        <div class="dropdown btn-group">
+        <div class="dropdown btn-group" role="group">
           <a href="{% url 'table:view_index' %}"
-             class="btn btn-primary btn-sm spin"
+             class="btn btn-default btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Views available for this table' %}">
             <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Views' %}
           </a>
           {% if views %}
-            <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+            <button class="btn btn-default btn-sm dropdown-toggle" type="button"
                     data-toggle="dropdown"><span class="caret"></span>
             </button>
             <ul role="menu" class="dropdown-menu">
@@ -110,33 +110,33 @@
       {% if columns %}
         {% if view %}
           <button type="button"
-                  class="btn btn-primary btn-sm js-view-edit align-middle"
+                  class="btn btn-default btn-sm js-view-edit align-middle"
                   data-url="{% url 'table:view_edit' view.id %}"
                   data-toggle="tooltip" title="{% trans 'Change elements in view' %}">
             <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit view' %}
           </button>
           <a class="btn btn-sm btn-default spin" href="{% url 'table:display' %}">Full table</a>
           <a href="{% url 'table:stat_table_view' view.id %}"
-             class="btn btn-primary btn-sm spin"
+             class="btn btn-default btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Dashboard created with the view data' %}">
             <span class="glyphicon glyphicon-dashboard"></span> {% trans 'Dashboard' %}
           </a>
           <a href="{% url 'table:csvdownload_view' view.id %}" download
-             class="btn btn-primary btn-sm js-logs-download spin"
+             class="btn btn-default btn-sm js-logs-download spin"
              data-toggle="tooltip"
              title="{% trans 'Download a CSV file containing this table' %}">
             <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
           </a>
         {% else %}
           <a href="{% url 'table:stat_table' %}"
-             class="btn btn-primary btn-sm spin"
+             class="btn btn-default btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Dashboard created with the table data' %}">
             <span class="glyphicon glyphicon-dashboard"></span> {% trans 'Dashboard' %}
           </a>
           <a href="{% url 'table:csvdownload' %}"
-             class="btn btn-primary btn-sm spin"
+             class="btn btn-default btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Download a CSV file containing this table' %}">
             <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
@@ -153,7 +153,7 @@
             {% for col in columns %}
               <th class="text-center">
                 <div class="dropdown" style="display: inline-table;">
-                  <button class="btn btn-primary btn-sm dropdown-toggle"
+                  <button class="btn btn-default btn-sm dropdown-toggle"
                           type="button"
                           data-toggle="dropdown">{{ col.name }}
                     <span class="caret"></span>

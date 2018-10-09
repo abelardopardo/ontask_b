@@ -1,5 +1,5 @@
 {% load i18n %}
-<div class="condition-btn" role="group">
+<div class="condition-btn btn-group" role="group">
   <a href="{% url 'action:edit' id %}"
      class="btn btn-default btn-sm align-middle spin"
      data-toggle="tooltip"
@@ -35,8 +35,8 @@
        title="{% trans 'Enter data manually' %}">
       <span class="glyphicon glyphicon-off"></span> {% trans 'Run' %}</a>
   {% endif %}
-  <div class="dropdown" style="display: inline-table;">
-    <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+  <div class="dropdown btn-group" style="display: inline-table;" role="group">
+    <button class="btn btn-default btn-sm dropdown-toggle" type="button"
             data-toggle="dropdown"> {% trans 'More' %} <span class="caret"></span>
     </button>
     <ul role="menu" class="dropdown-menu">

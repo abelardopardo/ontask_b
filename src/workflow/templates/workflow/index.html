@@ -50,21 +50,21 @@
       <p class="lead"><strong>Next Step:</strong> The main element in OnTask is a <i>Workflow<super>*</super></i>. Start by first creating a workflow element using the <i>New Workflow</i> button below,
       and then upload data in its table.</p>
     {% endif %}
-    <p>
-      <button type="button" class="btn btn-primary js-create-workflow"
+    <div class="condition-btn btn-group" role="group">
+      <button type="button" class="btn btn-default js-create-workflow"
               data-url="{% url 'workflow:create' %}"
                 data-toggle="tooltip"
                 title="{% trans 'Provide the name and description for a new workflow' %}">
         <span class="glyphicon glyphicon-plus"></span>
           {% trans 'New workflow' %}
       </button>
-      <a href="{% url 'workflow:import' %}" class="btn btn-primary spin"
+      <a href="{% url 'workflow:import' %}" class="btn btn-default spin"
                 data-toggle="tooltip"
                 title="{% trans 'Import a file with an OnTask workflow' %}">
         <span class="glyphicon glyphicon-import"></span>
           {% trans 'Import workflow' %}
       </a>
-    </p>
+    </div>
     {% render_table table %}
     <p class="text-left">{% blocktrans %}<strong><super>*</super></strong>A workflow contains a <i>table
     </i> with data about a set of learners and <i>a
