@@ -1,5 +1,5 @@
 mock
-Django==1.11.14
+Django==1.11.16
 django-environ==0.4.4
 django-braces==1.13.0
 django-crispy-forms==1.7.2
