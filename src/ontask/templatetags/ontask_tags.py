@@ -30,6 +30,12 @@ datatables_jquery_js = \
 datatables_bootstrap_js = \
     """<script src="//cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>"""
 
+datetimepicker_css = \
+    """<link href="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">"""
+
+datetimepicker_js = \
+    """<script src="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>"""
+
 # Tag to get ontask_version
 @register.simple_tag
 def ontask_version():
@@ -69,3 +75,13 @@ def ontask_datatables_bootstrap_css():
 @register.simple_tag
 def ontask_datatables_bootstrap_js():
     return format_html(datatables_bootstrap_js)
+
+
+@register.simple_tag
+def ontask_datetimepicker_css():
+    return format_html(datetimepicker_css)
+
+
+@register.simple_tag
+def ontask_datetimepicker_js():
+    return format_html(datetimepicker_js)
