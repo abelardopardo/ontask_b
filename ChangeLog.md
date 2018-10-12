@@ -1,3 +1,9 @@
+## 3.0.2 ()
+
+### Fixed
+
+- Bug preventing questions to be added to the workflow (Issue #95)
+
 ## 3.0.1 (2018-09-25)
 
 ### Fixed
