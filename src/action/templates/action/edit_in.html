@@ -155,7 +155,7 @@
       <div>
         <button type="button"
                 class="btn btn-primary btn-sm js-workflow-question-add"
-                data-url="{% url 'workflow:question_add' %}"
+                data-url="{% url 'workflow:question_add' action.id %}"
                 data-toggle="tooltip"
                 title="{% trans 'Add a new question to the action' %}">
           <span class="glyphicon glyphicon-plus"></span> {% trans 'Create new question' %}

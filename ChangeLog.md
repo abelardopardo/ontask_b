@@ -12,6 +12,20 @@
 
 - Datetimepicker widget changed due to incompatibilities with Django 2
 
+## 3.0.2 ()
+
+### Fixed
+
+- Bug preventing questions to be added to the workflow (Issue #95)
+
+### Added
+
+- Support for Python3/Django2
+
+### Changed
+
+- Datetimepicker widget changed due to incompatibilities with Django 2
+
 ## 3.0.1 (2018-09-25)
 
 ### Fixed
