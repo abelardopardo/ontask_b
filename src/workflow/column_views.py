@@ -7,12 +7,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
+from django.db.models import Q
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from action.models import Condition
+from action.models import Condition, Action
 from dataops import ops, formula_evaluation, pandas_db
 from logs.models import Log
 from ontask.permissions import is_instructor
@@ -51,7 +52,7 @@ formula_column_operands = [
 
 
 @user_passes_test(is_instructor)
-def column_add(request):
+def column_add(request, pk=None):
     # TODO: Encapsulate operations in a function so that is available for the
     #  API
     # Data to send as JSON response
@@ -59,7 +60,7 @@ def column_add(request):
 
     # Detect if this operation is to add a new column or a new question (in
     # the edit in page)
-    is_question = 'question_add' in request.path_info
+    is_question = pk is not None
 
     # Get the workflow element
     workflow = get_workflow(request)
@@ -83,6 +84,22 @@ def column_add(request):
             )
         return JsonResponse(data)
 
+    action_id = None
+    if pk:
+        # Get the action and the columns
+        try:
+            action = Action.objects.filter(
+                Q(workflow__user=request.user) |
+                Q(workflow__shared=request.user)
+            ).distinct().get(pk=pk)
+        except ObjectDoesNotExist:
+            messages.error(
+                request,
+                _('Cannot find action to add question.')
+            )
+            return JsonResponse({'html_redirect': reverse('action:index')})
+        action_id = action.id
+
     # Form to read/process data
     if is_question:
         form = QuestionAddForm(request.POST or None, workflow=workflow)
@@ -99,6 +116,7 @@ def column_add(request):
         data['html_form'] = render_to_string(template,
                                              {'form': form,
                                               'is_question': is_question,
+                                              'action_id': action_id,
                                               'add': True},
                                              request=request)
 
@@ -119,7 +137,7 @@ def column_add(request):
     # it was loaded when validating it.
     df = pandas_db.load_from_db(workflow.id)
 
-    # Add the column with the initial value
+    # Add the column with the initial value to the dataframe
     df = ops.data_frame_add_column(df, column, column_initial_value)
 
     # Update the column type with the value extracted from the data frame
@@ -133,6 +151,10 @@ def column_add(request):
 
     # Store the df to DB
     ops.store_dataframe_in_db(df, workflow.id)
+
+    # If the column is a question, add it to the action
+    if is_question:
+        action.columns.add(column)
 
     # Log the event
     if is_question:

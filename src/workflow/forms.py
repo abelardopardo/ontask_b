@@ -70,6 +70,7 @@ class AttributeItemForm(forms.Form):
 
 
 class ColumnBasicForm(forms.ModelForm):
+
     # Raw text for the categories
     raw_categories = forms.CharField(
         strip=True,
@@ -95,6 +96,8 @@ class ColumnBasicForm(forms.ModelForm):
             ', '.join([str(x) for x in self.instance.get_categories()])
 
         self.fields['data_type'].choices = self.data_type_choices
+
+        self.initial_valid_value = None
 
     def clean(self):
 
@@ -231,8 +234,6 @@ class ColumnAddForm(ColumnBasicForm):
     def __init__(self, *args, **kwargs):
 
         super(ColumnAddForm, self).__init__(*args, **kwargs)
-
-        self.initial_valid_value = None
 
         self.fields['data_type'].choices = self.data_type_choices[1:]
 
