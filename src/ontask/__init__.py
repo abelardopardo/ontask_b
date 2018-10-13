@@ -12,7 +12,7 @@ __all__ = ['celery_app', 'OntaskException']
 
 from django.utils.translation import ugettext_lazy as _
 
-__version__ = 'B.3.0.1'
+__version__ = 'B.3.0.2'
 
 
 def is_legal_name(val):
