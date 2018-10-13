@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-09 12:08+1030\n"
+"POT-Creation-Date: 2018-10-13 22:05+1030\n"
 "PO-Revision-Date: 2018-08-01 16:25+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -226,8 +226,8 @@ msgstr "URL para enviar el objeto JSON personalizado"
 msgid "Write a JSON object"
 msgstr "Introduzca un objeto JSON"
 
-#: action/forms.py:176 action/forms.py:180 workflow/forms.py:166
-#: workflow/forms.py:170
+#: action/forms.py:176 action/forms.py:180 workflow/forms.py:169
+#: workflow/forms.py:173
 msgid "Incorrect date/time window"
 msgstr "Intervalo de fecha/hora incorrecto"
 
@@ -297,7 +297,7 @@ msgstr "Ficha de autenticación obtenida de la plataforma externa."
 msgid "Authentication token to be sent with the JSON object."
 msgstr "Ficha de autenticación a enviar con el objeto JSON."
 
-#: action/forms.py:399 workflow/forms.py:460
+#: action/forms.py:399 workflow/forms.py:461
 msgid "File"
 msgstr "Fichero"
 
@@ -358,54 +358,54 @@ msgstr "Columnas presentes en esta condición"
 msgid "Number of rows selected"
 msgstr "Número de filas seleccionadas"
 
-#: action/ops.py:84
+#: action/ops.py:86
 msgid "Data not found in the table"
 msgstr "No se han encontrado datos en la tabla"
 
-#: action/ops.py:183
+#: action/ops.py:185
 #, python-brace-format
 msgid "Error when evaluating conditions for user {0}"
 msgstr "Error al evaluar las condiciones para el usuario {0}"
 
-#: action/ops.py:201
+#: action/ops.py:203
 #, python-brace-format
 msgid "Action not enabled for user {0}"
 msgstr "Acción no permitida para el usuario {0}"
 
-#: action/ops.py:357 workflow/ops.py:212
+#: action/ops.py:359 workflow/ops.py:212
 msgid "Incorrect file. Expecting a GZIP file (exported workflow)."
 msgstr "Fichero incorrect. Es espera un fichero GZIP (flujo exportado)."
 
-#: action/ops.py:368 action/ops.py:373 action/ops.py:378
+#: action/ops.py:370 action/ops.py:375 action/ops.py:380
 #, python-brace-format
 msgid "Unable to import action: {0}"
 msgstr "No se puede importar la acción: {0}"
 
-#: action/ops.py:375
+#: action/ops.py:377
 #, python-brace-format
 msgid "Unable to import action due to a validation error: {0}"
 msgstr "No es posible importar la acción debidi a un error de validación: {0}"
 
-#: action/ops.py:461
+#: action/ops.py:463
 msgid "Invalid email address in cc email"
 msgstr "Dirección de correo incorrecta en el CC"
 
-#: action/ops.py:463
+#: action/ops.py:465
 msgid "Invalid email address in bcc email"
 msgstr "Dirección de correo incorrecta en el BCC"
 
-#: action/ops.py:588
+#: action/ops.py:590
 #, python-brace-format
 msgid "Syntax error detected in OnTask notification template ({0})"
 msgstr ""
 "Error de sintaxis detectdado en la plantilla de notificación OnTask ({0})"
 
-#: action/ops.py:617
+#: action/ops.py:619
 #, python-brace-format
 msgid "An error occurred when sending your notification: {0}"
 msgstr "Se ha produciro un error al enviar la notificación: {0}"
 
-#: action/ops.py:669
+#: action/ops.py:671
 #, python-brace-format
 msgid "Incorrect JSON string in element number {0}"
 msgstr "Texto incorrecto en objeto JSON en elemento número {0}"
@@ -453,7 +453,7 @@ msgstr "Imposible crear la información para la condición"
 msgid "Unable to create columns field"
 msgstr "Imposible crear el campo de la columna"
 
-#: action/settings.py:34 ontask/settings/base.py:366
+#: action/settings.py:34 ontask/settings/base.py:371
 msgid "OnTask: Action executed"
 msgstr "OnTask: Acción ejecutada"
 
@@ -1333,7 +1333,7 @@ msgstr "No se ha podido clonar la condición"
 msgid "Action successfully cloned."
 msgstr "A acción ha sido clonada con éxito."
 
-#: action/views_out.py:63
+#: action/views_out.py:62
 msgid ""
 "Unable to send emails due to a misconfiguration. Ask your system "
 "administrator to enable email queueing."
@@ -1341,15 +1341,15 @@ msgstr ""
 "No es posible mandar los emails por una incorrecta configuración.  Contacte "
 "al administrador para activar la cola de emails."
 
-#: action/views_out.py:107 action/views_out.py:251
+#: action/views_out.py:106 action/views_out.py:276
 msgid "Send"
 msgstr "Enviar"
 
-#: action/views_out.py:134
+#: action/views_out.py:133
 msgid "Incorrect email action invocation."
 msgstr "Invocación de acción email incorrecta"
 
-#: action/views_out.py:218
+#: action/views_out.py:243
 msgid ""
 "Unable to send json objects due to a misconfiguration. Ask your system "
 "administrator to enable JSON queueing."
@@ -1357,16 +1357,16 @@ msgstr ""
 "No es posible mandar los objetos por una incorrecta configuración.  Contacte "
 "al administrador para activar el envío de objetos JSON."
 
-#: action/views_out.py:278
+#: action/views_out.py:303
 msgid "Incorrect JSON action invocation."
 msgstr "Invocación indorrecta de acción JSON"
 
-#: action/views_out.py:407
+#: action/views_out.py:432
 #, python-brace-format
 msgid "Error while retrieving content for student {0}"
 msgstr "Error al acceder al contenido para el estudiante {0}"
 
-#: action/views_out.py:441
+#: action/views_out.py:466
 msgid "Incorrect item filter invocation."
 msgstr "Invocación incorrecta del filtro"
 
@@ -1690,7 +1690,7 @@ msgstr "Parámetro de tipo fecha/hora no puede tener una lista de valores"
 msgid "Incorrect list of allowed value"
 msgstr "La lista de valores permitidos es incorrecta"
 
-#: dataops/plugin_manager.py:120 workflow/forms.py:255
+#: dataops/plugin_manager.py:120 workflow/forms.py:256
 msgid "Incorrect initial value"
 msgstr "Valor inicial incorrecto"
 
@@ -1952,7 +1952,7 @@ msgstr "Editas los datos del estudiante"
 
 #: dataops/templates/dataops/sql_connections.html:8
 #: dataops/templates/dataops/sql_connections.html:39
-#: dataops/templates/dataops/uploadmerge.html:64
+#: dataops/templates/dataops/uploadmerge.html:64 templates/base.html:76
 #: workflow/templates/workflow/sql_connections.html:8
 #: workflow/templates/workflow/sql_connections.html:43
 msgid "SQL Connections"
@@ -2868,6 +2868,14 @@ msgstr "Typos de contenidos permitidos en las cargas"
 msgid "Maximum size allowed in file uplaods"
 msgstr "Tamaño máximo de fichero permitido en las cargas"
 
+#: ontask/settings/base.py:272
+msgid "English"
+msgstr "Inglés"
+
+#: ontask/settings/base.py:273
+msgid "Spanish"
+msgstr "Español"
+
 #: ontask/urls.py:28
 msgid ""
 "The OnTask API offers functionality to manipulate \n"
@@ -3650,6 +3658,11 @@ msgstr "Acceso al manual"
 msgid "Logout"
 msgstr "Desconectar"
 
+#: templates/base.html:74 workflow/apps.py:9
+#: workflow/templates/workflow/index.html:8
+msgid "Workflows"
+msgstr "Flujos"
+
 #: templates/base.html:82 workflow/templates/workflow/detail.html:8
 msgid "Details"
 msgstr "Detalles"
@@ -3893,10 +3906,6 @@ msgstr "La columna {0} no existe"
 msgid "To be implemented"
 msgstr "Falta implementar"
 
-#: workflow/apps.py:9 workflow/templates/workflow/index.html:8
-msgid "Workflows"
-msgstr "Flujos"
-
 #: workflow/attribute_views.py:25
 msgid "Value"
 msgstr "Valor"
@@ -3919,79 +3928,83 @@ msgstr "Tipo de dato incorrecto {0}."
 msgid "Incorrect date/times in the active window for column {0}"
 msgstr "Fechas/horas incorrectas en la ventana activa de la columna {0}"
 
-#: workflow/column_views.py:37
+#: workflow/column_views.py:38
 msgid "sum: Sum selected columns"
 msgstr "sum: Suma de columnas seleccionadas"
 
-#: workflow/column_views.py:38
+#: workflow/column_views.py:39
 msgid "prod: Product of the selected columns"
 msgstr "prod: Producto de columnas seleccionadas"
 
-#: workflow/column_views.py:39
+#: workflow/column_views.py:40
 msgid "max: Maximum of the selected columns"
 msgstr "max: Máximo de las columnas seleccionadas"
 
-#: workflow/column_views.py:40
+#: workflow/column_views.py:41
 msgid "min: Minimum of the selected columns"
 msgstr "min: Mínimo de las columnas seleccionadas"
 
-#: workflow/column_views.py:41
+#: workflow/column_views.py:42
 msgid "mean: Mean of the selected columns"
 msgstr "mean: Media de las columnas seleccionadas"
 
-#: workflow/column_views.py:42
+#: workflow/column_views.py:43
 msgid "median: Median of the selected columns"
 msgstr "median: Mediana de las columnas seleccionadas"
 
-#: workflow/column_views.py:44
+#: workflow/column_views.py:45
 msgid "std: Standard deviation over the selected columns"
 msgstr "std: Desviación estándar de las columnas seleccionadas"
 
-#: workflow/column_views.py:46
+#: workflow/column_views.py:47
 msgid "all: True when all elements in selected columns are true"
 msgstr ""
 "all: Cierto si todos los elementos en las columnas seleccionadas son ciertos"
 
-#: workflow/column_views.py:48
+#: workflow/column_views.py:49
 msgid "any: True when any element in selected columns is true"
 msgstr "any: Cierto si algún elemento de las columnas seleccionadas es cierto"
 
-#: workflow/column_views.py:77
+#: workflow/column_views.py:78
 msgid "Cannot add question to a workflow without data"
 msgstr "No es posible añadir una pregunta a un flujo sin datos"
 
-#: workflow/column_views.py:82 workflow/column_views.py:174
-#: workflow/column_views.py:313
+#: workflow/column_views.py:83 workflow/column_views.py:196
+#: workflow/column_views.py:335
 msgid "Cannot add column to a workflow without data"
 msgstr "No es posible añadir una columna a un flujo sin datos"
 
-#: workflow/column_views.py:207 workflow/column_views.py:342
+#: workflow/column_views.py:98
+msgid "Cannot find action to add question."
+msgstr "No se ha encontrado la acción a la que añadir la pregunta."
+
+#: workflow/column_views.py:229 workflow/column_views.py:364
 msgid "A column with that name already exists"
 msgstr "Una columna con este nombre ya existe"
 
-#: workflow/column_views.py:242
+#: workflow/column_views.py:264
 #, python-brace-format
 msgid "Operand {0} not implemented"
 msgstr "Operando {0} sin implementar"
 
-#: workflow/column_views.py:251
+#: workflow/column_views.py:273
 #, python-brace-format
 msgid "Unable to perform the requested operation ({0})"
 msgstr "No es posible ejecutar la operación requerida ({0})"
 
-#: workflow/column_views.py:366
+#: workflow/column_views.py:388
 msgid "The integer value has to be larger than 1"
 msgstr "El valor numérico debe ser mayor que 1"
 
-#: workflow/column_views.py:382
+#: workflow/column_views.py:404
 msgid "The value has to be a comma-separated list"
 msgstr "El valor ha de ser una lista de valores separados por comas"
 
-#: workflow/column_views.py:572
+#: workflow/column_views.py:594
 msgid "You cannot delete the only key column"
 msgstr "No es posible borrar la única columna clave"
 
-#: workflow/column_views.py:849
+#: workflow/column_views.py:871
 msgid "You cannot restrict a key column"
 msgstr "No es posible restringir una columna clave"
 
@@ -3999,91 +4012,91 @@ msgstr "No es posible restringir una columna clave"
 msgid "Name has to be different from all existing ones."
 msgstr "El nombre ha de ser diferente a los ya existentes."
 
-#: workflow/forms.py:77
+#: workflow/forms.py:78
 msgid "Comma separated list of values allowed in this column"
 msgstr "Lista de valores permitidos separados por comas"
 
-#: workflow/forms.py:122
+#: workflow/forms.py:125
 msgid "There is a column already with this name"
 msgstr "Ya hay una columna con este nombre"
 
-#: workflow/forms.py:139
+#: workflow/forms.py:142
 msgid "Incorrect list of values"
 msgstr "La lista de valores es incorrecta"
 
-#: workflow/forms.py:151
+#: workflow/forms.py:154
 msgid "The values in the column are not compatible  with these ones."
 msgstr "Los valores en la columna no son compatibles con estos"
 
-#: workflow/forms.py:197 workflow/forms.py:284
+#: workflow/forms.py:200 workflow/forms.py:285
 msgid "Question name"
 msgstr "Nombre de la pregunta"
 
-#: workflow/forms.py:199 workflow/forms.py:286
+#: workflow/forms.py:202 workflow/forms.py:287
 msgid "Description (shown to the learners)"
 msgstr "Descripción (se muestra a los estudiantes)"
 
-#: workflow/forms.py:201 workflow/forms.py:288
+#: workflow/forms.py:204 workflow/forms.py:289
 msgid "Question position (zero to insert last)"
 msgstr "Posición de la pregunta (cero para insertar última)"
 
-#: workflow/forms.py:202 workflow/forms.py:289
+#: workflow/forms.py:205 workflow/forms.py:290
 msgid "Question active from"
 msgstr "Pregunta activa desde"
 
-#: workflow/forms.py:203 workflow/forms.py:290
+#: workflow/forms.py:206 workflow/forms.py:291
 msgid "Question active until"
 msgstr "Pregunta activa hasta"
 
-#: workflow/forms.py:228
+#: workflow/forms.py:231
 msgid "Value to assign to all cells in the column"
 msgstr "Valor a asignar a toda la columna"
 
-#: workflow/forms.py:262
+#: workflow/forms.py:263
 msgid "This value is not in the list of allowed values"
 msgstr "Este valor no está en la lista de valores permitidos"
 
-#: workflow/forms.py:329
+#: workflow/forms.py:330
 msgid "There must be at least one column with unique values"
 msgstr "Debe haber una columna con valores únicos (clave)"
 
-#: workflow/forms.py:339
+#: workflow/forms.py:340
 msgid "The column does not have unique values for each row."
 msgstr "La columna no tiene valores únicos en cada celda."
 
-#: workflow/forms.py:359
+#: workflow/forms.py:360
 msgid "Columns to combine*"
 msgstr "Columnas a combinar*"
 
-#: workflow/forms.py:391
+#: workflow/forms.py:392
 msgid "You need to select the columns to combine"
 msgstr "Se necesita seleccionar las columnas a combinar"
 
-#: workflow/forms.py:410
+#: workflow/forms.py:411
 msgid "Incorrect data type for the selected operand"
 msgstr "Tipo de datos incorrecto para el operando seleccionado"
 
-#: workflow/forms.py:436
+#: workflow/forms.py:437
 msgid "Number (values from 1 to N) or comma separated list of values."
 msgstr "Número (valores de 1 a N) o lista de valores separados por comas"
 
-#: workflow/forms.py:461
+#: workflow/forms.py:462
 msgid "File containing a previously exported workflow"
 msgstr "Fichero que contiene un flujo previamente exportado"
 
-#: workflow/forms.py:507
+#: workflow/forms.py:508
 msgid "User email"
 msgstr "Correo de usuario"
 
-#: workflow/forms.py:525
+#: workflow/forms.py:526
 msgid "User not found"
 msgstr "Usuario no encontrado"
 
-#: workflow/forms.py:530
+#: workflow/forms.py:531
 msgid "You don't need to add yourself to the share list"
 msgstr "No necesitas añadirte a la lista para compartir"
 
-#: workflow/forms.py:536
+#: workflow/forms.py:537
 msgid "User already in the list"
 msgstr "El usuario ya está en la lista"
 
@@ -4455,6 +4468,7 @@ msgid "Add question"
 msgstr "Añadir pregunta"
 
 #: workflow/templates/workflow/includes/partial_question_addedit.html:20
+#, python-format
 msgid "Edit question <strong>%(n)s</strong>"
 msgstr "Editar pregunta <strong>%(n)s</strong>"
 

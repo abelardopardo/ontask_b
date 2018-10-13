@@ -71,9 +71,9 @@
         <ul class="nav navbar-nav">
           {% block navbar-left %}
             {% if user.is_authenticated %}
-              <li><a class="nav navbar-nav spin" href="{% url 'home' %}">Workflows</a></li>
+              <li><a class="nav navbar-nav spin" href="{% url 'home' %}">{% trans 'Workflows' %}</a></li>
               {% if user.is_superuser %}
-                <li><a class="nav navbar-nav spin" href="{% url 'workflow:sql_connections' %}">SQL Connections</a></li>
+                <li><a class="nav navbar-nav spin" href="{% url 'workflow:sql_connections' %}">{% trans 'SQL Connections' %}</a></li>
               {% endif %}
             {% endif %}
             {% if request.session.ontask_workflow_id %}
