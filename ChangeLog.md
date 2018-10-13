@@ -4,6 +4,8 @@
 
 - Bug preventing questions to be added to the workflow (Issue #95)
 
+- Fixed bug in localization preventing the use of translations
+
 ## 3.0.1 (2018-09-25)
 
 ### Fixed

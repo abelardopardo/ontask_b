@@ -266,7 +266,12 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-es'
+
+LANGUAGES = (
+    ('en-us', _('English')),
+    ('es-es', _('Spanish')),
+)
 
 TIME_ZONE = env('TIME_ZONE')
 
