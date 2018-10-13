@@ -18,6 +18,7 @@ from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.core import signing, mail
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -40,6 +41,7 @@ from action.serializers import ActionSelfcontainedSerializer
 from dataops import pandas_db, ops
 from logs.models import Log
 from workflow.models import Column
+from workflow.ops import get_workflow
 from . import settings
 
 
@@ -711,3 +713,35 @@ def send_json(user, action, token, key_column, exclude_values, log_item):
     log_item.save()
 
     return None
+
+
+def get_workflow_action(request, pk):
+    """
+    Function that returns the action for the given PK and the workflow for
+    the session.
+
+    :param request:
+    :param pk: Action id.
+    :return: (workflow, Action) or None
+    """
+
+    # Get the workflow first
+    workflow = get_workflow(request)
+    if not workflow:
+        return None
+
+    if workflow.nrows == 0:
+        messages.error(request,
+                       'Workflow has no data. '
+                       'Go to "Manage table data" to upload data.')
+        return None
+
+    # Get the action
+    try:
+        action = Action.objects.filter(
+            Q(workflow__user=request.user) |
+            Q(workflow__shared=request.user)).distinct().get(pk=pk)
+    except ObjectDoesNotExist:
+        return None
+
+    return workflow, action
