@@ -267,6 +267,11 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
+LANGUAGES = (
+    ('en-us', _('English')),
+    ('es-es', _('Spanish')),
+)
+
 TIME_ZONE = env('TIME_ZONE')
 
 USE_I18N = True

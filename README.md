@@ -4,8 +4,6 @@ Current Version: 4.0.0 ([documentation](http://ontask-version-b.readthedocs.io/e
 
 ## OnTask in a nutshell
 
-- Authentication through LTI, LDAP, Shibboleth
-
 - Data upload through CSV, Excel files or SQL connections
 
 - Actions such as personalised email, personalised web page
@@ -28,6 +26,8 @@ Current Version: 4.0.0 ([documentation](http://ontask-version-b.readthedocs.io/e
 - Table views to see only a subset of the data
 
 - Execution of plugins to process and modify workflow data.
+
+- Authentication through LTI, LDAP, Shibboleth
 
 **For a detailed description of the tool, how to install it, and how to use it
 check the [OnTask Documentation](https://abelardopardo.github.io/ontask_b)**.
