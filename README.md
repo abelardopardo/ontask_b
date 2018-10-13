@@ -1,10 +1,8 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 3.0.1 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 3.0.2 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
 ## OnTask in a nutshell
-
-- Authentication through LTI, LDAP, Shibboleth
 
 - Data upload through CSV, Excel files or SQL connections
 
@@ -28,6 +26,8 @@ Current Version: 3.0.1 ([documentation](http://ontask-version-b.readthedocs.io/e
 - Table views to see only a subset of the data
 
 - Execution of plugins to process and modify workflow data.
+
+- Authentication through LTI, LDAP, Shibboleth
 
 **For a detailed description of the tool, how to install it, and how to use it
 check the [OnTask Documentation](https://abelardopardo.github.io/ontask_b)**.
