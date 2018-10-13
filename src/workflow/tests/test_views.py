@@ -21,21 +21,6 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         super(WorkflowInitial, self).setUp()
         test.create_users()
 
-    def test_00_home_view(self):
-        for uemail, ucode in [('student01@bogus.com', 302),
-                              ('instructor01@bogus.com', 200),
-                              ('superuser@bogus.com', 200)]:
-            user_login = self.client.login(email=uemail,
-                                           password=test.boguspwd)
-            self.assertTrue(user_login)
-
-            response = self.client.get(reverse('workflow:index'))
-
-            # Should redirect to a page with the profile (it is not staff).
-            self.assertEqual(response.status_code, ucode)
-
-            self.client.logout()
-
     def test_01_workflow_create_upload_merge_column_edit(self):
         """
         Create a workflow, upload data and merge
@@ -95,7 +80,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             "//table[@id='column-table']/tbody/tr[1]/td[2]").text,
                          'sid')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[1]/td[3]").text,
+            "//table[@id='column-table']/tbody/tr[1]/td[4]").text,
                          'number')
 
         # Second column must be email string
@@ -103,7 +88,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             "//table[@id='column-table']/tbody/tr[2]/td[2]").text,
                          'name')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[2]/td[3]").text,
+            "//table[@id='column-table']/tbody/tr[2]/td[4]").text,
                          'string')
 
         # Third column must be sid integer
@@ -111,7 +96,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             "//table[@id='column-table']/tbody/tr[3]/td[2]").text,
                          'email')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[3]/td[3]").text,
+            "//table[@id='column-table']/tbody/tr[3]/td[4]").text,
                          'string')
 
         # Fourth column must be name string
@@ -119,7 +104,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             "//table[@id='column-table']/tbody/tr[4]/td[2]").text,
                          'age')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[3]").text,
+            "//table[@id='column-table']/tbody/tr[4]/td[4]").text,
                          'number')
 
         # Fifth registered and boolean
@@ -127,7 +112,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             "//table[@id='column-table']/tbody/tr[5]/td[2]").text,
                          'registered')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[5]/td[3]").text,
+            "//table[@id='column-table']/tbody/tr[5]/td[4]").text,
                          'boolean')
 
         # Sixth when and datetime
@@ -135,7 +120,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             "//table[@id='column-table']/tbody/tr[6]/td[2]").text,
                          'when')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[6]/td[3]").text,
+            "//table[@id='column-table']/tbody/tr[6]/td[4]").text,
                          'datetime')
 
         # Number of key columns
@@ -212,7 +197,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             "//table[@id='column-table']/tbody/tr[7]/td[2]").text,
                          'another')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[7]/td[3]").text,
+            "//table[@id='column-table']/tbody/tr[7]/td[4]").text,
                          'string')
 
         # Sixth column must be one string
@@ -220,7 +205,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             "//table[@id='column-table']/tbody/tr[8]/td[2]").text,
                          'one')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[8]/td[3]").text,
+            "//table[@id='column-table']/tbody/tr[8]/td[4]").text,
                          'string')
 
         # Number of key columns
@@ -346,7 +331,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
             "//table[@id='column-table']/tbody/tr[1]/td[2]").text,
                          'age')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[1]/td[3]").text,
+            "//table[@id='column-table']/tbody/tr[1]/td[4]").text,
                          'number')
 
         # ADD COLUMNS
@@ -363,7 +348,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
             if ctype == 'integer':
                 ctype = 'number'
             row_path1 = "//table[@id='column-table']/tbody/tr[{0}]/td[2]"
-            row_path2 = "//table[@id='column-table']/tbody/tr[{0}]/td[3]"
+            row_path2 = "//table[@id='column-table']/tbody/tr[{0}]/td[4]"
 
             # Third column must be age, double
             self.assertEqual(self.selenium.find_element_by_xpath(
@@ -383,7 +368,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
             "//table[@id='column-table']/tbody/tr[6]/td[2]").text,
                          'one')
         self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[6]/td[3]").text,
+            "//table[@id='column-table']/tbody/tr[6]/td[4]").text,
                          'string')
 
         # End of session
