@@ -9,8 +9,7 @@
   </div>
   <div class="modal-body">
     <p class="lead">{% blocktrans with n=workflow.name %}Are you sure you want to flush the data in workflow <strong>{{ n }}</strong>?{% endblocktrans %}</p>
-    <p>{% blocktrans %}This operation will also remove <b>everything</b> stored in a workflow
-      except its name, description and the text in the Actions Out.{% endblocktrans %}</p>
+    <p>{% blocktrans %}This operation will also remove actions, table views and records.{% endblocktrans %}</p>
   </div>
   <div class="modal-footer" style="text-align: center;">
     <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}
