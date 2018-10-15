@@ -2,10 +2,8 @@
 from __future__ import unicode_literals, print_function
 
 import os
-import time
 
 from django.conf import settings
-from django.shortcuts import reverse
 from django.utils.html import escape
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
