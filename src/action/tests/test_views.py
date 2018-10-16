@@ -242,14 +242,14 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         # Click in the page to send email
         element = self.search_action('simple action')
         element.find_element_by_link_text("Email").click()
-
-        # Set the subject of the email
-        self.selenium.find_element_by_id('id_subject').send_keys('Subject TXT')
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.CLASS_NAME, 'page-header'),
                 'Send emails')
         )
+
+        # Set the subject of the email
+        self.selenium.find_element_by_id('id_subject').send_keys('Subject TXT')
 
         # Set the email column
         select = Select(self.selenium.find_element_by_id(
