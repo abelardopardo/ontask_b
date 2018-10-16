@@ -397,6 +397,9 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
             EC.element_to_be_clickable(
                 (By.ID, 'checkAll'))
         )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         self.selenium.find_element_by_name("Submit").click()
         self.wait_for_datatable('column-table_previous')
 
