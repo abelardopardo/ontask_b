@@ -38,12 +38,19 @@ def run_email_action(request, pk):
     :return: HTTP response
     """
 
+    # Get the workflow and action
     wflow_action = get_workflow_action(request, pk)
+
+    # If nothing found, return
     if not wflow_action:
         return redirect(reverse('action:index'))
 
     # Extract workflow and action
     workflow, action = wflow_action
+
+    if action.action_type != Action.PERSONALIZED_TEXT:
+        # Incorrect type of action.
+        return redirect(reverse('action:index'))
 
     # Get the payload from the session, and if not, use the given one
     op_payload = request.session.get(session_dictionary_name, None)
@@ -217,14 +224,27 @@ def run_zip_action_done(request, payload=None):
     pass
 
 
-def run_json_action(request, workflow, action):
+def run_json_action(request, pk):
     """
     Request data to send JSON objects. Form asking for...
     :param request: HTTP request (GET)
-    :param workflow: Workflow object
-    :param action: Action object
+    :param pk: Primary key of the action
     :return:
     """
+
+    # Get the workflow and action
+    wflow_action = get_workflow_action(request, pk)
+
+    # If nothing found, return
+    if not wflow_action:
+        return redirect(reverse('action:index'))
+
+    # Extract workflow and action
+    workflow, action = wflow_action
+
+    if action.action_type != Action.PERSONALIZED_JSON:
+        # Incorrect type of action.
+        return redirect(reverse('action:index'))
 
     # Get the payload from the session, and if not, use the given one
     op_payload = request.session.get(session_dictionary_name, None)

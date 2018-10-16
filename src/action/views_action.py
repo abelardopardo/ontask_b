@@ -49,8 +49,8 @@ from action.ops import (
     serve_action_out,
     clone_action,
     do_export_action,
-    do_import_action
-)
+    do_import_action,
+    get_workflow_action)
 from .models import Action, Condition
 
 
@@ -1053,16 +1053,16 @@ def run(request, pk):
         return run_email_action(request, pk)
 
     if action.action_type == Action.PERSONALIZED_JSON:
-        return run_json_action(request, workflow, action)
+        return run_json_action(request, pk)
 
     if action.action_type == Action.SURVEY:
-        return run_action_in(request, action)
+        return run_action_in(request, pk)
 
     if action.action_type == Action.TODO_LIST:
-        return run_action_in(request, action)
+        return run_action_in(request, pk)
 
 
-def run_action_in(request, action):
+def run_action_in(request, pk):
     """
     Function that runs the action in. Mainly, it renders a table with
     all rows that satisfy the filter condition and includes a link to
@@ -1072,6 +1072,21 @@ def run_action_in(request, action):
     :param pk: Action id. It is assumed to be an action In
     :return:
     """
+
+    # Get the workflow and action
+    wflow_action = get_workflow_action(request, pk)
+
+    # If nothing found, return
+    if not wflow_action:
+        return redirect(reverse('action:index'))
+
+    # Extract workflow and action
+    workflow, action = wflow_action
+
+    if action.action_type != Action.SURVEY and \
+            action.action_type != Action.TODO_LIST:
+        # Incorrect type of action.
+        return redirect(reverse('action:index'))
 
     # Render template with active columns.
     return render(request,
