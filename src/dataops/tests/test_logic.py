@@ -3,21 +3,29 @@ from __future__ import unicode_literals, print_function
 
 import StringIO
 import datetime
+import os
 
-import numpy as np
 import pandas as pd
 
 import test
+from django.conf import settings
 from dataops import pandas_db
-from dataops.formula_evaluation import evaluate_top_node, evaluate_node_sql
+from dataops.formula_evaluation import evaluate_top_node
 from dataops.ops import perform_dataframe_upload_merge
-from dataops.pandas_db import get_filter_query
+from dataops.pandas_db import get_filter_query, load_from_db
+from workflow.models import Workflow
 
 
 class DataopsMatrixManipulation(test.OntaskTestCase):
-    table_name = 'TEST_TABLE'
+    fixtures = ['test_merge']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'dataops',
+        'fixtures',
+        'test_merge.sql'
+    )
 
-    pk = '999'
+    table_name = 'DUMP_BOGUS_TABLE'
 
     csv1 = """key,text1,text2,double1,double2,bool1,bool2,date1,date2
               1.0,"d1_t1_1",,111.0,,True,,1/1/18 01:00:00,
@@ -48,17 +56,34 @@ class DataopsMatrixManipulation(test.OntaskTestCase):
         'how_merge': None
     }
 
+    def __init__(self, *args, **kwargs):
+        super(DataopsMatrixManipulation, self).__init__(*args, **kwargs)
+        self.workflow = None
+
+    def setUp(self):
+        super(DataopsMatrixManipulation, self).setUp()
+        pandas_db.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        pandas_db.delete_all_tables()
+        super(DataopsMatrixManipulation, self).tearDown()
+
     def parse_data_frames(self):
         # Parse the two CSV strings and return as data frames
-        df_dst = pandas_db.load_df_from_csvfile(
-            StringIO.StringIO(self.csv1),
-            0,
-            0)
-        df_src = pandas_db.load_df_from_csvfile(
-            StringIO.StringIO(self.csv2),
-            0,
-            0
-        )
+
+        if self.workflow:
+            # Get the workflow data frame
+            df_dst = load_from_db(self.workflow.id)
+        else:
+            df_dst = pandas_db.load_df_from_csvfile(
+                StringIO.StringIO(self.csv1),
+                0,
+                0
+            )
+
+        df_src = pandas_db.load_df_from_csvfile(StringIO.StringIO(self.csv2),
+                                                0,
+                                                0)
 
         # Fix the merge_info fields.
         self.merge_info['initial_column_names'] = list(df_src.columns)
@@ -67,27 +92,12 @@ class DataopsMatrixManipulation(test.OntaskTestCase):
 
         return df_dst, df_src
 
-    def df_update_inner(self):
-        df_dst, df_src = self.parse_data_frames()
+    def test_df_equivalent_after_sql(self):
 
-        self.merge_info['how_merge'] = 'inner'
-
-        result = perform_dataframe_upload_merge(self.pk,
-                                                df_dst,
-                                                df_src,
-                                                self.merge_info)
-
-        # Result must be correct (None)
-        self.assertEquals(result, None)
-
-        result_df = pandas_db.load_from_db(self.pk)
-
-    def df_equivalent_after_sql(self):
         # Parse the CSV
-        df_source = pandas_db.load_df_from_csvfile(
-            StringIO.StringIO(self.csv1),
-            0,
-            0)
+        df_source = pandas_db.load_df_from_csvfile(StringIO.StringIO(self.csv1),
+                                                   0,
+                                                   0)
 
         # Store the DF in the DB
         pandas_db.store_table(df_source, self.table_name)
@@ -95,13 +105,29 @@ class DataopsMatrixManipulation(test.OntaskTestCase):
         # Load it from the DB
         df_dst = pandas_db.load_table(self.table_name)
 
-        # Columns have to have the same values (None and NaN are
-        # different)
-        for x in df_source.columns:
-            np.testing.assert_array_equal(
-                np.array(df_source[x], dtype=unicode),
-                np.array(df_dst[x], dtype=unicode)
-            )
+        # Data frames mut be identical
+        assert df_source.equals(df_dst)
+
+    def test_merge_inner(self):
+
+        # Get the workflow
+        self.workflow = Workflow.objects.all()[0]
+
+        # Parse the source data frame
+        df_dst, df_src = self.parse_data_frames()
+
+        self.merge_info['how_merge'] = 'inner'
+
+        result = perform_dataframe_upload_merge(self.workflow.id,
+                                                df_dst,
+                                                df_src,
+                                                self.merge_info)
+
+        # Load again the workflow data frame
+        df_dst = load_from_db(self.workflow.id)
+
+        # Result must be correct (None)
+        self.assertEquals(result, None)
 
 
 class FormulaEvaluation(test.OntaskTestCase):
@@ -188,7 +214,6 @@ class FormulaEvaluation(test.OntaskTestCase):
         query, fields = get_filter_query(self.test_table, None, self.skel)
         result = pd.read_sql_query(query, pandas_db.engine, params=fields)
         self.assertEqual(len(result), 1)
-
 
     def test_eval_node(self):
         #
