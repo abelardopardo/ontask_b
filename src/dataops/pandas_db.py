@@ -283,7 +283,7 @@ def load_df_from_csvfile(file, skiprows=0, skipfooter=0):
         quotechar='"',
         skiprows=skiprows,
         skipfooter=skipfooter,
-        encoding = 'utf-8'
+        encoding='utf-8'
     )
 
     # Strip white space from all string columns and try to convert to
