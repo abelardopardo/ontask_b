@@ -1,3 +1,13 @@
+## 3.0.3 (2018-10-)
+
+### Fixed
+
+- Misleading information shown when flushing a workflow (Iussue #97)
+
+- Fixed bug when merging data frames using the "right" option
+
+- Fixed bug when loading/dumping dataframes with UTF-8 characters.
+
 ## 3.0.2 (2018-10-13)
 
 ### Fixed
