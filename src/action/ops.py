@@ -85,7 +85,8 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
 
         messages.error(request,
                        _('Data not found in the table'))
-        return redirect(reverse('action:run', kwargs={'pk': action.id}))
+        return redirect(reverse('action:run_action_in',
+                                kwargs={'pk': action.id}))
 
     # Bind the form with the existing data
     form = EnterActionIn(request.POST or None,
@@ -95,7 +96,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
 
     cancel_url = None
     if is_inst:
-        cancel_url = reverse('action:run', kwargs={'pk': action.id})
+        cancel_url = reverse('action:run_action_in', kwargs={'pk': action.id})
 
     # Create the context
     context = {'form': form,
@@ -156,7 +157,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
         return render(request, 'thanks.html', {})
 
     # Back to running the action
-    return redirect(reverse('action:run', kwargs={'pk': action.id}))
+    return redirect(reverse('action:run_action_in', kwargs={'pk': action.id}))
 
 
 def serve_action_out(user, action, user_attribute_name):

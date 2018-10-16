@@ -55,8 +55,20 @@ urlpatterns = [
     # Nuke the action
     url(r'^(?P<pk>\d+)/delete/$', views_action.delete_action, name='delete'),
 
-    # Run action
-    url(r'^(?P<pk>\d+)/run/$', views_action.run, name='run'),
+    # Run EMAIL action
+    url(r'^(?P<pk>\d+)/run_email/$',
+        views_out.run_email_action,
+        name='run_email_action'),
+
+    # Run JSON action
+    url(r'^(?P<pk>\d+)/run_json/$',
+        views_out.run_json_action,
+        name='run_json_action'),
+
+    # Run action IN
+    url(r'^(?P<pk>\d+)/run_action_in/$',
+        views_action.run_action_in,
+        name='run_action_in'),
 
     #
     # Email action steps

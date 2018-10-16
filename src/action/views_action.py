@@ -1019,49 +1019,6 @@ def delete_action(request, pk):
 
 
 @user_passes_test(is_instructor)
-def run(request, pk):
-    """
-    Function that runs the action in. Mainly, it renders a table with
-    all rows that satisfy the filter condition and includes a link to
-    enter data for each of them.
-
-    :param request:
-    :param pk: Action id. It is assumed to be an action In
-    :return:
-    """
-
-    # Get the workflow first
-    workflow = get_workflow(request)
-    if not workflow:
-        return redirect('workflow:index')
-
-    if workflow.nrows == 0:
-        messages.error(request,
-                       'Workflow has no data. '
-                       'Go to "Manage table data" to upload data.')
-        return redirect(reverse('action:index'))
-
-    # Get the action
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
-        return redirect('action:index')
-
-    if action.action_type == Action.PERSONALIZED_TEXT:
-        return run_email_action(request, pk)
-
-    if action.action_type == Action.PERSONALIZED_JSON:
-        return run_json_action(request, pk)
-
-    if action.action_type == Action.SURVEY:
-        return run_action_in(request, pk)
-
-    if action.action_type == Action.TODO_LIST:
-        return run_action_in(request, pk)
-
-
 def run_action_in(request, pk):
     """
     Function that runs the action in. Mainly, it renders a table with

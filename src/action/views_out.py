@@ -29,6 +29,8 @@ from .forms import EmailActionForm, JSONActionForm, EmailExcludeForm
 # Dictionary to store in the session the data between forms.
 session_dictionary_name = 'action_run_payload'
 
+
+@user_passes_test(is_instructor)
 def run_email_action(request, pk):
     """
     Request data to send emails. Form asking for subject line, email column,
@@ -56,7 +58,7 @@ def run_email_action(request, pk):
     op_payload = request.session.get(session_dictionary_name, None)
     if not op_payload:
         op_payload = {'action_id': action.id,
-                      'prev_url': reverse('action:run',
+                      'prev_url': reverse('action:run_email_action',
                                           kwargs={'pk': action.id}),
                       'post_url': reverse('action:email_done')}
         request.session[session_dictionary_name] = op_payload
@@ -224,6 +226,7 @@ def run_zip_action_done(request, payload=None):
     pass
 
 
+@user_passes_test(is_instructor)
 def run_json_action(request, pk):
     """
     Request data to send JSON objects. Form asking for...
@@ -250,7 +253,7 @@ def run_json_action(request, pk):
     op_payload = request.session.get(session_dictionary_name, None)
     if not op_payload:
         op_payload = {'action_id': action.id,
-                      'prev_url': reverse('action:run',
+                      'prev_url': reverse('action:run_json_action',
                                           kwargs={'pk': action.id}),
                       'post_url': reverse('action:json_done')}
         request.session[session_dictionary_name] = op_payload
