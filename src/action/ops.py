@@ -32,6 +32,7 @@ from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from validate_email import validate_email
+from django.db.models import Q
 
 from action.evaluate import evaluate_row_action_out, evaluate_action, \
     get_row_values
