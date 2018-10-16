@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-13 22:05+1030\n"
+"POT-Creation-Date: 2018-10-16 19:26+1030\n"
 "PO-Revision-Date: 2018-08-01 16:25+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -358,54 +358,54 @@ msgstr "Columnas presentes en esta condición"
 msgid "Number of rows selected"
 msgstr "Número de filas seleccionadas"
 
-#: action/ops.py:86
+#: action/ops.py:87
 msgid "Data not found in the table"
 msgstr "No se han encontrado datos en la tabla"
 
-#: action/ops.py:185
+#: action/ops.py:186
 #, python-brace-format
 msgid "Error when evaluating conditions for user {0}"
 msgstr "Error al evaluar las condiciones para el usuario {0}"
 
-#: action/ops.py:203
+#: action/ops.py:204
 #, python-brace-format
 msgid "Action not enabled for user {0}"
 msgstr "Acción no permitida para el usuario {0}"
 
-#: action/ops.py:359 workflow/ops.py:212
+#: action/ops.py:360 workflow/ops.py:212
 msgid "Incorrect file. Expecting a GZIP file (exported workflow)."
 msgstr "Fichero incorrect. Es espera un fichero GZIP (flujo exportado)."
 
-#: action/ops.py:370 action/ops.py:375 action/ops.py:380
+#: action/ops.py:371 action/ops.py:376 action/ops.py:381
 #, python-brace-format
 msgid "Unable to import action: {0}"
 msgstr "No se puede importar la acción: {0}"
 
-#: action/ops.py:377
+#: action/ops.py:378
 #, python-brace-format
 msgid "Unable to import action due to a validation error: {0}"
 msgstr "No es posible importar la acción debidi a un error de validación: {0}"
 
-#: action/ops.py:463
+#: action/ops.py:464
 msgid "Invalid email address in cc email"
 msgstr "Dirección de correo incorrecta en el CC"
 
-#: action/ops.py:465
+#: action/ops.py:466
 msgid "Invalid email address in bcc email"
 msgstr "Dirección de correo incorrecta en el BCC"
 
-#: action/ops.py:590
+#: action/ops.py:591
 #, python-brace-format
 msgid "Syntax error detected in OnTask notification template ({0})"
 msgstr ""
 "Error de sintaxis detectdado en la plantilla de notificación OnTask ({0})"
 
-#: action/ops.py:619
+#: action/ops.py:620
 #, python-brace-format
 msgid "An error occurred when sending your notification: {0}"
 msgstr "Se ha produciro un error al enviar la notificación: {0}"
 
-#: action/ops.py:671
+#: action/ops.py:672
 #, python-brace-format
 msgid "Incorrect JSON string in element number {0}"
 msgstr "Texto incorrecto en objeto JSON en elemento número {0}"
@@ -573,7 +573,7 @@ msgstr "Se enviarán %(n)s mensajes."
 #: workflow/templates/workflow/includes/partial_workflow_clone.html:15
 #: workflow/templates/workflow/includes/partial_workflow_create.html:17
 #: workflow/templates/workflow/includes/partial_workflow_delete.html:15
-#: workflow/templates/workflow/includes/partial_workflow_flush.html:16
+#: workflow/templates/workflow/includes/partial_workflow_flush.html:15
 #: workflow/templates/workflow/includes/partial_workflow_update.html:14
 msgid "Cancel"
 msgstr "Cancelar"
@@ -1333,7 +1333,7 @@ msgstr "No se ha podido clonar la condición"
 msgid "Action successfully cloned."
 msgstr "A acción ha sido clonada con éxito."
 
-#: action/views_out.py:62
+#: action/views_out.py:69
 msgid ""
 "Unable to send emails due to a misconfiguration. Ask your system "
 "administrator to enable email queueing."
@@ -1341,15 +1341,15 @@ msgstr ""
 "No es posible mandar los emails por una incorrecta configuración.  Contacte "
 "al administrador para activar la cola de emails."
 
-#: action/views_out.py:106 action/views_out.py:276
+#: action/views_out.py:113 action/views_out.py:283
 msgid "Send"
 msgstr "Enviar"
 
-#: action/views_out.py:133
+#: action/views_out.py:140
 msgid "Incorrect email action invocation."
 msgstr "Invocación de acción email incorrecta"
 
-#: action/views_out.py:243
+#: action/views_out.py:250
 msgid ""
 "Unable to send json objects due to a misconfiguration. Ask your system "
 "administrator to enable JSON queueing."
@@ -1357,16 +1357,16 @@ msgstr ""
 "No es posible mandar los objetos por una incorrecta configuración.  Contacte "
 "al administrador para activar el envío de objetos JSON."
 
-#: action/views_out.py:303
+#: action/views_out.py:310
 msgid "Incorrect JSON action invocation."
 msgstr "Invocación indorrecta de acción JSON"
 
-#: action/views_out.py:432
+#: action/views_out.py:439
 #, python-brace-format
 msgid "Error while retrieving content for student {0}"
 msgstr "Error al acceder al contenido para el estudiante {0}"
 
-#: action/views_out.py:466
+#: action/views_out.py:473
 msgid "Incorrect item filter invocation."
 msgstr "Invocación incorrecta del filtro"
 
@@ -4568,14 +4568,12 @@ msgstr ""
 "¿Está seguro que quiere borrar los datos del flujo <strong>%(n)s</strong>?"
 
 #: workflow/templates/workflow/includes/partial_workflow_flush.html:12
-msgid ""
-"This operation will also remove <b>everything</b> stored in a workflow\n"
-"      except its name, description and the text in the Actions Out."
+msgid "This operation will also remove actions, table views and records."
 msgstr ""
-"Esta operación también borrará <b>todos los elementos</b> del flujo]n "
-"excepto su nombre, descripción y el texto en las Acciones de salida."
+"Esta operación también borrará todas las condiciones, vistas, acciones, y "
+"registros."
 
-#: workflow/templates/workflow/includes/partial_workflow_flush.html:19
+#: workflow/templates/workflow/includes/partial_workflow_flush.html:18
 msgid "Flush workflow data"
 msgstr "Borrar datos del flujo"
 
@@ -4807,6 +4805,13 @@ msgstr "Imposible clonar flujo"
 #: workflow/views.py:626
 msgid "Workflow successfully cloned."
 msgstr "Flujo clonado con éxito"
+
+#~ msgid ""
+#~ "This operation will also remove <b>everything</b> stored in a workflow\n"
+#~ "      except its name, description and the text in the Actions Out."
+#~ msgstr ""
+#~ "Esta operación también borrará <b>todos los elementos</b> del flujo]n "
+#~ "excepto su nombre, descripción y el texto en las Acciones de salida."
 
 #~ msgid "Column"
 #~ msgstr "Columna"
