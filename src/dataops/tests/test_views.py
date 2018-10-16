@@ -484,6 +484,9 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
                 (By.XPATH, "//form")
             )
         )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
 
         # Select file and upload
         self.selenium.find_element_by_id("id_file").send_keys(
