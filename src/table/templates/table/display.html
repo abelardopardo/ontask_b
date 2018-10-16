@@ -122,7 +122,7 @@
             <span class="glyphicon glyphicon-dashboard"></span> {% trans 'Dashboard' %}
           </a>
           <a href="{% url 'table:csvdownload_view' view.id %}" download
-             class="btn btn-default btn-sm js-logs-download spin"
+             class="btn btn-default btn-sm js-logs-download"
              data-toggle="tooltip"
              title="{% trans 'Download a CSV file containing this table' %}">
             <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
@@ -135,7 +135,7 @@
             <span class="glyphicon glyphicon-dashboard"></span> {% trans 'Dashboard' %}
           </a>
           <a href="{% url 'table:csvdownload' %}"
-             class="btn btn-default btn-sm spin"
+             class="btn btn-default btn-sm"
              data-toggle="tooltip"
              title="{% trans 'Download a CSV file containing this table' %}">
             <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
