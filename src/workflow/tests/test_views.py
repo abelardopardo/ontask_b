@@ -262,6 +262,9 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
                                              'Step 2: Select Columns')
         )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
 
         # Click on the FINISH button
         self.selenium.find_element_by_xpath(

@@ -696,6 +696,9 @@ def csvdownload(request, pk=None):
         'attachment; filename="ontask_table.csv"'
 
     # Dump the data frame as the content of the response object
-    data_frame.to_csv(path_or_buf=response, sep=str(','), index=False)
+    data_frame.to_csv(path_or_buf=response,
+                      sep=str(','),
+                      index=False,
+                      encoding='utf-8')
 
     return response

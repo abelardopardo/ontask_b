@@ -12,6 +12,16 @@
 
 - Datetimepicker widget changed due to incompatibilities with Django 2
 
+## 3.0.3 (2018-10-16)
+
+### Fixed
+
+- Misleading information shown when flushing a workflow (Iussue #97)
+
+- Fixed bug when merging data frames using the "right" option (Issue #98)
+
+- Fixed bug when loading/dumping dataframes with UTF-8 characters (Issue #99)
+
 ## 3.0.2 (2018-10-13)
 
 ### Fixed

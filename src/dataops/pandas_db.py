@@ -75,7 +75,15 @@ def create_db_connection(dialect, driver, username, password, host, dbname):
             host=host,
             database_name=dbname,
         )
-    return create_engine(database_url, echo=False, paramstyle='format')
+
+    if settings.DEBUG:
+        print('Creating engine with ', database_url)
+
+    return create_engine(database_url,
+                         client_encoding=str('utf8'),
+                         encoding=str('utf8'),
+                         echo=False,
+                         paramstyle='format')
 
 
 def create_db_engine(dialect, driver, username, password, host, dbname):
@@ -102,13 +110,10 @@ def create_db_engine(dialect, driver, username, password, host, dbname):
             host=host,
             database_name=dbname,
         )
-    engine = create_db_connection(dialect, driver, username, password, host,
-                                  dbname)
+    the_engine = create_db_connection(dialect, driver, username, password, host,
+                                      dbname)
 
-    if settings.DEBUG:
-        print('Creating engine with ', database_url)
-
-    return engine
+    return the_engine
 
 
 def destroy_db_engine(db_engine):
@@ -278,7 +283,8 @@ def load_df_from_csvfile(file, skiprows=0, skipfooter=0):
         infer_datetime_format=True,
         quotechar='"',
         skiprows=skiprows,
-        skipfooter=skipfooter
+        skipfooter=skipfooter,
+        encoding='utf-8'
     )
 
     # Strip white space from all string columns and try to convert to

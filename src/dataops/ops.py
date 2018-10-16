@@ -286,16 +286,16 @@ def perform_overlap_update(dst_df, src_df, dst_key, src_key, how_merge):
     else:
         # Right merge
         # Subset of dst_df_tmp1 with the keys in both DFs
-        tmp1 = dst_df_tmp1.loc[
+        result = dst_df_tmp1.loc[
             dst_df_tmp1.index.intersection(src_df_tmp1.index)
         ]
         # Update with the right DF
-        tmp1.update(src_df_tmp1)
+        result.update(src_df_tmp1)
         # Append the rows that are in right and not in left
         tmp2 = src_df_tmp1.loc[src_df_tmp1.index.difference(dst_df_tmp1.index)]
         if not tmp2.empty:
             # Append only if it is not empty
-            result = tmp1.append(tmp2)
+            result = result.append(tmp2)
 
     # Return result
     return result.reset_index()

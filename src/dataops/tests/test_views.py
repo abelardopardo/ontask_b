@@ -2,10 +2,8 @@
 from __future__ import unicode_literals, print_function
 
 import os
-import time
 
 from django.conf import settings
-from django.shortcuts import reverse
 from django.utils.html import escape
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -399,6 +397,9 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
             EC.element_to_be_clickable(
                 (By.ID, 'checkAll'))
         )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         self.selenium.find_element_by_name("Submit").click()
         self.wait_for_datatable('column-table_previous')
 
@@ -482,6 +483,9 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
             EC.visibility_of_element_located(
                 (By.XPATH, "//form")
             )
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
         # Select file and upload

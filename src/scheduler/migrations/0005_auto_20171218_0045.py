@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import datetime
+import pytz
 from django.db import migrations, models
 
 
@@ -16,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='scheduledemailaction',
             name='execute',
-            field=models.DateTimeField(default=datetime.datetime(2017, 10, 20, 22, 23)),
+            field=models.DateTimeField(default=datetime.datetime(2017, 10, 20, 22, 23, 0, 0, pytz.UTC)),
             preserve_default=False,
         ),
     ]

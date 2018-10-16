@@ -28,7 +28,6 @@ from .forms import EmailActionForm, JSONActionForm, EmailExcludeForm
 # Dictionary to store in the session the data between forms.
 session_dictionary_name = 'action_run_payload'
 
-
 def run_email_action(request, workflow, action):
     """
     Request data to send emails. Form asking for subject line, email column,
@@ -183,6 +182,32 @@ def run_email_action_done(request, payload=None):
     return render(request,
                   'action/action_done.html',
                   {'log_id': log_item.id, 'download': export_wf})
+
+
+def run_zip_action(request, workflow, action):
+    """
+    Request data to create a zip file. Form asking for file name pattern.
+    :param request: HTTP request (GET)
+    :param workflow: Workflow object
+    :param action: Action object
+    :return: HTTP response
+    """
+
+    pass
+
+
+def run_zip_action_done(request, payload=None):
+    """
+    Final step. Create the zip object, send it for download and render the DONE
+    page.
+
+    :param request: HTTP request (GET)
+    :param payload: Dictionary containing all the required parameters. If
+    empty, the dictionary is taken from the session.
+    :return: HTTP response
+    """
+
+    pass
 
 
 def run_json_action(request, workflow, action):

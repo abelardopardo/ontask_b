@@ -423,10 +423,7 @@ class TableViews(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Add View']"
         ).click()
-        # Wait for the form to create the derived column
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'modal-open'))
-        )
+        self.wait_for_modal_open()
 
         # Add the details for the second view
         self.selenium.find_element_by_id("id_name").click()
