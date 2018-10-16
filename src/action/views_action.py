@@ -1050,7 +1050,7 @@ def run(request, pk):
         return redirect('action:index')
 
     if action.action_type == Action.PERSONALIZED_TEXT:
-        return run_email_action(request, workflow, action)
+        return run_email_action(request, pk)
 
     if action.action_type == Action.PERSONALIZED_JSON:
         return run_json_action(request, workflow, action)

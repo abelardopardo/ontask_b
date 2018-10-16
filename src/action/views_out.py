@@ -19,6 +19,7 @@ from action.evaluate import (
     evaluate_row_action_out,
     evaluate_row_action_in)
 from action.models import Action
+from action.ops import get_workflow_action
 from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tasks import send_email_messages, send_json_objects
@@ -28,15 +29,21 @@ from .forms import EmailActionForm, JSONActionForm, EmailExcludeForm
 # Dictionary to store in the session the data between forms.
 session_dictionary_name = 'action_run_payload'
 
-def run_email_action(request, workflow, action):
+def run_email_action(request, pk):
     """
     Request data to send emails. Form asking for subject line, email column,
     etc.
     :param request: HTTP request (GET)
-    :param workflow: Workflow object
-    :param action: Action object
+    :param pk: Action pk
     :return: HTTP response
     """
+
+    wflow_action = get_workflow_action(request, pk)
+    if not wflow_action:
+        return redirect(reverse('action:index'))
+
+    # Extract workflow and action
+    workflow, action = wflow_action
 
     # Get the payload from the session, and if not, use the given one
     op_payload = request.session.get(session_dictionary_name, None)
