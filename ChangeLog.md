@@ -12,6 +12,12 @@
 
 - Datetimepicker widget changed due to incompatibilities with Django 2
 
+## 3.0.4 ()
+
+### Fiexd
+
+- Fixed bug that showed the spinner when an invalid field is present in a form
+
 ## 3.0.3 (2018-10-16)
 
 ### Fixed
