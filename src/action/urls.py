@@ -55,16 +55,35 @@ urlpatterns = [
     # Nuke the action
     url(r'^(?P<pk>\d+)/delete/$', views_action.delete_action, name='delete'),
 
-    # Run action
-    url(r'^(?P<pk>\d+)/run/$', views_action.run, name='run'),
+    # Run EMAIL action
+    url(r'^(?P<pk>\d+)/run_email/$',
+        views_out.run_email_action,
+        name='run_email_action'),
+
+    # Run ZIP action
+    url(r'^(?P<pk>\d+)/run_zip/$',
+        views_out.run_zip_action,
+        name='run_zip_action'),
+
+    # Run JSON action
+    url(r'^(?P<pk>\d+)/run_json/$',
+        views_out.run_json_action,
+        name='run_json_action'),
+
+    # Run action IN
+    url(r'^(?P<pk>\d+)/run_action_in/$',
+        views_action.run_action_in,
+        name='run_action_in'),
 
     #
-    # Email action steps
+    # Personalised text and JSON action steps
     #
     url(r'^item_filter/$',
         views_out.run_action_item_filter,
         name='item_filter'),
     url(r'^email_done/$', views_out.run_email_action_done, name='email_done'),
+    url(r'^zip_done/$', views_out.run_zip_action_done, name='zip_done'),
+    url(r'^zip_export/$', views_out.action_zip_export, name='zip_export'),
     url(r'^json_done/$', views_out.json_done, name='json_done'),
 
     #

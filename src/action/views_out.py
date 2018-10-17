@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, print_function
 
+import zipfile
 import json
+from io import BytesIO
+
+from datetime import datetime
 
 from celery.task.control import inspect
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -17,32 +21,60 @@ from django.views.decorators.csrf import csrf_exempt
 from action.evaluate import (
     get_row_values,
     evaluate_row_action_out,
-    evaluate_row_action_in)
+    evaluate_row_action_in, evaluate_action)
 from action.models import Action
+from action.ops import get_workflow_action
 from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tasks import send_email_messages, send_json_objects
 from workflow.ops import get_workflow
-from .forms import EmailActionForm, JSONActionForm, EmailExcludeForm
+from .forms import EmailActionForm, JSONActionForm, EmailExcludeForm, \
+    ZipActionForm
 
 # Dictionary to store in the session the data between forms.
 session_dictionary_name = 'action_run_payload'
 
-def run_email_action(request, workflow, action):
+html_body = """<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>title</title>
+  </head>
+  <body>
+    {0}
+  </body>
+</html>"""
+
+
+@user_passes_test(is_instructor)
+def run_email_action(request, pk):
     """
     Request data to send emails. Form asking for subject line, email column,
     etc.
     :param request: HTTP request (GET)
-    :param workflow: Workflow object
-    :param action: Action object
+    :param pk: Action pk
     :return: HTTP response
     """
+
+    # Get the workflow and action
+    wflow_action = get_workflow_action(request, pk)
+
+    # If nothing found, return
+    if not wflow_action:
+        return redirect(reverse('action:index'))
+
+    # Extract workflow and action
+    workflow, action = wflow_action
+
+    if action.action_type != Action.PERSONALIZED_TEXT:
+        # Incorrect type of action.
+        return redirect(reverse('action:index'))
 
     # Get the payload from the session, and if not, use the given one
     op_payload = request.session.get(session_dictionary_name, None)
     if not op_payload:
         op_payload = {'action_id': action.id,
-                      'prev_url': reverse('action:run',
+                      'prev_url': reverse('action:run_email_action',
                                           kwargs={'pk': action.id}),
                       'post_url': reverse('action:email_done')}
         request.session[session_dictionary_name] = op_payload
@@ -112,6 +144,7 @@ def run_email_action(request, workflow, action):
     return run_email_action_done(request, op_payload)
 
 
+@user_passes_test(is_instructor)
 def run_email_action_done(request, payload=None):
     """
     Final step. Create the log object, queue the operation request,
@@ -184,18 +217,83 @@ def run_email_action_done(request, payload=None):
                   {'log_id': log_item.id, 'download': export_wf})
 
 
-def run_zip_action(request, workflow, action):
+@user_passes_test(is_instructor)
+def run_zip_action(request, pk):
     """
     Request data to create a zip file. Form asking for file name pattern.
     :param request: HTTP request (GET)
-    :param workflow: Workflow object
-    :param action: Action object
+    :param pk: Action key
     :return: HTTP response
     """
 
-    pass
+    # Get the workflow and action
+    wflow_action = get_workflow_action(request, pk)
+
+    # If nothing found, return
+    if not wflow_action:
+        return redirect(reverse('action:index'))
+
+    # Extract workflow and action
+    workflow, action = wflow_action
+
+    if action.action_type != Action.PERSONALIZED_TEXT:
+        # Incorrect type of action.
+        return redirect(reverse('action:index'))
+
+    # Get the payload from the session, and if not, use the given one
+    op_payload = request.session.get(session_dictionary_name, None)
+    if not op_payload:
+        op_payload = {'action_id': action.id,
+                      'prev_url': reverse('action:run_zip_action',
+                                          kwargs={'pk': action.id}),
+                      'post_url': reverse('action:zip_done')}
+        request.session[session_dictionary_name] = op_payload
+        request.session.save()
+
+    # Create the form to ask for the email subject and other information
+    form = ZipActionForm(
+        request.POST or None,
+        column_names=[x.name for x in workflow.columns.filter(is_key=True)],
+        action=action,
+        op_payload=op_payload
+    )
+
+    # Process the GET or invalid
+    if request.method == 'GET' or not form.is_valid():
+        # Get the number of rows from the action
+        filter_obj = action.get_filter()
+        num_msgs = filter_obj.n_rows_selected if filter_obj else -1
+        if num_msgs == -1:
+            # There is no filter in the action, so take the number of rows
+            num_msgs = workflow.nrows
+
+        # Render the form
+        return render(request,
+                      'action/action_zip_step1.html',
+                      {'action': action,
+                       'num_msgs': num_msgs,
+                       'form': form})
+
+    # Requet is a POST and is valid
+
+    # Collect information from the form and store it in op_payload
+    op_payload['item_column'] = form.cleaned_data['user_id_column']
+    op_payload['confirm_users'] = form.cleaned_data['confirm_users']
+    op_payload['exclude_values'] = []
+
+    if op_payload['confirm_users']:
+        # Create a dictionary in the session to carry over all the information
+        # to execute the next pages
+        op_payload['button_label'] = ugettext('Create ZIP')
+        request.session[session_dictionary_name] = op_payload
+
+        return redirect('action:item_filter')
+
+    # Go straight to the final step.
+    return run_zip_action_done(request, op_payload)
 
 
+@user_passes_test(is_instructor)
 def run_zip_action_done(request, payload=None):
     """
     Final step. Create the zip object, send it for download and render the DONE
@@ -207,23 +305,134 @@ def run_zip_action_done(request, payload=None):
     :return: HTTP response
     """
 
-    pass
+    # Get the payload from the session if not given
+    if payload is None:
+        payload = request.session.get(session_dictionary_name)
+
+        # If there is no payload, something went wrong.
+        if payload is None:
+            # Something is wrong with this execution. Return to action table.
+            messages.error(request, _('Incorrect ZIP action invocation.'))
+            return redirect('action:index')
+    else:
+        # Store the payload in the session for the next step
+        request.session[session_dictionary_name] = payload
+
+    # Get the information from the payload
+    action = Action.objects.get(pk=payload['action_id'])
+    user_id_column = payload['item_column']
+    exclude_values = payload['exclude_values']
+
+    # Log the event
+    log_item = Log.objects.register(request.user,
+                                    Log.DOWNLOAD_ZIP_ACTION,
+                                    action.workflow,
+                                    {'action': action.name,
+                                     'action_id': action.id,
+                                     'user_id_column': user_id_column,
+                                     'exclude_values': exclude_values})
+
+    # Successful processing.
+    return render(request,
+                  'action/action_zip_done.html', {})
 
 
-def run_json_action(request, workflow, action):
+@user_passes_test(is_instructor)
+def action_zip_export(request):
+    """
+    Create a zip with the personalised text and return it as response
+
+    :param request: Request object
+    :param payload: Dictionary with all the required information
+    :return:
+    """
+
+    # Get the payload from the session if not given
+    payload = request.session.get(session_dictionary_name, None)
+
+    # If there is no payload, something went wrong.
+    if not payload:
+        # Something is wrong with this execution. Return to action table.
+        messages.error(request, _('Incorrect ZIP action invocation.'))
+        return redirect('action:index')
+
+    # Get the information from the payload
+    action = Action.objects.get(pk=payload['action_id'])
+    user_id_column = payload['item_column']
+    exclude_values = payload['exclude_values']
+
+    # Obtain the personalised text
+
+    # Invoke evaluate_action
+    # Returns: [ (HTML, None, column name value) ] or String error!
+    result = evaluate_action(action,
+                             column_name=user_id_column,
+                             exclude_values=exclude_values)
+
+    # Check the type of the result to see if it was successful
+    if not isinstance(result, list):
+        # Something went wrong. The result contains a message
+        messages.error(request, _('Unable to generate zip:') + result)
+        return redirect('action:index')
+
+    # Loop over the result
+    files = []
+    for msg_body, user_id in result:
+        html_text = html_body.format(msg_body)
+        files.append((user_id, html_text))
+
+    # Create the ZIP and return it for download
+    sbuf = BytesIO()
+    zf = zipfile.ZipFile(sbuf, 'w')
+    for user_id, msg_body in files:
+        zf.writestr('{0}_{0}_feedback.html'.format(user_id), str(msg_body))
+    zf.close()
+
+    suffix = datetime.now().strftime('%y%m%d_%H%M%S')
+    # Attach the compressed value to the response and send
+    compressed_content = sbuf.getvalue()
+    response = HttpResponse(compressed_content)
+    response['Content-Type'] = 'application/x-zip-compressed'
+    response['Content-Transfer-Encoding'] = 'binary'
+    response['Content-Disposition'] = \
+        'attachment; filename="ontask_zip_action_{0}.gz"'.format(suffix)
+    response['Content-Length'] = str(len(compressed_content))
+
+    # Reset object to carry action info throughout dialogs
+    request.session[session_dictionary_name] = {}
+    request.session.save()
+
+    return response
+
+
+@user_passes_test(is_instructor)
+def run_json_action(request, pk):
     """
     Request data to send JSON objects. Form asking for...
     :param request: HTTP request (GET)
-    :param workflow: Workflow object
-    :param action: Action object
+    :param pk: Primary key of the action
     :return:
     """
+
+    # Get the workflow and action
+    wflow_action = get_workflow_action(request, pk)
+
+    # If nothing found, return
+    if not wflow_action:
+        return redirect(reverse('action:index'))
+
+    # Extract workflow and action
+    workflow, action = wflow_action
+
+    if action.action_type != Action.PERSONALIZED_JSON:
+        # Incorrect type of action.
+        return redirect(reverse('action:index'))
 
     # Get the payload from the session, and if not, use the given one
     op_payload = request.session.get(session_dictionary_name, None)
     if not op_payload:
         op_payload = {'action_id': action.id,
-                      'prev_url': reverse('action:run',
+                      'prev_url': reverse('action:run_json_action',
                                           kwargs={'pk': action.id}),
                       'post_url': reverse('action:json_done')}
         request.session[session_dictionary_name] = op_payload
