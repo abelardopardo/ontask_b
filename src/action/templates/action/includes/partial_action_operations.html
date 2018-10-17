@@ -4,7 +4,7 @@
      class="btn btn-default btn-sm align-middle spin"
      data-toggle="tooltip"
      title="{% trans 'Edit the text, conditions and filter' %}">
-    <span class="glyphicon glyphicon-folder-open"></span> {% trans 'Edit' %}</a>
+    <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}</a>
   <button type="button"
           class="btn btn-default btn-sm js-action-showurl"
           data-url="{% url 'action:showurl' id %}"
@@ -23,6 +23,10 @@
        class="btn btn-default btn-sm spin"
         data-toggle="tooltip" title="{% trans 'Send personalised emails' %}">
       <span class="glyphicon glyphicon-envelope"></span> {% trans 'Email' %}</a>
+    <a href="{% url 'action:run_zip_action' id %}"
+       class="btn btn-default btn-sm spin"
+        data-toggle="tooltip" title="{% trans 'Create ZIP with personalised texts' %}">
+      <span class="glyphicon glyphicon-compressed"></span> {% trans 'ZIP' %}</a>
   {% elif action_tval == 'personalized_json' %}
     <a href="{% url 'action:run_json_action' id %}"
        class="btn btn-default btn-sm spin {% if not is_executable %}disabled{% endif %}"
