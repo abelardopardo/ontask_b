@@ -50,17 +50,36 @@ urlpatterns = [
     # Nuke the action
     path('<int:pk>/delete/', views_action.delete_action, name='delete'),
 
-    # Run action
-    path('<int:pk>/run/', views_action.run, name='run'),
+    # Run EMAIL action
+    path('<int:pk>/run_email/',
+         views_out.run_email_action,
+         name='run_email_action'),
+
+    # Run ZIP action
+    path('<int:pk>/run_zip/',
+         views_out.run_zip_action,
+         name='run_zip_action'),
+
+    # Run JSON action
+    path('<int:pk>/run_json/',
+         views_out.run_json_action,
+         name='run_json_action'),
+
+    # Run action IN
+    path('<int:pk>/run_action_in/',
+        views_action.run_action_in,
+        name='run_action_in'),
 
     #
-    # Email action steps
+    # Personalised text and JSON action steps
     #
     path('item_filter/',
         views_out.run_action_item_filter,
         name='item_filter'),
 
     path('email_done/', views_out.run_email_action_done, name='email_done'),
+    path('zip_done/', views_out.run_zip_action_done, name='zip_done'),
+    url('zip_export/', views_out.action_zip_export, name='zip_export'),
     path('json_done/', views_out.json_done, name='json_done'),
 
     #

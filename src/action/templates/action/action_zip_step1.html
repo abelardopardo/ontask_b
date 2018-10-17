@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load ontask_tags %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'ZIP action' %}{% endblock %}
+{% block scripts %}
+  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
+{% endblock scripts %}
+{% block container %}
+<div align="center" class="container" id="zip-action-request-data">
+  <h1 class="page-header">{% blocktrans with n=action.name %}Create a ZIP for
+    action "{{ n }}"{% endblocktrans %}</h1>
+  <div class="container">
+    {% if num_msgs > 0 %}
+      <p>{% blocktrans with n=num_msgs%}A ZIP with {{ n }} files will be created.{% endblocktrans %}</p>
+      <form action="" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="text-center" style="margin: 1ex 0 1ex 0;">
+          <a type="button" class="btn btn-default"
+             href="{% url 'action:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
+          </a>
+          <button type="button" class="btn btn-primary js-zip-preview"
+                  style="margin-right:2ex;"
+                  data-url="{% url 'action:preview' action.id 1 %}">
+            <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Preview' %}
+          </button>
+          <button type="Submit" name="Submit" value="Submit"
+                  style="margin-right:2ex;"
+                  class="btn btn-primary btn-space spin">
+            <span class="glyphicon glyphicon-triangle-right"></span> {% trans 'Next' %}</button>
+        </div>
+      </form>
+    {% else %}
+      <p>{% trans 'The action does not apply to any data.' %}
+        <a href="{% url 'action:edit' action.id %}">{% trans 'Review the action filter' %}</a></p>
+    {% endif %}
+  </div>
+  <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock container %}

@@ -183,7 +183,7 @@
               title="{% trans 'Save and remain editing' %}">
         <span class="glyphicon glyphicon-ok"></span> {% trans 'Done' %}
       </a>
-      <a href="{% url 'action:run' action.id %}"
+      <a href="{% url 'action:run_action_in' action.id %}"
          class="btn btn-primary spin {% if not action.is_executable %}disabled{% endif %}"
          data-toggle="tooltip"
          title="{% trans 'Enter data manually' %}">

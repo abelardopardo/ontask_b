@@ -49,8 +49,8 @@ from action.ops import (
     serve_action_out,
     clone_action,
     do_export_action,
-    do_import_action
-)
+    do_import_action,
+    get_workflow_action)
 from .models import Action, Condition
 
 
@@ -1019,7 +1019,7 @@ def delete_action(request, pk):
 
 
 @user_passes_test(is_instructor)
-def run(request, pk):
+def run_action_in(request, pk):
     """
     Function that runs the action in. Mainly, it renders a table with
     all rows that satisfy the filter condition and includes a link to
@@ -1030,48 +1030,20 @@ def run(request, pk):
     :return:
     """
 
-    # Get the workflow first
-    workflow = get_workflow(request)
-    if not workflow:
-        return redirect('workflow:index')
+    # Get the workflow and action
+    wflow_action = get_workflow_action(request, pk)
 
-    if workflow.nrows == 0:
-        messages.error(request,
-                       'Workflow has no data. '
-                       'Go to "Manage table data" to upload data.')
+    # If nothing found, return
+    if not wflow_action:
         return redirect(reverse('action:index'))
 
-    # Get the action
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
-        return redirect('action:index')
+    # Extract workflow and action
+    workflow, action = wflow_action
 
-    if action.action_type == Action.PERSONALIZED_TEXT:
-        return run_email_action(request, workflow, action)
-
-    if action.action_type == Action.PERSONALIZED_JSON:
-        return run_json_action(request, workflow, action)
-
-    if action.action_type == Action.SURVEY:
-        return run_action_in(request, action)
-
-    if action.action_type == Action.TODO_LIST:
-        return run_action_in(request, action)
-
-
-def run_action_in(request, action):
-    """
-    Function that runs the action in. Mainly, it renders a table with
-    all rows that satisfy the filter condition and includes a link to
-    enter data for each of them.
-
-    :param request:
-    :param pk: Action id. It is assumed to be an action In
-    :return:
-    """
+    if action.action_type != Action.SURVEY and \
+            action.action_type != Action.TODO_LIST:
+        # Incorrect type of action.
+        return redirect(reverse('action:index'))
 
     # Render template with active columns.
     return render(request,
