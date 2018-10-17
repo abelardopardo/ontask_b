@@ -5,19 +5,6 @@
      data-toggle="tooltip"
      title="{% trans 'Edit the text, conditions and filter' %}">
     <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}</a>
-  <button type="button"
-          class="btn btn-default btn-sm js-action-showurl"
-          data-url="{% url 'action:showurl' id %}"
-          data-toggle="tooltip"
-          {% if is_out %}
-            title="{% trans 'URL for learners to access the personalised text' %}"
-          {% else %}
-            title="{% trans 'URL for learners to introduce data' %}"
-          {% endif %}
-          >
-    <span class="glyphicon glyphicon-link"></span> {% trans 'URL' %}
-    {% if serve_enabled %}<span class="badge">On</span>{% else %}(Off){% endif %}
-  </button>
   {% if action_tval == 'personalized_text' %}
     <a href="{% url 'action:run_email_action' id %}"
        class="btn btn-default btn-sm spin"
@@ -39,6 +26,19 @@
        title="{% trans 'Enter data manually' %}">
       <span class="glyphicon glyphicon-off"></span> {% trans 'Run' %}</a>
   {% endif %}
+  <button type="button"
+          class="btn btn-default btn-sm js-action-showurl"
+          data-url="{% url 'action:showurl' id %}"
+          data-toggle="tooltip"
+          {% if is_out %}
+            title="{% trans 'URL for learners to access the personalised text' %}"
+          {% else %}
+            title="{% trans 'URL for learners to introduce data' %}"
+          {% endif %}
+          >
+    <span class="glyphicon glyphicon-link"></span> {% trans 'URL' %}
+    {% if serve_enabled %}<span class="badge">On</span>{% else %}(Off){% endif %}
+  </button>
   <div class="dropdown btn-group" style="display: inline-table;" role="group">
     <button class="btn btn-default btn-sm dropdown-toggle" type="button"
             data-toggle="dropdown"> {% trans 'More' %} <span class="caret"></span>
