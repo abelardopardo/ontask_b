@@ -13,7 +13,7 @@
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
 {% endblock scripts %}
 {% block container %}
-<div align="center" class="container-fluid" id="email-action-request-data">
+<div align="center" class="container-fluid">
   <h1 class="page-header">{% blocktrans with n=action.name %}Select items to exclude from action{% endblocktrans %}</h1>
   <div class="container">
     <form action="" method="post">

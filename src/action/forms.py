@@ -318,6 +318,35 @@ class EmailActionForm(forms.Form):
         widgets = {'subject': forms.TextInput(attrs={'size': 256})}
 
 
+class ZipActionForm(forms.Form):
+
+    user_id_column = forms.ChoiceField(
+        label=_('Column containing user id'),
+        required=True
+    )
+
+    confirm_users = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Check/exclude users before sending?')
+    )
+
+    def __init__(self, *args, **kargs):
+        self.column_names = kargs.pop('column_names')
+        self.action = kargs.pop('action')
+        self.op_payload = kargs.pop('op_payload')
+
+        super(ZipActionForm, self).__init__(*args, **kargs)
+
+        # Set the initial values from the payload
+        user_id_column = self.op_payload.get('item_column', ('', '---'))
+        self.fields['user_id_column'].initial = user_id_column
+        self.fields['user_id_column'].choices = \
+            [(x, x) for x in self.column_names]
+        self.fields['confirm_users'].initial = self.op_payload.get(
+            'confirm_users', False)
+
+
 class EmailExcludeForm(forms.Form):
     # Email fields to exclude
     exclude_values = forms.MultipleChoiceField([],
