@@ -6,7 +6,7 @@ html, body{
 }
 
 body {
-  padding-top:50px; /* To jump over the fixed nav-bar */
+  padding-top:40px; /* To jump over the fixed nav-bar */
 }
 
 .starter-template {
@@ -66,6 +66,19 @@ body>.navbar-transparent {
 
 .navbar-right {
     margin-right: 0;
+}
+
+.navbar {
+    min-height: 40px;
+}
+
+.navbar-brand {
+    height: 40px;
+}
+
+.navbar-toggle {
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 
 .btn {
@@ -305,13 +318,6 @@ table#attribute-table {
     margin-top: 20px;
 }
 
-#workflow-area .dropdown-menu {
-  left: 70%;
-  right: auto;
-  text-align: center;
-  transform: translate(-50%, 0);
-}
-
 #filter-set .dropdown-menu {
   left: 50%;
   right: auto;
@@ -377,9 +383,4 @@ td.operations button {
     text-align: center;
     font-size: 16px;
     border: 2px solid black;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    padding: 0px;
-    margin-left: 0px;
 }

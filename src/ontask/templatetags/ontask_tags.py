@@ -22,7 +22,7 @@ shim_and_respond = \
 <![endif]-->"""
 
 datatables_bootstrap_css = \
-    """<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">"""
+    """<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">"""
 
 datatables_jquery_js = \
     """<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>"""
