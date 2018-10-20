@@ -79,7 +79,7 @@ urlpatterns = [
 
     path('email_done/', views_out.run_email_action_done, name='email_done'),
     path('zip_done/', views_out.run_zip_action_done, name='zip_done'),
-    url('zip_export/', views_out.action_zip_export, name='zip_export'),
+    path('zip_export/', views_out.action_zip_export, name='zip_export'),
     path('json_done/', views_out.json_done, name='json_done'),
 
     #

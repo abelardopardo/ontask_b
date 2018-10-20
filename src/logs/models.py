@@ -85,7 +85,7 @@ class Log(models.Model):
     SCHEDULE_EMAIL_EDIT = 'schedule_email_edit'
     SCHEDULE_EMAIL_DELETE = 'schedule_email_delete'
     SCHEDULE_EMAIL_EXECUTE = 'schedule_email_execute'
-    DOWNLOAD_ZIP_ACTION = 'download_zip_action',
+    DOWNLOAD_ZIP_ACTION = 'download_zip_action'
     SCHEDULE_JSON_EDIT = 'schedule_json_edit'
     SCHEDULE_JSON_DELETE = 'schedule_json_delete'
     SCHEDULE_JSON_EXECUTE = 'schedule_json_execute'
