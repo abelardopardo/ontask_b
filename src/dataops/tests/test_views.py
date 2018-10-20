@@ -496,10 +496,7 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
                          'test_df_merge_update_df1.csv')
         )
         self.selenium.find_element_by_name("Submit").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
-                                             'Step 2: Select Columns')
-        )
+        self.wait_for_page()
 
         # Submit
         self.selenium.find_element_by_xpath(
@@ -722,9 +719,7 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
         )).select_by_visible_text("email")
         # Submit the execution
         self.selenium.find_element_by_name("Submit").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'plugin-execution-report'))
-        )
+        self.wait_for_page(element_id='plugin-execution-report')
 
         # Done. Click continue.
         self.selenium.find_element_by_link_text('Continue').click()
