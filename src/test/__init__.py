@@ -22,7 +22,7 @@ from rest_framework.test import APITransactionTestCase
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -240,6 +240,24 @@ class OntaskLiveTestCase(LiveServerTestCase):
         )
         # Wait for the table to be refreshed
         self.wait_for_datatable(table_id)
+
+    def wait_for_page(self, title=None, element_id=None):
+        if title:
+            WebDriverWait(self.selenium, 10).until(
+                EC.title_is(title)
+            )
+
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'div-spinner'))
+        )
+        WebDriverWait(self.selenium, 10).until(
+            EC.invisibility_of_element_located((By.ID, 'img-spinner'))
+        )
+
+        if element_id:
+            WebDriverWait(self.selenium, 10).until(
+                EC.presence_of_element_located((By.ID, element_id))
+            )
 
     def cancel_modal(self):
         # Click in the cancel button
@@ -1006,24 +1024,6 @@ class ScreenTests(OntaskLiveTestCase):
     @staticmethod
     def img_path(f):
         return os.path.join(settings.BASE_DIR(), 'test', 'images', f)
-
-    def wait_for_page(self, title=None, element_id=None):
-        if title:
-            WebDriverWait(self.selenium, 10).until(
-                EC.title_is(title)
-            )
-
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'div-spinner'))
-        )
-        WebDriverWait(self.selenium, 10).until(
-            EC.invisibility_of_element_located((By.ID, 'img-spinner'))
-        )
-
-        if element_id:
-            WebDriverWait(self.selenium, 10).until(
-                EC.presence_of_element_located((By.ID, element_id))
-            )
 
     def element_ss(self, xpath, ss_filename):
         """

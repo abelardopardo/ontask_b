@@ -70,9 +70,13 @@
         <ul class="nav nav-pills pull-left">
           {% block navbar-left %}
             {% if user.is_authenticated %}
-              <li {% if request.path == '/' %}class="active"{% endif %}><a class="spin" href="{% url 'home' %}">{% trans 'Workflows' %}</a></li>
+              <li {% if request.path == ONTASK_BASE_URL %}class="active"{% endif %}>
+                <a class="spin"
+                   href="{% url 'home' %}">{% trans 'Workflows' %}</a>
+              </li>
               {% if user.is_superuser %}
-                <li><a class="spin" href="{% url 'workflow:sql_connections' %}">{% trans 'SQL Connections' %}</a></li>
+                <li {% if 'sql_connections' in request.path %}class="active"{% endif %}>
+          <a class="spin" href="{% url 'workflow:sql_connections' %}">{% trans 'SQL Connections' %}</a></li>
               {% endif %}
             {% endif %}
             {% if request.session.ontask_workflow_id %}
@@ -156,12 +160,12 @@
       <div class="container-fluid">
         <div class="footer">
           <div class="row navbar-default navbar" id="base_footer"
-               style="margin-bottom: 0px">
-            <div class="col-lg-6 div1" style="margin-top:15px;">
+               style="margin-bottom: 0px; padding-top:8px;">
+            <div class="col-lg-6 div1">
                 <span style="color: #777;">
                   &copy; {% trans 'OnTask Project' %} {% now 'Y' %}</span>
             </div>
-            <div class="col-lg-6 div2 text-right" style="margin-top:15px;">
+            <div class="col-lg-6 div2 text-right">
               <span class="align-middle"
                  style="color: #777;">{% trans 'Version:' %} {% ontask_version %}</span>
             </div>

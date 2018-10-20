@@ -12,7 +12,11 @@
 
 - Datetimepicker widget changed due to incompatibilities with Django 2
 
-## 3.0.4 ()
+## 3.0.4 (2018-10-20)
+
+### Changed
+
+- Cosmetic changes in menu bar to visualise properly in mobile devices.
 
 ### Fiexd
 
