@@ -24,6 +24,7 @@ from action.evaluate import (
     evaluate_row_action_in, evaluate_action)
 from action.models import Action
 from action.ops import get_workflow_action
+from dataops.pandas_db import get_table_cursor
 from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tasks import send_email_messages, send_json_objects
@@ -253,7 +254,7 @@ def run_zip_action(request, pk):
     # Create the form to ask for the email subject and other information
     form = ZipActionForm(
         request.POST or None,
-        column_names=[x.name for x in workflow.columns.filter(is_key=True)],
+        column_names=[x.name for x in workflow.columns.all()],
         action=action,
         op_payload=op_payload
     )
@@ -277,7 +278,8 @@ def run_zip_action(request, pk):
     # Requet is a POST and is valid
 
     # Collect information from the form and store it in op_payload
-    op_payload['item_column'] = form.cleaned_data['user_id_column']
+    op_payload['item_column'] = form.cleaned_data['participant_column']
+    op_payload['user_fname_column'] = form.cleaned_data['user_fname_column']
     op_payload['confirm_users'] = form.cleaned_data['confirm_users']
     op_payload['exclude_values'] = []
 
@@ -320,7 +322,8 @@ def run_zip_action_done(request, payload=None):
 
     # Get the information from the payload
     action = Action.objects.get(pk=payload['action_id'])
-    user_id_column = payload['item_column']
+    user_fname_column = payload['user_fname_column']
+    participant_column = payload['item_column']
     exclude_values = payload['exclude_values']
 
     # Log the event
@@ -329,8 +332,13 @@ def run_zip_action_done(request, payload=None):
                                     action.workflow,
                                     {'action': action.name,
                                      'action_id': action.id,
-                                     'user_id_column': user_id_column,
+                                     'user_fname_column': user_fname_column,
+                                     'participant_column': participant_column,
                                      'exclude_values': exclude_values})
+
+    # Update the last_execution_log
+    action.last_executed_log = log_item
+    action.save()
 
     # Successful processing.
     return render(request,
@@ -342,9 +350,9 @@ def action_zip_export(request):
     """
     Create a zip with the personalised text and return it as response
 
-    :param request: Request object
-    :param payload: Dictionary with all the required information
-    :return:
+    :param request: Request object with a Dictionary with all the required
+    information
+    :return: Response (download)
     """
 
     # Get the payload from the session if not given
@@ -358,15 +366,15 @@ def action_zip_export(request):
 
     # Get the information from the payload
     action = Action.objects.get(pk=payload['action_id'])
-    user_id_column = payload['item_column']
+    user_fname_column = payload['user_fname_column']
+    participant_column = payload['item_column']
     exclude_values = payload['exclude_values']
 
     # Obtain the personalised text
-
     # Invoke evaluate_action
     # Returns: [ (HTML, None, column name value) ] or String error!
     result = evaluate_action(action,
-                             column_name=user_id_column,
+                             column_name=participant_column,
                              exclude_values=exclude_values)
 
     # Check the type of the result to see if it was successful
@@ -375,17 +383,34 @@ def action_zip_export(request):
         messages.error(request, _('Unable to generate zip:') + result)
         return redirect('action:index')
 
+    # Get the user_fname_column values
+    user_fname_data = get_table_cursor(
+        action.workflow.pk,
+        None,
+        column_names=[user_fname_column]
+    ).fetchall()
+
+    # Data list combining messages, full name and participant (assuming
+    # participant columns has format "Participant [number]"
+    data_list = [(x[0], y[0], x[1].split()[1])
+                 for x, y in zip(result, user_fname_data)]
+
     # Loop over the result
     files = []
-    for msg_body, user_id in result:
+    for msg_body, user_fname, part_id in data_list:
         html_text = html_body.format(msg_body)
-        files.append((user_id, html_text))
+        files.append((user_fname, part_id, html_text))
 
     # Create the ZIP and return it for download
     sbuf = BytesIO()
     zf = zipfile.ZipFile(sbuf, 'w')
-    for user_id, msg_body in files:
-        zf.writestr('{0}_{0}_feedback.html'.format(user_id), str(msg_body))
+    for user_fname, part_id, msg_body in files:
+        zf.writestr(
+            '{0}_{1}_assignsubmission_file_feedback.html'.format(
+                user_fname, part_id
+            ),
+            str(msg_body)
+        )
     zf.close()
 
     suffix = datetime.now().strftime('%y%m%d_%H%M%S')
@@ -395,7 +420,7 @@ def action_zip_export(request):
     response['Content-Type'] = 'application/x-zip-compressed'
     response['Content-Transfer-Encoding'] = 'binary'
     response['Content-Disposition'] = \
-        'attachment; filename="ontask_zip_action_{0}.gz"'.format(suffix)
+        'attachment; filename="ontask_zip_action_{0}.zip"'.format(suffix)
     response['Content-Length'] = str(len(compressed_content))
 
     # Reset object to carry action info throughout dialogs

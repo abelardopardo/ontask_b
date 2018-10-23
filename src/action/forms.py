@@ -5,6 +5,7 @@ from builtins import next
 from builtins import str
 from builtins import object
 import json
+import re
 
 # from datetimewidget.widgets import DateTimeWidget
 from django import forms
@@ -13,7 +14,8 @@ from django_summernote.widgets import SummernoteInplaceWidget
 from validate_email import validate_email
 
 from core.widgets import OnTaskDateTimeInput
-from dataops.pandas_db import execute_select_on_table, get_table_cursor
+from dataops.pandas_db import execute_select_on_table, get_table_cursor, \
+    is_column_table_unique, get_table_data
 from ontask import ontask_prefs, is_legal_name
 from ontask.forms import column_to_field, RestrictedFileField
 from .models import Action, Condition
@@ -22,6 +24,7 @@ from .models import Action, Condition
 # the user and may pose a problem (injection bugs)
 field_prefix = '___ontask___select_'
 
+participant_re = re.compile('^Participant \d+$')
 
 class ActionUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -326,8 +329,13 @@ class EmailActionForm(forms.Form):
 
 class ZipActionForm(forms.Form):
 
-    user_id_column = forms.ChoiceField(
-        label=_('Column containing user id'),
+    user_fname_column = forms.ChoiceField(
+        label=_('Column containing user full name'),
+        required=True
+    )
+
+    participant_column = forms.ChoiceField(
+        label=_('Column with Moodle\'s Identifier (or participant id)'),
         required=True
     )
 
@@ -345,13 +353,65 @@ class ZipActionForm(forms.Form):
         super(ZipActionForm, self).__init__(*args, **kargs)
 
         # Set the initial values from the payload
-        user_id_column = self.op_payload.get('item_column', ('', '---'))
-        self.fields['user_id_column'].initial = user_id_column
-        self.fields['user_id_column'].choices = \
-            [(x, x) for x in self.column_names]
+        user_fname_column = self.op_payload.get('user_fname_column', None)
+        participant_column = self.op_payload.get('item_column', None)
+
+        if user_fname_column:
+            self.fields['user_fname_column'].choices = \
+                [(x, x) for x in self.column_names]
+            self.fields['user_fname_column'].initial = user_fname_column
+        else:
+            self.fields['user_fname_column'].choices = \
+                [('', '---')] + [(x, x) for x in self.column_names]
+            self.fields['user_fname_column'].initial = ('', '---')
+
+        if participant_column:
+            self.fields['participant_column'].choices = \
+                [(x, x) for x in self.column_names]
+            self.fields['participant_column'].initial = participant_column
+        else:
+            self.fields['participant_column'].choices = \
+                [('', '---')] + [(x, x) for x in self.column_names]
+            self.fields['participant_column'].initial = ('', '---')
+
         self.fields['confirm_users'].initial = self.op_payload.get(
             'confirm_users', False)
 
+    def clean(self):
+        data = super(ZipActionForm, self).clean()
+
+        # Participant column must be unique
+        pcolumn = data['participant_column']
+        ufname_column = data['user_fname_column']
+
+        # If both values are identical, return with error
+        if pcolumn == ufname_column:
+            self.add_error(
+                None,
+                _('The two columns must be different')
+            )
+            return data
+
+        # The given column must have unique values
+        if not is_column_table_unique(self.action.workflow.pk, pcolumn):
+            self.add_error(
+                'participant_column',
+                _('Column needs to have all unique values (no empty cells)')
+            )
+            return data
+
+        # Participant columns must match the pattern 'Participant [0-9]+'
+        pcolumn_data = get_table_data(self.action.workflow.pk,
+                                      None,
+                                      column_names=[pcolumn])
+        if next((x for x in pcolumn_data if not participant_re.search(x[0])),
+                None):
+            self.add_error(
+                'participant_column',
+                _('Values in column must have format "Participant [number]"')
+            )
+
+        return data
 
 class EmailExcludeForm(forms.Form):
     # Email fields to exclude

@@ -150,6 +150,6 @@ $(document).ready(function(){
 $(window).bind("load", function() {
    $('#div-spinner').hide();
 });
-$('input').on('invalid', function(e){
+$(':input').on('invalid', function(e){
   $('#div-spinner').hide();
 });

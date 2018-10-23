@@ -174,6 +174,26 @@ def is_wf_table_in_db(workflow):
     return is_table_in_db(create_table_name(workflow.id))
 
 
+def is_column_table_unique(pk, column_name):
+    """
+    Given a PK, see if the given column has unique values
+    :param pk:
+    :param column_name:
+    :return: Boolean
+    """
+
+    query = 'SELECT COUNT(DISTINCT "{0}") = count(*) from "{1}"'.format(
+        fix_pctg_in_name(column_name),
+        create_table_name(pk)
+    )
+
+    # Get the result
+    cursor = connection.cursor()
+    cursor.execute(query, [])
+
+    return cursor.fetchone()[0]
+
+
 def create_table_name(pk):
     """
 

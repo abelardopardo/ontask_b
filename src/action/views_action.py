@@ -9,8 +9,7 @@ import pytz
 from django.db import IntegrityError
 from django.utils.html import format_html
 
-from action.views_out import run_json_action, run_email_action, \
-    session_dictionary_name
+from action.views_out import session_dictionary_name
 from logs.models import Log
 from visualizations.plotly import PlotlyHandler
 
