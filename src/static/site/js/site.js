@@ -1,53 +1,53 @@
 var set_qbuilder = function (element_id, qbuilder_options) {
-    id_formula_value = $(element_id).val();
+    var id_formula_value = $(element_id).val();
     if (id_formula_value != "null" && id_formula_value != "{}") {
-      qbuilder_options['rules'] = JSON.parse(id_formula_value);
+      qbuilder_options["rules"] = JSON.parse(id_formula_value);
     }
-    $('#builder').queryBuilder(qbuilder_options);
+    $("#builder").queryBuilder(qbuilder_options);
 };
 var set_element_select = function(element_id) {
   $(element_id).searchableOptionList({
-    maxHeight: '250px',
+    maxHeight: "250px",
     showSelectAll: true,
     texts: {
-      searchplaceholder: gettext('Click here to search'),
-      noItemsAvailable: gettext('No element found'),
-    },
+      searchplaceholder: gettext("Click here to search"),
+      noItemsAvailable: gettext("No element found")
+    }
   });
- }
+ };
 var insert_fields = function (the_form) {
     if (document.getElementById("id_filter") != null) {
-      formula = $('#builder').queryBuilder('getRules');
-      if (formula == null || !formula['valid']) {
+      formula = $("#builder").queryBuilder("getRules");
+      if (formula == null || !formula["valid"]) {
         return false;
       }
       f_text = JSON.stringify(formula, undefined, 2);
-      $('#id_filter').val(f_text);
+      $("#id_filter").val(f_text);
     }
     return true;
-}
+};
 var get_id_content = function() {
-  if (typeof $('#id_content').summernote != 'undefined') {
-    value = $("#id_content").summernote('code');
+  if (typeof $("#id_content").summernote != "undefined") {
+    value = $("#id_content").summernote("code");
   } else {
-    value = $("#id_content").val()
+    value = $("#id_content").val();
   }
   return value;
 }
 var loadForm = function () {
-    $("#modal-item .modal-content").html('');
+    $("#modal-item .modal-content").html("");
     var btn = $(this);
-    if ($(this).is('[class*="disabled"]')) {
+    if ($(this).is("[class*='disabled']")) {
       return;
     }
     data = {};
     if (document.getElementById("id_subject") != null) {
-      data['subject_content'] = $("#id_subject").val();
+      data["subject_content"] = $("#id_subject").val();
     }
     $.ajax({
       url: btn.attr("data-url"),
-      type: 'get',
-      dataType: 'json',
+      type: "get",
+      dataType: "json",
       data: data,
       beforeSend: function() {
         $("#modal-item .modal-body").html("");
@@ -56,7 +56,7 @@ var loadForm = function () {
       success: function(data) {
         if (data.form_is_valid) {
           if (data.html_redirect == "") {
-            $('#div-spinner').show();
+            $("#div-spinner").show();
             window.location.reload(true);
           } else {
             location.href = data.html_redirect;
@@ -72,7 +72,7 @@ var loadForm = function () {
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        $('#div-spinner').show();
+        $("#div-spinner").show();
         location.reload(true);
       }
     });
@@ -80,20 +80,19 @@ var loadForm = function () {
 var saveForm = function () {
     var form = $(this);
     if (document.getElementById("id_formula") != null) {
-      formula = $('#builder').queryBuilder('getRules');
+      formula = $("#builder").queryBuilder('getRules');
       if (formula == null || !formula['valid']) {
         return false;
       }
       f_text = JSON.stringify(formula, undefined, 2);
-      $('#id_formula').val(f_text);
+      $("#id_formula").val(f_text);
     }
     var data = form.serializeArray();
     if (document.getElementById("id_content") != null) {
       value = get_id_content();
-      data.push({'name': 'action_content',
-                 'value': value});
+      data.push({"name": "action_content", "value": value});
     }
-    $("#modal-item .modal-content").html('');
+    $("#modal-item .modal-content").html("");
     $.ajax({
       url: form.attr("action"),
       data: data,
