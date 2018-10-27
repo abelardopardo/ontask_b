@@ -33,7 +33,7 @@ var get_id_content = function() {
     value = $("#id_content").val();
   }
   return value;
-}
+};
 var loadForm = function () {
     $("#modal-item .modal-content").html("");
     var btn = $(this);
@@ -76,7 +76,7 @@ var loadForm = function () {
         location.reload(true);
       }
     });
-}
+};
 var saveForm = function () {
     var form = $(this);
     if (document.getElementById("id_formula") != null) {
@@ -123,7 +123,7 @@ var saveForm = function () {
       }
     });
     return false;
-}
+};
 $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip({
     trigger: "hover",
