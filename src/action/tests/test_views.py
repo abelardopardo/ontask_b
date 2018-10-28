@@ -532,7 +532,6 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
 
     # Test operations with the filter
     def test_action_01_rename_column_condition_attribute(self):
-
         # First get objects for future checks
         workflow = Workflow.objects.get(name=self.wflow_name)
         column = Column.objects.get(
@@ -680,6 +679,98 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
         # Column age is present in action-in filter
         self.assertFalse(has_variable(filter_obj.formula, 'age'))
         self.assertTrue(has_variable(filter_obj.formula, 'age new'))
+
+        # End of session
+        self.logout()
+
+
+class ActionActionZip(test.OntaskLiveTestCase):
+    """
+    This test case is to check if the ZIP opeation is correct
+    """
+
+    fixtures = ['simple_workflow_two_actions']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'action',
+        'fixtures',
+        'simple_workflow_two_actions.sql'
+    )
+
+    wflow_name = 'wflow2'
+
+    def setUp(self):
+        super(ActionActionZip, self).setUp()
+        pandas_db.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        pandas_db.delete_all_tables()
+        super(ActionActionZip, self).tearDown()
+
+    # Test operations with the filter
+    def test_action_01_zip(self):
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
+
+        # Goto the action page
+        self.go_to_actions()
+
+        # Click in the page to send email
+        element = self.search_action('Detecting age')
+        element.find_element_by_link_text("ZIP").click()
+        self.wait_for_page(element_id='zip-action-request-data')
+
+        # The zip should include 2 files
+        self.assertIn('A ZIP with 2 files will be created',
+                      self.selenium.page_source)
+
+        # Set column 1
+        select = Select(self.selenium.find_element_by_id(
+            'id_participant_column'))
+        select.select_by_value('age')
+
+        # Set column 2
+        select = Select(self.selenium.find_element_by_id(
+            'id_user_fname_column'))
+        select.select_by_value('age')
+
+        # Click the next
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Next']").click()
+        self.wait_for_page(element_id='zip-action-request-data')
+
+        # Anomaly detected
+        self.assertIn('The two columns must be different',
+                      self.selenium.page_source)
+
+        # Set column 2
+        select = Select(self.selenium.find_element_by_id(
+            'id_user_fname_column'))
+        select.select_by_value('email')
+
+        # Choose the Moodle option
+        self.selenium.find_element_by_id('id_zip_for_moodle').click()
+
+        # Click the next
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Next']").click()
+        self.wait_for_page(element_id='zip-action-request-data')
+
+        # Anomaly detected
+        self.assertIn(
+            'Values in column must have format "Participant [number]"',
+            self.selenium.page_source)
+
+        # Unselect the Moodle option
+        self.selenium.find_element_by_id('id_zip_for_moodle').click()
+
+        # Click the next
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Next']").click()
+        self.wait_for_page(element_id='zip-action-done')
 
         # End of session
         self.logout()
