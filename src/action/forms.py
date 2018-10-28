@@ -26,6 +26,7 @@ field_prefix = '___ontask___select_'
 
 participant_re = re.compile('^Participant \d+$')
 
+
 class ActionUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop(str('workflow_user'), None)
@@ -328,15 +329,28 @@ class EmailActionForm(forms.Form):
 
 
 class ZipActionForm(forms.Form):
-
-    user_fname_column = forms.ChoiceField(
-        label=_('Column containing user full name'),
+    participant_column = forms.ChoiceField(
+        label=_('Key column to use for file name prefix (Participant id if '
+                'Moodle ZIP)'),
         required=True
     )
 
-    participant_column = forms.ChoiceField(
-        label=_('Column with Moodle\'s Identifier (or participant id)'),
-        required=True
+    user_fname_column = forms.ChoiceField(
+        label=_('Column to use for file name prefix (Full name if Moodle ZIP)'),
+        required=False
+    )
+
+    file_suffix = forms.CharField(
+        max_length=512,
+        strip=True,
+        required=False,
+        label='File name suffix ("feedback.html" if empty)'
+    )
+
+    zip_for_moodle = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('This ZIP will be uploaded to Moodle as feedback')
     )
 
     confirm_users = forms.BooleanField(
@@ -384,14 +398,6 @@ class ZipActionForm(forms.Form):
         pcolumn = data['participant_column']
         ufname_column = data['user_fname_column']
 
-        # If both values are identical, return with error
-        if pcolumn == ufname_column:
-            self.add_error(
-                None,
-                _('The two columns must be different')
-            )
-            return data
-
         # The given column must have unique values
         if not is_column_table_unique(self.action.workflow.pk, pcolumn):
             self.add_error(
@@ -400,18 +406,37 @@ class ZipActionForm(forms.Form):
             )
             return data
 
-        # Participant columns must match the pattern 'Participant [0-9]+'
-        pcolumn_data = get_table_data(self.action.workflow.pk,
-                                      None,
-                                      column_names=[pcolumn])
-        if next((x for x in pcolumn_data if not participant_re.search(x[0])),
-                None):
+        # If both values are given and they are identical, return with error
+        if pcolumn and ufname_column and pcolumn == ufname_column:
             self.add_error(
-                'participant_column',
-                _('Values in column must have format "Participant [number]"')
+                None,
+                _('The two columns must be different')
             )
+            return data
+
+        # If a moodle zip has been requested
+        if data.get('zip_for_moodle', False):
+            if not pcolumn or not ufname_column:
+                self.add_error(
+                    None,
+                    _('A Moodle ZIP requires two column names')
+                )
+                return data
+
+            # Participant columns must match the pattern 'Participant [0-9]+'
+            pcolumn_data = get_table_data(self.action.workflow.pk,
+                                          None,
+                                          column_names=[pcolumn])
+            if next((x for x in pcolumn_data
+                     if not participant_re.search(str(x[0]))),
+                    None):
+                self.add_error(
+                    'participant_column',
+                    _('Values in column must have format "Participant [number]"')
+                )
 
         return data
+
 
 class EmailExcludeForm(forms.Form):
     # Email fields to exclude
@@ -434,7 +459,6 @@ class EmailExcludeForm(forms.Form):
 
 
 class JSONActionForm(forms.Form):
-
     # Column with unique key to review objects to consider
     key_column = forms.ChoiceField(
         label=_('Column to exclude objects to send (empty to skip step)'),
@@ -474,7 +498,7 @@ class JSONActionForm(forms.Form):
             key_column = (key_column, key_column)
         self.fields['key_column'].initial = key_column
         self.fields['key_column'].choices = [('', '---')] + \
-            [(x, x) for x in self.column_names]
+                                            [(x, x) for x in self.column_names]
 
         self.fields['token'].initial = self.op_payload.get('token', '')
 

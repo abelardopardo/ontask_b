@@ -279,7 +279,11 @@ def run_zip_action(request, pk):
 
     # Collect information from the form and store it in op_payload
     op_payload['item_column'] = form.cleaned_data['participant_column']
-    op_payload['user_fname_column'] = form.cleaned_data['user_fname_column']
+    op_payload['user_fname_column'] = form.cleaned_data.get('user_fname_column',
+                                                            None)
+    op_payload['file_suffix'] = form.cleaned_data['file_suffix']
+    op_payload['zip_for_moodle'] = form.cleaned_data.get('zip_for_moodle',
+                                                         False)
     op_payload['confirm_users'] = form.cleaned_data['confirm_users']
     op_payload['exclude_values'] = []
 
@@ -322,8 +326,10 @@ def run_zip_action_done(request, payload=None):
 
     # Get the information from the payload
     action = Action.objects.get(pk=payload['action_id'])
-    user_fname_column = payload['user_fname_column']
     participant_column = payload['item_column']
+    user_fname_column = payload.get('user_fname_column', None)
+    file_suffix = payload['file_suffix']
+    zip_for_moodle = payload['zip_for_moodle']
     exclude_values = payload['exclude_values']
 
     # Log the event
@@ -334,6 +340,8 @@ def run_zip_action_done(request, payload=None):
                                      'action_id': action.id,
                                      'user_fname_column': user_fname_column,
                                      'participant_column': participant_column,
+                                     'file_suffix': file_suffix,
+                                     'zip_for_moodle': zip_for_moodle,
                                      'exclude_values': exclude_values})
 
     # Update the last_execution_log
@@ -368,6 +376,10 @@ def action_zip_export(request):
     action = Action.objects.get(pk=payload['action_id'])
     user_fname_column = payload['user_fname_column']
     participant_column = payload['item_column']
+    file_suffix = payload['file_suffix']
+    if not file_suffix:
+        file_suffix = 'feedback.html'
+    zip_for_moodle = payload['zip_for_moodle']
     exclude_values = payload['exclude_values']
 
     # Obtain the personalised text
@@ -383,17 +395,26 @@ def action_zip_export(request):
         messages.error(request, _('Unable to generate zip:') + result)
         return redirect('action:index')
 
-    # Get the user_fname_column values
-    user_fname_data = get_table_cursor(
-        action.workflow.pk,
-        None,
-        column_names=[user_fname_column]
-    ).fetchall()
+    if not result:
+        # Result is an empty list. There is nothing to include in the ZIP
+        messages.error(request, _('The resulting ZIP is empty'))
+        return redirect('action:index')
 
-    # Data list combining messages, full name and participant (assuming
-    # participant columns has format "Participant [number]"
-    data_list = [(x[0], y[0], x[1].split()[1])
-                 for x, y in zip(result, user_fname_data)]
+    if user_fname_column:
+        # Get the user_fname_column values
+        user_fname_data = get_table_cursor(
+            action.workflow.pk,
+            None,
+            column_names=[user_fname_column]
+        ).fetchall()
+
+        # Data list combining messages, full name and participant (assuming
+        # participant columns has format "Participant [number]"
+        data_list = [(x[0], str(y[0]), str(x[1]))
+                     for x, y in zip(result, user_fname_data)]
+    else:
+        # No user_fname_column given
+        data_list = [(x[0], None, str(x[1])) for x in result]
 
     # Loop over the result
     files = []
@@ -401,16 +422,29 @@ def action_zip_export(request):
         html_text = html_body.format(msg_body)
         files.append((user_fname, part_id, html_text))
 
+    # Create the file name template
+    if zip_for_moodle:
+        file_name_template = \
+            '{user_fname}_{part_id}_assignsubmission_file_{file_suffix}'
+    else:
+        if user_fname_column:
+            file_name_template = '{part_id}_{user_fname}_{file_suffix}'
+        else:
+            file_name_template = '{part_id}_{file_suffix}'
+
     # Create the ZIP and return it for download
     sbuf = BytesIO()
     zf = zipfile.ZipFile(sbuf, 'w')
     for user_fname, part_id, msg_body in files:
-        zf.writestr(
-            '{0}_{1}_assignsubmission_file_feedback.html'.format(
-                user_fname, part_id
-            ),
-            str(msg_body)
-        )
+        if zip_for_moodle:
+            # If a zip for moodle, field is Participant [number]. Take the
+            # number
+            part_id = part_id.split()[1]
+
+        fdict = {'user_fname': user_fname,
+                 'part_id': part_id,
+                 'file_suffix': file_suffix}
+        zf.writestr(file_name_template.format(**fdict), str(msg_body))
     zf.close()
 
     suffix = datetime.now().strftime('%y%m%d_%H%M%S')
@@ -648,7 +682,10 @@ def preview_response(request, pk, idx):
                 correct_json = False
     else:
         action_content = evaluate_row_action_in(action, context)
-    if action_content:
+    if action_content is None:
+        action_content = \
+            _("Error while retrieving content for student {0}").format(idx)
+    else:
         # Get the conditions used in the action content
         act_cond = action.get_action_conditions()
         # Get the variables/columns from the conditions
@@ -661,9 +698,6 @@ def preview_response(request, pk, idx):
         show_values = ', '.join(
             ["{0} = {1}".format(x.name, row_values[x.name]) for x in act_vars]
         )
-    else:
-        action_content = \
-            _("Error while retrieving content for student {0}").format(idx)
 
     # See if there is prelude content in the request
     prelude = request.GET.get('subject_content', None)

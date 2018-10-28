@@ -384,3 +384,8 @@ td.operations button {
     font-size: 16px;
     border: 2px solid black;
 }
+
+.js-action-showurl > span.badge {
+    padding: 2px 7px;
+    font-size: 10px;
+}
