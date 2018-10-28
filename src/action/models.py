@@ -450,6 +450,12 @@ class Condition(models.Model):
             return
 
         # Case 2: Condition is NOT a filter
+        # Get the filter formula from the action if it exists
+        if not filter_formula:
+            filter_obj = self.action.conditions.filter(is_filter=True).first()
+            if filter_obj:
+                filter_formula = filter_obj.formula
+
         formula = self.formula
         if filter_formula:
             # There is a formula to add to the condition, create a conjunction
