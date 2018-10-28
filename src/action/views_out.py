@@ -441,7 +441,7 @@ def action_zip_export(request):
             # number
             part_id = part_id.split()[1]
 
-        fdict = {'user_name': user_fname,
+        fdict = {'user_fname': user_fname,
                  'part_id': part_id,
                  'file_suffix': file_suffix}
         zf.writestr(file_name_template.format(**fdict), str(msg_body))
@@ -682,7 +682,10 @@ def preview_response(request, pk, idx):
                 correct_json = False
     else:
         action_content = evaluate_row_action_in(action, context)
-    if action_content:
+    if action_content is None:
+        action_content = \
+            _("Error while retrieving content for student {0}").format(idx)
+    else:
         # Get the conditions used in the action content
         act_cond = action.get_action_conditions()
         # Get the variables/columns from the conditions
@@ -695,9 +698,6 @@ def preview_response(request, pk, idx):
         show_values = ', '.join(
             ["{0} = {1}".format(x.name, row_values[x.name]) for x in act_vars]
         )
-    else:
-        action_content = \
-            _("Error while retrieving content for student {0}").format(idx)
 
     # See if there is prelude content in the request
     prelude = request.GET.get('subject_content', None)
