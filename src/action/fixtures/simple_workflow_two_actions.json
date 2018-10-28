@@ -821,7 +821,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "n_rows_selected": 3,
+        "n_rows_selected": 2,
         "is_filter": true,
         "created": "2017-12-08T01:29:51.431Z",
         "modified": "2017-12-08T01:30:04.937Z",
@@ -850,7 +850,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "n_rows_selected": 2,
+        "n_rows_selected": 1,
         "is_filter": false,
         "created": "2017-12-08T01:33:21.687Z",
         "modified": "2017-12-08T01:33:21.687Z",
