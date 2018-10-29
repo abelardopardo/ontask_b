@@ -3,19 +3,20 @@
 # This file is distributed under the same license as the OnTask package.
 # Abelardo Pardo <abelardo.pardo@gmail.com>, 2018.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-29 16:48+1030\n"
-"PO-Revision-Date: 2018-08-01 16:25+0930\n"
+"POT-Creation-Date: 2018-10-29 17:21+1030\n"
+"PO-Revision-Date: 2018-10-29 17:20+1030\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: ES\n"
+"Language-Team: \n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.2\n"
 
 #: accounts/forms.py:19
 msgid "Enter Email"
@@ -280,38 +281,39 @@ msgstr "Este campo necesita una lista de valores separados por comas"
 #: action/forms.py:327
 msgid "Key column to use for file name prefix (Participant id if Moodle ZIP)"
 msgstr ""
+"Columna clave de la que extraer el prefijo del nombre de fichero "
+"(“Participant id” si el ZIP es para Moodle)"
 
 #: action/forms.py:333
 msgid "Column to use for file name prefix (Full name if Moodle ZIP)"
 msgstr ""
+"Columna a usar para el prefijo de fichero (“Full name” si el ZIP es para "
+"Moodle)"
 
 #: action/forms.py:347
 msgid "This ZIP will be uploaded to Moodle as feedback"
-msgstr ""
+msgstr "Este ZIP será cargado en Moodle como feedback"
 
 #: action/forms.py:353
 msgid "Check/exclude users before sending?"
 msgstr "Comprobar/excluir usuarios antes de enviar"
 
 #: action/forms.py:399
-#, fuzzy
-#| msgid "The column does not have unique values for each row."
 msgid "Column needs to have all unique values (no empty cells)"
 msgstr "La columna no tiene valores únicos en cada celda."
 
 #: action/forms.py:407
 msgid "The two columns must be different"
-msgstr ""
+msgstr "Las dos columnas deben ser diferentes"
 
 #: action/forms.py:416
 msgid "A Moodle ZIP requires two column names"
-msgstr ""
+msgstr "Un ZIP para Moodle requiere dos columnas"
 
 #: action/forms.py:429
-#, fuzzy
-#| msgid "New values in column {0} are not of type number"
 msgid "Values in column must have format \"Participant [number]\""
-msgstr "Los nuevos valores en la columna {0} no son de tipo numérico"
+msgstr ""
+"Los valores en la columna deben tener el formato “Participant [número]”"
 
 #: action/forms.py:439
 msgid "Values to exclude"
@@ -664,14 +666,11 @@ msgid "ZIP action"
 msgstr "ZIP de la acción"
 
 #: action/templates/action/action_zip_step1.html:13
-#, fuzzy, python-format
-#| msgid ""
-#| "Create a ZIP for\n"
-#| "    action \"%(n)s\""
+#, python-format
 msgid ""
 "ZIP for\n"
 "    action \"%(n)s\""
-msgstr "Crear un ZIP para la acción \"(n)s\""
+msgstr "Crear un ZIP para la acción “%(n)s”"
 
 #: action/templates/action/action_zip_step1.html:17
 #, python-format
@@ -698,6 +697,21 @@ msgid ""
 "upload it.\n"
 "      "
 msgstr ""
+"\n"
+"Esta función crea un ZIP con un fichero HTML para cada usuario seleccionado "
+"por la\n"
+"acción. El fichero contiene el texto personalizado tal y como muestra el "
+"botón de \n"
+"“Vista previa”. El nombre de fichero se crea con los valores de las dos "
+"columnas \n"
+"seleccionadas seguido de un sufijo. Si vas a utilizar el ZIP como fichero de "
+"feedback\n"
+"en Moodle, la primera columna debe tener valores de la forma “Participant "
+"[número]” y\n"
+"La segunda columna debe ser el nombre completo. Estas  columnas se obtienen\n"
+"descargándose el fichero CSV para corregir offline en Moodle, y luego "
+"mezclando\n"
+"los datos en el flujo y usándolos para crear el fichero ZIP y subirlo."
 
 #: action/templates/action/edit_in.html:7
 msgid "Edit Action In"
@@ -942,10 +956,8 @@ msgid "Email"
 msgstr "Email"
 
 #: action/templates/action/includes/partial_action_operations.html:16
-#, fuzzy
-#| msgid "Create ZIP with personalised texts"
 msgid "Create a ZIP with each personalised text in a file"
-msgstr "Crear un ZIP con los textos persnalizados"
+msgstr "Crear un ZIP con un fichero para cada texto personalizado"
 
 #: action/templates/action/includes/partial_action_operations.html:17
 msgid "ZIP"
@@ -1464,7 +1476,7 @@ msgstr "No ha sido posible generar el fichero ZIP"
 
 #: action/views_out.py:400
 msgid "The resulting ZIP is empty"
-msgstr ""
+msgstr "El fichero ZIP está vacío"
 
 #: action/views_out.py:511
 msgid ""
@@ -4824,25 +4836,6 @@ msgid "Import a file with an OnTask workflow"
 msgstr "Cargar un fichero con un flujo OnTask "
 
 #: workflow/templates/workflow/index.html:69
-#, fuzzy
-#| msgid ""
-#| "<strong><super>*</super></strong>A workflow contains a <i>table\n"
-#| "    </i> with data about a set of learners and <i>a\n"
-#| "      collection of actions</i>. The table is organised by <i>columns</i> "
-#| "and the information in each row corresponds\n"
-#| "      to one learner. The actions will behave differently depending on "
-#| "the values stored for every learner and a set\n"
-#| "      of conditions. These conditions can be written based on the values "
-#| "of the columns for each student. Typically,\n"
-#| "      you create a workflow for a cohort of learners for which you have "
-#| "data available. Then you write the actions\n"
-#| "      depending on a) when you want students to introduce data or b) when "
-#| "you want students to receive personalised\n"
-#| "      data. The personalisation is done writing conditions to enable/"
-#| "disable text or other elements in a page. The\n"
-#| "      page can either be sent to the learner through email, shown through "
-#| "a HTML address, or sent to another\n"
-#| "      machine."
 msgid ""
 "A workflow contains a <i>table\n"
 "    </i> with data about a set of learners and <i>a\n"
@@ -4862,19 +4855,22 @@ msgid ""
 "HTML address, or sent to another\n"
 "      machine."
 msgstr ""
-"<strong><super>*</super></strong>Un flujo contiene una <i>tabla</i>  con los "
-"datos de un conjunto de estudiantes y una <i>colección de  acciones</i>. La "
-"tabla está organizada por <i>columnas</i>  y la información en cada fila "
-"corresponde con  con cada estudiante. Las acciones producirán resultados "
-"diferentes  dependiento de los valores almacenados para cada estuadiante y "
-"un conjunto  de condiciones. Estas condiciones se pueden especificar usando "
-"los nombres  de las columnas. Tipicamente creas un flujo para un grupo de "
-"estudiantes  para los que tienes datos disponibles. Luego escribes un "
-"conjunto de acciones dependiento de a) cuando quieres que los estudiantes te "
-"proporcionen datos  o b) cuando quieres que reciban un mensaje "
-"personalizado. La personalización  se consigue a través de condiciones que "
-"permiten/suprimen texto u otros  elementos en una página que puede ser "
-"enviada por email, ofrecida a través  de una URL, o enviada a otro servicio."
+"<strong><super>*</super></strong>Un flujo contiene una <i>tabla</i> \n"
+"con los datos de un conjunto de estudiantes y una <i>colección de  acciones</"
+"i>. La tabla está organizada por <i>columnas</i> \n"
+"y la información en cada fila corresponde con \n"
+"con cada estudiante. Las acciones producirán resultados diferentes \n"
+"dependiendo de los valores almacenados para cada estudiante y un conjunto \n"
+"de condiciones. Estas condiciones se pueden especificar usando los nombres \n"
+"de las columnas. Típicamente creas un flujo para un grupo de estudiantes \n"
+"para los que tienes datos disponibles. Luego escribes un conjunto de "
+"acciones \n"
+"dependiendo de a) cuando quieres que los estudiantes te proporcionen datos \n"
+"o b) cuando quieres que reciban un mensaje personalizado. La "
+"personalización \n"
+"se consigue a través de condiciones que permiten/suprimen texto u otros \n"
+"elementos en una página que puede ser enviada por email, ofrecida a través \n"
+"de una URL, o enviada a otro servicio."
 
 #: workflow/templates/workflow/share.html:14
 msgid "Users with access to this workflow"
