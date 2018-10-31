@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-29 17:21+1030\n"
+"POT-Creation-Date: 2018-10-31 11:53+1030\n"
 "PO-Revision-Date: 2018-10-29 17:20+1030\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: \n"
@@ -491,7 +491,7 @@ msgstr "Imposible crear la información para la condición"
 msgid "Unable to create columns field"
 msgstr "Imposible crear el campo de la columna"
 
-#: action/settings.py:34 ontask/settings/base.py:371
+#: action/settings.py:34 ontask/settings/base.py:372
 msgid "OnTask: Action executed"
 msgstr "OnTask: Acción ejecutada"
 
@@ -794,13 +794,13 @@ msgid "Done"
 msgstr "Terminar"
 
 #: action/templates/action/edit_in.html:192
-#: action/templates/action/includes/partial_action_operations.html:27
+#: action/templates/action/includes/partial_action_operations.html:30
 msgid "Enter data manually"
 msgstr "Introducir data manualmente"
 
 #: action/templates/action/edit_in.html:193
-#: action/templates/action/includes/partial_action_operations.html:22
-#: action/templates/action/includes/partial_action_operations.html:28
+#: action/templates/action/includes/partial_action_operations.html:25
+#: action/templates/action/includes/partial_action_operations.html:31
 #: dataops/templates/dataops/includes/partial_plugin_operations.html:6
 #: dataops/templates/dataops/includes/partial_sqlconn_runop.html:5
 #: dataops/templates/dataops/includes/plugin_run_buttons.html:9
@@ -854,7 +854,7 @@ msgid "Columns:"
 msgstr "Columnas:"
 
 #: action/templates/action/export_ask.html:28
-#: action/templates/action/includes/partial_action_operations.html:80
+#: action/templates/action/includes/partial_action_operations.html:83
 #: workflow/templates/workflow/export.html:63
 msgid "Export"
 msgstr "Exportar"
@@ -955,57 +955,49 @@ msgstr "Enviar mensajes personalizados"
 msgid "Email"
 msgstr "Email"
 
-#: action/templates/action/includes/partial_action_operations.html:16
-msgid "Create a ZIP with each personalised text in a file"
-msgstr "Crear un ZIP con un fichero para cada texto personalizado"
-
-#: action/templates/action/includes/partial_action_operations.html:17
-msgid "ZIP"
-msgstr "ZIP"
-
-#: action/templates/action/includes/partial_action_operations.html:21
+#: action/templates/action/includes/partial_action_operations.html:24
 msgid "Send personalised JSONs"
 msgstr "Enviar objetos JSON personalizados"
 
-#: action/templates/action/includes/partial_action_operations.html:35
+#: action/templates/action/includes/partial_action_operations.html:38
 msgid "URL for learners to access the personalised text"
 msgstr "URL para que los estudiantes accedan al texto personalizado"
 
-#: action/templates/action/includes/partial_action_operations.html:37
+#: action/templates/action/includes/partial_action_operations.html:40
 msgid "URL for learners to introduce data"
 msgstr "URL para que los estudiantes introduzcan los datos"
 
-#: action/templates/action/includes/partial_action_operations.html:40
+#: action/templates/action/includes/partial_action_operations.html:43
 msgid "URL"
 msgstr "URL"
 
-#: action/templates/action/includes/partial_action_operations.html:45
+#: action/templates/action/includes/partial_action_operations.html:48
 msgid "More"
 msgstr "Más"
 
-#: action/templates/action/includes/partial_action_operations.html:53
+#: action/templates/action/includes/partial_action_operations.html:56
 msgid "Schedule the execution of the action"
 msgstr "Planificar la ejecución de la acción"
 
-#: action/templates/action/includes/partial_action_operations.html:54
+#: action/templates/action/includes/partial_action_operations.html:57
 #: scheduler/views.py:236 scheduler/views.py:298
 msgid "Schedule"
 msgstr "Planificar"
 
-#: action/templates/action/includes/partial_action_operations.html:62
+#: action/templates/action/includes/partial_action_operations.html:65
 msgid "Change name and/or description"
 msgstr "Cambiar el nombre y/o la descripción"
 
-#: action/templates/action/includes/partial_action_operations.html:63
+#: action/templates/action/includes/partial_action_operations.html:66
 #: workflow/templates/workflow/includes/workflow_basic_buttons.html:13
 msgid "Rename"
 msgstr "Renombrar"
 
-#: action/templates/action/includes/partial_action_operations.html:71
+#: action/templates/action/includes/partial_action_operations.html:74
 msgid "Create an identical action"
 msgstr "Crear una acción idéntica"
 
-#: action/templates/action/includes/partial_action_operations.html:72
+#: action/templates/action/includes/partial_action_operations.html:75
 #: action/templates/action/includes/partial_column_selected_operations.html:21
 #: action/templates/action/includes/partial_condition_buttons.html:59
 #: dataops/templates/dataops/includes/partial_sqlconn_operations.html:22
@@ -1016,15 +1008,15 @@ msgstr "Crear una acción idéntica"
 msgid "Clone"
 msgstr "Clonar"
 
-#: action/templates/action/includes/partial_action_operations.html:79
+#: action/templates/action/includes/partial_action_operations.html:82
 msgid "Export the content of this action"
 msgstr "Exportar el contenido de esta acción"
 
-#: action/templates/action/includes/partial_action_operations.html:87
+#: action/templates/action/includes/partial_action_operations.html:90
 msgid "Delete the action"
 msgstr "Borrar la acción"
 
-#: action/templates/action/includes/partial_action_operations.html:88
+#: action/templates/action/includes/partial_action_operations.html:91
 #: action/templates/action/includes/partial_condition_buttons.html:68
 #: action/templates/action/includes/partial_filter_create_buttons.html:40
 #: dataops/templates/dataops/includes/partial_sqlconn_operations.html:31
@@ -3009,6 +3001,10 @@ msgstr "Inglés"
 msgid "Spanish"
 msgstr "Español"
 
+#: ontask/settings/base.py:274
+msgid "Chinese"
+msgstr ""
+
 #: ontask/urls.py:28
 msgid ""
 "The OnTask API offers functionality to manipulate \n"
@@ -4941,6 +4937,12 @@ msgstr "Imposible clonar flujo"
 #: workflow/views.py:626
 msgid "Workflow successfully cloned."
 msgstr "Flujo clonado con éxito"
+
+#~ msgid "Create a ZIP with each personalised text in a file"
+#~ msgstr "Crear un ZIP con un fichero para cada texto personalizado"
+
+#~ msgid "ZIP"
+#~ msgstr "ZIP"
 
 #~ msgid "Column containing user id"
 #~ msgstr "Columna con identificador de usuario"
