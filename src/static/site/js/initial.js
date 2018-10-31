@@ -1,6 +1,7 @@
 var langMap = {
    'en' : 'English',
    'es-ES' : 'Spanish',
+   'zh-CN' : 'Chinese',
 }
 
 function getLanguage() {
