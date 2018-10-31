@@ -1,6 +1,6 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 3.0.4 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 3.1.0 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
 ## OnTask in a nutshell
 
@@ -28,6 +28,8 @@ Current Version: 3.0.4 ([documentation](http://ontask-version-b.readthedocs.io/e
 - Execution of plugins to process and modify workflow data.
 
 - Authentication through LTI, LDAP, Shibboleth
+
+- Support for internationalization (initial versions for Spanish and Chinese)
 
 **For a detailed description of the tool, how to install it, and how to use it
 check the [OnTask Documentation](https://abelardopardo.github.io/ontask_b)**.
