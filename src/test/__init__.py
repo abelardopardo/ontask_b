@@ -3,6 +3,7 @@ from __future__ import unicode_literals, print_function
 
 import StringIO
 import os
+import math
 
 import pandas as pd
 from PIL import Image
@@ -1027,12 +1028,25 @@ class ScreenTests(OntaskLiveTestCase):
         :return: Nothing
         """
 
-        if xpath and ss_filename:
-            Image.open(StringIO.StringIO(
-                self.selenium.find_element_by_xpath(
-                    xpath
-                ).screenshot_as_png)
-            ).save(self.img_path(self.prefix + ss_filename))
+        if not xpath or not ss_filename:
+            raise Exception('Incorrect invocation of element_ss')
+
+        element = self.selenium.find_element_by_xpath(xpath)
+
+        img = Image.open(StringIO.StringIO(
+            self.selenium.find_element_by_xpath(
+                xpath
+            ).screenshot_as_png)
+
+        )
+        # img = img.crop(
+        #     (math.floor(element.location['x']),
+        #      math.floor(element.location['y']),
+        #      math.ceil(element.location['x'] + element.size['width']),
+        #      math.ceil(element.location['y'] + element.size['height']))
+        # )
+
+        img.save(self.img_path(self.prefix + ss_filename))
 
     def modal_ss(self, ss_filename):
         self.element_ss(self.modal_xpath, ss_filename)
