@@ -194,7 +194,7 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('workflow_details.png')
 
         # Take picture of the navigation bar
-        self.element_ss("//body/div[3]", 'navigation_bar.png')
+        self.element_ss("//body/div[2]", 'navigation_bar.png')
 
         #
         # New column modal
