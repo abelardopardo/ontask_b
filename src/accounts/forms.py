@@ -14,6 +14,7 @@ class LoginForm(AuthenticationForm):
         super(LoginForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.fields["username"].widget.input_type = "email"  # ugly hack
+        self.fields["username"].label = _("Email address")
 
         self.helper.layout = Layout(
             Field('username', placeholder=_("Enter Email"), autofocus=""),
