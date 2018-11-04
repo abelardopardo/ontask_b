@@ -9,22 +9,22 @@ from dataops import formula_evaluation
 class HasVariableTest(TestCase):
 
     formula1 = {u'not': False, u'rules': [
-        {u'value': u'df', u'field': u'UOS_Code_a', u'operator': u'equal',
-         u'input': u'text', u'type': u'string', u'id': u'UOS_Code_a'},
+        {u'value': u'df', u'field': u'{2}_Code_a', u'operator': u'equal',
+         u'input': u'text', u'type': u'string', u'id': u'Course_Code_a'},
         {u'value': u'v2', u'field': u'ANOTHER', u'operator': u'equal',
          u'input': u'text', u'type': u'string', u'id': u'ANOTHER'}],
                 u'valid': True, u'condition': u'AND'}
 
     formula2 = {u'not': False, u'rules': [
-        {u'value': u'df', u'field': u'UOS_Code_a', u'operator': u'equal',
-         u'input': u'text', u'type': u'string', u'id': u'UOS_Code_a'},
+        {u'value': u'df', u'field': u'Course_Code_a', u'operator': u'equal',
+         u'input': u'text', u'type': u'string', u'id': u'Course_Code_a'},
         {u'value': u'v2', u'field': u'ANOTHER', u'operator': u'equal',
          u'input': u'text', u'type': u'string', u'id': u'ANOTHER'}],
                 u'valid': True, u'condition': u'AND'}
 
     formula3 = {u'not': False, u'rules': [
-        {u'value': u'df', u'field': u'UOS_Code_b', u'operator': u'equal',
-         u'input': u'text', u'type': u'string', u'id': u'UOS_Code_b'},
+        {u'value': u'df', u'field': u'Course_Code_b', u'operator': u'equal',
+         u'input': u'text', u'type': u'string', u'id': u'Course_Code_b'},
         {u'value': u'v2', u'field': u'ANOTHER', u'operator': u'equal',
          u'input': u'text', u'type': u'string', u'id': u'ANOTHER'}],
                 u'valid': True, u'condition': u'AND'}
@@ -51,8 +51,8 @@ class HasVariableTest(TestCase):
         self.assertTrue(self.compare(self.formula1, self.formula2))
 
         f3 = formula_evaluation.rename_variable(self.formula1,
-                                                'UOS_Code_a',
-                                                'UOS_Code_b')
+                                                'Course_Code_a',
+                                                'Course_Code_b')
 
         self.assertTrue(self.compare(self.formula3, f3))
 
@@ -60,6 +60,6 @@ class HasVariableTest(TestCase):
 
         self.assertTrue(
             formula_evaluation.evaluate_top_node(
-                self.formula1, {'UOS_Code_a': 'df', 'ANOTHER': 'v2'}
+                self.formula1, {'Course_Code_a': 'df', 'ANOTHER': 'v2'}
             )
         )
