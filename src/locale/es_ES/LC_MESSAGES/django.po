@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-31 11:53+1030\n"
-"PO-Revision-Date: 2018-10-29 17:20+1030\n"
+"POT-Creation-Date: 2018-11-04 12:49+1030\n"
+"PO-Revision-Date: 2018-11-04 13:06+1030\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -18,15 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.2\n"
 
-#: accounts/forms.py:19
+#: accounts/forms.py:17
+msgid "Email address"
+msgstr "Dirección de correo"
+
+#: accounts/forms.py:20
 msgid "Enter Email"
 msgstr "Introducir correo"
 
-#: accounts/forms.py:20
+#: accounts/forms.py:21
 msgid "Enter Password"
 msgstr "Introducir clave"
 
-#: accounts/forms.py:24 accounts/templates/accounts/signup.html:11
+#: accounts/forms.py:25 accounts/templates/accounts/signup.html:11
 #: templates/registration/password_reset_complete.html:13
 msgid "Log in"
 msgstr "Iniciar sesión"
@@ -42,7 +46,7 @@ msgid ""
 "user account at %(site_name)s."
 msgstr ""
 "Este email se ha enviado porque uste a pedido reestablecer la clave de su "
-"cuenta en %(site_name)s"
+"cuenta en %(site_name)s."
 
 #: accounts/templates/accounts/emails/password-reset-email.html:4
 msgid "Please go to the following page and choose a new password:"
@@ -52,11 +56,11 @@ msgstr "Por favor, vaya a la siguiente página y escoja una clave nueva:"
 msgid "Your login email, in case you've forgotten, is same this email address:"
 msgstr ""
 "Si se ha olvidado, su correo para iniciar sesión es el mismo en el que ha "
-"recibido este mensaje"
+"recibido este mensaje:"
 
 #: accounts/templates/accounts/emails/password-reset-email.html:10
 msgid "Thanks for using our site!"
-msgstr "Gracias por utilizar esta aplicación"
+msgstr "¡Gracias por utilizar esta aplicación!"
 
 #: accounts/templates/accounts/emails/password-reset-email.html:12
 #, python-format
@@ -199,7 +203,7 @@ msgstr "Acciones, condiciones, filtros, emails"
 #: action/evaluate.py:163 action/evaluate.py:167
 #, python-brace-format
 msgid "Name {0} is reserved."
-msgstr "El nombre {0} está reservado"
+msgstr "El nombre {0} está reservado."
 
 #: action/evaluate.py:256
 #, python-brace-format
@@ -266,7 +270,7 @@ msgstr "Un fichero zip útil para revisar los mensajes que se envían."
 
 #: action/forms.py:245
 msgid "Check/exclude email addresses before sending?"
-msgstr "Comprobar/excluir direcciones de email antes de enviar"
+msgstr "¿Comprobar/excluir direcciones de email antes de enviar?"
 
 #: action/forms.py:297 action/forms.py:302 scheduler/forms.py:256
 #: scheduler/forms.py:261 scheduler/serializers.py:191
@@ -276,7 +280,7 @@ msgstr "La columna con las direcciones de correo tiene valores incorrectos."
 
 #: action/forms.py:309 action/forms.py:316
 msgid "Field needs a comma-separated list of emails."
-msgstr "Este campo necesita una lista de valores separados por comas"
+msgstr "Este campo necesita una lista de valores separados por comas."
 
 #: action/forms.py:327
 msgid "Key column to use for file name prefix (Participant id if Moodle ZIP)"
@@ -296,7 +300,7 @@ msgstr "Este ZIP será cargado en Moodle como feedback"
 
 #: action/forms.py:353
 msgid "Check/exclude users before sending?"
-msgstr "Comprobar/excluir usuarios antes de enviar"
+msgstr "¿Comprobar/excluir usuarios antes de enviar?"
 
 #: action/forms.py:399
 msgid "Column needs to have all unique values (no empty cells)"
@@ -698,11 +702,11 @@ msgid ""
 "      "
 msgstr ""
 "\n"
-"Esta función crea un ZIP con un fichero HTML para cada usuario seleccionado "
-"por la\n"
-"acción. El fichero contiene el texto personalizado tal y como muestra el "
+"    Esta función crea un ZIP con un fichero HTML para cada usuario "
+"seleccionado por la\n"
+"    acción. El fichero contiene el texto personalizado tal y como muestra el "
 "botón de \n"
-"“Vista previa”. El nombre de fichero se crea con los valores de las dos "
+"    “Vista previa”. El nombre de fichero se crea con los valores de las dos "
 "columnas \n"
 "seleccionadas seguido de un sufijo. Si vas a utilizar el ZIP como fichero de "
 "feedback\n"
@@ -711,7 +715,8 @@ msgstr ""
 "La segunda columna debe ser el nombre completo. Estas  columnas se obtienen\n"
 "descargándose el fichero CSV para corregir offline en Moodle, y luego "
 "mezclando\n"
-"los datos en el flujo y usándolos para crear el fichero ZIP y subirlo."
+"los datos en el flujo y usándolos para crear el fichero ZIP y subirlo.\n"
+"    "
 
 #: action/templates/action/edit_in.html:7
 msgid "Edit Action In"
@@ -719,7 +724,7 @@ msgstr "Editar acción de entrada"
 
 #: action/templates/action/edit_in.html:43
 msgid "No columns selected."
-msgstr "No se ha seleccionado ninguna columna"
+msgstr "No se ha seleccionado ninguna columna."
 
 #: action/templates/action/edit_in.html:72
 #: action/templates/action/includes/partial_action_edit_description.html:9
@@ -814,7 +819,7 @@ msgstr "Editar la información personal"
 
 #: action/templates/action/edit_personalized_json.html:31
 msgid "Personalized JSON:"
-msgstr "JSON personalizado"
+msgstr "JSON personalizado:"
 
 #: action/templates/action/edit_personalized_json.html:40
 #: action/templates/action/edit_personalized_text.html:50
@@ -1282,8 +1287,8 @@ msgid ""
 "Review the conditions in the action\n"
 "    or use a filter to exclude these entries."
 msgstr ""
-"Revise las condiciones en la acción o utilize un filtro para excluir estas "
-"filas"
+"Revise las condiciones en la acción o utilice un filtro para excluir estas "
+"filas."
 
 #: action/templates/action/index.html:8 action/templates/action/index.html:43
 #: templates/base.html:93
@@ -1412,7 +1417,7 @@ msgstr "Petición de formulario incorrecta (no es multiplart)"
 #: logs/views.py:57 table/views.py:171 table/views.py:285 table/views.py:342
 #: workflow/views.py:474 workflow/views.py:491
 msgid "Incorrect request. Unable to process"
-msgstr "Petición incorrecta. No es posible procesarla."
+msgstr "Petición incorrecta. No es posible procesarla"
 
 #: action/views_action.py:1074 table/views.py:290 table/views.py:347
 msgid "There is no data in the table"
@@ -1420,7 +1425,7 @@ msgstr "No hay datos en la tabla"
 
 #: action/views_condition.py:92
 msgid "A condition with that name already exists in this action"
-msgstr "Ya existe una condición con este nombre en esta acción."
+msgstr "Ya existe una condición con este nombre en esta acción"
 
 #: action/views_condition.py:110
 msgid "A column name with that name already exists."
@@ -1428,11 +1433,11 @@ msgstr "Ya existe una columna con este nombre."
 
 #: action/views_condition.py:125
 msgid "The workflow has an attribute with this name."
-msgstr "El flujo tiene un attributo con este nombre"
+msgstr "El flujo tiene un atributo con este nombre."
 
 #: action/views_condition.py:496
 msgid "Condition cannot be cloned."
-msgstr "No se ha podido clonar la condición"
+msgstr "No se ha podido clonar la condición."
 
 #: action/views_condition.py:521
 msgid "Action successfully cloned."
@@ -1452,7 +1457,7 @@ msgstr "Enviar"
 
 #: action/views_out.py:167
 msgid "Incorrect email action invocation."
-msgstr "Invocación de acción email incorrecta"
+msgstr "Invocación de acción email incorrecta."
 
 #: action/views_out.py:293
 msgid "Create ZIP"
@@ -1460,11 +1465,11 @@ msgstr "Crear ZIP"
 
 #: action/views_out.py:321 action/views_out.py:372
 msgid "Incorrect ZIP action invocation."
-msgstr "Invocación incorrecta de acción ZIP"
+msgstr "Invocación incorrecta de acción ZIP."
 
 #: action/views_out.py:395
 msgid "Unable to generate zip:"
-msgstr "No ha sido posible generar el fichero ZIP"
+msgstr "No ha sido posible generar el fichero ZIP:"
 
 #: action/views_out.py:400
 msgid "The resulting ZIP is empty"
@@ -1480,7 +1485,7 @@ msgstr ""
 
 #: action/views_out.py:571
 msgid "Incorrect JSON action invocation."
-msgstr "Invocación incorrecta de acción JSON"
+msgstr "Invocación incorrecta de acción JSON."
 
 #: action/views_out.py:687
 #, python-brace-format
@@ -1489,7 +1494,7 @@ msgstr "Error al acceder al contenido para el estudiante {0}"
 
 #: action/views_out.py:734
 msgid "Incorrect item filter invocation."
-msgstr "Invocación incorrecta del filtro"
+msgstr "Invocación incorrecta del filtro."
 
 #: core/apps.py:9
 msgid "Core Configuration"
@@ -1509,7 +1514,7 @@ msgstr "Operaciones de carga/mezcla de datos"
 
 #: dataops/csvupload.py:51 dataops/csvupload.py:70
 msgid "CSV file"
-msgstr "fichero CSV"
+msgstr "Fichero CSV"
 
 #: dataops/csvupload.py:56
 msgid "CSV upload form is not multiform"
@@ -1522,7 +1527,7 @@ msgstr "No se ha podido procesar el fichero ({0})"
 
 #: dataops/csvupload.py:94 dataops/excelupload.py:116
 msgid "The file has duplicated column names"
-msgstr "El fichero tienen nombres de columnas duplicados."
+msgstr "El fichero tienen nombres de columnas duplicados"
 
 #: dataops/csvupload.py:108 dataops/excelupload.py:130
 #: dataops/sqlcon_views.py:427
@@ -1531,7 +1536,7 @@ msgid ""
 "have unique values."
 msgstr ""
 "Los datos no tienen ninguna columna con valores únicos por cada fila. Al "
-"menos debe haber una columna con valores únicos"
+"menos debe haber una columna con valores únicos."
 
 #: dataops/csvupload.py:123 dataops/excelupload.py:145
 msgid "Sorry. This file cannot be processed."
@@ -1644,11 +1649,11 @@ msgstr "4) Selecciona sólo las filas con la clave en la tabla nueva"
 
 #: dataops/forms.py:335
 msgid "Key column in the existing table to match with the new table."
-msgstr "Columna clave en la tabla existente para emparejar con la tabla nueva"
+msgstr "Columna clave en la tabla existente para emparejar con la tabla nueva."
 
 #: dataops/forms.py:338
 msgid "Key column in the new table to match with the existing table."
-msgstr "Columna clave en la tabla nueva a emparejar con la tabla existente"
+msgstr "Columna clave en la tabla nueva a emparejar con la tabla existente."
 
 #: dataops/forms.py:341
 msgid "Select one method to see detailed information"
@@ -1878,7 +1883,7 @@ msgstr "No es posible cargar el plugin en la carpeta \"{0}\"."
 
 #: dataops/plugin_manager.py:350
 msgid "Result is not a pandas data frame."
-msgstr "El resultado no es un data frame de Pandas"
+msgstr "El resultado no es un data frame de Pandas."
 
 #: dataops/settings.py:31
 msgid "Folder where plugins are stored"
@@ -1895,7 +1900,7 @@ msgstr "<PROTEGIDO>"
 
 #: dataops/sqlcon_views.py:385
 msgid "SQL connection"
-msgstr "conexión SQL"
+msgstr "Conexión SQL"
 
 #: dataops/sqlcon_views.py:409
 #, python-brace-format
@@ -2064,7 +2069,7 @@ msgstr "Añadir"
 #: dataops/templates/dataops/row_create.html:43
 #: dataops/templates/dataops/row_filter.html:43
 msgid "No data available for this workflow"
-msgstr "No hay ningún dato en este flujo."
+msgstr "No hay ningún dato en este flujo"
 
 #: dataops/templates/dataops/row_filter.html:8
 #: dataops/templates/dataops/row_filter.html:18
@@ -2116,7 +2121,9 @@ msgstr "Driver para la conexión: %(n)s"
 msgid ""
 "Username: %(n)s\n"
 "        "
-msgstr "Usuario: %(n)s"
+msgstr ""
+"Usuario: %(n)s\n"
+"     "
 
 #: dataops/templates/dataops/sqlupload1.html:31
 msgid "Password: Requested below"
@@ -2206,7 +2213,7 @@ msgid ""
 msgstr ""
 "Selecciona todas las filas tanto de la tabla existente como de la tabla "
 "nueva. Los valores de las celdas en filas con claves en las dos tablas se "
-"actualizan is la tabla nueva tiene un valor no vacío"
+"actualizan is la tabla nueva tiene un valor no vacío."
 
 #: dataops/templates/dataops/upload_s3.html:27
 msgid "Merge using all the keys in either the existing or new table"
@@ -2330,8 +2337,7 @@ msgid ""
 msgstr ""
 "Si la tabla del flujo tiene datos, la operación requerirá una\n"
 "            columna clave en la tabla y una columna clave en el fichero\n"
-"            para emparejar las filas al cargar.\n"
-"            "
+"            para emparejar las filas al cargar."
 
 #: dataops/templates/dataops/uploadmerge.html:43
 msgid "Excel Upload/Merge"
@@ -2391,7 +2397,7 @@ msgstr "Ha habido una excepción mientras se cargaba el data frame"
 
 #: dataops/upload.py:404
 msgid "Merge operation failed."
-msgstr "La operación de mezcla ha fallado"
+msgstr "La operación de mezcla ha fallado."
 
 #: dataops/upload.py:491 dataops/upload.py:494
 msgid " (Ignored)"
@@ -2445,7 +2451,7 @@ msgstr "El flujo no tiene las columnas necesarias para ejecutar este plugin"
 
 #: dataops/views.py:428
 msgid "Incorrect number of rows in result data frame."
-msgstr "Número de filas incorrecto en el data frame resultante"
+msgstr "Número de filas incorrecto en el data frame resultante."
 
 #: django_auth_lti/backends.py:30
 msgid "about to begin authentication process"
@@ -2453,7 +2459,7 @@ msgstr "a punto de empezar el proceso de autenticación"
 
 #: django_auth_lti/backends.py:36
 msgid "Request doesn't contain an oauth_consumer_key; can't continue."
-msgstr "El request no contiene un oauth_comsumer_key; no es posible continuar"
+msgstr "El request no contiene un oauth_comsumer_key; no es posible continuar."
 
 #: django_auth_lti/backends.py:41
 msgid "Missing LTI_OAUTH_CREDENTIALS in settings"
@@ -2467,7 +2473,7 @@ msgstr "No fue posible obtener el secreto para la clave {0}"
 #: django_auth_lti/backends.py:52
 #, python-brace-format
 msgid "using key/secret {0}/{1}"
-msgstr "Utilizando clave/secreto {0}/{1}"
+msgstr "utilizando clave/secreto {0}/{1}"
 
 #: django_auth_lti/backends.py:58
 #, python-brace-format
@@ -2482,7 +2488,7 @@ msgstr "POST {0}: {1}"
 #: django_auth_lti/backends.py:63
 #, python-brace-format
 msgid "request abs url is {0}"
-msgstr "La URL del request es {0}"
+msgstr "la URL del request es {0}"
 
 #: django_auth_lti/backends.py:68
 #, python-brace-format
@@ -2496,15 +2502,15 @@ msgstr "a punto de comprobar la firma"
 #: django_auth_lti/backends.py:77
 #, python-brace-format
 msgid "error attempting to validate LTI launch {0}"
-msgstr "Error al intentar validar el arranque LTI {0}"
+msgstr "error al intentar validar el arranque LTI {0}"
 
 #: django_auth_lti/backends.py:84
 msgid "Invalid request: signature check failed."
-msgstr "Request incorrecto: fallo al comprobar firma"
+msgstr "Request incorrecto: fallo al comprobar firma."
 
 #: django_auth_lti/backends.py:87
 msgid "done checking the signature"
-msgstr "Finalizada la comprobación de la firma"
+msgstr "finalizada la comprobación de la firma"
 
 #: django_auth_lti/backends.py:90
 #, python-brace-format
@@ -2513,19 +2519,19 @@ msgstr "a punto de comprobar el timestamp: {0}"
 
 #: django_auth_lti/backends.py:96
 msgid "OAuth timestamp is too old."
-msgstr "El timestap OAuth es demasiado antiguo"
+msgstr "El timestap OAuth es demasiado antiguo."
 
 #: django_auth_lti/backends.py:99
 msgid "timestamp looks good"
-msgstr "El timestap es correcto"
+msgstr "el timestap es correcto"
 
 #: django_auth_lti/backends.py:101
 msgid "done checking the timestamp"
-msgstr "Se ha comprobado el timestap"
+msgstr "se ha comprobado el timestap"
 
 #: django_auth_lti/backends.py:120
 msgid "Invalid request: Invalid email."
-msgstr "Request incorrecto: Email incorrecto"
+msgstr "Request incorrecto: Email incorrecto."
 
 #: django_auth_lti/backends.py:123
 #, python-brace-format
@@ -2553,7 +2559,7 @@ msgstr ""
 #: django_auth_lti/backends.py:156
 #, python-brace-format
 msgid "authenticate could not find user {0}"
-msgstr "La autenticación no pudo encontrar el usuario {0}"
+msgstr "no se ha encontrado el usuario {0} al autenticar"
 
 #: django_auth_lti/backends.py:171
 msgid "updated the user record in the database"
@@ -2592,7 +2598,7 @@ msgid ""
 "user could not be authenticated via LTI params; let the request continue in "
 "case another auth plugin is configured"
 msgstr ""
-"El usuario no ha podido ser autenticado via LTI params; el request continua "
+"el usuario no ha podido ser autenticado vía LTI params; el request continua "
 "por si otro plugin de autenticación está configurado"
 
 #: django_auth_lti/middleware.py:126
@@ -2607,7 +2613,7 @@ msgstr "invocando el backend {0} clean_username con {1}"
 #: django_auth_lti/middleware.py:142
 #, python-brace-format
 msgid "cleaned username is {0}"
-msgstr "El nombre de usuario limpio es {0}"
+msgstr "el nombre de usuario limpio es {0}"
 
 #: django_auth_lti/middleware_patched.py:36
 #, python-format
@@ -2637,12 +2643,13 @@ msgstr "No se ha encontrado LTI launch para resource_link_id %s"
 #: django_auth_lti/middleware_patched.py:206
 #, python-format
 msgid "cleaned username is %s"
-msgstr "Nombre de usuario limpio es %s"
+msgstr "nombre de usuario limpio es %s"
 
 #: django_auth_lti/mixins.py:25
 msgid "'LTIRoleRestrictionMixin' requires 'allowed_roles' attribute to be set."
 msgstr ""
-"'LTIRoleRestrictionMixin' requiere el atributo 'allowed_roles' asignado"
+"'LTIRoleRestrictionMixin' requiere que el atributo 'allowed_roles' esté "
+"asignado."
 
 #: django_auth_lti/templatetags/lti.py:24
 #, python-brace-format
@@ -2965,11 +2972,11 @@ msgstr "El número de registro es incorrecto"
 
 #: ontask/__init__.py:43
 msgid "The symbol ' cannot be used in the column name."
-msgstr "El símbolo ' no se puede utilizar en el nombre de la columna"
+msgstr "El símbolo ' no se puede utilizar en el nombre de la columna."
 
 #: ontask/__init__.py:46
 msgid "The symbol \" cannot be used in the column name."
-msgstr "El símbolo \" no se puede utilizar en el nombre de la columna"
+msgstr "El símbolo \" no se puede utilizar en el nombre de la columna."
 
 #: ontask/forms.py:32
 #, python-format
@@ -2979,11 +2986,11 @@ msgstr "El tamaño del fichero (%(current)s) ha de ser menor que %(max)s."
 #: ontask/forms.py:40
 #, python-format
 msgid "File type (%s) is not supported."
-msgstr "Los ficheros de typo (%s) no se pueden procesar"
+msgstr "Los ficheros de tipo (%s) no se pueden procesar."
 
 #: ontask/forms.py:112
 msgid "Unable to process datatype "
-msgstr "No es posible procesar el tipo de datos"
+msgstr "No es posible procesar el tipo de datos "
 
 #: ontask/ontask_prefs.py:21
 msgid "Content types allowed in uploads"
@@ -3003,7 +3010,7 @@ msgstr "Español"
 
 #: ontask/settings/base.py:274
 msgid "Chinese"
-msgstr ""
+msgstr "Chino"
 
 #: ontask/urls.py:28
 msgid ""
@@ -3081,7 +3088,7 @@ msgstr "Enlace al perfil"
 
 #: profiles/templates/profiles/show_profile.html:50
 msgid "No permalink. See this issue."
-msgstr "No hay enlace. Ver este problema"
+msgstr "No hay enlace. Ver este problema."
 
 #: profiles/templates/profiles/show_profile.html:54
 msgid "Bio"
@@ -3105,7 +3112,7 @@ msgstr "Ha habido un problema con el formulario. Compruebe los detalles."
 
 #: profiles/views.py:66
 msgid "Profile details saved!"
-msgstr "Se han guardado los detalles del perfil"
+msgstr "¡Se han guardado los detalles del perfil!"
 
 #: scheduler/apps.py:9
 msgid "Task Scheduler"
@@ -3145,7 +3152,7 @@ msgstr "Columna para seleccionar elementos (vacío para saltar este paso)"
 
 #: scheduler/forms.py:268 scheduler/forms.py:275
 msgid "This field must be a comma-separated list of emails."
-msgstr "Este campo debe tener una lista de emails separados por comas"
+msgstr "Este campo debe tener una lista de emails separados por comas."
 
 #: scheduler/forms.py:291
 msgid "Scheduling action needs a token"
@@ -3189,7 +3196,7 @@ msgstr "valores a excluir"
 
 #: scheduler/serializers.py:78
 msgid "Incorrect permission to manipulate action."
-msgstr "Permiso incorrecto para manipular la acción"
+msgstr "Permiso incorrecto para manipular la acción."
 
 #: scheduler/serializers.py:84
 msgid "Invalid date/time for execution"
@@ -3209,7 +3216,7 @@ msgstr "La exclusión de elementos necesita un valor en item_column"
 
 #: scheduler/serializers.py:107
 msgid "Scheduled objects needs a payload."
-msgstr "El objeto planificado necesita un payload"
+msgstr "El objeto planificado necesita un payload."
 
 #: scheduler/serializers.py:125
 #, python-brace-format
@@ -3223,7 +3230,7 @@ msgstr "No se puede actualizar la acción planificada: {0}"
 
 #: scheduler/serializers.py:172 scheduler/serializers.py:223
 msgid "Incorrect type of action to schedule."
-msgstr "Tipo incorrecto de acción a planificar"
+msgstr "Tipo incorrecto de acción a planificar."
 
 #: scheduler/serializers.py:176
 msgid "Personalized text needs a subject."
@@ -3235,15 +3242,15 @@ msgstr "El texto personalizado necesita un item_column"
 
 #: scheduler/serializers.py:201
 msgid "cc_email must be a comma-separated list of emails."
-msgstr "cc_email debe tener una lista de emails separados por comas"
+msgstr "cc_email debe tener una lista de emails separados por comas."
 
 #: scheduler/serializers.py:207
 msgid "bcc_email must be a comma-separated list of emails."
-msgstr "bcc_email debe tener una lista de emails separados por comas"
+msgstr "bcc_email debe tener una lista de emails separados por comas."
 
 #: scheduler/serializers.py:227
 msgid "Personalized JSON needs a token in payload."
-msgstr "El JSON personalizado necesita una ficha en el payload"
+msgstr "El JSON personalizado necesita una ficha en el payload."
 
 #: scheduler/templates/scheduler/edit.html:7
 #: scheduler/templates/scheduler/edit.html:17
@@ -3346,7 +3353,7 @@ msgstr "Ya existe una ejecución planificada de esta acción con este nombre"
 
 #: scheduler/views.py:332
 msgid "Incorrect action scheduling invocation."
-msgstr "Datos incorrectos para planificar una acción"
+msgstr "Datos incorrectos para planificar una acción."
 
 #: scheduler/views.py:339
 msgid "Incorrect parameters in action scheduling"
@@ -3395,7 +3402,7 @@ msgstr "how debe ser uno de left, right, outer o inner"
 #: table/api.py:255 table/api.py:269
 #, python-brace-format
 msgid "column {0} does not contain a unique key."
-msgstr "columna {0} no contiene una clave única"
+msgstr "columna {0} no contiene una clave única."
 
 #: table/api.py:263
 #, python-brace-format
@@ -3424,7 +3431,7 @@ msgstr "La vista necesita al menos una columna a mostrar"
 
 #: table/forms.py:47
 msgid "There needs to be at least one key column"
-msgstr "Debe haber al menos una columna que sea clave."
+msgstr "Debe haber al menos una columna que sea clave"
 
 #: table/models.py:41
 msgid "Subset of columns to show"
@@ -3551,7 +3558,7 @@ msgstr "Estadísticas"
 
 #: table/templates/table/display.html:176
 msgid "Edit column name, description, etc"
-msgstr "Editor el nombre, descripción, tipo, valores, etc. de la columna."
+msgstr "Editor el nombre, descripción, tipo, valores, etc. de la columna"
 
 #: table/templates/table/display.html:185
 #: workflow/templates/workflow/includes/workflow_column_operations.html:23
@@ -3852,7 +3859,7 @@ msgstr "¡Vaya! Hemos detectado un error interno."
 msgid ""
 "The following message is trying to explain what\n"
 "      happened."
-msgstr "El siguiente mensaje intenta explicar lo que ha pasado"
+msgstr "El siguiente mensaje intenta explicar lo que ha pasado."
 
 #: templates/critical_error.html:22
 msgid "Referrer:"
@@ -3901,7 +3908,7 @@ msgstr "Cambio de clave realizado"
 
 #: templates/registration/password_change_done.html:12
 msgid "Your password was changed."
-msgstr "Su clave ha cambiado"
+msgstr "Su clave ha cambiado."
 
 #: templates/registration/password_change_form.html:16
 msgid "Please correct the error below."
@@ -4020,7 +4027,7 @@ msgstr "Esta función todavía no se ha implementatdo."
 #: visualizations/rgraph.py:265
 #, python-brace-format
 msgid "Warning: {0} NaN elements removed to create the graph"
-msgstr "Advertencia: se han borrado {0} elementos NaN para crear este gráfico "
+msgstr "Advertencia: se han borrado {0} elementos NaN para crear este gráfico"
 
 #: visualizations/templatetags/vis_include.py:22
 msgid "Action object not found when processing tag"
@@ -4041,11 +4048,11 @@ msgstr "Valor"
 
 #: workflow/attribute_views.py:93
 msgid "There is a column with this name. Please change."
-msgstr "Ya hay una columna con este nombre. Por favor, cámbielo"
+msgstr "Ya hay una columna con este nombre. Por favor, cámbielo."
 
 #: workflow/attribute_views.py:110
 msgid "There is a condition already with this name."
-msgstr "Ya hay una condición con este nombre"
+msgstr "Ya hay una condición con este nombre."
 
 #: workflow/column_serializers.py:20
 #, python-brace-format
@@ -4155,7 +4162,7 @@ msgstr "La lista de valores es incorrecta"
 
 #: workflow/forms.py:154
 msgid "The values in the column are not compatible  with these ones."
-msgstr "Los valores en la columna no son compatibles con estos"
+msgstr "Los valores en la columna no son compatibles con estos."
 
 #: workflow/forms.py:200 workflow/forms.py:285
 msgid "Question name"
@@ -4207,7 +4214,7 @@ msgstr "Tipo de datos incorrecto para el operando seleccionado"
 
 #: workflow/forms.py:437
 msgid "Number (values from 1 to N) or comma separated list of values."
-msgstr "Número (valores de 1 a N) o lista de valores separados por comas"
+msgstr "Número (valores de 1 a N) o lista de valores separados por comas."
 
 #: workflow/forms.py:462
 msgid "File containing a previously exported workflow"
@@ -4289,7 +4296,7 @@ msgstr "El flujo está siendo modificado por el usuario {0}"
 
 #: workflow/ops.py:163
 msgid "The workflow could not be accessed"
-msgstr "No se ha podido acceder al flujo."
+msgstr "No se ha podido acceder al flujo"
 
 #: workflow/ops.py:230 workflow/ops.py:234
 #, python-brace-format
@@ -4322,7 +4329,7 @@ msgstr "No se ha podido crear el flujo."
 
 #: workflow/serializers.py:77
 msgid "To guarantee compability"
-msgstr "Para garantizar compatibilidad."
+msgstr "Para garantizar compatibilidad"
 
 #: workflow/serializers.py:123 workflow/serializers.py:156
 #: workflow/serializers.py:167
@@ -4350,7 +4357,7 @@ msgstr "Attributos del flujo"
 msgid "%(num)s row"
 msgid_plural "%(num)s rows,"
 msgstr[0] "%(num)s fila"
-msgstr[1] "%(num)s filas"
+msgstr[1] "%(num)s filas,"
 
 #: workflow/templates/workflow/detail.html:78
 #, python-format
@@ -4371,14 +4378,14 @@ msgstr[1] "%(num)s columnas clave"
 msgid "%(num)s action"
 msgid_plural "%(num)s actions,"
 msgstr[0] "%(num)s acción"
-msgstr[1] "%(num)s acciones"
+msgstr[1] "%(num)s acciones,"
 
 #: workflow/templates/workflow/detail.html:81
 #, python-format
 msgid "%(num)s attribute"
 msgid_plural " %(num)s attributes"
-msgstr[0] "%(num)s attributo"
-msgstr[1] "%(num)s attributos"
+msgstr[0] "%(num)s atributo"
+msgstr[1] " %(num)s atributos"
 
 #: workflow/templates/workflow/detail.html:91
 msgid "Key?"
@@ -4395,7 +4402,7 @@ msgstr "Exportar flujo"
 
 #: workflow/templates/workflow/export.html:25
 msgid "Workflow name:"
-msgstr "Nombre del flujo"
+msgstr "Nombre del flujo:"
 
 #: workflow/templates/workflow/export.html:26
 msgid "Number of rows/columns:"
@@ -4478,7 +4485,7 @@ msgid ""
 msgstr ""
 "<strong>Siguiente paso:</strong> Click en el menú <a href=\"%(actionindex)s"
 "\">Acciones</a> en la barra superior para crear acciones y ejecutarlas con "
-"los datos de la tabla"
+"los datos de la tabla."
 
 #: workflow/templates/workflow/includes/no_data.html:3
 #, python-format
@@ -4829,7 +4836,7 @@ msgstr "Crear un flujo"
 
 #: workflow/templates/workflow/index.html:63
 msgid "Import a file with an OnTask workflow"
-msgstr "Cargar un fichero con un flujo OnTask "
+msgstr "Cargar un fichero con un flujo OnTask"
 
 #: workflow/templates/workflow/index.html:69
 msgid ""
@@ -4907,7 +4914,7 @@ msgstr "Ya existe un flujo con este nombre"
 
 #: workflow/views.py:159
 msgid "The newly created workflow could not be accessed"
-msgstr "No se ha podido accedear al flujo creado."
+msgstr "No se ha podido acceder al flujo creado"
 
 #: workflow/views.py:207
 msgid ""
@@ -4936,7 +4943,7 @@ msgstr "Imposible clonar flujo"
 
 #: workflow/views.py:626
 msgid "Workflow successfully cloned."
-msgstr "Flujo clonado con éxito"
+msgstr "Flujo clonado con éxito."
 
 #~ msgid "Create a ZIP with each personalised text in a file"
 #~ msgstr "Crear un ZIP con un fichero para cada texto personalizado"

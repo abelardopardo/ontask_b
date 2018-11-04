@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-31 11:53+1030\n"
-"PO-Revision-Date: 2018-10-31 11:53+1030\n"
+"POT-Creation-Date: 2018-11-04 12:49+1030\n"
+"PO-Revision-Date: 2018-11-04 13:11+1030\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh\n"
@@ -18,15 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 2.2\n"
 
-#: accounts/forms.py:19
+#: accounts/forms.py:17
+msgid "Email address"
+msgstr "电子邮件地址。"
+
+#: accounts/forms.py:20
 msgid "Enter Email"
 msgstr "输入邮箱"
 
-#: accounts/forms.py:20
+#: accounts/forms.py:21
 msgid "Enter Password"
 msgstr "输入密码"
 
-#: accounts/forms.py:24 accounts/templates/accounts/signup.html:11
+#: accounts/forms.py:25 accounts/templates/accounts/signup.html:11
 #: templates/registration/password_reset_complete.html:13
 msgid "Log in"
 msgstr "登陆"
@@ -1185,7 +1189,7 @@ msgstr "编辑过滤器"
 #, python-format
 msgid "(%(n)s learner of %(tot)s)"
 msgid_plural "(%(n)s learners of %(tot)s)"
-msgstr[0] "%(tot)s) 中有(%(n)s 学习者 "
+msgstr[0] "%(tot)s) 中有(%(n)s 学习者"
 
 #: action/templates/action/includes/partial_filter_create_buttons.html:31
 msgid "Edit the filter name and expression"
@@ -2392,7 +2396,7 @@ msgstr "更新行时找不到关键值"
 #, python-brace-format
 msgid ""
 "Repeated value in column {0}. It must be different to maintain Key property"
-msgstr "在列{0}中重复的值。值必须不同来保持密钥属性。 "
+msgstr "在列{0}中重复的值。值必须不同来保持密钥属性。"
 
 #: dataops/views.py:335
 #, python-brace-format
@@ -2923,11 +2927,11 @@ msgstr "请求的日志号不正确"
 
 #: ontask/__init__.py:43
 msgid "The symbol ' cannot be used in the column name."
-msgstr " ' 符号不能在列名中使用。"
+msgstr "' 符号不能在列名中使用。"
 
 #: ontask/__init__.py:46
 msgid "The symbol \" cannot be used in the column name."
-msgstr " \" 符号不能在列名中使用。"
+msgstr "\" 符号不能在列名中使用。"
 
 #: ontask/forms.py:32
 #, python-format
@@ -2941,7 +2945,7 @@ msgstr "不支持文件类型 (%s)"
 
 #: ontask/forms.py:112
 msgid "Unable to process datatype "
-msgstr "不能处理数据类型"
+msgstr "不能处理数据类型 "
 
 #: ontask/ontask_prefs.py:21
 msgid "Content types allowed in uploads"
@@ -2961,7 +2965,7 @@ msgstr "西班牙语"
 
 #: ontask/settings/base.py:274
 msgid "Chinese"
-msgstr ""
+msgstr "中文"
 
 #: ontask/urls.py:28
 msgid ""
