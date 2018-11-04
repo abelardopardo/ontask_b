@@ -161,13 +161,18 @@ class OntaskApiTestCase(APITransactionTestCase):
 
 class OntaskLiveTestCase(LiveServerTestCase):
 
+    viewport_height = 2880
+    viewport_width = 1800
+
     @classmethod
     def setUpClass(cls):
         super(OntaskLiveTestCase, cls).setUpClass()
         fp = webdriver.FirefoxProfile()
         fp.set_preference("dom.file.createInChild", True)
         cls.selenium = webdriver.Firefox(firefox_profile=fp)
-        cls.selenium.set_window_size(2880, 1800)
+        # cls.selenium = webdriver.Chrome()
+        cls.selenium.set_window_size(cls.viewport_height,
+                                     cls.viewport_width)
         # cls.selenium.implicitly_wait(30)
 
     @classmethod
@@ -1033,18 +1038,25 @@ class ScreenTests(OntaskLiveTestCase):
 
         element = self.selenium.find_element_by_xpath(xpath)
 
+        coordinates = element.location
+        dimensions = element.size
+
+        # Cap height
+        if dimensions['height'] > self.viewport_height / 2:
+            dimensions['height'] = self.viewport_height / 2
+
         img = Image.open(StringIO.StringIO(
             self.selenium.find_element_by_xpath(
                 xpath
             ).screenshot_as_png)
 
         )
-        # img = img.crop(
-        #     (math.floor(element.location['x']),
-        #      math.floor(element.location['y']),
-        #      math.ceil(element.location['x'] + element.size['width']),
-        #      math.ceil(element.location['y'] + element.size['height']))
-        # )
+        img = img.crop(
+            (math.floor(2 * coordinates['x']),
+             math.floor(2 * coordinates['y']),
+             math.ceil(2 * coordinates['x'] + 2 * dimensions['width']),
+             math.ceil(2 * coordinates['y'] + 2 * dimensions['height']))
+        )
 
         img.save(self.img_path(self.prefix + ss_filename))
 
