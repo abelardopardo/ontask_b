@@ -12,13 +12,19 @@
 
 - Datetimepicker widget changed due to incompatibilities with Django 2
 
+## 3.1.0 (2018-10-31)
+
+### Added
+
+- Initial support for localization to Chinese
+
 ## 3.0.4 (2018-10-20)
 
 ### Changed
 
 - Cosmetic changes in menu bar to visualise properly in mobile devices.
 
-### Fiexd
+### Fixed
 
 - Fixed bug that showed the spinner when an invalid field is present in a form
 

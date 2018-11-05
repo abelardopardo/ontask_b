@@ -20,8 +20,8 @@ import pandas as pd
 # - GivenName: First name
 # - MiddleInitial:
 # - Surname: Last name
-# - UOS Code: Single value ELON3609
-# - UOS Name: UOS name, single value "Translational Science"
+# - Course Code: Single value ELON3609
+# - Course Name: Course name, single value "Translational Science"
 # - Program: Four values: ENG, SCI, MED, AAS (Equal balance)
 #
 
@@ -38,12 +38,13 @@ initial_student_file = 'FakeNameGenerator.com_adbc811b.csv'
 #
 student_list_name = 'student_list.csv'
 student_list_fields = ['SID',
+                       'Identifier',
                        'email',
                        'Surname',
                        'GivenName',
                        'MiddleInitial',
                        'Gender',
-                       'UOS Code']
+                       'Course Code']
 
 student_program = ('Program',
                    ['FSCI', 'SMED', 'FEIT', 'FASS'],
@@ -149,57 +150,52 @@ def weighted_choice(items):
 
 
 def add_sid(all_students, field_name, from_value):
-    population = random.sample(list(range(100000000)), len(all_students))
-    idx = 0
-    for item in all_students:
-        item[field_name] = from_value + population[idx]
-        idx += 1
+    all_students[field_name] = \
+        [from_value + x
+         for x in random.sample(list(range(100000000)), len(all_students))]
 
 
 def add_email(all_students):
     population = random.sample(list(range(9000)), len(all_students))
-    idx = 0
-    for item in all_students:
-        letters = ''.join(random.choice(string.ascii_lowercase)
-                          for _ in range(4))
-        item['email'] = letters + str(1000 + population[idx]) + '@bogus.com'
-        idx += 1
+    all_students['email'] = \
+        [''.join(random.choice(string.ascii_lowercase) for _ in range(4)) +
+         str(1000 + x) + '@bogus.com'
+         for x in population]
+
+
+def add_identifier(all_students, field_name):
+    all_students[field_name] = \
+        ['Participant {0}'.format(idx + 1) for idx in range(len(all_students))]
 
 
 def add_column(all_students, col_name, values, probabilities):
     if len(values) != len(probabilities):
         raise Exception('Two last parameters have different lengths')
-    weighted_choices = list(zip(values, probabilities))
-    for item in all_students:
-        if len(probabilities) == 1:
-            item[col_name] = values[0]
-        else:
-            item[col_name] = weighted_choice(weighted_choices)
+
+    if len(probabilities) == 1:
+        all_students[col_name] = values[0]
+        return
+
+    all_students[col_name] = \
+        [weighted_choice(list(zip(values, probabilities)))
+         for x in range(len(all_students))]
 
 
 def read_initial_file(file_name, num_students=500):
-    all_students = []
-    data_in = open(file_name, 'rb')
-    reader = csv.DictReader(data_in)
-
-    for row in reader:
-        all_students.append(row)
+    all_students = pd.read_csv(file_name)
 
     max_l = len(all_students)
     if num_students < max_l:
         # Trim the result
-        for _ in range(max_l - num_students):
-            all_students.pop(random.randint(0, len(all_students) - 1))
+        all_students = all_students.drop(random.sample(range(len(all_students)),
+                                                       max_l - num_students),
+                                         axis=0)
 
     return all_students
 
 
 def generate_csv_file(data_list, file_name, fields, sort_by):
-    data_out = open(file_name, 'w')
-    writer = csv.DictWriter(data_out, fieldnames=fields, extrasaction='ignore')
-    writer.writeheader()
-    for element in sorted(data_list, key=lambda k: k[sort_by]):
-        writer.writerow(element)
+    data_list[fields].sort_values(sort_by).to_csv(file_name, index=False)
 
 
 def create_midterm_data(all_students):
@@ -223,14 +219,11 @@ def create_midterm_data(all_students):
         midterm_solution.append(random.choice(midterm_choices))
 
     # Insert the solution row
-    midterm_answers = [
-        dict(list(zip(
-            midterm_answers_fields,
-            [0, '', 'SOLUTION', 'SOLUTION'] + midterm_solution + ['100']
-        )))
-    ]
+    midterm_answers = pd.DataFrame(
+        [[0, '', 'SOLUTION', 'SOLUTION'] + midterm_solution + ['100']],
+        columns=midterm_answers_fields)
 
-    for student_info in all_students:
+    for idx, student_info in all_students.iterrows():
 
         midterm_score = {}
         # Detect if a student has to be dropped
@@ -282,7 +275,8 @@ def create_midterm_data(all_students):
             midterm_score[field] = answer
             midterm_score[field[1:]] = score
 
-        midterm_answers.append(midterm_score)
+        midterm_answers = midterm_answers.append(midterm_score,
+                                                 ignore_index=True)
 
     return midterm_answers
 
@@ -305,13 +299,13 @@ def create_midterm_data(all_students):
 #    - Number of answers correlates with midterm score!!!
 #
 def create_forum_data(all_students):
-    forum_participation = []
+    forum_participation = pd.DataFrame()
 
     # Number of contributions in the forum
     week_contributions = [random.randint(20, 80) for _ in range(2, 6)]
 
     # Loop for all the students
-    for student_info in all_students:
+    for idx, student_info in all_students.iterrows():
 
         forum_student_data = {'SID': student_info['SID']}
 
@@ -446,7 +440,8 @@ def create_forum_data(all_students):
         forum_student_data['Contributions'] = contributions_acc
         forum_student_data['Questions'] = questions_acc
 
-        forum_participation.append(forum_student_data)
+        forum_participation = forum_participation.append(forum_student_data,
+                                                         ignore_index=True)
 
     return forum_participation
 
@@ -464,10 +459,10 @@ def create_blended_file(all_students):
     #
     # All variables correlate with the midterm score
 
-    blended_indicators = []
+    blended_indicators = pd.DataFrame()
 
     # Loop for all the students
-    for student_info in all_students:
+    for idx, student_info in all_students.iterrows():
 
         blended_student = {'SID': student_info['SID']}
 
@@ -503,7 +498,8 @@ def create_blended_file(all_students):
                 value = 100
             blended_student['Correct_2_W' + str(week_n)] = value
 
-        blended_indicators.append(blended_student)
+        blended_indicators = blended_indicators.append(blended_student,
+                                                       ignore_index=True)
 
     return blended_indicators
 
@@ -523,28 +519,39 @@ def main(file_name=None, num_students=500):
     all_students = read_initial_file(file_name, num_students=num_students)
 
     print('  Initial list read with', len(all_students), 'elements.')
-    print('  Fields:', ','.join(list(all_students[0].keys())))
+    print('  Fields:', ','.join(list(all_students.columns)))
 
     #
     # Adding SID column
     #
-    print('Step', step_num, 'Adding column', student_list_fields[0])
+    assert 'SID' in student_list_fields
+    print('Step', step_num, 'Adding column', 'SID')
     step_num += 1
-    add_sid(all_students, student_list_fields[0], 300000000)
+    add_sid(all_students, 'SID', 300000000)
+
+    #
+    # Adding Identifier column
+    #
+    assert 'Identifier in student_list_fields'
+    print('Step', step_num, 'Adding column', 'Identifier')
+    step_num += 1
+    add_identifier(all_students, 'Identifier')
 
     #
     # Adding email column
     #
+    assert 'email' in student_list_fields
     print('Step', step_num, 'Adding email column')
     step_num += 1
     add_email(all_students)
 
     #
-    # Adding UOS Code
+    # Adding Course Code
     #
-    print('Step', step_num, 'Adding column', student_list_fields[6])
+    assert 'Course Code' in student_list_fields
+    print('Step', step_num, 'Adding column', 'Course Code')
     step_num += 1
-    add_column(all_students, student_list_fields[6], ['ELON3509'], [100])
+    add_column(all_students, 'Course Code', ['ELON3509'], [100])
 
     #
     # Adding columns for Program, Enrolment, Attendance
@@ -558,89 +565,92 @@ def main(file_name=None, num_students=500):
                    weights)
         student_list_fields.append(column_name)
 
-    #
-    # Writing file
-    #
-    print('Step', step_num, 'Creating', student_list_name)
-    step_num += 1
-    generate_csv_file(all_students, student_list_name, student_list_fields,
-                      'Surname')
-
-    # Data frame with all the data
-    all_data = pd.DataFrame(all_students[1:])
-    all_data = all_data[student_list_fields]
+    # Filter the undesired columns
+    all_students = all_students[student_list_fields]
 
     #
-    # Dumping midterm answers file
+    # Creating midterm answers
     #
     print('Step', step_num, 'Creating', midterm_answers_name)
     step_num += 1
     midterm_answers = create_midterm_data(all_students)
-    generate_csv_file(midterm_answers, midterm_answers_name,
-                      midterm_answers_fields, 'SID')
 
     #
-    # Print midterm results file
+    # Creating midterm results
     #
     print('Step', step_num, 'Creating', midterm_results_name)
     step_num += 1
-    # Remove the solution row
-    del midterm_answers[0]
     # Change the name of the fields so that they point to the result
     result_fields = midterm_answers_fields
     for x in range(4, 14):
         result_fields[x] = result_fields[x][1:]
-    generate_csv_file(midterm_answers, midterm_results_name,
-                      result_fields, 'SID')
 
-    all_data = pd.merge(
-        all_data,
-        pd.DataFrame(midterm_answers[1:])[result_fields].drop(
-            ['email',
-             'Last Name',
-             'First Name'],
-            axis=1),
-        how='left',
-        on='SID')
+    # Update all data
+    all_students = pd.merge(all_students,
+                            midterm_answers[1:][result_fields].drop(
+                                ['email', 'Last Name', 'First Name'],
+                                axis=1
+                            ),
+                            how='left',
+                            on='SID')
 
     #
-    # Dumping forum file
+    # Creating forum data
     #
     print('Step', step_num, 'Creating', forum_name)
     step_num += 1
     forum_participation = create_forum_data(all_students)
-    generate_csv_file(forum_participation, forum_name, forum_fields, 'SID')
 
-    all_data = pd.merge(
-        all_data,
-        pd.DataFrame(forum_participation[1:])[forum_fields],
-        how='left',
-        on='SID'
-    )
+    # Update all data
+    all_students = pd.merge(all_students,
+                            forum_participation[forum_fields],
+                            how='left',
+                            on='SID')
 
     #
-    # Dumping blended file
+    # Creating blended information
     #
     print('Step', step_num, 'Creating', blended_name)
     step_num += 1
     blended_indicators = create_blended_file(all_students)
+
+    # Update all data
+    all_students = pd.merge(all_students,
+                            blended_indicators[blended_fields],
+                            how='left',
+                            on='SID')
+
+    print('Step', step_num, 'Creating CSV files')
+    step_num += 1
+
+    # All data
+    all_students.to_csv('all_data.csv', index=False)
+
+    # Student info file
+    generate_csv_file(all_students,
+                      student_list_name,
+                      student_list_fields,
+                      'Surname')
+
+    # Midterm answers
+    generate_csv_file(midterm_answers, midterm_answers_name,
+                      midterm_answers_fields, 'SID')
+
+    # Midterm results
+    generate_csv_file(midterm_answers[1:], midterm_results_name,
+                      result_fields, 'SID')
+
+    # Forum data
+    generate_csv_file(forum_participation, forum_name, forum_fields, 'SID')
+
+    # Blended data
     generate_csv_file(blended_indicators, blended_name, blended_fields, 'SID')
 
-    all_data = pd.merge(
-        all_data,
-        pd.DataFrame(blended_indicators[1:])[blended_fields],
-        how='left',
-        on='SID'
-    )
-
-    print('Step', step_num, 'Creating all_data.csv')
-    step_num += 1
-    all_data.to_csv('all_data.csv', index=False)
 
 # Execution as script
 if __name__ == "__main__":
     n_students = 500
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 2:
         n_students = int(sys.argv[2])
 
     main(sys.argv[1], n_students)

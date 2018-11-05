@@ -271,7 +271,7 @@
             },
             {
                 "type": "string",
-                "id": "UOS Code"
+                "id": "Course Code"
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_28",
@@ -528,7 +528,7 @@
     "model": "workflow.column",
     "pk": 952,
     "fields": {
-        "name": "UOS Code",
+        "name": "Course Code",
         "description_text": "",
         "workflow": 28,
         "data_type": "string",

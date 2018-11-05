@@ -29,6 +29,8 @@ Current Version: 4.0.0 ([documentation](http://ontask-version-b.readthedocs.io/e
 
 - Authentication through LTI, LDAP, Shibboleth
 
+- Support for internationalization (initial versions for Spanish and Chinese)
+
 **For a detailed description of the tool, how to install it, and how to use it
 check the [OnTask Documentation](https://abelardopardo.github.io/ontask_b)**.
 

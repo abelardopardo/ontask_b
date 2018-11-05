@@ -270,6 +270,7 @@ LANGUAGE_CODE = 'en-us'
 LANGUAGES = (
     ('en-us', _('English')),
     ('es-es', _('Spanish')),
+    ('zh-cn', _('Chinese')),
 )
 
 TIME_ZONE = env('TIME_ZONE')

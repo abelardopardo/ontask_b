@@ -8,6 +8,7 @@ from builtins import range
 from builtins import object
 import io
 import os
+import math
 
 import pandas as pd
 from PIL import Image
@@ -165,13 +166,18 @@ class OntaskApiTestCase(APITransactionTestCase):
 
 class OntaskLiveTestCase(LiveServerTestCase):
 
+    viewport_height = 2880
+    viewport_width = 1800
+
     @classmethod
     def setUpClass(cls):
         super(OntaskLiveTestCase, cls).setUpClass()
         fp = webdriver.FirefoxProfile()
         fp.set_preference("dom.file.createInChild", True)
         cls.selenium = webdriver.Firefox(firefox_profile=fp)
-        cls.selenium.set_window_size(2880, 1800)
+        # cls.selenium = webdriver.Chrome()
+        cls.selenium.set_window_size(cls.viewport_height,
+                                     cls.viewport_width)
         # cls.selenium.implicitly_wait(30)
 
     @classmethod
@@ -480,7 +486,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
     def go_to_table(self):
         self.selenium.find_element_by_link_text("Table").click()
         self.wait_for_datatable('table-data_previous')
-        self.assertIn('Table View', self.selenium.page_source)
+        self.assertIn('Table', self.selenium.page_source)
 
     def go_to_scheduler(self):
         # Goto the action page
@@ -846,7 +852,12 @@ class OntaskLiveTestCase(LiveServerTestCase):
             )
         )
 
-    def open_action_run(self, name):
+    def open_action_json_run(self, name):
+        element = self.search_action(name)
+        element.find_element_by_link_text("Run").click()
+        self.wait_for_page(element_id='json-action-request-data')
+
+    def open_action_survey_run(self, name):
         element = self.search_action(name)
         element.find_element_by_link_text("Run").click()
         self.wait_for_datatable('actioninrun-data_previous')
@@ -1032,12 +1043,31 @@ class ScreenTests(OntaskLiveTestCase):
         :return: Nothing
         """
 
-        if xpath and ss_filename:
-            Image.open(io.StringIO(
-                self.selenium.find_element_by_xpath(
-                    xpath
-                ).screenshot_as_png)
-            ).save(self.img_path(self.prefix + ss_filename))
+        if not xpath or not ss_filename:
+            raise Exception('Incorrect invocation of element_ss')
+
+        element = self.selenium.find_element_by_xpath(xpath)
+
+        coordinates = element.location
+        dimensions = element.size
+
+        img = Image.open(io.StringIO(
+            self.selenium.find_element_by_xpath(
+                xpath
+            ).screenshot_as_png)
+
+        )
+
+        # Cap height
+        if dimensions['height'] < self.viewport_height / 2:
+            img = img.crop(
+                (math.floor(2 * coordinates['x']),
+                 math.floor(2 * coordinates['y']),
+                 math.ceil(2 * coordinates['x'] + 2 * dimensions['width']),
+                 math.ceil(2 * coordinates['y'] + 2 * dimensions['height']))
+            )
+
+        img.save(self.img_path(self.prefix + ss_filename))
 
     def modal_ss(self, ss_filename):
         self.element_ss(self.modal_xpath, ss_filename)
