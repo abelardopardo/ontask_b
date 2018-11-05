@@ -9,6 +9,7 @@ OnTask documentation (Ver. |ontask_version|)
 ############################################
 
 .. toctree::
+   :numbered:
    :maxdepth: 4
    :caption: Contents:
 

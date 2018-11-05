@@ -4,23 +4,12 @@
 Installation process
 ********************
 
-OnTask is a Web application that manages data about learners to provide them
-with personalized support. For this reason, it is recommended an installation
-that observes a set of tight security restrictions. Some of these
-restrictions lie within the scope of the tool, but some other are part of the
-environment in which the application is installed. We strongly recommend to
-install OnTask in a web server that uses TTL encryption (HTTPS) to serve all
-the pages. The application requires exchanging with your browser sensitive
-information about your session, so the information should be encrypted.
+OnTask is a Web application that manages data about learners to provide them with personalized support. For this reason, it is recommended an installation that observes a set of tight security restrictions. Some of these restrictions lie within the scope of the tool, but some other are part of the environment in which the application is installed. We strongly recommend to install OnTask in a web server that uses TTL encryption (HTTPS) to serve all the pages. The application requires exchanging with your browser sensitive information about your session, so the information should be encrypted.
 
 Requirements
 ============
 
-OnTask has been developed as a `Django <https://www.djangoproject.com/>`_
-application. Django is a high-level, python-based web framework that supports
-a rich set of functionality typically required in applications like OnTask.
-But as with many other applications, OnTask requires a set of additional
-applications for its execution:
+OnTask has been developed as a `Django <https://www.djangoproject.com/>`_ application. Django is a high-level, python-based web framework that supports a rich set of functionality typically required in applications like OnTask. But as with many other applications, OnTask requires a set of additional applications for its execution:
 
 - Python 2.7
 - Django 1.11
@@ -33,11 +22,7 @@ Some of these requirements are handled through Python's package index applicatio
 Are you upgrading from a version < 2.8 to 2.8 or later?
 =======================================================
 
-If you are upgrading OnTask from a version lower than 2.8 to 2.8 or later, you
-need to disable the ``crontab`` used to execute tasks asynchronously from the
-web server. Starting in version 2.8 those tasks are executed by an
-application called ``celery`` that is managed using ``supervisor`` (see
-:ref:`scheduling_tasks`).
+If you are upgrading OnTask from a version lower than 2.8 to 2.8 or later, you need to disable the ``crontab`` used to execute tasks asynchronously from the web server. Starting in version 2.8 those tasks are executed by an application called ``celery`` that is managed using ``supervisor`` (see :ref:`scheduling_tasks`).
 
 Installing the required tools
 =============================
@@ -55,8 +40,7 @@ Django requires Redis to execute as a daemon in the same machine to cache inform
 
    Follow the instructions to configure it to be used by Django.
 
-2. Test that it is executing properly in the background (use the ``ping``
-   command in the command line interface.
+2. Test that it is executing properly in the background (use the ``ping`` command in the command line interface.
 
 .. _install_postgresql:
 
@@ -86,8 +70,7 @@ Install and Configure PostgreSQL
 Install Python
 --------------
 
-In the following sections we assume that you can open a command line
-interpreter and you can execute the python interpreter.
+In the following sections we assume that you can open a command line interpreter and you can execute the python interpreter.
 
 1. Install `python <https://www.python.org/>`_
 
@@ -147,8 +130,7 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
 
 #. If OnTask is going to be served from a location different from the root of your server (for example ``myhost.com/ontask``, then modify the value of the variable ``BASE_URL`` with the suffix that should follow the domain name (in the example, ``/ontask``).
 
-#. Modify the line starting with ``DOMAIN_NAME=`` and change the field
-``[YOUR DOMAIN NAME``] with the domain name of the machine hosting OnTask.
+#. Modify the line starting with ``DOMAIN_NAME=`` and change the field ``[YOUR DOMAIN NAME``] with the domain name of the machine hosting OnTask.
 
 #. If you want to disable the appearance of the banner image in the login
    page set the value of the variable ``SHOW_HOME_FOOTER_IMAGE`` to False.
@@ -183,13 +165,7 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
 
 #. If at some point during the following steps you want to reset the content of the database, run the commands ``dropdb`` and ``createdb`` explained in :ref:`install_postgresql`.
 
-#. Execute the following commands from the ``src`` folder to prepare the
-   database initialization::
-
-     python manage.py makemigrations profiles accounts workflow dataops
-     python manage.py makemigrations table action logs scheduler table
-
-#. Execute the following command to create the database internal structure::
+#. Execute the following command from the ``src`` folder to create the database internal structure::
 
      python manage.py migrate
 
@@ -619,11 +595,11 @@ OnTask allows also the inclusion of arbitrary Python modules to execute and tran
 SQL Connections
 ===============
 
-One of the key functionalities of OnTask is to be able to merge data from multiple sources. Section :ref:`dataops` describes the functionality available to perform these operations. Some of them, however, require additional configuration from the administrator. This is the case for the uploading and merging of data from a remote database that allows SQL connections. These connections must be defined by the administrator and then they are available to the instructors.
+One of the key functionalities of OnTask is to be able to merge data from multiple sources. Section :ref:`dataops` describes the functionality available to perform these operations. Some of them, however, require special configuration from the tool administrator. This is the case when uploading and merging data from a remote database that allows SQL connections. These connections must be first defined by the administrator and are then are available to the instructors.
 
-The definition of these connections is done from the platform's home page, right after the table showing the available workflows.
+The screen to manage these connections is accessed clicking in the item *SQL Connections* at the top menu bar. This link is only available for those users with the administration role.
 
-.. figure:: ../scaptures/workflow_superuser_index.png
+.. figure:: ../scaptures/workflow_sql_connections_index.png
    :align: center
 
 Each connection can be defined with the following parameters:
@@ -663,7 +639,7 @@ Table (required)
 
 Once a connection is defined, as described in :ref:`sql_connection_run`, all the data in the table will be accessed and loaded/merged into the current workflow.
 
-The operations allowed in each connection are:
+The operations allowed for each connection are:
 
 Edit
   Change any of the parameters of the connection
