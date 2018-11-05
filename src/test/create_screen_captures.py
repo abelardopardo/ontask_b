@@ -54,6 +54,10 @@ class ScreenTutorialTest(ScreenTests):
             )
         )
 
+        # Go to details
+        self.go_to_details()
+        self.body_ss('workflow_details_empty.png')
+
         # End of session
         self.logout()
 
@@ -194,7 +198,7 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('workflow_details.png')
 
         # Take picture of the navigation bar
-        self.element_ss("//body/div[2]", 'navigation_bar.png')
+        self.element_ss("//body/div[@id='wflow-name']", 'navigation_bar.png')
 
         #
         # New column modal
@@ -617,7 +621,7 @@ class ScreenTestFixture(ScreenTests):
         self.cancel_modal()
 
         #
-        # Action row
+        # Back to the table of actions
         #
         self.go_to_actions()
 
@@ -635,6 +639,20 @@ class ScreenTestFixture(ScreenTests):
 
         # Picture of the body
         self.body_ss('action_email_request_data.png')
+
+        #
+        # JSON Edit
+        #
+        self.go_to_actions()
+        self.open_action_edit('Send JSON to remote server')
+        self.body_ss('action_personalized_json_edit.png')
+
+        #
+        # JSON RUN
+        #
+        self.go_to_actions()
+        self.open_action_json_run('Send JSON to remote server')
+        self.body_ss('action_json_run_request_data.png')
 
         #
         # Action URL

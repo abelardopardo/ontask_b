@@ -481,7 +481,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
     def go_to_table(self):
         self.selenium.find_element_by_link_text("Table").click()
         self.wait_for_datatable('table-data_previous')
-        self.assertIn('Table View', self.selenium.page_source)
+        self.assertIn('Table', self.selenium.page_source)
 
     def go_to_scheduler(self):
         # Goto the action page
@@ -847,7 +847,12 @@ class OntaskLiveTestCase(LiveServerTestCase):
             )
         )
 
-    def open_action_run(self, name):
+    def open_action_json_run(self, name):
+        element = self.search_action(name)
+        element.find_element_by_link_text("Run").click()
+        self.wait_for_page(element_id='json-action-request-data')
+
+    def open_action_survey_run(self, name):
         element = self.search_action(name)
         element.find_element_by_link_text("Run").click()
         self.wait_for_datatable('actioninrun-data_previous')
@@ -1041,22 +1046,21 @@ class ScreenTests(OntaskLiveTestCase):
         coordinates = element.location
         dimensions = element.size
 
-        # Cap height
-        if dimensions['height'] > self.viewport_height / 2:
-            dimensions['height'] = self.viewport_height / 2
-
         img = Image.open(StringIO.StringIO(
             self.selenium.find_element_by_xpath(
                 xpath
             ).screenshot_as_png)
 
         )
-        img = img.crop(
-            (math.floor(2 * coordinates['x']),
-             math.floor(2 * coordinates['y']),
-             math.ceil(2 * coordinates['x'] + 2 * dimensions['width']),
-             math.ceil(2 * coordinates['y'] + 2 * dimensions['height']))
-        )
+
+        # Cap height
+        if dimensions['height'] < self.viewport_height / 2:
+            img = img.crop(
+                (math.floor(2 * coordinates['x']),
+                 math.floor(2 * coordinates['y']),
+                 math.ceil(2 * coordinates['x'] + 2 * dimensions['width']),
+                 math.ceil(2 * coordinates['y'] + 2 * dimensions['height']))
+            )
 
         img.save(self.img_path(self.prefix + ss_filename))
 
