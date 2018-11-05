@@ -5,13 +5,12 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Schedule Action Execution' %}{% endblock %}
-  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
 {% block extrahead %}
   {% ontask_datetimepicker_css %}
 {% endblock extrahead %}
 {% block scripts %}
   {% ontask_datetimepicker_js %}
-  <script src="{% static 'action/js/action.js' %}{% otv %}"></script>
+  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
 {% endblock scripts %}
 {% block container %}
   <div align="center" class="container" id="email-schedule-send">
