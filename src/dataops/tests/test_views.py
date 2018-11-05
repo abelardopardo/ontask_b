@@ -300,7 +300,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.wait_for_datatable('action-table_previous')
 
         # Click in the run link
-        self.open_action_run('action in')
+        self.open_action_survey_run('action in')
 
         # Click on the first value
         self.selenium.find_element_by_link_text("student01@bogus.com").click()
