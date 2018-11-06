@@ -16,6 +16,7 @@
     <!-- Custom styles for this site -->
     {% block styles %}
     {% endblock styles %}
+    {% ontask_jquery %}
     <!-- Custom tags for the head tag -->
     {% block extrahead %}{% endblock extrahead %}
     <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
@@ -175,7 +176,6 @@
     {% endblock %}
     <script src="{% static 'site/js/initial.js' %}?v={% ontask_version %}"></script>
     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
-    {% ontask_jquery %}
     {% ontask_bootstrap_js %}
     <script src="{% static 'site/js/site.js' %}?v={% ontask_version %}"></script>
     {% block scripts %}
