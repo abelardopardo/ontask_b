@@ -739,18 +739,9 @@ enable/disable it or even provide a date/time window for its availability.
    :align: center
    :width: 80%
 
-Once enabled, you may send the URL to the students (you may even use a
-personalized text action for that). Once the students click in the action,
-after authenticaiton, and if their email is part of hte table, they will be
-able to enter the information and the values are automatically stored in the
-right row and column in the table.
+Once enabled, you may send the URL to the students (you may even use a personalized text action for that). Once the students click in the action, after authentication, and if their email is part of hte table, they will be able to enter the information and the values are automatically stored in the right row and column in the table.
 
-These survey actions are ideal to collect information about any aspect of a
-course in a way that is centralized and available for further processing
-through personalized text actions. For example, users may choose from a
-pre-defined set of topics those that were more challenging. This information
-can then be used in a personalized text action to provide the adequate
-resources to each learner.
+These survey actions are ideal to collect information about any aspect of a course in a way that is centralized and available for further processing through personalized text actions. For example, users may choose from a pre-defined set of topics those that were more challenging. This information can then be used in a personalized text action to provide the adequate resources to each learner.
 
 .. _scheduler:
 
@@ -760,23 +751,27 @@ The Scheduler
    "I have no regular schedule. I get up whenever I can."
    -- Jimmy Wales
 
-The *personalized text actions* sending emails can be
-*scheduled* to execute at some point in the future. The *Schedule* operation
-for these actions opens a dialog like the one shown in the following figure:
+
+The *personalized text* and *personalized JSON* actions can be scheduled to execute at some point in the future. To schedule the execution go to the *Actions* page (select the option from the top menu), click in the *More* button for the action and then in the button *Schedule*.
+
+Scheduling a Personalized Text Action
+-------------------------------------
+
+The following figure shows the information requested to schedule the execution of a personalized text action (sending emails to learners):
 
 .. figure:: ../scaptures/schedule_action_email.png
    :align: center
 
+The fields in this form are:
+
 Name
-  A name to identify this scheduling (a user may have several of these
-  actions pending in a workflow)
+  A name to identify this scheduling (a user may have several of these actions pending in a workflow)
 
 Description
-  A brief description explaining this scheduled action.
+  A brief description explaining this scheduled action (for example, "send reminder before the exam")
 
 Column containing email
-  The column in the table used to fill out the destination email. OnTask will
-  check that the data in that column has the right format.
+  The column in the table used to fill out the destination email. OnTask will check that the values in that column are proper email addresses.
 
 When to execute the action
   A date/time in the future when the action will be executed.
@@ -785,47 +780,62 @@ Email subject
   The text to be included in the email subjects.
 
 Comma separated list of CC emails
-  A comma separated list of emails to include in the *carbon copy* (or CC)
-  field of the email.
+  A comma separated list of emails to include in the *carbon copy* (or CC) field of the email.
 
 Comma separated list of BCC emails
-  A comma separated list of emails to include in the *blind carbon copy* (or
-  BCC) field of the email.
+  A comma separated list of emails to include in the *blind carbon copy* (or BCC) field of the email.
 
 Send confirmation email
   Select this option if you want a confirmation email sent to you.
 
 Track when emails are read
-  Include in the messages a HTML snipped to detect if the email is read.
-  OnTask adds an extra column to the table to store the number of times the
-  message is opened. This detection relies on how the email client opens the
-  message and processes the included images, therefore, the information in
-  this column may not accurately reflect this information.
+  Try to detect if the email is read. OnTask adds an extra column to the table to store the number of times the message is opened. This detection relies on how the email client processes the message, therefore, the information in this column may not be accurate.
 
 Check/exclude emails
-  If selected, this option inserts an extra step in which you can eliminate
-  certain emails form the action. This feature is useful to remove certain
-  emails that cannot be removed with the filter.
+  If selected, this option inserts an extra step select emaisl and eleminate them from the action. This option is useful to perform a final check and remove emails that cannot be removed with action the filter.
 
-The *Schedule* in the top menu shows the page with the scheduled tasks for
-the current workflow. The left-most column offers the operations to edit or
-delete the scheduled execution.
+Scheduling a Personalized JSON Action
+-------------------------------------
+
+The following figure shows the information requested to schedule the execution of a personalized JSON action (sending JSON object to another platform):
+
+.. figure:: ../scaptures/schedule_action_json.png
+   :align: center
+
+The fields in this form are:
+
+Name
+  A name to identify this scheduling (a user may have several of these actions pending in a workflow)
+
+Description
+  A brief description explaining this scheduled action (for example, "send reminder before the exam")
+
+Column to select elements
+  A column to show its values and allow to review and exclude some of the entries. This option is useful to perform a final check and remove entries that cannot be removed with the action filter.
+
+Authentication Token
+  The string to be use to authenticate with the external platform.
+
+The Scheduler Menu
+------------------
+
+The *Scheduler* in the top menu is a link to a page that shows the tasks scheduled for execution in the selected workflow.
 
 .. figure:: ../scaptures/schedule.png
    :align: center
+
+The left-most column offers the operations to edit or delete the scheduled execution.
 
 .. _logs:
 
 The Logs
 ========
 
-The platform keeps a log of most of the operations that are executed when
-managing a workflow. These records are available through the *Logs* link in
-the navigation bar at the top of the screen.
+The platform keeps a log of most of the operations that are executed when managing a workflow. These records are available through the *Logs* link in the navigation bar at the top of the screen.
 
 .. figure:: ../scaptures/logs.png
 
-You may review the events and download them as a CSV file.
+You may download all logs as a CSV file.
 
 .. _plugin_run:
 

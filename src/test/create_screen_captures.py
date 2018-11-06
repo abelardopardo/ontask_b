@@ -694,7 +694,7 @@ class ScreenTestFixture(ScreenTests):
         self.go_to_actions()
 
         #
-        # Open Action Schedule
+        # Open Action Schedule and schedule the Personalized Text action
         #
         self.open_action_schedule('Midterm comments')
 
@@ -719,6 +719,40 @@ class ScreenTestFixture(ScreenTests):
 
         # Take picture of the export page.
         self.body_ss('schedule_action_email.png')
+
+        # Click the schedule button
+        self.selenium.find_element_by_xpath(
+            "//button[@type='Submit']"
+        ).click()
+        self.wait_for_page(title='OnTask :: Action scheduled')
+
+        #
+        # Actions
+        #
+        self.go_to_actions()
+
+        #
+        # Open Action Schedule and schedule the Personalized JSON
+        #
+        self.open_action_schedule('Send JSON to remote server')
+
+        # Fill out some fields
+        self.selenium.find_element_by_id('id_name').send_keys(
+            'Send JSON object in Week 5'
+        )
+        dt_widget = self.selenium.find_element_by_xpath(
+            "//input[@id='id_execute']"
+        )
+        self.selenium.execute_script(
+            "arguments[0].value = '2110-07-25 17:00:00';",
+            dt_widget
+        )
+        self.selenium.find_element_by_id('id_token').send_keys(
+            'afabkvaidlfvsidkfe..kekfioroelallasifjjf;alksid'
+        )
+
+        # Take picture of the export page.
+        self.body_ss('schedule_action_json.png')
 
         # Click the schedule button
         self.selenium.find_element_by_xpath(

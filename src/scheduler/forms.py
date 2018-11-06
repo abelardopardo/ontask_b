@@ -138,7 +138,7 @@ class EmailScheduleForm(ScheduleForm):
 
         data = super(EmailScheduleForm, self).clean()
 
-        errors = scheduled_eamil_action_data_is_correct(
+        errors = scheduled_email_action_data_is_correct(
             self.action,
             self.cleaned_data
         )
@@ -229,7 +229,7 @@ def scheduled_action_data_is_correct(cleaned_data):
     return result
 
 
-def scheduled_eamil_action_data_is_correct(action, cleaned_data):
+def scheduled_email_action_data_is_correct(action, cleaned_data):
     """
     Verify the integrity of a ScheduledAction object with a Personalised_text
     type. The function returns a list of pairs (field name, message) with the
@@ -281,15 +281,13 @@ def scheduled_eamil_action_data_is_correct(action, cleaned_data):
 
 
 def scheduled_json_action_data_is_correct(action, cleaned_data):
-    result = []
+    """
+    Function to impose extra correct conditions in the JSON schedule data.
+    :param action: Action used for the verification
+    :param cleaned_data: Data just collected by the form
+    :return: List of (string, form element) to attach errors.
+    """
 
-    # Verify the correct time
-    result.extend(scheduled_action_data_is_correct(cleaned_data))
+    del action
 
-    payload = cleaned_data.get('payload', {})
-    if not payload.get('token'):
-        result.append(
-            ('token',
-             _('Scheduling action needs a token'))
-        )
-    return result
+    return scheduled_action_data_is_correct(cleaned_data)
