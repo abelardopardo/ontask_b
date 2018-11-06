@@ -168,16 +168,16 @@ def save_action_form(request, form, template_name):
                                              request=request)
         return JsonResponse(data)
 
+    # Fill in the fields of the action (without saving to DB)_
+    action_item = form.save(commit=False)
+
     # Process the POST request
-    if form.cleaned_data['action_type'] == Action.TODO_LIST:
+    if action_item.action_type == Action.TODO_LIST:
         # To be implemented
         return JsonResponse(
             {'html_redirect': reverse('under_construction'),
              'form_is_valid': True}
         )
-
-    # Fill in the fields of the action (without saving to DB)_
-    action_item = form.save(commit=False)
 
     # Is this a new action?
     is_new = action_item.pk is None
