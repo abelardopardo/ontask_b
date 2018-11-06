@@ -838,6 +838,14 @@ class OntaskLiveTestCase(LiveServerTestCase):
             )
         )
 
+    def open_action_rename(self, name):
+        element = self.search_action(name)
+        element.find_element_by_xpath(
+            "td//button[normalize-space()='More']").click()
+        element.find_element_by_xpath(
+            "td//button[normalize-space()='Rename']").click()
+        self.wait_for_modal_open()
+
     def open_action_email(self, name):
         element = self.search_action(name)
         element.find_element_by_link_text("Email").click()

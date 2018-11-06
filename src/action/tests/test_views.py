@@ -16,6 +16,7 @@ from workflow.models import Workflow
 
 
 class ActionActionEdit(test.OntaskLiveTestCase):
+    action_name = 'simple action'
     fixtures = ['simple_action']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -36,6 +37,38 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         pandas_db.delete_all_tables()
         super(ActionActionEdit, self).tearDown()
 
+    # Test action rename
+    def test_action_00_rename(self):
+        suffix = ' 2'
+
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
+
+        # Goto the action page
+        self.go_to_actions()
+
+        # Click on the action rename link
+        self.open_action_rename(self.action_name)
+
+        # Rename the action
+        self.selenium.find_element_by_id('id_name').send_keys(suffix)
+        # click in the Update button
+        self.selenium.find_element_by_xpath(
+            "//div[@id='modal-item']//button[@type='submit']"
+        ).click()
+
+        # Wait for modal to close and refresh the table
+        self.wait_close_modal_refresh_table('action-table_previous')
+
+        action_element = self.search_action(self.action_name + suffix)
+        self.assertTrue(action_element)
+
+        # End of session
+        self.logout()
+
     # Test operations with the filter
     def test_action_01_filter(self):
         # Login
@@ -48,7 +81,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.go_to_actions()
 
         # click in EDIT action link
-        self.open_action_edit('simple action')
+        self.open_action_edit(self.action_name)
 
         # Click in the add filter button
         self.selenium.find_element_by_xpath(
@@ -186,7 +219,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.go_to_actions()
 
         # click in the action page
-        self.open_action_edit('simple action')
+        self.open_action_edit(self.action_name)
 
         # Add condition
         self.create_condition('c1',
@@ -240,7 +273,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.go_to_actions()
 
         # Click in the page to send email
-        element = self.search_action('simple action')
+        element = self.search_action(self.action_name)
         element.find_element_by_link_text("Email").click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
@@ -302,7 +335,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.go_to_actions()
 
         # click in the action page
-        self.open_action_edit('simple action')
+        self.open_action_edit(self.action_name)
 
         # Make sure the content has the correct text
         self.assertEqual(
