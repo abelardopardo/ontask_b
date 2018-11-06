@@ -156,9 +156,7 @@ class ScheduleActionTable(tables.Table):
         }
 
         row_attrs = {
-            'style': 'text-align:center;',
-            'class': lambda record: 'success' \
-                if record.status == ScheduledAction.STATUS_PENDING else ''
+            'style': 'text-align:center;'
         }
 
 
