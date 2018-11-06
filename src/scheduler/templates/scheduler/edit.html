@@ -7,8 +7,8 @@
 {% block title %}{{ block.super }}{% trans 'Schedule Action Execution' %}{% endblock %}
 {% block extrahead %}
   {% ontask_datetimepicker_css %}
-{% endblock extrahead %}
   {% ontask_datetimepicker_js %}
+{% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
 {% endblock scripts %}
@@ -33,8 +33,3 @@
     </div>
   </div>
 {% endblock container %}
-
-
-
-
-
