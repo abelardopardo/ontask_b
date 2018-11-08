@@ -402,7 +402,7 @@ def upload_s4(request):
 
             messages.error(request,
                            _('Merge operation failed.') + ' (' + status + ')'),
-            return redirect(reverse('dataops:uploadmerge'))
+            return redirect(reverse('workflow:detail'))
 
         # Log the event
         Log.objects.register(request.user,
