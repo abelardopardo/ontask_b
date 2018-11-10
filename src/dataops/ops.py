@@ -260,13 +260,13 @@ def perform_overlap_update(dst_df, src_df, dst_key, src_key, how_merge):
     if len(src_df.columns) <= 1:
         return dst_df
 
-    dst_df_tmp1 = dst_df.set_index(dst_key)
-    src_df_tmp1 = src_df.set_index(src_key)
+    dst_df_tmp1 = dst_df.set_index(dst_key, drop=False)
+    src_df_tmp1 = src_df.set_index(src_key, drop=False)
     if how_merge == 'inner':
         # Subset of dst_df_tmp1 with the keys in both DFs
         result = dst_df_tmp1.loc[
             dst_df_tmp1.index.intersection(src_df_tmp1.index)
-        ]
+        ].copy()
         # Update the subset with the values in the right
         result.update(src_df_tmp1)
     elif how_merge == 'outer':
@@ -274,11 +274,13 @@ def perform_overlap_update(dst_df, src_df, dst_key, src_key, how_merge):
         result = dst_df_tmp1
         result.update(src_df_tmp1)
         # Append the missing rows
-        tmp1 = src_df_tmp1.loc[src_df_tmp1.index.difference(dst_df_tmp1.index)]
+        tmp1 = src_df_tmp1.loc[
+            src_df_tmp1.index.difference(dst_df_tmp1.index)
+        ].copy()
         if not tmp1.empty:
             # Append only if the tmp1 data frame is not empty (otherwise it
             # looses the name of the index column
-            result = result.append(tmp1)
+            result = result.append(tmp1, sort=True)
     elif how_merge == 'left':
         result = dst_df_tmp1
         result.update(src_df_tmp1)
@@ -287,17 +289,19 @@ def perform_overlap_update(dst_df, src_df, dst_key, src_key, how_merge):
         # Subset of dst_df_tmp1 with the keys in both DFs
         result = dst_df_tmp1.loc[
             dst_df_tmp1.index.intersection(src_df_tmp1.index)
-        ]
+        ].copy()
         # Update with the right DF
         result.update(src_df_tmp1)
         # Append the rows that are in right and not in left
-        tmp2 = src_df_tmp1.loc[src_df_tmp1.index.difference(dst_df_tmp1.index)]
+        tmp2 = src_df_tmp1.loc[
+            src_df_tmp1.index.difference(dst_df_tmp1.index)
+        ].copy()
         if not tmp2.empty:
             # Append only if it is not empty
-            result = result.append(tmp2)
+            result = result.append(tmp2, sort=True)
 
     # Return result
-    return result.reset_index()
+    return result.reset_index(drop=True)
 
 
 def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
@@ -482,20 +486,21 @@ def perform_dataframe_upload_merge(pk, dst_df, src_df, merge_info):
     # Store the result back in the DB
     store_dataframe_in_db(new_df, pk)
 
-    # Update the value of the "keey_key_column"
+    # Update the value of the "keep_key_column"
     for to_upload, cname, keep_key in zip(merge_info['columns_to_upload'],
                                           merge_info['rename_column_names'],
                                           merge_info['keep_key_column']):
         if not to_upload:
+            # Column is not uploaded, nothing to process
             continue
 
-        col = workflow.columns.get(name=cname)
-        # Condition 3: Process the is_key property.
-        is_key_now = is_unique_column(new_df[col.name]) and keep_key
-        if col.is_key and not is_key_now:
-            return _('Column {0} is no longer a key column.').format(col.name)
+        col = workflow.columns.filter(name=cname).first()
+        if not col:
+            # It is a new column so no need to update the value of col_key
+            continue
 
-        col.is_key = is_key_now
+        # Process the is_key property.
+        col.is_key = is_unique_column(new_df[col.name]) and keep_key
         col.save()
 
     # Recompute all the values of the conditions in each of the actions
