@@ -10,7 +10,7 @@ OnTask documentation (Ver. |ontask_version|)
 
 .. toctree::
    :numbered:
-   :maxdepth: 4
+   :maxdepth: 3
    :caption: Contents:
 
    Introduction/index
