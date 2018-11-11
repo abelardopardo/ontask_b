@@ -66,7 +66,7 @@ Click finish and verify that the table in the workflow contains two additional c
 
 Once created, go to the page showing the submissions for an assignment in Moodle and choose the option to *Upload multiple feedback files in a zip*.
 
-.. figure:: ../../scaptures/mutiplefeedbackzip.png
+.. figure:: ../../scaptures/multiplefeedbackzip.png
    :align: center
 
 Upload the zip just created and each file will be placed as the feedback file for each student (independently if there is a submission or not).
