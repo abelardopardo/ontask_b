@@ -284,6 +284,8 @@ When uploading data for the first time, the values are prepared to be assigned a
 
 After this step (if the table is empty), the data is stored and the platform shows the :ref:`details` page. If the upload operation is executed with a workflow with existing data in the table, then instead of an upload, the platform executes a **merge** operation.
 
+.. _data_merge:
+
 Data Merge
 ==========
 
@@ -664,6 +666,44 @@ The analogous operations for personalized JSON actions is to send the resulting 
 The first field is the column to perform a last review of the elements to send and select some of them to exclude in an extra step. If the field is empty, this step is skipped. The second field is the token to use for authentication when sending the JSON objects to the URL given when editing the action.
 
 Similarly to the email actions, once these fields are provided, the operation to send the JSON objects to the target URL is queued in a batch system and processed separated from the web application.
+
+Creating a ZIP file with the personalized text
+----------------------------------------------
+
+The personalized text actions offer the possibility of creating a ZIP file containing one HTML file per personalized text. You may use two columns and a fixed suffix to control the format of each file name.
+
+.. figure:: ../scaptures/action_zip_request_data.png
+   :align: center
+   :width: 100%
+
+The first part of the file name is taken from the values of a key column. The second part of the file name is taken from a second column (optional). Additionally, the user may include a third suffix to be used for the last part of the file name (if none is given the default suffix is ``feedback.html``. For example if the first column has the values ``submission 01, submission 02, submission 03``, the second column has the names ``John, Paul, Mary``, and the file suffix is empty, the ZIP file will be created with three HTML files with names ``submission 01_John_feedback.html``, ``submission 02_Paul_feedback.html`` and ``submission 03_Mary_feedback.html``.
+
+.. _upload_feedback_to_moodle:
+
+Uploading feedback files for a Moodle Assignment
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+One of the potential uses of the ZIP file generated from a personalized text action is to upload each file as personalized feedback of an assignment in a Moodle course. However, there are some requirements in the file names so that they are uploaded each to the appropriate location, namely:
+
+1. The table must have column named ``Identifier`` with values starting with the word ``Participant`` followed by a white space and a unique number. This column can be extracted from a Moodle Assignment by downloading the *grading worksheet*:
+
+  .. figure:: ../scaptures/downloadgradingworksheet.png
+     :align: center
+
+  The CSV file has two columns with names ``Identifier`` and ``Full name``.
+
+  .. figure:: ../scaptures/moodle_grading_sheet.png
+     :align: center
+
+2. The two columns ``Identifier`` and ``Full name`` must be :ref:`merged<data_merge>` with the current data in the workflow.
+
+3. Choose the column ``Identifier`` and ``Full name`` as the first and second column respectively when generating the ZIP file. Make sure you select the option ``This ZIP will be uploaded to Moodle as feedback``.
+
+4. Upload the resulting ZIP using the option ``Upload multiple files in a zip`` in the Moodle Assignment.
+
+   .. figure:: ../scaptures/multiplefeedbackzip.png
+      :align: center
+
 
 Surveys
 -------
