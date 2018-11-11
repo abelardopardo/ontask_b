@@ -40,7 +40,7 @@ Store the :download:`CSV file obtained from this page <../../Dataset/moodle_grad
    :align: center
    :width: 100%
 
-Go to the next step and select only the columns ``Identifier``, ``Full name`` and ``email``. This last one we will use as the key column to merge with the existing data.
+Go to the next step and select only the columns ``Identifier``, ``Full name`` and ``Email address``. This last one we will use as the key column to merge with the existing ``email`` column. In order not to create an extra column, rename ``Email address`` to ``email`` as shown in the next figure:
 
 .. figure:: ../../scaptures/tutorial_moodle_merge_step2.png
    :align: center
@@ -58,6 +58,17 @@ Verify that you are merging two columns and using ``email`` as the key.
    :align: center
    :width: 100%
 
-Click finish. The table in the workflow now contains two additional columns: ``Identifier`` and ``Full name``. Go back to the *Actions* page and click in the link to generate a ZIP file for one of the personalized text actions.
+Click finish and verify that the table in the workflow contains two additional columns: ``Identifier`` and ``Full name``. Go to the *Actions* page and click in the link to generate a ZIP file for one of the personalized text actions. Select now the column ``Identifier`` as the first name prefix and the column ``Full name`` as the second column prefix. Choose additional file name suffix (or leave it empty), and *click the option for the ZIP to be uploaded to Moodle*.
+
+.. figure:: ../../scaptures/tutorial_action_zip.png
+   :align: center
+   :width: 100%
+
+Once created, go to the page showing the submissions for an assignment in Moodle and choose the option to *Upload multiple feedback files in a zip*.
+
+.. figure:: ../../scaptures/mutiplefeedbackzip.png
+   :align: center
+
+Upload the zip just created and each file will be placed as the feedback file for each student (independently if there is a submission or not).
 
 
