@@ -58,8 +58,22 @@ The following tasks illustrate the different functionality available in OnTask f
    Tasks/workflow_details
    Tasks/table
    Tasks/actions
+   Tasks/send_email
+   Tasks/personalized_text_url
+   Tasks/zip_download
    Tasks/scheduling
    Tasks/merging
    Tasks/database_upload
    Tasks/plugin_write
    Tasks/api
+
+..
+
+    Tasks/manage_attributes
+    Tasks/export_workflow
+    Tasks/rename_workflow
+    Tasks/share_workflow
+    Tasks/clone_workflow
+    Tasks/flush_workflow
+    Tasks/delete_workflow
+    Tasks/send_json
