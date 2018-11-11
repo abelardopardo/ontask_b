@@ -794,6 +794,8 @@ The Scheduler
 
 The *personalized text* and *personalized JSON* actions can be scheduled to execute at some point in the future. To schedule the execution go to the *Actions* page (select the option from the top menu), click in the *More* button for the action and then in the button *Schedule*.
 
+.. _schedule_email:
+
 Scheduling a Personalized Text Action
 -------------------------------------
 
@@ -833,6 +835,8 @@ Track when emails are read
 
 Check/exclude emails
   If selected, this option inserts an extra step select emaisl and eleminate them from the action. This option is useful to perform a final check and remove emails that cannot be removed with action the filter.
+
+.. _schedule_json:
 
 Scheduling a Personalized JSON Action
 -------------------------------------
