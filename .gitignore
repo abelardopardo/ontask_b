@@ -88,3 +88,5 @@ docs
 # Initial user files (depending on the deployment)
 src/scripts/initial_instructors.csv
 src/scripts/initial_learners.csv
+src/celerybeat-schedule
+src/celerybeat.pid

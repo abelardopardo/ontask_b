@@ -3,24 +3,15 @@
 Open a workflow
 ===============
 
-When you open a workflow, a page with its details is shown like the one in
-the following figure
+OnTask assumes that you will be working with one workflow. The first screen (the one that appears when you log in or when you click in the *Workflows* link in the top menu) shows you the workflows available. To start working with one of them you have to *Open* it.
 
-.. figure:: ../../scaptures/workflow_details_empty.png
-   :align: center
-
-In this case the page only shows basic details because the workflow does not
-have any data stored in its table. While the workflow is open, the top menu
-contains the following links:
+While the workflow is open, the top menu contains the following links:
 
 Details
-  Is the current page that shows information about the columns, data types,
-  number of actions, etc. contained in the workflow (empty now because we
-  haven't populated it)
+  This iss the current page that shows information about the columns, data types, number of actions, etc. contained in the workflow (empty now because we haven't populated it)
 
 Table
-  Operations to visualize and manipulate the table (search for values, add a
-  row, add a column)
+  Operations to visualize and manipulate the table (search for values, add a row, add a column)
 
 Actions
   Create, edit and execute actions.
@@ -28,8 +19,12 @@ Actions
 Logs
   A table showing the history of operations performed on this workflow
 
-In the current *Details* page, immediately under the title there are buttons
-to perform the following operations:
+After you open a workflow, the next page shows its details and information about the columns in its data table. If the workflow does not contain any data, the page only shows basic details as shown in the following figure.
+
+.. figure:: ../../scaptures/workflow_details_empty.png
+   :align: center
+
+In the current *Details* page, immediately under the title there are two buttons to perform the following operations:
 
 - Manage table data
 

@@ -9,7 +9,7 @@ from dataops import formula_evaluation
 class HasVariableTest(TestCase):
 
     formula1 = {u'not': False, u'rules': [
-        {u'value': u'df', u'field': u'{2}_Code_a', u'operator': u'equal',
+        {u'value': u'df', u'field': u'Course_Code_a', u'operator': u'equal',
          u'input': u'text', u'type': u'string', u'id': u'Course_Code_a'},
         {u'value': u'v2', u'field': u'ANOTHER', u'operator': u'equal',
          u'input': u'text', u'type': u'string', u'id': u'ANOTHER'}],

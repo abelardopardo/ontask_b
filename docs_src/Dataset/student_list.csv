@@ -1,16 +1,16 @@
-SID,Identifier,email,Surname,GivenName,MiddleInitial,Gender,Course Code,Program,Enrolment Type,Attendance
-330794979,Participant 12,olie8242@bogus.com,Arthur,Oliver,S,male,ELON3509,FSCI,International,Full Time
-388963652,Participant 10,tcnf7608@bogus.com,Cannan,Lily,J,female,ELON3509,FASS,HECS,Full Time
-317547296,Participant 9,ckrn7263@bogus.com,Chao,Yuan,Q,female,ELON3509,FEIT,International,Full Time
-363393232,Participant 5,tdrv2640@bogus.com,Chin,Qiao,S,female,ELON3509,FSCI,International,Full Time
-326285587,Participant 6,isim6886@bogus.com,Hou,Lian,S,female,ELON3509,SMED,International,Full Time
-360594548,Participant 15,euho9752@bogus.com,Hoy,Zachary,K,male,ELON3509,SMED,Local,Full Time
-384087855,Participant 7,kjbc6748@bogus.com,Hsing,Manchu,Z,male,ELON3509,FSCI,HECS,Full Time
-315500979,Participant 11,zqdk2609@bogus.com,Jen,You,Y,male,ELON3509,FSCI,HECS,Part Time
-396913155,Participant 3,pzaz8370@bogus.com,Lin,Chung,D,male,ELON3509,FEIT,HECS,Full Time
-394589352,Participant 13,ctfh9946@bogus.com,Manchee,Kate,J,female,ELON3509,FASS,HECS,Full Time
-319549896,Participant 2,ttqp9766@bogus.com,Meng,Huan Yue,F,female,ELON3509,FSCI,International,Full Time
-352120481,Participant 4,ucdx8510@bogus.com,Mueller,Matthew,G,male,ELON3509,FEIT,International,Full Time
-320250819,Participant 14,tjxk6150@bogus.com,Shen,Hu,L,male,ELON3509,SMED,International,Full Time
-333306652,Participant 1,qvrr9413@bogus.com,Tuan,Jian,A,male,ELON3509,FASS,HECS,Full Time
-300773633,Participant 8,euhz6532@bogus.com,Tung,Mei,S,female,ELON3509,FSCI,HECS,Full Time
+SID,Identifier,email,Surname,GivenName,MiddleInitial,Full name,Gender,Course Code,Program,Enrolment Type,Attendance
+330794979,Participant 12,olie8242@bogus.com,Arthur,Oliver,S,Oliver Arthur,male,ELON3509,FSCI,International,Full Time
+388963652,Participant 10,tcnf7608@bogus.com,Cannan,Lily,J,Lily Cannan,female,ELON3509,FASS,HECS,Full Time
+317547296,Participant 9,ckrn7263@bogus.com,Chao,Yuan,Q,Yuan Chao,female,ELON3509,FEIT,International,Full Time
+363393232,Participant 5,tdrv2640@bogus.com,Chin,Qiao,S,Qiao Chin,female,ELON3509,FSCI,International,Full Time
+326285587,Participant 6,isim6886@bogus.com,Hou,Lian,S,Lian Hou,female,ELON3509,SMED,International,Full Time
+360594548,Participant 15,euho9752@bogus.com,Hoy,Zachary,K,Zachary Hoy,male,ELON3509,SMED,Local,Full Time
+384087855,Participant 7,kjbc6748@bogus.com,Hsing,Manchu,Z,Manchu Hsing,male,ELON3509,FSCI,HECS,Full Time
+315500979,Participant 11,zqdk2609@bogus.com,Jen,You,Y,You Jen,male,ELON3509,FSCI,HECS,Part Time
+396913155,Participant 3,pzaz8370@bogus.com,Lin,Chung,D,Chung Lin,male,ELON3509,FEIT,HECS,Full Time
+394589352,Participant 13,ctfh9946@bogus.com,Manchee,Kate,J,Kate Manchee,female,ELON3509,FASS,HECS,Full Time
+319549896,Participant 2,ttqp9766@bogus.com,Meng,Huan Yue,F,Huan Yue Meng,female,ELON3509,FSCI,International,Full Time
+352120481,Participant 4,ucdx8510@bogus.com,Mueller,Matthew,G,Matthew Mueller,male,ELON3509,FEIT,International,Full Time
+320250819,Participant 14,tjxk6150@bogus.com,Shen,Hu,L,Hu Shen,male,ELON3509,SMED,International,Full Time
+333306652,Participant 1,qvrr9413@bogus.com,Tuan,Jian,A,Jian Tuan,male,ELON3509,FASS,HECS,Full Time
+300773633,Participant 8,euhz6532@bogus.com,Tung,Mei,S,Mei Tung,female,ELON3509,FSCI,HECS,Full Time

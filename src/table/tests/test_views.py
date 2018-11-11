@@ -479,7 +479,7 @@ class TableViews(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, "//div[@id='table-content']/h1"),
-                'Table View'
+                'Table'
             )
         )
 
