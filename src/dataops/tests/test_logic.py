@@ -78,11 +78,10 @@ class DataopsMatrixManipulation(test.OntaskTestCase):
             df_dst = pandas_db.load_df_from_csvfile(
             io.StringIO(self.csv1),
                 0,
-            io.StringIO(self.csv2),
                 0
             )
 
-        df_src = pandas_db.load_df_from_csvfile(StringIO.StringIO(self.csv2),
+        df_src = pandas_db.load_df_from_csvfile(io.StringIO(self.csv2),
                                                 0,
                                                 0)
 
@@ -94,11 +93,9 @@ class DataopsMatrixManipulation(test.OntaskTestCase):
         return df_dst, df_src
 
     def test_df_equivalent_after_sql(self):
-        self.assertEqual(result, None)
 
         # Parse the CSV
-        df_source = pandas_db.load_df_from_csvfile(StringIO.StringIO(self.csv1),
-            io.StringIO(self.csv1),
+        df_source = pandas_db.load_df_from_csvfile(io.StringIO(self.csv1),
                                                    0,
                                                    0)
 
