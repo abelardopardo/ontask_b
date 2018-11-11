@@ -43,6 +43,7 @@ student_list_fields = ['SID',
                        'Surname',
                        'GivenName',
                        'MiddleInitial',
+                       'Full name',
                        'Gender',
                        'Course Code']
 
@@ -191,6 +192,8 @@ def read_initial_file(file_name, num_students=500):
                                                        max_l - num_students),
                                          axis=0)
 
+    all_students['Full name'] = all_students['GivenName'] + ' ' \
+                                + all_students['Surname']
     return all_students
 
 
