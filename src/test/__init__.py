@@ -216,6 +216,14 @@ class OntaskLiveTestCase(LiveServerTestCase):
             ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
         )
 
+    def wait_for_modal_close(self):
+        # Close modal (wail until the modal-open element disappears)
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
+
     def wait_for_datatable(self, table_id):
         # Wait for the table to be refreshed
         WebDriverWait(self.selenium, 10).until(
@@ -233,12 +241,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
         :param table_id: Id of the table being refreshed
         :return:
         """
-        # Close modal (wail until the modal-open element disappears)
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
+        self.wait_for_modal_close()
         # Wait for the table to be refreshed
         self.wait_for_datatable(table_id)
 
@@ -502,7 +505,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
 
         self.selenium.find_element_by_link_text("Table").click()
         self.wait_for_datatable('table-data_previous')
-        self.assertIn('Table View', self.selenium.page_source)
+        self.assertIn('Table', self.selenium.page_source)
 
         self.selenium.find_element_by_link_text('Views').click()
         self.wait_for_datatable('view-table_previous')
@@ -852,6 +855,15 @@ class OntaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH, "//button[contains(@class, 'js-email-preview')]"),
+            )
+        )
+
+    def open_action_zip(self, name):
+        element = self.search_action(name)
+        element.find_element_by_link_text("ZIP").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//button[contains(@class, 'js-zip-preview')]"),
             )
         )
 

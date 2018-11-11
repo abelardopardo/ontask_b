@@ -736,3 +736,113 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
         # End of session
         self.logout()
 
+class DataopsMerge(test.OntaskLiveTestCase):
+    wf_name = 'Testing Merge'
+    fixtures = ['test_merge']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'dataops',
+        'fixtures',
+        'test_merge.sql'
+    )
+    merge_file = os.path.join(
+        settings.BASE_DIR(),
+        'dataops',
+        'fixtures',
+        'test_df_merge_update_df2.csv'
+    )
+
+    def setUp(self):
+        super(DataopsMerge, self).setUp()
+        pandas_db.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        pandas_db.delete_all_tables()
+        super(DataopsMerge, self).tearDown()
+
+    def template_merge(self, method):
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wf_name)
+
+        # Go to the upload/merge page
+        self.go_to_upload_merge()
+
+        # Dataops/Merge CSV Merge Step 1
+        self.selenium.find_element_by_link_text("CSV Upload/Merge").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('OnTask :: Upload/Merge CSV')
+        )
+        self.selenium.find_element_by_id('id_file').send_keys(self.merge_file)
+
+        # Click the NEXT button
+        self.selenium.find_element_by_xpath(
+            "//button[@type='Submit']"
+        ).click()
+        self.wait_for_page()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//input[@id='id_new_name_0']")
+            )
+        )
+
+        # Dataops/Merge CSV Merge Step 2
+        # Rename the column
+        self.selenium.find_element_by_id('id_new_name_0').send_keys('2')
+        # Click the NEXT button
+        self.selenium.find_element_by_xpath(
+            "//button[@type='Submit']"
+        ).click()
+        self.wait_for_page()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//select[@id='id_dst_key']")
+            )
+        )
+
+        # Dataops/Merge CSV Merge Step 3
+        # Select left merge
+        Select(self.selenium.find_element_by_id(
+            'id_how_merge'
+        )).select_by_value(method)
+
+        # Click the NEXT button
+        self.selenium.find_element_by_xpath(
+            "//button[@type='Submit']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.CLASS_NAME, 'page-header'),
+                'Step 4: Review and confirm')
+        )
+
+        # Dataops/Merge CSV Merge Step 4
+        # Click in Finish
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Finish']"
+        ).click()
+        self.wait_for_datatable('column-table_previous')
+
+        # Assert the content of the dataframe
+        wflow = Workflow.objects.get(name=self.wf_name)
+        df = pandas_db.load_from_db(wflow.id)
+
+        self.assertTrue('key' in set(df.columns))
+        self.assertTrue('key2' in set(df.columns))
+
+        # End of session
+        self.logout()
+
+    def test_01_merge_inner(self):
+        self.template_merge('inner')
+
+    def test_02_merge_outer(self):
+        self.template_merge('outer')
+
+    def test_03_merge_left(self):
+        self.template_merge('left')
+
+    def test_04_merge_right(self):
+        self.template_merge('right')

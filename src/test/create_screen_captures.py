@@ -641,6 +641,15 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('action_email_request_data.png')
 
         #
+        # Create ZIP
+        #
+        self.go_to_actions()
+        self.open_action_zip('Midterm comments')
+
+        # Picture of the body
+        self.body_ss('action_zip_request_data.png')
+
+        #
         # JSON Edit
         #
         self.go_to_actions()
