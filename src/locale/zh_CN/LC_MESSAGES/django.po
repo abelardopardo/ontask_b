@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-04 12:49+1030\n"
+"POT-Creation-Date: 2018-11-12 13:51+1030\n"
 "PO-Revision-Date: 2018-11-11 18:47+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -718,7 +718,7 @@ msgstr "编辑描述"
 #: action/templates/action/includes/partial_condition_buttons.html:50
 #: action/templates/action/includes/partial_filter_create_buttons.html:32
 #: action/templates/action/run_survey.html:47
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:13
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:8
 #: scheduler/templates/scheduler/schedule_done.html:15
 #: table/templates/table/display.html:177
 #: table/templates/table/includes/partial_table_ops.html:19
@@ -780,13 +780,13 @@ msgid "Done"
 msgstr "完成"
 
 #: action/templates/action/edit_in.html:192
-#: action/templates/action/includes/partial_action_operations.html:30
+#: action/templates/action/includes/partial_action_operations.html:27
 msgid "Enter data manually"
 msgstr "手动输入数据"
 
 #: action/templates/action/edit_in.html:193
-#: action/templates/action/includes/partial_action_operations.html:25
-#: action/templates/action/includes/partial_action_operations.html:31
+#: action/templates/action/includes/partial_action_operations.html:22
+#: action/templates/action/includes/partial_action_operations.html:28
 #: dataops/templates/dataops/includes/partial_plugin_operations.html:6
 #: dataops/templates/dataops/includes/partial_sqlconn_runop.html:5
 #: dataops/templates/dataops/includes/plugin_run_buttons.html:9
@@ -840,7 +840,7 @@ msgid "Columns:"
 msgstr "列："
 
 #: action/templates/action/export_ask.html:28
-#: action/templates/action/includes/partial_action_operations.html:83
+#: action/templates/action/includes/partial_action_operations.html:80
 #: workflow/templates/workflow/export.html:63
 msgid "Export"
 msgstr "导出"
@@ -939,52 +939,60 @@ msgstr "发送个性化邮件"
 msgid "Email"
 msgstr "邮件"
 
-#: action/templates/action/includes/partial_action_operations.html:24
+#: action/templates/action/includes/partial_action_operations.html:16
+msgid "Create a ZIP with each personalised text in a file"
+msgstr "在文件中创建每个个性化文本的压缩文件"
+
+#: action/templates/action/includes/partial_action_operations.html:17
+msgid "ZIP"
+msgstr "压缩文件"
+
+#: action/templates/action/includes/partial_action_operations.html:21
 msgid "Send personalised JSONs"
 msgstr "发送个性化JSONs"
 
-#: action/templates/action/includes/partial_action_operations.html:38
+#: action/templates/action/includes/partial_action_operations.html:35
 msgid "URL for learners to access the personalised text"
 msgstr "学习者访问个性化文本的网址"
 
-#: action/templates/action/includes/partial_action_operations.html:40
+#: action/templates/action/includes/partial_action_operations.html:37
 msgid "URL for learners to introduce data"
 msgstr "学习者引入数据的网址"
 
-#: action/templates/action/includes/partial_action_operations.html:43
+#: action/templates/action/includes/partial_action_operations.html:40
 msgid "URL"
 msgstr "网址"
 
-#: action/templates/action/includes/partial_action_operations.html:48
+#: action/templates/action/includes/partial_action_operations.html:45
 msgid "More"
 msgstr "更多"
 
-#: action/templates/action/includes/partial_action_operations.html:56
+#: action/templates/action/includes/partial_action_operations.html:53
 msgid "Schedule the execution of the action"
 msgstr "安排操作执行"
 
-#: action/templates/action/includes/partial_action_operations.html:57
-#: scheduler/views.py:236 scheduler/views.py:298
+#: action/templates/action/includes/partial_action_operations.html:54
+#: scheduler/views.py:234 scheduler/views.py:296
 msgid "Schedule"
 msgstr "安排"
 
-#: action/templates/action/includes/partial_action_operations.html:65
+#: action/templates/action/includes/partial_action_operations.html:62
 msgid "Change name and/or description"
 msgstr "改变名字以及/或者描述"
 
-#: action/templates/action/includes/partial_action_operations.html:66
+#: action/templates/action/includes/partial_action_operations.html:63
 #: workflow/templates/workflow/includes/workflow_basic_buttons.html:13
 msgid "Rename"
 msgstr "重命名"
 
-#: action/templates/action/includes/partial_action_operations.html:74
+#: action/templates/action/includes/partial_action_operations.html:71
 msgid "Create an identical action"
 msgstr "创建相同的操作"
 
-#: action/templates/action/includes/partial_action_operations.html:75
+#: action/templates/action/includes/partial_action_operations.html:72
 #: action/templates/action/includes/partial_column_selected_operations.html:21
 #: action/templates/action/includes/partial_condition_buttons.html:59
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:22
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:15
 #: table/templates/table/display.html:186
 #: table/templates/table/includes/partial_view_operations.html:20
 #: workflow/templates/workflow/includes/workflow_basic_buttons.html:20
@@ -992,18 +1000,18 @@ msgstr "创建相同的操作"
 msgid "Clone"
 msgstr "克隆"
 
-#: action/templates/action/includes/partial_action_operations.html:82
+#: action/templates/action/includes/partial_action_operations.html:79
 msgid "Export the content of this action"
 msgstr "导出此操作的内容"
 
-#: action/templates/action/includes/partial_action_operations.html:90
+#: action/templates/action/includes/partial_action_operations.html:87
 msgid "Delete the action"
 msgstr "删除本操作"
 
-#: action/templates/action/includes/partial_action_operations.html:91
+#: action/templates/action/includes/partial_action_operations.html:88
 #: action/templates/action/includes/partial_condition_buttons.html:68
 #: action/templates/action/includes/partial_filter_create_buttons.html:40
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:31
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:22
 #: table/templates/table/display.html:195
 #: table/templates/table/includes/partial_table_ops.html:28
 #: table/templates/table/includes/partial_view_operations.html:27
@@ -1054,7 +1062,7 @@ msgstr "用列<code>[列名]</code>取代<strong>电子邮件</strong>。"
 #: action/templates/action/includes/partial_action_showurl.html:28
 #: dataops/plugin_manager.py:43 dataops/plugin_manager.py:50
 #: dataops/plugin_manager.py:58 dataops/plugin_manager.py:69
-#: dataops/plugin_manager.py:140 templates/base.html:152
+#: dataops/plugin_manager.py:140 templates/base.html:153
 msgid "Ok"
 msgstr "好"
 
@@ -1259,7 +1267,7 @@ msgid ""
 msgstr "审查此操作的条件或使用筛选标签排除这些条目。"
 
 #: action/templates/action/index.html:8 action/templates/action/index.html:43
-#: templates/base.html:93
+#: templates/base.html:94
 msgid "Actions"
 msgstr "操作"
 
@@ -1350,9 +1358,7 @@ msgid "Last executed"
 msgstr "上次执行的"
 
 #: action/views_action.py:74 dataops/sqlcon_views.py:26
-#: dataops/sqlcon_views.py:59
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:4
-#: dataops/views.py:51 scheduler/views.py:39
+#: dataops/sqlcon_views.py:59 dataops/views.py:51 scheduler/views.py:39
 #: table/templates/table/includes/partial_table_ops.html:4 table/views.py:42
 #: workflow/templates/workflow/detail.html:92 workflow/views.py:63
 msgid "Operations"
@@ -1702,40 +1708,36 @@ msgid "DB name"
 msgstr "数据库名称"
 
 #: dataops/models.py:133 table/apps.py:9 table/templates/table/display.html:8
+#: table/templates/table/display.html:68
 #: table/templates/table/includes/partial_view_operations.html:7
-#: templates/base.html:89
+#: templates/base.html:90
 msgid "Table"
 msgstr "表格"
 
-#: dataops/ops.py:412
+#: dataops/ops.py:416
 msgid "Merge operation failed. Exception: "
 msgstr "合并操作失败。例外： "
 
-#: dataops/ops.py:437
+#: dataops/ops.py:441
 msgid "Merge operation produced a result with no rows"
 msgstr "合并操作产生没有行的结果"
 
-#: dataops/ops.py:454 dataops/ops.py:466
+#: dataops/ops.py:458 dataops/ops.py:470
 #, python-brace-format
 msgid "New values in column {0} are not of type {1}"
 msgstr "列{0}中的新值不是{1}类型。"
 
-#: dataops/ops.py:461
+#: dataops/ops.py:465
 #, python-brace-format
 msgid "New values in column {0} are not of type number"
 msgstr "列{0}中的新值不是类型号"
 
-#: dataops/ops.py:477
+#: dataops/ops.py:481
 #, python-brace-format
 msgid "New values in column {0} are not in categories {1}"
 msgstr "列{0}中的新值不在类别{1}中。"
 
-#: dataops/ops.py:496
-#, python-brace-format
-msgid "Column {0} is no longer a key column."
-msgstr "列{0}不再是键列。"
-
-#: dataops/ops.py:540
+#: dataops/ops.py:545
 #, python-brace-format
 msgid "Type {0} not found"
 msgstr "未找到类型{0}"
@@ -1941,15 +1943,15 @@ msgstr "您确定要删除连接<strong>%(n)s</strong>?"
 msgid "Delete connection"
 msgstr "删除连接"
 
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:12
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:7
 msgid "Edit SQL connection parameters"
 msgstr "编辑SQL连接参数"
 
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:21
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:14
 msgid "Create an exact duplicate of this connection"
 msgstr "创建此连接的精确副本"
 
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:30
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:21
 msgid "Delete SQL connection"
 msgstr "删除SQL连接"
 
@@ -2040,7 +2042,7 @@ msgstr "编辑学生数据"
 
 #: dataops/templates/dataops/sql_connections.html:8
 #: dataops/templates/dataops/sql_connections.html:39
-#: dataops/templates/dataops/uploadmerge.html:64 templates/base.html:79
+#: dataops/templates/dataops/uploadmerge.html:64 templates/base.html:80
 #: workflow/templates/workflow/sql_connections.html:8
 #: workflow/templates/workflow/sql_connections.html:43
 msgid "SQL Connections"
@@ -2864,7 +2866,7 @@ msgid "Maximum number of logs shown to the user"
 msgstr "向用户显示的日志的最大数量"
 
 #: logs/templates/logs/display.html:8 logs/templates/logs/display.html:45
-#: templates/base.html:100
+#: templates/base.html:101
 msgid "Logs"
 msgstr "日志"
 
@@ -2999,7 +3001,7 @@ msgstr "已为{0}创建新用户个人信息资料"
 
 #: profiles/templates/profiles/edit_profile.html:6
 #: profiles/templates/profiles/show_profile.html:5
-#: profiles/templates/profiles/show_profile.html:24 templates/base.html:56
+#: profiles/templates/profiles/show_profile.html:24 templates/base.html:57
 msgid "Profile"
 msgstr "个人信息资料"
 
@@ -3107,10 +3109,6 @@ msgstr "列选择元素 (空格跳过)"
 #: scheduler/forms.py:268 scheduler/forms.py:275
 msgid "This field must be a comma-separated list of emails."
 msgstr "此字段必须是逗号分隔的电子邮件列表。"
-
-#: scheduler/forms.py:291
-msgid "Scheduling action needs a token"
-msgstr "排程操作需要令牌"
 
 #: scheduler/models.py:31
 msgid "Creating"
@@ -3300,34 +3298,34 @@ msgstr "参数"
 msgid "Result"
 msgstr "结果"
 
-#: scheduler/views.py:217
+#: scheduler/views.py:215
 msgid "A scheduled execution of this action with this name already exists"
 msgstr "以此命名的已排程操作已经存在"
 
-#: scheduler/views.py:332
+#: scheduler/views.py:330
 msgid "Incorrect action scheduling invocation."
 msgstr "不正确的操作排程调用。"
 
-#: scheduler/views.py:339
+#: scheduler/views.py:337
 msgid "Incorrect parameters in action scheduling"
 msgstr "操作排程中的错误参数"
 
-#: scheduler/views.py:401
+#: scheduler/views.py:399
 #, python-brace-format
 msgid "{0} days"
 msgstr "{0}天"
 
-#: scheduler/views.py:404
+#: scheduler/views.py:402
 #, python-brace-format
 msgid ", {0} hours"
 msgstr "{0}小时"
 
-#: scheduler/views.py:407
+#: scheduler/views.py:405
 #, python-brace-format
 msgid ", {0} minutes"
 msgstr "{0}分钟"
 
-#: scheduler/views.py:493
+#: scheduler/views.py:491
 msgid ""
 "Unable to schedule actions due to a misconfiguration. Ask your system "
 "administrator to enable queueing."
@@ -3448,10 +3446,6 @@ msgstr "该学生在此列中没有值"
 #: table/stat_views.py:184
 msgid "Unable to provide visualisation without data."
 msgstr "没有数据，无法提供可视化。"
-
-#: table/templates/table/display.html:68
-msgid "Table View"
-msgstr "表格视图"
 
 #: table/templates/table/display.html:80
 msgid "Add a new row to the table"
@@ -3715,12 +3709,12 @@ msgid ""
 "    address this anomaly soon."
 msgstr "哎呀!平台有一个内部错误。我们很抱歉。我们希望尽快解决这种异常现象。"
 
-#: templates/_navbar.html:3 templates/base.html:103
+#: templates/_navbar.html:3 templates/base.html:104
 msgid "About"
 msgstr "关于"
 
 #: templates/admin/admin_title.html:1 templates/admin/base_site.html:5
-#: templates/admin/base_site.html:7 templates/base.html:49
+#: templates/admin/base_site.html:7 templates/base.html:50
 msgid "Admin"
 msgstr "管理员"
 
@@ -3728,56 +3722,56 @@ msgstr "管理员"
 msgid "Switch to Site"
 msgstr "切换到网站"
 
-#: templates/base.html:34
+#: templates/base.html:35
 msgid "Toggle navigation"
 msgstr "切换导航"
 
-#: templates/base.html:57 templates/base.html:190
+#: templates/base.html:58 templates/base.html:190
 msgid "Logout"
 msgstr "退出"
 
-#: templates/base.html:65
+#: templates/base.html:66
 msgid "Read the manual"
 msgstr "阅读手册"
 
-#: templates/base.html:75 workflow/apps.py:9
+#: templates/base.html:76 workflow/apps.py:9
 #: workflow/templates/workflow/index.html:8
 msgid "Workflows"
 msgstr "工作表"
 
-#: templates/base.html:85 workflow/templates/workflow/detail.html:8
+#: templates/base.html:86 workflow/templates/workflow/detail.html:8
 msgid "Details"
 msgstr "详细信息"
 
-#: templates/base.html:97
+#: templates/base.html:98
 msgid "Scheduler"
 msgstr "排程"
 
-#: templates/base.html:105
+#: templates/base.html:106
 msgid "Contact"
 msgstr "联系"
 
-#: templates/base.html:132
+#: templates/base.html:133
 msgid "This functionality has not been implemented yet."
 msgstr "此功能尚未实现。"
 
-#: templates/base.html:143
+#: templates/base.html:144
 msgid "Your session is about to expire"
 msgstr "您的操作即将到期"
 
-#: templates/base.html:146
+#: templates/base.html:147
 msgid "Your session will expire in"
 msgstr "您的操作还有(）到期"
 
-#: templates/base.html:147
+#: templates/base.html:148
 msgid "seconds."
 msgstr "秒。"
 
-#: templates/base.html:166
+#: templates/base.html:167
 msgid "OnTask Project"
 msgstr "OnTask项目"
 
-#: templates/base.html:170
+#: templates/base.html:171
 msgid "Version:"
 msgstr "版本："
 
@@ -4876,11 +4870,14 @@ msgstr "无法克隆工作流"
 msgid "Workflow successfully cloned."
 msgstr "工作流已成功克隆。"
 
-#~ msgid "Create a ZIP with each personalised text in a file"
-#~ msgstr "在文件中创建每个个性化文本的压缩文件"
+#~ msgid "Column {0} is no longer a key column."
+#~ msgstr "列{0}不再是键列。"
 
-#~ msgid "ZIP"
-#~ msgstr "压缩文件"
+#~ msgid "Scheduling action needs a token"
+#~ msgstr "排程操作需要令牌"
+
+#~ msgid "Table View"
+#~ msgstr "表格视图"
 
 #~ msgid ""
 #~ "This operation will also remove <b>everything</b> stored in a workflow\n"
