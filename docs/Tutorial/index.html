@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Tutorial &#8212; OnTask (B.3.1.0) 1.1.0 documentation</title>
+    <title>5. Tutorial &#8212; OnTask (B.3.2.0) 1.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
@@ -17,8 +17,8 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Advanced Features" href="../Advanced/index.html" />
-    <link rel="prev" title="Scenario 3: Send email to some students with personalised text" href="../Scenarios/scenario_03/index.html" />
+    <link rel="next" title="5.1. Create an empty workflow" href="Tasks/create_workflow.html" />
+    <link rel="prev" title="4.3. Scenario 3: Send email to some students with personalised text" href="../Scenarios/scenario_03/index.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -34,60 +34,35 @@
           <div class="body" role="main">
             
   <div class="section" id="tutorial">
-<span id="id1"></span><h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
-<p>Before you start the tutorial make sure you have an instructor account in an
-OnTask server. Also, download and unpack the zip file <a class="reference download internal" download="" href="../_downloads/bee6c8716f1bd05318788d707bfc9399/dataset.zip"><code class="xref download docutils literal notranslate"><span class="pre">dataset.zip</span></code></a> that contains a synthetic data set
-with the following files: <code class="docutils literal notranslate"><span class="pre">student_list.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">midterm_results.csv</span></code>,
-<code class="docutils literal notranslate"><span class="pre">forum_participation.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">blended_participation.csv</span></code> and <code class="docutils literal notranslate"><span class="pre">all_data.csv</span></code>.
-The data has been extracted from the hypothetical scenario shown in the
-following figure.</p>
+<span id="id1"></span><h1>5. Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<p>The OnTask tutorial is organized as a set of tasks that are done using a set of files that contain data, actions, and other additional elements. Before attempting any of the tasks make sure you have an instructor account in an OnTask server and download and unpack the zip file <a class="reference download internal" download="" href="../_downloads/bee6c8716f1bd05318788d707bfc9399/dataset.zip"><code class="xref download docutils literal notranslate"><span class="pre">dataset.zip</span></code></a>. Once unpacked, you should have a folder with the following files in it: <code class="docutils literal notranslate"><span class="pre">student_list.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">midterm_results.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">forum_participation.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">blended_participation.csv</span></code> and <code class="docutils literal notranslate"><span class="pre">all_data.csv</span></code>. These files assume a hypothetical scenario shown in the following figure.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/the_dataset.png"><img alt="../_images/the_dataset.png" src="../_images/the_dataset.png" style="width: 100%;" /></a>
 </div>
-<p>We assume that a learning experience is through its sixth week. From weeks 2
-to 5 learners were engaging with two videos and to set of questions per week.
-In Week 6 students took a midterm examination consisting of 10 questions
-(about 5 topics, 2 question per topic). Additionally, during these six weeks
-a discussion forum has been available for them to make comments. The
-information contained in each file is:</p>
+<p>We assume that a learning experience is through its sixth week. From weeks 2 to 5 learners were engaging with two videos and to set of questions per week. In Week 6 students took a midterm examination consisting of 10 questions (about 5 topics, 2 question per topic). Additionally, during these six weeks a discussion forum has been available for them to make comments. The information contained in each file is:</p>
 <dl class="docutils">
 <dt><code class="docutils literal notranslate"><span class="pre">student_list.csv</span></code></dt>
-<dd>File with student id (SID), email, name, gender, course id (<cite>UOS Code</cite>),
-Degree (<cite>FSCI</cite>, <cite>FEIT</cite>, <cite>FASS</cite> or <cite>SMED</cite>), type of enrolment (<cite>HECS</cite>,
-<cite>Local</cite> or <cite>International</cite>) and attendance (Full Time or Part Time).</dd>
+<dd>File with student id (SID), Identifier (an auxiliary field), email, surname, given name, middle initial, gender, course code, program (<cite>FSCI</cite>, <cite>FEIT</cite>, <cite>FASS</cite> or <cite>SMED</cite>), type of enrolment (<cite>HECS</cite>, <cite>Local</cite> or <cite>International</cite>) and attendance (Full Time or Part Time).</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">midterm_results.csv</span></code></dt>
-<dd>File with student id (SID), email, name, the result of the 10 multiple
-choice questions (1 means correct, 0 means incorrect) and the total exam
-score (0-100).</dd>
+<dd>File with student id (SID), email, last name, first name, the result of the 10 multiple choice questions (1 means correct, 0 means incorrect) and the total exam score (0-100).</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">forum_participation.csv</span></code></dt>
-<dd>File with student id (SID), days online, views, contributions and questions
-for weeks 2-5, and the accumulated value for all weeks.</dd>
+<dd>File with student id (SID), days online, views, contributions and questions for weeks 2-5, and the accumulated value for all weeks.</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">blended_participation.csv</span></code></dt>
-<dd>File with student id (SID), Video, questions answered, and questions
-answered correctly (for two items) for weeks 2-5.</dd>
+<dd>File with student id (SID), Video, questions answered, and questions answered correctly (for two items) for weeks 2-5.</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">all_data.csv</span></code></dt>
 <dd>All data from the previous files properly combined into a single file.</dd>
 </dl>
-<p>Remember the three central concepts in OnTask:</p>
+<p>The three central concepts in OnTask are:</p>
 <dl class="docutils">
 <dt>Workflow</dt>
-<dd>A container with the data (table), a set of procedures to manipulate
-columns, data upload and a set of actions. This entity is typically
-associated with a course, but it could also model an entire degree.</dd>
+<dd>A container with the data (table), a set of procedures to manipulate columns, data upload and a set of actions. This entity is typically associated with a course, but it could also model an entire degree.</dd>
 <dt>Table</dt>
-<dd>A two-dimensional structure in which each row represents a learner, and
-each column a learner attribute such as the score in an assessment, class
-attendance, number of interventions in the discussion forum, engagement with
-videos, etc.</dd>
+<dd>A two-dimensional structure in which each row represents a learner, and each column a learner attribute such as the score in an assessment, class attendance, number of interventions in the discussion forum, engagement with videos, etc.</dd>
 <dt>Actions</dt>
 <dd><p class="first">An action in OnTask can be one of two entities:</p>
 <ul class="last simple">
-<li>A HTML resource of which certain parts are included or excluded based on
-a set of <strong>conditions</strong> created with the learner attributes (for example,
-number of interventions in the forum is larger than five, and number of
-times a video was watched is larger than 2).</li>
-<li>A set of questions that are shown to the students and their answers are
-incorporated to the data table.</li>
+<li>A HTML resource of which certain parts are included or excluded based on a set of <strong>conditions</strong> created with the learner attributes (for example, number of interventions in the forum is larger than five, and number of times a video was watched is larger than 2).</li>
+<li>A set of questions that are shown to the students and their answers are incorporated to the data table.</li>
 </ul>
 </dd>
 </dl>
@@ -95,635 +70,64 @@ incorporated to the data table.</li>
 <div class="figure align-center">
 <img alt="../_images/drawing.png" src="../_images/drawing.png" />
 </div>
-<p>The next sections explain how to perform various operations in OnTask.</p>
-<div class="section" id="create-a-workflow">
-<span id="create-workflow"></span><h2>Create a workflow<a class="headerlink" href="#create-a-workflow" title="Permalink to this headline">¶</a></h2>
-<p>Log into the tool and click in the tool icon on the top left corner of the
-screen. If you have an instructor account, you will see the buNew tton to
-create a new workflow as shown in the following figure.</p>
-<div class="figure align-center">
-<img alt="../_images/workflow_index_empty.png" src="../_images/workflow_index_empty.png" />
-</div>
-<p>The icon in the top right corner next to your profile image is a link to the
-OnTask documentation. Click in the button to create a new workflow and enter
-its name and a description.</p>
-<div class="figure align-center">
-<img alt="../_images/workflow_create.png" src="../_images/workflow_create.png" />
-</div>
-<p>After creating the workflow opens it and shows the screen to
-upload data to the table. The current workflow is shown underneath the top
-menu as shown in the following figure (the string <em>BIOL1011</em> with a blue
-background).</p>
-<div class="figure align-center">
-<img alt="../_images/dataops_datauploadmerge.png" src="../_images/dataops_datauploadmerge.png" />
-</div>
-<p>You can always click in the <em>Workflows</em> item at the top menu to go back to
-the home page and select a different workflow to open (or create a new one).</p>
-<div class="figure">
-<img alt="../_images/workflow_index.png" src="../_images/workflow_index.png" />
-</div>
-<p>From the home page you can also perform some additional operations in the
-worklow such as <a class="reference internal" href="../Using/index.html#details-rename"><span class="std std-ref">rename and change the workflow
-description</span></a>, <a class="reference internal" href="../Using/index.html#details-clone"><span class="std std-ref">cloning (or creating and
-exact replica of this workflow with another name)</span></a>,
-<a class="reference internal" href="../Using/index.html#details-flush-data"><span class="std std-ref">delete all data in the workflow table</span></a>, or
-<a class="reference internal" href="../Using/index.html#details-delete"><span class="std std-ref">delete the workflow</span></a>.</p>
-<div class="section" id="open-a-workflow">
-<h3>Open a workflow<a class="headerlink" href="#open-a-workflow" title="Permalink to this headline">¶</a></h3>
-<p>When you open a workflow, a page with its details is shown like the one in
-the following figure</p>
-<div class="figure align-center">
-<img alt="../_images/workflow_details_empty.png" src="../_images/workflow_details_empty.png" />
-</div>
-<p>In this case the page only shows basic details because the workflow does not
-have any data stored in its table. While the workflow is open, the top menu
-contains the following links:</p>
-<dl class="docutils">
-<dt>Details</dt>
-<dd>Is the current page that shows information about the columns, data types,
-number of actions, etc. contained in the workflow (empty now because we
-haven’t populated it)</dd>
-<dt>Table</dt>
-<dd>Operations to visualize and manipulate the table (search for values, add a
-row, add a column)</dd>
-<dt>Actions</dt>
-<dd>Create, edit and execute actions.</dd>
-<dt>Logs</dt>
-<dd>A table showing the history of operations performed on this workflow</dd>
-</dl>
-<p>In the current <em>Details</em> page, immediately under the title there are buttons
-to perform the following operations:</p>
-<ul class="simple">
-<li>Manage table data<ul>
-<li><a class="reference internal" href="#data-upload"><span class="std std-ref">Upload or merge data to the table</span></a></li>
-<li><a class="reference internal" href="../Using/index.html#plugin-run"><span class="std std-ref">Run a plugin to transform the data in the table</span></a></li>
+<p>The following tasks illustrate the different functionality available in OnTask for the scenario.</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Tasks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tasks/create_workflow.html">5.1. Create an empty workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tasks/open_workflow.html">5.2. Open a workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tasks/data_upload.html">5.3. Data Upload</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tasks/workflow_details.html">5.4. Workflow Details</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/workflow_details.html#adding-columns">5.4.1. Adding columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/workflow_details.html#uploading-or-merging-additional-data">5.4.2. Uploading or Merging additional data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/workflow_details.html#workflow-operations">5.4.3. Workflow operations</a></li>
 </ul>
 </li>
-<li>Workflow operations:<ul>
-<li><a class="reference internal" href="../Using/index.html#details-attributes"><span class="std std-ref">Edit the attributes</span></a></li>
-<li><a class="reference internal" href="../Using/index.html#details-export"><span class="std std-ref">Export the workflow</span></a></li>
-<li><a class="reference internal" href="../Using/index.html#details-rename"><span class="std std-ref">Rename or change the workflow description</span></a></li>
-<li><a class="reference internal" href="../Using/index.html#details-sharing"><span class="std std-ref">Share the workflow with other users in the platform</span></a></li>
-<li><a class="reference internal" href="../Using/index.html#details-clone"><span class="std std-ref">Clone the workflow</span></a></li>
-<li><a class="reference internal" href="../Using/index.html#details-flush-data"><span class="std std-ref">Flush the data in the table</span></a></li>
-<li><a class="reference internal" href="../Using/index.html#details-delete"><span class="std std-ref">Delete the workflow</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tasks/table.html">5.5. Browsing the data table</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/table.html#table-views">5.5.1. Table Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/table.html#column-and-row-statistics">5.5.2. Column and Row Statistics</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="Tasks/actions.html">5.6. Actions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/actions.html#personalized-text-action">5.6.1. Personalized text action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/actions.html#personalized-json-action">5.6.2. Personalized JSON action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/actions.html#surveys-and-or-polls">5.6.3. Surveys and/or Polls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/actions.html#combining-personalized-text-and-surveys">5.6.4. Combining personalized text and surveys</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tasks/send_email.html">5.7. Sending Personalized Text through Email</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/send_email.html#final-look-before-pushing-the-go-button">5.7.1. Final look before pushing the GO button</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tasks/personalized_text_url.html">5.8. Making content available through OnTask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tasks/zip_download.html">5.9. Download a ZIP (and upload it in Moodle)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/zip_download.html#use-the-zip-file-to-upload-feedback-in-moodle">5.9.1. Use the ZIP file to upload feedback in Moodle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tasks/scheduling.html">5.10. Scheduling Actions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/scheduling.html#scheduling-personalized-text-actions">5.10.1. Scheduling Personalized Text Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/scheduling.html#scheduling-personalized-json-actions">5.10.2. Scheduling Personalized JSON Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/scheduling.html#checking-the-scheduled-execution">5.10.3. Checking the scheduled execution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tasks/merging.html">5.11. Merging Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tasks/database_upload.html">5.12. Uploading Data from a Remote Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tasks/plugin_write.html">5.13. Plugins: Write your own data processing code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/plugin_write.html#example-a-predictive-model">5.13.1. Example: A Predictive Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tasks/api.html">5.14. Application Programming Interface (API)</a></li>
 </ul>
 </div>
-</div>
-<div class="section" id="data-upload">
-<span id="id2"></span><h2>Data Upload<a class="headerlink" href="#data-upload" title="Permalink to this headline">¶</a></h2>
-<p>We now will upload the data included in the file
-<a class="reference download internal" download="" href="../_downloads/d02e591eb347056ce48efb314f604d7f/student_list.csv"><code class="xref download docutils literal notranslate"><span class="pre">student_list.csv</span></code></a>.
-From the page showing the <em>Details</em> of the workflow, click in the <em>Manage
-table data</em> button and select the option <em>Upload or merge data</em>:</p>
-<div class="figure align-center">
-<img alt="../_images/dataops_datauploadmerge.png" src="../_images/dataops_datauploadmerge.png" />
-</div>
-<p>Click in the <em>CSV Upload/Merge</em> button. The next screen asks you to choose a
-file to upload the data. A CSV file is a text file in which the data is
-organized by lines, and the data in the lines are separated by commas. A
-conventional spreadsheet program can save the data in this format. When
-uploading the file you can optionally specify a number of lines to skip at
-the top or bottom of your data file. This is useful when the CSV file is
-produced by another tool and contains some of these lines that have to be
-ignored.</p>
-<div class="figure align-center">
-<img alt="../_images/dataops_csvupload.png" src="../_images/dataops_csvupload.png" />
-</div>
-<p>Choose the file <a class="reference download internal" download="" href="../_downloads/d02e591eb347056ce48efb314f604d7f/student_list.csv"><code class="xref download docutils literal notranslate"><span class="pre">student_list.csv</span></code></a> and proceed to the next step. The next
-screen shows the name of the columns detected in the file, the type (also
-automatically detected), a pre-filled field with the column name (in case you
-want to change it), and if it is a <em>key column</em> (there are no repeated
-values in all the rows).</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_csv_upload_learner_information.png" src="../_images/tutorial_csv_upload_learner_information.png" />
-</div>
-<p>The <em>key</em> columns are highlighted because a workflow must have at least one
-column of this type. Select all the column (clicking in the top
-element labeled <em>load</em>) and click on the <em>Finish</em> button.</p>
-</div>
-<div class="section" id="workflow-details">
-<h2>Workflow Details<a class="headerlink" href="#workflow-details" title="Permalink to this headline">¶</a></h2>
-<p>The details page now shows the information about the columns as well as some
-additional operations for the workflow.
-You can now see the information about the columns present in the workflow as
-shown in the following figure:</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_details_1.png" src="../_images/tutorial_details_1.png" />
-</div>
-<div class="section" id="adding-columns">
-<span id="tutorial-add-columns"></span><h3>Adding columns<a class="headerlink" href="#adding-columns" title="Permalink to this headline">¶</a></h3>
-<p>The left button in the area right below the title with name <em>Add Column</em>
-allows you to perform the following three operation.</p>
-<dl class="docutils">
-<dt><a class="reference internal" href="../Using/index.html#details-add-column"><span class="std std-ref">Add a new column</span></a></dt>
-<dd>Use this function to add a new column to the data table manualy (as opposed
-to the ones that were automatically derived from the CSV file you uploaded.</dd>
-<dt><a class="reference internal" href="../Using/index.html#details-add-formula-column"><span class="std std-ref">Add a formula-based column</span></a></dt>
-<dd>This function is to create a new column containing the result of the data
-from existing columns combined with certain basic operands.</dd>
-<dt><a class="reference internal" href="../Using/index.html#details-add-random-column"><span class="std std-ref">Add a column with random values</span></a></dt>
-<dd><dl class="first last docutils">
-<dt>This function is to populate a new column with values randomly taken from a</dt>
-<dd>pre-defined collection.</dd>
-</dl>
-</dd>
-</dl>
-</div>
-<div class="section" id="uploading-or-merging-additional-data">
-<h3>Uploading or Merging additional data<a class="headerlink" href="#uploading-or-merging-additional-data" title="Permalink to this headline">¶</a></h3>
-<p>The button labeled <em>Manage table data</em> allows to execute the operation to
-upload/merge new data to the table, or to execute an existing plugin.</p>
-</div>
-<div class="section" id="workflow-operations">
-<h3>Workflow operations<a class="headerlink" href="#workflow-operations" title="Permalink to this headline">¶</a></h3>
-<p>The button with name <em>More workflow operations</em> offers the following
-additional operations in the current workflow.</p>
-<dl class="docutils">
-<dt>Workflow attributes</dt>
-<dd>You can define a set of <em>attributes</em> in the workflow. This is simply a set of
-pairs <em>name, value</em> that you can use to have a single place where a value is
-defined and then reused in several other locations. For example, the name
-of the course is probably going to appear in various communications with
-the learners. If you define the attribute <em>Course_name</em> with that value,
-you can then refer to the attribute and it will be replaced by its value.</dd>
-<dt>Export workflow</dt>
-<dd>This functionality allows you to take all the information included in a
-workflow and export it. The functionality offers the option of including in
-the export only the data, or the data and the actions.</dd>
-<dt>Rename workflow</dt>
-<dd>Use this function to change the name and description of the workflow.</dd>
-<dt>Share workflow</dt>
-<dd>You may share a workflow with other instructors in the platform. The <em>Share</em>
-button will allow you to add/remove other users to this list. The other
-users will not be able to flush the data or delete the workflow. Whenever
-you open a workflow, it becomes unavailable for the other users with whom
-it is being shared until you either select another workflow or your session
-expires.</dd>
-<dt>Clone workflow</dt>
-<dd>This button creates a clone of the workflow with the a name containing the
-prefix <em>Copy of</em>. Once the operation is executed, the workflow is
-available in the home screen (link in the upper left corner of the screen).</dd>
-<dt>Flush Data</dt>
-<dd>This function deletes the data associated with the workflow. It maintains the
-set of attributes and the actions, but it removes the conditions and filters
-from all the actions.</dd>
-<dt>Delete workflow</dt>
-<dd>This function deletes completely the workflow from the platform.</dd>
-</dl>
-</div>
-</div>
-<div class="section" id="browsing-the-table">
-<h2>Browsing the table<a class="headerlink" href="#browsing-the-table" title="Permalink to this headline">¶</a></h2>
-<p>Once the data has been uploaded, click in the <em>Table</em> link at the top of the
-screen to see the stored data:</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_initial_table.png" src="../_images/tutorial_initial_table.png" />
-</div>
-<p>The buttons at the top of the page offer the following functionaity:</p>
-<dl class="docutils">
-<dt>Add row</dt>
-<dd>It offers a page with a form to enter the data for a new row in the table.</dd>
-<dt>Add column</dt>
-<dd>These operations are the ones discussed in the section
-<a class="reference internal" href="#tutorial-add-columns"><span class="std std-ref">Adding columns</span></a>.</dd>
-<dt>Manage table data</dt>
-<dd>The operations to either upload/merge new data on the table, or transform
-its content executing pre-installed program in the platform (plugin).</dd>
-<dt>Dashboard</dt>
-<dd>This button leads to a page summarizing the content in each of the columns
-in the table. The values are shown as a histogram. For the columns with
-numeric values, a boxplot, minmum, maximum, mean, standard deviation and
-quartiles is also shown.</dd>
-<dt>CSV Download</dt>
-<dd>Allows to download a CSV file with the information currently shown in the
-screen.</dd>
-</dl>
-<div class="section" id="table-views">
-<h3>Table Views<a class="headerlink" href="#table-views" title="Permalink to this headline">¶</a></h3>
-<p>For tables with a large number of columns and/or rows OnTask allows you to
-define a <em>view</em> of the table that shows only a subset of it. To create a view
-click first in the <em>Views</em> button at the top of the page and then the <em>Add
-View</em> in the next page. Insert a name, description and select some of the
-columns a shown in the following figure.</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_table_view_create.png" src="../_images/tutorial_table_view_create.png" />
-</div>
-<p>Save the definition of the view and now click in the <em>Table</em> button in the
-operations for a vew. The appropriate table subset is shown. The buttons at the
-top of the page allow you to edit the view (change the rows and columns
-selected), or select another available view.</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_table_view.png" src="../_images/tutorial_table_view.png" />
-</div>
-</div>
-<div class="section" id="column-and-row-statistics">
-<h3>Column and Row Statistics<a class="headerlink" href="#column-and-row-statistics" title="Permalink to this headline">¶</a></h3>
-<p>If you click in the button with the column name in any of the table view and
-select the <em>Statistics</em>, OnTask shows a page with an statistical description
-of the values in that column. The analogous option is available through the
-<em>Operations</em> button in the row (left side of the table view). The page shows
-identical representations than in the case of the column stats, but for each
-column the words <em>Your value</em> appear in the location corresponding to the value
-in the row.</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_row_statistics.png" src="../_images/tutorial_row_statistics.png" />
-</div>
-</div>
-</div>
-<div class="section" id="actions">
-<h2>Actions<a class="headerlink" href="#actions" title="Permalink to this headline">¶</a></h2>
-<p>Access the <em>Actions</em> page clicking in the link with the same name in the  top
-of the screen. The next screen shows the list of actions that are part of
-the workflow, and the buttons to create a new one, import, or manage the data
-table.</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_action_index.png" src="../_images/tutorial_action_index.png" />
-</div>
-<div class="section" id="personalized-text-action">
-<h3>Personalized text action<a class="headerlink" href="#personalized-text-action" title="Permalink to this headline">¶</a></h3>
-<p>Click on the button to create a <em>New Action</em>, provide a name, a description
-(optional) and select the type <em>Personalized text</em>.</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_personalized_text_create.png" src="../_images/tutorial_personalized_text_create.png" />
-</div>
-<p>The next screen is the <em>personalized text action editor</em>. The functions are
-divided into three areas.</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_personalized_text_editor.png" src="../_images/tutorial_personalized_text_editor.png" />
-</div>
-<ol class="arabic simple">
-<li>This section allows to define a <em>filter</em>, or a condition to select a subset
-of the learners for which this action will be considered.</li>
-<li>This section contains the conditions to be used in the personalized text.</li>
-<li>This area is the HTML text editor to write the content to personalize.</li>
-</ol>
-<p>Place the cursor in the text area and start the text with a salutation. Then
-click in the pull down menu next to <em>Insert</em> with the value <em>Column name</em>.
-Select the column <em>GivenName</em>. The string <cite>{{ GivenName}}</cite> appears
-in the text area. This notation is to instruct the next steps to replace the
-value among double curly braces with the name of each student.</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_personalized_text_editor_with_column.png" src="../_images/tutorial_personalized_text_editor_with_column.png" />
-</div>
-<p>Click now in the button <em>New</em> in the condition area. A form appears to
-introduce the name, description and formula. The formula may contain any
-combination of Boolean operators with respect to the column values. For
-example, the condition:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Program</span> <span class="n">equal</span> <span class="n">to</span> <span class="n">FASS</span>
-</pre></div>
-</div>
-<p>can be encoded in the formula widget as shown in the following figure</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_condition_program_FASS.png" src="../_images/tutorial_condition_program_FASS.png" />
-</div>
-<p>We now use this condition to control the appearance of text in the editor.</p>
-<ul class="simple">
-<li>Write a sentence in the editor below the greeting.</li>
-<li>Select it</li>
-<li>Click in the arrow button next to the condition name and select <em>Insert in
-text</em>.</li>
-</ul>
-<div class="figure align-center">
-<img alt="../_images/tutorial_personalized_text_condition_inserted.png" src="../_images/tutorial_personalized_text_condition_inserted.png" />
-</div>
-<p>The text area is then surrounded by two marks:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">Program</span> <span class="ow">is</span> <span class="n">FASS</span> <span class="o">%</span><span class="p">}</span><span class="n">Here</span> <span class="n">are</span> <span class="n">some</span> <span class="n">suggestions</span> <span class="k">for</span> <span class="n">FASS</span><span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
-</pre></div>
-</div>
-<p>This is the format to instruct the processing step to check the value of
-the condition <code class="docutils literal notranslate"><span class="pre">Program</span> <span class="pre">is</span> <span class="pre">FASS</span></code> and include the surrounded text only if
-the condition is true.</p>
-<p>Repeat the procedure and create three more conditions such that they are true
-if the value of the <em>Program</em> columns is equal to <em>FSCI</em>, <em>FEIT</em>, and <em>SMED</em>
-respectively. Insert three more messages in the text area that are controled
-by their respective conditions. At the end, each sentence will be surrounded
-by text referring to each of the four conditions you created:</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_personalized_text_condition_inserted2.png" src="../_images/tutorial_personalized_text_condition_inserted2.png" />
-</div>
-<div class="section" id="selecting-only-a-subset-of-learners">
-<h4>Selecting only a subset of learners<a class="headerlink" href="#selecting-only-a-subset-of-learners" title="Permalink to this headline">¶</a></h4>
-<p>In some cases, you may want to create a personalized text only for a subset of
-the learners. This can be done defining a <em>Filter</em> at the top of the screen
-(area 1). For example, the following filter:</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_personalized_text_filter.png" src="../_images/tutorial_personalized_text_filter.png" />
-</div>
-<p>selects only those learners for which the column <em>Attendance</em> in the table
-has the value <em>Full Time</em>. Upon closing the small window with the filter
-data, the editor screen contains information about how many learners are
-being selected by that filter.</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_personalized_text_editor2.png" src="../_images/tutorial_personalized_text_editor2.png" />
-</div>
-<p>The application will show a message if the filter excludes all the learners
-(none of them satisfy the condition given in the filter).</p>
-<p>The text in the editor will be processed for each row in the table (or the
-subset specified by the filter) and all conditions and fields will be evaluated
-with the values in that row. In other words, if a sentence is
-surrounded by one condition, the condition is evaluated replacing the column
-names by the values in the row. If the condition is <em>True</em>, the text will
-appear, and if not, it will be ignored.</p>
-<p>The botton with name <em>Preview</em> at the bottom of the editor allows you to see
-the text resulting from the evaluation of each row.</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_personalized_text_preview.png" src="../_images/tutorial_personalized_text_preview.png" />
-</div>
-<p>The bottom part of the screen shows the values of those columns that were
-used to evaluate the conditions required in the text. You may use the arrows
-at the top of the screen to review the message and see how it is changing
-from learner to learner.</p>
-</div>
-<div class="section" id="sending-emails">
-<h4>Sending Emails<a class="headerlink" href="#sending-emails" title="Permalink to this headline">¶</a></h4>
-<p>Once you have created a personalized text, you may want to send emails to the
-learners (or the subset selected by the filter, if defined). First click in
-the <em>Save</em> button to store the content of the the personalized text. The
-platform shows the page with all the actions in the workflow. Click in the
-button with name <em>Email</em> in the operations of the action you just created. The
-following form appears in the screen:</p>
-<div class="figure align-center">
-<img alt="../_images/action_personalized_text_email.png" src="../_images/action_personalized_text_email.png" />
-</div>
-<p>The form allows you to specify eight fields:</p>
-<dl class="docutils">
-<dt>Email subject</dt>
-<dd>String to use as subject for all the emails.</dd>
-<dt>Column to use as email address</dt>
-<dd>This is the name of the column in the table from where to extract the email
-address to use in the <em>To</em> field of the email.</dd>
-<dt>Comma separated list of CC emails</dt>
-<dd>This is useful when you want to send the emails with copy to other users.
-The CC emails must be separated by commas (e.g. <em>user1&#64;bogus.com,
-user2&#64;bogus.com</em>)</dd>
-<dt>Comma separated list of BCC emails</dt>
-<dd>Field analogous to the previous one except that the values are used in the
-blind copy of the email.</dd>
-<dt>Send you a summary message?</dt>
-<dd>If selected platform will send you (the email you used to log in) a message
-with a summary of the operation once all emails are sent.</dd>
-<dt>Track email reading in an extra column?</dt>
-<dd>If selected the platform will insert an extra column in the table
-containing the number of times each email has been opened (this counter,
-though, may not have a correct value as it depends on the configuration of
-external programs)</dd>
-<dt>Download a snapshop of the worfklow</dt>
-<dd>When selected, the platform saves the workflow in its current state. This
-function is useful to keep an exact replica of the state of the actions,
-conditions and data when the data was sent. The resulting file can then be
-imported (see the <em>Import workflow</em> in the home page) to check the content
-of the emails.</dd>
-<dt>Check/exclude email addresses before sending</dt>
-<dd><dl class="first last docutils">
-<dt>If selected the platform will offer you a last chance to specify some email</dt>
-<dd>addresses to <em>exclude</em> from the emails. This may be useful if you want to
-remove a small amount of addresses that you know they should not be
-considered but they cannot be easily removed with the use of the action
-filter.</dd>
-</dl>
-</dd>
-</dl>
-<p>The button <em>Preview</em> at the bottom of the page offers the same functionality
-than in the editor, preview the final appearance of the messages that will be
-sent out to the learners (with the subject).</p>
-</div>
-<div class="section" id="making-content-available-through-ontask">
-<h4>Making content available through OnTask<a class="headerlink" href="#making-content-available-through-ontask" title="Permalink to this headline">¶</a></h4>
-<p>An alternative to send an email is to make the personalized text available
-through a URL that is provided by OnTask. This URL can be enabled by clicking
-in the <em>URL</em> button of the action operations.</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_personalzed_text_URL.png" src="../_images/tutorial_personalzed_text_URL.png" />
-</div>
-<p>If learners are allowed to connect to OnTask (they have an account), their
-email is part of the data stored in the workflow,  and the access to the
-platform can be done through a Single Sign-on system (e.g. LTI through a
-learning management system), the URL shown in the  previous figure will allow
-them to access the personalized text.</p>
-</div>
-</div>
-<div class="section" id="surveys-and-or-polls">
-<h3>Surveys and/or Polls<a class="headerlink" href="#surveys-and-or-polls" title="Permalink to this headline">¶</a></h3>
-<p>Personalized texts can be very powerful to offer students content, comments,
-or point them to resources selected based on the available data. This data
-may come from sources such as student information systems or the learning
-management system. However, in some cases we would like to obtain data either
-directly from the students, or perhaps from the instructors through
-observation. This functionality is offered in OnTask through the actions
-called <em>Surveys</em>. These surveys collect information from the students (or the
-instructors) through conventional web forms and the data is automatically
-added to the workflow table and available to be explored through the
-dashboard or statistics.</p>
-<p>The first step to create a survey is to go to the <em>Actions</em> page, click in
-the <em>New action</em> button, provide a name, a description (optional) and select
-the action type <em>Survey</em>:</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_survey_create.png" src="../_images/tutorial_survey_create.png" />
-</div>
-<p>After the survey is created, the following screen is shown</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_survey_editor.png" src="../_images/tutorial_survey_editor.png" />
-</div>
-<p>The editor is divided into five areas:</p>
-<dl class="docutils">
-<dt>Filter learners</dt>
-<dd>An expression identical to the one used in the personalized text to select a
-subset of the learners for which the will be available.</dd>
-<dt>Description</dt>
-<dd>Text describing the survey that is shown to the learners.</dd>
-<dt>Key column to identify learners</dt>
-<dd>The key column in the table that will be used to identify the users when
-submitting their answers. This is typically the column that contains the
-user email.</dd>
-<dt>Shuffle questions</dt>
-<dd>If selected, the questions in the survey will be shuffled when shown to the
-learners.</dd>
-<dt>Columns to obtain and store the data</dt>
-<dd>The columns used to collect the data. In this action, a column is
-equivalent to a question. The description of the column is the text of the
-question. In this part of the editor you may either use one of the
-existing columns as question, create a new column (or
-question), or create a new derived one (the initial values are created by
-combining values from other columns).</dd>
-</dl>
-<p>This page will show you a warning message if any of the columns used in the
-survey has an empty description. Let’s suppose you want to ask the learners
-two questions:</p>
-<ul class="simple">
-<li>What was the most challenging topic for you this week?</li>
-<li>What was your dedication to the course this week?</li>
-</ul>
-<p>To make the data suitable for further processing, we will create the two
-questions/columns with a set of pre-defined answers. Use the <em>Add new column</em>
-button to create two columns of type string and provide the allowed answer
-values as a comma-separated list.</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_survey_column_creation.png" src="../_images/tutorial_survey_column_creation.png" />
-</div>
-<p>After creating the column, insert it in the survey by selecting it with the
-pull down menu. Repeat the procedure for the second question/column. You can
-now add these columns to the action and the editor will show them in the
-table at the bottom as shown in the following figure:</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_survey_editor2.png" src="../_images/tutorial_survey_editor2.png" />
-</div>
-<p>As in the case of the personalized text action, the <em>Preview</em> button allows
-you to verify how will the learners see the content:</p>
-<div class="figure align-center">
-<img alt="../_images/tutorial_survey_preview.png" src="../_images/tutorial_survey_preview.png" />
-</div>
-<p>Once created, you may select the URL from the action as it was described for
-the personalized text and make it available for learners to enter their
-answers. The data will be automatically added to the table.</p>
-<p>The <em>Run</em> button in the survey actions allows an instructor to introduce the
-survey answers for multiple learners. This functionality is used for
-instructors to enter observations when interacting with learners. The table
-search functionality allows to find the learners quickly and then click in
-their survey execution and enter the data.</p>
-</div>
-<div class="section" id="combining-personalized-text-and-surveys">
-<h3>Combining personalized text and surveys<a class="headerlink" href="#combining-personalized-text-and-surveys" title="Permalink to this headline">¶</a></h3>
-<p>The information collected through surveys can be used in a personalized text
-action. The survey data is stored in regular columns in the table. These
-columns can then be used as part of the conditions or filter in a
-personalized text. For example, the information collected as answers to the
-question <em>What was the most challenging topic for you this week?</em> can be used
-to select a set of adequate links to resources to help learners with the
-given topic.</p>
-</div>
-</div>
-<div class="section" id="scheduling-emails">
-<h2>Scheduling Emails<a class="headerlink" href="#scheduling-emails" title="Permalink to this headline">¶</a></h2>
-<p>Work in progress.</p>
-</div>
-<div class="section" id="merging-data">
-<h2>Merging Data<a class="headerlink" href="#merging-data" title="Permalink to this headline">¶</a></h2>
-<p>Work in progress</p>
-</div>
-<div class="section" id="uploading-data-from-a-remote-database">
-<h2>Uploading Data from a Remote Database<a class="headerlink" href="#uploading-data-from-a-remote-database" title="Permalink to this headline">¶</a></h2>
-<p>Work in progress</p>
-</div>
-<div class="section" id="plugins-write-your-own-data-processing-code">
-<h2>Plugins: Write your own data processing code<a class="headerlink" href="#plugins-write-your-own-data-processing-code" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="example-a-predictive-model">
-<h3>Example: A Predictive Model<a class="headerlink" href="#example-a-predictive-model" title="Permalink to this headline">¶</a></h3>
-<p>Suppose that your favorite data analyst has processed the data set and created a predictive model that estimates the score of the final exam based on the value of the column <em>Contributions</em> applying the following linear equation:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">final</span> <span class="n">exam</span> <span class="n">score</span> <span class="o">=</span> <span class="mf">3.73</span> <span class="o">*</span> <span class="n">Contributions</span> <span class="o">+</span> <span class="mf">25.4</span>
-</pre></div>
-</div>
-<p>You would like to incorporate this model to the workflow and use the predicted final exam score as another column to create conditions and personalize content. One way to achieve this is by creating a plugin that given the two coefficients of a linear model (in the example 3.73 and 25.4) returns a new data set with a column with the values obtained using the corresponding equation. In order for the plugin to comply with the  <a class="reference internal" href="../Using/index.html#plugin-requirements"><span class="std std-ref">requirements</span></a>, one possible definition would be:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span><span class="p">,</span> <span class="n">print_function</span>
-
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-
-<span class="c1"># The field class_name contains the name of the class to load to execute the</span>
-<span class="c1"># plugin.</span>
-<span class="n">class_name</span> <span class="o">=</span> <span class="s1">&#39;OntaskTestPlugin&#39;</span>
-
-
-<span class="k">class</span> <span class="nc">OntaskTestPlugin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Example of a class that implements the OnTask plugin interface. The</span>
-<span class="sd">    objects of this class have to provide the following elements:</span>
-
-<span class="sd">    1. name: Plugin name show to the users.</span>
-
-<span class="sd">    2. description_txt: A string with the detailed description of what the</span>
-<span class="sd">    plugin does</span>
-
-<span class="sd">    3. input_column_names: A potentially empty list of column names (strings).</span>
-<span class="sd">    If the list is empty, the columns are selected by the userat execution</span>
-<span class="sd">    time.</span>
-
-<span class="sd">    4. output_column_names: Non empty list of names (strings) of the columns</span>
-<span class="sd">    to be used for the output of the transformation.</span>
-
-<span class="sd">    5. parameters: an optionally empty list with tuples with the following</span>
-<span class="sd">      structure:</span>
-
-<span class="sd">      (&#39;name&#39;, type, [list of allowed values], initial value, help_text)</span>
-
-<span class="sd">      These elements will be requested from the user before executing the</span>
-<span class="sd">      plugin through a form. The conditions on these values are:</span>
-
-<span class="sd">      - name must be a string</span>
-<span class="sd">      - type must be a string equal to &quot;integer&quot;, &quot;double&quot;, &quot;string&quot;, </span>
-<span class="sd">        &quot;datetime&quot; or &quot;boolean&quot;. </span>
-<span class="sd">      - The list of values is to restrict the</span>
-<span class="sd">        possible values</span>
-<span class="sd">      - The initial value must be of the type specified by the second </span>
-<span class="sd">        element.</span>
-<span class="sd">      - Help_text a string to show as help text</span>
-
-<span class="sd">    6. method &quot;run&quot; that receives:</span>
-<span class="sd">       - a pandas data frame with the data to process</span>
-<span class="sd">       - a string with the name of the key column that will be used to merge</span>
-<span class="sd">       the result.</span>
-<span class="sd">       - A dictionary of pairs (name, value) with the parameters described in</span>
-<span class="sd">       the previous element.</span>
-
-<span class="sd">       and returns a result Pandas data frame. This frame **must** have one</span>
-<span class="sd">       column with the key column name provided so that it can be properly</span>
-<span class="sd">       merged with the existing data.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Test Plungin 1 Name&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">description_txt</span> <span class="o">=</span> <span class="s1">&#39;Test Plugin 1 Description Text&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">input_column_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_column_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;RESULT 1&#39;</span><span class="p">,</span> <span class="s1">&#39;RESULT 2&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="s1">&#39;param string&#39;</span><span class="p">,</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="s1">&#39;v2&#39;</span><span class="p">],</span> <span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="s1">&#39;help param string&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;param integer&#39;</span><span class="p">,</span> <span class="s1">&#39;integer&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="bp">None</span><span class="p">,</span> <span class="s1">&#39;help param integer&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;param double&#39;</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">],</span> <span class="bp">None</span><span class="p">,</span>
-                             <span class="s1">&#39;help param double&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;param boolean&#39;</span><span class="p">,</span> <span class="s1">&#39;boolean&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;help param boolean&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;param datetime&#39;</span><span class="p">,</span> <span class="s1">&#39;datetime&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="s1">&#39;2018-05-25 18:03:00+09:30&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;help param datetime&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;param datetime2&#39;</span><span class="p">,</span> <span class="s1">&#39;datetime&#39;</span><span class="p">,</span> 
-                                <span class="p">[],</span>
-                                <span class="s1">&#39;2018-05-25 18:03:00+09:30&#39;</span><span class="p">,</span>
-                                <span class="s1">&#39;help param datetime&#39;</span><span class="p">),</span>
-        <span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_frame</span><span class="p">,</span> <span class="n">merge_key</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="nb">dict</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Method to overwrite. Receives a data frame wih a number of columns</span>
-<span class="sd">        stipulated by the num_column_input pair, the name of a key column and a</span>
-<span class="sd">        dictionary with parameters of the form name, value.</span>
-
-<span class="sd">        Runs the algorithm and returns a pandas data frame structure that is</span>
-<span class="sd">        merged with the existing data frame in the workflow using the merge_key.</span>
-
-<span class="sd">        :param data_frame: Input data for the plugin</span>
-<span class="sd">        :param merge_key: Name of the column key that will be used for merging</span>
-<span class="sd">        :param parameters: Dictionary with (name, value) pairs.</span>
-
-<span class="sd">        :return: a Pandas data_frame to merge with the existing one (must</span>
-<span class="sd">        contain a column with name merge_key)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># Extract the key column from the given data frame</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data_frame</span><span class="p">[</span><span class="n">merge_key</span><span class="p">])</span>
-
-        <span class="c1"># Process the given data and create the result</span>
-        <span class="n">result</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">output_column_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">result</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">output_column_names</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">2</span>
-
-        <span class="k">return</span> <span class="n">result</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="application-programming-interface-api">
-<h2>Application Programming Interface (API)<a class="headerlink" href="#application-programming-interface-api" title="Permalink to this headline">¶</a></h2>
-<p>Work in progress</p>
-</div>
+<blockquote>
+<div>Tasks/manage_attributes
+Tasks/export_workflow
+Tasks/rename_workflow
+Tasks/share_workflow
+Tasks/clone_workflow
+Tasks/flush_workflow
+Tasks/delete_workflow
+Tasks/send_json</div></blockquote>
 </div>
 
 
@@ -732,7 +136,7 @@ given topic.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">OnTask (B.3.1.0)</a></h1>
+<h1 class="logo"><a href="../index.html">OnTask (B.3.2.0)</a></h1>
 
 
 
@@ -744,52 +148,36 @@ given topic.</p>
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../Introduction/index.html">What is OnTask</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Install/index.html">Installation process</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Using/index.html">Using the tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Scenarios/index.html">Use Scenarios</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#create-a-workflow">Create a workflow</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#open-a-workflow">Open a workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction/index.html">1. What is OnTask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Install/index.html">2. Installation process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Using/index.html">3. Using the tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Scenarios/index.html">4. Use Scenarios</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/create_workflow.html">5.1. Create an empty workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/open_workflow.html">5.2. Open a workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/data_upload.html">5.3. Data Upload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/workflow_details.html">5.4. Workflow Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/table.html">5.5. Browsing the data table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/actions.html">5.6. Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/send_email.html">5.7. Sending Personalized Text through Email</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/personalized_text_url.html">5.8. Making content available through OnTask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/zip_download.html">5.9. Download a ZIP (and upload it in Moodle)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/scheduling.html">5.10. Scheduling Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/merging.html">5.11. Merging Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/database_upload.html">5.12. Uploading Data from a Remote Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/plugin_write.html">5.13. Plugins: Write your own data processing code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tasks/api.html">5.14. Application Programming Interface (API)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#data-upload">Data Upload</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#workflow-details">Workflow Details</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#adding-columns">Adding columns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#uploading-or-merging-additional-data">Uploading or Merging additional data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#workflow-operations">Workflow operations</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#browsing-the-table">Browsing the table</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#table-views">Table Views</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#column-and-row-statistics">Column and Row Statistics</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#actions">Actions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#personalized-text-action">Personalized text action</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#surveys-and-or-polls">Surveys and/or Polls</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#combining-personalized-text-and-surveys">Combining personalized text and surveys</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#scheduling-emails">Scheduling Emails</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#merging-data">Merging Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#uploading-data-from-a-remote-database">Uploading Data from a Remote Database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plugins-write-your-own-data-processing-code">Plugins: Write your own data processing code</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#example-a-predictive-model">Example: A Predictive Model</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#application-programming-interface-api">Application Programming Interface (API)</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../Advanced/index.html">Advanced Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Advanced/index.html">6. Advanced Features</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../Scenarios/scenario_03/index.html" title="previous chapter">Scenario 3: Send email to some students with personalised text</a></li>
-      <li>Next: <a href="../Advanced/index.html" title="next chapter">Advanced Features</a></li>
+      <li>Previous: <a href="../Scenarios/scenario_03/index.html" title="previous chapter">4.3. Scenario 3: Send email to some students with personalised text</a></li>
+      <li>Next: <a href="Tasks/create_workflow.html" title="next chapter">5.1. Create an empty workflow</a></li>
   </ul></li>
 </ul>
 </div>
@@ -813,7 +201,7 @@ given topic.</p>
       &copy;Content Licensed under Creative Commons BY 3.0.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

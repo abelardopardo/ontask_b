@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Installation process &#8212; OnTask (B.3.1.0) 1.1.0 documentation</title>
+    <title>2. Installation process &#8212; OnTask (B.3.2.0) 1.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
@@ -17,8 +17,8 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Using the tool" href="../Using/index.html" />
-    <link rel="prev" title="What is OnTask" href="../Introduction/index.html" />
+    <link rel="next" title="3. Using the tool" href="../Using/index.html" />
+    <link rel="prev" title="1. What is OnTask" href="../Introduction/index.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -34,22 +34,11 @@
           <div class="body" role="main">
             
   <div class="section" id="installation-process">
-<span id="install"></span><h1>Installation process<a class="headerlink" href="#installation-process" title="Permalink to this headline">¶</a></h1>
-<p>OnTask is a Web application that manages data about learners to provide them
-with personalized support. For this reason, it is recommended an installation
-that observes a set of tight security restrictions. Some of these
-restrictions lie within the scope of the tool, but some other are part of the
-environment in which the application is installed. We strongly recommend to
-install OnTask in a web server that uses TTL encryption (HTTPS) to serve all
-the pages. The application requires exchanging with your browser sensitive
-information about your session, so the information should be encrypted.</p>
+<span id="install"></span><h1>2. Installation process<a class="headerlink" href="#installation-process" title="Permalink to this headline">¶</a></h1>
+<p>OnTask is a Web application that manages data about learners to provide them with personalized support. For this reason, it is recommended an installation that observes a set of tight security restrictions. Some of these restrictions lie within the scope of the tool, but some other are part of the environment in which the application is installed. We strongly recommend to install OnTask in a web server that uses TTL encryption (HTTPS) to serve all the pages. The application requires exchanging with your browser sensitive information about your session, so the information should be encrypted.</p>
 <div class="section" id="requirements">
-<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
-<p>OnTask has been developed as a <a class="reference external" href="https://www.djangoproject.com/">Django</a>
-application. Django is a high-level, python-based web framework that supports
-a rich set of functionality typically required in applications like OnTask.
-But as with many other applications, OnTask requires a set of additional
-applications for its execution:</p>
+<h2>2.1. Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>OnTask has been developed as a <a class="reference external" href="https://www.djangoproject.com/">Django</a> application. Django is a high-level, python-based web framework that supports a rich set of functionality typically required in applications like OnTask. But as with many other applications, OnTask requires a set of additional applications for its execution:</p>
 <ul class="simple">
 <li>Python 2.7</li>
 <li>Django 1.11</li>
@@ -60,30 +49,25 @@ applications for its execution:</p>
 <p>Some of these requirements are handled through Python’s package index application <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a>.</p>
 </div>
 <div class="section" id="are-you-upgrading-from-a-version-2-8-to-2-8-or-later">
-<h2>Are you upgrading from a version &lt; 2.8 to 2.8 or later?<a class="headerlink" href="#are-you-upgrading-from-a-version-2-8-to-2-8-or-later" title="Permalink to this headline">¶</a></h2>
-<p>If you are upgrading OnTask from a version lower than 2.8 to 2.8 or later, you
-need to disable the <code class="docutils literal notranslate"><span class="pre">crontab</span></code> used to execute tasks asynchronously from the
-web server. Starting in version 2.8 those tasks are executed by an
-application called <code class="docutils literal notranslate"><span class="pre">celery</span></code> that is managed using <code class="docutils literal notranslate"><span class="pre">supervisor</span></code> (see
-<a class="reference internal" href="#scheduling-tasks"><span class="std std-ref">Configure the Distributed Task Queue Celery</span></a>).</p>
+<h2>2.2. Are you upgrading from a version &lt; 2.8 to 2.8 or later?<a class="headerlink" href="#are-you-upgrading-from-a-version-2-8-to-2-8-or-later" title="Permalink to this headline">¶</a></h2>
+<p>If you are upgrading OnTask from a version lower than 2.8 to 2.8 or later, you need to disable the <code class="docutils literal notranslate"><span class="pre">crontab</span></code> used to execute tasks asynchronously from the web server. Starting in version 2.8 those tasks are executed by an application called <code class="docutils literal notranslate"><span class="pre">celery</span></code> that is managed using <code class="docutils literal notranslate"><span class="pre">supervisor</span></code> (see <a class="reference internal" href="#scheduling-tasks"><span class="std std-ref">Configure the Distributed Task Queue Celery</span></a>).</p>
 </div>
 <div class="section" id="installing-the-required-tools">
-<h2>Installing the required tools<a class="headerlink" href="#installing-the-required-tools" title="Permalink to this headline">¶</a></h2>
+<h2>2.3. Installing the required tools<a class="headerlink" href="#installing-the-required-tools" title="Permalink to this headline">¶</a></h2>
 <p>The following installation steps assume that you are deploying OnTask in a production web server capable of serving pages using the HTTPS protocol.</p>
 <div class="section" id="install-and-configure-redis">
-<span id="install-redis"></span><h3>Install and Configure Redis<a class="headerlink" href="#install-and-configure-redis" title="Permalink to this headline">¶</a></h3>
+<span id="install-redis"></span><h3>2.3.1. Install and Configure Redis<a class="headerlink" href="#install-and-configure-redis" title="Permalink to this headline">¶</a></h3>
 <p>Django requires Redis to execute as a daemon in the same machine to cache information about the sessions. No specific changes are required in the code, simply have the server running in the background.</p>
 <ol class="arabic">
 <li><p class="first">Download and install <a class="reference external" href="https://redis.io/">redis</a>.</p>
 <p>Follow the instructions to configure it to be used by Django.</p>
 </li>
-<li><p class="first">Test that it is executing properly in the background (use the <code class="docutils literal notranslate"><span class="pre">ping</span></code>
-command in the command line interface.</p>
+<li><p class="first">Test that it is executing properly in the background (use the <code class="docutils literal notranslate"><span class="pre">ping</span></code> command in the command line interface.</p>
 </li>
 </ol>
 </div>
 <div class="section" id="install-and-configure-postgresql">
-<span id="install-postgresql"></span><h3>Install and Configure PostgreSQL<a class="headerlink" href="#install-and-configure-postgresql" title="Permalink to this headline">¶</a></h3>
+<span id="install-postgresql"></span><h3>2.3.2. Install and Configure PostgreSQL<a class="headerlink" href="#install-and-configure-postgresql" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic">
 <li><p class="first">Download and install <a class="reference external" href="https://www.postgresql.org/">postgresql</a>.</p>
 </li>
@@ -108,9 +92,8 @@ options.</p>
 </ol>
 </div>
 <div class="section" id="install-python">
-<h3>Install Python<a class="headerlink" href="#install-python" title="Permalink to this headline">¶</a></h3>
-<p>In the following sections we assume that you can open a command line
-interpreter and you can execute the python interpreter.</p>
+<h3>2.3.3. Install Python<a class="headerlink" href="#install-python" title="Permalink to this headline">¶</a></h3>
+<p>In the following sections we assume that you can open a command line interpreter and you can execute the python interpreter.</p>
 <ol class="arabic simple">
 <li>Install <a class="reference external" href="https://www.python.org/">python</a></li>
 <li>Verify that the python interpreter can run and has the right version (2.7)
@@ -121,7 +104,7 @@ additional libraries required to execute OnTask.</li>
 </ol>
 </div>
 <div class="section" id="download-install-and-configure-ontask">
-<h3>Download, install and configure OnTask<a class="headerlink" href="#download-install-and-configure-ontask" title="Permalink to this headline">¶</a></h3>
+<h3>2.3.4. Download, install and configure OnTask<a class="headerlink" href="#download-install-and-configure-ontask" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic">
 <li><p class="first">Download or clone a copy of <a class="reference external" href="https://github.com/abelardopardo/ontask_b">OnTask</a>.</p>
 </li>
@@ -170,10 +153,8 @@ description of your time zone produced by the previous command.</p>
 </li>
 <li><p class="first">If OnTask is going to be served from a location different from the root of your server (for example <code class="docutils literal notranslate"><span class="pre">myhost.com/ontask</span></code>, then modify the value of the variable <code class="docutils literal notranslate"><span class="pre">BASE_URL</span></code> with the suffix that should follow the domain name (in the example, <code class="docutils literal notranslate"><span class="pre">/ontask</span></code>).</p>
 </li>
-</ol>
-<p>#. Modify the line starting with <code class="docutils literal notranslate"><span class="pre">DOMAIN_NAME=</span></code> and change the field
-<code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">DOMAIN</span> <span class="pre">NAME</span></code>] with the domain name of the machine hosting OnTask.</p>
-<ol class="arabic">
+<li><p class="first">Modify the line starting with <code class="docutils literal notranslate"><span class="pre">DOMAIN_NAME=</span></code> and change the field <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">DOMAIN</span> <span class="pre">NAME</span></code>] with the domain name of the machine hosting OnTask.</p>
+</li>
 <li><p class="first">If you want to disable the appearance of the banner image in the login
 page set the value of the variable <code class="docutils literal notranslate"><span class="pre">SHOW_HOME_FOOTER_IMAGE</span></code> to False.</p>
 </li>
@@ -208,14 +189,7 @@ authentication.</p>
 </li>
 <li><p class="first">If at some point during the following steps you want to reset the content of the database, run the commands <code class="docutils literal notranslate"><span class="pre">dropdb</span></code> and <code class="docutils literal notranslate"><span class="pre">createdb</span></code> explained in <a class="reference internal" href="#install-postgresql"><span class="std std-ref">Install and Configure PostgreSQL</span></a>.</p>
 </li>
-<li><p class="first">Execute the following commands from the <code class="docutils literal notranslate"><span class="pre">src</span></code> folder to prepare the
-database initialization:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">makemigrations</span> <span class="n">profiles</span> <span class="n">accounts</span> <span class="n">workflow</span> <span class="n">dataops</span>
-<span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">makemigrations</span> <span class="n">table</span> <span class="n">action</span> <span class="n">logs</span> <span class="n">scheduler</span> <span class="n">table</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">Execute the following command to create the database internal structure:</p>
+<li><p class="first">Execute the following command from the <code class="docutils literal notranslate"><span class="pre">src</span></code> folder to create the database internal structure:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span>
 </pre></div>
 </div>
@@ -307,7 +281,7 @@ only deploy a <strong>production</strong> version.</p>
 </ol>
 </div>
 <div class="section" id="configure-the-distributed-task-queue-celery">
-<span id="scheduling-tasks"></span><h3>Configure the Distributed Task Queue Celery<a class="headerlink" href="#configure-the-distributed-task-queue-celery" title="Permalink to this headline">¶</a></h3>
+<span id="scheduling-tasks"></span><h3>2.3.5. Configure the Distributed Task Queue Celery<a class="headerlink" href="#configure-the-distributed-task-queue-celery" title="Permalink to this headline">¶</a></h3>
 <p>There are various tasks that need to be executed by OnTask outside the web
 server. The solution adopted is to use <a class="reference external" href="http://www.celeryproject.org/">Celery</a>, <a class="reference external" href="http://supervisord.org/">Supervisor</a> (a
 prcocess control system) and <a class="reference external" href="https://redis.io/">Redis</a>. Redis
@@ -387,7 +361,7 @@ script <code class="docutils literal notranslate"><span class="pre">scheduler_sc
 </div>
 </div>
 <div class="section" id="upgrading-ontask">
-<span id="upgrading"></span><h2>Upgrading OnTask<a class="headerlink" href="#upgrading-ontask" title="Permalink to this headline">¶</a></h2>
+<span id="upgrading"></span><h2>2.4. Upgrading OnTask<a class="headerlink" href="#upgrading-ontask" title="Permalink to this headline">¶</a></h2>
 <p>If you have OnTask already configured and running, here are the steps to
 follow to upgrade to a new version (if you are upgrading from a version below
 2.8 to 2.8 or higher read <a class="reference internal" href="#scheduling-tasks"><span class="std std-ref">Configure the Distributed Task Queue Celery</span></a>).</p>
@@ -454,7 +428,7 @@ installed.</p>
 </ul>
 </div>
 <div class="section" id="the-administration-pages">
-<h2>The Administration Pages<a class="headerlink" href="#the-administration-pages" title="Permalink to this headline">¶</a></h2>
+<h2>2.5. The Administration Pages<a class="headerlink" href="#the-administration-pages" title="Permalink to this headline">¶</a></h2>
 <p>OnTask uses the administration pages offered by Django. The account created with
 the command <code class="docutils literal notranslate"><span class="pre">createsuperuser</span></code> has complete access to those pages through a
 link in the upper right corner of the screen.</p>
@@ -472,14 +446,14 @@ Each group has different functionalities.</li>
 your needs.</p>
 </div>
 <div class="section" id="production-deployment">
-<h2>Production Deployment<a class="headerlink" href="#production-deployment" title="Permalink to this headline">¶</a></h2>
+<h2>2.6. Production Deployment<a class="headerlink" href="#production-deployment" title="Permalink to this headline">¶</a></h2>
 <p>Once OnTask is executing normally, you may configure a web server (nginx,
 apache or similar) to make it available to a community of users. The
 instructions to make such deployment are beyond the scope of this manual but
 are available through the corresponding manual pages of these applications.</p>
 </div>
 <div class="section" id="authentication">
-<span id="id2"></span><h2>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h2>
+<span id="id2"></span><h2>2.7. Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h2>
 <p>OnTask comes with the following authentication mechanisms: IMS-LTI,
 <code class="docutils literal notranslate"><span class="pre">REMOTE_USER</span></code> variable, basic authentication, and LDAP. The first three
 (IMS-LTI, <code class="docutils literal notranslate"><span class="pre">REMOTE_USER</span></code> and basic authentication) are enabled by default and used in that order whenever an unauthenticated request is received. It follows a brief description of how to configure them.</p>
@@ -536,7 +510,7 @@ generated manually through the user profile page. This type of authentication
 may need some special configuration in the web server (Apache or similar) so
 that the <code class="docutils literal notranslate"><span class="pre">HTTP_AUTHORIZATION</span></code> header is not removed.</p>
 <div class="section" id="ldap-authentication">
-<h3>LDAP Authentication<a class="headerlink" href="#ldap-authentication" title="Permalink to this headline">¶</a></h3>
+<h3>2.7.1. LDAP Authentication<a class="headerlink" href="#ldap-authentication" title="Permalink to this headline">¶</a></h3>
 <p>OnTask may also be configured to use LDAP to authenticate users. This is done
 through the external package <a class="reference external" href="https://bitbucket.org/illocution/django-auth-ldap">django-auth-ldap</a>. In its current version,
 this authentication mode cannot be combined with the previous ones (this
@@ -592,7 +566,7 @@ format</p>
 </div>
 </div>
 <div class="section" id="email-configuration">
-<span id="email-config"></span><h2>Email Configuration<a class="headerlink" href="#email-configuration" title="Permalink to this headline">¶</a></h2>
+<span id="email-config"></span><h2>2.8. Email Configuration<a class="headerlink" href="#email-configuration" title="Permalink to this headline">¶</a></h2>
 <p>OnTask relies on the functionality included in Django to send emails from the
 application. The configuration parameters are defined in the file <code class="docutils literal notranslate"><span class="pre">base.py</span></code>
 and are: <code class="docutils literal notranslate"><span class="pre">EMAIL_HOST</span></code>, <code class="docutils literal notranslate"><span class="pre">EMAIL_PORT</span></code>, <code class="docutils literal notranslate"><span class="pre">EMAIL_HOST_USER</span></code>,
@@ -600,7 +574,7 @@ and are: <code class="docutils literal notranslate"><span class="pre">EMAIL_HOST
 <p>Set theses variables in the configuration file to the appropriate values
 before starting the application. Make sure the server is running <strong>in production mode</strong>. The development mode is configured to <strong>not send</strong> emails but show their content in the console instead.</p>
 <div class="section" id="tracking-email-reads">
-<h3>Tracking Email Reads<a class="headerlink" href="#tracking-email-reads" title="Permalink to this headline">¶</a></h3>
+<h3>2.8.1. Tracking Email Reads<a class="headerlink" href="#tracking-email-reads" title="Permalink to this headline">¶</a></h3>
 <p>If OnTask is deployed using SAML, all URLs are likely to be configured to go through the authentication layer. This configuration prevents OnTask from receiving the email read confirmations. In this case, the web server needs to be configured so that the SAML authentication is removed for the url <code class="docutils literal notranslate"><span class="pre">trck</span></code> (the one receiving the email read tracking). In Apache, this can be achieved by the following directive:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">Location</span> <span class="o">/</span><span class="n">trck</span><span class="o">&gt;</span>
   <span class="n">Require</span> <span class="nb">all</span> <span class="n">granted</span>
@@ -611,7 +585,7 @@ before starting the application. Make sure the server is running <strong>in prod
 </div>
 </div>
 <div class="section" id="plugins">
-<span id="plugin-install"></span><h2>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h2>
+<span id="plugin-install"></span><h2>2.9. Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h2>
 <p>OnTask allows also the inclusion of arbitrary Python modules to execute and transform the data stored in a workflow. The Python code in the plugins is executed the same interpreter and execution environment as the rest of the platform. Thus, <strong>use this functionality to execute only code that is fully trusted</strong>. There is nothing preventing a plugin to run malicious code (think <code class="docutils literal notranslate"><span class="pre">system.exec('rm</span> <span class="pre">-rf</span> <span class="pre">/')</span></code>, so use at your own risk. To configure the execution of plugins follow these steps:</p>
 <ol class="arabic">
 <li><p class="first">Create a folder at any location in your instance of OnTask to store the Python modules. OnTask assumes that each directory in that folder contains a Python module (that is, a folder with a file <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> inside).</p>
@@ -739,11 +713,11 @@ before starting the application. Make sure the server is running <strong>in prod
 <div></div></blockquote>
 </div>
 <div class="section" id="sql-connections">
-<span id="id3"></span><h2>SQL Connections<a class="headerlink" href="#sql-connections" title="Permalink to this headline">¶</a></h2>
-<p>One of the key functionalities of OnTask is to be able to merge data from multiple sources. Section <a class="reference internal" href="../Using/index.html#dataops"><span class="std std-ref">Data Table</span></a> describes the functionality available to perform these operations. Some of them, however, require additional configuration from the administrator. This is the case for the uploading and merging of data from a remote database that allows SQL connections. These connections must be defined by the administrator and then they are available to the instructors.</p>
-<p>The definition of these connections is done from the platform’s home page, right after the table showing the available workflows.</p>
+<span id="id3"></span><h2>2.10. SQL Connections<a class="headerlink" href="#sql-connections" title="Permalink to this headline">¶</a></h2>
+<p>One of the key functionalities of OnTask is to be able to merge data from multiple sources. Section <a class="reference internal" href="../Using/index.html#dataops"><span class="std std-ref">Data Table</span></a> describes the functionality available to perform these operations. Some of them, however, require special configuration from the tool administrator. This is the case when uploading and merging data from a remote database that allows SQL connections. These connections must be first defined by the administrator and are then are available to the instructors.</p>
+<p>The screen to manage these connections is accessed clicking in the item <em>SQL Connections</em> at the top menu bar. This link is only available for those users with the administration role.</p>
 <div class="figure align-center">
-<img alt="../_images/workflow_superuser_index.png" src="../_images/workflow_superuser_index.png" />
+<img alt="../_images/workflow_sql_connections_index.png" src="../_images/workflow_sql_connections_index.png" />
 </div>
 <p>Each connection can be defined with the following parameters:</p>
 <div class="figure align-center">
@@ -772,7 +746,7 @@ before starting the application. Make sure the server is running <strong>in prod
 <dd>Name of the table stored in the remote database and containing the data to upload/merge</dd>
 </dl>
 <p>Once a connection is defined, as described in <a class="reference internal" href="../Using/index.html#sql-connection-run"><span class="std std-ref">SQL connection</span></a>, all the data in the table will be accessed and loaded/merged into the current workflow.</p>
-<p>The operations allowed in each connection are:</p>
+<p>The operations allowed for each connection are:</p>
 <dl class="docutils">
 <dt>Edit</dt>
 <dd>Change any of the parameters of the connection</dd>
@@ -783,7 +757,7 @@ before starting the application. Make sure the server is running <strong>in prod
 </dl>
 </div>
 <div class="section" id="creating-users-in-bulk">
-<span id="bulk-user-creation"></span><h2>Creating users in Bulk<a class="headerlink" href="#creating-users-in-bulk" title="Permalink to this headline">¶</a></h2>
+<span id="bulk-user-creation"></span><h2>2.11. Creating users in Bulk<a class="headerlink" href="#creating-users-in-bulk" title="Permalink to this headline">¶</a></h2>
 <p>OnTask offers the possibility of creating users in bulk through given the
 data in a CSV file through the following steps:</p>
 <ol class="arabic">
@@ -818,7 +792,7 @@ this with the option <code class="docutils literal notranslate"><span class="pre
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">OnTask (B.3.1.0)</a></h1>
+<h1 class="logo"><a href="../index.html">OnTask (B.3.2.0)</a></h1>
 
 
 
@@ -830,46 +804,46 @@ this with the option <code class="docutils literal notranslate"><span class="pre
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../Introduction/index.html">What is OnTask</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation process</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#are-you-upgrading-from-a-version-2-8-to-2-8-or-later">Are you upgrading from a version &lt; 2.8 to 2.8 or later?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-the-required-tools">Installing the required tools</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#install-and-configure-redis">Install and Configure Redis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#install-and-configure-postgresql">Install and Configure PostgreSQL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#install-python">Install Python</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#download-install-and-configure-ontask">Download, install and configure OnTask</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configure-the-distributed-task-queue-celery">Configure the Distributed Task Queue Celery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction/index.html">1. What is OnTask</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Installation process</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">2.1. Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#are-you-upgrading-from-a-version-2-8-to-2-8-or-later">2.2. Are you upgrading from a version &lt; 2.8 to 2.8 or later?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-the-required-tools">2.3. Installing the required tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install-and-configure-redis">2.3.1. Install and Configure Redis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-and-configure-postgresql">2.3.2. Install and Configure PostgreSQL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-python">2.3.3. Install Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#download-install-and-configure-ontask">2.3.4. Download, install and configure OnTask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-the-distributed-task-queue-celery">2.3.5. Configure the Distributed Task Queue Celery</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#upgrading-ontask">Upgrading OnTask</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-administration-pages">The Administration Pages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#production-deployment">Production Deployment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#authentication">Authentication</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#ldap-authentication">LDAP Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#upgrading-ontask">2.4. Upgrading OnTask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-administration-pages">2.5. The Administration Pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#production-deployment">2.6. Production Deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#authentication">2.7. Authentication</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ldap-authentication">2.7.1. LDAP Authentication</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#email-configuration">Email Configuration</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#tracking-email-reads">Tracking Email Reads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#email-configuration">2.8. Email Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tracking-email-reads">2.8.1. Tracking Email Reads</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#plugins">Plugins</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#sql-connections">SQL Connections</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#creating-users-in-bulk">Creating users in Bulk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plugins">2.9. Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sql-connections">2.10. SQL Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-users-in-bulk">2.11. Creating users in Bulk</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../Using/index.html">Using the tool</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Scenarios/index.html">Use Scenarios</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Tutorial/index.html">Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Advanced/index.html">Advanced Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Using/index.html">3. Using the tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Scenarios/index.html">4. Use Scenarios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorial/index.html">5. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Advanced/index.html">6. Advanced Features</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../Introduction/index.html" title="previous chapter">What is OnTask</a></li>
-      <li>Next: <a href="../Using/index.html" title="next chapter">Using the tool</a></li>
+      <li>Previous: <a href="../Introduction/index.html" title="previous chapter">1. What is OnTask</a></li>
+      <li>Next: <a href="../Using/index.html" title="next chapter">3. Using the tool</a></li>
   </ul></li>
 </ul>
 </div>
@@ -893,7 +867,7 @@ this with the option <code class="docutils literal notranslate"><span class="pre
       &copy;Content Licensed under Creative Commons BY 3.0.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

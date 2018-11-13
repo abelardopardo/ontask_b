@@ -1,11 +1,16 @@
 $(function () {
-  // Column Add
   $("#table-content").on("click", ".js-workflow-column-add", loadForm);
+  // Column Add
   $("#modal-item").on("submit", ".js-workflow-column-add-form", saveForm);
 
   // Derived column add
   $("#table-content").on("click", ".js-workflow-formula-column-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-formula-column-add-form",
+  saveForm);
+
+  // Random column add
+  $("#table-content").on("click", ".js-workflow-random-column-add", loadForm);
+  $("#modal-item").on("submit", ".js-workflow-random-column-add-form",
   saveForm);
 
   // Column Edit
