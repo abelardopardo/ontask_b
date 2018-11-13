@@ -12,12 +12,33 @@
 
 - Datetimepicker widget changed due to incompatibilities with Django 2
 
-## 3.1.0 (2018-10-31)
+- Reviewed the Chinese localization
+
+## 3.2.0 (2018-11-12)
+
+### Added
+
+- Personalized actions can now be downloaded in a ZIP with one file per message. Suitable to be used in combination with *Upload multiple feedback files in a ZIP* in [Moodle Assignments](https://docs.moodle.org/35/en/Assignment_settings#Feedback_types) (Issue #96)
+
+### Fixed
+
+- Error when merging data frames with key columns with different name (Issue #103)
+
+- Error preventing the renaming of actions (Issue #101)
+
+### Changed
+
+- Reviewed the Chinese localization## 3.1.0 (2018-10-31)
 
 ### Added
 
 - Initial support for localization to Chinese
 
+## 3.1.0 (2018-10-31)
+
+### Added
+
+- Initial support for localization to Chinese
 ## 3.0.4 (2018-10-20)
 
 ### Changed

@@ -3,67 +3,67 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-31 11:47+1030\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2018-11-10 10:42+0800\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.2\n"
 
 #: action/static/action/js/action.js:27
 msgid "YOUR TEXT HERE"
-msgstr ""
+msgstr "您的文本在这里"
 
 #: static/html/_static/doctools.js:193
 msgid "Permalink to this headline"
-msgstr ""
+msgstr "此标题的永久链接"
 
 #: static/html/_static/doctools.js:199
 msgid "Permalink to this definition"
-msgstr ""
+msgstr "此定义的永久链接"
 
 #: static/html/_static/doctools.js:232
 msgid "Hide Search Matches"
-msgstr ""
+msgstr "隐藏搜索匹配"
 
 #: static/html/_static/searchtools.js:400
 msgid "Searching"
-msgstr ""
+msgstr "搜索"
 
 #: static/html/_static/searchtools.js:405
 msgid "Preparing search..."
-msgstr ""
+msgstr "准备搜索……"
 
 #: static/html/_static/searchtools.js:569
 msgid "Search Results"
-msgstr ""
+msgstr "搜索结果"
 
 #: static/html/_static/searchtools.js:571
 msgid ""
 "Your search did not match any documents. Please make sure that all words are "
 "spelled correctly and that you've selected enough categories."
-msgstr ""
+msgstr "您的搜索与文档不匹配。请确保所有单词拼写正确，并选择足够多的类别。"
 
 #: static/html/_static/searchtools.js:573
 #, javascript-format
 msgid "Search finished, found %s page(s) matching the search query."
-msgstr ""
+msgstr "搜索完成，找到%s页匹配查询词条。"
 
 #: static/html/_static/searchtools.js:626
 msgid ", in "
-msgstr ""
+msgstr "，在 "
 
 #: static/site/js/site.js:13
 msgid "Click here to search"
-msgstr ""
+msgstr "点击这里搜索"
 
 #: static/site/js/site.js:14
 msgid "No element found"
-msgstr ""
+msgstr "找不到元素"

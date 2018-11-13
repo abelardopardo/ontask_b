@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-04 12:49+1030\n"
-"PO-Revision-Date: 2018-11-04 13:11+1030\n"
+"POT-Creation-Date: 2018-11-12 13:55+1030\n"
+"PO-Revision-Date: 2018-11-11 18:47+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh\n"
@@ -20,11 +20,11 @@ msgstr ""
 
 #: accounts/forms.py:17
 msgid "Email address"
-msgstr "电子邮件地址。"
+msgstr "电子邮件地址"
 
 #: accounts/forms.py:20
 msgid "Enter Email"
-msgstr "输入邮箱"
+msgstr "输入电子邮箱"
 
 #: accounts/forms.py:21
 msgid "Enter Password"
@@ -91,12 +91,12 @@ msgid ""
 "any\n"
 "        learning environment."
 msgstr ""
-"学习者在个性化环境中更可能获得一个\n"
+"学习者在个性化环境中更有可能获得一个\n"
 "有效的体验。在考虑到每个学生具体情况时，\n"
 "资源、评论、建议、反馈会比那些针对学生群体的更有效。但是传统的个性化是基于高"
 "度细节化的\n"
-"对与学习者行为预获的模型. OnTask提供了一个可以将资源\n"
-"个性化的环境。这些资源都是从学习环境中收集的数据。"
+"对学习者行为预获的模型。基于从学习环境中收集的数据，OnTask提供了\n"
+"一个可以将资源个性化的环境。"
 
 #: accounts/templates/accounts/login.html:26
 msgid "The importance of feedback"
@@ -191,17 +191,17 @@ msgstr "您的密码已经更改，因此您已退出。请重新登录"
 
 #: action/apps.py:9
 msgid "Actions, Conditions, Filters, Emails"
-msgstr "行为，条件，过滤数值，邮件"
+msgstr "操作，条件，筛选标签，邮件"
 
 #: action/evaluate.py:163 action/evaluate.py:167
 #, python-brace-format
 msgid "Name {0} is reserved."
-msgstr "姓名 {0} 已保存。"
+msgstr "姓名{0}已保存。"
 
 #: action/evaluate.py:256
 #, python-brace-format
 msgid "Syntax error detected in the action text. {0}"
-msgstr "动作文本{0}中检测到语法错误。"
+msgstr "操作文本{0}中检测到语法错误。"
 
 #: action/evaluate.py:265
 #, python-brace-format
@@ -210,19 +210,19 @@ msgstr "主题{0}中检测到语法错误。"
 
 #: action/evaluate.py:329
 msgid "Incorrect type of action"
-msgstr "不正确的行动类型"
+msgstr "不正确的操作类型"
 
 #: action/forms.py:65
 msgid "Target URL"
-msgstr "目标 URL"
+msgstr "目标网址"
 
 #: action/forms.py:72
 msgid "URL to send the personalized JSON"
-msgstr "URL 发送个性化的 JSON"
+msgstr "用来发送个性化JSON的网址"
 
 #: action/forms.py:81
 msgid "Write a JSON object"
-msgstr "写一个JSON 对象"
+msgstr "写一个JSON对象"
 
 #: action/forms.py:180 action/forms.py:184 workflow/forms.py:169
 #: workflow/forms.py:173
@@ -259,7 +259,7 @@ msgstr "下载工作流程快照?"
 
 #: action/forms.py:239
 msgid "A zip file useful to review the emails sent."
-msgstr "一个zip文件，用于查看发送的电子邮件。"
+msgstr "用于查看发送的电子邮件的压缩文件。"
 
 #: action/forms.py:245
 msgid "Check/exclude email addresses before sending?"
@@ -277,15 +277,15 @@ msgstr "字段需要一个逗号分隔的电子邮件列表。"
 
 #: action/forms.py:327
 msgid "Key column to use for file name prefix (Participant id if Moodle ZIP)"
-msgstr "用于文件名前缀（如果是Moodle ZIP的话就是参与者ID）的键列"
+msgstr "用于文件名前缀（如果是Moodle压缩文件的话就是参与者身份）的键列"
 
 #: action/forms.py:333
 msgid "Column to use for file name prefix (Full name if Moodle ZIP)"
-msgstr "用于文件名前缀（如果是Moodle ZIP的话就是全名）的列"
+msgstr "用于文件名前缀（如果是Moodle压缩文件的话就是全名）的列"
 
 #: action/forms.py:347
 msgid "This ZIP will be uploaded to Moodle as feedback"
-msgstr "此ZIP将作为评价上传至Moodle"
+msgstr "此压缩文件将作为评价上传至Moodle"
 
 #: action/forms.py:353
 msgid "Check/exclude users before sending?"
@@ -301,7 +301,7 @@ msgstr "这两列必须不同"
 
 #: action/forms.py:416
 msgid "A Moodle ZIP requires two column names"
-msgstr "一个Moodle zip需要两个列名"
+msgstr "一个Moodle压缩文件需要两个列名"
 
 #: action/forms.py:429
 msgid "Values in column must have format \"Participant [number]\""
@@ -333,7 +333,7 @@ msgstr "文件"
 
 #: action/forms.py:513
 msgid "File containing a previously exported action"
-msgstr "文件包含先前导出的动作"
+msgstr "文件包含先前导出的操作"
 
 #: action/models.py:41
 msgid "Personalized text"
@@ -349,7 +349,7 @@ msgstr "调查"
 
 #: action/models.py:44
 msgid "TODO List"
-msgstr "TODO 列表"
+msgstr "待办事件列表"
 
 #: action/models.py:58 action/models.py:370 scheduler/models.py:47
 msgid "name"
@@ -362,15 +362,15 @@ msgstr "描述"
 
 #: action/models.py:87
 msgid "URL available to users?"
-msgstr "用户可用的URL？"
+msgstr "用户可用的网址？"
 
 #: action/models.py:92
 msgid "Action available from"
-msgstr "可用的动作来自"
+msgstr "可用的操作来自"
 
 #: action/models.py:97
 msgid "Action available until"
-msgstr "动作可用直到"
+msgstr "操作可用直到"
 
 #: action/models.py:120 action/templates/action/edit_in.html:121
 msgid "Shuffle questions?"
@@ -409,7 +409,7 @@ msgstr "文件不正确。期待GZIP文件 (导出工作流）。"
 #: action/ops.py:372 action/ops.py:377 action/ops.py:382
 #, python-brace-format
 msgid "Unable to import action: {0}"
-msgstr "无法导入动作：{0}"
+msgstr "无法导入操作：{0}"
 
 #: action/ops.py:379
 #, python-brace-format
@@ -459,7 +459,7 @@ msgstr "无效列名 {0}。"
 #: action/serializers.py:185
 #, python-brace-format
 msgid "New action cannot have non-existing key column {0}"
-msgstr "新动作不能有不存在的键列 {0}"
+msgstr "新操作不能有不存在的键列 {0}"
 
 #: action/serializers.py:199
 #, python-brace-format
@@ -468,7 +468,7 @@ msgstr "导入列 {0} 与现有的列不同。"
 
 #: action/serializers.py:253
 msgid "Action cannot be imported with and empty data table"
-msgstr "不能用空数据表导入动作"
+msgstr "不能用空数据表导入操作"
 
 #: action/serializers.py:270
 msgid "Unable to create column data"
@@ -484,7 +484,7 @@ msgstr "无法创建列字段"
 
 #: action/settings.py:34 ontask/settings/base.py:372
 msgid "OnTask: Action executed"
-msgstr "OnTask:执行的动作"
+msgstr "OnTask:操作已执行"
 
 #: action/settings.py:51
 msgid "Notification Emails"
@@ -505,12 +505,12 @@ msgstr "发送：通知电子邮件中的字段"
 #: action/templates/action/action_done.html:4
 #: action/templates/action/action_zip_done.html:4
 msgid "Action execution"
-msgstr "动作执行"
+msgstr "操作执行"
 
 #: action/templates/action/action_done.html:13
 #: scheduler/templates/scheduler/schedule_done.html:7
 msgid "Action scheduled for execution"
-msgstr "计划执行的动作"
+msgstr "计划执行的操作"
 
 #: action/templates/action/action_done.html:15
 #, python-format
@@ -519,7 +519,7 @@ msgid ""
 "        log record number %(log_id)s."
 msgstr ""
 "您可以检查\n"
-"日志记录号 %(log_id)s 的状态。"
+"日志记录号%(log_id)s的状态。"
 
 #: action/templates/action/action_done.html:19
 #: action/templates/action/action_zip_done.html:17
@@ -552,12 +552,12 @@ msgstr "电子邮件动作"
 msgid ""
 "Send emails for\n"
 "    action \"%(n)s\""
-msgstr "为动作 \"%(n)s\"发送电子邮件"
+msgstr "为操作\"%(n)s\"发送电子邮件"
 
 #: action/templates/action/action_email_step1.html:17
 #, python-format
 msgid "%(n)s Emails will be sent."
-msgstr "%(n)s 电子邮件即将被发送。"
+msgstr "%(n)s电子邮件即将被发送。"
 
 #: action/templates/action/action_email_step1.html:23
 #: action/templates/action/action_zip_step1.html:23
@@ -637,7 +637,7 @@ msgstr "该操作不适用于任何数据。"
 #: action/templates/action/action_zip_step1.html:38
 #: action/templates/action/request_json_data.html:38
 msgid "Review the action filter"
-msgstr "回顾动作过滤器"
+msgstr "回顾操作筛选"
 
 #: action/templates/action/action_unavailable.html:3
 msgid ""
@@ -647,27 +647,27 @@ msgstr "您目前不能执行该操作"
 
 #: action/templates/action/action_zip_done.html:12
 msgid "Action ZIP creation"
-msgstr "动作压缩创建"
+msgstr "操作作压缩文件创建"
 
 #: action/templates/action/action_zip_done.html:14
 msgid "Your ZIP will start to download shortly."
-msgstr "即将下载您的ZIP。"
+msgstr "即将下载您的压缩文件。"
 
 #: action/templates/action/action_zip_step1.html:7
 msgid "ZIP action"
-msgstr "ZIP操作"
+msgstr "压缩文件操作"
 
 #: action/templates/action/action_zip_step1.html:13
 #, python-format
 msgid ""
 "ZIP for\n"
 "    action \"%(n)s\""
-msgstr "动作 “%(n)s”的ZIP"
+msgstr "操作“%(n)s”的压缩文件"
 
 #: action/templates/action/action_zip_step1.html:17
 #, python-format
 msgid "A ZIP with %(n)s files will be created."
-msgstr "%(n)s 文件的ZIP即将被创建。"
+msgstr "%(n)s文件的压缩文件即将被创建。"
 
 #: action/templates/action/action_zip_step1.html:40
 msgid ""
@@ -690,18 +690,18 @@ msgid ""
 "      "
 msgstr ""
 "\n"
-"这个函数为每个由操作选择的用户创建一个带有一个HTML文件的zip。该文件包含使"
-"用“预览”按钮时显示的个性化文本。\n"
+"这个函数为每个由操作选择的用户创建一个带有一个HTML文件的压缩文件。该文件包含"
+"使用“预览”按钮时显示的个性化文本。\n"
 "文件名是用两个选定有后缀列的值创建的。\n"
-"如果计划在Moodle中使用ZIP作为文件反馈，那么第一列必须包"
+"如果计划在Moodle中使用压缩文件作为文件反馈，那么第一列必须包"
 "含“Participant[number]”形式的值，\n"
 "第二列必须是用户的全名。\n"
 "可以通过首先从Moodle分配下载分级CSV文件，\n"
-"将它们合并到工作流中，然后使用它们创建这个ZIP并上传来获得这些列。"
+"将它们合并到工作流中，然后使用它们创建这个压缩文件并上传来获得这些列 "
 
 #: action/templates/action/edit_in.html:7
 msgid "Edit Action In"
-msgstr "编辑动作"
+msgstr "编辑操作在"
 
 #: action/templates/action/edit_in.html:43
 msgid "No columns selected."
@@ -718,7 +718,7 @@ msgstr "编辑描述"
 #: action/templates/action/includes/partial_condition_buttons.html:50
 #: action/templates/action/includes/partial_filter_create_buttons.html:32
 #: action/templates/action/run_survey.html:47
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:13
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:8
 #: scheduler/templates/scheduler/schedule_done.html:15
 #: table/templates/table/display.html:177
 #: table/templates/table/includes/partial_table_ops.html:19
@@ -780,13 +780,13 @@ msgid "Done"
 msgstr "完成"
 
 #: action/templates/action/edit_in.html:192
-#: action/templates/action/includes/partial_action_operations.html:30
+#: action/templates/action/includes/partial_action_operations.html:27
 msgid "Enter data manually"
 msgstr "手动输入数据"
 
 #: action/templates/action/edit_in.html:193
-#: action/templates/action/includes/partial_action_operations.html:25
-#: action/templates/action/includes/partial_action_operations.html:31
+#: action/templates/action/includes/partial_action_operations.html:22
+#: action/templates/action/includes/partial_action_operations.html:28
 #: dataops/templates/dataops/includes/partial_plugin_operations.html:6
 #: dataops/templates/dataops/includes/partial_sqlconn_runop.html:5
 #: dataops/templates/dataops/includes/plugin_run_buttons.html:9
@@ -817,7 +817,7 @@ msgstr "输出行为"
 
 #: action/templates/action/export_ask.html:10
 msgid "Name:"
-msgstr "名字："
+msgstr "名称："
 
 #: action/templates/action/export_ask.html:11
 msgid "Description:"
@@ -829,26 +829,26 @@ msgstr "类型：行为输出 (个性化内容）"
 
 #: action/templates/action/export_ask.html:14
 msgid "Content"
-msgstr "类容"
+msgstr "内容"
 
 #: action/templates/action/export_ask.html:19
 msgid "Type: Action in (data request)"
-msgstr "类型：行为输入 (请求数据）"
+msgstr "类型：操作输入 (请求数据）"
 
 #: action/templates/action/export_ask.html:20
 msgid "Columns:"
 msgstr "列："
 
 #: action/templates/action/export_ask.html:28
-#: action/templates/action/includes/partial_action_operations.html:83
+#: action/templates/action/includes/partial_action_operations.html:80
 #: workflow/templates/workflow/export.html:63
 msgid "Export"
-msgstr "输出"
+msgstr "导出"
 
 #: action/templates/action/export_done.html:4
 #: action/templates/action/export_done.html:13
 msgid "Action export"
-msgstr "行为输出"
+msgstr "操作导出"
 
 #: action/templates/action/export_done.html:14
 #: workflow/templates/workflow/export_done.html:14
@@ -858,12 +858,12 @@ msgstr "完成！"
 #: action/templates/action/import.html:7 action/templates/action/import.html:13
 #: action/templates/action/index.html:61
 msgid "Import action"
-msgstr "输入行为"
+msgstr "导入操作"
 
 #: action/templates/action/import.html:22
 #: workflow/templates/workflow/import.html:23
 msgid "Import"
-msgstr "输入"
+msgstr "导入"
 
 #: action/templates/action/includes/partial_action_clone.html:8
 msgid "Confirm action cloning"
@@ -897,11 +897,11 @@ msgstr "确认删除"
 #: action/templates/action/includes/partial_action_delete.html:11
 #, python-format
 msgid "Are you sure you want to delete the action <strong>%(n)s</strong>?"
-msgstr "您确定删除 <strong>%(n)s</strong>?"
+msgstr "您确定删除操作<strong>%(n)s</strong>?"
 
 #: action/templates/action/includes/partial_action_delete.html:17
 msgid "Delete action"
-msgstr "删除"
+msgstr "删除操作"
 
 #: action/templates/action/includes/partial_action_edit_description.html:18
 #: action/templates/action/includes/partial_action_update.html:18
@@ -929,7 +929,7 @@ msgstr "列值"
 
 #: action/templates/action/includes/partial_action_operations.html:6
 msgid "Edit the text, conditions and filter"
-msgstr "编辑文本、条件和过滤器"
+msgstr "编辑文本、条件和筛选标签"
 
 #: action/templates/action/includes/partial_action_operations.html:11
 msgid "Send personalised emails"
@@ -939,52 +939,60 @@ msgstr "发送个性化邮件"
 msgid "Email"
 msgstr "邮件"
 
-#: action/templates/action/includes/partial_action_operations.html:24
-msgid "Send personalised JSONs"
-msgstr "发送个性化对象符号"
+#: action/templates/action/includes/partial_action_operations.html:16
+msgid "Create a ZIP with each personalised text in a file"
+msgstr "在文件中创建每个个性化文本的压缩文件"
 
-#: action/templates/action/includes/partial_action_operations.html:38
+#: action/templates/action/includes/partial_action_operations.html:17
+msgid "ZIP"
+msgstr "压缩文件"
+
+#: action/templates/action/includes/partial_action_operations.html:21
+msgid "Send personalised JSONs"
+msgstr "发送个性化JSONs"
+
+#: action/templates/action/includes/partial_action_operations.html:35
 msgid "URL for learners to access the personalised text"
 msgstr "学习者访问个性化文本的网址"
 
-#: action/templates/action/includes/partial_action_operations.html:40
+#: action/templates/action/includes/partial_action_operations.html:37
 msgid "URL for learners to introduce data"
 msgstr "学习者引入数据的网址"
 
-#: action/templates/action/includes/partial_action_operations.html:43
+#: action/templates/action/includes/partial_action_operations.html:40
 msgid "URL"
 msgstr "网址"
 
-#: action/templates/action/includes/partial_action_operations.html:48
+#: action/templates/action/includes/partial_action_operations.html:45
 msgid "More"
 msgstr "更多"
 
-#: action/templates/action/includes/partial_action_operations.html:56
+#: action/templates/action/includes/partial_action_operations.html:53
 msgid "Schedule the execution of the action"
 msgstr "安排操作执行"
 
-#: action/templates/action/includes/partial_action_operations.html:57
-#: scheduler/views.py:236 scheduler/views.py:298
+#: action/templates/action/includes/partial_action_operations.html:54
+#: scheduler/views.py:234 scheduler/views.py:296
 msgid "Schedule"
 msgstr "安排"
 
-#: action/templates/action/includes/partial_action_operations.html:65
+#: action/templates/action/includes/partial_action_operations.html:62
 msgid "Change name and/or description"
 msgstr "改变名字以及/或者描述"
 
-#: action/templates/action/includes/partial_action_operations.html:66
+#: action/templates/action/includes/partial_action_operations.html:63
 #: workflow/templates/workflow/includes/workflow_basic_buttons.html:13
 msgid "Rename"
 msgstr "重命名"
 
-#: action/templates/action/includes/partial_action_operations.html:74
+#: action/templates/action/includes/partial_action_operations.html:71
 msgid "Create an identical action"
-msgstr "创建相同的动作"
+msgstr "创建相同的操作"
 
-#: action/templates/action/includes/partial_action_operations.html:75
+#: action/templates/action/includes/partial_action_operations.html:72
 #: action/templates/action/includes/partial_column_selected_operations.html:21
 #: action/templates/action/includes/partial_condition_buttons.html:59
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:22
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:15
 #: table/templates/table/display.html:186
 #: table/templates/table/includes/partial_view_operations.html:20
 #: workflow/templates/workflow/includes/workflow_basic_buttons.html:20
@@ -992,18 +1000,18 @@ msgstr "创建相同的动作"
 msgid "Clone"
 msgstr "克隆"
 
-#: action/templates/action/includes/partial_action_operations.html:82
+#: action/templates/action/includes/partial_action_operations.html:79
 msgid "Export the content of this action"
 msgstr "导出此操作的内容"
 
-#: action/templates/action/includes/partial_action_operations.html:90
+#: action/templates/action/includes/partial_action_operations.html:87
 msgid "Delete the action"
 msgstr "删除本操作"
 
-#: action/templates/action/includes/partial_action_operations.html:91
+#: action/templates/action/includes/partial_action_operations.html:88
 #: action/templates/action/includes/partial_condition_buttons.html:68
 #: action/templates/action/includes/partial_filter_create_buttons.html:40
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:31
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:22
 #: table/templates/table/display.html:195
 #: table/templates/table/includes/partial_table_ops.html:28
 #: table/templates/table/includes/partial_view_operations.html:27
@@ -1015,7 +1023,7 @@ msgstr "删除"
 #: action/templates/action/includes/partial_action_preview_done_buttons.html:8
 #: dataops/templates/dataops/includes/partial_plugin_operations.html:11
 msgid "See how is the content shown to each learner"
-msgstr "观看内容如何显示给每一个学习者"
+msgstr "查看内容是如何展示给每一个学习者的"
 
 #: action/templates/action/includes/partial_action_preview_done_buttons.html:14
 msgid "Save and go back"
@@ -1042,19 +1050,19 @@ msgid ""
 "        To use a different column, add this parameter to the end of the URL:"
 msgstr ""
 "访问受身份验证保护，\n"
-"用户 <strong>电子邮件</strong> 位于一个列为 <strong>电子邮件</strong>。\n"
-"要使用不同的列，请将此参数添加到网址的结尾："
+"用户<strong>电子邮件</strong>位于一个列为<strong>电子邮件</strong>。\n"
+"如需使用不同的列，请将此参数添加到网址的结尾："
 
 #: action/templates/action/includes/partial_action_showurl.html:24
 msgid ""
 "replacing <code>[COLUMN NAME]</code> by the colum to use instead of "
 "<strong>email</strong>."
-msgstr "用列<code>[COLUMN NAME]</code>取代<strong>电子邮件</strong>。"
+msgstr "用列<code>[列名]</code>取代<strong>电子邮件</strong>。"
 
 #: action/templates/action/includes/partial_action_showurl.html:28
 #: dataops/plugin_manager.py:43 dataops/plugin_manager.py:50
 #: dataops/plugin_manager.py:58 dataops/plugin_manager.py:69
-#: dataops/plugin_manager.py:140 templates/base.html:152
+#: dataops/plugin_manager.py:140 templates/base.html:153
 msgid "Ok"
 msgstr "好"
 
@@ -1064,7 +1072,7 @@ msgstr "更新操作"
 
 #: action/templates/action/includes/partial_column_selected_operations.html:7
 msgid "Edit question name, description, type, values, etc."
-msgstr "编辑问题名，描述，类型，数值，等等。"
+msgstr "编辑问题名称，描述，类型，数值，等等。"
 
 #: action/templates/action/includes/partial_column_selected_operations.html:13
 msgid "Remove question from action"
@@ -1167,23 +1175,23 @@ msgstr "删除条件"
 
 #: action/templates/action/includes/partial_filter_addedit.html:15
 msgid "Create action filter"
-msgstr "创建行为过滤器"
+msgstr "创建操作筛选标签"
 
 #: action/templates/action/includes/partial_filter_addedit.html:15
 msgid "Edit filter"
-msgstr "编辑过滤器"
+msgstr "编辑筛选标签"
 
 #: action/templates/action/includes/partial_filter_addedit.html:26
 msgid "Create filter"
-msgstr "创建过滤器"
+msgstr "创建筛选标签"
 
 #: action/templates/action/includes/partial_filter_create_buttons.html:8
 msgid "Filter learners"
-msgstr "过滤学习者"
+msgstr "筛选学习者"
 
 #: action/templates/action/includes/partial_filter_create_buttons.html:15
 msgid "Edit the filter"
-msgstr "编辑过滤器"
+msgstr "编辑筛选标签"
 
 #: action/templates/action/includes/partial_filter_create_buttons.html:16
 #, python-format
@@ -1193,19 +1201,19 @@ msgstr[0] "%(tot)s) 中有(%(n)s 学习者"
 
 #: action/templates/action/includes/partial_filter_create_buttons.html:31
 msgid "Edit the filter name and expression"
-msgstr "编辑过滤名字和表达"
+msgstr "编辑筛选标签名字和表达"
 
 #: action/templates/action/includes/partial_filter_create_buttons.html:39
 msgid "Delete the filter"
-msgstr "删除过滤器"
+msgstr "删除筛选标签"
 
 #: action/templates/action/includes/partial_filter_create_buttons.html:49
 msgid "Add Filter"
-msgstr "添加过滤器"
+msgstr "添加筛选标签"
 
 #: action/templates/action/includes/partial_filter_create_buttons.html:58
 msgid "The filter excludes all learners!"
-msgstr "该过滤器排除所有学生！"
+msgstr "该筛选标签排除所有学习者！"
 
 #: action/templates/action/includes/partial_filter_create_buttons.html:63
 msgid "All learners considered for this action."
@@ -1213,16 +1221,16 @@ msgstr "该操作包含所有学生。"
 
 #: action/templates/action/includes/partial_filter_delete.html:8
 msgid "Confirm filter deletion"
-msgstr "确认过滤器删除"
+msgstr "确认筛选标签删除"
 
 #: action/templates/action/includes/partial_filter_delete.html:11
 #, python-format
 msgid "Are you sure you want to delete the filter <strong>%(n)s</strong>?"
-msgstr "您确定要删除过滤器 <strong>%(n)s</strong>?"
+msgstr "您确定要删除筛选标签 <strong>%(n)s</strong>?"
 
 #: action/templates/action/includes/partial_filter_delete.html:17
 msgid "Delete filter"
-msgstr "删除过滤器"
+msgstr "删除筛选标签"
 
 #: action/templates/action/includes/partial_preview.html:7
 #, python-format
@@ -1256,10 +1264,10 @@ msgstr ""
 msgid ""
 "Review the conditions in the action\n"
 "    or use a filter to exclude these entries."
-msgstr "审查此操作的条件或使用筛选器排除这些条目。"
+msgstr "审查此操作的条件或使用筛选标签排除这些条目。"
 
 #: action/templates/action/index.html:8 action/templates/action/index.html:43
-#: templates/base.html:93
+#: templates/base.html:94
 msgid "Actions"
 msgstr "操作"
 
@@ -1291,23 +1299,23 @@ msgstr "从操作中选择排除项目"
 
 #: action/templates/action/request_json_data.html:7
 msgid "JSON action"
-msgstr "对象符号操作"
+msgstr "JSON操作"
 
 #: action/templates/action/request_json_data.html:13
 #, python-format
 msgid ""
 "Send JSON objects for\n"
 "    action \"%(n)s\""
-msgstr "为操作发送对象符号目标\"%(n)s\""
+msgstr "为操作发送JSON目标\"%(n)s\""
 
 #: action/templates/action/request_json_data.html:17
 #, python-format
 msgid "%(n)s JSON objects will be sent."
-msgstr "%(n)s对象符号目标将被发送。"
+msgstr "%(n)sJSON目标将被发送。"
 
 #: action/templates/action/run_survey.html:8
 msgid "Run Action In"
-msgstr "运行处理程序"
+msgstr "运行操作在"
 
 #: action/templates/action/run_survey_row.html:7
 msgid "Enter Data"
@@ -1329,7 +1337,7 @@ msgstr ""
 #: workflow/forms.py:37 workflow/templates/workflow/detail.html:88
 #: workflow/views.py:33
 msgid "Name"
-msgstr "名字"
+msgstr "名称"
 
 #: action/views_action.py:67 dataops/models.py:79
 #: dataops/templates/dataops/uploadmerge.html:17 dataops/views.py:44
@@ -1343,16 +1351,14 @@ msgstr "描述"
 #: dataops/templates/dataops/upload_s2.html:41 scheduler/views.py:51
 #: workflow/templates/workflow/detail.html:90
 msgid "Type"
-msgstr "输入"
+msgstr "类型"
 
 #: action/views_action.py:71 dataops/views.py:48
 msgid "Last executed"
 msgstr "上次执行的"
 
 #: action/views_action.py:74 dataops/sqlcon_views.py:26
-#: dataops/sqlcon_views.py:59
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:4
-#: dataops/views.py:51 scheduler/views.py:39
+#: dataops/sqlcon_views.py:59 dataops/views.py:51 scheduler/views.py:39
 #: table/templates/table/includes/partial_table_ops.html:4 table/views.py:42
 #: workflow/templates/workflow/detail.html:92 workflow/views.py:63
 msgid "Operations"
@@ -1364,7 +1370,7 @@ msgstr "描述 (展示给学生看)"
 
 #: action/views_action.py:202
 msgid "An action with that name already exists"
-msgstr "以那个名称命名的一个处理程序已经存在"
+msgstr "以那个名称命名的操作已经存在"
 
 #: action/views_action.py:451 action/views_action.py:751
 #: action/views_action.py:802 action/views_action.py:844
@@ -1374,7 +1380,7 @@ msgstr "工作流没有数据。到 \"Manage table data\"上传数据 。"
 
 #: action/views_action.py:711
 msgid "An action with this name already exists"
-msgstr "本名称命名的处理程序已经存在"
+msgstr "本名称命名的操作已经存在"
 
 #: action/views_action.py:716 workflow/import_export_views.py:118
 msgid "Incorrect form request (it is not multipart)"
@@ -1392,7 +1398,7 @@ msgstr "表格中没有数据"
 
 #: action/views_condition.py:92
 msgid "A condition with that name already exists in this action"
-msgstr "本处理程序中以此命名的条件已经存在"
+msgstr "本操作中以此命名的条件已经存在"
 
 #: action/views_condition.py:110
 msgid "A column name with that name already exists."
@@ -1408,7 +1414,7 @@ msgstr "条件不能被克隆。"
 
 #: action/views_condition.py:521
 msgid "Action successfully cloned."
-msgstr "处理程序成功被克隆。"
+msgstr "操作成功被克隆。"
 
 #: action/views_out.py:95
 msgid ""
@@ -1426,19 +1432,19 @@ msgstr "不正确的电子邮件处理程序调动。"
 
 #: action/views_out.py:293
 msgid "Create ZIP"
-msgstr "创建ZIP"
+msgstr "创建压缩文件"
 
 #: action/views_out.py:321 action/views_out.py:372
 msgid "Incorrect ZIP action invocation."
-msgstr "不正确的ZIP处理程序调动。"
+msgstr "不正确的压缩文件操作调动。"
 
 #: action/views_out.py:395
 msgid "Unable to generate zip:"
-msgstr "无法生成zip:"
+msgstr "无法生成压缩文件:"
 
 #: action/views_out.py:400
 msgid "The resulting ZIP is empty"
-msgstr "生成的ZIP是空的"
+msgstr "生成的压缩文件是空的"
 
 #: action/views_out.py:511
 msgid ""
@@ -1450,7 +1456,7 @@ msgstr ""
 
 #: action/views_out.py:571
 msgid "Incorrect JSON action invocation."
-msgstr "不正确的JSON处理程序调动。"
+msgstr "不正确的JSON操作调动。"
 
 #: action/views_out.py:687
 #, python-brace-format
@@ -1459,7 +1465,7 @@ msgstr "检索学生{0}内容时出错"
 
 #: action/views_out.py:734
 msgid "Incorrect item filter invocation."
-msgstr "不正确的项目过滤器调用。"
+msgstr "不正确的项目筛选标签调用。"
 
 #: core/apps.py:9
 msgid "Core Configuration"
@@ -1552,7 +1558,7 @@ msgstr "该插件需要至少一个输入列"
 #: dataops/forms.py:163
 msgid ""
 "File in CSV format (typically produced by a statistics package or Excel)"
-msgstr "CSV格式的文件 (通常由统计软件包或Excel生成)"
+msgstr "CSV格式的文件(通常由统计软件包或Excel生成)"
 
 #: dataops/forms.py:167
 msgid "Lines to skip at the top"
@@ -1702,40 +1708,36 @@ msgid "DB name"
 msgstr "数据库名称"
 
 #: dataops/models.py:133 table/apps.py:9 table/templates/table/display.html:8
+#: table/templates/table/display.html:68
 #: table/templates/table/includes/partial_view_operations.html:7
-#: templates/base.html:89
+#: templates/base.html:90
 msgid "Table"
 msgstr "表格"
 
-#: dataops/ops.py:412
+#: dataops/ops.py:416
 msgid "Merge operation failed. Exception: "
-msgstr "合并操作失败。例外："
+msgstr "合并操作失败。例外： "
 
-#: dataops/ops.py:437
+#: dataops/ops.py:441
 msgid "Merge operation produced a result with no rows"
 msgstr "合并操作产生没有行的结果"
 
-#: dataops/ops.py:454 dataops/ops.py:466
+#: dataops/ops.py:458 dataops/ops.py:470
 #, python-brace-format
 msgid "New values in column {0} are not of type {1}"
 msgstr "列{0}中的新值不是{1}类型。"
 
-#: dataops/ops.py:461
+#: dataops/ops.py:465
 #, python-brace-format
 msgid "New values in column {0} are not of type number"
 msgstr "列{0}中的新值不是类型号"
 
-#: dataops/ops.py:477
+#: dataops/ops.py:481
 #, python-brace-format
 msgid "New values in column {0} are not in categories {1}"
 msgstr "列{0}中的新值不在类别{1}中。"
 
-#: dataops/ops.py:496
-#, python-brace-format
-msgid "Column {0} is no longer a key column."
-msgstr "列{0}不再是键列。"
-
-#: dataops/ops.py:540
+#: dataops/ops.py:545
 #, python-brace-format
 msgid "Type {0} not found"
 msgstr "未找到类型{0}"
@@ -1862,7 +1864,7 @@ msgstr "<受保护的>"
 
 #: dataops/sqlcon_views.py:385
 msgid "SQL connection"
-msgstr "一个到 SQL Server 数据库的打开的连接"
+msgstr "SQL连接"
 
 #: dataops/sqlcon_views.py:409
 #, python-brace-format
@@ -1918,7 +1920,7 @@ msgstr "确认连接克隆"
 #: dataops/templates/dataops/includes/partial_sqlconn_clone.html:11
 #, python-format
 msgid "Are you sure you want to clone connection <strong>%(n)s</strong>?"
-msgstr "您确定要连接克隆<strong>%(n)s</strong>?"
+msgstr "您确定要克隆连接<strong>%(n)s</strong>?"
 
 #: dataops/templates/dataops/includes/partial_sqlconn_clone.html:12
 msgid "A new connection with the prefix \"Copy_of_\" will be created"
@@ -1941,15 +1943,15 @@ msgstr "您确定要删除连接<strong>%(n)s</strong>?"
 msgid "Delete connection"
 msgstr "删除连接"
 
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:12
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:7
 msgid "Edit SQL connection parameters"
 msgstr "编辑SQL连接参数"
 
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:21
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:14
 msgid "Create an exact duplicate of this connection"
 msgstr "创建此连接的精确副本"
 
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:30
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:21
 msgid "Delete SQL connection"
 msgstr "删除SQL连接"
 
@@ -2040,7 +2042,7 @@ msgstr "编辑学生数据"
 
 #: dataops/templates/dataops/sql_connections.html:8
 #: dataops/templates/dataops/sql_connections.html:39
-#: dataops/templates/dataops/uploadmerge.html:64 templates/base.html:79
+#: dataops/templates/dataops/uploadmerge.html:64 templates/base.html:80
 #: workflow/templates/workflow/sql_connections.html:8
 #: workflow/templates/workflow/sql_connections.html:43
 msgid "SQL Connections"
@@ -2156,7 +2158,7 @@ msgstr "重命名至"
 #: dataops/templates/dataops/upload_s4.html:39
 #: dataops/templates/dataops/upload_s4.html:46
 msgid "Key"
-msgstr "关键"
+msgstr "密钥"
 
 #: dataops/templates/dataops/upload_s2.html:55
 msgid "Keep?"
@@ -2333,7 +2335,7 @@ msgstr ""
 "如果工作流表具有数据，\n"
 "则操作将要求您将表中的\n"
 "键列与要上传的文件中的键列匹配,\n"
-"以便可以匹配行。"
+"以便可以匹配行。 "
 
 #: dataops/templates/dataops/uploadmerge.html:68
 msgid ""
@@ -2373,7 +2375,7 @@ msgstr " (更新)"
 
 #: dataops/upload.py:507
 msgid " (Renamed)"
-msgstr " (重命名)"
+msgstr " (重命名的)"
 
 #: dataops/views.py:40
 msgid "Folder"
@@ -2382,7 +2384,7 @@ msgstr "文件夹"
 #: dataops/views.py:46 logs/templates/logs/view.html:8
 #: workflow/templates/workflow/detail.html:74 workflow/views.py:46
 msgid "Last modified"
-msgstr "最后修改"
+msgstr "最后被修改"
 
 #: dataops/views.py:173
 msgid "Unable to update table row"
@@ -2396,7 +2398,7 @@ msgstr "更新行时找不到关键值"
 #, python-brace-format
 msgid ""
 "Repeated value in column {0}. It must be different to maintain Key property"
-msgstr "在列{0}中重复的值。值必须不同来保持密钥属性。"
+msgstr "在列{0}中重复的值。值必须不同来保持密钥属性"
 
 #: dataops/views.py:335
 #, python-brace-format
@@ -2510,7 +2512,7 @@ msgstr "身份验证为{0}找到了一个现有用户。"
 msgid ""
 "automatic new user creation is turned OFF! just try to find and existing "
 "record"
-msgstr "记录"
+msgstr "自动创建新用户功能关闭！仅仅从现有记录中寻找"
 
 #: django_auth_lti/backends.py:156
 #, python-brace-format
@@ -2542,7 +2544,7 @@ msgstr "收到一个 基本的-lti-启动-请求-验证用户"
 #: django_auth_lti/middleware.py:49 django_auth_lti/middleware_patched.py:59
 #, python-format
 msgid "authenticate() took %s s"
-msgstr "身份验证 ()使用 %s s"
+msgstr "身份验证()使用 %s s"
 
 #: django_auth_lti/middleware.py:56 django_auth_lti/middleware_patched.py:66
 msgid "user was successfully authenticated; now log them in"
@@ -2620,11 +2622,11 @@ msgstr "事件日志"
 
 #: logs/models.py:94
 msgid "Workflow created"
-msgstr "工作流创造完成"
+msgstr "工作流已创建"
 
 #: logs/models.py:95
 msgid "Workflow updated"
-msgstr "工作流更新完成"
+msgstr "工作流已更新"
 
 #: logs/models.py:96
 msgid "Workflow deleted"
@@ -2841,7 +2843,7 @@ msgstr "执行电子邮件行动计划"
 
 #: logs/models.py:150
 msgid "Download a ZIP with personalized text"
-msgstr "下载有个性化文本的ZIP"
+msgstr "下载有个性化文本的压缩文件"
 
 #: logs/models.py:151
 msgid "Edit scheduled JSON action"
@@ -2864,7 +2866,7 @@ msgid "Maximum number of logs shown to the user"
 msgstr "向用户显示的日志的最大数量"
 
 #: logs/templates/logs/display.html:8 logs/templates/logs/display.html:45
-#: templates/base.html:100
+#: templates/base.html:101
 msgid "Logs"
 msgstr "日志"
 
@@ -2982,7 +2984,7 @@ msgstr "用户个人信息"
 
 #: profiles/models.py:18
 msgid "Profile picture"
-msgstr "简介图片"
+msgstr "个人信息图片"
 
 #: profiles/models.py:23
 msgid "Email verified"
@@ -2990,23 +2992,23 @@ msgstr "电子邮件已验证"
 
 #: profiles/models.py:32
 msgid "{}'s profile"
-msgstr "{}的简况"
+msgstr "{}的个人信息"
 
 #: profiles/signals.py:22
 #, python-brace-format
 msgid "New user profile for {0} created"
-msgstr "已为{0}创建新用户简介"
+msgstr "已为{0}创建新用户个人信息资料"
 
 #: profiles/templates/profiles/edit_profile.html:6
 #: profiles/templates/profiles/show_profile.html:5
-#: profiles/templates/profiles/show_profile.html:24 templates/base.html:56
+#: profiles/templates/profiles/show_profile.html:24 templates/base.html:57
 msgid "Profile"
-msgstr "简介"
+msgstr "个人信息资料"
 
 #: profiles/templates/profiles/edit_profile.html:9
 #: profiles/templates/profiles/show_profile.html:13
 msgid "Edit Profile"
-msgstr "编辑简介"
+msgstr "编辑个人信息资料"
 
 #: profiles/templates/profiles/edit_profile.html:20
 msgid "Personal info"
@@ -3034,7 +3036,7 @@ msgstr "已加入"
 
 #: profiles/templates/profiles/show_profile.html:37
 msgid "Last seen"
-msgstr "上次被看到"
+msgstr "上次被查看"
 
 #: profiles/templates/profiles/show_profile.html:46
 msgid "Profile permalink"
@@ -3046,11 +3048,11 @@ msgstr "无永久链接。查看此问题。"
 
 #: profiles/templates/profiles/show_profile.html:54
 msgid "Bio"
-msgstr "生物的"
+msgstr "简介"
 
 #: profiles/templates/profiles/show_profile.html:58
 msgid "API Auth token"
-msgstr "API Auth身份验证"
+msgstr "API Auth身份验证令牌"
 
 #: profiles/templates/profiles/show_profile.html:60
 msgid "Reset"
@@ -3062,15 +3064,15 @@ msgstr "创建"
 
 #: profiles/views.py:54
 msgid "There was a problem with the form. Please check the details."
-msgstr "表格有问题。请检查详情。"
+msgstr "表格有问题。请检查详细信息。"
 
 #: profiles/views.py:66
 msgid "Profile details saved!"
-msgstr "用户资料细节已保存！"
+msgstr "用户资料详细信息已保存！"
 
 #: scheduler/apps.py:9
 msgid "Task Scheduler"
-msgstr "任务调度程序"
+msgstr "任务日程安排"
 
 #: scheduler/forms.py:50 scheduler/forms.py:225
 msgid "Date/time must be in the future"
@@ -3107,10 +3109,6 @@ msgstr "列选择元素 (空格跳过)"
 #: scheduler/forms.py:268 scheduler/forms.py:275
 msgid "This field must be a comma-separated list of emails."
 msgstr "此字段必须是逗号分隔的电子邮件列表。"
-
-#: scheduler/forms.py:291
-msgid "Scheduling action needs a token"
-msgstr "调度动作需要令牌"
 
 #: scheduler/models.py:31
 msgid "Creating"
@@ -3170,21 +3168,21 @@ msgstr "排除项目需要item_column有一个值"
 
 #: scheduler/serializers.py:107
 msgid "Scheduled objects needs a payload."
-msgstr "计划对象需要有效载荷。"
+msgstr "已排程的对象需要有效载荷。"
 
 #: scheduler/serializers.py:125
 #, python-brace-format
 msgid "Scheduled action could not be created: {0}"
-msgstr "无法创建计划动作：{0}"
+msgstr "无法创建已排程的操作：{0}"
 
 #: scheduler/serializers.py:148
 #, python-brace-format
 msgid "Unable to update scheduled action: {0}"
-msgstr "无法更新计划动作：{0}"
+msgstr "无法更新已排程的操作：{0}"
 
 #: scheduler/serializers.py:172 scheduler/serializers.py:223
 msgid "Incorrect type of action to schedule."
-msgstr "不可调度的动作类型。"
+msgstr "不正确的待排程的操作类型。"
 
 #: scheduler/serializers.py:176
 msgid "Personalized text needs a subject."
@@ -3192,7 +3190,7 @@ msgstr "个性化的文本需要一个主题。"
 
 #: scheduler/serializers.py:179
 msgid "Personalized text needs a item_column"
-msgstr "个性化的文本需要一个item_column。"
+msgstr "个性化的文本需要一个item_column"
 
 #: scheduler/serializers.py:201
 msgid "cc_email must be a comma-separated list of emails."
@@ -3209,7 +3207,7 @@ msgstr "个性化JSON需要有效载荷中的令牌。"
 #: scheduler/templates/scheduler/edit.html:7
 #: scheduler/templates/scheduler/edit.html:17
 msgid "Schedule Action Execution"
-msgstr "计划行动执行"
+msgstr "安排操作执行"
 
 #: scheduler/templates/scheduler/edit.html:19
 #, python-format
@@ -3223,7 +3221,7 @@ msgstr "操作：%(action.name)s"
 
 #: scheduler/templates/scheduler/includes/partial_scheduler_delete.html:9
 msgid "Confirm scheduled operation deletion"
-msgstr "确认计划操作删除"
+msgstr "确认删除已排程的操作"
 
 #: scheduler/templates/scheduler/includes/partial_scheduler_delete.html:12
 #, python-format
@@ -3233,24 +3231,23 @@ msgid ""
 "      for action <strong>%(n)s</strong>?"
 msgstr ""
 "您确定\n"
-"要删除动作 <strong>%(n)s</strong> 的\n"
-"计划操作吗？"
+"要删除已排程的操作<strong>%(n)s</strong>吗？"
 
 #: scheduler/templates/scheduler/includes/partial_scheduler_delete.html:20
 msgid "Delete scheduled operation"
-msgstr "删除计划操作"
+msgstr "删除已排程的操作"
 
 #: scheduler/templates/scheduler/index.html:8
 msgid "Scheduled operations"
-msgstr "计划操作"
+msgstr "已排程的操作"
 
 #: scheduler/templates/scheduler/index.html:24
 msgid "No scheduled operations in this workflow."
-msgstr "本工作流中无计划操作。"
+msgstr "本工作流中没有已排程的操作。"
 
 #: scheduler/templates/scheduler/index.html:39
 msgid "Scheduled Operations"
-msgstr "计划操作"
+msgstr "已排程操作"
 
 #: scheduler/templates/scheduler/index.html:47
 #, python-format
@@ -3263,27 +3260,27 @@ msgid ""
 "    </i> for an\n"
 "    action."
 msgstr ""
-"处理程序的执行可以\n"
-"安排在将来的某个时间。本页面显示了那些执行计划。要调度一个处理程序的执行,\n"
-"找到<a href=\"%(actionindex)s\">处理程序</a>菜单，\n"
-"为一个处理程序选择<i>排队</i> 操作。"
+"操作的执行可以\n"
+"安排在将来的某个时间。本页面显示了那些执行计划。如需安排一个操作的执行,\n"
+"找到<a href=\"%(actionindex)s\">操作</a>菜单，\n"
+"为操作选择<i>排程</i>行动。"
 
 #: scheduler/templates/scheduler/schedule_done.html:4
 msgid "Action scheduled"
-msgstr "处理程序已安排"
+msgstr "操作已排程"
 
 #: scheduler/templates/scheduler/schedule_done.html:10
 #, python-format
 msgid "The action will execute in %(n)s"
-msgstr "该处理程序将在 %(n)s 执行"
+msgstr "该操作将在 %(n)s 执行"
 
 #: scheduler/views.py:57 workflow/templates/workflow/export.html:33
 msgid "Action"
-msgstr "处理程序"
+msgstr "操作"
 
 #: scheduler/views.py:63
 msgid "Scheduled"
-msgstr "已安排"
+msgstr "已排程"
 
 #: scheduler/views.py:74
 msgid "Item column"
@@ -3301,45 +3298,45 @@ msgstr "参数"
 msgid "Result"
 msgstr "结果"
 
-#: scheduler/views.py:217
+#: scheduler/views.py:215
 msgid "A scheduled execution of this action with this name already exists"
-msgstr "此名称的已排队执行已经存在"
+msgstr "以此命名的已排程操作已经存在"
 
-#: scheduler/views.py:332
+#: scheduler/views.py:330
 msgid "Incorrect action scheduling invocation."
-msgstr "不正确的处理程序调度调用"
+msgstr "不正确的操作排程调用。"
 
-#: scheduler/views.py:339
+#: scheduler/views.py:337
 msgid "Incorrect parameters in action scheduling"
-msgstr "动作调度中的错误参数"
+msgstr "操作排程中的错误参数"
 
-#: scheduler/views.py:401
+#: scheduler/views.py:399
 #, python-brace-format
 msgid "{0} days"
 msgstr "{0}天"
 
-#: scheduler/views.py:404
+#: scheduler/views.py:402
 #, python-brace-format
 msgid ", {0} hours"
 msgstr "{0}小时"
 
-#: scheduler/views.py:407
+#: scheduler/views.py:405
 #, python-brace-format
 msgid ", {0} minutes"
 msgstr "{0}分钟"
 
-#: scheduler/views.py:493
+#: scheduler/views.py:491
 msgid ""
 "Unable to schedule actions due to a misconfiguration. Ask your system "
 "administrator to enable queueing."
 msgstr ""
-"由于错误配置，无法调度操作。请系统管理员\n"
+"由于错误配置，无法安排操作。请系统管理员\n"
 "启用队列。"
 
 #: scripts/scheduler_script.py:119
 #, python-brace-format
 msgid "Operation executed. Status available in Log {0}"
-msgstr "执行操作。日志{0}中可用的状态"
+msgstr "操作已执行。可在日志{0}中查看状态"
 
 #: table/api.py:49 table/api.py:220
 msgid "Unable to access the workflow"
@@ -3373,7 +3370,7 @@ msgstr "视图名称"
 
 #: table/forms.py:22
 msgid "Columns to show"
-msgstr "显示的列"
+msgstr "待显示的列"
 
 #: table/forms.py:23
 msgid "View Description"
@@ -3381,7 +3378,7 @@ msgstr "视图描述"
 
 #: table/forms.py:41
 msgid "The view needs at least one column to show"
-msgstr "视图需要至少一列显示"
+msgstr "显示视图至少需要一列"
 
 #: table/forms.py:47
 msgid "There needs to be at least one key column"
@@ -3389,11 +3386,11 @@ msgstr "需要至少有一个键列"
 
 #: table/models.py:41
 msgid "Subset of columns to show"
-msgstr "要显示的列子集"
+msgstr "待显示的列子集"
 
 #: table/models.py:47
 msgid "Subset of rows to show"
-msgstr "要显示的行子集"
+msgstr "待显示的行子集"
 
 #: table/models.py:51
 msgid "Preselect rows satisfying this condition"
@@ -3449,10 +3446,6 @@ msgstr "该学生在此列中没有值"
 #: table/stat_views.py:184
 msgid "Unable to provide visualisation without data."
 msgstr "没有数据，无法提供可视化。"
-
-#: table/templates/table/display.html:68
-msgid "Table View"
-msgstr "表格视图"
 
 #: table/templates/table/display.html:80
 msgid "Add a new row to the table"
@@ -3562,7 +3555,7 @@ msgstr "添加视图"
 #: table/templates/table/includes/partial_view_add.html:15
 #: table/templates/table/includes/partial_view_edit.html:15
 msgid "Row filter"
-msgstr "行过滤器"
+msgstr "行筛选"
 
 #: table/templates/table/includes/partial_view_clone.html:8
 msgid "Confirm view cloning"
@@ -3571,7 +3564,7 @@ msgstr "确认视图克隆"
 #: table/templates/table/includes/partial_view_clone.html:11
 #, python-format
 msgid "Are you sure you want to clone view <strong>%(n)s</strong>?"
-msgstr "您确定要克隆视图 <strong>%(n)s</strong>?"
+msgstr "您确定要克隆视图<strong>%(n)s</strong>吗?"
 
 #: table/templates/table/includes/partial_view_clone.html:12
 msgid "A new view with the prefix \"Copy_of_\" will be created"
@@ -3589,7 +3582,7 @@ msgstr "确认视图删除"
 #, python-format
 msgid ""
 "Are you sure you want to delete the view <strong>%(view.name)s</strong>?"
-msgstr "您确定要删除视图 <strong>%(view.name)s</strong>?"
+msgstr "您确定要删除视图<strong>%(view.name)s</strong>吗?"
 
 #: table/templates/table/includes/partial_view_delete.html:17
 msgid "Delete view"
@@ -3618,7 +3611,7 @@ msgstr "列没有数据"
 #: table/templates/table/stat_row.html:20
 #, python-format
 msgid "Stats for %(value)s"
-msgstr "%(value)s 的统计表"
+msgstr "%(value)s的统计表"
 
 #: table/templates/table/stat_view.html:8
 msgid "Staticstics"
@@ -3636,7 +3629,7 @@ msgstr "表视图"
 
 #: table/templates/table/view_index.html:33
 msgid "There are no views for this workflow."
-msgstr "此工作流没有视图"
+msgstr "此工作流没有视图。"
 
 #: table/templates/table/view_index.html:64
 msgid "New view for the table"
@@ -3660,7 +3653,7 @@ msgstr "错误视图引用"
 
 #: table/views.py:397
 msgid "Incorrect URL invoked to delete a row"
-msgstr "调用不正确的URL删除行"
+msgstr "调用不正确的网址来删除行"
 
 #: table/views.py:472 table/views.py:505
 msgid "Cannot add a view to a workflow without data"
@@ -3716,12 +3709,12 @@ msgid ""
 "    address this anomaly soon."
 msgstr "哎呀!平台有一个内部错误。我们很抱歉。我们希望尽快解决这种异常现象。"
 
-#: templates/_navbar.html:3 templates/base.html:103
+#: templates/_navbar.html:3 templates/base.html:104
 msgid "About"
 msgstr "关于"
 
 #: templates/admin/admin_title.html:1 templates/admin/base_site.html:5
-#: templates/admin/base_site.html:7 templates/base.html:49
+#: templates/admin/base_site.html:7 templates/base.html:50
 msgid "Admin"
 msgstr "管理员"
 
@@ -3729,62 +3722,62 @@ msgstr "管理员"
 msgid "Switch to Site"
 msgstr "切换到网站"
 
-#: templates/base.html:34
+#: templates/base.html:35
 msgid "Toggle navigation"
 msgstr "切换导航"
 
-#: templates/base.html:57 templates/base.html:190
+#: templates/base.html:58 templates/base.html:190
 msgid "Logout"
 msgstr "退出"
 
-#: templates/base.html:65
+#: templates/base.html:66
 msgid "Read the manual"
 msgstr "阅读手册"
 
-#: templates/base.html:75 workflow/apps.py:9
+#: templates/base.html:76 workflow/apps.py:9
 #: workflow/templates/workflow/index.html:8
 msgid "Workflows"
 msgstr "工作表"
 
-#: templates/base.html:85 workflow/templates/workflow/detail.html:8
+#: templates/base.html:86 workflow/templates/workflow/detail.html:8
 msgid "Details"
-msgstr "细节"
+msgstr "详细信息"
 
-#: templates/base.html:97
+#: templates/base.html:98
 msgid "Scheduler"
-msgstr "调度程序"
+msgstr "排程"
 
-#: templates/base.html:105
+#: templates/base.html:106
 msgid "Contact"
 msgstr "联系"
 
-#: templates/base.html:132
+#: templates/base.html:133
 msgid "This functionality has not been implemented yet."
 msgstr "此功能尚未实现。"
 
-#: templates/base.html:143
+#: templates/base.html:144
 msgid "Your session is about to expire"
-msgstr "您的会话即将到期。"
-
-#: templates/base.html:146
-msgid "Your session will expire in"
-msgstr "您的会话还有 (）到期。"
+msgstr "您的操作即将到期"
 
 #: templates/base.html:147
-msgid "seconds."
-msgstr "秒"
+msgid "Your session will expire in"
+msgstr "您的操作还有(）到期"
 
-#: templates/base.html:166
+#: templates/base.html:148
+msgid "seconds."
+msgstr "秒。"
+
+#: templates/base.html:167
 msgid "OnTask Project"
 msgstr "OnTask项目"
 
-#: templates/base.html:170
+#: templates/base.html:171
 msgid "Version:"
 msgstr "版本："
 
 #: templates/base.html:189
 msgid "Your session is about to expire."
-msgstr "您的会话即将到期。"
+msgstr "您的操作即将到期。"
 
 #: templates/base.html:193
 msgid "Remain Connected"
@@ -3800,7 +3793,7 @@ msgstr "内部错误"
 
 #: templates/critical_error.html:11
 msgid "Oops. We have detected an internal error."
-msgstr "哎呀。我们检测到一个内部错误"
+msgstr "哎呀。我们检测到一个内部错误。"
 
 #: templates/critical_error.html:15
 msgid ""
@@ -3855,7 +3848,7 @@ msgstr "成功更改密码"
 
 #: templates/registration/password_change_done.html:12
 msgid "Your password was changed."
-msgstr "您的密码已更改"
+msgstr "您的密码已更改。"
 
 #: templates/registration/password_change_form.html:16
 msgid "Please correct the error below."
@@ -3970,7 +3963,7 @@ msgstr "感谢"
 
 #: templates/under_construction.html:7
 msgid "This functionality is under construction."
-msgstr "此项功能正在建设中"
+msgstr "此项功能正在建设中。"
 
 #: visualizations/rgraph.py:265
 #, python-brace-format
@@ -4077,11 +4070,11 @@ msgstr "无法执行所请求的操作 ({0})"
 
 #: workflow/column_views.py:388
 msgid "The integer value has to be larger than 1"
-msgstr "整数值必须大于1。"
+msgstr "整数值必须大于1"
 
 #: workflow/column_views.py:404
 msgid "The value has to be a comma-separated list"
-msgstr "该值必须是逗号分隔的列表。"
+msgstr "该值必须是逗号分隔的列表"
 
 #: workflow/column_views.py:594
 msgid "You cannot delete the only key column"
@@ -4109,7 +4102,7 @@ msgstr "不正确的列表值"
 
 #: workflow/forms.py:154
 msgid "The values in the column are not compatible  with these ones."
-msgstr "列中的值与这些值不兼容"
+msgstr "列中的值与这些值不兼容。"
 
 #: workflow/forms.py:200 workflow/forms.py:285
 msgid "Question name"
@@ -4137,11 +4130,11 @@ msgstr "分配给列中所有单元格的值"
 
 #: workflow/forms.py:263
 msgid "This value is not in the list of allowed values"
-msgstr "此值不在允许值列表中。"
+msgstr "此值不在允许值列表中"
 
 #: workflow/forms.py:330
 msgid "There must be at least one column with unique values"
-msgstr "必须至少有一个具有唯一值的列。"
+msgstr "必须至少有一个具有唯一值的列"
 
 #: workflow/forms.py:340
 msgid "The column does not have unique values for each row."
@@ -4153,7 +4146,7 @@ msgstr "要合并的列*"
 
 #: workflow/forms.py:392
 msgid "You need to select the columns to combine"
-msgstr "您需要选择要合并的列。"
+msgstr "您需要选择要合并的列"
 
 #: workflow/forms.py:411
 msgid "Incorrect data type for the selected operand"
@@ -4161,7 +4154,7 @@ msgstr "所选操作数的不正确数据类型"
 
 #: workflow/forms.py:437
 msgid "Number (values from 1 to N) or comma separated list of values."
-msgstr "数值 (从1到n的值)或逗号分隔的值列表。"
+msgstr "数值(从1到n的值)或逗号分隔的值列表。"
 
 #: workflow/forms.py:462
 msgid "File containing a previously exported workflow"
@@ -4197,7 +4190,7 @@ msgstr "列数"
 
 #: workflow/models.py:554
 msgid "column name"
-msgstr "列名"
+msgstr "列名称"
 
 #: workflow/models.py:577
 msgid "type of data to store in the column"
@@ -4225,7 +4218,7 @@ msgstr "列活跃于"
 
 #: workflow/models.py:619
 msgid "Column active until"
-msgstr "列活跃直到"
+msgstr "列将活跃直到"
 
 #: workflow/models.py:692
 #, python-format
@@ -4264,7 +4257,7 @@ msgstr "列没有意义值"
 
 #: workflow/serializers.py:22
 msgid "Attributes must be a dictionary of (string, string) pairs."
-msgstr "属性必须是(string, string)对的字典"
+msgstr "属性必须是(string, string)对的字典。"
 
 #: workflow/serializers.py:27
 msgid "Attributes must be a dictionary (str, str)"
@@ -4309,25 +4302,25 @@ msgstr[0] "%(num)s 行"
 #, python-format
 msgid "%(num)s column"
 msgid_plural "%(num)s columns"
-msgstr[0] "%(num)s 列"
+msgstr[0] "%(num)s列"
 
 #: workflow/templates/workflow/detail.html:79
 #, python-format
 msgid "%(num)s Key column"
 msgid_plural "%(num)s Key columns"
-msgstr[0] "%(num)s 键列"
+msgstr[0] "%(num)s键列"
 
 #: workflow/templates/workflow/detail.html:80
 #, python-format
 msgid "%(num)s action"
 msgid_plural "%(num)s actions,"
-msgstr[0] "%(num)s 操作"
+msgstr[0] "%(num)s操作"
 
 #: workflow/templates/workflow/detail.html:81
 #, python-format
 msgid "%(num)s attribute"
 msgid_plural " %(num)s attributes"
-msgstr[0] "%(num)s 属性"
+msgstr[0] "%(num)s属性"
 
 #: workflow/templates/workflow/detail.html:91
 msgid "Key?"
@@ -4336,7 +4329,7 @@ msgstr "密钥？"
 #: workflow/templates/workflow/detail.html:106
 #, python-format
 msgid "Go to <a href=\"%(windex)s\">your list of workflows</a>"
-msgstr "转到 <a href=\"%(windex)s\">您的工作流列表</a>"
+msgstr "转到<a href=\"%(windex)s\">您的工作流列表</a>"
 
 #: workflow/templates/workflow/export.html:13
 msgid "Export Workflow"
@@ -4364,11 +4357,11 @@ msgstr "全部"
 
 #: workflow/templates/workflow/export_done.html:13
 msgid "Workflow export"
-msgstr "工作流输出"
+msgstr "工作流导出"
 
 #: workflow/templates/workflow/import.html:7
 msgid "Import workflows"
-msgstr "输入工作流"
+msgstr "导入工作流"
 
 #: workflow/templates/workflow/includes/add_column_menu.html:4
 msgid "Add Column"
@@ -4426,7 +4419,7 @@ msgid ""
 "in the table."
 msgstr ""
 "<strong>下一步:</strong>点击<a href=\"%(actionindex)s\">\n"
-"处理程序</a> 顶部栏菜单\n"
+"操作</a> 顶部栏菜单\n"
 "创建与表中的数据一起执行的操作。"
 
 #: workflow/templates/workflow/includes/no_data.html:3
@@ -4453,7 +4446,7 @@ msgstr "确认删除属性"
 #: workflow/templates/workflow/includes/partial_attribute_delete.html:12
 #, python-format
 msgid "Are you sure you want to delete the attribute <strong>%(key)s</strong>?"
-msgstr "您确定要删除属性<strong>%(key)s</strong>?"
+msgstr "您确定将删除属性<strong>%(key)s</strong>吗?"
 
 #: workflow/templates/workflow/includes/partial_attribute_delete.html:18
 msgid "Delete attribute"
@@ -4483,7 +4476,7 @@ msgstr "添加列"
 #: workflow/templates/workflow/includes/partial_column_addedit.html:20
 #, python-format
 msgid "Edit column <strong>%(n)s</strong>"
-msgstr "编辑列 <strong>%(n)s</strong>"
+msgstr "编辑列<strong>%(n)s</strong>"
 
 #: workflow/templates/workflow/includes/partial_column_clone.html:8
 msgid "Confirm column cloning"
@@ -4492,11 +4485,11 @@ msgstr "确认克隆列"
 #: workflow/templates/workflow/includes/partial_column_clone.html:11
 #, python-format
 msgid "Are you sure you want to clone column <strong>%(n)s</strong>?"
-msgstr "您确定要克隆列 <strong>%(n)s</strong>"
+msgstr "您确定要克隆列<strong>%(n)s</strong>？"
 
 #: workflow/templates/workflow/includes/partial_column_clone.html:12
 msgid "A new column with the prefix \"Copy_of_\" will be created"
-msgstr "将创建一个带有前缀\"Copy_Of_\"的新列。"
+msgstr "将创建一个带有前缀\"Copy_Of_\"的新列"
 
 #: workflow/templates/workflow/includes/partial_column_clone.html:18
 msgid "Clone column"
@@ -4528,7 +4521,7 @@ msgid ""
 "      <strong>%(n)s</strong> to the values %(v)s?"
 msgstr ""
 "您确定要限制列\n"
-"<strong>%(n)s</strong> 为数值%(v)s?"
+"<strong>%(n)s</strong>为数值%(v)s?"
 
 #: workflow/templates/workflow/includes/partial_column_restrict.html:19
 msgid "Restrict column"
@@ -4547,7 +4540,7 @@ msgstr "添加问题"
 #: workflow/templates/workflow/includes/partial_question_addedit.html:20
 #, python-format
 msgid "Edit question <strong>%(n)s</strong>"
-msgstr "编辑问题 <strong>%(n)s</strong>"
+msgstr "编辑问题<strong>%(n)s</strong>"
 
 #: workflow/templates/workflow/includes/partial_random_column_add.html:11
 #: workflow/templates/workflow/includes/partial_random_column_add.html:20
@@ -4579,11 +4572,11 @@ msgstr "确认克隆工作流"
 #: workflow/templates/workflow/includes/partial_workflow_clone.html:11
 #, python-format
 msgid "Are you sure you want to clone workflow <strong>%(n)s</strong>?"
-msgstr "您确定要克隆工作流 <strong>%(n)s</strong>?"
+msgstr "您确定要克隆工作流<strong>%(n)s</strong>?"
 
 #: workflow/templates/workflow/includes/partial_workflow_clone.html:12
 msgid "A new workflow with the prefix \"Copy of \" will be created"
-msgstr "将创建一个带有前缀\"Copy Of \"的新工作流。"
+msgstr "将创建一个带有前缀\"Copy Of \"的新工作流"
 
 #: workflow/templates/workflow/includes/partial_workflow_clone.html:18
 #: workflow/templates/workflow/includes/workflow_detail_buttons.html:51
@@ -4618,7 +4611,7 @@ msgstr "确认删除工作流"
 #: workflow/templates/workflow/includes/partial_workflow_delete.html:11
 #, python-format
 msgid "Are you sure you want to delete the workflow <strong>%(n)s</strong>?"
-msgstr "您确定要删除工作流 <strong>%(n)s</strong>?"
+msgstr "您确定要删除工作流<strong>%(n)s</strong>吗?"
 
 #: workflow/templates/workflow/includes/partial_workflow_delete.html:12
 msgid ""
@@ -4626,7 +4619,7 @@ msgid ""
 "it."
 msgstr ""
 "此操作还将删除\n"
-"所有附带的条件和动作。"
+"所有附带的条件和操作。"
 
 #: workflow/templates/workflow/includes/partial_workflow_delete.html:18
 #: workflow/templates/workflow/includes/workflow_detail_buttons.html:68
@@ -4730,7 +4723,7 @@ msgstr "更多的工作流操作"
 
 #: workflow/templates/workflow/includes/workflow_detail_buttons.html:17
 msgid "List of name=value pairs to use in the actions"
-msgstr "在动作中使用的名称=值成对的列表"
+msgstr "在操作中使用的名称=值成对的列表"
 
 #: workflow/templates/workflow/includes/workflow_detail_buttons.html:18
 msgid "Workflow attributes"
@@ -4738,7 +4731,7 @@ msgstr "工作流属性"
 
 #: workflow/templates/workflow/includes/workflow_detail_buttons.html:25
 msgid "Export the workflow and its actions"
-msgstr "导出工作流及其行为"
+msgstr "导出工作流及其操作"
 
 #: workflow/templates/workflow/includes/workflow_detail_buttons.html:26
 msgid "Export workflow"
@@ -4797,14 +4790,14 @@ msgid ""
 "      machine."
 msgstr ""
 "一个工作流包含一个\n"
-"含有一组学生和<i>动作集合</i>数据的<i>表</i>。此表\n"
+"含有一组学生和<i>一系列操作</i>数据的<i>表</i>。此表\n"
 "由<i>列</i>组成，每行的信息对应一个学习者。根据每个学习者\n"
-"存储的数据和条件，动作将会产生不同的行为。这些条件\n"
+"存储的数据和条件，操作将会产生不同的表现。这些条件\n"
 "可以基于每个学生的列的值来编写。通常，您为有数据\n"
 "可用的一组学习者创建工作流。然后您将根据\n"
 "a)何时希望学生引入数据或b)何时希望学生接收个性化数据\n"
-"来编写动作。个人化是通过编写条件来启用/禁用页面中的\n"
-"文本或其他元素。页面可以通过电子邮件\n"
+"来编写操作。通过编写条件来启用/禁用页面中的\n"
+"文本或其他元素来获得个性化。页面可以通过电子邮件\n"
 "发送给学习者，通过HTML地址显示，或者发送到另一台机器。"
 
 #: workflow/templates/workflow/share.html:14
@@ -4822,7 +4815,7 @@ msgstr ""
 
 #: workflow/templates/workflow/sql_connections.html:28
 msgid "No SQL connections defined."
-msgstr "没有定义SQL连接"
+msgstr "没有定义SQL连接。"
 
 #: workflow/templates/workflow/sql_connections.html:48
 msgid "Add a new SQL database connection"
@@ -4851,7 +4844,7 @@ msgstr "无法访问新创建的工作流"
 #: workflow/views.py:207
 msgid ""
 "WARNING: Celery is not currently running. Please configure it correctly."
-msgstr "警告：Celery目前没有运行。请正确配置"
+msgstr "警告：Celery目前没有运行。请正确配置。"
 
 #: workflow/views.py:358
 msgid "You can only rename workflows you created."
@@ -4877,11 +4870,14 @@ msgstr "无法克隆工作流"
 msgid "Workflow successfully cloned."
 msgstr "工作流已成功克隆。"
 
-#~ msgid "Create a ZIP with each personalised text in a file"
-#~ msgstr "在文件中创建每个个性化文本的zip"
+#~ msgid "Column {0} is no longer a key column."
+#~ msgstr "列{0}不再是键列。"
 
-#~ msgid "ZIP"
-#~ msgstr "压缩（文本）"
+#~ msgid "Scheduling action needs a token"
+#~ msgstr "排程操作需要令牌"
+
+#~ msgid "Table View"
+#~ msgstr "表格视图"
 
 #~ msgid ""
 #~ "This operation will also remove <b>everything</b> stored in a workflow\n"

@@ -167,9 +167,6 @@ class ScreenTestFixture(ScreenTests):
                                                   1,
                                                   'Remote server')
         element.find_element_by_xpath(
-            "td/div/button[normalize-space()='Operations']"
-        ).click()
-        element.find_element_by_xpath(
             "td//button[normalize-space()='Edit']"
         ).click()
         self.wait_for_modal_open()

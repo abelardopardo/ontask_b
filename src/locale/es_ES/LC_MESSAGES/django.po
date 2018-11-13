@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-04 12:49+1030\n"
+"POT-Creation-Date: 2018-11-12 13:55+1030\n"
 "PO-Revision-Date: 2018-11-04 13:06+1030\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: \n"
@@ -737,7 +737,7 @@ msgstr "Editar descripción"
 #: action/templates/action/includes/partial_condition_buttons.html:50
 #: action/templates/action/includes/partial_filter_create_buttons.html:32
 #: action/templates/action/run_survey.html:47
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:13
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:8
 #: scheduler/templates/scheduler/schedule_done.html:15
 #: table/templates/table/display.html:177
 #: table/templates/table/includes/partial_table_ops.html:19
@@ -799,13 +799,13 @@ msgid "Done"
 msgstr "Terminar"
 
 #: action/templates/action/edit_in.html:192
-#: action/templates/action/includes/partial_action_operations.html:30
+#: action/templates/action/includes/partial_action_operations.html:27
 msgid "Enter data manually"
 msgstr "Introducir data manualmente"
 
 #: action/templates/action/edit_in.html:193
-#: action/templates/action/includes/partial_action_operations.html:25
-#: action/templates/action/includes/partial_action_operations.html:31
+#: action/templates/action/includes/partial_action_operations.html:22
+#: action/templates/action/includes/partial_action_operations.html:28
 #: dataops/templates/dataops/includes/partial_plugin_operations.html:6
 #: dataops/templates/dataops/includes/partial_sqlconn_runop.html:5
 #: dataops/templates/dataops/includes/plugin_run_buttons.html:9
@@ -859,7 +859,7 @@ msgid "Columns:"
 msgstr "Columnas:"
 
 #: action/templates/action/export_ask.html:28
-#: action/templates/action/includes/partial_action_operations.html:83
+#: action/templates/action/includes/partial_action_operations.html:80
 #: workflow/templates/workflow/export.html:63
 msgid "Export"
 msgstr "Exportar"
@@ -960,52 +960,60 @@ msgstr "Enviar mensajes personalizados"
 msgid "Email"
 msgstr "Email"
 
-#: action/templates/action/includes/partial_action_operations.html:24
+#: action/templates/action/includes/partial_action_operations.html:16
+msgid "Create a ZIP with each personalised text in a file"
+msgstr "Crear un ZIP con un fichero para cada texto personalizado"
+
+#: action/templates/action/includes/partial_action_operations.html:17
+msgid "ZIP"
+msgstr "ZIP"
+
+#: action/templates/action/includes/partial_action_operations.html:21
 msgid "Send personalised JSONs"
 msgstr "Enviar objetos JSON personalizados"
 
-#: action/templates/action/includes/partial_action_operations.html:38
+#: action/templates/action/includes/partial_action_operations.html:35
 msgid "URL for learners to access the personalised text"
 msgstr "URL para que los estudiantes accedan al texto personalizado"
 
-#: action/templates/action/includes/partial_action_operations.html:40
+#: action/templates/action/includes/partial_action_operations.html:37
 msgid "URL for learners to introduce data"
 msgstr "URL para que los estudiantes introduzcan los datos"
 
-#: action/templates/action/includes/partial_action_operations.html:43
+#: action/templates/action/includes/partial_action_operations.html:40
 msgid "URL"
 msgstr "URL"
 
-#: action/templates/action/includes/partial_action_operations.html:48
+#: action/templates/action/includes/partial_action_operations.html:45
 msgid "More"
 msgstr "Más"
 
-#: action/templates/action/includes/partial_action_operations.html:56
+#: action/templates/action/includes/partial_action_operations.html:53
 msgid "Schedule the execution of the action"
 msgstr "Planificar la ejecución de la acción"
 
-#: action/templates/action/includes/partial_action_operations.html:57
-#: scheduler/views.py:236 scheduler/views.py:298
+#: action/templates/action/includes/partial_action_operations.html:54
+#: scheduler/views.py:234 scheduler/views.py:296
 msgid "Schedule"
 msgstr "Planificar"
 
-#: action/templates/action/includes/partial_action_operations.html:65
+#: action/templates/action/includes/partial_action_operations.html:62
 msgid "Change name and/or description"
 msgstr "Cambiar el nombre y/o la descripción"
 
-#: action/templates/action/includes/partial_action_operations.html:66
+#: action/templates/action/includes/partial_action_operations.html:63
 #: workflow/templates/workflow/includes/workflow_basic_buttons.html:13
 msgid "Rename"
 msgstr "Renombrar"
 
-#: action/templates/action/includes/partial_action_operations.html:74
+#: action/templates/action/includes/partial_action_operations.html:71
 msgid "Create an identical action"
 msgstr "Crear una acción idéntica"
 
-#: action/templates/action/includes/partial_action_operations.html:75
+#: action/templates/action/includes/partial_action_operations.html:72
 #: action/templates/action/includes/partial_column_selected_operations.html:21
 #: action/templates/action/includes/partial_condition_buttons.html:59
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:22
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:15
 #: table/templates/table/display.html:186
 #: table/templates/table/includes/partial_view_operations.html:20
 #: workflow/templates/workflow/includes/workflow_basic_buttons.html:20
@@ -1013,18 +1021,18 @@ msgstr "Crear una acción idéntica"
 msgid "Clone"
 msgstr "Clonar"
 
-#: action/templates/action/includes/partial_action_operations.html:82
+#: action/templates/action/includes/partial_action_operations.html:79
 msgid "Export the content of this action"
 msgstr "Exportar el contenido de esta acción"
 
-#: action/templates/action/includes/partial_action_operations.html:90
+#: action/templates/action/includes/partial_action_operations.html:87
 msgid "Delete the action"
 msgstr "Borrar la acción"
 
-#: action/templates/action/includes/partial_action_operations.html:91
+#: action/templates/action/includes/partial_action_operations.html:88
 #: action/templates/action/includes/partial_condition_buttons.html:68
 #: action/templates/action/includes/partial_filter_create_buttons.html:40
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:31
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:22
 #: table/templates/table/display.html:195
 #: table/templates/table/includes/partial_table_ops.html:28
 #: table/templates/table/includes/partial_view_operations.html:27
@@ -1079,7 +1087,7 @@ msgstr ""
 #: action/templates/action/includes/partial_action_showurl.html:28
 #: dataops/plugin_manager.py:43 dataops/plugin_manager.py:50
 #: dataops/plugin_manager.py:58 dataops/plugin_manager.py:69
-#: dataops/plugin_manager.py:140 templates/base.html:152
+#: dataops/plugin_manager.py:140 templates/base.html:153
 msgid "Ok"
 msgstr "De acuerdo"
 
@@ -1291,7 +1299,7 @@ msgstr ""
 "filas."
 
 #: action/templates/action/index.html:8 action/templates/action/index.html:43
-#: templates/base.html:93
+#: templates/base.html:94
 msgid "Actions"
 msgstr "Acciones"
 
@@ -1381,9 +1389,7 @@ msgid "Last executed"
 msgstr "Última ejecución"
 
 #: action/views_action.py:74 dataops/sqlcon_views.py:26
-#: dataops/sqlcon_views.py:59
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:4
-#: dataops/views.py:51 scheduler/views.py:39
+#: dataops/sqlcon_views.py:59 dataops/views.py:51 scheduler/views.py:39
 #: table/templates/table/includes/partial_table_ops.html:4 table/views.py:42
 #: workflow/templates/workflow/detail.html:92 workflow/views.py:63
 msgid "Operations"
@@ -1738,40 +1744,36 @@ msgid "DB name"
 msgstr "Nombre de la base de datos"
 
 #: dataops/models.py:133 table/apps.py:9 table/templates/table/display.html:8
+#: table/templates/table/display.html:68
 #: table/templates/table/includes/partial_view_operations.html:7
-#: templates/base.html:89
+#: templates/base.html:90
 msgid "Table"
 msgstr "Tabla"
 
-#: dataops/ops.py:412
+#: dataops/ops.py:416
 msgid "Merge operation failed. Exception: "
 msgstr "La operación de mezcla ha fallado. Excepción: "
 
-#: dataops/ops.py:437
+#: dataops/ops.py:441
 msgid "Merge operation produced a result with no rows"
 msgstr "La operación de mecla ha producido un resultado sin filas"
 
-#: dataops/ops.py:454 dataops/ops.py:466
+#: dataops/ops.py:458 dataops/ops.py:470
 #, python-brace-format
 msgid "New values in column {0} are not of type {1}"
 msgstr "Los nuevos valores en la columna {0} no son de tipo {1}"
 
-#: dataops/ops.py:461
+#: dataops/ops.py:465
 #, python-brace-format
 msgid "New values in column {0} are not of type number"
 msgstr "Los nuevos valores en la columna {0} no son de tipo numérico"
 
-#: dataops/ops.py:477
+#: dataops/ops.py:481
 #, python-brace-format
 msgid "New values in column {0} are not in categories {1}"
 msgstr "Los nuevos valores en la columna {0} no están en la categoría {1}"
 
-#: dataops/ops.py:496
-#, python-brace-format
-msgid "Column {0} is no longer a key column."
-msgstr "La columna {0} ya no es una columna clave."
-
-#: dataops/ops.py:540
+#: dataops/ops.py:545
 #, python-brace-format
 msgid "Type {0} not found"
 msgstr "No se ha encontrado el tipo {0}"
@@ -1979,15 +1981,15 @@ msgstr "¿Está seguro de que quiere borrar la conexión <strong>%(n)s</strong>?
 msgid "Delete connection"
 msgstr "Borrar conexión"
 
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:12
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:7
 msgid "Edit SQL connection parameters"
 msgstr "Editar los parámetros de la conexión SQL"
 
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:21
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:14
 msgid "Create an exact duplicate of this connection"
 msgstr "Crear un duplicado exacto de esta conexión"
 
-#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:30
+#: dataops/templates/dataops/includes/partial_sqlconn_operations.html:21
 msgid "Delete SQL connection"
 msgstr "Borrar conexión SQL"
 
@@ -2078,7 +2080,7 @@ msgstr "Editas los datos del estudiante"
 
 #: dataops/templates/dataops/sql_connections.html:8
 #: dataops/templates/dataops/sql_connections.html:39
-#: dataops/templates/dataops/uploadmerge.html:64 templates/base.html:79
+#: dataops/templates/dataops/uploadmerge.html:64 templates/base.html:80
 #: workflow/templates/workflow/sql_connections.html:8
 #: workflow/templates/workflow/sql_connections.html:43
 msgid "SQL Connections"
@@ -2910,7 +2912,7 @@ msgid "Maximum number of logs shown to the user"
 msgstr "Número máximo de registros mostrados al usuario"
 
 #: logs/templates/logs/display.html:8 logs/templates/logs/display.html:45
-#: templates/base.html:100
+#: templates/base.html:101
 msgid "Logs"
 msgstr "Registro"
 
@@ -3045,7 +3047,7 @@ msgstr "Creado nuevo perfir para {0}"
 
 #: profiles/templates/profiles/edit_profile.html:6
 #: profiles/templates/profiles/show_profile.html:5
-#: profiles/templates/profiles/show_profile.html:24 templates/base.html:56
+#: profiles/templates/profiles/show_profile.html:24 templates/base.html:57
 msgid "Profile"
 msgstr "Perfil"
 
@@ -3153,10 +3155,6 @@ msgstr "Columna para seleccionar elementos (vacío para saltar este paso)"
 #: scheduler/forms.py:268 scheduler/forms.py:275
 msgid "This field must be a comma-separated list of emails."
 msgstr "Este campo debe tener una lista de emails separados por comas."
-
-#: scheduler/forms.py:291
-msgid "Scheduling action needs a token"
-msgstr "La planificación de la acción necesita una ficha"
 
 #: scheduler/models.py:31
 msgid "Creating"
@@ -3347,34 +3345,34 @@ msgstr "Parámetros"
 msgid "Result"
 msgstr "Resultado"
 
-#: scheduler/views.py:217
+#: scheduler/views.py:215
 msgid "A scheduled execution of this action with this name already exists"
 msgstr "Ya existe una ejecución planificada de esta acción con este nombre"
 
-#: scheduler/views.py:332
+#: scheduler/views.py:330
 msgid "Incorrect action scheduling invocation."
 msgstr "Datos incorrectos para planificar una acción."
 
-#: scheduler/views.py:339
+#: scheduler/views.py:337
 msgid "Incorrect parameters in action scheduling"
 msgstr "Parámetros incorrectos para planificar la acción"
 
-#: scheduler/views.py:401
+#: scheduler/views.py:399
 #, python-brace-format
 msgid "{0} days"
 msgstr "{0} días"
 
-#: scheduler/views.py:404
+#: scheduler/views.py:402
 #, python-brace-format
 msgid ", {0} hours"
 msgstr ", {0} horas"
 
-#: scheduler/views.py:407
+#: scheduler/views.py:405
 #, python-brace-format
 msgid ", {0} minutes"
 msgstr ", {0} minutos"
 
-#: scheduler/views.py:493
+#: scheduler/views.py:491
 msgid ""
 "Unable to schedule actions due to a misconfiguration. Ask your system "
 "administrator to enable queueing."
@@ -3499,10 +3497,6 @@ msgstr "No hay datos del estudiante en esta columna"
 #: table/stat_views.py:184
 msgid "Unable to provide visualisation without data."
 msgstr "No hay datos para crear la visualización."
-
-#: table/templates/table/display.html:68
-msgid "Table View"
-msgstr "Vista de la tabla"
 
 #: table/templates/table/display.html:80
 msgid "Add a new row to the table"
@@ -3769,12 +3763,12 @@ msgstr ""
 "¡Vaya! La plataforma ha tenido un error interno. Lo lamentamos. Esperamos  "
 "solventar esta anomalía pronto."
 
-#: templates/_navbar.html:3 templates/base.html:103
+#: templates/_navbar.html:3 templates/base.html:104
 msgid "About"
 msgstr "Conózcanos"
 
 #: templates/admin/admin_title.html:1 templates/admin/base_site.html:5
-#: templates/admin/base_site.html:7 templates/base.html:49
+#: templates/admin/base_site.html:7 templates/base.html:50
 msgid "Admin"
 msgstr "Admin"
 
@@ -3782,56 +3776,56 @@ msgstr "Admin"
 msgid "Switch to Site"
 msgstr "Volver al sitio"
 
-#: templates/base.html:34
+#: templates/base.html:35
 msgid "Toggle navigation"
 msgstr "Cambiar navegación"
 
-#: templates/base.html:57 templates/base.html:190
+#: templates/base.html:58 templates/base.html:190
 msgid "Logout"
 msgstr "Desconectar"
 
-#: templates/base.html:65
+#: templates/base.html:66
 msgid "Read the manual"
 msgstr "Acceso al manual"
 
-#: templates/base.html:75 workflow/apps.py:9
+#: templates/base.html:76 workflow/apps.py:9
 #: workflow/templates/workflow/index.html:8
 msgid "Workflows"
 msgstr "Flujos"
 
-#: templates/base.html:85 workflow/templates/workflow/detail.html:8
+#: templates/base.html:86 workflow/templates/workflow/detail.html:8
 msgid "Details"
 msgstr "Detalles"
 
-#: templates/base.html:97
+#: templates/base.html:98
 msgid "Scheduler"
 msgstr "Planificador"
 
-#: templates/base.html:105
+#: templates/base.html:106
 msgid "Contact"
 msgstr "Contacte"
 
-#: templates/base.html:132
+#: templates/base.html:133
 msgid "This functionality has not been implemented yet."
 msgstr "Esta función todavía no se ha implementatdo."
 
-#: templates/base.html:143
+#: templates/base.html:144
 msgid "Your session is about to expire"
 msgstr "Su sesión está a punto de expirar"
 
-#: templates/base.html:146
+#: templates/base.html:147
 msgid "Your session will expire in"
 msgstr "Su sesión va a expirar en"
 
-#: templates/base.html:147
+#: templates/base.html:148
 msgid "seconds."
 msgstr "segundos."
 
-#: templates/base.html:166
+#: templates/base.html:167
 msgid "OnTask Project"
 msgstr "Proyecto OnTask"
 
-#: templates/base.html:170
+#: templates/base.html:171
 msgid "Version:"
 msgstr "Versión:"
 
@@ -4945,11 +4939,14 @@ msgstr "Imposible clonar flujo"
 msgid "Workflow successfully cloned."
 msgstr "Flujo clonado con éxito."
 
-#~ msgid "Create a ZIP with each personalised text in a file"
-#~ msgstr "Crear un ZIP con un fichero para cada texto personalizado"
+#~ msgid "Column {0} is no longer a key column."
+#~ msgstr "La columna {0} ya no es una columna clave."
 
-#~ msgid "ZIP"
-#~ msgstr "ZIP"
+#~ msgid "Scheduling action needs a token"
+#~ msgstr "La planificación de la acción necesita una ficha"
+
+#~ msgid "Table View"
+#~ msgstr "Vista de la tabla"
 
 #~ msgid "Column containing user id"
 #~ msgstr "Columna con identificador de usuario"
