@@ -21,7 +21,7 @@ Logs
 
 After you open a workflow, the next page shows its details and information about the columns in its data table. If the workflow does not contain any data, the page only shows basic details as shown in the following figure.
 
-.. figure:: ../../scaptures/workflow_details_empty.png
+.. figure:: /scaptures/workflow_details_empty.png
    :align: center
 
 In the current *Details* page, immediately under the title there are two buttons to perform the following operations:

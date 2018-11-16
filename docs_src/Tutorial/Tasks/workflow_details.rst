@@ -5,7 +5,7 @@ Workflow Details
 
 Log into the platform and open a workflow that has data in the table. The details page shows the information about the columns as well as some additional operations for the workflow:
 
-.. figure:: ../../scaptures/tutorial_details_1.png
+.. figure:: /scaptures/tutorial_details_1.png
    :align: center
 
 The buttons at the top of the page are used to perform several operations over the workflow.

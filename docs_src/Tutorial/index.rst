@@ -3,7 +3,9 @@
 Tutorial
 ********
 
-The OnTask tutorial is organized as a set of tasks that are done using a set of files that contain data, actions, and other additional elements. Before attempting any of the tasks make sure you have an instructor account in an OnTask server and download and unpack the zip file :download:`dataset.zip <../Dataset/dataset.zip>`. Once unpacked, you should have a folder with the following files in it: ``student_list.csv``, ``midterm_results.csv``, ``forum_participation.csv``, ``blended_participation.csv`` and ``all_data.csv``. These files assume a hypothetical scenario shown in the following figure.
+The tutorial is organized as a collection of tasks. Some of them require the use of a set of files that contain data, actions, and other additional elements. Before starting to work on the tasks make sure you have an instructor account in an OnTask server.
+
+ and download and unpack the zip file :download:`dataset.zip <../Dataset/dataset.zip>`. Once unpacked, you should have a folder with the following files in it: ``student_list.csv``, ``midterm_results.csv``, ``forum_participation.csv``, ``blended_participation.csv`` and ``all_data.csv``. These files assume a hypothetical scenario shown in the following figure.
 
 .. figure:: the_dataset.png
    :width: 100%
@@ -26,25 +28,6 @@ We assume that a learning experience is through its sixth week. From weeks 2 to 
 ``all_data.csv``
   All data from the previous files properly combined into a single file.
 
-The three central concepts in OnTask are:
-
-Workflow
-  A container with the data (table), a set of procedures to manipulate columns, data upload and a set of actions. This entity is typically associated with a course, but it could also model an entire degree.
-
-Table
-  A two-dimensional structure in which each row represents a learner, and each column a learner attribute such as the score in an assessment, class attendance, number of interventions in the discussion forum, engagement with videos, etc.
-
-Actions
-  An action in OnTask can be one of two entities:
-
-  * A HTML resource of which certain parts are included or excluded based on a set of **conditions** created with the learner attributes (for example, number of interventions in the forum is larger than five, and number of times a video was watched is larger than 2).
-
-  * A set of questions that are shown to the students and their answers are incorporated to the data table.
-
-The following figure represents the high level view of the tool.
-
-.. figure:: drawing.png
-   :align: center
 
 The following tasks illustrate the different functionality available in OnTask for the scenario.
 
