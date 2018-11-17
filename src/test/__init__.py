@@ -684,9 +684,26 @@ class OntaskLiveTestCase(LiveServerTestCase):
         idx = 0
         for rule_filter, rule_operator, rule_value in rule_tuples:
             # Set the FILTER
-            form_field = self.selenium.find_element_by_name(
+            form_field = self.selenium.find_elements_by_name(
                 'builder_rule_{0}_filter'.format(idx)
             )
+            if not form_field:
+                # Click in the Add rule of the filter builder button
+                self.selenium.find_element_by_xpath(
+                    "//dl[@id='builder_group_0']/dt/div/button[1]"
+                ).click()
+                WebDriverWait(self.selenium, 10).until(
+                    EC.element_to_be_clickable(
+                        (By.XPATH,
+                         "//dl[@id='builder_group_0']/dt/div/button[1]")
+                    )
+                )
+                form_field = self.selenium.find_element_by_name(
+                    'builder_rule_{0}_filter'.format(idx)
+                )
+            else:
+                form_field = form_field[0]
+
             form_field.click()
             Select(form_field).select_by_visible_text(rule_filter)
 
@@ -704,8 +721,11 @@ class OntaskLiveTestCase(LiveServerTestCase):
                     "builder_rule_{0}_value_0".format(idx)
                 )
                 form_item.click()
-                form_item.clear()
-                form_item.send_keys(rule_value)
+                if form_item.tag_name == 'select':
+                    Select(form_item).select_by_value(rule_value)
+                else:
+                    form_item.clear()
+                    form_item.send_keys(rule_value)
             else:
                 # This is the case in which the operator is implicit (boolean)
                 if rule_value:
