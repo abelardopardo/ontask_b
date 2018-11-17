@@ -30,6 +30,8 @@ class TutorialCaptures(ScreenTests):
         :return:
         """
 
+        question_values = 'DNA duplication, Mitosis, Kreb\'s cycle, None'
+
         # Login
         self.login('instructor01@bogus.com')
 
@@ -54,7 +56,7 @@ class TutorialCaptures(ScreenTests):
                          '..',
                          'docs_src',
                          'Dataset',
-                         'student_list.csv')
+                         'all_data.csv')
         )
 
         self.body_ss('tutorial_csv_upload_learner_information.png')
@@ -68,7 +70,7 @@ class TutorialCaptures(ScreenTests):
                                              'Step 2: Select Columns')
         )
 
-        # Unckeck two elements
+        # Uncheck two elements
         element = self.search_table_row_by_string('workflow-table',
                                                   2,
                                                   'Surname')
@@ -77,6 +79,8 @@ class TutorialCaptures(ScreenTests):
                                                   2,
                                                   'GivenName')
         element.find_element_by_xpath("td[5]/input").click()
+
+        self.body_ss('tutorial_csv_upload_confirm.png')
 
         # Click on the Next button
         self.selenium.find_element_by_xpath(
@@ -169,8 +173,97 @@ class TutorialCaptures(ScreenTests):
 
         self.body_ss('tutorial_action_index.png')
 
-        # Create new action
+        #
+        # Merge data from Moodle
+        #
+        self.go_to_upload_merge()
+        self.selenium.find_element_by_link_text("CSV Upload/Merge").click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.title_is('OnTask :: Upload/Merge CSV')
+        )
+        self.selenium.find_element_by_id('id_file').send_keys(
+            os.path.join(settings.BASE_DIR(),
+                         '..',
+                         'docs_src',
+                         'Dataset',
+                         'moodle_grades.csv')
+        )
 
+        # Picture of the body
+        self.body_ss('tutorial_moodle_merge_step1.png')
+
+        # Click the NEXT button
+        self.selenium.find_element_by_xpath(
+            "//button[@type='Submit']"
+        ).click()
+        self.wait_for_page()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//input[@id='id_make_key_2']")
+            )
+        )
+
+        # Uncheck all the columns
+        self.selenium.find_element_by_id('checkAll').click()
+
+        # Check the columns to select and maintain email as unique
+        for k_num in [0, 1, 2]:
+            self.selenium.find_element_by_id(
+                'id_upload_{0}'.format(k_num)
+            ).click()
+        self.selenium.find_element_by_id('id_new_name_2').clear()
+        self.selenium.find_element_by_id('id_new_name_2').send_keys('email')
+        self.selenium.find_element_by_id('id_make_key_2').click()
+
+        # Picture of the body
+        self.body_ss('tutorial_moodle_merge_step2.png')
+
+        # Click the NEXT button
+        self.selenium.find_element_by_xpath("//button[@type='Submit']").click()
+        self.wait_for_page()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//select[@id='id_dst_key']")
+            )
+        )
+
+        # Dataops/Merge CSV Merge Step 3
+        Select(self.selenium.find_element_by_id(
+            'id_dst_key'
+        )).select_by_value('email')
+        Select(self.selenium.find_element_by_id(
+            'id_src_key'
+        )).select_by_value('email')
+        Select(self.selenium.find_element_by_id(
+            'id_how_merge'
+        )).select_by_value('right')
+
+        # Picture of the body
+        self.body_ss('tutorial_moodle_merge_step3.png')
+
+        # Click the NEXT button
+        self.selenium.find_element_by_xpath(
+            "//button[@type='Submit']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.CLASS_NAME, 'page-header'),
+                'Step 4: Review and confirm')
+        )
+
+        # Picture of the body
+        self.body_ss('tutorial_moodle_merge_step4.png')
+
+        # Click on Finish
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Finish']"
+        ).click()
+        self.wait_for_datatable('column-table_previous')
+
+         #
+        # Create PERSONALISED ACTION.
+        #
+        self.go_to_actions()
         self.selenium.find_element_by_class_name('js-create-action').click()
         self.wait_for_modal_open()
 
@@ -293,6 +386,20 @@ class TutorialCaptures(ScreenTests):
             "'editor.insertText',"
             "'{% if Program is SMED %}Here are "
             "some suggestions for SMED{% endif %}');")
+        self.selenium.execute_script(
+            "$('#id_content').summernote('editor.insertParagraph');")
+        self.selenium.execute_script(
+            "$('#id_content').summernote('editor.insertParagraph');")
+        self.selenium.execute_script(
+            "$('#id_content').summernote("
+            "'editor.insertText',"
+            "'Kind regards');")
+        self.selenium.execute_script(
+            "$('#id_content').summernote('editor.insertParagraph');")
+        self.selenium.execute_script(
+            "$('#id_content').summernote("
+            "'editor.insertText',"
+            "'Jane Doe -- Course Coordinator');")
 
         # Take picture of the html editor
         self.element_ss("//div[@id='html-editor']",
@@ -338,8 +445,54 @@ class TutorialCaptures(ScreenTests):
             )
         )
 
+        self.selenium.find_element_by_id('id_subject').send_keys(
+            'Connecting your program with this course'
+        )
+        self.selenium.find_element_by_id('id_cc_email').send_keys(
+            'tutor1@bogus.com, tutor2@bogus.com'
+        )
+        self.selenium.find_element_by_id('id_bcc_email').send_keys(
+            'coursecoordinator@bogus.com'
+        )
+        self.selenium.find_element_by_id('id_confirm_emails').click()
+
         # Screen shot of the body
         self.body_ss('action_personalized_text_email.png')
+
+        # Click in the preview
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Preview']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
+        )
+        self.modal_ss('tutorial_email_preview.png')
+
+        self.cancel_modal()
+
+        # Click in the next button to go to the filter email screen
+        self.selenium.find_element_by_xpath(
+            "//button[@name='Submit']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.CLASS_NAME, 'page-header'),
+                'Select items to exclude from action')
+        )
+
+        # Select two emails to exclude from the send.
+        self.selenium.find_element_by_css_selector(
+            "div.sol-input-container > input[type=\"text\"]"
+        ).click()
+        self.selenium.find_element_by_name("exclude_values").click()
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='exclude_values'])[2]"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='exclude_values'])[3]"
+        ).click()
+
+        self.body_ss('tutorial_exclude_action_items.png')
 
         # Cancel email and go back to action index
         self.selenium.find_element_by_link_text('Cancel').click()
@@ -358,7 +511,116 @@ class TutorialCaptures(ScreenTests):
         # Cancel the modal
         self.cancel_modal()
 
-        # Click on the create action button
+        #
+        # Download ZIP (for Moodle)
+        #
+        element = self.search_action('Program advice')
+        element.find_element_by_link_text('ZIP').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//button[normalize-space()='Next']")
+            )
+        )
+
+        # Select the key column
+        select = Select(self.selenium.find_element_by_id(
+            'id_participant_column')
+        )
+        select.select_by_value('Identifier')
+        select = Select(self.selenium.find_element_by_id(
+            'id_user_fname_column')
+        )
+        select.select_by_value('Full name')
+        self.selenium.find_element_by_id('id_file_suffix').send_keys(
+            'feedback.html'
+        )
+        self.selenium.find_element_by_id('id_zip_for_moodle').click()
+
+        self.body_ss('tutorial_action_zip.png')
+
+        # Click in the Cancel button
+        self.selenium.find_element_by_link_text('Cancel').click()
+
+        #
+        # Create new personalized JSON Action
+        #
+        self.selenium.find_element_by_class_name('js-create-action').click()
+        self.wait_for_modal_open()
+
+        # Select the options to create a personalized JSON and then close the
+        # screen
+        self.selenium.find_element_by_id('id_name').send_keys(
+            'Send JSON to remote server'
+        )
+        desc = self.selenium.find_element_by_id(
+            'id_description_text'
+        )
+        desc.send_keys(
+            'Send a JSON object to a remote server (outside this platform)'
+        )
+        # Select the action type
+        select = Select(self.selenium.find_element_by_id('id_action_type'))
+        select.select_by_value(Action.PERSONALIZED_JSON)
+        desc.send_keys('')
+
+        self.modal_ss('tutorial_personalized_json_create.png')
+
+        desc.send_keys(Keys.RETURN)
+        # Wait for the spinner to disappear, and then for the button to be
+        # clickable
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//h4[@id='filter-set']/div/button")
+            )
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
+
+        self.create_condition('Less than 50 in the midterm',
+                              '',
+                              [('Total', 'less', '50')])
+        self.create_condition('More or equal to 50 in midterm',
+                              '',
+                              [('Total', 'greater or equal', '50')])
+
+        self.selenium.find_element_by_id('id_content').send_keys(
+            """{
+  "sid": {{ SID }},
+  "midterm_total": {{ Total }},
+  "msg":
+     {% if Less than 50 in the midterm %}"Message number 1"{% endif %}
+    {% if More or equal to 50 in midterm %}"Message number 2"{% endif %}
+}"""
+        )
+
+        self.selenium.find_element_by_id('id_target_url').send_keys(
+            'http://127.0.0.1'
+        )
+
+        # Action editor
+        self.body_ss('tutorial_personalized_json_editor.png')
+
+        # Open the preview
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Preview']"
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
+        )
+        self.modal_ss('tutorial_personalized_json_preview.png')
+
+        self.cancel_modal()
+
+        # Save action and back to action index
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Save']"
+        ).click()
+        self.wait_for_datatable('action-table_previous')
+
+        #
+        # Click on the create action SURVEY
+        #
         self.selenium.find_element_by_class_name('js-create-action').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'id_name')))
@@ -390,7 +652,7 @@ class TutorialCaptures(ScreenTests):
 
         # Click on the Add Column button
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Add column']"
+            "//button[normalize-space()='Create new question']"
         ).click()
         self.wait_for_modal_open()
 
@@ -406,22 +668,20 @@ class TutorialCaptures(ScreenTests):
         select.select_by_value('string')
         self.selenium.find_element_by_id(
             'id_raw_categories'
-        ).send_keys(
-            'DNA duplication', 'Mitosis', "Kreb's cycle", "None"
-        )
+        ).send_keys(question_values)
 
         self.modal_ss('tutorial_survey_column_creation.png')
 
         # Click on the Submit button
         self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']//button[normalize-space()='Add column']"
+            "//div[@id='modal-item']//button[normalize-space()='Add question']"
         ).click()
 
         self.wait_close_modal_refresh_table('column-selected-table_previous')
 
         # Create the second column
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Add column']"
+            "//button[normalize-space()='Create new question']"
         ).click()
         self.wait_for_modal_open()
 
@@ -446,25 +706,19 @@ class TutorialCaptures(ScreenTests):
 
         # Click on the Submit button
         self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']//button[normalize-space()='Add column']"
+            "//div[@id='modal-item']//button[normalize-space()='Add question']"
         ).click()
 
         self.wait_close_modal_refresh_table('column-selected-table_previous')
-
-        # Add both columns to the survey
-        select = Select(self.selenium.find_element_by_id(
-            'select-column-name'))
-        select.select_by_visible_text('Survey Q1')
-        self.wait_for_datatable('column-selected-table_previous')
-        select = Select(self.selenium.find_element_by_id(
-            'select-column-name'))
-        select.select_by_visible_text('Survey Q2')
-        self.wait_for_datatable('column-selected-table_previous')
 
         # Click in the key-select
         select = Select(self.selenium.find_element_by_id(
             'select-key-column-name'))
         select.select_by_visible_text('email')
+        # Wait for spinner, and then refresh
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         # Wait for spinner, and then refresh
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
@@ -484,6 +738,101 @@ class TutorialCaptures(ScreenTests):
 
         self.cancel_modal()
 
+        # Save action and back to action index
+        self.selenium.find_element_by_link_text('Done').click()
+        self.wait_for_datatable('action-table_previous')
+
+        #
+        # Create an new action combining existing data with survey ata
+        #
+        self.selenium.find_element_by_class_name('js-create-action').click()
+        self.wait_for_modal_open()
+
+        # Set the name, description and type of the action
+        self.selenium.find_element_by_id('id_name').send_keys('More Strategies')
+        desc = self.selenium.find_element_by_id('id_description_text')
+        # Select the action type
+        select = Select(self.selenium.find_element_by_id('id_action_type'))
+        select.select_by_value(Action.PERSONALIZED_TEXT)
+        desc.send_keys('')
+        desc.send_keys(Keys.RETURN)
+        # Wait for the spinner to disappear, and then for the button to be
+        # clickable
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//h4[@id='filter-set']/div/button")
+            )
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
+
+        # Create the conditions for those that failed the exam
+        topics = [x.strip() for x in question_values.split(',')]
+        for topic in topics:
+            self.create_condition(
+                topic[0:4] + ' - Fail',
+                '',
+                [('Survey Q1', 'equal', topic),
+                 ('Total', 'less', 50)]
+            )
+        # Create the conditions for those that passed the exam
+        for topic in topics:
+            self.create_condition(
+                topic[0:4] + ' - Passed',
+                '',
+                [('Survey Q1', 'equal', topic),
+                 ('Total', 'greater or equal', 50)]
+            )
+
+        # Action editor
+        self.selenium.execute_script(
+            """$('#id_content').summernote(
+                   'editor.insertText', "Dear {{ GivenName }}");""")
+        self.selenium.execute_script(
+            "$('#id_content').summernote('editor.insertParagraph');")
+        self.selenium.execute_script(
+            """$('#id_content').summernote(
+                   'editor.insertText', "Here are some suggestions.");""")
+        self.selenium.execute_script(
+            "$('#id_content').summernote('editor.insertParagraph');")
+
+        # Add the text for those that failed
+        for topic in topics:
+            self.selenium.execute_script(
+                ("""$("#id_content").summernote("editor.insertText",""" 
+                """ "{{% if {0} - Fail %}}Tips about {0} """ 
+                """for those that failed.{{% endif %}}");""").format(topic))
+            self.selenium.execute_script(
+                "$('#id_content').summernote('editor.insertParagraph');")
+
+        # Add the text for those that passed
+        for topic in topics:
+            self.selenium.execute_script(
+                ("""$('#id_content').summernote("editor.insertText",""" 
+                """ "{{% if {0} - Passed %}}Tips about {0} """ 
+                """for those that passed.{{% endif %}}");""").format(topic))
+            self.selenium.execute_script(
+                "$('#id_content').summernote('editor.insertParagraph');")
+
+        self.selenium.execute_script(
+            """$('#id_content').summernote(
+                   'editor.insertText', "Kind regards -- Jane Doe");""")
+
+        # Open the filter condition
+        self.create_filter('Complete data',
+                           '',
+                           [('Survey Q1', 'is not empty', None),
+                            ('Total', 'is not empty', None)])
+
+        # Action editor
+        self.body_ss('tutorial_personalized_text_and_survey.png')
+
+        # Save action and back to action index
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Save']"
+        ).click()
+        self.wait_for_datatable('action-table_previous')
 
         # End of session
         self.logout()
