@@ -41,34 +41,29 @@
   </script>
 {% endblock %}
 {% block container %}
-<div align="center" class="container">
-  <h1 class="page-header">{% trans 'Logs' %}<super>*</super></h1>
-  <div class="container" id="log-table-page">
-    <a href="{% url 'logs:export' workflow.id %}" download
-       class="btn btn-default btn-sm js-logs-download"
-       data-toggle="tooltip"
-       title="{% trans 'Download a CSV file containing these logs' %}">
-      <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
-    </a>
-  </div>
-  <table class="table display dataTable no-footer cell-border table-bordered"
-         id="log-table">
-    <thead>
-      <tr>
-        {% for cname in column_names %}
-          <th>{{ cname }}</th>
-        {% endfor %}
-      </tr>
-    </thead>
-  </table>
-  <p class="text-left">{% blocktrans %}<strong><super>*</super></strong>The platform records all operations
-    performed on the workflow as <i>Logs</i>. These elements are shown in the table above. You can view its content
-    by clicking on its number.{% endblocktrans %}</p>
-  <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog">
-      <div class="modal-content">
-      </div>
+  <div align="center" class="container">
+    <h1 class="page-header">{% trans 'Logs' %}<super>*</super></h1>
+    <div class="container" id="log-table-page">
+      <a href="{% url 'logs:export' workflow.id %}" download
+         class="btn btn-default btn-sm js-logs-download"
+         data-toggle="tooltip"
+         title="{% trans 'Download a CSV file containing these logs' %}">
+        <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
+      </a>
     </div>
+    <table class="table display dataTable no-footer cell-border table-bordered"
+           id="log-table">
+      <thead>
+        <tr>
+          {% for cname in column_names %}
+            <th>{{ cname }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+    </table>
+    <p class="text-left">{% blocktrans %}<strong><super>*</super></strong>The platform records all operations
+      performed on the workflow as <i>Logs</i>. These elements are shown in the table above. You can view its content
+      by clicking on its number.{% endblocktrans %}</p>
   </div>
-</div>
+  {% include 'modal.html' %}
 {% endblock container %}

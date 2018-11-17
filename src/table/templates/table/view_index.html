@@ -54,26 +54,20 @@
   </script>
 {% endblock %}
 {% block container %}
-<div id="view-content" align="center" class="container-fluid">
-  <h1 class="page-header">{% trans 'Table Views' %}</h1>
-  <p>
-    <a class="btn btn-sm btn-default spin" href="{% url 'table:display' %}">{% trans 'Back' %}</a>
-    <button type="button" class="btn btn-sm btn-primary js-view-add"
-            data-url="{% url 'table:view_add' %}"
-            data-toggle="tooltip"
-            title="{% trans 'New view for the table' %}">
-      <span class="glyphicon glyphicon-plus"></span> {% trans 'Add View' %}
-    </button>
-  </p>
-  {% if table %}
-    {% render_table table %}
-  {% endif %}
-  <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog">
-      <div class="modal-content">
-      </div>
-    </div>
+  <div id="view-content" align="center" class="container-fluid">
+    <h1 class="page-header">{% trans 'Table Views' %}</h1>
+    <p>
+      <a class="btn btn-sm btn-default spin" href="{% url 'table:display' %}">{% trans 'Back' %}</a>
+      <button type="button" class="btn btn-sm btn-primary js-view-add"
+              data-url="{% url 'table:view_add' %}"
+              data-toggle="tooltip"
+              title="{% trans 'New view for the table' %}">
+        <span class="glyphicon glyphicon-plus"></span> {% trans 'Add View' %}
+      </button>
+    </p>
+    {% if table %}
+      {% render_table table %}
+    {% endif %}
   </div>
-
-</div>
+  {% include 'modal.html' %}
 {% endblock container %}

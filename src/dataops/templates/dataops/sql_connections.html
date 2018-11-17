@@ -35,18 +35,13 @@
   </script>
 {% endblock %}
 {% block container %}
-<div class="container-fluid text-center">
-  <h1 class="page-header">{% trans 'SQL Connections' %}</h1>
-  <div style="display: inline-block;" id="sqlconn-area">
-    {% render_table table %}
-  </div>
-  <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog">
-      <div class="modal-content">
-      </div>
+  <div class="container-fluid text-center">
+    <h1 class="page-header">{% trans 'SQL Connections' %}</h1>
+    <div style="display: inline-block;" id="sqlconn-area">
+      {% render_table table %}
     </div>
   </div>
-</div>
+  {% include 'modal.html' %}
 {% endblock container %}
 
 

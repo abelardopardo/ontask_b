@@ -37,19 +37,14 @@
   </script>
 {% endblock %}
 {% block container %}
-<div align="center" class="container">
-  <h1 class="page-header">{% trans 'Workflow Attributes' %}</h1>
-  <div style="display: inline-block;" id="workflow-attributes">
-    {% include 'workflow/includes/workflow_attribute_buttons.html' %}
-    {% render_table table %}
-  </div>
-  <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog">
-      <div class="modal-content">
-      </div>
+  <div align="center" class="container">
+    <h1 class="page-header">{% trans 'Workflow Attributes' %}</h1>
+    <div style="display: inline-block;" id="workflow-attributes">
+      {% include 'workflow/includes/workflow_attribute_buttons.html' %}
+      {% render_table table %}
     </div>
   </div>
-</div>
+  {% include 'modal.html' %}
 {% endblock container %}
 
 

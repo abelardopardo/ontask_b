@@ -39,36 +39,30 @@
   </script>
 {% endblock %}
 {% block container %}
-<div align="center" class="container">
-  <h1 class="page-header">{% trans 'Actions' %}</h1>
-  {% if not has_table %}
-    {% include 'workflow/includes/no_data.html' %}
-  {% elif no_actions %}
-    <p class="lead">{% blocktrans %}<strong>Next Step:</strong> Click in the <i>New action</i> below to create a new
-    action to execute based on the data stored in the table.{% endblocktrans %}</p>
-  {% endif %}
-  <div class="btn-group" style="padding-bottom: 2ex;" role="group">
-    <button type="button" class="btn btn-sm btn-default js-create-action"
-       data-url="{% url 'action:create' %}"
-       data-toggle="tooltip"
-       title="New action to collect data from learners">
-      <span class="glyphicon glyphicon-plus"></span> {% trans 'New action' %}
-    </button>
-    {% if has_table %}
-      <a href="{% url 'action:import' %}"
-         class="btn btn-sm btn-default"
-         data-toggle="tooltip" title="Import action previously exported">
-        <span class="glyphicon glyphicon-import"></span> {% trans 'Import action' %}</a>
+  <div align="center" class="container">
+    <h1 class="page-header">{% trans 'Actions' %}</h1>
+    {% if not has_table %}
+      {% include 'workflow/includes/no_data.html' %}
+    {% elif no_actions %}
+      <p class="lead">{% blocktrans %}<strong>Next Step:</strong> Click in the <i>New action</i> below to create a new
+      action to execute based on the data stored in the table.{% endblocktrans %}</p>
     {% endif %}
-    {% include 'workflow/includes/manage_table_data.html' %}
-  </div>
-  {% render_table table %}
-  <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog">
-      <div class="modal-content">
-      </div>
+    <div class="btn-group" style="padding-bottom: 2ex;" role="group">
+      <button type="button" class="btn btn-sm btn-default js-create-action"
+         data-url="{% url 'action:create' %}"
+         data-toggle="tooltip"
+         title="New action to collect data from learners">
+        <span class="glyphicon glyphicon-plus"></span> {% trans 'New action' %}
+      </button>
+      {% if has_table %}
+        <a href="{% url 'action:import' %}"
+           class="btn btn-sm btn-default"
+           data-toggle="tooltip" title="Import action previously exported">
+          <span class="glyphicon glyphicon-import"></span> {% trans 'Import action' %}</a>
+      {% endif %}
+      {% include 'workflow/includes/manage_table_data.html' %}
     </div>
+    {% render_table table %}
   </div>
-
-</div>
+  {% include 'modal.html' %}
 {% endblock container %}

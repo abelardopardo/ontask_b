@@ -9,50 +9,45 @@
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
 {% endblock scripts %}
 {% block container %}
-<div align="center" class="container" id="zip-action-request-data">
-  <h1 class="page-header">{% blocktrans with n=action.name %}ZIP for
-    action "{{ n }}"{% endblocktrans %}<super>*</super></h1>
-  <div class="container">
-    {% if num_msgs > 0 %}
-      <p>{% blocktrans with n=num_msgs%}A ZIP with {{ n }} files will be created.{% endblocktrans %}</p>
-      <form action="" method="post">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <div class="text-center" style="margin: 1ex 0 1ex 0;">
-          <a type="button" class="btn btn-default"
-             href="{% url 'action:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
-          </a>
-          <button type="button" class="btn btn-primary js-zip-preview"
-                  style="margin-right:2ex;"
-                  data-url="{% url 'action:preview' action.id 1 %}">
-            <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Preview' %}
-          </button>
-          <button type="Submit" name="Submit" value="Submit"
-                  style="margin-right:2ex;"
-                  class="btn btn-primary btn-space spin">
-            <span class="glyphicon glyphicon-triangle-right"></span> {% trans 'Next' %}</button>
-        </div>
-      </form>
-    {% else %}
-      <p>{% trans 'The action does not apply to any data.' %}
-        <a href="{% url 'action:edit' action.id %}">{% trans 'Review the action filter' %}</a></p>
-    {% endif %}
-    <p class="text-left"><strong><super>*</super></strong>{% blocktrans %}
-      This function creates a ZIP with one HTML file for each user selected by the action.
-      The file contains the personalised text as shown when using the "Preview" button.
-      The file name is created with the values of the two selected columns followed by
-      the suffix. If you plan to use the ZIP to use as file feedback in Moodle, the first
-      column must contain values of the form "Participant [number]" and the second must
-      be the user's full name. These columns can be
-      obtained by downloading first the grading CSV file from the Moodle assignment,
-      merge them into the workflow, and then use them to create this ZIP and upload it.
-      {% endblocktrans %}</p>
-  </div>
-  <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog">
-      <div class="modal-content">
-      </div>
+  <div align="center" class="container" id="zip-action-request-data">
+    <h1 class="page-header">{% blocktrans with n=action.name %}ZIP for
+      action "{{ n }}"{% endblocktrans %}<super>*</super></h1>
+    <div class="container">
+      {% if num_msgs > 0 %}
+        <p>{% blocktrans with n=num_msgs%}A ZIP with {{ n }} files will be created.{% endblocktrans %}</p>
+        <form action="" method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="text-center" style="margin: 1ex 0 1ex 0;">
+            <a type="button" class="btn btn-default"
+               href="{% url 'action:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
+            </a>
+            <button type="button" class="btn btn-primary js-zip-preview"
+                    style="margin-right:2ex;"
+                    data-url="{% url 'action:preview' action.id 1 %}">
+              <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Preview' %}
+            </button>
+            <button type="Submit" name="Submit" value="Submit"
+                    style="margin-right:2ex;"
+                    class="btn btn-primary btn-space spin">
+              <span class="glyphicon glyphicon-triangle-right"></span> {% trans 'Next' %}</button>
+          </div>
+        </form>
+      {% else %}
+        <p>{% trans 'The action does not apply to any data.' %}
+          <a href="{% url 'action:edit' action.id %}">{% trans 'Review the action filter' %}</a></p>
+      {% endif %}
+      <p class="text-left"><strong><super>*</super></strong>{% blocktrans %}
+        This function creates a ZIP with one HTML file for each user selected by the action.
+        The file contains the personalised text as shown when using the "Preview" button.
+        The file name is created with the values of the two selected columns followed by
+        the suffix. If you plan to use the ZIP to use as file feedback in Moodle, the first
+        column must contain values of the form "Participant [number]" and the second must
+        be the user's full name. These columns can be
+        obtained by downloading first the grading CSV file from the Moodle assignment,
+        merge them into the workflow, and then use them to create this ZIP and upload it.
+        {% endblocktrans %}</p>
     </div>
   </div>
-</div>
+  {% include 'modal.html' %}
 {% endblock container %}

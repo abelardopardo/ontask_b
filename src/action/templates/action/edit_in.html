@@ -183,7 +183,7 @@
               class="btn btn-primary spin"
               data-toggle="tooltip"
               data-placement="auto"
-              title="{% trans 'Save and remain editing' %}">
+              title="{% trans 'Save action and go back to action table' %}">
         <span class="glyphicon glyphicon-ok"></span> {% trans 'Done' %}
       </a>
       <a href="{% url 'action:run_action_in' action.id %}"
@@ -193,12 +193,7 @@
         <span class="glyphicon glyphicon-off"></span> {% trans 'Run' %}
       </a>
     </div>
-    <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
-      <div class="modal-dialog">
-        <div class="modal-content">
-        </div>
-      </div>
-    </div>
   </div>
+  {% include 'modal.html' %}
 {% endblock container %}
 

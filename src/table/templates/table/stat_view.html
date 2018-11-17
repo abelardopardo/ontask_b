@@ -5,7 +5,7 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-{% block title %}{{ block.super }}{% trans 'Staticstics' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Statistics' %}{% endblock %}
 {% block extrahead %}
   {% for script_src in vis_scripts %}
     <script src="{{ script_src|safe }}"></script>
