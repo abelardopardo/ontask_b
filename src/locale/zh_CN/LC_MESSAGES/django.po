@@ -3613,10 +3613,6 @@ msgstr "列没有数据"
 msgid "Stats for %(value)s"
 msgstr "%(value)s的统计表"
 
-#: table/templates/table/stat_view.html:8
-msgid "Staticstics"
-msgstr "统计表"
-
 #: table/templates/table/stat_view.html:22
 #, python-format
 msgid "Dashboard for %(n)s"
