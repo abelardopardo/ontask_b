@@ -227,7 +227,7 @@ dt div.btn-group-vertical {
     display: flow-root;
 }
 /* Clause var op value*/
-.query-builder .rules-list {
+.query-builder .rules-group-container {
     text-align:left;
 }
 
@@ -336,6 +336,10 @@ div.sol-container {
 .modal-body p,
 .modal-body div {
     word-wrap: break-word;
+}
+
+.modal-content {
+    text-align: center;
 }
 
 a.column-move-prev > span,
