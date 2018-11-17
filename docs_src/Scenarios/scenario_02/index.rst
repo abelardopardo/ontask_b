@@ -29,7 +29,7 @@ Suppose now that you :download:`do have the class listing in an excel sheet <sce
 
    #. The next page is the action out editor. In the second area from the top you will see a button to create a new condition (*Conditions + New*). Click the button and a new window opens to specify a condition. Enter the following data:
 
-      .. figure:: ../../scaptures/scenario_02_condition_FASS.png
+      .. figure:: /scaptures/scenario_02_condition_FASS.png
          :align: center
 
    The formula states that the condition will be satisfied when the column *Program* has the value *FASS*. Click the button to save the condition.
@@ -49,17 +49,17 @@ Suppose now that you :download:`do have the class listing in an excel sheet <sce
 
    #. Repeat the same procedure now with the three remaining paragraphs. Select the text and then click in the appropriate condition. The final result should be similar to the one shown in the following figure.
 
-      .. figure:: ../../scaptures/scenario_02_text_all_conditions.png
+      .. figure:: /scaptures/scenario_02_text_all_conditions.png
          :align: center
 
    #. Add the signature at the end of the text. Use the button named *Preview* at the bottom and use the arrows in the emerging window to browse through the different messages created for each user.
 
-      .. figure:: ../../scaptures/scenario_02_preview.png
+      .. figure:: /scaptures/scenario_02_preview.png
          :align: center
 
    #. Save and close the *Action Out*. You now are back to the screen showing the actions in the workflow (you can see the one we just created). If you click in the *Email* button, you will be asked for some extra data such as the email subject, the column to use as email address and some options to track email reading or even obtain a snapshot (duplicate) of the workflow as it is right now for future reference.
 
-     .. figure:: ../../scaptures/scenario_02_action_email.png
+     .. figure:: /scaptures/scenario_02_action_email.png
         :align: center
 
    #. That's it! Each student will receive a message with the content of the second paragraph different depending on the program.

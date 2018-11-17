@@ -44,11 +44,6 @@
     <div class="container-fluid" id="transform-selection">
       {% render_table table %}
     </div>
-    <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
-      <div class="modal-dialog">
-        <div class="modal-content">
-        </div>
-      </div>
-    </div>
   </div>
+  {% include 'modal.html' %}
 {% endblock container %}

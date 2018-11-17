@@ -56,10 +56,6 @@ class ScreenTutorialTest(ScreenTests):
             )
         )
 
-        # Go to details
-        self.go_to_details()
-        self.body_ss('workflow_details_empty.png')
-
         # End of session
         self.logout()
 

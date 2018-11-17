@@ -182,6 +182,12 @@ def evaluate_node(node, given_variables):
     elif operator == 'is_not_empty' and node['type'] == 'string':
         result = (varvalue is not None) and varvalue != ''
 
+    elif operator == 'is_null':
+        result = varvalue == None
+
+    elif operator == 'is_not_null':
+        result = varvalue is not None
+
     elif operator == 'less' and \
             (node['type'] == 'integer' or node['type'] == 'double'
              or node['type'] == 'datetime'):
@@ -346,15 +352,15 @@ def evaluate_node_sql(node):
         result = '("{0}"'.format(varname) + \
                  " = '') OR (\"{0}\" is null)".format(varname)
 
-    elif operator == 'is_empty' and node['type'] != 'string':
-        result = "(\"{0}\" is null)".format(varname)
-
     elif operator == 'is_not_empty' and node['type'] == 'string':
         result = '("{0}"'.format(varname) + \
                  " != '') AND (\"{0}\" is not null)".format(varname)
 
-    elif operator == 'is_not_empty' and node['type'] != 'string':
-        result = "(\"{0}\" is not null)".format(varname)
+    elif operator == 'is_null':
+        result = '(\"{0}\" is null)'.format(varname)
+
+    elif operator == 'is_not_null':
+        result = '(\"{0}\" is not null)'.format(varname)
 
     elif operator == 'less' and \
             (node['type'] == 'integer' or node['type'] == 'double'

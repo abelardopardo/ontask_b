@@ -10,27 +10,22 @@
   <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
-<div align="center" class="container">
-  <h1 class="page-header">{% trans 'Users with access to this workflow' %}</h1>
-  {% if not_shared %}
-    <p class="lead">{% blocktrans %}Click in the <i>Add User</i> button below and provide the email for the user
-      with whom you want to share the workflow.{% endblocktrans %}</p>
-  {% endif %}
-  <div style="display: inline-block;" id="workflow-shared">
-    <a href="{% url 'workflow:detail' workflow.id %}"
-       class="btn btn-default btn-sm">Back</a>
-    <button type="button"
-            class="btn btn-primary btn-sm js-share-create"
-            data-url="{% url 'workflow:share_create' %}">
-      <span class="glyphicon glyphicon-plus"></span> Add user
-    </button>
-    {% render_table table %}
-  </div>
-  <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog">
-      <div class="modal-content">
-      </div>
+  <div align="center" class="container">
+    <h1 class="page-header">{% trans 'Users with access to this workflow' %}</h1>
+    {% if not_shared %}
+      <p class="lead">{% blocktrans %}Click in the <i>Add User</i> button below and provide the email for the user
+        with whom you want to share the workflow.{% endblocktrans %}</p>
+    {% endif %}
+    <div style="display: inline-block;" id="workflow-shared">
+      <a href="{% url 'workflow:detail' workflow.id %}"
+         class="btn btn-default btn-sm">Back</a>
+      <button type="button"
+              class="btn btn-primary btn-sm js-share-create"
+              data-url="{% url 'workflow:share_create' %}">
+        <span class="glyphicon glyphicon-plus"></span> Add user
+      </button>
+      {% render_table table %}
     </div>
   </div>
-</div>
+  {% include 'modal.html' %}
 {% endblock container %}

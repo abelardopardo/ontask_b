@@ -19,7 +19,7 @@ class OntaskTestPlugin(object):
     plugin does
 
     3. input_column_names: A potentially empty list of column names (strings).
-    If the list is empty, the columns are selected by the userat execution
+    If the list is empty, the columns are selected by the user at execution
     time.
 
     4. output_column_names: Non empty list of names (strings) of the columns

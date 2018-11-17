@@ -7,7 +7,7 @@ Log into the platform, open a workflow that has data and actions already defined
 
 After creating a personalized text action, you may want to send emails to the learners (or a subset of them if you :ref:`defined a filter<tut_action_filter_definition>` in the action). Click in the button with name *Email* in the operations of the personalized text action. The following form appears in the screen:
 
-.. figure:: ../../scaptures/action_personalized_text_email.png
+.. figure:: /scaptures/action_personalized_text_email.png
    :align: center
 
 The form allows you to specify the following fields:
@@ -39,7 +39,7 @@ Check/exclude email addresses before sending
 
 Introduce a string in the subject field and click in the button *Preview* at the bottom of the page.
 
-.. figure:: ../../scaptures/tutorial_email_preview.png
+.. figure:: /scaptures/tutorial_email_preview.png
    :align: center
 
 The new page shows the final appearance of the message with its subject and the values for those columns used to configure the text. Click in the arrows next to the *Close* button to traverse the various messages and verify that they are properly composed.
@@ -51,7 +51,7 @@ Final look before pushing the GO button
 
 When running an action sometimes you may want to verify that the list of rows to be processed is correct, or perhaps in the last step remove one or two rows that you know should not be included (and you didn't filter with the action filter). If you want to go through this extra step *before* running the action, tick the field to *Check/exclude* thesse items. Click in the *Next* button. In the following page you can review the list of items and mark those you want to exclude.
 
-.. figure:: ../../scaptures/tutorial_exclude_action_items.png
+.. figure:: /scaptures/tutorial_exclude_action_items.png
    :align: center
 
 

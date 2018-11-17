@@ -78,6 +78,7 @@ exclude_patterns = [
     'Thumbs.db',
     '.DS_Store',
     'Scenarios/scenario_04*',
+    '**/include_*.rst',
     # 'Tutorial/Tasks*'
 ]
 
@@ -100,7 +101,15 @@ html_theme = 'alabaster'
 #
 # html_theme_options = {}
 html_theme_options = {
-    'show_related': True
+    'show_related': True,
+    'show_powered_by': False,
+    'show_relbars': True,
+    'fixed_sidebar': False,
+    'github_banner': True,
+    'github_button': True,
+    'github_user': 'abelardopardo',
+    'github_repo': 'ontask_b',
+    'logo': 'ontask-logo-1.png'
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

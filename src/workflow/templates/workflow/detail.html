@@ -86,7 +86,7 @@
               <tr>
                 <th class="number">#</th>
                 <th class="name">{% trans 'Name' %}</th>
-              <th class="name">{% trans 'Description' %}</th>
+                <th class="name">{% trans 'Description' %}</th>
                 <th class="type">{% trans 'Type' %}</th>
                 <th class="key">{% trans 'Key?' %}</th>
                 <th class="operations">{% trans 'Operations' %}</th>
@@ -95,17 +95,12 @@
           </table>
         {% endif %}
       </div>
-      <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-          <div class="modal-content">
-          </div>
-        </div>
-      </div>
     {% else %}
       {% url 'workflow:index' as windex %}
       {% blocktrans %}Go to <a href="{{ windex }}">your list of workflows</a>{% endblocktrans %}
     {% endif %}
   </div>
+  {% include 'modal.html' %}
 {% endblock container %}
 
 

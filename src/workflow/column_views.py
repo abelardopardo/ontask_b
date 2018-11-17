@@ -51,6 +51,17 @@ formula_column_operands = [
      ['boolean']),
 ]
 
+def partition(list_in, n):
+    """
+    Given a list and n, returns a list with n lists, and inside each of them a
+    set of elements from the shuffled list. All lists are of the same size
+    :param list_in: List of elements to partition
+    :param n: Number of partitions
+    :return: List of lists with shuffled elements partitioned
+    """
+    random.shuffle(list_in)
+    return [list_in[i::n] for i in range(n)]
+
 
 @user_passes_test(is_instructor)
 def column_add(request, pk=None):
@@ -394,8 +405,9 @@ def random_column_add(request):
             )
             return JsonResponse(data)
 
-        df[column.name] = [random.randint(1, int_value)
-                           for __ in range(workflow.nrows)]
+        vals = [x + 1 for x in range(int_value)]
+        # df[column.name] = [random.randint(1, int_value)
+        #                    for __ in range(workflow.nrows)]
     else:
         # At this point the field is a string and the values are the comma
         # separated strings.
@@ -410,7 +422,19 @@ def random_column_add(request):
             )
             return JsonResponse(data)
 
-        df[column.name] = [random.choice(vals) for __ in range(workflow.nrows)]
+        # df[column.name] = [random.choice(vals) for __ in range(workflow.nrows)]
+
+    # Empty new column
+    new_column = [None] * workflow.nrows
+    # Create the random partitions
+    partitions = partition([x for x in range(workflow.nrows)], len(vals))
+    # Assign values to partitions
+    for idx, indeces in enumerate(partitions):
+        for x in indeces:
+            new_column[x] = vals[idx]
+
+    # Assign the new column to the data frame
+    df[column.name] = new_column
 
     # Populate the column type
     column.data_type = \

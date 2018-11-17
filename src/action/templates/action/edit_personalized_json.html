@@ -15,6 +15,9 @@
   {% ontask_datetimepicker_js %}
   {{ form.media.js }}
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}"></script>
+  {% with country=LANGUAGE_CODE|country %}
+    <script src="{% static 'site/js/query-builder.'|add:country|add:'.js' %}"></script>
+  {% endwith %}
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
   <script type="text/javascript">
 
@@ -23,7 +26,8 @@
       operators: ['equal', 'not_equal', 'less', 'less_or_equal',
                   'greater', 'greater_or_equal', 'between', 'not_between',
                   'begins_with', 'not_begins_with', 'contains', 'not_contains',
-                  'ends_with', 'not_ends_with', 'is_empty', 'is_not_empty'],
+                  'ends_with', 'not_ends_with', 'is_empty', 'is_not_empty',
+                  'is_null', 'is_not_null'],
       allow_empty: false,
       filters: {{ query_builder_ops|safe }},
     };
@@ -51,12 +55,7 @@
         {% include 'action/includes/partial_action_preview_done_buttons.html' %}
       </form>
     </div>
-    <div class="modal fade" id="modal-item" data-backdrop="static" data-keyboard="false">
-      <div class="modal-dialog">
-        <div class="modal-content">
-        </div>
-      </div>
-    </div>
   </div>
+  {% include 'modal.html' %}
 {% endblock container %}
 

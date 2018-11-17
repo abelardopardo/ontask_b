@@ -11,7 +11,7 @@ Scheduling Personalized Text Actions
 
 If the action is a personalized text, the screen requests information to execute the action but including a field stating when to execute it.
 
-.. figure:: ../../scaptures/schedule_action_email.png
+.. figure:: /scaptures/schedule_action_email.png
    :align: center
    :width: 100%
 
@@ -22,7 +22,7 @@ Scheduling Personalized JSON Actions
 
 If the action is a personalized JSON, the screen requests information to execute the action but including a field stating when to execute it.
 
-.. figure:: ../../scaptures/schedule_action_json.png
+.. figure:: /scaptures/schedule_action_json.png
    :align: center
    :width: 100%
 
@@ -33,5 +33,5 @@ Checking the scheduled execution
 
 All the operations schedule for execution can be verified, edit and deleted from the link *Scheduler* through the top menu.
 
-.. figure:: ../../scaptures/schedule.png
+.. figure:: /scaptures/schedule.png
    :align: center
