@@ -16,6 +16,9 @@
 {% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
+  {% with country=LANGUAGE_CODE|country %}
+    <script src="{% static 'site/js/query-builder.'|add:country|add:'.js' %}"></script>
+  {% endwith %}
   <script src="{% static 'site/js/sol.js' %}"></script>
   <script src="{% static 'table/js/table.js' %}?v={% ontask_version %}"></script>
   {% ontask_datatables_jquery_js %}
@@ -46,7 +49,8 @@
       operators: ['equal', 'not_equal', 'less', 'less_or_equal',
                   'greater', 'greater_or_equal', 'between', 'not_between',
                   'begins_with', 'not_begins_with', 'contains', 'not_contains',
-                  'ends_with', 'not_ends_with', 'is_empty', 'is_not_empty'],
+                  'ends_with', 'not_ends_with', 'is_empty', 'is_not_empty',
+                  'is_null', 'is_not_null'],
       allow_empty: true,
       filters: {{ query_builder_ops|safe }},
       rules: [],

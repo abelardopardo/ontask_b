@@ -13,6 +13,9 @@
 {% block scripts %}
   {{ form.media.js }}
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}"></script>
+  {% with country=LANGUAGE_CODE|country %}
+    <script src="{% static 'site/js/query-builder.'|add:country|add:'.js' %}"></script>
+  {% endwith %}
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
   <script type="text/javascript">
     var qbuilder_options = {

@@ -35,6 +35,9 @@ datatables_bootstrap_js = \
 def ontask_version():
     return ontask.__version__
 
+@register.filter
+def country(value):
+    return value[0:value.find("-")]
 
 @register.simple_tag
 def ontask_jquery():

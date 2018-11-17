@@ -255,9 +255,7 @@ class FormulaEvaluation(test.OntaskTestCase):
         #
         # IS EMPTY
         #
-        self.do_operand('text',
-                        'is_{0}empty',
-                        'string', None, None, 'aaa')
+        self.do_operand('text', 'is_{0}empty', 'string', None, None, 'aaa')
 
         #
         # LESS
@@ -341,6 +339,21 @@ class FormulaEvaluation(test.OntaskTestCase):
                         datetime.datetime(2018, 9, 15, 0, 3, 30),
                         datetime.datetime(2018, 9, 15, 0, 4, 30))
 
+        #
+        # IS NULL
+        #
+        self.do_operand('number', 'is_{0}null', 'integer', None, None, 1)
+        self.do_operand('number', 'is_{0}null', 'double', None, None, 1.0)
+        self.do_operand('text', 'is_{0}null', 'string', None, None, 'aaa')
+        self.do_operand('text', 'is_{0}null', 'boolean', None, None, True)
+        self.do_operand('text', 'is_{0}null', 'boolean', None, None, False)
+        self.do_operand('text',
+                        'is_{0}null',
+                        'datetime',
+                        None,
+                        None,
+                        datetime.datetime(2018, 9, 15, 0, 3, 4))
+
     def test_eval_sql(self):
 
         # Create the dataframe with the variables
@@ -395,11 +408,16 @@ class FormulaEvaluation(test.OntaskTestCase):
         #
         # IS EMPTY
         #
-        self.do_sql_operand('number', 'is_{0}empty', 'integer', None)
-        self.do_sql_operand('number', 'is_{0}empty', 'double', None)
         self.do_sql_operand('text', 'is_{0}empty', 'string', None)
-        self.do_sql_operand('text', 'is_{0}empty', 'boolean', None)
-        self.do_sql_operand('text', 'is_{0}empty', 'datetime', None)
+
+        #
+        # IS NULL
+        #
+        self.do_sql_operand('number', 'is_{0}null', 'integer', None)
+        self.do_sql_operand('number', 'is_{0}null', 'double', None)
+        self.do_sql_operand('number', 'is_{0}null', 'boolean', None)
+        self.do_sql_operand('text', 'is_{0}null', 'string', None)
+        self.do_sql_operand('text', 'is_{0}null', 'datetime', None)
 
         #
         # LESS
