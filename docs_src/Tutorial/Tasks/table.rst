@@ -17,7 +17,7 @@ Add column
   These operations are the ones discussed in the section s:ref:`tutorial_add_columns`.
 
 Manage table data
-  The operations to either :ref:`upload<data_upload>`/:ref:`merge<merging>` new data on the table, or :ref:`transform its content executing pre-installed program in the platform (plugin)<plugin_write>`.
+  The operations to either upload/merge new data on the table, or transform its content executing pre-installed program in the platform (plugin).
 
 Views
   This button allows you to manage (create, modify, delete) a set of :ref:`table views<tut_table_views>`, which show a subset of data in the table.
