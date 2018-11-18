@@ -166,7 +166,7 @@ class Workflow(models.Model):
                 # Boolean will only use EQUAL and Yes/No as choices
                 item['input'] = 'radio'
                 item['values'] = {1: 'Yes', 0: 'No'}
-                item['operators'] = ['equal']
+                item['operators'] = ['equal', 'is_null', 'is_not_null']
                 result.append(item)
                 continue
 
@@ -179,7 +179,10 @@ class Workflow(models.Model):
             if column.get_categories():
                 item['input'] = 'select'
                 item['values'] = column.get_categories()
-                item['operators'] = ['equal', 'not_equal']
+                item['operators'] = ['equal',
+                                     'not_equal',
+                                     'is_null',
+                                     'is_not_null']
 
             result.append(item)
 
