@@ -132,9 +132,9 @@ var saveActionText = function() {
     return true;
 }
 $(function () {
-  $('#checkAll').click(function () {    
-       $('input:checkbox').prop('checked', this.checked);    
-   });
+  $("#checkAll").click(function () {
+       $("input[id*='id_upload_']").prop("checked", this.checked);
+  });
 
   // Create Action
   $(".js-create-action").click(loadForm);

@@ -28,9 +28,9 @@ var show_merge_figure = function() {
 }
 
 $(function () {
-  $('#checkAll').click(function () {    
-       $('input:checkbox').prop('checked', this.checked);    
-   });
+  $("#checkAll").click(function () {
+       $("input[id*='id_upload_']").prop("checked", this.checked);
+  });
 
   // Delete column
   $("#rowview-table").on("click", ".js-rowview-delete", loadForm)
