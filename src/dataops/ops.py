@@ -532,7 +532,7 @@ def data_frame_add_column(df, column, initial_value):
     if initial_value is None:
         # Choose the right numpy type
         if column_type == 'string':
-            initial_value = ''
+            initial_value = None
         elif column_type == 'integer':
             initial_value = np.nan
         elif column_type == 'double':
