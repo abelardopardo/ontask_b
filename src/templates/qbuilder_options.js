@@ -7,4 +7,5 @@ var qbuilder_options = {
               'is_null', 'is_not_null'],
   allow_empty: {{ allow_empty }},
   filters: {{ query_builder_ops|safe }},
+  {% if empty_rules %}rules: [],{% endif %}
 };
