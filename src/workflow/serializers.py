@@ -132,7 +132,9 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             # Load the data frame
             data_frame = validated_data.get('data_frame', None)
             if data_frame is not None:
-                ops.store_dataframe_in_db(data_frame, workflow_obj.id)
+                ops.store_dataframe_in_db(data_frame,
+                                          workflow_obj.id,
+                                          reset_keys=False)
 
                 # Reconcile now the information in workflow and columns with the
                 # one loaded
