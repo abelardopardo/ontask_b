@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.utils.translation import ugettext_lazy as _
 
+import dataops.pandas_db
 from dataops import pandas_db, ops
 from ontask.permissions import UserIsInstructor
 from table.serializers import (
@@ -198,23 +199,6 @@ class TableBasicMerge(APIView):
     permission_classes = (UserIsInstructor,)
 
     def get_object(self, pk):
-        # try:
-        #     if self.request.user.is_superuser:
-        #         workflow = Workflow.objects.get(pk=pk)
-        #     else:
-        #         workflow = Workflow.objects.filter(
-        #             Q(user=self.request.user) |
-        #             Q(shared__id=self.request.user.id)
-        #         ).distinct().get(id=pk)
-        # except Workflow.DoesNotExist:
-        #     raise APIException('Incorrect object')
-        #
-        # # if not self.request.session.session_key:
-        # #     self.request.session.save()
-        # #
-        # if workflow.is_locked():
-        #     raise APIException('Workflow is locked by another user')
-
         workflow = get_workflow(self.request, pk)
         if workflow is None:
             raise APIException(_('Unable to access the workflow'))
@@ -235,7 +219,7 @@ class TableBasicMerge(APIView):
     # Update
     def put(self, request, pk, format=None):
         # Try to retrieve the wflow to check for permissions
-        self.get_object(pk)
+        workflow = self.get_object(pk)
         # Get the dst_df
         dst_df = pandas_db.load_from_db(pk)
 
@@ -251,7 +235,7 @@ class TableBasicMerge(APIView):
                                  'or inner'))
 
         left_on = serializer.validated_data['left_on']
-        if not ops.is_unique_column(dst_df[left_on]):
+        if not dataops.pandas_db.is_unique_column(dst_df[left_on]):
             raise APIException(_('column {0} does not contain a unique '
                                  'key.').format(left_on))
 
@@ -264,7 +248,7 @@ class TableBasicMerge(APIView):
                 right_on)
             )
 
-        if not ops.is_unique_column(src_df[right_on]):
+        if not dataops.pandas_db.is_unique_column(src_df[right_on]):
             raise APIException(
                 _('column {0} does not contain a unique key.').format(right_on)
             )
@@ -280,7 +264,7 @@ class TableBasicMerge(APIView):
 
         # Ready to perform the MERGE
         try:
-            merge_result = ops.perform_dataframe_upload_merge(pk,
+            merge_result = ops.perform_dataframe_upload_merge(workflow,
                                                               dst_df,
                                                               src_df,
                                                               merge_info)
