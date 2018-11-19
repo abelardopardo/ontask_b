@@ -164,13 +164,13 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Enter data using the RUN menu. Select one entry to populate
         self.selenium.find_element_by_link_text("student01@bogus.com").click()
+        self.selenium.find_element_by_id("id____ontask___select_1").click()
+        self.selenium.find_element_by_id("id____ontask___select_1").clear()
+        self.selenium.find_element_by_id("id____ontask___select_1").send_keys(
+            "Carmelo Coton2")
         self.selenium.find_element_by_id("id____ontask___select_2").click()
         self.selenium.find_element_by_id("id____ontask___select_2").clear()
         self.selenium.find_element_by_id("id____ontask___select_2").send_keys(
-            "Carmelo Coton2")
-        self.selenium.find_element_by_id("id____ontask___select_3").click()
-        self.selenium.find_element_by_id("id____ontask___select_3").clear()
-        self.selenium.find_element_by_id("id____ontask___select_3").send_keys(
             "xxx"
         )
 
@@ -231,6 +231,8 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         # Click in the "Close" button
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']/div/div/div/div[2]/button[2]").click()
+
+        assert pandas_db.check_wf_df(Workflow.objects.get(name='sss'))
 
         # End of session
         self.logout()
@@ -361,6 +363,8 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.assertIn('<td class=" dt-center">16</td>',
                       self.selenium.page_source)
 
+        assert pandas_db.check_wf_df(Workflow.objects.get(name='sss'))
+
         # End of session
         self.logout()
 
@@ -408,6 +412,8 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
         self.assertEqual(wflow.nrows, 29)
         self.assertEqual(wflow.ncols, 14)
 
+        assert pandas_db.check_wf_df(Workflow.objects.get(name='wflow1'))
+
         # End of session
         self.logout()
 
@@ -451,6 +457,8 @@ class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
         wflow = Workflow.objects.all()[0]
         self.assertEqual(wflow.nrows, 19)
         self.assertEqual(wflow.ncols, 14)
+
+        assert pandas_db.check_wf_df(Workflow.objects.get(name='wflow1'))
 
         # End of session
         self.logout()
@@ -564,6 +572,8 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
 
         # Click in the preview and circle around the 12 rows
         self.open_browse_preview(11)
+
+        assert pandas_db.check_wf_df(Workflow.objects.get(name='wflow1'))
 
         # End of session
         self.logout()
@@ -687,6 +697,7 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
         self.assertTrue(all([x == 1 for x in df['RESULT 1_2']]))
         self.assertTrue(all([x == 2 for x in df['RESULT 2_2']]))
 
+        assert pandas_db.check_wf_df(Workflow.objects.get(name='Plugin test'))
 
         # End of session
         self.logout()
@@ -733,6 +744,8 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
         self.assertTrue(df['RESULT 3'].equals(df['A1'] + df['A2']))
         self.assertTrue(df['RESULT 4'].equals(df['A1'] - df['A2']))
 
+        assert pandas_db.check_wf_df(Workflow.objects.get(name='Plugin test'))
+
         # End of session
         self.logout()
 
@@ -760,7 +773,7 @@ class DataopsMerge(test.OntaskLiveTestCase):
         pandas_db.delete_all_tables()
         super(DataopsMerge, self).tearDown()
 
-    def template_merge(self, method):
+    def template_merge(self, method, rename=True):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -789,8 +802,10 @@ class DataopsMerge(test.OntaskLiveTestCase):
         )
 
         # Dataops/Merge CSV Merge Step 2
-        # Rename the column
-        self.selenium.find_element_by_id('id_new_name_0').send_keys('2')
+        if rename:
+            # Rename the column
+            self.selenium.find_element_by_id('id_new_name_0').send_keys('2')
+
         # Click the NEXT button
         self.selenium.find_element_by_xpath(
             "//button[@type='Submit']"
@@ -825,24 +840,104 @@ class DataopsMerge(test.OntaskLiveTestCase):
         ).click()
         self.wait_for_datatable('column-table_previous')
 
+
+    def test_01_merge_inner(self):
+        self.template_merge('inner')
+
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
         df = pandas_db.load_from_db(wflow.id)
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' in set(df.columns))
+        self.assertTrue('text3' in set(df.columns))
+        self.assertTrue('double3' in set(df.columns))
+        self.assertTrue('bool3' in set(df.columns))
+        self.assertTrue('date3' in set(df.columns))
+
+        assert pandas_db.check_wf_df(Workflow.objects.get(name='Testing Merge'))
 
         # End of session
         self.logout()
 
-    def test_01_merge_inner(self):
-        self.template_merge('inner')
-
     def test_02_merge_outer(self):
-        self.template_merge('outer')
+        self.template_merge('outer', False)
+
+        # Assert the content of the dataframe
+        wflow = Workflow.objects.get(name=self.wf_name)
+        df = pandas_db.load_from_db(wflow.id)
+
+        self.assertTrue('key' in set(df.columns))
+        self.assertTrue('key2' not in set(df.columns))
+        self.assertTrue('text3' in set(df.columns))
+        self.assertTrue('double3' in set(df.columns))
+        self.assertTrue('bool3' in set(df.columns))
+        self.assertTrue('date3' in set(df.columns))
+
+        assert pandas_db.check_wf_df(Workflow.objects.get(name='Testing Merge'))
+
+        # End of session
+        self.logout()
 
     def test_03_merge_left(self):
         self.template_merge('left')
 
+        # Assert the content of the dataframe
+        wflow = Workflow.objects.get(name=self.wf_name)
+        df = pandas_db.load_from_db(wflow.id)
+
+        self.assertTrue('key' in set(df.columns))
+        self.assertTrue('key2' in set(df.columns))
+        self.assertTrue('text3' in set(df.columns))
+        self.assertTrue('double3' in set(df.columns))
+        self.assertTrue('bool3' in set(df.columns))
+        self.assertTrue('date3' in set(df.columns))
+
+        assert pandas_db.check_wf_df(Workflow.objects.get(name='Testing Merge'))
+
+        # End of session
+        self.logout()
+
     def test_04_merge_right(self):
         self.template_merge('right')
+
+        # Assert the content of the dataframe
+        wflow = Workflow.objects.get(name=self.wf_name)
+        df = pandas_db.load_from_db(wflow.id)
+
+        self.assertTrue('key' in set(df.columns))
+        self.assertTrue('key2' in set(df.columns))
+        self.assertTrue('text3' in set(df.columns))
+        self.assertTrue('double3' in set(df.columns))
+        self.assertTrue('bool3' in set(df.columns))
+        self.assertTrue('date3' in set(df.columns))
+
+        assert pandas_db.check_wf_df(Workflow.objects.get(name='Testing Merge'))
+
+        # End of session
+        self.logout()
+
+    def test_05_merge_outer_fail(self):
+        self.template_merge('outer')
+
+        # Assert that the error is at the top of the page
+        self.assertIn(
+            'Merge operation produced a result without any key columns.',
+            self.selenium.page_source
+        )
+
+        # Assert the content of the dataframe
+        wflow = Workflow.objects.get(name=self.wf_name)
+        df = pandas_db.load_from_db(wflow.id)
+
+        self.assertTrue('key' in set(df.columns))
+        self.assertTrue('key2' not in set(df.columns))
+        self.assertTrue('text3' not in set(df.columns))
+        self.assertTrue('double3' not in set(df.columns))
+        self.assertTrue('bool3' not in set(df.columns))
+        self.assertTrue('date3' not in set(df.columns))
+
+        assert pandas_db.check_wf_df(Workflow.objects.get(name='Testing Merge'))
+
+        # End of session
+        self.logout()

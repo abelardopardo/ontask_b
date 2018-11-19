@@ -114,7 +114,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         filter_ops = self.selenium.find_elements_by_xpath(
             "//select[@name='builder_rule_0_operator']/option"
         )
-        self.assertEqual(len(filter_ops), 8)
+        self.assertEqual(len(filter_ops), 10)
 
         # Set the operator to less or equal
         sel = Select(self.selenium.find_element_by_name(
@@ -157,11 +157,11 @@ class ActionActionEdit(test.OntaskLiveTestCase):
 
         # Click in the Add rule of the filter builder button
         self.selenium.find_element_by_xpath(
-            "//dl[@id='builder_group_0']/dt/div/button[1]"
+            "//div[@id='builder_group_0']/div/div/button[1]"
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, "//dl[@id='builder_group_0']/dt/div/button[1]")
+                (By.XPATH, "//div[@id='builder_group_0']/div/div/button[1]")
             )
         )
 
@@ -180,7 +180,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         filter_ops = self.selenium.find_elements_by_xpath(
             "//select[@name='builder_rule_1_operator']/option"
         )
-        self.assertEqual(len(filter_ops), 8)
+        self.assertEqual(len(filter_ops), 10)
 
         # Set the operator to less or equal
         sel = Select(self.selenium.find_element_by_name(
@@ -198,6 +198,12 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until_not(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, 'modal-open')
+            )
+        )
+        # Wait for page to reload
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//h4[@id='filter-set']/div/button")
             )
         )
 
