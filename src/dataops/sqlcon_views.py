@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
+import dataops.pandas_db
 import logs
 from dataops import ops, pandas_db
 from dataops.forms import SQLConnectionForm, SQLRequestPassword
@@ -420,7 +421,7 @@ def sqlupload1(request, pk):
 
     # If the data frame does not have any unique key, it is not useful (no
     # way to uniquely identify rows). There must be at least one.
-    src_is_key_column = ops.are_unique_columns(data_frame)
+    src_is_key_column = dataops.pandas_db.are_unique_columns(data_frame)
     if not any(src_is_key_column):
         messages.error(
             request,
