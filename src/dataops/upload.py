@@ -158,7 +158,7 @@ def upload_s2(request):
             {'message': _('Exception while retrieving the data frame')})
 
     # Update the data frame
-    status = ops.perform_dataframe_upload_merge(workflow.id,
+    status = ops.perform_dataframe_upload_merge(workflow,
                                                 existing_df,
                                                 data_frame,
                                                 upload_data)
@@ -378,7 +378,7 @@ def upload_s4(request):
                           {'message': _('Exception while loading data frame')})
 
         # Performing the merge
-        status = ops.perform_dataframe_upload_merge(workflow.id,
+        status = ops.perform_dataframe_upload_merge(workflow,
                                                     dst_df,
                                                     src_df,
                                                     upload_data)
@@ -402,7 +402,8 @@ def upload_s4(request):
 
             messages.error(request,
                            _('Merge operation failed.') + ' (' + status + ')'),
-            return redirect(reverse('workflow:detail'))
+            return redirect(reverse('workflow:detail',
+                                    kwargs={'pk': workflow.id}))
 
         # Log the event
         Log.objects.register(request.user,
