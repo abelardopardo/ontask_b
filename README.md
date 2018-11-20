@@ -1,6 +1,6 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 3.2.0 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 3.2.1 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
 ## OnTask in a nutshell
 
@@ -8,7 +8,7 @@ Current Version: 3.2.0 ([documentation](http://ontask-version-b.readthedocs.io/e
 
 - Actions such as personalised email, personalised web page
 
-- Basic survey engine to collect student responses
+- Basic survey engine to collect student responses or instructor annotations
 
 - Visualization of columns (population measures) and individuals with
   respect to the population
@@ -23,13 +23,15 @@ Current Version: 3.2.0 ([documentation](http://ontask-version-b.readthedocs.io/e
 
 - Import/Export functionality for surveys
 
-- Table views to see only a subset of the data
+- Table views to see a subset of the data
 
 - Execution of plugins to process and modify workflow data.
 
 - Authentication through LTI, LDAP, Shibboleth
 
-- Support for internationalization (initial versions for Spanish and Chinese)
+- **NEW** Creation of ZIP file to upload feedback files in Moodle assessment
+
+- **NEW** Support for internationalization (initial versions for Spanish and Chinese)
 
 **For a detailed description of the tool, how to install it, and how to use it
 check the [OnTask Documentation](https://abelardopardo.github.io/ontask_b)**.

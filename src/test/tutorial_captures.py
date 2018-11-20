@@ -127,7 +127,7 @@ class TutorialCaptures(ScreenTests):
             '//*[@id="div_id_columns"]//div[@class="sol-selection"]'
         )
         for cname in ['email', 'Program', 'Enrolment Type']:
-            element = options.find_element_by_xpath(
+            options.find_element_by_xpath(
                 'div/label/div[normalize-space()="{0}"]'.format(cname)
             ).click()
 
@@ -213,7 +213,7 @@ class TutorialCaptures(ScreenTests):
             ).click()
         self.selenium.find_element_by_id('id_new_name_2').clear()
         self.selenium.find_element_by_id('id_new_name_2').send_keys('email')
-        self.selenium.find_element_by_id('id_make_key_2').click()
+        # self.selenium.find_element_by_id('id_make_key_2').click()
 
         # Picture of the body
         self.body_ss('tutorial_moodle_merge_step2.png')
@@ -260,7 +260,7 @@ class TutorialCaptures(ScreenTests):
         ).click()
         self.wait_for_datatable('column-table_previous')
 
-         #
+        #
         # Create PERSONALISED ACTION.
         #
         self.go_to_actions()
@@ -445,9 +445,13 @@ class TutorialCaptures(ScreenTests):
             )
         )
 
+        # Set the various fields in the form to send the email
         self.selenium.find_element_by_id('id_subject').send_keys(
             'Connecting your program with this course'
         )
+        select = Select(self.selenium.find_element_by_id(
+            'id_email_column'))
+        select.select_by_value('email')
         self.selenium.find_element_by_id('id_cc_email').send_keys(
             'tutor1@bogus.com, tutor2@bogus.com'
         )
@@ -801,8 +805,8 @@ class TutorialCaptures(ScreenTests):
         for topic in topics:
             self.selenium.execute_script(
                 ("""$("#id_content").summernote("editor.insertText",""" 
-                """ "{{% if {0} - Fail %}}Tips about {0} """ 
-                """for those that failed.{{% endif %}}");""").format(topic))
+                 """ "{{% if {0} - Fail %}}Tips about {0} """ 
+                 """for those that failed.{{% endif %}}");""").format(topic))
             self.selenium.execute_script(
                 "$('#id_content').summernote('editor.insertParagraph');")
 
@@ -810,8 +814,8 @@ class TutorialCaptures(ScreenTests):
         for topic in topics:
             self.selenium.execute_script(
                 ("""$('#id_content').summernote("editor.insertText",""" 
-                """ "{{% if {0} - Passed %}}Tips about {0} """ 
-                """for those that passed.{{% endif %}}");""").format(topic))
+                 """ "{{% if {0} - Passed %}}Tips about {0} """ 
+                 """for those that passed.{{% endif %}}");""").format(topic))
             self.selenium.execute_script(
                 "$('#id_content').summernote('editor.insertParagraph');")
 
@@ -822,8 +826,8 @@ class TutorialCaptures(ScreenTests):
         # Open the filter condition
         self.create_filter('Complete data',
                            '',
-                           [('Survey Q1', 'is not empty', None),
-                            ('Total', 'is not empty', None)])
+                           [('Survey Q1', 'is not null', None),
+                            ('Total', 'is not null', None)])
 
         # Action editor
         self.body_ss('tutorial_personalized_text_and_survey.png')
