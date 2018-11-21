@@ -67,7 +67,7 @@ There is a special type of column that is of special interest in OnTask. If a co
 Exploring the data with a spreadsheet
 -------------------------------------
 
-Open the file ``student_list.csv``with a recent version of Excel. Select all the data in the spreadsheet (you can use ``Crtl-A`` or ``Cmd-A`` in OSX) as shown in the following figure:
+Open the file ``student_list.csv`` with a recent version of Excel. Select all the data in the spreadsheet (you can use ``Crtl-A`` or ``Cmd-A`` in OSX) as shown in the following figure:
 
 .. figure:: /scaptures/excel_select_data.png
   :align: center
