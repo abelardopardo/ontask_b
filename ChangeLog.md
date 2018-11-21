@@ -20,6 +20,7 @@
 
 - Bug allowing a workflow to loose its key column through outer merge operation. 
 
+- Bug preventing the conditions to be clone in the actions
 
 ## 3.2.0 (2018-11-12)
 
