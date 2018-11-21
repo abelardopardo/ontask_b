@@ -260,8 +260,6 @@ def load_table(table_name, columns=None, filter_exp=None):
         # No view given, so simply get the whole table
         result = pd.read_sql(table_name, engine)
 
-    # After reading from the DB, turn all None into NaN
-    result.fillna(value=np.nan, inplace=True)
     return result
 
 
@@ -966,4 +964,35 @@ def check_wf_df(workflow):
         if n1.data_type != df_dt:
             return False
 
+    # Verify that the columns marked as unique are preserved
+    for col in workflow.columns.filter(is_key=True):
+        if not is_unique_column(df[col.name]):
+            return False
     return True
+
+
+def is_unique_column(df_column):
+    """
+
+    :param df_column: Column of a pandas data frame
+    :return: Boolean encoding if the column has unique values
+    """
+    return len(df_column.dropna().unique()) == len(df_column)
+
+
+def are_unique_columns(data_frame):
+    """
+
+    :param data_frame: Pandas data frame
+    :return: Array of Booleans stating of a column has unique values
+    """
+    return [is_unique_column(data_frame[x]) for x in list(data_frame.columns)]
+
+def has_unique_column(data_frame):
+    """
+    Verify if the data frame has a unique column
+    :param data_frame:
+    :return: Boolean with the result
+    """
+
+    return any([is_unique_column(data_frame[x]) for x in data_frame.columns])

@@ -51,13 +51,13 @@
           </button>
         </li>
         <li>
-          <a href="{% url 'action:clone_condition' condition.id %}"
+          <button type="button"
              class="btn btn-default btn-sm js-condition-clone"
-             data-url="{% url 'action:action_out_save_content' action.id %}"
+             data-url="{% url 'action:clone_condition' condition.id %}"
              data-toggle="tooltip"
              title="{% trans 'Create an exact copy of this condition' %}">
             <span class="glyphicon glyphicon-duplicate"></span> {% trans 'Clone' %}
-          </a>
+          </button>
         </li>
         <li>
           <button type="button"

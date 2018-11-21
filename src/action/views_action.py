@@ -743,7 +743,7 @@ def select_column_action(request, apk, cpk, key=None):
     # Check if the workflow is locked
     workflow = get_workflow(request)
     if not workflow:
-        return reverse('workflow:index')
+        return JsonResponse({'html_redirect': reverse('workflow:index')})
 
     if workflow.nrows == 0:
         messages.error(

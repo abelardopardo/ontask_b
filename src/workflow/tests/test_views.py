@@ -439,7 +439,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
         filter_ops = self.selenium.find_elements_by_xpath(
             "//select[@name='builder_rule_0_operator']/option"
         )
-        self.assertEqual(len(filter_ops), 2)
+        self.assertEqual(len(filter_ops), 4)
 
         # There should be as many values as in the categories
         filter_vals = self.selenium.find_elements_by_xpath(

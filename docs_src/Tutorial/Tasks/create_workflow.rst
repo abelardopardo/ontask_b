@@ -22,7 +22,7 @@ You can always click in the *Workflows* item at the top menu to go back to the h
 
 .. figure:: /scaptures/workflow_index.png
 
-From the home page you can also perform some additional operations in the worklow such as:
+From the home page you can also perform some additional operations in the workflow such as:
 
   - rename and change the workflow description,
   - cloning (create and exact replica of this workflow with another name),

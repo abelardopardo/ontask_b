@@ -29,7 +29,7 @@ Suppose now that you :download:`do have the class listing in an excel sheet <sce
 
    #. We now create a filter that selects only those students for which the column *Program* has the name *SMED*. Click in the *Add Filter* button at the top of the page and in the new screen introduce the elements shown in the following figure:
 
-      .. figure:: ../../scaptures/scenario_01_action_filter.png
+      .. figure:: /scaptures/scenario_01_action_filter.png
          :align: center
 
       The filter has name *Students in MED* and the students are selected if the given *Formula* is true. In other words, if the *Program* column is equal to *SMED*. Create the filter.
@@ -40,14 +40,14 @@ Suppose now that you :download:`do have the class listing in an excel sheet <sce
 
    #. Complete the rest of the message with a text explaining why the material and activities in this course are relevant to the *SMED* program. The *Action Out* screen should look similar to the one shown in the following figure:
 
-      .. figure:: ../../scaptures/scenario_01_action_SMED.png
+      .. figure:: /scaptures/scenario_01_action_SMED.png
          :align: center
 
    #. Once you are satisfied with how the text read, click in the *Preview* button at the bottom of the page and you will see how the message is produced by changing the name of the student (the rest of the text remains the same). Use the arrows to traverse the list of 129 students in this group.
 
    #. Save and close the *Action Out*. You go back to the screen showing you all the actions in the workflow (you can see the one we just created). If you click in the *Email* button, you will be asked for some extra data such as the email subject, the column to use as email address and some options to track email reading or even obtain a snapshot (duplicate) of the workflow as it is right now for future reference.
 
-      .. figure:: ../../scaptures/scenario_01_action_SMED_email.png
+      .. figure:: /scaptures/scenario_01_action_SMED_email.png
          :align: center
 
    #. That's it! You now can create three additional similar messages to send emails to the students in the other three programs (FEIT, FASS and FSCI) with an almost identical rule (changing the condition in the filter and the email text).

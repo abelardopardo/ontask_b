@@ -10,6 +10,8 @@ from django.shortcuts import redirect, reverse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 from action import ops
 from dataops.formula_evaluation import evaluate_node_sql, get_variables
@@ -476,13 +478,20 @@ def delete_condition(request, pk):
 
 
 @user_passes_test(is_instructor)
+@csrf_exempt
+@require_http_methods(['POST'])
 def clone(request, pk):
     """
-    View to clone an action
+    JSON request to clone a condition. The post request must come with the action_content
     :param request: Request object
     :param pk: id of the condition to clone
-    :return:
+    :return: JSON response
     """
+
+    # Check if the workflow is locked
+    workflow = get_workflow(request)
+    if not workflow:
+        return JsonResponse({'html_redirect': reverse('workflow:index')})
 
     # Get the condition
     try:
@@ -494,7 +503,13 @@ def clone(request, pk):
     except (KeyError, ObjectDoesNotExist):
         messages.error(request,
                        _('Condition cannot be cloned.'))
-        return redirect(reverse('action:index'))
+        return JsonResponse({'html_redirect': reverse('action:index')})
+
+    # If the request has the 'action_content', update the action
+    action_content = request.POST.get('action_content', None)
+    if action_content:
+        condition.action.set_content(action_content)
+        condition.action.save()
 
     # Get the new name appending as many times as needed the 'Copy of '
     new_name = 'Copy of ' + condition.name
@@ -519,5 +534,5 @@ def clone(request, pk):
 
     messages.success(request,
                      _('Action successfully cloned.'))
-    return redirect(reverse('action:edit',
-                            kwargs={'pk': condition.action.id}))
+    # Refresh the page to show the column in the list.
+    return JsonResponse({'html_redirect': ''})

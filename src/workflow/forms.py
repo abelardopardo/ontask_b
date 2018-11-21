@@ -13,7 +13,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 
-from dataops import pandas_db, ops
+from dataops import pandas_db
 from ontask import ontask_prefs, is_legal_name
 from ontask.forms import RestrictedFileField
 from core.widgets import OnTaskDateTimeInput
@@ -74,7 +74,6 @@ class AttributeItemForm(forms.Form):
 
 
 class ColumnBasicForm(forms.ModelForm):
-
     # Raw text for the categories
     raw_categories = forms.CharField(
         strip=True,
@@ -200,7 +199,6 @@ class ColumnBasicForm(forms.ModelForm):
 class QuestionAddForm(ColumnBasicForm):
 
     def __init__(self, *args, **kwargs):
-
         super(QuestionAddForm, self).__init__(*args, **kwargs)
 
         self.fields['name'].label = _('Question name')
@@ -212,7 +210,6 @@ class QuestionAddForm(ColumnBasicForm):
         self.fields['active_to'].label = _('Question active until')
 
     def clean(self):
-
         data = super(QuestionAddForm, self).clean()
 
         # Check and force a correct column index
@@ -285,7 +282,6 @@ class ColumnAddForm(ColumnBasicForm):
 class QuestionRenameForm(ColumnBasicForm):
 
     def __init__(self, *args, **kwargs):
-
         super(QuestionRenameForm, self).__init__(*args, **kwargs)
 
         self.fields['name'].label = _('Question name')
@@ -297,7 +293,6 @@ class QuestionRenameForm(ColumnBasicForm):
         self.fields['active_to'].label = _('Question active until')
 
     def clean(self):
-
         data = super(QuestionRenameForm, self).clean()
 
         # Check and force a correct column index
@@ -339,8 +334,8 @@ class ColumnRenameForm(ColumnBasicForm):
 
             # Case 2: False -> True Unique values must be verified
             if not self.instance.is_key and \
-                    not ops.is_unique_column(self.data_frame[
-                                                 self.instance.name]):
+                    not pandas_db.is_unique_column(self.data_frame[
+                                                       self.instance.name]):
                 self.add_error(
                     'is_key',
                     _('The column does not have unique values for each row.')

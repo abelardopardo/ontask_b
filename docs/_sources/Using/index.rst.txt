@@ -37,7 +37,7 @@ The Workflow
 
 The workflow in OnTask is simply a container that brings together the table, the operations to upload the data, and the actions to create the personalized content. The initial screen in OnTask shows the available workflows as shown in the following figure.
 
-.. figure:: ../scaptures/workflow_index.png
+.. figure:: /scaptures/workflow_index.png
    :align: center
    :width: 100%
 
@@ -55,13 +55,13 @@ The screen includes the following operations:
 
 2. Importing a file containing a previously exported workflow. Clicking in the *Import* button will ask you for the new for the new workflow, the file and will let you choose to import only the data, or the data and the actions as shown in the following figure
 
-   .. figure:: ../scaptures/workflow_import.png
+   .. figure:: /scaptures/workflow_import.png
       :align: center
       :width: 100%
 
 3. Open a workflow to work on it. This is perhaps the most common initial step. Once you open a workflow, all the operations are applied to it. The name of the current workflow is shown right under the top navigation bar as shown in the following figure.
 
-   .. figure:: ../scaptures/navigation_bar.png
+   .. figure:: /scaptures/navigation_bar.png
       :align: center
       :width: 100%
 
@@ -77,151 +77,7 @@ Once you open a workflow, it is locked and no other user can manipulate it (see 
 
 The operations to manage a workflow all become visible once you select it by clicking on its name.
 
-.. _details:
-
-Workflow Details
-================
-
-    "The details are not the details. They make the design"
-    -- Charles Eames
-
-After selecting a workflow to manage, the *details* page appears with a lot of information about operations, structure of the data, information about the columns, etc. The page contains the information shown in the following figure.
-
-.. figure:: ../scaptures/workflow_details.png
-   :align: center
-
-The name of the workflow is shown at the top of the page. The page includes links to additional menus with various operations on the selected workflow (some of them will be available depending on your user profile). Under the title *Workflow Details* there are buttons to access the following operations:
-
-Add a column
-  This menu opens three options: create a regular column, create a column combining the values of two existing columns, or create a new column with random values.
-
-.. _details_add_column:
-
-  Add a regular column
-    Opens a dialog to create a new column in the table with the following fields:
-
-    - Name (mandatory): column name (shown in the table)
-
-    - Description: text that will be shown to the learners if the column is part of a survey action.
-
-    - Data type (mandatory: The possible data types are *number* (representing both integers or real numbers), *string*, *boolean* (only possible values are *true* and *false*), and *datetime* (a date and time together).
-
-    - An integer (mandatory) representing the position of the column in the table (a value zero will insert it at the end of the table).
-
-    - Two date/time values to control the visibility of the column.
-
-    - Comma-separated list of possible values. This field is to restrict the values in the column. The values have to be compatible with the specified data type.
-
-    - Initial value to assign to all cells in the column.
-
-    .. figure:: ../scaptures/workflow_add_column.png
-       :align: center
-
-.. _details_add_formula_column:
-
-  Add a formula-derived column
-    This column is created by combining the values of existing columns using one of the operations addition, product, maximum, minimum, mean, median, standard deviation, conjunction or disjunction. The formula is only applied when the column is
-    created the current values of the other columns. The column is not refreshed if the operand change in the future.
-
-.. _details_add_random_column:
-
-  Add a column with random values
-    This is useful to create columns for A/B testing. The new column is created with a random value from either a numeric range (starting at 0) or a set of strings.
-
-.. _details_attributes:
-
-Attributes
-  This is simply a dictionary of pairs ``(name, value)`` so that when a ``name`` appears in a personalized text, it is replaced by the ``value``. The main use of these attributes is when a value has to appear in various locations and you may want to change all its occurrences. For example, the instructor name could be included as one of the attributes so that if it changes, modifying the attribute is the only required step.
-
-  .. figure:: ../scaptures/workflow_attributes.png
-     :align: center
-
-.. _details_sharing:
-
-Share
-  A screen to make the workflow accessible to other users. You are supposed to know the user identification (there is no search functionality available).
-
-  .. figure:: ../scaptures/workflow_share.png
-     :align: center
-
-.. _details_export:
-
-Export
-  This functionality allows you to take a snapshot of the content of the workflow and store it in a file for your records. You may select which actions are included in the exported file
-
-  .. figure:: ../scaptures/workflow_export.png
-     :align: center
-
-  The menu offers the possibility of exporting only the data, or the data **and** the :ref:`action <action>` in the workflow.
-
-.. _details_clone:
-
-Clone
-  This function creates a new workflow duplicating the data, actions and conditions of the current workflow. The new workflow will have the same name with the prefix *Copy of*.
-
-.. _details_rename:
-
-Rename
-  This functionality allows to change either the name or the description of the workflow.
-
-  .. figure:: ../scaptures/workflow_rename.png
-     :align: center
-
-.. _details_flush_data:
-
-Flush data
-  This operation deletes all the data attached to the workflow, but preserves the workflow structure (that is, the name and the description only).
-
-  .. figure:: ../scaptures/workflow_flush.png
-     :align: center
-
-  Given the destructive nature of this operation the platform requires you to confirm this step.
-
-.. _details_delete:
-
-Delete
-  Operation similar to the previous one, but now the whole workflow is deleted and therefore unselected. If executed, the platform will go back to the list of workflows as this one is no longer available for operations.
-
-  .. figure:: ../scaptures/workflow_delete.png
-     :align: center
-
-  As in the previous case, the platform asks for confirmation before carrying out the delete operation.
-
-Under the buttons to carry out these workflow operations the platform shows a summary of the information contained in the workflow.
-
-.. _columns:
-
-The Columns
------------
-
-The data in a workflow is stored in a structure called *a table* that is made of rows and columns (similar to a spreadsheet). The details page basically shows information about the available columns.
-
-.. figure:: ../scaptures/wokflow_columns.png
-   :align: center
-
-Each column has a position, name (cannot contain the quotes *'* or *"*), a type (one of integer, string, double, boolean or date/time), a field stating if the values of that column are unique for the rows, and operations. When a column is marked as *Unique*, it means that all the values it contains are different and unique for each row. Think of a column containing a passport number. Such number is different for every person. There could be several columns with this property. The application detects automatically this property in a column. You may edit and change this properly as long as the values are the adequate ones (they satisfy the uniqueness property if you try mark a column as unique). The operations available over columns are:
-
-Edit
-  It allows you to change the name, type, unique and values allowed in the column. If you are changing the column type, the application will check if the existing values are valid. If not, the change will not be allowed.
-  Similarly, if the *Unique* property is selected, the application checks the
-  values to make sure this property is satisfied.
-
-  .. figure:: ../scaptures/workflow_column_edit.png
-     :align: center
-
-  The column may also have a *validity window* defined by two date/times. This validity is used when executing *action in* tasks.
-
-Restrict
-  Assigns as *allowed values* for the column those currently stored. This operation is useful to transform a generic column into one with values limited to the current ones.
-
-Clone
-  Clones the column in the workflow changing its name adding the prefix *Copy of* to the name.
-
-Delete
-  Deletes the column from the workflow. If there are conditions in the actions that use this column, those conditions will be removed from the action.
-
-Statistics
-  Shows a statistical summary of the values in the column. If the data type is *number*, the summary includes information about quartiles, a boxplot, and a histogram. For the rest of data types, the summary only includes the histogram.
+.. include:: include_details.rst
 
 .. _dataops:
 
@@ -246,7 +102,7 @@ CSV or "comma separated value" files are plain text files in which the first lin
 
 This operation allows you to upload the values in a CSV file into the workflow table.
 
-.. figure:: ../scaptures/dataops_csvupload.png
+.. figure:: /scaptures/dataops_csvupload.png
    :align: center
 
 In some cases, the comma-separated values are surrounded by several lines that need to be ignored when processing the data. The page to upload the CSV file allows you to specify the number of lines to ignore at the start and end of the file.
@@ -256,7 +112,7 @@ Upload Excel Files
 
 OnTask also supports the upload of data from Excel files.
 
-.. figure:: ../scaptures/dataops_upload_excel.png
+.. figure:: /scaptures/dataops_upload_excel.png
    :align: center
 
 In this case the file is assumed to have multiple *Sheets* and one of them
@@ -269,17 +125,17 @@ SQL connection
 
 The third method to upload data into the current workflow is through a SQL connection to a remote database. These connections have to be :ref:`previously defined and configured by the system administrator <sql_connections>`. Instructors can use them to access the content of a previously defined table in a remote database. The option to upload data with a SQL connection shows the available connections and the possibility to *Run* each one of them:
 
-.. figure:: ../scaptures/dataops_SQL_available.png
+.. figure:: /scaptures/dataops_SQL_available.png
    :align: center
 
 When *running* a SQL connection the platform shows the configuration parameters and requests the password to access the remote database (if required).
 
-.. figure:: ../scaptures/dataops_SQL_run.png
+.. figure:: /scaptures/dataops_SQL_run.png
    :align: center
 
 When uploading data for the first time, the values are prepared to be assigned as the initial content of the table. Before this assignment is done, the platform first automatically detects those columns that have unique values (no repetitions) and marks them as *keys*. Key columns are very important because the values (as they are different for every row) are used for various operation. There must be **at least one key column** in the workflow and it is possible to remove the *key* mark from any column and only possible to mark a column as key if the values are all different. Before assigning the data to the table, the platform also allows to change the name of the columns as shown in the Step 2 of the upload process.
 
-.. figure:: ../scaptures/dataops_upload_merge_step2.png
+.. figure:: /scaptures/dataops_upload_merge_step2.png
    :align: center
 
 After this step (if the table is empty), the data is stored and the platform shows the :ref:`details` page. If the upload operation is executed with a workflow with existing data in the table, then instead of an upload, the platform executes a **merge** operation.
@@ -297,7 +153,7 @@ A merge operation is required when uploading a set of columns with an **already 
 
 After detecting the key columns and offering the option of changing their names, the following steps requires to identify the key columns used to match rows from the existing table and the one being uploaded.
 
-.. figure:: ../scaptures/dataops_upload_merge_step3.png
+.. figure:: /scaptures/dataops_upload_merge_step3.png
    :align: center
    :width: 100%
 
@@ -335,7 +191,7 @@ In any of these variants, for those columns that are present in both the existin
 
 After selecting these parameters the last step is to review the effect of the operation and proceed with the merge as shown in the following figure.
 
-.. figure:: ../scaptures/dataops_upload_merge_step4.png
+.. figure:: /scaptures/dataops_upload_merge_step4.png
    :align: center
 
 .. _table:
@@ -349,13 +205,13 @@ The Table
 
 This functionality is to show the values stored in the workflow. Since this data can be arbitrarily large, it is likely that only a portion of the columns is shown on the screen at any given point.
 
-.. figure:: ../scaptures/table.png
+.. figure:: /scaptures/table.png
    :align: center
    :width: 100%
 
 The buttons at the top of the page allow to execute several operations.
 
-.. figure:: ../scaptures/table_buttons.png
+.. figure:: /scaptures/table_buttons.png
    :align: center
    :width: 100%
 
@@ -386,19 +242,19 @@ Table Views
 
 Due to the potentially large size of this table in either number of rows or columns, OnTask offers the possibility to define *views*. A view is simply a table that shows a subset of columns and rows. You may define as many views as needed for the table.
 
-.. figure:: ../scaptures/table_views.png
+.. figure:: /scaptures/table_views.png
    :align: center
    :width: 100%
 
 When creating or editing the content of the view, aside from the name and the description, you may select those columns to show, and a expression to restrict the rows to those for which that expression is correct (you may leave this expression empty and all rows will be shown).
 
-.. figure:: ../scaptures/table_view_edit.png
+.. figure:: /scaptures/table_view_edit.png
    :align: center
    :width: 100%
 
 Once defined, you may select the view to show the corresponding data subset.
 
-.. figure:: ../scaptures/table_view_view.png
+.. figure:: /scaptures/table_view_view.png
    :align: center
    :width: 100%
 
@@ -415,7 +271,7 @@ The Actions
 
 This is the most important functionality of the platform. Actions are used exchange information with the learners, either offering a personalized document, or requesting data. A workflow contains an arbitrary number of actions shown in the *Table* page.
 
-.. figure:: ../scaptures/actions.png
+.. figure:: /scaptures/actions.png
    :align: center
    :width: 100%
 
@@ -428,13 +284,13 @@ Personalized Content
 
 These actions allow to create a resource (similar to a HTML page) and mark certain elements with *conditions* that will control if they are included or ignored when showing the document. Think of this personalized content as a resource (message, tip, comment) you would offer learners but with content that is different depending on the data stored in the table. You may have several of these items prepared to be used at different points during the experience. The personalized content action is manipulated with the screen shown in the following figure:
 
-.. figure:: ../scaptures/action_edit_action_out.png
+.. figure:: /scaptures/action_edit_action_out.png
    :align: center
    :width: 100%
 
 Before describing in detail the structure of this screen let's explore the concept of *condition*. A condition is an expression that when evaluated will either be **True** or **False**. These expressions are commonly used in other applications such as spreadsheets or programming languages. The following image shows an example of this condition.
 
-.. figure:: ../scaptures/action_action_out_edit_filter.png
+.. figure:: /scaptures/action_action_out_edit_filter.png
    :align: center
 
 The expression in the previous figure is contained under the title **Formula** and can be read as:
@@ -448,7 +304,7 @@ These conditions can have nested sub-expressions and get complex fairly quickly.
 The filter
   The top area contains a *filter*. This element is an expression used to decide which learners (or more precisely, the corresponding rowsin the data table that) will be selected and used in this action.
 
-  .. figure:: ../scaptures/action_action_out_filterpart.png
+  .. figure:: /scaptures/action_action_out_filterpart.png
      :align: center
      :width: 100%
 
@@ -457,7 +313,7 @@ The filter
 The conditions
   This area contains additional expressions called *conditions*.
 
-  .. figure:: ../scaptures/action_action_out_conditionpart.png
+  .. figure:: /scaptures/action_action_out_conditionpart.png
      :align: center
      :width: 100%
 
@@ -468,7 +324,7 @@ The conditions
 The HTML text editor
   This is the area to create the personalized document. It is a conventional HTML editor offering the usual functionalities (inserting text in various forms, headings, lists, links, images, etc.) Right above the editor window you have two choice menus that you can use to insert either a :ref:`workflow attribute <details_attributes>` or a column name that will be replaced by the corresponding value.
 
-  .. figure:: ../scaptures/action_action_out_editorpart.png
+  .. figure:: /scaptures/action_action_out_editorpart.png
      :align: center
      :width: 100%
 
@@ -479,14 +335,14 @@ The Preview button
   text that are controlled by any condition, the bottom area will show their
   values.
 
-  .. figure:: ../scaptures/action_action_out_preview.png
+  .. figure:: /scaptures/action_action_out_preview.png
      :align: center
      :width: 100%
 
   Use the arrow buttons to see all the different versions of the text
   depending on the values stored in the table for each learner.
 
-  .. figure:: ../scaptures/Ontask____howtopreviewtext.gif
+  .. figure:: /scaptures/Ontask____howtopreviewtext.gif
      :align: center
 
 The Save button
@@ -548,7 +404,7 @@ Conditional text
   evaluates to **True** with their current values in the data table.
   Otherwise, the text will be ignored. The following figure illustrates this process.
 
-  .. figure:: ../scaptures/Ontask____howtocreatetext.gif
+  .. figure:: /scaptures/Ontask____howtocreatetext.gif
      :align: center
      :width: 100%
 
@@ -559,7 +415,7 @@ This type of action allows the creation of a `JSON object <https://www.json.org/
 
 The screen to create a Personalized JSON object is shown in the following figure.
 
-.. figure:: ../scaptures/action_personalized_json_edit.png
+.. figure:: /scaptures/action_personalized_json_edit.png
    :align: center
    :width: 100%
 
@@ -578,13 +434,13 @@ Once you created a personalized text action and verified its content using the
 *Preview* button, save its content. The right-most column shows a button with
 name *Email*. Click on that button.
 
-.. figure:: ../scaptures/action_action_ops.png
+.. figure:: /scaptures/action_action_ops.png
    :align: center
 
 The following screen shows a form to introduce the required parameters to
 send the personalized text to each learner by email.
 
-.. figure:: ../scaptures/action_email_request_data.png
+.. figure:: /scaptures/action_email_request_data.png
    :align: center
 
 The subject
@@ -638,13 +494,13 @@ available to learner. Another one is to offer the content
 through a URL that can be given to the learners. To enable such URL click in
 the button labeled ``URL`` followed by either the word ``(Off)`` or ``(On)``.
 
-.. figure:: ../scaptures/action_action_ops.png
+.. figure:: /scaptures/action_action_ops.png
    :align: center
 
 The following window shows the URL in which the content is available as well
 as the field to enable/disable it.
 
-.. figure:: ../scaptures/action_URL_on.png
+.. figure:: /scaptures/action_URL_on.png
    :align: center
    :width: 60%
 
@@ -659,7 +515,7 @@ Sending personalized JSON objects to another platform
 
 The analogous operations for personalized JSON actions is to send the resulting objects to the given URL and is available when clicking in the ``Run`` button. The execution of these actions require two fields.
 
-.. figure:: ../scaptures/action_json_run_request_data.png
+.. figure:: /scaptures/action_json_run_request_data.png
    :align: center
    :width: 100%
 
@@ -672,7 +528,7 @@ Creating a ZIP file with the personalized text
 
 The personalized text actions offer the possibility of creating a ZIP file containing one HTML file per personalized text. You may use two columns and a fixed suffix to control the format of each file name.
 
-.. figure:: ../scaptures/action_zip_request_data.png
+.. figure:: /scaptures/action_zip_request_data.png
    :align: center
    :width: 100%
 
@@ -687,12 +543,12 @@ One of the potential uses of the ZIP file generated from a personalized text act
 
 1. The table must have column named ``Identifier`` with values starting with the word ``Participant`` followed by a white space and a unique number. This column can be extracted from a Moodle Assignment by downloading the *grading worksheet*:
 
-  .. figure:: ../scaptures/downloadgradingworksheet.png
+  .. figure:: /scaptures/downloadgradingworksheet.png
      :align: center
 
   The CSV file has two columns with names ``Identifier`` and ``Full name``.
 
-  .. figure:: ../scaptures/moodle_grading_sheet.png
+  .. figure:: /scaptures/moodle_grading_sheet.png
      :align: center
 
 2. The two columns ``Identifier`` and ``Full name`` must be :ref:`merged<data_merge>` with the current data in the workflow.
@@ -701,7 +557,7 @@ One of the potential uses of the ZIP file generated from a personalized text act
 
 4. Upload the resulting ZIP using the option ``Upload multiple files in a zip`` in the Moodle Assignment.
 
-   .. figure:: ../scaptures/multiplefeedbackzip.png
+   .. figure:: /scaptures/multiplefeedbackzip.png
       :align: center
 
 
@@ -719,7 +575,7 @@ annotations about learners throughout the experience.
 When you edit a survey action, the editor contains the elements shown in the
 following figure:
 
-.. figure:: ../scaptures/action_edit_action_in.png
+.. figure:: /scaptures/action_edit_action_in.png
    :align: center
    :width: 100%
 
@@ -736,7 +592,7 @@ included in the survey, its description text is shown as the *question text*.
 The *Preview* button at the bottom of the page shows the content as it will be
 shown to the learners.
 
-.. figure:: ../scaptures/action_action_out_preview.png
+.. figure:: /scaptures/action_action_out_preview.png
  :align: center
  :width: 100%
 
@@ -751,7 +607,7 @@ for the survey action as well as the data collected so far. Each row contains
 a link to access the data entry screen. The table has a search box in the
 upper left corner to quickly find a person.
 
-.. figure:: ../scaptures/action_run_action_in.png
+.. figure:: /scaptures/action_run_action_in.png
    :align: center
    :width: 100%
 
@@ -759,7 +615,7 @@ Instructors may click in the link available in the right-most column to
 either enter new information or modify the already existing information for
 that learner.
 
-.. figure:: ../scaptures/action_enter_data_action_in.png
+.. figure:: /scaptures/action_enter_data_action_in.png
    :align: center
    :width: 100%
 
@@ -775,7 +631,7 @@ the action table each survey action has a button labeled *URL*. If you click
 in this button the screen shows the URL for the survey and the possibility of
 enable/disable it or even provide a date/time window for its availability.
 
-.. figure:: ../scaptures/action_action_in_URL.png
+.. figure:: /scaptures/action_action_in_URL.png
    :align: center
    :width: 80%
 
@@ -801,7 +657,7 @@ Scheduling a Personalized Text Action
 
 The following figure shows the information requested to schedule the execution of a personalized text action (sending emails to learners):
 
-.. figure:: ../scaptures/schedule_action_email.png
+.. figure:: /scaptures/schedule_action_email.png
    :align: center
 
 The fields in this form are:
@@ -843,7 +699,7 @@ Scheduling a Personalized JSON Action
 
 The following figure shows the information requested to schedule the execution of a personalized JSON action (sending JSON object to another platform):
 
-.. figure:: ../scaptures/schedule_action_json.png
+.. figure:: /scaptures/schedule_action_json.png
    :align: center
 
 The fields in this form are:
@@ -865,7 +721,7 @@ The Scheduler Menu
 
 The *Scheduler* in the top menu is a link to a page that shows the tasks scheduled for execution in the selected workflow.
 
-.. figure:: ../scaptures/schedule.png
+.. figure:: /scaptures/schedule.png
    :align: center
 
 The left-most column offers the operations to edit or delete the scheduled execution.
@@ -877,7 +733,7 @@ The Logs
 
 The platform keeps a log of most of the operations that are executed when managing a workflow. These records are available through the *Logs* link in the navigation bar at the top of the screen.
 
-.. figure:: ../scaptures/logs.png
+.. figure:: /scaptures/logs.png
 
 You may download all logs as a CSV file.
 
@@ -890,14 +746,14 @@ The additional method offered by OnTask to manipulate the data in a workflow's t
 
 The purpose of the plugins is to allow arbitrary transformations of the data attached to a workflow. The list of plugins available for execution can be accessed through the link *Transform* in the *Dataops* top menu item.
 
-.. figure:: ../scaptures/dataops_transform_list.png
+.. figure:: /scaptures/dataops_transform_list.png
    :align: center
 
 Each plugin is shown with a (unique) name, a description, the last time the code was modified (based on the file modification time), if the plugin is ready to execute, and the link for either the *Run* operation, or a link to the diagnostics if the execution is not possible.
 
 The plugin execution request shows a form to collect the parameters required for the operation.
 
-.. figure:: ../scaptures/dataops_transformation_run.png
+.. figure:: /scaptures/dataops_transformation_run.png
    :align: center
 
 Input columns
@@ -975,7 +831,7 @@ structure:
 
 If a plugin does not comply with these properties the platform shows a summary of these checks to diagnose the problem.
 
-.. figure:: ../scaptures/dataops_plugin_diagnostics.png
+.. figure:: /scaptures/dataops_plugin_diagnostics.png
    :align: center
 
 

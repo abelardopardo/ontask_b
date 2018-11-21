@@ -14,6 +14,30 @@
 
 - Reviewed the Chinese localization
 
+## 3.2.1 (2018-11-21)
+
+### Added
+
+- Survey columns now can be queried about their null and not null status.
+
+### Changed
+
+- Significant changes in the documentation (more to come) to provide more activities and details in the tutorial
+
+- Various minor cosmetic changes in the HTML structure of the pages
+
+- Updated the version of QueryBuilder and added localization files
+
+### Fixed
+
+- Randomly populated columns now are guaranteed to have equal numer of elements in each partition (Issue #104)
+
+- Bug when using the Check all box in CSV upload. It was selecting all checkboxes in the page, now only those related to column upload
+
+- Bug allowing a workflow to loose its key column through outer merge operation. 
+
+- Bug preventing the conditions to be clone in the actions
+
 ## 3.2.0 (2018-11-12)
 
 ### Added

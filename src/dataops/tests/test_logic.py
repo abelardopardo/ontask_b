@@ -118,7 +118,7 @@ class DataopsMatrixManipulation(test.OntaskTestCase):
 
         self.merge_info['how_merge'] = 'inner'
 
-        result = perform_dataframe_upload_merge(self.workflow.id,
+        result = perform_dataframe_upload_merge(self.workflow,
                                                 df_dst,
                                                 df_src,
                                                 self.merge_info)

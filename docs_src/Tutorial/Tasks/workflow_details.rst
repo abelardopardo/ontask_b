@@ -22,7 +22,7 @@ Add a new column
   This function allows you to manually add a new column to the data table. You need to provide the name, a description (optional), the type of data (one of string, number, datetime, or boolean), the position where this column is inserted in the workflow, a date/time window when the columns is visible, an optional comma-separated list of possible value (useful to restrict the values), and an optional initial value.
 
 Add a formula-based column
-  This function is to create a new column containing the result of the data from existing columns combined with certain basic operantions such as *maximum*, *minimum*, *sum*, *product*, *mean*, *median*, etc. The way it works is by selecting the operation and a subset of existing columns to use as operands.
+  This function is to create a new column containing the result of the data from existing columns combined with certain basic operations such as *maximum*, *minimum*, *sum*, *product*, *mean*, *median*, etc. The way it works is by selecting the operation and a subset of existing columns to use as operands.
 
 Add a column with random values
   This function creates a new column with values randomly taken from a pre-defined collection.

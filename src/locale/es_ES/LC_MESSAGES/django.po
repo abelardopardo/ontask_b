@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-12 13:55+1030\n"
-"PO-Revision-Date: 2018-11-04 13:06+1030\n"
+"POT-Creation-Date: 2018-11-20 08:16+1030\n"
+"PO-Revision-Date: 2018-11-20 08:21+1030\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -231,8 +231,8 @@ msgstr "URL para enviar el objeto JSON personalizado"
 msgid "Write a JSON object"
 msgstr "Introduzca un objeto JSON"
 
-#: action/forms.py:180 action/forms.py:184 workflow/forms.py:169
-#: workflow/forms.py:173
+#: action/forms.py:180 action/forms.py:184 workflow/forms.py:168
+#: workflow/forms.py:172
 msgid "Incorrect date/time window"
 msgstr "Intervalo de fecha/hora incorrecto"
 
@@ -339,7 +339,7 @@ msgstr "Ficha de autenticación obtenida de la plataforma externa."
 msgid "Authentication token to be sent with the JSON object."
 msgstr "Ficha de autenticación a enviar con el objeto JSON."
 
-#: action/forms.py:512 workflow/forms.py:461
+#: action/forms.py:512 workflow/forms.py:456
 msgid "File"
 msgstr "Fichero"
 
@@ -368,7 +368,7 @@ msgid "name"
 msgstr "nombre"
 
 #: action/models.py:63 action/models.py:375 scheduler/models.py:52
-#: workflow/models.py:560
+#: workflow/models.py:563
 msgid "description"
 msgstr "descripción"
 
@@ -384,7 +384,7 @@ msgstr "Acción disponible desde"
 msgid "Action available until"
 msgstr "Acción disponible hasta"
 
-#: action/models.py:120 action/templates/action/edit_in.html:121
+#: action/models.py:120 action/templates/action/edit_in.html:118
 msgid "Shuffle questions?"
 msgstr "¿Barajar las preguntas?"
 
@@ -549,7 +549,7 @@ msgstr ""
 #: table/templates/table/stat_row.html:33
 #: table/templates/table/stat_view.html:29
 #: table/templates/table/stat_view.html:36
-#: table/templates/table/view_index.html:60 templates/thanks.html:9
+#: table/templates/table/view_index.html:56 templates/thanks.html:9
 #: workflow/templates/workflow/export_done.html:16
 #: workflow/templates/workflow/includes/workflow_attribute_buttons.html:4
 msgid "Back"
@@ -563,7 +563,7 @@ msgstr "Envío de correo"
 #, python-format
 msgid ""
 "Send emails for\n"
-"    action \"%(n)s\""
+"      action \"%(n)s\""
 msgstr "Enviar mensajes de la acción \"%(n)s\""
 
 #: action/templates/action/action_email_step1.html:17
@@ -625,7 +625,7 @@ msgstr "Cancelar"
 
 #: action/templates/action/action_email_step1.html:28
 #: action/templates/action/action_zip_step1.html:28
-#: action/templates/action/edit_in.html:179
+#: action/templates/action/edit_in.html:176
 #: action/templates/action/includes/partial_action_preview_done_buttons.html:9
 #: action/templates/action/request_json_data.html:28
 msgid "Preview"
@@ -673,7 +673,7 @@ msgstr "ZIP de la acción"
 #, python-format
 msgid ""
 "ZIP for\n"
-"    action \"%(n)s\""
+"      action \"%(n)s\""
 msgstr "Crear un ZIP para la acción “%(n)s”"
 
 #: action/templates/action/action_zip_step1.html:17
@@ -684,22 +684,22 @@ msgstr "Se creará un ZIP con %(n)s ficheros."
 #: action/templates/action/action_zip_step1.html:40
 msgid ""
 "\n"
-"      This function creates a ZIP with one HTML file for each user selected "
-"by the action.\n"
-"      The file contains the personalised text as shown when using the "
+"        This function creates a ZIP with one HTML file for each user "
+"selected by the action.\n"
+"        The file contains the personalised text as shown when using the "
 "\"Preview\" button.\n"
-"      The file name is created with the values of the two selected columns "
+"        The file name is created with the values of the two selected columns "
 "followed by\n"
-"      the suffix. If you plan to use the ZIP to use as file feedback in "
+"        the suffix. If you plan to use the ZIP to use as file feedback in "
 "Moodle, the first\n"
-"      column must contain values of the form \"Participant [number]\" and "
+"        column must contain values of the form \"Participant [number]\" and "
 "the second must\n"
-"      be the user's full name. These columns can be\n"
-"      obtained by downloading first the grading CSV file from the Moodle "
+"        be the user's full name. These columns can be\n"
+"        obtained by downloading first the grading CSV file from the Moodle "
 "assignment,\n"
-"      merge them into the workflow, and then use them to create this ZIP and "
-"upload it.\n"
-"      "
+"        merge them into the workflow, and then use them to create this ZIP "
+"and upload it.\n"
+"        "
 msgstr ""
 "\n"
 "    Esta función crea un ZIP con un fichero HTML para cada usuario "
@@ -722,16 +722,16 @@ msgstr ""
 msgid "Edit Action In"
 msgstr "Editar acción de entrada"
 
-#: action/templates/action/edit_in.html:43
+#: action/templates/action/edit_in.html:40
 msgid "No columns selected."
 msgstr "No se ha seleccionado ninguna columna."
 
-#: action/templates/action/edit_in.html:72
+#: action/templates/action/edit_in.html:69
 #: action/templates/action/includes/partial_action_edit_description.html:9
 msgid "Edit description"
 msgstr "Editar descripción"
 
-#: action/templates/action/edit_in.html:73
+#: action/templates/action/edit_in.html:70
 #: action/templates/action/includes/partial_action_operations.html:7
 #: action/templates/action/includes/partial_column_selected_operations.html:8
 #: action/templates/action/includes/partial_condition_buttons.html:50
@@ -739,71 +739,71 @@ msgstr "Editar descripción"
 #: action/templates/action/run_survey.html:47
 #: dataops/templates/dataops/includes/partial_sqlconn_operations.html:8
 #: scheduler/templates/scheduler/schedule_done.html:15
-#: table/templates/table/display.html:177
+#: table/templates/table/display.html:173
 #: table/templates/table/includes/partial_table_ops.html:19
 #: table/templates/table/includes/partial_view_operations.html:13
 #: workflow/templates/workflow/includes/workflow_column_operations.html:9
 msgid "Edit"
 msgstr "Editar"
 
-#: action/templates/action/edit_in.html:81
+#: action/templates/action/edit_in.html:78
 msgid "No description text provided"
 msgstr "No se ha introducido descripción"
 
-#: action/templates/action/edit_in.html:90
+#: action/templates/action/edit_in.html:87
 msgid "Key column to match the user id"
 msgstr "Columna clave para emparejar el identificador de usuario"
 
-#: action/templates/action/edit_in.html:94
+#: action/templates/action/edit_in.html:91
 msgid "Key column"
 msgstr "Columna clave"
 
-#: action/templates/action/edit_in.html:112
+#: action/templates/action/edit_in.html:109
 msgid "You need to specify a key column"
 msgstr "Se necesita especificar una columna clave"
 
-#: action/templates/action/edit_in.html:137
+#: action/templates/action/edit_in.html:134
 msgid "Columns to obtain and store the data"
 msgstr "Columnas para las que obtener y almacenar datos"
 
-#: action/templates/action/edit_in.html:142
+#: action/templates/action/edit_in.html:139
 msgid "There must be at least one non-key column."
 msgstr "Debe haber al menos una columna que no sea clave."
 
-#: action/templates/action/edit_in.html:145
+#: action/templates/action/edit_in.html:142
 msgid "All items should have non-empty descriptions."
 msgstr "Todos los items deberían tener descripciones."
 
-#: action/templates/action/edit_in.html:150
+#: action/templates/action/edit_in.html:147
 msgid "Question"
 msgstr "Pregunta"
 
-#: action/templates/action/edit_in.html:163
+#: action/templates/action/edit_in.html:160
 msgid "Add a new question to the action"
 msgstr "Añadir una nueva pregunta a la acción"
 
-#: action/templates/action/edit_in.html:164
+#: action/templates/action/edit_in.html:161
 msgid "Create new question"
 msgstr "Crear una nueva pregunta"
 
-#: action/templates/action/edit_in.html:178
+#: action/templates/action/edit_in.html:175
 msgid "See the content as shown to each learner"
 msgstr "Ver el contenido como se muestra al estudiante"
 
-#: action/templates/action/edit_in.html:186
-msgid "Save and remain editing"
-msgstr "Guardar y seguir editando"
+#: action/templates/action/edit_in.html:183
+msgid "Save action and go back to action table"
+msgstr "Guardar acción y volver a la tabla de acciones"
 
-#: action/templates/action/edit_in.html:187
+#: action/templates/action/edit_in.html:184
 msgid "Done"
 msgstr "Terminar"
 
-#: action/templates/action/edit_in.html:192
+#: action/templates/action/edit_in.html:189
 #: action/templates/action/includes/partial_action_operations.html:27
 msgid "Enter data manually"
 msgstr "Introducir data manualmente"
 
-#: action/templates/action/edit_in.html:193
+#: action/templates/action/edit_in.html:190
 #: action/templates/action/includes/partial_action_operations.html:22
 #: action/templates/action/includes/partial_action_operations.html:28
 #: dataops/templates/dataops/includes/partial_plugin_operations.html:6
@@ -817,16 +817,16 @@ msgstr "Ejecutar"
 msgid "Edit Personalized Text"
 msgstr "Editar la información personal"
 
-#: action/templates/action/edit_personalized_json.html:31
+#: action/templates/action/edit_personalized_json.html:28
 msgid "Personalized JSON:"
 msgstr "JSON personalizado:"
 
-#: action/templates/action/edit_personalized_json.html:40
-#: action/templates/action/edit_personalized_text.html:50
+#: action/templates/action/edit_personalized_json.html:37
+#: action/templates/action/edit_personalized_text.html:47
 msgid "Personalized Text"
 msgstr "Texto personalizado"
 
-#: action/templates/action/edit_personalized_text.html:41
+#: action/templates/action/edit_personalized_text.html:38
 msgid "Personalized text:"
 msgstr "Texto personalizado:"
 
@@ -1014,7 +1014,7 @@ msgstr "Crear una acción idéntica"
 #: action/templates/action/includes/partial_column_selected_operations.html:21
 #: action/templates/action/includes/partial_condition_buttons.html:59
 #: dataops/templates/dataops/includes/partial_sqlconn_operations.html:15
-#: table/templates/table/display.html:186
+#: table/templates/table/display.html:182
 #: table/templates/table/includes/partial_view_operations.html:20
 #: workflow/templates/workflow/includes/workflow_basic_buttons.html:20
 #: workflow/templates/workflow/includes/workflow_column_operations.html:25
@@ -1033,7 +1033,7 @@ msgstr "Borrar la acción"
 #: action/templates/action/includes/partial_condition_buttons.html:68
 #: action/templates/action/includes/partial_filter_create_buttons.html:40
 #: dataops/templates/dataops/includes/partial_sqlconn_operations.html:22
-#: table/templates/table/display.html:195
+#: table/templates/table/display.html:191
 #: table/templates/table/includes/partial_table_ops.html:28
 #: table/templates/table/includes/partial_view_operations.html:27
 #: workflow/templates/workflow/includes/workflow_basic_buttons.html:33
@@ -1311,10 +1311,10 @@ msgstr "No hay acciones en este flujo."
 msgid ""
 "<strong>Next Step:</strong> Click in the <i>New action</i> below to create a "
 "new\n"
-"    action to execute based on the data stored in the table."
+"      action to execute based on the data stored in the table."
 msgstr ""
 "<strong>Siguiente paso:</strong> Click en <i>Nueva acción</b> debajo  para "
-"crear una nueva acción y ejecutarala con los datos en la tabla."
+"crear una nueva acción y ejecutarla con los datos en la tabla."
 
 #: action/templates/action/index.html:55
 msgid "New action"
@@ -1336,8 +1336,10 @@ msgstr "Acción JSON"
 #, python-format
 msgid ""
 "Send JSON objects for\n"
-"    action \"%(n)s\""
-msgstr "Enviar los objetos JSON de la acción \"%(n)s\""
+"      action \"%(n)s\""
+msgstr ""
+"Enviar los objetos\n"
+"   JSON de la acción \"%(n)s\""
 
 #: action/templates/action/request_json_data.html:17
 #, python-format
@@ -1363,7 +1365,7 @@ msgstr ""
 "localizar el problema."
 
 #: action/views_action.py:65 action/views_action.py:123 dataops/models.py:72
-#: dataops/templates/dataops/upload_s2.html:39 dataops/views.py:42
+#: dataops/templates/dataops/upload_s2.html:39 dataops/views.py:43
 #: scheduler/views.py:45 table/views.py:35 workflow/attribute_views.py:24
 #: workflow/forms.py:37 workflow/templates/workflow/detail.html:88
 #: workflow/views.py:33
@@ -1371,7 +1373,7 @@ msgid "Name"
 msgstr "Nombre"
 
 #: action/views_action.py:67 dataops/models.py:79
-#: dataops/templates/dataops/uploadmerge.html:17 dataops/views.py:44
+#: dataops/templates/dataops/uploadmerge.html:17 dataops/views.py:45
 #: scheduler/views.py:47 table/views.py:38
 #: workflow/templates/workflow/detail.html:72
 #: workflow/templates/workflow/detail.html:89 workflow/views.py:37
@@ -1384,12 +1386,12 @@ msgstr "Descripción"
 msgid "Type"
 msgstr "Tipo"
 
-#: action/views_action.py:71 dataops/views.py:48
+#: action/views_action.py:71 dataops/views.py:49
 msgid "Last executed"
 msgstr "Última ejecución"
 
-#: action/views_action.py:74 dataops/sqlcon_views.py:26
-#: dataops/sqlcon_views.py:59 dataops/views.py:51 scheduler/views.py:39
+#: action/views_action.py:74 dataops/sqlcon_views.py:27
+#: dataops/sqlcon_views.py:60 dataops/views.py:52 scheduler/views.py:39
 #: table/templates/table/includes/partial_table_ops.html:4 table/views.py:42
 #: workflow/templates/workflow/detail.html:92 workflow/views.py:63
 msgid "Operations"
@@ -1518,25 +1520,25 @@ msgstr "Intervalo en minutos para programar las tareas planificadas"
 msgid "Data Upload/Merge Operations"
 msgstr "Operaciones de carga/mezcla de datos"
 
-#: dataops/csvupload.py:51 dataops/csvupload.py:70
+#: dataops/csvupload.py:52 dataops/csvupload.py:71
 msgid "CSV file"
 msgstr "Fichero CSV"
 
-#: dataops/csvupload.py:56
+#: dataops/csvupload.py:57
 msgid "CSV upload form is not multiform"
 msgstr "El formulario de carga CSV no es multiform"
 
-#: dataops/csvupload.py:81 dataops/excelupload.py:103
+#: dataops/csvupload.py:82 dataops/excelupload.py:104
 #, python-brace-format
 msgid "File could not be processed ({0})"
 msgstr "No se ha podido procesar el fichero ({0})"
 
-#: dataops/csvupload.py:94 dataops/excelupload.py:116
+#: dataops/csvupload.py:95 dataops/excelupload.py:117
 msgid "The file has duplicated column names"
 msgstr "El fichero tienen nombres de columnas duplicados"
 
-#: dataops/csvupload.py:108 dataops/excelupload.py:130
-#: dataops/sqlcon_views.py:427
+#: dataops/csvupload.py:109 dataops/excelupload.py:131
+#: dataops/sqlcon_views.py:428
 msgid ""
 "The data has no column with unique values per row. At least one column must "
 "have unique values."
@@ -1544,11 +1546,11 @@ msgstr ""
 "Los datos no tienen ninguna columna con valores únicos por cada fila. Al "
 "menos debe haber una columna con valores únicos."
 
-#: dataops/csvupload.py:123 dataops/excelupload.py:145
+#: dataops/csvupload.py:124 dataops/excelupload.py:146
 msgid "Sorry. This file cannot be processed."
 msgstr "Lo sentimos, pero este fichero no se puede procesar."
 
-#: dataops/excelupload.py:59
+#: dataops/excelupload.py:60
 msgid "Excel upload form is not multiform"
 msgstr "El formulario de carga Excel no es multiform"
 
@@ -1685,21 +1687,21 @@ msgstr "Método para seleccionar las filas a mezclar/actualizar"
 msgid "Unable to process datatype"
 msgstr "No se puede processar el tipo de datos"
 
-#: dataops/formula_evaluation.py:150 dataops/formula_evaluation.py:299
+#: dataops/formula_evaluation.py:150 dataops/formula_evaluation.py:305
 #, python-brace-format
 msgid "No function to translate type {0}"
 msgstr "No hay función para traducir el tipo {0}"
 
-#: dataops/formula_evaluation.py:215
+#: dataops/formula_evaluation.py:221
 msgid "Incorrect data type"
 msgstr "Tipo de datos incorrecto"
 
-#: dataops/formula_evaluation.py:223 dataops/formula_evaluation.py:396
+#: dataops/formula_evaluation.py:229 dataops/formula_evaluation.py:402
 #, python-brace-format
 msgid "Type, operator, field {0}, {1}, {2} not supported yet"
 msgstr "Tipo, operador, campo {0}, {1}, {2} no se puede procesar"
 
-#: dataops/formula_evaluation.py:229 dataops/formula_evaluation.py:402
+#: dataops/formula_evaluation.py:235 dataops/formula_evaluation.py:408
 msgid "Negation found in unexpected location"
 msgstr "Se ha encontrado una negación en un lugar inesperado"
 
@@ -1744,36 +1746,44 @@ msgid "DB name"
 msgstr "Nombre de la base de datos"
 
 #: dataops/models.py:133 table/apps.py:9 table/templates/table/display.html:8
-#: table/templates/table/display.html:68
+#: table/templates/table/display.html:64
 #: table/templates/table/includes/partial_view_operations.html:7
 #: templates/base.html:90
 msgid "Table"
 msgstr "Tabla"
 
-#: dataops/ops.py:416
+#: dataops/ops.py:414
 msgid "Merge operation failed. Exception: "
 msgstr "La operación de mezcla ha fallado. Excepción: "
 
-#: dataops/ops.py:441
+#: dataops/ops.py:439
 msgid "Merge operation produced a result with no rows"
 msgstr "La operación de mecla ha producido un resultado sin filas"
 
-#: dataops/ops.py:458 dataops/ops.py:470
+#: dataops/ops.py:445
+msgid ""
+"Merge operation produced a result without any key columns. Review the key "
+"columns in the data to upload."
+msgstr ""
+"La operación de mezcla a producido un resultado sin columnas clave. Revise "
+"las columnas clave the los datos a mezclar."
+
+#: dataops/ops.py:465 dataops/ops.py:476
 #, python-brace-format
 msgid "New values in column {0} are not of type {1}"
 msgstr "Los nuevos valores en la columna {0} no son de tipo {1}"
 
-#: dataops/ops.py:465
+#: dataops/ops.py:471
 #, python-brace-format
 msgid "New values in column {0} are not of type number"
 msgstr "Los nuevos valores en la columna {0} no son de tipo numérico"
 
-#: dataops/ops.py:481
+#: dataops/ops.py:485
 #, python-brace-format
 msgid "New values in column {0} are not in categories {1}"
 msgstr "Los nuevos valores en la columna {0} no están en la categoría {1}"
 
-#: dataops/ops.py:545
+#: dataops/ops.py:549
 #, python-brace-format
 msgid "Type {0} not found"
 msgstr "No se ha encontrado el tipo {0}"
@@ -1818,7 +1828,7 @@ msgstr "Parámetro de tipo fecha/hora no puede tener una lista de valores"
 msgid "Incorrect list of allowed value"
 msgstr "La lista de valores permitidos es incorrecta"
 
-#: dataops/plugin_manager.py:120 workflow/forms.py:256
+#: dataops/plugin_manager.py:120 workflow/forms.py:253
 msgid "Incorrect initial value"
 msgstr "Valor inicial incorrecto"
 
@@ -1891,29 +1901,29 @@ msgstr "El resultado no es un data frame de Pandas."
 msgid "Folder where plugins are stored"
 msgstr "Carpeta en la que se almacenan los plugins"
 
-#: dataops/sqlcon_views.py:118
+#: dataops/sqlcon_views.py:119
 msgid "A connection with this name already exists"
 msgstr "Ya hay una conexión con este nombre"
 
-#: dataops/sqlcon_views.py:138 dataops/sqlcon_views.py:285
-#: dataops/sqlcon_views.py:322 dataops/sqlcon_views.py:390
+#: dataops/sqlcon_views.py:139 dataops/sqlcon_views.py:286
+#: dataops/sqlcon_views.py:323 dataops/sqlcon_views.py:391
 msgid "<PROTECTED>"
 msgstr "<PROTEGIDO>"
 
-#: dataops/sqlcon_views.py:385
+#: dataops/sqlcon_views.py:386
 msgid "SQL connection"
 msgstr "Conexión SQL"
 
-#: dataops/sqlcon_views.py:409
+#: dataops/sqlcon_views.py:410
 #, python-brace-format
 msgid "Unable to obtain data: {0}"
 msgstr "No es posible obtener los datos: {0}"
 
-#: dataops/sqlcon_views.py:417
+#: dataops/sqlcon_views.py:418
 msgid "The data frame has duplicated column names"
 msgstr "El data frame tiene nombres de columnas repetidos"
 
-#: dataops/sqlcon_views.py:438
+#: dataops/sqlcon_views.py:439
 msgid "Sorry. The data from this connection cannot be processed."
 msgstr "Disculpas. Los datos de esta conexión no se pueden procesar."
 
@@ -2054,7 +2064,7 @@ msgstr "Parámetros de ejecución"
 
 #: dataops/templates/dataops/row_create.html:8
 #: dataops/templates/dataops/row_create.html:18
-#: table/templates/table/display.html:81
+#: table/templates/table/display.html:77
 msgid "Add row"
 msgstr "Añadir fila"
 
@@ -2389,7 +2399,7 @@ msgstr ""
 msgid "Finish"
 msgstr "Terminar"
 
-#: dataops/upload.py:158 dataops/views.py:380
+#: dataops/upload.py:158 dataops/views.py:381
 msgid "Exception while retrieving the data frame"
 msgstr "Ha habido una excepción mientras se accedía al data frame"
 
@@ -2401,40 +2411,40 @@ msgstr "Ha habido una excepción mientras se cargaba el data frame"
 msgid "Merge operation failed."
 msgstr "La operación de mezcla ha fallado."
 
-#: dataops/upload.py:491 dataops/upload.py:494
+#: dataops/upload.py:492 dataops/upload.py:495
 msgid " (Ignored)"
 msgstr " (Ignorada)"
 
-#: dataops/upload.py:501 dataops/views.py:520
+#: dataops/upload.py:502 dataops/views.py:521
 msgid " (New)"
 msgstr " (Nueva)"
 
-#: dataops/upload.py:503 dataops/views.py:525
+#: dataops/upload.py:504 dataops/views.py:526
 msgid " (Update)"
 msgstr " (Actualizar)"
 
-#: dataops/upload.py:507
+#: dataops/upload.py:508
 msgid " (Renamed)"
 msgstr " (Renombrada)"
 
-#: dataops/views.py:40
+#: dataops/views.py:41
 msgid "Folder"
 msgstr "Carpeta"
 
-#: dataops/views.py:46 logs/templates/logs/view.html:8
+#: dataops/views.py:47 logs/templates/logs/view.html:8
 #: workflow/templates/workflow/detail.html:74 workflow/views.py:46
 msgid "Last modified"
 msgstr "Última modificación"
 
-#: dataops/views.py:173
+#: dataops/views.py:174
 msgid "Unable to update table row"
 msgstr "No oes posible actualizar la fila en la tabla"
 
-#: dataops/views.py:213
+#: dataops/views.py:214
 msgid "Key value not found when updating row"
 msgstr "No se ha encontrado el valor clave al actaulizar la fila"
 
-#: dataops/views.py:284
+#: dataops/views.py:285
 #, python-brace-format
 msgid ""
 "Repeated value in column {0}. It must be different to maintain Key property"
@@ -2442,16 +2452,16 @@ msgstr ""
 "Valor repetido en la columna {0}. Debe ser diferente para que la columna "
 "siga siendo clave"
 
-#: dataops/views.py:335
+#: dataops/views.py:336
 #, python-brace-format
 msgid "Unable to instantiate plugin \"{0}\""
 msgstr "No es posible instanciar el plugi \"{0}\""
 
-#: dataops/views.py:346
+#: dataops/views.py:347
 msgid "Workflow does not have the correct columns to run this plugin"
 msgstr "El flujo no tiene las columnas necesarias para ejecutar este plugin"
 
-#: dataops/views.py:428
+#: dataops/views.py:429
 msgid "Incorrect number of rows in result data frame."
 msgstr "Número de filas incorrecto en el data frame resultante."
 
@@ -2924,21 +2934,21 @@ msgstr "No hay registros en este flujo."
 msgid "Download a CSV file containing these logs"
 msgstr "Descarga un fichero CSV con estos registros"
 
-#: logs/templates/logs/display.html:51 table/templates/table/display.html:128
-#: table/templates/table/display.html:141
+#: logs/templates/logs/display.html:51 table/templates/table/display.html:124
+#: table/templates/table/display.html:137
 msgid "CSV Download"
 msgstr "Descarga CSV"
 
 #: logs/templates/logs/display.html:64
 msgid ""
 "<strong><super>*</super></strong>The platform records all operations\n"
-"    performed on the workflow as <i>Logs</i>. These elements are shown in "
+"      performed on the workflow as <i>Logs</i>. These elements are shown in "
 "the table above. You can view its content\n"
-"    by clicking on its number."
+"      by clicking on its number."
 msgstr ""
 "<strong><super>*</super></strong>La plataforma graba todas las operaciones "
-"sobre el flujo como <i>registros</i>. Estos elementos se muestran  en la "
-"tabla anterior. Puedes ver su contenido haciendo click en su número."
+"sobre el flujo como <i>registros</i>. Estos elementos se muestran \n"
+"en la tabla anterior. Puedes ver su contenido haciendo click en su número."
 
 #: logs/templates/logs/view.html:4
 msgid "Log View"
@@ -3299,12 +3309,12 @@ msgstr "Operaciones planificadas"
 #, python-format
 msgid ""
 "<strong><super>*</super></strong>The execution of some of\n"
-"    the actions can be scheduled for a time in the future. This page shows "
+"      the actions can be scheduled for a time in the future. This page shows "
 "those planned executions. To schedule the\n"
-"    execution of one action, go to the <a href=\"%(actionindex)s\">Actions</"
-"a> menu and select the operation <i>Schedule\n"
-"    </i> for an\n"
-"    action."
+"      execution of one action, go to the <a href=\"%(actionindex)s"
+"\">Actions</a> menu and select the operation <i>Schedule\n"
+"      </i> for an\n"
+"      action."
 msgstr ""
 "<strong><super>*</super></strong>La ejecución de algunas de las  acciones se "
 "puede planificar en el futuro. Esta página muestra esas  ejecuciones "
@@ -3385,29 +3395,29 @@ msgstr ""
 msgid "Operation executed. Status available in Log {0}"
 msgstr "Operación ejecutada. Resultado disponible en registro {0}"
 
-#: table/api.py:49 table/api.py:220
+#: table/api.py:50 table/api.py:204
 msgid "Unable to access the workflow"
 msgstr "Imposible acceder al flujo"
 
-#: table/api.py:94
+#: table/api.py:95
 msgid "Post request requires workflow without a table"
 msgstr "El post necesita un flujo sin tabla"
 
-#: table/api.py:250
+#: table/api.py:234
 msgid "how must be one of left, right, outer or inner"
 msgstr "how debe ser uno de left, right, outer o inner"
 
-#: table/api.py:255 table/api.py:269
+#: table/api.py:239 table/api.py:253
 #, python-brace-format
 msgid "column {0} does not contain a unique key."
 msgstr "columna {0} no contiene una clave única."
 
-#: table/api.py:263
+#: table/api.py:247
 #, python-brace-format
 msgid "column {0} not found in data frame"
 msgstr "la columna {0} no está presente en el data frame"
 
-#: table/api.py:288
+#: table/api.py:272
 msgid "Unable to perform merge operation"
 msgstr "Incapaz de ejecutar la operación de mezcla"
 
@@ -3498,78 +3508,78 @@ msgstr "No hay datos del estudiante en esta columna"
 msgid "Unable to provide visualisation without data."
 msgstr "No hay datos para crear la visualización."
 
-#: table/templates/table/display.html:80
+#: table/templates/table/display.html:76
 msgid "Add a new row to the table"
 msgstr "Añadir una nueva fila a la tabla"
 
-#: table/templates/table/display.html:91
+#: table/templates/table/display.html:87
 msgid "Views available for this table"
 msgstr "Vistas disponibles en esta tabla"
 
-#: table/templates/table/display.html:92
+#: table/templates/table/display.html:88
 msgid "Views"
 msgstr "Vistas"
 
-#: table/templates/table/display.html:114
+#: table/templates/table/display.html:110
 #: table/templates/table/includes/partial_view_operations.html:12
 msgid "Change elements in view"
 msgstr "Cambiar los elementos en la vista"
 
-#: table/templates/table/display.html:115
+#: table/templates/table/display.html:111
 #: table/templates/table/includes/partial_view_edit.html:11
 msgid "Edit view"
 msgstr "Editar vista"
 
-#: table/templates/table/display.html:121
+#: table/templates/table/display.html:117
 msgid "Dashboard created with the view data"
 msgstr "Tablero de control creado con los datos de esta vista"
 
-#: table/templates/table/display.html:122
-#: table/templates/table/display.html:135
+#: table/templates/table/display.html:118
+#: table/templates/table/display.html:131
 #: table/templates/table/stat_view.html:24
 msgid "Dashboard"
 msgstr "Tablero de control"
 
-#: table/templates/table/display.html:127
-#: table/templates/table/display.html:140
+#: table/templates/table/display.html:123
+#: table/templates/table/display.html:136
 msgid "Download a CSV file containing this table"
 msgstr "Descarga un fichero CSV con esta tabla"
 
-#: table/templates/table/display.html:134
+#: table/templates/table/display.html:130
 msgid "Dashboard created with the table data"
 msgstr "Tablero de control creado con los datos de la tabla"
 
-#: table/templates/table/display.html:166
+#: table/templates/table/display.html:162
 msgid "Stats and visualizations about this column"
 msgstr "Estadísticas y visualizaciones de esta columna"
 
-#: table/templates/table/display.html:167
+#: table/templates/table/display.html:163
 #: table/templates/table/includes/partial_table_ops.html:12
-#: table/templates/table/stat_row.html:8
+#: table/templates/table/stat_row.html:8 table/templates/table/stat_view.html:8
 #: workflow/templates/workflow/includes/workflow_column_operations.html:33
 msgid "Statistics"
 msgstr "Estadísticas"
 
-#: table/templates/table/display.html:176
+#: table/templates/table/display.html:172
 msgid "Edit column name, description, etc"
 msgstr "Editor el nombre, descripción, tipo, valores, etc. de la columna"
 
-#: table/templates/table/display.html:185
+#: table/templates/table/display.html:181
 #: workflow/templates/workflow/includes/workflow_column_operations.html:23
 msgid "Create an exact duplicate of this column"
 msgstr "Crear un duplicado exacto de esta columna"
 
-#: table/templates/table/display.html:194
+#: table/templates/table/display.html:190
 #: workflow/templates/workflow/includes/partial_column_delete.html:24
 #: workflow/templates/workflow/includes/workflow_column_operations.html:39
 msgid "Delete column"
 msgstr "Borrar columna"
 
-#: table/templates/table/display.html:209
+#: table/templates/table/display.html:205
 msgid "Out of given date/time window. Edit column to enable."
 msgstr "Fuera de la ventana de tiempo dado. Edita la columna para activar."
 
-#: table/templates/table/display.html:210
+#: table/templates/table/display.html:206
 msgid "Disabled"
 msgstr "Desactivado"
 
@@ -3671,19 +3681,19 @@ msgid "Dashboard for %(n)s"
 msgstr "Tablero de control para %(n)s"
 
 #: table/templates/table/view_index.html:8
-#: table/templates/table/view_index.html:58
+#: table/templates/table/view_index.html:54
 msgid "Table Views"
 msgstr "Vistas de la tabla"
 
-#: table/templates/table/view_index.html:33
+#: table/templates/table/view_index.html:36
 msgid "There are no views for this workflow."
 msgstr "No hay ninguna vista definida en este flujo."
 
-#: table/templates/table/view_index.html:64
+#: table/templates/table/view_index.html:60
 msgid "New view for the table"
 msgstr "Nueva vista para esta tabla"
 
-#: table/templates/table/view_index.html:65
+#: table/templates/table/view_index.html:61
 msgid "Add View"
 msgstr "Añadir vista"
 
@@ -4091,46 +4101,46 @@ msgstr ""
 msgid "any: True when any element in selected columns is true"
 msgstr "any: Cierto si algún elemento de las columnas seleccionadas es cierto"
 
-#: workflow/column_views.py:78
+#: workflow/column_views.py:89
 msgid "Cannot add question to a workflow without data"
 msgstr "No es posible añadir una pregunta a un flujo sin datos"
 
-#: workflow/column_views.py:83 workflow/column_views.py:196
-#: workflow/column_views.py:335
+#: workflow/column_views.py:94 workflow/column_views.py:207
+#: workflow/column_views.py:346
 msgid "Cannot add column to a workflow without data"
 msgstr "No es posible añadir una columna a un flujo sin datos"
 
-#: workflow/column_views.py:98
+#: workflow/column_views.py:109
 msgid "Cannot find action to add question."
 msgstr "No se ha encontrado la acción a la que añadir la pregunta."
 
-#: workflow/column_views.py:229 workflow/column_views.py:364
+#: workflow/column_views.py:240 workflow/column_views.py:375
 msgid "A column with that name already exists"
 msgstr "Una columna con este nombre ya existe"
 
-#: workflow/column_views.py:264
+#: workflow/column_views.py:275
 #, python-brace-format
 msgid "Operand {0} not implemented"
 msgstr "Operando {0} sin implementar"
 
-#: workflow/column_views.py:273
+#: workflow/column_views.py:284
 #, python-brace-format
 msgid "Unable to perform the requested operation ({0})"
 msgstr "No es posible ejecutar la operación requerida ({0})"
 
-#: workflow/column_views.py:388
+#: workflow/column_views.py:399
 msgid "The integer value has to be larger than 1"
 msgstr "El valor numérico debe ser mayor que 1"
 
-#: workflow/column_views.py:404
+#: workflow/column_views.py:416
 msgid "The value has to be a comma-separated list"
 msgstr "El valor ha de ser una lista de valores separados por comas"
 
-#: workflow/column_views.py:594
+#: workflow/column_views.py:618
 msgid "You cannot delete the only key column"
 msgstr "No es posible borrar la única columna clave"
 
-#: workflow/column_views.py:871
+#: workflow/column_views.py:895
 msgid "You cannot restrict a key column"
 msgstr "No es posible restringir una columna clave"
 
@@ -4138,91 +4148,91 @@ msgstr "No es posible restringir una columna clave"
 msgid "Name has to be different from all existing ones."
 msgstr "El nombre ha de ser diferente a los ya existentes."
 
-#: workflow/forms.py:78
+#: workflow/forms.py:77
 msgid "Comma separated list of values allowed in this column"
 msgstr "Lista de valores permitidos separados por comas"
 
-#: workflow/forms.py:125
+#: workflow/forms.py:124
 msgid "There is a column already with this name"
 msgstr "Ya hay una columna con este nombre"
 
-#: workflow/forms.py:142
+#: workflow/forms.py:141
 msgid "Incorrect list of values"
 msgstr "La lista de valores es incorrecta"
 
-#: workflow/forms.py:154
+#: workflow/forms.py:153
 msgid "The values in the column are not compatible  with these ones."
 msgstr "Los valores en la columna no son compatibles con estos."
 
-#: workflow/forms.py:200 workflow/forms.py:285
+#: workflow/forms.py:198 workflow/forms.py:281
 msgid "Question name"
 msgstr "Nombre de la pregunta"
 
-#: workflow/forms.py:202 workflow/forms.py:287
+#: workflow/forms.py:200 workflow/forms.py:283
 msgid "Description (shown to the learners)"
 msgstr "Descripción (se muestra a los estudiantes)"
 
-#: workflow/forms.py:204 workflow/forms.py:289
+#: workflow/forms.py:202 workflow/forms.py:285
 msgid "Question position (zero to insert last)"
 msgstr "Posición de la pregunta (cero para insertar última)"
 
-#: workflow/forms.py:205 workflow/forms.py:290
+#: workflow/forms.py:203 workflow/forms.py:286
 msgid "Question active from"
 msgstr "Pregunta activa desde"
 
-#: workflow/forms.py:206 workflow/forms.py:291
+#: workflow/forms.py:204 workflow/forms.py:287
 msgid "Question active until"
 msgstr "Pregunta activa hasta"
 
-#: workflow/forms.py:231
+#: workflow/forms.py:228
 msgid "Value to assign to all cells in the column"
 msgstr "Valor a asignar a toda la columna"
 
-#: workflow/forms.py:263
+#: workflow/forms.py:260
 msgid "This value is not in the list of allowed values"
 msgstr "Este valor no está en la lista de valores permitidos"
 
-#: workflow/forms.py:330
+#: workflow/forms.py:325
 msgid "There must be at least one column with unique values"
 msgstr "Debe haber una columna con valores únicos (clave)"
 
-#: workflow/forms.py:340
+#: workflow/forms.py:335
 msgid "The column does not have unique values for each row."
 msgstr "La columna no tiene valores únicos en cada celda."
 
-#: workflow/forms.py:360
+#: workflow/forms.py:355
 msgid "Columns to combine*"
 msgstr "Columnas a combinar*"
 
-#: workflow/forms.py:392
+#: workflow/forms.py:387
 msgid "You need to select the columns to combine"
 msgstr "Se necesita seleccionar las columnas a combinar"
 
-#: workflow/forms.py:411
+#: workflow/forms.py:406
 msgid "Incorrect data type for the selected operand"
 msgstr "Tipo de datos incorrecto para el operando seleccionado"
 
-#: workflow/forms.py:437
+#: workflow/forms.py:432
 msgid "Number (values from 1 to N) or comma separated list of values."
 msgstr "Número (valores de 1 a N) o lista de valores separados por comas."
 
-#: workflow/forms.py:462
+#: workflow/forms.py:457
 msgid "File containing a previously exported workflow"
 msgstr "Fichero que contiene un flujo previamente exportado"
 
-#: workflow/forms.py:508
+#: workflow/forms.py:503
 msgid "User email"
 msgstr "Correo de usuario"
 
-#: workflow/forms.py:526
+#: workflow/forms.py:521
 msgid "User not found"
 msgstr "Usuario no encontrado"
 
-#: workflow/forms.py:531
+#: workflow/forms.py:526
 msgid "You don't need to add yourself to the share list"
 msgstr "No necesitas añadirte a la lista para compartir"
 
-#: workflow/forms.py:537
+#: workflow/forms.py:532
 msgid "User already in the list"
 msgstr "El usuario ya está en la lista"
 
@@ -4238,39 +4248,39 @@ msgstr "número de filas"
 msgid "number of columns"
 msgstr "número de columnas"
 
-#: workflow/models.py:554
+#: workflow/models.py:557
 msgid "column name"
 msgstr "nombre de columna"
 
-#: workflow/models.py:577
+#: workflow/models.py:580
 msgid "type of data to store in the column"
 msgstr "tipo de dato almacenado en la columna"
 
-#: workflow/models.py:582
+#: workflow/models.py:585
 msgid "has unique values per row"
 msgstr "tiene valores únicos por fila"
 
-#: workflow/models.py:588
+#: workflow/models.py:591
 msgid "column position (zero to insert last)"
 msgstr "posición de la columna (cero para insertar última)"
 
-#: workflow/models.py:597
+#: workflow/models.py:600
 msgid "include in visualization"
 msgstr "incluir en visualizaciones"
 
-#: workflow/models.py:607
+#: workflow/models.py:610
 msgid "comma separated list of values allowed"
 msgstr "lista de valores permitidos separados por comas"
 
-#: workflow/models.py:612
+#: workflow/models.py:615
 msgid "Column active from"
 msgstr "Columna activa desde"
 
-#: workflow/models.py:619
+#: workflow/models.py:622
 msgid "Column active until"
 msgstr "Columna activa hasta"
 
-#: workflow/models.py:692
+#: workflow/models.py:695
 #, python-format
 msgid "Unsupported type %(type)s"
 msgstr "Typo de datos %(type)s no soportado"
@@ -4321,8 +4331,8 @@ msgstr "No se ha podido crear el flujo."
 msgid "To guarantee compability"
 msgstr "Para garantizar compatibilidad"
 
-#: workflow/serializers.py:123 workflow/serializers.py:156
-#: workflow/serializers.py:167
+#: workflow/serializers.py:123 workflow/serializers.py:158
+#: workflow/serializers.py:169
 msgid "Unable to save column information"
 msgstr "Incapaz de guardar la información de la columna"
 
@@ -4381,7 +4391,7 @@ msgstr[1] " %(num)s atributos"
 msgid "Key?"
 msgstr "¿Clave?"
 
-#: workflow/templates/workflow/detail.html:106
+#: workflow/templates/workflow/detail.html:100
 #, python-format
 msgid "Go to <a href=\"%(windex)s\">your list of workflows</a>"
 msgstr "Ir a <a href=\"%(windex)s\">su lista de flujos</a>"
@@ -4873,7 +4883,7 @@ msgstr "Usuarios que pueden acceder a este flujo"
 msgid ""
 "Click in the <i>Add User</i> button below and provide the email for the "
 "user\n"
-"      with whom you want to share the workflow."
+"        with whom you want to share the workflow."
 msgstr ""
 "Haz click en el botón de <i>Añadir usuario</i> debajo para introducir el "
 "email del usuario con el que quieres compartir el flujo."
@@ -4934,6 +4944,9 @@ msgstr "Imposible clonar flujo"
 #: workflow/views.py:626
 msgid "Workflow successfully cloned."
 msgstr "Flujo clonado con éxito."
+
+#~ msgid "Save and remain editing"
+#~ msgstr "Guardar y seguir editando"
 
 #~ msgid "Column {0} is no longer a key column."
 #~ msgstr "La columna {0} ya no es una columna clave."

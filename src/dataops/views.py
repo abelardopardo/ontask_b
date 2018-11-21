@@ -21,6 +21,7 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.cache import cache_page
 
 import dataops.ops as ops
+import dataops.pandas_db
 from dataops import pandas_db
 from dataops.forms import SelectColumnForm
 from dataops.plugin_manager import run_plugin
@@ -281,7 +282,7 @@ def row_create(request):
 
     # Verify that the unique columns remain unique
     for ucol in [c for c in columns if c.is_key]:
-        if not ops.is_unique_column(df[ucol.name]):
+        if not dataops.pandas_db.is_unique_column(df[ucol.name]):
             form.add_error(
                 None,
                 _('Repeated value in column {0}. It must be different '
@@ -465,7 +466,7 @@ def plugin_invoke(request, pk):
     # Proceed with the merge
     try:
         result = ops.perform_dataframe_upload_merge(
-            workflow.id,
+            workflow,
             dst_df,
             result_df,
             {'how_merge': 'left',
