@@ -118,18 +118,28 @@ var loadFormPost = function () {
       }
     });
 }
-var saveActionText = function() {
-    $.ajax({
-      url: $(this).attr("data-url"),
-      data: [{'name': 'action_content', 'value': get_id_content()}],
-      type: 'post',
-      dataType: 'json',
-      error: function(jqXHR, textStatus, errorThrown) {
-        $('#div-spinner').show();
-        location.reload(true);
-      },
-    });
-    return true;
+var conditionClone = function() {
+  $('#div-spinner').show();
+  $.ajax({
+    url: $(this).attr("data-url"),
+    data: [{'name': 'action_content', 'value': get_id_content()}],
+    type: 'post',
+    dataType: 'json',
+    success: function (data) {
+      if (typeof data.html_redirect != 'undefined') {
+        if (data.html_redirect == '') {
+          location.reload(true);
+        } else {
+          location.href = data.html_redirect;
+        }
+      } else {
+        $('#div-spinner').hide();
+      }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      location.reload(true);
+    },
+  });
 }
 $(function () {
   $("#checkAll").click(function () {
@@ -177,7 +187,7 @@ $(function () {
   $("#modal-item").on("submit", ".js-condition-edit-form", saveForm);
 
   // Clone Condition
-  $("#condition-set").on("click", ".js-condition-clone", saveActionText);
+  $("#condition-set").on("click", ".js-condition-clone", conditionClone);
 
   // Delete Condition
   $("#condition-set").on("click", ".js-condition-delete", loadForm);
