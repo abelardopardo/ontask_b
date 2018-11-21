@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>2. Installation process &#8212; OnTask (B.3.2.0) 1.1.0 documentation</title>
+    <title>2. Installation process &#8212; OnTask (B.3.2.1) 1.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
@@ -31,6 +31,23 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="../Introduction/index.html" title="Previous document">1. What is OnTask</a>
+        </li>
+        <li>
+          <a href="../Using/index.html" title="Next document">3. Using the tool</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
           <div class="body" role="main">
             
   <div class="section" id="installation-process">
@@ -788,45 +805,59 @@ this with the option <code class="docutils literal notranslate"><span class="pre
 
 
           </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="../Introduction/index.html" title="Previous document">1. What is OnTask</a>
+        </li>
+        <li>
+          <a href="../Using/index.html" title="Next document">3. Using the tool</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">OnTask (B.3.2.0)</a></h1>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/ontask-logo-1.png" alt="Logo"/>
+    
+  </a>
+</p>
 
 
 
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=abelardopardo&repo=ontask_b&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
 
 
 
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../Introduction/index.html">1. What is OnTask</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">2. Installation process</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#requirements">2.1. Requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#are-you-upgrading-from-a-version-2-8-to-2-8-or-later">2.2. Are you upgrading from a version &lt; 2.8 to 2.8 or later?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-the-required-tools">2.3. Installing the required tools</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#install-and-configure-redis">2.3.1. Install and Configure Redis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#install-and-configure-postgresql">2.3.2. Install and Configure PostgreSQL</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#install-python">2.3.3. Install Python</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#download-install-and-configure-ontask">2.3.4. Download, install and configure OnTask</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configure-the-distributed-task-queue-celery">2.3.5. Configure the Distributed Task Queue Celery</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-the-required-tools">2.3. Installing the required tools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#upgrading-ontask">2.4. Upgrading OnTask</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-administration-pages">2.5. The Administration Pages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#production-deployment">2.6. Production Deployment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#authentication">2.7. Authentication</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#ldap-authentication">2.7.1. LDAP Authentication</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#email-configuration">2.8. Email Configuration</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#tracking-email-reads">2.8.1. Tracking Email Reads</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#authentication">2.7. Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#email-configuration">2.8. Email Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#plugins">2.9. Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sql-connections">2.10. SQL Connections</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-users-in-bulk">2.11. Creating users in Bulk</a></li>
@@ -859,6 +890,14 @@ this with the option <code class="docutils literal notranslate"><span class="pre
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
@@ -867,14 +906,14 @@ this with the option <code class="docutils literal notranslate"><span class="pre
       &copy;Content Licensed under Creative Commons BY 3.0.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
-      
-      |
       <a href="../_sources/Install/index.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
+    
+    <a href="https://github.com/abelardopardo/ontask_b" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
     
 
     

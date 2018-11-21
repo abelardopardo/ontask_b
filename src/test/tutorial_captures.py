@@ -823,11 +823,16 @@ class TutorialCaptures(ScreenTests):
             """$('#id_content').summernote(
                    'editor.insertText', "Kind regards -- Jane Doe");""")
 
-        # Open the filter condition
+        # Create the filter
         self.create_filter('Complete data',
                            '',
                            [('Survey Q1', 'is not null', None),
                             ('Total', 'is not null', None)])
+
+        # Open to take the picture
+        self.open_filter()
+        self.modal_ss('tutorial_personalized_text_and_survey_filter.png')
+        self.cancel_modal()
 
         # Action editor
         self.body_ss('tutorial_personalized_text_and_survey.png')

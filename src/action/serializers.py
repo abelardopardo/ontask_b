@@ -180,12 +180,12 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
                                         name=cname).first()
             if not col:
                 # new column
-                if citem['is_key']:
-                    raise Exception(
-                        _('New action cannot have non-existing key '
-                          'column {0}').format(cname))
+                # if citem['is_key']:
+                #     raise Exception(
+                #         _('New action cannot have non-existing key '
+                #           'column {0}').format(cname))
 
-                # Accummulate the new columns just in case we have to undo
+                # Accumulate the new columns just in case we have to undo
                 # the changes
                 new_columns.append(citem)
                 continue
@@ -300,7 +300,6 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
                 for citem in columns.data:
                     column = action_obj.workflow.columns.get(name=citem['name'])
                     action_obj.columns.add(column)
-                columns.save()
             else:
                 raise Exception(_('Unable to create columns field'))
         except Exception:

@@ -43,6 +43,7 @@ class ColumnSerializer(serializers.ModelSerializer):
                     _('Incorrect date/times in the active window for '
                       'column {0}').format(validated_data['name']))
 
+            # TODO: Fix the position field when creating the columns
             # All tests passed, proceed to save the object.
             column_obj.save()
         except Exception as e:

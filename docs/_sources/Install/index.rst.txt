@@ -599,12 +599,12 @@ One of the key functionalities of OnTask is to be able to merge data from multip
 
 The screen to manage these connections is accessed clicking in the item *SQL Connections* at the top menu bar. This link is only available for those users with the administration role.
 
-.. figure:: ../scaptures/workflow_sql_connections_index.png
+.. figure:: /scaptures/workflow_sql_connections_index.png
    :align: center
 
 Each connection can be defined with the following parameters:
 
-.. figure:: ../scaptures/workflow_superuser_sql_edit.png
+.. figure:: /scaptures/workflow_superuser_sql_edit.png
    :align: center
 
 Name (required)
