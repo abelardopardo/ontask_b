@@ -31,7 +31,7 @@ Send you a summary message?
 Track email reading in an extra column?
   If selected the platform will insert an extra column in the table containing the number of times each email has been opened (this counter, though, may not have a correct value as it depends on the configuration of external programs)
 
-Download a snapshop of the worfklow
+Download a snapshot of the workflow
   When selected, the platform saves the workflow in its current state. This function is useful to keep an exact replica of the state of the actions, conditions and data when the data was sent. The resulting file can then be imported (see the *Import workflow* in the home page) to check the content of the emails.
 
 Check/exclude email addresses before sending
@@ -49,7 +49,7 @@ The new page shows the final appearance of the message with its subject and the 
 Final look before pushing the GO button
 ---------------------------------------
 
-When running an action sometimes you may want to verify that the list of rows to be processed is correct, or perhaps in the last step remove one or two rows that you know should not be included (and you didn't filter with the action filter). If you want to go through this extra step *before* running the action, tick the field to *Check/exclude* thesse items. Click in the *Next* button. In the following page you can review the list of items and mark those you want to exclude.
+When running an action sometimes you may want to verify that the list of rows to be processed is correct, or perhaps in the last step remove one or two rows that you know should not be included (and you didn't filter with the action filter). If you want to go through this extra step *before* running the action, tick the field to *Check/exclude* these items. Click in the *Next* button. In the following page you can review the list of items and mark those you want to exclude.
 
 .. figure:: /scaptures/tutorial_exclude_action_items.png
    :align: center

@@ -23,7 +23,7 @@ Views
   This button allows you to manage (create, modify, delete) a set of :ref:`table views<tut_table_views>`, which show a subset of data in the table.
 
 Dashboard
-  This button shows a page summarizing the content in each of the columns in the table. The values are shown as a histogram. For the columns with numeric values, a boxplot, minmum, maximum, mean, standard deviation and quartiles is also shown.
+  This button shows a page summarizing the content in each of the columns in the table. The values are shown as a histogram. For the columns with numeric values, a boxplot, minimum, maximum, mean, standard deviation and quartiles is also shown.
 
 CSV Download
   Allows to download a CSV file with the information currently shown in the

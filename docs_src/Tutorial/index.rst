@@ -18,12 +18,13 @@ The tutorial is organized as a collection of tasks. Some of them require the use
    Tasks/table
    Tasks/actions
    Tasks/action_personalized_text
-   Tasks/action_personalized_json
-   Tasks/action_survey
    Tasks/send_email
    Tasks/personalized_text_url
    Tasks/zip_download
+   Tasks/action_survey
+   Tasks/run_survey
    Tasks/personalized_text_and_surveys
+   Tasks/action_personalized_json
    Tasks/scheduling
    Tasks/merging
    Tasks/database_upload

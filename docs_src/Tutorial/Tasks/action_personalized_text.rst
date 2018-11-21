@@ -52,7 +52,7 @@ The text message you wrote for those students in the FASS program is now surroun
 
 This is the format to instruct OnTask to check the value of the condition ``Program is FASS`` and include the surrounded text only if the condition is true.
 
-Repeat the procedure and create three more conditions such that they are true if the value of the *Program* columns is equal to *FSCI*, *FEIT*, and *SMED* respectively. Insert three more messages in the text area that are controled by their respective conditions. At the end, each sentence will be surrounded by text referring to each of the four conditions you created:
+Repeat the procedure and create three more conditions such that they are true if the value of the *Program* columns is equal to *FSCI*, *FEIT*, and *SMED* respectively. Insert three more messages in the text area that are controlled by their respective conditions. At the end, each sentence will be surrounded by text referring to each of the four conditions you created:
 
 .. figure:: /scaptures/tutorial_personalized_text_condition_inserted2.png
    :align: center
@@ -76,7 +76,7 @@ The application will show a message if the filter excludes all the learners (non
 
 The text in the editor will be processed for each row in the table (or the subset specified by the filter) and all conditions and fields will be evaluated with the values in that row. In other words, if a sentence is surrounded by one condition, the condition is evaluated replacing the column names by the values in the row. If the condition is *True*, the text will appear, and if not, it will be ignored.
 
-The botton with name *Preview* at the bottom of the editor allows you to see the text resulting from the evaluation of each row.
+The button with name *Preview* at the bottom of the editor allows you to see the text resulting from the evaluation of each row.
 
 .. figure:: /scaptures/tutorial_personalized_text_preview.png
    :align: center
