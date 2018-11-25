@@ -5,19 +5,15 @@ import logging.config
 
 from .base import *  # NOQA
 
-# In production set the environment variable like this:
-#    DJANGO_SETTINGS_MODULE=ontask.settings.production
-
 # For security and performance reasons, DEBUG is turned off
 DEBUG = False
-TEMPLATE_DEBUG = False
+TEMPLATES[0]['OPTIONS'].update({'debug': False})
 
 # Must mention ALLOWED_HOSTS in production!
 ALLOWED_HOSTS = [os.environ['DOMAIN_NAME']]
 
 # Additional middleware introduced by debug toolbar
-MIDDLEWARE_CLASSES += (
-   'django.middleware.security.SecurityMiddleware',)
+MIDDLEWARE_CLASSES += ('django.middleware.security.SecurityMiddleware',)
 
 #
 # Security features
@@ -80,10 +76,10 @@ LOGGING = {
             'filename': join(LOGFILE_ROOT, 'script.log'),
             'formatter': 'verbose'
         },
-        'scheduler_log_file': {
+        'celery_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'scheduler.log'),
+            'filename': join(LOGFILE_ROOT, 'celery.log'),
             'formatter': 'verbose'
         },
         'console': {
@@ -93,9 +89,14 @@ LOGGING = {
         }
     },
     'loggers': {
+        'django': {
+            'handlers': ['django_log_file'],
+            'propagate': True,
+            'level': 'ERROR',
+        },
         'project': {
             'handlers': ['proj_log_file'],
-            'level': 'DEBUG',
+            'level': 'ERROR',
         },
         'django.request': {
             'handlers': ['proj_log_file'],
@@ -107,8 +108,8 @@ LOGGING = {
             'propagate': True,
             'level': 'DEBUG',
         },
-        'scripts.scheduler': {
-            'handlers': ['scheduler_log_file'],
+        'celery_execution': {
+            'handlers': ['celery_log_file'],
             'propagate': True,
             'level': 'DEBUG',
         },
