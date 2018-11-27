@@ -10,6 +10,7 @@ The tutorial is organized as a collection of tasks. Some of them require the use
 
    Tasks/the_scenario
    Tasks/the_dataset
+   Tasks/explore_dataset_with_excel
    Tasks/main_concepts
    Tasks/create_workflow
    Tasks/data_upload
