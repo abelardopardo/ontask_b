@@ -13,9 +13,10 @@ OnTask contains functions to manage three type of actions:
 Personalized text
   These actions allow to create a HTML text in which some of its elements may be present/ignored depending on the how a condition is evaluated for every student.
 
-Personalized JSON object
-  These actions allow to create a JSON object with elements in its structure that can be present or ignored depending on how a condition is evaluated for every student (similarly to the previous actions)
-
 Surveys
   A set of questions for the students to answer. The information is collected and automatically added to the table in the workflow.
+
+Personalized JSON object
+  These actions allow to create a `JSON object <https://json.org>`_ with elements in its structure that can be present or ignored depending on how a condition is evaluated for every student (similarly to the previous actions)
+
 
