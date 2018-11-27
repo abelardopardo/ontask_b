@@ -432,3 +432,17 @@ CELERY_BEAT_SCHEDULE = {
 #
 LTI_OAUTH_CREDENTIALS = env('LTI_OAUTH_CREDENTIALS')
 
+################################################################################
+#
+# CANVAS API ENTRY POINTS
+#
+################################################################################
+# List of pairs ('name', 'URL')
+CANVAS_API_ENTRYPOINT_LIST = [
+    ('canvas API entry 1', 'http://127.0.0.1:8000'),
+    ('canvas API entry 2', 'http://127.0.0.2:8000'),
+]
+# Number of calls to the Canvas API in a burst (before pausing)
+CANVAS_API_CALL_BURST = 0
+# Pause between bursts (in seconds)
+CANVAS_API_CALL_PAUSE = 0

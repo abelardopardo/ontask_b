@@ -21,7 +21,7 @@ from django_tables2 import A
 
 from action.models import Action
 from action.views_out import session_dictionary_name
-from forms import EmailScheduleForm, JSONScheduleForm
+from forms import EmailScheduleForm, JSONScheduleForm, CanvasEmailScheduleForm
 from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
@@ -176,7 +176,7 @@ def save_email_schedule(request, action, schedule_item, op_payload):
         action=action,
         instance=schedule_item,
         columns=action.workflow.columns.filter(is_key=True),
-        confirm_emails=op_payload.get('confirm_emails', False))
+        confirm_items=op_payload.get('confirm_items', False))
 
     # Check if the request is GET, or POST but not valid
     if request.method == 'GET' or not form.is_valid():
@@ -221,13 +221,89 @@ def save_email_schedule(request, action, schedule_item, op_payload):
                        'now': datetime.datetime.now(pytz.timezone(
                            settings.TIME_ZONE))})
 
-    s_item.save()
+    # Upload information to the op_payload
+    op_payload['schedule_id'] = s_item.id
+    op_payload['confirm_items'] = form.cleaned_data['confirm_items']
+
+    if op_payload['confirm_items']:
+        # Update information to carry to the filtering stage
+        op_payload['exclude_values'] = s_item.exclude_values
+        op_payload['item_column'] = s_item.item_column.name
+        op_payload['button_label'] = ugettext('Schedule')
+        request.session[session_dictionary_name] = op_payload
+
+        return redirect('action:item_filter')
+    else:
+        # If there is not item_column, the exclude values should be empty.
+        s_item.exclude_values = []
+        s_item.save()
+
+    # Go straight to the final step
+    return finish_scheduling(request, s_item, op_payload)
+
+
+def save_canvas_email_schedule(request, action, schedule_item, op_payload):
+    """
+    Function to handle the creation and edition of email items
+    :param request: Http request being processed
+    :param action: Action item related to the schedule
+    :param schedule_item: Schedule item or None if it is new
+    :param op_payload: dictionary to carry over the request to the next step
+    :return:
+    """
+
+    # Create the form to ask for the email subject and other information
+    form = CanvasEmailScheduleForm(
+        data=request.POST or None,
+        action=action,
+        instance=schedule_item,
+        columns=action.workflow.columns.filter(is_key=True),
+        confirm_items=op_payload.get('confirm_items', False))
+
+    # Check if the request is GET, or POST but not valid
+    if request.method == 'GET' or not form.is_valid():
+        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
+        # Render the form
+        return render(request,
+                      'scheduler/edit.html',
+                      {'action': action,
+                       'form': form,
+                       'now': now})
+
+    # Processing a valid POST request
+
+    # Save the schedule item object
+    s_item = form.save(commit=False)
+
+    # Assign additional fields and save
+    s_item.user = request.user
+    s_item.action = action
+    s_item.status = ScheduledAction.STATUS_CREATING
+    s_item.payload = {
+        'subject': form.cleaned_data['subject'],
+        'token': form.cleaned_data['token'],
+    }
+    # Verify that that action does comply with the name uniqueness
+    # property (only with respect to other actions)
+    try:
+        s_item.save()
+    except IntegrityError as e:
+        # There is an action with this name already
+        form.add_error('name',
+                       _('A scheduled execution of this action with this name '
+                         'already exists'))
+        return render(request,
+                      'scheduler/edit.html',
+                      {'action': action,
+                       'form': form,
+                       'now': datetime.datetime.now(pytz.timezone(
+                           settings.TIME_ZONE))})
 
     # Upload information to the op_payload
     op_payload['schedule_id'] = s_item.id
-    op_payload['confirm_emails'] = form.cleaned_data['confirm_emails']
+    op_payload['confirm_items'] = form.cleaned_data['confirm_items']
 
-    if op_payload['confirm_emails']:
+    if op_payload['confirm_items']:
         # Update information to carry to the filtering stage
         op_payload['exclude_values'] = s_item.exclude_values
         op_payload['item_column'] = s_item.item_column.name
@@ -259,7 +335,8 @@ def save_json_schedule(request, action, schedule_item, op_payload):
         data=request.POST or None,
         action=action,
         instance=schedule_item,
-        columns=action.workflow.columns.filter(is_key=True))
+        columns=action.workflow.columns.filter(is_key=True),
+        confirm_items=op_payload.get('confirm_items', False))
 
     # Check if the request is GET, or POST but not valid
     if request.method == 'GET' or not form.is_valid():
@@ -334,7 +411,8 @@ def finish_scheduling(request, schedule_item=None, payload=None):
     if not schedule_item:
         s_item_id = payload.get('schedule_id')
         if not s_item_id:
-            messages.error(request, _('Incorrect parameters in action scheduling'))
+            messages.error(request,
+                           _('Incorrect parameters in action scheduling'))
             return redirect('action:index')
 
         # Get the item being processed
@@ -374,8 +452,20 @@ def finish_scheduling(request, schedule_item=None, payload=None):
             'token': schedule_item.payload.get('subject')
         })
         log_type = Log.SCHEDULE_JSON_EDIT
+    elif schedule_item.action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        ivalue = None
+        if schedule_item.item_column:
+            ivalue = schedule_item.item_column.name
+        log_payload.update({
+            'item_column': ivalue,
+            'token': schedule_item.payload.get('subject'),
+            'subject': schedule_item.payload.get('subject'),
+        })
+        log_type = Log.SCHEDULE_CANVAS_EMAIL_EXECUTE
     else:
-        log_type = None
+        messages.error(request,
+                       _('This type of actions cannot be scheduled'))
+        return redirect('action:index')
 
     # Create the log
     Log.objects.register(request.user,
@@ -494,10 +584,14 @@ def edit(request, pk):
 
     if action.action_type == Action.PERSONALIZED_TEXT:
         return save_email_schedule(request, action, s_item, op_payload)
+    elif action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        return save_canvas_email_schedule(request, action, s_item, op_payload)
     elif action.action_type == Action.PERSONALIZED_JSON:
         return save_json_schedule(request, action, s_item, op_payload)
 
     # Action type not found, so return to the main table view
+    messages.error(request,
+                   _('This action does not support scheduling'))
     return redirect('scheduler:index')
 
 
