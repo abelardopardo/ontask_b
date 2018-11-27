@@ -1,6 +1,6 @@
 $(function () {
   $("#checkAll").click(function () {
-       $("input[id*='id_upload_']").prop("checked", this.checked);
+       $("input[id*='id_select_']").prop("checked", this.checked);
   });
 
   // Create Workflow

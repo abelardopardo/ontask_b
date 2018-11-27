@@ -19,8 +19,7 @@ if "celery" in sys.argv[0]:
     DEBUG = False
 
 # Django Debug Toolbar
-INSTALLED_APPS += (
-    'debug_toolbar',)
+INSTALLED_APPS += ('debug_toolbar',)
 
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 if not TESTING:
@@ -92,10 +91,10 @@ LOGGING = {
             'filename': join(LOGFILE_ROOT, 'script.log'),
             'formatter': 'verbose'
         },
-        'scheduler_log_file': {
+        'celery_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'scheduler.log'),
+            'filename': join(LOGFILE_ROOT, 'celery.log'),
             'formatter': 'verbose'
         },
         'console': {
@@ -119,8 +118,8 @@ LOGGING = {
             'propagate': True,
             'level': 'DEBUG',
         },
-        'scripts.scheduler': {
-            'handlers': ['scheduler_log_file'],
+        'celery_execution': {
+            'handlers': ['celery_log_file'],
             'propagate': True,
             'level': 'DEBUG',
         },
@@ -128,7 +127,7 @@ LOGGING = {
             'handlers': ['django_log_file'],
             'propagate': True,
             'level': 'DEBUG',
-        }
+        },
     }
 }
 

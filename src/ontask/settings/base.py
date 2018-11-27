@@ -155,49 +155,6 @@ PASSWORD_HASHERS = [
 
 LOCALE_PATHS = (join(PROJECT_PATH, 'locale'),)
 
-#
-# LDAP AUTHENTICATION
-#
-# Variables taken from local.env
-# AUTH_LDAP_SERVER_URI = env('AUTH_LDAP_SERVER_URI')
-# AUTH_LDAP_BIND_PASSWORD = env('AUTH_LDAP_BIND_PASSWORD')
-
-# Additional configuration variables (read django-auth-ldap documentation)
-# AUTH_LDAP_CONNECTION_OPTIONS = {
-# }
-# AUTH_LDAP_BIND_DN = "cn=admin,dc=bogus,dc=com"
-# AUTH_LDAP_USER_SEARCH = LDAPSearch(
-#     "ou=people,dc=bogus,dc=com",
-#     ldap.SCOPE_SUBTREE,
-#     "(uid=%(user)s)")
-# AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=people,dc=bogus,dc=com"
-# AUTH_LDAP_START_TLS = True
-# AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=groups,dc=example,dc=com",
-#     ldap.SCOPE_SUBTREE, "(objectClass=groupOfNames)"
-# )
-# AUTH_LDAP_GROUP_TYPE = GroupOfNamesType()
-# AUTH_LDAP_REQUIRE_GROUP = "cn=enabled,ou=groups,dc=example,dc=com"
-# AUTH_LDAP_DENY_GROUP = "cn=disabled,ou=groups,dc=example,dc=com"
-# AUTH_LDAP_USER_ATTR_MAP = {"first_name": "givenName", "last_name": "sn"}
-# AUTH_LDAP_USER_FLAGS_BY_GROUP = {
-#     "is_active": "cn=active,ou=groups,dc=example,dc=com",
-#     "is_staff": (
-#         LDAPGroupQuery("cn=staff,ou=groups,dc=example,dc=com") |
-#         LDAPGroupQuery("cn=admin,ou=groups,dc=example,dc=com")
-#     ),
-#     "is_superuser": "cn=superuser,ou=groups,dc=example,dc=com"
-# }
-# AUTH_LDAP_ALWAYS_UPDATE_USER = True
-# AUTH_LDAP_FIND_GROUP_PERMS = True
-# AUTH_LDAP_CACHE_GROUPS = True
-# AUTH_LDAP_GROUP_CACHE_TIMEOUT = 300
-
-
-#
-# LTI Authentication
-#
-LTI_OAUTH_CREDENTIALS = env('LTI_OAUTH_CREDENTIALS')
-
 AUTHENTICATION_BACKENDS = [
     'django_auth_lti.backends.LTIAuthBackend',
     'django.contrib.auth.backends.RemoteUserBackend',
@@ -246,7 +203,11 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS':
         'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 100
+    'PAGE_SIZE': 100,
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/minute',
+        'user': '1000/minute'
+    }
 }
 
 ROOT_URLCONF = 'ontask.urls'
@@ -261,17 +222,6 @@ DATABASES = {
     # os.environ
     'default': env.db(),
 }
-
-# Internationalization
-# https://docs.djangoproject.com/en/dev/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-LANGUAGES = (
-    ('en-us', _('English')),
-    ('es-es', _('Spanish')),
-    ('zh-cn', _('Chinese')),
-)
 
 TIME_ZONE = env('TIME_ZONE')
 
@@ -295,7 +245,11 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
 
+################################################################################
+#
 # Authentication Settings
+#
+################################################################################
 AUTH_USER_MODEL = 'authtools.User'
 LOGIN_REDIRECT_URL = reverse_lazy("home")
 LOGIN_URL = reverse_lazy("accounts:login")
@@ -306,6 +260,25 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 SITE_ID = 1
 
+################################################################################
+#
+# Internationalization
+# https://docs.djangoproject.com/en/dev/topics/i18n/
+#
+################################################################################
+LANGUAGE_CODE = 'en-us'
+
+LANGUAGES = (
+    ('en-us', _('English')),
+    ('es-es', _('Spanish')),
+    ('zh-cn', _('Chinese')),
+)
+
+################################################################################
+#
+# SUMMERNOTE CONFIGURATION
+#
+################################################################################
 SUMMERNOTE_CONFIG = {
     'iframe': False,
     'summernote': {
@@ -330,14 +303,22 @@ SUMMERNOTE_CONFIG = {
     'lazy': True,
 }
 
-# Extra configuration options
+################################################################################
+#
+# DATA UPLOAD FILES
+#
+################################################################################
 DATAOPS_CONTENT_TYPES = '["text/csv", "application/json", "application/gzip", "application/x-gzip", "application/vnd.ms-excel"]'
 DATAOPS_MAX_UPLOAD_SIZE = 209715200  # 200 MB
 
 # Raise because default of 1000 is too short
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
+################################################################################
+#
 # Email sever configuration
+#
+################################################################################
 EMAIL_HOST = env.str('EMAIL_HOST', '')
 EMAIL_PORT = env.str('EMAIL_PORT', '')
 EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', '')
@@ -373,13 +354,26 @@ EMAIL_ACTION_NOTIFICATION_SENDER = env.str('EMAIL_ACTION_NOTIFICATION_SENDER',
                                            '')
 EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII='
 
+################################################################################
+#
+# Log configuration
+#
+################################################################################
 LOGS_MAX_LIST_SIZE = 200
-
 SHORT_DATETIME_FORMAT = 'r'
 
+################################################################################
+#
+# Scheduler configuration
+#
+################################################################################
 SCHEDULER_MINUTE_STEP = 15
 
+################################################################################
+#
 # CELERY parameters
+#
+################################################################################
 CELERY_BROKER_URL = env('REDIS_URL')
 CELERY_RESULT_BACKEND = env('REDIS_URL')
 CELERY_ACCEPT_CONTENT = ['application/json']
@@ -393,3 +387,47 @@ CELERY_BEAT_SCHEDULE = {
         'args': (DEBUG,)
     }
 }
+
+#
+# LDAP AUTHENTICATION
+#
+# Variables taken from local.env
+# AUTH_LDAP_SERVER_URI = env('AUTH_LDAP_SERVER_URI')
+# AUTH_LDAP_BIND_PASSWORD = env('AUTH_LDAP_BIND_PASSWORD')
+
+# Additional configuration variables (read django-auth-ldap documentation)
+# AUTH_LDAP_CONNECTION_OPTIONS = {
+# }
+# AUTH_LDAP_BIND_DN = "cn=admin,dc=bogus,dc=com"
+# AUTH_LDAP_USER_SEARCH = LDAPSearch(
+#     "ou=people,dc=bogus,dc=com",
+#     ldap.SCOPE_SUBTREE,
+#     "(uid=%(user)s)")
+# AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=people,dc=bogus,dc=com"
+# AUTH_LDAP_START_TLS = True
+# AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=groups,dc=example,dc=com",
+#     ldap.SCOPE_SUBTREE, "(objectClass=groupOfNames)"
+# )
+# AUTH_LDAP_GROUP_TYPE = GroupOfNamesType()
+# AUTH_LDAP_REQUIRE_GROUP = "cn=enabled,ou=groups,dc=example,dc=com"
+# AUTH_LDAP_DENY_GROUP = "cn=disabled,ou=groups,dc=example,dc=com"
+# AUTH_LDAP_USER_ATTR_MAP = {"first_name": "givenName", "last_name": "sn"}
+# AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+#     "is_active": "cn=active,ou=groups,dc=example,dc=com",
+#     "is_staff": (
+#         LDAPGroupQuery("cn=staff,ou=groups,dc=example,dc=com") |
+#         LDAPGroupQuery("cn=admin,ou=groups,dc=example,dc=com")
+#     ),
+#     "is_superuser": "cn=superuser,ou=groups,dc=example,dc=com"
+# }
+# AUTH_LDAP_ALWAYS_UPDATE_USER = True
+# AUTH_LDAP_FIND_GROUP_PERMS = True
+# AUTH_LDAP_CACHE_GROUPS = True
+# AUTH_LDAP_GROUP_CACHE_TIMEOUT = 300
+
+
+#
+# LTI Authentication
+#
+LTI_OAUTH_CREDENTIALS = env('LTI_OAUTH_CREDENTIALS')
+
