@@ -120,7 +120,7 @@ def run_email_action(request, pk):
                        'num_msgs': num_msgs,
                        'form': form})
 
-    # Requet is a POST and is valid
+    # Request is a POST and is valid
 
     # Collect information from the form and store it in op_payload
     op_payload['subject'] = form.cleaned_data['subject']
@@ -275,7 +275,7 @@ def run_zip_action(request, pk):
                        'num_msgs': num_msgs,
                        'form': form})
 
-    # Requet is a POST and is valid
+    # Request is a POST and is valid
 
     # Collect information from the form and store it in op_payload
     op_payload['item_column'] = form.cleaned_data['participant_column']
@@ -437,7 +437,7 @@ def action_zip_export(request):
     zf = zipfile.ZipFile(sbuf, 'w')
     for user_fname, part_id, msg_body in files:
         if zip_for_moodle:
-            # If a zip for moodle, field is Participant [number]. Take the
+            # If a zip for Moodle, field is Participant [number]. Take the
             # number
             part_id = part_id.split()[1]
 
@@ -531,7 +531,7 @@ def run_json_action(request, pk):
                        'num_msgs': num_msgs,
                        'form': form})
 
-    # Requet is a POST and is valid
+    # Request is a POST and is valid
 
     # Collect the information from the form
     op_payload['key_column'] = form.cleaned_data['key_column']
@@ -557,7 +557,7 @@ def json_done(request, payload=None):
 
     :param request: HTTP request (GET)
     :param payload: Dictionary containing all the required parameters. If
-    empty, the ditionary is taken from the session.
+    empty, the dictionary is taken from the session.
     :return: HTTP response
     """
 
