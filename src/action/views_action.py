@@ -5,7 +5,8 @@ import pytz
 from django.db import IntegrityError
 from django.utils.html import format_html
 
-from action.views_out import session_dictionary_name
+from action.views_out import session_dictionary_name, run_json_action, \
+    run_email_action, run_canvas_email_action
 from logs.models import Log
 from visualizations.plotly import PlotlyHandler
 
@@ -41,7 +42,8 @@ from .forms import (
     ActionForm,
     EditActionOutForm,
     EnableURLForm,
-    ActionDescriptionForm, ActionImportForm
+    ActionDescriptionForm,
+    ActionImportForm
 )
 from action.ops import (
     serve_action_in,
@@ -70,6 +72,17 @@ class ActionTable(tables.Table):
 
     last_executed_log = tables.Column(verbose_name=_('Last executed'))
 
+    #
+    # Operatiosn available per action type (see partial_action_operations.html)
+    #
+    #  Action type               |  Email  |  ZIP |  URL  |  RUN  |
+    #  ------------------------------------------------------------
+    #  Personalized text         |    X    |   X  |   X   |       |
+    #  Personalized canvas email |    X    |      |       |       |
+    #  Personalized JSON         |         |      |   ?   |   X   |
+    #  Survey                    |         |      |   X   |   X   |
+    #  Todo List                 |         |      |   X   |   X   |
+    #
     operations = OperationsColumn(
         verbose_name=_('Operations'),
         template_file='action/includes/partial_action_operations.html',
@@ -220,6 +233,10 @@ def save_action_form(request, form, template_name):
     if is_new:
         # If a new action is created, jump to the action edit page.
         if action_item.action_type == Action.PERSONALIZED_TEXT:
+            data['html_redirect'] = reverse(
+                'action:edit', kwargs={'pk': action_item.id}
+            )
+        elif action_item.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
             data['html_redirect'] = reverse(
                 'action:edit', kwargs={'pk': action_item.id}
             )
@@ -464,6 +481,9 @@ def edit_action(request, pk):
     if action.action_type == Action.PERSONALIZED_TEXT:
         return edit_action_out(request, workflow, action)
 
+    if action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        return edit_action_out(request, workflow, action)
+
     if action.action_type == Action.PERSONALIZED_JSON:
         return edit_action_out(request, workflow, action)
 
@@ -514,6 +534,8 @@ def edit_action_out(request, workflow, action):
     template = 'action/edit_personalized_text.html'
     if action.action_type == Action.PERSONALIZED_JSON:
         template = 'action/edit_personalized_json.html'
+    elif action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        template = 'action/edit_personalized_canvas_email.html'
 
     # Processing the request after receiving the text from the editor
     if request.method == 'GET' or not form.is_valid():
@@ -549,6 +571,14 @@ def edit_action_out(request, workflow, action):
     # Update additional fields
     if action.action_type == Action.PERSONALIZED_JSON:
         action.target_url = form.cleaned_data['target_url']
+
+    if action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        # If there is a single CANVAS API ENTRYPOINT set it as target_url
+        if len(settings.CANVAS_API_ENTRYPOINT_LIST) == 1:
+            action.target_url = \
+                settings.CANVAS_API_ENTRYPOINT_LIST[0][1]
+        else:
+            action.target_url = form.cleaned_data['target_url']
 
     action.save()
 
@@ -1018,10 +1048,11 @@ def delete_action(request, pk):
 
 
 @user_passes_test(is_instructor)
-def run_action_in(request, pk):
+def run(request, pk):
     """
-    Function that runs the action in. Mainly, it renders a table with
-    all rows that satisfy the filter condition and includes a link to
+    Function that runs the action in. Mainly, it distributes the traffic
+    depending on the type of action. If it is a Survey or TODO, renders a table
+    with all rows that satisfy the filter condition and includes a link to
     enter data for each of them.
 
     :param request:
@@ -1039,16 +1070,27 @@ def run_action_in(request, pk):
     # Extract workflow and action
     workflow, action = wflow_action
 
-    if action.action_type != Action.SURVEY and \
-            action.action_type != Action.TODO_LIST:
-        # Incorrect type of action.
-        return redirect(reverse('action:index'))
+    if action.action_type == Action.PERSONALIZED_TEXT:
+        return run_email_action(request, workflow, action)
 
-    # Render template with active columns.
-    return render(request,
-                  'action/run_survey.html',
-                  {'columns': [c for c in action.columns.all() if c.is_active],
-                   'action': action})
+    if action.action_type == Action.SURVEY or \
+            action.action_type == Action.TODO_LIST:
+        # Render template with active columns.
+        return render(request,
+                      'action/run_survey.html',
+                      {'columns': [c for c in action.columns.all() if
+                                   c.is_active],
+                       'action': action})
+
+    if action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        return run_canvas_email_action(request, workflow, action)
+
+    if action.action_type == Action.PERSONALIZED_JSON:
+        return run_json_action(request, workflow, action)
+
+    # Incorrect type of action.
+    return redirect(reverse('action:index'))
+
 
 
 @user_passes_test(is_instructor)
