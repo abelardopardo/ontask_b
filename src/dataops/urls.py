@@ -5,7 +5,7 @@ from django.conf.urls import url
 
 import dataops.upload
 import dataops.views
-from . import views, csvupload, excelupload, sqlcon_views
+from . import views, csvupload, excelupload, sqlcon_views, googlesheetupload
 
 app_name = 'dataops'
 urlpatterns = [
@@ -35,6 +35,11 @@ urlpatterns = [
 
     # Excel Upload/Merge
     url(r'^excelupload1/$', excelupload.excelupload1, name='excelupload1'),
+
+    # Google Sheet Upload/Merge
+    url(r'^googlesheetupload1/$',
+        googlesheetupload.googlesheetupload1,
+        name='googlesheetupload1'),
 
     # Upload/Merge
     url(r'^upload_s2/$', dataops.upload.upload_s2, name='upload_s2'),
