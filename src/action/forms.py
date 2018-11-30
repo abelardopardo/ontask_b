@@ -48,6 +48,13 @@ class ActionForm(ActionUpdateForm):
                      if x[0] == Action.PERSONALIZED_CANVAS_EMAIL)
             )
 
+        # Remove the TODO list for the time being as it has not been
+        #  implemented yet
+        self.fields['action_type'].widget.choices.remove(
+            next(x for x in Action.ACTION_TYPES
+                 if x[0] == Action.TODO_LIST)
+        )
+
     class Meta:
         model = Action
         fields = ('name', 'description_text', 'action_type')

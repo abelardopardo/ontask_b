@@ -185,7 +185,8 @@ def save_action_form(request, form, template_name):
     action_item = form.save(commit=False)
 
     # Process the POST request
-    if action_item.action_type == Action.TODO_LIST:
+    if action_item.action_type == Action.TODO_LIST or \
+            action_item.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
         # To be implemented
         return JsonResponse(
             {'html_redirect': reverse('under_construction'),
@@ -482,7 +483,8 @@ def edit_action(request, pk):
         return edit_action_out(request, workflow, action)
 
     if action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
-        return edit_action_out(request, workflow, action)
+        return redirect(reverse('under_construction'), {})
+        # return edit_action_out(request, workflow, action)
 
     if action.action_type == Action.PERSONALIZED_JSON:
         return edit_action_out(request, workflow, action)
