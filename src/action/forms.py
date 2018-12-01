@@ -40,13 +40,11 @@ class ActionForm(ActionUpdateForm):
 
         super(ActionForm, self).__init__(*args, **kargs)
 
-        if not ontask_settings.CANVAS_API_ENTRYPOINT_LIST:
-            # If the variable CANVAS_API_ENTRYPOINT_LIST is empty, the choice
-            # for Canvas Email action should be removed.
-            self.fields['action_type'].widget.choices.remove(
-                next(x for x in Action.ACTION_TYPES
-                     if x[0] == Action.PERSONALIZED_CANVAS_EMAIL)
-            )
+        # Remove Canvas email until full implementation is done
+        self.fields['action_type'].widget.choices.remove(
+            next(x for x in Action.ACTION_TYPES
+                 if x[0] == Action.PERSONALIZED_CANVAS_EMAIL)
+        )
 
         # Remove the TODO list for the time being as it has not been
         #  implemented yet
