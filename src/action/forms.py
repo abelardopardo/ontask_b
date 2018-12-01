@@ -57,6 +57,7 @@ class ActionForm(ActionUpdateForm):
                  if x[0] == Action.TODO_LIST)
         )
 
+    class Meta(object):
         model = Action
         fields = ('name', 'description_text', 'action_type')
 
@@ -128,6 +129,7 @@ class EditActionOutForm(forms.ModelForm):
                        'placeholder': _('Write a plain text message')}
             )
 
+    class Meta(object):
         model = Action
         fields = ('content',)
 
@@ -239,12 +241,6 @@ class EnableURLForm(forms.ModelForm):
         widgets = {
             'active_from': OnTaskDateTimeInput(),
             'active_to': OnTaskDateTimeInput()
-            # 'active_from': DateTimeWidget(options=dateTimeOptions,
-            #                               usel10n=True,
-            #                               bootstrap_version=3),
-            # 'active_to': DateTimeWidget(options=dateTimeOptions,
-            #                             usel10n=True,
-            #                             bootstrap_version=3)
         }
 
 
