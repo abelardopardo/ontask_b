@@ -255,7 +255,7 @@ class EmailActionForm(forms.Form):
         required=True
     )
 
-    confirm_emails = forms.BooleanField(
+    confirm_items = forms.BooleanField(
         initial=False,
         required=False,
         label=_('Check/exclude email addresses before sending?')
@@ -301,8 +301,8 @@ class EmailActionForm(forms.Form):
         email_column = self.op_payload.get('item_column', None)
         self.fields['cc_email'].initial = self.op_payload.get('cc_email', '')
         self.fields['bcc_email'].initial = self.op_payload.get('bcc_email', '')
-        self.fields['confirm_emails'].initial = self.op_payload.get(
-            'confirm_emails',
+        self.fields['confirm_items'].initial = self.op_payload.get(
+            'confirm_items',
             False
         )
         self.fields['send_confirmation'].initial = self.op_payload.get(
