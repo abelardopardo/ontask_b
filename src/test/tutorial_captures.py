@@ -458,7 +458,7 @@ class TutorialCaptures(ScreenTests):
         self.selenium.find_element_by_id('id_bcc_email').send_keys(
             'coursecoordinator@bogus.com'
         )
-        self.selenium.find_element_by_id('id_confirm_emails').click()
+        self.selenium.find_element_by_id('id_confirm_items').click()
 
         # Screen shot of the body
         self.body_ss('action_personalized_text_email.png')

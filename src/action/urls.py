@@ -50,25 +50,12 @@ urlpatterns = [
     # Nuke the action
     path('<int:pk>/delete/', views_action.delete_action, name='delete'),
 
-    # Run EMAIL action
-    path('<int:pk>/run_email/',
-         views_out.run_email_action,
-         name='run_email_action'),
-
     # Run ZIP action
-    path('<int:pk>/run_zip/',
-         views_out.run_zip_action,
-         name='run_zip_action'),
-
-    # Run JSON action
-    path('<int:pk>/run_json/',
-         views_out.run_json_action,
-         name='run_json_action'),
+    path('<int:pk>/zip/', views_out.zip_action, name='zip_action'),
 
     # Run action IN
-    path('<int:pk>/run_action_in/',
-        views_action.run_action_in,
-        name='run_action_in'),
+    path('<int:pk>/run/', views_action.run, name='run'),
+
 
     #
     # Personalised text and JSON action steps
@@ -77,10 +64,13 @@ urlpatterns = [
         views_out.run_action_item_filter,
         name='item_filter'),
 
-    path('email_done/', views_out.run_email_action_done, name='email_done'),
-    path('zip_done/', views_out.run_zip_action_done, name='zip_done'),
+    path('email_done/', views_out.email_action_done, name='email_done'),
+    path('zip_done/', views_out.zip_action_done, name='zip_done'),
     path('zip_export/', views_out.action_zip_export, name='zip_export'),
     path('json_done/', views_out.json_done, name='json_done'),
+    path('^canvas_email_done/',
+         views_out.canvas_email_done,
+         name='canvas_email_done'),
 
     #
     # ACTION IN EDIT PAGE

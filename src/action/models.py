@@ -35,12 +35,14 @@ class Action(models.Model):
 
     PERSONALIZED_TEXT = 'personalized_text'
     PERSONALIZED_JSON = 'personalized_json'
+    PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
     SURVEY = 'survey'
     TODO_LIST = 'todo_list'
 
     ACTION_TYPES = [
         (PERSONALIZED_TEXT, _('Personalized text')),
         (PERSONALIZED_JSON, _('Personalized JSON')),
+        (PERSONALIZED_CANVAS_EMAIL, _('Personalized Canvas Email')),
         (SURVEY, _('Survey')),
         (TODO_LIST, _('TODO List'))
     ]
@@ -105,7 +107,8 @@ class Action(models.Model):
     columns = models.ManyToManyField(Column, related_name='actions_in')
 
     #
-    # Field for actions PERSONALIZED_TEXT and PERSONALIZED_JSON
+    # Field for actions PERSONALIZED_TEXT, PERSONALIZED_CAVNAS_EMAIL and
+    # PERSONALIZED_JSON
     #
     # Text to be personalised for action OUT
     content = models.TextField(default='', null=False, blank=True)
@@ -148,7 +151,8 @@ class Action(models.Model):
         if self.action_type == Action.PERSONALIZED_TEXT:
             return True
 
-        if self.action_type == Action.PERSONALIZED_JSON:
+        if self.action_type == Action.PERSONALIZED_JSON or \
+                self.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
             # If None or empty, return false
             if not self.target_url:
                 return False
@@ -247,7 +251,8 @@ class Action(models.Model):
         """
 
         if self.action_type == self.PERSONALIZED_TEXT or \
-                self.action_type == self.PERSONALIZED_JSON:
+                self.action_type == self.PERSONALIZED_JSON or \
+                self.action_type == self.PERSONALIZED_CANVAS_EMAIL:
             # Need to change name appearances in content
             new_text = var_use_res[0].sub(
                 lambda m: '{{ ' +

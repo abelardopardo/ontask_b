@@ -13,6 +13,7 @@ import gzip
 import json
 import random
 from io import BytesIO
+from time import sleep
 
 import pytz
 import requests
@@ -35,6 +36,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from validate_email import validate_email
 from django.db.models import Q
+from celery.utils.log import get_task_logger
 
 from action.evaluate import evaluate_row_action_out, evaluate_action, \
     get_row_values
@@ -46,6 +48,8 @@ from logs.models import Log
 from workflow.models import Column
 from workflow.ops import get_workflow
 from . import settings
+
+logger = get_task_logger('celery_execution')
 
 
 def serve_action_in(request, action, user_attribute_name, is_inst):
@@ -87,8 +91,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
 
         messages.error(request,
                        _('Data not found in the table'))
-        return redirect(reverse('action:run_action_in',
-                                kwargs={'pk': action.id}))
+        return redirect(reverse('action:run', kwargs={'pk': action.id}))
 
     # Bind the form with the existing data
     form = EnterActionIn(request.POST or None,
@@ -98,7 +101,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
 
     cancel_url = None
     if is_inst:
-        cancel_url = reverse('action:run_action_in', kwargs={'pk': action.id})
+        cancel_url = reverse('action:run', kwargs={'pk': action.id})
 
     # Create the context
     context = {'form': form,
@@ -106,7 +109,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
                'cancel_url': cancel_url}
 
     if request.method == 'GET' or not form.is_valid() or \
-        request.POST.get('lti_version', None):
+            request.POST.get('lti_version', None):
         return render(request, 'action/run_survey_row.html', context)
 
     # Post with different data. # Update content in the DB
@@ -159,7 +162,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
         return render(request, 'thanks.html', {})
 
     # Back to running the action
-    return redirect(reverse('action:run_action_in', kwargs={'pk': action.id}))
+    return redirect(reverse('action:run', kwargs={'pk': action.id}))
 
 
 def serve_action_out(user, action, user_attribute_name):
@@ -626,6 +629,133 @@ def send_messages(user,
     return None
 
 
+def send_canvas_messages(user,
+                         action,
+                         subject,
+                         canvas_id_column,
+                         from_email,
+                         token,
+                         exclude_values,
+                         log_item):
+    """
+    Performs the submission of the emails for the given action and with the
+    given subject. The subject will be evaluated also with respect to the
+    rows, attributes, and conditions.
+    :param user: User object that executed the action
+    :param action: Action from where to take the messages
+    :param subject: Email subject
+    :param canvas_id_column: Name of the column from which to extract canvas ID
+    :param from_email: Email of the sender
+    :param token: String to include as authorisation token
+    :param exclude_values: List of values to exclude from the mailing
+    :param log_item: Log object to store results
+    :return: Send the emails
+    """
+
+    # Evaluate the action string, evaluate the subject, and get the value of
+    # the email column.
+    result = evaluate_action(action,
+                             extra_string=subject,
+                             column_name=canvas_id_column,
+                             exclude_values=exclude_values)
+
+    # Check the type of the result to see if it was successful
+    if not isinstance(result, list):
+        # Something went wrong. The result contains a message
+        return result
+
+    # Update the number of filtered rows if the action has a filter (table
+    # might have changed)
+    cfilter = action.get_filter()
+    if cfilter and cfilter.n_rows_selected != len(result):
+        cfilter.n_rows_selected = len(result)
+        cfilter.save()
+
+    # Create the headers to use for all requests
+    headers = {
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Authorization': 'Bearer {0}'.format(token),
+    }
+
+    # Send the objects to the given URL
+    status_vals = []
+    idx = 1
+    burst = ontask_settings.CANVAS_API_CALL_BURST
+    for msg_body, msg_subject, msg_to in result:
+        #
+        # JSON object to send. Taken from method.conversations.create in
+        # https://canvas.instructure.com/doc/api/conversations.html
+        #
+        canvas_email_payload = {
+            'recipients[]': msg_to,  # Required
+            'body': msg_body,  # Required
+            'subject': msg_subject,  # Optional, but we will require it
+            # 'group_conversation': '',
+            # 'attachment_ids[]': '',
+            # 'media_comment_id': '',
+            # 'media_comment_type': '',
+            # 'user_note': '0',
+            # 'mode': 'sync',
+            # 'scope': 'unread',
+            # 'filter[]': '',
+            # 'filter_mode': '',
+            # 'context_code': '',
+        }
+
+        if burst != 0 and idx % burst == 0:
+            # Burst exists and the limit has been reached
+            logger.info('Burst ({0}) reached. Waiting for {1} secs'.format(
+                burst, ontask_settings.CANVAS_API_CALL_PAUSE
+            ))
+            sleep(ontask_settings.CANVAS_API_CALL_PAUSE)
+        # Index to detect bursts
+        idx += 1
+
+        # Send the payload or print log (if debug)
+        if ontask_settings.TEMPLATES[0]['OPTIONS']['debug']:
+            logger.info('SEND JSON({0}): {1}'.format(
+                action.target_url,
+                json.dumps(canvas_email_payload)
+            ))
+            status = 200
+        else:
+            response = requests.post(url=action.target_url,
+                                     data=canvas_email_payload,
+                                     headers=headers)
+            status = response.status_code
+        status_vals.append(
+            (status,
+             datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)),
+             canvas_email_payload)
+        )
+
+    # Create the context for the log events
+    context = {
+        'user': user.id,
+        'action': action.id,
+    }
+
+    # Log all OBJ sent
+    for status, dt, json_obj in status_vals:
+        context['object'] = json.dumps(json_obj)
+        context['status'] = status
+        context['email_sent_datetime'] = str(dt)
+        Log.objects.register(user,
+                             Log.ACTION_CANVAS_EMAIL_SENT,
+                             action.workflow,
+                             context)
+
+    # Update data in the log item
+    log_item.payload['objects_sent'] = len(result)
+    log_item.payload['filter_present'] = cfilter is not None
+    log_item.payload['datetime'] = str(datetime.datetime.now(pytz.timezone(
+        ontask_settings.TIME_ZONE
+    )))
+    log_item.save()
+
+    return None
+
+
 def send_json(user, action, token, key_column, exclude_values, log_item):
     """
     Performs the submission of the emails for the given action and with the
@@ -678,8 +808,11 @@ def send_json(user, action, token, key_column, exclude_values, log_item):
     # Send the objects to the given URL
     status_vals = []
     for json_obj in json_objects:
-        if ontask_settings.DEBUG:
-            print(('SEND JSON: ' + json.dumps(json_obj)))
+        if ontask_settings.TEMPLATES[0]['OPTIONS']['debug']:
+            logger.info('SEND JSON({0}): {1}'.format(
+                action.target_url,
+                json.dumps(json_obj)
+            ))
             status = 200
         else:
             response = requests.post(url=action.target_url,

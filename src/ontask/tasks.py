@@ -12,12 +12,12 @@ from django.contrib.auth import get_user_model
 from django.core import signing
 
 from action.models import Action
-from action.ops import send_messages, send_json
+from action.ops import send_messages, send_json, send_canvas_messages
 from dataops import pandas_db
 from logs.models import Log
 from scheduler.models import ScheduledAction
 
-logger = get_task_logger(__name__)
+logger = get_task_logger('celery_execution')
 
 
 def get_execution_items(user_id, action_id, log_id):
@@ -115,6 +115,66 @@ def send_email_messages(user_id,
 
 
 @shared_task
+def send_canvas_email_messages(user_id,
+                               action_id,
+                               subject,
+                               email_column,
+                               from_email,
+                               token,
+                               exclude_values,
+                               log_id):
+    """
+    This function invokes send_messages in action/ops.py, gets the message
+    that may be sent as a result, and records the appropriate events.
+
+    :param user_id: Id of User object that is executing the action
+    :param action_id: Id of Action object from where the messages are taken
+    :param subject: String for the email subject
+    :param email_column: Name of the column to extract email addresses
+    :param from_email: String with email from sender
+    :param token: String to include as authorisation token
+    :param exclude_values: List of values to exclude from the mailing
+    :param log_id: Id of the log object where the status has to be reflected
+    :return: bool stating if execution has been correct
+    """
+
+    # Get the objects
+    user, action, log_item = get_execution_items(user_id, action_id, log_id)
+
+    msg = 'Finished'
+    to_return = True
+    logger.info('Preparing canvas email messages to be sent.')
+    try:
+        result = send_canvas_messages(user,
+                                      action,
+                                      subject,
+                                      email_column,
+                                      from_email,
+                                      token,
+                                      exclude_values,
+                                      log_item)
+        # If the result has some sort of message, push it to the log
+        if result:
+            msg = 'Incorrect execution: ' + str(result)
+            logger.error(msg)
+            to_return = False
+    except Exception as e:
+        msg = 'Error while executing send_canvas_messages: {0}'.format(
+            e.message
+        )
+        logger.error(msg)
+        to_return = False
+    else:
+        logger.info(msg)
+
+    # Update the message in the payload
+    log_item.payload['status'] = msg
+    log_item.save()
+
+    return to_return
+
+
+@shared_task
 def send_json_objects(user_id,
                       action_id,
                       token,
@@ -164,6 +224,7 @@ def send_json_objects(user_id,
     log_item.save()
 
     return to_return
+
 
 @shared_task
 def execute_scheduled_actions(debug):
@@ -271,6 +332,38 @@ def execute_scheduled_actions(debug):
                                        key_column,
                                        item.exclude_values,
                                        log_item.id)
+        #
+        # Canvas Email Action
+        #
+        elif item.action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+            # Get the information from the payload
+            token = item.payload['token']
+            subject = item.payload.get('subject', '')
+
+            # Log the event
+            log_item = Log.objects.register(
+                item.user,
+                Log.SCHEDULE_EMAIL_EXECUTE,
+                item.action.workflow,
+                {'action': item.action.name,
+                 'action_id': item.action.id,
+                 'email_column': item.item_column.name,
+                 'execute': item.execute.isoformat(),
+                 'exclude_values': item.exclude_values,
+                 'from_email': item.user.email,
+                 'status': 'Preparing to execute',
+                 'subject': subject,
+                 }
+            )
+
+            result = send_canvas_email_messages(item.user_id,
+                                                item.action_id,
+                                                subject,
+                                                item.item_column_name,
+                                                item.user.email,
+                                                token,
+                                                item.exclude_values,
+                                                log_item.id)
 
         if result:
             item.status = ScheduledAction.STATUS_DONE

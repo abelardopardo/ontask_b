@@ -59,6 +59,26 @@
         </tr>
         <tr>
           <td class="text-center">
+            <a href="{% url 'dataops:googlesheetupload1' %}" class="btn btn-primary">
+              <span class="glyphicon glyphicon-plus"></span>
+              {% trans 'Google Sheet Upload/Merge' %}
+            </a>
+          </td>
+          <td style="vertical-align:middle">
+            {% trans 'Upload data from a Google Sheet file.' %}<br/>
+            {% blocktrans %}
+            Given the URL pointing to a publicly available Google Sheet upload or merge its content.
+            {% endblocktrans %}
+            <br/>
+            {% blocktrans %}
+            If the workflow table has data, the operation will ask you
+            to match a key column in your table with a key column in the sheet
+            so that the rows can be matched.
+            {% endblocktrans %}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center">
             <a href="{% url 'dataops:sqlconns' %}" class="btn btn-primary">
               <span class="glyphicon glyphicon-plus"></span>
               {% trans 'SQL Connections' %}

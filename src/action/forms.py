@@ -11,6 +11,7 @@ import re
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteInplaceWidget
+from django.conf import settings as ontask_settings
 from validate_email import validate_email
 
 from core.widgets import OnTaskDateTimeInput
@@ -39,7 +40,23 @@ class ActionUpdateForm(forms.ModelForm):
 
 
 class ActionForm(ActionUpdateForm):
-    class Meta(object):
+    def __init__(self, *args, **kargs):
+
+        super(ActionForm, self).__init__(*args, **kargs)
+
+        # Remove Canvas email until full implementation is done
+        self.fields['action_type'].widget.choices.remove(
+            next(x for x in Action.ACTION_TYPES
+                 if x[0] == Action.PERSONALIZED_CANVAS_EMAIL)
+        )
+
+        # Remove the TODO list for the time being as it has not been
+        #  implemented yet
+        self.fields['action_type'].widget.choices.remove(
+            next(x for x in Action.ACTION_TYPES
+                 if x[0] == Action.TODO_LIST)
+        )
+
         model = Action
         fields = ('name', 'description_text', 'action_type')
 
@@ -60,9 +77,26 @@ class EditActionOutForm(forms.ModelForm):
 
         super(EditActionOutForm, self).__init__(*args, **kargs)
 
+        # Personalized text, canvas email
         if self.instance.action_type == Action.PERSONALIZED_TEXT:
             self.fields['content'].widget = SummernoteInplaceWidget()
-        else:
+
+        if self.instance.action_type == Action.PERSONALIZED_CANVAS_EMAIL \
+                and len(ontask_settings.CANVAS_API_ENTRYPOINT_LIST) > 1:
+            # Add the target_url field if the system has more than one entry
+            # point configured
+            self.fields['target_url'] = forms.ChoiceField(
+                initial=self.instance.target_url,
+                required=True,
+                choices=[('', '---')] + \
+                        [(b, a) for a, b in
+                         ontask_settings.CANVAS_API_ENTRYPOINT_LIST],
+                label=_('Canvas Instance'),
+                help_text=_('Name of the Canvas host to send the messages')
+            )
+
+        # Add the Target URL field
+        if self.instance.action_type == Action.PERSONALIZED_JSON:
             # Add the target_url field
             self.fields['target_url'] = forms.CharField(
                 initial=self.instance.target_url,
@@ -78,6 +112,7 @@ class EditActionOutForm(forms.ModelForm):
                 )
             )
 
+        if self.instance.action_type == Action.PERSONALIZED_JSON:
             # Modify the content field so that it uses the TextArea
             self.fields['content'].widget = forms.Textarea(
                 attrs={'cols': 80,
@@ -85,7 +120,14 @@ class EditActionOutForm(forms.ModelForm):
                        'placeholder': _('Write a JSON object')}
             )
 
-    class Meta(object):
+        if self.instance.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+            # Modify the content field so that it uses the TextArea
+            self.fields['content'].widget = forms.Textarea(
+                attrs={'cols': 80,
+                       'rows': 15,
+                       'placeholder': _('Write a plain text message')}
+            )
+
         model = Action
         fields = ('content',)
 
@@ -217,6 +259,12 @@ class EmailActionForm(forms.Form):
         required=True
     )
 
+    confirm_items = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Check/exclude email addresses before sending?')
+    )
+
     cc_email = forms.CharField(
         label=_('Comma separated list of CC emails'),
         required=False
@@ -245,12 +293,6 @@ class EmailActionForm(forms.Form):
         help_text=_('A zip file useful to review the emails sent.')
     )
 
-    confirm_emails = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_('Check/exclude email addresses before sending?')
-    )
-
     def __init__(self, *args, **kargs):
         self.column_names = kargs.pop('column_names')
         self.action = kargs.pop('action')
@@ -263,10 +305,14 @@ class EmailActionForm(forms.Form):
         email_column = self.op_payload.get('item_column', None)
         self.fields['cc_email'].initial = self.op_payload.get('cc_email', '')
         self.fields['bcc_email'].initial = self.op_payload.get('bcc_email', '')
-        self.fields['confirm_emails'].initial = self.op_payload.get(
-            'confirm_emails', False)
+        self.fields['confirm_items'].initial = self.op_payload.get(
+            'confirm_items',
+            False
+        )
         self.fields['send_confirmation'].initial = self.op_payload.get(
-            'send_confirmation', False)
+            'send_confirmation',
+            False
+        )
         self.fields['track_read'].initial = self.op_payload.get('track_read',
                                                                 False)
         self.fields['export_wf'].initial = self.op_payload.get('export_wf',
@@ -432,7 +478,8 @@ class ZipActionForm(forms.Form):
                     None):
                 self.add_error(
                     'participant_column',
-                    _('Values in column must have format "Participant [number]"')
+                    _(
+                        'Values in column must have format "Participant [number]"')
                 )
 
         return data
@@ -458,11 +505,14 @@ class EmailExcludeForm(forms.Form):
         self.fields['exclude_values'].initial = self.exclude_init
 
 
-class JSONActionForm(forms.Form):
-    # Column with unique key to review objects to consider
-    key_column = forms.ChoiceField(
-        label=_('Column to exclude objects to send (empty to skip step)'),
-        required=False
+class JSONBasicActionForm(forms.Form):
+    # Column with unique key to select objects/send email
+    key_column = forms.ChoiceField(required=True)
+
+    confirm_items = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Check/exclude items before sending?')
     )
 
     # Token to use when sending the JSON request
@@ -471,13 +521,12 @@ class JSONActionForm(forms.Form):
         label=_('Authentication Token'),
         strip=True,
         required=True,
-        help_text=_('Authentication token provided by the external platform.'),
         widget=forms.Textarea(
             attrs={
                 'rows': 1,
                 'cols': 120,
-                'placeholder': _('Authentication token to be sent with the '
-                                 'JSON object.')
+                'placeholder':
+                    _('Authentication token to communicate with the platform')
             }
         )
     )
@@ -487,11 +536,11 @@ class JSONActionForm(forms.Form):
         self.column_names = kargs.pop('column_names')
         self.op_payload = kargs.pop('op_payload')
 
-        super(JSONActionForm, self).__init__(*args, **kargs)
+        super(JSONBasicActionForm, self).__init__(*args, **kargs)
 
         # Handle the key column setting the initial value if given and
         # selecting the choices
-        key_column = self.op_payload.get('key_column', None)
+        key_column = self.op_payload.get('item_column', None)
         if key_column is None:
             key_column = ('', '---')
         else:
@@ -501,6 +550,59 @@ class JSONActionForm(forms.Form):
                                             [(x, x) for x in self.column_names]
 
         self.fields['token'].initial = self.op_payload.get('token', '')
+        self.fields['confirm_items'].initial = self.op_payload.get(
+            'confirm_items',
+            False
+        )
+
+
+class JSONActionForm(JSONBasicActionForm):
+
+    def __init__(self, *args, **kargs):
+
+        super(JSONActionForm, self).__init__(*args, **kargs)
+
+        self.fields['key_column'].label = \
+            _('Column to exclude objects to send (empty to skip step)')
+
+        self.fields['token'].help_text = \
+            _('Authentication token provided by the external platform.')
+
+
+class CanvasEmailActionForm(JSONBasicActionForm):
+
+    subject = forms.CharField(max_length=1024,
+                              strip=True,
+                              required=True,
+                              label=_('Email subject'))
+
+    export_wf = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Download a snapshot of the workflow?'),
+        help_text=_('A zip file useful to review the emails sent.')
+    )
+
+    def __init__(self, *args, **kargs):
+        self.action = kargs.pop('action')
+
+        super(CanvasEmailActionForm, self).__init__(*args, **kargs)
+
+        self.fields['key_column'].label = _('Column with the Canvas ID')
+        self.fields['confirm_items'].label = \
+            _('Check/Exclude Canvas IDs before sending?')
+        self.fields['token'].help_text = \
+            _('Authentication token given by the Canvas platform.')
+        self.fields['subject'].initial = self.op_payload.get('subject', '')
+        self.fields['confirm_items'].initial = self.op_payload.get(
+            'confirm_items',
+            False
+        )
+        self.fields['export_wf'].initial = self.op_payload.get('export_wf',
+                                                               False)
+
+    class Meta:
+        widgets = {'subject': forms.TextInput(attrs={'size': 256})}
 
 
 class ActionImportForm(forms.Form):

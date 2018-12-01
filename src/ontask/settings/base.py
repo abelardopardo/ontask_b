@@ -130,6 +130,7 @@ INSTALLED_APPS = (
     'action.apps.ActionConfig',
     'logs.apps.LogsConfig',
     'scheduler.apps.SchedulerConfig',
+    # 'canvas_oauth.apps.CanvasOauthConfig',
 )
 
 MIDDLEWARE = (
@@ -431,3 +432,23 @@ CELERY_BEAT_SCHEDULE = {
 #
 LTI_OAUTH_CREDENTIALS = env('LTI_OAUTH_CREDENTIALS')
 
+################################################################################
+#
+# CANVAS API ENTRY POINTS
+#
+################################################################################
+# FQDN where your canvas instance is installed. E.g canvas.myinstitution.edu
+CANVAS_DOMAIN = ''
+# Canvas Client ID/Secret. This has to be provided by Instructure once your
+# institution is allowed to use the API
+CANVAS_CLIENT_ID = None
+CANVAS_CLIENT_SECRET = None
+#
+# Derived values No need to change anything below this line
+#
+CANVAS_AUTHORIZE_URL = "https://{0}/login/oauth2/auth".format(CANVAS_DOMAIN)
+CANVAS_ACCESS_TOKEN = "https://{0}/login/oauth2/token".format(CANVAS_DOMAIN)
+# Number of calls to the Canvas API in a burst (before pausing)
+# CANVAS_API_CALL_BURST = 0
+# Pause between bursts (in seconds)
+# CANVAS_API_CALL_PAUSE = 0

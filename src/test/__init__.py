@@ -721,7 +721,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
                 form_field.click()
                 Select(form_field).select_by_visible_text(rule_operator)
 
-            if rule_value:
+            if rule_value is not None:
                 # Set the value
                 form_item = self.selenium.find_elements_by_name(
                     "builder_rule_{0}_value_0".format(idx)

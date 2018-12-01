@@ -44,6 +44,8 @@ def store_table_in_db(data_frame,
     :param table_name: Table to use in the DB
     :param temporary: Boolean stating if the table is temporary,
            or it belongs to an existing workflow.
+    :param reset_keys: Reset the value of the field is_key computing it from
+           scratch
     :return: If temporary = True, then return a list with three lists:
              - column names
              - column types
@@ -141,6 +143,7 @@ def store_dataframe_in_db(data_frame, pk, reset_keys=True):
 
     :param data_frame: Pandas data frame containing the data
     :param pk: The unique key for the workflow
+    :param reset_keys: Reset the field is_key computing its value from scratch
     :return: Nothing. Side effect in the database
     """
     return store_table_in_db(data_frame,
@@ -437,7 +440,7 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
     # If the merge produced a data frame with no rows, flag it as an error to
     # prevent loosing data when there is a mistake in the key column
     if new_df.shape[0] == 0:
-      return gettext('Merge operation produced a result with no rows')
+        return gettext('Merge operation produced a result with no rows')
 
     # If the merge produced a data frame with no unique columns, flag it as an
     # error to prevent the data frame from propagating without a key column

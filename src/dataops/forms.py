@@ -58,7 +58,7 @@ class SelectColumnForm(forms.Form):
             label=_('Key column for merging'),
             required=True,
             help_text=_('One of the existing key columns to merge the '
-                         'results'),
+                        'results'),
             choices=[('', '---')] + [(x, x) for x in
                                      self.workflow.columns.filter(is_key=True)]
         )
@@ -79,7 +79,7 @@ class SelectColumnForm(forms.Form):
             required=False,
             help_text=
             _('Added to all output column names. Useful to keep results from '
-               'several executions in separated columns.')
+              'several executions in separated columns.')
         )
 
         for idx, (k, p_type, p_allow, p_init, p_help) in \
@@ -168,12 +168,12 @@ class UploadCSVFileForm(forms.Form):
         allow_empty_file=False,
         label="",
         help_text=_('File in CSV format (typically produced by a statistics'
-                  ' package or Excel)'))
+                    ' package or Excel)'))
 
     skip_lines_at_top = forms.IntegerField(
         label=_('Lines to skip at the top'),
         help_text=_("Number of lines to skip at the top when reading the "
-                     "file"),
+                    "file"),
         initial=0,
         required=False
     )
@@ -181,7 +181,7 @@ class UploadCSVFileForm(forms.Form):
     skip_lines_at_bottom = forms.IntegerField(
         label=_('Lines to skip at the bottom'),
         help_text=_("Number of lines to skip at the bottom when reading the "
-                  "file"),
+                    "file"),
         initial=0,
         required=False
     )
@@ -229,6 +229,61 @@ class UploadExcelFileForm(forms.Form):
         required=True,
         initial='',
         help_text=_('Sheet within the excelsheet to upload'))
+
+
+# Step 1 of the CSV upload
+class UploadGoogleSheetForm(forms.Form):
+    """
+    Form to read a Google Sheet file through a URL. It also allows to specify
+    the number of lines to skip at the top and the bottom of the file. This
+    functionality is offered by the underlyng function read_csv in Pandas
+    """
+
+    google_url = forms.CharField(
+        max_length=1024,
+        strip=True,
+        required=True,
+        label=_('URL'),
+        help_text=_('URL to access the Google Spreadsheet in CSV format')
+    )
+
+    skip_lines_at_top = forms.IntegerField(
+        label=_('Lines to skip at the top'),
+        help_text=_("Number of lines to skip at the top when reading the "
+                    "file"),
+        initial=0,
+        required=False
+    )
+
+    skip_lines_at_bottom = forms.IntegerField(
+        label=_('Lines to skip at the bottom'),
+        help_text=_("Number of lines to skip at the bottom when reading the "
+                    "file"),
+        initial=0,
+        required=False
+    )
+
+    def clean(self, *args, **kwargs):
+        """
+        Function to check that the integers are positive.
+        :return: The cleaned data
+        """
+
+        data = super(UploadGoogleSheetForm, self).clean(*args, **kwargs)
+
+        if data['skip_lines_at_top'] < 0:
+            self.add_error(
+                'skip_lines_at_top',
+                _('This number has to be zero or positive')
+            )
+
+        if data['skip_lines_at_bottom'] < 0:
+            self.add_error(
+                'skip_lines_at_bottom',
+                _('This number has to be zero or positive')
+            )
+
+        return data
 
 
 class SQLConnectionForm(forms.ModelForm):
@@ -334,7 +389,7 @@ class SelectKeysForm(forms.Form):
         ('', _('- Choose row selection method -')),
         ('outer', _('1) Select all rows in both the existing and new table')),
         ('inner', _('2) Select only the rows with keys present in both the '
-                  'existing and new table')),
+                    'existing and new table')),
         ('left', _('3) Select only the rows with keys in the existing table')),
         ('right', _('4) Select only the rows with keys in the new table')),
     ]
