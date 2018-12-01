@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-
-
 from django.urls import path
 
 from . import views_action, views_condition, views_out
@@ -68,7 +66,7 @@ urlpatterns = [
     path('zip_done/', views_out.zip_action_done, name='zip_done'),
     path('zip_export/', views_out.action_zip_export, name='zip_export'),
     path('json_done/', views_out.json_done, name='json_done'),
-    path('^canvas_email_done/',
+    path('canvas_email_done/',
          views_out.canvas_email_done,
          name='canvas_email_done'),
 

@@ -37,7 +37,7 @@ urlpatterns = [
     path('excelupload1/', excelupload.excelupload1, name='excelupload1'),
 
     # Google Sheet Upload/Merge
-    url(r'^googlesheetupload1/$',
+    path('googlesheetupload1/',
         googlesheetupload.googlesheetupload1,
         name='googlesheetupload1'),
 
