@@ -1,6 +1,8 @@
 alabaster==0.7.12
 amqp==2.3.2
 appnope==0.1.0
+argon2==0.1.10
+argon2-cffi==18.3.0
 Babel==2.6.0
 backcall==0.1.0
 billiard==3.5.0.4
@@ -24,12 +26,14 @@ django-datetime-widget==0.9.3
 django-environ==0.4.5
 django-etc==0.11.0
 django-extensions==2.1.4
+django-formtools==2.1
 django-import-export==1.1.0
 django-jquery==3.1.0
 django-modeltranslation==0.12.2
 django-redis==4.10.0
 django-siteprefs==0.9.0
 django-summernote==0.8.10.0
+django-tables2==2.0.3
 django-timezone-field==3.0
 django-widget-tweaks==1.4.3
 djangorestframework==3.9.0
