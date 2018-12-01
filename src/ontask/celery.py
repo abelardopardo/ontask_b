@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-
-
-
 import os
 
 from celery import Celery
