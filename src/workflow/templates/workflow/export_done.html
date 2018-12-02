@@ -1,17 +1,16 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
-{% block title %}Done!{% endblock %}
+{% block title %}{% trans 'Export Done' %}{% endblock %}
 {% block scripts %}
   <script>
-    location.href="{% url 'workflow:export' include %}";
-    $('#div-spinner').hide();
+    $(window).on('load', function(){ location.href="{% url 'workflow:export' include %}"; });
   </script>
 {% endblock scripts %}
 {% block container %}
   <div class="container-fluid" style="text-align:center;">
     <h1 class="page-header text-center">{% trans 'Workflow export' %}</h1>
-    <p class="text-center">{% trans 'Done!' %}</p>
+    <p class="text-center">{% trans 'Your download will start shortly' %}</p>
     <a class="btn btn-default spin"
        href="{% url 'workflow:detail' wid %}">{% trans 'Back' %}</a>
   </div>
