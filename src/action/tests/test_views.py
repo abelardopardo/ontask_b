@@ -336,7 +336,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
 
         # There should be a column for the email tracking
         # This column is now added by Celery which needs to be running
-        # with the same DB configiration (which is not).
+        # with the same DB configuration (which is not).
         # self.assertIn('EmailRead_1', self.selenium.page_source)
 
         # Make sure the workflow is consistent

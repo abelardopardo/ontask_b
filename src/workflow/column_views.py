@@ -65,8 +65,6 @@ def partition(list_in, n):
 
 @user_passes_test(is_instructor)
 def column_add(request, pk=None):
-    # TODO: Encapsulate operations in a function so that is available for the
-    #  API
     # Data to send as JSON response
     data = {}
 
@@ -188,8 +186,6 @@ def column_add(request, pk=None):
 
 @user_passes_test(is_instructor)
 def formula_column_add(request):
-    # TODO: Encapsulate operations in a function so that is available for the
-    #  API
     # Data to send as JSON response, in principle, assume form is not valid
     data = {'form_is_valid': False}
 
@@ -327,8 +323,6 @@ def random_column_add(request):
     :param request:
     :return:
     """
-    # TODO: Encapsulate operations in a function so that is available for the
-    #  API
     # Data to send as JSON response, in principle, assume form is not valid
     data = {'form_is_valid': False}
 
@@ -466,8 +460,6 @@ def random_column_add(request):
 
 @user_passes_test(is_instructor)
 def column_edit(request, pk):
-    # TODO: Encapsulate operations in a function so that is available for the
-    #  API
     # Data to send as JSON response
     data = {}
 

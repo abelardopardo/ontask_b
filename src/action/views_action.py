@@ -1053,7 +1053,7 @@ def delete_action(request, pk):
 def run(request, pk):
     """
     Function that runs the action in. Mainly, it distributes the traffic
-    depending on the type of action. If it is a Survey or TODO, renders a table
+    depending on the type of action. If it is a Survey or todo, renders a table
     with all rows that satisfy the filter condition and includes a link to
     enter data for each of them.
 

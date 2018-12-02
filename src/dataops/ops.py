@@ -521,6 +521,9 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
 
 def data_frame_add_column(df, column, initial_value):
     """
+    Function that add a new column to the data frame with the structure to match
+    the given column. If the initial value is not give, it is decided based
+    on the data type stored in the column object.
 
     :param df: Data frame to modify
     :param column: Column object to add

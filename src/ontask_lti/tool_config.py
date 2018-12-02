@@ -28,7 +28,6 @@ class ToolConfig():
     LTI links as described here:
         http://www.imsglobal.org/LTI/v1p1pd/ltiIMGv1p1pd.html#_Toc309649689
 
-    TODO: Usage description
     '''
     def __init__(self, **kwargs):
         '''
