@@ -189,11 +189,6 @@
           message: "{% trans 'Your session is about to expire.' %}",
           logoutButton: "{% trans 'Logout' %}",
           ignoreUserActivity: true,
-          keepAlive: false,
-          keepAliveButton: "{% trans 'Remain Connected' %}",
-          keepAliveUrl: "{% url 'keep_alive' %}",
-          logoutUrl: "{% url 'accounts:logout' %}",
-          redirUrl: "{% url 'accounts:logout' %}",
           warnAfter: ({{ ONTASK_TIMEOUT }} - 60) * 1000,
           redirAfter: {{ ONTASK_TIMEOUT }} * 1000,
           onStart: false
