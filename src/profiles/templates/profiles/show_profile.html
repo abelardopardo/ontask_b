@@ -61,6 +61,14 @@
               {% else %}{% trans 'Create' %}{% endif %}
           </a>
         </div>
+        {% for token in tokens %}
+            <div class="panel-default panel-body">
+                <strong>{% trans 'Auth token for' %}</strong> {{ token.instance_name }}
+              <a href="{% url 'profiles:delete_token' token.id %}"
+                 class="btn btn-sm btn-info">{% trans 'Delete' %}
+              </a>
+            </div>
+        {% endfor %}
     </div>
   </div>
 </div>
