@@ -327,6 +327,11 @@ EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD', '')
 EMAIL_USE_TLS = env.str('EMAIL_HOST_TLS', '')
 EMAIL_USE_SSL = env.str('EMAIL_HOST_SSL', '')
 
+# Number of emails to send out in a burst (before pausing)
+EMAIL_BURST = 500
+# Pause between bursts (in seconds)
+EMAIL_BURST_PAUSE = 43200
+
 # Additional email related variables
 EMAIL_ACTION_NOTIFICATION_TEMPLATE = """
 <html>

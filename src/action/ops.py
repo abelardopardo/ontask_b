@@ -410,6 +410,10 @@ def send_messages(user,
     Performs the submission of the emails for the given action and with the
     given subject. The subject will be evaluated also with respect to the
     rows, attributes, and conditions.
+
+    The messages are sent in bursts with a pause in seconds as specified by the
+    configuration variables EMAIL_BURST  and EMAIL_BURST_PAUSE
+
     :param user: User object that executed the action
     :param action: Action from where to take the messages
     :param subject: Email subject
@@ -537,13 +541,29 @@ def send_messages(user,
         data_frame[track_col_name] = 0
         ops.store_dataframe_in_db(data_frame, action.workflow.id)
 
-    # Mass mail!
-    try:
-        connection = mail.get_connection()
-        connection.send_messages(msgs)
-    except Exception as e:
-        # Something went wrong, notify above
-        return str(e)
+    # Partition the list of emails into chunks as per the value of EMAIL_BURST
+    chunk_size = len(msgs)
+    wait_time = 0
+    if ontask_settings.EMAIL_BURST:
+        chunk_size = ontask_settings.EMAIL_BURST
+        wait_time = ontask_settings.EMAIL_BURST_PAUSE
+    msg_chunks = [msgs[i:i + chunk_size]
+                  for i in range(0, len(msgs), chunk_size)]
+    for idx, msg_chunk in enumerate(msg_chunks):
+        # Mass mail!
+        try:
+            connection = mail.get_connection()
+            connection.send_messages(msg_chunk)
+        except Exception as e:
+            # Something went wrong, notify above
+            return str(e)
+
+        if idx != len(msg_chunks) - 1:
+            logger.info(
+                'Email Burst ({0}) reached. Waiting for {1} secs'.format(
+                    len(msg_chunk), wait_time
+                ))
+            sleep(wait_time)
 
     # Log the events (one per email)
     now = datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
