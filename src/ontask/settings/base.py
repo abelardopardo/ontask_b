@@ -14,6 +14,7 @@ import os
 from os.path import dirname, join, exists
 
 import environ
+import json
 from celery.schedules import crontab
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -130,8 +131,8 @@ INSTALLED_APPS = (
     'action.apps.ActionConfig',
     'logs.apps.LogsConfig',
     'scheduler.apps.SchedulerConfig',
-    # 'canvas_oauth.apps.CanvasOauthConfig',
-)
+    'ontask_oauth.apps.OnTaskOauthConfig',
+]
 
 MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -255,7 +256,7 @@ AUTH_USER_MODEL = 'authtools.User'
 LOGIN_REDIRECT_URL = reverse_lazy("home")
 LOGIN_URL = reverse_lazy("accounts:login")
 
-THUMBNAIL_EXTENSION = 'png'     # Or any extn for your thumbnails
+THUMBNAIL_EXTENSION = 'png'  # Or any extn for your thumbnails
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
@@ -320,17 +321,17 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 # Email sever configuration
 #
 ################################################################################
-EMAIL_HOST = env.str('EMAIL_HOST', '')
-EMAIL_PORT = env.str('EMAIL_PORT', '')
-EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD', '')
-EMAIL_USE_TLS = env.str('EMAIL_HOST_TLS', '')
-EMAIL_USE_SSL = env.str('EMAIL_HOST_SSL', '')
+EMAIL_HOST = env.str('EMAIL_HOST', default='')
+EMAIL_PORT = env.str('EMAIL_PORT', default='')
+EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD', default='')
+EMAIL_USE_TLS = env.bool('EMAIL_HOST_TLS', default=False)
+EMAIL_USE_SSL = env.bool('EMAIL_HOST_SSL', default=False)
 
 # Number of emails to send out in a burst (before pausing)
-EMAIL_BURST = 500
+EMAIL_BURST = env.int('EMAIL_BURST', default=0)
 # Pause between bursts (in seconds)
-EMAIL_BURST_PAUSE = 43200
+EMAIL_BURST_PAUSE = env.int('EMAIL_BURST_PAUSE', default=0)
 
 # Additional email related variables
 EMAIL_ACTION_NOTIFICATION_TEMPLATE = """
@@ -354,7 +355,6 @@ Regards.
 The OnTask Support Team
 </body></html>"""
 
-
 EMAIL_ACTION_NOTIFICATION_SUBJECT = _("OnTask: Action executed")
 EMAIL_ACTION_NOTIFICATION_SENDER = env.str('EMAIL_ACTION_NOTIFICATION_SENDER',
                                            '')
@@ -367,6 +367,15 @@ EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nG
 ################################################################################
 LOGS_MAX_LIST_SIZE = 200
 SHORT_DATETIME_FORMAT = 'r'
+
+################################################################################
+#
+# Execute JSON transfer: If False, the personalized JSON and Canvas email
+# do not send the data but instead log the content of the JSON objects through
+# the logger
+#
+################################################################################
+EXECUTE_ACTION_JSON_TRANSFER = False
 
 ################################################################################
 #
@@ -442,18 +451,21 @@ LTI_OAUTH_CREDENTIALS = env('LTI_OAUTH_CREDENTIALS')
 # CANVAS API ENTRY POINTS
 #
 ################################################################################
-# FQDN where your canvas instance is installed. E.g canvas.myinstitution.edu
-CANVAS_DOMAIN = ''
-# Canvas Client ID/Secret. This has to be provided by Instructure once your
-# institution is allowed to use the API
-CANVAS_CLIENT_ID = None
-CANVAS_CLIENT_SECRET = None
+CANVAS_INFO_DICT = json.loads(env.str('CANVAS_INFO_DICT', default='{}'))
+# The string in the .env file must be a single line JSON encoding of a
+# dictionary with the following elements:
+#   "Server name or domain descriptor (shown to the user": {
+#      domain_port: VALUE,
+#      client_id: VALUE,
+#      client_secret: VALUE ,
+#      authorize_url: VALUE (format {0} for domain_port),
+#      access_token_url: VALUE (format {0} for domain_port),
+#      conversation_URL: VALUE (format {0} for domain_port),
+#      aux_params: DICT with additional parameters)
+#    }
+#  For example:
 #
-# Derived values No need to change anything below this line
-#
-CANVAS_AUTHORIZE_URL = "https://{0}/login/oauth2/auth".format(CANVAS_DOMAIN)
-CANVAS_ACCESS_TOKEN = "https://{0}/login/oauth2/token".format(CANVAS_DOMAIN)
-# Number of calls to the Canvas API in a burst (before pausing)
-# CANVAS_API_CALL_BURST = 0
-# Pause between bursts (in seconds)
-# CANVAS_API_CALL_PAUSE = 0
+#  CANVAS_INFO_DICT={"Server one": {"domain_port": "yourcanvasdomain.edu", "client_id": "10000000000001", "client_secret": "YZnGjbkopt9MpSq2fujUOgbeVZ8NdkdCeGF2ufhWZdBKAZvNCuuTOWXHotsWMu6X", "authorize_url": "http://{0}/login/oauth2/auth", "access_token_url": "http://{0}/login/oauth2/token", "conversation_url": "http://{0}/api/v1/conversations", "aux_params": {"burst": 10, "pause": 5}}}
+
+# Number of seconds left in the token validity to refresh
+CANVAS_TOKEN_EXPIRY_SLACK = env.int('CANVAS_TOKEN_EXPIRY_SLACK', default=600)

@@ -24,7 +24,7 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 from django_tables2 import A
 
 from action.models import Action
-from action.views_out import session_dictionary_name
+from action.views_out import action_session_dictionary
 from .forms import EmailScheduleForm, JSONScheduleForm, CanvasEmailScheduleForm
 from logs.models import Log
 from ontask.permissions import is_instructor
@@ -234,7 +234,7 @@ def save_email_schedule(request, action, schedule_item, op_payload):
         op_payload['exclude_values'] = s_item.exclude_values
         op_payload['item_column'] = s_item.item_column.name
         op_payload['button_label'] = ugettext('Schedule')
-        request.session[session_dictionary_name] = op_payload
+        request.session[action_session_dictionary] = op_payload
 
         return redirect('action:item_filter')
     else:
@@ -312,7 +312,7 @@ def save_canvas_email_schedule(request, action, schedule_item, op_payload):
         op_payload['exclude_values'] = s_item.exclude_values
         op_payload['item_column'] = s_item.item_column.name
         op_payload['button_label'] = ugettext('Schedule')
-        request.session[session_dictionary_name] = op_payload
+        request.session[action_session_dictionary] = op_payload
 
         return redirect('action:item_filter')
     else:
@@ -375,7 +375,7 @@ def save_json_schedule(request, action, schedule_item, op_payload):
         op_payload['item_column'] = s_item.item_column.name
         op_payload['exclude_values'] = s_item.exclude_values
         op_payload['button_label'] = ugettext('Schedule')
-        request.session[session_dictionary_name] = op_payload
+        request.session[action_session_dictionary] = op_payload
 
         return redirect('action:item_filter')
     else:
@@ -402,7 +402,7 @@ def finish_scheduling(request, schedule_item=None, payload=None):
 
     # Get the payload from the session if not given
     if payload is None:
-        payload = request.session.get(session_dictionary_name)
+        payload = request.session.get(action_session_dictionary)
 
         # If there is no payload, something went wrong.
         if payload is None:
@@ -484,7 +484,7 @@ def finish_scheduling(request, schedule_item=None, payload=None):
     tdelta = schedule_item.execute - now
 
     # Reset object to carry action info throughout dialogs
-    request.session[session_dictionary_name] = {}
+    request.session[action_session_dictionary] = {}
     request.session.save()
 
     # Create the timedelta string
@@ -563,13 +563,13 @@ def edit(request, pk):
         action = s_item.action
 
     # Get the payload from the session, and if not, use the given one
-    op_payload = request.session.get(session_dictionary_name, None)
+    op_payload = request.session.get(action_session_dictionary, None)
     if not op_payload:
         op_payload = {'action_id': action.id,
                       'prev_url': reverse('scheduler:create',
                                           kwargs={'pk': action.id}),
                       'post_url': reverse('scheduler:finish_scheduling')}
-        request.session[session_dictionary_name] = op_payload
+        request.session[action_session_dictionary] = op_payload
         request.session.save()
 
     # Verify that celery is running!

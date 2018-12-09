@@ -3,15 +3,16 @@ from __future__ import unicode_literals, print_function
 
 from django.contrib import admin
 
-from .models import CanvasUserTokens
+from .models import OnTaskOAuthUserTokens
 
 
-class CanvasUserTokensAdmin(admin.ModelAdmin):
+class OnTaskOAuthUserTokensAdmin(admin.ModelAdmin):
     list_display = ('user',
+                    'instance_name',
                     'access_token',
                     'refresh_token',
                     'created',
                     'modified',
                     'valid_until')
 
-admin.site.register(CanvasUserTokens, CanvasUserTokensAdmin)
+admin.site.register(OnTaskOAuthUserTokens, OnTaskOAuthUserTokensAdmin)

@@ -7,7 +7,6 @@ from .base import *  # NOQA
 
 # For security and performance reasons, DEBUG is turned off
 DEBUG = False
-TEMPLATES[0]['OPTIONS'].update({'debug': False})
 
 # Must mention ALLOWED_HOSTS in production!
 ALLOWED_HOSTS = [os.environ['DOMAIN_NAME']]
@@ -31,6 +30,11 @@ SECURE_HSTS_PRELOAD = True
 # Folder to scan for plugins
 #
 DATAOPS_PLUGIN_DIRECTORY = os.path.join(PROJECT_PATH, 'plugins')
+
+#
+# Execute the JSON transfers for the required actions
+#
+EXECUTE_ACTION_JSON_TRANSFER = True
 
 # Cache the templates in memory for speed-up
 loaders = [

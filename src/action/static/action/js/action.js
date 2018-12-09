@@ -225,7 +225,7 @@ $(function () {
   $("#html-editor").on("click", ".js-action-preview", loadFormPost);
   $("#email-action-request-data").on("click", ".js-email-preview", loadForm);
   $("#canvas-email-action-request-data").on("click",
-    ".js-json-preview",
+    ".js-canvas-email-preview",
     loadForm);
   $("#zip-action-request-data").on("click", ".js-zip-preview", loadForm);
   $("#json-action-request-data").on("click", ".js-json-preview", loadForm);

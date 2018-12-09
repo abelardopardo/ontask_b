@@ -119,9 +119,8 @@ def send_canvas_email_messages(user_id,
                                action_id,
                                subject,
                                email_column,
-                               from_email,
-                               token,
                                exclude_values,
+                               target_url,
                                log_id):
     """
     This function invokes send_messages in action/ops.py, gets the message
@@ -134,6 +133,7 @@ def send_canvas_email_messages(user_id,
     :param from_email: String with email from sender
     :param token: String to include as authorisation token
     :param exclude_values: List of values to exclude from the mailing
+    :param target_url: The name of the server to use to send email
     :param log_id: Id of the log object where the status has to be reflected
     :return: bool stating if execution has been correct
     """
@@ -149,9 +149,8 @@ def send_canvas_email_messages(user_id,
                                       action,
                                       subject,
                                       email_column,
-                                      from_email,
-                                      token,
                                       exclude_values,
+                                      target_url,
                                       log_item)
         # If the result has some sort of message, push it to the log
         if result:
@@ -160,7 +159,7 @@ def send_canvas_email_messages(user_id,
             to_return = False
     except Exception as e:
         msg = 'Error while executing send_canvas_messages: {0}'.format(
-            e.message
+            str(e)
         )
         logger.error(msg)
         to_return = False

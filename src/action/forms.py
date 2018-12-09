@@ -44,14 +44,16 @@ class ActionForm(ActionUpdateForm):
 
         super(ActionForm, self).__init__(*args, **kargs)
 
-        # Remove Canvas email until full implementation is done
-        self.fields['action_type'].widget.choices.remove(
-            next(x for x in Action.ACTION_TYPES
-                 if x[0] == Action.PERSONALIZED_CANVAS_EMAIL)
-        )
+        if not ontask_settings.CANVAS_INFO_DICT:
+            # If the variable CANVAS_INFO_DICT is empty, the choice for Canvas
+            # Email action should be removed.
+            self.fields['action_type'].widget.choices.remove(
+                next(x for x in Action.ACTION_TYPES
+                     if x[0] == Action.PERSONALIZED_CANVAS_EMAIL)
+            )
 
         # Remove the todo list for the time being as it has not been
-        #  implemented yet
+        # implemented yet
         self.fields['action_type'].widget.choices.remove(
             next(x for x in Action.ACTION_TYPES
                  if x[0] == Action.TODO_LIST)
@@ -82,19 +84,19 @@ class EditActionOutForm(forms.ModelForm):
         if self.instance.action_type == Action.PERSONALIZED_TEXT:
             self.fields['content'].widget = SummernoteInplaceWidget()
 
-        if self.instance.action_type == Action.PERSONALIZED_CANVAS_EMAIL \
-                and len(ontask_settings.CANVAS_API_ENTRYPOINT_LIST) > 1:
-            # Add the target_url field if the system has more than one entry
-            # point configured
-            self.fields['target_url'] = forms.ChoiceField(
-                initial=self.instance.target_url,
-                required=True,
-                choices=[('', '---')] + \
-                        [(b, a) for a, b in
-                         ontask_settings.CANVAS_API_ENTRYPOINT_LIST],
-                label=_('Canvas Instance'),
-                help_text=_('Name of the Canvas host to send the messages')
-            )
+        # if self.instance.action_type == Action.PERSONALIZED_CANVAS_EMAIL \
+        #         and len(ontask_settings.CANVAS_INFO_DICT) > 1:
+        #     # Add the target_url field if the system has more than one entry
+        #     # point configured
+        #     self.fields['target_url'] = forms.ChoiceField(
+        #         initial=self.instance.target_url,
+        #         required=True,
+        #         choices=[('', '---')] + \
+        #                 [(y[1], x) for x, y in
+        #                  sorted(ontask_settings.CANVAS_INFO_DICT.items()],
+        #         label=_('Canvas Instance'),
+        #         help_text=_('Name of the Canvas host to send the messages')
+        #     )
 
         # Add the Target URL field
         if self.instance.action_type == Action.PERSONALIZED_JSON:
@@ -511,22 +513,6 @@ class JSONBasicActionForm(forms.Form):
         label=_('Check/exclude items before sending?')
     )
 
-    # Token to use when sending the JSON request
-    token = forms.CharField(
-        initial='',
-        label=_('Authentication Token'),
-        strip=True,
-        required=True,
-        widget=forms.Textarea(
-            attrs={
-                'rows': 1,
-                'cols': 120,
-                'placeholder':
-                    _('Authentication token to communicate with the platform')
-            }
-        )
-    )
-
     def __init__(self, *args, **kargs):
 
         self.column_names = kargs.pop('column_names')
@@ -545,7 +531,6 @@ class JSONBasicActionForm(forms.Form):
         self.fields['key_column'].choices = [('', '---')] + \
                                             [(x, x) for x in self.column_names]
 
-        self.fields['token'].initial = self.op_payload.get('token', '')
         self.fields['confirm_items'].initial = self.op_payload.get(
             'confirm_items',
             False
@@ -554,6 +539,22 @@ class JSONBasicActionForm(forms.Form):
 
 class JSONActionForm(JSONBasicActionForm):
 
+    # Token to use when sending the JSON request
+    token = forms.CharField(
+        initial='',
+        label=_('Authentication Token'),
+        strip=True,
+        required=True,
+        widget=forms.Textarea(
+            attrs={
+                'rows': 1,
+                'cols': 120,
+                'placeholder':
+                    _('Authentication token to communicate with the platform')
+            }
+        )
+    )
+
     def __init__(self, *args, **kargs):
 
         super(JSONActionForm, self).__init__(*args, **kargs)
@@ -561,6 +562,7 @@ class JSONActionForm(JSONBasicActionForm):
         self.fields['key_column'].label = \
             _('Column to exclude objects to send (empty to skip step)')
 
+        self.fields['token'].initial = self.op_payload.get('token', '')
         self.fields['token'].help_text = \
             _('Authentication token provided by the external platform.')
 
@@ -584,11 +586,22 @@ class CanvasEmailActionForm(JSONBasicActionForm):
 
         super(CanvasEmailActionForm, self).__init__(*args, **kargs)
 
+        if len(ontask_settings.CANVAS_INFO_DICT) > 1:
+            # Add the target_url field if the system has more than one entry
+            # point configured
+            self.fields['target_url'] = forms.ChoiceField(
+                initial=self.action.target_url,
+                required=True,
+                choices=[('', '---')] + \
+                        [(x, x) for x in
+                         sorted(ontask_settings.CANVAS_INFO_DICT.keys())],
+                label=_('Canvas Host'),
+                help_text=_('Name of the Canvas host to send the messages')
+            )
+
         self.fields['key_column'].label = _('Column with the Canvas ID')
         self.fields['confirm_items'].label = \
             _('Check/Exclude Canvas IDs before sending?')
-        self.fields['token'].help_text = \
-            _('Authentication token given by the Canvas platform.')
         self.fields['subject'].initial = self.op_payload.get('subject', '')
         self.fields['confirm_items'].initial = self.op_payload.get(
             'confirm_items',
@@ -596,8 +609,13 @@ class CanvasEmailActionForm(JSONBasicActionForm):
         )
         self.fields['export_wf'].initial = self.op_payload.get('export_wf',
                                                                False)
+        self.order_fields(['key_column',
+                           'subject',
+                           'target_url',
+                           'confirm_items',
+                           'export_wf'])
 
-    class Meta:
+    class Meta(JSONBasicActionForm):
         widgets = {'subject': forms.TextInput(attrs={'size': 256})}
 
 

@@ -6,9 +6,9 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 
-class CanvasUserTokens(models.Model):
+class OnTaskOAuthUserTokens(models.Model):
     """
-    Table to store the tokens to authenticate with Canvas. There must be
+    Table to store the tokens to authenticate with OAuth. There must be
     a one-to-one correspondence with the user, an access token, and a refresh
     token.
     """
@@ -17,8 +17,15 @@ class CanvasUserTokens(models.Model):
                              db_index=True,
                              on_delete=models.CASCADE,
                              null=False,
+                             related_name='oauth2_token',
                              blank=False)
-   
+
+    # Instance name taken from the configuration parameters. It allows users to
+    # have more than one token (as long as they are from different canvas instances
+    instance_name = models.CharField(max_length=2048,
+                                     null=False,
+                                     blank=False)
+
     access_token = models.CharField(max_length=2048, blank=False)
 
     refresh_token = models.CharField(max_length=2048, blank=True)
@@ -32,3 +39,6 @@ class CanvasUserTokens(models.Model):
                                        blank=False,
                                        null=False,
                                        default=None)
+
+    class Meta(object):
+        unique_together = ('user', 'instance_name')

@@ -9,7 +9,7 @@ import pytz
 from django.db import IntegrityError
 from django.utils.html import format_html
 
-from action.views_out import session_dictionary_name, run_json_action, \
+from action.views_out import action_session_dictionary, run_json_action, \
     run_email_action, run_canvas_email_action
 from logs.models import Log
 from visualizations.plotly import PlotlyHandler
@@ -185,8 +185,7 @@ def save_action_form(request, form, template_name):
     action_item = form.save(commit=False)
 
     # Process the POST request
-    if action_item.action_type == Action.TODO_LIST or \
-            action_item.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+    if action_item.action_type == Action.TODO_LIST:
         # To be implemented
         return JsonResponse(
             {'html_redirect': reverse('under_construction'),
@@ -272,7 +271,7 @@ def action_index(request):
         return redirect('workflow:index')
 
     # Reset object to carry action info throughout dialogs
-    request.session[session_dictionary_name] = {}
+    request.session[action_session_dictionary] = {}
     request.session.save()
 
     # Get the actions
@@ -483,8 +482,8 @@ def edit_action(request, pk):
         return edit_action_out(request, workflow, action)
 
     if action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
-        return redirect(reverse('under_construction'), {})
-        # return edit_action_out(request, workflow, action)
+        # return redirect(reverse('under_construction'), {})
+        return edit_action_out(request, workflow, action)
 
     if action.action_type == Action.PERSONALIZED_JSON:
         return edit_action_out(request, workflow, action)
@@ -570,17 +569,17 @@ def edit_action_out(request, workflow, action):
     # Text is good. Update the content of the action
     action.set_content(content)
 
-    # Update additional fields
-    if action.action_type == Action.PERSONALIZED_JSON:
-        action.target_url = form.cleaned_data['target_url']
-
-    if action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
-        # If there is a single CANVAS API ENTRYPOINT set it as target_url
-        if len(settings.CANVAS_API_ENTRYPOINT_LIST) == 1:
-            action.target_url = \
-                settings.CANVAS_API_ENTRYPOINT_LIST[0][1]
-        else:
-            action.target_url = form.cleaned_data['target_url']
+    # # Update additional fields
+    # if action.action_type == Action.PERSONALIZED_JSON:
+    #     action.target_url = form.cleaned_data['target_url']
+    #
+    # if action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+    #     # If there is a single CANVAS API ENTRYPOINT set it as target_url
+    #     if len(settings.CANVAS_INFO_DICT) == 1:
+    #         action.target_url = \
+    #             next(iter(settings.CANVAS_INFO_DICT.keys()))
+    #     else:
+    #         action.target_url = form.cleaned_data['target_url']
 
     action.save()
 

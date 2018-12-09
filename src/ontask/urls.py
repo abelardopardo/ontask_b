@@ -17,6 +17,7 @@ import accounts.urls
 import action.urls
 import dataops.urls
 import logs.urls
+import ontask_oauth.urls
 import profiles.urls
 import scheduler.urls
 import table.urls
@@ -67,6 +68,8 @@ urlpatterns = [
     path('logs/', include(logs.urls, namespace='logs')),
 
     path('summernote/', include('django_summernote.urls')),
+
+    path('ontask_oauth/', include(ontask_oauth.urls, namespace='ontask_oauth')),
 
     path('tobedone', views.ToBeDone.as_view(), name='tobedone'),
 

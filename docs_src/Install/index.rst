@@ -119,7 +119,6 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
    DATABASE_URL=postgres://[PSQLUSERNAME]:[PSQLPWD]@127.0.0.1:5432/ontask
    REDIS_URL=[YOUR REDIS URL]
    SECRET_KEY=
-   LTI_OAUTH_CREDENTIALS=key1=secret1,key2=secret2
 
 #. Open a command interpreter and execute the following python command::
 
@@ -169,37 +168,25 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
 
      python manage.py migrate
 
-   A few messages should appear on the screen related to the initialization
-   of the database.
+   A few messages should appear on the screen related to the initialization of the database.
 
-#. Execute the following command to upload to the platform some initial data
-   structures::
+#. Execute the following command to upload to the platform some initial data structures::
 
      python manage.py runscript -v1 --traceback initial_data
 
-   The command should run without any error or exception. If you need to
-   create additional users before deploying the platform, read the section
-   :ref:`bulk_user_creation`.
+   The command should run without any error or exception. If you need to create additional users before deploying the platform, read the section :ref:`bulk_user_creation`.
 
 #. Execute the command to create a superuser account in OnTask::
 
      python manage.py createsuperuser
 
-   Remember the data that you enter in this step so that you use it when you
-   enter OnTask with your browser.
+   Remember the data that you enter in this step so that you use it when you enter OnTask with your browser.
 
-#. Go to the ``docs`` folder to generate the documentation. Make sure this
-   folder contains the sub-folders with name ``_static`` and ``_templates``.
-   Execute the command::
+#. Go to the ``docs_src`` folder to generate the documentation. Make sure this folder contains the sub-folders with name ``_static`` and ``_templates``. Execute the command::
 
-     make html
+     make clean html copy_to_docs
 
-   The documentation is produced by the ``sphinx-doc`` application and
-   generates the directory ``_build``. The documentation for the platform is in
-   the folder ``_build/html``.
-
-#. Copy the entire ``html`` folder (inside ``_build``) over to the
-   ``src/static`` folder (in Unix ``cp -r _build/html ../src/static``).
+   The documentation is produced by the ``sphinx-doc`` application and generates the directory ``_build`` which is then created to the folder ``../docs`` folder.
 
 #. From the ``src`` folder execute the following command to collect and install
    the static content::
@@ -447,42 +434,22 @@ OnTask comes with the following authentication mechanisms: IMS-LTI,
   1) A tool consumer that can be configured to connect with OnTask. This type
      of configuration is beyond the scope of this manual.
 
-  2) A set of pairs key,value in OnTask to be given to the tool consumers so
-     that together with the URL, they are ready to send the requests. The
-     key/value pairs are specified in the file ``local.env`` in the folder
-     ``src/ontask/settings`` together with other local configuration variables.
-     For example::
+  2) A set of pairs key,value in OnTask to be given to the tool consumers so that together with the URL, they are ready to send the requests. The key/value pairs need to be included as an additional variabsle in the file ``local.env`` in the folder ``src/ontask/settings`` together with other local configuration variables. For example, ::
 
        LTI_OAUTH_CREDENTIALS=key1=secret1,key2=secret2
 
-     If you change the values of this variable, you need to restart the server
-     so that the new credentials are in effect.
+     If you change the values of this variable, you need to restart the server so that the new credentials are in effect.
 
-  This authentication has only basic functionality and it is assumed to be
-  used only for learners (not for instructors).
+  This authentication has only basic functionality and it is assumed to be used only for learners (not for instructors).
 
 - ``REMOTE_USER``. The second method uses `the variable REMOTE_USER
-  <https://docs.djangoproject.com/en/1.11/howto/auth-remote-user/#authentication-using-remote-user>`__
-  that is assumed to be defined by an external application. This method is
-  ideal for environments in which users are already authenticated and are
-  redirected to the OnTask pages (for example, using SAML). If OnTask receives
-  a request from a non-existent user through this channel, it automatically and
-  transparently creates a new user in the platform with the user name stored in
-  the ``REMOTE_USER`` variable. OnTask relies on emails as the user name
-  differentiator, so if you plan to use this authentication method make sure
-  the value of ``REMOTE_USER`` is the email.
+  <https://docs.djangoproject.com/en/2.1/howto/auth-remote-user/#authentication-using-remote-user>`__ that is assumed to be defined by an external application. This method is ideal for environments in which users are already authenticated and are redirected to the OnTask pages (for example, using SAML). If OnTask receives a request from a non-existent user through this channel, it automatically and transparently creates a new user in the platform with the user name stored in the ``REMOTE_USER`` variable. OnTask relies on emails to identify different user names, so if you plan to use this authentication method make sure the value of ``REMOTE_USER`` is the email.
 
   Additionally, this mode of authentication will be enforced in all requests reaching OnTask. However, this configuration prevents the recording of email reads. Read the section :ref:`email_config` to configure the server to allow such functionality to be properly configured.
 
-- Basic authentication. If the variable ``REMOTE_USER`` is not set in the
-  internal environment of Django where the web requests are served, OnTask
-  resorts to conventional authentication requiring email and password. These
-  credentials are stored in the internal database managed by OnTask.
+- Basic authentication. If the variable ``REMOTE_USER`` is not set in the internal environment of Django where the web requests are served, OnTask resorts to conventional authentication requiring email and password. These credentials are stored in the internal database managed by OnTask.
 
-The API can be accessed using through token authentication. The token can be
-generated manually through the user profile page. This type of authentication
-may need some special configuration in the web server (Apache or similar) so
-that the ``HTTP_AUTHORIZATION`` header is not removed.
+The API can be accessed using through token authentication. The token can be generated manually through the user profile page. This type of authentication may need some special configuration in the web server (Apache or similar) so that the ``HTTP_AUTHORIZATION`` header is not removed.
 
 LDAP Authentication
 -------------------
@@ -509,22 +476,16 @@ the `documentation of the django-auth-ldap module
 
 - Install the module ``django-auth-ldap``
 
-- Edit the configuration file ``local.env`` and define the following two
-  variables::
+- Edit the configuration file ``local.env`` and add the following two variable definitions::
 
     AUTH_LDAP_SERVER_URI=[uri pointing to your ldap server]
     AUTH_LDAP_PASSWORD=[Password to connect to the server]
 
-- Edit the  file ``src/ontask/settings/base.py`` and uncomment the lines that
-  import the ``ldap`` library (``import ldap``) and the lines that import three
-  methods from the ``django_auth_ldap.config`` module (``LDAPSearch``,
-  ``GroupOfNamesType`` and ``LDAPGroupQuery``)
+- Edit the  file ``src/ontask/settings/base.py`` and uncomment the lines that import the ``ldap`` library (``import ldap``) and the lines that import three methods from the ``django_auth_ldap.config`` module (``LDAPSearch``, ``GroupOfNamesType`` and ``LDAPGroupQuery``)
 
-- Locate the section in the file ``src/ontask/settings/base.py`` that contains
-  the variables to configure *LDAP AUTHENTICATION*.
+- Locate the section in the file ``src/ontask/settings/base.py`` that contains the variables to configure *LDAP AUTHENTICATION*.
 
-- Uncomment the ones needed for your configuration. Make sure all the
-  information is included to connect to the server, perform the binding, search, and if needed, assign fields to user and group attributes.
+- Uncomment the ones needed for your configuration. Make sure all the information is included to connect to the server, perform the binding, search, and if needed, assign fields to user and group attributes.
 
 - Locate the variable ``AUTHENTICATION_BACKENDS`` in the same file.
 
@@ -543,10 +504,30 @@ the `documentation of the django-auth-ldap module
 Email Configuration
 ===================
 
-OnTask relies on the functionality included in Django to send emails from the
-application. The configuration parameters are defined in the file ``base.py``
-and are: ``EMAIL_HOST``, ``EMAIL_PORT``, ``EMAIL_HOST_USER``,
-``EMAIL_HOST_PASSWORD``, ``EMAIL_USE_TLS`` and ``EMAIL_USE_SSL``.
+OnTask relies on the functionality included in Django to send emails from the application. The following variables must be defined in the file ``local.env``:
+
+- ``EMAIL_HOST``: Host providing the SMTP service,
+- ``EMAIL_PORT``: Port to communicate with the host,
+- ``EMAIL_HOST_USER``: User account to log into the email host,
+- ``EMAIL_HOST_PASSWORD``: Password for the account to log into the email host,
+- ``EMAIL_USE_TLS``: Boolean stating if the communication should use TLS,
+- ``EMAIL_USE_SSL``: Boolean stating if the communication should use SSL,
+- ``EMAIL_ACTION_NOTIFICATION_SENDER``: Address to use when sending notifications,
+- ``EMAIL_BURST``: Number of consecutive emails to send before pausing (to adapt potential throttling of the SMTP server)
+- ``EMAIL_BURST_PAUSE``: Number of seconds to wait between bursts.
+
+An example of configuration is::
+
+  EMAIL_HOST=smtp.yourinstitution.org
+  EMAIL_PORT=334
+  EMAIL_HOST_USER=mailmaster
+  EMAIL_HOST_PASSWORD=somepassword
+  EMAIL_USE_TLS=False
+  EMAIL_USE_SSL=False
+  EMAIL_ACTION_NOTIFICATION_SENDER=ontaskmaster@yourinstitution.org
+  EMAIL_BURST=500
+  EMAIL_BURST_PAUSE=43200
+
 
 Set theses variables in the configuration file to the appropriate values
 before starting the application. Make sure the server is running **in production mode**. The development mode is configured to **not send** emails but show their content in the console instead.
@@ -561,6 +542,37 @@ If OnTask is deployed using SAML, all URLs are likely to be configured to go thr
   </Location>
 
 If OnTask is not served from the root of your web server, make sure you include the absolute URL to ``trck``. For example, if OnTask is available through the URL ``my.server.com/somesuffix/ontask``, then the URL to use in the previous configuration is ``my.server.com/somesuffix/ontask/trck``.
+
+.. _canvas_email_config:
+
+Canvas Email Configuration
+==========================
+
+OnTask allows to send personalized emails to the user inbox in an instance of a `Canvas Learning Management System <https://www.canvaslms.com.au/>`_ using its API. Configuring this functionality requires permission from Canvas to access its API using OAuth2 authentication. Once this authorizaton is obtained, the following variables need to be defined in the file ``local.env`` configuration file:
+
+- ``CANVAS_INFO_DICT``: A dictionary with elements pairs containing the identifier for a Canvas instance that will be shown to the user and a dictionary with the following configuration parameters:
+
+  - ``domain_port``: A string containing the domaind and port (if needed) of the Canvas host.
+
+  - ``client_id``: This value is provided by the administrator of the Canvas instance once permission to use the API has been granted.
+
+  - ``client_secret``: This value is provided together with the ``client_id`` once the permission to use the API is granted. It is typically a large random sequence of characters.
+
+   - ``authorize_url``: URL template to access the first step of the authorisation. This is usually ``https://{0}/login/oauth2/auth``. The string ``{0}`` is replaced internaly with the value of ``domain_port``.
+
+   - ``access_token_url``: URL template to access the token. This is usually ``https://{0}/login/oauth2/token``. The string ``{0}`` is replaced internaly with the value of ``domain_port``.
+
+  - ``conversation_URL``: Similar to the previous two values, it is the entry point in the API to create a conversation (equivalent to send an email). This is usually ``https://{0}/api/v1/conversations``. The string ``{0}`` is replaced internaly with the value of ``domain_port``.
+
+  - ``aux_params``: A dictionary with additional parameters. The dictionary may include a value for the key ``burst`` to limit the number of consecutive API invocations (to prevent throttling) and a value for the key ``pause`` with the number of seconds to separate bursts. Here is an example of the definition of this variable in the ``local.env`` file::
+
+      CANVAS_INFO_DICT={"Server one": {"domain_port": "yourcanvasdomain.edu", "client_id": "10000000000001", "client_secret": "YZnGjbkopt9MpSq2fujUOgbeVZ8NdkdCeGF2ufhWZdBKAZvNCuuTOWXHotsWMu6X", "authorize_url": "http://{0}/login/oauth2/auth", "access_token_url": "http://{0}/login/oauth2/token", "conversation_url": "http://{0}/api/v1/conversations", "aux_params": {"burst": 10, "pause": 5}}}
+
+- ``CANVAS_TOKEN_EXPIRY_SLACK``: The number of seconds to renew a token before it expires. For example, if the variable is 300, any API call performed with a token five minutes before it expires will prompt a token refresh. Here is an example of such definition in ``local.env``::
+
+      CANVAS_TOKEN_EXPIRY_SLACK=300
+
+After defining these variables, restart the application for the values to be considered. To test the configuration open a workflow, create an action of type ``Personalized canvas email`` and email those messages.
 
 .. _plugin_install:
 

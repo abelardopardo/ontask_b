@@ -62,6 +62,16 @@ urlpatterns = [
         views_out.run_action_item_filter,
         name='item_filter'),
 
+    #
+    # URL to get/set Canvas OAuth Token
+    #
+    path('canvas_token/',
+         views_out.canvas_get_or_set_oauth_token,
+         name='canvas_get_or_set_oauth_token'),
+
+    #
+    # URLs to use when action finishes run
+    #
     path('email_done/', views_out.email_action_done, name='email_done'),
     path('zip_done/', views_out.zip_action_done, name='zip_done'),
     path('zip_export/', views_out.action_zip_export, name='zip_export'),

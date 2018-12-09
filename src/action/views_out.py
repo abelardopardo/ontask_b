@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-import zipfile
 import json
 from io import BytesIO
 
@@ -589,11 +588,13 @@ def run_canvas_email_action(request, workflow, action):
     # Get the payload from the session, and if not, use the given one
     op_payload = request.session.get(session_dictionary_name, None)
     if not op_payload:
-        op_payload = {'action_id': action.id,
-                      'prev_url': reverse('action:run',
-                                          kwargs={'pk': action.id}),
-                      'post_url': reverse('action:canvas_email_done')}
-        request.session[session_dictionary_name] = op_payload
+        op_payload = {
+            'action_id': action.id,
+            'prev_url': reverse('action:run',
+                                kwargs={'pk': action.id}),
+            'post_url': reverse('action:canvas_get_or_set_oauth_token')
+        }
+        request.session[action_session_dictionary] = op_payload
         request.session.save()
 
     # Verify that celery is running!
@@ -635,24 +636,85 @@ def run_canvas_email_action(request, workflow, action):
     # Collect the information from the form
     op_payload['subject'] = form.cleaned_data['subject']
     op_payload['item_column'] = form.cleaned_data['key_column']
-    op_payload['token'] = form.cleaned_data['token']
     op_payload['confirm_items'] = form.cleaned_data['confirm_items']
     op_payload['export_wf'] = form.cleaned_data['export_wf']
+    op_payload['target_url'] = form.cleaned_data.get('target_url')
+    if not op_payload['target_url']:
+        op_payload['target_url'] = \
+            next(iter(ontask_settings.CANVAS_INFO_DICT.keys()))
     op_payload['exclude_values'] = []
-
 
     if op_payload['confirm_items']:
         # Create a dictionary in the session to carry over all the information
         # to execute the next pages
         op_payload['button_label'] = ugettext('Send')
-        request.session[session_dictionary_name] = op_payload
+        request.session[action_session_dictionary] = op_payload
 
         return redirect('action:item_filter')
 
-    # Go straight to the final step.
-    return canvas_email_done(request, op_payload)
+    # Go straight to the token request step
+    return canvas_get_or_set_oauth_token(request, op_payload)
 
 
+@user_passes_test(is_instructor)
+def canvas_get_or_set_oauth_token(request, payload=None):
+    """
+    Function that checks if the user has a Canvas OAuth token. If there is a
+    token, the function goes straight to send the messages. If not, the OAuth
+    process starts.
+
+    :param request: Request object to process
+    :param payload: Object with all the parameters (may be in the session)
+    :return:
+    """
+
+    # Get the payload from the session
+    payload = get_action_payload(request)
+    if not payload:
+        # Something is wrong with this execution. Return to the action table.
+        messages.error(request, _('Incorrect canvas oauth request invocation.'))
+        return redirect('action:index')
+
+    # Get the information from the payload
+    oauth_instance = payload.get('target_url')
+    if not oauth_instance:
+        messages.error(request, _('Internal error. Empty OAuth Instance name'))
+        return redirect('action:index')
+
+    oauth_info = ontask_settings.CANVAS_INFO_DICT.get(oauth_instance)
+    if not oauth_info:
+        messages.error(request, _('Internal error. Invalid OAuth Dict element'))
+        return redirect('action:index')
+
+    # At this point we have the correct information about the Canvas instance
+    # to use. Check if we have the token
+    token = OnTaskOAuthUserTokens.objects.filter(
+        user=request.user,
+        instance_name=oauth_instance
+    ).first()
+
+    if not token:
+        # There is no token, authentication has to take place for the first time
+        return get_initial_token_step1(request,
+                                       oauth_info,
+                                       reverse('action:canvas_email_done'))
+
+    # Check if the token is valid
+    now = datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
+    dead = token.valid_until - \
+        timedelta(seconds=ontask_settings.CANVAS_TOKEN_EXPIRY_SLACK)
+    if now > dead:
+        try:
+            refresh_token(token, oauth_instance, oauth_info)
+        except Exception as e:
+            # Something went wrong when refreshing the token
+            messages.error(request, str(e))
+            return redirect('action:index')
+
+    return redirect('action:canvas_email_done')
+
+
+@user_passes_test(is_instructor)
 def canvas_email_done(request, payload=None):
     """
     Final step. Create the log object, queue the operation request,
@@ -678,9 +740,9 @@ def canvas_email_done(request, payload=None):
     action = Action.objects.get(pk=payload['action_id'])
     subject = payload['subject']
     email_column = payload['item_column']
-    token = payload['token']
     export_wf = payload['export_wf']
     exclude_values = payload['exclude_values']
+    target_url = payload['target_url']
 
     # Log the event
     log_item = Log.objects.register(request.user,
@@ -691,6 +753,7 @@ def canvas_email_done(request, payload=None):
                                      'email_column': email_column,
                                      'exclude_values': exclude_values,
                                      'from_email': request.user.email,
+                                     'target_url': target_url,
                                      'status': 'Preparing to execute',
                                      'subject': subject})
 
@@ -700,9 +763,8 @@ def canvas_email_done(request, payload=None):
                                      action.id,
                                      subject,
                                      email_column,
-                                     request.user.email,
-                                     token,
                                      exclude_values,
+                                     target_url,
                                      log_item.id)
 
     # Reset object to carry action info throughout dialogs

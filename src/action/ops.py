@@ -5,7 +5,6 @@ functions to process request when receiving a "serve" action, cloning
 operations when cloning conditions and actions, and sending messages.
 """
 
-
 from builtins import zip
 from builtins import str
 import datetime
@@ -30,21 +29,26 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import strip_tags
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from validate_email import validate_email
 from django.db.models import Q
 from celery.utils.log import get_task_logger
+from rest_framework import status
 
-from action.evaluate import evaluate_row_action_out, evaluate_action, \
+from action.evaluate import (
+    evaluate_row_action_out, evaluate_action,
     get_row_values
+)
 from action.forms import EnterActionIn, field_prefix
 from action.models import Action
 from action.serializers import ActionSelfcontainedSerializer
 from dataops import pandas_db, ops
 from logs.models import Log
+from ontask_oauth.models import OnTaskOAuthUserTokens
+from ontask_oauth.views import refresh_token
 from workflow.models import Column
 from workflow.ops import get_workflow
 from . import settings
@@ -653,9 +657,8 @@ def send_canvas_messages(user,
                          action,
                          subject,
                          canvas_id_column,
-                         from_email,
-                         token,
                          exclude_values,
+                         target_url,
                          log_item):
     """
     Performs the submission of the emails for the given action and with the
@@ -665,9 +668,8 @@ def send_canvas_messages(user,
     :param action: Action from where to take the messages
     :param subject: Email subject
     :param canvas_id_column: Name of the column from which to extract canvas ID
-    :param from_email: Email of the sender
-    :param token: String to include as authorisation token
     :param exclude_values: List of values to exclude from the mailing
+    :param target_url: Server name to use to send the emails
     :param log_item: Log object to store results
     :return: Send the emails
     """
@@ -691,16 +693,33 @@ def send_canvas_messages(user,
         cfilter.n_rows_selected = len(result)
         cfilter.save()
 
+    # Get the oauth info
+    oauth_info = ontask_settings.CANVAS_INFO_DICT.get(target_url)
+    if not oauth_info:
+        return _('Unable to find OAuth Information Record')
+
+    # Get the token
+    user_token = OnTaskOAuthUserTokens.objects.filter(
+        user=user,
+        instance_name=target_url
+    ).first()
+    if not user_token:
+        # There is no token, execution cannot proceed
+        return _('Incorrect execution due to absence of token')
+
     # Create the headers to use for all requests
     headers = {
         'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'Authorization': 'Bearer {0}'.format(token),
+        'Authorization': 'Bearer {0}'.format(user_token.access_token),
     }
 
     # Send the objects to the given URL
     status_vals = []
     idx = 1
-    burst = ontask_settings.CANVAS_API_CALL_BURST
+    burst = oauth_info['aux_params'].get('burst')
+    burst_pause = oauth_info['aux_params'].get('pause', 0)
+    domain = oauth_info['domain_port']
+    conversation_url = oauth_info['conversation_url'].format(domain)
     for msg_body, msg_subject, msg_to in result:
         #
         # JSON object to send. Taken from method.conversations.create in
@@ -722,29 +741,72 @@ def send_canvas_messages(user,
             # 'context_code': '',
         }
 
-        if burst != 0 and idx % burst == 0:
+        if burst and idx % burst == 0:
             # Burst exists and the limit has been reached
             logger.info('Burst ({0}) reached. Waiting for {1} secs'.format(
-                burst, ontask_settings.CANVAS_API_CALL_PAUSE
+                burst, burst_pause
             ))
-            sleep(ontask_settings.CANVAS_API_CALL_PAUSE)
+            sleep(burst_pause)
         # Index to detect bursts
         idx += 1
 
-        # Send the payload or print log (if debug)
-        if ontask_settings.TEMPLATES[0]['OPTIONS']['debug']:
-            logger.info('SEND JSON({0}): {1}'.format(
-                action.target_url,
-                json.dumps(canvas_email_payload)
-            ))
-            status = 200
-        else:
-            response = requests.post(url=action.target_url,
+        #
+        # Send the email
+        #
+        result_msg = ugettext('Message successfuly sent')
+        if ontask_settings.EXECUTE_ACTION_JSON_TRANSFER:
+            # Send the email through the API call
+            # First attempt
+            response = requests.post(url=conversation_url,
                                      data=canvas_email_payload,
                                      headers=headers)
-            status = response.status_code
+            response_status = response.status_code
+
+            if response_status == status.HTTP_401_UNAUTHORIZED and \
+                    response.headers.get('WWW-Authenticate'):
+                # Request rejected due to token expiration. Refresh the
+                # token
+                user_token = None
+                result_msg = ugettext('OAuth token refreshed')
+                try:
+                    user_token = refresh_token(user_token,
+                                               target_url,
+                                               oauth_info)
+                except Exception as e:
+                    result_msg = str(e)
+
+                if user_token:
+                    # Update the header with the new token
+                    headers = {
+                        'content-type':
+                            'application/x-www-form-urlencoded; charset=UTF-8',
+                        'Authorization': 'Bearer {0}'.format(
+                            user_token.access_token
+                        ),
+                    }
+
+                    # Second attempt at executing the API call
+                    response = requests.post(url=conversation_url,
+                                             data=canvas_email_payload,
+                                             headers=headers)
+                    response_status = response.status_code
+            elif response_status != status.HTTP_201_CREATED:
+                result_msg = \
+                    ugettext('Unable to deliver message (code {0})').format(
+                        response_status
+                    )
+        else:
+            # Print the JSON that would be sent through the logger
+            logger.info('SEND JSON({0}): {1}'.format(
+                target_url,
+                json.dumps(canvas_email_payload)
+            ))
+            response_status = 200
+
+        # Append the response status
         status_vals.append(
-            (status,
+            (response_status,
+             result_msg,
              datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)),
              canvas_email_payload)
         )
@@ -756,9 +818,10 @@ def send_canvas_messages(user,
     }
 
     # Log all OBJ sent
-    for status, dt, json_obj in status_vals:
+    for st_val, result_msg, dt, json_obj in status_vals:
         context['object'] = json.dumps(json_obj)
-        context['status'] = status
+        context['status'] = st_val
+        context['result'] = result_msg
         context['email_sent_datetime'] = str(dt)
         Log.objects.register(user,
                              Log.ACTION_CANVAS_EMAIL_SENT,
@@ -828,17 +891,18 @@ def send_json(user, action, token, key_column, exclude_values, log_item):
     # Send the objects to the given URL
     status_vals = []
     for json_obj in json_objects:
-        if ontask_settings.TEMPLATES[0]['OPTIONS']['debug']:
+        if ontask_settings.EXECUTE_ACTION_JSON_TRANSFER:
+            response = requests.post(url=action.target_url,
+                                     data=json_obj,
+                                     headers=headers)
+            status = response.status_code
+        else:
             logger.info('SEND JSON({0}): {1}'.format(
                 action.target_url,
                 json.dumps(json_obj)
             ))
             status = 200
-        else:
-            response = requests.post(url=action.target_url,
-                                     data=json_obj,
-                                     headers=headers)
-            status = response.status_code
+
         status_vals.append(
             (status,
              datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)),

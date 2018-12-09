@@ -2,6 +2,9 @@
 
 
 from future import standard_library
+
+from action.models import Action
+
 standard_library.install_aliases()
 import io
 import os
@@ -616,6 +619,59 @@ class ScreenTestFixture(ScreenTests):
         self.cancel_modal()
 
         #
+        # Create a canvas email action
+        #
+        self.go_to_actions()
+        # click in the create action button and create an action
+        self.selenium.find_element_by_class_name('js-create-action').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'id_name')))
+
+        # Set the name, description and type of the action
+        self.selenium.find_element_by_id('id_name').send_keys(
+            'Send Canvas reminder'
+        )
+        desc = self.selenium.find_element_by_id('id_description_text')
+        # Select the action type
+        select = Select(self.selenium.find_element_by_id('id_action_type'))
+        select.select_by_value(Action.PERSONALIZED_CANVAS_EMAIL)
+        desc.send_keys('Week 3 reminder to review material')
+
+        self.modal_ss('action_personalized_canvas_email_create.png')
+
+        desc.send_keys(Keys.RETURN)
+        # Wait for the spinner to disappear, and then for the button to be
+        # clickable
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//h4[@id='filter-set']/div/button")
+            )
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
+
+        self.create_filter('No activity in Week 2',
+                           '',
+                           [('Days online 2', 'equal', '0')])
+        self.selenium.find_element_by_id('id_content').send_keys(
+            """Dear {{ GivenName }}
+
+We recommend that you review the discussions in the online forum about the topics we are going to cover this week
+
+Regards
+
+John Doe
+Course Coordinator""")
+        self.body_ss('action_personalized_canvas_email_edit.png')
+
+        # Save action and back to action index
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Save']"
+        ).click()
+        self.wait_for_datatable('action-table_previous')
+
+        #
         # Back to the table of actions
         #
         self.go_to_actions()
@@ -634,6 +690,12 @@ class ScreenTestFixture(ScreenTests):
 
         # Picture of the body
         self.body_ss('action_email_request_data.png')
+
+        self.go_to_actions()
+        self.open_action_canvas_email('Send Canvas reminder')
+
+        # Picture of the body
+        self.body_ss('action_personalized_canvas_email_run.png')
 
         #
         # Create ZIP
