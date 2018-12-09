@@ -97,7 +97,7 @@ pytz==2018.7
 PyYAML==3.13
 pyzmq==17.1.2
 qtconsole==4.4.3
-redis==3.0.1
+redis==2.10.6
 requests==2.20.1
 Send2Trash==1.5.0
 simplegeneric==0.8.1
