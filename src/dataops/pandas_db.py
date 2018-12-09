@@ -409,7 +409,6 @@ def df_column_types_rename(table_name):
     :param table_name: Primary key of the workflow containing this data frame (table) 
     :return: List of data type strings translated to the proper values
     """
-    column_types = get_table_column_types(table_name)
 
     # result = [table_name[x].dtype.name for x in list(table_name.columns)]
     # for tname, ntname in pandas_datatype_names.items():
@@ -417,6 +416,23 @@ def df_column_types_rename(table_name):
 
     return [sql_datatype_names[x] for __, x in
             get_table_column_types(table_name)]
+
+
+def db_column_rename(pk, old_name, new_name):
+    """
+
+    :param pk: Primary key of the workflow to use
+    :param old_name: Old name of the column
+    :param new_name: New name of the column
+    :return: Nothing. Change reflected in the database table
+    """
+    cursor = connection.cursor()
+    query = """ALTER TABLE "{0}" RENAME "{1}" TO "{2}" """.format(
+        create_table_name(pk),
+        old_name,
+        new_name
+    )
+    cursor.execute(query)
 
 
 def df_drop_column(pk, column_name):

@@ -522,17 +522,9 @@ def column_edit(request, pk):
         # no commit as we need to propagate the info to the df
         column = form.save(commit=False)
 
-        # Get the data frame from the form (should be
-        # loaded)
-        df = form.data_frame
-
         # If there is a new name, rename the data frame columns
         if 'name' in form.changed_data:
-            # Rename the column in the data frame
-            df = ops.rename_df_column(df,
-                                      workflow,
-                                      old_name,
-                                      column.name)
+            pandas_db.db_column_rename(workflow.pk, old_name, column.name)
 
         if 'position' in form.changed_data:
             # Update the positions of the appropriate columns
@@ -546,9 +538,6 @@ def column_edit(request, pk):
 
         # Save the workflow
         workflow.save()
-
-        # And save the DF in the DB
-        ops.store_dataframe_in_db(df, workflow.id)
 
     data['form_is_valid'] = True
     data['html_redirect'] = ''
