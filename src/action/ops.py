@@ -411,7 +411,7 @@ def send_messages(user,
                   exclude_values,
                   log_item):
     """
-    Performs the submission of the emails for the given action and with the
+    Sends the emails for the given action and with the
     given subject. The subject will be evaluated also with respect to the
     rows, attributes, and conditions.
 

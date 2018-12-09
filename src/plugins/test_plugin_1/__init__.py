@@ -5,10 +5,10 @@ import pandas as pd
 
 # The field class_name contains the name of the class to load to execute the
 # plugin.
-class_name = 'OntaskTestPlugin'
+class_name = 'OnTaskTestPlugin'
 
 
-class OntaskTestPlugin(object):
+class OnTaskTestPlugin(object):
     """
     Example of a class that implements the OnTask plugin interface. The
     objects of this class have to provide the following elements:

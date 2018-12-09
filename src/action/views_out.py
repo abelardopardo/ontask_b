@@ -2,11 +2,13 @@
 
 
 import json
+import zipfile
+from datetime import datetime, timedelta
 from io import BytesIO
 
-from datetime import datetime
-
+import pytz
 from celery.task.control import inspect
+from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
@@ -20,20 +22,26 @@ from django.views.decorators.csrf import csrf_exempt
 from action.evaluate import (
     get_row_values,
     evaluate_row_action_out,
-    evaluate_row_action_in, evaluate_action)
+    evaluate_row_action_in, evaluate_action
+)
 from action.models import Action
 from action.ops import get_workflow_action
 from dataops.pandas_db import get_table_cursor
 from logs.models import Log
+from ontask import action_session_dictionary
+from ontask import get_action_payload
 from ontask.permissions import is_instructor
-from ontask.tasks import send_email_messages, send_json_objects, \
+from ontask.tasks import (
+    send_email_messages, send_json_objects,
     send_canvas_email_messages
+)
+from ontask_oauth.models import OnTaskOAuthUserTokens
+from ontask_oauth.views import get_initial_token_step1, refresh_token
 from workflow.ops import get_workflow
-from .forms import EmailActionForm, JSONActionForm, EmailExcludeForm, \
+from .forms import (
+    EmailActionForm, JSONActionForm, EmailExcludeForm,
     ZipActionForm, CanvasEmailActionForm
-
-# Dictionary to store in the session the data between forms.
-session_dictionary_name = 'action_run_payload'
+)
 
 html_body = """<!DOCTYPE html>
 <html>
@@ -58,13 +66,13 @@ def run_email_action(request, workflow, action):
     """
 
     # Get the payload from the session, and if not, use the given one
-    op_payload = request.session.get(session_dictionary_name, None)
+    op_payload = get_action_payload(request)
     if not op_payload:
         op_payload = {'action_id': action.id,
                       'prev_url': reverse('action:run',
                                           kwargs={'pk': action.id}),
                       'post_url': reverse('action:email_done')}
-        request.session[session_dictionary_name] = op_payload
+        request.session[action_session_dictionary] = op_payload
         request.session.save()
 
     # Verify that celery is running!
@@ -123,7 +131,7 @@ def run_email_action(request, workflow, action):
         # Create a dictionary in the session to carry over all the information
         # to execute the next pages
         op_payload['button_label'] = ugettext('Send')
-        request.session[session_dictionary_name] = op_payload
+        request.session[action_session_dictionary] = op_payload
 
         return redirect('action:item_filter')
 
@@ -145,7 +153,7 @@ def email_action_done(request, payload=None):
 
     # Get the payload from the session if not given
     if payload is None:
-        payload = request.session.get(session_dictionary_name)
+        payload = get_action_payload(request)
 
         # If there is no payload, something went wrong.
         if payload is None:
@@ -195,7 +203,7 @@ def email_action_done(request, payload=None):
                               log_item.id)
 
     # Reset object to carry action info throughout dialogs
-    request.session[session_dictionary_name] = {}
+    request.session[action_session_dictionary] = {}
     request.session.save()
 
     # Successful processing.
@@ -228,13 +236,13 @@ def zip_action(request, pk):
         return redirect(reverse('action:index'))
 
     # Get the payload from the session, and if not, use the given one
-    op_payload = request.session.get(session_dictionary_name, None)
+    op_payload = get_action_payload(request)
     if not op_payload:
         op_payload = {'action_id': action.id,
                       'prev_url': reverse('action:zip_action',
                                           kwargs={'pk': action.id}),
                       'post_url': reverse('action:zip_done')}
-        request.session[session_dictionary_name] = op_payload
+        request.session[action_session_dictionary] = op_payload
         request.session.save()
 
     # Create the form to ask for the email subject and other information
@@ -277,7 +285,7 @@ def zip_action(request, pk):
         # Create a dictionary in the session to carry over all the information
         # to execute the next pages
         op_payload['button_label'] = ugettext('Create ZIP')
-        request.session[session_dictionary_name] = op_payload
+        request.session[action_session_dictionary] = op_payload
 
         return redirect('action:item_filter')
 
@@ -299,7 +307,7 @@ def zip_action_done(request, payload=None):
 
     # Get the payload from the session if not given
     if payload is None:
-        payload = request.session.get(session_dictionary_name)
+        payload = get_action_payload(request)
 
         # If there is no payload, something went wrong.
         if payload is None:
@@ -308,7 +316,7 @@ def zip_action_done(request, payload=None):
             return redirect('action:index')
     else:
         # Store the payload in the session for the next step
-        request.session[session_dictionary_name] = payload
+        request.session[action_session_dictionary] = payload
 
     # Get the information from the payload
     action = Action.objects.get(pk=payload['action_id'])
@@ -350,7 +358,7 @@ def action_zip_export(request):
     """
 
     # Get the payload from the session if not given
-    payload = request.session.get(session_dictionary_name, None)
+    payload = get_action_payload(request)
 
     # If there is no payload, something went wrong.
     if not payload:
@@ -444,7 +452,7 @@ def action_zip_export(request):
     response['Content-Length'] = str(len(compressed_content))
 
     # Reset object to carry action info throughout dialogs
-    request.session[session_dictionary_name] = {}
+    request.session[action_session_dictionary] = {}
     request.session.save()
 
     return response
@@ -460,13 +468,13 @@ def run_json_action(request, workflow, action):
     """
 
     # Get the payload from the session, and if not, use the given one
-    op_payload = request.session.get(session_dictionary_name, None)
+    op_payload = get_action_payload(request)
     if not op_payload:
         op_payload = {'action_id': action.id,
                       'prev_url': reverse('action:run',
                                           kwargs={'pk': action.id}),
                       'post_url': reverse('action:json_done')}
-        request.session[session_dictionary_name] = op_payload
+        request.session[action_session_dictionary] = op_payload
         request.session.save()
 
     # Verify that celery is running!
@@ -514,7 +522,7 @@ def run_json_action(request, workflow, action):
         # Create a dictionary in the session to carry over all the information
         # to execute the next pages
         op_payload['button_label'] = ugettext('Send')
-        request.session[session_dictionary_name] = op_payload
+        request.session[action_session_dictionary] = op_payload
 
         return redirect('action:item_filter')
 
@@ -522,6 +530,7 @@ def run_json_action(request, workflow, action):
     return json_done(request, op_payload)
 
 
+@user_passes_test(is_instructor)
 def json_done(request, payload=None):
     """
     Final step. Create the log object, queue the operation request,
@@ -535,7 +544,7 @@ def json_done(request, payload=None):
 
     # Get the payload from the session if not given
     if payload is None:
-        payload = request.session.get(session_dictionary_name)
+        payload = get_action_payload(request)
 
         # If there is no payload, something went wrong.
         if payload is None:
@@ -570,7 +579,7 @@ def json_done(request, payload=None):
                             log_item.id)
 
     # Reset object to carry action info throughout dialogs
-    request.session[session_dictionary_name] = {}
+    request.session[action_session_dictionary] = {}
     request.session.save()
 
     # Successful processing.
@@ -586,7 +595,7 @@ def run_canvas_email_action(request, workflow, action):
     :return: HTTP response
     """
     # Get the payload from the session, and if not, use the given one
-    op_payload = request.session.get(session_dictionary_name, None)
+    op_payload = get_action_payload(request)
     if not op_payload:
         op_payload = {
             'action_id': action.id,
@@ -727,7 +736,7 @@ def canvas_email_done(request, payload=None):
     """
     # Get the payload from the session if not given
     if payload is None:
-        payload = request.session.get(session_dictionary_name)
+        payload = get_action_payload(request)
 
         # If there is no payload, something went wrong.
         if payload is None:
@@ -768,7 +777,7 @@ def canvas_email_done(request, payload=None):
                                      log_item.id)
 
     # Reset object to carry action info throughout dialogs
-    request.session[session_dictionary_name] = {}
+    request.session[action_session_dictionary] = {}
     request.session.save()
 
     # Successful processing.
@@ -900,7 +909,7 @@ def run_action_item_filter(request):
     """
 
     # Get the payload from the session, and if not, use the given one
-    payload = request.session.get(session_dictionary_name, None)
+    payload = get_action_payload(request)
     if not payload:
         # Something is wrong with this execution. Return to the action table.
         messages.error(request, _('Incorrect item filter invocation.'))

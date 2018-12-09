@@ -7,7 +7,7 @@ import itertools
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
-from ontask import OntaskException, fix_pctg_in_name
+from ontask import OnTaskException, fix_pctg_in_name
 
 
 def has_variable(formula, variable):
@@ -121,7 +121,7 @@ def evaluate_node(node, given_variables):
     if given_variables is not None:
         # If calculating a boolean result and no value in the dictionary, finish
         if varname not in given_variables:
-            raise OntaskException(
+            raise OnTaskException(
                 'No value found for variable {0}'.format(varname),
                 varname
             )

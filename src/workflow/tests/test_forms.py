@@ -7,7 +7,7 @@ import test
 from workflow.forms import WorkflowForm
 
 
-class WorkflowFormTest(test.OntaskTestCase):
+class WorkflowFormTest(test.OnTaskTestCase):
     # Valid data
     def test_workflow_valid(self):
         form = WorkflowForm(data={'name': 'workflow1',

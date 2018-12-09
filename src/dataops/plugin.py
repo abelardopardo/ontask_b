@@ -6,10 +6,10 @@ from abc import ABCMeta
 from django.utils.translation import ugettext_lazy as _
 from future.utils import with_metaclass
 
-class_name = 'OntaskPlugin'
+class_name = 'OnTaskPlugin'
 
 
-class OntaskPluginAbstract(with_metaclass(ABCMeta, object)):
+class OnTaskPluginAbstract(with_metaclass(ABCMeta, object)):
     """
     Abstract class to instantiate to create an OnTask plugin.
     """

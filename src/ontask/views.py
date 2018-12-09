@@ -69,6 +69,12 @@ def trck(request):
 @login_required
 @csrf_exempt
 def keep_alive(request):
+    """
+    Function invoked by the session Timeout Javascript fragment when the
+    session is about to expire and the user clicks on "continue connected"
+    :param request:
+    :return:
+    """
     return JsonResponse({})
 
 

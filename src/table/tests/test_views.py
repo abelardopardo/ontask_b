@@ -14,7 +14,7 @@ from dataops import pandas_db
 from workflow.models import Workflow
 
 
-class TableDerivedColumns(test.OntaskLiveTestCase):
+class TableDerivedColumns(test.OnTaskLiveTestCase):
     fixtures = ['derived_column']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -331,7 +331,7 @@ class TableDerivedColumns(test.OntaskLiveTestCase):
         self.logout()
 
 
-class TableViews(test.OntaskLiveTestCase):
+class TableViews(test.OnTaskLiveTestCase):
     fixtures = ['derived_column']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -529,7 +529,7 @@ class TableViews(test.OntaskLiveTestCase):
         self.logout()
 
 
-class TableInsertRow(test.OntaskLiveTestCase):
+class TableInsertRow(test.OnTaskLiveTestCase):
     fixtures = ['derived_column']
     filename = os.path.join(
         settings.BASE_DIR(),

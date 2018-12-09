@@ -12,7 +12,7 @@ DEBUG = False
 ALLOWED_HOSTS = [os.environ['DOMAIN_NAME']]
 
 # Additional middleware introduced by debug toolbar
-MIDDLEWARE_CLASSES += ('django.middleware.security.SecurityMiddleware',)
+MIDDLEWARE_CLASSES += ['django.middleware.security.SecurityMiddleware']
 
 #
 # Security features

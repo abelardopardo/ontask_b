@@ -10,7 +10,7 @@ import test
 from dataops import pandas_db
 
 
-class EmailActionTracking(test.OntaskTestCase):
+class EmailActionTracking(test.OnTaskTestCase):
     fixtures = ['simple_email_action']
     filename = os.path.join(
         settings.BASE_DIR(),

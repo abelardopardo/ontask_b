@@ -6,8 +6,6 @@ import sys
 
 from .base import *  # NOQA
 
-TEMPLATES[0]['OPTIONS'].update({'debug': True})
-
 ALLOWED_HOSTS = ['*']
 
 # Define STATIC_ROOT for the collectstatic command
@@ -19,7 +17,7 @@ if "celery" in sys.argv[0]:
     DEBUG = False
 
 # Django Debug Toolbar
-INSTALLED_APPS += ('debug_toolbar',)
+INSTALLED_APPS += ['debug_toolbar']
 
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 if not TESTING:
@@ -38,7 +36,7 @@ if DEBUG:
     print('ONTASK_HELP_URL: ' + ONTASK_HELP_URL)
 
 # Additional middleware introduced by debug toolbar
-MIDDLEWARE += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
 # Show emails to console in DEBUG mode
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

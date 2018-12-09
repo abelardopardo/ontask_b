@@ -18,7 +18,7 @@ from workflow.models import Workflow
 from workflow.ops import do_export_workflow
 
 
-class WorkflowImportExport(test.OntaskTestCase):
+class WorkflowImportExport(test.OnTaskTestCase):
     fixtures = ['simple_workflow_export']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -59,7 +59,7 @@ class WorkflowImportExport(test.OntaskTestCase):
         self.assertEqual(workflow.query_builder_ops, data['query_builder_ops'])
 
 
-class WorkflowImport(test.OntaskLiveTestCase):
+class WorkflowImport(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow_export']
     filename = os.path.join(
         settings.BASE_DIR(),

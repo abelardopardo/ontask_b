@@ -106,20 +106,20 @@ class ElementHasFullOpacity(object):
             return False
 
 
-class OntaskTestCase(TransactionTestCase):
+class OnTaskTestCase(TransactionTestCase):
     @classmethod
     def tearDownClass(cls):
         # Close the db_engine
         pandas_db.destroy_db_engine(pandas_db.engine)
-        super(OntaskTestCase, cls).tearDownClass()
+        super(OnTaskTestCase, cls).tearDownClass()
 
 
-class OntaskApiTestCase(APITransactionTestCase):
+class OnTaskApiTestCase(APITransactionTestCase):
     @classmethod
     def tearDownClass(cls):
         # Close the db_engine
         pandas_db.destroy_db_engine(pandas_db.engine)
-        super(OntaskApiTestCase, cls).tearDownClass()
+        super(OnTaskApiTestCase, cls).tearDownClass()
 
     def compare_wflows(self, jwflow, workflow):
         # Name and description match the one in the db
@@ -164,14 +164,14 @@ class OntaskApiTestCase(APITransactionTestCase):
             )
 
 
-class OntaskLiveTestCase(LiveServerTestCase):
+class OnTaskLiveTestCase(LiveServerTestCase):
 
     viewport_height = 2880
     viewport_width = 1800
 
     @classmethod
     def setUpClass(cls):
-        super(OntaskLiveTestCase, cls).setUpClass()
+        super(OnTaskLiveTestCase, cls).setUpClass()
         fp = webdriver.FirefoxProfile()
         fp.set_preference("dom.file.createInChild", True)
         cls.selenium = webdriver.Firefox(firefox_profile=fp)
@@ -184,7 +184,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
     def tearDownClass(cls):
         cls.selenium.quit()
         pandas_db.destroy_db_engine(pandas_db.engine)
-        super(OntaskLiveTestCase, cls).tearDownClass()
+        super(OnTaskLiveTestCase, cls).tearDownClass()
 
     def open(self, url):
         self.selenium.get("%s%s" % (self.live_server_url, url))
@@ -1107,7 +1107,7 @@ class OntaskLiveTestCase(LiveServerTestCase):
         self.wait_close_modal_refresh_table('html-editor')
 
 
-class ScreenTests(OntaskLiveTestCase):
+class ScreenTests(OnTaskLiveTestCase):
     weight = 1024
     height = 1800
     prefix = ''
@@ -1135,11 +1135,10 @@ class ScreenTests(OntaskLiveTestCase):
         coordinates = element.location
         dimensions = element.size
 
-        img = Image.open(io.StringIO(
+        img = Image.open(io.BytesIO(
             self.selenium.find_element_by_xpath(
                 xpath
             ).screenshot_as_png)
-
         )
 
         # Cap height

@@ -5,7 +5,7 @@ import pandas as pd
 
 # The field class_name contains the name of the class to load to execute the
 # plugin.
-class_name = 'OntaskTestPlugin'
+class_name = 'OnTaskTestPlugin'
 
 
 class OntaskTestPlugin(object):

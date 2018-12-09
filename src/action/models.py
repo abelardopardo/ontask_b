@@ -17,7 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 from dataops import formula_evaluation, pandas_db
 from dataops.formula_evaluation import get_variables, evaluate_top_node
 from logs.models import Log
-from ontask import OntaskException
+from ontask import OnTaskException
 from workflow.models import Workflow, Column
 
 # Regular expressions detecting the use of a variable, or the
@@ -34,16 +34,16 @@ class Action(models.Model):
     """
 
     PERSONALIZED_TEXT = 'personalized_text'
-    PERSONALIZED_JSON = 'personalized_json'
     PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
+    PERSONALIZED_JSON = 'personalized_json'
     SURVEY = 'survey'
     TODO_LIST = 'todo_list'
 
     ACTION_TYPES = [
         (PERSONALIZED_TEXT, _('Personalized text')),
-        (PERSONALIZED_JSON, _('Personalized JSON')),
         (PERSONALIZED_CANVAS_EMAIL, _('Personalized Canvas Email')),
         (SURVEY, _('Survey')),
+        (PERSONALIZED_JSON, _('Personalized JSON')),
         (TODO_LIST, _('TODO List'))
     ]
 
@@ -342,7 +342,7 @@ class Action(models.Model):
                     condition['formula'],
                     row_values
                 )
-            except OntaskException:
+            except OnTaskException:
                 # Something went wrong evaluating a condition. Stop.
                 return None
 

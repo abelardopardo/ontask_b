@@ -15,7 +15,7 @@ from dataops.formula_evaluation import has_variable
 from workflow.models import Workflow
 
 
-class ActionActionEdit(test.OntaskLiveTestCase):
+class ActionActionEdit(test.OnTaskLiveTestCase):
     action_name = 'simple action'
     fixtures = ['simple_action']
     filename = os.path.join(
@@ -465,7 +465,7 @@ class ActionActionEdit(test.OntaskLiveTestCase):
         self.logout()
 
 
-class ActionActionInCreate(test.OntaskLiveTestCase):
+class ActionActionInCreate(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -560,7 +560,7 @@ class ActionActionInCreate(test.OntaskLiveTestCase):
         self.logout()
 
 
-class ActionActionRenameEffect(test.OntaskLiveTestCase):
+class ActionActionRenameEffect(test.OnTaskLiveTestCase):
     """This test case is to check the effect of renaming columns, attributes
        and conditions. These name changes need to propagate throughout various
        elements attached to the workflow
@@ -738,7 +738,7 @@ class ActionActionRenameEffect(test.OntaskLiveTestCase):
         self.logout()
 
 
-class ActionActionZip(test.OntaskLiveTestCase):
+class ActionActionZip(test.OnTaskLiveTestCase):
     """
     This test case is to check if the ZIP opeation is correct
     """

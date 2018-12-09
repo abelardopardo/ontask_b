@@ -16,7 +16,7 @@ from dataops.pandas_db import get_filter_query, load_from_db
 from workflow.models import Workflow
 
 
-class DataopsMatrixManipulation(test.OntaskTestCase):
+class DataopsMatrixManipulation(test.OnTaskTestCase):
     fixtures = ['test_merge']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -130,7 +130,7 @@ class DataopsMatrixManipulation(test.OntaskTestCase):
         self.assertEquals(result, None)
 
 
-class FormulaEvaluation(test.OntaskTestCase):
+class FormulaEvaluation(test.OnTaskTestCase):
     skel = {
         'condition': 'AND',
         'not': False,

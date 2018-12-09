@@ -44,7 +44,7 @@ if exists(env_file):
     environ.Env.read_env(str(env_file))
 
 # Read various variables from the environment
-BASE_URL = env('BASE_URL')
+BASE_URL = env('BASE_URL', default='')
 DOMAIN_NAME = env('DOMAIN_NAME')
 DEBUG = env('DEBUG')
 SHOW_HOME_FOOTER_IMAGE = env('SHOW_HOME_FOOTER_IMAGE')
@@ -95,7 +95,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 # Application definition
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django_extensions',
     'django.contrib.auth',
     'django.contrib.admin',
@@ -134,7 +134,7 @@ INSTALLED_APPS = (
     'ontask_oauth.apps.OnTaskOauthConfig',
 ]
 
-MIDDLEWARE = (
+MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -145,7 +145,7 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
-)
+]
 
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',
@@ -155,7 +155,7 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.BCryptPasswordHasher',
 ]
 
-LOCALE_PATHS = (join(PROJECT_PATH, 'locale'),)
+LOCALE_PATHS = [join(PROJECT_PATH, 'locale')]
 
 AUTHENTICATION_BACKENDS = [
     'django_auth_lti.backends.LTIAuthBackend',
@@ -356,8 +356,8 @@ The OnTask Support Team
 </body></html>"""
 
 EMAIL_ACTION_NOTIFICATION_SUBJECT = _("OnTask: Action executed")
-EMAIL_ACTION_NOTIFICATION_SENDER = env.str('EMAIL_ACTION_NOTIFICATION_SENDER',
-                                           '')
+EMAIL_ACTION_NOTIFICATION_SENDER = \
+    env.str('EMAIL_ACTION_NOTIFICATION_SENDER', default='')
 EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII='
 
 ################################################################################

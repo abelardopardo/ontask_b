@@ -16,7 +16,7 @@ from workflow.models import Workflow
 from action.models import Action
 
 
-class WorkflowInitial(test.OntaskLiveTestCase):
+class WorkflowInitial(test.OnTaskLiveTestCase):
     def setUp(self):
         super(WorkflowInitial, self).setUp()
         test.create_users()
@@ -284,7 +284,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         self.logout()
 
 
-class WorkflowModify(test.OntaskLiveTestCase):
+class WorkflowModify(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -451,7 +451,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
         self.logout()
 
 
-class WorkflowAttribute(test.OntaskLiveTestCase):
+class WorkflowAttribute(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -565,7 +565,7 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         self.logout()
 
 
-class WorkflowShare(test.OntaskLiveTestCase):
+class WorkflowShare(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),

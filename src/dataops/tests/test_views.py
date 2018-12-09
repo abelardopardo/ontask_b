@@ -15,7 +15,7 @@ from dataops import pandas_db
 from workflow.models import Workflow
 
 
-class DataopsSymbols(test.OntaskLiveTestCase):
+class DataopsSymbols(test.OnTaskLiveTestCase):
     fixtures = ['wflow_symbols']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -369,7 +369,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.logout()
 
 
-class DataopsExcelUpload(test.OntaskLiveTestCase):
+class DataopsExcelUpload(test.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
 
     def tearDown(self):
@@ -418,7 +418,7 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
         self.logout()
 
 
-class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
+class DataopsExcelUploadSheet(test.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
 
     def tearDown(self):
@@ -464,7 +464,7 @@ class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
         self.logout()
 
 
-class DataopsNaNProcessing(test.OntaskLiveTestCase):
+class DataopsNaNProcessing(test.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
     action_text = "Bool1 = {{ bool1 }}\\n" + \
                   "Bool2 = {{ bool2 }}\\n" + \
@@ -579,7 +579,7 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
         self.logout()
 
 
-class DataopsPluginExecution(test.OntaskLiveTestCase):
+class DataopsPluginExecution(test.OnTaskLiveTestCase):
     fixtures = ['plugin_execution']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -749,7 +749,7 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
         # End of session
         self.logout()
 
-class DataopsMerge(test.OntaskLiveTestCase):
+class DataopsMerge(test.OnTaskLiveTestCase):
     wf_name = 'Testing Merge'
     fixtures = ['test_merge']
     filename = os.path.join(

@@ -8,11 +8,14 @@ import json
 
 from ontask.celery import app as celery_app
 
-__all__ = ['celery_app', 'OntaskException']
+__all__ = ['celery_app', 'OnTaskException']
 
 from django.utils.translation import ugettext_lazy as _
 
 __version__ = 'B.4.0.0'
+
+# Dictionary to store in the session the data between forms.
+action_session_dictionary = 'action_run_payload'
 
 
 def is_legal_name(val):
@@ -65,7 +68,17 @@ def is_json(text):
     return True
 
 
-class OntaskException(Exception):
+def get_action_payload(request):
+    """
+    Gets the payload from the current session
+    :param request: Request object
+    :return: request.session[session_dictionary_name] or None
+    """
+
+    return request.session.get(action_session_dictionary, None)
+
+
+class OnTaskException(Exception):
     """
     Generic class in OnTask for our own exception
     """

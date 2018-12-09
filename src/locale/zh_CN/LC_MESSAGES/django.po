@@ -3834,8 +3834,8 @@ msgid "Remain Connected"
 msgstr "保持连接"
 
 #: templates/critical_error.html:4
-msgid "Ontask Error"
-msgstr "Ontask错误"
+msgid "OnTask Error"
+msgstr "OnTask错误"
 
 #: templates/critical_error.html:8
 msgid "Internal Error"
