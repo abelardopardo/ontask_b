@@ -134,7 +134,9 @@ var saveForm = function () {
     return false;
 };
 var setDateTimePickers = function() {
-  $('.ontask-datetimepicker').datetimepicker(dtp_opts);
+  if ($('.ontask-datetimepicker').length != 0) {
+    $('.ontask-datetimepicker').datetimepicker(dtp_opts);
+  }
 };
 $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip({
