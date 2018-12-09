@@ -292,6 +292,8 @@ class QuestionRenameForm(ColumnBasicForm):
         self.fields['active_from'].label = _('Question active from')
         self.fields['active_to'].label = _('Question active until')
 
+        self.fields['data_type'].disabled = True
+
     def clean(self):
         data = super(QuestionRenameForm, self).clean()
 
