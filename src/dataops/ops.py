@@ -87,7 +87,11 @@ def store_table_in_db(data_frame,
     for col in wf_cols:
         if reset_keys:
             new_val = is_unique_column(data_frame[col.name])
-            if col.is_key != new_val:
+            if col.is_key and not new_val:
+                # Only set the is_key value if the column states that it is a
+                # key column, but the values say no. Othe other way around
+                # is_key is false in the column will be ignored as it may have
+                # been set by the user
                 col.is_key = new_val
                 col.save()
 
