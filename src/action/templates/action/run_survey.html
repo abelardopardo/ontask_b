@@ -26,9 +26,6 @@
                   type: 'POST',
                 },
                 "order": [0],
-                "columnDefs": [
-                    {"className": "dt-center", "targets": "_all"}
-                ],
                 language: {
                   url: getLanguage()
                 }
@@ -47,7 +44,7 @@
       <span class="fa fa-pencil"></span> {% trans 'Edit' %}</a>
     </h4>
     <p class="help-block">{{ action.description_text }}</p>
-    <table class="table display dataTable no-footer cell-border table-bordered"
+    <table class="table table-striped dataTable no-footer cell-border table-bordered"
            id="actioninrun-data">
       <thead>
         <tr>

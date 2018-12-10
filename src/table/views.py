@@ -55,7 +55,7 @@ class ViewTable(tables.Table):
         fields = ('name', 'description_text', 'modified', 'operations')
         sequence = ('name', 'description_text', 'modified', 'operations')
         attrs = {
-            'class': 'table display table-bordered',
+            'class': 'table table-striped table-bordered',
             'id': 'view-table'
         }
 

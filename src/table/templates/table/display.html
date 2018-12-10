@@ -39,7 +39,6 @@
                 "columnDefs": [
                     {"orderable": false, "targets": 0},
                     {"searchable": false, "targets": 0},
-                    {"className": "dt-center", "targets": "_all"}
                 ],
                 "drawCallback": function(settings) {
                    // Needed to enable tooltips in ajax produced content
@@ -85,7 +84,7 @@
              class="btn btn-outline-dark btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Views available for this table' %}">
-            <span class="fa fa-eye-open"></span> {% trans 'Views' %}
+            <span class="fa fa fa-eye"></span> {% trans 'Views' %}
           </a>
           {% if views %}
             <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button"
@@ -140,7 +139,7 @@
       {% endif %}
     </div>
     {% if columns %}
-      <table class="table display dataTable no-footer cell-border table-bordered"
+      <table class="table table-striped dataTable no-footer table-bordered"
              id="table-data">
         <thead>
           <tr>

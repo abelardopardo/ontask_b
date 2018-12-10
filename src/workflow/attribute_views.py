@@ -33,7 +33,7 @@ class AttributeTable(tables.Table):
     class Meta(object):
         fields = ('name', 'value', 'operations')
         attrs = {
-            'class': 'table display table-bordered',
+            'class': 'table table-striped table-bordered',
             'id': 'attribute-table'
         }
 

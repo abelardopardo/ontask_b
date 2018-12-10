@@ -85,7 +85,7 @@ def display_ss(request):
         row = [
             """<a href="{0}" class="btn btn-outline-dark spin"
                   data-toggle="tooltip" title="{1}">
-                  <span class="fa fa-eye-open"></span> {2}
+                  <span class="fa fa-eye"></span> {2}
                 </a>""".format(
                 reverse('logs:view', kwargs={'pk': item[0]}),
                 ugettext('View log content'),

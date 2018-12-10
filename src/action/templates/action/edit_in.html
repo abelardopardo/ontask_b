@@ -38,7 +38,6 @@
                     "url": getLanguage()
                 },
                 "columnDefs": [
-                    {"className": "dt-center", "targets": "_all"},
                     {"orderable": false, "targets": 2},
                     {"searchable": false, "targets": 2},
                 ],
@@ -170,7 +169,7 @@
               data-url="{% url 'action:preview' action.id 1 %}"
               data-toggle="tooltip"
               title="{% trans 'See the content as shown to each learner' %}">
-        <span class="fa fa-eye-open"></span> {% trans 'Preview' %}
+        <span class="fa fa fa-eye"></span> {% trans 'Preview' %}
       </button>
       <a href="{% url 'action:index' %}"
               style="margin-right:2ex;"

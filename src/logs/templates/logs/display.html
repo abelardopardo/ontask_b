@@ -24,9 +24,6 @@
             type: 'POST',
           },
           ordering: false,
-          "columnDefs": [
-              {"className": "dt-center", "targets": "_all"},
-          ],
           "language": {
               "emptyTable": "{% trans 'No logs recorded for this workflow.' %}",
               "url": getLanguage()
@@ -51,7 +48,7 @@
         <span class="fa fa-download-alt"></span> {% trans 'CSV Download' %}
       </a>
     </div>
-    <table class="table display dataTable no-footer cell-border table-bordered"
+    <table class="table table-striped dataTable no-footer table-bordered"
            id="log-table">
       <thead>
         <tr>

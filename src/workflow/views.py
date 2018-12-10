@@ -29,7 +29,7 @@ from ontask.permissions import is_instructor, UserIsInstructor, is_admin
 from ontask.tables import OperationsColumn
 from .forms import WorkflowForm
 from .models import Workflow, Column
-from .ops import (get_workflow, store_workflow_in_session)
+from .ops import get_workflow
 
 
 class WorkflowTable(tables.Table):
@@ -81,7 +81,7 @@ class WorkflowTable(tables.Table):
                    'data_frame_table_name')
 
         attrs = {
-            'class': 'table display table-bordered',
+            'class': 'table table-striped table-bordered',
             'id': 'workflow-table'
         }
 

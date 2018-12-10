@@ -120,7 +120,7 @@ class ActionTable(tables.Table):
         exclude = ('content', 'serve_enabled', 'columns', 'filter')
 
         attrs = {
-            'class': 'table display table-bordered',
+            'class': 'table table-striped table-bordered',
             'id': 'action-table'
         }
 
@@ -145,7 +145,7 @@ class ColumnSelectedTable(tables.Table):
     class Meta(object):
         fields = ('name', 'description_text', 'operations')
         attrs = {
-            'class': 'table display table-bordered',
+            'class': 'table table-striped table-bordered',
             'id': 'column-selected-table'
         }
 
