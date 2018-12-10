@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="{% block description %}{% endblock description %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'site/ico/favicon.ico' %}" type="favicon/ico">
     <title>{% block title %}{% include "_brandname.html" %} :: {% endblock %}</title>
@@ -29,87 +29,86 @@
            alt="Loading..."/>
     </div>
     {% block navbar %}
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="sr-only">{% trans 'Toggle navigation' %}</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        {% block navbar-brand %}
-          <img class="navbar-brand" src="{% static 'site/img/logo.png' %}" alt="logo">
-        {% endblock %}
-      </div>
-      {% block navbar-menu %}
-      <div class="collapse navbar-collapse navbar-inner">
-        <ul class="nav nav-pills navbar-right">
-          {% block navbar-right %}
-            {% if user.is_authenticated %}
-              {% if user.is_staff %}
-                <li><a class="spin" href="{% url 'admin:index' %}">{% trans 'Admin' %}</a></li>
-              {% endif %}
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle profile-menu" data-toggle="dropdown">
-                 <img src="{% thumbnail user.profile.picture|default:'default_profile.png' 19x19 crop %}" alt="" />
-                </a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a class="spin" href="{% url 'profiles:show_self' %}">{% trans 'Profile' %}</a></li>
-                  <li><a class="spin" href="{% url 'accounts:logout' %}">{% trans 'Logout' %}</a></li>
-                </ul>
-              </li>
-            {% endif %}
-            <li>
-              <a href="{% static ONTASK_HELP_URL %}" class="btn btn-default btn-sm spin"
-                 data-toggle="tooltip"
-                 data-placement="bottom"
-                 title="{% trans 'Read the manual' %}">
-                <span class="glyphicon glyphicon-book"></span></a>
-            </li>
-          {% endblock %}
-        </ul>
-        <ul class="nav nav-pills pull-left">
-          {% block navbar-left %}
-            {% if user.is_authenticated %}
-              <li {% if request.path == ONTASK_BASE_URL %}class="active"{% endif %}>
-                <a class="spin"
-                   href="{% url 'home' %}">{% trans 'Workflows' %}</a>
-              </li>
-              {% if user.is_superuser %}
-                <li {% if 'sql_connections' in request.path %}class="active"{% endif %}>
-          <a class="spin" href="{% url 'workflow:sql_connections' %}">{% trans 'SQL Connections' %}</a></li>
-              {% endif %}
-            {% endif %}
-            {% if request.session.ontask_workflow_id %}
-              {% url 'workflow:detail' request.session.ontask_workflow_id as workflow_url %}
-              <li {% if '/workflow/' in request.path %}class="active"{% endif %}><a
-                  class="spin" href="{{ workflow_url }}">{% trans 'Details' %}</a></li>
-
-
-              <li {% if '/table/' in request.path  or '/dataops' in request.path%}class="active"{% endif %}><a
-                  class="spin" href="{% url 'table:display' %}">{% trans 'Table' %}</a>
-              </li>
-
-              <li {% if '/action/' in request.path %}class="active"{% endif %}>
-                <a class="spin" href="{% url 'action:index' %}">{% trans 'Actions' %}</a>
-              </li>
-
-              <li {% if '/scheduler/' in request.path %}class="active"{% endif %}><a
-                  class="spin" href="{% url 'scheduler:index' %}">{% trans 'Scheduler' %}</a></li>
-
-              <li {% if '/logs/' in request.path %}class="active"{% endif %}><a
-                  class="spin" href="{% url 'logs:index' %}">{% trans 'Logs' %}</a>
-              </li>
-            {% else %}
-              <li><a href="https://ontasklearning.org" target="blank">{% trans 'About' %}</a></li>
-              <li><a href="https://www.ontasklearning.org/contact/" target="blank">
-                {% trans 'Contact' %}</a></li>
-            {% endif %}
-          {% endblock %}
-        </ul>
-      </div><!--/.nav-collapse -->
+    <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
+      {% block navbar-brand %}
+        <a class="navbar-brand" href="#">
+          <img src="{% static 'site/img/logo.png' %}" height="30" alt="logo">
+        </a>
       {% endblock %}
-    </div>
+      {% block navbar-menu %}
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="nav nav-pills mr-auto">
+            {% block navbar-left %}
+              {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link spin{% if request.path == ONTASK_BASE_URL %} active{% endif %}"
+                     href="{% url 'home' %}">{% trans 'Workflows' %}</a>
+                </li>
+                {% if user.is_superuser %}
+                  <li class="nav-item">
+            <a class="nav-link spin{% if 'sql_connections' in request.path %} active{% endif %}" href="{% url 'workflow:sql_connections' %}">{% trans 'SQL Connections' %}</a></li>
+                {% endif %}
+              {% endif %}
+              {% if request.session.ontask_workflow_id %}
+                {% url 'workflow:detail' request.session.ontask_workflow_id as workflow_url %}
+                <li class="nav-item"><a
+                    class="nav-link spin{% if '/workflow/' in request.path %} active{% endif %}" href="{{ workflow_url }}">{% trans 'Details' %}</a></li>
+
+
+                <li class="nav-item"><a
+                    class="nav-link spin{% if '/table/' in request.path  or '/dataops' in request.path%} active{% endif %}" href="{% url 'table:display' %}">{% trans 'Table' %}</a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link spin{% if '/action/' in request.path %} active{% endif %}" href="{% url 'action:index' %}">{% trans 'Actions' %}</a>
+                </li>
+
+                <li class="nav-item"><a
+                    class="nav-link spin{% if '/scheduler/' in request.path %} active{% endif %}" href="{% url 'scheduler:index' %}">{% trans 'Scheduler' %}</a></li>
+
+                <li class="nav-item"><a
+                    class="nav-link spin{% if '/logs/' in request.path %} active{% endif %}" href="{% url 'logs:index' %}">{% trans 'Logs' %}</a>
+                </li>
+              {% else %}
+                <li class="nav-item"><a href="https://ontasklearning.org" class="nav-link" target="blank">{% trans 'About' %}</a></li>
+                <li class="nav-item"><a class="nav-link" href="https://www.ontasklearning.org/contact/" target="blank">
+                  {% trans 'Contact' %}</a></li>
+              {% endif %}
+            {% endblock %}
+          </ul>
+          <ul class="nav ml-auto">
+            {% block navbar-right %}
+              {% if user.is_authenticated %}
+                {% if user.is_staff %}
+                  <li class="nav-item"><a class="nav-link spin" href="{% url 'admin:index' %}">{% trans 'Admin' %}</a></li>
+                {% endif %}
+                <li class="nav-item dropdown">
+                  <a href="#" class="nav-link dropdown-toggle profile-menu" data-toggle="dropdown">
+                   <img src="{% thumbnail user.profile.picture|default:'default_profile.png' 19x19 crop %}" alt="" />
+                  </a>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item spin" href="{% url 'profiles:show_self' %}">{% trans 'Profile' %}</a>
+                    <a class="dropdown-item spin" href="{% url 'accounts:logout' %}">{% trans 'Logout' %}</a>
+                  </div>
+                </li>
+              {% endif %}
+              <li class="nav-item">
+                <a href="{% static ONTASK_HELP_URL %}" class="nav-link btn btn-outline-dark spin"
+                   data-toggle="tooltip"
+                   data-placement="bottom"
+                   title="{% trans 'Read the manual' %}">
+                  <span class="fa fa-book"></span></a>
+              </li>
+            {% endblock %}
+          </ul>
+        </div>
+      {% endblock %}
+    </nav>
     {% endblock navbar %}
     {% if request.session.ontask_workflow_name %}
       <div id="wflow-name" class="text-center alert alert-info">
@@ -141,7 +140,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">{% trans 'Your session is about to expire' %}</h4>
+              <h4 class="modal-title">{% trans 'Your session is about to expire' %}</h4>
             </div>
             <div class="modal-body">
               {% trans 'Your session will expire in' %}
@@ -158,21 +157,16 @@
     {% endblock timeout %}
     <!-- Site footer -->
     {% block footer %}
-      <div class="container-fluid">
-        <div class="footer">
-          <div class="row navbar-default navbar" id="base_footer"
-               style="margin-bottom: 0px; padding-top:8px;">
-            <div class="col-lg-6 div1">
-                <span style="color: #777;">
-                  &copy; {% trans 'OnTask Project' %} {% now 'Y' %}</span>
-            </div>
-            <div class="col-lg-6 div2 text-right">
-              <span class="align-middle"
-                 style="color: #777;">{% trans 'Version:' %} {% ontask_version %}</span>
-            </div>
-          </div>
+      <nav class="navbar navbar-light bg-light" id="base_footer">
+        <div class="col-lg-6 div1">
+            <span style="color: #777;">
+              &copy; {% trans 'OnTask Project' %} {% now 'Y' %}</span>
         </div>
-      </div>
+        <div class="col-lg-6 div2 text-right">
+          <span class="align-middle"
+             style="color: #777;">{% trans 'Version:' %} {% ontask_version %}</span>
+        </div>
+      </nav>
     {% endblock %}
     <script src="{% static 'site/js/initial.js' %}?v={% ontask_version %}"></script>
     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>

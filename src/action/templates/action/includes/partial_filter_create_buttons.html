@@ -24,7 +24,7 @@
           <ul role="menu" class="dropdown-menu">
             <li>
               <button type="button"
-                      class="btn btn-sm btn-default js-filter-edit"
+                      class="btn btn-sm btn-outline-dark js-filter-edit"
                       data-url="{% url 'action:edit_filter' filter_condition.id %}"
                       data-type="filter"
                       data-toggle="tooltip"
@@ -34,7 +34,7 @@
             </li>
             <li>
               <button type="button"
-                      class="btn btn-sm btn-danger js-filter-delete"
+                      class="btn btn-sm btn-outline-danger js-filter-delete"
                       data-url="{% url 'action:delete_filter' filter_condition.id %}"
                       data-toggle="tooltip" title="{% trans 'Delete the filter' %}">
                 <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}

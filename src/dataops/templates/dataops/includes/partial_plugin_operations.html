@@ -5,7 +5,7 @@
        data-toggle="tooltip" title="{% trans 'Execute the transformation' %}">
       <span class="glyphicon glyphicon-off"></span> {% trans 'Run' %}</a>
   {% else %}
-    <button type="button" class="btn btn-danger js-transform-diagnose"
+    <button type="button" class="btn btn-outline-danger js-transform-diagnose"
             data-url="{% url 'dataops:plugin_diagnose' id %}"
             data-toggle="tooltip"
             title="{% trans 'See how is the content shown to each learner' %}">

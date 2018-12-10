@@ -26,14 +26,14 @@
       </h1>
     <div class="text-center">
       <a href="{{ request.META.HTTP_REFERER }}"
-           class="btn btn-default btn-sm align-middle spin"> {% trans 'Back' %}</a>
+           class="btn btn-outline-dark btn-sm align-middle spin"> {% trans 'Back' %}</a>
     </div>
     {% for vis_item in visualizations %}
         {{ vis_item|safe }}
     {% endfor %}
     <div class="text-center">
       <a href="{{ request.META.HTTP_REFERER }}"
-           class="btn btn-default btn-sm align-middle spin"> {% trans 'Back' %}</a>
+           class="btn btn-outline-dark btn-sm align-middle spin"> {% trans 'Back' %}</a>
     </div>
   </div>
 {% endblock container %}

@@ -20,7 +20,7 @@
       {% csrf_token %}
       {{ form|crispy }}
       <div class="text-center" style="margin: 1ex 0 1ex 0;">
-        <a type="button" class="btn btn-default spin"
+        <a type="button" class="btn btn-outline-dark spin"
            href="{% url 'action:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
         </a>
         <a class="btn btn-primary spin" style="margin-right:2ex;" href="{{ prev_step }}">

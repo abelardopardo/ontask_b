@@ -83,7 +83,7 @@ def display_ss(request):
     final_qs = []
     for item in qs[start:start + length]:
         row = [
-            """<a href="{0}" class="btn btn-default spin"
+            """<a href="{0}" class="btn btn-outline-dark spin"
                   data-toggle="tooltip" title="{1}">
                   <span class="glyphicon glyphicon-eye-open"></span> {2}
                 </a>""".format(

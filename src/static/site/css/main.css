@@ -6,7 +6,7 @@ html, body{
 }
 
 body {
-  padding-top:40px; /* To jump over the fixed nav-bar */
+  padding-top:37px; /* To jump over the fixed nav-bar */
 }
 
 .starter-template {
@@ -38,13 +38,8 @@ body>.navbar-transparent {
     background-color: transparent;
 }
 
-.navbar-form {
+.form-inline {
     margin-right: 0;
-}
-
-.navbar-nav>li>a.profile-menu {
-    padding-top: 10px;
-    padding-bottom: 10px;
 }
 
 .navbar-nav>.btn{
@@ -57,26 +52,19 @@ body>.navbar-transparent {
 }
 
 .navbar-brand {
-    padding:0px;
+    padding: 0px;
+    margin: 0px;
 }
 
 .navbar-brand > img {
     float: left;
 }
 
-.navbar-right {
-    margin-right: 0;
-}
-
 .navbar {
-    min-height: 40px;
+    padding: 0;
 }
 
-.navbar-brand {
-    height: 40px;
-}
-
-.navbar-toggle {
+.navbar-toggler {
     margin-top: 2px;
     margin-bottom: 2px;
 }
@@ -292,16 +280,9 @@ mark {
     background-color: #dff0d8;
 }
 
-/* button {
-    margin-top: 0.5ex;
-    margin-bottom: 0.5ex;
-} */
 div.group-conditions > label:not([class*=active]) {
     opacity: 0.3;
 }
-/* a.btn {
-    margin-top: 0.5ex;
-} */
 
 #base_footer .div1 {
     float: left;

@@ -9,7 +9,7 @@
     <p class="text-center">
       {% blocktrans with n=tdelta %}The action will execute in {{ n }}{% endblocktrans %}
     </p>
-    <a class="btn btn-default" href="{% url 'scheduler:index' %}">{% trans 'Back' %}</a>
+    <a class="btn btn-outline-dark" href="{% url 'scheduler:index' %}">{% trans 'Back' %}</a>
     <a href="{% url 'scheduler:edit' s_item.id %}"
        class="btn btn-primary btn-sm align-middle">
     <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}</a>

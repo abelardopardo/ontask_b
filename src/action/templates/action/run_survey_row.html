@@ -22,7 +22,7 @@
           {{ form|crispy }}
         </div>
         {% if cancel_url %}
-          <a type="button" class="btn btn-default spin"
+          <a type="button" class="btn btn-outline-dark spin"
              href="{{ cancel_url }}"> {% trans 'Back' %}</a>
         {% endif %}
         <button type="submit" name="submit" value="update"

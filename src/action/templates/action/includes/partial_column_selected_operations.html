@@ -1,20 +1,20 @@
 {% load i18n %}
 <div class="condition-btn btn-group" role="group">
   <button type="button"
-          class="btn btn-default btn-sm js-workflow-question-edit"
+          class="btn btn-outline-dark btn-sm js-workflow-question-edit"
           data-url="{% url 'workflow:question_edit' id %}"
           data-toggle="tooltip"
           title="{% trans 'Edit question name, description, type, values, etc.' %}">
     <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
   </button>
   <a href="{% url 'action:unselect_column_action' aid id  %}"
-     class="btn btn-default btn-sm spin"
+     class="btn btn-outline-dark btn-sm spin"
      data-toggle="tooltip"
      title="{% trans 'Remove question from action' %}">
     <span class="glyphicon glyphicon-trash"></span> {% trans 'Remove' %}
   </a>
   <button type="button"
-          class="btn btn-default btn-sm js-column-clone align-middle"
+          class="btn btn-outline-dark btn-sm js-column-clone align-middle"
           data-url="{% url 'workflow:column_clone' id %}"
           data-toggle="tooltip"
           title="{% trans 'Create an exact duplicate of this question' %}">

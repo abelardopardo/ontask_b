@@ -24,7 +24,7 @@
   {% endif %}
 
   <p><a href="{{ request.META.HTTP_REFERER }}"
-        class="btn btn-default btn-sm align-middle spin"> {% trans 'Back' %}</a></p>
+        class="btn btn-outline-dark btn-sm align-middle spin"> {% trans 'Back' %}</a></p>
 
   {% if stat_data %}
     {% if column.data_type == 'integer' or column.data_type == 'double' %}
@@ -71,7 +71,7 @@
 
   <div class="text-center">
     <a href="{{ request.META.HTTP_REFERER }}"
-         class="btn btn-default btn-sm align-middle spin"> {% trans 'Back' %}</a>
+         class="btn btn-outline-dark btn-sm align-middle spin"> {% trans 'Back' %}</a>
   </div>
 </div>
 {% endblock container %}

@@ -34,7 +34,7 @@
       <ul role="menu" class="dropdown-menu">
         <li>
           <button type="button"
-                  class="btn btn-default btn-sm js-condition-insert"
+                  class="btn btn-outline-dark btn-sm js-condition-insert"
                   data-name="{{ condition.name }}"
                   data-toggle="tooltip"
                   title="{% trans 'Insert text condition into the body.' %}">
@@ -43,7 +43,7 @@
         </li>
         <li>
           <button type="button"
-                  class="btn btn-default btn-sm js-condition-edit"
+                  class="btn btn-outline-dark btn-sm js-condition-edit"
                   data-url="{% url 'action:edit_condition' condition.id %}"
                   data-toggle="tooltip"
                   title="{% trans 'Edit name, description and formula' %}">
@@ -52,7 +52,7 @@
         </li>
         <li>
           <button type="button"
-             class="btn btn-default btn-sm js-condition-clone"
+             class="btn btn-outline-dark btn-sm js-condition-clone"
              data-url="{% url 'action:clone_condition' condition.id %}"
              data-toggle="tooltip"
              title="{% trans 'Create an exact copy of this condition' %}">
@@ -61,7 +61,7 @@
         </li>
         <li>
           <button type="button"
-                  class="btn btn-danger btn-sm js-condition-delete"
+                  class="btn btn-outline-danger btn-sm js-condition-delete"
                   data-url="{% url 'action:delete_condition' condition.id %}"
                   data-toggle="tooltip"
                   title="{% trans 'Delete the condition' %}">

@@ -43,7 +43,7 @@
     <h4 class="page-header">
       <strong>{{ action.name }}</strong>
       <a href="{% url 'action:edit' action.id %}"
-         class="btn btn-default btn-sm align-middle">
+         class="btn btn-outline-dark btn-sm align-middle">
       <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}</a>
     </h4>
     <p class="help-block">{{ action.description_text }}</p>
@@ -57,7 +57,7 @@
         </tr>
       </thead>
     </table>
-    <a class="btn btn-default spin" style="margin-right:2ex;"
+    <a class="btn btn-outline-dark spin" style="margin-right:2ex;"
        href="{% url 'action:index' %}"> {% trans 'Back' %}</a>
   </div>
   {% include 'modal.html' %}

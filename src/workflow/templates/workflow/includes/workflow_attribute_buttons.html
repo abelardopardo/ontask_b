@@ -1,7 +1,7 @@
 {% load i18n %}
 <div style="margin-bottom: 2ex;">
   <a href="{% url 'workflow:detail' wid %}"
-       class="btn btn-default btn-sm align-middle"> {% trans 'Back' %}</a>
+       class="btn btn-outline-dark btn-sm align-middle"> {% trans 'Back' %}</a>
   <button type="button"
           class="btn btn-primary btn-sm js-attribute-create"
           data-url="{% url 'workflow:attribute_create' %}"

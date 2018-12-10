@@ -1,12 +1,12 @@
 {% load i18n %}
 <div class="dropdown btn-group" style="display: inline-table;" role="group">
-  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+  <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
     {% trans 'Manage table data' %}  <span class="caret"></span>
   </button>
   <ul role="menu" class="dropdown-menu">
     <li>
       <a href="{% url 'dataops:uploadmerge' %}"
-         class="btn btn-default btn-sm spin"
+         class="btn btn-outline-dark btn-sm spin"
          data-toggle="tooltip"
          title="{% trans 'Upload or merge data into the workflow table' %}">
         {% trans 'Upload or merge data' %}
@@ -14,7 +14,7 @@
     </li>
     <li>
       <a href="{% url 'dataops:transform' %}"
-         class="btn btn-default btn-sm spin"
+         class="btn btn-outline-dark btn-sm spin"
          data-toggle="tooltip"
          title="{% trans 'Execute one of the available plugins' %}">
         {% trans 'Execute plugin' %}

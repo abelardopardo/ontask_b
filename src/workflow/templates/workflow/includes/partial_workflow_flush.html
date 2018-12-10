@@ -2,19 +2,19 @@
 <form method="post" action="{% url 'workflow:flush' workflow.id %}" class="js-workflow-flush-form">
   {% csrf_token %}
   <div class="modal-header">
+    <h4 class="modal-title">{% trans 'Confirm data deletion' %}</h4>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title">{% trans 'Confirm data deletion' %}</h4>
   </div>
   <div class="modal-body">
     <p class="lead">{% blocktrans with n=workflow.name %}Are you sure you want to flush the data in workflow <strong>{{ n }}</strong>?{% endblocktrans %}</p>
     <p>{% blocktrans %}This operation will also remove actions, table views and records.{% endblocktrans %}</p>
   </div>
   <div class="modal-footer" style="text-align: center;">
-    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}
+    <button type="button" class="btn btn-outline-dark" data-dismiss="modal">{% trans 'Cancel' %}
     </button>
-    <button type="submit" class="btn btn-danger">
+    <button type="submit" class="btn btn-outline-danger">
       <span class="glyphicon glyphicon-floppy-remove"></span> {% trans 'Flush workflow data' %}</button>
   </div>
 </form>

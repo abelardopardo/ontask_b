@@ -5,14 +5,14 @@
   {% endif %}
   {% include 'workflow/includes/manage_table_data.html' %}
   <div class="dropdown btn-group text-center" role="group">
-    <button class="btn btn-default btn-sm dropdown-toggle" type="button"
+    <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button"
             data-toggle="dropdown"> {% trans 'More workflow operations' %}
       <span class="caret"></span>
     </button>
     <ul role="menu" class="dropdown-menu">
       <li>
         <a href="{% url 'workflow:attributes' %}"
-           class="btn btn-default btn-sm spin"
+           class="btn btn-outline-dark btn-sm spin"
            data-toggle="tooltip"
            title="{% trans 'List of name=value pairs to use in the actions' %}">
           <span class="glyphicon glyphicon-list"></span> {% trans 'Workflow attributes' %}
@@ -20,7 +20,7 @@
       </li>
       <li>
         <a href="{% url 'workflow:export_ask' workflow.id %}"
-           class="btn btn-default btn-sm spin"
+           class="btn btn-outline-dark btn-sm spin"
            data-toggle="tooltip"
            title="{% trans 'Export the workflow and its actions' %}">
           <span class="glyphicon glyphicon-export"></span> {% trans 'Export workflow' %}
@@ -29,14 +29,14 @@
       {% if request.user == workflow.user %}
         <li>
           <button type="button" style="width:100%;"
-                  class="btn btn-default btn-sm js-workflow-update align-middle"
+                  class="btn btn-outline-dark btn-sm js-workflow-update align-middle"
                   data-url="{% url 'workflow:update' workflow.id %}" data-toggle="tooltip"
             title="{% trans 'Change the name and description of this workflow' %}">
               <span class="glyphicon glyphicon-pencil"></span> {% trans 'Rename workflow' %}
           </button>
         </li>
         <li>
-          <a href="{% url 'workflow:share' workflow.id %}" class="btn btn-default btn-sm spin"
+          <a href="{% url 'workflow:share' workflow.id %}" class="btn btn-outline-dark btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Allow other users to access the workflow' %}">
             <span class="glyphicon glyphicon-share"></span> {% trans 'Share workflow' %}
@@ -44,7 +44,7 @@
         </li>
         <li>
           <button type="button" style="width:100%;"
-                  class="btn btn-default btn-sm js-workflow-clone align-middle"
+                  class="btn btn-outline-dark btn-sm js-workflow-clone align-middle"
                   data-url="{% url 'workflow:clone' workflow.id %}" data-toggle="tooltip"
                   title="{% trans 'Create a duplicate of this workflow' %}">
             <span class="glyphicon glyphicon-duplicate"></span>
@@ -53,7 +53,7 @@
         </li>
         <li>
           <button type="button" style="width:100%;"
-                  class="btn btn-default btn-sm js-workflow-flush"
+                  class="btn btn-outline-dark btn-sm js-workflow-flush"
                   data-url="{% url 'workflow:flush' workflow.id %}" data-toggle="tooltip"
                   title="{% trans 'Delete the data in the table of this workflow' %}">
             <span class="glyphicon glyphicon-floppy-remove"></span>
@@ -62,7 +62,7 @@
         </li>
         <li>
           <button type="button" style="width:100%;"
-                  class="btn btn-danger btn-sm js-workflow-delete"
+                  class="btn btn-outline-danger btn-sm js-workflow-delete"
                   data-url="{% url 'workflow:delete' workflow.id %}" data-toggle="tooltip"
                   title="{% trans 'Delete this workflow' %}">
             <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete workflow' %}
