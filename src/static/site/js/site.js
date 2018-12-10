@@ -72,7 +72,9 @@ var loadForm = function () {
           return;
         }
         $("#modal-item .modal-content").html(data.html_form);
-        $('#modal-item .ontask-datetimepicker').datetimepicker(dtp_opts);
+        if ($('#modal-item .ontask-datetimepicker').length != 0) {
+          $('#modal-item .ontask-datetimepicker').datetimepicker(dtp_opts);
+        }
         if (document.getElementById("id_formula") != null) {
           set_qbuilder('#id_formula', qbuilder_options);
         }
