@@ -1,5 +1,6 @@
 {% load i18n %}
-<form method="post" 
+{% load crispy_forms_tags %}
+<form method="post"
   {% if add %}
     action="{% url 'action:create_filter' action_id %}" 
     class="js-filter-create-form"
@@ -15,7 +16,7 @@
     </button>
   </div>
   <div class="modal-body">
-    {% include 'action/includes/partial_form_fields.html' %}
+    {{ form|crispy }}
     <div id="builder"></div>
   </div>
   <div class="modal-footer" style="text-align: center;">
@@ -23,9 +24,9 @@
     </button>
     <button type="submit" class="btn btn-primary">
       {% if add %}
-        <span class="glyphicon glyphicon-ok"></span> {% trans 'Create filter' %}</button>
+        <span class="fa fa-ok"></span> {% trans 'Create filter' %}</button>
       {% else %}
-        <span class="glyphicon glyphicon-ok"></span> {% trans 'Update' %}</button>
+        <span class="fa fa-ok"></span> {% trans 'Update' %}</button>
       {% endif %}
   </div>
 </form>

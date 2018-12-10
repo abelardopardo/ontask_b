@@ -1639,9 +1639,9 @@
 			'</thead>',
 		headTemplateV3:   '<thead>' +
 							  '<tr>' +
-							  '<th class="prev"><span class="glyphicon glyphicon-arrow-left"></span> </th>' +
+							  '<th class="prev"><span class="fa fa-arrow-left"></span> </th>' +
 							  '<th colspan="5" class="switch"></th>' +
-							  '<th class="next"><span class="glyphicon glyphicon-arrow-right"></span> </th>' +
+							  '<th class="next"><span class="fa fa-arrow-right"></span> </th>' +
 							  '</tr>' +
 			'</thead>',
 		contTemplate:     '<tbody><tr><td colspan="7"></td></tr></tbody>',

@@ -23,7 +23,7 @@
       <thead>
         <tr>
           <th class="text-center">{% trans 'Existing Table' %}</th>
-          <th class="text-center"><button class=" glyphicon glyphicon-arrow-left"></button></th>
+          <th class="text-center"><button class=" fa fa-arrow-left"></button></th>
           <th class="text-center">{% trans 'New Data' %}</th>
         </tr>
       </thead>
@@ -31,7 +31,7 @@
         {% if request.session.upload_data.dst_selected_key == request.session.upload_data.src_selected_key %}
           <tr class="success">
             <td class="text-center">{{ request.session.upload_data.dst_selected_key }} ({% trans 'Key' %})</td>
-            <td class="text-center"><button class=" glyphicon glyphicon-arrow-left"></button></td>
+            <td class="text-center"><button class=" fa fa-arrow-left"></button></td>
             <td class="text-center">{{ request.session.upload_data.src_selected_key }} ({% trans 'Key' %})</td>
           </tr>
         {% else %}
@@ -42,14 +42,14 @@
           </tr>
           <tr class="success">
             <td></td>
-            <td class="text-center"><button class=" glyphicon glyphicon-arrow-left"></button></td>
+            <td class="text-center"><button class=" fa fa-arrow-left"></button></td>
             <td class="text-center">{{ request.session.upload_data.src_selected_key }} ({% trans 'Key' %})</td>
           </tr>
         {% endif %}
         {% for item in info %}
           <tr>
             <td class="text-center" style="max-width:220px">{{ item.0 }}</td>
-            <td class="text-center">{% if item.1 %}<button class=" glyphicon glyphicon-arrow-left"></button>{% endif %}</td>
+            <td class="text-center">{% if item.1 %}<button class=" fa fa-arrow-left"></button>{% endif %}</td>
             <td class="text-center">{{ item.2 }}</td>
           </tr>
         {% endfor %}

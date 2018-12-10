@@ -3,13 +3,13 @@
   {% if is_verified %}
     <a href="{% url 'dataops:plugin_invoke' id %}" class="btn btn-primary btn-sm spin"
        data-toggle="tooltip" title="{% trans 'Execute the transformation' %}">
-      <span class="glyphicon glyphicon-off"></span> {% trans 'Run' %}</a>
+      <span class="fa fa-off"></span> {% trans 'Run' %}</a>
   {% else %}
     <button type="button" class="btn btn-outline-danger js-transform-diagnose"
             data-url="{% url 'dataops:plugin_diagnose' id %}"
             data-toggle="tooltip"
             title="{% trans 'See how is the content shown to each learner' %}">
-      <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Diagnose' %}
+      <span class="fa fa-eye-open"></span> {% trans 'Diagnose' %}
     </button>
   {% endif %}
 </div>

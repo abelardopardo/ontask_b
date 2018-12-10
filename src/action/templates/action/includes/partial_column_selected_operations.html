@@ -5,19 +5,19 @@
           data-url="{% url 'workflow:question_edit' id %}"
           data-toggle="tooltip"
           title="{% trans 'Edit question name, description, type, values, etc.' %}">
-    <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
+    <span class="fa fa-pencil"></span> {% trans 'Edit' %}
   </button>
   <a href="{% url 'action:unselect_column_action' aid id  %}"
      class="btn btn-outline-dark btn-sm spin"
      data-toggle="tooltip"
      title="{% trans 'Remove question from action' %}">
-    <span class="glyphicon glyphicon-trash"></span> {% trans 'Remove' %}
+    <span class="fa fa-trash"></span> {% trans 'Remove' %}
   </a>
   <button type="button"
           class="btn btn-outline-dark btn-sm js-column-clone align-middle"
           data-url="{% url 'workflow:column_clone' id %}"
           data-toggle="tooltip"
           title="{% trans 'Create an exact duplicate of this question' %}">
-      <span class="glyphicon glyphicon-duplicate"></span> {% trans 'Clone' %}
+      <span class="fa fa-duplicate"></span> {% trans 'Clone' %}
   </button>
 </div>

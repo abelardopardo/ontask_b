@@ -74,7 +74,7 @@
            class="btn btn-sm btn-outline-dark"
            data-toggle="tooltip"
            title="{% trans 'Add a new row to the table' %}">
-          <span class="glyphicon glyphicon-plus"></span> {% trans 'Add row' %}
+          <span class="fa fa-plus"></span> {% trans 'Add row' %}
         </a>
         {% include 'workflow/includes/add_column_menu.html' %}
       {% endif %}
@@ -85,7 +85,7 @@
              class="btn btn-outline-dark btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Views available for this table' %}">
-            <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Views' %}
+            <span class="fa fa-eye-open"></span> {% trans 'Views' %}
           </a>
           {% if views %}
             <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button"
@@ -108,33 +108,33 @@
                   class="btn btn-outline-dark btn-sm js-view-edit align-middle"
                   data-url="{% url 'table:view_edit' view.id %}"
                   data-toggle="tooltip" title="{% trans 'Change elements in view' %}">
-            <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit view' %}
+            <span class="fa fa-pencil"></span> {% trans 'Edit view' %}
           </button>
           <a class="btn btn-sm btn-outline-dark spin" href="{% url 'table:display' %}">Full table</a>
           <a href="{% url 'table:stat_table_view' view.id %}"
              class="btn btn-outline-dark btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Dashboard created with the view data' %}">
-            <span class="glyphicon glyphicon-dashboard"></span> {% trans 'Dashboard' %}
+            <span class="fa fa-dashboard"></span> {% trans 'Dashboard' %}
           </a>
           <a href="{% url 'table:csvdownload_view' view.id %}" download
              class="btn btn-outline-dark btn-sm js-logs-download"
              data-toggle="tooltip"
              title="{% trans 'Download a CSV file containing this table' %}">
-            <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
+            <span class="fa fa-download-alt"></span> {% trans 'CSV Download' %}
           </a>
         {% else %}
           <a href="{% url 'table:stat_table' %}"
              class="btn btn-outline-dark btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Dashboard created with the table data' %}">
-            <span class="glyphicon glyphicon-dashboard"></span> {% trans 'Dashboard' %}
+            <span class="fa fa-dashboard"></span> {% trans 'Dashboard' %}
           </a>
           <a href="{% url 'table:csvdownload' %}"
              class="btn btn-outline-dark btn-sm"
              data-toggle="tooltip"
              title="{% trans 'Download a CSV file containing this table' %}">
-            <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
+            <span class="fa fa-download-alt"></span> {% trans 'CSV Download' %}
           </a>
         {% endif %}
       {% endif %}
@@ -160,7 +160,7 @@
                            class="btn btn-outline-dark btn-sm align-middle spin"
                            data-toggle="tooltip"
                            title="{% trans 'Stats and visualizations about this column' %}">
-                          <span class="glyphicon glyphicon-stats"></span> {% trans 'Statistics' %}
+                          <span class="fa fa-stats"></span> {% trans 'Statistics' %}
                         </a>
                       </li>
                     {% endif %}
@@ -170,7 +170,7 @@
                               data-url="{% url 'workflow:column_edit' col.id %}"
                               data-toggle="tooltip"
                               title="{% trans 'Edit column name, description, etc' %}">
-                        <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
+                        <span class="fa fa-pencil"></span> {% trans 'Edit' %}
                       </button>
                     </li>
                     <li>
@@ -179,7 +179,7 @@
                               data-url="{% url 'workflow:column_clone' col.id %}"
                               data-toggle="tooltip"
                               title="{% trans 'Create an exact duplicate of this column' %}">
-                          <span class="glyphicon glyphicon-duplicate"></span> {% trans 'Clone' %}
+                          <span class="fa fa-duplicate"></span> {% trans 'Clone' %}
                       </button>
                     </li>
                     <li>
@@ -188,7 +188,7 @@
                               data-url="{% url 'workflow:column_delete' col.id %}"
                               data-toggle="tooltip"
                               title="{% trans 'Delete column' %}">
-                        <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
+                        <span class="fa fa-trash"></span> {% trans 'Delete' %}
                       </button>
                     </li>
                   </ul>
@@ -212,11 +212,11 @@
                       <a href="{% url 'workflow:column_move_top' col.id %}"
                          class="column-move-top"
                          style="display:table-cell;">
-                        <span class="glyphicon glyphicon-step-backward"></span></a>
+                        <span class="fa fa-step-backward"></span></a>
                       <a href="{% url 'workflow:column_move_prev' col.id %}"
                          class="column-move-prev"
                          style="display:table-cell;">
-                        <span class="glyphicon glyphicon-chevron-left"></span></a>
+                        <span class="fa fa-chevron-left"></span></a>
                     {% endif %}
                   </div>
                   {% if col.position != col.workflow.ncols %}
@@ -225,11 +225,11 @@
                        class="column-move-next"
                        style="display:table-cell;">
                        <span
-                           class="glyphicon glyphicon-chevron-right"></span></a>
+                           class="fa fa-chevron-right"></span></a>
                     <a href="{% url 'workflow:column_move_bottom' col.id %}"
                        class="column-move-bottom"
                        style="display:table-cell;">
-                      <span class="glyphicon glyphicon-step-forward"></span></a>
+                      <span class="fa fa-step-forward"></span></a>
                     </div>
                   {% endif %}
                 </div>

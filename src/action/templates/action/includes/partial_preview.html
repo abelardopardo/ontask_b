@@ -10,12 +10,12 @@
     <button type="button"
             class="btn btn-primary js-action-preview-prv"
             data-url="{% url 'action:preview' action.id prv %}">
-      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="fa fa-chevron-left"></span>
     </button>
     <button type="button" class="btn btn-outline-dark" data-dismiss="modal">{% trans 'Close' %}</button>
     <button type="button" class="btn btn-primary js-action-preview-nxt"
             data-url="{% url 'action:preview' action.id nxt %}">
-      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="fa fa-chevron-right"></span>
     </button>
   </div>
   {% if not correct_json %}

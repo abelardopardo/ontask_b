@@ -12,7 +12,7 @@
               style="margin-bottom: 0.5ex;"
               data-toggle="tooltip"
               title="{% trans 'Define a text condition to insert in the text body below.' %}">
-        <span class="glyphicon glyphicon-plus"></span> {% trans 'New' %}</button></h4>
+        <span class="fa fa-plus"></span> {% trans 'New' %}</button></h4>
   </div>
 </div>
 <div id="condition-set" class="row conditions">
@@ -38,7 +38,7 @@
                   data-name="{{ condition.name }}"
                   data-toggle="tooltip"
                   title="{% trans 'Insert text condition into the body.' %}">
-            <span class="glyphicon glyphicon-arrow-down"></span> {% trans 'Insert in text' %}
+            <span class="fa fa-arrow-down"></span> {% trans 'Insert in text' %}
           </button>
         </li>
         <li>
@@ -47,7 +47,7 @@
                   data-url="{% url 'action:edit_condition' condition.id %}"
                   data-toggle="tooltip"
                   title="{% trans 'Edit name, description and formula' %}">
-            <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
+            <span class="fa fa-pencil"></span> {% trans 'Edit' %}
           </button>
         </li>
         <li>
@@ -56,7 +56,7 @@
              data-url="{% url 'action:clone_condition' condition.id %}"
              data-toggle="tooltip"
              title="{% trans 'Create an exact copy of this condition' %}">
-            <span class="glyphicon glyphicon-duplicate"></span> {% trans 'Clone' %}
+            <span class="fa fa-duplicate"></span> {% trans 'Clone' %}
           </button>
         </li>
         <li>
@@ -65,7 +65,7 @@
                   data-url="{% url 'action:delete_condition' condition.id %}"
                   data-toggle="tooltip"
                   title="{% trans 'Delete the condition' %}">
-            <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
+            <span class="fa fa-trash"></span> {% trans 'Delete' %}
           </button>
         </li>
       </ul>

@@ -15,7 +15,7 @@
            class="btn btn-outline-dark btn-sm spin"
            data-toggle="tooltip"
            title="{% trans 'List of name=value pairs to use in the actions' %}">
-          <span class="glyphicon glyphicon-list"></span> {% trans 'Workflow attributes' %}
+          <span class="fa fa-list"></span> {% trans 'Workflow attributes' %}
         </a>
       </li>
       <li>
@@ -23,7 +23,7 @@
            class="btn btn-outline-dark btn-sm spin"
            data-toggle="tooltip"
            title="{% trans 'Export the workflow and its actions' %}">
-          <span class="glyphicon glyphicon-export"></span> {% trans 'Export workflow' %}
+          <span class="fa fa-export"></span> {% trans 'Export workflow' %}
         </a>
       </li>
       {% if request.user == workflow.user %}
@@ -32,14 +32,14 @@
                   class="btn btn-outline-dark btn-sm js-workflow-update align-middle"
                   data-url="{% url 'workflow:update' workflow.id %}" data-toggle="tooltip"
             title="{% trans 'Change the name and description of this workflow' %}">
-              <span class="glyphicon glyphicon-pencil"></span> {% trans 'Rename workflow' %}
+              <span class="fa fa-pencil"></span> {% trans 'Rename workflow' %}
           </button>
         </li>
         <li>
           <a href="{% url 'workflow:share' workflow.id %}" class="btn btn-outline-dark btn-sm spin"
              data-toggle="tooltip"
              title="{% trans 'Allow other users to access the workflow' %}">
-            <span class="glyphicon glyphicon-share"></span> {% trans 'Share workflow' %}
+            <span class="fa fa-share"></span> {% trans 'Share workflow' %}
           </a>
         </li>
         <li>
@@ -47,7 +47,7 @@
                   class="btn btn-outline-dark btn-sm js-workflow-clone align-middle"
                   data-url="{% url 'workflow:clone' workflow.id %}" data-toggle="tooltip"
                   title="{% trans 'Create a duplicate of this workflow' %}">
-            <span class="glyphicon glyphicon-duplicate"></span>
+            <span class="fa fa-duplicate"></span>
             {% trans 'Clone workflow' %}
           </button>
         </li>
@@ -56,7 +56,7 @@
                   class="btn btn-outline-dark btn-sm js-workflow-flush"
                   data-url="{% url 'workflow:flush' workflow.id %}" data-toggle="tooltip"
                   title="{% trans 'Delete the data in the table of this workflow' %}">
-            <span class="glyphicon glyphicon-floppy-remove"></span>
+            <span class="fa fa-floppy-remove"></span>
             {% trans 'Flush data table' %}
           </button>
         </li>
@@ -65,7 +65,7 @@
                   class="btn btn-outline-danger btn-sm js-workflow-delete"
                   data-url="{% url 'workflow:delete' workflow.id %}" data-toggle="tooltip"
                   title="{% trans 'Delete this workflow' %}">
-            <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete workflow' %}
+            <span class="fa fa-trash"></span> {% trans 'Delete workflow' %}
           </button>
         </li>
       {% endif %}

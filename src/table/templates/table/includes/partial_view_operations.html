@@ -4,25 +4,25 @@
      class="btn btn-outline-dark btn-sm"
      data-toggle="tooltip"
      title="{% trans 'Access the table with this view' %}">
-    <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Table' %}</a>
+    <span class="fa fa-eye-open"></span> {% trans 'Table' %}</a>
   <button type="button"
           class="btn btn-outline-dark btn-sm js-view-edit align-middle"
           data-url="{% url 'table:view_edit' id %}"
           data-toggle="tooltip"
           title="{% trans 'Change elements in view' %}">
-      <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
+      <span class="fa fa-pencil"></span> {% trans 'Edit' %}
   </button>
   <button type="button"
           class="btn btn-outline-dark btn-sm js-view-clone align-middle"
           data-url="{% url 'table:view_clone' id %}"
           data-toggle="tooltip"
           title="{% trans 'Create an identical view' %}">
-    <span class="glyphicon glyphicon-duplicate"></span> {% trans 'Clone' %}
+    <span class="fa fa-duplicate"></span> {% trans 'Clone' %}
   </button>
   <button type="button"
           class="btn btn-outline-danger btn-sm js-view-delete"
           data-url="{% url 'table:view_delete' id %}"
           data-toggle="tooltip"
           title="{% trans 'Delete the view' %}">
-    <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}</button>
+    <span class="fa fa-trash"></span> {% trans 'Delete' %}</button>
 </div>

@@ -64,7 +64,7 @@
                   data-type="filter"
                   data-toggle="tooltip"
                   title="{% trans 'Edit description' %}">
-            <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}</button>
+            <span class="fa fa-pencil"></span> {% trans 'Edit' %}</button>
         </h4>
       </div>
     </div>
@@ -155,7 +155,7 @@
                 data-url="{% url 'workflow:question_add' action.id %}"
                 data-toggle="tooltip"
                 title="{% trans 'Add a new question to the action' %}">
-          <span class="glyphicon glyphicon-plus"></span> {% trans 'Create new question' %}
+          <span class="fa fa-plus"></span> {% trans 'Create new question' %}
         </button>
       </div>
       <div class="container-fluid" id="column-selection"
@@ -170,7 +170,7 @@
               data-url="{% url 'action:preview' action.id 1 %}"
               data-toggle="tooltip"
               title="{% trans 'See the content as shown to each learner' %}">
-        <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Preview' %}
+        <span class="fa fa-eye-open"></span> {% trans 'Preview' %}
       </button>
       <a href="{% url 'action:index' %}"
               style="margin-right:2ex;"
@@ -178,13 +178,13 @@
               data-toggle="tooltip"
               data-placement="auto"
               title="{% trans 'Save action and go back to action table' %}">
-        <span class="glyphicon glyphicon-ok"></span> {% trans 'Done' %}
+        <span class="fa fa-ok"></span> {% trans 'Done' %}
       </a>
       <a href="{% url 'action:run' action.id %}"
          class="btn btn-primary spin {% if not action.is_executable %}disabled{% endif %}"
          data-toggle="tooltip"
          title="{% trans 'Enter data manually' %}">
-        <span class="glyphicon glyphicon-off"></span> {% trans 'Run' %}
+        <span class="fa fa-off"></span> {% trans 'Run' %}
       </a>
     </div>
   </div>

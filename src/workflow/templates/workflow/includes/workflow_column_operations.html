@@ -5,7 +5,7 @@
           data-url="{% url 'workflow:column_edit' id %}"
           data-toggle="tooltip"
           title="{% trans 'Edit column name, description, type, values, etc.' %}">
-    <span class="glyphicon glyphicon-pencil"></span>
+    <span class="fa fa-pencil"></span>
     {% trans 'Edit' %}
   </button>
   <button type="button"
@@ -13,7 +13,7 @@
           data-url="{% url 'workflow:column_restrict' id %}"
           data-toggle="tooltip"
           title="{% trans 'Restrict the values allowed in the column' %}">
-    <span class="glyphicon glyphicon-resize-small"></span>
+    <span class="fa fa-resize-small"></span>
     {% trans 'Restrict values' %}
   </button>
   <button type="button"
@@ -21,7 +21,7 @@
           data-url="{% url 'workflow:column_clone' id %}"
           data-toggle="tooltip"
           title="{% trans 'Create an exact duplicate of this column' %}">
-      <span class="glyphicon glyphicon-duplicate"></span>
+      <span class="fa fa-duplicate"></span>
     {% trans 'Clone' %}
   </button>
   {% if not is_key %}
@@ -29,7 +29,7 @@
        class="btn btn-outline-dark btn-sm align-middle spin"
        data-toggle="tooltip"
        title="{% trans 'Statistics about this column' %}">
-      <span class="glyphicon glyphicon-stats"></span>
+      <span class="fa fa-stats"></span>
       {% trans 'Statistics' %}</a>
   {% endif %}
   <button type="button"
@@ -37,6 +37,6 @@
           data-url="{% url 'workflow:column_delete' id %}"
           data-toggle="tooltip"
           title="{% trans 'Delete column' %}">
-    <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
+    <span class="fa fa-trash"></span> {% trans 'Delete' %}
   </button>
 </div>

@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load crispy_forms_tags %}
 <form method="post" action="{% url 'action:create' %}"
       class="js-action-create-form">
   {% csrf_token %}
@@ -9,12 +10,12 @@
     </button>
   </div>
   <div class="modal-body">
-    {% include 'action/includes/partial_form_fields.html' %}
+    {{ form|crispy }}
   </div>
   <div class="modal-footer" style="text-align: center;">
     <button type="button" class="btn btn-outline-dark" data-dismiss="modal">{% trans 'Cancel' %}
     </button>
     <button type="submit" class="btn btn-primary">
-    <span class="glyphicon glyphicon-ok"></span> {% trans 'Create action' %}
+    <span class="fa fa-ok"></span> {% trans 'Create action' %}
   </div>
 </form>

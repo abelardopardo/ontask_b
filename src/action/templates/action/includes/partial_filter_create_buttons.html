@@ -29,7 +29,7 @@
                       data-type="filter"
                       data-toggle="tooltip"
                       title="{% trans 'Edit the filter name and expression' %}">
-                <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
+                <span class="fa fa-pencil"></span> {% trans 'Edit' %}
               </button>
             </li>
             <li>
@@ -37,7 +37,7 @@
                       class="btn btn-sm btn-outline-danger js-filter-delete"
                       data-url="{% url 'action:delete_filter' filter_condition.id %}"
                       data-toggle="tooltip" title="{% trans 'Delete the filter' %}">
-                <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
+                <span class="fa fa-trash"></span> {% trans 'Delete' %}
               </button>
             </li>
           </ul>
@@ -46,7 +46,7 @@
                   class="btn btn-primary btn-sm js-filter-create{% if not has_data %} disabled{% endif %}"
                   data-url="{% url 'action:create_filter' action.id %}"
                   data-type="filter">
-            <span class="glyphicon glyphicon-plus"></span> {% trans 'Add Filter' %}</button>
+            <span class="fa fa-plus"></span> {% trans 'Add Filter' %}</button>
         {% endif %}
       </div>
     </h4>

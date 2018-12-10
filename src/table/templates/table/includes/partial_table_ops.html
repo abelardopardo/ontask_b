@@ -9,14 +9,14 @@
          class="btn btn-outline-dark btn-sm align-middle spin"
             data-toggle="tooltip" 
             title="{% trans 'Statistics about this column' %}">
-        <span class="glyphicon glyphicon-stats"></span> {% trans 'Statistics' %}
+        <span class="fa fa-stats"></span> {% trans 'Statistics' %}
       </a>
     </li>
     <li>
       <a class="btn btn-outline-dark btn-sm" href="{{ edit_url }}"
          data-toggle="tooltip" 
          title="{% trans 'Edit the data in this row' %}">
-        <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
+        <span class="fa fa-pencil"></span> {% trans 'Edit' %}
       </a>
     </li>
     <li>
@@ -25,7 +25,7 @@
               data-url="{% url 'table:row_delete' %}{{ delete_key }}"
               data-toggle="tooltip" 
               title="{% trans 'Delete this row' %}">
-        <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
+        <span class="fa fa-trash"></span> {% trans 'Delete' %}
       </button>
     </li>
   </ul>

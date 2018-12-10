@@ -5,20 +5,20 @@
           data-url="{% url 'dataops:sqlconn_edit' id %}"
           data-toggle="tooltip"
           title="{% trans 'Edit SQL connection parameters' %}.">
-    <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
+    <span class="fa fa-pencil"></span> {% trans 'Edit' %}
   </button>
   <button type="button"
           class="btn btn-outline-dark btn-sm js-sqlconn-clone align-middle"
           data-url="{% url 'dataops:sqlconn_clone' id %}"
           data-toggle="tooltip"
           title="{% trans 'Create an exact duplicate of this connection' %}">
-      <span class="glyphicon glyphicon-duplicate"></span> {% trans 'Clone' %}
+      <span class="fa fa-duplicate"></span> {% trans 'Clone' %}
   </button>
   <button type="button"
           class="btn btn-outline-danger btn-sm js-sqlconn-delete"
           data-url="{% url 'dataops:sqlconn_delete' id %}"
           data-toggle="tooltip"
           title="{% trans 'Delete SQL connection' %}">
-    <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
+    <span class="fa fa-trash"></span> {% trans 'Delete' %}
   </button>
 </div>
