@@ -145,13 +145,17 @@ urlpatterns = [
     #
     # FILTERS
     #
-    path('<int:pk>/create_filter/',
-        views_condition.FilterCreateView.as_view(),
-        name='create_filter'),
+    # path('<int:pk>/create_filter/',
+    #     views_condition.FilterCreateView.as_view(),
+    #     name='create_filter'),
+    #
+    # path('<int:pk>/edit_filter/',
+    #     views_condition.edit_filter,
+    #     name='edit_filter'),
 
-    path('<int:pk>/edit_filter/',
-        views_condition.edit_filter,
-        name='edit_filter'),
+    path('<int:pk>/update_filter/',
+        views_condition.update_filter,
+        name='update_filter'),
 
     path('<int:pk>/delete_filter/',
         views_condition.delete_filter,

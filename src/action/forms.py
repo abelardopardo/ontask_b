@@ -13,10 +13,13 @@ from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteInplaceWidget
 from django.conf import settings as ontask_settings
 from validate_email import validate_email
+from django.utils.html import escape
 
 from core.widgets import OnTaskDateTimeInput
-from dataops.pandas_db import execute_select_on_table, get_table_cursor, \
+from dataops.pandas_db import (
+    execute_select_on_table, get_table_cursor,
     is_column_table_unique, get_table_data
+)
 from ontask import ontask_prefs, is_legal_name
 from ontask.forms import column_to_field, RestrictedFileField
 from .models import Action, Condition
@@ -41,7 +44,6 @@ class ActionUpdateForm(forms.ModelForm):
 
 class ActionForm(ActionUpdateForm):
     def __init__(self, *args, **kargs):
-
         super(ActionForm, self).__init__(*args, **kargs)
 
         if not ontask_settings.CANVAS_INFO_DICT:
@@ -83,20 +85,6 @@ class EditActionOutForm(forms.ModelForm):
         # Personalized text, canvas email
         if self.instance.action_type == Action.PERSONALIZED_TEXT:
             self.fields['content'].widget = SummernoteInplaceWidget()
-
-        # if self.instance.action_type == Action.PERSONALIZED_CANVAS_EMAIL \
-        #         and len(ontask_settings.CANVAS_INFO_DICT) > 1:
-        #     # Add the target_url field if the system has more than one entry
-        #     # point configured
-        #     self.fields['target_url'] = forms.ChoiceField(
-        #         initial=self.instance.target_url,
-        #         required=True,
-        #         choices=[('', '---')] + \
-        #                 [(y[1], x) for x, y in
-        #                  sorted(ontask_settings.CANVAS_INFO_DICT.items()],
-        #         label=_('Canvas Instance'),
-        #         help_text=_('Name of the Canvas host to send the messages')
-        #     )
 
         # Add the Target URL field
         if self.instance.action_type == Action.PERSONALIZED_JSON:
@@ -176,21 +164,28 @@ class FilterForm(forms.ModelForm):
     formula field is set to False because it is enforced in the server.
     """
 
+    filter_formula = forms.CharField(required=False,
+                                     label=_('formula'))
+
     def __init__(self, *args, **kwargs):
         super(FilterForm, self).__init__(*args, **kwargs)
 
         # Required enforced in the server (not in the browser)
-        self.fields['formula'].required = False
+        self.fields['filter_formula'].required = False
 
+        # Set the value of the formula in the action
+        if self.instance.formula:
+            self.fields['filter_formula'].initial = \
+                escape(json.dumps(self.instance.formula))
         # Filter should be hidden.
-        self.fields['formula'].widget = forms.HiddenInput()
+        self.fields['filter_formula'].widget = forms.HiddenInput()
 
     class Meta(object):
         model = Condition
-        fields = ('name', 'description_text', 'formula')
+        fields = ('name', 'description_text')
 
 
-class ConditionForm(FilterForm):
+class ConditionForm(forms.ModelForm):
     """
     Form to read information about a condition. The same as the filter but we
     need to enforce that the name is a valid variable name
@@ -200,6 +195,12 @@ class ConditionForm(FilterForm):
 
         super(ConditionForm, self).__init__(*args, **kwargs)
 
+        # Required enforced in the server (not in the browser)
+        self.fields['formula'].required = False
+
+        # Filter should be hidden.
+        self.fields['formula'].widget = forms.HiddenInput()
+
         # Remember the condition name to perform content substitution
         self.old_name = None,
         if hasattr(self, 'instance'):
@@ -208,6 +209,10 @@ class ConditionForm(FilterForm):
     def clean(self):
         data = super(ConditionForm, self).clean()
 
+        if not data.get('name'):
+            self.add_error('name', _('Name cannot be empty'))
+            return  data
+
         msg = is_legal_name(data['name'])
         if msg:
             self.add_error('name', msg)
@@ -215,6 +220,9 @@ class ConditionForm(FilterForm):
 
         return data
 
+    class Meta(object):
+        model = Condition
+        fields = ('name', 'description_text', 'formula')
 
 class EnableURLForm(forms.ModelForm):
 
@@ -538,7 +546,6 @@ class JSONBasicActionForm(forms.Form):
 
 
 class JSONActionForm(JSONBasicActionForm):
-
     # Token to use when sending the JSON request
     token = forms.CharField(
         initial='',
@@ -556,7 +563,6 @@ class JSONActionForm(JSONBasicActionForm):
     )
 
     def __init__(self, *args, **kargs):
-
         super(JSONActionForm, self).__init__(*args, **kargs)
 
         self.fields['key_column'].label = \
@@ -568,7 +574,6 @@ class JSONActionForm(JSONBasicActionForm):
 
 
 class CanvasEmailActionForm(JSONBasicActionForm):
-
     subject = forms.CharField(max_length=1024,
                               strip=True,
                               required=True,

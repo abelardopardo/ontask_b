@@ -43,7 +43,6 @@ var get_id_content = function() {
   return value;
 };
 var loadForm = function () {
-    $("#modal-item .modal-content").html("");
     var btn = $(this);
     if ($(this).is("[class*='disabled']")) {
       return;
@@ -156,3 +155,9 @@ $(window).bind("load", function() {
 $(':input').on('invalid', function(e){
   $('#div-spinner').hide();
 });
+$('#modal-item').on('hide.bs.modal', function (e) {
+  $("#modal-item .modal-content").html("");
+  if (typeof qbuilder_options != 'undefined') {
+    delete qbuilder_options['rules'];
+  }
+})

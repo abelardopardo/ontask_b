@@ -1,21 +1,14 @@
 {% load i18n %}
-<div class="row row-top-border" style="padding-bottom: 0.5ex;">
-  <div class="col-xs-1 col-md-1">
-    <div class="numberCircle"><b>2</b></div>
-  </div>
-  <div id="condition-set-header" class="col-xs-11 col-md-11">
-    <h4 class="text-center">
-      <strong>{% trans 'Text Conditions' %}</strong>
-      <button type="button"
-              class="btn btn-sm btn-primary js-condition-create{% if not has_data %} disabled{% endif %}"
-              data-url="{% url 'action:create_condition' action.id %}"
-              style="margin-bottom: 0.5ex;"
-              data-toggle="tooltip"
-              title="{% trans 'Define a text condition to insert in the text body below.' %}">
-        <span class="fa fa-plus"></span> {% trans 'New' %}</button></h4>
-  </div>
+<div id="condition-set-header" class="row justify-content-center">
+  <button type="button"
+          class="btn btn-sm btn-primary js-condition-create{% if not has_data %} disabled{% endif %}"
+          data-url="{% url 'action:create_condition' action.id %}"
+          style="margin-bottom: 0.5ex;"
+          data-toggle="tooltip"
+          title="{% trans 'Define a text condition to insert in the text body below.' %}">
+    <span class="fa fa-plus"></span> {% trans 'New Condition' %}</button>
 </div>
-<div id="condition-set" class="row conditions">
+<div id="condition-set" class="row conditions justify-content-center">
   {% for condition in conditions %}
     <div class="condition-btn btn-group">
       <button type="button"
@@ -72,8 +65,7 @@
     </div>
   {% empty %}
     <p class="text-center">
-      {% blocktrans %}Create conditions to control the text in the
-      body below (optional){% endblocktrans %}</p>
+      {% blocktrans %}Create conditions to show/hide text in the message (optional){% endblocktrans %}</p>
   {% endfor %}
 </div>
 

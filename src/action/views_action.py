@@ -43,7 +43,8 @@ from .forms import (
     EditActionOutForm,
     EnableURLForm,
     ActionDescriptionForm,
-    ActionImportForm
+    ActionImportForm,
+    FilterForm
 )
 from action.ops import (
     serve_action_in,
@@ -508,6 +509,8 @@ def edit_action_out(request, workflow, action):
     # Create the form
     form = EditActionOutForm(request.POST or None, instance=action)
 
+    form_filter = FilterForm(request.POST or None, instance=action.get_filter())
+
     # Get the filter or None
     filter_condition = action.get_filter()
 
@@ -528,6 +531,7 @@ def edit_action_out(request, workflow, action):
                'has_data': ops.workflow_has_table(action.workflow),
                'total_rows': workflow.nrows,
                'form': form,
+               'form_filter': form_filter,
                'vis_scripts': PlotlyHandler.get_engine_scripts()
                }
 
@@ -539,7 +543,8 @@ def edit_action_out(request, workflow, action):
         template = 'action/edit_personalized_canvas_email.html'
 
     # Processing the request after receiving the text from the editor
-    if request.method == 'GET' or not form.is_valid():
+    if request.method == 'GET' or not form.is_valid() or \
+            not form_filter.is_valid():
         # Return the same form in the same page
         return render(request, template, context=context)
 
@@ -569,20 +574,10 @@ def edit_action_out(request, workflow, action):
     # Text is good. Update the content of the action
     action.set_content(content)
 
-    # # Update additional fields
-    # if action.action_type == Action.PERSONALIZED_JSON:
-    #     action.target_url = form.cleaned_data['target_url']
-    #
-    # if action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
-    #     # If there is a single CANVAS API ENTRYPOINT set it as target_url
-    #     if len(settings.CANVAS_INFO_DICT) == 1:
-    #         action.target_url = \
-    #             next(iter(settings.CANVAS_INFO_DICT.keys()))
-    #     else:
-    #         action.target_url = form.cleaned_data['target_url']
-
     action.save()
 
+    if request.POST['Submit'] == 'Submit':
+        return redirect(request.get_full_path())
     return redirect('action:index')
 
 

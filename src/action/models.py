@@ -373,7 +373,7 @@ class Condition(models.Model):
                                blank=False,
                                related_name='conditions')
 
-    name = models.CharField(max_length=256, blank=False, verbose_name=_('name'))
+    name = models.CharField(max_length=256, blank=True, verbose_name=_('name'))
 
     description_text = models.CharField(max_length=512,
                                         default='',

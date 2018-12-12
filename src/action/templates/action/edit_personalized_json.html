@@ -20,7 +20,7 @@
   {% endwith %}
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
   <script type="text/javascript">
-    {% with allow_empty='false' %}
+    {% with js_var='qbuilder_options' allow_empty='false' %}
       {% include 'qbuilder_options.js' %}
     {% endwith %}
   </script>

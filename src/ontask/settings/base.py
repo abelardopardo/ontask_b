@@ -281,6 +281,7 @@ LANGUAGES = (
 # SUMMERNOTE CONFIGURATION
 #
 ################################################################################
+SUMMERNOTE_THEME = 'bs4'
 SUMMERNOTE_CONFIG = {
     'iframe': False,
     'summernote': {

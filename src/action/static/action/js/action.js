@@ -118,6 +118,18 @@ var loadFormPost = function () {
       }
     });
 }
+var transferFormula = function () {
+  if (document.getElementById("id_filter_formula") != null) {
+    formula = $("#filter_builder").queryBuilder('getRules');
+    if (formula == null || !formula['valid']) {
+      $('#div-spinner').hide();
+      return false;
+    }
+    f_text = JSON.stringify(formula, undefined, 2);
+    $("#id_filter_formula").val(f_text);
+   }
+   return true;
+}
 var conditionClone = function() {
   $('#div-spinner').show();
   $.ajax({
@@ -174,8 +186,11 @@ $(function () {
   $("#filter-set").on("click", ".js-filter-edit", loadForm);
   $("#modal-item").on("submit", ".js-filter-edit-form", saveForm);
 
+  // Update Filter
+  $("#filter").on("submit", ".js-filter-update-form", transferFormula);
+
   // Delete Filter
-  $("#filter-set").on("click", ".js-filter-delete", loadForm);
+  $("#filter").on("click", ".js-filter-delete", loadForm);
   $("#modal-item").on("submit", ".js-filter-delete-form", saveForm);
 
   // Create Condition
@@ -222,7 +237,7 @@ $(function () {
                        toggleShuffleQuestion);
 
   // Preview
-  $("#html-editor").on("click", ".js-action-preview", loadFormPost);
+  $("#action-preview-done").on("click", ".js-action-preview", loadFormPost);
   $("#email-action-request-data").on("click", ".js-email-preview", loadForm);
   $("#canvas-email-action-request-data").on("click",
     ".js-canvas-email-preview",
@@ -261,5 +276,11 @@ window.onload = function(){
     set_element_select("#id_exclude_values");
   }
   setDateTimePickers();
+  if (typeof qbuilder_filter_options != "undefined") {
+    if ($('#id_filter_formula').val() != '') {
+      qbuilder_filter_options["rules"] = JSON.parse($('#id_filter_formula').val());
+    }
+    $("#filter_builder").queryBuilder(qbuilder_filter_options);
+  }
 };
 

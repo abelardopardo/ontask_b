@@ -1,19 +1,18 @@
 {% load i18n %}
-<div id="attribute-names" style="margin-bottom:1ex;">
-  <div style="display: table-cell; padding-right: 1ex;">{% trans 'Insert:' %}</div>
+<div id="attribute-names" class="row justify-content-md-center" style="padding-bottom: 1em;">
   {% if attribute_names %}
-    <div style="display: table-cell; padding-right: 1ex;">
+    <div class="col col-md-auto">
         <select id="select-attribute-name">
-          <option value="">- {% trans 'Attribute' %} -</option>
+          <option value="">- {% trans 'Insert Attribute' %} -</option>
           {% for attr in attribute_names %}
             <option value="{{ attr }}">{{ attr }}</option>
           {% endfor %}
         </select>
     </div>
   {% endif %}
-  <div style="display: table-cell; padding-right: 1ex;">
+  <div class="col col-md-auto">
       <select id="select-column-name">
-        <option value="">- {% trans 'Column Value' %} -</option>
+        <option value="">- {% trans 'Insert Column Value' %} -</option>
         {% for colname in column_names %}
           <option value="{{ colname }}">{{ colname }}</option>
         {% endfor %}

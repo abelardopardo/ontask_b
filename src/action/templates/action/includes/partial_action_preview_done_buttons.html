@@ -1,5 +1,6 @@
 {% load i18n %}
-<div class="text-center" style="margin: 1ex 0 1ex 0;">
+<div id="action-preview-done" class="row justify-content-center row-top-border"
+     style="border-color: #dee2e6; padding: 1em 0 1em 0;">
   <button type="button"
           class="btn btn-primary js-action-preview {% if selected_rows == 0 %}disabled{% endif %}"
           style="margin-right:2ex;"
@@ -10,8 +11,14 @@
   </button>
   <button type="submit" name="Submit" value="Submit"
           class="btn btn-primary spin"
+          style="margin-right:2ex;"
           data-toggle="tooltip"
-          title="{% trans 'Save and go back' %}">
+          title="{% trans 'Save current data' %}">
     <span class="fa fa-ok"></span> {% trans 'Save' %}</button>
+  <button type="submit" name="Submit" value="Close"
+          class="btn btn-primary spin"
+          data-toggle="tooltip"
+          title="{% trans 'Save and go back to the action table' %}">
+    <span class="fa fa-ok"></span> {% trans 'Close' %}</button>
 </div>
 

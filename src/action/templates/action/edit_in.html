@@ -22,7 +22,7 @@
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
-    {% with allow_empty='true' %}
+    {% with js_var='qbuilder_options' allow_empty='true' %}
       {% include 'qbuilder_options.js' %}
     {% endwith %}
     if (document.getElementById("column-selected-table") != null) {

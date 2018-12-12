@@ -38,10 +38,6 @@ body>.navbar-transparent {
     background-color: transparent;
 }
 
-.form-inline {
-    margin-right: 0;
-}
-
 .navbar-nav>.btn{
     margin-top:10px;
     margin-right: 1.7em;
@@ -208,7 +204,11 @@ div.condition-btn {
     padding: 0.5ex;
 }
 /* Tweaks for JQuery QueryBuilder
-
+/* Needed for QueryBuilder to expand width 100% */
+#filter_builder.form-inline,
+#builder.form-inline {
+  display: unset;
+}
 /* Needed to fix rendering of jQuery QueryBuilder in Popup */
 dt div.btn-group,
 dt div.btn-group-vertical {
@@ -319,8 +319,8 @@ div.sol-container {
     word-wrap: break-word;
 }
 
-.modal-content {
-    text-align: center;
+.modal-dialog {
+    max-width: 800px;
 }
 
 a.column-move-prev > span,
