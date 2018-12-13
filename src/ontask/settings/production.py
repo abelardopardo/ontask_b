@@ -34,7 +34,7 @@ DATAOPS_PLUGIN_DIRECTORY = os.path.join(PROJECT_PATH, 'plugins')
 #
 # Execute the JSON transfers for the required actions
 #
-EXECUTE_ACTION_JSON_TRANSFER = True
+EXECUTE_ACTION_JSON_TRANSFER = env.bool('EXECUTE_ACTION_JSON_TRANSFER', default=True)
 
 # Cache the templates in memory for speed-up
 loaders = [

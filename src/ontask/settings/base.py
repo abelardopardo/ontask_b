@@ -375,7 +375,7 @@ SHORT_DATETIME_FORMAT = 'r'
 # the logger
 #
 ################################################################################
-EXECUTE_ACTION_JSON_TRANSFER = False
+EXECUTE_ACTION_JSON_TRANSFER = env.bool('EXECUTE_ACTION_JSON_TRANSFER', default=False)
 
 ################################################################################
 #
