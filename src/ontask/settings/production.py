@@ -12,7 +12,7 @@ DEBUG = False
 ALLOWED_HOSTS = [os.environ['DOMAIN_NAME']]
 
 # Additional middleware introduced by debug toolbar
-MIDDLEWARE_CLASSES += ['django.middleware.security.SecurityMiddleware']
+MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
 
 #
 # Security features
@@ -34,7 +34,8 @@ DATAOPS_PLUGIN_DIRECTORY = os.path.join(PROJECT_PATH, 'plugins')
 #
 # Execute the JSON transfers for the required actions
 #
-EXECUTE_ACTION_JSON_TRANSFER = True
+EXECUTE_ACTION_JSON_TRANSFER = env.bool('EXECUTE_ACTION_JSON_TRANSFER',
+                                        default=True)
 
 # Cache the templates in memory for speed-up
 loaders = [
@@ -68,6 +69,12 @@ LOGGING = {
         },
     },
     'handlers': {
+        'django_log_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': join(LOGFILE_ROOT, 'django.log'),
+            'formatter': 'verbose'
+        },
         'proj_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
