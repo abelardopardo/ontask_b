@@ -271,6 +271,24 @@ def action_index(request):
     if not workflow:
         return redirect('workflow:index')
 
+    return action_index_set(request)
+
+
+@user_passes_test(is_instructor)
+def action_index_set(request, pk=None):
+    """
+    Set the workflow in the session object (if not given) and create the page
+    with the list of actions.
+    :param request: HTTP Request
+    :param pk: Primary key of the workflow object to use
+    :return: HTTP response
+    """
+
+    # Get the appropriate workflow object
+    workflow = get_workflow(request, wid=pk)
+    if not workflow:
+        return redirect('workflow:index')
+
     # Reset object to carry action info throughout dialogs
     request.session[action_session_dictionary] = {}
     request.session.save()

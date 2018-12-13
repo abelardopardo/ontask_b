@@ -9,6 +9,12 @@ body {
   padding-top:37px; /* To jump over the fixed nav-bar */
 }
 
+.ontask-card {
+    cursor: pointer;
+    max-width: 250px;
+    min-width:250px;
+}
+
 .starter-template {
   padding: 40px 15px;
   text-align: center;

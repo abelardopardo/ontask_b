@@ -73,3 +73,8 @@ $(function () {
 window.onload = function(){
   setDateTimePickers();
 };
+$(".ontask-card .card-body").click(function() {
+  window.location = $(this).parent().find("a").attr("href");
+  $('#div-spinner').show();
+  return false;
+});

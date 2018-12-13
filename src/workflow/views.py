@@ -57,10 +57,10 @@ class WorkflowTable(tables.Table):
             self.attrs['id'] = table_id
 
     def render_nrows_cols(self, record):
-        if record['nrows'] == 0 and record['ncols'] == 0:
+        if record.nrows == 0 and record.ncols == 0:
             return "No data"
 
-        return format_html("{0}/{1}".format(record['nrows'], record['ncols']))
+        return format_html("{0}/{1}".format(record.nrows, record.ncols))
 
     operations = OperationsColumn(
         verbose_name=_('Operations'),
@@ -179,20 +179,10 @@ def workflow_index(request):
     # Get the available workflows
     workflows = Workflow.objects.filter(
         Q(user=request.user) | Q(shared=request.user)
-    ).distinct().values(
-        'id',
-        'name',
-        'description_text',
-        'nrows',
-        'ncols',
-        'modified'
-    )
+    ).distinct().order_by('name')
 
     # We include the table only if it is not empty.
     context = {
-        'table': WorkflowTable(workflows,
-                               id='workflow-table',
-                               orderable=False),
         'workflows': workflows,
         'nwflows': len(workflows)
     }

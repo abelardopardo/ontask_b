@@ -47,7 +47,8 @@
               {% if user.is_authenticated %}
                 <li class="nav-item">
                   <a class="nav-link spin{% if request.path == ONTASK_BASE_URL %} active{% endif %}"
-                     href="{% url 'home' %}">{% trans 'Workflows' %}</a>
+                     href="{% url 'home' %}"
+                     data-toggle="tooltip" title="Your workflows"><span class="fa fa-home"></span></a>
                 </li>
                 {% if user.is_superuser %}
                   <li class="nav-item">
@@ -56,24 +57,29 @@
               {% endif %}
               {% if request.session.ontask_workflow_id %}
                 {% url 'workflow:detail' request.session.ontask_workflow_id as workflow_url %}
-                <li class="nav-item"><a
-                    class="nav-link spin{% if '/workflow/' in request.path %} active{% endif %}" href="{{ workflow_url }}">{% trans 'Details' %}</a></li>
-
-
-                <li class="nav-item"><a
-                    class="nav-link spin{% if '/table/' in request.path  or '/dataops' in request.path%} active{% endif %}" href="{% url 'table:display' %}">{% trans 'Table' %}</a>
-                </li>
-
                 <li class="nav-item">
-                  <a class="nav-link spin{% if '/action/' in request.path %} active{% endif %}" href="{% url 'action:index' %}">{% trans 'Actions' %}</a>
+                  <a class="nav-link spin{% if '/action/' in request.path %} active{% endif %}"
+                     href="{% url 'action:index' %}"
+                     data-toggle="tooltip" title="Messages and Surveys"><span class="fa fa-comments"></span></a>
                 </li>
-
                 <li class="nav-item"><a
-                    class="nav-link spin{% if '/scheduler/' in request.path %} active{% endif %}" href="{% url 'scheduler:index' %}">{% trans 'Scheduler' %}</a></li>
-
-                <li class="nav-item"><a
-                    class="nav-link spin{% if '/logs/' in request.path %} active{% endif %}" href="{% url 'logs:index' %}">{% trans 'Logs' %}</a>
+                    class="nav-link spin{% if '/table/' in request.path  or '/dataops' in request.path%} active{% endif %}"
+                    href="{% url 'table:display' %}"
+                    data-toggle="tooltip" title="Data Table Operations"><span class="fa fa-table"></span></a>
                 </li>
+                <li class="nav-item"><a
+                    class="nav-link spin{% if '/scheduler/' in request.path %} active{% endif %}"
+                    href="{% url 'scheduler:index' %}"
+                    data-toggle="tooltip" title="Scheduled Actions"><span class="fa fa-history"></span></a></li>
+                <li class="nav-item"><a
+                    class="nav-link spin{% if '/logs/' in request.path %} active{% endif %}"
+                    href="{% url 'logs:index' %}"
+                    data-toggle="tooltip" title="Execution Logs"><span class="fa fa-archive"></span></a>
+                </li>
+                <li class="nav-item"><a
+                    class="nav-link spin{% if '/workflow/' in request.path %} active{% endif %}"
+                    href="{{ workflow_url }}"
+                     data-toggle="tooltip" title="Workflow and column details"><span class="fa fa-cog"></span></a></li>
               {% else %}
                 <li class="nav-item"><a href="https://ontasklearning.org" class="nav-link" target="blank">{% trans 'About' %}</a></li>
                 <li class="nav-item"><a class="nav-link" href="https://www.ontasklearning.org/contact/" target="blank">
@@ -89,7 +95,7 @@
                 {% endif %}
                 <li class="nav-item dropdown">
                   <a href="#" class="nav-link dropdown-toggle profile-menu" data-toggle="dropdown">
-                   <img src="{% thumbnail user.profile.picture|default:'default_profile.png' 19x19 crop %}" alt="" />
+                   <span class="fa fa-user"></span>
                   </a>
                   <div class="dropdown-menu">
                     <a class="dropdown-item spin" href="{% url 'profiles:show_self' %}">{% trans 'Profile' %}</a>
@@ -98,7 +104,7 @@
                 </li>
               {% endif %}
               <li class="nav-item">
-                <a href="{% static ONTASK_HELP_URL %}" class="nav-link btn btn-outline-dark spin"
+                <a href="{% static ONTASK_HELP_URL %}" class="nav-link btn btn-light spin"
                    data-toggle="tooltip"
                    data-placement="bottom"
                    title="{% trans 'Read the manual' %}">
