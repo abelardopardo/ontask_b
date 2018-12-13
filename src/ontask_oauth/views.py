@@ -63,6 +63,7 @@ def get_initial_token_step1(request, oauth_info, return_url):
                              'client_id': oauth_info['client_id'],
                              'response_type': 'code',
                              'redirect_uri': request.session[callback_url_key],
+                             'scopes':'url:POST|/api/v1/conversations',
                              'state': request.session[oauth_hash_key],
                          }).prepare().url
     )
