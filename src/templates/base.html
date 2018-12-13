@@ -48,7 +48,7 @@
                 <li class="nav-item">
                   <a class="nav-link spin{% if request.path == ONTASK_BASE_URL %} active{% endif %}"
                      href="{% url 'home' %}"
-                     data-toggle="tooltip" title="Your workflows"><span class="fa fa-home"></span></a>
+                     data-toggle="tooltip" title="Your workflows"><span class="fa fa-home"></span>{% if request.path == ONTASK_BASE_URL %} Home{% endif %}</a>
                 </li>
                 {% if user.is_superuser %}
                   <li class="nav-item">
@@ -60,12 +60,12 @@
                 <li class="nav-item">
                   <a class="nav-link spin{% if '/action/' in request.path %} active{% endif %}"
                      href="{% url 'action:index' %}"
-                     data-toggle="tooltip" title="Messages and Surveys"><span class="fa fa-comments"></span></a>
+                     data-toggle="tooltip" title="Messages and Surveys"><span class="fa fa-comments"></span>{% if '/action' in request.path %} Actions{% endif %}</a>
                 </li>
                 <li class="nav-item"><a
-                    class="nav-link spin{% if '/table/' in request.path  or '/dataops' in request.path%} active{% endif %}"
+                    class="nav-link spin{% if '/table/' in request.path  or '/dataops' in request.path %} active{% endif %}"
                     href="{% url 'table:display' %}"
-                    data-toggle="tooltip" title="Data Table Operations"><span class="fa fa-table"></span></a>
+                    data-toggle="tooltip" title="Data Table Operations"><span class="fa fa-table"></span>{% if '/table/' in request.path or '/dataops' in request.path %} Table{% endif %}</a>
                 </li>
                 <li class="nav-item"><a
                     class="nav-link spin{% if '/scheduler/' in request.path %} active{% endif %}"

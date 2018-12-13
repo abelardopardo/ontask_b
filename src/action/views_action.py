@@ -2,10 +2,12 @@
 
 
 from future import standard_library
+
+from ontask import simplify_datetime_str
+
 standard_library.install_aliases()
 from builtins import next
 from builtins import object
-import pytz
 from django.db import IntegrityError
 from django.utils.html import format_html
 
@@ -30,7 +32,6 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
 
 from action.evaluate import render_template
 from dataops import ops, pandas_db
@@ -95,17 +96,39 @@ class ActionTable(tables.Table):
             'serve_enabled': record['serve_enabled']}
     )
 
+    def render_action_type(self, record):
+        icon = 'file-text'
+        title = 'Personalized text'
+        if record['action_type'] == 'Personalized text':
+            icon = 'file-text'
+            title = 'Personalized text'
+        elif record['action_type'] == 'Personalized Canvas Email':
+            icon = 'envelope-square'
+            title = 'Personalized Canvas Email'
+        elif record['action_type'] == 'Personalized JSON':
+            icon = 'code'
+            title = 'Personalized JSON'
+        elif record['action_type'] == 'Survey':
+            icon = 'question-circle-o'
+            title = 'Survey'
+        return format_html(
+            """<div data-toggle="tooltip" title="{0}">
+                 <span class="fa fa-{1}"></span></div>""".format(
+                title,
+                icon
+            )
+        )
+
     def render_last_executed_log(self, record):
         log_item = record['last_executed_log']
         if not log_item:
             return "---"
 
+        dtime = log_item.modified
         return format_html(
             """<a class="spin" href="{0}">{1}</a>""".format(
                 reverse('logs:view', kwargs={'pk': log_item.id}),
-                log_item.modified.astimezone(
-                    pytz.timezone(settings.TIME_ZONE)
-                )
+                simplify_datetime_str(log_item.modified)
             )
         )
 
@@ -115,7 +138,7 @@ class ActionTable(tables.Table):
         fields = ('name', 'description_text', 'action_type',
                   'last_executed_log')
 
-        sequence = ('name', 'description_text', 'action_type',
+        sequence = ('action_type', 'name', 'description_text',
                     'last_executed_log')
 
         exclude = ('content', 'serve_enabled', 'columns', 'filter')

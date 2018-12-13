@@ -11,8 +11,24 @@ body {
 
 .ontask-card {
     cursor: pointer;
+    min-width: 250px;
     max-width: 250px;
-    min-width:250px;
+}
+
+.wflow-buttons,
+.cond-buttons {
+    border-top:1px solid rgba(0,0,0,.125);
+    background-color: #f8f9fa;
+}
+
+.ontask-ccard {
+    cursor: pointer;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+#preview-variables {
+    background-color: rgba(0,0,0,.125);
 }
 
 .starter-template {
@@ -199,12 +215,12 @@ body>.navbar-transparent {
   z-index: 2;
 }
 
-/* For the Action Edit */
+/* For the Action Edit
 div.conditions {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-}
+} */
 
 div.condition-btn {
     padding: 0.5ex;

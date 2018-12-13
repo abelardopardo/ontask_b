@@ -8,51 +8,37 @@
           title="{% trans 'Define a text condition to insert in the text body below.' %}">
     <span class="fa fa-plus"></span> {% trans 'New Condition' %}</button>
 </div>
-<div id="condition-set" class="row conditions justify-content-center">
+<div id="condition-set" class="card-deck justify-content-center"
+     style="margin:1em 0 1em 0;">
   {% for condition in conditions %}
-    <div class="condition-btn btn-group">
-      <button type="button"
-              class="btn btn-primary btn-sm js-condition-edit"
-              data-url="{% url 'action:edit_condition' condition.id %}"
-              data-toggle="tooltip"
-              title="{% blocktrans with n=condition.n_rows_selected %}Edit the condition ({{ n }} rows satisfy this condition){% endblocktrans %}">
-        {{ condition.name }} {% blocktrans with n=condition.n_rows_selected count counter=condition.n_rows_selected %}({{ n }} learner){% plural %}({{ n }} learners){% endblocktrans %}
-      </button>
-      <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
-              data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-        <span class="caret"></span>
-        <span class="sr-only">{% trans 'Toggle Dropdown' %}</span>
-      </button>
-      <ul role="menu" class="dropdown-menu">
-        <li>
-          <button type="button"
-                  class="btn btn-outline-dark btn-sm js-condition-edit"
-                  data-url="{% url 'action:edit_condition' condition.id %}"
-                  data-toggle="tooltip"
-                  title="{% trans 'Edit name, description and formula' %}">
-            <span class="fa fa-pencil"></span> {% trans 'Edit' %}
-          </button>
-        </li>
-        <li>
-          <button type="button"
-             class="btn btn-outline-dark btn-sm js-condition-clone"
-             data-url="{% url 'action:clone_condition' condition.id %}"
-             data-toggle="tooltip"
-             title="{% trans 'Create an exact copy of this condition' %}">
-            <span class="fa fa-clone"></span> {% trans 'Clone' %}
-          </button>
-        </li>
-        <li>
-          <button type="button"
-                  class="btn btn-outline-danger btn-sm js-condition-delete"
-                  data-url="{% url 'action:delete_condition' condition.id %}"
-                  data-toggle="tooltip"
-                  title="{% trans 'Delete the condition' %}">
-            <span class="fa fa-trash"></span> {% trans 'Delete' %}
-          </button>
-        </li>
-      </ul>
+    <div class="card ontask-ccard" style="margin-bottom: 15px;">
+      <div class="card-body">
+        <h4 class="card-title text-center">{{ condition.name }}</h4>
+        <h5 class="card-subtitle  mb-2 text-muted text-center">{% blocktrans with n=condition.n_rows_selected count counter=condition.n_rows_selected %}({{ n }} learner){% plural %}({{ n }} learners){% endblocktrans %}</h5>
+        <p class="card-text" style="min-height: 100px;">{{ condition.description_text }}</p>
+      </div>
+      <div class="cond-buttons justify-content-right">
+        <button type="button"
+                class="btn btn-light btn-sm js-condition-edit"
+                data-url="{% url 'action:edit_condition' condition.id %}"
+                data-toggle="tooltip"
+                title="{% blocktrans with n=condition.n_rows_selected %}Edit the condition ({{ n }} rows satisfy this condition){% endblocktrans %}"><span class="fa fa-pencil"></span>
+        </button>
+        <button type="button"
+           class="btn btn-light btn-sm js-condition-clone"
+           data-url="{% url 'action:clone_condition' condition.id %}"
+           data-toggle="tooltip"
+           title="{% trans 'Create an exact copy of this condition' %}">
+          <span class="fa fa-clone"></span>
+        </button>
+        <button type="button"
+                class="btn btn-danger btn-sm js-condition-delete"
+                data-url="{% url 'action:delete_condition' condition.id %}"
+                data-toggle="tooltip"
+                title="{% trans 'Delete the condition' %}">
+          <span class="fa fa-trash"></span>
+        </button>
+      </div>
     </div>
   {% empty %}
     <p class="text-center">

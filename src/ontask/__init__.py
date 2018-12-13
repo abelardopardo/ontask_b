@@ -5,12 +5,14 @@ Basic functions and definitions used all over the platform.
 
 
 import json
+import pytz
 
 from ontask.celery import app as celery_app
 
 __all__ = ['celery_app', 'OnTaskException']
 
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings as ontask_settings
 
 __version__ = 'B.4.0.0'
 
@@ -77,6 +79,10 @@ def get_action_payload(request):
 
     return request.session.get(action_session_dictionary, None)
 
+def simplify_datetime_str(dtime):
+    return dtime.astimezone(
+                    pytz.timezone(ontask_settings.TIME_ZONE)
+                ).strftime('%Y-%m-%d %H:%M:%S %z')
 
 class OnTaskException(Exception):
     """

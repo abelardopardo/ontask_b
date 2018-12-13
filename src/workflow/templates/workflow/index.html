@@ -69,7 +69,7 @@
             <h4 class="card-title">{{ wflow.name }}</h4>
             <p class="card-text" style="min-height: 100px;">{{ wflow.description_text }}</p>
           </div>
-          <div style="border-top:1px solid rgba(0,0,0,.125);background-color: #f8f9fa;">
+          <div class="wflow-buttons">
             <a href="{% url 'action:index_set' wflow.id %}"
                class="btn btn-light btn-sm card-link spin"
                data-toggle="tooltip"

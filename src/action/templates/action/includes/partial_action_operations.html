@@ -16,7 +16,7 @@
        class="btn btn-outline-dark btn-sm spin"
         data-toggle="tooltip"
         title="{% trans 'Create a ZIP with each personalised text in a file' %}">
-      <span class="fa fa-compressed"></span> {% trans 'ZIP' %}</a>
+      <span class="fa fa-archive-o"></span> {% trans 'ZIP' %}</a>
   {% endif %}
   {% if action_tval == 'survey' or action_tval == 'todo_list' or action_tval == 'personalized_json' %}
     <a href="{% url 'action:run' id %}"
@@ -24,7 +24,7 @@
        data-toggle="tooltip"
        {% if action_tval == 'survey' or action_tval == 'todo_list' %}title="{% trans 'Enter data manually' %}"{% endif %}
        {% if action_tval == 'personalized_json' %}title="{% trans 'Send personalised JSONs' %}"{% endif %}>
-      <span class="fa fa-off"></span> {% trans 'Run' %}</a>
+      <span class="fa fa-rocket"></span> {% trans 'Run' %}</a>
   {% endif %}
   {% if action_tval != 'personalized_canvas_email' and action_val != 'personalized_json' %}
     <button type="button"
@@ -78,7 +78,7 @@
            class="btn btn-outline-dark btn-sm spin"
            data-toggle="tooltip"
            title="{% trans 'Export the content of this action' %}">
-          <span class="fa fa-export"></span> {% trans 'Export' %}</a>
+          <span class="fa fa-download"></span> {% trans 'Export' %}</a>
       </li>
       <li>
         <button type="button"

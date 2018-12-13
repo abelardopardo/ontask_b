@@ -120,7 +120,7 @@
              class="btn btn-outline-dark btn-sm js-logs-download"
              data-toggle="tooltip"
              title="{% trans 'Download a CSV file containing this table' %}">
-            <span class="fa fa-download-alt"></span> {% trans 'CSV Download' %}
+            <span class="fa fa-download"></span> {% trans 'CSV Download' %}
           </a>
         {% else %}
           <a href="{% url 'table:stat_table' %}"
@@ -133,7 +133,7 @@
              class="btn btn-outline-dark btn-sm"
              data-toggle="tooltip"
              title="{% trans 'Download a CSV file containing this table' %}">
-            <span class="fa fa-download-alt"></span> {% trans 'CSV Download' %}
+            <span class="fa fa-download"></span> {% trans 'CSV Download' %}
           </a>
         {% endif %}
       {% endif %}
