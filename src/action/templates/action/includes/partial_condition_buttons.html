@@ -27,15 +27,6 @@
       <ul role="menu" class="dropdown-menu">
         <li>
           <button type="button"
-                  class="btn btn-outline-dark btn-sm js-condition-insert"
-                  data-name="{{ condition.name }}"
-                  data-toggle="tooltip"
-                  title="{% trans 'Insert text condition into the body.' %}">
-            <span class="fa fa-arrow-down"></span> {% trans 'Insert in text' %}
-          </button>
-        </li>
-        <li>
-          <button type="button"
                   class="btn btn-outline-dark btn-sm js-condition-edit"
                   data-url="{% url 'action:edit_condition' condition.id %}"
                   data-toggle="tooltip"
@@ -49,7 +40,7 @@
              data-url="{% url 'action:clone_condition' condition.id %}"
              data-toggle="tooltip"
              title="{% trans 'Create an exact copy of this condition' %}">
-            <span class="fa fa-duplicate"></span> {% trans 'Clone' %}
+            <span class="fa fa-clone"></span> {% trans 'Clone' %}
           </button>
         </li>
         <li>

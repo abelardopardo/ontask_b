@@ -81,7 +81,7 @@ class WorkflowTable(tables.Table):
                    'data_frame_table_name')
 
         attrs = {
-            'class': 'table table-striped table-bordered',
+            'class': 'table table-striped',
             'id': 'workflow-table'
         }
 
@@ -193,6 +193,7 @@ def workflow_index(request):
         'table': WorkflowTable(workflows,
                                id='workflow-table',
                                orderable=False),
+        'workflows': workflows,
         'nwflows': len(workflows)
     }
 

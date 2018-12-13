@@ -1,5 +1,21 @@
 {% load i18n %}
-<div id="attribute-names" class="row justify-content-md-center" style="padding-bottom: 1em;">
+<div id="attribute-names" class="row justify-content-center" style="padding-bottom: 1em;">
+  <div class="col col-md-auto">
+      <select id="select-column-name">
+        <option value="">- {% trans 'Insert Column Value' %} -</option>
+        {% for colname in column_names %}
+          <option value="{{ colname }}">{{ colname }}</option>
+        {% endfor %}
+      </select>
+  </div>
+  <div class="col col-md-auto">
+      <select id="select-condition-name">
+        <option value="">- {% trans 'Use condition in highlighted text' %} -</option>
+        {% for cond_name in conditions %}
+          <option value="{{ cond_name }}">{{ cond_name }}</option>
+        {% endfor %}
+      </select>
+  </div>
   {% if attribute_names %}
     <div class="col col-md-auto">
         <select id="select-attribute-name">
@@ -10,12 +26,4 @@
         </select>
     </div>
   {% endif %}
-  <div class="col col-md-auto">
-      <select id="select-column-name">
-        <option value="">- {% trans 'Insert Column Value' %} -</option>
-        {% for colname in column_names %}
-          <option value="{{ colname }}">{{ colname }}</option>
-        {% endfor %}
-      </select>
-  </div>
 </div>

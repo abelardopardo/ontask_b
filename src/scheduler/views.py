@@ -155,7 +155,7 @@ class ScheduleActionTable(tables.Table):
                     'last_executed_log')
 
         attrs = {
-            'class': 'table table-striped table-bordered',
+            'class': 'table table-striped',
             'id': 'scheduler-table'
         }
 

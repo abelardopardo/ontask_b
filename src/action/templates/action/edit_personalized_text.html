@@ -39,7 +39,7 @@
 {% endblock %}
 {% block container %}
   <div class="container" id="action-out-editor">
-    <h1 class="page-header text-center">{{ action.name }}</h1>
+    <h1 class="text-center">{{ action.name }}</h1>
     <ul class="nav nav-tabs nav-fill" id="edit-personalized-text-tabs" role="tablist">
       <li class="nav-item">
         <a class="nav-link active" id="text-tab" data-toggle="tab" href="#text" role="tab" aria-controls="text" aria-selected="true">Personalized Text</a>
@@ -64,7 +64,7 @@
             <div id="action-preview-done" class="row justify-content-center row-top-border"
                  style="border-color: #dee2e6; padding: 1em 0 1em 0;">
               <button type="button"
-                      class="btn btn-primary js-action-preview {% if selected_rows == 0 %}disabled{% endif %}"
+                      class="btn btn-info js-action-preview {% if selected_rows == 0 %}disabled{% endif %}"
                       style="margin-right:2ex;"
                       data-url="{% url 'action:preview' action.id 1 %}"
                       data-toggle="tooltip"

@@ -32,9 +32,10 @@ var insertConditionInContent = function() {
   } else {
       condition_text = '';
   }
-  insert_text = "{% if " + btn.attr('data-name') +
+  insert_text = "{% if " + btn.val() +
       " %}" + condition_text + "{% endif %}";
   insertText('id_content', insert_text);
+  $(this).val(this.defaultSelected);
 };
 var insertAttributeInContent = function() {
   var val = $(this).val();
@@ -178,14 +179,6 @@ $(function () {
   $("#action-in-editor").on("click", ".js-description-edit", loadForm);
   $("#modal-item").on("submit", ".js-description-edit-form", saveForm);
 
-  // Create filter
-  $("#filter-set").on("click", ".js-filter-create", loadForm);
-  $("#modal-item").on("submit", ".js-filter-create-form", saveForm);
-
-  // Edit Filter
-  $("#filter-set").on("click", ".js-filter-edit", loadForm);
-  $("#modal-item").on("submit", ".js-filter-edit-form", saveForm);
-
   // Update Filter
   $("#filter").on("submit", ".js-filter-update-form", transferFormula);
 
@@ -209,8 +202,11 @@ $(function () {
   $("#modal-item").on("submit", ".js-condition-delete-form", saveForm);
 
   // Insert condition blurb in the editor
-  $("#condition-set").on("click", ".js-condition-insert",
-    insertConditionInContent);
+  $("#attribute-names").on("change",
+                           "#select-condition-name",
+                           insertConditionInContent);
+//  $("#condition-set").on("click", ".js-condition-insert",
+//    insertConditionInContent);
 
   // Insert attribute in content
   $("#attribute-names").on("change",
@@ -222,14 +218,14 @@ $(function () {
                            insertAttributeInContent);
 
   // Insert columns in action in
-  $("#column-names").on("change",
-                       "#select-column-name",
-                       insertColumnInActionIn);
+  $("#questions").on("change",
+                      "#select-column-name",
+                      insertColumnInActionIn);
 
   // Insert columns in action in
-  $("#action-in-editor").on("change",
-                       "#select-key-column-name",
-                       insertColumnInActionIn);
+  $("#parameters").on("change",
+                      "#select-key-column-name",
+                      insertColumnInActionIn);
 
   // Toggle shuffle question
   $("#action-in-editor").on("change",

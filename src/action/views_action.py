@@ -121,7 +121,7 @@ class ActionTable(tables.Table):
         exclude = ('content', 'serve_enabled', 'columns', 'filter')
 
         attrs = {
-            'class': 'table table-striped table-bordered',
+            'class': 'table table-striped',
             'id': 'action-table'
         }
 
@@ -146,7 +146,7 @@ class ColumnSelectedTable(tables.Table):
     class Meta(object):
         fields = ('name', 'description_text', 'operations')
         attrs = {
-            'class': 'table table-striped table-bordered',
+            'class': 'table table-striped',
             'id': 'column-selected-table'
         }
 
@@ -590,6 +590,8 @@ def edit_action_in(request, workflow, action):
     :return: HTTP response
     """
 
+    form_filter = FilterForm(request.POST or None, instance=action.get_filter())
+
     # Get filter or None
     filter_condition = action.get_filter()
 
@@ -633,6 +635,7 @@ def edit_action_in(request, workflow, action):
                     )]
            ),
            'has_no_key': has_no_key,
+           'form_filter': form_filter,
            'has_empty_description': has_empty_description}
 
     return render(request, 'action/edit_in.html', ctx)

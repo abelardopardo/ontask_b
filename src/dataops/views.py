@@ -68,7 +68,7 @@ class PluginRegistryTable(tables.Table):
                     'is_verified', 'executed')
 
         attrs = {
-            'class': 'table table-striped table-bordered',
+            'class': 'table table-striped',
             'id': 'transform-table'
         }
 

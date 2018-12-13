@@ -4,7 +4,7 @@
 {% load static %}
 {% load widget_tweaks %}
 {% load django_tables2 %}
-{% block title %}{{ block.super }}{% trans 'Edit Action In' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Edit Survey' %}{% endblock %}
 {% block extrahead %}
   {% ontask_datetimepicker_css %}
   <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
@@ -22,7 +22,10 @@
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
-    {% with js_var='qbuilder_options' allow_empty='true' %}
+    {% with js_var='qbuilder_options' allow_empty='false' %}
+      {% include 'qbuilder_options.js' %}
+    {% endwith %}
+    {% with js_var='qbuilder_filter_options' allow_empty='false' %}
       {% include 'qbuilder_options.js' %}
     {% endwith %}
     if (document.getElementById("column-selected-table") != null) {
@@ -47,16 +50,80 @@
   </script>
 {% endblock %}
 {% block container %}
-  <div align="center" class="container" id="action-in-editor">
-    <h1 class="page-header"><strong>{{ action.name }}</strong> <small>({{ action.get_action_type_display }})</small></h1>
-    {% include 'action/includes/partial_filter_create_buttons.html' %}
-    <div class="row row-top-border">
-      <div class="col-xs-1 col-md-1">
-        <div class="numberCircle"><b>2</b></div>
+  <div class="container" id="action-in-editor">
+    <h1 class="text-center">{{ action.name }}</h1>
+    <ul class="nav nav-tabs nav-fill" id="edit-personalized-text-tabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="questions-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="true">Survey Questions</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="parameters-tab" data-toggle="tab" href="#parameters" role="tab" aria-controls="parameters" aria-selected="false">Survey parameters</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="false">Filter Learners
+          {% if not filter_condition %}(Empty){% else %}{% blocktrans with n=selected_rows tot=total_rows count counter=selected_rows %}({{ n }} learner of {{ tot }}){% plural %}({{ n }} learners of {{ tot }}){% endblocktrans %}{% endif %}
+        </a>
+      </li>
+    </ul>
+    <br/>
+    <div class="tab-content" id="edit-survey-tab-content">
+      <div class="tab-pane fade show active" id="questions" role="tabpanel" aria-labelledby="questions-tab">
+        <div class="row justify-content-center">
+          {% if not has_no_key %}
+            <p class="alert-danger">{% trans 'There must be at least one non-key column.' %}</p>
+          {% endif %}
+          {% if has_empty_description %}
+            <p class="alert-danger">{% trans 'All questions should have non-empty descriptions.' %}</p>
+          {% endif %}
+        </div>
+        <div class="row justify-content-center">
+          <select id="select-column-name" style="margin-right:1ex;">
+            <option value="">- {% trans 'Insert question' %} -</option>
+            {% for col in columns_to_insert %}
+              <option
+                value="{% url 'action:select_column_action' action.id col.id %}">{{ col.name }}</option>
+            {% endfor %}
+          </select>
+          <button type="button"
+                  class="btn btn-primary btn-sm js-workflow-question-add"
+                  data-url="{% url 'workflow:question_add' action.id %}"
+                  data-toggle="tooltip"
+                  title="{% trans 'Add a new question to the action' %}">
+            <span class="fa fa-plus"></span> {% trans 'Create new question' %}
+          </button>
+        </div>
+        <div class="row justify-content-center"
+             style="padding-right: 1ex; padding-top:1ex;">
+          {% render_table column_selected_table %}
+        </div>
+        <div class="row justify-content-center"
+             style="margin-bottom:1.5ex;margin-top:1.5ex">
+          <button type="button"
+                  class="btn btn-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
+                  style="margin-right:2ex;"
+                  data-url="{% url 'action:preview' action.id 1 %}"
+                  data-toggle="tooltip"
+                  title="{% trans 'See the content as shown to each learner' %}">
+            <span class="fa fa fa-eye"></span> {% trans 'Preview' %}
+          </button>
+          <a href="{% url 'action:index' %}"
+                  style="margin-right:2ex;"
+                  class="btn btn-primary spin"
+                  data-toggle="tooltip"
+                  data-placement="auto"
+                  title="{% trans 'Save action and go back to action table' %}">
+            <span class="fa fa-ok"></span> {% trans 'Done' %}
+          </a>
+          <a href="{% url 'action:run' action.id %}"
+             class="btn btn-primary spin {% if not action.is_executable %}disabled{% endif %}"
+             data-toggle="tooltip"
+             title="{% trans 'Enter data manually' %}">
+            <span class="fa fa-off"></span> {% trans 'Run' %}
+          </a>
+        </div>
       </div>
-      <div class="col-xs-11 col-md-11">
-        <h4>
-          Description (shown to learners)
+      <div class="tab-pane fade" id="parameters" role="tabpanel" aria-labelledby="parameters-tab">
+        <h4 class="text-center">Survey description (shown to learners)
           <button type="button"
                   class="btn btn-sm btn-primary js-description-edit"
                   data-url="{% url 'action:edit_description' action.id %}"
@@ -65,21 +132,14 @@
                   title="{% trans 'Edit description' %}">
             <span class="fa fa-pencil"></span> {% trans 'Edit' %}</button>
         </h4>
-      </div>
-    </div>
-    <div class="row">
-      {% if action.description_text %}
-        <p>{{ action.description_text }}</p>
-      {% else %}
-        <p>{% trans 'No description text provided' %}</p>
-      {% endif %}
-    </div>
-    <div class="row row-top-border">
-      <div class="col-xs-1 col-md-1">
-        <div class="numberCircle"><b>3</b></div>
-      </div>
-      <div class="col-xs-11 col-md-11">
-        <h4>
+        <div class="row justify-content-center">
+          {% if action.description_text %}
+            <p>{{ action.description_text }}</p>
+          {% else %}
+            <p>{% trans 'No description text provided' %}</p>
+          {% endif %}
+        </div>
+        <h4 class="text-center">
           {% trans 'Key column to match the user id' %}
           <small>
             <select id="select-key-column-name">
@@ -98,20 +158,12 @@
             </select>
           </small>
         </h4>
-      </div>
-    </div>
-    {% if not key_selected %}
-      <div class="row">
-        <p class="alert-danger" style="margin-top:1ex;">{% trans 'You need to specify a key column' %}</p>
-      </div>
-    {% endif %}
-    <div class="row row-top-border">
-      <div class="col-xs-1 col-md-1">
-        <div class="numberCircle"><b>4</b></div>
-      </div>
-      <div class="col-xs-11 col-md-11">
-        <h4>
-          {% trans 'Shuffle questions?' %}
+        {% if not key_selected %}
+          <div class="row">
+            <p class="alert-danger" style="margin-top:1ex;">{% trans 'You need to specify a key column' %}</p>
+          </div>
+        {% endif %}
+        <h4 class="text-center">{% trans 'Shuffle questions?' %}
           <small>
             <input id="shuffle-questions"
                    {% if action.shuffle %}checked{% endif %}
@@ -121,70 +173,9 @@
           </small>
         </h4>
       </div>
-    </div>
-    <div class="row row-top-border">
-      <div class="col-xs-1 col-md-1">
-        <div class="numberCircle"><b>5</b></div>
+      <div class="tab-pane fade" id="filter" role="tabpanel" aria-labelledby="filter-tab">
+        {% include 'action/includes/partial_filter_create_buttons.html' %}
       </div>
-      <div class="col-xs-11 col-md-11">
-        <h4>{% trans 'Columns to obtain and store the data' %}</h4>
-      </div>
-    </div>
-    <div class="row row-bottom-border" id="column-names">
-      {% if not has_no_key %}
-        <p class="alert-danger">{% trans 'There must be at least one non-key column.' %}</p>
-      {% endif %}
-      {% if has_empty_description %}
-        <p class="alert-danger">{% trans 'All items should have non-empty descriptions.' %}</p>
-      {% endif %}
-      <div>Insert existing question (choose it and will be automatically added)</div>
-      <div>
-          <select id="select-column-name">
-            <option value="">- {% trans 'Question' %} -</option>
-            {% for col in columns_to_insert %}
-              <option
-                value="{% url 'action:select_column_action' action.id col.id %}">{{ col.name }}</option>
-            {% endfor %}
-          </select>
-      </div>
-      <div><p>or</p></div>
-      <div>
-        <button type="button"
-                class="btn btn-primary btn-sm js-workflow-question-add"
-                data-url="{% url 'workflow:question_add' action.id %}"
-                data-toggle="tooltip"
-                title="{% trans 'Add a new question to the action' %}">
-          <span class="fa fa-plus"></span> {% trans 'Create new question' %}
-        </button>
-      </div>
-      <div class="container-fluid" id="column-selection"
-           style="display: table-cell; padding-right: 1ex;padding-top:1ex;">
-        {% render_table column_selected_table %}
-      </div>
-    </div>
-    <div class="text-center" style="margin-bottom:1.5ex;margin-top:1.5ex">
-      <button type="button"
-              class="btn btn-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
-              style="margin-right:2ex;"
-              data-url="{% url 'action:preview' action.id 1 %}"
-              data-toggle="tooltip"
-              title="{% trans 'See the content as shown to each learner' %}">
-        <span class="fa fa fa-eye"></span> {% trans 'Preview' %}
-      </button>
-      <a href="{% url 'action:index' %}"
-              style="margin-right:2ex;"
-              class="btn btn-primary spin"
-              data-toggle="tooltip"
-              data-placement="auto"
-              title="{% trans 'Save action and go back to action table' %}">
-        <span class="fa fa-ok"></span> {% trans 'Done' %}
-      </a>
-      <a href="{% url 'action:run' action.id %}"
-         class="btn btn-primary spin {% if not action.is_executable %}disabled{% endif %}"
-         data-toggle="tooltip"
-         title="{% trans 'Enter data manually' %}">
-        <span class="fa fa-off"></span> {% trans 'Run' %}
-      </a>
     </div>
   </div>
   {% include 'modal.html' %}

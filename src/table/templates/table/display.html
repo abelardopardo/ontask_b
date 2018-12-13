@@ -139,7 +139,7 @@
       {% endif %}
     </div>
     {% if columns %}
-      <table class="table table-striped dataTable no-footer table-bordered"
+      <table class="table table-striped dataTable no-footer"
              id="table-data">
         <thead>
           <tr>
@@ -178,7 +178,7 @@
                               data-url="{% url 'workflow:column_clone' col.id %}"
                               data-toggle="tooltip"
                               title="{% trans 'Create an exact duplicate of this column' %}">
-                          <span class="fa fa-duplicate"></span> {% trans 'Clone' %}
+                          <span class="fa fa fa-clone"></span> {% trans 'Clone' %}
                       </button>
                     </li>
                     <li>

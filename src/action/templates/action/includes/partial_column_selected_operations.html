@@ -10,7 +10,7 @@
   <a href="{% url 'action:unselect_column_action' aid id  %}"
      class="btn btn-outline-dark btn-sm spin"
      data-toggle="tooltip"
-     title="{% trans 'Remove question from action' %}">
+     title="{% trans 'Remove question from this survey' %}">
     <span class="fa fa-trash"></span> {% trans 'Remove' %}
   </a>
   <button type="button"
@@ -18,6 +18,6 @@
           data-url="{% url 'workflow:column_clone' id %}"
           data-toggle="tooltip"
           title="{% trans 'Create an exact duplicate of this question' %}">
-      <span class="fa fa-duplicate"></span> {% trans 'Clone' %}
+      <span class="fa fa fa-clone"></span> {% trans 'Clone' %}
   </button>
 </div>

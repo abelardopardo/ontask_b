@@ -181,57 +181,6 @@ def save_condition_form(request,
     return JsonResponse(data)
 
 
-# class FilterCreateView(UserIsInstructor, generic.TemplateView):
-#     """
-#     CBV to create a filter through AJAX calls. It receives the action ID
-#     where the condition needs to be connected.
-#     """
-#     form_class = FilterForm
-#     template_name = 'action/includes/partial_filter_addedit.html'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(FilterCreateView, self).get_context_data(**kwargs)
-#         context['add'] = True
-#         return context
-#
-#     def get(self, request, *args, **kwargs):
-#         # Get the action that is being used
-#         try:
-#             action = Action.objects.filter(
-#                 Q(workflow__user=request.user) |
-#                 Q(workflow__shared=request.user)
-#             ).distinct().get(pk=kwargs['pk'])
-#         except (KeyError, ObjectDoesNotExist):
-#             return redirect('workflow:index')
-#
-#         form = self.form_class()
-#         return save_condition_form(request,
-#                                    form,
-#                                    self.template_name,
-#                                    action,
-#                                    None,  # no current condition object
-#                                    True)  # Is Filter
-#
-#     def post(self, request, *args, **kwargs):
-#         del args
-#         # Get the action that is being used
-#         try:
-#             action = Action.objects.filter(
-#                 Q(workflow__user=request.user) |
-#                 Q(workflow__shared=request.user)
-#             ).distinct().get(pk=kwargs['pk'])
-#         except (KeyError, ObjectDoesNotExist):
-#             return redirect('workflow:index')
-#
-#         form = self.form_class(request.POST)
-#         return save_condition_form(request,
-#                                    form,
-#                                    self.template_name,
-#                                    action,
-#                                    None,  # No current condition object
-#                                    True)  # Is Filter
-#
-
 @user_passes_test(is_instructor)
 @require_http_methods(['POST'])
 def update_filter(request, pk):
@@ -328,36 +277,6 @@ def update_filter(request, pk):
     return redirect(reverse('action:edit', kwargs={'pk': action.id}))
 
 
-# @user_passes_test(is_instructor)
-# def edit_filter(request, pk):
-#     """
-#     Edit the filter of an action through AJAX.
-#     :param request: HTTP request
-#     :param pk: condition ID
-#     :return: AJAX response
-#     """
-#     # Get the filter
-#     try:
-#         cond_filter = Condition.objects.filter(
-#             Q(action__workflow__user=request.user) |
-#             Q(action__workflow__shared=request.user),
-#             is_filter=True
-#         ).distinct().get(pk=pk)
-#     except (KeyError, ObjectDoesNotExist):
-#         return redirect('workflow:index')
-#
-#     # Create the filter and populate with existing data
-#     form = FilterForm(request.POST or None, instance=cond_filter)
-#
-#     # Render the form with the Condition information
-#     return save_condition_form(request,
-#                                form,
-#                                'action/includes/partial_filter_addedit.html',
-#                                cond_filter.action,
-#                                cond_filter,  # Condition object
-#                                True)  # It is a filter
-#
-
 @user_passes_test(is_instructor)
 def delete_filter(request, pk):
     """
@@ -446,8 +365,7 @@ class ConditionCreateView(UserIsInstructor, generic.TemplateView):
                                    form,
                                    self.template_name,
                                    action,
-                                   None,
-                                   False)  # Is it a filter?
+                                   None)  # Is it a filter?
 
     def post(self, request, *args, **kwargs):
         del args
@@ -466,8 +384,7 @@ class ConditionCreateView(UserIsInstructor, generic.TemplateView):
                                    form,
                                    self.template_name,
                                    action,
-                                   None,
-                                   False)  # It is not a filter
+                                   None)
 
 
 @user_passes_test(is_instructor)
@@ -495,8 +412,7 @@ def edit_condition(request, pk):
     return save_condition_form(request, form,
                                'action/includes/partial_condition_addedit.html',
                                condition.action,
-                               condition,
-                               False)  # It is not new
+                               condition)
 
 
 @user_passes_test(is_instructor)
