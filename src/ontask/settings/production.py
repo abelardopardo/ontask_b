@@ -12,7 +12,7 @@ DEBUG = False
 ALLOWED_HOSTS = [os.environ['DOMAIN_NAME']]
 
 # Additional middleware introduced by debug toolbar
-MIDDLEWARE_CLASSES += ['django.middleware.security.SecurityMiddleware']
+MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
 
 #
 # Security features
@@ -68,6 +68,12 @@ LOGGING = {
         },
     },
     'handlers': {
+        'django_log_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': join(LOGFILE_ROOT, 'django.log'),
+            'formatter': 'verbose'
+        },
         'proj_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
