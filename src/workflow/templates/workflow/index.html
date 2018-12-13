@@ -62,7 +62,46 @@
           {% trans 'Import workflow' %}
       </a>
     </div>
+    <div class="card-deck" style="margin:1em 0 1em 0;">
+      {% for wflow in workflows %}
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title">{{ wflow.name }}</div>
+            <div class="card-body">{{ wflow.description_text }}</div>
+            <div class="row row-top-border">
+              <div>
+                <a href="{% url 'workflow:detail' wflow.id %}"
+                   class="btn btn-outline-dark btn-sm card-link spin"
+                   data-toggle="tooltip"
+                   title="{% trans 'Open the workflow to manipulate its data and actions' %}">
+                    <span class="fa fa-book"></span> {% trans 'Open' %}
+                </a>
+                {% if request.user == workflow.user %}
+                  <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button"
+                          data-toggle="dropdown"><span class="fa fa-ellipsis-v"></span>
+                  </button>
+                  <ul role="menu" class="dropdown-menu">
+                    <li>
+                      <a href="{{ stat_url }}"
+                         class="btn btn-outline-dark btn-sm align-middle spin"
+                            data-toggle="tooltip"
+                            title="{% trans 'Statistics about this column' %}">
+                        <span class="fa fa-stats"></span> {% trans 'Statistics' %}
+                      </a>
+                    </li>
+                  </ul>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+
     {% render_table table %}
+
+
     <p class="text-left"><strong><super>*</super></strong>{% blocktrans %}A workflow contains a <i>table
     </i> with data about a set of learners and <i>a
       collection of actions</i>. The table is organised by <i>columns</i> and the information in each row corresponds
