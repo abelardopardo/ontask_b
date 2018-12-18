@@ -153,37 +153,37 @@ def evaluate_node(node, given_variables):
 
     # Terminal Node
     if operator == 'equal':
-        result = varvalue == constant
+        result = (varvalue is not None) and varvalue == constant
 
     elif operator == 'not_equal':
-        result = varvalue != constant
+        result = (varvalue is not None) and varvalue != constant
 
     elif operator == 'begins_with' and node['type'] == 'string':
         result = (varvalue is not None) and varvalue.startswith(constant)
 
     elif operator == 'not_begins_with' and node['type'] == 'string':
-        result = not ((varvalue is not None) and varvalue.startswith(constant))
+        result = (varvalue is not None) and not varvalue.startswith(constant)
 
     elif operator == 'contains' and node['type'] == 'string':
         result = (varvalue is not None) and varvalue.find(constant) != -1
 
     elif operator == 'not_contains' and node['type'] == 'string':
-        result = (varvalue is None) or varvalue.find(constant) == -1
+        result = (varvalue is not None) and varvalue.find(constant) == -1
 
     elif operator == 'ends_with' and node['type'] == 'string':
         result = (varvalue is not None) and varvalue.endswith(constant)
 
     elif operator == 'not_ends_with' and node['type'] == 'string':
-        result = (varvalue is None) or (not varvalue.endswith(constant))
+        result = (varvalue is not None) and (not varvalue.endswith(constant))
 
     elif operator == 'is_empty' and node['type'] == 'string':
-        result = varvalue == '' or varvalue == None
+        result = (varvalue is not None) and varvalue == ''
 
     elif operator == 'is_not_empty' and node['type'] == 'string':
         result = (varvalue is not None) and varvalue != ''
 
     elif operator == 'is_null':
-        result = varvalue == None
+        result = varvalue is None
 
     elif operator == 'is_not_null':
         result = varvalue is not None
@@ -191,22 +191,22 @@ def evaluate_node(node, given_variables):
     elif operator == 'less' and \
             (node['type'] == 'integer' or node['type'] == 'double'
              or node['type'] == 'datetime'):
-        result = varvalue < constant
+        result = (varvalue is not None) and varvalue < constant
 
     elif operator == 'less_or_equal' and \
             (node['type'] == 'integer' or node['type'] == 'double'
              or node['type'] == 'datetime'):
-        result = varvalue <= constant
+        result = (varvalue is not None) and varvalue <= constant
 
     elif operator == 'greater' and \
             (node['type'] == 'integer' or node['type'] == 'double'
              or node['type'] == 'datetime'):
-        result = varvalue > constant
+        result = (varvalue is not None) and varvalue > constant
 
     elif operator == 'greater_or_equal' and \
             (node['type'] == 'integer' or node['type'] == 'double'
              or node['type'] == 'datetime'):
-        result = varvalue >= constant
+        result = (varvalue is not None) and varvalue >= constant
 
     elif operator == 'between' or operator == 'not_between':
         if node['type'] == 'integer':
@@ -221,8 +221,8 @@ def evaluate_node(node, given_variables):
         else:
             raise Exception(_('Incorrect data type'))
 
-        result = left <= varvalue <= right
-        if operator == 'not_between':
+        result = (varvalue is not None) and left <= varvalue <= right
+        if (varvalue is not None) and operator == 'not_between':
             result = not result
 
     else:
