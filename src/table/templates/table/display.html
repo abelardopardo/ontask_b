@@ -47,9 +47,9 @@
           columns: {{ columns_datatables|safe }},
           "order": [[1, 'asc']],
           "columnDefs": [
-              {"className": "dt-center", "targets": "_all"},
-              {"orderable": false, "targets": 0},
-              {"searchable": false, "targets": 0},
+            {"className": "dt-center", "targets": "_all"},
+            {"orderable": false, "targets": 0},
+            {"searchable": false, "targets": 0},
           ],
           "drawCallback": function(settings) {
              // Needed to enable tooltips in ajax produced content
@@ -89,7 +89,7 @@
       <div class="btn-group" role="group">
         {% if columns %}
           <a href="{% url 'dataops:rowcreate' %}"
-             class="btn btn-sm btn-outline-dark"
+             class="btn btn-outline-dark"
              data-toggle="tooltip"
              title="{% trans 'Add a new row to the table' %}">
             <span class="fa fa-plus"></span> {% trans 'Add row' %}
@@ -98,58 +98,58 @@
         {% endif %}
         {% include 'workflow/includes/manage_table_data.html' %}
         {% if columns %}
-          <div class="dropdown btn-group" role="group">
+          <div class="dropdown btn-group">
             <a href="{% url 'table:view_index' %}"
-               class="btn btn-outline-dark btn-sm spin"
+               class="btn btn-outline-dark spin"
                data-toggle="tooltip"
                title="{% trans 'Views available for this table' %}">
               <span class="fa fa fa-eye"></span> {% trans 'Views' %}
             </a>
             {% if views %}
-              <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button"
-                      data-toggle="dropdown"><span class="caret"></span>
+              <button type="button" data-toggle="dropdown"
+                      class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="sr-only">Toggle Dropdown</span>
               </button>
-              <ul role="menu" class="dropdown-menu">
+              <div class="dropdown-menu">
               {% for v in views %}
-                <li>
-                  <a href="{% url 'table:display_view' v.id %}"
-                     class="btn btn-outline-dark btn-sm spin">{{ v.name }}</a>
-                </li>
+                <a href="{% url 'table:display_view' v.id %}"
+                   class="dropdown-item spin">{{ v.name }}</a>
               {% endfor %}
-              </ul>
+              </div>
             {% endif %}
           </div>
         {% endif %}
         {% if columns %}
           {% if view %}
             <button type="button"
-                    class="btn btn-outline-dark btn-sm js-view-edit align-middle"
+                    class="btn btn-outline-dark js-view-edit align-middle"
                     data-url="{% url 'table:view_edit' view.id %}"
                     data-toggle="tooltip" title="{% trans 'Change elements in view' %}">
               <span class="fa fa-pencil"></span> {% trans 'Edit view' %}
             </button>
-            <a class="btn btn-sm btn-outline-dark spin" href="{% url 'table:display' %}">Full table</a>
+            <a class="btn btn-outline-dark spin" href="{% url 'table:display' %}">Full table</a>
             <a href="{% url 'table:stat_table_view' view.id %}"
-               class="btn btn-outline-dark btn-sm spin"
+               class="btn btn-outline-dark spin"
                data-toggle="tooltip"
                title="{% trans 'Dashboard created with the view data' %}">
               <span class="fa fa-dashboard"></span> {% trans 'Dashboard' %}
             </a>
             <a href="{% url 'table:csvdownload_view' view.id %}" download
-               class="btn btn-outline-dark btn-sm js-logs-download"
+               class="btn btn-outline-dark js-logs-download"
                data-toggle="tooltip"
                title="{% trans 'Download a CSV file containing this table' %}">
               <span class="fa fa-download"></span> {% trans 'CSV Download' %}
             </a>
           {% else %}
             <a href="{% url 'table:stat_table' %}"
-               class="btn btn-outline-dark btn-sm spin"
+               class="btn btn-outline-dark spin"
                data-toggle="tooltip"
                title="{% trans 'Dashboard created with the table data' %}">
               <span class="fa fa-dashboard"></span> {% trans 'Dashboard' %}
             </a>
             <a href="{% url 'table:csvdownload' %}"
-               class="btn btn-outline-dark btn-sm"
+               class="btn btn-outline-dark"
                data-toggle="tooltip"
                title="{% trans 'Download a CSV file containing this table' %}">
               <span class="fa fa-download"></span> {% trans 'CSV Download' %}
@@ -168,7 +168,7 @@
             {% for col in columns %}
               <th class="text-center">
                 <div class="dropdown btn-group">
-                  <button class="btn btn-outline-dark btn-sm dropdown-toggle"
+                  <button class="btn btn-outline-dark dropdown-toggle"
                           type="button"
                           data-toggle="dropdown">Ops
                   </button>
@@ -176,7 +176,7 @@
                     {% if not col.is_key %}
                       <li>
                         <a href="{% url 'table:stat_column' col.id %}"
-                           class="btn btn-outline-dark btn-sm align-middle spin"
+                           class="btn btn-outline-dark align-middle spin"
                            data-toggle="tooltip"
                            title="{% trans 'Stats and visualizations about this column' %}">
                           <span class="fa fa-bar-chart"></span> {% trans 'Statistics' %}
@@ -185,7 +185,7 @@
                     {% endif %}
                     <li>
                       <button type="button"
-                              class="btn btn-sm btn-outline-dark js-column-edit"
+                              class="btn btn-outline-dark js-column-edit"
                               data-url="{% url 'workflow:column_edit' col.id %}"
                               data-toggle="tooltip"
                               title="{% trans 'Edit column name, description, etc' %}">
@@ -194,7 +194,7 @@
                     </li>
                     <li>
                       <button type="button"
-                              class="btn btn-outline-dark btn-sm js-column-clone align-middle"
+                              class="btn btn-outline-dark js-column-clone align-middle"
                               data-url="{% url 'workflow:column_clone' col.id %}"
                               data-toggle="tooltip"
                               title="{% trans 'Create an exact duplicate of this column' %}">
@@ -203,7 +203,7 @@
                     </li>
                     <li>
                       <button type="button"
-                              class="btn btn-outline-danger btn-sm js-column-delete"
+                              class="btn btn-outline-danger js-column-delete"
                               data-url="{% url 'workflow:column_delete' col.id %}"
                               data-toggle="tooltip"
                               title="{% trans 'Delete column' %}">
@@ -235,7 +235,7 @@
                 {{ col.name }}
                 {% comment %}
                 <div class="dropdown btn-group">
-                  <button class="btn btn-outline-dark btn-sm dropdown-toggle"
+                  <button class="btn btn-outline-dark dropdown-toggle"
                           type="button"
                           data-toggle="dropdown">{{ col.name }}
                     <span class="caret"></span>
@@ -244,7 +244,7 @@
                     {% if not col.is_key %}
                       <li>
                         <a href="{% url 'table:stat_column' col.id %}"
-                           class="btn btn-outline-dark btn-sm align-middle spin"
+                           class="btn btn-outline-dark align-middle spin"
                            data-toggle="tooltip"
                            title="{% trans 'Stats and visualizations about this column' %}">
                           <span class="fa fa-bar-chart"></span> {% trans 'Statistics' %}
@@ -253,7 +253,7 @@
                     {% endif %}
                     <li>
                       <button type="button"
-                              class="btn btn-sm btn-outline-dark js-column-edit"
+                              class="btn btn-outline-dark js-column-edit"
                               data-url="{% url 'workflow:column_edit' col.id %}"
                               data-toggle="tooltip"
                               title="{% trans 'Edit column name, description, etc' %}">
@@ -262,7 +262,7 @@
                     </li>
                     <li>
                       <button type="button"
-                              class="btn btn-outline-dark btn-sm js-column-clone align-middle"
+                              class="btn btn-outline-dark js-column-clone align-middle"
                               data-url="{% url 'workflow:column_clone' col.id %}"
                               data-toggle="tooltip"
                               title="{% trans 'Create an exact duplicate of this column' %}">
@@ -271,7 +271,7 @@
                     </li>
                     <li>
                       <button type="button"
-                              class="btn btn-outline-danger btn-sm js-column-delete"
+                              class="btn btn-outline-danger js-column-delete"
                               data-url="{% url 'workflow:column_delete' col.id %}"
                               data-toggle="tooltip"
                               title="{% trans 'Delete column' %}">

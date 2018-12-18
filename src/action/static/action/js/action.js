@@ -249,7 +249,7 @@ $(function () {
   $("#modal-item").on("submit", ".js-action-showurl-form", saveForm);
 
   // Column Add
-  $("#column-names").on("click", ".js-workflow-question-add", loadForm);
+  $("#edit-survey-tab-content").on("click", ".js-workflow-question-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-question-add-form", saveForm);
 
   // Column Selected Edit

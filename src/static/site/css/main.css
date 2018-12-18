@@ -242,6 +242,10 @@ table th {
     vertical-align: middle;
 }
 
+.table {
+  overflow-y: visible !important;
+}
+
 /* Needed to show summer note aligned to the left */
 .note-editor.note-frame.panel .note-editing-area .note-editable {
     text-align: left;

@@ -1,36 +1,27 @@
 {% load i18n %}
-<div class="dropdown btn-group" style="display: inline-table;" role="group">
-  <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button"
+<div class="dropdown btn-group">
+  <button class="btn btn-outline-dark dropdown-toggle" type="button"
+          id="addColumnOperations"
           data-toggle="dropdown"> {% trans 'Add Column' %}
-    <span class="caret"></span>
   </button>
-  <ul role="menu" class="dropdown-menu">
-    <li>
-      <button type="button"
-              class="btn btn-outline-dark btn-sm js-workflow-column-add"
-              data-url="{% url 'workflow:column_add' %}"
-              data-toggle="tooltip"
-              title="{% trans 'Add a new column to the table' %}">
-        {% trans 'Regular column' %}
-      </button>
-    </li>
-    <li>
-      <button type="button"
-              class="btn btn-outline-dark btn-sm js-workflow-formula-column-add"
-              data-url="{% url 'workflow:formula_column_add' %}"
-              data-toggle="tooltip"
-              title="{% trans 'Add a new column combining columns with a formula' %}">
-        {% trans 'Formula-derived column' %}
-      </button>
-    </li>
-    <li>
-      <button type="button"
-              class="btn btn-outline-dark btn-sm js-workflow-random-column-add"
-              data-url="{% url 'workflow:random_column_add' %}"
-              data-toggle="tooltip"
-              title="{% trans 'Add a new column with ramdom values' %}">
-        {% trans 'Column with random values' %}
-      </button>
-    </li>
-  </ul>
+  <div class="dropdown-menu" aria-labelledby="addColumnOpertions">
+    <button type="button" class="dropdown-item js-workflow-column-add"
+            data-url="{% url 'workflow:column_add' %}"
+            data-toggle="tooltip"
+            title="{% trans 'Add a new column to the table' %}">
+      {% trans 'Regular column' %}
+    </button>
+    <button type="button" class="dropdown-item js-workflow-formula-column-add"
+            data-url="{% url 'workflow:formula_column_add' %}"
+            data-toggle="tooltip"
+            title="{% trans 'Add a new column combining columns with a formula' %}">
+      {% trans 'Formula-derived column' %}
+    </button>
+    <button type="button" class="dropdown-item js-workflow-random-column-add"
+            data-url="{% url 'workflow:random_column_add' %}"
+            data-toggle="tooltip"
+            title="{% trans 'Add a new column with ramdom values' %}">
+      {% trans 'Column with random values' %}
+    </button>
+  </div>
 </div>

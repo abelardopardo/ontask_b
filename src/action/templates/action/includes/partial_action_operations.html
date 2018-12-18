@@ -41,53 +41,38 @@
       {% if serve_enabled %}<span class="badge">On</span>{% else %}(Off){% endif %}
     </button>
   {% endif %}
-  <div class="dropdown btn-group" style="display: inline-table;" role="group">
+  <div class="dropdown btn-group">
     <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button"
-            data-toggle="dropdown">{% trans 'More' %} <span class="caret"></span>
-    </button>
-    <ul role="menu" class="dropdown-menu">
+            id="actionMoreOperations"
+            data-toggle="dropdown">{% trans 'More' %}</button>
+    <div class="dropdown-menu" aria-labelledby="actionMoreOperations">
       {% if is_out %}
-        <li>
-          <a href="{% url 'scheduler:create' id %}"
-             class="btn btn-outline-dark btn-sm spin"
-             data-toggle="tooltip"
-             title="{% trans 'Schedule the execution of the action' %}">
-            <span class="fa fa-calendar"></span> {% trans 'Schedule' %}</a>
-        </li>
-      {% endif %}
-      <li>
-        <button type="button"
-                class="btn btn-outline-dark btn-sm js-action-update align-middle"
-                data-url="{% url 'action:update' id %}"
-                data-toggle="tooltip"
-                title="{% trans 'Change name and/or description' %}">
-            <span class="fa fa-pencil"></span> {% trans 'Rename' %}
-        </button>
-      </li>
-      <li>
-        <button type="button"
-                class="btn btn-outline-dark btn-sm js-action-clone align-middle"
-                data-url="{% url 'action:clone' id %}"
-                data-toggle="tooltip"
-                title="{% trans 'Create an identical action' %}">
-          <span class="fa fa-clone"></span> {% trans 'Clone' %}
-        </button>
-      </li>
-      <li>
-        <a href="{% url 'action:export_ask' id %}"
-           class="btn btn-outline-dark btn-sm spin"
+        <a href="{% url 'scheduler:create' id %}" class="spin dropdown-item"
            data-toggle="tooltip"
-           title="{% trans 'Export the content of this action' %}">
-          <span class="fa fa-download"></span> {% trans 'Export' %}</a>
-      </li>
-      <li>
-        <button type="button"
-                class="btn btn-outline-danger btn-sm js-action-delete"
-                data-url="{% url 'action:delete' id %}"
-                data-toggle="tooltip"
-                title="{% trans 'Delete the action' %}">
-          <span class="fa fa-trash"></span> {% trans 'Delete' %}</button>
-      </li>
-    </ul>
+           title="{% trans 'Schedule the execution of the action' %}">
+          <span class="fa fa-calendar"></span> {% trans 'Schedule' %}</a>
+      {% endif %}
+      <button type="button" class="js-action-update dropdown-item"
+              data-url="{% url 'action:update' id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Change name and/or description' %}">
+          <span class="fa fa-pencil"></span> {% trans 'Rename' %}
+      </button>
+      <button type="button" class="js-action-clone dropdown-item"
+              data-url="{% url 'action:clone' id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Create an identical action' %}">
+        <span class="fa fa-clone"></span> {% trans 'Clone' %}
+      </button>
+      <a href="{% url 'action:export_ask' id %}" class="spin dropdown-item"
+         data-toggle="tooltip"
+         title="{% trans 'Export the content of this action' %}">
+        <span class="fa fa-download"></span> {% trans 'Export' %}</a>
+      <button type="button" class="js-action-delete dropdown-item"
+              data-url="{% url 'action:delete' id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Delete the action' %}">
+        <span class="fa fa-trash"></span> {% trans 'Delete' %}</button>
+    </div>
   </div>
 </div>

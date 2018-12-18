@@ -9,55 +9,54 @@
   <script src="{% static 'dataops/js/dataops.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
-<div align="center" class="container">
-  <h1 class="page-header">{% trans 'Step 2: Select Columns' %}</h1>
-  <form method="POST" action="">
-    {% csrf_token %}
-    {% include 'dataops/includes/upload_buttons.html' %}
-    {% if form.errors %}
-      {% for field in form %}
-        {% for error in field.errors %}
+<div class="container">
+  <h1 class="text-center">{% trans 'Step 2: Select Columns' %}</h1>
+  <div class="row justify-content-center">
+    <form method="POST" action="">
+      {% csrf_token %}
+      {% include 'dataops/includes/upload_buttons.html' %}
+      {% if form.errors %}
+        {% for field in form %}
+          {% for error in field.errors %}
+            <div class="alert alert-danger"><strong>{{ error|escape }}</strong></div>
+          {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
           <div class="alert alert-danger">
             <strong>{{ error|escape }}</strong>
           </div>
         {% endfor %}
-      {% endfor %}
-      {% for error in form.non_field_errors %}
-        <div class="alert alert-danger">
-          <strong>{{ error|escape }}</strong>
-        </div>
-      {% endfor %}
-    {% endif %}
-    <table class="table table-striped" id="workflow-table"
-           style="display: table-cell;">
-      <thead>
-        <tr>
-          <th class="text-center" style="vertical-align:middle;">
-            {% trans 'Load' %}<br/>
-            <input type="checkbox" id="checkAll" checked/>
-          </th>
-          <th class="text-center" style="vertical-align:middle;">{% trans 'Name' %}</th>
-          <th class="text-center" style="vertical-align:middle;">{% trans 'Rename to' %}</th>
-          <th class="text-center" style="vertical-align:middle;">{% trans 'Type' %}</th>
-          <th class="text-center" style="vertical-align:middle;">{% trans 'Key' %}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in df_info %}
-          <tr {% if item.4 %}class="success"{% endif %}>
-            <td class="text-center" style="vertical-align: middle;">{% render_field item.0 %}</td>
-            <td class="text-center" style="vertical-align: middle;">{{ item.1 }}</td>
-            <td class="text-center" style="vertical-align: middle;">{% render_field item.2 %}</td>
-            <td class="text-center" style="vertical-align: middle;">
-              {% if item.3 == 'integer' or item.3 == 'double' %}
-              number{% else %}{{ item.3 }}{% endif %}
-            </td>
-            <td class="text-center"style="vertical-align: middle;">{% if item.4 %}{% trans 'Keep?' %} {% render_field item.4 %}{% endif %}</td>
+      {% endif %}
+      <table class="table table-hover table-striped table-bordered" id="workflow-table">
+        <thead>
+          <tr>
+            <th class="text-center" style="vertical-align:middle;">
+              {% trans 'Load' %}<br/>
+              <input type="checkbox" id="checkAll" checked/>
+            </th>
+            <th class="text-center" style="vertical-align:middle;">{% trans 'Name' %}</th>
+            <th class="text-center" style="vertical-align:middle;">{% trans 'Rename to' %}</th>
+            <th class="text-center" style="vertical-align:middle;">{% trans 'Type' %}</th>
+            <th class="text-center" style="vertical-align:middle;">{% trans 'Key' %}</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% include 'dataops/includes/upload_buttons.html' %}
-  </form>
+        </thead>
+        <tbody>
+          {% for item in df_info %}
+            <tr {% if item.4 %}class="success"{% endif %}>
+              <td class="text-center" style="vertical-align: middle;">{% render_field item.0 %}</td>
+              <td class="text-center" style="vertical-align: middle;">{{ item.1 }}</td>
+              <td class="text-center" style="vertical-align: middle;">{% render_field item.2 %}</td>
+              <td class="text-center" style="vertical-align: middle;">
+                {% if item.3 == 'integer' or item.3 == 'double' %}
+                number{% else %}{{ item.3 }}{% endif %}
+              </td>
+              <td class="text-center"style="vertical-align: middle;">{% if item.4 %}{% trans 'Keep?' %} {% render_field item.4 %}{% endif %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% include 'dataops/includes/upload_buttons.html' %}
+    </form>
+  </div>
 </div>
 {% endblock container %}

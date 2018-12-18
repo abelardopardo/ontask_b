@@ -15,50 +15,54 @@
   <script src="{% static 'table/js/table.js' %}?v={% ontask_version %}"></script>
   <script type="text/javascript">
     if (document.getElementById("actioninrun-data") != null) {
-        // Required for DataTables
-        $(document).ready(function() {
-            $('#actioninrun-data').DataTable({
-                stateSave: true,
-                stateSaveParams: function (settings, data) {
-                  delete data.search;
-                },
-                processing: true,
-                serverSide: true,
-                ajax: {
-                  url: "{% url 'action:run_survey_ss' action.id %}",
-                  type: 'POST',
-                },
-                "order": [0],
-                language: {
-                  url: getLanguage()
-                }
-            });
+      // Required for DataTables
+      $(document).ready(function() {
+        $('#actioninrun-data').DataTable({
+          stateSave: true,
+          stateSaveParams: function (settings, data) {
+            delete data.search;
+          },
+          processing: true,
+          serverSide: true,
+          ajax: {
+            url: "{% url 'action:run_survey_ss' action.id %}",
+            type: 'POST',
+          },
+          "order": [0],
+          language: {
+            url: getLanguage()
+          },
+          columnDefs: [
+            {"className": "dt-center", "targets": "_all"},
+          ],
+          colReorder: false,
         });
+      });
     }
   </script>
 {% endblock %}
 {% block container %}
-  <div id="table-content" align="center" class="container"
-       style="padding-top:2ex;">
-    <h4 class="page-header">
-      <strong>{{ action.name }}</strong>
+  <div class="container" id="table-content">
+    <h1 class="text-center">{{ action.name }}
       <a href="{% url 'action:edit' action.id %}"
          class="btn btn-outline-dark btn-sm align-middle">
       <span class="fa fa-pencil"></span> {% trans 'Edit' %}</a>
-    </h4>
-    <p class="help-block">{{ action.description_text }}</p>
-    <table class="table table-striped dataTable no-footer cell-border"
-           id="actioninrun-data">
-      <thead>
-        <tr>
-          {% for c in columns %}
-            <th>{{ c.name }}</th>
-          {% endfor %}
-        </tr>
-      </thead>
-    </table>
-    <a class="btn btn-outline-dark spin" style="margin-right:2ex;"
-       href="{% url 'action:index' %}"> {% trans 'Back' %}</a>
+    </h1>
+    <p class="help-block text-center">{{ action.description_text }}</p>
+    <div class="row justify-content-center">
+      <table class="table table-hover table-striped table-bordered" id="actioninrun-data">
+        <thead>
+          <tr>
+            {% for c in columns %}
+              <th>{{ c.name }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+      </table>
+    </div>
+    <div class="text-center">
+      <a class="btn btn-outline-dark spin" href="{% url 'action:index' %}"> {% trans 'Back' %}</a>
+    </div>
   </div>
   {% include 'modal.html' %}
 {% endblock container %}

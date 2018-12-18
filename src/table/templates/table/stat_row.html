@@ -16,21 +16,22 @@
   <script src="{% static 'table/js/table.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
-<div class="container-fluid text-center">
+<div class="container">
   <h1 class="page-header">{% blocktrans %}Stats for {{ value }}{% endblocktrans %}</h1>
 
   <div class="text-center">
     <a href="{{ request.META.HTTP_REFERER }}"
-         class="btn btn-outline-dark btn-sm align-middle spin"> {% trans 'Back' %}</a>
+         class="btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
   </div>
-
-  {% for vis_item in visualizations %}
-      {{ vis_item|safe }}
-  {% endfor %}
-
+  <br/>
+  <div class="text-center">
+    {% for vis_item in visualizations %}
+        {{ vis_item|safe }}
+    {% endfor %}
+  </div>
   <div class="text-center">
     <a href="{{ request.META.HTTP_REFERER }}"
-         class="btn btn-outline-dark btn-sm align-middle spin"> {% trans 'Back' %}</a>
+         class="btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
   </div>
 </div>
 {% endblock container %}

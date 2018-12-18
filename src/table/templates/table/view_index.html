@@ -7,6 +7,7 @@
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Table Views' %}{% endblock %}
 {% block extrahead %}
+  {% ontask_datatables_bootstrap_css %}
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
   <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
   {% ontask_datetimepicker_css %}
@@ -36,9 +37,11 @@
           "url": getLanguage()
         },
         "columnDefs": [
+          {"className": "dt-center", "targets": "_all"},
           {"orderable": false, "targets": 2},
           {"searchable": false, "targets": 2},
         ],
+        colReorder: false,
       });
     });
     {% with js_var='qbuilder_options' allow_empty='true' empty_rules=True %}
@@ -49,10 +52,10 @@
 {% block container %}
   <div class="container" id="view-content">
     <h1 class="text-center">{% trans 'Table Views' %}</h1>
-    <div class="row justify-content-center condition-btn">
-      <a class="btn btn-sm btn-outline-dark spin" style="margin-right: 1ex;"
+    <div class="text-center">
+      <a class="btn btn-outline-dark spin"
          href="{% url 'table:display' %}">{% trans 'Back' %}</a>
-      <button type="button" class="btn btn-sm btn-primary js-view-add"
+      <button type="button" class="btn btn-outline-dark js-view-add"
               data-url="{% url 'table:view_add' %}"
               data-toggle="tooltip"
               title="{% trans 'New view for the table' %}">

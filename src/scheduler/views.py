@@ -51,45 +51,37 @@ class ScheduleActionTable(tables.Table):
     description_text = tables.Column(verbose_name=_('Description'))
 
     type = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
         verbose_name=_('Type'),
         accessor=A('action.get_action_type_display')
     )
 
     action = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
         verbose_name=_('Action'),
         accessor=A('action.name')
     )
 
     execute = tables.DateTimeColumn(
-        attrs={'td': {'class': 'dt-center'}},
         verbose_name=_('Scheduled')
     )
 
     status = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
         verbose_name=_('Status'),
         accessor=A('get_status_display')
     )
 
     item_column = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
         verbose_name=_('Item column'),
     )
 
     exclude_values = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
         verbose_name=_('Exclude'),
     )
 
     payload = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
         verbose_name=_('Parameters'),
     )
 
     last_executed_log = tables.DateTimeColumn(
-        attrs={'td': {'class': 'dt-center'}},
         verbose_name=_('Result'),
     )
 
@@ -99,6 +91,29 @@ class ScheduleActionTable(tables.Table):
                 reverse('action:edit',
                         kwargs={'pk': record.action.id}),
                 record.action.name
+            )
+        )
+
+    def render_type(self, record):
+        icon = 'file-text'
+        title = 'Personalized text'
+        if record.action.action_type == Action.PERSONALIZED_TEXT:
+            icon = 'file-text'
+            title = 'Personalized text'
+        elif record.action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+            icon = 'envelope-square'
+            title = 'Personalized Canvas Email'
+        elif record.action.action_type == Action.PERSONALIZED_JSON:
+            icon = 'code'
+            title = 'Personalized JSON'
+        elif record.action.action_type == Action.SURVEY:
+            icon = 'question-circle-o'
+            title = 'Survey'
+        return format_html(
+            """<div data-toggle="tooltip" title="{0}">
+                 <span class="fa fa-{1}"></span></div>""".format(
+                title,
+                icon
             )
         )
 
@@ -139,9 +154,9 @@ class ScheduleActionTable(tables.Table):
     class Meta(object):
         model = ScheduledAction
 
-        fields = ('name', 'description_text', 'action', 'execute',
-                  'status', 'item_column', 'exclude_values', 'operations',
-                  'last_executed_log')
+        fields = ('name', 'description_text', 'type', 'action',
+                  'execute', 'status', 'item_column', 'exclude_values',
+                  'operations', 'last_executed_log')
 
         sequence = ('operations',
                     'name',
@@ -158,10 +173,6 @@ class ScheduleActionTable(tables.Table):
             'class': 'table table-hover table-striped table-bordered',
             'style': 'min-width: 505px; width: 100%;',
             'id': 'scheduler-table'
-        }
-
-        row_attrs = {
-            'style': 'text-align:center;'
         }
 
 
@@ -525,9 +536,7 @@ def index(request):
     return render(request,
                   'scheduler/index.html',
                   {'table': ScheduleActionTable(s_items, orderable=False),
-                   'no_data': workflow.nrows == 0,
-                   'no_actions': workflow.actions.count() == 0,
-                   'no_items': len(s_items) == 0})
+                   'workflow': workflow})
 
 
 @user_passes_test(is_instructor)

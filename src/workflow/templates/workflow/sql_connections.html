@@ -16,43 +16,47 @@
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
     if (document.getElementById("sqlconn-table") != null) {
-        // Required for DataTables
-        $(document).ready(function() {
-            $('#sqlconn-table').DataTable({
-                "stateSave": true,
-                stateSaveParams: function (settings, data) {
-                  delete data.search;
-                },
-                "search": {
-                  "caseInsensitive": true,
-                },
-                "order": [[0, "asc"]],
-                "language": {
-                    "emptyTable": "{% trans 'No SQL connections defined.' %}",
-                    "url": getLanguage()
-                },
-                "columnDefs": [
-                    {"orderable": false, "targets": 10},
-                    {"searchable": false, "targets": 10},
-                ],
-              });
+      // Required for DataTables
+      $(document).ready(function() {
+        $('#sqlconn-table').DataTable({
+          "stateSave": true,
+          stateSaveParams: function (settings, data) {
+            delete data.search;
+          },
+          "search": {
+            "caseInsensitive": true,
+          },
+          "order": [[0, "asc"]],
+          "language": {
+            "emptyTable": "{% trans 'No SQL connections defined.' %}",
+            "url": getLanguage()
+          },
+          "columnDefs": [
+            {"className": "dt-center", "targets": "_all"},
+            {"orderable": false, "targets": 10},
+            {"searchable": false, "targets": 10},
+          ],
+          colReorder: false,
         });
+      });
     }
   </script>
 {% endblock %}
 {% block container %}
   <div class="container" id="sql-connections">
-    <h1 class="page-header">{% trans 'SQL Connections' %}</h1>
-    <p>
+    <h1 class="text-center">{% trans 'SQL Connections' %}</h1>
+    <div class="text-center">
       <button type="button" class="btn btn-outline-dark js-create-workflow"
               data-url="{% url 'dataops:sqlconn_add' %}"
-                data-toggle="tooltip"
-                title="{% trans 'Add a new SQL database connection' %}">
+              data-toggle="tooltip"
+              title="{% trans 'Add a new SQL database connection' %}">
         <span class="fa fa-plus"></span>
           {% trans 'New SQL connection' %}
       </button>
-    </p>
-    {% render_table table %}
+    </div>
+    <div class="row justify-content-center">
+      {% render_table table %}
+    </div>
   </div>
   {% include 'modal.html' %}
 {% endblock container %}

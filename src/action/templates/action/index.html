@@ -34,6 +34,7 @@
           {"orderable": false, "targets": 4},
           {"searchable": false, "targets": 4},
         ],
+        colReorder: false,
       });
       action_table.columns().iterator('column', function (ctx, idx) {
         $(action_table.column(idx).header()).append('<span class="sort-icon"/>');
@@ -50,7 +51,7 @@
       <p class="lead text-center">{% blocktrans %}<strong>Next Step:</strong> Click in the <i>New action</i> below to create a new
       action to execute based on the data stored in the table.{% endblocktrans %}</p>
     {% endif %}
-    <div class="row justify-content-center condition-btn">
+    <div class="text-center">
       <div class="btn-group" role="group">
         <button type="button" class="btn btn-sm btn-outline-dark js-create-action"
                 data-url="{% url 'action:create' %}"
@@ -60,7 +61,7 @@
         </button>
         {% if workflow.nrows %}
           <a href="{% url 'action:import' %}"
-             class="btn btn-sm btn-outline-dark"
+             class="btn btn-outline-dark"
              data-toggle="tooltip" title="Import action previously exported">
             <span class="fa fa-import"></span> {% trans 'Import action' %}</a>
         {% endif %}

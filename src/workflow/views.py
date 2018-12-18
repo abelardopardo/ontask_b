@@ -51,10 +51,6 @@ class AttributeTable(tables.Table):
             'id': 'attribute-table'
         }
 
-        row_attrs = {
-            'style': 'text-align:center;',
-        }
-
 
 class WorkflowShareTable(tables.Table):
     email = tables.Column(

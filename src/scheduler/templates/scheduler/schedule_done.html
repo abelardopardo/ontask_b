@@ -3,15 +3,15 @@
 {% load static %}
 {% block title %}{{ block.super }}{% trans 'Action scheduled' %}{% endblock %}
 {% block container %}
-  <div class="container-fluid" style="text-align:center;">
-    <h1 class="page-header text-center">{% trans 'Action scheduled for execution' %}</h1>
+  <div class="container">
+    <h1 class="text-center">{% trans 'Action scheduled for execution' %}</h1>
 
-    <p class="text-center">
-      {% blocktrans with n=tdelta %}The action will execute in {{ n }}{% endblocktrans %}
-    </p>
-    <a class="btn btn-outline-dark" href="{% url 'scheduler:index' %}">{% trans 'Back' %}</a>
-    <a href="{% url 'scheduler:edit' s_item.id %}"
-       class="btn btn-primary btn-sm align-middle">
-    <span class="fa fa-pencil"></span> {% trans 'Edit' %}</a>
+    <p class="text-center">{% blocktrans with n=tdelta %}The action will execute in {{ n }}{% endblocktrans %}</p>
+    <div class="text-center">
+      <a class="btn btn-outline-dark" href="{% url 'scheduler:index' %}">{% trans 'Back' %}</a>
+      <a href="{% url 'scheduler:edit' s_item.id %}"
+         class="btn btn-primary btn-sm align-middle">
+      <span class="fa fa-pencil"></span> {% trans 'Edit' %}</a>
+    </div>
   </div>
 {% endblock container %}

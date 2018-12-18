@@ -27,14 +27,15 @@
           },
           "order": [[0, "asc"]],
           "language": {
-              "emptyTable": "{% trans 'No attributes defined.' %}",
-              "url": getLanguage()
+            "emptyTable": "{% trans 'No attributes defined.' %}",
+            "url": getLanguage()
           },
           "columnDefs": [
-              {"className": "dt-center", "targets": "_all"},
-              {"orderable": false, "targets": 2},
-              {"searchable": false, "targets": 2},
+            {"className": "dt-center", "targets": "_all"},
+            {"orderable": false, "targets": 2},
+            {"searchable": false, "targets": 2},
           ],
+          colReorder: false,
         });
       });
     }

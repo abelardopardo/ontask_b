@@ -13,21 +13,18 @@
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
 {% endblock scripts %}
 {% block container %}
-<div align="center" class="container-fluid">
-  <h1 class="page-header">{% blocktrans with n=action.name %}Select items to exclude from action{% endblocktrans %}</h1>
-  <div class="container">
+<div class="container" id="action-filter-items">
+  <h1 class="text-center">{% blocktrans with n=action.name %}Select items to exclude from action{% endblocktrans %}</h1>
+  <div class="row justify-content-center">
     <form action="" method="post">
       {% csrf_token %}
       {{ form|crispy }}
-      <div class="text-center" style="margin: 1ex 0 1ex 0;">
+      <div class="text-center">
         <a type="button" class="btn btn-outline-dark spin"
-           href="{% url 'action:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
-        </a>
-        <a class="btn btn-primary spin" style="margin-right:2ex;" href="{{ prev_step }}">
-          <span class="fa fa-triangle-left"></span> {% trans 'Back' %}
-        </a>
+           href="{% url 'action:index' %}"> {% trans 'Cancel' %}</a>
+        <a class="btn btn-primary spin" href="{{ prev_step }}">
+          <span class="fa fa-triangle-left"></span> {% trans 'Back' %}</a>
         <button type="Submit" name="Submit" value="Submit"
-                style="margin-right:2ex;"
                 class="btn btn-primary btn-space">
           <span class="fa fa-triangle-right"></span> {{ button_label }}</button>
       </div>

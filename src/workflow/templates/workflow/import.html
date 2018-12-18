@@ -4,7 +4,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-{% block title %}{{ block.super }}{% trans 'Import workflows' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Import workflow' %}{% endblock %}
 {% block scripts %}
   <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
@@ -12,8 +12,7 @@
   <div class="container" id="workflow-import">
     <h1 class="text-center">{% trans 'Import workflow' %}</h1>
     <div class="row justify-content-center">
-      <form action="{% url 'workflow:import' %}" method="post"
-            enctype="multipart/form-data">
+      <form action="{% url 'workflow:import' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
         <a class="btn btn-outline-dark spin" style="margin-right:2ex;"

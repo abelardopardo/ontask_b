@@ -15,24 +15,6 @@
   <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
   <script src="{% static 'dataops/js/dataops.js' %}?v={% ontask_version %}"></script>
   <script type="text/javascript">
-    if (document.getElementById("workflow-table") != null) {
-        $(document).ready(function() {
-            $('#workflow-table').DataTable({
-                "stateSave": true,
-                stateSaveParams: function (settings, data) {
-                  delete data.search;
-                },
-                "search": {
-                  "caseInsensitive": true,
-                },
-                "order": [[0, "asc"]],
-                "language": {
-                  "emptyTable": "{% trans 'No workflows available' %}",
-                  "url": getLanguage()
-                },
-            });
-        });
-    }
     $('#modal-item').on('hide.bs.modal', function (e) {
       $('#div-spinner').show();
       location.reload();
@@ -41,7 +23,7 @@
 {% endblock %}
 {% block container %}
   <div class="container" id="workflow-index">
-    {% if table %}
+    {% if workflows|length %}
       <h1 class="text-center">{% trans 'Open or create a workflow' %}<super>*</super></h1>
     {% else %}
       <h1 class="text-center">{% trans 'Create a workflow' %}<super>*</super></h1>

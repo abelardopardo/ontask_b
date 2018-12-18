@@ -13,20 +13,18 @@
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
 {% endblock scripts %}
 {% block container %}
-  <div align="center" class="container" id="email-schedule-send">
-    <h1 class="page-header">{% trans 'Schedule Action Execution' %}</h1>
-    <div class="container">
-      <p>{% blocktrans with n=now %}Time now is {{ n }}{% endblocktrans %}</p>
-      <p class="lead">{% blocktrans %}Action: {{ action.name }}{% endblocktrans %}</p>
+  <div class="container" id="email-schedule-send">
+    <h1 class="text-center">{% trans 'Schedule Action Execution' %}</h1>
+    <p class="text-center">{% blocktrans with n=now %}Time now is {{ n }}{% endblocktrans %}</p>
+    <p class="lead text-center">{{ action.name }}</p>
+    <div class="row justify-content-center">
       <form action="" method="post">
         {% csrf_token %}
         {{ form|crispy }}
-        <div style="margin: 1ex 0 1ex 0;">
+        <div class="text-center">
           <a type="button" class="btn btn-outline-dark"
-             href="{% url 'scheduler:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
-          </a>
+             href="{% url 'scheduler:index' %}"> {% trans 'Cancel' %}</a>
           <button type="Submit" name="Submit" value="Send"
-                  style="margin-right:2ex;"
                   class="btn btn-primary">{% trans 'Next' %}</button>
         </div>
       </form>

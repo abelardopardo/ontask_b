@@ -180,7 +180,8 @@ def row_update(request):
     # Get the rows from the table
     rows = pandas_db.execute_select_on_table(workflow.id,
                                              [update_key],
-                                             [update_val])
+                                             [update_val],
+                                             workflow.get_column_names())
 
     row_form = RowForm(request.POST or None,
                        workflow=workflow,

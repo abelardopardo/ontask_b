@@ -29,10 +29,11 @@
             "url": getLanguage()
           },
           "createdRow": function(row, data, dataIndex) {
-              if (data[4] == '<span class="false">✘</span>') {
-                $(row).addClass('danger');
-              }
+            if (data[4] == '<span class="false">✘</span>') {
+              $(row).addClass('danger');
+            }
           },
+          colReorder: false,
         });
       }
     });
@@ -41,7 +42,7 @@
 {% block container %}
   <div class="container">
     <h1 class="text-center">{% trans 'Transformations' %}</h1>
-    <div class="row" id="transform-selection">
+    <div class="row justify-content-center" id="transform-selection">
       {% render_table table %}
     </div>
   </div>

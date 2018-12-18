@@ -56,16 +56,15 @@
     <br/>
     <div class="tab-content" id="edit-personalized-text-tab-content">
       <div class="tab-pane fade show active" id="text" role="tabpanel" aria-labelledby="text-tab">
-        <div id="html-editor">
+        <div id="html-editor text-center">
           {% include 'action/includes/partial_action_edit_out_attributes_columns.html' %}
           <form action="" enctype="multipart/form-data" method="POST">
             {% csrf_token %}
             {{ form|safe }}
-            <div id="action-preview-done" class="row justify-content-center row-top-border"
-                 style="border-color: #dee2e6; padding: 1em 0 1em 0;">
+            <div id="action-preview-done" class="text-center"
+                 style="padding: 1em 0 1em 0;">
               <button type="button"
                       class="btn btn-info js-action-preview {% if selected_rows == 0 %}disabled{% endif %}"
-                      style="margin-right:2ex;"
                       data-url="{% url 'action:preview' action.id 1 %}"
                       data-toggle="tooltip"
                   title="{% trans 'See how is the content shown to each learner' %}">
@@ -73,7 +72,6 @@
               </button>
               <button type="submit" name="Submit" value="Submit"
                       class="btn btn-primary spin"
-                      style="margin-right:2ex;"
                       data-toggle="tooltip"
                       title="{% trans 'Save current data' %}">
                 <span class="fa fa-ok"></span> {% trans 'Save' %}</button>

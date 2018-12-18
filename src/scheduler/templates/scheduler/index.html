@@ -25,9 +25,11 @@
             "url": getLanguage()
           },
           "columnDefs": [
-              {"orderable": false, "targets": 0},
-              {"searchable": false, "targets": 0},
+            {"className": "dt-center", "targets": "_all"},
+            {"orderable": false, "targets": 0},
+            {"searchable": false, "targets": 0},
           ],
+          colReorder: false,
         });
       }
     });
@@ -36,13 +38,15 @@
 {% block container %}
   <div class="container">
     <h1 class="text-center">{% trans 'Scheduled Operations' %}<super>*</super></h1>
-    {% if no_data %}
+    {% if not workflow.nrows %}
       {% include 'workflow/includes/no_data.html' %}
-    {% elif no_actions %}
+    {% elif not workflow.actions.all.count %}
       {% include 'workflow/includes/no_actions.html' %}
     {% endif %}
-    {% if not no_items %}
-      {% render_table table %}
+    {% if table.data|length %}
+      <div class="row justify-content-center">
+        {% render_table table %}
+      </div>
     {% endif %}
     {% url 'action:index' as actionindex %}
     <p class="text-left">{% blocktrans %}<strong><super>*</super></strong>The execution of some of

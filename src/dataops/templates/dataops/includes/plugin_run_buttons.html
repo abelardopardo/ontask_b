@@ -1,11 +1,11 @@
 {% load i18n %}
-<div class="text-center" style="margin-bottom:1.5ex">
-  <a class="btn btn-outline-dark spin" style="margin-right:2ex;"
+<div class="text-center">
+  <a class="btn btn-outline-dark spin"
      href="{% url 'dataops:transform' %}">{% trans 'Cancel' %}</a>
   <button type="submit" name="Submit" value="Submit"
           class="btn btn-primary"
           data-toggle="tooltip"
           title="{% trans 'Run the plugin' %}">
-    <span class="fa fa-off"></span> {% trans 'Run' %}</button>
+    <span class="fa fa-rocket"></span> {% trans 'Run' %}</button>
 </div>
 

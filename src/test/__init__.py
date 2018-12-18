@@ -199,11 +199,11 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         # Wait for the user profile page
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
-                (By.XPATH, "//table[@id='workflow-table']/tbody/tr/td")
+                (By.XPATH, "//div[@id='workflow-index']")
             )
         )
 
-        self.assertIn('Open or create a workflow', self.selenium.page_source)
+        self.assertIn('reate a workflow', self.selenium.page_source)
 
     def logout(self):
         self.open(reverse('accounts:logout'))

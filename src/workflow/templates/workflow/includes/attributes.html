@@ -1,9 +1,9 @@
 {% load i18n %}
 {% load django_tables2 %}
 <div class="container" id="workflow-attributes">
-  <div class="row justify-content-center">
+  <div class="text-center">
     <button type="button"
-            class="btn btn-outline-dark btn-sm js-attribute-create"
+            class="btn btn-outline-dark js-attribute-create"
             data-url="{% url 'workflow:attribute_create' %}"
             data-toggle="tooltip"
             title="{% trans 'Add a new name/value pair' %}">

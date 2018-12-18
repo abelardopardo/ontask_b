@@ -8,12 +8,10 @@
   </script>
 {% endblock scripts %}
 {% block container %}
-  <div class="container-fluid" style="text-align:center;">
-    <h1 id='zip-action-done' class="page-header text-center">{% trans 'Action ZIP creation' %}</h1>
+  <div class="container">
+    <h1 id='zip-action-done' class="text-center">{% trans 'Action ZIP creation' %}</h1>
+    <p class="text-center">{% blocktrans %}Your ZIP will start to download shortly.{% endblocktrans %}</p>
     <div class="text-center">
-      {% blocktrans %}Your ZIP will start to download shortly.{% endblocktrans %}
-    </div>
-    <div class="modal-footer">
       <a class="btn btn-outline-dark spin" href="{% url 'action:index' %}">{% trans 'Back' %}</a>
     </div>
   </div>

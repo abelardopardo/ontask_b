@@ -514,7 +514,7 @@ def run_json_action(request, workflow, action):
     # Request is a POST and is valid
 
     # Collect the information from the form
-    op_payload['item_column'] = form.cleaned_data['email_column']
+    op_payload['item_column'] = form.cleaned_data['key_column']
     op_payload['confirm_items'] = form.cleaned_data['confirm_items']
     op_payload['token'] = form.cleaned_data['token']
 

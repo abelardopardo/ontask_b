@@ -1,32 +1,27 @@
 {% load i18n %}
 <div class="dropdown btn-group">
   <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button"
-          data-toggle="dropdown"> {% trans 'Operations' %} <span class="caret"></span>
+          id="tableRowOperations"
+          data-toggle="dropdown"> {% trans 'Operations' %}
   </button>
-  <ul role="menu" class="dropdown-menu">
-    <li>
-      <a href="{{ stat_url }}"
-         class="btn btn-outline-dark btn-sm align-middle spin"
-            data-toggle="tooltip" 
-            title="{% trans 'Statistics about this column' %}">
-        <span class="fa fa-bar-chart"></span> {% trans 'Statistics' %}
-      </a>
-    </li>
-    <li>
-      <a class="btn btn-outline-dark btn-sm" href="{{ edit_url }}"
-         data-toggle="tooltip" 
-         title="{% trans 'Edit the data in this row' %}">
-        <span class="fa fa-pencil"></span> {% trans 'Edit' %}
-      </a>
-    </li>
-    <li>
-      <button type="button"
-              class="btn btn-outline-danger btn-sm js-row-delete"
-              data-url="{% url 'table:row_delete' %}{{ delete_key }}"
-              data-toggle="tooltip" 
-              title="{% trans 'Delete this row' %}">
-        <span class="fa fa-trash"></span> {% trans 'Delete' %}
-      </button>
-    </li>
-  </ul>
+  <div class="dropdown-menu" aria-labelledby="tableRowOperations">
+    <a href="{{ stat_url }}"
+       class="spin dropdown-item"
+          data-toggle="tooltip"
+          title="{% trans 'Statistics about this column' %}">
+      <span class="fa fa-bar-chart"></span> {% trans 'Statistics' %}
+    </a>
+    <a class="spin dropdown-item" href="{{ edit_url }}"
+       data-toggle="tooltip"
+       title="{% trans 'Edit the data in this row' %}">
+      <span class="fa fa-pencil"></span> {% trans 'Edit' %}
+    </a>
+    <button type="button"
+            class="dropdown-item js-row-delete"
+            data-url="{% url 'table:row_delete' %}{{ delete_key }}"
+            data-toggle="tooltip"
+            title="{% trans 'Delete this row' %}">
+      <span class="fa fa-trash"></span> {% trans 'Delete' %}
+    </button>
+  </div>
 </div>

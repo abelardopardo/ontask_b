@@ -13,33 +13,34 @@
   {% ontask_datetimepicker_js %}
 {% endblock %}
 {% block container %}
-<div align="center" class="container">
-  <h1 class="page-header">{% trans 'Add row' %}</h1>
-  <p>{% blocktrans with n=workflow.name %}Workflow {{ n }}{% endblocktrans %}</p>
-  <div class="container">
+<div class="container">
+  <h1 class="text-center">{% trans 'Add row' %}</h1>
+  <div class="row justify-content-center">
     <form action="" method="post">
       {% csrf_token %}
-      {% if cancel_url %}
-        <a class="btn btn-outline-dark spin" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
-      {% endif %}
-      <button type="submit" name="submit" value="update"
-              class="btn btn-primary">
-        <span class="fa fa-ok"></span> {% trans 'Add' %}
-      </button>
-      <div class="input-group input-group-lg">
-        {{ form|crispy }}
+      <div class="text-center">
+        {% if cancel_url %}
+          <a class="btn btn-outline-dark spin" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
+        {% endif %}
+        <button type="submit" name="submit" value="update"
+                class="btn btn-primary">
+          <span class="fa fa-ok"></span> {% trans 'Add' %}
+        </button>
       </div>
-      {% if cancel_url %}
-        <a class="btn btn-outline-dark spin" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
-      {% endif %}
-      <button type="submit" name="submit" value="update"
-              class="btn btn-primary">
-        <span class="fa fa-ok"></span> {% trans 'Add' %}
-      </button>
+      {{ form|crispy }}
+      <div class="text-center">
+        {% if cancel_url %}
+          <a class="btn btn-outline-dark spin" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
+        {% endif %}
+        <button type="submit" name="submit" value="update"
+                class="btn btn-primary">
+          <span class="fa fa-ok"></span> {% trans 'Add' %}
+        </button>
+      </div>
     </form>
   </div>
   {% if not form %}
-    <p><strong>{% trans 'No data available for this workflow' %}</strong></p>
+    <p class="text-center"><strong>{% trans 'No data available for this workflow' %}</strong></p>
   {% endif %}
 </div>
 {% endblock container %}

@@ -410,8 +410,8 @@ def sqlupload1(request, pk):
         data_frame = pandas_db.load_df_from_sqlconnection(conn, read_pwd)
     except Exception as e:
         messages.error(request,
-                       _('Unable to obtain data: {0}').format(e.message))
-        return render(request, 'dataops/upload1.html', context)
+                       _('Unable to obtain data: {0}').format(e))
+        return render(request, 'dataops/sqlupload1.html', context)
 
     # If the frame has repeated column names, it will not be processed.
     if len(set(data_frame.columns)) != len(data_frame.columns):

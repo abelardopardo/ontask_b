@@ -265,12 +265,6 @@ class EmailActionForm(forms.Form):
         required=True
     )
 
-    confirm_items = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_('Check/exclude email addresses before sending?')
-    )
-
     cc_email = forms.CharField(
         label=_('Comma separated list of CC emails'),
         required=False
@@ -278,6 +272,12 @@ class EmailActionForm(forms.Form):
     bcc_email = forms.CharField(
         label=_('Comma separated list of BCC emails'),
         required=False
+    )
+
+    confirm_items = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Check/exclude email addresses before sending?')
     )
 
     send_confirmation = forms.BooleanField(
@@ -571,6 +571,10 @@ class JSONActionForm(JSONBasicActionForm):
         self.fields['token'].initial = self.op_payload.get('token', '')
         self.fields['token'].help_text = \
             _('Authentication token provided by the external platform.')
+
+        self.order_fields(['key_column',
+                           'token',
+                           'confirm_items'])
 
 
 class CanvasEmailActionForm(JSONBasicActionForm):

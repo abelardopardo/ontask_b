@@ -422,8 +422,7 @@ def upload_s4(request):
         # Remove the csvupload from the session object
         request.session.pop('upload_data', None)
 
-        return redirect(reverse('table:display',
-                                kwargs={'pk': workflow.id}))
+        return redirect(reverse('table:display'))
 
     # We are processing a GET request
 

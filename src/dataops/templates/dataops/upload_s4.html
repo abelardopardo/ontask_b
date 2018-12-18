@@ -9,56 +9,58 @@
   <script src="{% static 'dataops/js/dataops.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
-<div align="center" class="container">
-  <h1 class="page-header">{% trans 'Step 4: Review and confirm' %}</h1>
-
-  <form method="POST" action="">
-    {% csrf_token %}
-    {% include 'dataops/includes/upload_buttons.html' %}
-  </form>
-
-  <div align="center" class="container" style="display:inline-block;">
-    <table class="table table-striped" id="workflow-detail"
-           style="display:table-cell;">
-      <thead>
-        <tr>
-          <th class="text-center">{% trans 'Existing Table' %}</th>
-          <th class="text-center"><button class=" fa fa-arrow-left"></button></th>
-          <th class="text-center">{% trans 'New Data' %}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% if request.session.upload_data.dst_selected_key == request.session.upload_data.src_selected_key %}
-          <tr class="success">
-            <td class="text-center">{{ request.session.upload_data.dst_selected_key }} ({% trans 'Key' %})</td>
-            <td class="text-center"><button class=" fa fa-arrow-left"></button></td>
-            <td class="text-center">{{ request.session.upload_data.src_selected_key }} ({% trans 'Key' %})</td>
-          </tr>
-        {% else %}
-          <tr class="success">
-            <td class="text-center">{{ request.session.upload_data.dst_selected_key }} ({% trans 'Key' %})</td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr class="success">
-            <td></td>
-            <td class="text-center"><button class=" fa fa-arrow-left"></button></td>
-            <td class="text-center">{{ request.session.upload_data.src_selected_key }} ({% trans 'Key' %})</td>
-          </tr>
-        {% endif %}
-        {% for item in info %}
+  <div class="container">
+    <h1 class="text-center">{% trans 'Step 4: Review and confirm' %}</h1>
+    <div class="row justify-content-center">
+      <form method="POST" action="">
+        {% csrf_token %}
+        {% include 'dataops/includes/upload_buttons.html' %}
+      </form>
+    </div>
+    <div class="row justify-content-center">
+      <table class="table table-hover table-striped table-bordered" id="workflow-detail"
+             style="width:100%;">
+        <thead>
           <tr>
-            <td class="text-center" style="max-width:220px">{{ item.0 }}</td>
-            <td class="text-center">{% if item.1 %}<button class=" fa fa-arrow-left"></button>{% endif %}</td>
-            <td class="text-center">{{ item.2 }}</td>
+            <th class="text-center">{% trans 'Existing Table' %}</th>
+            <th class="text-center"><button class=" fa fa-arrow-left"></button></th>
+            <th class="text-center">{% trans 'New Data' %}</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% if request.session.upload_data.dst_selected_key == request.session.upload_data.src_selected_key %}
+            <tr class="success">
+              <td class="text-center">{{ request.session.upload_data.dst_selected_key }} ({% trans 'Key' %})</td>
+              <td class="text-center"><button class=" fa fa-arrow-left"></button></td>
+              <td class="text-center">{{ request.session.upload_data.src_selected_key }} ({% trans 'Key' %})</td>
+            </tr>
+          {% else %}
+            <tr class="success">
+              <td class="text-center">{{ request.session.upload_data.dst_selected_key }} ({% trans 'Key' %})</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr class="success">
+              <td></td>
+              <td class="text-center"><button class=" fa fa-arrow-left"></button></td>
+              <td class="text-center">{{ request.session.upload_data.src_selected_key }} ({% trans 'Key' %})</td>
+            </tr>
+          {% endif %}
+          {% for item in info %}
+            <tr>
+              <td class="text-center" style="max-width:220px">{{ item.0 }}</td>
+              <td class="text-center">{% if item.1 %}<button class=" fa fa-arrow-left"></button>{% endif %}</td>
+              <td class="text-center">{{ item.2 }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="row justify-content-center">
+      <form method="POST" action="">
+        {% csrf_token %}
+        {% include 'dataops/includes/upload_buttons.html' %}
+      </form>
+    </div>
   </div>
-  <form method="POST" action="">
-    {% csrf_token %}
-    {% include 'dataops/includes/upload_buttons.html' %}
-  </form>
-</div>
 {% endblock container %}
