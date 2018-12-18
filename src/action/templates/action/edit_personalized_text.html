@@ -46,7 +46,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="false">{% trans 'Filter Learners' %}
-          {% if not filter_condition %}{% trans '(Empty)' %}{% else %}{% blocktrans with n=selected_rows tot=total_rows %}({{ n }} learner of {{ tot }}){% plural %}({{ n }} learners of {{ tot }}){% endblocktrans %}{% endif %}
+          {% if not filter_condition %}{% trans '(Empty)' %}{% else %}{% blocktrans with n=selected_rows tot=total_rows count counter=selected_rows %}({{ n }} learner of {{ tot }}){% plural %}({{ n }} learners of {{ tot }}){% endblocktrans %}{% endif %}
         </a>
       </li>
       <li class="nav-item">
