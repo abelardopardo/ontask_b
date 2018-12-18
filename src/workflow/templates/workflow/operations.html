@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load ontask_tags %}
+{% load static %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Details' %}{% endblock %}
+{% block extrahead %}
+  {% ontask_datatables_bootstrap_css %}
+{% endblock extrahead %}
+{% block scripts %}
+  {% ontask_datetimepicker_js %}
+  <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
+  {% ontask_datatables_jquery_js %}
+  {% ontask_datatables_bootstrap_js %}
+  <script type="text/javascript">
+    if (document.getElementById("attribute-table") != null) {
+      $(document).ready(function() {
+        var attribute_table = $('#attribute-table').DataTable({
+          "search": {
+            "caseInsensitive": true,
+          },
+          stateSave: true,
+          stateSaveParams: function (settings, data) {
+            delete data.search;
+          },
+          "order": [[0, "asc"]],
+          "language": {
+              "emptyTable": "{% trans 'No attributes defined.' %}",
+              "url": getLanguage()
+          },
+          "columnDefs": [
+              {"className": "dt-center", "targets": "_all"},
+              {"orderable": false, "targets": 2},
+              {"searchable": false, "targets": 2},
+          ],
+        });
+      });
+    }
+  </script>
+{% endblock %}
+{% block container %}
+  <div class="container" id="workflow-detail">
+    <h1 class="text-center">{% trans 'Workflow' %}</h1>
+    {% if not workflow.nrows %}
+      {% include 'workflow/includes/no_data.html' %}
+    {% elif not workflow.actions.all|length %}
+      {% include 'workflow/includes/no_actions.html' %}
+    {% endif %}
+    <div class="row justify-content-center">
+      {% include 'workflow/includes/workflow_operation_buttons.html' %}
+    </div>
+    {% if request.user == workflow.user %}
+      <ul class="nav nav-tabs nav-fill" id="workflow-operation-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="attribute-tab" data-toggle="tab" href="#attribute" role="tab" aria-controls="text" aria-selected="true">{% trans 'Attributes' %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="share-tab" data-toggle="tab" href="#share" role="tab" aria-controls="filter" aria-selected="false">{% trans 'Share' %}</a>
+        </li>
+      </ul>
+      <br/>
+      <div class="tab-content" id="edit-personalized-text-tab-content">
+        <div class="tab-pane fade show active" id="attribute" role="tabpanel" aria-labelledby="attribute-tab">
+          {% include 'workflow/includes/attributes.html' %}
+        </div>
+        <div class="tab-pane fade" id="share" role="tabpanel" aria-labelledby="share-tab">
+          {% include 'workflow/includes/share.html' %}
+        </div>
+      </div>
+    {% else %}
+      {% include 'workflow/includes/attributes.html' %}
+    {% endif %}
+  </div>
+  {% include 'modal.html' %}
+{% endblock container %}

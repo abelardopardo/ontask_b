@@ -35,6 +35,9 @@
                   "caseInsensitive": true,
                 },
                 stateSave: true,
+                stateSaveParams: function (settings, data) {
+                  delete data.search;
+                },
                 "order": [],
                 "language": {
                     "emptyTable": "{% trans 'No columns selected.' %}",

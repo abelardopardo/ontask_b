@@ -51,7 +51,8 @@ class SQLConnectionTableAdmin(tables.Table):
                     'db_table', 'operations')
 
         attrs = {
-            'class': 'table table-striped',
+            'class': 'table table-hover table-striped table-bordered',
+            'style': 'min-width: 505px; width: 100%;',
             'id': 'sqlconn-table'
         }
 
@@ -84,7 +85,8 @@ class SQLConnectionTableRun(tables.Table):
                     'db_table', 'operations')
 
         attrs = {
-            'class': 'table table-striped',
+            'class': 'table table-hover table-striped table-bordered',
+            'style': 'min-width: 505px; width: 100%;',
             'id': 'sqlconn-table'
         }
 

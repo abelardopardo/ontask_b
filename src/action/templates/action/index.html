@@ -17,51 +17,61 @@
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
     $(document).ready(function() {
-      if (document.getElementById("action-table") != null) {
-        // Required for DataTables
-        $('#action-table').DataTable({
-          "search": {
-            "caseInsensitive": true,
-          },
-          "stateSave": true,
-          "language": {
-            "emptyTable": "{% trans 'There are no actions for this workflow.' %}",
-            "url": getLanguage()
-          },
-          "columnDefs": [
-            {"orderable": false, "targets": 4},
-            {"searchable": false, "targets": 4},
-          ],
-        });
-      }
+      var action_table = $('#action-table').DataTable({
+        "search": {
+          "caseInsensitive": true,
+        },
+        "stateSave": true,
+        stateSaveParams: function (settings, data) {
+          delete data.search;
+        },
+        "language": {
+          "emptyTable": "{% trans 'There are no actions for this workflow.' %}",
+          "url": getLanguage()
+        },
+        "columnDefs": [
+          {"className": "dt-center", "targets": [0, 3, 4]},
+          {"orderable": false, "targets": 4},
+          {"searchable": false, "targets": 4},
+        ],
+      });
+      action_table.columns().iterator('column', function (ctx, idx) {
+        $(action_table.column(idx).header()).append('<span class="sort-icon"/>');
+      });
     });
   </script>
 {% endblock %}
 {% block container %}
-  <div align="center" class="container">
-    <h1 class="page-header">{% trans 'Actions' %}</h1>
-    {% if not has_table %}
+  <div class="container" id="action-index">
+    <h1 class="text-center">{% trans 'Actions' %}</h1>
+    {% if not workflow.nrows %}
       {% include 'workflow/includes/no_data.html' %}
-    {% elif no_actions %}
-      <p class="lead">{% blocktrans %}<strong>Next Step:</strong> Click in the <i>New action</i> below to create a new
+    {% elif not workflow.actions.all|length %}
+      <p class="lead text-center">{% blocktrans %}<strong>Next Step:</strong> Click in the <i>New action</i> below to create a new
       action to execute based on the data stored in the table.{% endblocktrans %}</p>
     {% endif %}
-    <div class="btn-group" style="padding-bottom: 2ex;" role="group">
-      <button type="button" class="btn btn-sm btn-outline-dark js-create-action"
-         data-url="{% url 'action:create' %}"
-         data-toggle="tooltip"
-         title="New action to collect data from learners">
-        <span class="fa fa-plus"></span> {% trans 'New action' %}
-      </button>
-      {% if has_table %}
-        <a href="{% url 'action:import' %}"
-           class="btn btn-sm btn-outline-dark"
-           data-toggle="tooltip" title="Import action previously exported">
-          <span class="fa fa-import"></span> {% trans 'Import action' %}</a>
-      {% endif %}
-      {% include 'workflow/includes/manage_table_data.html' %}
+    <div class="row justify-content-center condition-btn">
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-sm btn-outline-dark js-create-action"
+                data-url="{% url 'action:create' %}"
+                data-toggle="tooltip"
+                title="New action to collect data from learners">
+          <span class="fa fa-plus"></span> {% trans 'New action' %}
+        </button>
+        {% if workflow.nrows %}
+          <a href="{% url 'action:import' %}"
+             class="btn btn-sm btn-outline-dark"
+             data-toggle="tooltip" title="Import action previously exported">
+            <span class="fa fa-import"></span> {% trans 'Import action' %}</a>
+        {% endif %}
+        {% include 'workflow/includes/manage_table_data.html' %}
+      </div>
     </div>
-    {% render_table table %}
+    {% if table.data|length %}
+      <div class="row justify-content-center">
+        {% render_table table %}
+      </div>
+    {% endif %}
   </div>
   {% include 'modal.html' %}
 {% endblock container %}

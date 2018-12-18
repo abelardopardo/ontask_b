@@ -20,6 +20,9 @@
         $(document).ready(function() {
             $('#sqlconn-table').DataTable({
                 "stateSave": true,
+                stateSaveParams: function (settings, data) {
+                  delete data.search;
+                },
                 "search": {
                   "caseInsensitive": true,
                 },
@@ -38,7 +41,7 @@
   </script>
 {% endblock %}
 {% block container %}
-  <div align="center" class="container">
+  <div class="container" id="sql-connections">
     <h1 class="page-header">{% trans 'SQL Connections' %}</h1>
     <p>
       <button type="button" class="btn btn-outline-dark js-create-workflow"

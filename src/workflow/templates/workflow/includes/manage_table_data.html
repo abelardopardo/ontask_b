@@ -20,5 +20,15 @@
         {% trans 'Execute plugin' %}
       </a>
     </li>
+    {% if workflow.nrows %}
+      <li>
+        <button type="button" style="width:100%;"
+                class="btn btn-outline-dark btn-sm js-workflow-flush"
+                data-url="{% url 'workflow:flush' workflow.id %}" data-toggle="tooltip"
+                title="{% trans 'Delete the data in the table of this workflow' %}">
+          <span class="fa fa-floppy-remove"></span> {% trans 'Flush data table' %}
+        </button>
+      </li>
+    {% endif %}
   </ul>
 </div>

@@ -451,7 +451,7 @@ def df_drop_column(pk, column_name):
     cursor.execute(query)
 
 
-def get_subframe(pk, cond_filter, column_names=None):
+def get_subframe(pk, cond_filter, column_names):
     """
     Execute a select query to extract a subset of the dataframe and turn the
      resulting query set into a data frame.
@@ -470,7 +470,7 @@ def get_subframe(pk, cond_filter, column_names=None):
     return result
 
 
-def get_table_cursor(pk, cond_filter, column_names=None):
+def get_table_cursor(pk, cond_filter, column_names):
     """
     Execute a select query in the database with an optional filter obtained
     from the jquery QueryBuilder.
@@ -482,14 +482,11 @@ def get_table_cursor(pk, cond_filter, column_names=None):
     """
 
     # Create the query
-    if column_names:
-        safe_column_names = [fix_pctg_in_name(x) for x in column_names]
-        query = 'SELECT "{0}" from "{1}"'.format(
-            '", "'.join(safe_column_names),
-            create_table_name(pk)
-        )
-    else:
-        query = 'SELECT * from "{0}"'.format(create_table_name(pk))
+    safe_column_names = [fix_pctg_in_name(x) for x in column_names]
+    query = 'SELECT "{0}" from "{1}"'.format(
+        '", "'.join(safe_column_names),
+        create_table_name(pk)
+    )
 
     # See if the action has a filter or not
     fields = []
@@ -506,7 +503,7 @@ def get_table_cursor(pk, cond_filter, column_names=None):
     return cursor
 
 
-def get_table_data(pk, cond_filter, column_names=None):
+def get_table_data(pk, cond_filter, column_names):
     # Get first the cursor
     cursor = get_table_cursor(pk, cond_filter, column_names)
 
@@ -514,7 +511,7 @@ def get_table_data(pk, cond_filter, column_names=None):
     return cursor.fetchall()
 
 
-def execute_select_on_table(pk, fields, values, column_names=None):
+def execute_select_on_table(pk, fields, values, column_names):
     """
     Execute a select query in the database with an optional filter obtained
     from the jquery QueryBuilder.
@@ -527,12 +524,9 @@ def execute_select_on_table(pk, fields, values, column_names=None):
     """
 
     # Create the query
-    if column_names:
-        safe_column_names = ['"' + fix_pctg_in_name(x) + '"'
-                             for x in column_names]
-        query = 'SELECT {0}'.format(','.join(safe_column_names))
-    else:
-        query = 'SELECT *'
+    safe_column_names = ['"' + fix_pctg_in_name(x) + '"'
+                         for x in column_names]
+    query = 'SELECT {0}'.format(','.join(safe_column_names))
 
     # Add the table
     query += ' FROM "{0}"'.format(create_table_name(pk))
@@ -549,17 +543,6 @@ def execute_select_on_table(pk, fields, values, column_names=None):
         cursor.execute(query)
 
     # Get the data
-    return cursor.fetchall()
-
-
-def get_table_queryset(tablename):
-    query = 'SELECT * from "{0}";'.format(tablename)
-    try:
-        cursor = connection.cursor()
-        cursor.execute(query)
-    except Exception:
-        return None
-
     return cursor.fetchall()
 
 
@@ -638,7 +621,7 @@ def increase_row_integer(pk, set_field, where_field, where_value):
     connection.commit()
 
 
-def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names=None):
+def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names):
     """
     Select the set of elements after filtering and with the key=value pair
 
@@ -652,17 +635,12 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names=None):
     """
 
     # Create the query
-    if column_names:
-        safe_column_names = [fix_pctg_in_name(x) for x in column_names]
-        query = 'SELECT "{0}"'.format('", "'.join(safe_column_names))
-    else:
-        query = 'SELECT *'
-
-    # Add the table
-    query += ' FROM "{0}"'.format(create_table_name(workflow.id))
-
-    # Create the second part of the query setting key=value
-    query += ' WHERE ("{0}" = %s)'.format(fix_pctg_in_name(kv_pair[0]))
+    safe_column_names = [fix_pctg_in_name(x) for x in column_names]
+    query = 'SELECT "{0}" FROM "{1}" WHERE ("{2}" = %s)'.format(
+        '", "'.join(safe_column_names),
+        create_table_name(workflow.id),
+        fix_pctg_in_name(kv_pair[0])
+    )
     fields = [kv_pair[1]]
 
     # See if the action has a filter or not
@@ -761,14 +739,9 @@ def get_filter_query(table_name, column_names, filter_exp):
     """
 
     # Create the query
-    if column_names:
-        safe_column_names = [fix_pctg_in_name(x) for x in column_names]
-        query = 'SELECT "{0}"'.format('", "'.join(safe_column_names))
-    else:
-        query = 'SELECT *'
-
-    # Add the table
-    query += ' FROM "{0}"'.format(table_name)
+    safe_column_names = [fix_pctg_in_name(x) for x in column_names]
+    query = 'SELECT "{0}" FROM "{1}"'.format('", "'.join(safe_column_names),
+                                             table_name)
 
     # Calculate the first suffix to add to the query
     filter_txt = ''
@@ -818,14 +791,9 @@ def search_table_rows(workflow_id,
     """
 
     # Create the query
-    if column_names:
-        safe_column_names = [fix_pctg_in_name(x) for x in column_names]
-        query = 'SELECT "{0}"'.format('", "'.join(safe_column_names))
-    else:
-        query = 'SELECT *'
-
-    # Add the table
-    query += ' FROM "{0}"'.format(create_table_name(workflow_id))
+    safe_column_names = [fix_pctg_in_name(x) for x in column_names]
+    query = 'SELECT "{0}" FROM "{1}"'.format('", "'.join(safe_column_names),
+                                             create_table_name(workflow_id))
 
     # Calculate the first suffix to add to the query
     filter_txt = ''
@@ -878,7 +846,7 @@ def search_table_rows(workflow_id,
 
     # Execute the query
     cursor = connection.cursor()
-    cursor.execute(query, fields)
+    result = cursor.execute(query, fields)
 
     # Get the data
     return cursor.fetchall()
@@ -960,31 +928,27 @@ def check_wf_df(workflow):
         df_col_names = []
 
     # Check 1: Number of rows and columns
-    if workflow.nrows != dfnrows:
-        return False
-    if workflow.ncols != dfncols:
-        return False
+    assert workflow.nrows == dfnrows
+
+    assert workflow.ncols == dfncols
 
     # Identical sets of columns
     wf_cols = workflow.columns.all()
-    if [x.name for x in wf_cols] != df_col_names:
-        return False
+    assert set([x.name for x in wf_cols]) == set(df_col_names)
 
     # Identical data types
-    for n1, n2 in zip(wf_cols, df_col_names):
-        df_dt = pandas_datatype_names[df[n2].dtype.name]
-        if n1.data_type == 'boolean' and df_dt == 'string':
+    # for n1, n2 in zip(wf_cols, df_col_names):
+    for col in wf_cols:
+        df_dt = pandas_datatype_names[df[col.name].dtype.name]
+        if col.data_type == 'boolean' and df_dt == 'string':
             # This is the case of a column with Boolean and Nulls
             continue
 
-        if n1.data_type != df_dt:
-            return False
+        assert col.data_type == df_dt
 
     # Verify that the columns marked as unique are preserved
     for col in workflow.columns.filter(is_key=True):
-        if not is_unique_column(df[col.name]):
-            return False
-    return True
+        assert is_unique_column(df[col.name])
 
 
 def is_unique_column(df_column):
@@ -1003,6 +967,7 @@ def are_unique_columns(data_frame):
     :return: Array of Booleans stating of a column has unique values
     """
     return [is_unique_column(data_frame[x]) for x in list(data_frame.columns)]
+
 
 def has_unique_column(data_frame):
     """

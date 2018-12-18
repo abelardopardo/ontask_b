@@ -6,14 +6,14 @@
      title="{% trans 'Access the table with this view' %}">
     <span class="fa fa fa-eye"></span> {% trans 'Table' %}</a>
   <button type="button"
-          class="btn btn-outline-dark btn-sm js-view-edit align-middle"
+          class="btn btn-outline-dark btn-sm js-view-edit"
           data-url="{% url 'table:view_edit' id %}"
           data-toggle="tooltip"
           title="{% trans 'Change elements in view' %}">
       <span class="fa fa-pencil"></span> {% trans 'Edit' %}
   </button>
   <button type="button"
-          class="btn btn-outline-dark btn-sm js-view-clone align-middle"
+          class="btn btn-outline-dark btn-sm js-view-clone"
           data-url="{% url 'table:view_clone' id %}"
           data-toggle="tooltip"
           title="{% trans 'Create an identical view' %}">

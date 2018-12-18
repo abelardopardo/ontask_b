@@ -216,7 +216,9 @@ def evaluate_action(action, extra_string=None,
 
     # Step 3: Get the table data
     result = []
-    data_frame = pandas_db.get_subframe(workflow.id, cond_filter)
+    data_frame = pandas_db.get_subframe(workflow.id,
+                                        cond_filter,
+                                        workflow.get_column_names())
 
     for __, row in data_frame.iterrows():
 
@@ -301,7 +303,8 @@ def get_row_values(action, row_idx):
     else:
         result = pandas_db.get_table_row_by_key(action.workflow,
                                                 cond_filter,
-                                                row_idx)
+                                                row_idx,
+                                                action.workflow.get_column_names())
     return result
 
 

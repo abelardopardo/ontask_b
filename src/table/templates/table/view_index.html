@@ -23,23 +23,23 @@
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
     $(document).ready(function() {
-      if (document.getElementById("view-table") != null) {
-        // Required for DataTables
-        $('#view-table').DataTable({
-          "search": {
-            "caseInsensitive": true,
-          },
-          stateSave: true,
-          "language": {
-            "emptyTable": "{% trans 'There are no views for this workflow.' %}",
-            "url": getLanguage()
-          },
-          "columnDefs": [
-            {"orderable": false, "targets": 3},
-            {"searchable": false, "targets": 3},
-          ],
-        });
-      }
+      $('#view-table').DataTable({
+        "search": {
+          "caseInsensitive": true,
+        },
+        stateSave: true,
+        stateSaveParams: function (settings, data) {
+          delete data.search;
+        },
+        "language": {
+          "infoEmpty": "{% trans 'There are no views for this workflow.' %}",
+          "url": getLanguage()
+        },
+        "columnDefs": [
+          {"orderable": false, "targets": 2},
+          {"searchable": false, "targets": 2},
+        ],
+      });
     });
     {% with js_var='qbuilder_options' allow_empty='true' empty_rules=True %}
       {% include 'qbuilder_options.js' %}
@@ -47,19 +47,25 @@
   </script>
 {% endblock %}
 {% block container %}
-  <div id="view-content" align="center" class="container-fluid">
-    <h1 class="page-header">{% trans 'Table Views' %}</h1>
-    <p>
-      <a class="btn btn-sm btn-outline-dark spin" href="{% url 'table:display' %}">{% trans 'Back' %}</a>
+  <div class="container" id="view-content">
+    <h1 class="text-center">{% trans 'Table Views' %}</h1>
+    <div class="row justify-content-center condition-btn">
+      <a class="btn btn-sm btn-outline-dark spin" style="margin-right: 1ex;"
+         href="{% url 'table:display' %}">{% trans 'Back' %}</a>
       <button type="button" class="btn btn-sm btn-primary js-view-add"
               data-url="{% url 'table:view_add' %}"
               data-toggle="tooltip"
               title="{% trans 'New view for the table' %}">
         <span class="fa fa-plus"></span> {% trans 'Add View' %}
       </button>
-    </p>
-    {% if table %}
-      {% render_table table %}
+    </div>
+    {% if table.data|length %}
+      <div class="row justify-content-center">
+        {% render_table table %}
+      </div>
+    {% else %}
+      <p class="text-center">{% blocktrans %}Create views by selecting a subset of rows and columns
+      of the table to show.{% endblocktrans %}
     {% endif %}
   </div>
   {% include 'modal.html' %}

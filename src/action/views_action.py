@@ -89,26 +89,26 @@ class ActionTable(tables.Table):
         verbose_name=_('Operations'),
         template_file='action/includes/partial_action_operations.html',
         template_context=lambda record: {
-            'id': record['id'],
-            'action_tval': record['action_tval'],
-            'is_out': int(record['is_out']),
-            'is_executable': record['is_executable'],
-            'serve_enabled': record['serve_enabled']}
+            'id': record.id,
+            'action_tval': record.action_type,
+            'is_out': int(record.is_out),
+            'is_executable': record.is_executable,
+            'serve_enabled': record.serve_enabled}
     )
 
     def render_action_type(self, record):
         icon = 'file-text'
         title = 'Personalized text'
-        if record['action_type'] == 'Personalized text':
+        if record.action_type == Action.PERSONALIZED_TEXT:
             icon = 'file-text'
             title = 'Personalized text'
-        elif record['action_type'] == 'Personalized Canvas Email':
+        elif record.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
             icon = 'envelope-square'
             title = 'Personalized Canvas Email'
-        elif record['action_type'] == 'Personalized JSON':
+        elif record.action_type == Action.PERSONALIZED_JSON:
             icon = 'code'
             title = 'Personalized JSON'
-        elif record['action_type'] == 'Survey':
+        elif record.action_type == Action.SURVEY:
             icon = 'question-circle-o'
             title = 'Survey'
         return format_html(
@@ -120,11 +120,10 @@ class ActionTable(tables.Table):
         )
 
     def render_last_executed_log(self, record):
-        log_item = record['last_executed_log']
+        log_item = record.last_executed_log
         if not log_item:
             return "---"
 
-        dtime = log_item.modified
         return format_html(
             """<a class="spin" href="{0}">{1}</a>""".format(
                 reverse('logs:view', kwargs={'pk': log_item.id}),
@@ -134,22 +133,15 @@ class ActionTable(tables.Table):
 
     class Meta(object):
         model = Action
-
         fields = ('name', 'description_text', 'action_type',
                   'last_executed_log')
-
         sequence = ('action_type', 'name', 'description_text',
                     'last_executed_log')
-
         exclude = ('content', 'serve_enabled', 'columns', 'filter')
-
         attrs = {
-            'class': 'table table-striped',
+            'class': 'table table-hover table-striped table-bordered',
+            'style': 'min-width: 505px; width: 100%;',
             'id': 'action-table'
-        }
-
-        row_attrs = {
-            'style': 'text-align:center;',
         }
 
 
@@ -169,7 +161,8 @@ class ColumnSelectedTable(tables.Table):
     class Meta(object):
         fields = ('name', 'description_text', 'operations')
         attrs = {
-            'class': 'table table-striped',
+            'class': 'table table-hover table-striped table-bordered',
+            'style': 'min-width: 505px; width: 100%;',
             'id': 'column-selected-table'
         }
 
@@ -316,30 +309,11 @@ def action_index_set(request, pk=None):
     request.session[action_session_dictionary] = {}
     request.session.save()
 
-    # Get the actions
-    actions = Action.objects.filter(workflow__id=workflow.id)
-
-    # Context to render the template
-    context = {'has_table': ops.workflow_has_table(workflow)}
-
-    # Build the table only if there is anything to show (prevent empty table)
-    qset = []
-    for action in actions:
-        qset.append({'id': action.id,
-                     'name': action.name,
-                     'description_text': action.description_text,
-                     'action_type': action.get_action_type_display(),
-                     'action_tval': action.action_type,
-                     'is_out': action.is_out,
-                     'is_executable': action.is_executable,
-                     'last_executed_log': action.last_executed_log,
-                     'serve_enabled': action.serve_enabled})
-
-    context['table'] = \
-        ActionTable(qset, orderable=False)
-    context['no_actions'] = len(qset) == 0
-
-    return render(request, 'action/index.html', context)
+    return render(request,
+                  'action/index.html',
+                  {'workflow': workflow,
+                   'table': ActionTable(workflow.actions.all(),
+                                        orderable=False)})
 
 
 class ActionCreateView(UserIsInstructor, generic.TemplateView):
@@ -482,7 +456,7 @@ def action_out_save_content(request, pk):
         return JsonResponse({})
 
     # If the request has the 'action_content', update the action
-    action_content = request.POST.get('action_content', None)
+    action_content = request.POST.get('action_content')
     if action_content:
         action.set_content(action_content)
         action.save()

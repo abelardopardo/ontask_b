@@ -10,7 +10,7 @@ from . import attribute_views, column_views, import_export_views, share_views, \
 app_name = 'workflow'
 
 urlpatterns = [
-    path('', views.workflow_index, name='index'),
+    path('', views.index, name='index'),
 
     path('sql_connections', views.sql_connections, name='sql_connections'),
 
@@ -27,11 +27,12 @@ urlpatterns = [
     path('<int:pk>/detail/', views.WorkflowDetailView.as_view(),
          name='detail'),
 
+    path('<int:pk>/operations/', views.operations, name='operations'),
+
     # Column table manipulation
     path('<int:pk>/column_ss/', views.column_ss, name='column_ss'),
 
     # Import Export
-
     path('<int:pk>/export_ask/',
          import_export_views.export_ask,
          name='export_ask'),
@@ -43,9 +44,6 @@ urlpatterns = [
     path('import/', import_export_views.import_workflow, name='import'),
 
     # Attributes
-
-    path('attributes/', attribute_views.attributes, name='attributes'),
-
     path('attribute_create/',
          attribute_views.attribute_create,
          name='attribute_create'),
@@ -59,9 +57,6 @@ urlpatterns = [
          name='attribute_delete'),
 
     # Sharing
-
-    path('<int:pk>/share/', share_views.share, name='share'),
-
     path('share_create/',
          share_views.share_create,
          name='share_create'),
@@ -71,7 +66,6 @@ urlpatterns = [
          name='share_delete'),
 
     # Column manipulation
-
     path('column_add/', column_views.column_add, name='column_add'),
 
     path('<int:pk>/question_add/', column_views.column_add, name='question_add'),
@@ -99,6 +93,9 @@ urlpatterns = [
     path('<int:pk>/column_clone/',
          column_views.column_clone,
          name='column_clone'),
+
+    # Select key column for action in
+    path('column_move/', column_views.column_move, name='column_move'),
 
     path('<int:pk>/column_move_prev/',
          column_views.column_move_prev,

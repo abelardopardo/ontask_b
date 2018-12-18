@@ -265,6 +265,10 @@ $(function () {
   // Clone column
   $("#column-selected-table").on("click", ".js-column-clone", loadForm);
   $("#modal-item").on("submit", ".js-column-clone-form", saveForm);
+
+  // Flush workflow in detail view
+  $("#action-index").on("click", ".js-workflow-flush", loadForm);
+  $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
 });
 
 window.onload = function(){

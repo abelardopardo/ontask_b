@@ -19,6 +19,9 @@
       $(document).ready(function() {
         $('#sqlconn-table').DataTable({
           "stateSave": true,
+          stateSaveParams: function (settings, data) {
+            delete data.search;
+          },
           "order": [],
           "language": {
               "emptyTable": "{% trans 'No sql connections available.' %}",
@@ -34,11 +37,17 @@
   </script>
 {% endblock %}
 {% block container %}
-  <div class="container-fluid text-center">
+  <div class="container text-center">
     <h1 class="page-header">{% trans 'SQL Connections' %}</h1>
-    <div style="display: inline-block;" id="sqlconn-area">
-      {% render_table table %}
-    </div>
+    {% if table.data|length %}
+      <div class="row justify-content-center" id="sqlconn-area">
+        {% render_table table %}
+      </div>
+    {% else %}
+    {% blocktrans %}In this page you will find the available SQL connections to
+    access data stored in external relational databases. The connections can only
+    be created by the system administrator.{% endblocktrans %}
+    {% endif %}
   </div>
   {% include 'modal.html' %}
 {% endblock container %}

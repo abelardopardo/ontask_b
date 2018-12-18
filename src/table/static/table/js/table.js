@@ -1,3 +1,19 @@
+var column_reorder = function (e, settings, details ) {
+  data = {'from_name': settings.aoColumns[details.mapping[details.from]].data,
+          'to_name': settings.aoColumns[details.mapping[details.to]].data}
+  $.ajax({
+    url: $(this).attr("data-url"),
+    data: data,
+    type: 'post',
+    dataType: 'json',
+    success: function (data) {
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      $('#div-spinner').show();
+      location.reload(true);
+    }
+  });
+};
 $(function () {
   $("#table-content").on("click", ".js-workflow-column-add", loadForm);
   // Column Add
@@ -45,6 +61,10 @@ $(function () {
   // View clone
   $("#view-content").on("click", ".js-view-clone", loadForm);
   $("#modal-item").on("click", ".js-view-clone-form", saveForm);
+
+  // Flush workflow in detail view
+  $("#table-content").on("click", ".js-workflow-flush", loadForm);
+  $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
 });
 window.onload = function(){
   setDateTimePickers();

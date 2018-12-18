@@ -76,7 +76,7 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
             df_dst = load_from_db(self.workflow.id)
         else:
             df_dst = pandas_db.load_df_from_csvfile(
-            io.StringIO(self.csv1),
+                io.StringIO(self.csv1),
                 0,
                 0
             )
@@ -144,6 +144,11 @@ class FormulaEvaluation(test.OnTaskTestCase):
         'valid': True
     }
     test_table = 'TEST_TABLE'
+    test_columns = ['v_integer',
+                    'v_double',
+                    'v_boolean',
+                    'v_string',
+                    'v_datetime']
 
     def set_skel(self, input_value, op_value, type_value, value, vname=None):
         if vname:
@@ -211,7 +216,9 @@ class FormulaEvaluation(test.OnTaskTestCase):
             type_value,
             value, 'v_' + type_value
         )
-        query, fields = get_filter_query(self.test_table, None, self.skel)
+        query, fields = get_filter_query(self.test_table,
+                                         self.test_columns,
+                                         self.skel)
         result = pd.read_sql_query(query, pandas_db.engine, params=fields)
         self.assertEqual(len(result), 1)
 
@@ -360,11 +367,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
         df = pd.DataFrame(
             [(1, 2.0, True, 'xxx', datetime.datetime(2018, 1, 1, 0, 0, 0)),
              (None, None, None, None, None)],
-            columns=['v_integer',
-                     'v_double',
-                     'v_boolean',
-                     'v_string',
-                     'v_datetime'])
+            columns=self.test_columns)
 
         # Store the data frame
         pandas_db.store_table(df, 'TEST_TABLE')

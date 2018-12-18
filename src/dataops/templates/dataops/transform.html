@@ -21,6 +21,9 @@
             "caseInsensitive": true,
           },
           stateSave: true,
+          stateSaveParams: function (settings, data) {
+            delete data.search;
+          },
           "language": {
             "emptyTable": "{% trans 'No transformations in this workflow.' %}",
             "url": getLanguage()
@@ -36,9 +39,9 @@
   </script>
 {% endblock %}
 {% block container %}
-  <div align="center" class="container">
-    <h1 class="page-header">{% trans 'Transformations' %}</h1>
-    <div class="container-fluid" id="transform-selection">
+  <div class="container">
+    <h1 class="text-center">{% trans 'Transformations' %}</h1>
+    <div class="row" id="transform-selection">
       {% render_table table %}
     </div>
   </div>

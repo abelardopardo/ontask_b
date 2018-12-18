@@ -19,6 +19,9 @@
         $(document).ready(function() {
             $('#actioninrun-data').DataTable({
                 stateSave: true,
+                stateSaveParams: function (settings, data) {
+                  delete data.search;
+                },
                 processing: true,
                 serverSide: true,
                 ajax: {

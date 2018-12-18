@@ -40,7 +40,6 @@ class ViewTable(tables.Table):
         empty_values=[],
         verbose_name=_('Description')
     )
-    modified = tables.DateTimeColumn(verbose_name=_('Modified'))
     operations = OperationsColumn(
         verbose_name=_('Operations'),
         template_file='table/includes/partial_view_operations.html',
@@ -52,10 +51,11 @@ class ViewTable(tables.Table):
         Select the model and specify fields, sequence and attributes
         """
         model = View
-        fields = ('name', 'description_text', 'modified', 'operations')
-        sequence = ('name', 'description_text', 'modified', 'operations')
+        fields = ('name', 'description_text', 'operations')
+        sequence = ('name', 'description_text', 'operations')
         attrs = {
-            'class': 'table table-striped',
+            'class': 'table table-hover table-striped table-bordered',
+            'style': 'min-width: 505px; width: 100%;',
             'id': 'view-table'
         }
 
@@ -132,6 +132,7 @@ def render_table_display_page(request, workflow, view, columns, ajax_url):
     """
     # Create the initial context
     context = {
+        'workflow': workflow,
         'query_builder_ops': workflow.get_query_builder_ops_as_str(),
         'ajax_url': ajax_url,
         'views': workflow.views.all(),
@@ -141,6 +142,8 @@ def render_table_display_page(request, workflow, view, columns, ajax_url):
     # If there is a DF, add the columns
     if ops.workflow_id_has_table(workflow.id):
         context['columns'] = columns
+        context['columns_datatables'] = \
+            [{'data': 'Operations'}] + [{'data': c.name} for c in columns]
 
     # If using a view, add it to the context
     if view:
@@ -211,6 +214,7 @@ def render_table_display_data(request, workflow, columns, formula,
     items = 0  # For counting the number of elements in the result
     for row in qs[start:start + length]:
         items += 1
+        new_element = {}
         if view_id:
             stat_url = reverse('table:stat_row_view', kwargs={'pk': view_id})
         else:
@@ -229,11 +233,10 @@ def render_table_display_data(request, workflow, columns, formula,
         )
 
         # Element to add to the final queryset
-        new_element = [ops_string] + list(row)
-
-        # Tweak the date time format
-        new_element = [x.strftime('%Y-%m-%d %H:%M:%S %z')
-        if isinstance(x, datetime) else x for x in new_element]
+        new_element['Operations'] = ops_string
+        values = [x.strftime('%Y-%m-%d %H:%M:%S %z')
+            if isinstance(x, datetime) else x for x in list(row)]
+        new_element.update(zip(column_names, values))
 
         # Create the list of elements to display and add it ot the final QS
         final_qs.append(new_element)
@@ -685,10 +688,11 @@ def csvdownload(request, pk=None):
                                     kwargs={'pk': workflow.id}))
 
     # Fetch the data frame
-    data_frame = pandas_db.get_subframe(
-        workflow.id,
-        view,
-        [x.name for x in view.columns.all()] if view is not None else None)
+    if view:
+        col_names = [x.name for x in view.columns.all()]
+    else:
+        col_names = [x.name for x in workflow.get_column_names()]
+    data_frame = pandas_db.get_subframe(workflow.id, view, col_names)
 
     # Create the response object
     response = HttpResponse(content_type='text/csv')

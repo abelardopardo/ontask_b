@@ -21,88 +21,74 @@
     {% ontask_datatables_bootstrap_js %}
     <script type="text/javascript">
       if (document.getElementById("column-table") != null) {
-          // Required for DataTables
-          $(document).ready(function() {
-              $('#column-table').DataTable({
-                  "language": {
-                    url: getLanguage()
-                  },
-                  "stateSave": true,
-                  "processing": true,
-                  "serverSide": true,
-                  "ajax": {
-                    url: "{% url 'workflow:column_ss' workflow.id %}",
-                    type: 'POST',
-                  },
-                  "columns": [
-                    {"data": "number", "class": "dt-center"},
-                    {"data": "name", "class": "dt-center"},
-                    {"data": "description", "class": "dt-center"},
-                    {"data": "type", "class": "dt-center"},
-                    {"data": "key", "class": "dt-center"},
-                    {"data": "operations", "class": "dt-center operations"},
-                  ],
-                  "order": [],
-                  "columnDefs": [
-                      {"orderable": false, "targets": "_all"},
-                      {"searchable": false, "targets": "operations"},
-                  ],
-                  "drawCallback": function(settings) {
-                     // Needed to enable tooltips in ajax produced content
-                     $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
-                  },
-                });
+        $(document).ready(function() {
+          $('#column-table').DataTable({
+            "language": {
+              url: getLanguage()
+            },
+            "stateSave": true,
+            stateSaveParams: function (settings, data) {
+              delete data.search;
+            },
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+              url: "{% url 'workflow:column_ss' workflow.id %}",
+              type: 'POST',
+            },
+            "columns": [
+              {"data": "number", "class": "dt-center"},
+              {"data": "name", "class": "dt-center"},
+              {"data": "description", "class": "dt-center"},
+              {"data": "type", "class": "dt-center"},
+              {"data": "key", "class": "dt-center"},
+              {"data": "operations", "class": "dt-center operations"},
+            ],
+            "order": [],
+            "columnDefs": [
+              {"orderable": false, "targets": "_all"},
+              {"searchable": false, "targets": "operations"},
+            ],
+            "drawCallback": function(settings) {
+              $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+            },
           });
+        });
       }
     </script>
   {% endif %}
 {% endblock %}
 {% block container %}
-  <div class="container text-center">
-    <h1 class="page-header">Worlflow details</h1>
-    {% if workflow %}
-      <div class="container" id="workflow-area">
-        {% if not table_info %}
-          {% include 'workflow/includes/no_data.html' %}
-        {% elif not table_info.num_actions %}
-          {% include 'workflow/includes/no_actions.html' %}
+  <div class="container" id="workflow-detail">
+    <h2 class="text-center">{% trans 'Columns' %}</h2>
+    {% if not table_info %}
+      {% include 'workflow/includes/no_data.html' %}
+    {% elif not table_info.num_actions %}
+      {% include 'workflow/includes/no_actions.html' %}
+    {% endif %}
+    <div class="row justify-content-center">
+      <div class="condition-btn btn-group" role="group">
+        {% if workflow.nrows != 0 %}
+          {% include 'workflow/includes/add_column_menu.html' %}
         {% endif %}
-        {% include 'workflow/includes/workflow_detail_buttons.html' %}
-        <p class="help-block"
-           style="text-align:center;"><strong>{% trans 'Description' %}
-          </strong>: {{ workflow.description_text }}</p>
-        <p class="help-block">{% trans 'Last modified' %}: {{ workflow.modified }}</p>
-        {% if table_info %}
-          <p class="help-block">
-            {% blocktrans with num=table_info.num_rows count counter=table_info.num_rows %}{{ num }} row{% plural %}{{ num }} rows,{% endblocktrans %}
-            {% blocktrans with num=table_info.num_cols count counter=table_info.num_cols %}{{ num }} column{% plural %}{{ num }} columns{% endblocktrans %}
-            ({% blocktrans with num=num_key_columns count counter=num_key_columns %}{{ num }} Key column{% plural %}{{ num }} Key columns{% endblocktrans %}),
-            {% blocktrans with num=table_info.num_actions count counter=table_info.num_actions %}{{ num }} action{% plural %}{{ num }} actions,{% endblocktrans %}
-            {% blocktrans with num=table_info.num_attributes count counter=table_info.num_attributes %}{{ num }} attribute{% plural %} {{ num }} attributes{% endblocktrans %}.
-          <h4 class="modal-title">Columns</h4>
-          <table class="table table-striped dataTable no-footer"
-                 id="column-table">
-            <thead>
-              <tr>
-                <th class="number">#</th>
-                <th class="name">{% trans 'Name' %}</th>
-                <th class="name">{% trans 'Description' %}</th>
-                <th class="type">{% trans 'Type' %}</th>
-                <th class="key">{% trans 'Key?' %}</th>
-                <th class="operations">{% trans 'Operations' %}</th>
-              </tr>
-            </thead>
-          </table>
-        {% endif %}
+        {% include 'workflow/includes/manage_table_data.html' %}
       </div>
-    {% else %}
-      {% url 'workflow:index' as windex %}
-      {% blocktrans %}Go to <a href="{{ windex }}">your list of workflows</a>{% endblocktrans %}
+    </div>
+    {% if table_info %}
+      <table class="table table-striped dataTable no-footer" id="column-table">
+        <thead>
+          <tr>
+            <th class="number">#</th>
+            <th class="name">{% trans 'Name' %}</th>
+            <th class="name">{% trans 'Description' %}</th>
+            <th class="type">{% trans 'Type' %}</th>
+            <th class="key">{% trans 'Key?' %}</th>
+            <th class="operations">{% trans 'Operations' %}</th>
+          </tr>
+        </thead>
+      </table>
     {% endif %}
   </div>
   {% include 'modal.html' %}
 {% endblock container %}
-
-
-
 

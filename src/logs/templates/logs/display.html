@@ -16,14 +16,24 @@
   <script type="text/javascript">
     $(document).ready(function() {
         $('#log-table').DataTable({
+          "search": {
+            "caseInsensitive": true,
+          },
           stateSave: true,
+          stateSaveParams: function (settings, data) {
+            delete data.search;
+          },
           processing: true,
           serverSide: true,
           ajax: {
             url: "{% url 'logs:display_ss' %}",
             type: 'POST',
+            deferRender: true,
           },
           ordering: false,
+          columnDefs: [
+            {"className": "dt-center", "targets": "_all"},
+          ],
           "language": {
               "emptyTable": "{% trans 'No logs recorded for this workflow.' %}",
               "url": getLanguage()
@@ -38,9 +48,9 @@
   </script>
 {% endblock %}
 {% block container %}
-  <div align="center" class="container">
-    <h1 class="page-header">{% trans 'Logs' %}<super>*</super></h1>
-    <div class="container" id="log-table-page">
+  <div class="container">
+    <h1 class="text-center">{% trans 'Logs' %}<super>*</super></h1>
+    <div class="row justify-content-center" id="log-table-page">
       <a href="{% url 'logs:export' workflow.id %}" download
          class="btn btn-outline-dark btn-sm js-logs-download"
          data-toggle="tooltip"

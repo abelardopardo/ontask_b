@@ -16,7 +16,7 @@
        class="btn btn-outline-dark btn-sm spin"
         data-toggle="tooltip"
         title="{% trans 'Create a ZIP with each personalised text in a file' %}">
-      <span class="fa fa-archive-o"></span> {% trans 'ZIP' %}</a>
+      <span class="fa fa-file-archive-o"></span> {% trans 'ZIP' %}</a>
   {% endif %}
   {% if action_tval == 'survey' or action_tval == 'todo_list' or action_tval == 'personalized_json' %}
     <a href="{% url 'action:run' id %}"

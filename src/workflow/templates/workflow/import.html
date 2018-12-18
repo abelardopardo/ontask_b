@@ -9,20 +9,20 @@
   <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
-  <div align="center" class="container">
-    <h1 class="page-header">{% trans 'Import workflow' %}</h1>
+  <div class="container" id="workflow-import">
+    <h1 class="text-center">{% trans 'Import workflow' %}</h1>
+    <div class="row justify-content-center">
       <form action="{% url 'workflow:import' %}" method="post"
             enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="text-center input-group input-group-lg">
-          {{ form|crispy }}
-          <a class="btn btn-outline-dark spin" style="margin-right:2ex;"
-             href="{% url 'workflow:index' %}">{% trans 'Cancel' %}</a>
-          <button class="btn btn-primary btn-space spin"
-                  type="Submit" name="Submit" value="Submit">
-            <span class="fa fa-import"></span> {% trans 'Import' %}</button>
-        </div>
+        {{ form|crispy }}
+        <a class="btn btn-outline-dark spin" style="margin-right:2ex;"
+           href="{% url 'workflow:index' %}">{% trans 'Cancel' %}</a>
+        <button class="btn btn-primary btn-space spin"
+                type="Submit" name="Submit" value="Submit">
+          <span class="fa fa-import"></span> {% trans 'Import' %}</button>
       </form>
+    </div>
   </div>
 {% endblock %}
 

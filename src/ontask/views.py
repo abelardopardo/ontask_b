@@ -14,7 +14,7 @@ from django_auth_lti.decorators import lti_role_required
 from ontask.permissions import UserIsInstructor
 from ontask.tasks import increase_track_count
 from ontask.permissions import is_instructor, is_admin
-from workflow.views import workflow_index
+from workflow.views import index
 
 
 def home(request):
@@ -24,7 +24,7 @@ def home(request):
 
     if is_instructor(request.user) or is_admin(request.user):
         # Authenticated request, go to the workflow index
-        return workflow_index(request)
+        return index(request)
 
     # Authenticated request from learner, show profile
     return redirect(reverse('profiles:show_self'))

@@ -1,11 +1,9 @@
-@import "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min
- .css";
-
 html, body{
     height:100%;		/* For full height images */
 }
 
 body {
+  font-family: Arial, Helvetica, Verdana, sans-serif;
   padding-top:37px; /* To jump over the fixed nav-bar */
 }
 
@@ -215,26 +213,14 @@ body>.navbar-transparent {
   z-index: 2;
 }
 
-/* For the Action Edit
-div.conditions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-} */
-
 div.condition-btn {
-    padding: 0.5ex;
+    margin-bottom: 1ex;
 }
 /* Tweaks for JQuery QueryBuilder
 /* Needed for QueryBuilder to expand width 100% */
 #filter_builder.form-inline,
 #builder.form-inline {
   display: unset;
-}
-/* Needed to fix rendering of jQuery QueryBuilder in Popup */
-dt div.btn-group,
-dt div.btn-group-vertical {
-    display: flow-root;
 }
 /* Clause var op value*/
 .query-builder .rules-group-container {
@@ -246,46 +232,14 @@ dt div.btn-group-vertical {
     color:red;
 }
 
-/* Sortable columns in db */
-.orderable {
-    background: url("orderable.png") no-repeat center right;
-}
-.asc {
-    background: url("asc.png") no-repeat center right;
-}
-.desc {
-    background: url("desc.png") no-repeat center right;
-}
-
+th.dt-body-center,
 td.dt-body-center {
     text-align: center;
     }
 
 table td,
-#actioninrun-data td,
-#action-table td,
-#attribute-table td,
-#column-selected-table td,
-#column-table td,
-#log-table td,
-#scheduler-table td,
-#sqlconn-table td,
-#table-data td,
-#transform-diagnostics-table td,
-#transform-table td,
-#view-table td,
-#workflow-table td {
+table th {
     vertical-align: middle;
-}
-
-/* Reducing padding in all column rows */
-.table > thead > tr > th,
-.table > tbody > tr > th,
-.table > tfoot > tr > th,
-.table > thead > tr > td,
-.table > tbody > tr > td,
-.table > tfoot > tr > td {
-    padding: 4px;
 }
 
 /* Needed to show summer note aligned to the left */
@@ -306,6 +260,10 @@ div.group-conditions > label:not([class*=active]) {
     opacity: 0.3;
 }
 
+#base_footer {
+  margin-top: 1ex;
+}
+
 #base_footer .div1 {
     float: left;
 }
@@ -315,7 +273,7 @@ div.group-conditions > label:not([class*=active]) {
     text-align:right;
 }
 
-th.dt-center, td.dt-center { text-align: center; }
+.dt-center { text-align: center; }
 
 table#attribute-table {
     margin-top: 20px;
@@ -334,22 +292,6 @@ table#attribute-table {
 
 div.sol-container {
     display: table;
-}
-
-.modal-body p,
-.modal-body div {
-    word-wrap: break-word;
-}
-
-.modal-dialog {
-    max-width: 800px;
-}
-
-a.column-move-prev > span,
-a.column-move-next> span,
-a.column-move-top> span,
-a.column-move-bottom> span {
-    font-size:75%;
 }
 
 /* Fix placement of SOL inside modal */

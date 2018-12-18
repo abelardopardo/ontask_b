@@ -155,7 +155,8 @@ class ScheduleActionTable(tables.Table):
                     'last_executed_log')
 
         attrs = {
-            'class': 'table table-striped',
+            'class': 'table table-hover table-striped table-bordered',
+            'style': 'min-width: 505px; width: 100%;',
             'id': 'scheduler-table'
         }
 
@@ -525,7 +526,8 @@ def index(request):
                   'scheduler/index.html',
                   {'table': ScheduleActionTable(s_items, orderable=False),
                    'no_data': workflow.nrows == 0,
-                   'no_actions': workflow.actions.count() == 0})
+                   'no_actions': workflow.actions.count() == 0,
+                   'no_items': len(s_items) == 0})
 
 
 @user_passes_test(is_instructor)

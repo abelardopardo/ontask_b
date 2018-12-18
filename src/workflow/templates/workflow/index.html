@@ -19,6 +19,9 @@
         $(document).ready(function() {
             $('#workflow-table').DataTable({
                 "stateSave": true,
+                stateSaveParams: function (settings, data) {
+                  delete data.search;
+                },
                 "search": {
                   "caseInsensitive": true,
                 },
@@ -37,37 +40,41 @@
   </script>
 {% endblock %}
 {% block container %}
-  <div align="center" class="container" id="workflow-area">
+  <div class="container" id="workflow-index">
     {% if table %}
-      <h1 class="page-header">{% trans 'Open or create a workflow' %}<super>*</super></h1>
+      <h1 class="text-center">{% trans 'Open or create a workflow' %}<super>*</super></h1>
     {% else %}
-      <h1 class="page-header">{% trans 'Create a workflow' %}<super>*</super></h1>
+      <h1 class="text-center">{% trans 'Create a workflow' %}<super>*</super></h1>
     {% endif %}
     {% if not nwflows %}
-      <p class="lead"><strong>Next Step:</strong> The main element in OnTask is a <i>Workflow<super>*</super></i>. Start by first creating a workflow element using the <i>New Workflow</i> button below,
-      and then upload data in its table.</p>
+      <p class="lead text-center"><strong>Next Step:</strong> The main element in OnTask is a <i>Workflow<super>*</super></i>. Start by first creating a workflow element using the <i>New Workflow</i> button below, and then upload data in its table.</p>
     {% endif %}
-    <div class="condition-btn btn-group" role="group">
-      <button type="button" class="btn btn-outline-dark js-create-workflow"
-              data-url="{% url 'workflow:create' %}"
+    <div class="row justify-content-center">
+      <div class="condition-btn btn-group" role="group">
+        <button type="button" class="btn btn-outline-dark js-create-workflow"
+                data-url="{% url 'workflow:create' %}"
                 data-toggle="tooltip"
                 title="{% trans 'Provide the name and description for a new workflow' %}">
-        <span class="fa fa-plus"></span>
-          {% trans 'New workflow' %}
-      </button>
-      <a href="{% url 'workflow:import' %}" class="btn btn-outline-dark spin"
-                data-toggle="tooltip"
-                title="{% trans 'Import a file with an OnTask workflow' %}">
-        <span class="fa fa-import"></span>
-          {% trans 'Import workflow' %}
-      </a>
+          <span class="fa fa-plus"></span>{% trans 'New workflow' %}
+        </button>
+        <a href="{% url 'workflow:import' %}" class="btn btn-outline-dark spin"
+                  data-toggle="tooltip"
+                  title="{% trans 'Import a file with an OnTask workflow' %}">
+          <span class="fa fa-import"></span>
+            {% trans 'Import workflow' %}
+        </a>
+      </div>
     </div>
     <div class="card-deck justify-content-center" style="margin:1em 0 1em 0;">
       {% for wflow in workflows %}
         <div class="card ontask-card" style="margin-bottom: 15px;">
           <div class="card-body">
-            <h4 class="card-title">{{ wflow.name }}</h4>
+            <h4 class="card-title text-center">{{ wflow.name }}</h4>
             <p class="card-text" style="min-height: 100px;">{{ wflow.description_text }}</p>
+            <p class="card-text text-center">
+        {% blocktrans count counter=wflow.nrows %}{{ counter }} row,{% plural %}{{ counter }} rows,{% endblocktrans %}
+        {% blocktrans count counter=wflow.ncols %}{{ counter }} column,{% plural %}{{ counter }} columns,{% endblocktrans %}
+        {% blocktrans count counter=wflow.actions.all|length %}{{ counter }} action{% plural %}{{ counter }} actions{% endblocktrans %}.</p>
           </div>
           <div class="wflow-buttons">
             <a href="{% url 'action:index_set' wflow.id %}"

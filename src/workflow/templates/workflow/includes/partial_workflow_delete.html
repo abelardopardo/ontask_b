@@ -11,7 +11,7 @@
     <p class="lead">{% blocktrans with n=workflow.name %}Are you sure you want to delete the workflow <strong>{{ n }}</strong>?{% endblocktrans %}</p>
     <p>{% trans 'This operation will also remove all the conditions and actions attached to it.' %}</p>
   </div>
-  <div class="modal-footer" style="text-align: center;">
+  <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" data-dismiss="modal">{% trans 'Cancel' %}
     </button>
     <button type="submit" class="btn btn-outline-danger">

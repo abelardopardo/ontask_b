@@ -10,10 +10,12 @@ from django.contrib.auth.decorators import user_passes_test
 from django.db.models import F, Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse, render
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
+from ontask import simplify_datetime_str
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
 from .models import Log
@@ -91,7 +93,7 @@ def display_ss(request):
                 ugettext('View log content'),
                 item[0]
             ),
-            item[1].astimezone(pytz.timezone(ontask_settings.TIME_ZONE)),
+            simplify_datetime_str(item[1]),
             item[2],
             item[3],
         ]

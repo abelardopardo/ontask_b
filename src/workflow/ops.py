@@ -414,8 +414,9 @@ def reposition_column_and_update_df(workflow, column, to_idx):
     :return: Content reflected in the DB
     """
 
-    df = pandas_db.load_from_db(workflow.id)
+    # df = pandas_db.load_from_db(workflow.id)
     workflow.reposition_columns(column.position, to_idx)
     column.position = to_idx
     column.save()
-    ops.store_dataframe_in_db(df, workflow.id)
+    # FIXME Enough to simply modify the position field without DB update
+    # ops.store_dataframe_in_db(df, workflow.id)

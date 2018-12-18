@@ -29,13 +29,13 @@ shim_and_respond = \
 <![endif]-->"""
 
 datatables_bootstrap_css = \
-    """<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">"""
+    """<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/fc-3.2.5/sc-1.5.0/datatables.min.css"/>"""
 
 datatables_jquery_js = \
-    """<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>"""
+    """<script src="//cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>"""
 
 datatables_bootstrap_js = \
-    """<script src="//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>"""
+    """<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/fc-3.2.5/sc-1.5.0/datatables.min.js"></script>"""
 
 datetimepicker_css = \
     """<link href="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">"""

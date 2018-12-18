@@ -8,19 +8,31 @@ $(function () {
   $("#modal-item").on("submit", ".js-workflow-create-form", saveForm);
 
   // Delete Workflow
-  $("#workflow-area").on("click", ".js-workflow-delete", loadForm);
+  $("#workflow-index, #workflow-detail").on(
+    "click",
+    ".js-workflow-delete",
+    loadForm);
   $("#modal-item").on("submit", ".js-workflow-delete-form", saveForm);
 
   // Update Workflow
-  $("#workflow-area").on("click", ".js-workflow-update", loadForm);
+  $("#workflow-index, #workflow-detail").on(
+    "click",
+    ".js-workflow-update",
+    loadForm);
   $("#modal-item").on("submit", ".js-workflow-update-form", saveForm);
 
   // Clone workflow
-  $("#workflow-area").on("click", ".js-workflow-clone", loadForm);
+  $("#workflow-index, #workflow-detail").on(
+    "click",
+    ".js-workflow-clone",
+    loadForm);
   $("#modal-item").on("submit", ".js-workflow-clone-form", saveForm);
 
   // Flush workflow in detail view
-  $("#workflow-area").on("click", ".js-workflow-flush", loadForm);
+  $("#workflow-index, #workflow-detail").on(
+    "click",
+    ".js-workflow-flush",
+    loadForm);
   $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
 
   // Add/Edit attribute
@@ -41,16 +53,16 @@ $(function () {
   $("#modal-item").on("submit", ".js-share-delete-form", saveForm);
 
   // Column Add
-  $("#workflow-area").on("click", ".js-workflow-column-add", loadForm);
+  $("#workflow-index").on("click", ".js-workflow-column-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-column-add-form", saveForm);
 
   // Derived column add
-  $("#workflow-area").on("click", ".js-workflow-formula-column-add", loadForm);
+  $("#workflow-index").on("click", ".js-workflow-formula-column-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-formula-column-add-form",
   saveForm);
 
   // Random column add
-  $("#workflow-area").on("click", ".js-workflow-random-column-add", loadForm);
+  $("#workflow-index").on("click", ".js-workflow-random-column-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-random-column-add-form",
   saveForm);
 

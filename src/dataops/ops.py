@@ -17,7 +17,6 @@ from dataops.pandas_db import (
     load_table,
     get_table_data,
     is_table_in_db,
-    get_table_queryset,
     pandas_datatype_names,
     is_unique_column,
     are_unique_columns,
@@ -188,7 +187,7 @@ def get_table_row_by_index(workflow, cond_filter, idx):
     """
 
     # Get the data
-    data = get_table_data(workflow.id, cond_filter)
+    data = get_table_data(workflow.id, cond_filter, workflow.get_column_names())
 
     # If the data is not there, return None
     if idx > len(data):
@@ -209,14 +208,6 @@ def workflow_has_upload_table(workflow_item):
     return is_table_in_db(
         create_upload_table_name(workflow_item.id)
     )
-
-
-def get_queryset_by_workflow(workflow_item):
-    return get_table_queryset(create_table_name(workflow_item.id))
-
-
-def get_queryset_by_workflow_id(workflow_id):
-    return get_table_queryset(create_table_name(workflow_id))
 
 
 def perform_overlap_update(dst_df, src_df, dst_key, src_key, how_merge):

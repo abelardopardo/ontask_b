@@ -10,7 +10,7 @@
   <h1 class="page-header">{% trans 'Data upload/merge operations' %}</h1>
 
   <div align="center" class="container">
-    <table class="table-condensed" id="dataops-table">
+    <table class="table table-hover table-striped table-bordered" id="dataops-table">
       <thead>
         <tr>
           <th class="text-center">{% trans 'Operation' %}</th>
@@ -19,7 +19,7 @@
       </thead>
       <tbody>
         <tr>
-          <td class="text-center">
+          <td class="text-center" style="vertical-align: middle;">
             <a href="{% url 'dataops:csvupload1' %}" class="btn btn-primary">
               <span class="fa fa-plus"></span>
               {% trans 'CSV Upload/Merge' %}
@@ -37,7 +37,7 @@
           </td>
         </tr>
         <tr>
-          <td class="text-center">
+          <td class="text-center" style="vertical-align: middle;">
             <a href="{% url 'dataops:excelupload1' %}" class="btn btn-primary">
               <span class="fa fa-plus"></span>
               {% trans 'Excel Upload/Merge' %}
@@ -58,7 +58,7 @@
           </td>
         </tr>
         <tr>
-          <td class="text-center">
+          <td class="text-center" style="vertical-align: middle;">
             <a href="{% url 'dataops:googlesheetupload1' %}" class="btn btn-primary">
               <span class="fa fa-plus"></span>
               {% trans 'Google Sheet Upload/Merge' %}
@@ -78,7 +78,7 @@
           </td>
         </tr>
         <tr>
-          <td class="text-center">
+          <td class="text-center" style="vertical-align: middle;">
             <a href="{% url 'dataops:sqlconns' %}" class="btn btn-primary">
               <span class="fa fa-plus"></span>
               {% trans 'SQL Connections' %}

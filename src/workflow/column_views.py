@@ -13,6 +13,7 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
 
 from action.models import Condition, Action
 from dataops import ops, formula_evaluation, pandas_db
@@ -715,6 +716,51 @@ def column_clone(request, pk):
     data['html_redirect'] = ''
 
     return JsonResponse(data)
+
+@user_passes_test(is_instructor)
+@csrf_exempt
+def column_move(request):
+    """
+    Function to process an AJAX request to move a column by providing two
+    column names. There are two possible cases (columns are assumed to be in
+    order a, b, c, d)
+    1) a -> d: Result b, c, d, a
+    2) d -> a: Result d, a, b, c
+
+    The changes are reflected in the DB
+
+    :param request:
+    :return: AJAX response, empty.
+    """
+
+    # Check if the workflow is locked
+    workflow = get_workflow(request)
+    if not workflow:
+        # No workflow present
+        return JsonResponse({'html_redirect': reverse('workflow:index')})
+
+    if workflow.nrows == 0:
+        # Workflow is empty
+        return JsonResponse({})
+
+    from_name = request.POST.get('from_name')
+    to_name = request.POST.get('to_name')
+    if not from_name or not to_name:
+        # Incorrect parameter
+        return JsonResponse({})
+
+    from_col = workflow.columns.filter(name=from_name).first()
+    to_col = workflow.columns.filter(name=to_name).first()
+
+    if not from_col or not to_col:
+        # Incorrect condition name
+        return JsonResponse({})
+
+    # Two correct condition names, perform the swap
+    # workflow.reposition_columns(from_col, to_col.position)
+    reposition_column_and_update_df(workflow, from_col, to_col.position)
+
+    return JsonResponse({})
 
 
 @user_passes_test(is_instructor)

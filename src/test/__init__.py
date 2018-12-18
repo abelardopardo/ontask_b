@@ -329,7 +329,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         # Goto the details page
         self.selenium.find_element_by_link_text('Details').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'workflow-area'))
+            EC.presence_of_element_located((By.ID, 'workflow-index'))
         )
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))

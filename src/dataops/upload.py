@@ -190,7 +190,7 @@ def upload_s2(request):
                           'column_unique': col_info[2]})
 
     # Go back to show the workflow detail
-    return redirect(reverse('workflow:detail', kwargs={'pk': workflow.id}))
+    return redirect(reverse('table:display'))
 
 
 @user_passes_test(is_instructor)
@@ -422,7 +422,7 @@ def upload_s4(request):
         # Remove the csvupload from the session object
         request.session.pop('upload_data', None)
 
-        return redirect(reverse('workflow:detail',
+        return redirect(reverse('table:display',
                                 kwargs={'pk': workflow.id}))
 
     # We are processing a GET request

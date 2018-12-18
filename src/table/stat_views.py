@@ -93,7 +93,7 @@ def get_row_visualisations(request, view_id=None):
 
     # If a view is given, filter the columns
     columns_to_view = workflow.columns.all()
-    column_names = None
+    column_names = workflow.get_column_names()
     if view_id:
         try:
             view = View.objects.get(pk=view_id)
