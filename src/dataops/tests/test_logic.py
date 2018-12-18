@@ -76,7 +76,7 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
             df_dst = load_from_db(self.workflow.id)
         else:
             df_dst = pandas_db.load_df_from_csvfile(
-            io.StringIO(self.csv1),
+                io.StringIO(self.csv1),
                 0,
                 0
             )
@@ -162,43 +162,55 @@ class FormulaEvaluation(test.OnTaskTestCase):
                    value1,
                    value2,
                    value3):
-        self.assertTrue(
-            evaluate_top_node(
+
+        result1 = evaluate_top_node(
+            self.set_skel(input_value,
+                          op_value.format(''),
+                          type_value,
+                          value1),
+            {'variable': value2}
+        )
+        result2 = evaluate_top_node(
+            self.set_skel(input_value,
+                          op_value.format(''),
+                          type_value,
+                          value1),
+            {'variable': value3}
+        )
+
+        if value2 is not None or value3 is not None:
+            # If value2 is not None, expect regular results
+            self.assertTrue(result1)
+            self.assertFalse(result2)
+        else:
+            # If value2 is None, then all formulas should be false
+            self.assertFalse(result1)
+            self.assertFalse(result2)
+
+        if op_value.find('{0}') != -1:
+            result1 = evaluate_top_node(
                 self.set_skel(input_value,
-                              op_value.format(''),
+                              op_value.format('not_'),
                               type_value,
                               value1),
                 {'variable': value2}
             )
-        )
-        self.assertFalse(
-            evaluate_top_node(
+            result2 = evaluate_top_node(
                 self.set_skel(input_value,
-                              op_value.format(''),
+                              op_value.format('not_'),
                               type_value,
                               value1),
                 {'variable': value3}
             )
-        )
-        if op_value.find('{0}') != -1:
-            self.assertFalse(
-                evaluate_top_node(
-                    self.set_skel(input_value,
-                                  op_value.format('not_'),
-                                  type_value,
-                                  value1),
-                    {'variable': value2}
-                )
-            )
-            self.assertTrue(
-                evaluate_top_node(
-                    self.set_skel(input_value,
-                                  op_value.format('not_'),
-                                  type_value,
-                                  value1),
-                    {'variable': value3}
-                )
-            )
+
+            if value2 is not None or value3 is not None:
+                # If value2 is not None, expect regular results
+                self.assertFalse(result1)
+                self.assertTrue(result2)
+            else:
+                # If value2 is None, then all formulas should be false
+                self.assertFalse(result1)
+                self.assertFalse(result2)
 
     def do_sql_operand(self,
                        input_value,
@@ -261,6 +273,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
         # LESS
         #
         self.do_operand('number', 'less', 'integer', '1', 0, 3)
+        self.do_operand('number', 'less', 'integer', '1', None, None)
         self.do_operand('number', 'less', 'double', '1.2', 0.2, 3.2)
         self.do_operand('text',
                         'less',
