@@ -50,10 +50,6 @@
                      href="{% url 'home' %}"
                      data-toggle="tooltip" title="Your workflows"><span class="fa fa-home"></span>{% if request.path == ONTASK_BASE_URL %} Home{% endif %}</a>
                 </li>
-                {% if user.is_superuser %}
-                  <li class="nav-item">
-            <a class="nav-link spin{% if 'sql_connections' in request.path %} active{% endif %}" href="{% url 'workflow:sql_connections' %}">{% trans 'SQL Connections' %}</a></li>
-                {% endif %}
               {% endif %}
               {% if request.session.ontask_workflow_id %}
                 {% url 'workflow:detail' request.session.ontask_workflow_id as workflow_detail %}
@@ -83,7 +79,21 @@
                     <a class="dropdown-item spin" href="{% url 'logs:index' %}"
                        data-toggle="tooltip" title="Execution Logs">{% trans 'View logs' %}</a>
                   </div>
+                {% if user.is_superuser %}
+                  <li class="nav-item">
+                    <a class="nav-link spin{% if 'sql_connections' in request.path %} active{% endif %}"
+                       data-toggle="tooltip" title="Connections to SQL databases"
+                       href="{% url 'workflow:sql_connections' %}">
+                      <span class="fa fa-database"></span>{% if '/sql_connections' in request.path %} {% trans 'SQL Connections' %}{% endif %}</a></li>
+                {% endif %}
               {% else %}
+                {% if user.is_superuser %}
+                  <li class="nav-item">
+                    <a class="nav-link spin{% if 'sql_connections' in request.path %} active{% endif %}"
+                       data-toggle="tooltip" title="Connections to SQL databases"
+                       href="{% url 'workflow:sql_connections' %}">
+                      <span class="fa fa-database"></span>{% if '/sql_connections' in request.path %} {% trans 'SQL Connections' %}{% endif %}</a></li>
+                {% endif %}
                 <li class="nav-item"><a href="https://ontasklearning.org" class="nav-link" target="blank">{% trans 'About' %}</a></li>
                 <li class="nav-item"><a class="nav-link" href="https://www.ontasklearning.org/contact/" target="blank">
                   {% trans 'Contact' %}</a></li>

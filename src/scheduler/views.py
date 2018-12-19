@@ -39,8 +39,7 @@ class ScheduleActionTable(tables.Table):
     """
 
     operations = OperationsColumn(
-        attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name=_('Operations'),
+        verbose_name='',
         orderable=False,
         template_file='scheduler/includes/partial_scheduler_operations.html',
         template_context=lambda record: {'id': record.id}
@@ -170,7 +169,7 @@ class ScheduleActionTable(tables.Table):
                     'last_executed_log')
 
         attrs = {
-            'class': 'table table-hover table-striped table-bordered',
+            'class': 'table table-hover table-bordered',
             'style': 'min-width: 505px; width: 100%;',
             'id': 'scheduler-table'
         }

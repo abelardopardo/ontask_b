@@ -1,5 +1,6 @@
 {% load i18n %}
 <div class="condition-btn btn-group" role="group">
+  {% comment %}
   <a href="{% url 'action:edit' id %}"
      class="btn btn-outline-dark btn-sm align-middle spin"
      data-toggle="tooltip"
@@ -11,41 +12,39 @@
         data-toggle="tooltip" title="{% trans 'Send personalised emails' %}">
       <span class="fa fa-envelope"></span> {% trans 'Email' %}</a>
   {% endif %}
-  {% if action_tval == 'personalized_text' %}
-    <a href="{% url 'action:zip_action' id %}"
-       class="btn btn-outline-dark btn-sm spin"
-        data-toggle="tooltip"
-        title="{% trans 'Create a ZIP with each personalised text in a file' %}">
-      <span class="fa fa-file-archive-o"></span> {% trans 'ZIP' %}</a>
-  {% endif %}
-  {% if action_tval == 'survey' or action_tval == 'todo_list' or action_tval == 'personalized_json' %}
-    <a href="{% url 'action:run' id %}"
-       class="btn btn-outline-dark btn-sm spin {% if not is_executable %}disabled{% endif %}"
-       data-toggle="tooltip"
-       {% if action_tval == 'survey' or action_tval == 'todo_list' %}title="{% trans 'Enter data manually' %}"{% endif %}
-       {% if action_tval == 'personalized_json' %}title="{% trans 'Send personalised JSONs' %}"{% endif %}>
-      <span class="fa fa-rocket"></span> {% trans 'Run' %}</a>
-  {% endif %}
-  {% if action_tval != 'personalized_canvas_email' and action_val != 'personalized_json' %}
-    <button type="button"
-            class="btn btn-outline-dark btn-sm js-action-showurl"
-            data-url="{% url 'action:showurl' id %}"
-            data-toggle="tooltip"
-            {% if is_out %}
-              title="{% trans 'URL for learners to access the personalised text' %}"
-            {% else %}
-              title="{% trans 'URL for learners to introduce data' %}"
-            {% endif %}
-            >
-      <span class="fa fa-link"></span> {% trans 'URL' %}
-      {% if serve_enabled %}<span class="badge">On</span>{% else %}(Off){% endif %}
-    </button>
-  {% endif %}
-  <div class="dropdown btn-group">
-    <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button"
+  {% endcomment %}
+  <a href="{% url 'action:run' id %}"
+     class="btn btn-light btn-sm spin {% if not is_executable %}disabled{% endif %}"
+     data-toggle="tooltip"
+     title="{% if action_tval == 'survey' or action_tval == 'todo_list' %}{% trans 'Enter data manually' %}{% elif action_tval == 'personalized_json' %}{% trans 'Send personalised JSONs' %}{% else %}{% trans 'Send personalised text' %}{% endif %}"><span class="fa fa-rocket"></span> {% trans 'Run' %}</a>
+  <div class="dropdown">
+    <button class="btn btn-light btn-sm" type="button"
             id="actionMoreOperations"
-            data-toggle="dropdown">{% trans 'More' %}</button>
+            data-toggle="dropdown"><span class="fa fa-ellipsis-h"></span></button>
     <div class="dropdown-menu" aria-labelledby="actionMoreOperations">
+      {% if action_tval != 'personalized_canvas_email' and action_val != 'personalized_json' %}
+        <button type="button"
+                class="dropdown-item js-action-showurl"
+                data-url="{% url 'action:showurl' id %}"
+                data-toggle="tooltip"
+                {% if is_out %}
+                  title="{% trans 'URL for learners to access the personalised text' %}"
+                {% else %}
+                  title="{% trans 'URL for learners to introduce data' %}"
+                {% endif %}
+                >
+          <span class="fa fa-link"></span> {% trans 'URL' %}
+          {% if serve_enabled %}<span class="badge badge-dark">On</span>
+          {% else %}<span class="badge badge-light">Off</span>{% endif %}
+        </button>
+      {% endif %}
+      {% if action_tval == 'personalized_text' %}
+        <a href="{% url 'action:zip_action' id %}"
+           class="spin dropdown-item"
+            data-toggle="tooltip"
+            title="{% trans 'Create a ZIP with each personalised text in a file' %}">
+          <span class="fa fa-file-archive-o"></span> {% trans 'ZIP' %}</a>
+      {% endif %}
       {% if is_out %}
         <a href="{% url 'scheduler:create' id %}" class="spin dropdown-item"
            data-toggle="tooltip"

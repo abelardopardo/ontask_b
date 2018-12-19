@@ -22,7 +22,7 @@
         <span class="fa fa-ok"></span> {% trans 'Update filter' %}</button>
       {% if filter_condition %}
         <button type="button"
-                class="btn btn-sm btn-outline-danger js-filter-delete"
+                class="btn btn-outline-danger js-filter-delete"
                 data-url="{% url 'action:delete_filter' filter_condition.id %}"
                 data-toggle="tooltip" title="{% trans 'Delete the filter' %}">
           <span class="fa fa-trash"></span> {% trans 'Delete filter' %}

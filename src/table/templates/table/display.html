@@ -53,7 +53,7 @@
           ],
           "drawCallback": function(settings) {
              // Needed to enable tooltips in ajax produced content
-             $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
+             $('[data-toggle="tooltip"]').tooltip({ trigger: "hover"});
           },
           language: {
             url: getLanguage()
@@ -61,10 +61,11 @@
           colReorder: {
             fixedColumnsLeft: 1
           },
+          fixedColumns: false,
           scrollX: true,
+          rowReorder: false,
         });
         // Process the column reorder events
-        table_data.fixedColumns
         table_data.on("column-reorder", column_reorder);
       });
     }
@@ -159,7 +160,7 @@
       </div>
     </div>
     {% if columns %}
-      <table class="table table-hover table-striped table-bordered"
+      <table class="table table-hover table-bordered"
              id="table-data" data-url="{% url 'workflow:column_move' %}" style="width: 100%;">
         <thead>
           {% comment %}
@@ -217,7 +218,7 @@
           </tr>
           {% endcomment %}
           <tr>
-            <th>Operations</th>
+            <th></th>
             {% for col in columns %}
               <th class="text-center">
                 {% comment %}
@@ -298,6 +299,7 @@
           </tr>
         </thead>
       </table>
+      <p class="text-left">{% trans 'You may drag-and-drop a column header to change its positin in the table' %}</p>
     {% endif %}
   </div>
   {% include 'modal.html' %}

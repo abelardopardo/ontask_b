@@ -97,14 +97,6 @@ urlpatterns = [
     # Select key column for action in
     path('column_move/', column_views.column_move, name='column_move'),
 
-    path('<int:pk>/column_move_prev/',
-         column_views.column_move_prev,
-         name='column_move_prev'),
-
-    path('<int:pk>/column_move_next/',
-         column_views.column_move_next,
-         name='column_move_next'),
-
     path('<int:pk>/column_move_top/',
          column_views.column_move_top,
          name='column_move_top'),

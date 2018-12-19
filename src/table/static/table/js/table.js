@@ -1,19 +1,3 @@
-var column_reorder = function (e, settings, details ) {
-  data = {'from_name': settings.aoColumns[details.mapping[details.from]].data,
-          'to_name': settings.aoColumns[details.mapping[details.to]].data}
-  $.ajax({
-    url: $(this).attr("data-url"),
-    data: data,
-    type: 'post',
-    dataType: 'json',
-    success: function (data) {
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      $('#div-spinner').show();
-      location.reload(true);
-    }
-  });
-};
 $(function () {
   $("#table-content").on("click", ".js-workflow-column-add", loadForm);
   // Column Add

@@ -86,7 +86,7 @@ class ActionTable(tables.Table):
     #  Todo List                 |         |      |   X   |   X   |
     #
     operations = OperationsColumn(
-        verbose_name=_('Operations'),
+        verbose_name='',
         template_file='action/includes/partial_action_operations.html',
         template_context=lambda record: {
             'id': record.id,
@@ -95,6 +95,17 @@ class ActionTable(tables.Table):
             'is_executable': record.is_executable,
             'serve_enabled': record.serve_enabled}
     )
+
+    def render_name(self, record):
+        return format_html(
+            """<a href="{0}"
+                  data-toggle="tooltip"
+                  title="{1}">{2}</a>""".format(
+                reverse('action:edit', kwargs={'pk': record.id}),
+                _('Edit the text, conditions and filter'),
+                record.name
+            )
+        )
 
     def render_action_type(self, record):
         icon = 'file-text'
@@ -139,7 +150,7 @@ class ActionTable(tables.Table):
                     'last_executed_log')
         exclude = ('content', 'serve_enabled', 'columns', 'filter')
         attrs = {
-            'class': 'table table-hover table-striped table-bordered',
+            'class': 'table table-hover table-bordered',
             'style': 'min-width: 505px; width: 100%;',
             'id': 'action-table'
         }
@@ -161,7 +172,7 @@ class ColumnSelectedTable(tables.Table):
     class Meta(object):
         fields = ('name', 'description_text', 'operations')
         attrs = {
-            'class': 'table table-hover table-striped table-bordered',
+            'class': 'table table-hover table-bordered',
             'style': 'min-width: 505px; width: 100%;',
             'id': 'column-selected-table'
         }
@@ -643,7 +654,7 @@ def edit_action_in(request, workflow, action):
                extra_columns=[
                    ('operations',
                     OperationsColumn(
-                        verbose_name='Ops',
+                        verbose_name='',
                         template_file=ColumnSelectedTable.ops_template,
                         template_context=lambda record: {'id': record['id'],
                                                          'aid': action.id})

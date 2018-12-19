@@ -24,12 +24,14 @@
             "emptyTable": "{% trans 'No scheduled operations in this workflow.' %}",
             "url": getLanguage()
           },
+          "order": [[1, 'asc']],
           "columnDefs": [
             {"className": "dt-center", "targets": "_all"},
-            {"orderable": false, "targets": 0},
+            {"orderable": false, "targets": [0, 10]},
             {"searchable": false, "targets": 0},
           ],
           colReorder: false,
+          rowReorder: false,
         });
       }
     });

@@ -1,8 +1,15 @@
-<a href="{% url 'scheduler:edit' id %}"
-   class="btn btn-outline-dark btn-sm align-middle">
-  <span class="fa fa-pencil"></span></a>
-<button type="button"
-        class="btn btn-outline-danger btn-sm js-scheduleremail-delete"
-        data-url="{% url 'scheduler:delete' id %}">
-  <span class="fa fa-trash"></span>
-</button>
+{% load i18n %}
+<div class="dropdown">
+  <button class="btn btn-light btn-sm" type="button"
+          id="scheduledActionOperations"
+          data-toggle="dropdown"><span class="fa fa-ellipsis-h"></span></button>
+  <div class="dropdown-menu" aria-labelledby="scheduledActionOperations">
+    <a href="{% url 'scheduler:edit' id %}"
+       class="dropdown-item spin">
+      <span class="fa fa-pencil"></span> {% trans 'Edit' %}</a>
+    <button type="button"
+            class="dropdown-item js-scheduleremail-delete"
+            data-url="{% url 'scheduler:delete' id %}">
+      <span class="fa fa-trash"></span> {% trans 'Delete' %}</button>
+  </div>
+</div>

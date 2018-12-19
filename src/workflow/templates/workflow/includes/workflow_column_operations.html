@@ -1,42 +1,47 @@
 {% load i18n %}
-<div class="btn-group" role="group">
-  <button type="button"
-          class="btn btn-outline-dark btn-sm js-workflow-column-edit"
-          data-url="{% url 'workflow:column_edit' id %}"
-          data-toggle="tooltip"
-          title="{% trans 'Edit column name, description, type, values, etc.' %}">
-    <span class="fa fa-pencil"></span>
-    {% trans 'Edit' %}
-  </button>
-  <button type="button"
-          class="btn btn-outline-dark btn-sm js-column-restrict"
-          data-url="{% url 'workflow:column_restrict' id %}"
-          data-toggle="tooltip"
-          title="{% trans 'Restrict the values allowed in the column' %}">
-    <span class="fa fa-resize-small"></span>
-    {% trans 'Restrict values' %}
-  </button>
-  <button type="button"
-          class="btn btn-outline-dark btn-sm js-column-clone align-middle"
-          data-url="{% url 'workflow:column_clone' id %}"
-          data-toggle="tooltip"
-          title="{% trans 'Create an exact duplicate of this column' %}">
-      <span class="fa fa fa-clone"></span>
-    {% trans 'Clone' %}
-  </button>
-  {% if not is_key %}
-    <a href="{% url 'table:stat_column' id %}"
-       class="btn btn-outline-dark btn-sm align-middle spin"
-       data-toggle="tooltip"
-       title="{% trans 'Statistics about this column' %}">
-      <span class="fa fa-bar-chart"></span>
-      {% trans 'Statistics' %}</a>
-  {% endif %}
-  <button type="button"
-          class="btn btn-outline-danger btn-sm js-column-delete"
-          data-url="{% url 'workflow:column_delete' id %}"
-          data-toggle="tooltip"
-          title="{% trans 'Delete column' %}">
-    <span class="fa fa-trash"></span> {% trans 'Delete' %}
-  </button>
+<div class="dropdown">
+  <button class="btn btn-light btn-sm" type="button"
+          id="columnOperations"
+          data-toggle="dropdown"><span class="fa fa-ellipsis-h"></span></button>
+  <div class="dropdown-menu" aria-labelledby="columnOperations">
+    <button type="button"
+            class="dropdown-item js-workflow-column-edit"
+            data-url="{% url 'workflow:column_edit' id %}"
+            data-toggle="tooltip"
+            title="{% trans 'Edit column name, description, type, values, etc.' %}">
+      <span class="fa fa-pencil"></span>
+      {% trans 'Edit' %}
+    </button>
+    <button type="button"
+            class="dropdown-item js-column-clone align-middle"
+            data-url="{% url 'workflow:column_clone' id %}"
+            data-toggle="tooltip"
+            title="{% trans 'Create an exact duplicate of this column' %}">
+        <span class="fa fa fa-clone"></span>
+      {% trans 'Clone' %}
+    </button>
+    {% if not is_key %}
+      <a href="{% url 'table:stat_column' id %}"
+         class="dropdown-item spin"
+         data-toggle="tooltip"
+         title="{% trans 'Statistics about this column' %}">
+        <span class="fa fa-bar-chart"></span>
+        {% trans 'Statistics' %}</a>
+      <button type="button"
+              class="dropdown-item js-column-restrict"
+              data-url="{% url 'workflow:column_restrict' id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Prevent the use of values other than the ones in this column' %}">
+        <span class="fa fa-compress"></span>
+        {% trans 'Restrict values' %}
+      </button>
+    {% endif %}
+    <button type="button"
+            class="dropdown-item js-column-delete"
+            data-url="{% url 'workflow:column_delete' id %}"
+            data-toggle="tooltip"
+            title="{% trans 'Delete column' %}">
+      <span class="fa fa-trash"></span> {% trans 'Delete' %}
+    </button>
+  </div>
 </div>

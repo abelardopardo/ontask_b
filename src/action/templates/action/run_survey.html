@@ -36,6 +36,7 @@
             {"className": "dt-center", "targets": "_all"},
           ],
           colReorder: false,
+          rowReorder: false,
         });
       });
     }
@@ -50,7 +51,7 @@
     </h1>
     <p class="help-block text-center">{{ action.description_text }}</p>
     <div class="row justify-content-center">
-      <table class="table table-hover table-striped table-bordered" id="actioninrun-data">
+      <table class="table table-hover table-bordered" id="actioninrun-data">
         <thead>
           <tr>
             {% for c in columns %}

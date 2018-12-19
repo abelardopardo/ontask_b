@@ -1,9 +1,8 @@
 {% load i18n %}
-<div class="dropdown btn-group">
-  <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button"
+<div class="dropright btn-group">
+  <button class="btn btn-light btn-sm" type="button"
           id="tableRowOperations"
-          data-toggle="dropdown"> {% trans 'Operations' %}
-  </button>
+          data-toggle="dropdown"><span class="fa fa-ellipsis-h"></span></button>
   <div class="dropdown-menu" aria-labelledby="tableRowOperations">
     <a href="{{ stat_url }}"
        class="spin dropdown-item"

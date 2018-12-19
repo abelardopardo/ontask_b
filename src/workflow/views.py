@@ -38,7 +38,7 @@ class AttributeTable(tables.Table):
     name = tables.Column(verbose_name=_('Name'))
     value = tables.Column(verbose_name=_('Value'))
     operations = OperationsColumn(
-        verbose_name='Operations',
+        verbose_name='',
         template_file='workflow/includes/partial_attribute_operations.html',
         template_context=lambda record: {'id': record['id'], }
     )
@@ -46,7 +46,7 @@ class AttributeTable(tables.Table):
     class Meta(object):
         fields = ('name', 'value', 'operations')
         attrs = {
-            'class': 'table table-hover table-striped table-bordered',
+            'class': 'table table-hover table-bordered',
             'style': 'min-width: 505px; width: 100%;',
             'id': 'attribute-table'
         }
@@ -62,7 +62,7 @@ class WorkflowShareTable(tables.Table):
         orderable=False,
         template_file='workflow/includes/partial_share_operations.html',
         template_context=lambda x: {'id': x['id']},
-        verbose_name=_('Delete'),
+        verbose_name='',
         attrs={'td': {'class': 'dt-body-center'}},
     )
 
@@ -72,7 +72,7 @@ class WorkflowShareTable(tables.Table):
         sequence = ('email', 'operations')
 
         attrs = {
-            'class': 'table table-hover table-striped table-bordered',
+            'class': 'table table-hover table-bordered',
             'style': 'min-width: 505px; width: 100%;',
             'id': 'share-table',
             'th': {'class': 'dt-body-center'}
@@ -215,27 +215,25 @@ def sql_connections(request):
         Workflow.unlock_workflow_by_id(wid)
     request.session.pop('ontask_workflow_name', None)
 
-    context = {}
-
-    conns = SQLConnection.objects.all().values(
-        'id',
-        'name',
-        'description_txt',
-        'conn_type',
-        'conn_driver',
-        'db_user',
-        'db_password',
-        'db_host',
-        'db_port',
-        'db_name',
-        'db_table'
-    )
-
-    context['table'] = SQLConnectionTableAdmin(conns,
-                                               id='sqlconn-table',
-                                               orderable=False)
-
-    return render(request, 'workflow/sql_connections.html', context)
+    return render(request,
+                  'workflow/sql_connections.html',
+                  {'table': SQLConnectionTableAdmin(
+                      SQLConnection.objects.all().values(
+                          'id',
+                          'name',
+                          'description_txt',
+                          'conn_type',
+                          'conn_driver',
+                          'db_user',
+                          'db_password',
+                          'db_host',
+                          'db_port',
+                          'db_name',
+                          'db_table'
+                      ),
+                      id='sqlconn-table',
+                      orderable=False)
+                  })
 
 
 class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
@@ -482,7 +480,11 @@ def column_ss(request, pk):
 
     # Reorder if required
     if order_col:
-        col_name = ['name', 'data_type', 'is_key'][int(order_col)]
+        col_name = ['position',
+                    'name',
+                    'description_text',
+                    'data_type',
+                    'is_key'][int(order_col)]
         if order_dir == 'desc':
             col_name = '-' + col_name
         qs = qs.order_by(col_name)

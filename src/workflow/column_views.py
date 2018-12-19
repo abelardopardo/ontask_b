@@ -717,6 +717,7 @@ def column_clone(request, pk):
 
     return JsonResponse(data)
 
+
 @user_passes_test(is_instructor)
 @csrf_exempt
 def column_move(request):
@@ -759,66 +760,6 @@ def column_move(request):
     # Two correct condition names, perform the swap
     # workflow.reposition_columns(from_col, to_col.position)
     reposition_column_and_update_df(workflow, from_col, to_col.position)
-
-    return JsonResponse({})
-
-
-@user_passes_test(is_instructor)
-def column_move_prev(request, pk):
-    """
-
-    :param request: HTTP request to move a column to its previous position
-    :param pk: Column ID
-    :return:
-    """
-
-    # Get the workflow element
-    workflow = get_workflow(request)
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('workflow:index')})
-
-    # Get the column
-    try:
-        column = Column.objects.get(pk=pk, workflow=workflow)
-    except ObjectDoesNotExist:
-        return JsonResponse({
-            'html_redirect': reverse('workflow:detail',
-                                     kwargs={'pk': workflow.id})
-        })
-
-    # The workflow and column objects have been correctly obtained
-    if column.position > 1:
-        reposition_column_and_update_df(workflow, column, column.position - 1)
-
-    return JsonResponse({})
-
-
-@user_passes_test(is_instructor)
-def column_move_next(request, pk):
-    """
-
-    :param request: HTTP request to move a column to its next position
-    :param pk: Column ID
-    :return:
-    """
-
-    # Get the workflow element
-    workflow = get_workflow(request)
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('workflow:index')})
-
-    # Get the column
-    try:
-        column = Column.objects.get(pk=pk, workflow=workflow)
-    except ObjectDoesNotExist:
-        return JsonResponse({
-            'html_redirect': reverse('workflow:detail',
-                                     kwargs={'pk': workflow.id})
-        })
-
-    # The workflow and column objects have been correctly obtained
-    if column.position < workflow.ncols:
-        reposition_column_and_update_df(workflow, column, column.position + 1)
 
     return JsonResponse({})
 

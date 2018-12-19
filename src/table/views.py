@@ -18,6 +18,7 @@ from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
+from django.utils.html import format_html
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
@@ -36,15 +37,27 @@ class ViewTable(tables.Table):
     Table to display the set of views handled in a workflow
     """
     name = tables.Column(verbose_name=_('Name'))
+
     description_text = tables.Column(
         empty_values=[],
         verbose_name=_('Description')
     )
     operations = OperationsColumn(
-        verbose_name=_('Operations'),
+        verbose_name='',
         template_file='table/includes/partial_view_operations.html',
         template_context=lambda record: {'id': record['id']}
     )
+
+    def render_name(self, record):
+        return format_html(
+            """<a href="{0}"
+                  data-toggle="tooltip"
+                  title="{1}">{2}</a>""".format(
+                reverse('table:display_view', kwargs={'pk': record['id']}),
+                _('Access the table with this view'),
+                record['name']
+            )
+        )
 
     class Meta(object):
         """
@@ -54,7 +67,7 @@ class ViewTable(tables.Table):
         fields = ('name', 'description_text', 'operations')
         sequence = ('name', 'description_text', 'operations')
         attrs = {
-            'class': 'table table-hover table-striped table-bordered',
+            'class': 'table table-hover table-bordered',
             'style': 'min-width: 505px; width: 100%;',
             'id': 'view-table'
         }
