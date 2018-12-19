@@ -269,6 +269,7 @@ $(function () {
   // Flush workflow in detail view
   $("#action-index").on("click", ".js-workflow-flush", loadForm);
   $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
+
 });
 
 window.onload = function(){
