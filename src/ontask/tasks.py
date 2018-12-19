@@ -101,7 +101,7 @@ def send_email_messages(user_id,
             logger.error(msg)
             to_return = False
     except Exception as e:
-        msg = 'Error while executing send_messages: {0}'.format(e.message)
+        msg = 'Error while executing send_messages: {0}'.format(e)
         logger.error(msg)
         to_return = False
     else:
@@ -212,7 +212,7 @@ def send_json_objects(user_id,
             to_return = False
 
     except Exception as e:
-        msg = 'Error while executing send_messages: {0}'.format(e.message)
+        msg = 'Error while executing send_messages: {0}'.format(e)
         logger.error(msg)
         to_return = False
     else:
@@ -433,7 +433,7 @@ def increase_track_count(method, get_dict):
                                            column_to,
                                            msg_to)
         except Exception as e:
-            log_payload['EXCEPTION_MSG'] = e.message
+            log_payload['EXCEPTION_MSG'] = str(e)
         else:
             # Get the tracking column and update all the conditions in the
             # actions that have this column as part of their formulas

@@ -383,12 +383,12 @@ def do_import_action(user, workflow, name, file_item):
         # Save the new workflow
         action = action_data.save(user=user, name=name)
     except (TypeError, NotImplementedError) as e:
-        return _('Unable to import action: {0}').format(e.message)
+        return _('Unable to import action: {0}').format(e)
     except serializers.ValidationError as e:
         return _('Unable to import action due to a validation error: '
-                 '{0}').format(e.message)
+                 '{0}').format(e)
     except Exception as e:
-        return _('Unable to import action: {0}').format(e.message)
+        return _('Unable to import action: {0}').format(e)
 
     # Success, log the event
     Log.objects.register(user,
@@ -619,7 +619,7 @@ def send_messages(user,
         text_content = strip_tags(html_content)
     except TemplateSyntaxError as e:
         return _('Syntax error detected in OnTask notification template '
-                 '({0})').format(e.message)
+                 '({0})').format(e)
 
     # Log the event
     Log.objects.register(
@@ -648,7 +648,7 @@ def send_messages(user,
             html_message=html_content)
     except Exception as e:
         return _('An error occurred when sending your notification: '
-                 '{0}').format(e.message)
+                 '{0}').format(e)
 
     return None
 

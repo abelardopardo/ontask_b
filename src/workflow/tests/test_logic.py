@@ -84,7 +84,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         # Click in the import button and wait
         self.selenium.find_element_by_link_text('Import workflow').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
                                              'Import workflow')
         )
 
@@ -102,9 +102,11 @@ class WorkflowImport(test.OnTaskLiveTestCase):
             "//button[@type='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//table['workflow-table']/tbody/tr/td"),
-                'newwf')
+            EC.presence_of_element_located(
+                (By.XPATH,
+                 "//h5[contains(@class, 'card-header') " \
+                 "and normalize-space(text()) = '{0}']".format('newwf')),
+            )
         )
 
         # Check elements in workflow and in newwf

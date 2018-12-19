@@ -97,7 +97,7 @@ def googlesheetupload1(request):
             form.cleaned_data['skip_lines_at_bottom'])
     except Exception as e:
         form.add_error(None,
-                       _('File could not be processed ({0})').format(e.message))
+                       _('File could not be processed ({0})').format(e))
         return render(request,
                       'dataops/upload1.html',
                       {'form': form,

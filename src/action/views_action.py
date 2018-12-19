@@ -584,7 +584,7 @@ def edit_action_out(request, workflow, action):
         render_template(content, {}, action)
     except Exception as e:
         # Pass the django exception to the form (fingers crossed)
-        form.add_error(None, e.message)
+        form.add_error(None, e)
         return render(request, template, context)
 
     # Log the event

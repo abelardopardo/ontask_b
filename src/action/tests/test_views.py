@@ -298,7 +298,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         )
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'page-header'),
+                (By.XPATH, "//body/div/h1"),
                 'Send emails')
         )
 
@@ -318,7 +318,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
             "//button[normalize-space()='Next']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'page-header'),
+                (By.XPATH, "//body/div/h1"),
                 'Action scheduled for execution')
         )
 

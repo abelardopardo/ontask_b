@@ -56,7 +56,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
                                              'Step 2: Select Columns')
         )
 
@@ -73,7 +73,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         ).click()
 
         # Wait for detail table
-        self.wait_for_datatable('column-table_previous')
+        self.wait_for_datatable('table-table_previous')
 
         # First column must be: age, double
         self.assertEqual(self.selenium.find_element_by_xpath(
@@ -142,7 +142,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
                                              'Step 2: Select Columns')
         )
 
@@ -160,7 +160,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         # Wait for the upload/merge
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'page-header'),
+                (By.XPATH, "//body/div/h1"),
                 'Step 3: Select Keys and Merge Option')
         )
 
@@ -181,7 +181,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         # Wait for the upload/merge
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'page-header'),
+                (By.XPATH, "//body/div/h1"),
                 'Step 4: Review and confirm')
         )
 
@@ -259,7 +259,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
                                              'Step 2: Select Columns')
         )
         WebDriverWait(self.selenium, 10).until_not(

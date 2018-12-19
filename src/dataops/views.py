@@ -479,7 +479,7 @@ def plugin_invoke(request, pk):
              'columns_to_upload': [True] * len(list(result_df.columns))}
         )
     except Exception as e:
-        context['exec_status'] = e.message
+        context['exec_status'] = e
         return render(request,
                       'dataops/plugin_execution_report.html',
                       context)

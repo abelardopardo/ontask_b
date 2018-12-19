@@ -183,7 +183,7 @@ def detach_dataframe(workflow):
     workflow.save()
 
     # Delete the column_names, column_types and column_unique
-    Column.objects.filter(workflow__id=workflow.id).delete()
+    workflow.columns.delete()
 
     # Delete the info for QueryBuilder
     workflow.set_query_builder_ops()
@@ -228,13 +228,15 @@ def do_import_workflow(user, name, file_item):
         # Save the new workflow
         workflow = workflow_data.save(user=user, name=name)
     except (TypeError, NotImplementedError) as e:
-        return _('Unable to import workflow (Exception: {0})').format(e.message)
+        return _('Unable to import workflow (Exception: {0})').format(e)
     except serializers.ValidationError as e:
         return _('Unable to import workflow due to a validation error')
     except Exception as e:
-        return _('Unable to import workflow (Exception: {0})').format(e.message)
+        return _('Unable to import workflow (Exception: {0})').format(e)
 
-    if not pandas_db.check_wf_df(workflow):
+    try:
+        pandas_db.check_wf_df(workflow)
+    except AssertionError:
         # Something went wrong.
         workflow.delete()
         return _('Workflow data with incorrect structure.')

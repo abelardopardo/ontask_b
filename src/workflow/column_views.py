@@ -279,9 +279,7 @@ def formula_column_add(request):
         # Notify in the form
         form.add_error(
             None,
-            _('Unable to perform the requested operation ({0})').format(
-                e.message
-            )
+            _('Unable to perform the requested operation ({0})').format(e)
         )
         data['html_form'] = render_to_string(
             'workflow/includes/partial_formula_column_add.html',

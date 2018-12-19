@@ -66,7 +66,7 @@ class TutorialCaptures(ScreenTests):
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
                                              'Step 2: Select Columns')
         )
 
@@ -247,7 +247,7 @@ class TutorialCaptures(ScreenTests):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'page-header'),
+                (By.XPATH, "//body/div/h1"),
                 'Step 4: Review and confirm')
         )
 
@@ -480,7 +480,7 @@ class TutorialCaptures(ScreenTests):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'page-header'),
+                (By.XPATH, "//body/div/h1"),
                 'Select items to exclude from action')
         )
 

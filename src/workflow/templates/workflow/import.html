@@ -15,11 +15,13 @@
       <form action="{% url 'workflow:import' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
-        <a class="btn btn-outline-dark spin" style="margin-right:2ex;"
-           href="{% url 'workflow:index' %}">{% trans 'Cancel' %}</a>
-        <button class="btn btn-primary btn-space spin"
-                type="Submit" name="Submit" value="Submit">
-          <span class="fa fa-import"></span> {% trans 'Import' %}</button>
+        <div class="text-center">
+          <a class="btn btn-outline-dark spin"
+             href="{% url 'workflow:index' %}">{% trans 'Cancel' %}</a>
+          <button class="btn btn-primary btn-space spin"
+                  type="Submit" name="Submit" value="Submit">
+            <span class="fa fa-upload"></span> {% trans 'Import' %}</button>
+        </div>
       </form>
     </div>
   </div>

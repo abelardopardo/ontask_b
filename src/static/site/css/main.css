@@ -7,34 +7,36 @@ body {
   padding-top:37px; /* To jump over the fixed nav-bar */
 }
 
-.ontask-card {
-    cursor: pointer;
-    min-width: 250px;
-    max-width: 250px;
-}
-
 .wflow-buttons,
 .cond-buttons {
-    border-top:1px solid rgba(0,0,0,.125);
-    background-color: #f8f9fa;
+  border-top:1px solid rgba(0,0,0,.125);
+  background-color: #f8f9fa;
+}
+
+.ontask-card {
+  cursor: pointer;
+  min-width: 250px;
+  max-width: 250px;
+  margin-bottom: 15px;
 }
 
 .ontask-ccard {
-    min-width: 200px;
-    max-width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+}
+
+.ontask-card .card-body,
+.ontask-ccard .card-body {
+  min-height: 100px;
 }
 
 #preview-variables {
-    background-color: rgba(0,0,0,.125);
+  background-color: rgba(0,0,0,.125);
 }
 
 .starter-template {
   padding: 40px 15px;
   text-align: center;
-}
-
-.page-header {
-    margin: 1ex 0 1ex 0;
 }
 
 .footer {
@@ -43,23 +45,23 @@ body {
 }
 
 .alert {
-    /* margin-top: 55px; */
-    margin-bottom: 0;
+  /* margin-top: 55px; */
+  margin-bottom: 0;
 }
 
 body>.navbar-transparent {
-    /* background-color: transparent; */
-    border-color: transparent;
-    box-shadow: none;
+  /* background-color: transparent; */
+  border-color: transparent;
+  box-shadow: none;
 }
 
 .navbar-transparent .navbar-nav > .active > a {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .navbar-nav>.btn{
-    margin-top:10px;
-    margin-right: 1.7em;
+  margin-top:10px;
+  margin-right: 1.7em;
 }
 
 .navbar-nav > li > a {

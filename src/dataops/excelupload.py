@@ -101,7 +101,7 @@ def excelupload1(request):
                     pass
     except Exception as e:
         form.add_error('file',
-                       _('File could not be processed ({0})').format(e.message))
+                       _('File could not be processed ({0})').format(e))
         return render(request,
                       'dataops/upload1.html',
                       {'form': form,

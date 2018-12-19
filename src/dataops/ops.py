@@ -410,7 +410,7 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
                               left_on=dst_key,
                               right_on=src_key)
         except Exception as e:
-            return gettext('Merge operation failed. Exception: ') + e.message
+            return gettext('Merge operation failed. Exception: ') + str(e)
 
         # VERY special case: The key used for the merge in src_df can have an
         # identical column in dst_df, but it is not the one used for the

@@ -176,7 +176,8 @@ class Log(models.Model):
     workflow = models.ForeignKey(Workflow,
                                  db_index=True,
                                  on_delete=models.CASCADE,
-                                 null=True)
+                                 null=True,
+                                 related_name='logs')
 
     # JSON element with additional information
     payload = JSONField(default=dict,

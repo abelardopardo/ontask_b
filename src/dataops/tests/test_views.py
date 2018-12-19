@@ -381,7 +381,7 @@ class DataopsExcelUpload(test.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page('wflow1', False)
+        self.access_workflow_from_home_page('wflow1')
 
         # Go to Excel upload/merge
         self.go_to_excel_upload_merge_step_1()
@@ -430,7 +430,7 @@ class DataopsExcelUploadSheet(test.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page('wflow1', False)
+        self.access_workflow_from_home_page('wflow1')
 
         # Go to Excel upload/merge
         self.go_to_excel_upload_merge_step_1()
@@ -524,7 +524,7 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         )
         self.selenium.find_element_by_name("Submit").click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
                                              'Step 2: Select Columns')
         )
 
@@ -533,7 +533,7 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         # Wait for the upload/merge
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'page-header'),
+                (By.XPATH, "//body/div/h1"),
                 'Step 3: Select Keys and Merge Option')
         )
 
@@ -544,7 +544,7 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_name("Submit").click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'page-header'),
+                (By.XPATH, "//body/div/h1"),
                 'Step 4: Review and confirm')
         )
 
@@ -829,7 +829,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'page-header'),
+                (By.XPATH, "//body/div/h1"),
                 'Step 4: Review and confirm')
         )
 

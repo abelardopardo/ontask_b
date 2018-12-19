@@ -3,7 +3,6 @@
 File containing functions to implement all views related to the table element.
 """
 
-
 from builtins import next
 from builtins import str
 from builtins import object
@@ -248,7 +247,7 @@ def render_table_display_data(request, workflow, columns, formula,
         # Element to add to the final queryset
         new_element['Operations'] = ops_string
         values = [x.strftime('%Y-%m-%d %H:%M:%S %z')
-            if isinstance(x, datetime) else x for x in list(row)]
+                  if isinstance(x, datetime) else x for x in list(row)]
         new_element.update(zip(column_names, values))
 
         # Create the list of elements to display and add it ot the final QS
@@ -453,11 +452,10 @@ def view_index(request):
         return redirect('workflow:index')
 
     # Get the views
-    views = View.objects.filter(
-        workflow__id=workflow.id).values('id',
-                                         'name',
-                                         'description_text',
-                                         'modified')
+    views = workflow.views.values('id',
+                                  'name',
+                                  'description_text',
+                                  'modified')
 
     # Context to render the template
     context = {

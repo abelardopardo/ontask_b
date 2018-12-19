@@ -63,7 +63,7 @@ def display_ss(request):
     search_value = request.POST.get('search[value]', None)
 
     # Get the logs
-    qs = Log.objects.filter(workflow__id=workflow.id)
+    qs = workflow.logs
     recordsTotal = qs.count()
 
     if search_value:

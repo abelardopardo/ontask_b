@@ -224,9 +224,9 @@ def load_plugin(foldername):
         if not all(x == 'Ok' for x, _ in tests):
             return (None, tests)
     except AttributeError as e:
-        return (None, [(e.message, _('Class instantiation'))])
+        return (None, [(e, _('Class instantiation'))])
     except Exception as e:
-        return (None, [(e.message, _('Instance creation'))])
+        return (None, [(e, _('Instance creation'))])
 
     return (plugin_instance, tests)
 
@@ -344,8 +344,7 @@ def run_plugin(plugin_instance, df, merge_key, params):
     try:
         new_df = plugin_instance.run(df, merge_key, parameters=params)
     except Exception as e:
-        msg = e.message
-        return None, msg
+        return None, str(e)
 
     # If plugin does not return a data frame, flag as error
     if not isinstance(new_df, pd.DataFrame):

@@ -213,7 +213,7 @@ class QuestionAddForm(ColumnBasicForm):
         data = super(QuestionAddForm, self).clean()
 
         # Check and force a correct column index
-        ncols = Column.objects.filter(workflow__id=self.workflow.id).count()
+        ncols = self.workflow.columns.count()
         if data['position'] < 1 or data['position'] > ncols:
             data['position'] = ncols + 1
 
@@ -298,7 +298,7 @@ class QuestionRenameForm(ColumnBasicForm):
         data = super(QuestionRenameForm, self).clean()
 
         # Check and force a correct column index
-        ncols = Column.objects.filter(workflow__id=self.workflow.id).count()
+        ncols = self.workflow.columns.count()
         if data['position'] < 1 or data['position'] > ncols:
             data['position'] = ncols
 

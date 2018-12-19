@@ -259,7 +259,7 @@ def evaluate_action(action, extra_string=None,
                                               action)]
         except Exception as e:
             return _('Syntax error detected in the action text. {0}').format(
-                e.message
+                e
             )
 
         # If there is extra message, render with context and create tuple
@@ -268,7 +268,7 @@ def evaluate_action(action, extra_string=None,
                 partial_result.append(render_template(extra_string, context))
             except Exception as e:
                 return _('Syntax error detected in the subject. {0}').format(
-                    e.message
+                    e
                 )
 
         # If column_name was given (and it exists), create a tuple with that

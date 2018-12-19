@@ -928,13 +928,14 @@ def check_wf_df(workflow):
         df_col_names = []
 
     # Check 1: Number of rows and columns
-    assert workflow.nrows == dfnrows
+    assert workflow.nrows == dfnrows, 'Inconsistent number of rows'
 
-    assert workflow.ncols == dfncols
+    assert workflow.ncols == dfncols, 'Inconsistent number of columns'
 
     # Identical sets of columns
     wf_cols = workflow.columns.all()
-    assert set([x.name for x in wf_cols]) == set(df_col_names)
+    assert set([x.name for x in wf_cols]) == set(df_col_names), \
+        'Inconsistent set of columns'
 
     # Identical data types
     # for n1, n2 in zip(wf_cols, df_col_names):
@@ -944,12 +945,16 @@ def check_wf_df(workflow):
             # This is the case of a column with Boolean and Nulls
             continue
 
-        assert col.data_type == df_dt
+        assert col.data_type == df_dt, 'Inconsistent data type {0}'.format(
+            col.name
+        )
 
     # Verify that the columns marked as unique are preserved
     for col in workflow.columns.filter(is_key=True):
-        assert is_unique_column(df[col.name])
+        assert is_unique_column(df[col.name]), \
+            'Column {0} should be unique.'.format(col.name)
 
+    return True
 
 def is_unique_column(df_column):
     """

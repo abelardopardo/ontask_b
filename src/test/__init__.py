@@ -307,34 +307,33 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         )
 
     def search_action(self, action_name):
-        return self.search_table_row_by_string('action-table', 1, action_name)
+        return self.search_table_row_by_string('action-table', 2, action_name)
 
     def search_column(self, column_name):
         return self.search_table_row_by_string('column-table', 2, column_name)
 
-    def access_workflow_from_home_page(self, wname, wait=True):
+    def access_workflow_from_home_page(self, wname):
+        xpath = "//h5[contains(@class, 'card-header') and " \
+                "normalize-space(text()) = '{0}']"
+
         # Verify that this is the right page
         self.assertIn('New workflow', self.selenium.page_source)
         self.assertIn('Import workflow', self.selenium.page_source)
 
-        row_element = self.search_table_row_by_string('workflow-table',
-                                                      1,
-                                                      wname)
-        row_element.find_element_by_xpath("td[5]/div/a").click()
+        self.selenium.find_element_by_xpath(xpath.format(wname)).click()
 
-        if wait:
-            self.wait_for_datatable('column-table_previous')
 
     def go_to_details(self):
         # Goto the details page
-        self.selenium.find_element_by_link_text('Details').click()
+        self.selenium.find_element_by_class_name('fa-cog').click()
+        self.selenium.find_element_by_link_text('Columns').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'workflow-index'))
+            EC.presence_of_element_located((By.ID, 'workflow-detail'))
         )
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
-        self.assertIn('More workflow operations', self.selenium.page_source)
+        self.assertIn('Manage table data', self.selenium.page_source)
 
     def go_to_sql_connections(self):
         # Goto the details page
