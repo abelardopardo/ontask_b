@@ -65,12 +65,6 @@ class ScheduleForm(forms.ModelForm):
 
         widgets = {
             'execute': OnTaskDateTimeInput()
-            # 'execute': DateTimeWidget(
-            #     options={'weekStart': 1,
-            #              'minuteStep': str(getattr(core_settings,
-            #                                        'MINUTE_STEP'))},
-            #     usel10n=True,
-            #     bootstrap_version=3),
         }
 
 
@@ -131,6 +125,18 @@ class EmailScheduleForm(ScheduleForm):
             self.fields['send_confirmation'].initial = \
                 payload.get('send_confirmation', False)
             self.fields['track_read'].initial = payload.get('track_read', False)
+
+        self.order_fields(['name',
+                           'description_text',
+                           'execute',
+                           'item_column',
+                           'subject',
+                           'cc_email',
+                           'bcc_email',
+                           'confirm_items',
+                           'send_confirmation',
+                           'track_read'])
+
 
     def clean(self):
 
