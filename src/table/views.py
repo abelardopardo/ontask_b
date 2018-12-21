@@ -155,7 +155,8 @@ def render_table_display_page(request, workflow, view, columns, ajax_url):
     if ops.workflow_id_has_table(workflow.id):
         context['columns'] = columns
         context['columns_datatables'] = \
-            [{'data': 'Operations'}] + [{'data': c.name} for c in columns]
+            [{'data': 'Operations'}] + \
+            [{'data': c.name.replace('.', '\\.')} for c in columns]
 
     # If using a view, add it to the context
     if view:
