@@ -214,9 +214,6 @@ body>.navbar-transparent {
   z-index: 2;
 }
 
-div.condition-btn {
-    margin-bottom: 1ex;
-}
 /* Tweaks for JQuery QueryBuilder
 /* Needed for QueryBuilder to expand width 100% */
 #builder.form-inline {

@@ -1,0 +1,33 @@
+{% load i18n %}
+{% load crispy_forms_tags %}
+<form method="post" 
+  {% if add %}
+    action="{% url 'action:create_filter' action_id %}" 
+    class="js-filter-create-form"
+  {% else %}
+    action="{% url 'action:edit_filter' condition_id %}" 
+    class="js-filter-edit-form"
+  {% endif %}>
+  {% csrf_token %}
+  <div class="modal-header">
+    <h4 class="modal-title">{% if add %}{% trans 'Create filter' %}{% else %}{% trans 'Edit filter' %}{% endif %}</h4>
+    <button type="button" class="close" data-dismiss="modal" arial-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    {{ form|crispy }}
+    <div>{% trans 'The learner will be selected if' %}</div>
+    <div id="builder"></div>
+  </div>
+  <div class="modal-footer" style="text-align: center;">
+    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}
+    </button>
+    <button type="submit" class="btn btn-primary">
+      {% if add %}
+        <span class="glyphicon glyphicon-ok"></span> {% trans 'Create filter' %}</button>
+      {% else %}
+        <span class="glyphicon glyphicon-ok"></span> {% trans 'Update' %}</button>
+      {% endif %}
+  </div>
+</form>

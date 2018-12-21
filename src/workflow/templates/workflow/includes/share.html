@@ -6,7 +6,7 @@
     <p class="lead text-center">{% blocktrans %}Click in the <i>Add User</i> button below and provide the email for the user
       with whom you want to share the workflow.{% endblocktrans %}</p>
   {% endif %}
-  <div class="row justify-content-center condition-btn" id="workflow-shared">
+  <div class="row justify-content-center mb-3" id="workflow-shared">
     <button type="button"
             class="btn btn-outline-dark btn-sm js-share-create"
             data-url="{% url 'workflow:share_create' %}">

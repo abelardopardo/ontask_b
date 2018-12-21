@@ -53,7 +53,7 @@ $(function () {
   $("#modal-item").on("submit", ".js-share-delete-form", saveForm);
 
   // Column Add
-  $("#workflow-index").on("click", ".js-workflow-column-add", loadForm);
+  $("#workflow-detail").on("click", ".js-workflow-column-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-column-add-form", saveForm);
 
   // Derived column add
@@ -85,7 +85,7 @@ $(function () {
 window.onload = function(){
   setDateTimePickers();
 };
-$(".ontask-card .card-body").click(function() {
+$(".ontask-card .card-body, .ontask-card .card-header").click(function() {
   window.location = $(this).parent().find("a").attr("href");
   $('#div-spinner').show();
   return false;

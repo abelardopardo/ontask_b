@@ -556,7 +556,7 @@ def data_frame_add_column(df, column, initial_value):
     return df
 
 
-def rename_df_column(df, workflow, old_name, new_name):
+def rename_df_column(workflow, old_name, new_name):
     """
     Function to change the name of a column in the dataframe.
 
@@ -586,8 +586,6 @@ def rename_df_column(df, workflow, old_name, new_name):
             new_name
         )
         view.save()
-
-    return df.rename(columns={old_name: new_name})
 
 
 def detect_datetime_columns(data_frame):

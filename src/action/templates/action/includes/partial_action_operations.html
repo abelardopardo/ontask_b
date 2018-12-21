@@ -1,18 +1,5 @@
 {% load i18n %}
-<div class="condition-btn btn-group" role="group">
-  {% comment %}
-  <a href="{% url 'action:edit' id %}"
-     class="btn btn-outline-dark btn-sm align-middle spin"
-     data-toggle="tooltip"
-     title="{% trans 'Edit the text, conditions and filter' %}">
-    <span class="fa fa-pencil"></span> {% trans 'Edit' %}</a>
-  {% if action_tval == 'personalized_text' or action_tval == 'personalized_canvas_email' %}
-    <a href="{% url 'action:run' id %}"
-       class="btn btn-outline-dark btn-sm spin"
-        data-toggle="tooltip" title="{% trans 'Send personalised emails' %}">
-      <span class="fa fa-envelope"></span> {% trans 'Email' %}</a>
-  {% endif %}
-  {% endcomment %}
+<div class=" btn-group" role="group">
   <a href="{% url 'action:run' id %}"
      class="btn btn-light btn-sm spin {% if not is_executable %}disabled{% endif %}"
      data-toggle="tooltip"

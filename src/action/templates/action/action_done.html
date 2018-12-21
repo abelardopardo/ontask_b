@@ -11,10 +11,14 @@
 {% endblock scripts %}
 {% block container %}
   {% url 'logs:view' log_id as record_url %}
-  <div class="container">
+  <div class="container" id="action-run-done">
     <h1 class="text-center">{% trans 'Action scheduled for execution' %}</h1>
-    <a class="text-center" href="{{ record_url }}">{% blocktrans %}You may check the status in
+    <div class="text-center">
+      <a href="{{ record_url }}">{% blocktrans %}You may check the status in
       log number {{ log_id }}.{% endblocktrans %}</a>
-    <a class="btn btn-outline-dark spin text-center" href="{% url 'action:index' %}">{% trans 'Back' %}</a>
+    </div>
+    <div class="text-center">
+      <a class="btn btn-outline-dark spin" href="{% url 'action:index' %}">{% trans 'Back' %}</a>
+    </div>
   </div>
 {% endblock container %}

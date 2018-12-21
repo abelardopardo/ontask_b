@@ -38,7 +38,7 @@
   </script>
 {% endblock %}
 {% block container %}
-  <div class="container">
+  <div class="container" id="scheduler-index">
     <h1 class="text-center">{% trans 'Scheduled Operations' %}<super>*</super></h1>
     {% if not workflow.nrows %}
       {% include 'workflow/includes/no_data.html' %}

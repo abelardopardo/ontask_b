@@ -404,8 +404,7 @@ def upload_s4(request):
 
             messages.error(request,
                            _('Merge operation failed.') + ' (' + status + ')'),
-            return redirect(reverse('workflow:detail',
-                                    kwargs={'pk': workflow.id}))
+            return redirect(reverse('table:display'))
 
         # Log the event
         Log.objects.register(request.user,

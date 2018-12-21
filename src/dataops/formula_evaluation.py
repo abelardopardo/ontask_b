@@ -122,8 +122,7 @@ def evaluate_node(node, given_variables):
         # If calculating a boolean result and no value in the dictionary, finish
         if varname not in given_variables:
             raise OnTaskException(
-                'No value found for variable {0}'.format(varname),
-                varname
+                'No value found for variable {0}'.format(varname)
             )
 
         varvalue = given_variables.get(varname, None)
