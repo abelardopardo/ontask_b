@@ -39,8 +39,11 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
         # Login
         self.login('instructor01@bogus.com')
 
-        # GO TO THE WORKFLOW PAGE
+        # Open workflow
         self.access_workflow_from_home_page(self.wflow_name)
+
+        # Go to table page
+        self.go_to_table()
 
         # Click in the add derived column button
         self.open_add_derived_column()
@@ -69,7 +72,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "div.modal-footer > button.btn.btn-primary"
         ).click()
         # MODAL WAITING
-        self.wait_close_modal_refresh_table('column-table_previous')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
         # Click in the add derived column button
         self.open_add_derived_column()
@@ -98,7 +101,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "div.modal-footer > button.btn.btn-primary"
         ).click()
         # MODAL WAITING
-        self.wait_close_modal_refresh_table('column-table_previous')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
         # Click in the add derived column button
         self.open_add_derived_column()
@@ -124,7 +127,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "div.modal-footer > button.btn.btn-primary"
         ).click()
         # MODAL WAITING
-        self.wait_close_modal_refresh_table('column-table_previous')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
         # Click in the add derived column button
         self.open_add_derived_column()
@@ -150,7 +153,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "div.modal-footer > button.btn.btn-primary"
         ).click()
         # MODAL WAITING
-        self.wait_close_modal_refresh_table('column-table_previous')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
         # Click in the add derived column button
         self.open_add_derived_column()
@@ -179,7 +182,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "div.modal-footer > button.btn.btn-primary"
         ).click()
         # MODAL WAITING
-        self.wait_close_modal_refresh_table('column-table_previous')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
         # Click in the add derived column button
         self.open_add_derived_column()
@@ -208,7 +211,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "div.modal-footer > button.btn.btn-primary"
         ).click()
         # MODAL WAITING
-        self.wait_close_modal_refresh_table('column-table_previous')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
         # Click in the add derived column button
         self.open_add_derived_column()
@@ -236,7 +239,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "div.modal-footer > button.btn.btn-primary"
         ).click()
         # MODAL WAITING
-        self.wait_close_modal_refresh_table('column-table_previous')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
         # Click in the add derived column button
         self.open_add_derived_column()
@@ -269,7 +272,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "div.modal-footer > button.btn.btn-primary"
         ).click()
         # MODAL WAITING
-        self.wait_close_modal_refresh_table('column-table_previous')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
         # Click in the add derived column button
         self.open_add_derived_column()
@@ -302,7 +305,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "div.modal-footer > button.btn.btn-primary"
         ).click()
         # MODAL WAITING
-        self.wait_close_modal_refresh_table('column-table_previous')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
         # Check that the data is correct
         df = pandas_db.load_from_db(Workflow.objects.all()[0].id)
@@ -404,8 +407,9 @@ class TableViews(test.OnTaskLiveTestCase):
         self.wait_close_modal_refresh_table('view-table_previous')
 
         # Click in the link to see the table resulting from this view
-        element = self.search_table_row_by_string('view-table', 1, 'v1')
-        element.find_element_by_link_text("Table").click()
+        self.selenium.find_element_by_xpath(
+            "//table[@id='view-table']//td[1][normalize-space() = 'v1']"
+        ).click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
 
@@ -463,8 +467,9 @@ class TableViews(test.OnTaskLiveTestCase):
         self.wait_close_modal_refresh_table('view-table_previous')
 
         # Check the table resulting from the view
-        element = self.search_table_row_by_string('view-table', 1, 'v2')
-        element.find_element_by_link_text("Table").click()
+        self.selenium.find_element_by_xpath(
+            "//table[@id='view-table']//td[1][normalize-space() = 'v2']"
+        ).click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
 
@@ -496,15 +501,7 @@ class TableViews(test.OnTaskLiveTestCase):
         self.wait_for_datatable('view-table_previous')
 
         # Click in the clone link of the first view
-        element = self.search_table_row_by_string('view-table', 1, 'v1')
-        element.find_element_by_xpath(
-            "td//button[normalize-space()='Clone']"
-        ).click()
-        # Wait for the modal to open
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'modal-open'))
-        )
-
+        self.open_view_row_op('v1', 'Clone')
         # Confirm view cloning
         self.selenium.find_element_by_xpath(
             "//div[@class='modal-footer']/button[normalize-space()='Clone "
@@ -513,10 +510,9 @@ class TableViews(test.OnTaskLiveTestCase):
         self.wait_close_modal_refresh_table('view-table_previous')
 
         # Open the view with the clone
-        element = self.search_table_row_by_string('view-table',
-                                                  1,
-                                                  'Copy_of_v1')
-        element.find_element_by_link_text("Table").click()
+        self.selenium.find_element_by_xpath(
+            "//table[@id='view-table']//td[1][normalize-space() = 'Copy_of_v1']"
+        ).click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
 
@@ -576,7 +572,7 @@ class TableInsertRow(test.OnTaskLiveTestCase):
         c91.click()
         # Click on the Submit button
         self.selenium.find_element_by_xpath(
-            "//form/button[@type='submit']"
+            "//form//button[@type='submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, 'alert-danger'))
@@ -594,7 +590,7 @@ class TableInsertRow(test.OnTaskLiveTestCase):
         keyelem.send_keys('100')
         # Click on the Submit button
         self.selenium.find_element_by_xpath(
-            "//form/button[@type='submit']"
+            "//form//button[@type='submit']"
         ).click()
         self.wait_for_datatable('table-data_previous')
 
@@ -606,18 +602,7 @@ class TableInsertRow(test.OnTaskLiveTestCase):
         )
 
         # Click in the Ops -> delete button -> Delete row
-        element = self.search_table_row_by_string('table-data', 2, '100')
-        element.find_element_by_xpath(
-            "td//button[normalize-space()='Operations']"
-        ).click()
-        element.find_element_by_xpath(
-            "td//button[normalize-space()='Delete']"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
+        self.open_table_row_op(2, '100', 'Delete')
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']//button[@type='submit']"
         ).click()

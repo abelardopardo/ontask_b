@@ -84,9 +84,8 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.open_action_edit(self.action_name)
 
         # Click in the add filter button
-        self.selenium.find_element_by_xpath(
-            "//h4[@id='filter-set']/div/button"
-        ).click()
+        self.select_filter_tab()
+        self.selenium.find_element_by_class_name('js-filter-create').click()
         # Wait for the form to appear
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
@@ -94,8 +93,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
             )
         )
 
-        # Add the name and description
-        self.selenium.find_element_by_id('id_name').send_keys('fname')
+        # Add the description
         self.selenium.find_element_by_id(
             'id_description_text').send_keys('fdesc')
 
@@ -127,7 +125,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Click in the "update filter"
         self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']/div/div/form/div/button[2]"
+            "//div[@id='modal-item']//button[@type='submit']"
         ).click()
         # MODAL WAITING
         WebDriverWait(self.selenium, 10).until_not(
@@ -135,11 +133,15 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
                 (By.CLASS_NAME, 'modal-open')
             )
         )
-        # Wait for page to reload
+        # Preview button clickable
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, "//h4[@id='filter-set']/div/button")
+                (By.XPATH, "//button[contains(@class, 'js-action-preview')]"),
             )
+        )
+        # Spinner not visible
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
         # Check that the filter is selecting 2 out of 3 rows
@@ -147,6 +149,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Add a second clause to the filter
         # Click in the edit filter button
+        self.select_filter_tab()
         self.selenium.find_element_by_class_name('js-filter-edit').click()
         # Wait for the form to modify the filter
         WebDriverWait(self.selenium, 10).until(
@@ -193,7 +196,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Click in the "update filter"
         self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']/div/div/form/div/button[2]"
+            "//div[@id='modal-item']//button[@type='submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until_not(
             EC.presence_of_element_located(
@@ -201,10 +204,15 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
             )
         )
         # Wait for page to reload
+        # Preview button clickable
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, "//h4[@id='filter-set']/div/button")
+                (By.XPATH, "//button[contains(@class, 'js-action-preview')]"),
             )
+        )
+        # Spinner not visible
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
         # Check that the filter is selecting 2 out of 3 rows
@@ -228,11 +236,13 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.open_action_edit(self.action_name)
 
         # Add condition
+        self.select_condition_tab()
         self.create_condition('c1',
                               'cdesc1',
                               [('age', 'less or equal', '12.1')])
 
         # Click in the add a second condition
+        self.select_condition_tab()
         self.create_condition('c2',
                               'cdesc2',
                               [('age', 'greater', '12.1')])
@@ -287,20 +297,8 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.go_to_actions()
 
         # Click in the page to send email
-        element = self.search_action(self.action_name)
-        element.find_element_by_link_text("Email").click()
-
-        # Wait for the send emails page
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//div[@id='email-action-request-data']")
-            )
-        )
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//body/div/h1"),
-                'Send emails')
-        )
+        self.open_action_run(self.action_name)
+        self.wait_for_datatable('email-action-request-data')
 
         # Set the subject of the email
         self.selenium.find_element_by_id('id_subject').send_keys('Subject TXT')
@@ -325,9 +323,9 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # There should be a message on that page
         self.assertTrue(
             self.selenium.find_element_by_xpath(
-                "//body/div[4]/div/a"
+                "//div[@id='action-run-done']/div/a"
             ).text.startswith(
-                'You may check the status in log record number'
+                'You may check the status in log number'
             )
         )
 
@@ -372,7 +370,8 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         )
 
         # Create filter.
-        self.create_filter('fname', 'fdesc', [('age', 'less or equal', '12.1')])
+        self.select_filter_tab()
+        self.create_filter(None, 'fdesc', [('age', 'less or equal', '12.1')])
 
         # Make sure the content has the correct text
         self.assertIn(
@@ -388,7 +387,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         )
 
         # Modify the filter. Click in the edit filter button
-        self.edit_filter('fname2', '', [])
+        self.edit_filter(None, '', [])
 
         # Make sure the content has the correct text
         self.assertIn(
@@ -451,6 +450,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         )
 
         # Delete the condition
+        self.select_condition_tab()
         self.delete_condition('fname2')
 
         # Make sure the content has the correct text
@@ -501,13 +501,14 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
         self.create_new_survey_action('new action in', '')
 
         # Click in the add rule button (the filter is initially empty)
-        self.create_filter('filter name', '', [('registered', None, False)])
+        self.create_filter(None, '', [('registered', None, False)])
         self.wait_close_modal_refresh_table('column-selected-table_previous')
 
         # Check that the filter is working properly
         self.assertIn('1 learner of 3', self.selenium.page_source)
 
-        # Select two columns: email and registered
+        # Select email column as key column
+        self.select_parameters_tab()
         select = Select(self.selenium.find_element_by_id(
             'select-key-column-name'))
         select.select_by_visible_text('email')
@@ -533,13 +534,9 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
         self.wait_for_datatable('action-table_previous')
 
         # Run the action
-        element = self.search_action('new action in')
-        element.find_element_by_link_text("Run").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.LINK_TEXT, "student02@bogus.com")
-            )
-        )
+        self.open_action_run('new action in')
+        self.wait_for_datatable('actioninrun-data_previous')
+
         # Enter data for the remaining user
         self.selenium.find_element_by_link_text("student02@bogus.com").click()
         # Mark as registered
@@ -593,9 +590,7 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
             workflow=workflow
         )
         attributes = workflow.attributes
-        action_in = Action.objects.get(
-            name='Check registration',
-            workflow=workflow
+        Action.objects.get(name='Check registration', workflow=workflow
         )
         action_out = Action.objects.get(
             name='Detecting age',
@@ -630,6 +625,7 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         self.access_workflow_from_home_page(self.wflow_name)
 
         # Click the button to rename the "registered" column
+        self.go_to_details()
         self.open_column_edit('registered')
 
         # Introduce the new column name and submit
@@ -655,55 +651,16 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         self.go_to_attribute_page()
 
         # Change the name of the attribute and submit
-        element = self.search_table_row_by_string('attribute-table',
-                                                  1,
-                                                  'attribute name')
-        element.find_element_by_xpath("td[3]/button[1]").click()
-
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'modal-title'), 'Edit attribute'
-            )
-        )
-        self.selenium.find_element_by_id('id_key').clear()
-        self.selenium.find_element_by_id('id_key').send_keys(
-            'attribute name new'
-        )
-        self.selenium.find_element_by_id('id_value').clear()
-        self.selenium.find_element_by_id('id_value').send_keys(
-            'attribute value'
-        )
-        # Submit
-        self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[2]"
-        ).click()
-        # Go back to the attribute table page
-        self.wait_close_modal_refresh_table('attribute-table_previous')
+        self.edit_attribute('attribute name',
+                            'attribute name new',
+                            'attribute value')
 
         # Go to the actions and select the edit button of the action out
         self.go_to_actions()
         self.open_action_edit('Detecting age')
 
         # Click the button to edit a condition and change its name
-        self.selenium.find_element_by_xpath(
-            "//button[contains(@class, 'js-condition-edit')]"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//div[@id='modal-item']//form")
-            )
-        )
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("Registered new")
-        self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']//button[@type='submit']"
-        ).click()
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
+        self.edit_condition('Registered', 'Registered new', None, [])
 
         # Refresh variables
         workflow = Workflow.objects.get(pk=workflow.id)
@@ -773,9 +730,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
         self.go_to_actions()
 
         # Click in the page to send email
-        element = self.search_action('Detecting age')
-        element.find_element_by_link_text("ZIP").click()
-        self.wait_for_page(element_id='zip-action-request-data')
+        self.open_action_zip('Detecting age')
 
         # The zip should include 2 files
         self.assertIn('A ZIP with 2 files will be created',

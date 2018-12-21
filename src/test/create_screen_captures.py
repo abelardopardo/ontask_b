@@ -6,10 +6,8 @@ from future import standard_library
 from action.models import Action
 
 standard_library.install_aliases()
-import io
 import os
 
-from PIL import Image
 from django.conf import settings
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
