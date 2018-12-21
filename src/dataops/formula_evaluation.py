@@ -408,3 +408,145 @@ def evaluate_node_sql(node):
         raise Exception(_('Negation found in unexpected location'))
 
     return result, result_fields
+
+
+def evaluate_node_text(node):
+    """
+    Given a node representing a query filter
+    translates the expression into a natural language.
+    :param node: Node representing the expression
+    :return: String describing the filter
+    """
+    if 'condition' in node:
+        # Node is a condition, get the values of the sub-clauses
+        sub_pairs = \
+            [evaluate_node_text(x) for x in node['rules']]
+
+        if not sub_pairs:
+            # Nothing has been returned, so it is an empty query
+            return '', []
+
+        # Now combine
+        if node['condition'] == 'AND':
+            result = '(' + \
+                     ') AND ('.join([x for x in sub_pairs]) + ')'
+        else:
+            result = '(' + \
+                     ') OR ('.join([x for x in sub_pairs]) + ')'
+
+        if node.get('not', False):
+            result = 'NOT (' + result + ')'
+
+        return result
+
+    # Get the variable name and duplicate the symbol % in case it is part of
+    # the variable name (escape needed for SQL processing)
+    varname = fix_pctg_in_name(node['field'])
+
+    # Get the operator
+    operator = node['operator']
+
+    # If the operator is between or not_between, there is a special case,
+    # the constant cannot be computed because the node['value'] is a pair
+    constant = None
+    if node['value'] is not None and not isinstance(node['value'], list):
+        # Calculate the constant value depending on the type
+        if node['type'] == 'integer':
+            constant = int(node['value'])
+        elif node['type'] == 'double':
+            constant = float(node['value'])
+        elif node['type'] == 'boolean':
+            constant = node['value'] == '1'
+        elif node['type'] == 'string':
+            constant = node['value']
+        elif node['type'] == 'datetime':
+            constant = node['value']
+        else:
+            raise Exception(
+                _('No function to translate type {0}').format(node['type'])
+            )
+
+    # Terminal Node
+    if operator == 'equal':
+        result = '{0} equal to {1}'.format(varname, constant)
+
+    elif operator == 'not_equal':
+        result = '{0} not equal to {1}'.format(varname, constant)
+
+    elif operator == 'begins_with' and node['type'] == 'string':
+        result = '{0} starts with {1}'.format(varname, constant)
+
+    elif operator == 'not_begins_with' and node['type'] == 'string':
+        result = '{0} does not start with {1}'.format(varname, constant)
+
+    elif operator == 'contains' and node['type'] == 'string':
+        result = '{0} contains {1}'.format(varname, constant)
+
+    elif operator == 'not_contains' and node['type'] == 'string':
+        result = '{0} does not contain {1}'.format(varname, constant)
+
+    elif operator == 'ends_with' and node['type'] == 'string':
+        result = '{0} ends with {1}'.format(varname, constant)
+
+    elif operator == 'not_ends_with' and node['type'] == 'string':
+        result = '{0} does not end with {1}'.format(varname, constant)
+
+    elif operator == 'is_empty' and node['type'] == 'string':
+        result = '{0} is empty'.format(varname)
+
+    elif operator == 'is_not_empty' and node['type'] == 'string':
+        result = '{0} is not empty'.format(varname)
+
+    elif operator == 'is_null':
+        result = '{0} is null'.format(varname)
+
+    elif operator == 'is_not_null':
+        result = '{0} is not null'.format(varname)
+
+    elif operator == 'less' and \
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
+        result = '{0} is less than {1}'.format(varname, constant)
+
+    elif operator == 'less_or_equal' and \
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
+        result = '{0} is less than or equal to {1}'.format(varname, constant)
+
+    elif operator == 'greater' and \
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
+        result = '{0} is greater than {1}'.format(varname, constant)
+
+    elif operator == 'greater_or_equal' and \
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
+        result = '{0} is greater than or equal to {1}'.format(varname, constant)
+
+    elif operator == 'between' and \
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
+        result = '{0} is between {1} and {2}'.format(varname,
+                                                     str(node['value'][0]),
+                                                     str(node['value'][1]))
+
+    elif operator == 'not_between' and \
+            (node['type'] == 'integer' or node['type'] == 'double'
+             or node['type'] == 'datetime'):
+        result = '{0} is not between {1} and {2}'.format(
+            varname,
+            str(node['value'][0]),
+            str(node['value'][1])
+        )
+
+    else:
+        raise Exception(
+            _('Type, operator, field {0}, {1}, {2} not supported yet').format(
+                node['type'], operator, varname
+            )
+        )
+
+    if node.get('not', False):
+        raise Exception(_('Negation found in unexpected location'))
+
+    return result

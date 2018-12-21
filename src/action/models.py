@@ -15,7 +15,10 @@ from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
 from dataops import formula_evaluation, pandas_db
-from dataops.formula_evaluation import get_variables, evaluate_top_node
+from dataops.formula_evaluation import (
+    get_variables, evaluate_top_node,
+    evaluate_node_text
+)
 from logs.models import Log
 from ontask import OnTaskException
 from workflow.models import Workflow, Column
@@ -475,6 +478,14 @@ class Condition(models.Model):
         self.save()
 
         return
+
+    def get_formula_text(self):
+        """
+        Return the content of the formula in a string that is human readable
+        :return: String
+        """
+
+        return evaluate_node_text(self.formula)[1:-1]
 
     def __str__(self):
         return self.name

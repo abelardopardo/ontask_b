@@ -10,13 +10,14 @@
 </div>
 <div id="condition-set" class="card-deck justify-content-center" style="margin:1em 0 1em 0;">
   {% for condition in conditions %}
-    <div class="card ontask-ccard" style="margin-bottom: 15px;">
-      <div class="card-body">
-        <h4 class="card-title text-center">{{ condition.name }}</h4>
-        <h5 class="card-subtitle  mb-2 text-muted text-center">{% blocktrans with n=condition.n_rows_selected count counter=condition.n_rows_selected %}({{ n }} learner){% plural %}({{ n }} learners){% endblocktrans %}</h5>
-        <p class="card-text" style="min-height: 100px;">{{ condition.description_text }}</p>
+    <div class="card ontask-ccard text-center" style="margin-bottom: 15px;">
+      <h5 class="card-header">{{ condition.name }}</h5>
+      <div class="card-body" style="min-height: 100px;">
+        <h5 class="card-subtitle mb-2 text-muted">{% blocktrans with n=condition.n_rows_selected count counter=condition.n_rows_selected %}({{ n }} learner){% plural %}({{ n }} learners){% endblocktrans %}</h5>
+        <p class="card-text">{{ condition.description_text }}</p>
+        <p class="card-text"><strong>{% trans 'Formula' %}</strong><br/>{{ condition.get_formula_text }}</p>
       </div>
-      <div class="cond-buttons justify-content-right">
+      <div class="cond-buttons">
         <button type="button"
                 class="btn btn-light btn-sm js-condition-edit"
                 data-url="{% url 'action:edit_condition' condition.id %}"
