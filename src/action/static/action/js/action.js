@@ -120,14 +120,14 @@ var loadFormPost = function () {
     });
 }
 var transferFormula = function () {
-  if (document.getElementById("id_filter_formula") != null) {
-    formula = $("#filter_builder").queryBuilder('getRules');
+  if (document.getElementById("id_formula") != null) {
+    formula = $("#builder").queryBuilder('getRules');
     if (formula == null || !formula['valid']) {
       $('#div-spinner').hide();
       return false;
     }
     f_text = JSON.stringify(formula, undefined, 2);
-    $("#id_filter_formula").val(f_text);
+    $("#id_formula").val(f_text);
    }
    return true;
 }
@@ -178,6 +178,14 @@ $(function () {
   // Edit Action Description
   $("#action-in-editor").on("click", ".js-description-edit", loadForm);
   $("#modal-item").on("submit", ".js-description-edit-form", saveForm);
+
+  // Create filter
+  $("#filter-set-header").on("click", ".js-filter-create", loadForm);
+  $("#modal-item").on("submit", ".js-filter-create-form", saveForm);
+
+  // Edit Filter
+  $("#filter-set").on("click", ".js-filter-edit", loadForm);
+  $("#modal-item").on("submit", ".js-filter-edit-form", saveForm);
 
   // Update Filter
   $("#filter").on("submit", ".js-filter-update-form", transferFormula);
@@ -277,11 +285,11 @@ window.onload = function(){
     set_element_select("#id_exclude_values");
   }
   setDateTimePickers();
-  if (typeof qbuilder_filter_options != "undefined") {
-    if ($('#id_filter_formula').val() != '') {
-      qbuilder_filter_options["rules"] = JSON.parse($('#id_filter_formula').val());
-    }
-    $("#filter_builder").queryBuilder(qbuilder_filter_options);
-  }
+//  if (typeof qbuilder_filter_options != "undefined") {
+//    if ($('#id_formula').val() != '') {
+//      qbuilder_filter_options["rules"] = JSON.parse($('#id_formula').val());
+//    }
+//    $("#builder").queryBuilder(qbuilder_filter_options);
+//  }
 };
 

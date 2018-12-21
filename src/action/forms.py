@@ -164,25 +164,18 @@ class FilterForm(forms.ModelForm):
     formula field is set to False because it is enforced in the server.
     """
 
-    filter_formula = forms.CharField(required=False,
-                                     label=_('formula'))
-
     def __init__(self, *args, **kwargs):
         super(FilterForm, self).__init__(*args, **kwargs)
 
         # Required enforced in the server (not in the browser)
-        self.fields['filter_formula'].required = False
+        self.fields['formula'].required = False
 
-        # Set the value of the formula in the action
-        if self.instance.formula:
-            self.fields['filter_formula'].initial = \
-                escape(json.dumps(self.instance.formula))
         # Filter should be hidden.
-        self.fields['filter_formula'].widget = forms.HiddenInput()
+        self.fields['formula'].widget = forms.HiddenInput()
 
     class Meta(object):
         model = Condition
-        fields = ('name', 'description_text')
+        fields = ('description_text', 'formula')
 
 
 class ConditionForm(forms.ModelForm):

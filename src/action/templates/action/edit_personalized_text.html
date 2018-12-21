@@ -22,9 +22,6 @@
     {% with js_var='qbuilder_options' allow_empty='false' %}
       {% include 'qbuilder_options.js' %}
     {% endwith %}
-    {% with js_var='qbuilder_filter_options' allow_empty='false' %}
-      {% include 'qbuilder_options.js' %}
-    {% endwith %}
     $(document).ready(function() {
       if (document.getElementById("id_content") != null) {
         initSummernote();
@@ -74,21 +71,21 @@
                       class="btn btn-primary spin"
                       data-toggle="tooltip"
                       title="{% trans 'Save current data' %}">
-                <span class="fa fa-ok"></span> {% trans 'Save' %}</button>
+                <span class="fa fa-check"></span> {% trans 'Save' %}</button>
               <button type="submit" name="Submit" value="Close"
                       class="btn btn-primary spin"
                       data-toggle="tooltip"
                       title="{% trans 'Save and go back to the action table' %}">
-                <span class="fa fa-ok"></span> {% trans 'Close' %}</button>
+                <span class="fa fa-check"></span> {% trans 'Close' %}</button>
             </div>
           </form>
         </div>
       </div>
       <div class="tab-pane fade" id="filter" role="tabpanel" aria-labelledby="filter-tab">
-        {% include 'action/includes/partial_filter_create_buttons.html' %}
+        {% include 'action/includes/partial_filter_tab.html' %}
       </div>
       <div class="tab-pane fade" id="conditions" role="tabpanel" aria-labelledby="conditions-tab">
-        {% include 'action/includes/partial_condition_buttons.html' %}
+        {% include 'action/includes/partial_condition_tab.html' %}
       </div>
     </div>
   </div>

@@ -219,7 +219,6 @@ div.condition-btn {
 }
 /* Tweaks for JQuery QueryBuilder
 /* Needed for QueryBuilder to expand width 100% */
-#filter_builder.form-inline,
 #builder.form-inline {
   display: unset;
 }
