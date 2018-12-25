@@ -51,11 +51,7 @@ class ScreenTutorialTest(ScreenTests):
 
         # Close the modal.
         desc.send_keys(Keys.RETURN)
-        WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located(
-                (By.XPATH, "//table[@id='dataops-table']")
-            )
-        )
+        self.wait_for_modal_close()
 
         # End of session
         self.logout()
@@ -160,13 +156,15 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('workflow_sql_connections_index.png')
 
         # click in the edit element
-        element = self.search_table_row_by_string('sqlconn-table',
-                                                  1,
-                                                  'Remote server')
-        element.find_element_by_xpath(
-            "td//button[normalize-space()='Edit']"
-        ).click()
-        self.wait_for_modal_open()
+        xpath_txt = \
+            "//table[@id='sqlconn-table']//tr/td[1][text() = '{0}']/..".format(
+                'Remote server'
+            )
+        # Click in the dropdown
+        self.open_dropdown_click_option(
+            xpath_txt + "/td[11]/div/button",
+            'Edit'
+        )
 
         # Take picture of the modal
         self.modal_ss('workflow_superuser_sql_edit.png')

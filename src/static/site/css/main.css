@@ -3,7 +3,6 @@ html, body{
 }
 
 body {
-  font-family: Arial, Helvetica, Verdana, sans-serif;
   padding-top:37px; /* To jump over the fixed nav-bar */
 }
 

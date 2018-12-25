@@ -42,7 +42,7 @@
   <div class="container" id="sql-connections">
     <h1 class="text-center">{% trans 'SQL Connections' %}</h1>
     {% if table.data|length %}
-      <div class="row justify-content-center" id="sqlconn-area">
+      <div class="container justify-content-center" id="sqlconn-area">
         {% render_table table %}
       </div>
     {% else %}

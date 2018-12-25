@@ -1,24 +1,27 @@
 {% load i18n %}
-<div class="btn-group" role="group">
-  <button type="button"
-          class="btn btn-outline-dark btn-sm js-sqlconn-edit"
-          data-url="{% url 'dataops:sqlconn_edit' id %}"
-          data-toggle="tooltip"
-          title="{% trans 'Edit SQL connection parameters' %}.">
-    <span class="fa fa-pencil"></span> {% trans 'Edit' %}
-  </button>
-  <button type="button"
-          class="btn btn-outline-dark btn-sm js-sqlconn-clone align-middle"
-          data-url="{% url 'dataops:sqlconn_clone' id %}"
-          data-toggle="tooltip"
-          title="{% trans 'Create an exact duplicate of this connection' %}">
-      <span class="fa fa fa-clone"></span> {% trans 'Clone' %}
-  </button>
-  <button type="button"
-          class="btn btn-outline-danger btn-sm js-sqlconn-delete"
-          data-url="{% url 'dataops:sqlconn_delete' id %}"
-          data-toggle="tooltip"
-          title="{% trans 'Delete SQL connection' %}">
-    <span class="fa fa-trash"></span> {% trans 'Delete' %}
-  </button>
+<div class="btn-group dropdown">
+  <button class="btn btn-light btn-sm" type="button" id="sqlConnOperations"
+          data-toggle="dropdown"><span class="fa fa-ellipsis-h"></span></button>
+  <div class="dropdown-menu" aria-labelledby="sqlConnOperations">
+    <button type="button" class="dropdown-item js-sqlconn-edit"
+            data-url="{% url 'dataops:sqlconn_edit' id %}"
+            data-toggle="tooltip"
+            title="{% trans 'Edit SQL connection parameters' %}.">
+      <span class="fa fa-pencil"></span> {% trans 'Edit' %}
+    </button>
+    <button type="button"
+            class="dropdown-item js-sqlconn-clone align-middle"
+            data-url="{% url 'dataops:sqlconn_clone' id %}"
+            data-toggle="tooltip"
+            title="{% trans 'Create an exact duplicate of this connection' %}">
+        <span class="fa fa fa-clone"></span> {% trans 'Clone' %}
+    </button>
+    <button type="button"
+            class="dropdown-item js-sqlconn-delete"
+            data-url="{% url 'dataops:sqlconn_delete' id %}"
+            data-toggle="tooltip"
+            title="{% trans 'Delete SQL connection' %}">
+      <span class="fa fa-trash"></span> {% trans 'Delete' %}
+    </button>
+  </div>
 </div>

@@ -179,6 +179,8 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         fp.set_preference("dom.file.createInChild", True)
         cls.selenium = webdriver.Firefox(firefox_profile=fp)
         # cls.selenium = webdriver.Chrome()
+        print('Setting viewport {0}, {1}'.format(cls.viewport_width,
+                                                 cls.viewport_height))
         cls.selenium.set_window_size(cls.viewport_width,
                                      cls.viewport_height)
         # cls.selenium.implicitly_wait(30)
@@ -1321,8 +1323,8 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
 
 class ScreenTests(OnTaskLiveTestCase):
-    width = 1024
-    height = 1800
+    viewport_width = 1024
+    viewport_height = 1800
     prefix = ''
     workflow_name = 'BIOL1011'
     description = 'Course on Cell Biology'
@@ -1374,4 +1376,4 @@ class ScreenTests(OnTaskLiveTestCase):
     @classmethod
     def setUpClass(cls):
         super(ScreenTests, cls).setUpClass()
-        cls.selenium.set_window_size(cls.width, cls.height)
+        # cls.selenium.set_window_size(cls.width, cls.height)

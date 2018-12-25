@@ -39,6 +39,11 @@ class SQLConnectionTableAdmin(tables.Table):
         if table_id:
             self.attrs['id'] = table_id
 
+    def render_db_password(self, record):
+        if record['db_password']:
+            return 'Yes'
+        return 'No'
+
     class Meta(object):
         model = SQLConnection
 

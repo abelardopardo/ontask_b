@@ -2,7 +2,9 @@
 from __future__ import unicode_literals
 
 from django import template
+from django.conf import settings
 from django.utils.html import format_html
+from django.contrib.staticfiles.templatetags.staticfiles import static
 
 import ontask
 
@@ -14,25 +16,25 @@ jquery = """<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>"""
 # Bootstrap
 #
 bootstrap_css = \
-    """<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    """<link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">"""
 
 bootstrap_js = \
-    """<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/
+    """<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="//stackpath.bootstrapcdn.com/
 bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>"""
 
 #
 # Datatables
 #
 datatables_bootstrap_css = \
-    """<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/fc-3.2.5/rr-1.2.4/sc-1.5.0/datatables.min.css"/>"""
+    """<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/r-2.2.2/fc-3.2.5/rr-1.2.4/sc-1.5.0/datatables.min.css"/>"""
 
 datatables_jquery_js = \
     """<script src="//cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>"""
 
 datatables_bootstrap_js = \
-    """<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/fc-3.2.5/rr-1.2.4/sc-1.5.0/datatables.min.js"></script>"""
+    """<script type="text/javascript" src="//cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/r-2.2.2/fc-3.2.5/rr-1.2.4/sc-1.5.0/datatables.min.js"></script>"""
 
 #
 # Datetimepicker
@@ -41,8 +43,10 @@ datetimepicker_css = \
     """<link href="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">"""
 
 datetimepicker_js = \
-    """<script src="//cdn.bootcss.com/moment.js/2.17.1/moment-with-locales.min.js"></script>
-       <script src="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>"""
+    """<script src="{0}"></script>
+       <script src="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>""".format(
+        static('site/js/moment-with-locales.js')
+    )
 
 #
 # Auxiliary

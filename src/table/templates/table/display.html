@@ -42,7 +42,6 @@
           ajax: {
             url: "{{ ajax_url }}",
             type: 'POST',
-            deferRender: true,
           },
           columns: {{ columns_datatables|safe }},
           "order": [[1, 'asc']],
@@ -59,14 +58,16 @@
             url: getLanguage()
           },
           colReorder: {
-            fixedColumnsLeft: 1
+            fixedColumnsLeft: 1,
+            realtime: false,
           },
-          fixedColumns: false,
           scrollX: true,
-          rowReorder: false,
+          scrollCollapse: true,
+          fixedColumns: true,
+          deferRender: true,
         });
         // Process the column reorder events
-        table_data.on("column-reorder", column_reorder);
+        //table_data.on("column-reorder", column_reorder);
       });
     }
     {% with js_var='qbuilder_options' allow_empty='true' empty_rules=True %}
@@ -160,148 +161,22 @@
       </div>
     </div>
     {% if columns %}
-      <div class="row justify-content-center">
+      <div class="container justify-content-center">
         <table class="table table-hover table-bordered"
                id="table-data" data-url="{% url 'workflow:column_move' %}" style="width: 100%;">
           <thead>
-            {% comment %}
-            <tr>
-              <th class="text-center" rowspan="2">Operations</th>
-              {% for col in columns %}
-                <th class="text-center">
-                  <div class="dropdown btn-group">
-                    <button class="btn btn-outline-dark dropdown-toggle"
-                            type="button"
-                            data-toggle="dropdown">Ops
-                    </button>
-                    <ul class="dropdown-menu">
-                      {% if not col.is_key %}
-                        <li>
-                          <a href="{% url 'table:stat_column' col.id %}"
-                             class="btn btn-outline-dark align-middle spin"
-                             data-toggle="tooltip"
-                             title="{% trans 'Stats and visualizations about this column' %}">
-                            <span class="fa fa-bar-chart"></span> {% trans 'Statistics' %}
-                          </a>
-                        </li>
-                      {% endif %}
-                      <li>
-                        <button type="button"
-                                class="btn btn-outline-dark js-column-edit"
-                                data-url="{% url 'workflow:column_edit' col.id %}"
-                                data-toggle="tooltip"
-                                title="{% trans 'Edit column name, description, etc' %}">
-                          <span class="fa fa-pencil"></span> {% trans 'Edit' %}
-                        </button>
-                      </li>
-                      <li>
-                        <button type="button"
-                                class="btn btn-outline-dark js-column-clone align-middle"
-                                data-url="{% url 'workflow:column_clone' col.id %}"
-                                data-toggle="tooltip"
-                                title="{% trans 'Create an exact duplicate of this column' %}">
-                            <span class="fa fa fa-clone"></span> {% trans 'Clone' %}
-                        </button>
-                      </li>
-                      <li>
-                        <button type="button"
-                                class="btn btn-outline-danger js-column-delete"
-                                data-url="{% url 'workflow:column_delete' col.id %}"
-                                data-toggle="tooltip"
-                                title="{% trans 'Delete column' %}">
-                          <span class="fa fa-trash"></span> {% trans 'Delete' %}
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                </th>
-              {% endfor %}
-            </tr>
-            {% endcomment %}
             <tr>
               <th></th>
               {% for col in columns %}
                 <th class="text-center">
-                  {% comment %}
-                  <div class="row">
-                    {% if col.position != 1 %}
-                        <a href="{% url 'workflow:column_move_top' col.id %}"
-                           class="column-move-top">
-                          <span class="fa fa-step-backward"></span></a>
-                        <a href="{% url 'workflow:column_move_prev' col.id %}"
-                           class="column-move-prev">
-                          <span class="fa fa-chevron-left"></span></a>
-                    {% endif %}
-                  </div>
-                  {% endcomment %}
                   {{ col.name }}
-                  {% comment %}
-                  <div class="dropdown btn-group">
-                    <button class="btn btn-outline-dark dropdown-toggle"
-                            type="button"
-                            data-toggle="dropdown">{{ col.name }}
-                      <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                      {% if not col.is_key %}
-                        <li>
-                          <a href="{% url 'table:stat_column' col.id %}"
-                             class="btn btn-outline-dark align-middle spin"
-                             data-toggle="tooltip"
-                             title="{% trans 'Stats and visualizations about this column' %}">
-                            <span class="fa fa-bar-chart"></span> {% trans 'Statistics' %}
-                          </a>
-                        </li>
-                      {% endif %}
-                      <li>
-                        <button type="button"
-                                class="btn btn-outline-dark js-column-edit"
-                                data-url="{% url 'workflow:column_edit' col.id %}"
-                                data-toggle="tooltip"
-                                title="{% trans 'Edit column name, description, etc' %}">
-                          <span class="fa fa-pencil"></span> {% trans 'Edit' %}
-                        </button>
-                      </li>
-                      <li>
-                        <button type="button"
-                                class="btn btn-outline-dark js-column-clone align-middle"
-                                data-url="{% url 'workflow:column_clone' col.id %}"
-                                data-toggle="tooltip"
-                                title="{% trans 'Create an exact duplicate of this column' %}">
-                            <span class="fa fa fa-clone"></span> {% trans 'Clone' %}
-                        </button>
-                      </li>
-                      <li>
-                        <button type="button"
-                                class="btn btn-outline-danger js-column-delete"
-                                data-url="{% url 'workflow:column_delete' col.id %}"
-                                data-toggle="tooltip"
-                                title="{% trans 'Delete column' %}">
-                          <span class="fa fa-trash"></span> {% trans 'Delete' %}
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                  {% endcomment %}
-                  {% comment %}
-                  <div class="row">
-                    {% if col.position != col.workflow.ncols %}
-                      <a href="{% url 'workflow:column_move_next' col.id %}"
-                         class="column-move-next">
-                        <span class="fa fa-chevron-right"></span></a>
-                      <a href="{% url 'workflow:column_move_bottom' col.id %}"
-                         class="column-move-bottom">
-                        <span class="fa fa-step-forward"></span></a>
-                    {% endif %}
-                  </div>
-                  {% endcomment %}
                 </th>
               {% endfor %}
             </tr>
           </thead>
         </table>
       </div>
-      <p class="text-center">{% trans 'You may drag-and-drop a column header to change its positin in the table' %}</p>
+      <p class="text-center">{% trans 'You may drag-and-drop a column header to change its position in the table' %}</p>
     {% endif %}
   </div>
   {% include 'modal.html' %}
