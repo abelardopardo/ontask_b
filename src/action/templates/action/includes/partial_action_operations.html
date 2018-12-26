@@ -5,8 +5,7 @@
      data-toggle="tooltip"
      title="{% if action_tval == 'survey' or action_tval == 'todo_list' %}{% trans 'Enter data manually' %}{% elif action_tval == 'personalized_json' %}{% trans 'Send personalised JSONs' %}{% else %}{% trans 'Send personalised text' %}{% endif %}"><span class="fa fa-rocket"></span> {% trans 'Run' %}</a>
   <div class="dropdown">
-    <button class="btn btn-light btn-sm" type="button"
-            id="actionMoreOperations"
+    <button class="btn btn-light btn-sm" type="button" id="actionMoreOperations"
             data-toggle="dropdown"><span class="fa fa-ellipsis-h"></span></button>
     <div class="dropdown-menu" aria-labelledby="actionMoreOperations">
       {% if action_tval != 'personalized_canvas_email' and action_val != 'personalized_json' %}
@@ -18,8 +17,7 @@
                   title="{% trans 'URL for learners to access the personalised text' %}"
                 {% else %}
                   title="{% trans 'URL for learners to introduce data' %}"
-                {% endif %}
-                >
+                {% endif %}>
           <span class="fa fa-link"></span> {% trans 'URL' %}
           {% if serve_enabled %}<span class="badge badge-dark">On</span>
           {% else %}<span class="badge badge-light">Off</span>{% endif %}

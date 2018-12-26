@@ -25,19 +25,10 @@ from workflow.ops import get_workflow
 
 class SQLConnectionTableAdmin(tables.Table):
     operations = OperationsColumn(
-        verbose_name=_('Operations'),
+        verbose_name='',
         template_file='dataops/includes/partial_sqlconn_operations.html',
         template_context=lambda record: {'id': record['id']}
     )
-
-    def __init__(self, data, *args, **kwargs):
-        table_id = kwargs.pop('id')
-
-        super(SQLConnectionTableAdmin, self).__init__(data, *args, **kwargs)
-
-        # If an ID was given, pass it on to the table attrs.
-        if table_id:
-            self.attrs['id'] = table_id
 
     def render_db_password(self, record):
         if record['db_password']:
@@ -46,37 +37,25 @@ class SQLConnectionTableAdmin(tables.Table):
 
     class Meta(object):
         model = SQLConnection
-
         fields = ('name', 'description_txt', 'conn_type', 'conn_driver',
                   'db_user', 'db_password', 'db_host', 'db_port', 'db_name',
                   'db_table')
-
         sequence = ('name', 'description_txt', 'conn_type', 'conn_driver',
                     'db_user', 'db_password', 'db_host', 'db_port', 'db_name',
                     'db_table', 'operations')
-
         attrs = {
             'class': 'table table-hover table-bordered',
             'style': 'min-width: 505px; width: 100%;',
-            'id': 'sqlconn-table'
+            'id': 'sqlconn-admin-table'
         }
 
 
 class SQLConnectionTableRun(tables.Table):
     operations = OperationsColumn(
-        verbose_name=_('Operations'),
+        verbose_name='',
         template_file='dataops/includes/partial_sqlconn_runop.html',
         template_context=lambda record: {'id': record['id']}
     )
-
-    def __init__(self, data, *args, **kwargs):
-        table_id = kwargs.pop('id')
-
-        super(SQLConnectionTableRun, self).__init__(data, *args, **kwargs)
-
-        # If an ID was given, pass it on to the table attrs.
-        if table_id:
-            self.attrs['id'] = table_id
 
     class Meta(object):
         model = SQLConnection
@@ -88,7 +67,6 @@ class SQLConnectionTableRun(tables.Table):
         sequence = ('name', 'description_txt', 'conn_type', 'conn_driver',
                     'db_user', 'db_password', 'db_host', 'db_port', 'db_name',
                     'db_table', 'operations')
-
         attrs = {
             'class': 'table table-hover table-bordered',
             'style': 'min-width: 505px; width: 100%;',
@@ -190,9 +168,7 @@ def sqlconnection_index(request):
 
     return render(request,
                   'dataops/sql_connections.html',
-                  {'table': SQLConnectionTableRun(conns,
-                                                  id='sqlconn-table',
-                                                  orderable=False)})
+                  {'table': SQLConnectionTableRun(conns, orderable=False)})
 
 
 @user_passes_test(is_admin)

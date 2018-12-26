@@ -1,26 +1,20 @@
 {% load i18n %}
-<div class="dropright btn-group">
+<div class="dropright">
   <button class="btn btn-light btn-sm" type="button"
           id="tableRowOperations"
           data-toggle="dropdown"><span class="fa fa-ellipsis-h"></span></button>
   <div class="dropdown-menu" aria-labelledby="tableRowOperations">
-    <a href="{{ stat_url }}"
-       class="spin dropdown-item"
-          data-toggle="tooltip"
-          title="{% trans 'Statistics about this column' %}">
-      <span class="fa fa-bar-chart"></span> {% trans 'Statistics' %}
-    </a>
-    <a class="spin dropdown-item" href="{{ edit_url }}"
-       data-toggle="tooltip"
-       title="{% trans 'Edit the data in this row' %}">
-      <span class="fa fa-pencil"></span> {% trans 'Edit' %}
-    </a>
-    <button type="button"
-            class="dropdown-item js-row-delete"
-            data-url="{% url 'table:row_delete' %}{{ delete_key }}"
-            data-toggle="tooltip"
-            title="{% trans 'Delete this row' %}">
-      <span class="fa fa-trash"></span> {% trans 'Delete' %}
-    </button>
+    <div class="dropdown-item">
+      <a class="btn btn-light spin" href="{{ edit_url }}" style="width: unset;">
+        <span class="fa fa-pencil"></span> {% trans 'Edit' %}
+      </a>
+      <a href="{{ stat_url }}" class="btn btn-light spin" style="width: unset;">
+        <span class="fa fa-bar-chart"></span> {% trans 'Statistics' %}
+      </a>
+      <a class="btn btn-light js-row-delete" href="#" style="width: unset;"
+         data-url="{% url 'table:row_delete' %}{{ delete_key }}">
+        <span class="fa fa-trash"></span> {% trans 'Delete' %}
+      </a>
+    </div>
   </div>
 </div>

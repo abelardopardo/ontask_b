@@ -1323,7 +1323,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
 
 class ScreenTests(OnTaskLiveTestCase):
-    viewport_width = 1024
+    viewport_width = 1440
     viewport_height = 1800
     prefix = ''
     workflow_name = 'BIOL1011'

@@ -11,7 +11,7 @@
 {% block container %}
 <div class="container">
   <h1 class="text-center">{% trans 'Step 2: Select Columns' %}</h1>
-  <div class="row justify-content-center">
+  <div class="container justify-content-center">
     <form method="POST" action="">
       {% csrf_token %}
       {% include 'dataops/includes/upload_buttons.html' %}

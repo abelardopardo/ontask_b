@@ -15,16 +15,16 @@
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
-    if (document.getElementById("sqlconn-table") != null) {
+    if (document.getElementById("sqlconn-admin-table") != null) {
       // Required for DataTables
       $(document).ready(function() {
-        $('#sqlconn-table').DataTable({
+        var sqlconn_admin_table = $('#sqlconn-admin-table').DataTable({
+          "search": {
+            "caseInsensitive": true,
+          },
           "stateSave": true,
           stateSaveParams: function (settings, data) {
             delete data.search;
-          },
-          "search": {
-            "caseInsensitive": true,
           },
           "order": [[0, "asc"]],
           "language": {
@@ -38,16 +38,20 @@
           ],
           colReorder: false,
           rowReorder: false,
+          responsive: true,
+        });
+        sqlconn_admin_table.columns().iterator('column', function (ctx, idx) {
+          $(sqlconn_admin_table.column(idx).header()).append('<span class="sort-icon"/>');
         });
       });
     }
   </script>
 {% endblock %}
 {% block container %}
-  <div class="container" id="sql-connections">
+  <div id="sql-connections" class="container">
     <h1 class="text-center">{% trans 'SQL Connections' %}</h1>
-    <div class="text-center">
-      <button type="button" class="btn btn-outline-dark js-create-workflow"
+    <div class="text-center mb-3">
+      <button type="button" class="btn btn-outline-dark js-sqlconn-add"
               data-url="{% url 'dataops:sqlconn_add' %}"
               data-toggle="tooltip"
               title="{% trans 'Add a new SQL database connection' %}">
@@ -55,7 +59,7 @@
           {% trans 'New SQL connection' %}
       </button>
     </div>
-    <div class="container justify-content-center">
+    <div class="justify-content-center">
       {% render_table table %}
     </div>
   </div>

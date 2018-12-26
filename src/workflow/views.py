@@ -20,6 +20,7 @@ from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
 
 import action
+from action.views_action import ActionTable
 from dataops import ops, pandas_db
 from dataops.models import SQLConnection
 from dataops.sqlcon_views import SQLConnectionTableAdmin
@@ -231,7 +232,6 @@ def sql_connections(request):
                           'db_name',
                           'db_table'
                       ),
-                      id='sqlconn-table',
                       orderable=False)
                   })
 

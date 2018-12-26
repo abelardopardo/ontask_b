@@ -17,22 +17,29 @@
     if (document.getElementById("sqlconn-table") != null) {
       // Required for DataTables
       $(document).ready(function() {
-        $('#sqlconn-table').DataTable({
+        var sqlconn_table = $('#sqlconn-table').DataTable({
+          "search": {
+            "caseInsensitive": true,
+          },
           "stateSave": true,
           stateSaveParams: function (settings, data) {
             delete data.search;
           },
-          "order": [],
+          "order": [[0, "asc"]],
           "language": {
               "emptyTable": "{% trans 'No sql connections available.' %}",
               "url": getLanguage()
           },
           "columnDefs": [
+              {"className": "dt-center", "targets": [2, 4, 5, 6, 7, 8, 9, 10]},
               {"orderable": false, "targets": 10},
               {"searchable": false, "targets": 10},
           ],
           colReorder: false,
-          rowReorder: false,
+          scrollX: true,
+        });
+        sqlconn_table.columns().iterator('column', function (ctx, idx) {
+          $(sqlconn_table.column(idx).header()).append('<span class="sort-icon"/>');
         });
       });
     }
@@ -42,11 +49,11 @@
   <div class="container" id="sql-connections">
     <h1 class="text-center">{% trans 'SQL Connections' %}</h1>
     {% if table.data|length %}
-      <div class="container justify-content-center" id="sqlconn-area">
+      <div class="justify-content-center" id="sqlconn-area">
         {% render_table table %}
       </div>
     {% else %}
-    <p class="text-center">{% blocktrans %}In this page you will find the available SQL connections to
+      <p class="text-center">{% blocktrans %}In this page you will find the available SQL connections to
     access data stored in external relational databases. The connections can only
       be created by the system administrator.{% endblocktrans %}</p>
     {% endif %}

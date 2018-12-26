@@ -1,5 +1,5 @@
 {% load i18n %}
-<div class="btn-group dropdown">
+<div class="dropdown">
   <button class="btn btn-light btn-sm" type="button" id="sqlConnOperations"
           data-toggle="dropdown"><span class="fa fa-ellipsis-h"></span></button>
   <div class="dropdown-menu" aria-labelledby="sqlConnOperations">
@@ -10,7 +10,7 @@
       <span class="fa fa-pencil"></span> {% trans 'Edit' %}
     </button>
     <button type="button"
-            class="dropdown-item js-sqlconn-clone align-middle"
+            class="dropdown-item js-sqlconn-clone"
             data-url="{% url 'dataops:sqlconn_clone' id %}"
             data-toggle="tooltip"
             title="{% trans 'Create an exact duplicate of this connection' %}">
