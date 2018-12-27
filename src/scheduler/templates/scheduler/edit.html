@@ -6,30 +6,28 @@
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Schedule Action Execution' %}{% endblock %}
 {% block extrahead %}
-  <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
-  <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+  {% ontask_datetimepicker_css %}
+  {% ontask_datetimepicker_js %}
 {% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
 {% endblock scripts %}
 {% block container %}
-<div align="center" class="container" id="email-schedule-send">
-  <h1 class="page-header">{% trans 'Schedule Action Execution' %}</h1>
-  <div class="container">
-    <p>{% blocktrans with n=now %}Time now is {{ n }}{% endblocktrans %}</p>
-    <p class="lead">{% blocktrans %}Action: {{ action.name }}{% endblocktrans %}</p>
-    <form action="" method="post">
-      {% csrf_token %}
-      {{ form|crispy }}
-      <div style="margin: 1ex 0 1ex 0;">
-        <a type="button" class="btn btn-default"
-           href="{% url 'scheduler:index' %}" style="margin-right:2ex;"> {% trans 'Cancel' %}
-        </a>
-        <button type="Submit" name="Submit" value="Send"
-                style="margin-right:2ex;"
-                class="btn btn-primary">{% trans 'Next' %}</button>
-      </div>
-    </form>
+  <div class="container" id="email-schedule-send">
+    <h1 class="text-center">{% trans 'Schedule Action Execution' %}</h1>
+    <p class="text-center">{% blocktrans with n=now %}Time now is {{ n }}{% endblocktrans %}</p>
+    <p class="lead text-center">{{ action.name }}</p>
+    <div class="row justify-content-center">
+      <form action="" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="text-center">
+          <a type="button" class="btn btn-outline-dark"
+             href="{% url 'scheduler:index' %}"> {% trans 'Cancel' %}</a>
+          <button type="Submit" name="Submit" value="Send"
+                  class="btn btn-outline-primary spin">{% trans 'Next' %}</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 {% endblock container %}

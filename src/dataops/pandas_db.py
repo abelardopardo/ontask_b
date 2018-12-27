@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import next
+from builtins import zip
 import logging
 import os.path
 import subprocess
 from collections import OrderedDict
-from itertools import izip
 
 import numpy as np
 import pandas as pd
@@ -408,7 +409,6 @@ def df_column_types_rename(table_name):
     :param table_name: Primary key of the workflow containing this data frame (table) 
     :return: List of data type strings translated to the proper values
     """
-    column_types = get_table_column_types(table_name)
 
     # result = [table_name[x].dtype.name for x in list(table_name.columns)]
     # for tname, ntname in pandas_datatype_names.items():
@@ -416,6 +416,23 @@ def df_column_types_rename(table_name):
 
     return [sql_datatype_names[x] for __, x in
             get_table_column_types(table_name)]
+
+
+def db_column_rename(pk, old_name, new_name):
+    """
+
+    :param pk: Primary key of the workflow to use
+    :param old_name: Old name of the column
+    :param new_name: New name of the column
+    :return: Nothing. Change reflected in the database table
+    """
+    cursor = connection.cursor()
+    query = """ALTER TABLE "{0}" RENAME "{1}" TO "{2}" """.format(
+        create_table_name(pk),
+        old_name,
+        new_name
+    )
+    cursor.execute(query)
 
 
 def df_drop_column(pk, column_name):
@@ -434,7 +451,7 @@ def df_drop_column(pk, column_name):
     cursor.execute(query)
 
 
-def get_subframe(pk, cond_filter, column_names=None):
+def get_subframe(pk, cond_filter, column_names):
     """
     Execute a select query to extract a subset of the dataframe and turn the
      resulting query set into a data frame.
@@ -453,7 +470,7 @@ def get_subframe(pk, cond_filter, column_names=None):
     return result
 
 
-def get_table_cursor(pk, cond_filter, column_names=None):
+def get_table_cursor(pk, cond_filter, column_names):
     """
     Execute a select query in the database with an optional filter obtained
     from the jquery QueryBuilder.
@@ -465,14 +482,11 @@ def get_table_cursor(pk, cond_filter, column_names=None):
     """
 
     # Create the query
-    if column_names:
-        safe_column_names = [fix_pctg_in_name(x) for x in column_names]
-        query = 'SELECT "{0}" from "{1}"'.format(
-            '", "'.join(safe_column_names),
-            create_table_name(pk)
-        )
-    else:
-        query = 'SELECT * from "{0}"'.format(create_table_name(pk))
+    safe_column_names = [fix_pctg_in_name(x) for x in column_names]
+    query = 'SELECT "{0}" from "{1}"'.format(
+        '", "'.join(safe_column_names),
+        create_table_name(pk)
+    )
 
     # See if the action has a filter or not
     fields = []
@@ -489,7 +503,7 @@ def get_table_cursor(pk, cond_filter, column_names=None):
     return cursor
 
 
-def get_table_data(pk, cond_filter, column_names=None):
+def get_table_data(pk, cond_filter, column_names):
     # Get first the cursor
     cursor = get_table_cursor(pk, cond_filter, column_names)
 
@@ -497,7 +511,7 @@ def get_table_data(pk, cond_filter, column_names=None):
     return cursor.fetchall()
 
 
-def execute_select_on_table(pk, fields, values, column_names=None):
+def execute_select_on_table(pk, fields, values, column_names):
     """
     Execute a select query in the database with an optional filter obtained
     from the jquery QueryBuilder.
@@ -510,12 +524,9 @@ def execute_select_on_table(pk, fields, values, column_names=None):
     """
 
     # Create the query
-    if column_names:
-        safe_column_names = ['"' + fix_pctg_in_name(x) + '"'
-                             for x in column_names]
-        query = 'SELECT {0}'.format(','.join(safe_column_names))
-    else:
-        query = 'SELECT *'
+    safe_column_names = ['"' + fix_pctg_in_name(x) + '"'
+                         for x in column_names]
+    query = 'SELECT {0}'.format(','.join(safe_column_names))
 
     # Add the table
     query += ' FROM "{0}"'.format(create_table_name(pk))
@@ -535,17 +546,6 @@ def execute_select_on_table(pk, fields, values, column_names=None):
     return cursor.fetchall()
 
 
-def get_table_queryset(tablename):
-    query = 'SELECT * from "{0}";'.format(tablename)
-    try:
-        cursor = connection.cursor()
-        cursor.execute(query)
-    except Exception:
-        return None
-
-    return cursor.fetchall()
-
-
 def query_to_dicts(query_string, *query_args):
     """
     Run a simple query and produce a generator that returns the results as
@@ -558,7 +558,7 @@ def query_to_dicts(query_string, *query_args):
         row = cursor.fetchone()
         if row is None:
             break
-        row_dict = OrderedDict(izip(col_names, row))
+        row_dict = OrderedDict(list(zip(col_names, row)))
         yield row_dict
     return
 
@@ -621,7 +621,7 @@ def increase_row_integer(pk, set_field, where_field, where_value):
     connection.commit()
 
 
-def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names=None):
+def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names):
     """
     Select the set of elements after filtering and with the key=value pair
 
@@ -635,17 +635,12 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names=None):
     """
 
     # Create the query
-    if column_names:
-        safe_column_names = [fix_pctg_in_name(x) for x in column_names]
-        query = 'SELECT "{0}"'.format('", "'.join(safe_column_names))
-    else:
-        query = 'SELECT *'
-
-    # Add the table
-    query += ' FROM "{0}"'.format(create_table_name(workflow.id))
-
-    # Create the second part of the query setting key=value
-    query += ' WHERE ("{0}" = %s)'.format(fix_pctg_in_name(kv_pair[0]))
+    safe_column_names = [fix_pctg_in_name(x) for x in column_names]
+    query = 'SELECT "{0}" FROM "{1}" WHERE ("{2}" = %s)'.format(
+        '", "'.join(safe_column_names),
+        create_table_name(workflow.id),
+        fix_pctg_in_name(kv_pair[0])
+    )
     fields = [kv_pair[1]]
 
     # See if the action has a filter or not
@@ -670,7 +665,7 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names=None):
     qs = qs[0]
 
     # ZIP the values to create a dictionary
-    return OrderedDict(zip(workflow.get_column_names(), qs))
+    return OrderedDict(list(zip(workflow.get_column_names(), qs)))
 
 
 def get_column_stats_from_df(df_column):
@@ -744,14 +739,9 @@ def get_filter_query(table_name, column_names, filter_exp):
     """
 
     # Create the query
-    if column_names:
-        safe_column_names = [fix_pctg_in_name(x) for x in column_names]
-        query = 'SELECT "{0}"'.format('", "'.join(safe_column_names))
-    else:
-        query = 'SELECT *'
-
-    # Add the table
-    query += ' FROM "{0}"'.format(table_name)
+    safe_column_names = [fix_pctg_in_name(x) for x in column_names]
+    query = 'SELECT "{0}" FROM "{1}"'.format('", "'.join(safe_column_names),
+                                             table_name)
 
     # Calculate the first suffix to add to the query
     filter_txt = ''
@@ -801,14 +791,9 @@ def search_table_rows(workflow_id,
     """
 
     # Create the query
-    if column_names:
-        safe_column_names = [fix_pctg_in_name(x) for x in column_names]
-        query = 'SELECT "{0}"'.format('", "'.join(safe_column_names))
-    else:
-        query = 'SELECT *'
-
-    # Add the table
-    query += ' FROM "{0}"'.format(create_table_name(workflow_id))
+    safe_column_names = [fix_pctg_in_name(x) for x in column_names]
+    query = 'SELECT "{0}" FROM "{1}"'.format('", "'.join(safe_column_names),
+                                             create_table_name(workflow_id))
 
     # Calculate the first suffix to add to the query
     filter_txt = ''
@@ -861,7 +846,7 @@ def search_table_rows(workflow_id,
 
     # Execute the query
     cursor = connection.cursor()
-    cursor.execute(query, fields)
+    result = cursor.execute(query, fields)
 
     # Get the data
     return cursor.fetchall()
@@ -943,32 +928,33 @@ def check_wf_df(workflow):
         df_col_names = []
 
     # Check 1: Number of rows and columns
-    if workflow.nrows != dfnrows:
-        return False
-    if workflow.ncols != dfncols:
-        return False
+    assert workflow.nrows == dfnrows, 'Inconsistent number of rows'
+
+    assert workflow.ncols == dfncols, 'Inconsistent number of columns'
 
     # Identical sets of columns
     wf_cols = workflow.columns.all()
-    if [x.name for x in wf_cols] != df_col_names:
-        return False
+    assert set([x.name for x in wf_cols]) == set(df_col_names), \
+        'Inconsistent set of columns'
 
     # Identical data types
-    for n1, n2 in zip(wf_cols, df_col_names):
-        df_dt = pandas_datatype_names[df[n2].dtype.name]
-        if n1.data_type == 'boolean' and df_dt == 'string':
+    # for n1, n2 in zip(wf_cols, df_col_names):
+    for col in wf_cols:
+        df_dt = pandas_datatype_names[df[col.name].dtype.name]
+        if col.data_type == 'boolean' and df_dt == 'string':
             # This is the case of a column with Boolean and Nulls
             continue
 
-        if n1.data_type != df_dt:
-            return False
+        assert col.data_type == df_dt, 'Inconsistent data type {0}'.format(
+            col.name
+        )
 
     # Verify that the columns marked as unique are preserved
     for col in workflow.columns.filter(is_key=True):
-        if not is_unique_column(df[col.name]):
-            return False
-    return True
+        assert is_unique_column(df[col.name]), \
+            'Column {0} should be unique.'.format(col.name)
 
+    return True
 
 def is_unique_column(df_column):
     """
@@ -986,6 +972,7 @@ def are_unique_columns(data_frame):
     :return: Array of Booleans stating of a column has unique values
     """
     return [is_unique_column(data_frame[x]) for x in list(data_frame.columns)]
+
 
 def has_unique_column(data_frame):
     """

@@ -4,30 +4,30 @@
 <form method="post" 
   {% if add %}
     action="{% url 'dataops:sqlconn_add' %}"
-    class="js-sqlconn-add-form">
+    class="js-sqlconn-add-form"
   {% else %}
     action="{% url 'dataops:sqlconn_edit' id %}"
-    class="js-sqlconn-edit-form">
-  {% endif %}
+    class="js-sqlconn-edit-form"
+  {% endif %}>
   {% csrf_token %}
   <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
   {% if add %}
     <h4 class="modal-title">{% trans 'Add SQL connection' %}</h4>
   {% else %}
     <h4 class="modal-title">{% blocktrans with n=cname %}Edit SQL connection <strong>{{ n }}</strong>{% endblocktrans %}</h4>
   {% endif %}
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   <div class="modal-body">
     {{ form|crispy }}
   </div>
-  <div class="modal-footer" style="text-align: center;">
-    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" data-dismiss="modal">{% trans 'Cancel' %}
     </button>
-    <button type="submit" class="btn btn-primary">
-       <span class="glyphicon glyphicon-ok"></span> {% if add %}{% trans 'Add connection' %}{% else %}{% trans 'Update' %}{% endif %}
+    <button type="submit" class="btn btn-outline-primary">
+       <span class="fa fa-check"></span> {% if add %}{% trans 'Add connection' %}{% else %}{% trans 'Update' %}{% endif %}
     </button>
   </div>
 </form>

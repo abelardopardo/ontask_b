@@ -1,21 +1,41 @@
-@import "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min
- .css";
-
 html, body{
     height:100%;		/* For full height images */
 }
 
 body {
-  padding-top:40px; /* To jump over the fixed nav-bar */
+  padding-top:37px; /* To jump over the fixed nav-bar */
+}
+
+.wflow-buttons,
+.cond-buttons {
+  border-top:1px solid rgba(0,0,0,.125);
+  background-color: #f8f9fa;
+}
+
+.ontask-card {
+  cursor: pointer;
+  min-width: 250px;
+  max-width: 250px;
+  margin-bottom: 15px;
+}
+
+.ontask-ccard {
+  min-width: 200px;
+  max-width: 200px;
+}
+
+.ontask-card .card-body,
+.ontask-ccard .card-body {
+  min-height: 100px;
+}
+
+#preview-variables {
+  background-color: rgba(0,0,0,.125);
 }
 
 .starter-template {
   padding: 40px 15px;
   text-align: center;
-}
-
-.page-header {
-    margin: 1ex 0 1ex 0;
 }
 
 .footer {
@@ -24,32 +44,23 @@ body {
 }
 
 .alert {
-    /* margin-top: 55px; */
-    margin-bottom: 0;
+  /* margin-top: 55px; */
+  margin-bottom: 0;
 }
 
 body>.navbar-transparent {
-    /* background-color: transparent; */
-    border-color: transparent;
-    box-shadow: none;
+  /* background-color: transparent; */
+  border-color: transparent;
+  box-shadow: none;
 }
 
 .navbar-transparent .navbar-nav > .active > a {
-    background-color: transparent;
-}
-
-.navbar-form {
-    margin-right: 0;
-}
-
-.navbar-nav>li>a.profile-menu {
-    padding-top: 10px;
-    padding-bottom: 10px;
+  background-color: transparent;
 }
 
 .navbar-nav>.btn{
-    margin-top:10px;
-    margin-right: 1.7em;
+  margin-top:10px;
+  margin-right: 1.7em;
 }
 
 .navbar-nav > li > a {
@@ -57,26 +68,19 @@ body>.navbar-transparent {
 }
 
 .navbar-brand {
-    padding:0px;
+    padding: 0px;
+    margin: 0px;
 }
 
 .navbar-brand > img {
     float: left;
 }
 
-.navbar-right {
-    margin-right: 0;
-}
-
 .navbar {
-    min-height: 40px;
+    padding: 0;
 }
 
-.navbar-brand {
-    height: 40px;
-}
-
-.navbar-toggle {
+.navbar-toggler {
     margin-top: 2px;
     margin-bottom: 2px;
 }
@@ -209,22 +213,10 @@ body>.navbar-transparent {
   z-index: 2;
 }
 
-/* For the Action Edit */
-div.conditions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-div.condition-btn {
-    padding: 0.5ex;
-}
 /* Tweaks for JQuery QueryBuilder
-
-/* Needed to fix rendering of jQuery QueryBuilder in Popup */
-dt div.btn-group,
-dt div.btn-group-vertical {
-    display: flow-root;
+/* Needed for QueryBuilder to expand width 100% */
+#builder.form-inline {
+  display: unset;
 }
 /* Clause var op value*/
 .query-builder .rules-group-container {
@@ -236,17 +228,7 @@ dt div.btn-group-vertical {
     color:red;
 }
 
-/* Sortable columns in db */
-.orderable {
-    background: url("orderable.png") no-repeat center right;
-}
-.asc {
-    background: url("asc.png") no-repeat center right;
-}
-.desc {
-    background: url("desc.png") no-repeat center right;
-}
-
+th.dt-body-center,
 td.dt-body-center {
     text-align: center;
     }
@@ -259,7 +241,8 @@ table td,
 #column-table td,
 #log-table td,
 #scheduler-table td,
-#sqlconn-table td,
+#sqlconn-instructor-table td,
+#sqlconn-admin-table td,
 #table-data td,
 #transform-diagnostics-table td,
 #transform-table td,
@@ -268,14 +251,8 @@ table td,
     vertical-align: middle;
 }
 
-/* Reducing padding in all column rows */
-.table > thead > tr > th,
-.table > tbody > tr > th,
-.table > tfoot > tr > th,
-.table > thead > tr > td,
-.table > tbody > tr > td,
-.table > tfoot > tr > td {
-    padding: 4px;
+.table {
+  overflow-y: visible !important;
 }
 
 /* Needed to show summer note aligned to the left */
@@ -292,16 +269,13 @@ mark {
     background-color: #dff0d8;
 }
 
-/* button {
-    margin-top: 0.5ex;
-    margin-bottom: 0.5ex;
-} */
 div.group-conditions > label:not([class*=active]) {
     opacity: 0.3;
 }
-/* a.btn {
-    margin-top: 0.5ex;
-} */
+
+#base_footer {
+  margin-top: 1ex;
+}
 
 #base_footer .div1 {
     float: left;
@@ -312,7 +286,7 @@ div.group-conditions > label:not([class*=active]) {
     text-align:right;
 }
 
-th.dt-center, td.dt-center { text-align: center; }
+.dt-center { text-align: center; }
 
 table#attribute-table {
     margin-top: 20px;
@@ -331,22 +305,6 @@ table#attribute-table {
 
 div.sol-container {
     display: table;
-}
-
-.modal-body p,
-.modal-body div {
-    word-wrap: break-word;
-}
-
-.modal-content {
-    text-align: center;
-}
-
-a.column-move-prev > span,
-a.column-move-next> span,
-a.column-move-top> span,
-a.column-move-bottom> span {
-    font-size:75%;
 }
 
 /* Fix placement of SOL inside modal */
@@ -378,15 +336,6 @@ a.column-move-bottom> span {
 td.operations a,
 td.operations button {
     margin-top: 0.5ex;
-}
-
-.numberCircle {
-    width: 30px;
-    line-height: 25px;
-    border-radius: 50%;
-    text-align: center;
-    font-size: 16px;
-    border: 2px solid black;
 }
 
 .js-action-showurl > span.badge {

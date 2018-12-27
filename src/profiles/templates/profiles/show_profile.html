@@ -24,11 +24,11 @@
         <li class="list-group-item text-muted">{% trans 'Profile' as profile %}</li>
         <li class="list-group-item text-right"><span class="pull-left"><strong>{% trans 'Email:' %}</strong></span> {{ show_user.email|default:"missing" }}
 	  {% if show_user.profile.email_verified %}
-	    <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"
+	    <span class="fa fa-check-circle" aria-hidden="true"
             title="{% trans 'This email address has been verified' %}"></span>
 	    <span class="sr-only">Verified</span>
 	  {% else %}
-	    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"
+	    <span class="fa fa-warning-sign" aria-hidden="true"
             title="{% trans 'This email address is not verified' %}"></span>
 	    <span class="sr-only">Not Verified</span>
 	  {% endif %}
@@ -42,7 +42,7 @@
         <div class="panel-heading">{{ profile }}
 	  {% if show_user.profile.slug %}
 	    <a href="{% url 'profiles:show' show_user.profile.slug %}">
-	    	<span class="glyphicon glyphicon-link" aria-hidden="true"
+	    	<span class="fa fa-link" aria-hidden="true"
               title="{% trans 'Profile permalink' %}"></span>
 	    	<span class="sr-only">Permalink</span></a> {{ show_user.profile.get_absolute_url }}
 	  {% else %}
@@ -61,6 +61,14 @@
               {% else %}{% trans 'Create' %}{% endif %}
           </a>
         </div>
+        {% for token in tokens %}
+            <div class="panel-default panel-body">
+                <strong>{% trans 'Auth token for' %}</strong> {{ token.instance_name }}
+              <a href="{% url 'profiles:delete_token' token.id %}"
+                 class="btn btn-sm btn-info">{% trans 'Delete' %}
+              </a>
+            </div>
+        {% endfor %}
     </div>
   </div>
 </div>

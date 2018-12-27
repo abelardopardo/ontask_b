@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+
 
 from collections import Counter
+from io import TextIOWrapper
 
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
@@ -74,12 +75,13 @@ def csvupload1(request):
     # Process CSV file using pandas read_csv
     try:
         data_frame = pandas_db.load_df_from_csvfile(
-            request.FILES['file'],
+            TextIOWrapper(request.FILES['file'].file,
+                          encoding=request.encoding),
             form.cleaned_data['skip_lines_at_top'],
             form.cleaned_data['skip_lines_at_bottom'])
     except Exception as e:
         form.add_error('file',
-                       _('File could not be processed ({0})').format(e.message))
+                       _('File could not be processed ({0})').format(e))
         return render(request,
                       'dataops/upload1.html',
                       {'form': form,

@@ -1,4 +1,4 @@
-from __future__ import unicode_literals, print_function
+
 
 from authtools import forms as authtoolsforms
 from crispy_forms.helper import FormHelper
@@ -22,8 +22,8 @@ class LoginForm(AuthenticationForm):
             # HTML('<a href="{}">Forgot Password?</a>'.format(
             #    reverse("accounts:password-reset"))),
             # Field('remember_me'),
-            Submit('sign_in', _(u"Log in"),
-                   css_class="btn btn-lg btn-primary btn-block"),
+            Submit('sign_in', _("Log in"),
+                   css_class="btn btn-lg btn-outline-primary btn-block"),
         )
 
 

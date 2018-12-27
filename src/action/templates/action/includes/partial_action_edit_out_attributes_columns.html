@@ -1,22 +1,23 @@
 {% load i18n %}
-<div id="attribute-names" style="margin-bottom:1ex;">
-  <div style="display: table-cell; padding-right: 1ex;">{% trans 'Insert:' %}</div>
+<div id="attribute-names" class="text-center mb-3">
+  <select id="select-column-name">
+    <option value="">- {% trans 'Insert Column Value' %} -</option>
+    {% for colname in column_names %}
+      <option value="{{ colname }}">{{ colname }}</option>
+    {% endfor %}
+  </select>
+  <select id="select-condition-name">
+    <option value="">- {% trans 'Use condition in highlighted text' %} -</option>
+    {% for cond_name in conditions %}
+      <option value="{{ cond_name }}">{{ cond_name }}</option>
+    {% endfor %}
+  </select>
   {% if attribute_names %}
-    <div style="display: table-cell; padding-right: 1ex;">
-        <select id="select-attribute-name">
-          <option value="">- {% trans 'Attribute' %} -</option>
-          {% for attr in attribute_names %}
-            <option value="{{ attr }}">{{ attr }}</option>
-          {% endfor %}
-        </select>
-    </div>
+    <select id="select-attribute-name">
+      <option value="">- {% trans 'Insert Attribute' %} -</option>
+      {% for attr in attribute_names %}
+        <option value="{{ attr }}">{{ attr }}</option>
+      {% endfor %}
+    </select>
   {% endif %}
-  <div style="display: table-cell; padding-right: 1ex;">
-      <select id="select-column-name">
-        <option value="">- {% trans 'Column Value' %} -</option>
-        {% for colname in column_names %}
-          <option value="{{ colname }}">{{ colname }}</option>
-        {% endfor %}
-      </select>
-  </div>
 </div>

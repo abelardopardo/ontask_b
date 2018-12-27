@@ -3844,7 +3844,7 @@ msgid "Remain Connected"
 msgstr "Mantener la sesión"
 
 #: templates/critical_error.html:4
-msgid "Ontask Error"
+msgid "OnTask Error"
 msgstr "Error OnTask"
 
 #: templates/critical_error.html:8

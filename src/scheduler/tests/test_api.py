@@ -8,7 +8,7 @@ import test
 from workflow.models import Workflow
 
 
-class ScheduleApiCreate(test.OntaskApiTestCase):
+class ScheduleApiCreate(test.OnTaskApiTestCase):
     fixtures = ['simple_workflow']
 
     def setUp(self):

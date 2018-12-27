@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import range
 import random
 
 from django.contrib import messages
@@ -9,9 +10,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import JsonResponse
+from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
 
 from action.models import Condition, Action
 from dataops import ops, formula_evaluation, pandas_db
@@ -64,8 +67,6 @@ def partition(list_in, n):
 
 @user_passes_test(is_instructor)
 def column_add(request, pk=None):
-    # TODO: Encapsulate operations in a function so that is available for the
-    #  API
     # Data to send as JSON response
     data = {}
 
@@ -187,8 +188,6 @@ def column_add(request, pk=None):
 
 @user_passes_test(is_instructor)
 def formula_column_add(request):
-    # TODO: Encapsulate operations in a function so that is available for the
-    #  API
     # Data to send as JSON response, in principle, assume form is not valid
     data = {'form_is_valid': False}
 
@@ -281,9 +280,7 @@ def formula_column_add(request):
         # Notify in the form
         form.add_error(
             None,
-            _('Unable to perform the requested operation ({0})').format(
-                e.message
-            )
+            _('Unable to perform the requested operation ({0})').format(e)
         )
         data['html_form'] = render_to_string(
             'workflow/includes/partial_formula_column_add.html',
@@ -326,8 +323,6 @@ def random_column_add(request):
     :param request:
     :return:
     """
-    # TODO: Encapsulate operations in a function so that is available for the
-    #  API
     # Data to send as JSON response, in principle, assume form is not valid
     data = {'form_is_valid': False}
 
@@ -465,8 +460,6 @@ def random_column_add(request):
 
 @user_passes_test(is_instructor)
 def column_edit(request, pk):
-    # TODO: Encapsulate operations in a function so that is available for the
-    #  API
     # Data to send as JSON response
     data = {}
 
@@ -529,17 +522,10 @@ def column_edit(request, pk):
         # no commit as we need to propagate the info to the df
         column = form.save(commit=False)
 
-        # Get the data frame from the form (should be
-        # loaded)
-        df = form.data_frame
-
         # If there is a new name, rename the data frame columns
         if 'name' in form.changed_data:
-            # Rename the column in the data frame
-            df = ops.rename_df_column(df,
-                                      workflow,
-                                      old_name,
-                                      column.name)
+            pandas_db.db_column_rename(workflow.pk, old_name, column.name)
+            ops.rename_df_column(workflow, old_name, column.name)
 
         if 'position' in form.changed_data:
             # Update the positions of the appropriate columns
@@ -553,9 +539,6 @@ def column_edit(request, pk):
 
         # Save the workflow
         workflow.save()
-
-        # And save the DF in the DB
-        ops.store_dataframe_in_db(df, workflow.id)
 
     data['form_is_valid'] = True
     data['html_redirect'] = ''
@@ -736,61 +719,47 @@ def column_clone(request, pk):
 
 
 @user_passes_test(is_instructor)
-def column_move_prev(request, pk):
+@csrf_exempt
+def column_move(request):
+    """
+    Function to process an AJAX request to move a column by providing two
+    column names. There are two possible cases (columns are assumed to be in
+    order a, b, c, d)
+    1) a -> d: Result b, c, d, a
+    2) d -> a: Result d, a, b, c
+
+    The changes are reflected in the DB
+
+    :param request:
+    :return: AJAX response, empty.
     """
 
-    :param request: HTTP request to move a column to its previous position
-    :param pk: Column ID
-    :return:
-    """
-
-    # Get the workflow element
+    # Check if the workflow is locked
     workflow = get_workflow(request)
     if not workflow:
+        # No workflow present
         return JsonResponse({'html_redirect': reverse('workflow:index')})
 
-    # Get the column
-    try:
-        column = Column.objects.get(pk=pk, workflow=workflow)
-    except ObjectDoesNotExist:
-        return JsonResponse({
-            'html_redirect': reverse('workflow:detail',
-                                     kwargs={'pk': workflow.id})
-        })
+    if workflow.nrows == 0:
+        # Workflow is empty
+        return JsonResponse({})
 
-    # The workflow and column objects have been correctly obtained
-    if column.position > 1:
-        reposition_column_and_update_df(workflow, column, column.position - 1)
+    from_name = request.POST.get('from_name')
+    to_name = request.POST.get('to_name')
+    if not from_name or not to_name:
+        # Incorrect parameter
+        return JsonResponse({})
 
-    return JsonResponse({})
+    from_col = workflow.columns.filter(name=from_name).first()
+    to_col = workflow.columns.filter(name=to_name).first()
 
+    if not from_col or not to_col:
+        # Incorrect condition name
+        return JsonResponse({})
 
-@user_passes_test(is_instructor)
-def column_move_next(request, pk):
-    """
-
-    :param request: HTTP request to move a column to its next position
-    :param pk: Column ID
-    :return:
-    """
-
-    # Get the workflow element
-    workflow = get_workflow(request)
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('workflow:index')})
-
-    # Get the column
-    try:
-        column = Column.objects.get(pk=pk, workflow=workflow)
-    except ObjectDoesNotExist:
-        return JsonResponse({
-            'html_redirect': reverse('workflow:detail',
-                                     kwargs={'pk': workflow.id})
-        })
-
-    # The workflow and column objects have been correctly obtained
-    if column.position < workflow.ncols:
-        reposition_column_and_update_df(workflow, column, column.position + 1)
+    # Two correct condition names, perform the swap
+    # workflow.reposition_columns(from_col, to_col.position)
+    reposition_column_and_update_df(workflow, from_col, to_col.position)
 
     return JsonResponse({})
 
@@ -801,28 +770,25 @@ def column_move_top(request, pk):
 
     :param request: HTTP request to move a column to the top of the list
     :param pk: Column ID
-    :return:
+    :return: Once done, redirects to the column page
     """
 
     # Get the workflow element
     workflow = get_workflow(request)
     if not workflow:
-        return JsonResponse({'html_redirect': reverse('workflow:index')})
+        return redirect('workflow:index')
 
     # Get the column
     try:
-        column = Column.objects.get(pk=pk, workflow=workflow)
+        column = workflow.columns.get(pk=pk)
     except ObjectDoesNotExist:
-        return JsonResponse({
-            'html_redirect': reverse('workflow:detail',
-                                     kwargs={'pk': workflow.id})
-        })
+        return redirect('workflow:detail', pk=workflow.id)
 
     # The workflow and column objects have been correctly obtained
     if column.position > 1:
         reposition_column_and_update_df(workflow, column, 1)
 
-    return JsonResponse({})
+    return redirect('workflow:detail', pk=workflow.id)
 
 
 @user_passes_test(is_instructor)
@@ -831,28 +797,25 @@ def column_move_bottom(request, pk):
 
     :param request: HTTP request to move a column to end of the list
     :param pk: Column ID
-    :return:
+    :return: Once done, redirects to the column page
     """
 
     # Get the workflow element
     workflow = get_workflow(request)
     if not workflow:
-        return JsonResponse({'html_redirect': reverse('workflow:index')})
+        return redirect('workflow:index')
 
     # Get the column
     try:
-        column = Column.objects.get(pk=pk, workflow=workflow)
+        column = workflow.columns.get(pk=pk)
     except ObjectDoesNotExist:
-        return JsonResponse({
-            'html_redirect': reverse('workflow:detail',
-                                     kwargs={'pk': workflow.id})
-        })
+        return redirect('workflow:detail', pk=workflow.id)
 
     # The workflow and column objects have been correctly obtained
     if column.position < workflow.ncols:
         reposition_column_and_update_df(workflow, column, workflow.ncols)
 
-    return JsonResponse({})
+    return redirect('workflow:detail', pk=workflow.id)
 
 
 @user_passes_test(is_instructor)

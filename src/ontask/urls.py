@@ -1,27 +1,29 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+
 
 from django.conf import settings
-from django.conf.urls import include, url
+from django.conf.urls import include
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sites.models import Site
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext
 from django.views.decorators.cache import cache_page
 from django.views.i18n import JavaScriptCatalog
 from rest_framework.documentation import include_docs_urls
+from django.urls import path
 
 import accounts.urls
 import action.urls
 import dataops.urls
 import logs.urls
+import ontask_oauth.urls
 import profiles.urls
 import scheduler.urls
 import table.urls
 import workflow.urls
 from dataops import pandas_db
-from templatetags.ontask_tags import ontask_version
+from ontask.templatetags.ontask_tags import ontask_version
 from . import views
 import workflow.views
 
@@ -31,64 +33,69 @@ these objects.""")
 
 urlpatterns = [
     # Home Page!
-    url(r'^$', views.home, name='home'),
+    path('', views.home, name='home'),
 
-    url(r'^lti_entry$', views.lti_entry, name='lti_entry'),
+    path('lti_entry', views.lti_entry, name='lti_entry'),
 
-    url(r'^not_authorized$', views.home, name='not_authorized'),
+    path('not_authorized', views.home, name='not_authorized'),
 
-    url(r'^about/$', views.AboutPage.as_view(), name='about'),
+    path('about', views.AboutPage.as_view(), name='about'),
 
-    url(r'^under_construction/$',
-        views.under_construction,
-        name='under_construction'),
+    path('under_construction',
+         views.under_construction,
+         name='under_construction'),
 
-    url(r'^users/', include(profiles.urls, namespace='profiles')),
+    path('users', include(profiles.urls, namespace='profiles')),
 
-    url(r'^admin/', include(admin.site.urls)),
+    path('admin', admin.site.urls),
 
-    url(r'^trck/', views.trck, name='trck'),
+    path('trck', views.trck, name='trck'),
 
-    url(r'^keep_alive/', views.keep_alive, name='keep_alive'),
+    path('keep_alive', views.keep_alive, name='keep_alive'),
 
-    url(r'^', include(accounts.urls, namespace='accounts')),
+    path('', include(accounts.urls, namespace='accounts')),
 
-    url(r'^workflow/', include(workflow.urls, namespace='workflow')),
+    path('workflow/', include(workflow.urls, namespace='workflow')),
 
-    url(r'^dataops/', include(dataops.urls, namespace='dataops')),
+    path('dataops/', include(dataops.urls, namespace='dataops')),
 
-    url(r'^action/', include(action.urls, namespace='action')),
+    path('action/', include(action.urls, namespace='action')),
 
-    url(r'^table/', include(table.urls, namespace='table')),
+    path('table/', include(table.urls, namespace='table')),
 
-    url(r'^scheduler/', include(scheduler.urls, namespace='scheduler')),
+    path('scheduler/', include(scheduler.urls, namespace='scheduler')),
 
-    url(r'^logs/', include(logs.urls, namespace='logs')),
+    path('logs/', include(logs.urls, namespace='logs')),
 
-    url(r'^summernote/', include('django_summernote.urls')),
+    path('summernote/', include('django_summernote.urls')),
 
-    url(r'^tobedone/', views.ToBeDone.as_view(), name='tobedone'),
+    path('ontask_oauth/', include(ontask_oauth.urls, namespace='ontask_oauth')),
+
+    path('tobedone', views.ToBeDone.as_view(), name='tobedone'),
 
     # API AUTH and DOC
-    url(r'^api-auth/',
-        include('rest_framework.urls', namespace='rest_framework')),
+    path('api-auth/',
+         include('rest_framework.urls', namespace='rest_framework')),
 
-    url(r'^apidoc/',
-        include_docs_urls(
-            title='OnTask API',
-            description=api_description,
-            public=False),
-        ),
+    path('apidoc/',
+         include_docs_urls(
+             title='OnTask API',
+             description=api_description,
+             public=False),
+         ),
 ]
 
 # User-uploaded files like profile pics need to be served in development
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns(
-    url(r'^jsi18n/$',
-        cache_page(86400, key_prefix='js18n-%s' % ontask_version())(
-            JavaScriptCatalog.as_view()),
-        name='javascript-catalog'),
+    path('jsi18n',
+         cache_page(
+             86400,
+             key_prefix='js18n-%s' % ontask_version())(
+             JavaScriptCatalog.as_view()),
+         name='javascript-catalog'
+         ),
 )
 
 # Include django debug toolbar if DEBUG is ons
@@ -96,7 +103,7 @@ if settings.DEBUG:
     import debug_toolbar
 
     urlpatterns += [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
+        path(r'__debug__/', include(debug_toolbar.urls)),
     ]
 
 handler400 = 'ontask.views.ontask_handler400'

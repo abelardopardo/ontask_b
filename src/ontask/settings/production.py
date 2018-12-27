@@ -7,13 +7,12 @@ from .base import *  # NOQA
 
 # For security and performance reasons, DEBUG is turned off
 DEBUG = False
-TEMPLATES[0]['OPTIONS'].update({'debug': False})
 
 # Must mention ALLOWED_HOSTS in production!
 ALLOWED_HOSTS = [os.environ['DOMAIN_NAME']]
 
 # Additional middleware introduced by debug toolbar
-MIDDLEWARE_CLASSES += ('django.middleware.security.SecurityMiddleware',)
+MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
 
 #
 # Security features
@@ -31,6 +30,12 @@ SECURE_HSTS_PRELOAD = True
 # Folder to scan for plugins
 #
 DATAOPS_PLUGIN_DIRECTORY = os.path.join(PROJECT_PATH, 'plugins')
+
+#
+# Execute the JSON transfers for the required actions
+#
+EXECUTE_ACTION_JSON_TRANSFER = env.bool('EXECUTE_ACTION_JSON_TRANSFER',
+                                        default=True)
 
 # Cache the templates in memory for speed-up
 loaders = [
@@ -64,6 +69,12 @@ LOGGING = {
         },
     },
     'handlers': {
+        'django_log_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': join(LOGFILE_ROOT, 'django.log'),
+            'formatter': 'verbose'
+        },
         'proj_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',

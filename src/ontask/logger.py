@@ -13,9 +13,10 @@
 # keywords meant for the Logger (eg. ectra).
 #
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
 
+
+from builtins import object
 import logging
 
 
@@ -28,7 +29,7 @@ class NewStyleLogMessage(object):
     def __str__(self):
         args = (i() if callable(i) else i for i in self.args)
         kwargs = dict((k, v() if callable(v) else v)
-                      for k, v in self.kwargs.items())
+                      for k, v in list(self.kwargs.items()))
 
         return self.message.format(*args, **kwargs)
 

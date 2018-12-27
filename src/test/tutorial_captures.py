@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+
 
 import os
 
@@ -66,7 +66,7 @@ class TutorialCaptures(ScreenTests):
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
                                              'Step 2: Select Columns')
         )
 
@@ -247,7 +247,7 @@ class TutorialCaptures(ScreenTests):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'page-header'),
+                (By.XPATH, "//body/div/h1"),
                 'Step 4: Review and confirm')
         )
 
@@ -458,7 +458,7 @@ class TutorialCaptures(ScreenTests):
         self.selenium.find_element_by_id('id_bcc_email').send_keys(
             'coursecoordinator@bogus.com'
         )
-        self.selenium.find_element_by_id('id_confirm_emails').click()
+        self.selenium.find_element_by_id('id_confirm_items').click()
 
         # Screen shot of the body
         self.body_ss('action_personalized_text_email.png')
@@ -480,7 +480,7 @@ class TutorialCaptures(ScreenTests):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'page-header'),
+                (By.XPATH, "//body/div/h1"),
                 'Select items to exclude from action')
         )
 

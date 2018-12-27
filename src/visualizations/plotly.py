@@ -2,8 +2,9 @@
 """
 Implementation of visualizations using the Plotly JS libarry
 """
-from __future__ import unicode_literals, print_function
 
+
+from builtins import str
 import json
 
 from dataops import pandas_db
@@ -67,7 +68,7 @@ class PlotlyBoxPlot(PlotlyHandler):
 
         self.format_dict['id'] = 'boxplot-id'
         # Transfer the keys to the formatting dictionary
-        for key, value in kwargs.pop('context', {}).items():
+        for key, value in list(kwargs.pop('context', {}).items()):
             self.format_dict[key] = value
 
         data = []
@@ -136,7 +137,7 @@ class PlotlyColumnHistogram(PlotlyHandler):
                             'yaxis': {'title': 'Count'}})
 
         # Transfer the keys to the formatting dictionary
-        for key, value in kwargs.pop('context', {}).items():
+        for key, value in list(kwargs.pop('context', {}).items()):
             self.format_dict[key] = value
 
         data = []
@@ -231,7 +232,7 @@ class PlotlyGauge(PlotlyHandler):
 
     def __init__(self, data, *args, **kwargs):
         # Transfer the keys to the formatting dictionary
-        for key, value in kwargs.pop('context', {}).items():
+        for key, value in list(kwargs.pop('context', {}).items()):
             self.format_dict[key] = value
 
         super(PlotlyGauge, self).__init__(data, *args, **kwargs)

@@ -2,8 +2,9 @@
 """
 This model is to store process to execute in the platform at a certain time.
 """
-from __future__ import unicode_literals
 
+
+from builtins import object
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
@@ -112,7 +113,7 @@ class ScheduledAction(models.Model):
     def item_column_name(self):
         return self.item_column.name if self.item_column else None
 
-    class Meta:
+    class Meta(object):
         """
         Define the criteria of uniqueness with name and action
         """

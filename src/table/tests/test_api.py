@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+
 
 import os
 
@@ -15,7 +15,7 @@ from workflow.models import Workflow, Column
 from workflow.ops import workflow_delete_column
 
 
-class TableApiBase(test.OntaskApiTestCase):
+class TableApiBase(test.OnTaskApiTestCase):
     fixtures = ['simple_table']
     filename = os.path.join(
         settings.BASE_DIR(),

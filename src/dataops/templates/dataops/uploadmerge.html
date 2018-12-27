@@ -6,11 +6,10 @@
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Data Upload/Merge' %}{% endblock %}
 {% block container %}
-<div align="center" class="container">
-  <h1 class="page-header">{% trans 'Data upload/merge operations' %}</h1>
-
-  <div align="center" class="container">
-    <table class="table-condensed table-bordered" id="dataops-table">
+<div class="container">
+  <h1 class="text-center">{% trans 'Data upload/merge operations' %}</h1>
+  <div class="container justify-content-center">
+    <table class="table table-hover table-bordered" id="dataops-table">
       <thead>
         <tr>
           <th class="text-center">{% trans 'Operation' %}</th>
@@ -19,9 +18,9 @@
       </thead>
       <tbody>
         <tr>
-          <td class="text-center">
-            <a href="{% url 'dataops:csvupload1' %}" class="btn btn-primary">
-              <span class="glyphicon glyphicon-plus"></span>
+          <td class="text-center" style="vertical-align: middle;">
+            <a href="{% url 'dataops:csvupload1' %}" class="btn btn-outline-primary">
+              <span class="fa fa-plus"></span>
               {% trans 'CSV Upload/Merge' %}
             </a>
           </td>
@@ -37,9 +36,9 @@
           </td>
         </tr>
         <tr>
-          <td class="text-center">
-            <a href="{% url 'dataops:excelupload1' %}" class="btn btn-primary">
-              <span class="glyphicon glyphicon-plus"></span>
+          <td class="text-center" style="vertical-align: middle;">
+            <a href="{% url 'dataops:excelupload1' %}" class="btn btn-outline-primary">
+              <span class="fa fa-plus"></span>
               {% trans 'Excel Upload/Merge' %}
             </a>
           </td>
@@ -58,10 +57,30 @@
           </td>
         </tr>
         <tr>
-          <td class="text-center">
-            <a href="{% url 'dataops:sqlconns' %}" class="btn btn-primary">
-              <span class="glyphicon glyphicon-plus"></span>
-              {% trans 'SQL Connections' %}
+          <td class="text-center" style="vertical-align: middle;">
+            <a href="{% url 'dataops:googlesheetupload1' %}" class="btn btn-outline-primary">
+              <span class="fa fa-plus"></span>
+              {% trans 'Google Sheet Upload/Merge' %}
+            </a>
+          </td>
+          <td style="vertical-align:middle">
+            {% trans 'Upload data from a Google Sheet file.' %}<br/>
+            {% blocktrans %}
+            Given the URL pointing to a publicly available Google Sheet upload or merge its content.
+            {% endblocktrans %}
+            <br/>
+            {% blocktrans %}
+            If the workflow table has data, the operation will ask you
+            to match a key column in your table with a key column in the sheet
+            so that the rows can be matched.
+            {% endblocktrans %}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center" style="vertical-align: middle;">
+            <a href="{% url 'dataops:sqlconns_instructor_index' %}" class="btn btn-outline-primary">
+              <span class="fa fa-plus"></span>
+              {% trans 'SQL Connection' %}
             </a>
           </td>
           <td style="vertical-align:middle">

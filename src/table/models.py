@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import object
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -76,7 +77,7 @@ class View(models.Model):
 
         return self.nrows
 
-    class Meta:
+    class Meta(object):
         """
         Define the criteria of uniqueness with name in workflow and order by
         name

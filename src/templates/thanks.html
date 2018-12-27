@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
-{% block title %}Ontask{% endblock %}
+{% block title %}OnTask{% endblock %}
 {% block container %}
 <div class="container text-center" style="margin-top:50px;">
-  <h1 class="page-header text-center">{% trans 'Thanks' %}</h1>
-  <a class="btn btn-primary spin" style="margin-right:2ex;" href="{{ request.path }}">
-    <span class="glyphicon glyphicon-triangle-left"></span> {% trans 'Back' %}
+  <h1 class="text-center">{% trans 'Thanks' %}</h1>
+  <a class="btn btn-outline-primary spin" style="margin-right:2ex;" href="{{ request.path }}">
+    <span class="fa fa-triangle-left"></span> {% trans 'Back' %}
   </a>
 </div>
 {% endblock container %}

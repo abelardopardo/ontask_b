@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load ontask_tags %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Canvas Email action' %}{% endblock %}
+{% block scripts %}
+  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
+{% endblock scripts %}
+{% block container %}
+  <div class="container" id="canvas-email-action-request-data">
+    <h1 class="text-center">{% blocktrans with n=action.name %}Send Canvas Email for
+      action "{{ n }}"{% endblocktrans %}</h1>
+    {% if num_msgs > 0 %}
+      <p class="text-center">{% blocktrans with n=num_msgs%}{{ n }} Emails will be sent.{% endblocktrans %}</p>
+      <div class="row justify-content-center">
+        <form action="" method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="text-center">
+            <a type="button" class="btn btn-outline-dark"
+               href="{% url 'action:index' %}"> {% trans 'Cancel' %}</a>
+            <button type="button" class="btn btn-info js-canvas-email-preview"
+                    data-url="{% url 'action:preview' action.id 1 %}">
+              <span class="fa fa fa-eye"></span> {% trans 'Preview' %}</button>
+            <button type="Submit" name="Submit" value="Submit"
+                    class="btn btn-outline-primary btn-space">
+              <span class="fa fa-triangle-right"></span> {% trans 'Next' %}</button>
+          </div>
+        </form>
+      </div>
+    {% else %}
+      <p class="text-center">{% trans 'The action does not apply to any data.' %}
+        <a href="{% url 'action:edit' action.id %}">{% trans 'Review the action filter' %}</a></p>
+    {% endif %}
+  </div>
+  {% include 'modal.html' %}
+{% endblock container %}

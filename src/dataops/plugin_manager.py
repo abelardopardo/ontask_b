@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import zip
+from builtins import map
 import os
 import time
 
@@ -114,7 +116,7 @@ def verify_plugin_elements(plugin_instance):
 
             # Translate all values to the right type
             result[check_idx] = _('Incorrect list of allowed value')
-            __ = map(t_func, p_allowed)
+            __ = list(map(t_func, p_allowed))
 
             # And translate the initial value to the right type
             result[check_idx] = _('Incorrect initial value')
@@ -194,7 +196,7 @@ def verify_plugin(plugin_instance):
           'and a help string to be shown when requesting this parameter.')
     ]
 
-    return zip(verify_plugin_elements(plugin_instance), checks)
+    return list(zip(verify_plugin_elements(plugin_instance), checks))
 
 
 def load_plugin(foldername):
@@ -222,9 +224,9 @@ def load_plugin(foldername):
         if not all(x == 'Ok' for x, _ in tests):
             return (None, tests)
     except AttributeError as e:
-        return (None, [(e.message, _('Class instantiation'))])
+        return (None, [(e, _('Class instantiation'))])
     except Exception as e:
-        return (None, [(e.message, _('Instance creation'))])
+        return (None, [(e, _('Instance creation'))])
 
     return (plugin_instance, tests)
 
@@ -342,8 +344,7 @@ def run_plugin(plugin_instance, df, merge_key, params):
     try:
         new_df = plugin_instance.run(df, merge_key, parameters=params)
     except Exception as e:
-        msg = e.message
-        return None, msg
+        return None, str(e)
 
     # If plugin does not return a data frame, flag as error
     if not isinstance(new_df, pd.DataFrame):

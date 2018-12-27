@@ -1,3 +1,11 @@
+var dtp_opts = {
+    format:'YYYY-MM-DD HH:mm',
+    stepping: 1,
+    toolbarPlacement: 'top',
+    showTodayButton: true,
+    showClear: true,
+    showClose: true,
+    sideBySide: true};
 var set_qbuilder = function (element_id, qbuilder_options) {
     var id_formula_value = $(element_id).val();
     if (id_formula_value != "null" && id_formula_value != "{}") {
@@ -35,7 +43,6 @@ var get_id_content = function() {
   return value;
 };
 var loadForm = function () {
-    $("#modal-item .modal-content").html("");
     var btn = $(this);
     if ($(this).is("[class*='disabled']")) {
       return;
@@ -64,6 +71,9 @@ var loadForm = function () {
           return;
         }
         $("#modal-item .modal-content").html(data.html_form);
+        if ($('#modal-item .ontask-datetimepicker').length != 0) {
+          $('#modal-item .ontask-datetimepicker').datetimepicker(dtp_opts);
+        }
         if (document.getElementById("id_formula") != null) {
           set_qbuilder('#id_formula', qbuilder_options);
         }
@@ -124,6 +134,11 @@ var saveForm = function () {
     });
     return false;
 };
+var setDateTimePickers = function() {
+  if ($('.ontask-datetimepicker').length != 0) {
+    $('.ontask-datetimepicker').datetimepicker(dtp_opts);
+  }
+};
 $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip({
     trigger: "hover",
@@ -140,3 +155,9 @@ $(window).bind("load", function() {
 $(':input').on('invalid', function(e){
   $('#div-spinner').hide();
 });
+$('#modal-item').on('hide.bs.modal', function (e) {
+  $("#modal-item .modal-content").html("");
+  if (typeof qbuilder_options != 'undefined') {
+    delete qbuilder_options['rules'];
+  }
+})

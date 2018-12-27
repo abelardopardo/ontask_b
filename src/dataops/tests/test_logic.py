@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
-import StringIO
+
+import io
 import datetime
 import os
 
@@ -16,7 +16,7 @@ from dataops.pandas_db import get_filter_query, load_from_db
 from workflow.models import Workflow
 
 
-class DataopsMatrixManipulation(test.OntaskTestCase):
+class DataopsMatrixManipulation(test.OnTaskTestCase):
     fixtures = ['test_merge']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -76,12 +76,12 @@ class DataopsMatrixManipulation(test.OntaskTestCase):
             df_dst = load_from_db(self.workflow.id)
         else:
             df_dst = pandas_db.load_df_from_csvfile(
-                StringIO.StringIO(self.csv1),
+                io.StringIO(self.csv1),
                 0,
                 0
             )
 
-        df_src = pandas_db.load_df_from_csvfile(StringIO.StringIO(self.csv2),
+        df_src = pandas_db.load_df_from_csvfile(io.StringIO(self.csv2),
                                                 0,
                                                 0)
 
@@ -95,7 +95,7 @@ class DataopsMatrixManipulation(test.OntaskTestCase):
     def test_df_equivalent_after_sql(self):
 
         # Parse the CSV
-        df_source = pandas_db.load_df_from_csvfile(StringIO.StringIO(self.csv1),
+        df_source = pandas_db.load_df_from_csvfile(io.StringIO(self.csv1),
                                                    0,
                                                    0)
 
@@ -130,20 +130,25 @@ class DataopsMatrixManipulation(test.OntaskTestCase):
         self.assertEquals(result, None)
 
 
-class FormulaEvaluation(test.OntaskTestCase):
+class FormulaEvaluation(test.OnTaskTestCase):
     skel = {
-        u'condition': u'AND',
-        u'not': False,
-        u'rules': [{
-            u'field': u'variable',
-            u'id': u'variable',
-            u'input': u'{0}',  # Number/Text/
-            u'operator': u'{1}',  # Operator
-            u'type': u'{2}',  # Data type: integer, double, text, ...
-            u'value': u'{3}'}],  # The constant
-        u'valid': True
+        'condition': 'AND',
+        'not': False,
+        'rules': [{
+            'field': 'variable',
+            'id': 'variable',
+            'input': '{0}',  # Number/Text/
+            'operator': '{1}',  # Operator
+            'type': '{2}',  # Data type: integer, double, text, ...
+            'value': '{3}'}],  # The constant
+        'valid': True
     }
     test_table = 'TEST_TABLE'
+    test_columns = ['v_integer',
+                    'v_double',
+                    'v_boolean',
+                    'v_string',
+                    'v_datetime']
 
     def set_skel(self, input_value, op_value, type_value, value, vname=None):
         if vname:
@@ -162,43 +167,54 @@ class FormulaEvaluation(test.OntaskTestCase):
                    value1,
                    value2,
                    value3):
-        self.assertTrue(
-            evaluate_top_node(
+
+        result1 = evaluate_top_node(
+            self.set_skel(input_value,
+                          op_value.format(''),
+                          type_value,
+                          value1),
+            {'variable': value2}
+        )
+        result2 = evaluate_top_node(
+            self.set_skel(input_value,
+                          op_value.format(''),
+                          type_value,
+                          value1),
+            {'variable': value3}
+        )
+
+        if op_value.endswith('null') or value2 is not None:
+            # If value2 is not None, expect regular results
+            self.assertTrue(result1)
+        else:
+            # If value2 is None, then all formulas should be false
+            self.assertFalse(result1)
+
+        self.assertFalse(result2)
+
+        if op_value.find('{0}') != -1:
+            result1 = evaluate_top_node(
                 self.set_skel(input_value,
-                              op_value.format(''),
+                              op_value.format('not_'),
                               type_value,
                               value1),
                 {'variable': value2}
             )
-        )
-        self.assertFalse(
-            evaluate_top_node(
+            result2 = evaluate_top_node(
                 self.set_skel(input_value,
-                              op_value.format(''),
+                              op_value.format('not_'),
                               type_value,
                               value1),
                 {'variable': value3}
             )
-        )
-        if op_value.find('{0}') != -1:
-            self.assertFalse(
-                evaluate_top_node(
-                    self.set_skel(input_value,
-                                  op_value.format('not_'),
-                                  type_value,
-                                  value1),
-                    {'variable': value2}
-                )
-            )
-            self.assertTrue(
-                evaluate_top_node(
-                    self.set_skel(input_value,
-                                  op_value.format('not_'),
-                                  type_value,
-                                  value1),
-                    {'variable': value3}
-                )
-            )
+
+            self.assertFalse(result1)
+            if op_value.endswith('null') or value3 is not None:
+                # If value2 is not None, expect regular results
+                self.assertTrue(result2)
+            else:
+                # If value2 is None, then all formulas should be false
+                self.assertFalse(result2)
 
     def do_sql_operand(self,
                        input_value,
@@ -211,7 +227,9 @@ class FormulaEvaluation(test.OntaskTestCase):
             type_value,
             value, 'v_' + type_value
         )
-        query, fields = get_filter_query(self.test_table, None, self.skel)
+        query, fields = get_filter_query(self.test_table,
+                                         self.test_columns,
+                                         self.skel)
         result = pd.read_sql_query(query, pandas_db.engine, params=fields)
         self.assertEqual(len(result), 1)
 
@@ -220,16 +238,27 @@ class FormulaEvaluation(test.OntaskTestCase):
         # EQUAL
         #
         self.do_operand('number', '{0}equal', 'integer', '0', 0, 3)
+        self.do_operand('number', '{0}equal', 'integer', '0', 0, None)
         self.do_operand('number', '{0}equal', 'double', '0.3', 0.3, 3.2)
+        self.do_operand('number', '{0}equal', 'double', '0.3', 0.3, None)
         self.do_operand('text', '{0}equal', 'string', 'aaa', 'aaa', 'abb')
+        self.do_operand('text', '{0}equal', 'string', 'aaa', 'aaa', 'None')
         self.do_operand('text', '{0}equal', 'boolean', '1', True, False)
+        self.do_operand('text', '{0}equal', 'boolean', '1', None, None)
         self.do_operand('text', '{0}equal', 'boolean', '0', False, True)
+        self.do_operand('text', '{0}equal', 'boolean', '0', None, None)
         self.do_operand('text',
                         '{0}equal',
                         'datetime',
                         '2018-09-15T00:03:03',
                         datetime.datetime(2018, 9, 15, 0, 3, 3),
                         datetime.datetime(2018, 9, 15, 0, 3, 4))
+        self.do_operand('text',
+                        '{0}equal',
+                        'datetime',
+                        '2018-09-15T00:03:03',
+                        None,
+                        None)
 
         #
         # BEGINS WITH
@@ -237,6 +266,9 @@ class FormulaEvaluation(test.OntaskTestCase):
         self.do_operand('text',
                         '{0}begins_with',
                         'string', 'ab', 'abcd', 'acd')
+        self.do_operand('text',
+                        '{0}begins_with',
+                        'string', 'ab', None, None)
 
         #
         # CONTAINS
@@ -244,6 +276,9 @@ class FormulaEvaluation(test.OntaskTestCase):
         self.do_operand('text',
                         '{0}contains',
                         'string', 'bc', 'abcd', 'acd')
+        self.do_operand('text',
+                        '{0}contains',
+                        'string', 'bc', None, None)
 
         #
         # ENDS WITH
@@ -251,31 +286,45 @@ class FormulaEvaluation(test.OntaskTestCase):
         self.do_operand('text',
                         '{0}ends_with',
                         'string', 'cd', 'abcd', 'abc')
+        self.do_operand('text',
+                        '{0}ends_with',
+                        'string', 'cd', None, None)
 
         #
         # IS EMPTY
         #
-        self.do_operand('text', 'is_{0}empty', 'string', None, None, 'aaa')
+        self.do_operand('text', 'is_{0}empty', 'string', None, '', 'aaa')
+        self.do_operand('text', 'is_{0}empty', 'string', None, None, None)
 
         #
         # LESS
         #
         self.do_operand('number', 'less', 'integer', '1', 0, 3)
+        self.do_operand('number', 'less', 'integer', '1', None, None)
         self.do_operand('number', 'less', 'double', '1.2', 0.2, 3.2)
+        self.do_operand('number', 'less', 'double', '1.2', None, None)
         self.do_operand('text',
                         'less',
                         'datetime',
                         '2018-09-15T00:03:03',
                         datetime.datetime(2018, 9, 15, 0, 3, 2),
                         datetime.datetime(2018, 9, 15, 0, 3, 4))
+        self.do_operand('text',
+                        'less',
+                        'datetime',
+                        '2018-09-15T00:03:03',
+                        None,
+                        None)
 
         #
         # LESS OR EQUAL
         #
         self.do_operand('number', 'less_or_equal', 'integer', '1', 0, 3)
         self.do_operand('number', 'less_or_equal', 'integer', '1', 1, 3)
+        self.do_operand('number', 'less_or_equal', 'integer', '1', None, None)
         self.do_operand('number', 'less_or_equal', 'double', '1.2', 0.2, 3.2)
         self.do_operand('number', 'less_or_equal', 'double', '1.2', 1.2, 3.2)
+        self.do_operand('number', 'less_or_equal', 'double', '1.2', None, None)
         self.do_operand('text',
                         'less_or_equal',
                         'datetime',
@@ -288,26 +337,52 @@ class FormulaEvaluation(test.OntaskTestCase):
                         '2018-09-15T00:03:03',
                         datetime.datetime(2018, 9, 15, 0, 3, 3),
                         datetime.datetime(2018, 9, 15, 0, 3, 4))
+        self.do_operand('text',
+                        'less_or_equal',
+                        'datetime',
+                        '2018-09-15T00:03:03',
+                        None,
+                        None)
 
         #
         # GREATER
         #
-        self.do_operand('number', 'greater', 'integer', '1', 3, 0, )
+        self.do_operand('number', 'greater', 'integer', '1', 3, 0)
+        self.do_operand('number', 'greater', 'integer', '1', None, None)
         self.do_operand('number', 'greater', 'double', '1.2', 3.2, 0.2)
+        self.do_operand('number', 'greater', 'double', '1.2', None, None)
         self.do_operand('text',
                         'greater',
                         'datetime',
                         '2018-09-15T00:03:03',
                         datetime.datetime(2018, 9, 15, 0, 3, 4),
                         datetime.datetime(2018, 9, 15, 0, 3, 2))
+        self.do_operand('text',
+                        'greater',
+                        'datetime',
+                        '2018-09-15T00:03:03',
+                        None,
+                        None)
 
         #
         # GREATER OR EQUAL
         #
         self.do_operand('number', 'greater_or_equal', 'integer', '1', 3, 0)
         self.do_operand('number', 'greater_or_equal', 'integer', '1', 1, 0)
+        self.do_operand('number',
+                        'greater_or_equal',
+                        'integer',
+                        '1',
+                        None,
+                        None)
         self.do_operand('number', 'greater_or_equal', 'double', '1.2', 3.2, 0.2)
         self.do_operand('number', 'greater_or_equal', 'double', '1.2', 1.2, 0.2)
+        self.do_operand('number',
+                        'greater_or_equal',
+                        'double',
+                        '1.2',
+                        None,
+                        None)
         self.do_operand('text',
                         'greater_or_equal',
                         'datetime',
@@ -320,6 +395,12 @@ class FormulaEvaluation(test.OntaskTestCase):
                         '2018-09-15T00:03:03',
                         datetime.datetime(2018, 9, 15, 0, 3, 3),
                         datetime.datetime(2018, 9, 15, 0, 3, 2))
+        self.do_operand('text',
+                        'greater_or_equal',
+                        'datetime',
+                        '2018-09-15T00:03:03',
+                        None,
+                        None)
 
         #
         # In Between (needs special function)
@@ -327,17 +408,36 @@ class FormulaEvaluation(test.OntaskTestCase):
         self.do_operand('number', '{0}between', 'integer', ['1', '4'], 2, 5)
         self.do_operand('number',
                         '{0}between',
+                        'integer',
+                        ['1', '4'],
+                        None,
+                        None)
+        self.do_operand('number',
+                        '{0}between',
                         'double',
                         ['1.0',
                          '4.0'],
                         2.0,
                         5.0)
+        self.do_operand('number',
+                        '{0}between',
+                        'double',
+                        ['1.0',
+                         '4.0'],
+                        None,
+                        None)
         self.do_operand('text',
                         '{0}between',
                         'datetime',
                         ['2018-09-15T00:03:03', '2018-09-15T00:04:03'],
                         datetime.datetime(2018, 9, 15, 0, 3, 30),
                         datetime.datetime(2018, 9, 15, 0, 4, 30))
+        self.do_operand('text',
+                        '{0}between',
+                        'datetime',
+                        ['2018-09-15T00:03:03', '2018-09-15T00:04:03'],
+                        None,
+                        None)
 
         #
         # IS NULL
@@ -358,14 +458,9 @@ class FormulaEvaluation(test.OntaskTestCase):
 
         # Create the dataframe with the variables
         df = pd.DataFrame(
-            [(1, 2.0, True, 'xxx', datetime.datetime(2018, 01, 01, 00, 00,
-                                                     00)),
+            [(1, 2.0, True, 'xxx', datetime.datetime(2018, 1, 1, 0, 0, 0)),
              (None, None, None, None, None)],
-            columns=['v_integer',
-                     'v_double',
-                     'v_boolean',
-                     'v_string',
-                     'v_datetime'])
+            columns=self.test_columns)
 
         # Store the data frame
         pandas_db.store_table(df, 'TEST_TABLE')

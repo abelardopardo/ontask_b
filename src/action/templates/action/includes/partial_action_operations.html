@@ -1,92 +1,62 @@
 {% load i18n %}
-<div class="condition-btn btn-group" role="group">
-  <a href="{% url 'action:edit' id %}"
-     class="btn btn-default btn-sm align-middle spin"
+<div class=" btn-group" role="group">
+  <a href="{% url 'action:run' id %}"
+     class="btn btn-light btn-sm spin {% if not is_executable %}disabled{% endif %}"
      data-toggle="tooltip"
-     title="{% trans 'Edit the text, conditions and filter' %}">
-    <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}</a>
-  {% if action_tval == 'personalized_text' %}
-    <a href="{% url 'action:run_email_action' id %}"
-       class="btn btn-default btn-sm spin"
-        data-toggle="tooltip" title="{% trans 'Send personalised emails' %}">
-      <span class="glyphicon glyphicon-envelope"></span> {% trans 'Email' %}</a>
-    <a href="{% url 'action:run_zip_action' id %}"
-       class="btn btn-default btn-sm spin"
-        data-toggle="tooltip"
-        title="{% trans 'Create a ZIP with each personalised text in a file' %}">
-      <span class="glyphicon glyphicon-compressed"></span> {% trans 'ZIP' %}</a>
-  {% elif action_tval == 'personalized_json' %}
-    <a href="{% url 'action:run_json_action' id %}"
-       class="btn btn-default btn-sm spin {% if not is_executable %}disabled{% endif %}"
-        data-toggle="tooltip" title="{% trans 'Send personalised JSONs' %}">
-      <span class="glyphicon glyphicon-off"></span> {% trans 'Run' %}</a>
-  {% elif action_tval == 'survey' or action_tval == 'todo_list' %}
-    <a href="{% url 'action:run_action_in' id %}"
-       class="btn btn-default btn-sm spin {% if not is_executable %}disabled{% endif %}"
-       data-toggle="tooltip"
-       title="{% trans 'Enter data manually' %}">
-      <span class="glyphicon glyphicon-off"></span> {% trans 'Run' %}</a>
-  {% endif %}
-  <button type="button"
-          class="btn btn-default btn-sm js-action-showurl"
-          data-url="{% url 'action:showurl' id %}"
-          data-toggle="tooltip"
-          {% if is_out %}
-            title="{% trans 'URL for learners to access the personalised text' %}"
-          {% else %}
-            title="{% trans 'URL for learners to introduce data' %}"
-          {% endif %}
-          >
-    <span class="glyphicon glyphicon-link"></span> {% trans 'URL' %}
-    {% if serve_enabled %}<span class="badge">On</span>{% else %}(Off){% endif %}
-  </button>
-  <div class="dropdown btn-group" style="display: inline-table;" role="group">
-    <button class="btn btn-default btn-sm dropdown-toggle" type="button"
-            data-toggle="dropdown">{% trans 'More' %} <span class="caret"></span>
-    </button>
-    <ul role="menu" class="dropdown-menu">
-      {% if is_out %}
-        <li>
-          <a href="{% url 'scheduler:create' id %}"
-             class="btn btn-default btn-sm spin"
-             data-toggle="tooltip"
-             title="{% trans 'Schedule the execution of the action' %}">
-            <span class="glyphicon glyphicon-calendar"></span> {% trans 'Schedule' %}</a>
-        </li>
+     title="{% if action_tval == 'survey' or action_tval == 'todo_list' %}{% trans 'Enter data manually' %}{% elif action_tval == 'personalized_json' %}{% trans 'Send personalised JSONs' %}{% else %}{% trans 'Send personalised text' %}{% endif %}"><span class="fa fa-rocket"></span> {% trans 'Run' %}</a>
+  <div class="dropdown">
+    <button class="btn btn-light btn-sm" type="button" id="actionMoreOperations"
+            data-toggle="dropdown"><span class="fa fa-ellipsis-h"></span></button>
+    <div class="dropdown-menu" aria-labelledby="actionMoreOperations">
+      {% if action_tval != 'personalized_canvas_email' and action_val != 'personalized_json' %}
+        <button type="button"
+                class="dropdown-item js-action-showurl"
+                data-url="{% url 'action:showurl' id %}"
+                data-toggle="tooltip"
+                {% if is_out %}
+                  title="{% trans 'URL for learners to access the personalised text' %}"
+                {% else %}
+                  title="{% trans 'URL for learners to introduce data' %}"
+                {% endif %}>
+          <span class="fa fa-link"></span> {% trans 'URL' %}
+          {% if serve_enabled %}<span class="badge badge-dark">On</span>
+          {% else %}<span class="badge badge-light">Off</span>{% endif %}
+        </button>
       {% endif %}
-      <li>
-        <button type="button"
-                class="btn btn-default btn-sm js-action-update align-middle"
-                data-url="{% url 'action:update' id %}"
-                data-toggle="tooltip"
-                title="{% trans 'Change name and/or description' %}">
-            <span class="glyphicon glyphicon-pencil"></span> {% trans 'Rename' %}
-        </button>
-      </li>
-      <li>
-        <button type="button"
-                class="btn btn-default btn-sm js-action-clone align-middle"
-                data-url="{% url 'action:clone' id %}"
-                data-toggle="tooltip"
-                title="{% trans 'Create an identical action' %}">
-          <span class="glyphicon glyphicon-duplicate"></span> {% trans 'Clone' %}
-        </button>
-      </li>
-      <li>
-        <a href="{% url 'action:export_ask' id %}"
-           class="btn btn-default btn-sm spin"
+      {% if action_tval == 'personalized_text' %}
+        <a href="{% url 'action:zip_action' id %}"
+           class="spin dropdown-item"
+            data-toggle="tooltip"
+            title="{% trans 'Create a ZIP with each personalised text in a file' %}">
+          <span class="fa fa-file-archive-o"></span> {% trans 'ZIP' %}</a>
+      {% endif %}
+      {% if is_out %}
+        <a href="{% url 'scheduler:create' id %}" class="spin dropdown-item"
            data-toggle="tooltip"
-           title="{% trans 'Export the content of this action' %}">
-          <span class="glyphicon glyphicon-export"></span> {% trans 'Export' %}</a>
-      </li>
-      <li>
-        <button type="button"
-                class="btn btn-danger btn-sm js-action-delete"
-                data-url="{% url 'action:delete' id %}"
-                data-toggle="tooltip"
-                title="{% trans 'Delete the action' %}">
-          <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}</button>
-      </li>
-    </ul>
+           title="{% trans 'Schedule the execution of the action' %}">
+          <span class="fa fa-calendar"></span> {% trans 'Schedule' %}</a>
+      {% endif %}
+      <button type="button" class="js-action-update dropdown-item"
+              data-url="{% url 'action:update' id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Change name and/or description' %}">
+          <span class="fa fa-pencil"></span> {% trans 'Rename' %}
+      </button>
+      <button type="button" class="js-action-clone dropdown-item"
+              data-url="{% url 'action:clone' id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Create an identical action' %}">
+        <span class="fa fa-clone"></span> {% trans 'Clone' %}
+      </button>
+      <a href="{% url 'action:export_ask' id %}" class="spin dropdown-item"
+         data-toggle="tooltip"
+         title="{% trans 'Export the content of this action' %}">
+        <span class="fa fa-download"></span> {% trans 'Export' %}</a>
+      <button type="button" class="js-action-delete dropdown-item"
+              data-url="{% url 'action:delete' id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Delete the action' %}">
+        <span class="fa fa-trash"></span> {% trans 'Delete' %}</button>
+    </div>
   </div>
 </div>

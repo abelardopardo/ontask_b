@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import zip
 import numpy as np
 import pandas as pd
 from django.conf import settings
@@ -16,7 +17,6 @@ from dataops.pandas_db import (
     load_table,
     get_table_data,
     is_table_in_db,
-    get_table_queryset,
     pandas_datatype_names,
     is_unique_column,
     are_unique_columns,
@@ -43,6 +43,8 @@ def store_table_in_db(data_frame,
     :param table_name: Table to use in the DB
     :param temporary: Boolean stating if the table is temporary,
            or it belongs to an existing workflow.
+    :param reset_keys: Reset the value of the field is_key computing it from
+           scratch
     :return: If temporary = True, then return a list with three lists:
              - column names
              - column types
@@ -84,7 +86,11 @@ def store_table_in_db(data_frame,
     for col in wf_cols:
         if reset_keys:
             new_val = is_unique_column(data_frame[col.name])
-            if col.is_key != new_val:
+            if col.is_key and not new_val:
+                # Only set the is_key value if the column states that it is a
+                # key column, but the values say no. Othe other way around
+                # is_key is false in the column will be ignored as it may have
+                # been set by the user
                 col.is_key = new_val
                 col.save()
 
@@ -140,6 +146,7 @@ def store_dataframe_in_db(data_frame, pk, reset_keys=True):
 
     :param data_frame: Pandas data frame containing the data
     :param pk: The unique key for the workflow
+    :param reset_keys: Reset the field is_key computing its value from scratch
     :return: Nothing. Side effect in the database
     """
     return store_table_in_db(data_frame,
@@ -180,13 +187,13 @@ def get_table_row_by_index(workflow, cond_filter, idx):
     """
 
     # Get the data
-    data = get_table_data(workflow.id, cond_filter)
+    data = get_table_data(workflow.id, cond_filter, workflow.get_column_names())
 
     # If the data is not there, return None
     if idx > len(data):
         return None
 
-    return dict(zip(workflow.get_column_names(), data[idx - 1]))
+    return dict(list(zip(workflow.get_column_names(), data[idx - 1])))
 
 
 def workflow_has_table(workflow_item):
@@ -201,14 +208,6 @@ def workflow_has_upload_table(workflow_item):
     return is_table_in_db(
         create_upload_table_name(workflow_item.id)
     )
-
-
-def get_queryset_by_workflow(workflow_item):
-    return get_table_queryset(create_table_name(workflow_item.id))
-
-
-def get_queryset_by_workflow_id(workflow_id):
-    return get_table_queryset(create_table_name(workflow_id))
 
 
 def perform_overlap_update(dst_df, src_df, dst_key, src_key, how_merge):
@@ -356,8 +355,8 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
 
     # STEP 1 Rename the column names.
     src_df = src_df.rename(
-        columns=dict(zip(merge_info['initial_column_names'],
-                         merge_info['rename_column_names'])))
+        columns=dict(list(zip(merge_info['initial_column_names'],
+                         merge_info['rename_column_names']))))
 
     # STEP 2 Drop the columns not selected
     columns_to_upload = merge_info['columns_to_upload']
@@ -411,7 +410,7 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
                               left_on=dst_key,
                               right_on=src_key)
         except Exception as e:
-            return gettext('Merge operation failed. Exception: ') + e.message
+            return gettext('Merge operation failed. Exception: ') + str(e)
 
         # VERY special case: The key used for the merge in src_df can have an
         # identical column in dst_df, but it is not the one used for the
@@ -436,7 +435,7 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
     # If the merge produced a data frame with no rows, flag it as an error to
     # prevent loosing data when there is a mistake in the key column
     if new_df.shape[0] == 0:
-      return gettext('Merge operation produced a result with no rows')
+        return gettext('Merge operation produced a result with no rows')
 
     # If the merge produced a data frame with no unique columns, flag it as an
     # error to prevent the data frame from propagating without a key column
@@ -517,6 +516,9 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
 
 def data_frame_add_column(df, column, initial_value):
     """
+    Function that add a new column to the data frame with the structure to match
+    the given column. If the initial value is not give, it is decided based
+    on the data type stored in the column object.
 
     :param df: Data frame to modify
     :param column: Column object to add
@@ -554,7 +556,7 @@ def data_frame_add_column(df, column, initial_value):
     return df
 
 
-def rename_df_column(df, workflow, old_name, new_name):
+def rename_df_column(workflow, old_name, new_name):
     """
     Function to change the name of a column in the dataframe.
 
@@ -584,8 +586,6 @@ def rename_df_column(df, workflow, old_name, new_name):
             new_name
         )
         view.save()
-
-    return df.rename(columns={old_name: new_name})
 
 
 def detect_datetime_columns(data_frame):

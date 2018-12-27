@@ -1,15 +1,15 @@
 {% load i18n %}
-<button type="button"
-        class="btn btn-primary btn-sm js-attribute-edit"
-        data-url="{% url 'workflow:attribute_edit' id %}"
-        data-toggle="tooltip"
-        title="{% trans 'Edit name and value' %}">
-  <span class="glyphicon glyphicon-pencil"></span>
-</button>
-<button type="button"
-        class="btn btn-danger btn-sm js-attribute-delete"
-        data-url="{% url 'workflow:attribute_delete' id %}"
-        data-toggle="tooltip" 
-        title="{% trans 'Delete this pair name/value' %}">
-  <span class="glyphicon glyphicon-trash"></span>
-</button>
+<div class="btn-group">
+  <button type="button"
+          class="btn btn-sm btn-light js-attribute-edit"
+          data-url="{% url 'workflow:attribute_edit' id %}"
+          data-toggle="tooltip"
+          title="{% trans 'Edit name and value' %}">
+    <span class="fa fa-pencil"></span></button>
+  <button type="button"
+          class="btn btn-sm btn-light js-attribute-delete"
+          data-url="{% url 'workflow:attribute_delete' id %}"
+          data-toggle="tooltip"
+          title="{% trans 'Delete pair name/value' %}">
+    <span class="fa fa-trash"></span></button>
+</div>

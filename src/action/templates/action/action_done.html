@@ -4,19 +4,21 @@
 {% block title %}{% trans 'Action execution' %}{% endblock %}
 {% block scripts %}
   {% if download %}
-    <script>location.href="{% url 'workflow:export' 1 %}";</script>
+    <script>
+      $(window).on('load', function(){ location.href="{% url 'workflow:export' 1 %}"; });
+    </script>
   {% endif %}
 {% endblock scripts %}
 {% block container %}
   {% url 'logs:view' log_id as record_url %}
-  <div class="container-fluid" style="text-align:center;">
-    <h1 class="page-header text-center">{% trans 'Action scheduled for execution' %}</h1>
+  <div class="container" id="action-run-done">
+    <h1 class="text-center">{% trans 'Action scheduled for execution' %}</h1>
     <div class="text-center">
       <a href="{{ record_url }}">{% blocktrans %}You may check the status in
-        log record number {{ log_id }}.{% endblocktrans %}</a>
+      log number {{ log_id }}.{% endblocktrans %}</a>
     </div>
-    <div class="modal-footer" style="text-align: center;">
-      <a class="btn btn-default spin" href="{% url 'action:index' %}">{% trans 'Back' %}</a>
+    <div class="text-center">
+      <a class="btn btn-outline-dark spin" href="{% url 'action:index' %}">{% trans 'Back' %}</a>
     </div>
   </div>
 {% endblock container %}

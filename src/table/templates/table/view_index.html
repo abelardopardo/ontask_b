@@ -6,15 +6,14 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Table Views' %}{% endblock %}
-{% block styles %}
-  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
-  <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
-{% endblock styles %}
 {% block extrahead %}
   {% ontask_datatables_bootstrap_css %}
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
+  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
+  {% ontask_datetimepicker_css %}
 {% endblock extrahead %}
 {% block scripts %}
+  {% ontask_datetimepicker_js %}
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
   {% with country=LANGUAGE_CODE|country %}
     <script src="{% static 'site/js/query-builder.'|add:country|add:'.js' %}"></script>
@@ -25,44 +24,52 @@
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
     $(document).ready(function() {
-      if (document.getElementById("view-table") != null) {
-        // Required for DataTables
-        $('#view-table').DataTable({
-          "search": {
-            "caseInsensitive": true,
-          },
-          stateSave: true,
-          "language": {
-            "emptyTable": "{% trans 'There are no views for this workflow.' %}",
-            "url": getLanguage()
-          },
-          "columnDefs": [
-            {"className": "dt-center", "targets": "_all"},
-            {"orderable": false, "targets": 3},
-            {"searchable": false, "targets": 3},
-          ],
-        });
-      }
+      $('#view-table').DataTable({
+        "search": {
+          "caseInsensitive": true,
+        },
+        stateSave: true,
+        stateSaveParams: function (settings, data) {
+          delete data.search;
+        },
+        "language": {
+          "infoEmpty": "{% trans 'There are no views for this workflow.' %}",
+          "url": getLanguage()
+        },
+        "columnDefs": [
+          {"className": "dt-center", "targets": [0, 2]},
+          {"orderable": false, "targets": 2},
+          {"searchable": false, "targets": 2},
+        ],
+        colReorder: false,
+        rowReorder: false,
+      });
     });
-    {% with allow_empty='true' empty_rules=True %}
+    {% with js_var='qbuilder_options' allow_empty='true' empty_rules=True %}
       {% include 'qbuilder_options.js' %}
     {% endwith %}
   </script>
 {% endblock %}
 {% block container %}
-  <div id="view-content" align="center" class="container-fluid">
-    <h1 class="page-header">{% trans 'Table Views' %}</h1>
-    <p>
-      <a class="btn btn-sm btn-default spin" href="{% url 'table:display' %}">{% trans 'Back' %}</a>
-      <button type="button" class="btn btn-sm btn-primary js-view-add"
+  <div class="container" id="view-content">
+    <h1 class="text-center">{% trans 'Table Views' %}</h1>
+    <div class="text-center mb-3">
+      <a class="btn btn-outline-dark spin"
+         href="{% url 'table:display' %}">{% trans 'Full Table' %}</a>
+      <button type="button" class="btn btn-outline-dark js-view-add"
               data-url="{% url 'table:view_add' %}"
               data-toggle="tooltip"
               title="{% trans 'New view for the table' %}">
-        <span class="glyphicon glyphicon-plus"></span> {% trans 'Add View' %}
+        <span class="fa fa-plus"></span> {% trans 'Add View' %}
       </button>
-    </p>
-    {% if table %}
-      {% render_table table %}
+    </div>
+    {% if table.data|length %}
+      <div class="container justify-content-center">
+        {% render_table table %}
+      </div>
+    {% else %}
+      <p class="text-center">{% blocktrans %}Create views by selecting a subset of rows and columns
+      of the table to show.{% endblocktrans %}
     {% endif %}
   </div>
   {% include 'modal.html' %}

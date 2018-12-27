@@ -4,13 +4,15 @@ File with auxiliary operations needed to handle the actions, namely:
 functions to process request when receiving a "serve" action, cloning
 operations when cloning conditions and actions, and sending messages.
 """
-from __future__ import unicode_literals, print_function
 
+from builtins import zip
+from builtins import str
 import datetime
 import gzip
 import json
 import random
 from io import BytesIO
+from time import sleep
 
 import pytz
 import requests
@@ -27,23 +29,31 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import strip_tags
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from validate_email import validate_email
 from django.db.models import Q
+from celery.utils.log import get_task_logger
+from rest_framework import status
 
-from action.evaluate import evaluate_row_action_out, evaluate_action, \
+from action.evaluate import (
+    evaluate_row_action_out, evaluate_action,
     get_row_values
+)
 from action.forms import EnterActionIn, field_prefix
 from action.models import Action
 from action.serializers import ActionSelfcontainedSerializer
 from dataops import pandas_db, ops
 from logs.models import Log
+from ontask_oauth.models import OnTaskOAuthUserTokens
+from ontask_oauth.views import refresh_token
 from workflow.models import Column
 from workflow.ops import get_workflow
 from . import settings
+
+logger = get_task_logger('celery_execution')
 
 
 def serve_action_in(request, action, user_attribute_name, is_inst):
@@ -85,18 +95,17 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
 
         messages.error(request,
                        _('Data not found in the table'))
-        return redirect(reverse('action:run_action_in',
-                                kwargs={'pk': action.id}))
+        return redirect(reverse('action:run', kwargs={'pk': action.id}))
 
     # Bind the form with the existing data
     form = EnterActionIn(request.POST or None,
                          columns=columns,
-                         values=row_pairs.values(),
+                         values=list(row_pairs.values()),
                          show_key=is_inst)
 
     cancel_url = None
     if is_inst:
-        cancel_url = reverse('action:run_action_in', kwargs={'pk': action.id})
+        cancel_url = reverse('action:run', kwargs={'pk': action.id})
 
     # Create the context
     context = {'form': form,
@@ -104,7 +113,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
                'cancel_url': cancel_url}
 
     if request.method == 'GET' or not form.is_valid() or \
-        request.POST.get('lti_version', None):
+            request.POST.get('lti_version', None):
         return render(request, 'action/run_survey_row.html', context)
 
     # Post with different data. # Update content in the DB
@@ -157,7 +166,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
         return render(request, 'thanks.html', {})
 
     # Back to running the action
-    return redirect(reverse('action:run_action_in', kwargs={'pk': action.id}))
+    return redirect(reverse('action:run', kwargs={'pk': action.id}))
 
 
 def serve_action_out(user, action, user_attribute_name):
@@ -374,12 +383,12 @@ def do_import_action(user, workflow, name, file_item):
         # Save the new workflow
         action = action_data.save(user=user, name=name)
     except (TypeError, NotImplementedError) as e:
-        return _('Unable to import action: {0}').format(e.message)
+        return _('Unable to import action: {0}').format(e)
     except serializers.ValidationError as e:
         return _('Unable to import action due to a validation error: '
-                 '{0}').format(e.message)
+                 '{0}').format(e)
     except Exception as e:
-        return _('Unable to import action: {0}').format(e.message)
+        return _('Unable to import action: {0}').format(e)
 
     # Success, log the event
     Log.objects.register(user,
@@ -402,9 +411,13 @@ def send_messages(user,
                   exclude_values,
                   log_item):
     """
-    Performs the submission of the emails for the given action and with the
+    Sends the emails for the given action and with the
     given subject. The subject will be evaluated also with respect to the
     rows, attributes, and conditions.
+
+    The messages are sent in bursts with a pause in seconds as specified by the
+    configuration variables EMAIL_BURST  and EMAIL_BURST_PAUSE
+
     :param user: User object that executed the action
     :param action: Action from where to take the messages
     :param subject: Email subject
@@ -532,13 +545,29 @@ def send_messages(user,
         data_frame[track_col_name] = 0
         ops.store_dataframe_in_db(data_frame, action.workflow.id)
 
-    # Mass mail!
-    try:
-        connection = mail.get_connection()
-        connection.send_messages(msgs)
-    except Exception as e:
-        # Something went wrong, notify above
-        return str(e)
+    # Partition the list of emails into chunks as per the value of EMAIL_BURST
+    chunk_size = len(msgs)
+    wait_time = 0
+    if ontask_settings.EMAIL_BURST:
+        chunk_size = ontask_settings.EMAIL_BURST
+        wait_time = ontask_settings.EMAIL_BURST_PAUSE
+    msg_chunks = [msgs[i:i + chunk_size]
+                  for i in range(0, len(msgs), chunk_size)]
+    for idx, msg_chunk in enumerate(msg_chunks):
+        # Mass mail!
+        try:
+            connection = mail.get_connection()
+            connection.send_messages(msg_chunk)
+        except Exception as e:
+            # Something went wrong, notify above
+            return str(e)
+
+        if idx != len(msg_chunks) - 1:
+            logger.info(
+                'Email Burst ({0}) reached. Waiting for {1} secs'.format(
+                    len(msg_chunk), wait_time
+                ))
+            sleep(wait_time)
 
     # Log the events (one per email)
     now = datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
@@ -590,7 +619,7 @@ def send_messages(user,
         text_content = strip_tags(html_content)
     except TemplateSyntaxError as e:
         return _('Syntax error detected in OnTask notification template '
-                 '({0})').format(e.message)
+                 '({0})').format(e)
 
     # Log the event
     Log.objects.register(
@@ -619,7 +648,193 @@ def send_messages(user,
             html_message=html_content)
     except Exception as e:
         return _('An error occurred when sending your notification: '
-                 '{0}').format(e.message)
+                 '{0}').format(e)
+
+    return None
+
+
+def send_canvas_messages(user,
+                         action,
+                         subject,
+                         canvas_id_column,
+                         exclude_values,
+                         target_url,
+                         log_item):
+    """
+    Performs the submission of the emails for the given action and with the
+    given subject. The subject will be evaluated also with respect to the
+    rows, attributes, and conditions.
+    :param user: User object that executed the action
+    :param action: Action from where to take the messages
+    :param subject: Email subject
+    :param canvas_id_column: Name of the column from which to extract canvas ID
+    :param exclude_values: List of values to exclude from the mailing
+    :param target_url: Server name to use to send the emails
+    :param log_item: Log object to store results
+    :return: Send the emails
+    """
+
+    # Evaluate the action string, evaluate the subject, and get the value of
+    # the email column.
+    result = evaluate_action(action,
+                             extra_string=subject,
+                             column_name=canvas_id_column,
+                             exclude_values=exclude_values)
+
+    # Check the type of the result to see if it was successful
+    if not isinstance(result, list):
+        # Something went wrong. The result contains a message
+        return result
+
+    # Update the number of filtered rows if the action has a filter (table
+    # might have changed)
+    cfilter = action.get_filter()
+    if cfilter and cfilter.n_rows_selected != len(result):
+        cfilter.n_rows_selected = len(result)
+        cfilter.save()
+
+    # Get the oauth info
+    oauth_info = ontask_settings.CANVAS_INFO_DICT.get(target_url)
+    if not oauth_info:
+        return _('Unable to find OAuth Information Record')
+
+    # Get the token
+    user_token = OnTaskOAuthUserTokens.objects.filter(
+        user=user,
+        instance_name=target_url
+    ).first()
+    if not user_token:
+        # There is no token, execution cannot proceed
+        return _('Incorrect execution due to absence of token')
+
+    # Create the headers to use for all requests
+    headers = {
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Authorization': 'Bearer {0}'.format(user_token.access_token),
+    }
+
+    # Send the objects to the given URL
+    status_vals = []
+    idx = 1
+    burst = oauth_info['aux_params'].get('burst')
+    burst_pause = oauth_info['aux_params'].get('pause', 0)
+    domain = oauth_info['domain_port']
+    conversation_url = oauth_info['conversation_url'].format(domain)
+    for msg_body, msg_subject, msg_to in result:
+        #
+        # JSON object to send. Taken from method.conversations.create in
+        # https://canvas.instructure.com/doc/api/conversations.html
+        #
+        canvas_email_payload = {
+            'recipients[]': msg_to,  # Required
+            'body': msg_body,  # Required
+            'subject': msg_subject,  # Optional, but we will require it
+            # 'group_conversation': '',
+            # 'attachment_ids[]': '',
+            # 'media_comment_id': '',
+            # 'media_comment_type': '',
+            # 'user_note': '0',
+            # 'mode': 'sync',
+            # 'scope': 'unread',
+            # 'filter[]': '',
+            # 'filter_mode': '',
+            # 'context_code': '',
+        }
+
+        if burst and idx % burst == 0:
+            # Burst exists and the limit has been reached
+            logger.info('Burst ({0}) reached. Waiting for {1} secs'.format(
+                burst, burst_pause
+            ))
+            sleep(burst_pause)
+        # Index to detect bursts
+        idx += 1
+
+        #
+        # Send the email
+        #
+        result_msg = ugettext('Message successfuly sent')
+        if ontask_settings.EXECUTE_ACTION_JSON_TRANSFER:
+            # Send the email through the API call
+            # First attempt
+            response = requests.post(url=conversation_url,
+                                     data=canvas_email_payload,
+                                     headers=headers)
+            response_status = response.status_code
+
+            if response_status == status.HTTP_401_UNAUTHORIZED and \
+                    response.headers.get('WWW-Authenticate'):
+                # Request rejected due to token expiration. Refresh the
+                # token
+                user_token = None
+                result_msg = ugettext('OAuth token refreshed')
+                try:
+                    user_token = refresh_token(user_token,
+                                               target_url,
+                                               oauth_info)
+                except Exception as e:
+                    result_msg = str(e)
+
+                if user_token:
+                    # Update the header with the new token
+                    headers = {
+                        'content-type':
+                            'application/x-www-form-urlencoded; charset=UTF-8',
+                        'Authorization': 'Bearer {0}'.format(
+                            user_token.access_token
+                        ),
+                    }
+
+                    # Second attempt at executing the API call
+                    response = requests.post(url=conversation_url,
+                                             data=canvas_email_payload,
+                                             headers=headers)
+                    response_status = response.status_code
+            elif response_status != status.HTTP_201_CREATED:
+                result_msg = \
+                    ugettext('Unable to deliver message (code {0})').format(
+                        response_status
+                    )
+        else:
+            # Print the JSON that would be sent through the logger
+            logger.info('SEND JSON({0}): {1}'.format(
+                target_url,
+                json.dumps(canvas_email_payload)
+            ))
+            response_status = 200
+
+        # Append the response status
+        status_vals.append(
+            (response_status,
+             result_msg,
+             datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)),
+             canvas_email_payload)
+        )
+
+    # Create the context for the log events
+    context = {
+        'user': user.id,
+        'action': action.id,
+    }
+
+    # Log all OBJ sent
+    for st_val, result_msg, dt, json_obj in status_vals:
+        context['object'] = json.dumps(json_obj)
+        context['status'] = st_val
+        context['result'] = result_msg
+        context['email_sent_datetime'] = str(dt)
+        Log.objects.register(user,
+                             Log.ACTION_CANVAS_EMAIL_SENT,
+                             action.workflow,
+                             context)
+
+    # Update data in the log item
+    log_item.payload['objects_sent'] = len(result)
+    log_item.payload['filter_present'] = cfilter is not None
+    log_item.payload['datetime'] = str(datetime.datetime.now(pytz.timezone(
+        ontask_settings.TIME_ZONE
+    )))
+    log_item.save()
 
     return None
 
@@ -676,14 +891,18 @@ def send_json(user, action, token, key_column, exclude_values, log_item):
     # Send the objects to the given URL
     status_vals = []
     for json_obj in json_objects:
-        if ontask_settings.DEBUG:
-            print('SEND JSON: ' + json.dumps(json_obj))
-            status = 200
-        else:
+        if ontask_settings.EXECUTE_ACTION_JSON_TRANSFER:
             response = requests.post(url=action.target_url,
                                      data=json_obj,
                                      headers=headers)
             status = response.status_code
+        else:
+            logger.info('SEND JSON({0}): {1}'.format(
+                action.target_url,
+                json.dumps(json_obj)
+            ))
+            status = 200
+
         status_vals.append(
             (status,
              datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)),

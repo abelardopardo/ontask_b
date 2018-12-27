@@ -1,3 +1,4 @@
+from builtins import object
 from braces.views import LoginRequiredMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.shortcuts import redirect

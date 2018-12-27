@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 from authtools import views as authviews
 from braces import views as bracesviews

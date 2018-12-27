@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+
 
 import os
 
@@ -36,7 +36,7 @@ class Scenario2Captures(ScreenTests):
         # Open Import page
         self.selenium.find_element_by_link_text('Import workflow').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
                                              'Import workflow')
         )
 

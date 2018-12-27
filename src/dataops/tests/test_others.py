@@ -56,6 +56,10 @@ class HasVariableTest(TestCase):
 
         self.assertTrue(self.compare(self.formula3, f3))
 
+        f3 = formula_evaluation.rename_variable(self.formula1,
+                                                'Course_Code_b',
+                                                'Course_Code_a')
+
     def test_evaluate_formula(self):
 
         self.assertTrue(

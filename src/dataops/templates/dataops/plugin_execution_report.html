@@ -9,20 +9,19 @@
 {% endblock %}
 {% block container %}
   <div align="center" class="container">
-    <h1 class="page-header">{% trans 'Plugin execution report' %}</h1>
-
+    <h1 class="text-center">{% trans 'Plugin execution report' %}</h1>
     {% if exec_status %}
-      <h3>{% trans 'Incorrect execution' %}</h3>
-      <p class="alert-warning">{{ exec_status }}</p>
+      <h3 class="text-center">{% trans 'Incorrect execution' %}</h3>
+      <p class="alert-warning text-center">{{ exec_status }}</p>
     {% else %}
-      <h3>Correct execution</h3>
-      <div align="center">
-        <table class="table table-bordered" id="plugin-execution-report"
-               style="display:table-cell;">
+      <h3 class="text-center">Correct execution</h3>
+      <div class="container justify-content-center">
+        <table class="table table-hover table-bordered" style="width:100%;"
+               id="plugin-execution-report">
           <thead>
             <tr>
               <th class="text-center">{% trans 'Existing Table' %}</th>
-              <th class="text-center"><button class=" glyphicon glyphicon-arrow-left"></button></th>
+              <th class="text-center"><button class=" fa fa-arrow-left"></button></th>
               <th class="text-center">{% trans 'New Data' %}</th>
             </tr>
           </thead>
@@ -32,7 +31,7 @@
                 <td class="text-center" style="max-width:220px">{{ item.0 }}</td>
                 <td class="text-center">
                   {% if item.1 %}
-                    <button class=" glyphicon glyphicon-arrow-left"></button>
+                    <button class=" fa fa-arrow-left"></button>
                   {% endif %}
                 </td>
                 <td class="text-center">{{ item.1 }}</td>
@@ -42,8 +41,10 @@
         </table>
       </div>
     {% endif %}
-    <a class="btn btn-default" style="margin-top:2ex;" href="{% url 'workflow:detail' id %}">
-      {% trans 'Continue' %}
-    </a>
+    <div class="text-center">
+      <a class="btn btn-outline-dark" href="{% url 'table:display' %}">
+        {% trans 'Continue' %}
+      </a>
+    </div>
   </div>
 {% endblock container %}

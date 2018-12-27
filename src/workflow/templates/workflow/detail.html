@@ -8,12 +8,12 @@
 {% block title %}{{ block.super }}{% trans 'Details' %}{% endblock %}
 {% block extrahead %}
   {% ontask_datatables_bootstrap_css %}
-  <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
+  {% ontask_datetimepicker_css %}
   <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
   {% if workflow %}
-    <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+    {% ontask_datetimepicker_js %}
     <script src="{% static 'site/js/sol.js' %}"></script>
     <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
     <script src="{% static 'workflow/js/column_move.js' %}?v={% ontask_version %}"></script>
@@ -21,88 +21,81 @@
     {% ontask_datatables_bootstrap_js %}
     <script type="text/javascript">
       if (document.getElementById("column-table") != null) {
-          // Required for DataTables
-          $(document).ready(function() {
-              $('#column-table').DataTable({
-                  "language": {
-                    url: getLanguage()
-                  },
-                  "stateSave": true,
-                  "processing": true,
-                  "serverSide": true,
-                  "ajax": {
-                    url: "{% url 'workflow:column_ss' workflow.id %}",
-                    type: 'POST',
-                  },
-                  "columns": [
-                    {"data": "number", "class": "dt-center"},
-                    {"data": "name", "class": "dt-center"},
-                    {"data": "description", "class": "dt-center"},
-                    {"data": "type", "class": "dt-center"},
-                    {"data": "key", "class": "dt-center"},
-                    {"data": "operations", "class": "dt-center operations"},
-                  ],
-                  "order": [],
-                  "columnDefs": [
-                      {"orderable": false, "targets": "_all"},
-                      {"searchable": false, "targets": "operations"},
-                  ],
-                  "drawCallback": function(settings) {
-                     // Needed to enable tooltips in ajax produced content
-                     $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
-                  },
-                });
+        $(document).ready(function() {
+          var column_table = $('#column-table').DataTable({
+            "language": {
+              url: getLanguage()
+            },
+            "stateSave": true,
+            stateSaveParams: function (settings, data) {
+              delete data.search;
+            },
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+              url: "{% url 'workflow:column_ss' workflow.id %}",
+              type: 'POST',
+            },
+            "columns": [
+              {"data": "number", "class": "dt-center"},
+              {"data": "name", "class": "dt-center"},
+              {"data": "description"},
+              {"data": "type", "class": "dt-center"},
+              {"data": "key", "class": "dt-center"},
+              {"data": "operations", "class": "dt-center"},
+            ],
+            "columnDefs": [
+              {"orderable": false, "targets": 5},
+              {"searchable": false, "targets": "operations"},
+            ],
+            "drawCallback": function(settings) {
+              $('[data-toggle="tooltip"]').tooltip({ trigger: "hover"});
+            },
+            colReorder: false,
+            rowReorder: { dataSrc: 'name' },
           });
+          // Process the column reorder events
+          column_table.on("row-reordered", row_reordered);
+        });
       }
     </script>
   {% endif %}
 {% endblock %}
 {% block container %}
-  <div class="container text-center">
-    <h1 class="page-header">{{ workflow.name }}</h1>
-    {% if workflow %}
-      <div class="container" id="workflow-area">
-        {% if not table_info %}
-          {% include 'workflow/includes/no_data.html' %}
-        {% elif not table_info.num_actions %}
-          {% include 'workflow/includes/no_actions.html' %}
+  <div class="container" id="workflow-detail">
+    <h2 class="text-center">{% trans 'Columns' %}</h2>
+    {% if not table_info %}
+      {% include 'workflow/includes/no_data.html' %}
+    {% elif not table_info.num_actions %}
+      {% include 'workflow/includes/no_actions.html' %}
+    {% endif %}
+    <div class="text-center">
+      <div class="mb-3 btn-group" role="group">
+        {% if workflow.nrows != 0 %}
+          {% include 'workflow/includes/add_column_menu.html' %}
         {% endif %}
-        {% include 'workflow/includes/workflow_detail_buttons.html' %}
-        <p class="help-block"
-           style="text-align:center;"><strong>{% trans 'Description' %}
-          </strong>: {{ workflow.description_text }}</p>
-        <p class="help-block">{% trans 'Last modified' %}: {{ workflow.modified }}</p>
-        {% if table_info %}
-          <p class="help-block">
-            {% blocktrans with num=table_info.num_rows count counter=table_info.num_rows %}{{ num }} row{% plural %}{{ num }} rows,{% endblocktrans %}
-            {% blocktrans with num=table_info.num_cols count counter=table_info.num_cols %}{{ num }} column{% plural %}{{ num }} columns{% endblocktrans %}
-            ({% blocktrans with num=num_key_columns count counter=num_key_columns %}{{ num }} Key column{% plural %}{{ num }} Key columns{% endblocktrans %}),
-            {% blocktrans with num=table_info.num_actions count counter=table_info.num_actions %}{{ num }} action{% plural %}{{ num }} actions,{% endblocktrans %}
-            {% blocktrans with num=table_info.num_attributes count counter=table_info.num_attributes %}{{ num }} attribute{% plural %} {{ num }} attributes{% endblocktrans %}.
-          <h4 class="modal-title">Columns</h4>
-          <table class="table display dataTable no-footer cell-border table-bordered"
-                 id="column-table">
-            <thead>
-              <tr>
-                <th class="number">#</th>
-                <th class="name">{% trans 'Name' %}</th>
-                <th class="name">{% trans 'Description' %}</th>
-                <th class="type">{% trans 'Type' %}</th>
-                <th class="key">{% trans 'Key?' %}</th>
-                <th class="operations">{% trans 'Operations' %}</th>
-              </tr>
-            </thead>
-          </table>
-        {% endif %}
+        {% include 'workflow/includes/manage_table_data.html' %}
       </div>
-    {% else %}
-      {% url 'workflow:index' as windex %}
-      {% blocktrans %}Go to <a href="{{ windex }}">your list of workflows</a>{% endblocktrans %}
+    </div>
+    {% if table_info %}
+      <div class="container justify-content-center">
+        <table class="table table-hover table-bordered"
+               id="column-table" data-url="{% url 'workflow:column_move' %}">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{% trans 'Name' %}</th>
+              <th>{% trans 'Description' %}</th>
+              <th>{% trans 'Type' %}</th>
+              <th>{% trans 'Key?' %}</th>
+              <th></th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <p class="text-center">{% blocktrans %}You may drag and drop the columns from the left-most cell to change their position in the workflow.{% endblocktrans %}</p>
     {% endif %}
   </div>
   {% include 'modal.html' %}
 {% endblock container %}
-
-
-
 

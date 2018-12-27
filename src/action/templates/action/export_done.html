@@ -4,14 +4,15 @@
 {% block title %}{% trans 'Action export' %}{% endblock %}
 {% block scripts %}
   <script>
-    location.href="{% url 'action:export_download' action.id %}";
-    $('#div-spinner').hide();
+    $(window).on('load', function(){ location.href="{% url 'action:export_download' action.id %}"; });
   </script>
 {% endblock scripts %}
 {% block container %}
-  <div class="container-fluid" style="text-align:center;">
-    <h1 class="page-header text-center">{% trans 'Action export' %}</h1>
-    <p class="text-center">{% trans 'Done!' %}</p>
-    <a class="btn btn-default spin" href="{% url 'action:index' %}"> {% trans 'Back' %}</a>
+  <div class="container">
+    <h1 class="text-center">{% trans 'Action export' %}</h1>
+    <p class="text-center">{% trans 'Your download will start shortly' %}</p>
+    <div class="text-center">
+      <a class="btn btn-outline-dark spin" href="{% url 'action:index' %}"> {% trans 'Back' %}</a>
+    </div>
   </div>
 {% endblock container %}

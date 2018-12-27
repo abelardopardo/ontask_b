@@ -4,25 +4,26 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-{% block title %}{{ block.super }}{% trans 'Import workflows' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Import workflow' %}{% endblock %}
 {% block scripts %}
   <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
-  <div align="center" class="container">
-    <h1 class="page-header">{% trans 'Import workflow' %}</h1>
-      <form action="{% url 'workflow:import' %}" method="post"
-            enctype="multipart/form-data">
+  <div class="container" id="workflow-import">
+    <h1 class="text-center">{% trans 'Import workflow' %}</h1>
+    <div class="row justify-content-center">
+      <form action="{% url 'workflow:import' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="text-center input-group input-group-lg">
-          {{ form|crispy }}
-          <a class="btn btn-default spin" style="margin-right:2ex;"
+        {{ form|crispy }}
+        <div class="text-center">
+          <a class="btn btn-outline-dark spin"
              href="{% url 'workflow:index' %}">{% trans 'Cancel' %}</a>
-          <button class="btn btn-primary btn-space spin"
+          <button class="btn btn-outline-primary btn-space spin"
                   type="Submit" name="Submit" value="Submit">
-            <span class="glyphicon glyphicon-import"></span> {% trans 'Import' %}</button>
+            <span class="fa fa-upload"></span> {% trans 'Import' %}</button>
         </div>
       </form>
+    </div>
   </div>
 {% endblock %}
 

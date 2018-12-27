@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import str
+from builtins import object
 import datetime
 
 import pytz
-from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from validate_email import validate_email
 
-from core import settings as core_settings
+from core.widgets import OnTaskDateTimeInput
 from dataops.pandas_db import execute_select_on_table
 from workflow.models import Column
 from .models import ScheduledAction
@@ -29,17 +30,24 @@ class ScheduleForm(forms.ModelForm):
     # columns, those that are "key".
     item_column = forms.ModelChoiceField(queryset=Column.objects.none())
 
+    confirm_items = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Check/exclude email addresses before scheduling?')
+    )
+
     def __init__(self, data, *args, **kwargs):
         self.action = kwargs.pop('action')
         columns = kwargs.pop('columns')
+        confirm_items = kwargs.pop('confirm_items')
 
         # Call the parent constructor
         super(ScheduleForm, self).__init__(data, *args, **kwargs)
 
         self.fields['item_column'].queryset = columns
+        self.fields['confirm_items'].initial = confirm_items
 
     def clean(self):
-
         data = super(ScheduleForm, self).clean()
 
         # The executed time must be in the future
@@ -51,17 +59,12 @@ class ScheduleForm(forms.ModelForm):
 
         return data
 
-    class Meta:
+    class Meta(object):
         model = ScheduledAction
         fields = ('name', 'description_text', 'item_column', 'execute')
 
         widgets = {
-            'execute': DateTimeWidget(
-                options={'weekStart': 1,
-                         'minuteStep': str(getattr(core_settings,
-                                                   'MINUTE_STEP'))},
-                usel10n=True,
-                bootstrap_version=3),
+            'execute': OnTaskDateTimeInput()
         }
 
 
@@ -103,22 +106,13 @@ class EmailScheduleForm(ScheduleForm):
         label=_('Track if emails are read?')
     )
 
-    confirm_emails = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_('Check/exclude email addresses before scheduling?')
-    )
-
     def __init__(self, data, *args, **kwargs):
-        confirm_emails = kwargs.pop('confirm_emails')
 
         # Call the parent constructor
         super(EmailScheduleForm, self).__init__(data, *args, **kwargs)
 
         self.fields['item_column'].label = _('Column in the table containing '
                                              'the email')
-
-        self.fields['confirm_emails'].initial = confirm_emails
 
         # If there is an instance, push the values in the payload to the form
         if self.instance:
@@ -131,6 +125,18 @@ class EmailScheduleForm(ScheduleForm):
             self.fields['send_confirmation'].initial = \
                 payload.get('send_confirmation', False)
             self.fields['track_read'].initial = payload.get('track_read', False)
+
+        self.order_fields(['name',
+                           'description_text',
+                           'execute',
+                           'item_column',
+                           'subject',
+                           'cc_email',
+                           'bcc_email',
+                           'confirm_items',
+                           'send_confirmation',
+                           'track_read'])
+
 
     def clean(self):
 
@@ -204,6 +210,52 @@ class JSONScheduleForm(ScheduleForm):
             self.add_error(a, b)
 
         return data
+
+    class Meta(ScheduleForm.Meta):
+        fields = ('name',
+                  'description_text',
+                  'item_column',
+                  'confirm_items',
+                  'execute',
+                  'token')
+
+
+class CanvasEmailScheduleForm(JSONScheduleForm):
+    """
+    Form to create/edit objects of the ScheduleAction of type canvas email. One
+    of the fields is the canvas ID key column, which is a subset of the
+    columns attached to the action. The subset is passed as the name arguments
+    "columns" (list of key columns).
+
+    There is an additional field to allow for an extra step to review and
+    filter canvas IDs.
+    """
+
+    subject = forms.CharField(initial='',
+                              label=_('Email subject'),
+                              strip=True,
+                              required=True)
+
+    def __init__(self, data, *args, **kwargs):
+        # Call the parent constructor
+        super(CanvasEmailScheduleForm, self).__init__(data, *args, **kwargs)
+
+        self.fields['item_column'].label = _('Column in the table containing '
+                                             'the Canvas ID')
+
+        # If there is an instance, push the values in the payload to the form
+        if self.instance:
+            payload = self.instance.payload
+            self.fields['subject'].initial = payload.get('subject')
+
+    class Meta(JSONScheduleForm.Meta):
+        fields = ('name',
+                  'description_text',
+                  'item_column',
+                  'confirm_items',
+                  'subject',
+                  'execute',
+                  'token')
 
 
 def scheduled_action_data_is_correct(cleaned_data):

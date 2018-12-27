@@ -1,17 +1,21 @@
 {% load i18n %}
-<div class="text-center" style="margin: 1ex 0 1ex 0;">
+<div id="action-preview-done" class="text-center">
   <button type="button"
-          class="btn btn-primary js-action-preview {% if selected_rows == 0 %}disabled{% endif %}"
-          style="margin-right:2ex;"
+          class="btn btn-info js-action-preview {% if selected_rows == 0 %}disabled{% endif %}"
           data-url="{% url 'action:preview' action.id 1 %}"
           data-toggle="tooltip"
       title="{% trans 'See how is the content shown to each learner' %}">
-    <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Preview' %}
+    <span class="fa fa fa-eye"></span> {% trans 'Preview' %}
   </button>
   <button type="submit" name="Submit" value="Submit"
-          class="btn btn-primary spin"
+          class="btn btn-outline-primary spin"
           data-toggle="tooltip"
-          title="{% trans 'Save and go back' %}">
-    <span class="glyphicon glyphicon-ok"></span> {% trans 'Save' %}</button>
+          title="{% trans 'Save current data' %}">
+    <span class="fa fa-floppy-o"></span> {% trans 'Save' %}</button>
+  <button type="submit" name="Submit" value="Close"
+          class="btn btn-outline-primary spin"
+          data-toggle="tooltip"
+          title="{% trans 'Save and go back to the action table' %}">
+    <span class="fa fa-check"></span> {% trans 'Close' %}</button>
 </div>
 

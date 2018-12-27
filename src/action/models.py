@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import object
 import datetime
 import itertools
 import re
@@ -14,9 +15,12 @@ from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
 from dataops import formula_evaluation, pandas_db
-from dataops.formula_evaluation import get_variables, evaluate_top_node
+from dataops.formula_evaluation import (
+    get_variables, evaluate_top_node,
+    evaluate_node_text
+)
 from logs.models import Log
-from ontask import OntaskException
+from ontask import OnTaskException
 from workflow.models import Workflow, Column
 
 # Regular expressions detecting the use of a variable, or the
@@ -33,14 +37,16 @@ class Action(models.Model):
     """
 
     PERSONALIZED_TEXT = 'personalized_text'
+    PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
     PERSONALIZED_JSON = 'personalized_json'
     SURVEY = 'survey'
     TODO_LIST = 'todo_list'
 
     ACTION_TYPES = [
         (PERSONALIZED_TEXT, _('Personalized text')),
-        (PERSONALIZED_JSON, _('Personalized JSON')),
+        (PERSONALIZED_CANVAS_EMAIL, _('Personalized Canvas Email')),
         (SURVEY, _('Survey')),
+        (PERSONALIZED_JSON, _('Personalized JSON')),
         (TODO_LIST, _('TODO List'))
     ]
 
@@ -104,7 +110,8 @@ class Action(models.Model):
     columns = models.ManyToManyField(Column, related_name='actions_in')
 
     #
-    # Field for actions PERSONALIZED_TEXT and PERSONALIZED_JSON
+    # Field for actions PERSONALIZED_TEXT, PERSONALIZED_CAVNAS_EMAIL and
+    # PERSONALIZED_JSON
     #
     # Text to be personalised for action OUT
     content = models.TextField(default='', null=False, blank=True)
@@ -147,7 +154,8 @@ class Action(models.Model):
         if self.action_type == Action.PERSONALIZED_TEXT:
             return True
 
-        if self.action_type == Action.PERSONALIZED_JSON:
+        if self.action_type == Action.PERSONALIZED_JSON or \
+                self.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
             # If None or empty, return false
             if not self.target_url:
                 return False
@@ -246,7 +254,8 @@ class Action(models.Model):
         """
 
         if self.action_type == self.PERSONALIZED_TEXT or \
-                self.action_type == self.PERSONALIZED_JSON:
+                self.action_type == self.PERSONALIZED_JSON or \
+                self.action_type == self.PERSONALIZED_CANVAS_EMAIL:
             # Need to change name appearances in content
             new_text = var_use_res[0].sub(
                 lambda m: '{{ ' +
@@ -336,7 +345,7 @@ class Action(models.Model):
                     condition['formula'],
                     row_values
                 )
-            except OntaskException:
+            except OnTaskException:
                 # Something went wrong evaluating a condition. Stop.
                 return None
 
@@ -346,7 +355,7 @@ class Action(models.Model):
 
         return dict(dict(row_values, **condition_eval), **attributes)
 
-    class Meta:
+    class Meta(object):
         """
         Define the criteria of uniqueness with name in workflow and order by
         name
@@ -367,7 +376,7 @@ class Condition(models.Model):
                                blank=False,
                                related_name='conditions')
 
-    name = models.CharField(max_length=256, blank=False, verbose_name=_('name'))
+    name = models.CharField(max_length=256, blank=True, verbose_name=_('name'))
 
     description_text = models.CharField(max_length=512,
                                         default='',
@@ -470,10 +479,18 @@ class Condition(models.Model):
 
         return
 
+    def get_formula_text(self):
+        """
+        Return the content of the formula in a string that is human readable
+        :return: String
+        """
+
+        return evaluate_node_text(self.formula)[1:-1]
+
     def __str__(self):
         return self.name
 
-    class Meta:
+    class Meta(object):
         """
         The unique criteria here is within the action, the name and being a
         filter. We may choose to name a filter and a condition with the same

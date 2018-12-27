@@ -9,50 +9,48 @@
   <script src="{% static 'dataops/js/dataops.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
-<div align="center" class="container">
-  <h1 class="page-header">{% blocktrans with n=dtype_select %}Step 1: Establish a {{ n }}{% endblocktrans %}</h1>
+  <div class="container">
+    <h1 class="text-center">{% blocktrans with n=dtype_select %}Step 1: Establish a {{ n }}{% endblocktrans %}</h1>
 
-  <div style="display:block;">
-    <p>{% trans 'The data will be accessed with the following parameters:' %}</p>
+    <p class="text-center">{% trans 'The data will be accessed with the following parameters:' %}</p>
 
     {% if conn_type %}
-      <p class="help-block">{% blocktrans with n=conn_type %}Connection type:
+      <p class="help-block text-center">{% blocktrans with n=conn_type %}Connection type:
         {{ n }}{% endblocktrans %}</p>
     {% endif %}
     {% if conn_driver %}
-      <p class="help-block">{% blocktrans with n=conn_driver %}Connection
+      <p class="help-block text-center">{% blocktrans with n=conn_driver %}Connection
         driver: {{ n }}{% endblocktrans %}</p>
     {% endif %}
     {% if db_user %}
-      <p class="help-block">{% blocktrans with n=db_user %}Username: {{ n }}
+      <p class="help-block text-center">{% blocktrans with n=db_user %}Username: {{ n }}
         {% endblocktrans %}</p>
     {% endif %}
     {% if db_password %}
-      <p class="help-block">{% trans 'Password: Requested below' %}</p>
+      <p class="help-block text-center">{% trans 'Password: Requested below' %}</p>
     {% endif %}
     {% if db_host %}
-      <p class="help-block">
+      <p class="help-block text-center">
         {% blocktrans with n=db_host %}Host: {{ n }}{% endblocktrans %}</p>
     {% endif %}
     {% if db_port %}
-      <p class="help-block">
+      <p class="help-block text-center">
         {% blocktrans with n=db_port %}Port: {{ n }}{% endblocktrans %}</p>
     {% endif %}
-    <p class="help-block">
+    <p class="help-block text-center">
       {% blocktrans with n=db_name %}Database name: {{ n }}{% endblocktrans %}
     </p>
-    <p class="help-block">
+    <p class="help-block text-center">
       {% blocktrans with n=db_table %}Database table: {{ n }}{% endblocktrans %}
     </p>
   </div>
-  <form action="" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="input-group input-group-lg">
-      {% if form %}
-        {{ form|crispy }}
-      {% endif %}
-      {% include 'dataops/includes/upload_buttons.html' %}
-    </div>
-  </form>
-</div>
+  <div class="row justify-content-center">
+    <form action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <div class="text-center">
+        {% include 'dataops/includes/upload_buttons.html' %}
+      </div>
+    </form>
+  </div>
 {% endblock container %}

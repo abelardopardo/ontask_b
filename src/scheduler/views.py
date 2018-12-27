@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
+
+
+from builtins import str
+from past.utils import old_div
+from builtins import object
 import datetime
 
 import django_tables2 as tables
@@ -20,8 +24,8 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 from django_tables2 import A
 
 from action.models import Action
-from action.views_out import session_dictionary_name
-from forms import EmailScheduleForm, JSONScheduleForm
+from action.views_out import action_session_dictionary
+from .forms import EmailScheduleForm, JSONScheduleForm, CanvasEmailScheduleForm
 from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
@@ -35,8 +39,7 @@ class ScheduleActionTable(tables.Table):
     """
 
     operations = OperationsColumn(
-        attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name=_('Operations'),
+        verbose_name='',
         orderable=False,
         template_file='scheduler/includes/partial_scheduler_operations.html',
         template_context=lambda record: {'id': record.id}
@@ -44,119 +47,82 @@ class ScheduleActionTable(tables.Table):
 
     name = tables.Column(verbose_name=_('Name'))
 
-    description_text = tables.Column(verbose_name=_('Description'))
-
-    type = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=_('Type'),
-        accessor=A('action.get_action_type_display')
-    )
-
     action = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
         verbose_name=_('Action'),
         accessor=A('action.name')
     )
 
     execute = tables.DateTimeColumn(
-        attrs={'td': {'class': 'dt-center'}},
         verbose_name=_('Scheduled')
     )
 
     status = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
         verbose_name=_('Status'),
         accessor=A('get_status_display')
     )
 
-    item_column = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=_('Item column'),
-    )
-
-    exclude_values = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=_('Exclude'),
-    )
-
-    payload = tables.Column(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=_('Parameters'),
-    )
-
-    last_executed_log = tables.DateTimeColumn(
-        attrs={'td': {'class': 'dt-center'}},
-        verbose_name=_('Result'),
-    )
-
-    def render_action(self, record):
+    def render_name(self, record):
         return format_html(
-            '<a class="spin" href="{0}">{1}</a>'.format(
-                reverse('action:edit',
-                        kwargs={'pk': record.action.id}),
-                record.action.name
+            """<a href="{0}"
+                  data-toggle="tooltip"
+                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""".format(
+                reverse('scheduler:edit', kwargs={'pk': record.id}),
+                _('Edit this scheduled action execution'),
+                record.name
             )
         )
 
-    def render_exclude_values(self, record):
-        return ', '.join(record.exclude_values)
+    def render_action(self, record):
+        icon = 'file-text'
+        if record.action.action_type == Action.PERSONALIZED_TEXT:
+            icon = 'file-text'
+            title = 'Personalized text'
+        elif record.action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+            icon = 'envelope-square'
+            title = 'Personalized Canvas Email'
+        elif record.action.action_type == Action.PERSONALIZED_JSON:
+            icon = 'code'
+            title = 'Personalized JSON'
+        elif record.action.action_type == Action.SURVEY:
+            icon = 'question-circle-o'
+            title = 'Survey'
 
-    def render_payload(self, record):
-        result = ''
-        if not record.payload:
-            return result
-
-        for k, v in sorted(record.payload.items()):
-            if isinstance(v, list):
-                result += '<li>{0}: {1}</li>'.format(
-                    escape(str(k)), escape(', '.join([str(x) for x in v]))
-                )
-            else:
-                result += '<li>{0}: {1}</li>'.format(
-                    escape(str(k)), escape(str(v))
-                )
         return format_html(
-            '<ul style="text-align:left;">{0}<ul>'.format(result)
+            '<a class="spin" href="{0}"'
+            '   data-toggle="tooltip" title="{1}">{2} '
+            '<span class="fa fa-{3}"></span></a>'.format(
+                reverse('action:edit',
+                        kwargs={'pk': record.action.id}),
+                _('Edit the action scheduled for execution'),
+                record.action.name,
+                icon
+            )
         )
 
-    def render_last_executed_log(self, record):
+    def render_status(self, record):
         log_item = record.last_executed_log
         if not log_item:
-            return "---"
+            return record.get_status_display()
+
+        # At this point, the object is not pending. Produce a link
         return format_html(
             """<a class="spin" href="{0}">{1}</a>""".format(
                 reverse('logs:view', kwargs={'pk': log_item.id}),
-                log_item.modified.astimezone(
-                    pytz.timezone(settings.TIME_ZONE)
-                )
+                record.get_status_display()
             )
         )
 
-    class Meta:
+    class Meta(object):
         model = ScheduledAction
 
-        fields = ('name', 'description_text', 'action', 'execute',
-                  'status', 'item_column', 'exclude_values', 'operations',
-                  'last_executed_log')
+        fields = ('name', 'action', 'execute', 'status')
 
-        sequence = ('operations',
-                    'name',
-                    'description_text',
-                    'type',
-                    'action',
-                    'execute',
-                    'status',
-                    'item_column',
-                    'exclude_values',
-                    'last_executed_log')
+        sequence = ('name', 'action', 'execute', 'status', 'operations')
 
         attrs = {
-            'class': 'table display table-bordered',
+            'class': 'table table-hover table-bordered',
+            'style': 'width: 100%;',
             'id': 'scheduler-table'
-        }
-
-        row_attrs = {
-            'style': 'text-align:center;'
         }
 
 
@@ -176,7 +142,7 @@ def save_email_schedule(request, action, schedule_item, op_payload):
         action=action,
         instance=schedule_item,
         columns=action.workflow.columns.filter(is_key=True),
-        confirm_emails=op_payload.get('confirm_emails', False))
+        confirm_items=op_payload.get('confirm_items', False))
 
     # Check if the request is GET, or POST but not valid
     if request.method == 'GET' or not form.is_valid():
@@ -221,18 +187,94 @@ def save_email_schedule(request, action, schedule_item, op_payload):
                        'now': datetime.datetime.now(pytz.timezone(
                            settings.TIME_ZONE))})
 
-    s_item.save()
-
     # Upload information to the op_payload
     op_payload['schedule_id'] = s_item.id
-    op_payload['confirm_emails'] = form.cleaned_data['confirm_emails']
+    op_payload['confirm_items'] = form.cleaned_data['confirm_items']
 
-    if op_payload['confirm_emails']:
+    if op_payload['confirm_items']:
         # Update information to carry to the filtering stage
         op_payload['exclude_values'] = s_item.exclude_values
         op_payload['item_column'] = s_item.item_column.name
         op_payload['button_label'] = ugettext('Schedule')
-        request.session[session_dictionary_name] = op_payload
+        request.session[action_session_dictionary] = op_payload
+
+        return redirect('action:item_filter')
+    else:
+        # If there is not item_column, the exclude values should be empty.
+        s_item.exclude_values = []
+        s_item.save()
+
+    # Go straight to the final step
+    return finish_scheduling(request, s_item, op_payload)
+
+
+def save_canvas_email_schedule(request, action, schedule_item, op_payload):
+    """
+    Function to handle the creation and edition of email items
+    :param request: Http request being processed
+    :param action: Action item related to the schedule
+    :param schedule_item: Schedule item or None if it is new
+    :param op_payload: dictionary to carry over the request to the next step
+    :return:
+    """
+
+    # Create the form to ask for the email subject and other information
+    form = CanvasEmailScheduleForm(
+        data=request.POST or None,
+        action=action,
+        instance=schedule_item,
+        columns=action.workflow.columns.filter(is_key=True),
+        confirm_items=op_payload.get('confirm_items', False))
+
+    # Check if the request is GET, or POST but not valid
+    if request.method == 'GET' or not form.is_valid():
+        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
+        # Render the form
+        return render(request,
+                      'scheduler/edit.html',
+                      {'action': action,
+                       'form': form,
+                       'now': now})
+
+    # Processing a valid POST request
+
+    # Save the schedule item object
+    s_item = form.save(commit=False)
+
+    # Assign additional fields and save
+    s_item.user = request.user
+    s_item.action = action
+    s_item.status = ScheduledAction.STATUS_CREATING
+    s_item.payload = {
+        'subject': form.cleaned_data['subject'],
+        'token': form.cleaned_data['token'],
+    }
+    # Verify that that action does comply with the name uniqueness
+    # property (only with respect to other actions)
+    try:
+        s_item.save()
+    except IntegrityError as e:
+        # There is an action with this name already
+        form.add_error('name',
+                       _('A scheduled execution of this action with this name '
+                         'already exists'))
+        return render(request,
+                      'scheduler/edit.html',
+                      {'action': action,
+                       'form': form,
+                       'now': datetime.datetime.now(pytz.timezone(
+                           settings.TIME_ZONE))})
+
+    # Upload information to the op_payload
+    op_payload['schedule_id'] = s_item.id
+    op_payload['confirm_items'] = form.cleaned_data['confirm_items']
+
+    if op_payload['confirm_items']:
+        # Update information to carry to the filtering stage
+        op_payload['exclude_values'] = s_item.exclude_values
+        op_payload['item_column'] = s_item.item_column.name
+        op_payload['button_label'] = ugettext('Schedule')
+        request.session[action_session_dictionary] = op_payload
 
         return redirect('action:item_filter')
     else:
@@ -259,7 +301,8 @@ def save_json_schedule(request, action, schedule_item, op_payload):
         data=request.POST or None,
         action=action,
         instance=schedule_item,
-        columns=action.workflow.columns.filter(is_key=True))
+        columns=action.workflow.columns.filter(is_key=True),
+        confirm_items=op_payload.get('confirm_items', False))
 
     # Check if the request is GET, or POST but not valid
     if request.method == 'GET' or not form.is_valid():
@@ -294,7 +337,7 @@ def save_json_schedule(request, action, schedule_item, op_payload):
         op_payload['item_column'] = s_item.item_column.name
         op_payload['exclude_values'] = s_item.exclude_values
         op_payload['button_label'] = ugettext('Schedule')
-        request.session[session_dictionary_name] = op_payload
+        request.session[action_session_dictionary] = op_payload
 
         return redirect('action:item_filter')
     else:
@@ -321,7 +364,7 @@ def finish_scheduling(request, schedule_item=None, payload=None):
 
     # Get the payload from the session if not given
     if payload is None:
-        payload = request.session.get(session_dictionary_name)
+        payload = request.session.get(action_session_dictionary)
 
         # If there is no payload, something went wrong.
         if payload is None:
@@ -334,7 +377,8 @@ def finish_scheduling(request, schedule_item=None, payload=None):
     if not schedule_item:
         s_item_id = payload.get('schedule_id')
         if not s_item_id:
-            messages.error(request, _('Incorrect parameters in action scheduling'))
+            messages.error(request,
+                           _('Incorrect parameters in action scheduling'))
             return redirect('action:index')
 
         # Get the item being processed
@@ -374,8 +418,20 @@ def finish_scheduling(request, schedule_item=None, payload=None):
             'token': schedule_item.payload.get('subject')
         })
         log_type = Log.SCHEDULE_JSON_EDIT
+    elif schedule_item.action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        ivalue = None
+        if schedule_item.item_column:
+            ivalue = schedule_item.item_column.name
+        log_payload.update({
+            'item_column': ivalue,
+            'token': schedule_item.payload.get('subject'),
+            'subject': schedule_item.payload.get('subject'),
+        })
+        log_type = Log.SCHEDULE_CANVAS_EMAIL_EXECUTE
     else:
-        log_type = None
+        messages.error(request,
+                       _('This type of actions cannot be scheduled'))
+        return redirect('action:index')
 
     # Create the log
     Log.objects.register(request.user,
@@ -390,17 +446,17 @@ def finish_scheduling(request, schedule_item=None, payload=None):
     tdelta = schedule_item.execute - now
 
     # Reset object to carry action info throughout dialogs
-    request.session[session_dictionary_name] = {}
+    request.session[action_session_dictionary] = {}
     request.session.save()
 
     # Create the timedelta string
     delta_string = ''
     if tdelta.days != 0:
         delta_string += ugettext('{0} days').format(tdelta.days)
-    hours = tdelta.seconds / 3600
+    hours = old_div(tdelta.seconds, 3600)
     if hours != 0:
         delta_string += ugettext(', {0} hours').format(hours)
-    minutes =  (tdelta.seconds % 3600) / 60
+    minutes =  old_div((tdelta.seconds % 3600), 60)
     if minutes != 0:
         delta_string += ugettext(', {0} minutes').format(minutes)
 
@@ -430,8 +486,42 @@ def index(request):
     return render(request,
                   'scheduler/index.html',
                   {'table': ScheduleActionTable(s_items, orderable=False),
-                   'no_data': workflow.nrows == 0,
-                   'no_actions': workflow.actions.count() == 0})
+                   'workflow': workflow})
+
+
+@user_passes_test(is_instructor)
+def view(request, pk):
+    """
+    View an existing scheduled action
+    :param request: HTTP request
+    :param pk: primary key of the scheduled action
+    :return: HTTP response
+    """
+
+    data = {'form_is_valid': False}
+
+    # Get first the current workflow
+    workflow = get_workflow(request)
+    if not workflow:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('schedule:index')
+        return JsonResponse(data)
+
+    # Get the scheduled action
+    sch_obj = ScheduledAction.objects.filter(action__workflow=workflow,
+                                             pk=pk)
+
+    if not sch_obj:
+        # Connection object not found, go to table of sql connections
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('schedule:index')
+        return JsonResponse(data)
+
+    data['html_form'] = render_to_string(
+        'scheduler/includes/partial_show_schedule_action.html',
+        {'s_vals': sch_obj.values()[0], 'id': sch_obj[0].id}
+    )
+    return JsonResponse(data)
 
 
 @user_passes_test(is_instructor)
@@ -469,13 +559,13 @@ def edit(request, pk):
         action = s_item.action
 
     # Get the payload from the session, and if not, use the given one
-    op_payload = request.session.get(session_dictionary_name, None)
+    op_payload = request.session.get(action_session_dictionary, None)
     if not op_payload:
         op_payload = {'action_id': action.id,
                       'prev_url': reverse('scheduler:create',
                                           kwargs={'pk': action.id}),
                       'post_url': reverse('scheduler:finish_scheduling')}
-        request.session[session_dictionary_name] = op_payload
+        request.session[action_session_dictionary] = op_payload
         request.session.save()
 
     # Verify that celery is running!
@@ -494,10 +584,14 @@ def edit(request, pk):
 
     if action.action_type == Action.PERSONALIZED_TEXT:
         return save_email_schedule(request, action, s_item, op_payload)
+    elif action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        return save_canvas_email_schedule(request, action, s_item, op_payload)
     elif action.action_type == Action.PERSONALIZED_JSON:
         return save_json_schedule(request, action, s_item, op_payload)
 
     # Action type not found, so return to the main table view
+    messages.error(request,
+                   _('This action does not support scheduling'))
     return redirect('scheduler:index')
 
 

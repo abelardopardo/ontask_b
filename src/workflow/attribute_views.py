@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
-import django_tables2 as tables
+
 from django.contrib.auth.decorators import user_passes_test
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -12,53 +11,8 @@ from django.utils.translation import ugettext_lazy as _
 from action.models import Condition, Action
 from logs.models import Log
 from ontask.permissions import is_instructor
-from ontask.tables import OperationsColumn
 from .forms import (AttributeItemForm)
 from .ops import (get_workflow)
-
-
-class AttributeTable(tables.Table):
-    """
-    Table to render the list of attributes attached to a workflow
-    """
-    name = tables.Column(verbose_name=_('Name'))
-    value = tables.Column(verbose_name=_('Value'))
-    operations = OperationsColumn(
-        verbose_name='Operations',
-        template_file='workflow/includes/partial_attribute_operations.html',
-        template_context=lambda record: {'id': record['id'], }
-    )
-
-    class Meta:
-        fields = ('name', 'value', 'operations')
-        attrs = {
-            'class': 'table display table-bordered',
-            'id': 'attribute-table'
-        }
-
-        row_attrs = {
-            'style': 'text-align:center;',
-        }
-
-
-@user_passes_test(is_instructor)
-def attributes(request):
-    # Get the workflow
-    workflow = get_workflow(request)
-    if not workflow:
-        return redirect('workflow:index')
-
-    attribute_data = [
-        {'id': idx, 'name': k, 'value': v}
-        for idx, (k, v) in enumerate(sorted(workflow.attributes.items()))]
-
-    # Context to render the template
-    context = {
-        'table': AttributeTable(attribute_data, orderable=False),
-        'wid': workflow.id
-    }
-
-    return render(request, 'workflow/attributes.html', context)
 
 
 def save_attribute_form(request, workflow, template, form, key_idx):
@@ -145,7 +99,7 @@ def save_attribute_form(request, workflow, template, form, key_idx):
                           'attr_val': form.cleaned_data['value']})
 
     data['form_is_valid'] = True
-    data['html_redirect'] = reverse('workflow:attributes')
+    data['html_redirect'] = ''
     return JsonResponse(data)
 
 
@@ -158,7 +112,7 @@ def attribute_create(request):
 
     # Create the form object with the form_fields just computed
     form = AttributeItemForm(request.POST or None,
-                             keys=workflow.attributes.keys())
+                             keys=list(workflow.attributes.keys()))
 
     return save_attribute_form(
         request,
@@ -238,7 +192,8 @@ def attribute_delete(request, pk):
         workflow.save()
 
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:attributes')
+        data['html_redirect'] = ''
+        return JsonResponse(data)
 
     data['html_form'] = render_to_string(
         'workflow/includes/partial_attribute_delete.html',

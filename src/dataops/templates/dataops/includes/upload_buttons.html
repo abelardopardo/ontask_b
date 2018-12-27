@@ -1,12 +1,12 @@
 {% load i18n %}
 <div class="text-center" style="margin-bottom:1.5ex;margin-top:1.5ex;">
-  <a class="btn btn-default spin" style="margin-right:2ex;" href="{% url 'dataops:uploadmerge' %}">{% trans 'Cancel' %}</a>
-  <a class="btn btn-primary spin" style="margin-right:2ex;" href="{{ prev_step }}">
-    <span class="glyphicon glyphicon-triangle-left"></span>
+  <a class="btn btn-outline-dark spin" href="{% url 'dataops:uploadmerge' %}">{% trans 'Cancel' %}</a>
+  <a class="btn btn-outline-primary spin" href="{{ prev_step }}">
+    <span class="fa fa-triangle-left"></span>
     {% trans 'Back' %}
   </a>
-  <button class="btn btn-primary btn-space spin"  style="margin-right:2ex;"
+  <button class="btn btn-outline-primary btn-space spin"
           type="Submit" name="Submit" value="Submit">
-    <span class="glyphicon glyphicon-triangle-right"></span> {% if next_name %}{{ next_name }}{% else %}{% trans 'Next' %}{% endif %}</button>
+    <span class="fa fa-triangle-right"></span> {% if next_name %}{{ next_name }}{% else %}{% trans 'Next' %}{% endif %}</button>
 </div>
 

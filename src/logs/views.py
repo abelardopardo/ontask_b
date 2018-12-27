@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+
 
 import json
 
@@ -10,10 +10,12 @@ from django.contrib.auth.decorators import user_passes_test
 from django.db.models import F, Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse, render
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
+from ontask import simplify_datetime_str
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
 from .models import Log
@@ -61,7 +63,7 @@ def display_ss(request):
     search_value = request.POST.get('search[value]', None)
 
     # Get the logs
-    qs = Log.objects.filter(workflow__id=workflow.id)
+    qs = workflow.logs
     recordsTotal = qs.count()
 
     if search_value:
@@ -83,15 +85,15 @@ def display_ss(request):
     final_qs = []
     for item in qs[start:start + length]:
         row = [
-            """<a href="{0}" class="btn btn-default spin"
+            """<a href="{0}" class="btn btn-outline-dark spin"
                   data-toggle="tooltip" title="{1}">
-                  <span class="glyphicon glyphicon-eye-open"></span> {2}
+                  <span class="fa fa-eye"></span> {2}
                 </a>""".format(
                 reverse('logs:view', kwargs={'pk': item[0]}),
                 ugettext('View log content'),
                 item[0]
             ),
-            item[1].astimezone(pytz.timezone(ontask_settings.TIME_ZONE)),
+            simplify_datetime_str(item[1]),
             item[2],
             item[3],
         ]

@@ -1,32 +1,14 @@
 {% load i18n %}
-<div class="dropdown btn-group">
-  <button class="btn btn-default btn-sm dropdown-toggle" type="button"
-          data-toggle="dropdown"> {% trans 'Operations' %} <span class="caret"></span>
-  </button>
-  <ul role="menu" class="dropdown-menu">
-    <li>
-      <a href="{{ stat_url }}"
-         class="btn btn-default btn-sm align-middle spin"
-            data-toggle="tooltip" 
-            title="{% trans 'Statistics about this column' %}">
-        <span class="glyphicon glyphicon-stats"></span> {% trans 'Statistics' %}
-      </a>
-    </li>
-    <li>
-      <a class="btn btn-default btn-sm" href="{{ edit_url }}"
-         data-toggle="tooltip" 
-         title="{% trans 'Edit the data in this row' %}">
-        <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
-      </a>
-    </li>
-    <li>
-      <button type="button"
-              class="btn btn-danger btn-sm js-row-delete"
-              data-url="{% url 'table:row_delete' %}{{ delete_key }}"
-              data-toggle="tooltip" 
-              title="{% trans 'Delete this row' %}">
-        <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
-      </button>
-    </li>
-  </ul>
+<div class="btn-group">
+  <a class="btn btn-sm btn-light spin" href="{{ edit_url }}" style="width: unset;"
+     data-toggle="tooltip" title="{% trans 'Edit the values in this row' %}">
+    <span class="fa fa-pencil"></span></a>
+  <a href="{{ stat_url }}" class="btn btn-sm btn-light spin" style="width: unset;"
+     data-toggle="tooltip"
+     title="{% trans 'Compare values in the row with the rest of the table' %}">
+    <span class="fa fa-bar-chart"></span></a>
+  <a class="btn btn-sm btn-light js-row-delete" href="#" style="width: unset;"
+     data-url="{% url 'table:row_delete' %}{{ delete_key }}"
+     data-toggle="tooltip" title="{% trans 'Delete this row' %}">
+    <span class="fa fa-trash"></span></a>
 </div>

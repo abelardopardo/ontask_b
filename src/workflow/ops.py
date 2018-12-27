@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import str
 import gzip
 from datetime import datetime
 from io import BytesIO
@@ -182,7 +183,7 @@ def detach_dataframe(workflow):
     workflow.save()
 
     # Delete the column_names, column_types and column_unique
-    Column.objects.filter(workflow__id=workflow.id).delete()
+    workflow.columns.delete()
 
     # Delete the info for QueryBuilder
     workflow.set_query_builder_ops()
@@ -227,13 +228,15 @@ def do_import_workflow(user, name, file_item):
         # Save the new workflow
         workflow = workflow_data.save(user=user, name=name)
     except (TypeError, NotImplementedError) as e:
-        return _('Unable to import workflow (Exception: {0})').format(e.message)
+        return _('Unable to import workflow (Exception: {0})').format(e)
     except serializers.ValidationError as e:
         return _('Unable to import workflow due to a validation error')
     except Exception as e:
-        return _('Unable to import workflow (Exception: {0})').format(e.message)
+        return _('Unable to import workflow (Exception: {0})').format(e)
 
-    if not pandas_db.check_wf_df(workflow):
+    try:
+        pandas_db.check_wf_df(workflow)
+    except AssertionError:
         # Something went wrong.
         workflow.delete()
         return _('Workflow data with incorrect structure.')
@@ -413,8 +416,9 @@ def reposition_column_and_update_df(workflow, column, to_idx):
     :return: Content reflected in the DB
     """
 
-    df = pandas_db.load_from_db(workflow.id)
+    # df = pandas_db.load_from_db(workflow.id)
     workflow.reposition_columns(column.position, to_idx)
     column.position = to_idx
     column.save()
-    ops.store_dataframe_in_db(df, workflow.id)
+    # FIXME Enough to simply modify the position field without DB update
+    # ops.store_dataframe_in_db(df, workflow.id)

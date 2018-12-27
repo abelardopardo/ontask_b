@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import str
+from builtins import map
+from builtins import zip
 import re
 import string
 
@@ -85,7 +88,7 @@ def translate(varname):
 
     # If the variable name starts with a non-letter or the prefix used to
     # force letter start, add a prefix.
-    if not varname[0] in string.letters or varname.startswith('OT_'):
+    if not varname[0] in string.ascii_letters or varname.startswith('OT_'):
         varname = 'OT_' + varname
 
     # Return the new variable name surrounded by the detected marks.
@@ -153,7 +156,7 @@ def render_template(template_text, context_dict, action=None):
 
     # Step 3. Apply the translation process to the context keys
     new_context = dict([(translate(escape(x)), y)
-                        for x, y in context_dict.items()])
+                        for x, y in list(context_dict.items())])
 
     # If the number of elements in the two dictionaries is different, we have
     #  a case of collision in the translation. Need to stop immediately.
@@ -213,12 +216,14 @@ def evaluate_action(action, extra_string=None,
 
     # Step 3: Get the table data
     result = []
-    data_frame = pandas_db.get_subframe(workflow.id, cond_filter)
+    data_frame = pandas_db.get_subframe(workflow.id,
+                                        cond_filter,
+                                        workflow.get_column_names())
 
     for __, row in data_frame.iterrows():
 
         # Get the dict(col_name, value)
-        row_values = dict(zip(col_names, row))
+        row_values = dict(list(zip(col_names, row)))
 
         if exclude_values and col_idx != -1 and \
                 str(row_values[column_name]) in exclude_values:
@@ -254,7 +259,7 @@ def evaluate_action(action, extra_string=None,
                                               action)]
         except Exception as e:
             return _('Syntax error detected in the action text. {0}').format(
-                e.message
+                e
             )
 
         # If there is extra message, render with context and create tuple
@@ -263,7 +268,7 @@ def evaluate_action(action, extra_string=None,
                 partial_result.append(render_template(extra_string, context))
             except Exception as e:
                 return _('Syntax error detected in the subject. {0}').format(
-                    e.message
+                    e
                 )
 
         # If column_name was given (and it exists), create a tuple with that
@@ -298,7 +303,8 @@ def get_row_values(action, row_idx):
     else:
         result = pandas_db.get_table_row_by_key(action.workflow,
                                                 cond_filter,
-                                                row_idx)
+                                                row_idx,
+                                                action.workflow.get_column_names())
     return result
 
 
@@ -337,8 +343,7 @@ def evaluate_row_action_out(action, context, text=None):
     try:
         result = render_template(text, context, action)
     except TemplateSyntaxError as e:
-        return render_to_string('action/syntax_error.html',
-                                {'msg': e.message})
+        return render_to_string('action/syntax_error.html', {'msg': e})
 
     return result
 
@@ -400,7 +405,7 @@ def run(*script_args):
     --{{ OT_The prefix 2 }}--
     """
 
-    template = u'<p>Hi&nbsp;{{ !"#$%&amp;()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~ }}</p>'
+    template = '<p>Hi&nbsp;{{ !"#$%&amp;()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~ }}</p>'
 
     context = {
         'one': 1,
@@ -422,8 +427,8 @@ def run(*script_args):
         'The prefix 2': 'This should NOT appear. ERROR',
     }
     context = {
-        u'!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~': u'Carmelo Coton',
+        '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~': 'Carmelo Coton',
     }
 
-    print(escape(context.items()[0][0]))
-    print(render_template(template, context))
+    print((escape(list(context.items())[0][0])))
+    print((render_template(template, context)))

@@ -17,61 +17,59 @@
   <script src="{% static 'table/js/table.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
-<div class="container-fluid text-center">
-  <h1 class="page-header">Column: {{ column.name }}</h1>
+<div class="container">
+  <h1 class="text-center">Column: {{ column.name }}</h1>
   {% if column.description_text %}
-    <p class="lead">{{ column.description_text }}</p>
+    <p class="lead text-center">{{ column.description_text }}</p>
   {% endif %}
-
-  <p><a href="{{ request.META.HTTP_REFERER }}"
-        class="btn btn-default btn-sm align-middle spin"> {% trans 'Back' %}</a></p>
-
-  {% if stat_data %}
-    {% if column.data_type == 'integer' or column.data_type == 'double' %}
-      <table class="table display dataTable no-footer table-bordered"
-             id="stat-column" role="grid" aria-describedby="stat-column_info">
-        <thead>
-          <tr role="row">
-            <th class="dt-center">Min</th>
-            <th class="dt-center">Q1</th>
-            <th class="dt-center">Mean</th>
-            <th class="dt-center">Median</th>
-            <th class="dt-center">Q3</th>
-            <th class="dt-center">Max</th>
-            <th class="dt-center">Std</th>
-            <th class="dt-center">Mode</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr role="row">
-            <td class="dt-center">{{ stat_data.min }}</td>
-            <td class="dt-center">{{ stat_data.q1 }}</td>
-            <td class="dt-center">{{ stat_data.mean }}</td>
-            <td class="dt-center">{{ stat_data.median }}</td>
-            <td class="dt-center">{{ stat_data.q3 }}</td>
-            <td class="dt-center">{{ stat_data.max }}</td>
-            <td class="dt-center">{{ stat_data.std }}</td>
-            <td class="dt-center">{{ stat_data.mode }}</td>
-          </tr>
-        </tbody>
-      </table>
-    {% endif %}
-
-    {% comment %}
-      <h1>MACRO</h1>
-      {% visualization 'WAM' 'boxplot' %}
-    {% endcomment %}
-
-    {% for vis_item in visualizations %}
-      {{ vis_item|safe }}
-    {% endfor %}
-  {% else %}
-    <p class="alert-warning">{% trans 'Column has no data' %}</p>
-  {% endif %}
-
   <div class="text-center">
     <a href="{{ request.META.HTTP_REFERER }}"
-         class="btn btn-default btn-sm align-middle spin"> {% trans 'Back' %}</a>
+       class="btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
+  </div>
+  <br/>
+  {% if stat_data %}
+    {% if column.data_type == 'integer' or column.data_type == 'double' %}
+      <div class="container justify-content-center">
+        <table class="table table-hover table-bordered"
+               id="stat-column" role="grid" aria-describedby="stat-column_info">
+          <thead>
+            <tr role="row">
+              <th class="dt-center">Min</th>
+              <th class="dt-center">Q1</th>
+              <th class="dt-center">Mean</th>
+              <th class="dt-center">Median</th>
+              <th class="dt-center">Q3</th>
+              <th class="dt-center">Max</th>
+              <th class="dt-center">Std</th>
+              <th class="dt-center">Mode</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr role="row">
+              <td class="dt-center">{{ stat_data.min }}</td>
+              <td class="dt-center">{{ stat_data.q1 }}</td>
+              <td class="dt-center">{{ stat_data.mean }}</td>
+              <td class="dt-center">{{ stat_data.median }}</td>
+              <td class="dt-center">{{ stat_data.q3 }}</td>
+              <td class="dt-center">{{ stat_data.max }}</td>
+              <td class="dt-center">{{ stat_data.std }}</td>
+              <td class="dt-center">{{ stat_data.mode }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+    <div class="row justify-content-center">
+      {% for vis_item in visualizations %}
+        {{ vis_item|safe }}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="alert-warning text-center">{% trans 'Column has no data' %}</p>
+  {% endif %}
+  <div class="text-center">
+    <a href="{{ request.META.HTTP_REFERER }}"
+         class="btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
   </div>
 </div>
 {% endblock container %}

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+
 
 from rest_framework import status
 from rest_framework.exceptions import APIException
@@ -31,20 +31,6 @@ class TableBasicOps(APIView):
     permission_classes = (UserIsInstructor,)
 
     def get_object(self, pk):
-        # try:
-        #     if self.request.user.is_superuser:
-        #         workflow = Workflow.objects.get(pk=pk)
-        #     else:
-        #         workflow = Workflow.objects.filter(
-        #             Q(user=self.request.user) |
-        #             Q(shared__id=self.request.user.id)
-        #         ).distinct().get(id=pk)
-        # except Workflow.DoesNotExist:
-        #     raise APIException('Incorrect object')
-        #
-        # if workflow.is_locked():
-        #     raise APIException('Workflow is locked by another user')
-        #
         workflow = get_workflow(self.request, pk)
         if workflow is None:
             raise APIException(_('Unable to access the workflow'))
@@ -150,7 +136,7 @@ class TablePandasOps(TableBasicOps):
     import base64
     import pandas
 
-    out_file = StringIO.StringIO()
+    out_file = StringIO()
     pandas.to_pickle(data_frame, out_file)
     result = base64.b64encode(out_file.getvalue())
 
@@ -160,7 +146,7 @@ class TablePandasOps(TableBasicOps):
     import base64
     import pandas
 
-    output = StringIO.StringIO()
+    output = StringIO()
     output.write(base64.b64decode(encoded_dataframe))
     result = pandas.read_pickle(output)
 
@@ -317,7 +303,7 @@ class TablePandasMerge(TableBasicMerge):
     import base64
     import pandas
 
-    out_file = StringIO.StringIO()
+    out_file = StringIO()
     pandas.to_pickle(data_frame, out_file)
     result = base64.b64encode(out_file.getvalue())
     </pre>
@@ -330,7 +316,7 @@ class TablePandasMerge(TableBasicMerge):
     import base64
     import pandas
 
-    output = StringIO.StringIO()
+    output = StringIO()
     output.write(base64.b64decode(encoded_dataframe))
     result = pandas.read_pickle(output)
     </pre>

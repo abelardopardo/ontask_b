@@ -9,30 +9,30 @@
   <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
-  <div align="center" class="container">
-    <h1 class="page-header">{% trans 'Export Workflow' %}</h1>
+  <div class="container" id="workflow-export">
+    <h1 class="text-center">{% trans 'Export Workflow' %}</h1>
+    <div class="row justify-content-center">
       <form action="{% url 'workflow:export_ask' wid %}" method="post"
             enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="modal-body">
-          {% if form.errors %}
-            {% for error in form.non_field_errors %}
-              <div class="alert alert-danger">
-                <strong>{{ error|escape }}</strong>
-              </div>
-            {% endfor %}
-          {% endif %}
-          <p>{% trans 'Workflow name:' %} {{ name }}</p>
-          <p>{% trans 'Number of rows/columns:' %} {{ nrows }}/{{ ncols }}</p>
-          <p>{% trans 'Number of actions:' %} {{ nactions }}</p>
-          {% if nactions > 0 %}
-            <p>{% trans 'Select the actions to include in the export:' %}</p>
-            <table class="table display dataTable table-bordered">
+        {% if form.errors %}
+          {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+              <strong>{{ error|escape }}</strong>
+            </div>
+          {% endfor %}
+        {% endif %}
+        <p class="text-center">{% trans 'Workflow name:' %} {{ name }}</p>
+        <p class="text-center">{% trans 'Number of rows/columns:' %} {{ nrows }}/{{ ncols }}</p>
+        <p class="text-center">{% trans 'Number of actions:' %} {{ nactions }}</p>
+        {% if nactions > 0 %}
+          <p class="text-center">{% trans 'Select the actions to include in the export:' %}</p>
+          <table class="table dataTable">
             <thead>
               <tr>
                 <th class="text-center">{% trans 'Action' %}</th>
                 <th class="text-center">
-                  {% trans 'All' %} <input type="checkbox" id="checkAll">
+                  {% trans 'Select all' %} <input type="checkbox" id="checkAll"/>
                 </th>
               </tr>
             </thead>
@@ -54,14 +54,14 @@
               {% endfor %}
             </tbody>
           </table>
-          {% endif %}
-        </div>
-        <div class="modal-footer" style="text-align: center;">
-          <a class="btn btn-default spin" href="{% url 'workflow:detail' wid %}">{% trans 'Cancel' %}</a>
-          <button class="btn btn-primary btn-space"
+        {% endif %}
+        <div class="text-center">
+          <a class="btn btn-outline-dark spin" href="{% url 'workflow:operations' wid %}">{% trans 'Cancel' %}</a>
+          <button class="btn btn-outline-primary btn-space"
                   type="Submit" name="Submit" value="Submit">
-            <span class="glyphicon glyphicon-export"></span> {% trans 'Export' %}</button>
+            <span class="fa fa-download"></span> {% trans 'Export' %}</button>
         </div>
       </form>
+    </div>
   </div>
 {% endblock %}

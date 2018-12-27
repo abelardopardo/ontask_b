@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
+
+from builtins import object
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponse
 from import_export import resources
@@ -10,7 +11,7 @@ from .models import Log
 
 
 class LogResource(resources.ModelResource):
-    class Meta:
+    class Meta(object):
         model = Log
         fields = ('id', 'created', 'name', 'payload',)
 

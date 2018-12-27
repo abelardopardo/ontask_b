@@ -15,7 +15,7 @@ from dataops import pandas_db
 from workflow.models import Workflow
 
 
-class DataopsSymbols(test.OntaskLiveTestCase):
+class DataopsSymbols(test.OnTaskLiveTestCase):
     fixtures = ['wflow_symbols']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -38,8 +38,11 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         # Login
         self.login('instructor01@bogus.com')
 
-        # Go to the details page
+        # Open the workflow
         self.access_workflow_from_home_page('sss')
+
+        # Go to the column details
+        self.go_to_details()
 
         # Edit the name column
         self.open_column_edit('name')
@@ -89,28 +92,20 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.go_to_attribute_page()
 
         # Delete the existing one and confirm deletion
-        self.selenium.find_element_by_xpath(
-            "//table[@id='attribute-table']/tbody/tr/td[3]/button[2]"
-        ).click()
-        # Wait for the delete confirmation frame
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),
-                                             'Confirm attribute deletion')
+        # click the delete button in the second row
+        self.open_dropdown_click_option(
+            '//table[@id="attribute-table"]//tr[1]/td[3]/div/button',
+            'Delete'
         )
         # Click in the delete confirm button
         self.selenium.find_element_by_xpath(
             "//div[@class='modal-footer']/button[2]"
         ).click()
         # MODAL WAITING
-        self.wait_close_modal_refresh_table('attribute-table_previous')
+        self.wait_for_page(element_id='workflow-detail')
 
         # Add a new attribute and insert key (symbols) and value
         self.create_attribute(symbols + '3', 'vvv')
-
-        # Save and close the attribute page
-        self.selenium.find_element_by_link_text('Back').click()
-        # Wait for the details page
-        self.wait_close_modal_refresh_table('column-table_previous')
 
         # Click in the TABLE link
         self.go_to_table()
@@ -137,12 +132,15 @@ class DataopsSymbols(test.OntaskLiveTestCase):
             )
         )
 
+        # Set some parameters
+        self.select_parameters_tab()
         select = Select(self.selenium.find_element_by_id(
             'select-key-column-name'))
         select.select_by_visible_text('sid')
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
+        self.select_parameters_tab()
         select = Select(self.selenium.find_element_by_id(
             'select-key-column-name'))
         select.select_by_visible_text('email')
@@ -151,6 +149,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         )
 
         # Save action-in
+        self.select_questions_tab()
         self.selenium.find_element_by_link_text('Done').click()
         self.wait_for_datatable('action-table_previous')
 
@@ -164,39 +163,41 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Enter data using the RUN menu. Select one entry to populate
         self.selenium.find_element_by_link_text("student01@bogus.com").click()
+        self.wait_for_page(element_id='action-row-datainput')
         self.selenium.find_element_by_id("id____ontask___select_1").click()
         self.selenium.find_element_by_id("id____ontask___select_1").clear()
         self.selenium.find_element_by_id("id____ontask___select_1").send_keys(
-            "Carmelo Coton2")
+            "17")
         self.selenium.find_element_by_id("id____ontask___select_2").click()
         self.selenium.find_element_by_id("id____ontask___select_2").clear()
         self.selenium.find_element_by_id("id____ontask___select_2").send_keys(
+            "Carmelo Coton2")
+        self.selenium.find_element_by_id("id____ontask___select_3").click()
+        self.selenium.find_element_by_id("id____ontask___select_3").clear()
+        self.selenium.find_element_by_id("id____ontask___select_3").send_keys(
             "xxx"
         )
 
         # Submit the data for one entry
         self.selenium.find_element_by_xpath(
-            "//body/div[4]/div/form/button[1]/span").click()
+            "//div[@id='action-row-datainput']//form//button").click()
         # Wait for paging widget
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'actioninrun-data_previous'))
         )
 
         # Go Back to the action table
-        self.selenium.find_element_by_xpath(
-            "//div[@id='table-content']/a"
-        ).click()
-        # Wait for paging widget
-        self.wait_for_datatable('action-table_previous')
+        self.go_to_actions()
 
         # Edit the action out
-        element = self.search_action('action_out')
-        element.find_element_by_link_text("Edit").click()
+        self.open_action_edit('action_out')
 
         # Insert attribute
         self.selenium.find_element_by_id("select-attribute-name").click()
         Select(self.selenium.find_element_by_id(
-            "select-attribute-name")).select_by_visible_text("- Attribute -")
+            "select-attribute-name")).select_by_visible_text(
+            "- Insert Attribute -"
+        )
 
         # Insert column name
         self.selenium.find_element_by_id("select-column-name").click()
@@ -214,13 +215,13 @@ class DataopsSymbols(test.OntaskLiveTestCase):
                               [(symbols, "begins with", "C")])
 
         # Create the filter
-        self.create_filter(symbols,
+        self.create_filter(None,
                            '',
                            [(symbols + "2", "doesn't begin with", "x")])
 
        # Click the preview button
-        self.selenium.find_element_by_xpath(
-            "//div[@id='html-editor']/form/div[3]/button").click()
+        self.select_text_tab()
+        self.selenium.find_element_by_class_name('js-action-preview').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME, 'js-action-preview-nxt'))
         )
@@ -245,6 +246,9 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page('sss')
+
+        # Go to column details
+        self.go_to_details()
 
         # Edit the email column
         self.open_column_edit('email')
@@ -288,6 +292,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
 
         # Set the correct values for an action-in
         # Set the right columns to process
+        self.select_parameters_tab()
         select = Select(self.selenium.find_element_by_id(
             'select-key-column-name'
         ))
@@ -298,11 +303,13 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         )
 
         # Done editing the action in
+        self.select_questions_tab()
         self.selenium.find_element_by_link_text('Done').click()
         self.wait_for_datatable('action-table_previous')
 
         # Click in the run link
-        self.open_action_survey_run('action in')
+        self.open_action_run('action in')
+        self.wait_for_datatable('actioninrun-data_previous')
 
         # Click on the first value
         self.selenium.find_element_by_link_text("student01@bogus.com").click()
@@ -322,7 +329,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         # Click on the second value
         self.selenium.find_element_by_link_text("student02@bogus.com").click()
 
-        # Modify the value of the column
+        # Modify the value of the columne
         self.selenium.find_element_by_id("id____ontask___select_1").clear()
         self.selenium.find_element_by_id(
             "id____ontask___select_1"
@@ -369,7 +376,7 @@ class DataopsSymbols(test.OntaskLiveTestCase):
         self.logout()
 
 
-class DataopsExcelUpload(test.OntaskLiveTestCase):
+class DataopsExcelUpload(test.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
 
     def tearDown(self):
@@ -381,7 +388,7 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page('wflow1', False)
+        self.access_workflow_from_home_page('wflow1')
 
         # Go to Excel upload/merge
         self.go_to_excel_upload_merge_step_1()
@@ -405,7 +412,7 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
         self.selenium.find_element_by_name("Submit").click()
-        self.wait_for_datatable('column-table_previous')
+        self.wait_for_datatable('table-data_previous')
 
         # The number of rows must be 29
         wflow = Workflow.objects.all()[0]
@@ -418,7 +425,7 @@ class DataopsExcelUpload(test.OntaskLiveTestCase):
         self.logout()
 
 
-class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
+class DataopsExcelUploadSheet(test.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
 
     def tearDown(self):
@@ -430,7 +437,7 @@ class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page('wflow1', False)
+        self.access_workflow_from_home_page('wflow1')
 
         # Go to Excel upload/merge
         self.go_to_excel_upload_merge_step_1()
@@ -451,7 +458,7 @@ class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
                 (By.ID, 'checkAll'))
         )
         self.selenium.find_element_by_name("Submit").click()
-        self.wait_for_datatable('column-table_previous')
+        self.wait_for_datatable('table-data_previous')
 
         # The number of rows must be 19
         wflow = Workflow.objects.all()[0]
@@ -464,7 +471,7 @@ class DataopsExcelUploadSheet(test.OntaskLiveTestCase):
         self.logout()
 
 
-class DataopsNaNProcessing(test.OntaskLiveTestCase):
+class DataopsNaNProcessing(test.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
     action_text = "Bool1 = {{ bool1 }}\\n" + \
                   "Bool2 = {{ bool2 }}\\n" + \
@@ -485,15 +492,12 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
 
         # Go to CSV Upload/Merge
         self.selenium.find_element_by_xpath(
-            "//tbody/tr[1]/td[1]/a[1]"
-        ).click()
+            "//table[@id='dataops-table']//a[normalize-space()='CSV "
+            "Upload/Merge']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
                 (By.XPATH, "//form")
             )
-        )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
         # Select file and upload
@@ -510,7 +514,7 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "(//button[@name='Submit'])[2]"
         ).click()
-        self.wait_for_datatable('column-table_previous')
+        self.wait_for_datatable('table-data_previous')
 
         # Select again the upload/merge function
         self.go_to_csv_upload_merge_step_1()
@@ -524,7 +528,7 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
         )
         self.selenium.find_element_by_name("Submit").click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
                                              'Step 2: Select Columns')
         )
 
@@ -533,7 +537,7 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
         # Wait for the upload/merge
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'page-header'),
+                (By.XPATH, "//body/div/h1"),
                 'Step 3: Select Keys and Merge Option')
         )
 
@@ -544,14 +548,14 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
         self.selenium.find_element_by_name("Submit").click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'page-header'),
+                (By.XPATH, "//body/div/h1"),
                 'Step 4: Review and confirm')
         )
 
         # Check the merge summary and proceed
         self.selenium.find_element_by_name("Submit").click()
         # Wait for the upload/merge to finish
-        self.wait_for_datatable('column-table_previous')
+        self.wait_for_datatable('table-data_previous')
 
         # Go to the actions page
         self.go_to_actions()
@@ -560,11 +564,13 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
         self.create_new_personalized_text_action("action out", '')
 
         # Create three conditions
+        self.select_condition_tab()
         self.create_condition("bool1 cond", '', [('bool1', None, True)])
         self.create_condition("bool 2 cond", '', [('bool2', None, True)])
         self.create_condition('bool3 cond', '', [('bool3', None, True)])
 
         # insert the action text
+        self.select_text_tab()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', 
             "{0}");""".format(self.action_text)
@@ -579,7 +585,7 @@ class DataopsNaNProcessing(test.OntaskLiveTestCase):
         self.logout()
 
 
-class DataopsPluginExecution(test.OntaskLiveTestCase):
+class DataopsPluginExecution(test.OnTaskLiveTestCase):
     fixtures = ['plugin_execution']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -637,7 +643,7 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
 
         # Done. Click continue.
         self.selenium.find_element_by_link_text('Continue').click()
-        self.wait_for_datatable('column-table_previous')
+        self.wait_for_datatable('table-data_previous')
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name='Plugin test')
@@ -687,7 +693,7 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
 
         # Done. Click continue.
         self.selenium.find_element_by_link_text('Continue').click()
-        self.wait_for_datatable('column-table_previous')
+        self.wait_for_datatable('table-data_previous')
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name='Plugin test')
@@ -712,9 +718,7 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
         # Open the transform page
         self.go_to_transform()
 
-
         # Click in the second plugin
-        # Click in the first plugin
         element = self.search_table_row_by_string('transform-table',
                                                   1,
                                                   'test_plugin_2')
@@ -734,7 +738,7 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
 
         # Done. Click continue.
         self.selenium.find_element_by_link_text('Continue').click()
-        self.wait_for_datatable('column-table_previous')
+        self.wait_for_datatable('table-data_previous')
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name='Plugin test')
@@ -749,7 +753,7 @@ class DataopsPluginExecution(test.OntaskLiveTestCase):
         # End of session
         self.logout()
 
-class DataopsMerge(test.OntaskLiveTestCase):
+class DataopsMerge(test.OnTaskLiveTestCase):
     wf_name = 'Testing Merge'
     fixtures = ['test_merge']
     filename = os.path.join(
@@ -829,7 +833,7 @@ class DataopsMerge(test.OntaskLiveTestCase):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'page-header'),
+                (By.XPATH, "//body/div/h1"),
                 'Step 4: Review and confirm')
         )
 
@@ -838,7 +842,7 @@ class DataopsMerge(test.OntaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Finish']"
         ).click()
-        self.wait_for_datatable('column-table_previous')
+        self.wait_for_datatable('table-data_previous')
 
 
     def test_01_merge_inner(self):

@@ -1,9 +1,25 @@
+## 4.0.0 ()
+
+### Fixed
+
+- Various bugs due to the incompatibility with Python3/Django2
+
+### Added
+
+- Support for Python3/Django2
+
+### Changed
+
+- Datetimepicker widget changed due to incompatibilities with Django 2
+
+- Reviewed the Chinese localization
+
 ## 3.2.1 (2018-11-21)
 
 ### Added
 
 - Survey columns now can be queried about their null and not null status.
-    
+
 ### Changed
 
 - Significant changes in the documentation (more to come) to provide more activities and details in the tutorial
@@ -36,14 +52,17 @@
 
 ### Changed
 
-- Reviewed the Chinese localization
+- Reviewed the Chinese localization## 3.1.0 (2018-10-31)
+
+### Added
+
+- Initial support for localization to Chinese
 
 ## 3.1.0 (2018-10-31)
 
 ### Added
 
 - Initial support for localization to Chinese
- 
 ## 3.0.4 (2018-10-20)
 
 ### Changed

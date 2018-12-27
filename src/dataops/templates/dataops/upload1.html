@@ -8,16 +8,15 @@
 {% block scripts %}
   <script src="{% static 'dataops/js/dataops.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
-{% block container %}
-<div align="center" class="container-fluid">
-  <h1 class="page-header">{% trans 'Step 1: Select' %} {{ dtype_select }}</h1>
-  <form action="" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="input-group input-group-lg">
-    {{ form|crispy }}
-    {% include 'dataops/includes/upload_buttons.html' %}
+{% block container %}0
+  <div class="container" id="upload-merge-step1">
+    <h1 class="text-center">{% trans 'Step 1: Select' %} {{ dtype_select }}</h1>
+    <div class="row justify-content-center">
+      <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+        {% include 'dataops/includes/upload_buttons.html' %}
+      </form>
     </div>
-  </form>
-</div>
-
+  </div>
 {% endblock container %}

@@ -1,8 +1,12 @@
-<a href="{% url 'scheduler:edit' id %}"
-   class="btn btn-primary btn-sm align-middle">
-  <span class="glyphicon glyphicon-pencil"></span></a>
-<button type="button"
-        class="btn btn-danger btn-sm js-scheduleremail-delete"
-        data-url="{% url 'scheduler:delete' id %}">
-  <span class="glyphicon glyphicon-trash"></span>
-</button>
+{% load i18n %}
+<div class="btn-group">
+  <button type="button"
+     data-url="{% url 'scheduler:view' id %}" data-toggle="tooltip"
+     title="View the details of this scheduled action"
+     class="btn btn-sm btn-light js-scheduler-view">
+    <span class="fa fa-eye"></span></button>
+  <button type="button" class="btn btn-sm btn-light js-scheduler-delete"
+          data-toggle="tooltip" title="Delete this scheduled action"
+          data-url="{% url 'scheduler:delete' id %}">
+    <span class="fa fa-trash"></span></button>
+</div>

@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
-import StringIO
+
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
+from io import BytesIO
 import base64
 import json
 
@@ -19,7 +22,7 @@ def df_to_string(df):
     :param df: Pandas dataframe
     :return: Base64 encoded string of its pickled representation
     """
-    out_file = StringIO.StringIO()
+    out_file = BytesIO()
     pd.to_pickle(df, out_file)
     return base64.b64encode(out_file.getvalue())
 
@@ -30,7 +33,7 @@ def string_to_df(value):
     of a pandas dataframe
     :return: The encoded dataframe
     """
-    output = StringIO.StringIO()
+    output = BytesIO()
     output.write(base64.b64decode(value))
     try:
         result = pd.read_pickle(output)
@@ -157,7 +160,7 @@ class ViewSerializer(serializers.ModelSerializer):
 
         return view_obj
 
-    class Meta:
+    class Meta(object):
         model = View
 
         exclude = ('id',

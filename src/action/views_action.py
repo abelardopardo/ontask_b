@@ -1,20 +1,23 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
-import pytz
+
+from future import standard_library
+
+from ontask import simplify_datetime_str
+
+standard_library.install_aliases()
+from builtins import next
+from builtins import object
 from django.db import IntegrityError
 from django.utils.html import format_html
 
-from action.views_out import session_dictionary_name
+from action.views_out import action_session_dictionary, run_json_action, \
+    run_email_action, run_canvas_email_action
 from logs.models import Log
 from visualizations.plotly import PlotlyHandler
 
-try:
-    import urlparse
-    from urllib import urlencode
-except:  # For Python 3
-    import urllib.parse as urlparse
-    from urllib.parse import urlencode
+import urllib.parse
+from urllib.parse import urlencode
 
 import django_tables2 as tables
 from django.contrib import messages
@@ -29,7 +32,6 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
 
 from action.evaluate import render_template
 from dataops import ops, pandas_db
@@ -41,7 +43,9 @@ from .forms import (
     ActionForm,
     EditActionOutForm,
     EnableURLForm,
-    ActionDescriptionForm, ActionImportForm
+    ActionDescriptionForm,
+    ActionImportForm,
+    FilterForm
 )
 from action.ops import (
     serve_action_in,
@@ -70,49 +74,85 @@ class ActionTable(tables.Table):
 
     last_executed_log = tables.Column(verbose_name=_('Last executed'))
 
+    #
+    # Operatiosn available per action type (see partial_action_operations.html)
+    #
+    #  Action type               |  Email  |  ZIP |  URL  |  RUN  |
+    #  ------------------------------------------------------------
+    #  Personalized text         |    X    |   X  |   X   |       |
+    #  Personalized canvas email |    X    |      |       |       |
+    #  Personalized JSON         |         |      |   ?   |   X   |
+    #  Survey                    |         |      |   X   |   X   |
+    #  Todo List                 |         |      |   X   |   X   |
+    #
     operations = OperationsColumn(
-        verbose_name=_('Operations'),
+        verbose_name='',
         template_file='action/includes/partial_action_operations.html',
         template_context=lambda record: {
-            'id': record['id'],
-            'action_tval': record['action_tval'],
-            'is_out': int(record['is_out']),
-            'is_executable': record['is_executable'],
-            'serve_enabled': record['serve_enabled']}
+            'id': record.id,
+            'action_tval': record.action_type,
+            'is_out': int(record.is_out),
+            'is_executable': record.is_executable,
+            'serve_enabled': record.serve_enabled}
     )
 
+    def render_name(self, record):
+        return format_html(
+            """<a href="{0}"
+                  data-toggle="tooltip"
+                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""".format(
+                reverse('action:edit', kwargs={'pk': record.id}),
+                _('Edit the text, conditions and filter'),
+                record.name
+            )
+        )
+
+    def render_action_type(self, record):
+        icon = 'file-text'
+        title = 'Personalized text'
+        if record.action_type == Action.PERSONALIZED_TEXT:
+            icon = 'file-text'
+            title = 'Personalized text'
+        elif record.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+            icon = 'envelope-square'
+            title = 'Personalized Canvas Email'
+        elif record.action_type == Action.PERSONALIZED_JSON:
+            icon = 'code'
+            title = 'Personalized JSON'
+        elif record.action_type == Action.SURVEY:
+            icon = 'question-circle-o'
+            title = 'Survey'
+        return format_html(
+            """<div data-toggle="tooltip" title="{0}">
+                 <span class="fa fa-{1}"></span></div>""".format(
+                title,
+                icon
+            )
+        )
+
     def render_last_executed_log(self, record):
-        log_item = record['last_executed_log']
+        log_item = record.last_executed_log
         if not log_item:
             return "---"
 
         return format_html(
             """<a class="spin" href="{0}">{1}</a>""".format(
                 reverse('logs:view', kwargs={'pk': log_item.id}),
-                log_item.modified.astimezone(
-                    pytz.timezone(settings.TIME_ZONE)
-                )
+                simplify_datetime_str(log_item.modified)
             )
         )
 
-    class Meta:
+    class Meta(object):
         model = Action
-
         fields = ('name', 'description_text', 'action_type',
                   'last_executed_log')
-
-        sequence = ('name', 'description_text', 'action_type',
+        sequence = ('action_type', 'name', 'description_text',
                     'last_executed_log')
-
         exclude = ('content', 'serve_enabled', 'columns', 'filter')
-
         attrs = {
-            'class': 'table display table-bordered',
+            'class': 'table table-hover table-bordered',
+            'style': 'width: 100%;',
             'id': 'action-table'
-        }
-
-        row_attrs = {
-            'style': 'text-align:center;',
         }
 
 
@@ -129,15 +169,28 @@ class ColumnSelectedTable(tables.Table):
     # Template to render the extra column created dynamically
     ops_template = 'action/includes/partial_column_selected_operations.html'
 
-    class Meta:
-        fields = ('name', 'description_text', 'operations')
+    def render_name(self, record):
+        return format_html(
+            """<a href="#" data-toggle="tooltip" 
+                  class="js-workflow-question-edit" data-url="{0}"
+                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""".format(
+                reverse('workflow:question_edit', kwargs={'pk': record['id']}),
+                _('Edit the question'),
+                record['name']
+            )
+        )
+
+    class Meta(object):
+        fields = ('id', 'name', 'description_text', 'operations')
+        sequence = ('name', 'description_text', 'operations')
+
         attrs = {
-            'class': 'table display table-bordered',
+            'class': 'table table-hover table-bordered',
+            'style': 'width: 100%;',
             'id': 'column-selected-table'
         }
 
         row_attrs = {
-            'style': 'text-align:center;',
             'class': lambda record:
             'danger' if not record['description_text'] else '',
         }
@@ -223,6 +276,10 @@ def save_action_form(request, form, template_name):
             data['html_redirect'] = reverse(
                 'action:edit', kwargs={'pk': action_item.id}
             )
+        elif action_item.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+            data['html_redirect'] = reverse(
+                'action:edit', kwargs={'pk': action_item.id}
+            )
         elif action_item.action_type == Action.PERSONALIZED_JSON:
             data['html_redirect'] = reverse(
                 'action:edit', kwargs={'pk': action_item.id}
@@ -253,34 +310,33 @@ def action_index(request):
     if not workflow:
         return redirect('workflow:index')
 
+    return action_index_set(request)
+
+
+@user_passes_test(is_instructor)
+def action_index_set(request, pk=None):
+    """
+    Set the workflow in the session object (if not given) and create the page
+    with the list of actions.
+    :param request: HTTP Request
+    :param pk: Primary key of the workflow object to use
+    :return: HTTP response
+    """
+
+    # Get the appropriate workflow object
+    workflow = get_workflow(request, wid=pk)
+    if not workflow:
+        return redirect('workflow:index')
+
     # Reset object to carry action info throughout dialogs
-    request.session[session_dictionary_name] = {}
+    request.session[action_session_dictionary] = {}
     request.session.save()
 
-    # Get the actions
-    actions = Action.objects.filter(workflow__id=workflow.id)
-
-    # Context to render the template
-    context = {'has_table': ops.workflow_has_table(workflow)}
-
-    # Build the table only if there is anything to show (prevent empty table)
-    qset = []
-    for action in actions:
-        qset.append({'id': action.id,
-                     'name': action.name,
-                     'description_text': action.description_text,
-                     'action_type': action.get_action_type_display(),
-                     'action_tval': action.action_type,
-                     'is_out': action.is_out,
-                     'is_executable': action.is_executable,
-                     'last_executed_log': action.last_executed_log,
-                     'serve_enabled': action.serve_enabled})
-
-    context['table'] = \
-        ActionTable(qset, orderable=False)
-    context['no_actions'] = len(qset) == 0
-
-    return render(request, 'action/index.html', context)
+    return render(request,
+                  'action/index.html',
+                  {'workflow': workflow,
+                   'table': ActionTable(workflow.actions.all(),
+                                        orderable=False)})
 
 
 class ActionCreateView(UserIsInstructor, generic.TemplateView):
@@ -423,7 +479,7 @@ def action_out_save_content(request, pk):
         return JsonResponse({})
 
     # If the request has the 'action_content', update the action
-    action_content = request.POST.get('action_content', None)
+    action_content = request.POST.get('action_content')
     if action_content:
         action.set_content(action_content)
         action.save()
@@ -464,6 +520,10 @@ def edit_action(request, pk):
     if action.action_type == Action.PERSONALIZED_TEXT:
         return edit_action_out(request, workflow, action)
 
+    if action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        # return redirect(reverse('under_construction'), {})
+        return edit_action_out(request, workflow, action)
+
     if action.action_type == Action.PERSONALIZED_JSON:
         return edit_action_out(request, workflow, action)
 
@@ -487,6 +547,8 @@ def edit_action_out(request, workflow, action):
     # Create the form
     form = EditActionOutForm(request.POST or None, instance=action)
 
+    form_filter = FilterForm(request.POST or None, instance=action.get_filter())
+
     # Get the filter or None
     filter_condition = action.get_filter()
 
@@ -500,13 +562,14 @@ def edit_action_out(request, workflow, action):
                'action': action,
                'conditions': conditions,
                'query_builder_ops': workflow.get_query_builder_ops_as_str(),
-               'attribute_names': [x for x in workflow.attributes.keys()],
+               'attribute_names': [x for x in list(workflow.attributes.keys())],
                'column_names': workflow.get_column_names(),
                'selected_rows':
                    filter_condition.n_rows_selected if filter_condition else -1,
                'has_data': ops.workflow_has_table(action.workflow),
                'total_rows': workflow.nrows,
                'form': form,
+               'form_filter': form_filter,
                'vis_scripts': PlotlyHandler.get_engine_scripts()
                }
 
@@ -514,9 +577,12 @@ def edit_action_out(request, workflow, action):
     template = 'action/edit_personalized_text.html'
     if action.action_type == Action.PERSONALIZED_JSON:
         template = 'action/edit_personalized_json.html'
+    elif action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        template = 'action/edit_personalized_canvas_email.html'
 
     # Processing the request after receiving the text from the editor
-    if request.method == 'GET' or not form.is_valid():
+    if request.method == 'GET' or not form.is_valid() or \
+            not form_filter.is_valid():
         # Return the same form in the same page
         return render(request, template, context=context)
 
@@ -530,7 +596,7 @@ def edit_action_out(request, workflow, action):
         render_template(content, {}, action)
     except Exception as e:
         # Pass the django exception to the form (fingers crossed)
-        form.add_error(None, e.message)
+        form.add_error(None, e)
         return render(request, template, context)
 
     # Log the event
@@ -546,12 +612,10 @@ def edit_action_out(request, workflow, action):
     # Text is good. Update the content of the action
     action.set_content(content)
 
-    # Update additional fields
-    if action.action_type == Action.PERSONALIZED_JSON:
-        action.target_url = form.cleaned_data['target_url']
-
     action.save()
 
+    if request.POST['Submit'] == 'Submit':
+        return redirect(request.get_full_path())
     return redirect('action:index')
 
 
@@ -563,6 +627,8 @@ def edit_action_in(request, workflow, action):
     :param action: Action
     :return: HTTP response
     """
+
+    form_filter = FilterForm(request.POST or None, instance=action.get_filter())
 
     # Get filter or None
     filter_condition = action.get_filter()
@@ -600,13 +666,14 @@ def edit_action_in(request, workflow, action):
                extra_columns=[
                    ('operations',
                     OperationsColumn(
-                        verbose_name='Ops',
+                        verbose_name='',
                         template_file=ColumnSelectedTable.ops_template,
                         template_context=lambda record: {'id': record['id'],
                                                          'aid': action.id})
                     )]
            ),
            'has_no_key': has_no_key,
+           'form_filter': form_filter,
            'has_empty_description': has_empty_description}
 
     return render(request, 'action/edit_in.html', ctx)
@@ -1018,10 +1085,11 @@ def delete_action(request, pk):
 
 
 @user_passes_test(is_instructor)
-def run_action_in(request, pk):
+def run(request, pk):
     """
-    Function that runs the action in. Mainly, it renders a table with
-    all rows that satisfy the filter condition and includes a link to
+    Function that runs the action in. Mainly, it distributes the traffic
+    depending on the type of action. If it is a Survey or todo, renders a table
+    with all rows that satisfy the filter condition and includes a link to
     enter data for each of them.
 
     :param request:
@@ -1039,16 +1107,27 @@ def run_action_in(request, pk):
     # Extract workflow and action
     workflow, action = wflow_action
 
-    if action.action_type != Action.SURVEY and \
-            action.action_type != Action.TODO_LIST:
-        # Incorrect type of action.
-        return redirect(reverse('action:index'))
+    if action.action_type == Action.PERSONALIZED_TEXT:
+        return run_email_action(request, workflow, action)
 
-    # Render template with active columns.
-    return render(request,
-                  'action/run_survey.html',
-                  {'columns': [c for c in action.columns.all() if c.is_active],
-                   'action': action})
+    if action.action_type == Action.SURVEY or \
+            action.action_type == Action.TODO_LIST:
+        # Render template with active columns.
+        return render(request,
+                      'action/run_survey.html',
+                      {'columns': [c for c in action.columns.all() if
+                                   c.is_active],
+                       'action': action})
+
+    if action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        return run_canvas_email_action(request, workflow, action)
+
+    if action.action_type == Action.PERSONALIZED_JSON:
+        return run_json_action(request, workflow, action)
+
+    # Incorrect type of action.
+    return redirect(reverse('action:index'))
+
 
 
 @user_passes_test(is_instructor)
@@ -1133,12 +1212,12 @@ def run_survey_ss(request, pk):
         # Render the first element (the key) as the link to the page to update
         # the content.
         dst_url = reverse('action:run_survey_row', kwargs={'pk': action.id})
-        url_parts = list(urlparse.urlparse(dst_url))
-        query = dict(urlparse.parse_qs(url_parts[4]))
+        url_parts = list(urllib.parse.urlparse(dst_url))
+        query = dict(urllib.parse.parse_qs(url_parts[4]))
         query.update({'uatn': column_names[key_idx], 'uatv': row[key_idx]})
         url_parts[4] = urlencode(query)
         link_item = '<a href="{0}">{1}</a>'.format(
-            urlparse.urlunparse(url_parts), row[key_idx]
+            urllib.parse.urlunparse(url_parts), row[key_idx]
         )
         row = list(row)
         row[key_idx] = link_item

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
-from django.conf.urls import url
+
+from django.urls import path
 
 from . import views, resources, api
 
@@ -9,14 +9,14 @@ app_name = 'logs'
 
 urlpatterns = [
 
-    url(r'^$', views.display, name="index"),
+    path('', views.display, name="index"),
 
-    url(r'^display_ss/$', views.display_ss, name="display_ss"),
+    path('display_ss/', views.display_ss, name="display_ss"),
 
-    url(r'^(?P<pk>\d+)/view/$', views.view, name="view"),
+    path('<int:pk>/view/', views.view, name="view"),
 
-    url(r'^(?P<pk>\d+)/export/$', resources.export, name="export"),
+    path('<int:pk>/export/', resources.export, name="export"),
 
-    url(r'^list/$', api.LogAPIList.as_view()),
+    path('list/', api.LogAPIList.as_view()),
 
 ]

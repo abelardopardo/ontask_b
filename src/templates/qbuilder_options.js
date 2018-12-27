@@ -1,4 +1,4 @@
-var qbuilder_options = {
+var {{ js_var }} = {
   plugins: ['bt-tooltip-errors', 'not-group'],
   operators: ['equal', 'not_equal', 'less', 'less_or_equal',
               'greater', 'greater_or_equal', 'between', 'not_between',

@@ -1,5 +1,6 @@
-from __future__ import unicode_literals
 
+
+from builtins import object
 import uuid
 
 from django.conf import settings
@@ -22,7 +23,7 @@ class BaseProfile(models.Model):
     bio = models.CharField("Short Bio", max_length=200, blank=True, null=True)
     email_verified = models.BooleanField(_("Email verified"), default=False)
 
-    class Meta:
+    class Meta(object):
         abstract = True
 
 

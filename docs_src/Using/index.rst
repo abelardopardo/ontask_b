@@ -486,6 +486,41 @@ Check/exclude emails
 
 Once these fields are provided, the operation is queued in a batch system and processed separated from the web application.
 
+.. _personalized_canvas_emails:
+
+Sending personalized emails in Canvas
+-------------------------------------
+
+If :ref:`appropriately configured <canvas_email_config>`, OnTask allows to send the emails to the internal email service in a `Canvas Learning Management System <https://www.canvaslms.com.au/>`_. The messages delivered with this service need to be created with a special action of type *Personalized Canvas Email*.
+
+.. figure:: /scaptures/action_personalized_canvas_email_create.png
+   :align: center
+   :width: 100%
+
+The definitions of a filter and text conditions are identical to those used in the :ref:`personalized content actions <personalized_content>`. The body of the email can only contain plain text without any HTML markup.
+
+.. figure:: /scaptures/action_personalized_canvas_email_edit.png
+   :align: center
+   :width: 100%
+
+Once a *Personalized Canvas Email* action has been created, it will appear in the action table with the rest of actions and with the possibility of execute the *Email* operation. Before sending the messages OnTask requests the following data:
+
+- Column in the table containing Canvas ID values. This column is essential to send the emails to the platform as it is used to uniquely identify every Canvas user. The data can be obtained downloading the marks of a course as a CSV file and uploading and merging this column as part of the table.
+
+- Email subject: The text to use as subject for the messages.
+
+- If there is more than one Canvas platform configured in OnTask, an additional pull-down menu will appear to select which one to use. If there is a single Canvas platform configured, it will be used by default and this field will not be shown in the form.
+
+- Check/Exclude Canvas IDs before sending messages. As in the case of the other actions that send email, if selected OnTask adds an extra step to check those identifies and exclude some of them.
+
+- Download a snapshot of the workflow. If selected, a snapshot of the workflow (data and actions) will be downloaded after the messages have been queued for delivery.
+
+.. figure:: /scaptures/action_personalized_canvas_email_run.png
+   :align: center
+   :width: 100%
+
+After introducing this data, OnTask will check if it has credentials for the user to access Canvas. If not, the user will be redirected to a page in the Canvas Learning Management System to 1) authenticate, and 2) authorize the access to the platform through OnTask. If these steps are successful, the user is redirected back to OnTask and the messages are delivered. The credentials retrieved from Canvas will be reused for future executions of actions requiring access to Canvas.
+
 Making personalized content available to learners
 -------------------------------------------------
 

@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 from authtools.admin import NamedUserAdmin
 from django.contrib import admin

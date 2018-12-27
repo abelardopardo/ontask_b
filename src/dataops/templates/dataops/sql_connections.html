@@ -14,32 +14,50 @@
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
-    if (document.getElementById("sqlconn-table") != null) {
+    if (document.getElementById("sqlconn-instructor-table") != null) {
       // Required for DataTables
       $(document).ready(function() {
-        $('#sqlconn-table').DataTable({
+        var sqlconn_table = $('#sqlconn-instructor-table').DataTable({
+          "search": {
+            "caseInsensitive": true,
+          },
           "stateSave": true,
-          "order": [],
+          stateSaveParams: function (settings, data) {
+            delete data.search;
+          },
+          "order": [[0, "asc"]],
           "language": {
               "emptyTable": "{% trans 'No sql connections available.' %}",
               "url": getLanguage()
           },
           "columnDefs": [
-              {"className": "dt-center", "targets": "_all"},
-              {"orderable": false, "targets": 10},
-              {"searchable": false, "targets": 10},
+              {"className": "dt-center", "targets": [0, 2]},
+              {"orderable": false, "targets": 2},
+              {"searchable": false, "targets": 2},
           ],
+          colReorder: false,
+          rowReorder: false,
+          "responsive": false,
+        });
+        sqlconn_table.columns().iterator('column', function (ctx, idx) {
+          $(sqlconn_table.column(idx).header()).append('<span class="sort-icon"/>');
         });
       });
     }
   </script>
 {% endblock %}
 {% block container %}
-  <div class="container-fluid text-center">
-    <h1 class="page-header">{% trans 'SQL Connections' %}</h1>
-    <div style="display: inline-block;" id="sqlconn-area">
-      {% render_table table %}
-    </div>
+  <div class="container" id="sql-connections">
+    <h1 class="text-center">{% trans 'SQL Connections' %}</h1>
+    {% if table.data|length %}
+      <div class="justify-content-center" id="sqlconn-area">
+        {% render_table table %}
+      </div>
+    {% else %}
+      <p class="text-center">{% blocktrans %}In this page you will find the available SQL connections to
+    access data stored in external relational databases. The connections can only
+      be created by the system administrator.{% endblocktrans %}</p>
+    {% endif %}
   </div>
   {% include 'modal.html' %}
 {% endblock container %}

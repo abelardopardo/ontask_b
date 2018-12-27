@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+
+
+from builtins import range
 
 import django_tables2 as tables
 from celery.task.control import inspect
@@ -19,91 +21,57 @@ from django.utils.translation import ugettext_lazy as _
 
 import action
 from dataops import ops, pandas_db
-from dataops.models import SQLConnection
-from dataops.sqlcon_views import SQLConnectionTableAdmin
 from logs.models import Log
-from ontask.permissions import is_instructor, UserIsInstructor, is_admin
+from ontask.permissions import is_instructor, UserIsInstructor
 from ontask.tables import OperationsColumn
 from .forms import WorkflowForm
-from .models import Workflow, Column
-from .ops import (get_workflow, store_workflow_in_session)
+from .models import Workflow
+from .ops import get_workflow
 
 
-class WorkflowTable(tables.Table):
+class AttributeTable(tables.Table):
+    """
+    Table to render the list of attributes attached to a workflow
+    """
     name = tables.Column(verbose_name=_('Name'))
-
-    description_text = tables.Column(
-        empty_values=[],
-        verbose_name=_('Description')
-    )
-
-    nrows_cols = tables.Column(
-        empty_values=[],
-        verbose_name=_('Rows/Columns'),
-        default=_('No data')
-    )
-
-    modified = tables.DateTimeColumn(verbose_name=_('Last modified'))
-
-    def __init__(self, data, *args, **kwargs):
-        table_id = kwargs.pop('id')
-
-        super(WorkflowTable, self).__init__(data, *args, **kwargs)
-        # If an ID was given, pass it on to the table attrs.
-        if table_id:
-            self.attrs['id'] = table_id
-
-    def render_nrows_cols(self, record):
-        if record['nrows'] == 0 and record['ncols'] == 0:
-            return "No data"
-
-        return format_html("{0}/{1}".format(record['nrows'], record['ncols']))
-
+    value = tables.Column(verbose_name=_('Value'))
     operations = OperationsColumn(
-        verbose_name=_('Operations'),
-        attrs={'td': {'class': 'dt-body-center'}},
-        template_file='workflow/includes/workflow_basic_buttons.html',
-        template_context=lambda record: {'workflow': record}
+        verbose_name='',
+        template_file='workflow/includes/partial_attribute_operations.html',
+        template_context=lambda record: {'id': record['id'], }
     )
 
-    class Meta:
-        model = Workflow
-
-        fields = ('name', 'description_text', 'nrows_cols', 'modified')
-
-        sequence = ('name', 'description_text', 'nrows_cols', 'modified')
-
-        exclude = ('user', 'attributes', 'nrows', 'ncols', 'column_names',
-                   'column_types', 'column_unique', 'query_builder_ops',
-                   'data_frame_table_name')
-
+    class Meta(object):
+        fields = ('name', 'value', 'operations')
         attrs = {
-            'class': 'table display table-bordered',
-            'id': 'workflow-table'
+            'class': 'table table-hover table-bordered',
+            'style': 'width: 100%;',
+            'id': 'attribute-table'
         }
 
 
 class WorkflowShareTable(tables.Table):
     email = tables.Column(
         attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name=str('User')
+        verbose_name=_('User')
     )
 
     operations = OperationsColumn(
-        attrs={'td': {'class': 'dt-body-center'}},
-        verbose_name='',
         orderable=False,
         template_file='workflow/includes/partial_share_operations.html',
-        template_context=lambda x: {'id': x['id']}
+        template_context=lambda x: {'id': x['id']},
+        verbose_name='',
+        attrs={'td': {'class': 'dt-body-center'}},
     )
 
-    class Meta:
+    class Meta(object):
         fields = ('email', 'id')
 
         sequence = ('email', 'operations')
 
         attrs = {
-            'class': 'table display',
+            'class': 'table table-hover table-bordered',
+            'style': 'width: 100%;',
             'id': 'share-table',
             'th': {'class': 'dt-body-center'}
         }
@@ -166,7 +134,7 @@ def save_workflow_form(request, form, template_name):
 
 
 @user_passes_test(is_instructor)
-def workflow_index(request):
+def index(request):
     wid = request.session.pop('ontask_workflow_id', None)
     # If removing workflow from session, mark it as available for sharing
     if wid:
@@ -176,20 +144,11 @@ def workflow_index(request):
     # Get the available workflows
     workflows = Workflow.objects.filter(
         Q(user=request.user) | Q(shared=request.user)
-    ).distinct().values(
-        'id',
-        'name',
-        'description_text',
-        'nrows',
-        'ncols',
-        'modified'
-    )
+    ).distinct().order_by('name')
 
     # We include the table only if it is not empty.
     context = {
-        'table': WorkflowTable(workflows,
-                               id='workflow-table',
-                               orderable=False),
+        'workflows': workflows,
         'nwflows': len(workflows)
     }
 
@@ -211,40 +170,34 @@ def workflow_index(request):
     return render(request, 'workflow/index.html', context)
 
 
-@user_passes_test(is_admin)
-def sql_connections(request):
+@user_passes_test(is_instructor)
+def operations(request, pk):
     """
-    Page to show and handle the SQL connections
-    :param request: Request
-    :return: Render the appropriate page.
+    Http request to serve the operations page for the workflow
+    :param request: HTTP Request
+    :param pk: primary key of the workflow
+    :return:
     """
-    wid = request.session.pop('ontask_workflow_id', None)
-    # If removing workflow from session, mark it as available for sharing
-    if wid:
-        Workflow.unlock_workflow_by_id(wid)
-    request.session.pop('ontask_workflow_name', None)
 
-    context = {}
+    # Get the appropriate workflow object
+    workflow = get_workflow(request, wid=pk)
+    if not workflow:
+        return redirect('workflow:index')
 
-    conns = SQLConnection.objects.all().values(
-        'id',
-        'name',
-        'description_txt',
-        'conn_type',
-        'conn_driver',
-        'db_user',
-        'db_password',
-        'db_host',
-        'db_port',
-        'db_name',
-        'db_table'
-    )
+    # Context to render the page
+    context = {
+        'workflow': workflow,
+        'attribute_table': AttributeTable(
+            [{'id': idx, 'name': k, 'value': v}
+             for idx, (k, v) in enumerate(sorted(workflow.attributes.items()))],
+            orderable=False
+        ),
+        'share_table': WorkflowShareTable(
+            workflow.shared.values('email', 'id').order_by('email')
+        )
+    }
 
-    context['table'] = SQLConnectionTableAdmin(conns,
-                                               id='sqlconn-table',
-                                               orderable=False)
-
-    return render(request, 'workflow/sql_connections.html', context)
+    return render(request, 'workflow/operations.html', context)
 
 
 class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
@@ -285,10 +238,6 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
         context = super(WorkflowDetailView, self).get_context_data(**kwargs)
 
-        workflow_id = self.request.session.get('ontask_workflow_id', None)
-        if not workflow_id:
-            return context
-
         # Get the table information (if it exist)
         context['table_info'] = None
         if ops.workflow_id_has_table(self.object.id):
@@ -298,14 +247,10 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
                 'num_actions': self.object.actions.all().count(),
                 'num_attributes': len(self.object.attributes)}
 
-        # Get the key columns
-        columns = Column.objects.filter(
-            workflow__id=workflow_id,
+        # put the number of key columns in the context
+        context['num_key_columns'] = self.object.columns.filter(
             is_key=True
-        )
-
-        # put the number of key columns in the workflow
-        context['num_key_columns'] = columns.count()
+        ).count()
 
         # Guarantee that column position is set for backward compatibility
         columns = self.object.columns.all()
@@ -317,13 +262,11 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
         # Safety check for consistency (only in development)
         if settings.DEBUG:
-            assert pandas_db.check_wf_df(self.object)
+            pandas_db.check_wf_df(self.object)
 
             # Columns are properly numbered
-            cpos = Column.objects.filter(
-                workflow__id=workflow_id
-            ).values_list('position', flat=True)
-            assert sorted(cpos) == range(1, len(cpos) + 1)
+            cpos = self.object.columns.all().values_list('position', flat=True)
+            assert sorted(cpos) == list(range(1, len(cpos) + 1))
 
         return context
 
@@ -501,7 +444,11 @@ def column_ss(request, pk):
 
     # Reorder if required
     if order_col:
-        col_name = ['name', 'data_type', 'is_key'][int(order_col)]
+        col_name = ['position',
+                    'name',
+                    'description_text',
+                    'data_type',
+                    'is_key'][int(order_col)]
         if order_dir == 'desc':
             col_name = '-' + col_name
         qs = qs.order_by(col_name)
@@ -521,17 +468,31 @@ def column_ss(request, pk):
 
         # The data type for integers or doubles is shown as 'number'
         col_data_type = col.data_type
-        if col_data_type == 'integer' or col_data_type == 'double':
-            col_data_type = 'number'
+        col_data_type_str = """<div data-toggle="tooltip" title="{0}">
+                 <span class="fa fa-{1}"></span></div>"""
+        if col_data_type == 'string':
+            col_data_type_str = col_data_type_str.format('Text', 'italic')
+        elif col_data_type == 'integer' or col_data_type == 'double':
+            col_data_type_str = col_data_type_str.format('Number', 'percent')
+        elif col_data_type == 'boolean':
+            col_data_type_str = col_data_type_str.format('True/False',
+                                                         'toggle-on')
+        elif col_data_type == 'datetime':
+            col_data_type_str = col_data_type_str.format('Date/Time',
+                                                         'calendar-o')
 
         final_qs.append({
-            'number': render_to_string(
-                'workflow/includes/workflow_column_movement.html',
-                {'column': col}
+            'number': col.position,
+            'name': format_html(
+                """<a href="#" class="js-workflow-column-edit"
+                  data-toggle="tooltip" 
+                  title="Edit the parameters of this column">{0} 
+                  <span class="fa fa-pencil"></span></a>""".format(
+                    col.name
+                )
             ),
-            'name': col.name,
             'description': col.description_text,
-            'type': col_data_type,
+            'type': format_html(col_data_type_str),
             'key': '<span class="true">✔</span>' if col.is_key else '',
             'operations': ops_string
         })

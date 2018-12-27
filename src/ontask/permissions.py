@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+
 
 from django.contrib.auth.mixins import UserPassesTestMixin
 from rest_framework import permissions

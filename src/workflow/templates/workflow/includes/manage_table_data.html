@@ -1,24 +1,27 @@
 {% load i18n %}
-<div class="dropdown btn-group" style="display: inline-table;" role="group">
-  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-    {% trans 'Manage table data' %}  <span class="caret"></span>
+<div class="dropdown btn-group">
+  <button class="btn btn-outline-dark dropdown-toggle" type="button"
+          id="manageTableOperations" data-toggle="dropdown">
+    {% trans 'Manage table data' %}
   </button>
-  <ul role="menu" class="dropdown-menu">
-    <li>
-      <a href="{% url 'dataops:uploadmerge' %}"
-         class="btn btn-default btn-sm spin"
-         data-toggle="tooltip"
-         title="{% trans 'Upload or merge data into the workflow table' %}">
-        {% trans 'Upload or merge data' %}
-      </a>
-    </li>
-    <li>
-      <a href="{% url 'dataops:transform' %}"
-         class="btn btn-default btn-sm spin"
-         data-toggle="tooltip"
-         title="{% trans 'Execute one of the available plugins' %}">
-        {% trans 'Execute plugin' %}
-      </a>
-    </li>
-  </ul>
+  <div class="dropdown-menu" aria-labelledby="manageTableOperations">
+    <a href="{% url 'dataops:uploadmerge' %}"
+       class="dropdown-item spin"
+       data-toggle="tooltip"
+       title="{% trans 'Upload or merge data into the workflow table' %}">
+      {% trans 'Upload or merge data' %}</a>
+    <a href="{% url 'dataops:transform' %}"
+       class="dropdown-item spin"
+       data-toggle="tooltip"
+       title="{% trans 'Execute one of the available plugins' %}">
+      {% trans 'Execute plugin' %}</a>
+    {% if workflow.nrows %}
+      <button type="button" class="dropdown-item js-workflow-flush"
+              data-url="{% url 'workflow:flush' workflow.id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Delete the data in the table of this workflow' %}">
+        <span class="fa fa-floppy-remove"></span> {% trans 'Flush data table' %}
+      </button>
+    {% endif %}
+  </div>
 </div>

@@ -8,14 +8,15 @@
 {% block title %}{{ block.super }}{% trans 'Table' %}{% endblock %}
 {% block extrahead %}
   {% ontask_datatables_bootstrap_css %}
-  <link href="{% static 'css/datetimepicker.css' %}" rel="stylesheet">
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
+  {% ontask_datetimepicker_css %}
   <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
-  <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+  {% ontask_datetimepicker_js %}
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
+  <script src="https://cdn.datatables.net/scroller/1.5.1/js/dataTables.scroller.min.js"></script>
   <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
   {% with country=LANGUAGE_CODE|country %}
     <script src="{% static 'site/js/query-builder.'|add:country|add:'.js' %}"></script>
@@ -25,219 +26,157 @@
   <script src="{% static 'workflow/js/column_move.js' %}?v={% ontask_version %}"></script>
   <script type="text/javascript">
     if (document.getElementById("table-data") != null) {
-        // Required for DataTables
-        $(document).ready(function() {
-            table_data = $('#table-data').DataTable({
-                stateSave: true,
-                processing: true,
-                serverSide: true,
-                ajax: {
-                  url: "{{ ajax_url }}",
-                  type: 'POST',
-                },
-                "order": [1],
-                "columnDefs": [
-                    {"orderable": false, "targets": 0},
-                    {"searchable": false, "targets": 0},
-                    {"className": "dt-center", "targets": "_all"}
-                ],
-                "drawCallback": function(settings) {
-                   // Needed to enable tooltips in ajax produced content
-                   $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
-                },
-                language: {
-                  url: getLanguage()
-                }
-            });
+      // Required for DataTables
+      $(document).ready(function() {
+        var table_data = $('#table-data').DataTable({
+          "search": {
+            "caseInsensitive": true,
+          },
+          stateSave: true,
+          stateSaveParams: function (settings, data) {
+            delete data.search;
+            delete data.ColReorder;
+          },
+          processing: true,
+          serverSide: true,
+          ajax: {
+            url: "{{ ajax_url }}",
+            type: 'POST',
+          },
+          columns: {{ columns_datatables|safe }},
+          "order": [[1, 'asc']],
+          "columnDefs": [
+            {"className": "dt-center", "targets": "_all"},
+            {"orderable": false, "targets": 0},
+            {"searchable": false, "targets": 0},
+          ],
+          "drawCallback": function(settings) {
+             // Needed to enable tooltips in ajax produced content
+             $('[data-toggle="tooltip"]').tooltip({ trigger: "hover"});
+          },
+          language: {
+            url: getLanguage()
+          },
+          colReorder: {
+            fixedColumnsLeft: 1,
+            realtime: false,
+          },
+          scrollX: true,
+          fixedColumns: true,
+          deferRender: true,
         });
+        table_data.on("column-reorder", column_reorder);
+      });
     }
-    {% with allow_empty='true' empty_rules=True %}
+    {% with js_var='qbuilder_options' allow_empty='true' empty_rules=True %}
       {% include 'qbuilder_options.js' %}
     {% endwith %}
-  </script>
+</script>
 {% endblock %}
 {% block container %}
-  <div id="table-content" align="center" class="container-fluid">
+  <div id="table-content" class="container">
     {% if view %}
-      <h4><strong>{{ view.name }}</strong></h4>
+      <h1 class="text-center">{{ view.name }}</h1>
     {% else %}
-      <h1>{% trans 'Table' %}</h1>
+      <h1 class="text-center">{% trans 'Table' %}</h1>
     {% endif %}
     {% if not columns %}
       {% include 'workflow/includes/no_data.html' %}
     {% elif no_actions %}
       {% include 'workflow/includes/no_actions.html' %}
     {% endif %}
-    <div class="btn-group" style="padding-bottom: 2ex;" role="group">
-      {% if columns %}
-        <a href="{% url 'dataops:rowcreate' %}"
-           class="btn btn-sm btn-default"
-           data-toggle="tooltip"
-           title="{% trans 'Add a new row to the table' %}">
-          <span class="glyphicon glyphicon-plus"></span> {% trans 'Add row' %}
-        </a>
-        {% include 'workflow/includes/add_column_menu.html' %}
-      {% endif %}
-      {% include 'workflow/includes/manage_table_data.html' %}
-      {% if columns %}
-        <div class="dropdown btn-group" role="group">
-          <a href="{% url 'table:view_index' %}"
-             class="btn btn-default btn-sm spin"
+    <div class="text-center">
+      <div class="btn-group mb-3">
+        {% if columns %}
+          <a href="{% url 'dataops:rowcreate' %}"
+             class="btn btn-outline-dark"
              data-toggle="tooltip"
-             title="{% trans 'Views available for this table' %}">
-            <span class="glyphicon glyphicon-eye-open"></span> {% trans 'Views' %}
+             title="{% trans 'Add a new row to the table' %}">
+            <span class="fa fa-plus"></span> {% trans 'Row' %}
           </a>
-          {% if views %}
-            <button class="btn btn-default btn-sm dropdown-toggle" type="button"
-                    data-toggle="dropdown"><span class="caret"></span>
-            </button>
-            <ul role="menu" class="dropdown-menu">
-            {% for v in views %}
-              <li>
-                <a href="{% url 'table:display_view' v.id %}"
-                   class="btn btn-default btn-sm spin">{{ v.name }}</a>
-              </li>
-            {% endfor %}
-            </ul>
-          {% endif %}
-        </div>
-      {% endif %}
-      {% if columns %}
-        {% if view %}
-          <button type="button"
-                  class="btn btn-default btn-sm js-view-edit align-middle"
-                  data-url="{% url 'table:view_edit' view.id %}"
-                  data-toggle="tooltip" title="{% trans 'Change elements in view' %}">
-            <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit view' %}
-          </button>
-          <a class="btn btn-sm btn-default spin" href="{% url 'table:display' %}">Full table</a>
-          <a href="{% url 'table:stat_table_view' view.id %}"
-             class="btn btn-default btn-sm spin"
-             data-toggle="tooltip"
-             title="{% trans 'Dashboard created with the view data' %}">
-            <span class="glyphicon glyphicon-dashboard"></span> {% trans 'Dashboard' %}
-          </a>
-          <a href="{% url 'table:csvdownload_view' view.id %}" download
-             class="btn btn-default btn-sm js-logs-download"
-             data-toggle="tooltip"
-             title="{% trans 'Download a CSV file containing this table' %}">
-            <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
-          </a>
-        {% else %}
-          <a href="{% url 'table:stat_table' %}"
-             class="btn btn-default btn-sm spin"
-             data-toggle="tooltip"
-             title="{% trans 'Dashboard created with the table data' %}">
-            <span class="glyphicon glyphicon-dashboard"></span> {% trans 'Dashboard' %}
-          </a>
-          <a href="{% url 'table:csvdownload' %}"
-             class="btn btn-default btn-sm"
-             data-toggle="tooltip"
-             title="{% trans 'Download a CSV file containing this table' %}">
-            <span class="glyphicon glyphicon-download-alt"></span> {% trans 'CSV Download' %}
-          </a>
+          {% include 'workflow/includes/add_column_menu.html' %}
         {% endif %}
-      {% endif %}
+        {% include 'workflow/includes/manage_table_data.html' %}
+      </div>
+    </div>
+    <div class="text-center">
+      <div class="btn-group mb-3">
+        {% if columns %}
+          <div class="dropdown btn-group">
+            <a href="{% url 'table:view_index' %}"
+               class="btn btn-outline-dark spin"
+               data-toggle="tooltip"
+               title="{% trans 'Views available for this table' %}">
+              <span class="fa fa fa-eye"></span> {% trans 'Views' %}
+            </a>
+            {% if views %}
+              <button type="button" data-toggle="dropdown"
+                      class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <div class="dropdown-menu">
+              {% for v in views %}
+                <a href="{% url 'table:display_view' v.id %}"
+                   class="dropdown-item spin">{{ v.name }}</a>
+              {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+        {% if columns %}
+          {% if view %}
+            <button type="button"
+                    class="btn btn-outline-dark js-view-edit align-middle"
+                    data-url="{% url 'table:view_edit' view.id %}"
+                    data-toggle="tooltip" title="{% trans 'Change elements in view' %}">
+              <span class="fa fa-pencil"></span> {% trans 'Edit view' %}
+            </button>
+            <a class="btn btn-outline-dark spin" href="{% url 'table:display' %}">Full table</a>
+            <a href="{% url 'table:stat_table_view' view.id %}"
+               class="btn btn-outline-dark spin"
+               data-toggle="tooltip"
+               title="{% trans 'Dashboard created with the view data' %}">
+              <span class="fa fa-dashboard"></span> {% trans 'Dashboard' %}
+            </a>
+            <a href="{% url 'table:csvdownload_view' view.id %}" download
+               class="btn btn-outline-dark js-logs-download"
+               data-toggle="tooltip"
+               title="{% trans 'Download a CSV file containing this table' %}">
+              <span class="fa fa-download"></span> {% trans 'CSV Download' %}
+            </a>
+          {% else %}
+            <a href="{% url 'table:stat_table' %}"
+               class="btn btn-outline-dark spin"
+               data-toggle="tooltip"
+               title="{% trans 'Dashboard created with the table data' %}">
+              <span class="fa fa-dashboard"></span> {% trans 'Dashboard' %}
+            </a>
+            <a href="{% url 'table:csvdownload' %}"
+               class="btn btn-outline-dark"
+               data-toggle="tooltip"
+               title="{% trans 'Download a CSV file containing this table' %}">
+              <span class="fa fa-download"></span> {% trans 'CSV Download' %}
+            </a>
+          {% endif %}
+        {% endif %}
+      </div>
     </div>
     {% if columns %}
-      <table class="table display dataTable no-footer cell-border table-bordered"
-             id="table-data">
+      <table class="table table-hover table-bordered" style="width: 100%;"
+             id="table-data" data-url="{% url 'workflow:column_move' %}">
         <thead>
           <tr>
-            <th rowspan="2"></th>
+            <th></th>
             {% for col in columns %}
               <th class="text-center">
-                <div class="dropdown btn-group" style="display: inline-table;">
-                  <button class="btn btn-default btn-sm dropdown-toggle"
-                          type="button"
-                          data-toggle="dropdown">{{ col.name }}
-                    <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu">
-                    {% if not col.is_key %}
-                      <li>
-                        <a href="{% url 'table:stat_column' col.id %}"
-                           class="btn btn-default btn-sm align-middle spin"
-                           data-toggle="tooltip"
-                           title="{% trans 'Stats and visualizations about this column' %}">
-                          <span class="glyphicon glyphicon-stats"></span> {% trans 'Statistics' %}
-                        </a>
-                      </li>
-                    {% endif %}
-                    <li>
-                      <button type="button"
-                              class="btn btn-sm btn-default js-column-edit"
-                              data-url="{% url 'workflow:column_edit' col.id %}"
-                              data-toggle="tooltip"
-                              title="{% trans 'Edit column name, description, etc' %}">
-                        <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
-                      </button>
-                    </li>
-                    <li>
-                      <button type="button"
-                              class="btn btn-default btn-sm js-column-clone align-middle"
-                              data-url="{% url 'workflow:column_clone' col.id %}"
-                              data-toggle="tooltip"
-                              title="{% trans 'Create an exact duplicate of this column' %}">
-                          <span class="glyphicon glyphicon-duplicate"></span> {% trans 'Clone' %}
-                      </button>
-                    </li>
-                    <li>
-                      <button type="button"
-                              class="btn btn-danger btn-sm js-column-delete"
-                              data-url="{% url 'workflow:column_delete' col.id %}"
-                              data-toggle="tooltip"
-                              title="{% trans 'Delete column' %}">
-                        <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </th>
-            {% endfor %}
-          </tr>
-          <tr>
-            {% for col in columns %}
-              <th>
-                <div style="display:block;">
-                {% if not col.is_active %}
-                  <font color="red" data-toggle="tooltip"
-                        title="{% trans 'Out of given date/time window. Edit column to enable.' %}">
-                    {% trans 'Disabled' %}</font>
-                {% endif %}
-                </div>
-                <div style="display:flex;justify-content:space-between">
-                  <div>
-                    {% if col.position != 1 %}
-                      <a href="{% url 'workflow:column_move_top' col.id %}"
-                         class="column-move-top"
-                         style="display:table-cell;">
-                        <span class="glyphicon glyphicon-step-backward"></span></a>
-                      <a href="{% url 'workflow:column_move_prev' col.id %}"
-                         class="column-move-prev"
-                         style="display:table-cell;">
-                        <span class="glyphicon glyphicon-chevron-left"></span></a>
-                    {% endif %}
-                  </div>
-                  {% if col.position != col.workflow.ncols %}
-                    <div>
-                    <a href="{% url 'workflow:column_move_next' col.id %}"
-                       class="column-move-next"
-                       style="display:table-cell;">
-                       <span
-                           class="glyphicon glyphicon-chevron-right"></span></a>
-                    <a href="{% url 'workflow:column_move_bottom' col.id %}"
-                       class="column-move-bottom"
-                       style="display:table-cell;">
-                      <span class="glyphicon glyphicon-step-forward"></span></a>
-                    </div>
-                  {% endif %}
-                </div>
+                {{ col.name }}
               </th>
             {% endfor %}
           </tr>
         </thead>
       </table>
+      <p class="text-center">{% trans 'You may drag-and-drop a column header to change its position in the table' %}</p>
     {% endif %}
   </div>
   {% include 'modal.html' %}

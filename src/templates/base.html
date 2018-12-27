@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="{% block description %}{% endblock description %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'site/ico/favicon.ico' %}" type="favicon/ico">
     <title>{% block title %}{% include "_brandname.html" %} :: {% endblock %}</title>
@@ -29,87 +29,106 @@
            alt="Loading..."/>
     </div>
     {% block navbar %}
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="sr-only">{% trans 'Toggle navigation' %}</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        {% block navbar-brand %}
-          <img class="navbar-brand" src="{% static 'site/img/logo.png' %}" alt="logo">
-        {% endblock %}
-      </div>
-      {% block navbar-menu %}
-      <div class="collapse navbar-collapse navbar-inner">
-        <ul class="nav nav-pills navbar-right">
-          {% block navbar-right %}
-            {% if user.is_authenticated %}
-              {% if user.is_staff %}
-                <li><a class="spin" href="{% url 'admin:index' %}">{% trans 'Admin' %}</a></li>
-              {% endif %}
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle profile-menu" data-toggle="dropdown">
-                 <img src="{% thumbnail user.profile.picture|default:'default_profile.png' 19x19 crop %}" alt="" />
-                </a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a class="spin" href="{% url 'profiles:show_self' %}">{% trans 'Profile' %}</a></li>
-                  <li><a class="spin" href="{% url 'accounts:logout' %}">{% trans 'Logout' %}</a></li>
-                </ul>
-              </li>
-            {% endif %}
-            <li>
-              <a href="{% static ONTASK_HELP_URL %}" class="btn btn-default btn-sm spin"
-                 data-toggle="tooltip"
-                 data-placement="bottom"
-                 title="{% trans 'Read the manual' %}">
-                <span class="glyphicon glyphicon-book"></span></a>
-            </li>
-          {% endblock %}
-        </ul>
-        <ul class="nav nav-pills pull-left">
-          {% block navbar-left %}
-            {% if user.is_authenticated %}
-              <li {% if request.path == ONTASK_BASE_URL %}class="active"{% endif %}>
-                <a class="spin"
-                   href="{% url 'home' %}">{% trans 'Workflows' %}</a>
-              </li>
-              {% if user.is_superuser %}
-                <li {% if 'sql_connections' in request.path %}class="active"{% endif %}>
-          <a class="spin" href="{% url 'workflow:sql_connections' %}">{% trans 'SQL Connections' %}</a></li>
-              {% endif %}
-            {% endif %}
-            {% if request.session.ontask_workflow_id %}
-              {% url 'workflow:detail' request.session.ontask_workflow_id as workflow_url %}
-              <li {% if '/workflow/' in request.path %}class="active"{% endif %}><a
-                  class="spin" href="{{ workflow_url }}">{% trans 'Details' %}</a></li>
-
-
-              <li {% if '/table/' in request.path  or '/dataops' in request.path%}class="active"{% endif %}><a
-                  class="spin" href="{% url 'table:display' %}">{% trans 'Table' %}</a>
-              </li>
-
-              <li {% if '/action/' in request.path %}class="active"{% endif %}>
-                <a class="spin" href="{% url 'action:index' %}">{% trans 'Actions' %}</a>
-              </li>
-
-              <li {% if '/scheduler/' in request.path %}class="active"{% endif %}><a
-                  class="spin" href="{% url 'scheduler:index' %}">{% trans 'Scheduler' %}</a></li>
-
-              <li {% if '/logs/' in request.path %}class="active"{% endif %}><a
-                  class="spin" href="{% url 'logs:index' %}">{% trans 'Logs' %}</a>
-              </li>
-            {% else %}
-              <li><a href="https://ontasklearning.org" target="blank">{% trans 'About' %}</a></li>
-              <li><a href="https://www.ontasklearning.org/contact/" target="blank">
-                {% trans 'Contact' %}</a></li>
-            {% endif %}
-          {% endblock %}
-        </ul>
-      </div><!--/.nav-collapse -->
+    <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
+      {% block navbar-brand %}
+        <a class="navbar-brand" href="#">
+          <img src="{% static 'site/img/logo.png' %}" height="30" alt="logo">
+        </a>
       {% endblock %}
-    </div>
+      {% block navbar-menu %}
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="nav nav-pills mr-auto">
+            {% block navbar-left %}
+              {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link spin{% if request.path == ONTASK_BASE_URL %} active{% endif %}"
+                     href="{% url 'home' %}" id="ontask-base-home"
+                     data-toggle="tooltip" title="Your workflows"><span class="fa fa-home"></span>{% if request.path == ONTASK_BASE_URL %} Home{% endif %}</a>
+                </li>
+              {% endif %}
+              {% if request.session.ontask_workflow_id %}
+                {% url 'workflow:detail' request.session.ontask_workflow_id as workflow_detail %}
+                {% url 'workflow:operations' request.session.ontask_workflow_id as workflow_ops %}
+                <li class="nav-item">
+                  <a class="nav-link spin{% if '/action/' in request.path %} active{% endif %}"
+                     href="{% url 'action:index' %}"  id="ontask-base-actions"
+                     data-toggle="tooltip" title="Messages and Surveys"><span class="fa fa-comments"></span>{% if '/action' in request.path %} Actions{% endif %}</a>
+                </li>
+                <li class="nav-item"><a
+                    class="nav-link spin{% if '/table/' in request.path or '/dataops' in request.path %} active{% endif %}"
+                    href="{% url 'table:display' %}"  id="ontask-base-table"
+                    data-toggle="tooltip" title="Data Table"><span class="fa fa-table"></span>{% if '/table/' in request.path or '/dataops' in request.path %} Table{% endif %}</a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a href="#" class="nav-link dropdown-toggle details-menu{% if '/logs/' in request.path or '/scheduler/' in request.path or '/detail/' in request.path or '/operations/' in request.path %} active{% endif %}"
+                     data-toggle="dropdown" id="ontask-base-settings">
+                   <span class="fa fa-cog"></span> {% if '/logs/' in request.path or '/scheduler/' in request.path or '/detail/' in request.path or '/operations/' in request.path %} {% trans 'Settings' %}{% endif %}
+                  </a>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item spin" href="{{ workflow_ops }}"
+                       data-toggle="tooltip" title="Workflow operations"
+                       id="ontask-base-workflow">{% trans 'Workflow' %}</a>
+                    <a class="dropdown-item spin" href="{{ workflow_detail }}" id="ontask-base-columns"
+                       data-toggle="tooltip" title="Workflow and column details">{% trans 'Columns' %}</a>
+                    <a class="dropdown-item spin" href="{% url 'scheduler:index' %}"  id="ontask-base-scheduler"
+                    data-toggle="tooltip" title="Scheduled actions">{% trans 'Scheduler' %}</a>
+                    <a class="dropdown-item spin" href="{% url 'logs:index' %}" id="ontask-base-logs"
+                       data-toggle="tooltip" title="Execution Logs">{% trans 'View logs' %}</a>
+                  </div>
+                {% if user.is_superuser %}
+                  <li class="nav-item">
+                    <a class="nav-link spin{% if 'slconns_admin' in request.path %} active{% endif %}" id="ontask-base-sqlconn"
+                       data-toggle="tooltip" title="Connections to SQL databases"
+                       href="{% url 'dataops:sqlconns_admin_index' %}">
+                      <span class="fa fa-database"></span>{% if '/sqlconns_admin' in request.path %} {% trans 'SQL Connections' %}{% endif %}</a></li>
+                {% endif %}
+              {% else %}
+                {% if user.is_superuser %}
+                  <li class="nav-item">
+                    <a class="nav-link spin{% if 'sqlconns_admin' in request.path %} active{% endif %}" id="ontask-base-sqlconn"
+                       data-toggle="tooltip" title="Connections to SQL databases"
+                       href="{% url 'dataops:sqlconns_admin_index' %}">
+                      <span class="fa fa-database"></span>{% if '/sqlconns_admin' in request.path %} {% trans 'SQL Connections' %}{% endif %}</a></li>
+                {% endif %}
+                <li class="nav-item"><a href="https://ontasklearning.org" class="nav-link" target="blank">{% trans 'About' %}</a></li>
+                <li class="nav-item"><a class="nav-link" href="https://www.ontasklearning.org/contact/" target="blank">
+                  {% trans 'Contact' %}</a></li>
+              {% endif %}
+            {% endblock %}
+          </ul>
+          <ul class="nav ml-auto">
+            {% block navbar-right %}
+              {% if user.is_authenticated %}
+                {% if user.is_staff %}
+                  <li class="nav-item"><a class="nav-link spin" href="{% url 'admin:index' %}">{% trans 'Admin' %}</a></li>
+                {% endif %}
+                <li class="nav-item dropdown">
+                  <a href="#" class="nav-link dropdown-toggle profile-menu" data-toggle="dropdown">
+                   <span class="fa fa-user"></span>
+                  </a>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item spin" href="{% url 'profiles:show_self' %}">{% trans 'Profile' %}</a>
+                    <a class="dropdown-item spin" href="{% url 'accounts:logout' %}">{% trans 'Logout' %}</a>
+                  </div>
+                </li>
+              {% endif %}
+              <li class="nav-item">
+                <a href="{% static ONTASK_HELP_URL %}" class="nav-link spin"
+                   data-toggle="tooltip"
+                   data-placement="bottom"
+                   title="{% trans 'Read the manual' %}">
+                  <span class="fa fa-book"></span></a>
+              </li>
+            {% endblock %}
+          </ul>
+        </div>
+      {% endblock %}
+    </nav>
     {% endblock navbar %}
     {% if request.session.ontask_workflow_name %}
       <div id="wflow-name" class="text-center alert alert-info">
@@ -141,7 +160,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">{% trans 'Your session is about to expire' %}</h4>
+              <h4 class="modal-title">{% trans 'Your session is about to expire' %}</h4>
             </div>
             <div class="modal-body">
               {% trans 'Your session will expire in' %}
@@ -149,8 +168,8 @@
             </div>
             <div class="modal-footer">
               <button type="button"
-                      class="btn btn-primary">
-                <span class="glyphicon glyphicon-ok"></span> {% trans 'Ok' %}</button>
+                      class="btn btn-outline-primary">
+                <span class="fa fa-check"></span> {% trans 'Ok' %}</button>
             </div>
           </div>
         </div>
@@ -158,21 +177,17 @@
     {% endblock timeout %}
     <!-- Site footer -->
     {% block footer %}
-      <div class="container-fluid">
-        <div class="footer">
-          <div class="row navbar-default navbar" id="base_footer"
-               style="margin-bottom: 0px; padding-top:8px;">
-            <div class="col-lg-6 div1">
-                <span style="color: #777;">
-                  &copy; {% trans 'OnTask Project' %} {% now 'Y' %}</span>
-            </div>
-            <div class="col-lg-6 div2 text-right">
-              <span class="align-middle"
-                 style="color: #777;">{% trans 'Version:' %} {% ontask_version %}</span>
-            </div>
-          </div>
+      <nav class="navbar navbar-light bg-light" id="base_footer"
+           style="height: 50px;">
+        <div class="col-lg-6 div1">
+            <span style="color: #777;">
+              &copy; {% trans 'OnTask Project' %} {% now 'Y' %}</span>
         </div>
-      </div>
+        <div class="col-lg-6 div2 text-right">
+          <span class="align-middle"
+             style="color: #777;">{% trans 'Version:' %} {% ontask_version %}</span>
+        </div>
+      </nav>
     {% endblock %}
     <script src="{% static 'site/js/initial.js' %}?v={% ontask_version %}"></script>
     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
@@ -188,12 +203,13 @@
           title: 'OnTask',
           message: "{% trans 'Your session is about to expire.' %}",
           logoutButton: "{% trans 'Logout' %}",
-          ignoreUserActivity: true,
-          keepAlive: false,
           keepAliveButton: "{% trans 'Remain Connected' %}",
           keepAliveUrl: "{% url 'keep_alive' %}",
-          logoutUrl: "{% url 'accounts:logout' %}",
+          keepAlive: true,
+          keepAliveInterval: 0,
           redirUrl: "{% url 'accounts:logout' %}",
+          logoutUrl: "{% url 'accounts:logout' %}",
+          ignoreUserActivity: true,
           warnAfter: ({{ ONTASK_TIMEOUT }} - 60) * 1000,
           redirAfter: {{ ONTASK_TIMEOUT }} * 1000,
           onStart: false

@@ -1,18 +1,13 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
-from datetimewidget.widgets import DateTimeWidget
+
+from builtins import next
 from django import forms
 from django.template.defaultfilters import filesizeformat
 from django.utils.translation import ugettext_lazy as _
 
 import ontask.ontask_prefs
-
-dateTimeOptions = {
-    'weekStart': 1,  # Start week on Monday
-    'minuteStep': 5,  # Minute step
-}
-
+from core.widgets import OnTaskDateTimeInput
 
 class RestrictedFileField(forms.FileField):
 
@@ -20,7 +15,7 @@ class RestrictedFileField(forms.FileField):
         self.content_types = kwargs.pop('content_types', None)
         self.max_upload_size = kwargs.pop('max_upload_size', None)
         if not self.max_upload_size:
-            self.max_upload_size = str(ontask.ontask_prefs.MAX_UPLOAD_SIZE)
+            self.max_upload_size = int(ontask.ontask_prefs.MAX_UPLOAD_SIZE)
         super(RestrictedFileField, self).__init__(*args, **kwargs)
 
     def clean(self, *args, **kwargs):
@@ -69,7 +64,7 @@ def column_to_field(col, initial=None, required=False, label=None):
         if col.data_type == 'string':
             choices.insert(0, ('', '---'))
 
-        return forms.ChoiceField(choices,
+        return forms.ChoiceField(choices=choices,
                                  required=required,
                                  initial=initial,
                                  label=label)
@@ -104,9 +99,10 @@ def column_to_field(col, initial=None, required=False, label=None):
             initial=initial,
             label=label,
             required=required,
-            widget=DateTimeWidget(options=dateTimeOptions,
-                                  usel10n=True,
-                                  bootstrap_version=3),
+            widget=OnTaskDateTimeInput()
+            # widget=DateTimeWidget(options=dateTimeOptions,
+            #                       usel10n=True,
+            #                       bootstrap_version=3),
         )
     else:
         raise Exception(_('Unable to process datatype '), col.data_type)

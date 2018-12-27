@@ -32,9 +32,10 @@ var insertConditionInContent = function() {
   } else {
       condition_text = '';
   }
-  insert_text = "{% if " + btn.attr('data-name') +
+  insert_text = "{% if " + btn.val() +
       " %}" + condition_text + "{% endif %}";
   insertText('id_content', insert_text);
+  $(this).val(this.defaultSelected);
 };
 var insertAttributeInContent = function() {
   var val = $(this).val();
@@ -118,6 +119,18 @@ var loadFormPost = function () {
       }
     });
 }
+var transferFormula = function () {
+  if (document.getElementById("id_formula") != null) {
+    formula = $("#builder").queryBuilder('getRules');
+    if (formula == null || !formula['valid']) {
+      $('#div-spinner').hide();
+      return false;
+    }
+    f_text = JSON.stringify(formula, undefined, 2);
+    $("#id_formula").val(f_text);
+   }
+   return true;
+}
 var conditionClone = function() {
   $('#div-spinner').show();
   $.ajax({
@@ -167,15 +180,18 @@ $(function () {
   $("#modal-item").on("submit", ".js-description-edit-form", saveForm);
 
   // Create filter
-  $("#filter-set").on("click", ".js-filter-create", loadForm);
+  $("#filter-set-header").on("click", ".js-filter-create", loadForm);
   $("#modal-item").on("submit", ".js-filter-create-form", saveForm);
 
   // Edit Filter
   $("#filter-set").on("click", ".js-filter-edit", loadForm);
   $("#modal-item").on("submit", ".js-filter-edit-form", saveForm);
 
+  // Update Filter
+  $("#filter").on("submit", ".js-filter-update-form", transferFormula);
+
   // Delete Filter
-  $("#filter-set").on("click", ".js-filter-delete", loadForm);
+  $("#filter").on("click", ".js-filter-delete", loadForm);
   $("#modal-item").on("submit", ".js-filter-delete-form", saveForm);
 
   // Create Condition
@@ -194,8 +210,11 @@ $(function () {
   $("#modal-item").on("submit", ".js-condition-delete-form", saveForm);
 
   // Insert condition blurb in the editor
-  $("#condition-set").on("click", ".js-condition-insert",
-    insertConditionInContent);
+  $("#attribute-names").on("change",
+                           "#select-condition-name",
+                           insertConditionInContent);
+//  $("#condition-set").on("click", ".js-condition-insert",
+//    insertConditionInContent);
 
   // Insert attribute in content
   $("#attribute-names").on("change",
@@ -207,14 +226,14 @@ $(function () {
                            insertAttributeInContent);
 
   // Insert columns in action in
-  $("#column-names").on("change",
-                       "#select-column-name",
-                       insertColumnInActionIn);
+  $("#questions").on("change",
+                      "#select-column-name",
+                      insertColumnInActionIn);
 
   // Insert columns in action in
-  $("#action-in-editor").on("change",
-                       "#select-key-column-name",
-                       insertColumnInActionIn);
+  $("#parameters").on("change",
+                      "#select-key-column-name",
+                      insertColumnInActionIn);
 
   // Toggle shuffle question
   $("#action-in-editor").on("change",
@@ -222,8 +241,11 @@ $(function () {
                        toggleShuffleQuestion);
 
   // Preview
-  $("#html-editor").on("click", ".js-action-preview", loadFormPost);
+  $("#action-preview-done").on("click", ".js-action-preview", loadFormPost);
   $("#email-action-request-data").on("click", ".js-email-preview", loadForm);
+  $("#canvas-email-action-request-data").on("click",
+    ".js-canvas-email-preview",
+    loadForm);
   $("#zip-action-request-data").on("click", ".js-zip-preview", loadForm);
   $("#json-action-request-data").on("click", ".js-json-preview", loadForm);
   $("#action-in-editor").on("click", ".js-action-preview", loadForm);
@@ -235,7 +257,7 @@ $(function () {
   $("#modal-item").on("submit", ".js-action-showurl-form", saveForm);
 
   // Column Add
-  $("#column-names").on("click", ".js-workflow-question-add", loadForm);
+  $("#edit-survey-tab-content").on("click", ".js-workflow-question-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-question-add-form", saveForm);
 
   // Column Selected Edit
@@ -251,11 +273,23 @@ $(function () {
   // Clone column
   $("#column-selected-table").on("click", ".js-column-clone", loadForm);
   $("#modal-item").on("submit", ".js-column-clone-form", saveForm);
+
+  // Flush workflow in detail view
+  $("#action-index").on("click", ".js-workflow-flush", loadForm);
+  $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
+
 });
 
 window.onload = function(){
   if (document.getElementById("id_exclude_values") != null) {
     set_element_select("#id_exclude_values");
   }
+  setDateTimePickers();
+//  if (typeof qbuilder_filter_options != "undefined") {
+//    if ($('#id_formula').val() != '') {
+//      qbuilder_filter_options["rules"] = JSON.parse($('#id_formula').val());
+//    }
+//    $("#builder").queryBuilder(qbuilder_filter_options);
+//  }
 };
 

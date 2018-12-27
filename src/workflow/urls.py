@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
-from django.conf.urls import url
+
+from django.urls import path, re_path
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from . import attribute_views, column_views, import_export_views, share_views, \
@@ -10,133 +10,119 @@ from . import attribute_views, column_views, import_export_views, share_views, \
 app_name = 'workflow'
 
 urlpatterns = [
-    url(r'^$', views.workflow_index, name='index'),
+    path('', views.index, name='index'),
 
-    url(r'^sql_connections', views.sql_connections, name='sql_connections'),
+    path('create/', views.WorkflowCreateView.as_view(), name='create'),
 
-    url(r'^create/$', views.WorkflowCreateView.as_view(), name='create'),
+    path('<int:pk>/clone/', views.clone, name='clone'),
 
-    url(r'^(?P<pk>\d+)/clone/$', views.clone, name='clone'),
+    path('<int:pk>/update/', views.update, name='update'),
 
-    url(r'^(?P<pk>\d+)/update/$', views.update, name='update'),
+    path('<int:pk>/delete/', views.delete, name='delete'),
 
-    url(r'^(?P<pk>\d+)/delete/$', views.delete, name='delete'),
+    path('<int:pk>/flush/', views.flush, name='flush'),
 
-    url(r'^(?P<pk>\d+)/flush/$', views.flush, name='flush'),
+    path('<int:pk>/detail/', views.WorkflowDetailView.as_view(),
+         name='detail'),
 
-    url(r'^(?P<pk>\d+)/detail/$', views.WorkflowDetailView.as_view(),
-        name='detail'),
+    path('<int:pk>/operations/', views.operations, name='operations'),
 
     # Column table manipulation
-    url(r'^(?P<pk>\d+)/column_ss/$', views.column_ss, name='column_ss'),
+    path('<int:pk>/column_ss/', views.column_ss, name='column_ss'),
 
     # Import Export
+    path('<int:pk>/export_ask/',
+         import_export_views.export_ask,
+         name='export_ask'),
 
-    url(r'^(?P<pk>\d+)/export_ask/$',
-        import_export_views.export_ask,
-        name='export_ask'),
+    re_path('(?P<data>(\d+(,\d+)*)?)/export/',
+         import_export_views.export,
+         name='export'),
 
-    url(r'^(?P<data>(\d+(,\d+)*)?)/export/$',
-        import_export_views.export,
-        name='export'),
-
-    url(r'^import/$', import_export_views.import_workflow, name='import'),
+    path('import/', import_export_views.import_workflow, name='import'),
 
     # Attributes
+    path('attribute_create/',
+         attribute_views.attribute_create,
+         name='attribute_create'),
 
-    url(r'^attributes/$', attribute_views.attributes, name='attributes'),
+    path('<int:pk>/attribute_edit/',
+         attribute_views.attribute_edit,
+         name='attribute_edit'),
 
-    url(r'^attribute_create/$',
-        attribute_views.attribute_create,
-        name='attribute_create'),
-
-    url(r'^(?P<pk>\d+)/attribute_edit/$',
-        attribute_views.attribute_edit,
-        name='attribute_edit'),
-
-    url(r'^(?P<pk>\d+)/attribute_delete/$',
-        attribute_views.attribute_delete,
-        name='attribute_delete'),
+    path('<int:pk>/attribute_delete/',
+         attribute_views.attribute_delete,
+         name='attribute_delete'),
 
     # Sharing
+    path('share_create/',
+         share_views.share_create,
+         name='share_create'),
 
-    url(r'^(?P<pk>\d+)/share/$', share_views.share, name='share'),
-
-    url(r'^share_create/$',
-        share_views.share_create,
-        name='share_create'),
-
-    url(r'^(?P<pk>\d+)/share_delete/$',
-        share_views.share_delete,
-        name='share_delete'),
+    path('<int:pk>/share_delete/',
+         share_views.share_delete,
+         name='share_delete'),
 
     # Column manipulation
+    path('column_add/', column_views.column_add, name='column_add'),
 
-    url(r'^column_add/$', column_views.column_add, name='column_add'),
+    path('<int:pk>/question_add/', column_views.column_add, name='question_add'),
 
-    url(r'^(?P<pk>\d+)/question_add/$', column_views.column_add,
-        name='question_add'),
+    path('formula_column_add',
+         column_views.formula_column_add,
+         name='formula_column_add'),
 
-    url(r'^formula_column_add/$',
-        column_views.formula_column_add,
-        name='formula_column_add'),
+    path('random_column_add/',
+         column_views.random_column_add,
+         name='random_column_add'),
 
-    url(r'^random_column_add/$',
-        column_views.random_column_add,
-        name='random_column_add'),
+    path('<int:pk>/column_delete/',
+         column_views.column_delete,
+         name='column_delete'),
 
-    url(r'^(?P<pk>\d+)/column_delete/$',
-        column_views.column_delete,
-        name='column_delete'),
+    path('<int:pk>/column_edit/',
+         column_views.column_edit,
+         name='column_edit'),
 
-    url(r'^(?P<pk>\d+)/column_edit/$',
-        column_views.column_edit,
-        name='column_edit'),
-
-    url(r'^(?P<pk>\d+)/question_edit/$',
+    path('<int:pk>/question_edit/',
         column_views.column_edit,
         name='question_edit'),
 
-    url(r'^(?P<pk>\d+)/column_clone/$',
-        column_views.column_clone,
-        name='column_clone'),
+    path('<int:pk>/column_clone/',
+         column_views.column_clone,
+         name='column_clone'),
 
-    url(r'^(?P<pk>\d+)/column_move_prev/$',
-        column_views.column_move_prev,
-        name='column_move_prev'),
+    # Select key column for action in
+    path('column_move/', column_views.column_move, name='column_move'),
 
-    url(r'^(?P<pk>\d+)/column_move_next/$',
-        column_views.column_move_next,
-        name='column_move_next'),
+    path('<int:pk>/column_move_top/',
+         column_views.column_move_top,
+         name='column_move_top'),
 
-    url(r'^(?P<pk>\d+)/column_move_top/$',
-        column_views.column_move_top,
-        name='column_move_top'),
+    path('<int:pk>/column_move_bottom/',
+         column_views.column_move_bottom,
+         name='column_move_bottom'),
 
-    url(r'^(?P<pk>\d+)/column_move_bottom/$',
-        column_views.column_move_bottom,
-        name='column_move_bottom'),
-
-    url(r'^(?P<pk>\d+)/column_restrict/$',
-        column_views.column_restrict_values,
-        name='column_restrict'),
+    path('<int:pk>/column_restrict/',
+         column_views.column_restrict_values,
+         name='column_restrict'),
 
     # API
 
     # Listing and creating workflows
-    url(r'^workflows/$',
-        api.WorkflowAPIListCreate.as_view(),
-        name='api_workflows'),
+    path('workflows/',
+         api.WorkflowAPIListCreate.as_view(),
+         name='api_workflows'),
 
     # Get, update content or destroy workflows
-    url(r'^(?P<pk>\d+)/rud/$',
-        api.WorkflowAPIRetrieveUpdateDestroy.as_view(),
-        name='api_rud'),
+    path('<int:pk>/rud/',
+         api.WorkflowAPIRetrieveUpdateDestroy.as_view(),
+         name='api_rud'),
 
     # Manage workflow locks (get, set (post, put), unset (delete))
-    url(r'^(?P<pk>\d+)/lock/$',
-        api.WorkflowAPILock.as_view(),
-        name='api_lock'),
+    path('<int:pk>/lock/',
+         api.WorkflowAPILock.as_view(),
+         name='api_lock'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

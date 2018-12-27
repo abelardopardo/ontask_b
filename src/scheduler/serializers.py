@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-#
-from __future__ import unicode_literals, print_function
 
+
+from builtins import object
 import datetime
 
 import pytz
@@ -152,7 +153,7 @@ class ScheduledActionSerializer(serializers.ModelSerializer):
 
         return instance
 
-    class Meta:
+    class Meta(object):
         model = ScheduledAction
 
         fields = ('id', 'name', 'description_text', 'action', 'execute',

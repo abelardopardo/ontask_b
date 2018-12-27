@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
-from django.conf.urls import url
+
+from django.urls import path
 
 from . import views
 
 app_name = 'profiles'
 
 urlpatterns = [
-    url(r'^me$', views.ShowProfile.as_view(), name='show_self'),
-    url(r'^me/edit$', views.EditProfile.as_view(), name='edit_self'),
-    url(r'^reset_token$', views.reset_token, name='reset_token'),
-    url(r'^(?P<slug>[\w\-]+)$', views.ShowProfile.as_view(),
-        name='show'),
+    path('me', views.ShowProfile.as_view(), name='show_self'),
+    path('me/edit', views.EditProfile.as_view(), name='edit_self'),
+    path('reset_token', views.reset_token, name='reset_token'),
+    path('<int:pk>/reset_token/', views.delete_token, name='delete_token'),
+    path('<slug:slug>', views.ShowProfile.as_view(), name='show'),
 ]

@@ -5,29 +5,30 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Enter Data' %}{% endblock %}
+{% block extrahead %}
+  {% ontask_datetimepicker_css %}
+{% endblock extrahead %}
 {% block scripts %}
-  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
+  {% ontask_datetimepicker_js %}
 {% endblock %}
 {% block container %}
-<div align="center" class="container">
-  <h4 class="page-header"><strong>{{ action.name }}</strong></h4>
-  <p class="lead">{{ action.description_text }}</p>
-  <div class="container-fluid">
-    <form action="" method="post">
-      {% csrf_token %}
-      <div class="input-group input-group-lg" style="padding-bottom:1.5ex;">
+  <div class="container" id="action-row-datainput">
+    <h1 class="text-center">{{ action.name }}</h1>
+    <p class="lead text-center">{{ action.description_text }}</p>
+    <div class="row justify-content-center">
+      <form action="" method="post">
+        {% csrf_token %}
         {{ form|crispy }}
-      </div>
-      {% if cancel_url %}
-        <a type="button" class="btn btn-default spin"
-           href="{{ cancel_url }}"> {% trans 'Back' %}
-        </a>
-      {% endif %}
-      <button type="submit" name="submit" value="update"
-              class="btn btn-primary">
-        <span class="glyphicon glyphicon-ok"></span> {% trans 'Update' %}
-      </button>
-    </form>
+        <div class="text-center">
+          {% if cancel_url %}
+            <a type="button" class="btn btn-outline-dark spin"
+               href="{{ cancel_url }}"> {% trans 'Back' %}</a>
+          {% endif %}
+          <button type="submit" name="submit" value="update"
+                  class="btn btn-outline-primary">
+            <span class="fa fa-check"></span> {% trans 'Update' %}</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 {% endblock container %}

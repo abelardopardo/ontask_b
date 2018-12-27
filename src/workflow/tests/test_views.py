@@ -16,7 +16,7 @@ from workflow.models import Workflow
 from action.models import Action
 
 
-class WorkflowInitial(test.OntaskLiveTestCase):
+class WorkflowInitial(test.OnTaskLiveTestCase):
     def setUp(self):
         super(WorkflowInitial, self).setUp()
         test.create_users()
@@ -35,8 +35,8 @@ class WorkflowInitial(test.OntaskLiveTestCase):
 
         # Go to CSV Upload/Merge
         self.selenium.find_element_by_xpath(
-            "//tbody/tr[1]/td[1]/a[1]"
-        ).click()
+            "//table[@id='dataops-table']//a[normalize-space()='CSV "
+            "Upload/Merge']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
                 (By.XPATH, "//form")
@@ -56,7 +56,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
                                              'Step 2: Select Columns')
         )
 
@@ -73,58 +73,28 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         ).click()
 
         # Wait for detail table
-        self.wait_for_datatable('column-table_previous')
+        self.wait_for_datatable('table-data_previous')
+
+        # Go to column details
+        self.go_to_details()
 
         # First column must be: age, double
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[1]/td[2]").text,
-                         'sid')
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[1]/td[4]").text,
-                         'number')
+        self.assert_column_name_type('sid', 'Number', 1)
 
         # Second column must be email string
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[2]/td[2]").text,
-                         'name')
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[2]/td[4]").text,
-                         'string')
+        self.assert_column_name_type('name', 'Text', 2)
 
         # Third column must be sid integer
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[3]/td[2]").text,
-                         'email')
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[3]/td[4]").text,
-                         'string')
+        self.assert_column_name_type('email', 'Text', 3)
 
         # Fourth column must be name string
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[2]").text,
-                         'age')
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[4]/td[4]").text,
-                         'number')
+        self.assert_column_name_type('age', 'Number', 4)
 
         # Fifth registered and boolean
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[5]/td[2]").text,
-                         'registered')
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[5]/td[4]").text,
-                         'boolean')
+        self.assert_column_name_type('registered', 'True/False', 5)
 
         # Sixth when and datetime
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[6]/td[2]").text,
-                         'when')
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[6]/td[4]").text,
-                         'datetime')
-
-        # Number of key columns
-        self.assertIn('3 Key columns', self.selenium.page_source)
+        self.assert_column_name_type('when', 'Date/Time', 6)
 
         # Go to CSV Upload/Merge Step 1
         self.go_to_csv_upload_merge_step_1()
@@ -142,7 +112,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
                                              'Step 2: Select Columns')
         )
 
@@ -160,7 +130,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         # Wait for the upload/merge
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'page-header'),
+                (By.XPATH, "//body/div/h1"),
                 'Step 3: Select Keys and Merge Option')
         )
 
@@ -181,7 +151,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         # Wait for the upload/merge
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'page-header'),
+                (By.XPATH, "//body/div/h1"),
                 'Step 4: Review and confirm')
         )
 
@@ -190,26 +160,16 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             "//button[@name='Submit']"
         ).click()
         # Wait for the upload/merge to finish
-        self.wait_for_datatable('column-table_previous')
+        self.wait_for_datatable('table-data_previous')
 
-        # Fourth column must be: another, string
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[7]/td[2]").text,
-                         'another')
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[7]/td[4]").text,
-                         'string')
+        # Go to column details
+        self.go_to_details()
 
-        # Sixth column must be one string
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[8]/td[2]").text,
-                         'one')
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[8]/td[4]").text,
-                         'string')
+        # Seventh column must be: another, string
+        self.assert_column_name_type('one', 'Text')
 
-        # Number of key columns
-        self.assertIn('3 Key columns', self.selenium.page_source)
+        # Eight column must be one string
+        self.assert_column_name_type('another', 'Text')
 
         # End of session
         self.logout()
@@ -231,8 +191,8 @@ class WorkflowInitial(test.OntaskLiveTestCase):
 
         # Go to the CSV upload step 1
         self.selenium.find_element_by_xpath(
-            "//tbody/tr[1]/td[1]/a[1]"
-        ).click()
+            "//table[@id='dataops-table']//a[normalize-space()='CSV "
+            "Upload/Merge']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
                 (By.XPATH, "//form")
@@ -259,7 +219,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'page-header'),
+            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
                                              'Step 2: Select Columns')
         )
         WebDriverWait(self.selenium, 10).until_not(
@@ -272,7 +232,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         ).click()
 
         # Wait for the details table
-        self.wait_for_datatable('column-table_previous')
+        self.wait_for_datatable('table-data_previous')
 
         # Check that the number of rows is the correct one in the only
         # workflow available
@@ -284,7 +244,7 @@ class WorkflowInitial(test.OntaskLiveTestCase):
         self.logout()
 
 
-class WorkflowModify(test.OntaskLiveTestCase):
+class WorkflowModify(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -316,6 +276,9 @@ class WorkflowModify(test.OntaskLiveTestCase):
         # Go to the details page
         self.access_workflow_from_home_page(test.wflow_name)
 
+        # Go to column details
+        self.go_to_details()
+
         # Edit the age column
         self.open_column_edit('age')
 
@@ -330,12 +293,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
         self.wait_close_modal_refresh_table('column-table_previous')
 
         # First column must be age, number
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[1]/td[2]").text,
-                         'age')
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[1]/td[4]").text,
-                         'number')
+        self.assert_column_name_type('age', 'Number', 1)
 
         # ADD COLUMNS
         idx = 6
@@ -348,18 +306,16 @@ class WorkflowModify(test.OntaskLiveTestCase):
         # CHECK THAT THE COLUMNS HAVE BEEN CREATED (starting in the sixth)
         idx = 6
         for cname, ctype, _, _ in new_cols:
-            if ctype == 'integer':
-                ctype = 'number'
-            row_path1 = "//table[@id='column-table']/tbody/tr[{0}]/td[2]"
-            row_path2 = "//table[@id='column-table']/tbody/tr[{0}]/td[4]"
+            if ctype == 'integer' or ctype == 'double':
+                ctype = 'Number'
+            elif ctype == 'string':
+                ctype = 'Text'
+            elif ctype == 'boolean':
+                ctype = 'True/False'
+            elif ctype == 'datetime':
+                ctype = 'Date/Time'
 
-            # Third column must be age, double
-            self.assertEqual(self.selenium.find_element_by_xpath(
-                row_path1.format(idx)).text,
-                             cname)
-            self.assertEqual(self.selenium.find_element_by_xpath(
-                row_path2.format(idx)).text,
-                             ctype)
+            self.assert_column_name_type(cname, ctype, idx)
             idx += 1
 
         # DELETE THE COLUMNS
@@ -367,12 +323,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
             self.delete_column(cname)
 
         # Sixth column must be one string
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[6]/td[2]").text,
-                         'one')
-        self.assertEqual(self.selenium.find_element_by_xpath(
-            "//table[@id='column-table']/tbody/tr[6]/td[4]").text,
-                         'string')
+        self.assert_column_name_type('one', 'Text', 6)
 
         # End of session
         self.logout()
@@ -385,8 +336,11 @@ class WorkflowModify(test.OntaskLiveTestCase):
         # Login
         self.login('instructor01@bogus.com')
 
-        # Go to the details page
+        # Open the workflow
         self.access_workflow_from_home_page(test.wflow_name)
+
+        # Go to the details page
+        self.go_to_details()
 
         # Edit the another column and change the name
         self.open_column_edit('another')
@@ -414,16 +368,10 @@ class WorkflowModify(test.OntaskLiveTestCase):
         # click in the create action out button
         self.create_new_personalized_text_action(action_name, action_desc)
 
-        # Click in the add rule button (the filter is initially empty)
-        self.selenium.find_element_by_xpath(
-            "//h4[@id='filter-set']/div/button"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//div[@id='modal-item']//form")
-            )
-        )
-
+        # Select filter tab
+        self.select_filter_tab()
+        self.open_condition(None,
+                            "//button[contains(@class, 'js-filter-create')]")
         # Select the another2 column (with new name
         select = Select(self.selenium.find_element_by_name(
             'builder_rule_0_filter'))
@@ -451,7 +399,7 @@ class WorkflowModify(test.OntaskLiveTestCase):
         self.logout()
 
 
-class WorkflowAttribute(test.OntaskLiveTestCase):
+class WorkflowAttribute(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -498,11 +446,9 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         self.search_table_row_by_string('attribute-table', 2, 'value2')
 
         # Rename second attribute
-        element = self.search_table_row_by_string('attribute-table', 1, 'key2')
-        element.find_element_by_xpath("td[3]/button[1]").click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.CLASS_NAME, 'modal-title'), 'Edit attribute')
+        self.open_dropdown_click_option(
+            '//table[@id="attribute-table"]//tr[2]/td[3]/div/button',
+            'Edit'
         )
         self.selenium.find_element_by_id('id_key').clear()
         self.selenium.find_element_by_id('id_key').send_keys('newkey2')
@@ -517,11 +463,6 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         # Go back to the attribute table page
         self.wait_close_modal_refresh_table('attribute-table_previous')
 
-        # Click in the back
-        self.selenium.find_element_by_link_text('Back').click()
-        # Wait for the details page
-        self.wait_for_datatable('column-table_previous')
-
         # Check that the attributes are properly stored in the workflow
         workflow = Workflow.objects.all()[0]
         self.assertEqual(len(workflow.attributes), 2)
@@ -532,22 +473,16 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         self.go_to_attribute_page()
 
         # click the delete button in the second row
-        element = self.search_table_row_by_string('attribute-table',
-                                                  1,
-                                                  'newkey2')
-        element.find_element_by_xpath("td[3]/button[2]").click()
-
-        # Wait for the delete confirmation frame
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),
-                                             'Confirm attribute deletion')
+        self.open_dropdown_click_option(
+            '//table[@id="attribute-table"]//tr[2]/td[3]/div/button',
+            'Delete'
         )
         # Click in the delete confirm button
         self.selenium.find_element_by_xpath(
             "//div[@class='modal-footer']/button[2]"
         ).click()
         # MODAL WAITING
-        self.wait_close_modal_refresh_table('attribute-table_previous')
+        self.wait_for_page(element_id='workflow-detail')
 
         # There should only be a single element
         self.assertEqual(
@@ -565,7 +500,7 @@ class WorkflowAttribute(test.OntaskLiveTestCase):
         self.logout()
 
 
-class WorkflowShare(test.OntaskLiveTestCase):
+class WorkflowShare(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -614,12 +549,13 @@ class WorkflowShare(test.OntaskLiveTestCase):
                 (By.CLASS_NAME, 'modal-open')
             )
         )
-        # Wait for the user share page to reload.
+        # Wait for the  page to reload.
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'js-share-delete'))
+            EC.element_to_be_clickable((By.CLASS_NAME, 'js-attribute-create'))
         )
 
         # Value now should be in the table
+        self.select_share_tab()
         self.search_table_row_by_string('share-table',
                                         1,
                                         'instructor02@bogus.com')
@@ -646,16 +582,16 @@ class WorkflowShare(test.OntaskLiveTestCase):
             )
         )
 
+        # Wait for the  page to reload.
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'js-attribute-create'))
+        )
+
         # Value now should be in the table
+        self.select_share_tab()
         self.search_table_row_by_string('share-table',
                                         1,
                                         'instructor02@bogus.com')
-
-        # Click in the save and close
-        self.selenium.find_element_by_link_text('Back').click()
-
-        # Wait for the details page
-        self.wait_for_datatable('column-table_previous')
 
         # Check that the shared users are properly stored in the workflow
         workflow = Workflow.objects.all()[0]
@@ -663,9 +599,6 @@ class WorkflowShare(test.OntaskLiveTestCase):
         users = workflow.shared.all().values_list('email', flat=True)
         self.assertTrue('instructor02@bogus.com' in users)
         self.assertTrue('superuser@bogus.com' in users)
-
-        # Go back to the share page
-        self.go_to_workflow_share()
 
         # click the delete button in the superuser@bogus.com row
         element = self.search_table_row_by_string('share-table',
@@ -691,6 +624,7 @@ class WorkflowShare(test.OntaskLiveTestCase):
         )
 
         # There should only be a single element
+        self.select_share_tab()
         self.assertEqual(
             len(self.selenium.find_elements_by_xpath(
                 "//table[@id='share-table']/tbody/tr"
