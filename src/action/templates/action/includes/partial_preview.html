@@ -8,12 +8,12 @@
   </div>
   <div class="modal-body text-center">
     <button type="button"
-            class="btn btn-primary js-action-preview-prv"
+            class="btn btn-outline-primary js-action-preview-prv"
             data-url="{% url 'action:preview' action.id prv %}">
       <span class="fa fa-chevron-left"></span>
     </button>
     <button type="button" class="btn btn-outline-dark" data-dismiss="modal">{% trans 'Close' %}</button>
-    <button type="button" class="btn btn-primary js-action-preview-nxt"
+    <button type="button" class="btn btn-outline-primary js-action-preview-nxt"
             data-url="{% url 'action:preview' action.id nxt %}">
       <span class="fa fa-chevron-right"></span>
     </button>

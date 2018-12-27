@@ -100,7 +100,7 @@ class ActionTable(tables.Table):
         return format_html(
             """<a href="{0}"
                   data-toggle="tooltip"
-                  title="{1}">{2}</a>""".format(
+                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""".format(
                 reverse('action:edit', kwargs={'pk': record.id}),
                 _('Edit the text, conditions and filter'),
                 record.name
@@ -151,7 +151,7 @@ class ActionTable(tables.Table):
         exclude = ('content', 'serve_enabled', 'columns', 'filter')
         attrs = {
             'class': 'table table-hover table-bordered',
-            'style': 'min-width: 505px; width: 100%;',
+            'style': 'width: 100%;',
             'id': 'action-table'
         }
 
@@ -169,16 +169,28 @@ class ColumnSelectedTable(tables.Table):
     # Template to render the extra column created dynamically
     ops_template = 'action/includes/partial_column_selected_operations.html'
 
+    def render_name(self, record):
+        return format_html(
+            """<a href="#" data-toggle="tooltip" 
+                  class="js-workflow-question-edit" data-url="{0}"
+                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""".format(
+                reverse('workflow:question_edit', kwargs={'pk': record['id']}),
+                _('Edit the question'),
+                record['name']
+            )
+        )
+
     class Meta(object):
-        fields = ('name', 'description_text', 'operations')
+        fields = ('id', 'name', 'description_text', 'operations')
+        sequence = ('name', 'description_text', 'operations')
+
         attrs = {
             'class': 'table table-hover table-bordered',
-            'style': 'min-width: 505px; width: 100%;',
+            'style': 'width: 100%;',
             'id': 'column-selected-table'
         }
 
         row_attrs = {
-            'style': 'text-align:center;',
             'class': lambda record:
             'danger' if not record['description_text'] else '',
         }

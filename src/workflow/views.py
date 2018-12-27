@@ -20,15 +20,12 @@ from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
 
 import action
-from action.views_action import ActionTable
 from dataops import ops, pandas_db
-from dataops.models import SQLConnection
-from dataops.sqlcon_views import SQLConnectionTableAdmin
 from logs.models import Log
-from ontask.permissions import is_instructor, UserIsInstructor, is_admin
+from ontask.permissions import is_instructor, UserIsInstructor
 from ontask.tables import OperationsColumn
 from .forms import WorkflowForm
-from .models import Workflow, Column
+from .models import Workflow
 from .ops import get_workflow
 
 
@@ -48,7 +45,7 @@ class AttributeTable(tables.Table):
         fields = ('name', 'value', 'operations')
         attrs = {
             'class': 'table table-hover table-bordered',
-            'style': 'min-width: 505px; width: 100%;',
+            'style': 'width: 100%;',
             'id': 'attribute-table'
         }
 
@@ -74,7 +71,7 @@ class WorkflowShareTable(tables.Table):
 
         attrs = {
             'class': 'table table-hover table-bordered',
-            'style': 'min-width: 505px; width: 100%;',
+            'style': 'width: 100%;',
             'id': 'share-table',
             'th': {'class': 'dt-body-center'}
         }
@@ -201,39 +198,6 @@ def operations(request, pk):
     }
 
     return render(request, 'workflow/operations.html', context)
-
-
-@user_passes_test(is_admin)
-def sql_connections(request):
-    """
-    Page to show and handle the SQL connections
-    :param request: Request
-    :return: Render the appropriate page.
-    """
-    wid = request.session.pop('ontask_workflow_id', None)
-    # If removing workflow from session, mark it as available for sharing
-    if wid:
-        Workflow.unlock_workflow_by_id(wid)
-    request.session.pop('ontask_workflow_name', None)
-
-    return render(request,
-                  'workflow/sql_connections.html',
-                  {'table': SQLConnectionTableAdmin(
-                      SQLConnection.objects.all().values(
-                          'id',
-                          'name',
-                          'description_txt',
-                          'conn_type',
-                          'conn_driver',
-                          'db_user',
-                          'db_password',
-                          'db_host',
-                          'db_port',
-                          'db_name',
-                          'db_table'
-                      ),
-                      orderable=False)
-                  })
 
 
 class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
@@ -509,8 +473,7 @@ def column_ss(request, pk):
         if col_data_type == 'string':
             col_data_type_str = col_data_type_str.format('Text', 'italic')
         elif col_data_type == 'integer' or col_data_type == 'double':
-            col_data_type_str = col_data_type_str.format('Number',
-                                                         'percent')
+            col_data_type_str = col_data_type_str.format('Number', 'percent')
         elif col_data_type == 'boolean':
             col_data_type_str = col_data_type_str.format('True/False',
                                                          'toggle-on')
@@ -519,11 +482,15 @@ def column_ss(request, pk):
                                                          'calendar-o')
 
         final_qs.append({
-            'number': render_to_string(
-                'workflow/includes/workflow_column_movement.html',
-                {'column': col}
+            'number': col.position,
+            'name': format_html(
+                """<a href="#" class="js-workflow-column-edit"
+                  data-toggle="tooltip" 
+                  title="Edit the parameters of this column">{0} 
+                  <span class="fa fa-pencil"></span></a>""".format(
+                    col.name
+                )
             ),
-            'name': col.name,
             'description': col.description_text,
             'type': format_html(col_data_type_str),
             'key': '<span class="true">✔</span>' if col.is_key else '',

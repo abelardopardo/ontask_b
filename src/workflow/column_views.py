@@ -10,6 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import JsonResponse
+from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -769,28 +770,25 @@ def column_move_top(request, pk):
 
     :param request: HTTP request to move a column to the top of the list
     :param pk: Column ID
-    :return:
+    :return: Once done, redirects to the column page
     """
 
     # Get the workflow element
     workflow = get_workflow(request)
     if not workflow:
-        return JsonResponse({'html_redirect': reverse('workflow:index')})
+        return redirect('workflow:index')
 
     # Get the column
     try:
-        column = Column.objects.get(pk=pk, workflow=workflow)
+        column = workflow.columns.get(pk=pk)
     except ObjectDoesNotExist:
-        return JsonResponse({
-            'html_redirect': reverse('workflow:detail',
-                                     kwargs={'pk': workflow.id})
-        })
+        return redirect('workflow:detail', pk=workflow.id)
 
     # The workflow and column objects have been correctly obtained
     if column.position > 1:
         reposition_column_and_update_df(workflow, column, 1)
 
-    return JsonResponse({})
+    return redirect('workflow:detail', pk=workflow.id)
 
 
 @user_passes_test(is_instructor)
@@ -799,28 +797,25 @@ def column_move_bottom(request, pk):
 
     :param request: HTTP request to move a column to end of the list
     :param pk: Column ID
-    :return:
+    :return: Once done, redirects to the column page
     """
 
     # Get the workflow element
     workflow = get_workflow(request)
     if not workflow:
-        return JsonResponse({'html_redirect': reverse('workflow:index')})
+        return redirect('workflow:index')
 
     # Get the column
     try:
-        column = Column.objects.get(pk=pk, workflow=workflow)
+        column = workflow.columns.get(pk=pk)
     except ObjectDoesNotExist:
-        return JsonResponse({
-            'html_redirect': reverse('workflow:detail',
-                                     kwargs={'pk': workflow.id})
-        })
+        return redirect('workflow:detail', pk=workflow.id)
 
     # The workflow and column objects have been correctly obtained
     if column.position < workflow.ncols:
         reposition_column_and_update_df(workflow, column, workflow.ncols)
 
-    return JsonResponse({})
+    return redirect('workflow:detail', pk=workflow.id)
 
 
 @user_passes_test(is_instructor)

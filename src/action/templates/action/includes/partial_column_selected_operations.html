@@ -1,27 +1,10 @@
 {% load i18n %}
-<div class="dropdown">
-  <button class="btn btn-light btn-sm" type="button"
-          id="actionSurveyColumnOperations"
-          data-toggle="dropdown"><span class="fa fa-ellipsis-h"></span></button>
-  <div class="dropdown-menu" aria-labelledby="actionSurveyColumnOperations">
-    <button type="button"
-            class="dropdown-item js-workflow-question-edit"
-            data-url="{% url 'workflow:question_edit' id %}"
-            data-toggle="tooltip"
-            title="{% trans 'Edit question name, description, type, values, etc.' %}">
-      <span class="fa fa-pencil"></span> {% trans 'Edit' %}
-    </button>
-    <a href="{% url 'action:unselect_column_action' aid id  %}"
-       class="dropdown-item spin" data-toggle="tooltip"
-       title="{% trans 'Remove question from this survey' %}">
-      <span class="fa fa-trash"></span> {% trans 'Remove' %}
-    </a>
-    <button type="button"
-            class="dropdown-item js-column-clone align-middle"
-            data-url="{% url 'workflow:column_clone' id %}"
-            data-toggle="tooltip"
-            title="{% trans 'Create an exact duplicate of this question' %}">
-        <span class="fa fa fa-clone"></span> {% trans 'Clone' %}
-    </button>
-  </div>
-</div>
+<button type="button" class="btn btn-sm btn-outline-primary js-column-clone align-middle"
+        data-url="{% url 'workflow:column_clone' id %}" data-toggle="tooltip"
+        title="{% trans 'Create an exact duplicate of this question' %}">
+    <span class="fa fa fa-clone"></span>
+</button>
+<a href="{% url 'action:unselect_column_action' aid id  %}"
+   class="btn btn-sm btn-outline-danger spin" data-toggle="tooltip"
+   title="{% trans 'Remove question from this survey' %}">
+  <span class="fa fa-trash"></span></a>

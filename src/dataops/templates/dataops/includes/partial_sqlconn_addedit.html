@@ -4,11 +4,11 @@
 <form method="post" 
   {% if add %}
     action="{% url 'dataops:sqlconn_add' %}"
-    class="js-sqlconn-add-form">
+    class="js-sqlconn-add-form"
   {% else %}
     action="{% url 'dataops:sqlconn_edit' id %}"
-    class="js-sqlconn-edit-form">
-  {% endif %}
+    class="js-sqlconn-edit-form"
+  {% endif %}>
   {% csrf_token %}
   <div class="modal-header">
   {% if add %}
@@ -26,7 +26,7 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" data-dismiss="modal">{% trans 'Cancel' %}
     </button>
-    <button type="submit" class="btn btn-primary">
+    <button type="submit" class="btn btn-outline-primary">
        <span class="fa fa-check"></span> {% if add %}{% trans 'Add connection' %}{% else %}{% trans 'Update' %}{% endif %}
     </button>
   </div>

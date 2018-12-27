@@ -62,11 +62,10 @@
             realtime: false,
           },
           scrollX: true,
-          // fixedColumns: true,
+          fixedColumns: true,
           deferRender: true,
         });
-        // Process the column reorder events
-        //table_data.on("column-reorder", column_reorder);
+        table_data.on("column-reorder", column_reorder);
       });
     }
     {% with js_var='qbuilder_options' allow_empty='true' empty_rules=True %}
@@ -87,17 +86,21 @@
       {% include 'workflow/includes/no_actions.html' %}
     {% endif %}
     <div class="text-center">
-      <div class="btn-group mb-3" role="group">
+      <div class="btn-group mb-3">
         {% if columns %}
           <a href="{% url 'dataops:rowcreate' %}"
              class="btn btn-outline-dark"
              data-toggle="tooltip"
              title="{% trans 'Add a new row to the table' %}">
-            <span class="fa fa-plus"></span> {% trans 'Add row' %}
+            <span class="fa fa-plus"></span> {% trans 'Row' %}
           </a>
           {% include 'workflow/includes/add_column_menu.html' %}
         {% endif %}
         {% include 'workflow/includes/manage_table_data.html' %}
+      </div>
+    </div>
+    <div class="text-center">
+      <div class="btn-group mb-3">
         {% if columns %}
           <div class="dropdown btn-group">
             <a href="{% url 'table:view_index' %}"

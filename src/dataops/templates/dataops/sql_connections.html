@@ -14,10 +14,10 @@
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
-    if (document.getElementById("sqlconn-table") != null) {
+    if (document.getElementById("sqlconn-instructor-table") != null) {
       // Required for DataTables
       $(document).ready(function() {
-        var sqlconn_table = $('#sqlconn-table').DataTable({
+        var sqlconn_table = $('#sqlconn-instructor-table').DataTable({
           "search": {
             "caseInsensitive": true,
           },
@@ -31,12 +31,13 @@
               "url": getLanguage()
           },
           "columnDefs": [
-              {"className": "dt-center", "targets": [2, 4, 5, 6, 7, 8, 9, 10]},
-              {"orderable": false, "targets": 10},
-              {"searchable": false, "targets": 10},
+              {"className": "dt-center", "targets": [0, 2]},
+              {"orderable": false, "targets": 2},
+              {"searchable": false, "targets": 2},
           ],
           colReorder: false,
-          scrollX: true,
+          rowReorder: false,
+          "responsive": false,
         });
         sqlconn_table.columns().iterator('column', function (ctx, idx) {
           $(sqlconn_table.column(idx).header()).append('<span class="sort-icon"/>');

@@ -157,12 +157,11 @@ class ScreenTestFixture(ScreenTests):
 
         # click in the edit element
         xpath_txt = \
-            "//table[@id='sqlconn-table']//tr/td[1][text() = '{0}']/..".format(
-                'Remote server'
-            )
+            "//table[@id='sqlconn-admin-table']" \
+            "//tr/td[1][text() = '{0}']/..".format('Remote server')
         # Click in the dropdown
         self.open_dropdown_click_option(
-            xpath_txt + "/td[11]/div/button",
+            xpath_txt + "/td[1]/div/button",
             'Edit'
         )
 

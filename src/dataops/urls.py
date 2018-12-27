@@ -3,6 +3,7 @@
 
 from django.urls import path
 
+import dataops.sqlcon_views
 import dataops.upload
 import dataops.views
 from . import views, csvupload, excelupload, sqlcon_views, googlesheetupload
@@ -49,9 +50,19 @@ urlpatterns = [
     path('upload_s4/', dataops.upload.upload_s4, name='upload_s4'),
 
     # SQL Connections
-    path('sqlconns/', sqlcon_views.sqlconnection_index, name="sqlconns"),
+    path('sqlconns_admin',
+         sqlcon_views.sqlconnection_admin_index,
+         name='sqlconns_admin_index'),
+
+    path('sqlconns_instructor/',
+         sqlcon_views.sqlconnection_instructor_index,
+         name="sqlconns_instructor_index"),
 
     path('sqlconn_add/', sqlcon_views.sqlconn_add, name="sqlconn_add"),
+
+    path('<int:pk>/sqlconn_view/',
+        sqlcon_views.sqlconn_view,
+        name="sqlconn_view"),
 
     path('<int:pk>/sqlconn_edit/',
         sqlcon_views.sqlconn_edit,

@@ -10,7 +10,6 @@
   {% ontask_datatables_bootstrap_css %}
 {% endblock extrahead %}
 {% block scripts %}
-  <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
   <script src="{% static 'dataops/js/dataops.js' %}?v={% ontask_version %}"></script>
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
@@ -26,19 +25,17 @@
           stateSaveParams: function (settings, data) {
             delete data.search;
           },
-          "order": [[0, "asc"]],
+          "order": [[0  , "asc"]],
           "language": {
             "emptyTable": "{% trans 'No SQL connections defined.' %}",
             "url": getLanguage()
           },
           "columnDefs": [
-            {"className": "dt-center", "targets": "_all"},
-            {"orderable": false, "targets": 10},
-            {"searchable": false, "targets": 10},
+            {"className": "dt-center", "targets": [0]},
           ],
           colReorder: false,
           rowReorder: false,
-          responsive: true,
+          "responsive": false,
         });
         sqlconn_admin_table.columns().iterator('column', function (ctx, idx) {
           $(sqlconn_admin_table.column(idx).header()).append('<span class="sort-icon"/>');

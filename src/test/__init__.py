@@ -441,7 +441,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         # Goto the details page
         self.selenium.find_element_by_id('ontask-base-sqlconn').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'sqlconn-table'))
+            EC.presence_of_element_located((By.ID, 'sqlconn-admin-table'))
         )
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
@@ -1323,7 +1323,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
 
 class ScreenTests(OnTaskLiveTestCase):
-    viewport_width = 1440
+    viewport_width = 1040
     viewport_height = 1800
     prefix = ''
     workflow_name = 'BIOL1011'

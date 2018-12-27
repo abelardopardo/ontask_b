@@ -12,8 +12,6 @@ app_name = 'workflow'
 urlpatterns = [
     path('', views.index, name='index'),
 
-    path('sql_connections', views.sql_connections, name='sql_connections'),
-
     path('create/', views.WorkflowCreateView.as_view(), name='create'),
 
     path('<int:pk>/clone/', views.clone, name='clone'),

@@ -41,6 +41,7 @@
             "url": getLanguage()
           },
           "columnDefs": [
+            {"className": "dt-center", "targets": [0, 2]},
             {"orderable": false, "targets": 2},
             {"searchable": false, "targets": 2},
           ],
@@ -59,12 +60,12 @@
         <a class="nav-link active" id="questions-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="true">Survey Questions</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="parameters-tab" data-toggle="tab" href="#parameters" role="tab" aria-controls="parameters" aria-selected="false">Survey parameters</a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="false">Filter Learners
           {% if not filter_condition %}(Empty){% else %}{% blocktrans with n=selected_rows tot=total_rows count counter=selected_rows %}({{ n }} learner of {{ tot }}){% plural %}({{ n }} learners of {{ tot }}){% endblocktrans %}{% endif %}
         </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="parameters-tab" data-toggle="tab" href="#parameters" role="tab" aria-controls="parameters" aria-selected="false">Survey parameters</a>
       </li>
     </ul>
     <br/>
@@ -76,49 +77,30 @@
         {% if has_empty_description %}
           <p class="alert-danger text-center">{% trans 'All questions should have non-empty descriptions.' %}</p>
         {% endif %}
-        <div class="text-center">
+        <div class="text-center mb-3">
           <select id="select-column-name">
-            <option value="">- {% trans 'Insert question' %} -</option>
+            <option value="">- {% trans 'Insert existing question' %} -</option>
             {% for col in columns_to_insert %}
               <option
                 value="{% url 'action:select_column_action' action.id col.id %}">{{ col.name }}</option>
             {% endfor %}
           </select>
           <button type="button"
-                  class="btn btn-outline-dark btn-sm js-workflow-question-add"
+                  class="btn btn-outline-dark js-workflow-question-add"
                   data-url="{% url 'workflow:question_add' action.id %}"
                   data-toggle="tooltip"
                   title="{% trans 'Add a new question to the action' %}">
             <span class="fa fa-plus"></span> {% trans 'Create new question' %}
           </button>
         </div>
-        <div class="container justify-content-center">
+        <div class="container justify-content-center mb-3">
           {% render_table column_selected_table %}
         </div>
-        <div class="text-center">
-          <button type="button"
-                  class="btn btn-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
-                  data-url="{% url 'action:preview' action.id 1 %}"
-                  data-toggle="tooltip"
-                  title="{% trans 'See the content as shown to each learner' %}">
-            <span class="fa fa fa-eye"></span> {% trans 'Preview' %}
-          </button>
-          <a href="{% url 'action:index' %}"
-                  class="btn btn-primary spin"
-                  data-toggle="tooltip"
-                  data-placement="auto"
-                  title="{% trans 'Save action and go back to action table' %}">
-            <span class="fa fa-check"></span> {% trans 'Done' %}
-          </a>
-          <a href="{% url 'action:run' action.id %}"
-             class="btn btn-primary spin {% if not action.is_executable %}disabled{% endif %}"
-             data-toggle="tooltip"
-             title="{% trans 'Enter data manually' %}">
-            <span class="fa fa-rocket"></span> {% trans 'Run' %}
-          </a>
-        </div>
       </div>
-      <div class="tab-pane fade" id="parameters" role="tabpanel" aria-labelledby="parameters-tab">
+      <div class="tab-pane fade" id="filter" role="tabpanel" aria-labelledby="filter-tab">
+        {% include 'action/includes/partial_filter_tab.html' %}
+      </div>
+      <div class="tab-pane fade mb-3" id="parameters" role="tabpanel" aria-labelledby="parameters-tab">
         <h5 class="text-center">Survey description (shown to learners)
           <button type="button"
                   class="btn btn-sm btn-outline-dark js-description-edit"
@@ -165,8 +147,27 @@
           </small>
         </h5>
       </div>
-      <div class="tab-pane fade" id="filter" role="tabpanel" aria-labelledby="filter-tab">
-        {% include 'action/includes/partial_filter_tab.html' %}
+      <div class="text-center">
+        <button type="button"
+                class="btn btn-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
+                data-url="{% url 'action:preview' action.id 1 %}"
+                data-toggle="tooltip"
+                title="{% trans 'See the content as shown to each learner' %}">
+          <span class="fa fa fa-eye"></span> {% trans 'Preview' %}
+        </button>
+        <a href="{% url 'action:index' %}"
+                class="btn btn-outline-primary spin"
+                data-toggle="tooltip"
+                data-placement="auto"
+                title="{% trans 'Save action and go back to action table' %}">
+          <span class="fa fa-check"></span> {% trans 'Done' %}
+        </a>
+        <a href="{% url 'action:run' action.id %}"
+           class="btn btn-outline-primary spin {% if not action.is_executable %}disabled{% endif %}"
+           data-toggle="tooltip"
+           title="{% trans 'Enter data manually' %}">
+          <span class="fa fa-rocket"></span> {% trans 'Run' %}
+        </a>
       </div>
     </div>
   </div>

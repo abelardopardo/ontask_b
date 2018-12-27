@@ -37,7 +37,7 @@
           "url": getLanguage()
         },
         "columnDefs": [
-          {"className": "dt-center", "targets": "_all"},
+          {"className": "dt-center", "targets": [0, 2]},
           {"orderable": false, "targets": 2},
           {"searchable": false, "targets": 2},
         ],
@@ -55,7 +55,7 @@
     <h1 class="text-center">{% trans 'Table Views' %}</h1>
     <div class="text-center mb-3">
       <a class="btn btn-outline-dark spin"
-         href="{% url 'table:display' %}">{% trans 'Back' %}</a>
+         href="{% url 'table:display' %}">{% trans 'Full Table' %}</a>
       <button type="button" class="btn btn-outline-dark js-view-add"
               data-url="{% url 'table:view_add' %}"
               data-toggle="tooltip"

@@ -5,14 +5,6 @@
           data-toggle="dropdown"><span class="fa fa-ellipsis-h"></span></button>
   <div class="dropdown-menu" aria-labelledby="columnOperations">
     <button type="button"
-            class="dropdown-item js-workflow-column-edit"
-            data-url="{% url 'workflow:column_edit' id %}"
-            data-toggle="tooltip"
-            title="{% trans 'Edit column name, description, type, values, etc.' %}">
-      <span class="fa fa-pencil"></span>
-      {% trans 'Edit' %}
-    </button>
-    <button type="button"
             class="dropdown-item js-column-clone align-middle"
             data-url="{% url 'workflow:column_clone' id %}"
             data-toggle="tooltip"
@@ -43,5 +35,15 @@
             title="{% trans 'Delete column' %}">
       <span class="fa fa-trash"></span> {% trans 'Delete' %}
     </button>
+    <div class="dropdown-divider"></div>
+    <a href="{% url 'workflow:column_move_top' id %}"
+       class="dropdown-item">
+      <span class="fa fa-step-forward spin" style="transform:rotate(-90deg);"></span>
+      {% trans 'Make first column' %}</a>
+    <a href="{% url 'workflow:column_move_bottom' id %}"
+       class="dropdown-item spin">
+      <span class="fa fa-step-backward" style="transform:rotate(-90deg);"></span>
+      {% trans 'Make last column' %}</a>
+    </a>
   </div>
 </div>

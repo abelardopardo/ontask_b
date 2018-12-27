@@ -30,7 +30,10 @@ var row_reordered = function(e, details, edit) {
   if (details[0].oldPosition - details[0].newPosition == 1) {
     idx = details.length - 1;
   }
-  send_column_reorder($(this), {'from_name': details[idx].oldData, 'to_name': details[idx].newData});
+  send_column_reorder(
+    $(this),
+    {'from_name': $(details[idx].oldData).text().trim(),
+     'to_name': $(details[idx].newData).text().trim()});
 };
 var column_move = function () {
     $.ajax({

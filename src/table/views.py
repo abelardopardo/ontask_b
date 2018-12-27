@@ -49,11 +49,11 @@ class ViewTable(tables.Table):
 
     def render_name(self, record):
         return format_html(
-            """<a href="{0}"
-                  data-toggle="tooltip"
-                  title="{1}">{2}</a>""".format(
-                reverse('table:display_view', kwargs={'pk': record['id']}),
-                _('Access the table with this view'),
+            """<a href="#" class="js-view-edit"
+                  data-toggle="tooltip" data-url="{0}"
+                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""".format(
+                reverse('table:view_edit', kwargs={'pk': record['id']}),
+                _('Change the columns present in the view'),
                 record['name']
             )
         )
@@ -67,7 +67,7 @@ class ViewTable(tables.Table):
         sequence = ('name', 'description_text', 'operations')
         attrs = {
             'class': 'table table-hover table-bordered',
-            'style': 'min-width: 505px; width: 100%;',
+            'style': 'width: 100%;',
             'id': 'view-table'
         }
 

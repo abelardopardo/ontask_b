@@ -23,7 +23,7 @@ class LoginForm(AuthenticationForm):
             #    reverse("accounts:password-reset"))),
             # Field('remember_me'),
             Submit('sign_in', _("Log in"),
-                   css_class="btn btn-lg btn-primary btn-block"),
+                   css_class="btn btn-lg btn-outline-primary btn-block"),
         )
 
 

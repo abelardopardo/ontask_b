@@ -41,16 +41,18 @@ $(function () {
   $("#transform-selection").on("click", ".js-transform-diagnose", loadForm);
 
   // SQL connection add, edit, delete and clone
+  $("#sql-connections").on("click", ".js-sqlconn-view", loadForm);
+
   $("#sql-connections").on("click", ".js-sqlconn-add", loadForm);
   $("#modal-item").on("submit", ".js-sqlconn-add-form", saveForm);
 
-  $("#sqlconn-admin-table").on("click", ".js-sqlconn-edit", loadForm);
+  $("#modal-item").on("click", ".js-sqlconn-edit", loadForm);
   $("#modal-item").on("submit", ".js-sqlconn-edit-form", saveForm);
 
-  $("#sqlconn-admin-table").on("click", ".js-sqlconn-delete", loadForm);
+  $("#modal-item").on("click", ".js-sqlconn-delete", loadForm);
   $("#modal-item").on("submit", ".js-sqlconn-delete-form", saveForm);
 
-  $("#sqlconn-admin-table").on("click", ".js-sqlconn-clone", loadForm);
+  $("#modal-item").on("click", ".js-sqlconn-clone", loadForm);
   $("#modal-item").on("submit", ".js-sqlconn-clone-form", saveForm);
 });
 

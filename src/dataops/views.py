@@ -69,7 +69,7 @@ class PluginRegistryTable(tables.Table):
 
         attrs = {
             'class': 'table table-hover table-bordered',
-            'style': 'min-width: 505px; width: 100%;',
+            'style': 'width: 100%;',
             'id': 'transform-table'
         }
 

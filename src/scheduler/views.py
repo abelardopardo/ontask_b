@@ -47,13 +47,6 @@ class ScheduleActionTable(tables.Table):
 
     name = tables.Column(verbose_name=_('Name'))
 
-    description_text = tables.Column(verbose_name=_('Description'))
-
-    type = tables.Column(
-        verbose_name=_('Type'),
-        accessor=A('action.get_action_type_display')
-    )
-
     action = tables.Column(
         verbose_name=_('Action'),
         accessor=A('action.name')
@@ -68,34 +61,19 @@ class ScheduleActionTable(tables.Table):
         accessor=A('get_status_display')
     )
 
-    item_column = tables.Column(
-        verbose_name=_('Item column'),
-    )
-
-    exclude_values = tables.Column(
-        verbose_name=_('Exclude'),
-    )
-
-    payload = tables.Column(
-        verbose_name=_('Parameters'),
-    )
-
-    last_executed_log = tables.DateTimeColumn(
-        verbose_name=_('Result'),
-    )
-
-    def render_action(self, record):
+    def render_name(self, record):
         return format_html(
-            '<a class="spin" href="{0}">{1}</a>'.format(
-                reverse('action:edit',
-                        kwargs={'pk': record.action.id}),
-                record.action.name
+            """<a href="{0}"
+                  data-toggle="tooltip"
+                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""".format(
+                reverse('scheduler:edit', kwargs={'pk': record.id}),
+                _('Edit this scheduled action execution'),
+                record.name
             )
         )
 
-    def render_type(self, record):
+    def render_action(self, record):
         icon = 'file-text'
-        title = 'Personalized text'
         if record.action.action_type == Action.PERSONALIZED_TEXT:
             icon = 'file-text'
             title = 'Personalized text'
@@ -108,69 +86,42 @@ class ScheduleActionTable(tables.Table):
         elif record.action.action_type == Action.SURVEY:
             icon = 'question-circle-o'
             title = 'Survey'
+
         return format_html(
-            """<div data-toggle="tooltip" title="{0}">
-                 <span class="fa fa-{1}"></span></div>""".format(
-                title,
+            '<a class="spin" href="{0}"'
+            '   data-toggle="tooltip" title="{1}">{2} '
+            '<span class="fa fa-{3}"></span></a>'.format(
+                reverse('action:edit',
+                        kwargs={'pk': record.action.id}),
+                _('Edit the action scheduled for execution'),
+                record.action.name,
                 icon
             )
         )
 
-    def render_exclude_values(self, record):
-        return ', '.join(record.exclude_values)
-
-    def render_payload(self, record):
-        result = ''
-        if not record.payload:
-            return result
-
-        for k, v in sorted(record.payload.items()):
-            if isinstance(v, list):
-                result += '<li>{0}: {1}</li>'.format(
-                    escape(str(k)), escape(', '.join([str(x) for x in v]))
-                )
-            else:
-                result += '<li>{0}: {1}</li>'.format(
-                    escape(str(k)), escape(str(v))
-                )
-        return format_html(
-            '<ul style="text-align:left;">{0}<ul>'.format(result)
-        )
-
-    def render_last_executed_log(self, record):
+    def render_status(self, record):
         log_item = record.last_executed_log
         if not log_item:
-            return "---"
+            return record.get_status_display()
+
+        # At this point, the object is not pending. Produce a link
         return format_html(
             """<a class="spin" href="{0}">{1}</a>""".format(
                 reverse('logs:view', kwargs={'pk': log_item.id}),
-                log_item.modified.astimezone(
-                    pytz.timezone(settings.TIME_ZONE)
-                )
+                record.get_status_display()
             )
         )
 
     class Meta(object):
         model = ScheduledAction
 
-        fields = ('name', 'description_text', 'type', 'action',
-                  'execute', 'status', 'item_column', 'exclude_values',
-                  'operations', 'last_executed_log')
+        fields = ('name', 'action', 'execute', 'status')
 
-        sequence = ('operations',
-                    'name',
-                    'description_text',
-                    'type',
-                    'action',
-                    'execute',
-                    'status',
-                    'item_column',
-                    'exclude_values',
-                    'last_executed_log')
+        sequence = ('name', 'action', 'execute', 'status', 'operations')
 
         attrs = {
             'class': 'table table-hover table-bordered',
-            'style': 'min-width: 505px; width: 100%;',
+            'style': 'width: 100%;',
             'id': 'scheduler-table'
         }
 
@@ -536,6 +487,41 @@ def index(request):
                   'scheduler/index.html',
                   {'table': ScheduleActionTable(s_items, orderable=False),
                    'workflow': workflow})
+
+
+@user_passes_test(is_instructor)
+def view(request, pk):
+    """
+    View an existing scheduled action
+    :param request: HTTP request
+    :param pk: primary key of the scheduled action
+    :return: HTTP response
+    """
+
+    data = {'form_is_valid': False}
+
+    # Get first the current workflow
+    workflow = get_workflow(request)
+    if not workflow:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('schedule:index')
+        return JsonResponse(data)
+
+    # Get the scheduled action
+    sch_obj = ScheduledAction.objects.filter(action__workflow=workflow,
+                                             pk=pk)
+
+    if not sch_obj:
+        # Connection object not found, go to table of sql connections
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('schedule:index')
+        return JsonResponse(data)
+
+    data['html_form'] = render_to_string(
+        'scheduler/includes/partial_show_schedule_action.html',
+        {'s_vals': sch_obj.values()[0], 'id': sch_obj[0].id}
+    )
+    return JsonResponse(data)
 
 
 @user_passes_test(is_instructor)

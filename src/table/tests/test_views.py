@@ -69,7 +69,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "(//input[@name='columns'])[3]"
         ).click()
         self.selenium.find_element_by_css_selector(
-            "div.modal-footer > button.btn.btn-primary"
+            "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
         self.wait_close_modal_refresh_table('table-data_previous')
@@ -98,7 +98,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "(//input[@name='columns'])[5]"
         ).click()
         self.selenium.find_element_by_css_selector(
-            "div.modal-footer > button.btn.btn-primary"
+            "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
         self.wait_close_modal_refresh_table('table-data_previous')
@@ -124,7 +124,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "(//input[@name='columns'])[7]"
         ).click()
         self.selenium.find_element_by_css_selector(
-            "div.modal-footer > button.btn.btn-primary"
+            "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
         self.wait_close_modal_refresh_table('table-data_previous')
@@ -150,7 +150,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "(//input[@name='columns'])[9]"
         ).click()
         self.selenium.find_element_by_css_selector(
-            "div.modal-footer > button.btn.btn-primary"
+            "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
         self.wait_close_modal_refresh_table('table-data_previous')
@@ -179,7 +179,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "(//input[@name='columns'])[3]"
         ).click()
         self.selenium.find_element_by_css_selector(
-            "div.modal-footer > button.btn.btn-primary"
+            "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
         self.wait_close_modal_refresh_table('table-data_previous')
@@ -208,7 +208,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "(//input[@name='columns'])[5]"
         ).click()
         self.selenium.find_element_by_css_selector(
-            "div.modal-footer > button.btn.btn-primary"
+            "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
         self.wait_close_modal_refresh_table('table-data_previous')
@@ -236,7 +236,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "(//input[@name='columns'])[7]"
         ).click()
         self.selenium.find_element_by_css_selector(
-            "div.modal-footer > button.btn.btn-primary"
+            "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
         self.wait_close_modal_refresh_table('table-data_previous')
@@ -269,7 +269,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "(//input[@name='columns'])[12]"
         ).click()
         self.selenium.find_element_by_css_selector(
-            "div.modal-footer > button.btn.btn-primary"
+            "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
         self.wait_close_modal_refresh_table('table-data_previous')
@@ -302,7 +302,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
             "(//input[@name='columns'])[12]"
         ).click()
         self.selenium.find_element_by_css_selector(
-            "div.modal-footer > button.btn.btn-primary"
+            "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
         self.wait_close_modal_refresh_table('table-data_previous')

@@ -16,6 +16,9 @@ urlpatterns = [
     # Create scheduled email action
     path('<int:pk>/create/', views.edit, name="create"),
 
+    # View the details of a scheduled action
+    path('<int:pk>/view/', views.view, name="view"),
+
     # Edit scheduled email action
     path('<int:pk>/edit/', views.edit, name='edit'),
 
