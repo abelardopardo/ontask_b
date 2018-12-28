@@ -11,8 +11,10 @@ from builtins import object
 from django.db import IntegrityError
 from django.utils.html import format_html
 
-from action.views_out import action_session_dictionary, run_json_action, \
+from action.views_out import (
+    action_session_dictionary, run_json_action,
     run_email_action, run_canvas_email_action
+)
 from logs.models import Log
 from visualizations.plotly import PlotlyHandler
 
@@ -53,7 +55,8 @@ from action.ops import (
     clone_action,
     do_export_action,
     do_import_action,
-    get_workflow_action)
+    get_workflow_action
+)
 from .models import Action, Condition
 
 
@@ -100,11 +103,10 @@ class ActionTable(tables.Table):
         return format_html(
             """<a href="{0}"
                   data-toggle="tooltip"
-                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""".format(
-                reverse('action:edit', kwargs={'pk': record.id}),
-                _('Edit the text, conditions and filter'),
-                record.name
-            )
+                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""",
+            reverse('action:edit', kwargs={'pk': record.id}),
+            _('Edit the text, conditions and filter'),
+            record.name
         )
 
     def render_action_type(self, record):
@@ -124,10 +126,9 @@ class ActionTable(tables.Table):
             title = 'Survey'
         return format_html(
             """<div data-toggle="tooltip" title="{0}">
-                 <span class="fa fa-{1}"></span></div>""".format(
-                title,
-                icon
-            )
+                 <span class="fa fa-{1}"></span></div>""",
+            title,
+            icon
         )
 
     def render_last_executed_log(self, record):
@@ -136,10 +137,9 @@ class ActionTable(tables.Table):
             return "---"
 
         return format_html(
-            """<a class="spin" href="{0}">{1}</a>""".format(
-                reverse('logs:view', kwargs={'pk': log_item.id}),
-                simplify_datetime_str(log_item.modified)
-            )
+            """<a class="spin" href="{0}">{1}</a>""",
+            reverse('logs:view', kwargs={'pk': log_item.id}),
+            simplify_datetime_str(log_item.modified)
         )
 
     class Meta(object):
@@ -173,11 +173,10 @@ class ColumnSelectedTable(tables.Table):
         return format_html(
             """<a href="#" data-toggle="tooltip" 
                   class="js-workflow-question-edit" data-url="{0}"
-                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""".format(
-                reverse('workflow:question_edit', kwargs={'pk': record['id']}),
-                _('Edit the question'),
-                record['name']
-            )
+                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""",
+            reverse('workflow:question_edit', kwargs={'pk': record['id']}),
+            _('Edit the question'),
+            record['name']
         )
 
     class Meta(object):
@@ -194,7 +193,6 @@ class ColumnSelectedTable(tables.Table):
             'class': lambda record:
             'danger' if not record['description_text'] else '',
         }
-
 
 def save_action_form(request, form, template_name):
     """
@@ -296,7 +294,6 @@ def save_action_form(request, form, template_name):
     # Enough said. Respond.
     return JsonResponse(data)
 
-
 @user_passes_test(is_instructor)
 def action_index(request):
     """
@@ -311,7 +308,6 @@ def action_index(request):
         return redirect('workflow:index')
 
     return action_index_set(request)
-
 
 @user_passes_test(is_instructor)
 def action_index_set(request, pk=None):
@@ -338,7 +334,6 @@ def action_index_set(request, pk=None):
                    'table': ActionTable(workflow.actions.all(),
                                         orderable=False)})
 
-
 class ActionCreateView(UserIsInstructor, generic.TemplateView):
     """
     CBV to handle the create action form (very simple)
@@ -357,7 +352,6 @@ class ActionCreateView(UserIsInstructor, generic.TemplateView):
         return save_action_form(request,
                                 form,
                                 self.template_name)
-
 
 class ActionUpdateView(UserIsInstructor, generic.DetailView):
     """
@@ -388,7 +382,6 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
         return save_action_form(request,
                                 form,
                                 self.template_name)
-
 
 @user_passes_test(is_instructor)
 def edit_description(request, pk):
@@ -450,7 +443,6 @@ def edit_description(request, pk):
 
     return JsonResponse(data)
 
-
 @user_passes_test(is_instructor)
 @csrf_exempt
 def action_out_save_content(request, pk):
@@ -486,7 +478,6 @@ def action_out_save_content(request, pk):
 
     return JsonResponse({})
 
-
 @user_passes_test(is_instructor)
 def edit_action(request, pk):
     """
@@ -504,7 +495,8 @@ def edit_action(request, pk):
     if workflow.nrows == 0:
         messages.error(
             request,
-            _('Workflow has no data. Go to "Manage table data" to upload data.')
+            _(
+                'Workflow has no data. Go to "Manage table data" to upload data.')
         )
         return redirect(reverse('action:index'))
 
@@ -534,7 +526,6 @@ def edit_action(request, pk):
         return redirect(reverse('under_construction'), {})
         # return edit_action_in(request, workflow, action)
 
-
 def edit_action_out(request, workflow, action):
     """
     View to handle the form to edit an action OUT (editor, conditions,
@@ -547,7 +538,8 @@ def edit_action_out(request, workflow, action):
     # Create the form
     form = EditActionOutForm(request.POST or None, instance=action)
 
-    form_filter = FilterForm(request.POST or None, instance=action.get_filter())
+    form_filter = FilterForm(request.POST or None,
+                             instance=action.get_filter())
 
     # Get the filter or None
     filter_condition = action.get_filter()
@@ -562,7 +554,8 @@ def edit_action_out(request, workflow, action):
                'action': action,
                'conditions': conditions,
                'query_builder_ops': workflow.get_query_builder_ops_as_str(),
-               'attribute_names': [x for x in list(workflow.attributes.keys())],
+               'attribute_names': [x for x in
+                                   list(workflow.attributes.keys())],
                'column_names': workflow.get_column_names(),
                'selected_rows':
                    filter_condition.n_rows_selected if filter_condition else -1,
@@ -618,7 +611,6 @@ def edit_action_out(request, workflow, action):
         return redirect(request.get_full_path())
     return redirect('action:index')
 
-
 def edit_action_in(request, workflow, action):
     """
     View to handle the AJAX form to edit an action in (filter + columns).
@@ -628,7 +620,8 @@ def edit_action_in(request, workflow, action):
     :return: HTTP response
     """
 
-    form_filter = FilterForm(request.POST or None, instance=action.get_filter())
+    form_filter = FilterForm(request.POST or None,
+                             instance=action.get_filter())
 
     # Get filter or None
     filter_condition = action.get_filter()
@@ -640,7 +633,8 @@ def edit_action_in(request, workflow, action):
         filter_condition.save()
 
     # Column names suitable to insert
-    columns_selected = action.columns.filter(is_key=False).order_by('position')
+    columns_selected = action.columns.filter(is_key=False).order_by(
+        'position')
     columns_to_insert = [c for c in workflow.columns.all()
                          if not c.is_key and c not in columns_selected]
 
@@ -678,7 +672,6 @@ def edit_action_in(request, workflow, action):
 
     return render(request, 'action/edit_in.html', ctx)
 
-
 @user_passes_test(is_instructor)
 def export_ask(request, pk):
     """
@@ -703,7 +696,6 @@ def export_ask(request, pk):
                   {'action': action,
                    'cnames': [c.name for c in action.columns.all()]})
 
-
 @user_passes_test(is_instructor)
 def export_done(request, pk):
     """
@@ -723,7 +715,6 @@ def export_done(request, pk):
         return redirect('action:index')
 
     return render(request, 'action/export_done.html', {'action': action})
-
 
 @user_passes_test(is_instructor)
 def export_download(request, pk):
@@ -746,7 +737,6 @@ def export_download(request, pk):
     response = do_export_action(action)
 
     return response
-
 
 @user_passes_test(is_instructor)
 def action_import(request):
@@ -780,7 +770,8 @@ def action_import(request):
 
     # Process the reception of the file
     if not form.is_multipart():
-        form.add_error(None, _('Incorrect form request (it is not multipart)'))
+        form.add_error(None,
+                       _('Incorrect form request (it is not multipart)'))
         return render(request, 'action/import.html', context)
 
     # UPLOAD THE FILE!
@@ -795,7 +786,6 @@ def action_import(request):
 
     # Go back to the list of actions
     return redirect('action:index')
-
 
 @user_passes_test(is_instructor)
 def select_column_action(request, apk, cpk, key=None):
@@ -815,7 +805,8 @@ def select_column_action(request, apk, cpk, key=None):
     if workflow.nrows == 0:
         messages.error(
             request,
-            _('Workflow has no data. Go to "Manage table data" to upload data.')
+            _(
+                'Workflow has no data. Go to "Manage table data" to upload data.')
         )
         return JsonResponse({'html_redirect': reverse('action:index')})
 
@@ -848,7 +839,6 @@ def select_column_action(request, apk, cpk, key=None):
     # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})
 
-
 @user_passes_test(is_instructor)
 def unselect_column_action(request, apk, cpk):
     """
@@ -866,7 +856,8 @@ def unselect_column_action(request, apk, cpk):
     if workflow.nrows == 0:
         messages.error(
             request,
-            _('Workflow has no data. Go to "Manage table data" to upload data.')
+            _(
+                'Workflow has no data. Go to "Manage table data" to upload data.')
         )
         return redirect(reverse('action:index'))
 
@@ -890,7 +881,6 @@ def unselect_column_action(request, apk, cpk):
 
     return redirect(reverse('action:edit', kwargs={'pk': action.id}))
 
-
 @user_passes_test(is_instructor)
 def shuffle_questions(request, pk):
     """
@@ -908,7 +898,8 @@ def shuffle_questions(request, pk):
     if workflow.nrows == 0:
         messages.error(
             request,
-            _('Workflow has no data. Go to "Manage table data" to upload data.')
+            _(
+                'Workflow has no data. Go to "Manage table data" to upload data.')
         )
         return redirect(reverse('action:index'))
 
@@ -925,7 +916,6 @@ def shuffle_questions(request, pk):
     action.save()
 
     return JsonResponse({'shuffle': action.shuffle})
-
 
 @user_passes_test(is_instructor)
 def showurl(request, pk):
@@ -982,7 +972,6 @@ def showurl(request, pk):
 
     return JsonResponse(data)
 
-
 # This method only requires the user to be authenticated since it is conceived
 #  to serve content that is not only for instructors.
 @csrf_exempt
@@ -1035,7 +1024,6 @@ def serve(request, action_id):
 
     return serve_action_in(request, action, user_attribute_name, False)
 
-
 @user_passes_test(is_instructor)
 def delete_action(request, pk):
     """
@@ -1083,7 +1071,6 @@ def delete_action(request, pk):
         request=request)
     return JsonResponse(data)
 
-
 @user_passes_test(is_instructor)
 def run(request, pk):
     """
@@ -1127,8 +1114,6 @@ def run(request, pk):
 
     # Incorrect type of action.
     return redirect(reverse('action:index'))
-
-
 
 @user_passes_test(is_instructor)
 @csrf_exempt
@@ -1238,7 +1223,6 @@ def run_survey_ss(request, pk):
 
     return JsonResponse(data)
 
-
 @user_passes_test(is_instructor)
 def run_survey_row(request, pk):
     """
@@ -1259,7 +1243,8 @@ def run_survey_row(request, pk):
     if workflow.nrows == 0:
         messages.error(
             request,
-            _('Workflow has no data. Go to "Manage table data" to upload data.')
+            _(
+                'Workflow has no data. Go to "Manage table data" to upload data.')
         )
         return redirect(reverse('action:index'))
 
@@ -1279,7 +1264,6 @@ def run_survey_row(request, pk):
     user_attribute_name = request.GET.get('uatn', 'email')
 
     return serve_action_in(request, action, user_attribute_name, True)
-
 
 @user_passes_test(is_instructor)
 def clone(request, pk):
@@ -1351,7 +1335,6 @@ def clone(request, pk):
                      'Action successfully cloned.')
 
     return redirect(reverse('action:index'))
-
 
 @login_required
 def thanks(request):

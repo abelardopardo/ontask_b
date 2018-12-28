@@ -28,11 +28,9 @@ from workflow.ops import get_workflow
 class SQLConnectionTableAdmin(tables.Table):
     def render_name(self, record):
         return format_html(
-            """<a class="js-sqlconn-view" href="#"
-         data-url="{0}">{1}</a>""".format(
-                reverse('dataops:sqlconn_view', kwargs={'pk': record['id']}),
-                record['name']
-            )
+            """<a class="js-sqlconn-view" href="#" data-url="{0}">{1}</a>""",
+            reverse('dataops:sqlconn_view', kwargs={'pk': record['id']}),
+            record['name']
         )
 
     class Meta(object):
@@ -55,11 +53,9 @@ class SQLConnectionTableRun(tables.Table):
 
     def render_name(self, record):
         return format_html(
-            """<a class="js-sqlconn-view" href="#"
-         data-url="{0}">{1}</a>""".format(
-                reverse('dataops:sqlconn_view', kwargs={'pk': record['id']}),
-                record['name']
-            )
+            '<a class="js-sqlconn-view" href="#" data-url="{0}">{1}</a>',
+            reverse('dataops:sqlconn_view', kwargs={'pk': record['id']}),
+            record['name']
         )
 
     class Meta(object):

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-
 from builtins import str
 from past.utils import old_div
 from builtins import object
@@ -65,11 +64,10 @@ class ScheduleActionTable(tables.Table):
         return format_html(
             """<a href="{0}"
                   data-toggle="tooltip"
-                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""".format(
-                reverse('scheduler:edit', kwargs={'pk': record.id}),
-                _('Edit this scheduled action execution'),
-                record.name
-            )
+                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""",
+            reverse('scheduler:edit', kwargs={'pk': record.id}),
+            _('Edit this scheduled action execution'),
+            record.name
         )
 
     def render_action(self, record):
@@ -106,10 +104,9 @@ class ScheduleActionTable(tables.Table):
 
         # At this point, the object is not pending. Produce a link
         return format_html(
-            """<a class="spin" href="{0}">{1}</a>""".format(
-                reverse('logs:view', kwargs={'pk': log_item.id}),
-                record.get_status_display()
-            )
+            """<a class="spin" href="{0}">{1}</a>""",
+            reverse('logs:view', kwargs={'pk': log_item.id}),
+            record.get_status_display()
         )
 
     class Meta(object):
@@ -165,9 +162,13 @@ def save_email_schedule(request, action, schedule_item, op_payload):
     s_item.status = ScheduledAction.STATUS_CREATING
     s_item.payload = {
         'subject': form.cleaned_data['subject'],
-        'cc_email': [x for x in form.cleaned_data['cc_email'].split(',') if x],
+        'cc_email': [x for x in form.cleaned_data['cc_email'].split(',')
+                     if
+                     x],
         'bcc_email': [x
-                      for x in form.cleaned_data['bcc_email'].split(',') if x],
+                      for x in form.cleaned_data['bcc_email'].split(',')
+                      if
+                      x],
         'send_confirmation': form.cleaned_data['send_confirmation'],
         'track_read': form.cleaned_data['track_read']
     }
@@ -178,8 +179,9 @@ def save_email_schedule(request, action, schedule_item, op_payload):
     except IntegrityError as e:
         # There is an action with this name already
         form.add_error('name',
-                       _('A scheduled execution of this action with this name '
-                         'already exists'))
+                       _(
+                           'A scheduled execution of this action with this name '
+                           'already exists'))
         return render(request,
                       'scheduler/edit.html',
                       {'action': action,
@@ -207,8 +209,8 @@ def save_email_schedule(request, action, schedule_item, op_payload):
     # Go straight to the final step
     return finish_scheduling(request, s_item, op_payload)
 
-
-def save_canvas_email_schedule(request, action, schedule_item, op_payload):
+def save_canvas_email_schedule(request, action, schedule_item,
+                               op_payload):
     """
     Function to handle the creation and edition of email items
     :param request: Http request being processed
@@ -256,8 +258,9 @@ def save_canvas_email_schedule(request, action, schedule_item, op_payload):
     except IntegrityError as e:
         # There is an action with this name already
         form.add_error('name',
-                       _('A scheduled execution of this action with this name '
-                         'already exists'))
+                       _(
+                           'A scheduled execution of this action with this name '
+                           'already exists'))
         return render(request,
                       'scheduler/edit.html',
                       {'action': action,
@@ -284,7 +287,6 @@ def save_canvas_email_schedule(request, action, schedule_item, op_payload):
 
     # Go straight to the final step
     return finish_scheduling(request, s_item, op_payload)
-
 
 def save_json_schedule(request, action, schedule_item, op_payload):
     """
@@ -348,7 +350,6 @@ def save_json_schedule(request, action, schedule_item, op_payload):
     # Go straight to the final step
     return finish_scheduling(request, s_item, op_payload)
 
-
 def finish_scheduling(request, schedule_item=None, payload=None):
     """
     Finalize the creation of a scheduled action. All required data is passed
@@ -378,7 +379,8 @@ def finish_scheduling(request, schedule_item=None, payload=None):
         s_item_id = payload.get('schedule_id')
         if not s_item_id:
             messages.error(request,
-                           _('Incorrect parameters in action scheduling'))
+                           _(
+                               'Incorrect parameters in action scheduling'))
             return redirect('action:index')
 
         # Get the item being processed
@@ -404,8 +406,9 @@ def finish_scheduling(request, schedule_item=None, payload=None):
             'subject': schedule_item.payload.get('subject'),
             'cc_email': schedule_item.payload.get('cc_email', []),
             'bcc_email': schedule_item.payload.get('bcc_email', []),
-            'send_confirmation': schedule_item.payload.get('send_confirmation',
-                                                           False),
+            'send_confirmation': schedule_item.payload.get(
+                'send_confirmation',
+                False),
             'track_read': schedule_item.payload.get('track_read', False)
         })
         log_type = Log.SCHEDULE_EMAIL_EDIT
@@ -456,7 +459,7 @@ def finish_scheduling(request, schedule_item=None, payload=None):
     hours = old_div(tdelta.seconds, 3600)
     if hours != 0:
         delta_string += ugettext(', {0} hours').format(hours)
-    minutes =  old_div((tdelta.seconds % 3600), 60)
+    minutes = old_div((tdelta.seconds % 3600), 60)
     if minutes != 0:
         delta_string += ugettext(', {0} minutes').format(minutes)
 
@@ -465,7 +468,6 @@ def finish_scheduling(request, schedule_item=None, payload=None):
                   'scheduler/schedule_done.html',
                   {'tdelta': delta_string,
                    's_item': schedule_item})
-
 
 @user_passes_test(is_instructor)
 def index(request):
@@ -481,13 +483,14 @@ def index(request):
         return redirect('workflow:index')
 
     # Get the actions
-    s_items = ScheduledAction.objects.filter(action__workflow=workflow.id)
+    s_items = ScheduledAction.objects.filter(
+        action__workflow=workflow.id)
 
     return render(request,
                   'scheduler/index.html',
-                  {'table': ScheduleActionTable(s_items, orderable=False),
+                  {'table': ScheduleActionTable(s_items,
+                                                orderable=False),
                    'workflow': workflow})
-
 
 @user_passes_test(is_instructor)
 def view(request, pk):
@@ -522,7 +525,6 @@ def view(request, pk):
         {'s_vals': sch_obj.values()[0], 'id': sch_obj[0].id}
     )
     return JsonResponse(data)
-
 
 @user_passes_test(is_instructor)
 def edit(request, pk):
@@ -564,7 +566,8 @@ def edit(request, pk):
         op_payload = {'action_id': action.id,
                       'prev_url': reverse('scheduler:create',
                                           kwargs={'pk': action.id}),
-                      'post_url': reverse('scheduler:finish_scheduling')}
+                      'post_url': reverse(
+                          'scheduler:finish_scheduling')}
         request.session[action_session_dictionary] = op_payload
         request.session.save()
 
@@ -585,7 +588,8 @@ def edit(request, pk):
     if action.action_type == Action.PERSONALIZED_TEXT:
         return save_email_schedule(request, action, s_item, op_payload)
     elif action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
-        return save_canvas_email_schedule(request, action, s_item, op_payload)
+        return save_canvas_email_schedule(request, action, s_item,
+                                          op_payload)
     elif action.action_type == Action.PERSONALIZED_JSON:
         return save_json_schedule(request, action, s_item, op_payload)
 
@@ -593,7 +597,6 @@ def edit(request, pk):
     messages.error(request,
                    _('This action does not support scheduling'))
     return redirect('scheduler:index')
-
 
 @user_passes_test(is_instructor)
 def delete(request, pk):

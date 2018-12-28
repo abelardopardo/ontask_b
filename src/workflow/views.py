@@ -18,6 +18,7 @@ from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
+from django.utils.html import escape
 
 import action
 from dataops import ops, pandas_db
@@ -40,6 +41,16 @@ class AttributeTable(tables.Table):
         template_file='workflow/includes/partial_attribute_operations.html',
         template_context=lambda record: {'id': record['id'], }
     )
+
+    def render_name(self, record):
+        return format_html(
+            """<a href="#" data-toggle="tooltip" 
+                  class="js-attribute-edit" data-url="{0}"
+                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""",
+            reverse('workflow:attribute_edit', kwargs={'pk': record['id']}),
+            _('Edit the attribute'),
+            record['name']
+        )
 
     class Meta(object):
         fields = ('name', 'value', 'operations')
@@ -485,11 +496,11 @@ def column_ss(request, pk):
             'number': col.position,
             'name': format_html(
                 """<a href="#" class="js-workflow-column-edit"
-                  data-toggle="tooltip" 
-                  title="Edit the parameters of this column">{0} 
-                  <span class="fa fa-pencil"></span></a>""".format(
-                    col.name
-                )
+                  data-toggle="tooltip" data-url="{0}"
+                  title="Edit the parameters of this column">{1} 
+                  <span class="fa fa-pencil"></span></a>""",
+                reverse('workflow:column_edit', kwargs={'pk': col.id}),
+                col.name
             ),
             'description': col.description_text,
             'type': format_html(col_data_type_str),
