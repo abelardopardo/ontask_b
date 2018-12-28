@@ -18,7 +18,7 @@ class CreateSuperUser < Vagrant.plugin(2, :command)
     password = "admin"
 
     opts = OptionParser.new do |o|
-      o.banner = "Usage: vagrant createsuperuser -e [email=admin@example.com] -p [password=admin]"
+      o.banner = "Usage: vagrant createsuperuser -e [email=admin@example.com] -p [password=admin] (arguments optional)"
       o.separator ""
 
       o.on("-e", "--email EMAIL", "Specify the email (otherwise admin@example.com)") do |e|
