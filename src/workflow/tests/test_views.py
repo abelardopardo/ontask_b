@@ -446,10 +446,9 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         self.search_table_row_by_string('attribute-table', 2, 'value2')
 
         # Rename second attribute
-        self.open_dropdown_click_option(
-            '//table[@id="attribute-table"]//tr[2]/td[3]/div/button',
-            'Edit'
-        )
+        self.selenium.find_element_by_xpath(
+            "//tr/td[1][text() = 'key2']"
+        ).click()
         self.selenium.find_element_by_id('id_key').clear()
         self.selenium.find_element_by_id('id_key').send_keys('newkey2')
         self.selenium.find_element_by_id('id_value').clear()
@@ -473,10 +472,10 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         self.go_to_attribute_page()
 
         # click the delete button in the second row
-        self.open_dropdown_click_option(
-            '//table[@id="attribute-table"]//tr[2]/td[3]/div/button',
-            'Delete'
-        )
+        self.selenium.find_element_by_xpath(
+            '//table[@id="attribute-table"]'
+            '//tr[2]/td[3]//button[contains(@class, "js-attribute-delete")]'
+        ).click()
         # Click in the delete confirm button
         self.selenium.find_element_by_xpath(
             "//div[@class='modal-footer']/button[2]"

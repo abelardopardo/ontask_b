@@ -93,10 +93,10 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
 
         # Delete the existing one and confirm deletion
         # click the delete button in the second row
-        self.open_dropdown_click_option(
-            '//table[@id="attribute-table"]//tr[1]/td[3]/div/button',
-            'Delete'
-        )
+        self.selenium.find_element_by_xpath(
+            '//table[@id="attribute-table"]'
+            '//tr[1]/td[3]//button[contains(@class, "js-attribute-delete")]'
+        ).click()
         # Click in the delete confirm button
         self.selenium.find_element_by_xpath(
             "//div[@class='modal-footer']/button[2]"
@@ -219,7 +219,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
                            '',
                            [(symbols + "2", "doesn't begin with", "x")])
 
-       # Click the preview button
+        # Click the preview button
         self.select_text_tab()
         self.selenium.find_element_by_class_name('js-action-preview').click()
         WebDriverWait(self.selenium, 10).until(
@@ -753,6 +753,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
+
 class DataopsMerge(test.OnTaskLiveTestCase):
     wf_name = 'Testing Merge'
     fixtures = ['test_merge']
@@ -843,7 +844,6 @@ class DataopsMerge(test.OnTaskLiveTestCase):
             "//button[normalize-space()='Finish']"
         ).click()
         self.wait_for_datatable('table-data_previous')
-
 
     def test_01_merge_inner(self):
         self.template_merge('inner')

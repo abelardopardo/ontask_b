@@ -179,8 +179,6 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         fp.set_preference("dom.file.createInChild", True)
         cls.selenium = webdriver.Firefox(firefox_profile=fp)
         # cls.selenium = webdriver.Chrome()
-        print('Setting viewport {0}, {1}'.format(cls.viewport_width,
-                                                 cls.viewport_height))
         cls.selenium.set_window_size(cls.viewport_width,
                                      cls.viewport_height)
         # cls.selenium.implicitly_wait(30)
@@ -641,7 +639,8 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
     def delete_column(self, col_name):
         xpath_txt = \
-            "//table[@id='column-table']//tr/td[2][text() = '{0}']/..".format(
+            "//table[@id='column-table']" \
+            "//tr/td[2][normalize-space() = '{0}']/..".format(
                 col_name
             )
         # Click in the dropdown
@@ -981,19 +980,20 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                                         'Formula-derived column')
 
     def open_column_edit(self, name):
-        xpath_txt = \
-            "//table[@id='column-table']//tr/td[2][text() = '{0}']/..".format(
-                name
+        self.selenium.find_element_by_xpath(
+            "//table[@id='column-table']"
+            "//td[2][normalize-space() = '{0}']".format(name)).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//form[contains(@class, 'js-column-edit-form')]"),
             )
-        # Click in the dropdown
-        self.open_dropdown_click_option(
-            xpath_txt + "/td[6]/div/button",
-            'Edit'
         )
+
 
     def open_table_row_op(self, col_idx, text, ddown_option):
         xpath_str = \
-            "//table[@id='table-data']//tr/td[{0}][text() = '{1}']/" \
+            "//table[@id='table-data']" \
+            "//tr/td[{0}][normalize-space() = '{1}']/" \
             "../td[1]/div/button".format(col_idx, text)
         self.open_dropdown_click_option(xpath_str, ddown_option)
 
@@ -1270,14 +1270,11 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         self.wait_for_page(element_id='edit-personalized-text-tab-content')
 
     def edit_attribute(self, attribute_key, nkey, nvalue):
-        xpath_txt = \
-            "//table[@id='attribute-table']" \
-            "//tr/td[1][text() = '{0}']/..".format(attribute_key)
-        # Click in the dropdown
-        self.open_dropdown_click_option(
-            xpath_txt + "/td[3]/div/button",
-            'Edit'
-        )
+        self.selenium.find_element_by_xpath(
+            "//table[@id='attribute-table']"
+            "//tr/td[1][normalize-space() = '{0}']".format(attribute_key)
+        ).click()
+        self.wait_for_modal_open()
 
         # Fill out the form
         element = self.selenium.find_element_by_id('id_key')
@@ -1305,21 +1302,33 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         :param row_idx: Row index in the table (search if none is given)
         :return: Nothing
         """
+        icon_name = 'fa-italic'
+        if col_type == 'Number':
+            icon_name = 'fa-percent'
+        elif col_type == 'True/False':
+            icon_name = 'fa-toggle-on'
+        elif col_type == 'Date/Time':
+            icon_name = 'fa-calendar-o'
+
         if row_idx:
             xpath_txt = \
-                "//table[@id='column-table']//tr[{0}]/td[2][text()='{1}']" \
-                "/../td[4]/div".format(row_idx, name)
+                "//table[@id='column-table']" \
+                "//tr[{0}]/td[2][normalize-space() = '{1}']" \
+                "/../td[4]/div/span[contains(@class, '{2}')]".format(
+                    row_idx,
+                    name,
+                    icon_name
+                )
         else:
             xpath_txt = \
-                "//table[@id='column-table']//tr/td[2][text()='{0}']" \
-                "/../td[4]/div".format(name)
+                "//table[@id='column-table']" \
+                "//tr/td[2][normalize-space() = '{0}']" \
+                "/../td[4]/div/span[contains(@class, '{1}')]".format(
+                    name,
+                    icon_name
+                )
 
-        self.assertEqual(
-            self.selenium.find_element_by_xpath(xpath_txt).get_attribute(
-                'data-original-title'
-            ),
-            col_type
-        )
+        self.assertIsNotNone(self.selenium.find_element_by_xpath(xpath_txt))
 
 
 class ScreenTests(OnTaskLiveTestCase):
