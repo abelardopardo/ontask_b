@@ -2,10 +2,8 @@
 <div id="filter-set-header" class="text-center">
   {% if filter_condition %}
     <div id="filter-set" class="card-deck justify-content-center" style="margin:1em 0 1em 0;">
-      <div class="card ontask-ccard text-center">
-        {% if filter_condition.name %}
-          <h5 class="card-header">{{ condition.name }}</h5>
-        {% endif %}
+      <div class="card ontask-ccard text-center" style="margin-bottom: 15px;">
+        <h5 class="card-header">{% trans 'Filter' %}</h5>
         <div class="card-body" style="min-height: 100px;">
           <p class="card-text">{{ filter_condition.description_text }}</p>
           <p class="card-text"><strong>{% trans 'Formula' %}</strong><br/>{{ filter_condition.get_formula_text }}</p>

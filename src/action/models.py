@@ -154,8 +154,10 @@ class Action(models.Model):
         if self.action_type == Action.PERSONALIZED_TEXT:
             return True
 
-        if self.action_type == Action.PERSONALIZED_JSON or \
-                self.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        if  self.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+            return settings.CANVAS_INFO_DICT is not None
+
+        if self.action_type == Action.PERSONALIZED_JSON:
             # If None or empty, return false
             if not self.target_url:
                 return False
@@ -485,7 +487,7 @@ class Condition(models.Model):
         :return: String
         """
 
-        return evaluate_node_text(self.formula)[1:-1]
+        return evaluate_node_text(self.formula)
 
     def __str__(self):
         return self.name

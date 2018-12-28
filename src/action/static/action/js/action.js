@@ -279,17 +279,21 @@ $(function () {
   $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
 
 });
-
 window.onload = function(){
   if (document.getElementById("id_exclude_values") != null) {
     set_element_select("#id_exclude_values");
   }
   setDateTimePickers();
-//  if (typeof qbuilder_filter_options != "undefined") {
-//    if ($('#id_formula').val() != '') {
-//      qbuilder_filter_options["rules"] = JSON.parse($('#id_formula').val());
-//    }
-//    $("#builder").queryBuilder(qbuilder_filter_options);
-//  }
 };
-
+$(document).ready(function() {
+  if (location.hash) {
+    $("a[href='" + location.hash + "']").tab("show");
+  }
+  $(document.body).on("click", "a[data-toggle]", function(event) {
+    location.hash = this.getAttribute("href");
+  });
+});
+$(window).on("popstate", function() {
+  var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
+  $("a[href='" + anchor + "']").tab("show");
+});

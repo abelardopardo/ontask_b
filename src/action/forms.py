@@ -549,8 +549,8 @@ class JSONActionForm(JSONBasicActionForm):
             attrs={
                 'rows': 1,
                 'cols': 120,
-                'placeholder':
-                    _('Authentication token to communicate with the platform')
+                # 'placeholder':
+                #     _('Authentication token to communicate with the platform')
             }
         )
     )

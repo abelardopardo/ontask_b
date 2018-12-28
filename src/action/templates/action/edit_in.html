@@ -149,7 +149,7 @@
       </div>
       <div class="text-center">
         <button type="button"
-                class="btn btn-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
+                class="btn btn-outline-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
                 data-url="{% url 'action:preview' action.id 1 %}"
                 data-toggle="tooltip"
                 title="{% trans 'See the content as shown to each learner' %}">

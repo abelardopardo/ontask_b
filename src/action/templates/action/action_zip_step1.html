@@ -21,7 +21,7 @@
           <div class="text-center">
             <a type="button" class="btn btn-outline-dark"
                href="{% url 'action:index' %}"> {% trans 'Cancel' %}</a>
-            <button type="button" class="btn btn-info js-zip-preview"
+            <button type="button" class="btn btn-outline-info js-zip-preview"
                     data-url="{% url 'action:preview' action.id 1 %}">
               <span class="fa fa fa-eye"></span> {% trans 'Preview' %}</button>
             <button type="Submit" name="Submit" value="Submit"
