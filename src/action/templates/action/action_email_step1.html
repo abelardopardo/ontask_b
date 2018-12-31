@@ -21,12 +21,12 @@
           <div class="text-center">
             <a type="button" class="btn btn-outline-dark"
                href="{% url 'action:index' %}"> {% trans 'Cancel' %}</a>
-            <button type="button" class="btn btn-outline-info js-email-preview"
+            <button type="button" class="btn btn-outline-info js-action-preview"
                     data-url="{% url 'action:preview' action.id 1 %}">
               <span class="fa fa fa-eye"></span> {% trans 'Preview' %}</button>
             <button type="Submit" name="Submit" value="Submit"
                     class="btn btn-outline-primary btn-space spin">
-              <span class="fa fa-triangle-right"></span> {% trans 'Next' %}</button>
+              <span class="fa fa-angle-right"></span> {% trans 'Next' %}</button>
           </div>
         </form>
       </div>
