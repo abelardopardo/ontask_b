@@ -46,13 +46,13 @@ $(function () {
   $("#sql-connections").on("click", ".js-sqlconn-add", loadForm);
   $("#modal-item").on("submit", ".js-sqlconn-add-form", saveForm);
 
-  $("#modal-item").on("click", ".js-sqlconn-edit", loadForm);
+  $("#sqlconn-admin-table").on("click", ".js-sqlconn-edit", loadForm);
   $("#modal-item").on("submit", ".js-sqlconn-edit-form", saveForm);
 
-  $("#modal-item").on("click", ".js-sqlconn-delete", loadForm);
+  $("#sqlconn-admin-table, #modal-item").on("click", ".js-sqlconn-delete", loadForm);
   $("#modal-item").on("submit", ".js-sqlconn-delete-form", saveForm);
 
-  $("#modal-item").on("click", ".js-sqlconn-clone", loadForm);
+  $("#sqlconn-admin-table, #modal-item").on("click", ".js-sqlconn-clone", loadForm);
   $("#modal-item").on("submit", ".js-sqlconn-clone-form", saveForm);
 });
 

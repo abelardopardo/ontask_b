@@ -97,7 +97,7 @@ class EditActionOutForm(forms.ModelForm):
                 widget=forms.Textarea(
                     attrs={
                         'rows': 1,
-                        'cols': 120,
+                        'cols': 80,
                         'placeholder': _('URL to send the personalized JSON')
                     }
                 )

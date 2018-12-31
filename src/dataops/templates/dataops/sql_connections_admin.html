@@ -31,7 +31,9 @@
             "url": getLanguage()
           },
           "columnDefs": [
-            {"className": "dt-center", "targets": [0]},
+            {"className": "dt-center", "targets": [0, 2]},
+            {"orderable": false, "targets": 2},
+            {"searchable": false, "targets": 2},
           ],
           colReorder: false,
           rowReorder: false,

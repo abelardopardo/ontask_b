@@ -160,14 +160,7 @@
                 data-toggle="tooltip"
                 data-placement="auto"
                 title="{% trans 'Save action and go back to action table' %}">
-          <span class="fa fa-check"></span> {% trans 'Done' %}
-        </a>
-        <a href="{% url 'action:run' action.id %}"
-           class="btn btn-outline-primary spin {% if not action.is_executable %}disabled{% endif %}"
-           data-toggle="tooltip"
-           title="{% trans 'Enter data manually' %}">
-          <span class="fa fa-rocket"></span> {% trans 'Run' %}
-        </a>
+          <span class="fa fa-check"></span> {% trans 'Done' %}</a>
       </div>
     </div>
   </div>

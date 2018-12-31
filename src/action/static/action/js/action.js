@@ -242,12 +242,12 @@ $(function () {
 
   // Preview
   $("#action-preview-done").on("click", ".js-action-preview", loadFormPost);
-  $("#email-action-request-data").on("click", ".js-email-preview", loadForm);
+  $("#email-action-request-data").on("click", ".js-action-preview", loadForm);
   $("#canvas-email-action-request-data").on("click",
-    ".js-canvas-email-preview",
+    ".js-action-preview",
     loadForm);
-  $("#zip-action-request-data").on("click", ".js-zip-preview", loadForm);
-  $("#json-action-request-data").on("click", ".js-json-preview", loadForm);
+  $("#zip-action-request-data").on("click", ".js-action-preview", loadForm);
+  $("#json-action-request-data").on("click", ".js-action-preview", loadForm);
   $("#action-in-editor").on("click", ".js-action-preview", loadForm);
   $(".modal-content").on("click", ".js-action-preview-nxt", loadForm);
   $(".modal-content").on("click", ".js-action-preview-prv", loadForm);

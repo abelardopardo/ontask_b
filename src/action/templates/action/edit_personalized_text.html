@@ -55,7 +55,7 @@
       {% csrf_token %}
       <div class="tab-content" id="edit-personalized-text-tab-content">
         <div class="tab-pane fade show active" id="text" role="tabpanel" aria-labelledby="text-tab">
-          <div id="html-editor" class="text-center mb-3">
+          <div id="html-editor" class="mb-3">
             {% include 'action/includes/partial_action_edit_out_attributes_columns.html' %}
             {{ form|safe }}
           </div>

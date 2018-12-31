@@ -46,7 +46,7 @@
       {% csrf_token %}
       <div class="tab-content" id="edit-personalized-text-tab-content">
         <div class="tab-pane fade show active" id="text" role="tabpanel" aria-labelledby="text-tab">
-          <div id="html-editor text-center">
+          <div id="html-editor">
             {% include 'action/includes/partial_action_edit_out_attributes_columns.html' %}
             <div class="row justify-content-center">
                 {{ form|crispy|safe }}
