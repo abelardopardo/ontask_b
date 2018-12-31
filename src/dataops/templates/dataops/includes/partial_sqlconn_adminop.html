@@ -1,0 +1,18 @@
+{% load i18n %}
+<div class="btn-group">
+  <button type="button" class="btn btn-sm btn-light js-sqlconn-view"
+          data-url="{% url 'dataops:sqlconn_view' id %}"
+          data-toggle="tooltip"
+          title="{% trans 'View the details of this connection' %}">
+    <span class="fa fa fa-eye"></span></button>
+  <button type="button" class="btn btn-sm btn-light js-sqlconn-clone"
+          data-url="{% url 'dataops:sqlconn_clone' id %}"
+          data-toggle="tooltip"
+          title="{% trans 'Create an exact duplicate of this connection' %}">
+    <span class="fa fa fa-clone"></span></button>
+  <button type="button" class="btn btn-sm btn-light js-sqlconn-delete"
+          data-url="{% url 'dataops:sqlconn_delete' id %}"
+          data-toggle="tooltip"
+          title="{% trans 'Delete SQL connection' %}">
+    <span class="fa fa-trash"></span></button>
+</div>
