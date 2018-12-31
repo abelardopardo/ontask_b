@@ -215,9 +215,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
                               [(symbols, "begins with", "C")])
 
         # Create the filter
-        self.create_filter(None,
-                           '',
-                           [(symbols + "2", "doesn't begin with", "x")])
+        self.create_filter('', [(symbols + "2", "doesn't begin with", "x")])
 
         # Click the preview button
         self.select_text_tab()

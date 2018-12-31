@@ -371,7 +371,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Create filter.
         self.select_filter_tab()
-        self.create_filter(None, 'fdesc', [('age', 'less or equal', '12.1')])
+        self.create_filter('fdesc', [('age', 'less or equal', '12.1')])
 
         # Make sure the content has the correct text
         self.assertIn(
@@ -501,7 +501,7 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
         self.create_new_survey_action('new action in', '')
 
         # Click in the add rule button (the filter is initially empty)
-        self.create_filter(None, '', [('registered', None, False)])
+        self.create_filter('', [('registered', None, False)])
         self.wait_close_modal_refresh_table('column-selected-table_previous')
 
         # Check that the filter is working properly

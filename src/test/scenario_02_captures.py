@@ -59,13 +59,10 @@ class Scenario2Captures(ScreenTests):
         self.selenium.find_element_by_xpath(
             "//form/div/button[@type='Submit']"
         ).click()
-        self.wait_for_datatable('workflow-table_previous')
+        self.wait_for_page(element_id='workflow-index')
 
         # Select the workflow
         self.access_workflow_from_home_page(self.workflow_name)
-
-        # Go to actions
-        self.go_to_actions()
 
         # Open the right action
         self.open_action_edit('Welcome email')
@@ -74,6 +71,7 @@ class Scenario2Captures(ScreenTests):
         self.body_ss('scenario_02_text_all_conditions.png')
 
         # Edit the condition
+        self.select_condition_tab()
         self.open_condition('Student in FASS')
 
         # Take picture of the modal

@@ -59,13 +59,10 @@ class Scenario1Captures(ScreenTests):
         self.selenium.find_element_by_xpath(
             "//form/div/button[@type='Submit']"
         ).click()
-        self.wait_for_datatable('workflow-table_previous')
+        self.wait_for_page(element_id='workflow-index')
 
         # Select the workflow
         self.access_workflow_from_home_page(self.workflow_name)
-
-        # Go to actions
-        self.go_to_actions()
 
         # Open the right action
         self.open_action_edit('Email students in SMED')
@@ -74,6 +71,7 @@ class Scenario1Captures(ScreenTests):
         self.body_ss('scenario_01_action_SMED.png')
 
         # Edit the filter
+        self.select_filter_tab()
         self.selenium.find_element_by_class_name('js-filter-edit').click()
         # Wait for the form to modify the filter
         WebDriverWait(self.selenium, 10).until(
