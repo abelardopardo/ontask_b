@@ -81,6 +81,12 @@ $(function () {
   // Restrict column
   $("#column-table").on("click", ".js-column-restrict", loadForm);
   $("#modal-item").on("submit", ".js-column-restrict-form", saveForm);
+
+  $(".card").hover(function(){
+    $(this).css("background-color", "lightgray");
+  }, function(){
+    $(this).css("background-color", "white");
+  });
 });
 window.onload = function(){
   setDateTimePickers();
