@@ -278,6 +278,11 @@ $(function () {
   $("#action-index").on("click", ".js-workflow-flush", loadForm);
   $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
 
+  $(".card").hover(function(){
+    $(this).css("background-color", "lightgray");
+  }, function(){
+    $(this).css("background-color", "white");
+  });
 });
 window.onload = function(){
   if (document.getElementById("id_exclude_values") != null) {
