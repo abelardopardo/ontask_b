@@ -13,7 +13,7 @@
         {% trans 'Edit Profile' %}</a>
       {% endif %}
     </div>
-    <div class="col-sm-2"><img title="profile picture" class="img-circle img-responsive" src="{% thumbnail show_user.profile.picture|default:'default_profile.png' 140x140 crop %}">
+    <div class="col-sm-2"><img title="profile picture" class="rounded-circle img-fluid" src="{% thumbnail show_user.profile.picture|default:'default_profile.png' 140x140 crop %}">
     </div>
   </div>
 </div>
@@ -22,7 +22,7 @@
     <div class="col-sm-4">
       <ul class="list-group">
         <li class="list-group-item text-muted">{% trans 'Profile' as profile %}</li>
-        <li class="list-group-item text-right"><span class="pull-left"><strong>{% trans 'Email:' %}</strong></span> {{ show_user.email|default:"missing" }}
+        <li class="list-group-item text-right"><span class="float-left"><strong>{% trans 'Email:' %}</strong></span> {{ show_user.email|default:"missing" }}
 	  {% if show_user.profile.email_verified %}
 	    <span class="fa fa-check-circle" aria-hidden="true"
             title="{% trans 'This email address has been verified' %}"></span>
@@ -33,13 +33,13 @@
 	    <span class="sr-only">Not Verified</span>
 	  {% endif %}
 	</li>
-        <li class="list-group-item text-right"><span class="pull-left"><strong>{% trans "Joined" %}</strong></span>{{ show_user.date_joined }}</li>
-        <li class="list-group-item text-right"><span class="pull-left"><strong>{% trans "Last seen" %}</strong></span>{{ show_user.last_login }}</li>
+        <li class="list-group-item text-right"><span class="float-left"><strong>{% trans "Joined" %}</strong></span>{{ show_user.date_joined }}</li>
+        <li class="list-group-item text-right"><span class="float-left"><strong>{% trans "Last seen" %}</strong></span>{{ show_user.last_login }}</li>
       </ul>
     </div>
     <div class="col-sm-8">
-      <div class="panel panel-default">
-        <div class="panel-heading">{{ profile }}
+      <div class="card">
+        <div class="card-header">{{ profile }}
 	  {% if show_user.profile.slug %}
 	    <a href="{% url 'profiles:show' show_user.profile.slug %}">
 	    	<span class="fa fa-link" aria-hidden="true"
@@ -50,11 +50,11 @@
        target="_blank"><span>{% trans 'No permalink. See this issue.' %}</span></a>
 	  {% endif %}
 	</div>
-        <div class="panel-body">
+        <div class="card-body">
 	  <strong>{% trans 'Bio' %}</strong>: {{ show_user.profile.bio }}
 	</div>
       </div>
-        <div class="panel-default panel-body">
+        <div class="card-body">
             <strong>{% trans 'API Auth token' %}</strong> {{ user.auth_token }}
           <a href="{% url 'profiles:reset_token' %}"
              class="btn btn-sm btn-info">{% if user.auth_token %}{% trans 'Reset' %}
@@ -62,7 +62,7 @@
           </a>
         </div>
         {% for token in tokens %}
-            <div class="panel-default panel-body">
+            <div class="card-body">
                 <strong>{% trans 'Auth token for' %}</strong> {{ token.instance_name }}
               <a href="{% url 'profiles:delete_token' token.id %}"
                  class="btn btn-sm btn-info">{% trans 'Delete' %}

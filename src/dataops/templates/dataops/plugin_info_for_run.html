@@ -23,7 +23,7 @@
     <div class="row justify-content-center">
       <form method="POST" action="">
         {% csrf_token %}
-        <div class="form-group{% if form.columns.errors %} has-error{% endif %}"
+        <div class="form-group{% if form.columns.errors %} has-danger{% endif %}"
              style="border:1px solid black;padding-left:1ex;padding-right:1ex;">
           {% if pinstance.input_column_names %}
               <p class="lead">{% trans 'Input columns' %}</p>
@@ -32,11 +32,11 @@
               {% include 'form_field.html' with field=form.columns form_show_labels=True %}
           {% endif %}
         </div>
-        <div class="form-group{% if form.merge_key.errors %} has-error{% endif %}"
+        <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}"
              style="border:1px solid black;padding:1ex;">
           {% include 'form_field.html' with field=form.merge_key form_show_labels=True %}
         </div>
-        <div class="form-group{% if form.merge_key.errors %} has-error{% endif %}"
+        <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}"
              style="border:1px solid black;padding:1ex;">
           <p class="lead">{% trans 'Output column names' %}</p>
           {% for field in output_column_fields %}
@@ -44,11 +44,11 @@
           {% endfor %}
           <p class="help-block">{% trans 'Change the default names if needed.' %}</p>
         </div>
-        <div class="form-group{% if form.merge_key.errors %} has-error{% endif %}"
+        <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}"
              style="border:1px solid black;padding:1ex;">
           {% include 'form_field.html' with field=form.out_column_suffix form_show_labels=True %}
         </div>
-        <div class="form-group{% if form.merge_key.errors %} has-error{% endif %}"
+        <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}"
              style="border:1px solid black;padding:1ex;">
           <p class="lead">{% trans 'Execution parameters' %}</p>
           {% for field in parameters %}

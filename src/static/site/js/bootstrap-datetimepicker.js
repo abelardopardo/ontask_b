@@ -1649,35 +1649,35 @@
 	};
 	DPGlobal.template = '<div class="datetimepicker">' +
 		'<div class="datetimepicker-minutes">' +
-		'<table class=" table-condensed">' +
+		'<table class=" table-sm">' +
 		DPGlobal.headTemplate +
 		DPGlobal.contTemplate +
 		DPGlobal.footTemplate +
 		'</table>' +
 		'</div>' +
 		'<div class="datetimepicker-hours">' +
-		'<table class=" table-condensed">' +
+		'<table class=" table-sm">' +
 		DPGlobal.headTemplate +
 		DPGlobal.contTemplate +
 		DPGlobal.footTemplate +
 		'</table>' +
 		'</div>' +
 		'<div class="datetimepicker-days">' +
-		'<table class=" table-condensed">' +
+		'<table class=" table-sm">' +
 		DPGlobal.headTemplate +
 		'<tbody></tbody>' +
 		DPGlobal.footTemplate +
 		'</table>' +
 		'</div>' +
 		'<div class="datetimepicker-months">' +
-		'<table class="table-condensed">' +
+		'<table class="table-sm">' +
 		DPGlobal.headTemplate +
 		DPGlobal.contTemplate +
 		DPGlobal.footTemplate +
 		'</table>' +
 		'</div>' +
 		'<div class="datetimepicker-years">' +
-		'<table class="table-condensed">' +
+		'<table class="table-sm">' +
 		DPGlobal.headTemplate +
 		DPGlobal.contTemplate +
 		DPGlobal.footTemplate +
@@ -1686,35 +1686,35 @@
 		'</div>';
 	DPGlobal.templateV3 = '<div class="datetimepicker">' +
 		'<div class="datetimepicker-minutes">' +
-		'<table class=" table-condensed">' +
+		'<table class=" table-sm">' +
 		DPGlobal.headTemplateV3 +
 		DPGlobal.contTemplate +
 		DPGlobal.footTemplate +
 		'</table>' +
 		'</div>' +
 		'<div class="datetimepicker-hours">' +
-		'<table class=" table-condensed">' +
+		'<table class=" table-sm">' +
 		DPGlobal.headTemplateV3 +
 		DPGlobal.contTemplate +
 		DPGlobal.footTemplate +
 		'</table>' +
 		'</div>' +
 		'<div class="datetimepicker-days">' +
-		'<table class=" table-condensed">' +
+		'<table class=" table-sm">' +
 		DPGlobal.headTemplateV3 +
 		'<tbody></tbody>' +
 		DPGlobal.footTemplate +
 		'</table>' +
 		'</div>' +
 		'<div class="datetimepicker-months">' +
-		'<table class="table-condensed">' +
+		'<table class="table-sm">' +
 		DPGlobal.headTemplateV3 +
 		DPGlobal.contTemplate +
 		DPGlobal.footTemplate +
 		'</table>' +
 		'</div>' +
 		'<div class="datetimepicker-years">' +
-		'<table class="table-condensed">' +
+		'<table class="table-sm">' +
 		DPGlobal.headTemplateV3 +
 		DPGlobal.contTemplate +
 		DPGlobal.footTemplate +
