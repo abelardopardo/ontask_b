@@ -20,6 +20,7 @@ body {
 }
 
 .ontask-ccard {
+  cursor: pointer;
   min-width: 200px;
   max-width: 200px;
 }
