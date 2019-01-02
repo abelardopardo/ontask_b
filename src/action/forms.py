@@ -7,13 +7,11 @@ from builtins import object
 import json
 import re
 
-# from datetimewidget.widgets import DateTimeWidget
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteInplaceWidget
 from django.conf import settings as ontask_settings
 from validate_email import validate_email
-from django.utils.html import escape
 
 from core.widgets import OnTaskDateTimeInput
 from dataops.pandas_db import (
