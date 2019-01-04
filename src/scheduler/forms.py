@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import str
-from builtins import object
 import datetime
+from builtins import object
 
 import pytz
+from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from validate_email import validate_email
 
-from core.widgets import OnTaskDateTimeInput
 from dataops.pandas_db import execute_select_on_table
+from ontask.forms import dateTimeWidgetOptions
 from workflow.models import Column
 from .models import ScheduledAction
 
@@ -64,7 +64,7 @@ class ScheduleForm(forms.ModelForm):
         fields = ('name', 'description_text', 'item_column', 'execute')
 
         widgets = {
-            'execute': OnTaskDateTimeInput()
+            'execute': DateTimePickerInput(options=dateTimeWidgetOptions),
         }
 
 
@@ -136,7 +136,6 @@ class EmailScheduleForm(ScheduleForm):
                            'confirm_items',
                            'send_confirmation',
                            'track_read'])
-
 
     def clean(self):
 
@@ -284,6 +283,7 @@ def scheduled_email_action_data_is_correct(action, cleaned_data):
     Verify the integrity of a ScheduledAction object with a Personalised_text
     type. The function returns a list of pairs (field name, message) with the
     errors, or [] if no error has been found.
+    :param action: Action object to use for scheduling
     :param cleaned_data:
     :return: List of pairs (field name, error) or [] if correct
     """

@@ -2,6 +2,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{{ form.media }}
 <div class="js-action-showurl-form">
   <form action="{% url 'action:showurl' action.id %}" method="post"
         class="js-action-showurl-form">
