@@ -466,8 +466,7 @@ def delete_condition(request, pk):
         # Perform the delete operation
         condition.delete()
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('action:edit',
-                                        kwargs={'pk': condition.action.id})
+        data['html_redirect'] = ''
         return JsonResponse(data)
 
     data['html_form'] = \
@@ -495,13 +494,13 @@ def clone(request, pk):
         return JsonResponse({'html_redirect': reverse('workflow:index')})
 
     # Get the condition
-    try:
-        condition = Condition.objects.filter(
-            Q(action__workflow__user=request.user) |
-            Q(action__workflow__shared=request.user),
-            is_filter=False
-        ).distinct().get(pk=pk)
-    except (KeyError, ObjectDoesNotExist):
+    condition = Condition.objects.filter(
+        pk=pk).filter(
+        Q(action__workflow__user=request.user) |
+        Q(action__workflow__shared=request.user),
+        is_filter=False).first()
+
+    if not condition:
         messages.error(request,
                        _('Condition cannot be cloned.'))
         return JsonResponse({'html_redirect': reverse('action:index')})
@@ -514,8 +513,7 @@ def clone(request, pk):
 
     # Get the new name appending as many times as needed the 'Copy of '
     new_name = 'Copy of ' + condition.name
-    while Condition.objects.filter(name=new_name,
-                                   action=condition.action).exists():
+    while condition.action.conditions.filter(name=new_name).exists():
         new_name = 'Copy of ' + new_name
 
     old_id = condition.id
@@ -533,7 +531,7 @@ def clone(request, pk):
                           'name_old': old_name,
                           'name_new': condition.name})
 
-    messages.success(request,
-                     _('Action successfully cloned.'))
+    messages.success(request, _('Action successfully cloned.'))
+
     # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})
