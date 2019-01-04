@@ -306,8 +306,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.wait_for_datatable('action-table_previous')
 
         # Click in the run link
-        self.open_action_run('action in')
-        self.wait_for_datatable('actioninrun-data_previous')
+        self.open_action_run('action in', True)
 
         # Click on the first value
         self.selenium.find_element_by_link_text("student01@bogus.com").click()
@@ -665,6 +664,12 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
 
         # Provide the execution data
         self.selenium.find_element_by_xpath("//input[@type='text']").click()
+        # Wait for the column eleemnt to open
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.NAME, "columns"),
+            )
+        )
         self.selenium.find_element_by_name("columns").click()
         self.selenium.find_element_by_xpath(
             "(//input[@name='columns'])[2]"

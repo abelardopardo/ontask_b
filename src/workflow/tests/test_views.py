@@ -447,8 +447,9 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
 
         # Rename second attribute
         self.selenium.find_element_by_xpath(
-            "//tr/td[1][text() = 'key2']"
+            "//tr/td[1][normalize-space() = 'key2']"
         ).click()
+        self.wait_for_modal_open()
         self.selenium.find_element_by_id('id_key').clear()
         self.selenium.find_element_by_id('id_key').send_keys('newkey2')
         self.selenium.find_element_by_id('id_value').clear()
@@ -550,7 +551,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
         )
         # Wait for the  page to reload.
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'js-attribute-create'))
+            EC.element_to_be_clickable((By.CLASS_NAME, 'js-share-create'))
         )
 
         # Value now should be in the table
