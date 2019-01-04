@@ -197,6 +197,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         self.open(reverse('accounts:login'))
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'id_username')))
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         self.selenium.find_element_by_id('id_username').send_keys(uemail)
         self.selenium.find_element_by_id('id_password').send_keys(boguspwd)
         self.selenium.find_element_by_id('submit-id-sign_in').click()
@@ -215,6 +218,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             EC.visibility_of_element_located(
                 (By.XPATH, "//div[@id='div_id_username']")
             )
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
     def wait_for_modal_open(self, xpath="//div[@id='modal-item']//form"):
@@ -1036,6 +1042,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                 (By.XPATH, "//button[contains(@class, 'js-action-preview')]")
             )
         )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
 
     def open_action_rename(self, name):
         xpath_str = \
@@ -1084,14 +1093,20 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         element.find_element_by_link_text("Run").click()
         self.wait_for_page(element_id='json-action-request-data')
 
-    def open_action_run(self, name):
+    def open_action_run(self, name, is_action_in=False):
         element = self.search_action(name)
         element.find_element_by_link_text("Run").click()
-        # Preview button clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//button[contains(@class, 'js-action-preview')]"),
+        if is_action_in:
+            self.wait_for_datatable('actioninrun-data_previous')
+        else:
+            # Preview button clickable
+            WebDriverWait(self.selenium, 10).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, "//button[contains(@class, 'js-action-preview')]"),
+                )
             )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
     def open_action_schedule(self, name):
@@ -1249,7 +1264,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     def edit_condition(self, oldname, cname, cdesc, rule_tuples):
         self.select_condition_tab()
         self.create_condition_base(
-            "//*[@class = 'card-header' and text() = '{0}']/"
+            "//*[contains(@class, 'card-header') and text() = '{0}']/"
             "../div[@class = 'cond-buttons']/"
             "button[contains(@class, 'js-condition-edit')]".format(oldname),
             cname,
@@ -1267,7 +1282,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
         # Get the button for the condition
         self.selenium.find_element_by_xpath(
-            "//*[@class = 'card-header' and text() = '{0}']/"
+            "//*[contains(@class, 'card-header') and text() = '{0}']/"
             "../div[@class = 'cond-buttons']/"
             "button[contains(@class, 'js-condition-delete')]".format(cname),
         ).click()
