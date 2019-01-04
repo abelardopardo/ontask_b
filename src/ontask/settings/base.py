@@ -106,6 +106,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django_celery_beat',
     'django_celery_results',
+    # 'tempus_dominus',
+    'bootstrap_datepicker_plus',
 
     'authtools',
     'crispy_forms',
@@ -120,7 +122,6 @@ INSTALLED_APPS = [
     'django_summernote',
     'jquery',
     'django_auth_lti',
-    'datetimewidget',
 
     'accounts',
     'core.apps.CoreConfig',
@@ -237,8 +238,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 STATIC_URL = BASE_URL + '/static/'
 
-# Crispy Form Theme - Bootstrap 3
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
+# Crispy Form Theme - Bootstrap 4
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # For Bootstrap 3, change error alert to 'danger'
 MESSAGE_STORE = 'django.contrib.messages.storage.session.SessionStorage'
