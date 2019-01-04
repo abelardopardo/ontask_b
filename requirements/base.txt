@@ -68,7 +68,7 @@ mistune==0.8.4
 mock==2.0.0
 nbconvert==5.4.0
 nbformat==4.4.0
-notebook==5.7.0
+notebook==5.7.4
 numpy==1.15.4
 oauth2==1.9.0.post1
 odfpy==1.3.6
