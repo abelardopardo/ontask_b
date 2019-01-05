@@ -25,7 +25,7 @@ from django.views.decorators.cache import cache_page
 import dataops.ops as ops
 import dataops.pandas_db
 from dataops import pandas_db
-from dataops.forms import SelectColumnForm
+from dataops.forms import PluginInfoForm
 from dataops.plugin_manager import run_plugin
 from logs.models import Log
 from ontask.permissions import is_instructor
@@ -387,9 +387,9 @@ def plugin_invoke(request, pk):
             return redirect('dataops:transform')
 
     # create the form to select the columns and the corresponding dictionary
-    form = SelectColumnForm(request.POST or None,
-                            workflow=workflow,
-                            plugin_instance=plugin_instance)
+    form = PluginInfoForm(request.POST or None,
+                          workflow=workflow,
+                          plugin_instance=plugin_instance)
 
     # Set the basic elements in the context
     context = {

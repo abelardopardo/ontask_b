@@ -26,7 +26,7 @@ field_prefix = '___ontask___upload_'
 
 
 # Form to select a subset of the columns
-class SelectColumnForm(forms.Form):
+class PluginInfoForm(forms.Form):
     """
     Form to select a subset of columns
     """
@@ -42,7 +42,7 @@ class SelectColumnForm(forms.Form):
         self.workflow = kwargs.pop('workflow', None)
         self.plugin_instance = kwargs.pop('plugin_instance', None)
 
-        super(SelectColumnForm, self).__init__(*args, **kwargs)
+        super(PluginInfoForm, self).__init__(*args, **kwargs)
 
         if self.plugin_instance.input_column_names != []:
             # The set of columns is fixed, remove the field.
@@ -141,7 +141,7 @@ class SelectColumnForm(forms.Form):
 
     def clean(self):
 
-        data = super(SelectColumnForm, self).clean()
+        data = super(PluginInfoForm, self).clean()
 
         columns = data.get('columns', None)
         if columns and columns.count() == 0:

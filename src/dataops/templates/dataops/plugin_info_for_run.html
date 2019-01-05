@@ -8,55 +8,84 @@
 {% block title %}{{ block.super }}{% trans 'Run Transformation' %}{% endblock %}
 {% block extrahead %}
   {% ontask_datetimepicker_css %}
-  {% ontask_datetimepicker_js %}
   <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
+  {% ontask_datetimepicker_js %}
   <script src="{% static 'site/js/sol.js' %}"></script>
   <script src="{% static 'dataops/js/dataops.js' %}"></script>
 {% endblock %}
 {% block container %}
   <div class="container" id="dataops-get-plugin-info-to-run">
     <h1 class="text-center">
-      {% blocktrans with n=pinstance.name %}Information to run plugin "{{ n }}"{% endblocktrans %}
+      {% blocktrans with n=pinstance.name %}Transformation "{{ n }}"{% endblocktrans %}
     </h1>
-    <div class="row justify-content-center">
-      <form method="POST" action="">
-        {% csrf_token %}
-        <div class="form-group{% if form.columns.errors %} has-danger{% endif %}"
-             style="border:1px solid black;padding-left:1ex;padding-right:1ex;">
-          {% if pinstance.input_column_names %}
+    <ul class="nav nav-tabs nav-fill" id="dataops-get-plugin-info-tabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="inputs-tab" data-toggle="tab" href="#inputs"
+           role="tab" aria-controls="inputs"
+           aria-selected="true">{% trans 'Columns to pass to the transformation' %}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="outputs-tab" data-toggle="tab" href="#outputs"
+           role="tab" aria-controls="outputs"
+           aria-selected="false">{% trans 'Columns to store the result' %}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="parameters-tab" data-toggle="tab" href="#parameters"
+           role="tab" aria-controls="parameters"
+           aria-selected="false">{% trans 'Parameters' %}</a>
+      </li>
+    </ul>
+    <br/>
+    <form method="POST" action="">
+      {% csrf_token %}
+      <div class="tab-content" id="dataops-get-plugin-info-tab-content">
+        <div class="tab-pane fade show active" id="inputs" role="tabpanel"
+             aria-labelledby="inputs-tab">
+          <div class="row justify-content-center form-group{% if form.columns.errors %} has-danger{% endif %}">
+            {% if pinstance.input_column_names %}
               <p class="lead">{% trans 'Input columns' %}</p>
               <p>{{ pinstance.input_column_names|join:", " }}</p>
-          {% else %}
-              {% include 'form_field.html' with field=form.columns form_show_labels=True %}
-          {% endif %}
+            {% else %}
+              {{ form.columns|as_crispy_field }}
+            {% endif %}
+          </div>
         </div>
-        <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}"
-             style="border:1px solid black;padding:1ex;">
-          {% include 'form_field.html' with field=form.merge_key form_show_labels=True %}
+        <div class="row justify-content-center tab-pane fade" id="outputs" role="tabpanel"
+             aria-labelledby="outputs-tab">
+          <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}"
+               style="border-bottom:1px solid black;padding:1ex;">
+            <p class="lead">{% trans 'Output column names' %}</p>
+            {% for field_item in output_column_fields %}
+              {{ field_item|as_crispy_field }}
+            {% endfor %}
+          </div>
+          <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}"
+               style="border-bottom:1px solid black;padding:1ex;">
+            {{ form.out_column_suffix|as_crispy_field }}
+          </div>
+          <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}">
+            {{ form.merge_key|as_crispy_field }}
+          </div>
         </div>
-        <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}"
-             style="border:1px solid black;padding:1ex;">
-          <p class="lead">{% trans 'Output column names' %}</p>
-          {% for field in output_column_fields %}
-            {% include 'form_field.html' with field=field form_show_labels=True %}
-          {% endfor %}
-          <p class="help-block">{% trans 'Change the default names if needed.' %}</p>
+        <div class="tab-pane fade" id="parameters" role="tabpanel"
+             aria-labelledby="parameters-tab">
+          <div class="justify-content-center">
+            <p class="lead text-center">{% trans 'Execution parameters' %}</p>
+            {% for field_item in parameters %}
+              {{ field_item|as_crispy_field }}
+            {% endfor %}
+          </div>
         </div>
-        <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}"
-             style="border:1px solid black;padding:1ex;">
-          {% include 'form_field.html' with field=form.out_column_suffix form_show_labels=True %}
-        </div>
-        <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}"
-             style="border:1px solid black;padding:1ex;">
-          <p class="lead">{% trans 'Execution parameters' %}</p>
-          {% for field in parameters %}
-            {% include 'form_field.html' with field=field form_show_labels=True %}
-          {% endfor %}
-        </div>
-        {% include 'dataops/includes/plugin_run_buttons.html' %}
-      </form>
-    </div>
+      </div>
+      <div class="text-center">
+        <a class="btn btn-outline-dark spin" href="{% url 'dataops:transform' %}">{% trans 'Cancel' %}</a>
+        <button type="submit" name="Submit" value="Submit"
+                class="btn btn-outline-primary spin" data-toggle="tooltip"
+                title="{% trans 'Run the plugin' %}">
+          <span class="fa fa-rocket"></span> {% trans 'Run' %}</button>
+      </div>
+    </form>
   </div>
 {% endblock container %}
