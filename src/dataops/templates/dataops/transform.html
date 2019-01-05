@@ -14,9 +14,9 @@
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
-    $(document).ready(function() {
-      if (document.getElementById("transform-table") != null) {
-        $('#transform-table').DataTable({
+    if (document.getElementById("transform-table") != null) {
+      $(document).ready(function() {
+        var transform_table = $('#transform-table').DataTable({
           "search": {
             "caseInsensitive": true,
           },
@@ -33,11 +33,14 @@
               $(row).addClass('danger');
             }
           },
+          "columnDefs": [
+            {"className": "dt-center", "targets": [0, 1, 3, 4]},
+          ],
           colReorder: false,
           rowReorder: false,
         });
-      }
-    });
+      })
+    };
   </script>
 {% endblock %}
 {% block container %}

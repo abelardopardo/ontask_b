@@ -40,13 +40,13 @@ Research
 
 There are several platforms that implement similar functionality or follow a similar approach. OnTask has been implemented with numerous ideas initially present in the Student Relationship Engagement System `SRES <http://sres.io>`_) and subsequent versions. The common idea among them is the positive impact that personalized communication may have when supporting learners. There are a few scientific publications that document the ideas and processes that inspired the creation of OnTask:
 
+- Pardo, A., Bartimote-Aufflick, K., Buckingham Shum, S., Dawson, S., Gao, J., Gašević , D., . . . Vigentini, L. (2018). OnTask: Delivering Data-Informed Personalized Learning Support Actions. Journal of Learning Analytics, 5(3), 235-249.
+
+- Pardo, A., Jovanović, J., Dawson, S., Gašević, D., & Mirriahi, N. (2018). Using Learning Analytics to Scale the Provision of Personalised Feedback. British Journal of Educational Technology. doi:10.1111/bjet.12592
+
 - Liu, D. Y.-T., Taylor, C. E., Bridgeman, A. J., Bartimote-Aufflick, K., & Pardo, A. (2016). Empowering instructors through customizable collection and analyses of actionable information Workshop on Learning Analytics for Curriculum and Program Quality Improvement (pp. 3). Edinburgh, UK.
 
 - Liu, D. Y. T., Bartimote-Aufflick, K., Pardo, A., & Bridgeman, A. J. (2017). Data-driven Personalization of Student Learning Support in Higher Education. In A. Peña-Ayala (Ed.), Learning analytics: Fundaments, applications, and trends: A view of the current state of the art: Springer. doi:10.1007/978-3-319-52977-6_5
-
-- Pardo, A., Jovanović, J., Dawson, S., Gašević, D., & Mirriahi, N. (In press). Using Learning Analytics to Scale the Provision of Personalised Feedback. British Journal of Educational Technology. doi:10.1111/bjet.12592
-
-- Pardo, A., Bartimote-Aufflick, K., Buckingham Shum, S., Dawson, S., Gao, J., Gašević , D., . . . Vigentini, L. (In Press). OnTask: Delivering Data-Informed Personalized Learning Support Actions. Journal of Learning Analytics, In Press.
 
 
 License

@@ -14,9 +14,11 @@ from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import F
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.cache import cache_page
 
@@ -47,34 +49,63 @@ class PluginRegistryTable(tables.Table):
 
     description_txt = tables.Column(verbose_name=_('Description'))
 
-    modified = tables.DateTimeColumn(verbose_name=_('Last modified'))
-
-    executed = tables.DateTimeColumn(verbose_name=_('Last executed'))
-
-    operations = OperationsColumn(
-        verbose_name=_('Operations'),
-        template_file='dataops/includes/partial_plugin_operations.html',
-        template_context=lambda record: {'id': record.id,
-                                         'is_verified': record.is_verified}
+    last_exec = tables.DateTimeColumn(
+        verbose_name=_('Last executed'),
+        extra_context={''}
     )
+
+    def __init__(self, *args, **kwargs):
+
+        self.request = kwargs.get("request", None)
+
+        super(PluginRegistryTable, self).__init__(*args, **kwargs)
+
+    def render_name(self, record):
+        if record.is_verified:
+            return format_html(
+                """<a href="{0}"
+                      data-toggle="tooltip"
+                      title="{1}">{2}&nbsp;<span class="fa fa-rocket"></span></a>""",
+                reverse('dataops:plugin_invoke', kwargs={'pk': record.id}),
+                _('Execute the transformation'),
+                record.name
+            )
+
+        return record.name
+
+    def render_is_verified(self, record):
+        if record.is_verified:
+            return format_html('<span class="true">✔</span>')
+
+        return render_to_string(
+            'dataops/includes/partial_plugin_diagnose.html',
+            context={'id': record.id},
+            request=None
+        )
+
+    def render_last_exec(self, record):
+        workflow = get_workflow(self.request)
+        log_item = workflow.logs.filter(
+            user=self.request.user,
+            name=Log.PLUGIN_EXECUTE,
+            payload__name=record.name
+        ).order_by(F('created').desc()).first()
+        if not log_item:
+            return '--'
+        return log_item.created
 
     class Meta(object):
         model = PluginRegistry
 
-        fields = ('filename', 'name', 'description_txt', 'modified',
-                  'is_verified', 'executed')
+        fields = ('filename', 'name', 'description_txt', 'is_verified')
 
-        sequence = ('filename', 'name', 'description_txt', 'modified',
-                    'is_verified', 'executed')
+        sequence = ('filename', 'name', 'description_txt', 'is_verified',
+                    'last_exec')
 
         attrs = {
             'class': 'table table-hover table-bordered',
             'style': 'width: 100%;',
             'id': 'transform-table'
-        }
-
-        row_attrs = {
-            'style': 'text-align:center;',
         }
 
 
@@ -102,7 +133,8 @@ def transform(request):
     refresh_plugin_data(request, workflow)
 
     table = PluginRegistryTable(PluginRegistry.objects.all(),
-                                orderable=False)
+                                orderable=False,
+                                request=request)
 
     return render(request, 'dataops/transform.html', {'table': table})
 
