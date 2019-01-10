@@ -3,7 +3,6 @@
 
 import json
 from builtins import next
-from builtins import object
 from builtins import range
 from builtins import str
 from builtins import zip
@@ -11,7 +10,7 @@ from builtins import zip
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.utils.dateparse import parse_datetime
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 import ontask.ontask_prefs
 from dataops.models import SQLConnection
@@ -22,7 +21,7 @@ from ontask.forms import (
 
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)
-field_prefix = '___ontask___upload_'
+FIELD_PREFIX = '___ontask___upload_'
 
 
 # Form to select a subset of the columns
@@ -67,9 +66,9 @@ class PluginInfoForm(forms.Form):
 
         # Add the fields for the output column names
         for idx, cname in enumerate(self.plugin_instance.output_column_names):
-            self.fields[field_prefix + 'output_%s' % idx] = forms.CharField(
+            self.fields[FIELD_PREFIX + 'output_%s' % idx] = forms.CharField(
                 initial=cname,
-                label=_('Name for result column "{0}"').format(cname),
+                label=ugettext('Name for result column "{0}"').format(cname),
                 strip=True,
                 required=False,
             )
@@ -137,7 +136,7 @@ class PluginInfoForm(forms.Form):
                     new_field.initial = p_init
 
             # Insert the new_field in the form
-            self.fields[field_prefix + 'parameter_%s' % idx] = new_field
+            self.fields[FIELD_PREFIX + 'parameter_%s' % idx] = new_field
 
     def clean(self):
 
@@ -184,13 +183,13 @@ class UploadCSVFileForm(forms.Form):
         required=False
     )
 
-    def clean(self, *args, **kwargs):
+    def clean(self):
         """
         Function to check that the integers are positive.
         :return: The cleaned data
         """
 
-        data = super(UploadCSVFileForm, self).clean(*args, **kwargs)
+        data = super(UploadCSVFileForm, self).clean()
 
         if data['skip_lines_at_top'] < 0:
             self.add_error(
@@ -261,13 +260,13 @@ class UploadGoogleSheetForm(forms.Form):
         required=False
     )
 
-    def clean(self, *args, **kwargs):
+    def clean(self):
         """
         Function to check that the integers are positive.
         :return: The cleaned data
         """
 
-        data = super(UploadGoogleSheetForm, self).clean(*args, **kwargs)
+        data = super(UploadGoogleSheetForm, self).clean()
 
         if data['skip_lines_at_top'] < 0:
             self.add_error(
@@ -292,7 +291,7 @@ class SQLConnectionForm(forms.ModelForm):
     dialect[+driver]://user:password@host/dbname[?key=value..]
     """
 
-    class Meta(object):
+    class Meta:
         model = SQLConnection
 
         fields = [
@@ -507,7 +506,7 @@ class RowForm(forms.Form):
             self.initial_values = [None] * len(self.columns)
 
         for idx, column in enumerate(self.columns):
-            field_name = field_prefix + '%s' % idx
+            field_name = FIELD_PREFIX + '%s' % idx
             self.fields[field_name] = \
                 column_to_field(column, self.initial_values[idx])
 

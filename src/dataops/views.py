@@ -31,7 +31,7 @@ from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from workflow.ops import get_workflow
-from .forms import RowForm, field_prefix
+from .forms import RowForm, FIELD_PREFIX
 from .models import PluginRegistry
 from .plugin_manager import refresh_plugin_data, load_plugin
 
@@ -237,7 +237,7 @@ def row_update(request):
     unique_value = None
     log_payload = []
     for idx, col in enumerate(columns):
-        value = row_form.cleaned_data[field_prefix + '%s' % idx]
+        value = row_form.cleaned_data[FIELD_PREFIX + '%s' % idx]
         set_fields.append(col.name)
         set_values.append(value)
         log_payload.append((col.name, str(value)))
@@ -301,7 +301,7 @@ def row_create(request):
     # Create the query to update the row
     columns = workflow.get_columns()
     column_names = [c.name for c in columns]
-    field_name = field_prefix + '%s'
+    field_name = FIELD_PREFIX + '%s'
     row_vals = [form.cleaned_data[field_name % idx]
                 for idx in range(len(columns))]
 
@@ -395,9 +395,9 @@ def plugin_invoke(request, pk):
     context = {
         'form': form,
         'output_column_fields': [x for x in list(form)
-                                 if x.name.startswith(field_prefix + 'output')],
+                                 if x.name.startswith(FIELD_PREFIX + 'output')],
         'parameters': [x for x in list(form)
-                       if x.name.startswith(field_prefix + 'parameter')],
+                       if x.name.startswith(FIELD_PREFIX + 'parameter')],
         'pinstance': plugin_instance,
         'id': workflow.id
     }
@@ -429,7 +429,7 @@ def plugin_invoke(request, pk):
 
     # Process the output columns
     for idx, output_cname in enumerate(plugin_instance.output_column_names):
-        new_cname = form.cleaned_data[field_prefix + 'output_%s' % idx]
+        new_cname = form.cleaned_data[FIELD_PREFIX + 'output_%s' % idx]
         if form.cleaned_data['out_column_suffix']:
             new_cname += form.cleaned_data['out_column_suffix']
         plugin_instance.output_column_names[idx] = new_cname
@@ -437,7 +437,7 @@ def plugin_invoke(request, pk):
     # Pack the parameters
     params = dict()
     for idx, tpl in enumerate(plugin_instance.parameters):
-        params[tpl[0]] = form.cleaned_data[field_prefix + 'parameter_%s' % idx]
+        params[tpl[0]] = form.cleaned_data[FIELD_PREFIX + 'parameter_%s' % idx]
 
     # Execute the plugin
     result_df, status = run_plugin(plugin_instance,

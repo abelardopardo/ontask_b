@@ -7,12 +7,12 @@ Basic functions and definitions used all over the platform.
 import json
 import pytz
 
-from ontask.celery import app as celery_app
-
-__all__ = ['celery_app', 'OnTaskException', 'is_legal_name']
-
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings as ontask_settings
+
+from ontask.celery import app as celery_app
+
+__all__ = ['celery_app', 'OnTaskException', 'is_legal_name', 'fix_pctg_in_name']
 
 __version__ = 'B.4.0.0'
 
