@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import json
-
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
@@ -15,7 +13,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from action import ops
-from dataops.formula_evaluation import evaluate_node_sql, get_variables
+from dataops.formula_evaluation import (
+    get_variables,
+    evaluate,
+    NodeEvaluation
+)
 from logs.models import Log
 from ontask.permissions import is_instructor, UserIsInstructor
 from workflow.ops import get_workflow
@@ -174,7 +176,7 @@ def save_condition_form(request,
     condition.save()
 
     # Log the event
-    formula, _ = evaluate_node_sql(condition.formula)
+    formula, _ = evaluate(condition.formula, NodeEvaluation.EVAL_SQL)
     if is_new:
         if is_filter:
             log_type = Log.FILTER_CREATE
@@ -311,7 +313,7 @@ def delete_filter(request, pk):
             cond_filter.action.save()
 
         # Log the event
-        formula, fields = evaluate_node_sql(cond_filter.formula)
+        formula, fields = evaluate(cond_filter.formula, NodeEvaluation.EVAL_SQL)
         Log.objects.register(request.user,
                              Log.FILTER_DELETE,
                              cond_filter.action.workflow,
@@ -454,7 +456,7 @@ def delete_condition(request, pk):
             condition.action.set_content(action_content)
             condition.action.save()
 
-        formula, fields = evaluate_node_sql(condition.formula)
+        formula, fields = evaluate(condition.formula, NodeEvaluation.EVAL_SQL)
         Log.objects.register(request.user,
                              Log.CONDITION_DELETE,
                              condition.action.workflow,
@@ -482,7 +484,8 @@ def delete_condition(request, pk):
 @require_http_methods(['POST'])
 def clone(request, pk):
     """
-    JSON request to clone a condition. The post request must come with the action_content
+    JSON request to clone a condition. The post request must come with the
+    action_content
     :param request: Request object
     :param pk: id of the condition to clone
     :return: JSON response
@@ -494,11 +497,11 @@ def clone(request, pk):
         return JsonResponse({'html_redirect': reverse('workflow:index')})
 
     # Get the condition
-    condition = Condition.objects.filter(
-        pk=pk).filter(
+    condition = Condition.objects.filter(pk=pk).filter(
         Q(action__workflow__user=request.user) |
         Q(action__workflow__shared=request.user),
-        is_filter=False).first()
+        is_filter=False
+    ).first()
 
     if not condition:
         messages.error(request,

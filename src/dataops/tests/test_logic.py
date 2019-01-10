@@ -10,7 +10,7 @@ import pandas as pd
 import test
 from django.conf import settings
 from dataops import pandas_db
-from dataops.formula_evaluation import evaluate_top_node
+from dataops.formula_evaluation import evaluate, NodeEvaluation
 from dataops.ops import perform_dataframe_upload_merge
 from dataops.pandas_db import get_filter_query, load_from_db
 from workflow.models import Workflow
@@ -168,18 +168,20 @@ class FormulaEvaluation(test.OnTaskTestCase):
                    value2,
                    value3):
 
-        result1 = evaluate_top_node(
+        result1 = evaluate(
             self.set_skel(input_value,
                           op_value.format(''),
                           type_value,
                           value1),
+            NodeEvaluation.EVAL_EXP,
             {'variable': value2}
         )
-        result2 = evaluate_top_node(
+        result2 = evaluate(
             self.set_skel(input_value,
                           op_value.format(''),
                           type_value,
                           value1),
+            NodeEvaluation.EVAL_EXP,
             {'variable': value3}
         )
 
@@ -193,18 +195,20 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.assertFalse(result2)
 
         if op_value.find('{0}') != -1:
-            result1 = evaluate_top_node(
+            result1 = evaluate(
                 self.set_skel(input_value,
                               op_value.format('not_'),
                               type_value,
                               value1),
+                NodeEvaluation.EVAL_EXP,
                 {'variable': value2}
             )
-            result2 = evaluate_top_node(
+            result2 = evaluate(
                 self.set_skel(input_value,
                               op_value.format('not_'),
                               type_value,
                               value1),
+                NodeEvaluation.EVAL_EXP,
                 {'variable': value3}
             )
 
