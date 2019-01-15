@@ -106,7 +106,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django_celery_beat',
     'django_celery_results',
-    # 'tempus_dominus',
     'bootstrap_datepicker_plus',
 
     'authtools',
