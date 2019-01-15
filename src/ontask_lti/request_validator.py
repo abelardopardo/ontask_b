@@ -1,10 +1,11 @@
 import oauth2
 
 
-class RequestValidatorMixin(object):
+class RequestValidatorMixin:
     '''
     A 'mixin' for OAuth request validation.
     '''
+
     def __init__(self):
         super(RequestValidatorMixin, self).__init__()
 
@@ -14,7 +15,7 @@ class RequestValidatorMixin(object):
         self.oauth_consumer = oauth2.Consumer(
             self.consumer_key, self.consumer_secret)
 
-    def is_valid_request(self, request, parameters={},
+    def is_valid_request(self, request, parameters=dict,
                          fake_method=None, handle_error=True):
         '''
         Validates an OAuth request using the python-oauth2 library:
@@ -36,18 +37,25 @@ class RequestValidatorMixin(object):
                 headers=headers,
                 parameters=parameters)
 
+            # After the oauth_request has been created, the signature needs to
+            # be encoded to be compliant with the oauth2 comparison algorithm
+            # That compares the signature encoded as bytes (not as str). In
+            # Python 2 this comparison was performed assuming the two data types
+            # were equivalent, but it is no longer the case in Python 3
+            oauth_request['oauth_signature'] = \
+                oauth_request['oauth_signature'].encode()
+
             self.oauth_server.verify_request(
                 oauth_request, self.oauth_consumer, {})
 
         except oauth2.MissingSignature as e:
             if handle_error:
                 return False
-            else:
-                raise e
+            raise e
         # Signature was valid
         return True
 
-    def parse_request(self, request, parameters):
+    def parse_request(self, request, parameters, fake_method=None):
         '''
         This must be implemented for the framework you're using
 
@@ -57,7 +65,7 @@ class RequestValidatorMixin(object):
         headers is a dictionary of any headers sent in the request
         parameters are the parameters sent from the LMS
         '''
-        raise NotImplemented
+        raise NotImplementedError
 
     def valid_request(self, request):
         '''
@@ -71,7 +79,7 @@ class FlaskRequestValidatorMixin(RequestValidatorMixin):
     A mixin for OAuth request validation using Flask
     '''
 
-    def parse_request(self, request, parameters=None, fake_method=None):
+    def parse_request(self, request, parameters, fake_method=None):
         '''
         Parse Flask request
         '''
@@ -94,5 +102,5 @@ class DjangoRequestValidatorMixin(RequestValidatorMixin):
                 request.build_absolute_uri(),
                 request.META,
                 (dict(iter(request.POST.items()))
-                    if request.method == 'POST'
-                    else parameters))
+                 if request.method == 'POST'
+                 else parameters))

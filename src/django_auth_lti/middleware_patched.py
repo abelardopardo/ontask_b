@@ -1,5 +1,3 @@
-
-from builtins import object
 import json
 import logging
 from collections import OrderedDict
@@ -7,7 +5,6 @@ from collections import OrderedDict
 from django.conf import settings
 from django.contrib import auth
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.translation import ugettext_lazy as _
 
 from .timer import Timer
 from .thread_local import set_current_request
@@ -15,7 +12,7 @@ from .thread_local import set_current_request
 logger = logging.getLogger(__name__)
 
 
-class MultiLTILaunchAuthMiddleware(object):
+class MultiLTILaunchAuthMiddleware:
     """
     Middleware for authenticating users via an LTI launch URL.
 
@@ -46,43 +43,43 @@ class MultiLTILaunchAuthMiddleware(object):
         return response
 
     def process_request(self, request):
-        logger.debug(_('inside process_request %s') % request.path)
+        logger.debug('inside process_request %s', request.path)
 
         # AuthenticationMiddleware is required so that request.user exists.
         if not hasattr(request, 'user'):
             logger.debug('improperly configured: request has no user attr')
             raise ImproperlyConfigured(
-                _("The Django LTI auth middleware requires the"
-                  " authentication middleware to be installed.  Edit your"
-                  " MIDDLEWARE_CLASSES setting to insert"
-                  " 'django.contrib.auth.middleware.AuthenticationMiddleware'"
-                  " before the PINAuthMiddleware class."))
+                "The Django LTI auth middleware requires the"
+                " authentication middleware to be installed.  Edit your"
+                " MIDDLEWARE_CLASSES setting to insert"
+                " 'django.contrib.auth.middleware.AuthenticationMiddleware'"
+                " before the PINAuthMiddleware class."
+            )
 
         resource_link_id = None
         if request.method == 'POST' and request.POST.get(
                 'lti_message_type') == 'basic-lti-launch-request':
             logger.debug(
-                _('received a basic-lti-launch-request - authenticating the '
-                  'user')
+                'received a basic-lti-launch-request - authenticating the user'
             )
 
             # authenticate and log the user in
             with Timer() as t:
                 user = auth.authenticate(request=request)
-            logger.debug(_('authenticate() took %s s') % t.secs)
+            logger.debug('authenticate() took %s s', t.secs)
 
             if user is not None:
-                # User is valid.  Set request.user and persist user in the session
-                # by logging the user in.
+                # User is valid. Set request.user and persist user in the
+                # session by logging the user in.
 
                 logger.debug(
-                    _('user was successfully authenticated; now log them in')
+                    'user was successfully authenticated; now log them in'
                 )
                 request.user = user
                 with Timer() as t:
                     auth.login(request, user)
 
-                logger.debug(_('login() took %s s') % t.secs)
+                logger.debug('login() took %s s', t.secs)
 
                 resource_link_id = request.POST.get('resource_link_id', None)
                 lti_launch = {
@@ -159,11 +156,13 @@ class MultiLTILaunchAuthMiddleware(object):
                     'user_id': request.POST.get('user_id', None),
                     'user_image': request.POST.get('user_image', None),
                 }
-                # If a custom role key is defined in project, merge into existing role list
+                # If a custom role key is defined in project, merge into
+                # existing role list
                 if hasattr(settings, 'LTI_CUSTOM_ROLE_KEY'):
                     custom_roles = request.POST.get(
                         settings.LTI_CUSTOM_ROLE_KEY, '').split(',')
-                    lti_launch['roles'] += [_f for _f in custom_roles if _f]  # Filter out any empty roles
+                    lti_launch['roles'] += [_f for _f in custom_roles if
+                                            _f]  # Filter out any empty roles
 
                 lti_launches = request.session.get('LTI_LAUNCH')
                 if not lti_launches or not isinstance(lti_launches,
@@ -173,24 +172,22 @@ class MultiLTILaunchAuthMiddleware(object):
 
                 # Limit the number of LTI launches stored in the session
                 max_launches = getattr(settings, 'LTI_AUTH_MAX_LAUNCHES', 10)
-                logger.info("LTI launch count %s [max=%s]" % (
-                    len(list(lti_launches.keys())), max_launches))
+                logger.info("LTI launch count %s [max=%s]",
+                            len(list(lti_launches.keys())),
+                            max_launches)
                 if len(list(lti_launches.keys())) >= max_launches:
                     invalidated_launch = lti_launches.popitem(last=False)
-                    logger.info(_("LTI launch invalidated: {0}").format(
-                        json.dumps(invalidated_launch, indent=4))
-                    )
+                    logger.info("LTI launch invalidated: %s",
+                                json.dumps(invalidated_launch, indent=4))
 
                 lti_launches[resource_link_id] = lti_launch
-                logger.info(_("LTI launch added to session: {0}").format(
-                    json.dumps(
-                        lti_launch, indent=4))
-                )
+                logger.info("LTI launch added to session: %s",
+                            json.dumps(lti_launch, indent=4))
             else:
                 # User could not be authenticated!
-                logger.warning(_('user could not be authenticated via LTI '
-                                 'params; let the request continue in case '
-                                 'another auth plugin is configured'))
+                logger.warning('user could not be authenticated via LTI '
+                               'params; let the request continue in case '
+                               'another auth plugin is configured')
         else:
             resource_link_id = request.GET.get('resource_link_id', None)
 
@@ -198,8 +195,8 @@ class MultiLTILaunchAuthMiddleware(object):
                 request.session.get('LTI_LAUNCH', {}).get(resource_link_id, {}))
         set_current_request(request)
         if not request.LTI:
-            logger.warning(_("Could not find LTI launch for resource_link_id "
-                             "%s"), resource_link_id)
+            logger.warning("Could not find LTI launch for resource_link_id %s",
+                           resource_link_id)
 
     def clean_username(self, username, request):
         """
@@ -209,13 +206,11 @@ class MultiLTILaunchAuthMiddleware(object):
         backend_str = request.session[auth.BACKEND_SESSION_KEY]
         backend = auth.load_backend(backend_str)
         try:
-            logger.debug(
-                _('calling the backend {0} clean_username with {1}').format(
-                    backend, username
-                )
-            )
+            logger.debug('calling the backend %s clean_username with %s',
+                         backend,
+                         username)
             username = backend.clean_username(username)
-            logger.debug(_('cleaned username is %s') % username)
+            logger.debug('cleaned username is %s', username)
         except AttributeError:  # Backend has no clean_username method.
             pass
         return username
