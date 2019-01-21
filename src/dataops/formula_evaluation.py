@@ -725,6 +725,11 @@ def evaluate(node, eval_type, given_variables=None):
             return result
 
         if eval_type == NodeEvaluation.EVAL_SQL:
+
+            if not sub_clauses:
+                # Nothing has been returned, so it is an empty query
+                return '', []
+
             if node['condition'] == 'AND':
                 result = '((' + \
                          ') AND ('.join([x for x, __ in sub_clauses]) + '))'
