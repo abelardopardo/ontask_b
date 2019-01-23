@@ -37,10 +37,10 @@
            aria-selected="false">{% trans 'Parameters' %}</a>
       </li>
     </ul>
-    <br/>
     <form method="POST" action="">
       {% csrf_token %}
-      <div class="tab-content" id="dataops-get-plugin-info-tab-content">
+      <div class="tab-content tab-wrapper pt-3 pb-3 pl-2 pr-2"
+           id="dataops-get-plugin-info-tab-content">
         <div class="tab-pane fade show active" id="inputs" role="tabpanel"
              aria-labelledby="inputs-tab">
           <div class="row justify-content-center form-group{% if form.columns.errors %} has-danger{% endif %}">
