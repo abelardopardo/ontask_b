@@ -3,7 +3,7 @@ html, body{
 }
 
 body {
-  padding-top:37px; /* To jump over the fixed nav-bar */
+  padding-top:35px; /* To jump over the fixed nav-bar */
 }
 
 .wflow-buttons,
@@ -30,6 +30,11 @@ body {
   min-height: 100px;
 }
 
+.tab-wrapper {
+  border-left: 1px solid #dee2e6;
+  border-right: 1px solid #dee2e6;
+  border-bottom: 1px solid #dee2e6;
+}
 #preview-variables {
   background-color: rgba(0,0,0,.125);
 }
