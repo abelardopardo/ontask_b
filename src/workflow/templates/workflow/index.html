@@ -50,8 +50,8 @@
     <div class="card-deck justify-content-center" style="margin:1em 0 1em 0;">
       {% for wflow in workflows %}
         <div class="card ontask-card" style="margin-bottom: 15px;">
-          <h5 class="card-header text-center">{{ wflow.name }}</h5>
-          <div class="card-body">
+          <h5 class="card-header text-center spin">{{ wflow.name }}</h5>
+          <div class="card-body spin">
             <p class="card-text">{{ wflow.description_text }}</p>
             <p class="card-text text-center">
         {% blocktrans count counter=wflow.nrows %}{{ counter }} row,{% plural %}{{ counter }} rows,{% endblocktrans %}

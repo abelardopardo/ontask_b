@@ -8,7 +8,7 @@ import pandas as pd
 class_name = 'OnTaskTestPlugin'
 
 
-class OnTaskTestPlugin(object):
+class OnTaskTestPlugin:
     """
     Example of a class that implements the OnTask plugin interface. The
     objects of this class have to provide the following elements:
@@ -34,11 +34,11 @@ class OnTaskTestPlugin(object):
       plugin through a form. The conditions on these values are:
 
       - name must be a string
-      - type must be a string equal to "integer", "double", "string", 
-        "datetime" or "boolean". 
+      - type must be a string equal to "integer", "double", "string",
+        "datetime" or "boolean".
       - The list of values is to restrict the
         possible values
-      - The initial value must be of the type specified by the second 
+      - The initial value must be of the type specified by the second
         element.
       - Help_text a string to show as help text
 
@@ -62,15 +62,22 @@ class OnTaskTestPlugin(object):
         self.parameters = [
             ('param string', 'string', ['v1', 'v2'], 'v1', 'help param string'),
             ('param integer', 'integer', [], None, 'help param integer'),
-            ('param double', 'double', [1.2, 2.2, 3.2], None,
-                             'help param double'),
+            ('param double',
+             'double',
+             [1.2, 2.2, 3.2],
+             None,
+             'help param double'),
             ('param boolean', 'boolean', [], True, 'help param boolean'),
-            ('param datetime', 'datetime', [], '2018-05-25 18:03:00+09:30',
-                               'help param datetime'),
-            ('param datetime2', 'datetime', 
-                                [],
-                                '2018-05-25 18:03:00+09:30',
-                                'help param datetime'),
+            ('param datetime',
+             'datetime',
+             [],
+             '2018-05-25 18:03:00+09:30',
+             'help param datetime'),
+            ('param datetime2',
+             'datetime',
+             [],
+             '2018-05-25 18:03:00+09:30',
+             'help param datetime'),
         ]
 
     def run(self, data_frame, merge_key, parameters=dict):
