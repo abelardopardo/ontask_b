@@ -396,6 +396,7 @@ class ScreenTestFixture(ScreenTests):
 
         # Click on the link RUN
         self.selenium.find_element_by_link_text('Run').click()
+        self.wait_for_page(None, 'sql-load-step1')
 
         # Picture of the RUN menu in SQL
         self.body_ss('dataops_SQL_run.png')
@@ -413,7 +414,7 @@ class ScreenTestFixture(ScreenTests):
         element = self.search_table_row_by_string('transform-table',
                                                   1,
                                                   'test_plugin_1')
-        element.find_element_by_link_text('Run').click()
+        element.find_element_by_xpath('td[2]/a').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -457,9 +458,7 @@ class ScreenTestFixture(ScreenTests):
         #
         # Specific table view
         #
-        element = self.search_table_row_by_string('view-table', 1, 'Midterm')
-        element.find_element_by_xpath('td[3]/div/a').click()
-        self.wait_for_datatable('table-data_previous')
+        self.open_view('Midterm')
 
         # Picture of the body
         self.body_ss('table_view_view.png')
@@ -503,26 +502,19 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('action_edit_action_in.png')
 
         # Open the preview
-        self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Preview']"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
-        )
+        self.open_preview()
         self.modal_ss('action_action_in_preview.png')
         self.cancel_modal()
+
+        # Done
+        # Submit the action
+        self.selenium.find_element_by_link_text('Done').click()
+        self.wait_for_datatable('action-table_previous')
 
         #
         # Run Action In
         #
-        self.selenium.find_element_by_xpath(
-            "//a[normalize-space()='Run']"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.ID, 'actioninrun-data_previous')
-            )
-        )
+        self.open_action_run('Student comments Week 1', True)
 
         # Picture of the body
         self.body_ss('action_run_action_in.png')
@@ -618,11 +610,9 @@ class ScreenTestFixture(ScreenTests):
         self.modal_ss('action_personalized_canvas_email_create.png')
 
         desc.send_keys(Keys.RETURN)
-        # Wait for the spinner to disappear, and then for the button to be
-        # clickable
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
-                (By.XPATH, "//div[@id='action-out-editor']")
+                (By.ID, "action-out-editor")
             )
         )
         WebDriverWait(self.selenium, 10).until_not(
@@ -632,7 +622,7 @@ class ScreenTestFixture(ScreenTests):
         self.select_filter_tab()
         self.create_filter('No activity in Week 2',
                            [('Days online 2', 'equal', '0')])
-        self.select_text_tab()
+        self.select_canvas_text_tab()
         self.selenium.find_element_by_id('id_content').send_keys(
             """Dear {{ GivenName }}
 
@@ -665,7 +655,7 @@ Course Coordinator""")
         #
         # Send emails
         #
-        self.open_action_email('Midterm comments')
+        self.open_action_canvas_email('Midterm comments')
 
         # Picture of the body
         self.body_ss('action_email_request_data.png')

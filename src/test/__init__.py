@@ -168,6 +168,7 @@ class OnTaskApiTestCase(APITransactionTestCase):
 class OnTaskLiveTestCase(LiveServerTestCase):
     viewport_height = 2880
     viewport_width = 1024
+    device_pixel_ratio = 1
 
     class_and_text_xpath = \
         "//{0}[contains(@class, '{1}') and normalize-space(text()) = '{2}']"
@@ -182,6 +183,20 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         # cls.selenium = webdriver.Chrome()
         cls.selenium.set_window_size(cls.viewport_width,
                                      cls.viewport_height)
+        # After setting the window size, we need to update these values
+        screen_size = cls.selenium.get_window_size()
+        cls.viewport_height = cls.selenium.execute_script(
+            'return window.innerHeight'
+        )
+        cls.viewport_width = cls.selenium.execute_script(
+            'return window.innerWidth'
+        )
+        cls.device_pixel_ratio = cls.selenium.execute_script(
+            'return window.devicePixelRatio'
+        )
+        print('Device Pixel Ratio: {0}'.format(cls.device_pixel_ratio))
+        print('Viewport width: {0}'.format(cls.viewport_width))
+        print('viewport height: {0}'.format(cls.viewport_height))
         # cls.selenium.implicitly_wait(30)
 
     @classmethod
@@ -433,7 +448,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
-        self.assertIn('Scheduled Operations', self.selenium.page_source)
+        self.assertIn('Scheduled Actions', self.selenium.page_source)
 
     def go_to_logs(self):
         self.selenium.find_element_by_id('ontask-base-settings').click()
@@ -1102,7 +1117,8 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             # Preview button clickable
             WebDriverWait(self.selenium, 10).until(
                 EC.element_to_be_clickable(
-                    (By.XPATH, "//button[contains(@class, 'js-action-preview')]"),
+                    (By.XPATH,
+                     "//button[contains(@class, 'js-action-preview')]"),
                 )
             )
         WebDriverWait(self.selenium, 10).until_not(
@@ -1212,6 +1228,14 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH, "//textarea[@id='id_target_url']")
+            )
+        )
+
+    def select_canvas_text_tab(self):
+        self.selenium.find_element_by_id('text-tab').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//textarea[@id='id_content']")
             )
         )
 
@@ -1391,7 +1415,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
 class ScreenTests(OnTaskLiveTestCase):
     viewport_width = 1040
-    viewport_height = 1800
+    viewport_height = 2800
     prefix = ''
     workflow_name = 'BIOL1011'
     description = 'Course on Cell Biology'
@@ -1402,20 +1426,15 @@ class ScreenTests(OnTaskLiveTestCase):
     def img_path(f):
         return os.path.join(settings.BASE_DIR(), 'test', 'images', f)
 
-    def element_ss(self, xpath, ss_filename):
+    def _get_image(self, xpath):
         """
         Take the snapshot of the element with the given xpath and store it in
         the given filename
-        :return: Nothing
+        :return: image object
         """
 
-        if not xpath or not ss_filename:
-            raise Exception('Incorrect invocation of element_ss')
-
-        element = self.selenium.find_element_by_xpath(xpath)
-
-        coordinates = element.location
-        dimensions = element.size
+        if not xpath:
+            raise Exception('Incorrect invocation of _get_image')
 
         img = Image.open(io.BytesIO(
             self.selenium.find_element_by_xpath(
@@ -1423,24 +1442,53 @@ class ScreenTests(OnTaskLiveTestCase):
             ).screenshot_as_png)
         )
 
-        # Cap height
-        if dimensions['height'] < self.viewport_height / 2:
-            img = img.crop(
-                (math.floor(2 * coordinates['x']),
-                 math.floor(2 * coordinates['y']),
-                 math.ceil(2 * coordinates['x'] + 2 * dimensions['width']),
-                 math.ceil(2 * coordinates['y'] + 2 * dimensions['height']))
-            )
+        return img
 
+    def element_ss(self, xpath, ss_filename):
+        """
+        Take the snapshot of the element with the given xpath and store it in
+        the given filename
+        :return: Nothing
+        """
+
+        if not ss_filename:
+            raise Exception('Incorrect invocation of element_ss')
+
+        element = self.selenium.find_element_by_xpath(xpath)
+        coord = element.location
+        dims = element.size
+
+        # Get the image
+        img = self._get_image(xpath)
+
+        # Crop it
+        img = img.crop(
+            (math.ceil(coord['x'] * self.device_pixel_ratio),
+             math.ceil(coord['y'] * self.device_pixel_ratio),
+             math.ceil((coord['x'] + dims['width']) *
+                       self.device_pixel_ratio),
+             math.ceil((coord['y'] + dims['height']) *
+                       self.device_pixel_ratio))
+        )
         img.save(self.img_path(self.prefix + ss_filename))
 
     def modal_ss(self, ss_filename):
         self.element_ss(self.modal_xpath, ss_filename)
 
     def body_ss(self, ss_filename):
-        self.element_ss('//body', ss_filename)
+        img = self._get_image('//body')
 
-    @classmethod
-    def setUpClass(cls):
-        super(ScreenTests, cls).setUpClass()
-        # cls.selenium.set_window_size(cls.width, cls.height)
+        b_footer = self.selenium.find_element_by_id('base_footer')
+        coord = b_footer.location
+        dims = b_footer.size
+
+        if (coord['y'] + dims['height'] * self.device_pixel_ratio) \
+                < self.viewport_height:
+            img = img.crop(
+                (0,
+                 0,
+                 math.ceil(dims['width'] * self.device_pixel_ratio),
+                 math.ceil((coord['y'] + dims['height']) *
+                           self.device_pixel_ratio))
+            )
+        img.save(self.img_path(self.prefix + ss_filename))
