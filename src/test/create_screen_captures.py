@@ -181,6 +181,9 @@ class ScreenTestFixture(ScreenTests):
         # List of workflows, navigation
         self.body_ss('workflow_index.png')
 
+        # Workdlow card
+        self.element_ss('//div[contains(@class, "ontask-card")]',
+                        'workflow_card.png')
         #
         # Navigation bar, details
         #
@@ -385,6 +388,13 @@ class ScreenTestFixture(ScreenTests):
         self.go_to_excel_upload_merge_step_1()
         self.body_ss('dataops_upload_excel.png')
 
+        #
+        # Dataops/Merge Excel Merge
+        #
+        # Go to Excel Upload/Merge
+        self.go_to_google_sheet_upload_merge_step_1()
+        self.body_ss('dataops_upload_gsheet.png')
+
         # Back to details
         self.go_to_details()
 
@@ -444,7 +454,7 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('table.png')
 
         # Picture of the buttons
-        self.element_ss("//div[@id='table-content']/div[1]",
+        self.element_ss("//div[@id='table-operation-buttons']",
                         'table_buttons.png')
 
         #

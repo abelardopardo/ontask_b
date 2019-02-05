@@ -84,21 +84,22 @@
     {% elif no_actions %}
       {% include 'workflow/includes/no_actions.html' %}
     {% endif %}
-    <div class="text-center">
-      <div class="btn-group mb-3">
-        {% if columns %}
-          <a href="{% url 'dataops:rowcreate' %}"
-             class="btn btn-outline-dark spin"
-             data-toggle="tooltip"
-             title="{% trans 'Add a new row to the table' %}">
-            <span class="fa fa-plus"></span> {% trans 'Row' %}
-          </a>
-          {% include 'workflow/includes/add_column_menu.html' %}
-        {% endif %}
-        {% include 'workflow/includes/manage_table_data.html' %}
+    <div id="table-operation-buttons">
+      <div class="text-center">
+        <div class="btn-group mb-3">
+          {% if columns %}
+            <a href="{% url 'dataops:rowcreate' %}"
+               class="btn btn-outline-dark spin"
+               data-toggle="tooltip"
+               title="{% trans 'Add a new row to the table' %}">
+              <span class="fa fa-plus"></span> {% trans 'Row' %}
+            </a>
+            {% include 'workflow/includes/add_column_menu.html' %}
+          {% endif %}
+          {% include 'workflow/includes/manage_table_data.html' %}
+        </div>
       </div>
-    </div>
-    <div class="text-center">
+      <div class="text-center">
       <div class="btn-group mb-3">
         {% if columns %}
           <div class="dropdown btn-group">
@@ -160,6 +161,7 @@
           {% endif %}
         {% endif %}
       </div>
+    </div>
     </div>
     {% if columns %}
       <table class="table table-hover table-bordered" style="width: 100%;"

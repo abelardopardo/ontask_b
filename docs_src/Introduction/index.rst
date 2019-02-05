@@ -2,9 +2,9 @@
 What is OnTask
 **************
 
-Welcome to OnTask, the platform offering instructors and educational designers the capacity to use data to personalize the learners experience.
+Welcome to OnTask, the platform offering instructors and educational designers the capacity to use data to personalize the learner experience.
 
-Learning is complex, highly situated, and requires interacting with peers, instructors, resources, platforms, etc. This complexity can be alleviated providing learners with the right support actions. But this process becomes increasingly complex when the number of learners grows. The more learners, the more difficult is for instructors to provide support and usual solutions usually include generic resources that are only relevant to a subset of the audience.
+Learning is complex, highly situated, and requires interacting with peers, instructors, resources, platforms, etc. This complexity can be alleviated providing learners with the right support actions. But this process becomes increasingly complex when the number of learners grows. The larger the number of learners, the more difficult is for instructors to provide support. Typical solutions usually include suggesting or providing generic resources that are only relevant to a subset of the audience.
 
 .. sidebar:: Learner testimonials
 

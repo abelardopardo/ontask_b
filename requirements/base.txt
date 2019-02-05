@@ -1,8 +1,8 @@
 alabaster==0.7.12
 amqp==2.3.2
 appnope==0.1.0
-argon2==0.1.10
-argon2-cffi==18.3.0
+#argon2==0.1.10
+#argon2-cffi==18.3.0
 Babel==2.6.0
 backcall==0.1.0
 billiard==3.5.0.4

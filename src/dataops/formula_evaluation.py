@@ -746,12 +746,15 @@ def evaluate(node, eval_type, given_variables=None):
             return result, result_fields
 
         # Text evaluation
-        if node['condition'] == 'AND':
-            result = '(' + \
-                     ') AND ('.join([x for x in sub_clauses]) + ')'
+        if len(sub_clauses) > 1:
+            if node['condition'] == 'AND':
+                result = '(' + \
+                         ') AND ('.join([x for x in sub_clauses]) + ')'
+            else:
+                result = '(' + \
+                         ') OR ('.join([x for x in sub_clauses]) + ')'
         else:
-            result = '(' + \
-                     ') OR ('.join([x for x in sub_clauses]) + ')'
+            result = sub_clauses[0]
 
         if node.get('not', False):
             result = 'NOT (' + result + ')'
