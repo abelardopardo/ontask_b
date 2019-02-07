@@ -1,8 +1,6 @@
 alabaster==0.7.12
 amqp==2.3.2
 appnope==0.1.0
-#argon2==0.1.10
-#argon2-cffi==18.3.0
 Babel==2.6.0
 backcall==0.1.0
 billiard==3.5.0.4
@@ -16,7 +14,7 @@ coreschema==0.0.4
 decorator==4.3.0
 defusedxml==0.5.0
 diff-match-patch==20181111
-Django==2.1.5
+Django[argon2]==2.1.5
 django-authtools==1.6.0
 django-braces==1.13.0
 django-celery-beat==1.2.0
