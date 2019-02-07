@@ -24,7 +24,7 @@ class NodeEvaluation:
     GET_CONSTANT_FN = {
         'integer': lambda x: int(x),
         'double': lambda x: float(x),
-        'boolean': lambda x: x == '1',
+        'boolean': lambda x: x is True,
         'string': lambda x: str(x),
         'datetime': lambda x: parse_datetime(x)
     }
