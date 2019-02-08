@@ -14,6 +14,9 @@ ALLOWED_HOSTS = [os.environ['DOMAIN_NAME']]
 # Additional middleware introduced by debug toolbar
 MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
 
+# Show emails to console
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 #
 # Security features
 #
