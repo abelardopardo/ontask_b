@@ -14,22 +14,24 @@ from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import F
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.cache import cache_page
 
 import dataops.ops as ops
 import dataops.pandas_db
 from dataops import pandas_db
-from dataops.forms import SelectColumnForm
+from dataops.forms import PluginInfoForm
 from dataops.plugin_manager import run_plugin
 from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from workflow.ops import get_workflow
-from .forms import RowForm, field_prefix
+from .forms import RowForm, FIELD_PREFIX
 from .models import PluginRegistry
 from .plugin_manager import refresh_plugin_data, load_plugin
 
@@ -47,34 +49,63 @@ class PluginRegistryTable(tables.Table):
 
     description_txt = tables.Column(verbose_name=_('Description'))
 
-    modified = tables.DateTimeColumn(verbose_name=_('Last modified'))
-
-    executed = tables.DateTimeColumn(verbose_name=_('Last executed'))
-
-    operations = OperationsColumn(
-        verbose_name=_('Operations'),
-        template_file='dataops/includes/partial_plugin_operations.html',
-        template_context=lambda record: {'id': record.id,
-                                         'is_verified': record.is_verified}
+    last_exec = tables.DateTimeColumn(
+        verbose_name=_('Last executed'),
+        extra_context={''}
     )
+
+    def __init__(self, *args, **kwargs):
+
+        self.request = kwargs.get("request", None)
+
+        super(PluginRegistryTable, self).__init__(*args, **kwargs)
+
+    def render_name(self, record):
+        if record.is_verified:
+            return format_html(
+                """<a href="{0}"
+                      data-toggle="tooltip"
+                      title="{1}">{2}&nbsp;<span class="fa fa-rocket"></span></a>""",
+                reverse('dataops:plugin_invoke', kwargs={'pk': record.id}),
+                _('Execute the transformation'),
+                record.name
+            )
+
+        return record.name
+
+    def render_is_verified(self, record):
+        if record.is_verified:
+            return format_html('<span class="true">✔</span>')
+
+        return render_to_string(
+            'dataops/includes/partial_plugin_diagnose.html',
+            context={'id': record.id},
+            request=None
+        )
+
+    def render_last_exec(self, record):
+        workflow = get_workflow(self.request)
+        log_item = workflow.logs.filter(
+            user=self.request.user,
+            name=Log.PLUGIN_EXECUTE,
+            payload__name=record.name
+        ).order_by(F('created').desc()).first()
+        if not log_item:
+            return '--'
+        return log_item.created
 
     class Meta(object):
         model = PluginRegistry
 
-        fields = ('filename', 'name', 'description_txt', 'modified',
-                  'is_verified', 'executed')
+        fields = ('filename', 'name', 'description_txt', 'is_verified')
 
-        sequence = ('filename', 'name', 'description_txt', 'modified',
-                    'is_verified', 'executed')
+        sequence = ('filename', 'name', 'description_txt', 'is_verified',
+                    'last_exec')
 
         attrs = {
             'class': 'table table-hover table-bordered',
             'style': 'width: 100%;',
             'id': 'transform-table'
-        }
-
-        row_attrs = {
-            'style': 'text-align:center;',
         }
 
 
@@ -102,7 +133,8 @@ def transform(request):
     refresh_plugin_data(request, workflow)
 
     table = PluginRegistryTable(PluginRegistry.objects.all(),
-                                orderable=False)
+                                orderable=False,
+                                request=request)
 
     return render(request, 'dataops/transform.html', {'table': table})
 
@@ -205,7 +237,7 @@ def row_update(request):
     unique_value = None
     log_payload = []
     for idx, col in enumerate(columns):
-        value = row_form.cleaned_data[field_prefix + '%s' % idx]
+        value = row_form.cleaned_data[FIELD_PREFIX + '%s' % idx]
         set_fields.append(col.name)
         set_values.append(value)
         log_payload.append((col.name, str(value)))
@@ -269,7 +301,7 @@ def row_create(request):
     # Create the query to update the row
     columns = workflow.get_columns()
     column_names = [c.name for c in columns]
-    field_name = field_prefix + '%s'
+    field_name = FIELD_PREFIX + '%s'
     row_vals = [form.cleaned_data[field_name % idx]
                 for idx in range(len(columns))]
 
@@ -355,17 +387,17 @@ def plugin_invoke(request, pk):
             return redirect('dataops:transform')
 
     # create the form to select the columns and the corresponding dictionary
-    form = SelectColumnForm(request.POST or None,
-                            workflow=workflow,
-                            plugin_instance=plugin_instance)
+    form = PluginInfoForm(request.POST or None,
+                          workflow=workflow,
+                          plugin_instance=plugin_instance)
 
     # Set the basic elements in the context
     context = {
         'form': form,
         'output_column_fields': [x for x in list(form)
-                                 if x.name.startswith(field_prefix + 'output')],
+                                 if x.name.startswith(FIELD_PREFIX + 'output')],
         'parameters': [x for x in list(form)
-                       if x.name.startswith(field_prefix + 'parameter')],
+                       if x.name.startswith(FIELD_PREFIX + 'parameter')],
         'pinstance': plugin_instance,
         'id': workflow.id
     }
@@ -397,7 +429,7 @@ def plugin_invoke(request, pk):
 
     # Process the output columns
     for idx, output_cname in enumerate(plugin_instance.output_column_names):
-        new_cname = form.cleaned_data[field_prefix + 'output_%s' % idx]
+        new_cname = form.cleaned_data[FIELD_PREFIX + 'output_%s' % idx]
         if form.cleaned_data['out_column_suffix']:
             new_cname += form.cleaned_data['out_column_suffix']
         plugin_instance.output_column_names[idx] = new_cname
@@ -405,7 +437,7 @@ def plugin_invoke(request, pk):
     # Pack the parameters
     params = dict()
     for idx, tpl in enumerate(plugin_instance.parameters):
-        params[tpl[0]] = form.cleaned_data[field_prefix + 'parameter_%s' % idx]
+        params[tpl[0]] = form.cleaned_data[FIELD_PREFIX + 'parameter_%s' % idx]
 
     # Execute the plugin
     result_df, status = run_plugin(plugin_instance,

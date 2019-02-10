@@ -242,12 +242,12 @@ $(function () {
 
   // Preview
   $("#action-preview-done").on("click", ".js-action-preview", loadFormPost);
-  $("#email-action-request-data").on("click", ".js-email-preview", loadForm);
+  $("#email-action-request-data").on("click", ".js-action-preview", loadForm);
   $("#canvas-email-action-request-data").on("click",
-    ".js-canvas-email-preview",
+    ".js-action-preview",
     loadForm);
-  $("#zip-action-request-data").on("click", ".js-zip-preview", loadForm);
-  $("#json-action-request-data").on("click", ".js-json-preview", loadForm);
+  $("#zip-action-request-data").on("click", ".js-action-preview", loadForm);
+  $("#json-action-request-data").on("click", ".js-action-preview", loadForm);
   $("#action-in-editor").on("click", ".js-action-preview", loadForm);
   $(".modal-content").on("click", ".js-action-preview-nxt", loadForm);
   $(".modal-content").on("click", ".js-action-preview-prv", loadForm);
@@ -278,18 +278,27 @@ $(function () {
   $("#action-index").on("click", ".js-workflow-flush", loadForm);
   $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
 
+  $(".card").hover(function(){
+    $(this).css("background-color", "lightgray");
+  }, function(){
+    $(this).css("background-color", "white");
+  });
 });
-
 window.onload = function(){
   if (document.getElementById("id_exclude_values") != null) {
     set_element_select("#id_exclude_values");
   }
   setDateTimePickers();
-//  if (typeof qbuilder_filter_options != "undefined") {
-//    if ($('#id_formula').val() != '') {
-//      qbuilder_filter_options["rules"] = JSON.parse($('#id_formula').val());
-//    }
-//    $("#builder").queryBuilder(qbuilder_filter_options);
-//  }
 };
-
+$(document).ready(function() {
+  if (location.hash) {
+    $("a[href='" + location.hash + "']").tab("show");
+  }
+  $(document.body).on("click", "a[data-toggle]", function(event) {
+    location.hash = this.getAttribute("href");
+  });
+});
+$(window).on("popstate", function() {
+  var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
+  $("a[href='" + anchor + "']").tab("show");
+});

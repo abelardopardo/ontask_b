@@ -16,8 +16,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from dataops import formula_evaluation, pandas_db
 from dataops.formula_evaluation import (
-    get_variables, evaluate_top_node,
-    evaluate_node_text
+    get_variables, evaluate,
+    NodeEvaluation
 )
 from logs.models import Log
 from ontask import OnTaskException
@@ -154,8 +154,10 @@ class Action(models.Model):
         if self.action_type == Action.PERSONALIZED_TEXT:
             return True
 
-        if self.action_type == Action.PERSONALIZED_JSON or \
-                self.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        if  self.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+            return settings.CANVAS_INFO_DICT is not None
+
+        if self.action_type == Action.PERSONALIZED_JSON:
             # If None or empty, return false
             if not self.target_url:
                 return False
@@ -341,8 +343,9 @@ class Action(models.Model):
                 'name', 'is_filter', 'formula'):
             # Evaluate the condition
             try:
-                condition_eval[condition['name']] = evaluate_top_node(
+                condition_eval[condition['name']] = evaluate(
                     condition['formula'],
+                    NodeEvaluation.EVAL_EXP,
                     row_values
                 )
             except OnTaskException:
@@ -485,7 +488,7 @@ class Condition(models.Model):
         :return: String
         """
 
-        return evaluate_node_text(self.formula)[1:-1]
+        return evaluate(self.formula, NodeEvaluation.EVAL_TXT)
 
     def __str__(self):
         return self.name

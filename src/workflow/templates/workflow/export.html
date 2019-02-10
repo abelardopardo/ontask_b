@@ -22,24 +22,23 @@
             </div>
           {% endfor %}
         {% endif %}
-        <p class="text-center">{% trans 'Workflow name:' %} {{ name }}</p>
         <p class="text-center">{% trans 'Number of rows/columns:' %} {{ nrows }}/{{ ncols }}</p>
         <p class="text-center">{% trans 'Number of actions:' %} {{ nactions }}</p>
         {% if nactions > 0 %}
-          <p class="text-center">{% trans 'Select the actions to include in the export:' %}</p>
+          <p class="text-center">{% trans 'Select the actions to export:' %}</p>
           <table class="table dataTable">
             <thead>
               <tr>
                 <th class="text-center">{% trans 'Action' %}</th>
                 <th class="text-center">
-                  {% trans 'Select all' %} <input type="checkbox" id="checkAll"/>
+                  {% trans 'All' %} <input type="checkbox" id="checkAll"/>
                 </th>
               </tr>
             </thead>
             <tbody>
               {% for field in form.visible_fields %}
                 <tr>
-                  <td>"{{ field.label_tag }}" {{ field.help_text }}</td>
+                  <td>{{ field.label_tag }} {{ field.help_text }}</td>
                   <td class="text-center">
                     {% if field.errors %}
                       <ul>

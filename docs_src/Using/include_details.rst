@@ -1,7 +1,7 @@
 .. _details:
 
 Workflow Details
-================
+----------------
 
     "The details are not the details. They make the design"
     -- Charles Eames
@@ -113,7 +113,7 @@ Under the buttons to carry out these workflow operations the platform shows a su
 .. _columns:
 
 The Columns
------------
+^^^^^^^^^^^
 
 The data in a workflow is stored in a structure called *a table* that is made of rows and columns (similar to a spreadsheet). The details page basically shows information about the available columns.
 

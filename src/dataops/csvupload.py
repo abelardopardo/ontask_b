@@ -9,7 +9,6 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
-import dataops.pandas_db
 from dataops import ops, pandas_db
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
@@ -104,7 +103,7 @@ def csvupload1(request):
 
     # If the data frame does not have any unique key, it is not useful (no
     # way to uniquely identify rows). There must be at least one.
-    src_is_key_column = dataops.pandas_db.are_unique_columns(data_frame)
+    src_is_key_column = pandas_db.are_unique_columns(data_frame)
     if not any(src_is_key_column):
         form.add_error(
             'file',

@@ -15,7 +15,10 @@ from django.core.cache import cache
 from django.db import connection
 from sqlalchemy import create_engine
 
-from dataops.formula_evaluation import evaluate_node_sql
+from dataops.formula_evaluation import (
+    NodeEvaluation,
+    evaluate
+)
 from ontask import fix_pctg_in_name
 
 SITE_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -491,7 +494,8 @@ def get_table_cursor(pk, cond_filter, column_names):
     # See if the action has a filter or not
     fields = []
     if cond_filter is not None:
-        cond_filter, fields = evaluate_node_sql(cond_filter.formula)
+        cond_filter, fields = evaluate(cond_filter.formula,
+                                       NodeEvaluation.EVAL_SQL)
         if cond_filter:
             # The condition may be empty, in which case, nothing is needed.
             query += ' WHERE ' + cond_filter
@@ -646,7 +650,7 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names):
     # See if the action has a filter or not
     if cond_filter is not None:
         cond_filter, filter_fields = \
-            evaluate_node_sql(cond_filter.formula)
+            evaluate(cond_filter.formula, NodeEvaluation.EVAL_SQL)
         query += ' AND (' + cond_filter + ')'
         fields = fields + filter_fields
 
@@ -747,7 +751,7 @@ def get_filter_query(table_name, column_names, filter_exp):
     filter_txt = ''
     filter_fields = []
     if filter_exp:
-        filter_txt, filter_fields = evaluate_node_sql(filter_exp)
+        filter_txt, filter_fields = evaluate(filter_exp, NodeEvaluation.EVAL_SQL)
 
     # Build the query so far appending the filter and/or the cv_tuples
     if filter_txt:
@@ -799,7 +803,7 @@ def search_table_rows(workflow_id,
     filter_txt = ''
     filter_fields = []
     if pre_filter:
-        filter_txt, filter_fields = evaluate_node_sql(pre_filter)
+        filter_txt, filter_fields = evaluate(pre_filter, NodeEvaluation.EVAL_SQL)
 
     if cv_tuples:
         likes = []
@@ -898,7 +902,7 @@ def num_rows_by_name(table_name, cond_filter=None):
 
     fields = []
     if cond_filter is not None:
-        cond_filter, fields = evaluate_node_sql(cond_filter)
+        cond_filter, fields = evaluate(cond_filter, NodeEvaluation.EVAL_SQL)
         query += ' WHERE ' + cond_filter
 
     cursor = connection.cursor()
@@ -955,6 +959,7 @@ def check_wf_df(workflow):
             'Column {0} should be unique.'.format(col.name)
 
     return True
+
 
 def is_unique_column(df_column):
     """

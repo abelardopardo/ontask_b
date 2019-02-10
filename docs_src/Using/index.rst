@@ -35,49 +35,57 @@ The Workflow
     "But anyone who has experienced flow knows that the deep enjoyment it provides requires an equal degree of disciplined concentration."
     -― Mihaly Csikszentmihalyi
 
-The workflow in OnTask is simply a container that brings together the table, the operations to upload the data, and the actions to create the personalized content. The initial screen in OnTask shows the available workflows as shown in the following figure.
+The workflow in OnTask is an entity that contains the data table and the actions (personalized content, emails, surveys). The initial screen in OnTask shows the available workflows as ilustrated in the following figure.
 
 .. figure:: /scaptures/workflow_index.png
    :align: center
    :width: 100%
 
-Clicking in the word *Workflows* in the top menu brings you back to the list of workflows from any page in the application. Clicking in the book icon in the upper right side of the menu bar opens the documentation page.
+Clicking in the *Home* in the top menu bar brings you back to this page. Clicking in the book icon in the upper right side of the menu bar opens the documentation page.
 
-The screen includes the following operations:
+For every workflow available in the home screen the following operations are available:
 
 .. sidebar:: Going back
 
-   Remember that clicking in the *Workflow* word in the top menu corner *closes* the workflow and you see the list of available workflows again.
+   Clicking in the *Home* link at the top left corner *closes* brings you back to the list of available workflows **and** unlocks or the workflow you were manipulating up to that point.
 
-1. Create a new workflow: Clicking in the *New Workflow* button will ask you for the name and description of the element.
+.. _workflow_create:
+
+1. *New workflow* This button opens a dialog to introduce the name and description of a new workflow, and then go to the page to upload data.
 
 .. _workflow_import:
 
-2. Importing a file containing a previously exported workflow. Clicking in the *Import* button will ask you for the new for the new workflow, the file and will let you choose to import only the data, or the data and the actions as shown in the following figure
+2. *Import workflow*: This button opens a dialog requesting a workflow name and a file containing a previously exported OnTask workflow as shown in the following figure:
 
    .. figure:: /scaptures/workflow_import.png
       :align: center
       :width: 100%
 
-3. Open a workflow to work on it. This is perhaps the most common initial step. Once you open a workflow, all the operations are applied to it. The name of the current workflow is shown right under the top navigation bar as shown in the following figure.
+Each of your workflows is represented by a card as shown in the following figure:
+
+.. figure:: /scaptures/workflow_card.png
+   :align: center
+   :width: 60%
+
+The icons in the bottom part of this element allow you to perform the following operations:
+
+1. *Open a workflow*: Click in either the workflow box or the *Open* link. This operation opens the workflow and selects it for further manipulation. The name of the currently open workflow is always shown right under the top navigation bar as illustrated in the following figure.
 
    .. figure:: /scaptures/navigation_bar.png
       :align: center
       :width: 100%
 
-4. Rename the workflow (change either its name or its description).
+2. *Change name or description*: Click in this icon to change the name of the descxription given to the workflow.
 
-5. Clone a workflow. This operation will create an exact copy of the workflow with a name created by adding the previx *Copy_of_* to the current workflow name.
+3. *Create a duplicate*: This operation will create an exact copy of the workflow with the prefix *Copy_of_* added to the current workflow name.
 
-6. Flush all the data in the workflow. This operation maintains the workflow but it wipes out the data in the table.
+4. *Delete all data*: This operation removes the information and actions stored in the workflow (turns it into an empty workflow).
 
-7. Delete the workflow.
+5. *Delete the workflow*: Remove the workflow completely from the system.
 
-Once you open a workflow, it is locked and no other user can manipulate it (see :ref:`sharing a workflow <details_sharing>`). If you access a workflow and another user is currently using it, the platform will not allow you to see the data and will show who is holding the lock.
+Once you open a workflow, the platform *locks it* so that no other user can manipulate it (see :ref:`sharing a workflow <details_sharing>`). If you access a workflow and another user is currently using it, the platform will not allow you to see the data and will show who is holding the lock.
 
 The operations to manage a workflow all become visible once you select it by clicking on its name.
-
-.. include:: include_details.rst
 
 .. _dataops:
 
@@ -90,10 +98,10 @@ Data Table
 
 This section describes the operations to upload and merge data into the table. It may be the case that this task is already done, or it is done automatically before you work with a workflow. If this is the case, you may skip this section. The data operations page offers various options to upload and merge data to the table and the process is divided into several steps. This functionality is available from the *Details*, *Table* or *Actions* screens.
 
-Upload/Merge Data
------------------
+Upload Data
+-----------
 
-This functionality is used to upload new data in to the table, or merge new data with the one already existing in the table. There are three types of operations depending if the data is obtained form a CSV file, an Excel file, or a connection to a remote database.
+If the table in a workflow is empty, OnTask allows to upload data from various sources. If, on the other hand, the table already contains data, then OnTask performs a *merge* operation in which the existing data is combined with the new data.
 
 Upload CSV Files
 ^^^^^^^^^^^^^^^^
@@ -117,6 +125,18 @@ OnTask also supports the upload of data from Excel files.
 
 In this case the file is assumed to have multiple *Sheets* and one of them
 has to be selected to upload the data.
+
+.. _google_spreadsheet_file:
+
+Upload Google Spreadsheet Files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+OnTask allows you to upload a data table stored in a Google Spreadsheet that is publicly accessible.
+
+.. figure:: /scaptures/dataops_upload_gsheet.png
+   :align: center
+
+
 
 .. _sql_connection_run:
 
@@ -674,10 +694,20 @@ Once enabled, you may send the URL to the students (you may even use a personali
 
 These survey actions are ideal to collect information about any aspect of a course in a way that is centralized and available for further processing through personalized text actions. For example, users may choose from a pre-defined set of topics those that were more challenging. This information can then be used in a personalized text action to provide the adequate resources to each learner.
 
+
+.. _workflow_settings:
+
+Workflow Settings
+=================
+
+[SOME TEXT GOES HERE]
+
+.. include:: include_details.rst
+
 .. _scheduler:
 
-The Scheduler
-=============
+Scheduled Actions
+-----------------
 
    "I have no regular schedule. I get up whenever I can."
    -- Jimmy Wales
@@ -688,7 +718,7 @@ The *personalized text* and *personalized JSON* actions can be scheduled to exec
 .. _schedule_email:
 
 Scheduling a Personalized Text Action
--------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following figure shows the information requested to schedule the execution of a personalized text action (sending emails to learners):
 
@@ -730,7 +760,7 @@ Check/exclude emails
 .. _schedule_json:
 
 Scheduling a Personalized JSON Action
--------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following figure shows the information requested to schedule the execution of a personalized JSON action (sending JSON object to another platform):
 
@@ -752,7 +782,7 @@ Authentication Token
   The string to be use to authenticate with the external platform.
 
 The Scheduler Menu
-------------------
+^^^^^^^^^^^^^^^^^^
 
 The *Scheduler* in the top menu is a link to a page that shows the tasks scheduled for execution in the selected workflow.
 
@@ -763,8 +793,8 @@ The left-most column offers the operations to edit or delete the scheduled execu
 
 .. _logs:
 
-The Logs
-========
+View Logs
+---------
 
 The platform keeps a log of most of the operations that are executed when managing a workflow. These records are available through the *Logs* link in the navigation bar at the top of the screen.
 

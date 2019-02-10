@@ -19,8 +19,8 @@
                   title="{% trans 'URL for learners to introduce data' %}"
                 {% endif %}>
           <span class="fa fa-link"></span> {% trans 'URL' %}
-          {% if serve_enabled %}<span class="badge badge-dark">On</span>
-          {% else %}<span class="badge badge-light">Off</span>{% endif %}
+          {% if serve_enabled %}<span class="badge  badge-pill badge-dark">On</span>
+          {% else %}<span class="badge badge-pill badge-light">Off</span>{% endif %}
         </button>
       {% endif %}
       {% if action_tval == 'personalized_text' %}

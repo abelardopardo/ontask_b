@@ -1,27 +1,28 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import next
-from builtins import str
-from builtins import object
 import json
 import re
+from builtins import next
+from builtins import object
+from builtins import str
 
-# from datetimewidget.widgets import DateTimeWidget
+from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
+from django.conf import settings as ontask_settings
 from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteInplaceWidget
-from django.conf import settings as ontask_settings
 from validate_email import validate_email
-from django.utils.html import escape
 
-from core.widgets import OnTaskDateTimeInput
 from dataops.pandas_db import (
     execute_select_on_table, get_table_cursor,
     is_column_table_unique, get_table_data
 )
 from ontask import ontask_prefs, is_legal_name
-from ontask.forms import column_to_field, RestrictedFileField
+from ontask.forms import (
+    column_to_field, RestrictedFileField,
+    dateTimeWidgetOptions
+)
 from .models import Action, Condition
 
 # Field prefix to use in forms to avoid using column names (they are given by
@@ -97,7 +98,7 @@ class EditActionOutForm(forms.ModelForm):
                 widget=forms.Textarea(
                     attrs={
                         'rows': 1,
-                        'cols': 120,
+                        'cols': 80,
                         'placeholder': _('URL to send the personalized JSON')
                     }
                 )
@@ -242,8 +243,8 @@ class EnableURLForm(forms.ModelForm):
         fields = ('serve_enabled', 'active_from', 'active_to')
 
         widgets = {
-            'active_from': OnTaskDateTimeInput(),
-            'active_to': OnTaskDateTimeInput()
+            'active_from': DateTimePickerInput(options=dateTimeWidgetOptions),
+            'active_to': DateTimePickerInput(options=dateTimeWidgetOptions),
         }
 
 
@@ -549,8 +550,8 @@ class JSONActionForm(JSONBasicActionForm):
             attrs={
                 'rows': 1,
                 'cols': 120,
-                'placeholder':
-                    _('Authentication token to communicate with the platform')
+                # 'placeholder':
+                #     _('Authentication token to communicate with the platform')
             }
         )
     )

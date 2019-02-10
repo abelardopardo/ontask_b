@@ -1,0 +1,7 @@
+{% load i18n %}
+<button type="button" class="btn btn-outline-danger js-transform-diagnose"
+        data-url="{% url 'dataops:plugin_diagnose' id %}"
+        data-toggle="tooltip"
+        title="{% trans 'Show diagnostics for this plugin' %}">
+  <span class="fa fa fa-eye"></span> {% trans 'Diagnose' %}
+</button>

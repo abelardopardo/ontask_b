@@ -17,7 +17,7 @@ jquery = """<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>"""
 #
 bootstrap_css = \
     """<link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">"""
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">"""
 
 bootstrap_js = \
     """<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
@@ -37,15 +37,20 @@ datatables_bootstrap_js = \
     """<script type="text/javascript" src="//cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/r-2.2.2/fc-3.2.5/rr-1.2.4/sc-1.5.0/datatables.min.js"></script>"""
 
 #
-# Datetimepicker
+# Datetimepicker:
 #
 datetimepicker_css = \
-    """<link href="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">"""
+    """<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css" type="text/css" media="all" rel="stylesheet">
+    <link href="{0}" type="text/css" media="all" rel="stylesheet">""".format(
+        static('bootstrap_datepicker_plus/css/datepicker-widget.css')
+    )
 
 datetimepicker_js = \
-    """<script src="{0}"></script>
-       <script src="//cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>""".format(
-        static('site/js/moment-with-locales.js')
+    '<script type="text/javascript" src="{0}"></script>'.format(
+      static('site/js/moment-with-locales.js')
+    ) + """<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="{0}"></script>""".format(
+        static('bootstrap_datepicker_plus/js/datepicker-widget.js')
     )
 
 #

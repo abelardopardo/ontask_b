@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-23 10:04+0930\n"
+"POT-Creation-Date: 2019-02-08 17:31+1030\n"
 "PO-Revision-Date: 2018-07-01 16:25+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: es_ES <LL@li.org>\n"
@@ -17,35 +17,35 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: action/static/action/js/action.js:4
+#: action/static/action/js/action.js:27
 msgid "YOUR TEXT HERE"
 msgstr "SU TEXTO AQUÍ"
 
-#: static/html/_static/doctools.js:193
+#: static/html/_static/doctools.js:195
 msgid "Permalink to this headline"
 msgstr "Enlace a este título"
 
-#: static/html/_static/doctools.js:199
+#: static/html/_static/doctools.js:201
 msgid "Permalink to this definition"
 msgstr "Enlace a esta definición"
 
-#: static/html/_static/doctools.js:232
+#: static/html/_static/doctools.js:234
 msgid "Hide Search Matches"
 msgstr "Ocultar los resultados de la búsqueda"
 
-#: static/html/_static/searchtools.js:400
+#: static/html/_static/searchtools.js:121
 msgid "Searching"
 msgstr "Buscando"
 
-#: static/html/_static/searchtools.js:405
+#: static/html/_static/searchtools.js:126
 msgid "Preparing search..."
 msgstr "Preparando búsqueda"
 
-#: static/html/_static/searchtools.js:569
+#: static/html/_static/searchtools.js:290
 msgid "Search Results"
 msgstr "Buscar resultados"
 
-#: static/html/_static/searchtools.js:571
+#: static/html/_static/searchtools.js:292
 msgid ""
 "Your search did not match any documents. Please make sure that all words are "
 "spelled correctly and that you've selected enough categories."
@@ -53,19 +53,23 @@ msgstr ""
 "Su búsqueda no coincide con ningún document. Asegúrese de que las palabras "
 "están escritas correctamente y que ha seleccionado suficientes categorías."
 
-#: static/html/_static/searchtools.js:573
+#: static/html/_static/searchtools.js:294
 #, javascript-format
 msgid "Search finished, found %s page(s) matching the search query."
 msgstr "Se han encontrado %s página(s) que coinciden con su búsqueda."
 
-#: static/html/_static/searchtools.js:626
+#: static/html/_static/searchtools.js:347
 msgid ", in "
 msgstr ", en "
 
-#: static/site/js/site.js:13
-msgid "Click here to search for columns"
+#: static/site/js/site.js:21
+#, fuzzy
+#| msgid "Click here to search for columns"
+msgid "Click here to search"
 msgstr "Haga click aquí para buscar columnas"
 
-#: static/site/js/site.js:14
-msgid "No columns found"
+#: static/site/js/site.js:22
+#, fuzzy
+#| msgid "No columns found"
+msgid "No element found"
 msgstr "No se ha encontrado ninguna columna"

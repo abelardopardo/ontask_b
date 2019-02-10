@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function
 from django.test import TestCase
 
 from dataops import formula_evaluation
+from dataops.formula_evaluation import NodeEvaluation
 
 
 class HasVariableTest(TestCase):
@@ -63,7 +64,9 @@ class HasVariableTest(TestCase):
     def test_evaluate_formula(self):
 
         self.assertTrue(
-            formula_evaluation.evaluate_top_node(
-                self.formula1, {'Course_Code_a': 'df', 'ANOTHER': 'v2'}
+            formula_evaluation.evaluate(
+                self.formula1,
+                NodeEvaluation.EVAL_EXP,
+                {'Course_Code_a': 'df', 'ANOTHER': 'v2'}
             )
         )

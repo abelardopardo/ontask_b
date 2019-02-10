@@ -4,10 +4,10 @@ from __future__ import unicode_literals, print_function
 import os
 
 from django.conf import settings
-from django.shortcuts import reverse
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.webdriver.common.action_chains import ActionChains
 
 import test
 from dataops import pandas_db
@@ -408,7 +408,8 @@ class TableViews(test.OnTaskLiveTestCase):
 
         # Click in the link to see the table resulting from this view
         self.selenium.find_element_by_xpath(
-            "//table[@id='view-table']//td[1][normalize-space() = 'v1']"
+            "//table[@id='view-table']"
+            "//td[1][normalize-space() = 'v1']/../td[3]/div/a"
         ).click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
@@ -468,7 +469,8 @@ class TableViews(test.OnTaskLiveTestCase):
 
         # Check the table resulting from the view
         self.selenium.find_element_by_xpath(
-            "//table[@id='view-table']//td[1][normalize-space() = 'v2']"
+            "//table[@id='view-table']"
+            "//td[1][normalize-space() = 'v2']/../td[3]/div/a"
         ).click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
@@ -501,7 +503,10 @@ class TableViews(test.OnTaskLiveTestCase):
         self.wait_for_datatable('view-table_previous')
 
         # Click in the clone link of the first view
-        self.open_view_row_op('v1', 'Clone')
+        self.selenium.find_element_by_xpath(
+            "//table[@id='view-table']//tr/td[1][normalize-space() = 'v1']/"
+            "../td[3]/div/button[1]"
+        ).click()
         # Confirm view cloning
         self.selenium.find_element_by_xpath(
             "//div[@class='modal-footer']/button[normalize-space()='Clone "
@@ -511,7 +516,8 @@ class TableViews(test.OnTaskLiveTestCase):
 
         # Open the view with the clone
         self.selenium.find_element_by_xpath(
-            "//table[@id='view-table']//td[1][normalize-space() = 'Copy_of_v1']"
+            "//table[@id='view-table']"
+            "//td[1][normalize-space() = 'Copy_of_v1']/../td[3]/div/a"
         ).click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
@@ -556,7 +562,7 @@ class TableInsertRow(test.OnTaskLiveTestCase):
         self.go_to_table()
 
         # Click on the add row button
-        self.selenium.find_element_by_link_text('Add row').click()
+        self.selenium.find_element_by_link_text('Row').click()
 
         # Fill out the fields in the form
         for x in range(0,10):
@@ -602,7 +608,13 @@ class TableInsertRow(test.OnTaskLiveTestCase):
         )
 
         # Click in the Ops -> delete button -> Delete row
-        self.open_table_row_op(2, '100', 'Delete')
+        element = self.selenium.find_element_by_xpath(
+            "//table[@id='table-data']"
+            "//tr/td[2][normalize-space() = '100']/"
+            "../td[1]/div/button"
+        )
+        ActionChains(self.selenium).move_to_element(element).click().perform()
+        self.wait_for_modal_open()
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']//button[@type='submit']"
         ).click()

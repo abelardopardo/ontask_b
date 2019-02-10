@@ -51,11 +51,10 @@ class ViewTable(tables.Table):
         return format_html(
             """<a href="#" class="js-view-edit"
                   data-toggle="tooltip" data-url="{0}"
-                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""".format(
-                reverse('table:view_edit', kwargs={'pk': record['id']}),
-                _('Change the columns present in the view'),
-                record['name']
-            )
+                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""",
+            reverse('table:view_edit', kwargs={'pk': record['id']}),
+            _('Change the columns present in the view'),
+            record['name']
         )
 
     class Meta(object):
@@ -70,7 +69,6 @@ class ViewTable(tables.Table):
             'style': 'width: 100%;',
             'id': 'view-table'
         }
-
 
 def save_view_form(request, form, template_name):
     """
@@ -130,7 +128,6 @@ def save_view_form(request, form, template_name):
     data['html_redirect'] = ''  # Refresh the page
     return JsonResponse(data)
 
-
 def render_table_display_page(request, workflow, view, columns, ajax_url):
     """
     Function to render the content of the display page taking into account
@@ -163,7 +160,6 @@ def render_table_display_page(request, workflow, view, columns, ajax_url):
         context['view'] = view
 
     return render(request, 'table/display.html', context)
-
 
 def render_table_display_data(request, workflow, columns, formula,
                               view_id=None):
@@ -229,7 +225,8 @@ def render_table_display_data(request, workflow, columns, formula,
         items += 1
         new_element = {}
         if view_id:
-            stat_url = reverse('table:stat_row_view', kwargs={'pk': view_id})
+            stat_url = reverse('table:stat_row_view',
+                               kwargs={'pk': view_id})
         else:
             stat_url = reverse('table:stat_row')
 
@@ -239,7 +236,8 @@ def render_table_display_data(request, workflow, columns, formula,
                          '?key={0}&val={1}'.format(key_name, row[key_idx]),
              'edit_url': reverse('dataops:rowupdate') +
                          '?update_key={0}&update_val={1}'.format(key_name,
-                                                                 row[key_idx]),
+                                                                 row[
+                                                                     key_idx]),
              'delete_key': '?key={0}&value={1}'.format(key_name,
                                                        row[key_idx]),
              'view_id': view_id}
@@ -268,7 +266,6 @@ def render_table_display_data(request, workflow, columns, formula,
 
     return JsonResponse(data)
 
-
 @user_passes_test(is_instructor)
 def display(request):
     """
@@ -287,7 +284,6 @@ def display(request):
         workflow.columns.all(),
         reverse('table:display_ss')
     )
-
 
 @user_passes_test(is_instructor)
 @csrf_exempt
@@ -315,7 +311,6 @@ def display_ss(request):
         None
     )
 
-
 @user_passes_test(is_instructor)
 def display_view(request, pk):
     """
@@ -341,7 +336,6 @@ def display_view(request, pk):
         view.columns.all(),
         reverse('table:display_view_ss', kwargs={'pk': view.id})
     )
-
 
 @user_passes_test(is_instructor)
 @csrf_exempt
@@ -378,7 +372,6 @@ def display_view_ss(request, pk):
         view.formula,
         view.id
     )
-
 
 @user_passes_test(is_instructor)
 def row_delete(request):
@@ -438,7 +431,6 @@ def row_delete(request):
 
     return JsonResponse(data)
 
-
 @user_passes_test(is_instructor)
 def view_index(request):
     """
@@ -467,7 +459,6 @@ def view_index(request):
     context['table'] = ViewTable(views, orderable=False)
 
     return render(request, 'table/view_index.html', context)
-
 
 @user_passes_test(is_instructor)
 def view_add(request):
@@ -499,7 +490,6 @@ def view_add(request):
     return save_view_form(request,
                           form,
                           'table/includes/partial_view_add.html')
-
 
 @user_passes_test(is_instructor)
 def view_edit(request, pk):
@@ -547,7 +537,6 @@ def view_edit(request, pk):
                           form,
                           'table/includes/partial_view_edit.html')
 
-
 @user_passes_test(is_instructor)
 def view_delete(request, pk):
     """
@@ -593,7 +582,6 @@ def view_delete(request, pk):
         {'view': view},
         request=request)
     return JsonResponse(data)
-
 
 @user_passes_test(is_instructor)
 def view_clone(request, pk):
@@ -664,7 +652,6 @@ def view_clone(request, pk):
                           'new_view_name': view.name})
 
     return JsonResponse({'form_is_valid': True, 'html_redirect': ''})
-
 
 @user_passes_test(is_instructor)
 def csvdownload(request, pk=None):

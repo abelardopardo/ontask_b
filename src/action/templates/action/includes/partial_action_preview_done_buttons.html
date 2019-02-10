@@ -1,7 +1,7 @@
 {% load i18n %}
 <div id="action-preview-done" class="text-center">
   <button type="button"
-          class="btn btn-info js-action-preview {% if selected_rows == 0 %}disabled{% endif %}"
+          class="btn btn-outline-info js-action-preview {% if selected_rows == 0 %}disabled{% endif %}"
           data-url="{% url 'action:preview' action.id 1 %}"
           data-toggle="tooltip"
       title="{% trans 'See how is the content shown to each learner' %}">

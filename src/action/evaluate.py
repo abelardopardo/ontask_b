@@ -7,12 +7,10 @@ from builtins import zip
 import re
 import string
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
-from validate_email import validate_email
 
 import dataops.formula_evaluation
 from action.forms import EnterActionIn
@@ -241,10 +239,10 @@ def evaluate_action(action, extra_string=None,
 
             # Evaluate the condition
             condition_eval[condition['name']] = \
-                dataops.formula_evaluation.evaluate_top_node(
+                dataops.formula_evaluation.evaluate(
                     condition['formula'],
-                    row_values
-                )
+                    dataops.formula_evaluation.NodeEvaluation.EVAL_EXP,
+                    row_values)
 
         # Step 4: Create the context with the attributes, the evaluation of the
         # conditions and the values of the columns.

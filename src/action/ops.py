@@ -14,6 +14,7 @@ import random
 from io import BytesIO
 from time import sleep
 
+import html2text as html2text
 import pytz
 import requests
 from django.conf import settings as ontask_settings
@@ -508,7 +509,7 @@ def send_messages(user,
 
         # Get the plain text content and bundle it together with the HTML in
         # a message to be added to the list.
-        text_content = strip_tags(msg_body)
+        text_content = html2text.html2text(msg_body)
         msg = EmailMultiAlternatives(
             msg_subject,
             text_content,

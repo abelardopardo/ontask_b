@@ -446,10 +446,10 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         self.search_table_row_by_string('attribute-table', 2, 'value2')
 
         # Rename second attribute
-        self.open_dropdown_click_option(
-            '//table[@id="attribute-table"]//tr[2]/td[3]/div/button',
-            'Edit'
-        )
+        self.selenium.find_element_by_xpath(
+            "//tr/td[1][normalize-space() = 'key2']"
+        ).click()
+        self.wait_for_modal_open()
         self.selenium.find_element_by_id('id_key').clear()
         self.selenium.find_element_by_id('id_key').send_keys('newkey2')
         self.selenium.find_element_by_id('id_value').clear()
@@ -473,10 +473,10 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         self.go_to_attribute_page()
 
         # click the delete button in the second row
-        self.open_dropdown_click_option(
-            '//table[@id="attribute-table"]//tr[2]/td[3]/div/button',
-            'Delete'
-        )
+        self.selenium.find_element_by_xpath(
+            '//table[@id="attribute-table"]'
+            '//tr[2]/td[3]//button[contains(@class, "js-attribute-delete")]'
+        ).click()
         # Click in the delete confirm button
         self.selenium.find_element_by_xpath(
             "//div[@class='modal-footer']/button[2]"
@@ -551,7 +551,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
         )
         # Wait for the  page to reload.
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'js-attribute-create'))
+            EC.element_to_be_clickable((By.CLASS_NAME, 'js-share-create'))
         )
 
         # Value now should be in the table

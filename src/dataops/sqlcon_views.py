@@ -26,19 +26,24 @@ from workflow.ops import get_workflow
 
 
 class SQLConnectionTableAdmin(tables.Table):
+    operations = OperationsColumn(
+        verbose_name='',
+        template_file='dataops/includes/partial_sqlconn_adminop.html',
+        template_context=lambda record: {'id': record['id']}
+    )
+
     def render_name(self, record):
         return format_html(
-            """<a class="js-sqlconn-view" href="#"
-         data-url="{0}">{1}</a>""".format(
-                reverse('dataops:sqlconn_view', kwargs={'pk': record['id']}),
-                record['name']
-            )
+            """<a class="js-sqlconn-edit" href="#" data-url="{0}">{1}
+            <span class="fa fa fa-pencil"></span> </a>""",
+            reverse('dataops:sqlconn_edit', kwargs={'pk': record['id']}),
+            record['name']
         )
 
     class Meta(object):
         model = SQLConnection
         fields = ('name', 'description_txt')
-        sequence = ('name', 'description_txt')
+        sequence = ('name', 'description_txt', 'operations')
         attrs = {
             'class': 'table table-hover table-bordered',
             'style': 'width: 100%;',
@@ -55,11 +60,9 @@ class SQLConnectionTableRun(tables.Table):
 
     def render_name(self, record):
         return format_html(
-            """<a class="js-sqlconn-view" href="#"
-         data-url="{0}">{1}</a>""".format(
-                reverse('dataops:sqlconn_view', kwargs={'pk': record['id']}),
-                record['name']
-            )
+            '<a class="js-sqlconn-view" href="#" data-url="{0}">{1}</a>',
+            reverse('dataops:sqlconn_view', kwargs={'pk': record['id']}),
+            record['name']
         )
 
     class Meta(object):

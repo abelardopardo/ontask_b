@@ -156,14 +156,11 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('workflow_sql_connections_index.png')
 
         # click in the edit element
-        xpath_txt = \
-            "//table[@id='sqlconn-admin-table']" \
-            "//tr/td[1][text() = '{0}']/..".format('Remote server')
-        # Click in the dropdown
-        self.open_dropdown_click_option(
-            xpath_txt + "/td[1]/div/button",
-            'Edit'
-        )
+        self.selenium.find_element_by_xpath(
+            "//table[@id='sqlconn-admin-table']"
+            "//tr/td[1][normalize-space() = 'Remote server']"
+        ).click()
+        self.wait_for_modal_open()
 
         # Take picture of the modal
         self.modal_ss('workflow_superuser_sql_edit.png')
@@ -184,6 +181,9 @@ class ScreenTestFixture(ScreenTests):
         # List of workflows, navigation
         self.body_ss('workflow_index.png')
 
+        # Workdlow card
+        self.element_ss('//div[contains(@class, "ontask-card")]',
+                        'workflow_card.png')
         #
         # Navigation bar, details
         #
@@ -196,6 +196,7 @@ class ScreenTestFixture(ScreenTests):
         #
         # New column modal
         #
+        self.go_to_details()
         self.open_add_regular_column()
         self.modal_ss('workflow_add_column.png')
 
@@ -208,17 +209,11 @@ class ScreenTestFixture(ScreenTests):
         self.go_to_attribute_page()
         self.body_ss('workflow_attributes.png')
 
-        # Click back to the details page
-        self.go_to_details()
-
         #
         # Share
         #
         self.go_to_workflow_share()
         self.body_ss('workflow_share.png')
-
-        # Click back to the details page
-        self.go_to_details()
 
         #
         # EXPORT
@@ -228,9 +223,9 @@ class ScreenTestFixture(ScreenTests):
 
         # Click back to the details page
         self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/a[normalize-space()='Cancel']"
+            "//a[normalize-space()='Cancel']"
         ).click()
-        self.wait_for_datatable('column-table_previous')
+        self.wait_for_datatable('attribute-table_previous')
 
         #
         # RENAME
@@ -271,6 +266,9 @@ class ScreenTestFixture(ScreenTests):
 
         # Open Workflows page
         self.access_workflow_from_home_page(self.workflow_name)
+
+        # Go to workflow details
+        self.go_to_details()
 
         # Table of columns (separated)
         self.element_ss("//div[@id='column-table_wrapper']",
@@ -329,7 +327,7 @@ class ScreenTestFixture(ScreenTests):
                 (By.XPATH, "//input[@id='id_make_key_2']")
             )
         )
-        # Unckeck the columns that won't be keys
+        # Uncheck the columns that won't be keys
         for k_num in [2, 3, 40, 45, 46, 47, 49, 50, 51, 59, 61, 64]:
             self.selenium.find_element_by_id(
                 'id_make_key_{0}'.format(k_num)
@@ -381,7 +379,7 @@ class ScreenTestFixture(ScreenTests):
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Finish']"
         ).click()
-        self.wait_for_datatable('column-table_previous')
+        self.wait_for_datatable('table-data_previous')
 
         #
         # Dataops/Merge Excel Merge
@@ -389,6 +387,13 @@ class ScreenTestFixture(ScreenTests):
         # Go to Excel Upload/Merge
         self.go_to_excel_upload_merge_step_1()
         self.body_ss('dataops_upload_excel.png')
+
+        #
+        # Dataops/Merge Excel Merge
+        #
+        # Go to Excel Upload/Merge
+        self.go_to_google_sheet_upload_merge_step_1()
+        self.body_ss('dataops_upload_gsheet.png')
 
         # Back to details
         self.go_to_details()
@@ -401,6 +406,7 @@ class ScreenTestFixture(ScreenTests):
 
         # Click on the link RUN
         self.selenium.find_element_by_link_text('Run').click()
+        self.wait_for_page(None, 'sql-load-step1')
 
         # Picture of the RUN menu in SQL
         self.body_ss('dataops_SQL_run.png')
@@ -418,7 +424,7 @@ class ScreenTestFixture(ScreenTests):
         element = self.search_table_row_by_string('transform-table',
                                                   1,
                                                   'test_plugin_1')
-        element.find_element_by_link_text('Run').click()
+        element.find_element_by_xpath('td[2]/a').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -448,7 +454,7 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('table.png')
 
         # Picture of the buttons
-        self.element_ss("//div[@id='table-content']/div[1]",
+        self.element_ss("//div[@id='table-operation-buttons']",
                         'table_buttons.png')
 
         #
@@ -462,9 +468,7 @@ class ScreenTestFixture(ScreenTests):
         #
         # Specific table view
         #
-        element = self.search_table_row_by_string('view-table', 1, 'Midterm')
-        element.find_element_by_xpath('td[4]/div/a').click()
-        self.wait_for_datatable('table-data_previous')
+        self.open_view('Midterm')
 
         # Picture of the body
         self.body_ss('table_view_view.png')
@@ -472,9 +476,7 @@ class ScreenTestFixture(ScreenTests):
         # Click edit view definition
         self.go_to_table_views()
         element = self.search_table_row_by_string('view-table', 1, 'Midterm')
-        element.find_element_by_xpath(
-            "td//button[normalize-space()='Edit']"
-        ).click()
+        element.find_element_by_xpath("td[1]/a").click()
         self.wait_for_modal_open()
 
         # Take picture of the modal
@@ -499,7 +501,6 @@ class ScreenTestFixture(ScreenTests):
         #
         # Actions
         #
-        self.go_to_actions()
         self.body_ss('actions.png')
 
         #
@@ -511,26 +512,19 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('action_edit_action_in.png')
 
         # Open the preview
-        self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Preview']"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
-        )
+        self.open_preview()
         self.modal_ss('action_action_in_preview.png')
         self.cancel_modal()
+
+        # Done
+        # Submit the action
+        self.selenium.find_element_by_link_text('Done').click()
+        self.wait_for_datatable('action-table_previous')
 
         #
         # Run Action In
         #
-        self.selenium.find_element_by_xpath(
-            "//a[normalize-space()='Run']"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.ID, 'actioninrun-data_previous')
-            )
-        )
+        self.open_action_run('Student comments Week 1', True)
 
         # Picture of the body
         self.body_ss('action_run_action_in.png')
@@ -550,19 +544,14 @@ class ScreenTestFixture(ScreenTests):
         # Action In URL enable
         #
         self.go_to_actions()
-        element = self.search_action('Student comments Week 1')
-        element.find_element_by_xpath(
-            "td[5]/div/button[1]"
-        ).click()
-        self.wait_for_modal_open()
+        self.open_action_url('Student comments Week 1')
 
         # Take picture of the modal
         self.modal_ss('action_action_in_URL.png')
 
         # click in the OK button to return
         self.selenium.find_element_by_xpath("//button[@type='submit']").click()
-        # MODAL WAITING
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_modal_close()
 
         #
         # Edit Action Out
@@ -577,6 +566,7 @@ class ScreenTestFixture(ScreenTests):
         #
         # Edit filter in action out
         #
+        self.select_filter_tab()
         self.selenium.find_element_by_class_name('js-filter-edit').click()
         # Wait for the form to modify the filter
         WebDriverWait(self.selenium, 10).until(
@@ -592,16 +582,11 @@ class ScreenTestFixture(ScreenTests):
         #
         # Editor parts of action out
         #
-        self.element_ss("//h4[@id='filter-set']",
-                        'action_action_out_filterpart.png')
+        self.body_ss('action_action_out_filterpart.png')
 
         # Take picture of the condition set
-        self.element_ss("//div[@id='condition-set']",
-                        'action_action_out_conditionpart.png')
-
-        # Take picture of the html editor
-        self.element_ss("//div[@id='html-editor']",
-                        'action_action_out_editorpart.png')
+        self.select_condition_tab()
+        self.body_ss('action_action_out_conditionpart.png')
 
         # Open the preview
         self.selenium.find_element_by_xpath(
@@ -635,20 +620,19 @@ class ScreenTestFixture(ScreenTests):
         self.modal_ss('action_personalized_canvas_email_create.png')
 
         desc.send_keys(Keys.RETURN)
-        # Wait for the spinner to disappear, and then for the button to be
-        # clickable
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
-                (By.XPATH, "//h4[@id='filter-set']/div/button")
+                (By.ID, "action-out-editor")
             )
         )
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
+        self.select_filter_tab()
         self.create_filter('No activity in Week 2',
-                           '',
                            [('Days online 2', 'equal', '0')])
+        self.select_canvas_text_tab()
         self.selenium.find_element_by_id('id_content').send_keys(
             """Dear {{ GivenName }}
 
@@ -662,7 +646,7 @@ Course Coordinator""")
 
         # Save action and back to action index
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Save']"
+            "//button[normalize-space()='Close']"
         ).click()
         self.wait_for_datatable('action-table_previous')
 
@@ -681,7 +665,7 @@ Course Coordinator""")
         #
         # Send emails
         #
-        self.open_action_email('Midterm comments')
+        self.open_action_canvas_email('Midterm comments')
 
         # Picture of the body
         self.body_ss('action_email_request_data.png')
@@ -719,11 +703,7 @@ Course Coordinator""")
         # Action URL
         #
         self.go_to_actions()
-        element = self.search_table_row_by_string('action-table',
-                                                  1,
-                                                  'Midterm comments')
-        element.find_element_by_xpath("td[5]/div/button[1]").click()
-        self.wait_for_modal_open()
+        self.open_action_url('Midterm comments', 'URL Off')
 
         # Take picture of the modal
         self.modal_ss('action_URL_on.png')
@@ -746,11 +726,6 @@ Course Coordinator""")
 
         # Open Workflows page
         self.access_workflow_from_home_page(self.workflow_name)
-
-        #
-        # Actions
-        #
-        self.go_to_actions()
 
         #
         # Open Action Schedule and schedule the Personalized Text action

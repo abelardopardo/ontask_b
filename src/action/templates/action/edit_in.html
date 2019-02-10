@@ -68,8 +68,7 @@
         <a class="nav-link" id="parameters-tab" data-toggle="tab" href="#parameters" role="tab" aria-controls="parameters" aria-selected="false">Survey parameters</a>
       </li>
     </ul>
-    <br/>
-    <div class="tab-content" id="edit-survey-tab-content">
+    <div class="tab-content pt-3 pb-3 pl-2 pr-2 tab-wrapper" id="edit-survey-tab-content">
       <div class="tab-pane fade show active" id="questions" role="tabpanel" aria-labelledby="questions-tab">
         {% if not has_no_key %}
           <p class="alert-danger text-center">{% trans 'There must be at least one non-key column.' %}</p>
@@ -149,7 +148,7 @@
       </div>
       <div class="text-center">
         <button type="button"
-                class="btn btn-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
+                class="btn btn-outline-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
                 data-url="{% url 'action:preview' action.id 1 %}"
                 data-toggle="tooltip"
                 title="{% trans 'See the content as shown to each learner' %}">
@@ -160,14 +159,7 @@
                 data-toggle="tooltip"
                 data-placement="auto"
                 title="{% trans 'Save action and go back to action table' %}">
-          <span class="fa fa-check"></span> {% trans 'Done' %}
-        </a>
-        <a href="{% url 'action:run' action.id %}"
-           class="btn btn-outline-primary spin {% if not action.is_executable %}disabled{% endif %}"
-           data-toggle="tooltip"
-           title="{% trans 'Enter data manually' %}">
-          <span class="fa fa-rocket"></span> {% trans 'Run' %}
-        </a>
+          <span class="fa fa-check"></span> {% trans 'Done' %}</a>
       </div>
     </div>
   </div>

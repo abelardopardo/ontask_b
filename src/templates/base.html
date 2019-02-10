@@ -71,14 +71,10 @@
                   </a>
                   <div class="dropdown-menu">
                     <a class="dropdown-item spin" href="{{ workflow_ops }}"
-                       data-toggle="tooltip" title="Workflow operations"
-                       id="ontask-base-workflow">{% trans 'Workflow' %}</a>
-                    <a class="dropdown-item spin" href="{{ workflow_detail }}" id="ontask-base-columns"
-                       data-toggle="tooltip" title="Workflow and column details">{% trans 'Columns' %}</a>
-                    <a class="dropdown-item spin" href="{% url 'scheduler:index' %}"  id="ontask-base-scheduler"
-                    data-toggle="tooltip" title="Scheduled actions">{% trans 'Scheduler' %}</a>
-                    <a class="dropdown-item spin" href="{% url 'logs:index' %}" id="ontask-base-logs"
-                       data-toggle="tooltip" title="Execution Logs">{% trans 'View logs' %}</a>
+                       id="ontask-base-workflow">{% trans 'Workflow operations' %}</a>
+                    <a class="dropdown-item spin" href="{{ workflow_detail }}" id="ontask-base-columns">{% trans 'Column operations' %}</a>
+                    <a class="dropdown-item spin" href="{% url 'scheduler:index' %}"  id="ontask-base-scheduler">{% trans 'Scheduled actions' %}</a>
+                    <a class="dropdown-item spin" href="{% url 'logs:index' %}" id="ontask-base-logs">{% trans 'View logs' %}</a>
                   </div>
                 {% if user.is_superuser %}
                   <li class="nav-item">

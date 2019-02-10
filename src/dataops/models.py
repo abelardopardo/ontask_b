@@ -36,7 +36,7 @@ class PluginRegistry(models.Model):
 
     # Last time the file was checked (to detect changes)
     executed = models.DateTimeField(
-        _('Last execution'),
+        _('Last verified'),
         blank=True,
         null=True,
         default=None

@@ -4,15 +4,15 @@
 Installation process
 ********************
 
-OnTask is a Web application that manages data about learners to provide them with personalized support. For this reason, it is recommended an installation that observes a set of tight security restrictions. Some of these restrictions lie within the scope of the tool, but some other are part of the environment in which the application is installed. We strongly recommend to install OnTask in a web server that uses TTL encryption (HTTPS) to serve all the pages. The application requires exchanging with your browser sensitive information about your session, so the information should be encrypted.
+OnTask is a Web application that manages data about learners to offer them personalized support. For this reason the installation process complies with a set of tight security restrictions. Some of these restrictions lie within the scope of the tool, but others are part of the environment in which the application is installed. We strongly recommend to install OnTask in a web server that uses TTL encryption (HTTPS) to serve all the pages. The application requires exchanging sensitive information about your session with the browser, so the information should be encrypted.
 
 Requirements
 ============
 
 OnTask has been developed as a `Django <https://www.djangoproject.com/>`_ application. Django is a high-level, python-based web framework that supports a rich set of functionality typically required in applications like OnTask. But as with many other applications, OnTask requires a set of additional applications for its execution:
 
-- Python 2.7
-- Django 1.11
+- Python 2.7 **and** Python 3.6
+- Django 2.1.4
 - Additional Django modules (included in the requirements/base.txt) file
 - Redis 
 - PostgreSQL (version 9.5 or later)
@@ -23,6 +23,11 @@ Are you upgrading from a version < 2.8 to 2.8 or later?
 =======================================================
 
 If you are upgrading OnTask from a version lower than 2.8 to 2.8 or later, you need to disable the ``crontab`` used to execute tasks asynchronously from the web server. Starting in version 2.8 those tasks are executed by an application called ``celery`` that is managed using ``supervisor`` (see :ref:`scheduling_tasks`).
+
+Are you upgrading from version < 4.0 to 4.0 or later?
+=====================================================
+
+The upgrade to 4.0 or later requires version 2.7 and 3.6 both installed and available in the system. Django versions 2.0 and later require Python 3 but certain additional libraries used by OnTask have not been fully ported yet and still require the use of Python 2.7. Make sure both versions are available before proceeding to the upgrade.
 
 Installing the required tools
 =============================
@@ -67,19 +72,17 @@ Install and Configure PostgreSQL
    If the client does not connect to the database, review your configuration
    options.
 
-Install Python
---------------
+Install Python (2.7 and 3.6)
+----------------------------
 
-In the following sections we assume that you can open a command line interpreter and you can execute the python interpreter.
+In the following sections we assume that you can open a command line interpreter and you can execute the two python interpreters for versions 2.7 and 3.6.
 
 1. Install `python <https://www.python.org/>`_
 
-#. Verify that the python interpreter can run and has the right version (2.7)
-   using the command line interpreter.
+#. Verify that the two python interpreters can run and have each the right version (2.7 and 3.6) using the command line interpreter (typically ``python --version`` or ``python3 --version``).
 
 #. Install `pip <https://pip.pypa.io/en/stable/>`__ (the package may be called
-   ``python-pip``). This tool will be used by both Python and Django to install
-   additional libraries required to execute OnTask.
+   ``python-pip`` for Python 2.7 and ``python3-pip`` for Python 3.6). This tool will be used by both Python and Django to install additional libraries required to execute OnTask.
 
 Download, install and configure OnTask
 --------------------------------------
@@ -96,17 +99,17 @@ Download, install and configure OnTask
 
 #. If you plan to run a production instance of OnTask execute the command (you may need administrative privileges to execute this command)::
 
-     pip install -r requirements/production.txt
+     pip3 install -r requirements/production.txt
 
    Alternatively, if you plan to run a development instance of OnTask,
    execute the command::
 
-     pip install -r requirements/development.txt
+     pip3 install -r requirements/development.txt
 
    This command downloads  a set of libraries and modules and installs them as
    part of the python libraries in the system. 
 
-At this point you have the major modules in place. The next steps include the configuration of the Django environment to run OnTask. If you plan to install a production instance of OnTask, using a plain text editor (nano, vim, Emacs or similar) in a command line interpreter, open the file ``manage.py`` in the ``src`` folder of the project. Modify line 10 replacing the value ``"ontask.settings.development"`` by ``"ontask.settings.production"``. Save and close the file.
+At this point you have the major modules in place. The next steps include the configuration of the Django environment to run OnTask. If you plan to install a **development** instance of OnTask, using a plain text editor (nano, vim, Emacs or similar) in a command line interpreter, open the file ``manage.py`` in the ``src`` folder of the project. Modify line 10 replacing the value ``"ontask.settings.production"`` by ``"ontask.settings.development"``. Save and close the file.
 
 Using the same plain text editor create a file with name ``local.env`` in the folder ``src/ontask/settings`` with the following content (note there is no space between variable names and the equal sign)::
 
@@ -119,6 +122,10 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
    DATABASE_URL=postgres://[PSQLUSERNAME]:[PSQLPWD]@127.0.0.1:5432/ontask
    REDIS_URL=[YOUR REDIS URL]
    SECRET_KEY=
+   #
+   # LTI
+   #
+   LTI_OAUTH_CREDENTIALS=test=secret,test2=reallysecret
 
 #. Open a command interpreter and execute the following python command::
 
@@ -147,7 +154,7 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
 
 #. Open a command interpreter and execute the following python command::
 
-     python -c 'import random; import string; print("".join([random.SystemRandom().choice(string.digits + string.ascii_letters + string.punctuation) for i in range(100)]))'
+     python3 -c 'import random; import string; print("".join([random.SystemRandom().choice(string.digits + string.ascii_letters + string.punctuation) for i in range(100)]))'
 
    Copy the long string produced as output and add it at the end of the last
    line of the file ``local.env``. It should look something like (with
@@ -166,19 +173,19 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
 
 #. Execute the following command from the ``src`` folder to create the database internal structure::
 
-     python manage.py migrate
+     python3 manage.py migrate
 
    A few messages should appear on the screen related to the initialization of the database.
 
 #. Execute the following command to upload to the platform some initial data structures::
 
-     python manage.py runscript -v1 --traceback initial_data
+     python3 manage.py runscript -v1 --traceback initial_data
 
    The command should run without any error or exception. If you need to create additional users before deploying the platform, read the section :ref:`bulk_user_creation`.
 
 #. Execute the command to create a superuser account in OnTask::
 
-     python manage.py createsuperuser
+     python3 manage.py createsuperuser
 
    Remember the data that you enter in this step so that you use it when you enter OnTask with your browser.
 
@@ -191,12 +198,12 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
 #. From the ``src`` folder execute the following command to collect and install
    the static content::
 
-     python manage.py collectstatic
+     python3 manage.py collectstatic
 
 #. If you are running a production instance, execute the following
    command to check the status of the platform::
 
-     python manage.py check --deploy
+     python3 manage.py check --deploy
 
    The command should print just one warning about the configuration variable
    X_FRAME_OPTIONS. If you are running a development instance, you will get
@@ -205,10 +212,10 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
 
 #. Execute the following command to start the OnTask server::
 
-     python manage.py runserver
+     python3 manage.py runserver
 
    If there are no errors, the message on the screen should say that your
-   server is running in the url 127.0.0.1:800. However, if you open your
+   server is running in the url 127.0.0.1:8000. However, if you open your
    browser in that URL, an error will be shown. This error is normal and it
    is because the production version requires the pages to be served through
    SSL with a valid certificate in a conventional server.
@@ -225,11 +232,11 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
 
    Second, execute the following command from the ``src`` folder::
 
-     pip install -r requirements/development.txt
+     pip3 install -r requirements/development.txt
 
    Now, the command::
 
-     python manage.py runserver
+     python3 manage.py runserver
 
    will start the server in the URL 127.0.0.1:8000 and you should be able to
    access it normally with the browser.
@@ -253,13 +260,17 @@ has been configured in a previous step. This section explains how to set
 up the distributed task queue and make sure it is continuously executing in
 parallel with the web server.
 
-1. Make sure the binaries ``supervisord``, ``supervisorctl`` and ``celery``
+1. Install the application ``supervisor`` using **pip2**. This application makes sure the application Celery is continusouly running in the background and in communication with the server. As of now, the application can only run through Python 2 (an upgrade in the future may remove this anomaly). For this reason, the package has to be installed with the following command (using Python 2.7)::
+
+     pip2 install supervisor
+
+2. Check that the binaries ``supervisord``, ``supervisorctl`` and ``celery``
    are installed in your system.
 
-2. Go to the folder ``supervisor`` in the top of the project and edit the file
+3. Go to the folder ``supervisor`` in the top of the project and edit the file
    ``supervisor.conf``.
 
-3. The file configures ``supervisord`` to run in the background and prepare
+4. The file configures ``supervisord`` to run in the background and prepare
    two sets of processes for OnTask. You have two options to use this file:
 
    a) Use environment variables.
@@ -324,8 +335,18 @@ Upgrading OnTask
 ================
 
 If you have OnTask already configured and running, here are the steps to
-follow to upgrade to a new version (if you are upgrading from a version below
-2.8 to 2.8 or higher read :ref:`scheduling_tasks`).
+follow to upgrade to a new version. If you are upgrading from a version below
+2.8 to 2.8 or higher read :ref:`scheduling_tasks`.
+
+If you are upgrading from a version below 4.0, make sure that:
+
+- Versions 2.7 and 3 of Python are properly installed.
+
+- The library ``Celery`` is installed as part of the Python 3 system and the binary is executed using Python 3.
+
+- The library ``supervisord`` is installed as part of the Python 2.7 system and the binary is executed using Python 2.
+
+After verifying the previous requirements, proceed with the following steps.
 
 - Create a backup of the database to be able to restore the state of the tool
   before the upgrade process.

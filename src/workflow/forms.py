@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import next
-from builtins import str
-from builtins import object
 import json
+from builtins import next
+from builtins import object
+from builtins import str
 
 import pandas as pd
-# from datetimewidget.widgets import DateTimeWidget
+from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
@@ -15,12 +15,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from dataops import pandas_db
 from ontask import ontask_prefs, is_legal_name
-from ontask.forms import RestrictedFileField
-from core.widgets import OnTaskDateTimeInput
+from ontask.forms import RestrictedFileField, dateTimeWidgetOptions
 from .models import Workflow, Column
-
-
-# Options for the datetime picker used in column forms
 
 
 class WorkflowForm(forms.ModelForm):
@@ -185,14 +181,8 @@ class ColumnBasicForm(forms.ModelForm):
                   'active_from', 'active_to']
 
         widgets = {
-            'active_from': OnTaskDateTimeInput(),
-            'active_to': OnTaskDateTimeInput()
-            # 'active_from': DateTimeWidget(options=dateTimeOptions,
-            #                               usel10n=True,
-            #                               bootstrap_version=3),
-            # 'active_to': DateTimeWidget(options=dateTimeOptions,
-            #                             usel10n=True,
-            #                             bootstrap_version=3)
+            'active_from': DateTimePickerInput(options=dateTimeWidgetOptions),
+            'active_to': DateTimePickerInput(options=dateTimeWidgetOptions),
         }
 
 

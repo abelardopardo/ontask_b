@@ -86,21 +86,19 @@ class TutorialCaptures(ScreenTests):
         self.selenium.find_element_by_xpath(
             "//button[@name='Submit']"
         ).click()
-        self.wait_for_datatable('column-table_paginate')
-
-        # New details (with the first set of columns)
-        self.body_ss('tutorial_details_1.png')
-
-        # Go to table
-        self.go_to_table()
+        self.wait_for_datatable('table-data_paginate')
 
         # Take picture of the table
         self.body_ss('tutorial_initial_table.png')
 
-        # Go back to details to facilitate navigation
+        # Go back to details
         self.go_to_details()
 
+        # New details (with the first set of columns)
+        self.body_ss('tutorial_details_1.png')
+
         # Create a new view
+        self.go_to_table()
         self.go_to_table_views()
 
         # Button to add a view
@@ -151,13 +149,10 @@ class TutorialCaptures(ScreenTests):
         element = self.search_table_row_by_string('table-data',
                                                   2,
                                                   'ckrn7263@bogus.com')
-        element.find_element_by_xpath(
-            "td/div/button[normalize-space()='Operations']"
-        ).click()
-        element.find_element_by_xpath(
-            "td/div/ul/li/a[normalize-space()='Statistics']"
-
-        ).click()
+        stat_page = element.find_element_by_xpath(
+            "td//a[contains(@href, 'stat_row')]"
+        ).get_attribute('href')
+        self.selenium.get(stat_page)
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
                 (By.XPATH,
@@ -258,7 +253,7 @@ class TutorialCaptures(ScreenTests):
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Finish']"
         ).click()
-        self.wait_for_datatable('column-table_previous')
+        self.wait_for_datatable('table-data_previous')
 
         #
         # Create PERSONALISED ACTION.
@@ -282,7 +277,7 @@ class TutorialCaptures(ScreenTests):
         # clickable
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
-                (By.XPATH, "//h4[@id='filter-set']/div/button")
+                (By.ID, "action-out-editor")
             )
         )
         WebDriverWait(self.selenium, 10).until_not(
@@ -308,6 +303,7 @@ class TutorialCaptures(ScreenTests):
                         'tutorial_personalized_text_editor_with_column.png')
 
         # Create the first condition
+        self.select_condition_tab()
         self.create_condition(
             'Program is FASS',
             '',
@@ -319,6 +315,7 @@ class TutorialCaptures(ScreenTests):
 
         self.cancel_modal()
 
+        self.select_text_tab()
         self.selenium.execute_script(
             "$('#id_content').summernote('code', '');"
             "$('#id_content').summernote("
@@ -339,6 +336,7 @@ class TutorialCaptures(ScreenTests):
                         'tutorial_personalized_text_condition_inserted.png')
 
         # Create the remaining conditions
+        self.select_condition_tab()
         self.create_condition('Program is FSCI',
                               '',
                               [('Program', 'equal', 'FSCI')]
@@ -353,6 +351,7 @@ class TutorialCaptures(ScreenTests):
                               )
 
         # Insert additional sentences for each program
+        self.select_text_tab()
         self.selenium.execute_script(
             "$('#id_content').summernote('code', '');"
             "$('#id_content').summernote("
@@ -406,8 +405,8 @@ class TutorialCaptures(ScreenTests):
                         'tutorial_personalized_text_condition_inserted2.png')
 
         # Open the filter condition
+        self.select_filter_tab()
         self.create_filter('Full time attendance',
-                           '',
                            [('Attendance', 'equal', 'Full Time')])
         # Open it again for the picture
         self.open_filter()
@@ -432,18 +431,12 @@ class TutorialCaptures(ScreenTests):
 
         # Save action and back to action index
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Save']"
+            "//button[normalize-space()='Close']"
         ).click()
         self.wait_for_datatable('action-table_previous')
 
         # Click in the email button
-        element = self.search_action('Program advice')
-        element.find_element_by_link_text('Email').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//button[normalize-space()='Next']")
-            )
-        )
+        self.open_action_run('Program advice')
 
         # Set the various fields in the form to send the email
         self.selenium.find_element_by_id('id_subject').send_keys(
@@ -467,9 +460,8 @@ class TutorialCaptures(ScreenTests):
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Preview']"
         ).click()
-        WebDriverWait(self.selenium, 10).until(
-            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
-        )
+        self.wait_for_modal_open("//div[@id='preview-body']")
+
         self.modal_ss('tutorial_email_preview.png')
 
         self.cancel_modal()
@@ -503,11 +495,7 @@ class TutorialCaptures(ScreenTests):
         self.wait_for_datatable('action-table_previous')
 
         # Click in the URL link
-        element = self.search_action('Program advice')
-        element.find_element_by_xpath(
-            "//button[contains(normalize-space(), 'URL')]"
-        ).click()
-        self.wait_for_modal_open()
+        self.open_action_url('Program advice', 'URL Off')
 
         # Capture the modal with the URL
         self.modal_ss('tutorial_personalzed_text_URL.png')
@@ -518,13 +506,7 @@ class TutorialCaptures(ScreenTests):
         #
         # Download ZIP (for Moodle)
         #
-        element = self.search_action('Program advice')
-        element.find_element_by_link_text('ZIP').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//button[normalize-space()='Next']")
-            )
-        )
+        self.open_action_zip('Program advice')
 
         # Select the key column
         select = Select(self.selenium.find_element_by_id(
@@ -572,9 +554,11 @@ class TutorialCaptures(ScreenTests):
         desc.send_keys(Keys.RETURN)
         # Wait for the spinner to disappear, and then for the button to be
         # clickable
+        # Wait for the spinner to disappear, and then for the button to be
+        # clickable
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
-                (By.XPATH, "//h4[@id='filter-set']/div/button")
+                (By.ID, "action-out-editor")
             )
         )
         WebDriverWait(self.selenium, 10).until_not(
@@ -588,6 +572,7 @@ class TutorialCaptures(ScreenTests):
                               '',
                               [('Total', 'greater or equal', '50')])
 
+        self.select_json_text_tab()
         self.selenium.find_element_by_id('id_content').send_keys(
             """{
   "sid": {{ SID }},
@@ -606,19 +591,14 @@ class TutorialCaptures(ScreenTests):
         self.body_ss('tutorial_personalized_json_editor.png')
 
         # Open the preview
-        self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Preview']"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
-        )
+        self.open_preview()
         self.modal_ss('tutorial_personalized_json_preview.png')
 
         self.cancel_modal()
 
         # Save action and back to action index
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Save']"
+            "//button[normalize-space()='Close']"
         ).click()
         self.wait_for_datatable('action-table_previous')
 
@@ -644,7 +624,7 @@ class TutorialCaptures(ScreenTests):
         # clickable
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
-                (By.XPATH, "//h4[@id='filter-set']/div/button")
+                (By.XPATH, "//*[@id='action-in-editor']")
             )
         )
         WebDriverWait(self.selenium, 10).until_not(
@@ -716,14 +696,15 @@ class TutorialCaptures(ScreenTests):
         self.wait_close_modal_refresh_table('column-selected-table_previous')
 
         # Click in the key-select
+        self.select_parameters_tab()
+
+        # Select email column as key column
+        self.select_parameters_tab()
         select = Select(self.selenium.find_element_by_id(
             'select-key-column-name'))
         select.select_by_visible_text('email')
-        # Wait for spinner, and then refresh
-        WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
-        # Wait for spinner, and then refresh
+        # Table disappears (page is updating) -- Wait for spinner, and then
+        # refresh
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
@@ -732,12 +713,7 @@ class TutorialCaptures(ScreenTests):
         self.body_ss('tutorial_survey_editor2.png')
 
         # Click the preview button
-        self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Preview']"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
-        )
+        self.open_preview()
         self.modal_ss('tutorial_survey_preview.png')
 
         self.cancel_modal()
@@ -749,29 +725,10 @@ class TutorialCaptures(ScreenTests):
         #
         # Create an new action combining existing data with survey ata
         #
-        self.selenium.find_element_by_class_name('js-create-action').click()
-        self.wait_for_modal_open()
-
-        # Set the name, description and type of the action
-        self.selenium.find_element_by_id('id_name').send_keys('More Strategies')
-        desc = self.selenium.find_element_by_id('id_description_text')
-        # Select the action type
-        select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.PERSONALIZED_TEXT)
-        desc.send_keys('')
-        desc.send_keys(Keys.RETURN)
-        # Wait for the spinner to disappear, and then for the button to be
-        # clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located(
-                (By.XPATH, "//h4[@id='filter-set']/div/button")
-            )
-        )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.create_new_personalized_text_action('More Strategies', '')
 
         # Create the conditions for those that failed the exam
+        self.select_condition_tab()
         topics = [x.strip() for x in question_values.split(',')]
         for topic in topics:
             self.create_condition(
@@ -790,6 +747,7 @@ class TutorialCaptures(ScreenTests):
             )
 
         # Action editor
+        self.select_text_tab()
         self.selenium.execute_script(
             """$('#id_content').summernote(
                    'editor.insertText', "Dear {{ GivenName }}");""")
@@ -824,8 +782,8 @@ class TutorialCaptures(ScreenTests):
                    'editor.insertText', "Kind regards -- Jane Doe");""")
 
         # Create the filter
+        self.select_filter_tab()
         self.create_filter('Complete data',
-                           '',
                            [('Survey Q1', 'is not null', None),
                             ('Total', 'is not null', None)])
 
@@ -835,11 +793,12 @@ class TutorialCaptures(ScreenTests):
         self.cancel_modal()
 
         # Action editor
+        self.select_text_tab()
         self.body_ss('tutorial_personalized_text_and_survey.png')
 
         # Save action and back to action index
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Save']"
+            "//button[normalize-space()='Close']"
         ).click()
         self.wait_for_datatable('action-table_previous')
 

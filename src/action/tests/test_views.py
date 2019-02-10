@@ -350,9 +350,6 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page(self.wflow_name)
 
-        # Goto the action page
-        self.go_to_actions()
-
         # click in the action page
         self.open_action_edit(self.action_name)
 
@@ -371,7 +368,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Create filter.
         self.select_filter_tab()
-        self.create_filter(None, 'fdesc', [('age', 'less or equal', '12.1')])
+        self.create_filter('fdesc', [('age', 'less or equal', '12.1')])
 
         # Make sure the content has the correct text
         self.assertIn(
@@ -382,11 +379,13 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         )
 
         # insert the second mark
+        self.select_text_tab()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "mark2");"""
         )
 
         # Modify the filter. Click in the edit filter button
+        self.select_filter_tab()
         self.edit_filter(None, '', [])
 
         # Make sure the content has the correct text
@@ -398,11 +397,13 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         )
 
         # insert the third mark
+        self.select_text_tab()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "mark3");"""
         )
 
         # Click in the more ops and then the delete filter button
+        self.select_filter_tab()
         self.delete_filter()
 
         self.assertIn(
@@ -412,6 +413,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
             )
         )
         # insert the first mark
+        self.select_text_tab()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "cmark1");"""
         )
@@ -421,6 +423,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
                               'fdesc',
                               [('age', 'less or equal', '12.1')])
 
+        self.select_text_tab()
         self.assertIn(
             "cmark1",
             self.selenium.execute_script(
@@ -437,6 +440,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.edit_condition('fname', 'fname2', '', [])
 
         # Make sure the content has the correct text
+        self.select_text_tab()
         self.assertIn(
             "cmark2",
             self.selenium.execute_script(
@@ -454,6 +458,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.delete_condition('fname2')
 
         # Make sure the content has the correct text
+        self.select_text_tab()
         self.assertIn(
             "cmark3",
             self.selenium.execute_script(
@@ -501,7 +506,7 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
         self.create_new_survey_action('new action in', '')
 
         # Click in the add rule button (the filter is initially empty)
-        self.create_filter(None, '', [('registered', None, False)])
+        self.create_filter('', [('registered', None, False)])
         self.wait_close_modal_refresh_table('column-selected-table_previous')
 
         # Check that the filter is working properly
@@ -534,8 +539,7 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
         self.wait_for_datatable('action-table_previous')
 
         # Run the action
-        self.open_action_run('new action in')
-        self.wait_for_datatable('actioninrun-data_previous')
+        self.open_action_run('new action in', True)
 
         # Enter data for the remaining user
         self.selenium.find_element_by_link_text("student02@bogus.com").click()

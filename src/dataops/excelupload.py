@@ -7,7 +7,7 @@ import pandas as pd
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 import dataops.pandas_db
 from dataops import ops
@@ -101,7 +101,7 @@ def excelupload1(request):
                     pass
     except Exception as e:
         form.add_error('file',
-                       _('File could not be processed ({0})').format(e))
+                       ugettext('File could not be processed ({0})').format(e))
         return render(request,
                       'dataops/upload1.html',
                       {'form': form,
@@ -129,7 +129,7 @@ def excelupload1(request):
         form.add_error(
             'file',
             _('The data has no column with unique values per row. '
-            'At least one column must have unique values.'))
+              'At least one column must have unique values.'))
         return render(request, 'dataops/upload1.html',
                       {'form': form,
                        'dtype': 'Excel',

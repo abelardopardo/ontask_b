@@ -93,10 +93,10 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
 
         # Delete the existing one and confirm deletion
         # click the delete button in the second row
-        self.open_dropdown_click_option(
-            '//table[@id="attribute-table"]//tr[1]/td[3]/div/button',
-            'Delete'
-        )
+        self.selenium.find_element_by_xpath(
+            '//table[@id="attribute-table"]'
+            '//tr[1]/td[3]//button[contains(@class, "js-attribute-delete")]'
+        ).click()
         # Click in the delete confirm button
         self.selenium.find_element_by_xpath(
             "//div[@class='modal-footer']/button[2]"
@@ -215,11 +215,9 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
                               [(symbols, "begins with", "C")])
 
         # Create the filter
-        self.create_filter(None,
-                           '',
-                           [(symbols + "2", "doesn't begin with", "x")])
+        self.create_filter('', [(symbols + "2", "doesn't begin with", "x")])
 
-       # Click the preview button
+        # Click the preview button
         self.select_text_tab()
         self.selenium.find_element_by_class_name('js-action-preview').click()
         WebDriverWait(self.selenium, 10).until(
@@ -308,8 +306,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.wait_for_datatable('action-table_previous')
 
         # Click in the run link
-        self.open_action_run('action in')
-        self.wait_for_datatable('actioninrun-data_previous')
+        self.open_action_run('action in', True)
 
         # Click on the first value
         self.selenium.find_element_by_link_text("student01@bogus.com").click()
@@ -667,6 +664,12 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
 
         # Provide the execution data
         self.selenium.find_element_by_xpath("//input[@type='text']").click()
+        # Wait for the column eleemnt to open
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.NAME, "columns"),
+            )
+        )
         self.selenium.find_element_by_name("columns").click()
         self.selenium.find_element_by_xpath(
             "(//input[@name='columns'])[2]"
@@ -752,6 +755,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
 
         # End of session
         self.logout()
+
 
 class DataopsMerge(test.OnTaskLiveTestCase):
     wf_name = 'Testing Merge'
@@ -843,7 +847,6 @@ class DataopsMerge(test.OnTaskLiveTestCase):
             "//button[normalize-space()='Finish']"
         ).click()
         self.wait_for_datatable('table-data_previous')
-
 
     def test_01_merge_inner(self):
         self.template_merge('inner')
