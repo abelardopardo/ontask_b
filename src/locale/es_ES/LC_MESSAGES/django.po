@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-08 17:31+1030\n"
-"PO-Revision-Date: 2018-11-20 08:21+1030\n"
+"PO-Revision-Date: 2019-02-08 17:56+1030\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: accounts/forms.py:17
 msgid "Email address"
@@ -333,10 +333,8 @@ msgid "Values to exclude"
 msgstr "Valores a excluir"
 
 #: action/forms.py:515
-#, fuzzy
-#| msgid "Check/exclude users before sending?"
 msgid "Check/exclude items before sending?"
-msgstr "¿Comprobar/excluir usuarios antes de enviar?"
+msgstr "¿Comprobar/excluir elementos antes de enviarlos?"
 
 #: action/forms.py:546 scheduler/forms.py:170
 msgid "Authentication Token"
@@ -359,16 +357,12 @@ msgid "Name of the Canvas host to send the messages"
 msgstr ""
 
 #: action/forms.py:605
-#, fuzzy
-#| msgid "Column with random values"
 msgid "Column with the Canvas ID"
-msgstr "Columna con valores aleatorios"
+msgstr "Columna con identificadores de usuario Canvas"
 
 #: action/forms.py:607
-#, fuzzy
-#| msgid "Check/exclude users before sending?"
 msgid "Check/Exclude Canvas IDs before sending?"
-msgstr "¿Comprobar/excluir usuarios antes de enviar?"
+msgstr "¿Comprobar/excluir identificadores de Canvas antes de enviar?"
 
 #: action/forms.py:637 workflow/forms.py:454
 msgid "File"
@@ -383,10 +377,8 @@ msgid "Personalized text"
 msgstr "Texto personalizado"
 
 #: action/models.py:47
-#, fuzzy
-#| msgid "Personalized text"
 msgid "Personalized Canvas Email"
-msgstr "Texto personalizado"
+msgstr "Email Canvas Personalizado"
 
 #: action/models.py:48
 msgid "Survey"
@@ -485,32 +477,25 @@ msgid "An error occurred when sending your notification: {0}"
 msgstr "Se ha produciro un error al enviar la notificación: {0}"
 
 #: action/ops.py:700
-#, fuzzy
-#| msgid "Unable to save column information"
 msgid "Unable to find OAuth Information Record"
-msgstr "Incapaz de guardar la información de la columna"
+msgstr "No se ha encontrado información de OAuth para este elemento"
 
 #: action/ops.py:709
-#, fuzzy
-#| msgid "Incorrect execution"
 msgid "Incorrect execution due to absence of token"
-msgstr "Ejecución incorrecta"
+msgstr "Ejecución incorrecta debido a la ausencia de token"
 
 #: action/ops.py:757
-#, fuzzy
-#| msgid "Password change successful"
 msgid "Message successfuly sent"
-msgstr "Cambio de clave realizado"
+msgstr "Mensaje enviado"
 
 #: action/ops.py:771
 msgid "OAuth token refreshed"
 msgstr ""
 
 #: action/ops.py:796
-#, fuzzy, python-brace-format
-#| msgid "Unable to import action: {0}"
+#, python-brace-format
 msgid "Unable to deliver message (code {0})"
-msgstr "No se puede importar la acción: {0}"
+msgstr "No se puede enviar el mensaje: (código {0})"
 
 #: action/ops.py:889
 #, python-brace-format
@@ -586,10 +571,7 @@ msgid "Action scheduled for execution"
 msgstr "Acción planificada para su ejecución"
 
 #: action/templates/action/action_done.html:17
-#, fuzzy, python-format
-#| msgid ""
-#| "You may check the status in\n"
-#| "        log record number %(log_id)s."
+#, python-format
 msgid ""
 "You may check the status in\n"
 "      log number %(log_id)s."
@@ -749,25 +731,6 @@ msgid "A ZIP with %(n)s files will be created."
 msgstr "Se creará un ZIP con %(n)s ficheros."
 
 #: action/templates/action/action_zip_step1.html:37
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "        This function creates a ZIP with one HTML file for each user "
-#| "selected by the action.\n"
-#| "        The file contains the personalised text as shown when using the "
-#| "\"Preview\" button.\n"
-#| "        The file name is created with the values of the two selected "
-#| "columns followed by\n"
-#| "        the suffix. If you plan to use the ZIP to use as file feedback in "
-#| "Moodle, the first\n"
-#| "        column must contain values of the form \"Participant [number]\" "
-#| "and the second must\n"
-#| "        be the user's full name. These columns can be\n"
-#| "        obtained by downloading first the grading CSV file from the "
-#| "Moodle assignment,\n"
-#| "        merge them into the workflow, and then use them to create this "
-#| "ZIP and upload it.\n"
-#| "        "
 msgid ""
 "\n"
 "      This function creates a ZIP with one HTML file for each user selected "
@@ -805,10 +768,8 @@ msgstr ""
 "    "
 
 #: action/templates/action/edit_in.html:7
-#, fuzzy
-#| msgid "Survey"
 msgid "Edit Survey"
-msgstr "Questionario"
+msgstr "Editar Questionario"
 
 #: action/templates/action/edit_in.html:40
 msgid "No columns selected."
@@ -829,16 +790,12 @@ msgid "There must be at least one non-key column."
 msgstr "Debe haber al menos una columna que no sea clave."
 
 #: action/templates/action/edit_in.html:77
-#, fuzzy
-#| msgid "All items should have non-empty descriptions."
 msgid "All questions should have non-empty descriptions."
-msgstr "Todos los items deberían tener descripciones."
+msgstr "Todas las preguntas deben tener descripciones."
 
 #: action/templates/action/edit_in.html:81
-#, fuzzy
-#| msgid "Insert in text"
 msgid "Insert existing question"
-msgstr "Insertar en el texto"
+msgstr "Insertar pregunta ya creada"
 
 #: action/templates/action/edit_in.html:91
 msgid "Add a new question to the action"
@@ -890,10 +847,8 @@ msgid "Done"
 msgstr "Terminar"
 
 #: action/templates/action/edit_personalized_canvas_email.html:7
-#, fuzzy
-#| msgid "Edit Personalized Text"
 msgid "Edit Personalized Canvas Email"
-msgstr "Editar la información personal"
+msgstr "Editar Email de Canvas Personalizado"
 
 #: action/templates/action/edit_personalized_json.html:7
 #: action/templates/action/edit_personalized_text.html:7
@@ -905,8 +860,6 @@ msgid "Personalized Text"
 msgstr "Texto personalizado"
 
 #: action/templates/action/edit_personalized_text.html:45
-#, fuzzy
-#| msgid "Filter learners"
 msgid "Filter Learners"
 msgstr "Filtrar estudiantes"
 
@@ -931,10 +884,8 @@ msgid "Description:"
 msgstr "Descripción:"
 
 #: action/templates/action/export_ask.html:11
-#, fuzzy
-#| msgid "Type"
 msgid "Type: "
-msgstr "Tipo"
+msgstr "Tipo: "
 
 #: action/templates/action/export_ask.html:12
 msgid "Content"
@@ -962,10 +913,8 @@ msgstr "Exportar acción"
 
 #: action/templates/action/export_done.html:13
 #: workflow/templates/workflow/export_done.html:13
-#, fuzzy
-#| msgid "Your ZIP will start to download shortly."
 msgid "Your download will start shortly"
-msgstr "El fichero ZIP se descargará en breve."
+msgstr "Su descarga comenzará en breve"
 
 #: action/templates/action/import.html:7 action/templates/action/import.html:13
 #: action/templates/action/index.html:67
@@ -1030,18 +979,14 @@ msgid "Update"
 msgstr "Actualizar"
 
 #: action/templates/action/includes/partial_action_edit_out_attributes_columns.html:4
-#, fuzzy
-#| msgid "Column Value"
 msgid "Insert Column Value"
-msgstr "Valor de la columna"
+msgstr "Añadir valor de columna"
 
 #: action/templates/action/includes/partial_action_edit_out_attributes_columns.html:11
 msgid "Use condition in highlighted text"
 msgstr ""
 
 #: action/templates/action/includes/partial_action_edit_out_attributes_columns.html:19
-#, fuzzy
-#| msgid "New Attribute"
 msgid "Insert Attribute"
 msgstr "Añadir attributo"
 
@@ -1054,8 +999,6 @@ msgid "Send personalised JSONs"
 msgstr "Enviar objetos JSON personalizados"
 
 #: action/templates/action/includes/partial_action_operations.html:6
-#, fuzzy
-#| msgid "Send personalised emails"
 msgid "Send personalised text"
 msgstr "Enviar mensajes personalizados"
 
@@ -1149,8 +1092,6 @@ msgid "Save"
 msgstr "Guardar"
 
 #: action/templates/action/includes/partial_action_preview_done_buttons.html:18
-#, fuzzy
-#| msgid "Save action and go back to action table"
 msgid "Save and go back to the action table"
 msgstr "Guardar acción y volver a la tabla de acciones"
 
@@ -1207,10 +1148,8 @@ msgid "Create an exact duplicate of this question"
 msgstr "Crear un duplicado exacto de esta pregunta"
 
 #: action/templates/action/includes/partial_column_selected_operations.html:10
-#, fuzzy
-#| msgid "Remove question from action"
 msgid "Remove question from this survey"
-msgstr "Borrar la pregunta de la acción"
+msgstr "Borrar la pregunta del cuestionario"
 
 #: action/templates/action/includes/partial_condition_addedit.html:15
 #: action/templates/action/includes/partial_condition_addedit.html:34
@@ -1255,10 +1194,8 @@ msgid "Define a text condition to insert in the text body below."
 msgstr "Definir una condición textual para insertar en el mensaje debajo."
 
 #: action/templates/action/includes/partial_condition_tab.html:9
-#, fuzzy
-#| msgid "Text Conditions"
 msgid "New Condition"
-msgstr "Condiciones en el texto"
+msgstr "Nueva condición"
 
 #: action/templates/action/includes/partial_condition_tab.html:17
 #, python-format
@@ -1269,10 +1206,8 @@ msgstr[1] "(%(n)s estudiantes)"
 
 #: action/templates/action/includes/partial_condition_tab.html:19
 #: action/templates/action/includes/partial_filter_tab.html:11
-#, fuzzy
-#| msgid "formula"
 msgid "Formula"
-msgstr "fórmula"
+msgstr "Fórmula"
 
 #: action/templates/action/includes/partial_condition_tab.html:26
 #, python-format
@@ -1288,14 +1223,9 @@ msgid "Delete the condition"
 msgstr "Borrar la condición"
 
 #: action/templates/action/includes/partial_condition_tab.html:46
-#, fuzzy
-#| msgid ""
-#| "Create conditions to control the text in the\n"
-#| "      body below (optional)"
 msgid "Create conditions to show/hide text in the message (optional)"
 msgstr ""
-"Crear condiciones para controlar el texto en el\n"
-"        cuerpo del mensaje debajo (opcional)"
+"Crear condiciones para mostrar/ocultar el texto en el mensaje (opcional)"
 
 #: action/templates/action/includes/partial_filter_addedit.html:13
 #: action/templates/action/includes/partial_filter_addedit.html:28
@@ -1307,10 +1237,8 @@ msgid "Edit filter"
 msgstr "Editar perfil"
 
 #: action/templates/action/includes/partial_filter_addedit.html:20
-#, fuzzy
-#| msgid "The action will execute in %(n)s"
 msgid "The learner will be selected if"
-msgstr "La acción se ejecutará en %(n)s"
+msgstr "El estudiante será seleccionado si"
 
 #: action/templates/action/includes/partial_filter_delete.html:5
 msgid "Confirm filter deletion"
@@ -1326,16 +1254,13 @@ msgid "Delete filter"
 msgstr "Borrar filtro"
 
 #: action/templates/action/includes/partial_filter_tab.html:7
-#, fuzzy
-#| msgid "Add Filter"
 msgid "Filter"
-msgstr "Añadir filtro"
+msgstr "Filtro"
 
 #: action/templates/action/includes/partial_filter_tab.html:18
-#, fuzzy, python-format
-#| msgid "Edit the condition (%(n)s rows satisfy this condition)"
+#, python-format
 msgid "Edit the filter (%(n)s rows satisfy this condition)"
-msgstr "Editar la condición (%(n)s rows satisfy this condition)"
+msgstr "Editar filtro (%(n)s filas cumplen esta condición)"
 
 #: action/templates/action/includes/partial_filter_tab.html:24
 msgid "Delete the filter"
@@ -1363,29 +1288,20 @@ msgid "Values:"
 msgstr "Valores:"
 
 #: action/templates/action/incorrect_preview.html:2
-#, fuzzy
-#| msgid ""
-#| "This preview could not be produced\n"
-#| "    because the row in the table does not have values in the following\n"
-#| "    variables:"
 msgid ""
 "This preview could not be produced\n"
 "because the row in the table does not have values in the following variables:"
 msgstr ""
-"No se ha podido producir la vista previa porque la fila en la tabla no tiene "
-"valores en las siguientes variables:"
+"No se ha podido producir la vista previa\n"
+"porque la fila en la tabla no tiene valores en las siguientes variables:"
 
 #: action/templates/action/incorrect_preview.html:11
-#, fuzzy
-#| msgid ""
-#| "Review the conditions in the action\n"
-#| "    or use a filter to exclude these entries."
 msgid ""
 "Review the conditions in the action\n"
 "  or use a filter to exclude these entries."
 msgstr ""
-"Revise las condiciones en la acción o utilice un filtro para excluir estas "
-"filas."
+"Revise las condiciones en la acción \n"
+" o utilice un filtro para excluir estas filas."
 
 #: action/templates/action/index.html:8 action/templates/action/index.html:48
 msgid "Actions"
@@ -1417,10 +1333,8 @@ msgid "Select items to exclude from action"
 msgstr "Seleccione elementos a excluir de la acción"
 
 #: action/templates/action/request_canvas_email_data.html:7
-#, fuzzy
-#| msgid "Email action"
 msgid "Canvas Email action"
-msgstr "Envío de correo"
+msgstr "Acción de Email Canvas"
 
 #: action/templates/action/request_canvas_email_data.html:13
 #, fuzzy, python-format
@@ -3562,10 +3476,8 @@ msgid "Incorrect parameters in action scheduling"
 msgstr "Parámetros incorrectos para planificar la acción"
 
 #: scheduler/views.py:436
-#, fuzzy
-#| msgid "Incorrect type of action to schedule."
 msgid "This type of actions cannot be scheduled"
-msgstr "Tipo incorrecto de acción a planificar."
+msgstr "Este tipo de acciones no pueden programarse"
 
 #: scheduler/views.py:458
 #, python-brace-format
@@ -3591,10 +3503,8 @@ msgstr ""
 "Contacte al administrador para activar la cola de ejecución."
 
 #: scheduler/views.py:598
-#, fuzzy
-#| msgid "The action does not apply to any data."
 msgid "This action does not support scheduling"
-msgstr "No hay datos a los que aplicar la acción."
+msgstr "Esta acción no admite la programación"
 
 #: table/api.py:36 table/api.py:190
 msgid "Unable to access the workflow"
@@ -5015,30 +4925,24 @@ msgid "Import a file with an OnTask workflow"
 msgstr "Cargar un fichero con un flujo OnTask"
 
 #: workflow/templates/workflow/index.html:57
-#, fuzzy, python-format
-#| msgid "%(num)s row"
-#| msgid_plural "%(num)s rows,"
+#, python-format
 msgid "%(counter)s row,"
 msgid_plural "%(counter)s rows,"
-msgstr[0] "%(num)s fila"
+msgstr[0] "%(counter)s fila,"
 msgstr[1] "%(num)s filas,"
 
 #: workflow/templates/workflow/index.html:58
-#, fuzzy, python-format
-#| msgid "%(num)s column"
-#| msgid_plural "%(num)s columns"
+#, python-format
 msgid "%(counter)s column,"
 msgid_plural "%(counter)s columns,"
-msgstr[0] "%(num)s columna"
+msgstr[0] "%(counter)s columna,"
 msgstr[1] "%(num)s columnas"
 
 #: workflow/templates/workflow/index.html:59
-#, fuzzy, python-format
-#| msgid "%(num)s action"
-#| msgid_plural "%(num)s actions,"
+#, python-format
 msgid "%(counter)s action"
 msgid_plural "%(counter)s actions"
-msgstr[0] "%(num)s acción"
+msgstr[0] "%(counter)s acción"
 msgstr[1] "%(num)s acciones,"
 
 #: workflow/templates/workflow/index.html:65
