@@ -188,7 +188,6 @@ class ScreenTestFixture(ScreenTests):
         # Navigation bar, details
         #
         self.access_workflow_from_home_page(self.workflow_name)
-        self.body_ss('workflow_details.png')
 
         # Take picture of the navigation bar
         self.element_ss("//body/div[@id='wflow-name']", 'navigation_bar.png')
@@ -197,6 +196,7 @@ class ScreenTestFixture(ScreenTests):
         # New column modal
         #
         self.go_to_details()
+        self.body_ss('workflow_details.png')
         self.open_add_regular_column()
         self.modal_ss('workflow_add_column.png')
 
@@ -332,6 +332,7 @@ class ScreenTestFixture(ScreenTests):
             self.selenium.find_element_by_id(
                 'id_make_key_{0}'.format(k_num)
             ).click()
+        self.selenium.execute_script("window.scroll(0,0);")
 
         # Picture of the body
         self.body_ss('dataops_upload_merge_step2.png')
@@ -387,16 +388,14 @@ class ScreenTestFixture(ScreenTests):
         # Go to Excel Upload/Merge
         self.go_to_excel_upload_merge_step_1()
         self.body_ss('dataops_upload_excel.png')
-
+        self.go_to_table()
         #
         # Dataops/Merge Excel Merge
         #
         # Go to Excel Upload/Merge
         self.go_to_google_sheet_upload_merge_step_1()
         self.body_ss('dataops_upload_gsheet.png')
-
-        # Back to details
-        self.go_to_details()
+        self.go_to_table()
 
         #
         # Dataops/Merge SQL Connection
@@ -511,6 +510,17 @@ class ScreenTestFixture(ScreenTests):
         # Picture of the body
         self.body_ss('action_edit_action_in.png')
 
+        # Open the "Create question modal"
+        self.selenium.find_element_by_xpath(
+            "//button[contains(@class, 'js-workflow-question-add')]").click()
+        self.wait_for_modal_open()
+        self.modal_ss("action_edit_action_in_create_question.png")
+        self.cancel_modal()
+
+        # Open the Survey Parameters
+        self.select_parameters_tab()
+        self.body_ss('action_edit_action_in_parameters.png')
+
         # Open the preview
         self.open_preview()
         self.modal_ss('action_action_in_preview.png')
@@ -588,6 +598,12 @@ class ScreenTestFixture(ScreenTests):
         self.select_condition_tab()
         self.body_ss('action_action_out_conditionpart.png')
 
+        # Open one of the conditions
+        self.open_condition('No Video 1')
+        # Take picture of the condition open
+        self.modal_ss('action_action_out_edit_condition.png')
+        self.cancel_modal()
+
         # Open the preview
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Preview']"
@@ -632,6 +648,15 @@ class ScreenTestFixture(ScreenTests):
         self.select_filter_tab()
         self.create_filter('No activity in Week 2',
                            [('Days online 2', 'equal', '0')])
+
+        # Create one condition
+        self.select_condition_tab()
+        self.create_condition(
+            'Full time',
+            '',
+            [('Attendance', 'equal', 'Full Time')]
+        )
+
         self.select_canvas_text_tab()
         self.selenium.find_element_by_id('id_content').send_keys(
             """Dear {{ GivenName }}
@@ -653,6 +678,11 @@ Course Coordinator""")
         #
         # Back to the table of actions
         #
+        self.go_to_actions()
+
+        # Picture of Canvas scheduling
+        self.open_action_schedule('Send Canvas reminder')
+        self.body_ss('scheduler_action_canvas_email.png')
         self.go_to_actions()
 
         # Picture of the action row

@@ -91,11 +91,17 @@ class TutorialCaptures(ScreenTests):
         # Take picture of the table
         self.body_ss('tutorial_initial_table.png')
 
+        # Take picture of the top-bar menu
+        self.element_ss("//nav[contains(@class, 'fixed-top')]",
+                        'tutorial_top_menu_bar.png')
+
         # Go back to details
         self.go_to_details()
-
-        # New details (with the first set of columns)
         self.body_ss('tutorial_details_1.png')
+
+        # Go back to details
+        self.go_to_workflow_operations()
+        self.body_ss('tutorial_workflow_operations.png')
 
         # Create a new view
         self.go_to_table()
@@ -165,8 +171,17 @@ class TutorialCaptures(ScreenTests):
 
         # Go to the actions page
         self.go_to_actions()
-
         self.body_ss('tutorial_action_index.png')
+
+        # Go to the import action page
+        self.selenium.find_element_by_link_text('Import action').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//input[@id='id_name']")
+            )
+        )
+        self.body_ss('tutorial_action_import.png')
+        self.go_to_actions()
 
         #
         # Merge data from Moodle
@@ -636,7 +651,7 @@ class TutorialCaptures(ScreenTests):
 
         # Click on the Add Column button
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Create new question']"
+            "//button[normalize-space()='Create question']"
         ).click()
         self.wait_for_modal_open()
 
@@ -665,7 +680,7 @@ class TutorialCaptures(ScreenTests):
 
         # Create the second column
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Create new question']"
+            "//button[normalize-space()='Create question']"
         ).click()
         self.wait_for_modal_open()
 
@@ -699,7 +714,6 @@ class TutorialCaptures(ScreenTests):
         self.select_parameters_tab()
 
         # Select email column as key column
-        self.select_parameters_tab()
         select = Select(self.selenium.find_element_by_id(
             'select-key-column-name'))
         select.select_by_visible_text('email')
