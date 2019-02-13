@@ -938,15 +938,15 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                 (By.CLASS_NAME, 'modal-open')
             )
         )
+        # Spinner not visible
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         # Preview button clickable
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH, "//button[contains(@class, 'js-action-preview')]"),
             )
-        )
-        # Spinner not visible
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
     def create_view(self, vname, vdesc, cols):
@@ -1011,6 +1011,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                 EC.presence_of_element_located(
                     (By.ID, wait_for)
                 )
+            )
+            WebDriverWait(self.selenium, 10).until_not(
+                EC.visibility_of_element_located((By.ID, 'div-spinner'))
             )
         else:
             self.wait_for_modal_open()
