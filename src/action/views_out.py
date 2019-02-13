@@ -515,7 +515,7 @@ def run_json_action(request, workflow, action):
 
     # Collect the information from the form
     op_payload['item_column'] = form.cleaned_data['key_column']
-    op_payload['confirm_items'] = form.cleaned_data['confirm_items']
+    op_payload['confirm_items'] = form.cleaned_data['key_column'] != ''
     op_payload['token'] = form.cleaned_data['token']
 
     if op_payload['confirm_items']:
@@ -555,7 +555,7 @@ def json_done(request, payload=None):
     # Get the information from the payload
     action = Action.objects.get(pk=payload['action_id'])
     token = payload['token']
-    key_column = payload['key_column']
+    key_column = payload['item_column']
     exclude_values = payload.get('exclude_values', [])
 
     # Log the event
