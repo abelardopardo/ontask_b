@@ -561,14 +561,15 @@ class JSONActionForm(JSONBasicActionForm):
 
         self.fields['key_column'].label = \
             _('Column to exclude objects to send (empty to skip step)')
+        self.fields['key_column'].required = False
+
+        self.fields.pop('confirm_items')
 
         self.fields['token'].initial = self.op_payload.get('token', '')
         self.fields['token'].help_text = \
             _('Authentication token provided by the external platform.')
 
-        self.order_fields(['key_column',
-                           'token',
-                           'confirm_items'])
+        self.order_fields(['key_column', 'token'])
 
 
 class CanvasEmailActionForm(JSONBasicActionForm):
