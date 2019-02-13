@@ -1,11 +1,10 @@
 .. _plugin_write:
 
 Plugins: Write your own data processing code
-============================================
-
+********************************************
 
 Example: A Predictive Model
----------------------------
+===========================
 
 Suppose that your favorite data analyst has processed the data set and created a predictive model that estimates the score of the final exam based on the value of the column *Contributions* applying the following linear equation::
 

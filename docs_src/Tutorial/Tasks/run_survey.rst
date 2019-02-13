@@ -1,7 +1,7 @@
 .. _run_survey:
 
 Run a survey
-============
+************
 
 Once a survey has been created, there are two possible operations that it supports:
 
@@ -9,6 +9,7 @@ Once a survey has been created, there are two possible operations that it suppor
 
    .. figure:: /scaptures/action_URL_on.png
       :align: center
+      :width: 60%
 
 2) The instructor selects a learner and introduces the data for the questions. This function is accessed clicking in the ``Run`` operation in the action table. The application shows the table of learners (with links to modify their data) together with the data collected so far. The following figure shows an example of this screen
 

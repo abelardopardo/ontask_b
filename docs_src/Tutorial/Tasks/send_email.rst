@@ -1,7 +1,7 @@
 .. _tut_send_personalized_email:
 
 Sending Personalized Text through Email
-=======================================
+***************************************
 
 Log into the platform, open a workflow that has data and actions already defined and click the *Action* link in the top menu.
 
@@ -25,6 +25,9 @@ Comma separated list of CC emails
 Comma separated list of BCC emails
   Field analogous to the previous one except that the values are used in the blind copy of the email.
 
+Check/exclude email addresses before sending
+  If selected the platform will offer you a last chance to specify some email addresses to *exclude* from the emails. This may be useful if you want to remove a small amount of addresses that you know they should not be considered but they cannot be easily removed with the use of the action filter.
+
 Send you a summary message?
   If selected the platform will send you (the email you used to log in) a message with a summary of the operation once all emails are sent.
 
@@ -34,20 +37,18 @@ Track email reading in an extra column?
 Download a snapshot of the workflow
   When selected, the platform saves the workflow in its current state. This function is useful to keep an exact replica of the state of the actions, conditions and data when the data was sent. The resulting file can then be imported (see the *Import workflow* in the home page) to check the content of the emails.
 
-Check/exclude email addresses before sending
-  If selected the platform will offer you a last chance to specify some email addresses to *exclude* from the emails. This may be useful if you want to remove a small amount of addresses that you know they should not be considered but they cannot be easily removed with the use of the action filter.
-
 Introduce a string in the subject field and click in the button *Preview* at the bottom of the page.
 
 .. figure:: /scaptures/tutorial_email_preview.png
    :align: center
+   :width: 60%
 
 The new page shows the final appearance of the message with its subject and the values for those columns used to configure the text. Click in the arrows next to the *Close* button to traverse the various messages and verify that they are properly composed.
 
 .. _tut_exclude_action_items:
 
 Final look before pushing the GO button
----------------------------------------
+=======================================
 
 When running an action sometimes you may want to verify that the list of rows to be processed is correct, or perhaps in the last step remove one or two rows that you know should not be included (and you didn't filter with the action filter). If you want to go through this extra step *before* running the action, tick the field to *Check/exclude* these items. Click in the *Next* button. In the following page you can review the list of items and mark those you want to exclude.
 

@@ -1,7 +1,7 @@
 .. _tut_surveys:
 
 Surveys and/or Polls
-====================
+********************
 
 Personalized texts can be very powerful to offer students content, comments, or point them to resources selected based on the available data. This data
 may come from sources such as student information systems or the learning management system. However, in some cases we would like to obtain data either
@@ -13,31 +13,34 @@ The first step to create a survey is to go to the *Actions* page, click in the *
 
 .. figure:: /scaptures/tutorial_survey_create.png
    :align: center
+   :width: 60%
 
 After the survey is created, the following screen is shown
 
 .. figure:: /scaptures/tutorial_survey_editor.png
    :align: center
 
-The editor is divided into five areas:
+The editor contains three tabs:
+
+Survey Questions
+  The columns used to collect the data. In this action, a column is equivalent to a question. The description of the column is the text of the
+  question. In this part of the editor you may either use one of the existing columns as question, create a new column (or
+  question), or create a new derived one (the initial values are created by combining values from other columns).
 
 Filter learners
   An expression identical to the one used in the personalized text to select a subset of the learners for which the will be available.
 
-Description
-  Text describing the survey that is shown to the learners.
+Survey Parameters
+  This tab contains additional parameters for the survey, more precisely:
 
-Key column to identify learners
-  The key column in the table that will be used to identify the users when submitting their answers. This is typically the column that contains the
-  user email.
+  Description
+    Text describing the survey that is shown to the learners.
 
-Shuffle questions
-  If selected, the questions in the survey will be shuffled when shown to the learners.
+  Key column to identify learners
+    The key column in the table that will be used to identify the users when submitting their answers. This is typically the column that contains the user email.
 
-Columns to obtain and store the data
-  The columns used to collect the data. In this action, a column is equivalent to a question. The description of the column is the text of the
-  question. In this part of the editor you may either use one of the existing columns as question, create a new column (or
-  question), or create a new derived one (the initial values are created by combining values from other columns).
+  Shuffle questions
+    If selected, the questions in the survey will be shuffled when shown to the learners.
 
 This page will show you a warning message if any of the columns used in the survey has an empty description. Let's suppose you want to ask the learners two questions:
 
@@ -45,14 +48,13 @@ This page will show you a warning message if any of the columns used in the surv
 
 - What was your dedication to the course this week?
 
-To make the data suitable for further processing, we will create the two questions/columns with a set of pre-defined answers. Use the *Add new column*
-button to create two columns of type string and provide the allowed answer values as a comma-separated list.
+To make the data suitable for further processing, we will create the two questions/columns with a set of pre-defined answers. Use the |fa-plus| *Create question* button to create two columns of type string and provide the allowed answer values as a comma-separated list.
 
 .. figure:: /scaptures/tutorial_survey_column_creation.png
    :align: center
+   :width: 60%
 
-After creating the column, insert it in the survey by selecting it with the pull down menu. Repeat the procedure for the second question/column. You can
-now add these columns to the action and the editor will show them in the table at the bottom as shown in the following figure:
+Repeat the procedure for the second question/column. The result should be as shown in the following figure.
 
 .. figure:: /scaptures/tutorial_survey_editor2.png
    :align: center
@@ -61,6 +63,7 @@ As in the case of the personalized text action, the *Preview* button allows you 
 
 .. figure:: /scaptures/tutorial_survey_preview.png
    :align: center
+   :width: 60%
 
 Once created, you may select the URL from the action as it was described for the personalized text and make it available for learners to enter their answers. The data will be automatically added to the table.
 

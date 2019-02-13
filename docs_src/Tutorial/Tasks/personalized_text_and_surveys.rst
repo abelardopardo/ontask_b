@@ -1,7 +1,7 @@
 .. _tut_personalized_text_and_surveys:
 
 Combining personalized text and surveys
-=======================================
+***************************************
 
 The information collected through :ref:surveys<tut_surveys>` is stored in the appropriate columns in the data table and therefore can be used in a personalized text action to select the appropriate message. For example, the information collected as answers to the question *What was the most challenging topic for you this week?* can be used to select a set of appropriate links to resources about the given topic. The answers are stored in column `Survey Q1` in the Table. Analogously, the answers to the question *What was your dedication to the course this week?* are stored in the Table in the column with name `Survey Q2`.
 
@@ -11,6 +11,7 @@ When using the values previously collected in a survey, special care must be tak
 
 .. figure:: /scaptures/tutorial_personalized_text_and_survey_filter.png
    :align: center
+   :width: 60%
 
 The action then uses the conditions to control which message is shown.
 

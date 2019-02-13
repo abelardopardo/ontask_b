@@ -1,12 +1,13 @@
 .. _tut_personalized_json_action:
 
 Personalized JSON action
-========================
+************************
 
 The second type of action available in OnTask is called *personalized JSON*. Create a new action and select this type from the pull-down menu when introducing the name and description.
 
 .. figure:: /scaptures/tutorial_personalized_json_create.png
    :align: center
+   :width: 60%
 
 The following screen contains the editor for these actions.
 
@@ -27,4 +28,5 @@ As in the case of the :ref:`personalized text actions<tut_personalized_text_acti
 
 .. figure:: /scaptures/tutorial_personalized_json_preview.png
    :align: center
+   :width: 60%
 

@@ -1,7 +1,7 @@
 .. _the_scenario:
 
 The Scenario
-============
+************
 
 To make the activities in the tutorial as close as possible to the use of OnTask in a real situation all of them assume the following scenario.
 

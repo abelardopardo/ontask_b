@@ -1,13 +1,12 @@
 .. _install:
 
-********************
 Installation process
-********************
+####################
 
 OnTask is a Web application that manages data about learners to offer them personalized support. For this reason the installation process complies with a set of tight security restrictions. Some of these restrictions lie within the scope of the tool, but others are part of the environment in which the application is installed. We strongly recommend to install OnTask in a web server that uses TTL encryption (HTTPS) to serve all the pages. The application requires exchanging sensitive information about your session with the browser, so the information should be encrypted.
 
 Requirements
-============
+************
 
 OnTask has been developed as a `Django <https://www.djangoproject.com/>`_ application. Django is a high-level, python-based web framework that supports a rich set of functionality typically required in applications like OnTask. But as with many other applications, OnTask requires a set of additional applications for its execution:
 
@@ -20,24 +19,24 @@ OnTask has been developed as a `Django <https://www.djangoproject.com/>`_ applic
 Some of these requirements are handled through Python's package index application `pip <https://pypi.python.org/pypi/pip>`__.
 
 Are you upgrading from a version < 2.8 to 2.8 or later?
-=======================================================
+*******************************************************
 
 If you are upgrading OnTask from a version lower than 2.8 to 2.8 or later, you need to disable the ``crontab`` used to execute tasks asynchronously from the web server. Starting in version 2.8 those tasks are executed by an application called ``celery`` that is managed using ``supervisor`` (see :ref:`scheduling_tasks`).
 
 Are you upgrading from version < 4.0 to 4.0 or later?
-=====================================================
+*****************************************************
 
 The upgrade to 4.0 or later requires version 2.7 and 3.6 both installed and available in the system. Django versions 2.0 and later require Python 3 but certain additional libraries used by OnTask have not been fully ported yet and still require the use of Python 2.7. Make sure both versions are available before proceeding to the upgrade.
 
 Installing the required tools
-=============================
+*****************************
 
 The following installation steps assume that you are deploying OnTask in a production web server capable of serving pages using the HTTPS protocol.
 
 .. _install_redis:
 
 Install and Configure Redis
----------------------------
+===========================
 
 Django requires Redis to execute as a daemon in the same machine to cache information about the sessions. No specific changes are required in the code, simply have the server running in the background.
 
@@ -50,7 +49,7 @@ Django requires Redis to execute as a daemon in the same machine to cache inform
 .. _install_postgresql:
 
 Install and Configure PostgreSQL
---------------------------------
+================================
 
 1. Download and install `postgresql <https://www.postgresql.org/>`_.
 
@@ -73,7 +72,7 @@ Install and Configure PostgreSQL
    options.
 
 Install Python (2.7 and 3.6)
-----------------------------
+============================
 
 In the following sections we assume that you can open a command line interpreter and you can execute the two python interpreters for versions 2.7 and 3.6.
 
@@ -85,7 +84,7 @@ In the following sections we assume that you can open a command line interpreter
    ``python-pip`` for Python 2.7 and ``python3-pip`` for Python 3.6). This tool will be used by both Python and Django to install additional libraries required to execute OnTask.
 
 Download, install and configure OnTask
---------------------------------------
+======================================
 
 1. Download or clone a copy of `OnTask <https://github.com/abelardopardo/ontask_b>`_.
 
@@ -250,17 +249,17 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
 .. _scheduling_tasks:
 
 Configure the Distributed Task Queue Celery
--------------------------------------------
+===========================================
 
 There are various tasks that need to be executed by OnTask outside the web
 server. The solution adopted is to use `Celery
 <http://www.celeryproject.org/>`_, `Supervisor <http://supervisord.org/>`_ (a
-prcocess control system) and `Redis <https://redis.io/>`_. Redis
+process control system) and `Redis <https://redis.io/>`_. Redis
 has been configured in a previous step. This section explains how to set
 up the distributed task queue and make sure it is continuously executing in
 parallel with the web server.
 
-1. Install the application ``supervisor`` using **pip2**. This application makes sure the application Celery is continusouly running in the background and in communication with the server. As of now, the application can only run through Python 2 (an upgrade in the future may remove this anomaly). For this reason, the package has to be installed with the following command (using Python 2.7)::
+1. Install the application ``supervisor`` using **pip2**. This application makes sure the application Celery is continuously running in the background and in communication with the server. As of now, the application can only run through Python 2 (an upgrade in the future may remove this anomaly). For this reason, the package has to be installed with the following command (using Python 2.7)::
 
      pip2 install supervisor
 
@@ -332,7 +331,7 @@ parallel with the web server.
 .. _upgrading:
 
 Upgrading OnTask
-================
+****************
 
 If you have OnTask already configured and running, here are the steps to
 follow to upgrade to a new version. If you are upgrading from a version below
@@ -399,7 +398,7 @@ After verifying the previous requirements, proceed with the following steps.
   installed.
 
 The Administration Pages
-========================
+************************
 
 OnTask uses the administration pages offered by Django. The account created with
 the command ``createsuperuser`` has complete access to those pages through a
@@ -421,7 +420,7 @@ Once the instance is running, visit these pages and configure the platform to
 your needs.
 
 Production Deployment
-=====================
+*********************
 
 Once OnTask is executing normally, you may configure a web server (nginx,
 apache or similar) to make it available to a community of users. The
@@ -431,7 +430,7 @@ are available through the corresponding manual pages of these applications.
 .. _authentication:
 
 Authentication
-==============
+**************
 
 OnTask comes with the following authentication mechanisms: IMS-LTI,
 ``REMOTE_USER`` variable, basic authentication, and LDAP. The first three
@@ -443,7 +442,7 @@ OnTask comes with the following authentication mechanisms: IMS-LTI,
   multiple tools within a learning environment. In LTI terms, OnTask is
   configured to behave as a *tool provider* and assumes a *tool consumer* such
   as a Learning Management System to invoke its functionality. Any URL in
-  OnTask can be give nto the LTI consumer as the point of access.
+  OnTask can be given to the LTI consumer as the point of access.
 
   Ontask only provides two points of access for LTI requests coming from the
   consumer. One is the URL with suffix ``/lti_entry`` and the second is the
@@ -455,7 +454,7 @@ OnTask comes with the following authentication mechanisms: IMS-LTI,
   1) A tool consumer that can be configured to connect with OnTask. This type
      of configuration is beyond the scope of this manual.
 
-  2) A set of pairs key,value in OnTask to be given to the tool consumers so that together with the URL, they are ready to send the requests. The key/value pairs need to be included as an additional variabsle in the file ``local.env`` in the folder ``src/ontask/settings`` together with other local configuration variables. For example, ::
+  2) A set of pairs key,value in OnTask to be given to the tool consumers so that together with the URL, they are ready to send the requests. The key/value pairs need to be included as an additional variables in the file ``local.env`` in the folder ``src/ontask/settings`` together with other local configuration variables. For example, ::
 
        LTI_OAUTH_CREDENTIALS=key1=secret1,key2=secret2
 
@@ -473,7 +472,7 @@ OnTask comes with the following authentication mechanisms: IMS-LTI,
 The API can be accessed using through token authentication. The token can be generated manually through the user profile page. This type of authentication may need some special configuration in the web server (Apache or similar) so that the ``HTTP_AUTHORIZATION`` header is not removed.
 
 LDAP Authentication
--------------------
+===================
 
 OnTask may also be configured to use LDAP to authenticate users. This is done
 through the external package `django-auth-ldap
@@ -523,7 +522,7 @@ the `documentation of the django-auth-ldap module
 .. _email_config:
 
 Email Configuration
-===================
+*******************
 
 OnTask relies on the functionality included in Django to send emails from the application. The following variables must be defined in the file ``local.env``:
 
@@ -554,9 +553,9 @@ Set theses variables in the configuration file to the appropriate values
 before starting the application. Make sure the server is running **in production mode**. The development mode is configured to **not send** emails but show their content in the console instead.
 
 Tracking Email Reads
---------------------
+====================
 
-If OnTask is deployed using SAML, all URLs are likely to be configured to go through the authentication layer. This configuration prevents OnTask from receiving the email read confirmations. In this case, the web server needs to be configured so that the SAML authentication is removed for the url ``trck`` (the one receiving the email read tracking). In Apache, this can be achieved by the following directive::
+If OnTask is deployed using SAML, all URLs are likely to be configured to go through the authentication layer. This configuration prevents OnTask from receiving the email read confirmations. In this case, the web server needs to be configured so that the SAML authentication is removed for the URL ``trck`` (the one receiving the email read tracking). In Apache, this can be achieved by the following directive::
 
   <Location /trck>
     Require all granted
@@ -567,23 +566,23 @@ If OnTask is not served from the root of your web server, make sure you include 
 .. _canvas_email_config:
 
 Canvas Email Configuration
-==========================
+**************************
 
-OnTask allows to send personalized emails to the user inbox in an instance of a `Canvas Learning Management System <https://www.canvaslms.com.au/>`_ using its API. Configuring this functionality requires permission from Canvas to access its API using OAuth2 authentication. Once this authorizaton is obtained, the following variables need to be defined in the file ``local.env`` configuration file:
+OnTask allows to send personalized emails to the user inbox in an instance of a `Canvas Learning Management System <https://www.canvaslms.com.au/>`_ using its API. Configuring this functionality requires permission from Canvas to access its API using OAuth2 authentication. Once this authorization is obtained, the following variables need to be defined in the file ``local.env`` configuration file:
 
 - ``CANVAS_INFO_DICT``: A dictionary with elements pairs containing the identifier for a Canvas instance that will be shown to the user and a dictionary with the following configuration parameters:
 
-  - ``domain_port``: A string containing the domaind and port (if needed) of the Canvas host.
+  - ``domain_port``: A string containing the domain and port (if needed) of the Canvas host.
 
   - ``client_id``: This value is provided by the administrator of the Canvas instance once permission to use the API has been granted.
 
   - ``client_secret``: This value is provided together with the ``client_id`` once the permission to use the API is granted. It is typically a large random sequence of characters.
 
-   - ``authorize_url``: URL template to access the first step of the authorisation. This is usually ``https://{0}/login/oauth2/auth``. The string ``{0}`` is replaced internaly with the value of ``domain_port``.
+   - ``authorize_url``: URL template to access the first step of the authorization. This is usually ``https://{0}/login/oauth2/auth``. The string ``{0}`` is replaced internally with the value of ``domain_port``.
 
-   - ``access_token_url``: URL template to access the token. This is usually ``https://{0}/login/oauth2/token``. The string ``{0}`` is replaced internaly with the value of ``domain_port``.
+   - ``access_token_url``: URL template to access the token. This is usually ``https://{0}/login/oauth2/token``. The string ``{0}`` is replaced internally with the value of ``domain_port``.
 
-  - ``conversation_URL``: Similar to the previous two values, it is the entry point in the API to create a conversation (equivalent to send an email). This is usually ``https://{0}/api/v1/conversations``. The string ``{0}`` is replaced internaly with the value of ``domain_port``.
+  - ``conversation_URL``: Similar to the previous two values, it is the entry point in the API to create a conversation (equivalent to send an email). This is usually ``https://{0}/api/v1/conversations``. The string ``{0}`` is replaced internally with the value of ``domain_port``.
 
   - ``aux_params``: A dictionary with additional parameters. The dictionary may include a value for the key ``burst`` to limit the number of consecutive API invocations (to prevent throttling) and a value for the key ``pause`` with the number of seconds to separate bursts. Here is an example of the definition of this variable in the ``local.env`` file::
 
@@ -598,7 +597,7 @@ After defining these variables, restart the application for the values to be con
 .. _plugin_install:
 
 Plugins
-=======
+*******
 
 OnTask allows also the inclusion of arbitrary Python modules to execute and transform the data stored in a workflow. The Python code in the plugins is executed the same interpreter and execution environment as the rest of the platform. Thus, **use this functionality to execute only code that is fully trusted**. There is nothing preventing a plugin to run malicious code (think ``system.exec('rm -rf /')``, so use at your own risk. To configure the execution of plugins follow these steps:
 
@@ -626,7 +625,7 @@ OnTask allows also the inclusion of arbitrary Python modules to execute and tran
  .. _sql_connections:
 
 SQL Connections
-===============
+***************
 
 One of the key functionalities of OnTask is to be able to merge data from multiple sources. Section :ref:`dataops` describes the functionality available to perform these operations. Some of them, however, require special configuration from the tool administrator. This is the case when uploading and merging data from a remote database that allows SQL connections. These connections must be first defined by the administrator and are then are available to the instructors.
 
@@ -686,7 +685,7 @@ Delete
 .. _bulk_user_creation:
 
 Creating users in Bulk
-======================
+**********************
 
 OnTask offers the possibility of creating users in bulk through given the
 data in a CSV file through the following steps:

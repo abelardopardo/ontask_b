@@ -1,7 +1,7 @@
 .. _tut_download_zip:
 
 Download a ZIP (and upload it in Moodle)
-========================================
+****************************************
 
 Log into the platform, open a workflow that contains data and a personalized action, click in the *Actions* link in the top menu.
 
@@ -27,7 +27,7 @@ Click in the button *Preview* at the bottom of the page to see the final appeara
 .. _tut_moodle_upload:
 
 Use the ZIP file to upload feedback in Moodle
----------------------------------------------
+=============================================
 
 If the ZIP created using this functionality has the file names created with certain specific structure, it can be used to upload the personalized messages as part of a Moodle assignment. The workflow data table must have two columns: one with name ``Identifier`` with values with structure ``Participant N`` where N is a unique number per row, and a column with name ``Full name`` with the learner's full name. These columns can be obtained :ref:`downloading<upload_feedback_to_moodle>` the *grading worksheet* from the screen showing all the submissions in a Moodle assignment.
 

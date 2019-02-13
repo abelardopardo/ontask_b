@@ -1,7 +1,7 @@
 .. _tut_personalized_text_url:
 
 Making content available through OnTask
-=======================================
+***************************************
 
 An alternative to send an email is to make the personalized text available
 through a URL that is provided by OnTask. This URL can be enabled by clicking
@@ -9,6 +9,7 @@ in the *URL* button of the action operations.
 
 .. figure:: /scaptures/tutorial_personalzed_text_URL.png
    :align: center
+   :width: 60%
 
 
 If learners are allowed to connect to OnTask (they have an account), their
