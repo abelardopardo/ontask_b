@@ -220,6 +220,8 @@ def save_canvas_email_schedule(request, action, schedule_item,
     :return:
     """
 
+    return render(request, 'under_construction.html', {})
+
     # Create the form to ask for the email subject and other information
     form = CanvasEmailScheduleForm(
         data=request.POST or None,
@@ -632,6 +634,8 @@ def delete(request, pk):
         log_type = Log.SCHEDULE_EMAIL_DELETE
     elif s_item.action.action_type == Action.PERSONALIZED_JSON:
         log_type = Log.SCHEDULE_JSON_DELETE
+    elif s_item.action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        log_type = Log.SCHEDULE_CANVAS_EMAIL_DELETE
 
     # Log the event
     if s_item.item_column:
