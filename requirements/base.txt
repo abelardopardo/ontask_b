@@ -14,7 +14,7 @@ coreschema==0.0.4
 decorator==4.3.0
 defusedxml==0.5.0
 diff-match-patch==20181111
-Django[argon2]==2.1.5
+Django[argon2]==2.1.7
 django-authtools==1.6.0
 django-braces==1.13.0
 django-celery-beat==1.2.0
