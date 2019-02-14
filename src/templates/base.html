@@ -19,7 +19,7 @@
     {% ontask_jquery %}
     <!-- Custom tags for the head tag -->
     {% block extrahead %}{% endblock extrahead %}
-    <link href="{% static 'site/css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'site/css/main.css' %}?v={% ontask_version %}" rel="stylesheet">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     {% ontask_shim_respond %}
   </head>
