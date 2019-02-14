@@ -681,9 +681,9 @@ Course Coordinator""")
         self.go_to_actions()
 
         # Picture of Canvas scheduling
-        self.open_action_schedule('Send Canvas reminder')
-        self.body_ss('scheduler_action_canvas_email.png')
-        self.go_to_actions()
+        # self.open_action_schedule('Send Canvas reminder')
+        # self.body_ss('scheduler_action_canvas_email.png')
+        # self.go_to_actions()
 
         # Picture of the action row
         self.element_ss(

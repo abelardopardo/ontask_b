@@ -14,7 +14,7 @@ from ontask.celery import app as celery_app
 
 __all__ = ['celery_app', 'OnTaskException', 'is_legal_name', 'fix_pctg_in_name']
 
-__version__ = 'B.4.0.0'
+__version__ = 'B.4.0'
 
 # Dictionary to store in the session the data between forms.
 action_session_dictionary = 'action_run_payload'

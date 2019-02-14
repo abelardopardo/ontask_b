@@ -12,5 +12,5 @@ OnTask assumes that you will be working with one workflow. The first screen (the
 
    If your account has *superuser* or *admin* privileges, the top menu will include the additional option with name *SQL Connections*. This functionality allows the administrator to manage a collection of connections to SQL relational databases. These connections are available to instructors as part of the operations to Upload/Merge data into the table.
 
-.. include:: ../../Using/include_top_menu.rst
+.. include:: /Using/include_top_menu.rst
 

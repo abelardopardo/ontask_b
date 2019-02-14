@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-08 17:31+1030\n"
+"POT-Creation-Date: 2019-02-14 10:08+1030\n"
 "PO-Revision-Date: 2018-11-11 18:47+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -237,7 +237,7 @@ msgstr ""
 msgid "Incorrect date/time window"
 msgstr "错误的日期/时间窗口"
 
-#: action/forms.py:255 action/forms.py:578 scheduler/forms.py:83
+#: action/forms.py:255 action/forms.py:579 scheduler/forms.py:83
 #: scheduler/forms.py:234
 msgid "Email subject"
 msgstr "邮件主题"
@@ -266,11 +266,11 @@ msgstr "给您发送摘要信息吗？"
 msgid "Track email reading in an extra column?"
 msgstr "是否跟踪电子邮件阅读额外列？"
 
-#: action/forms.py:292 action/forms.py:583
+#: action/forms.py:292 action/forms.py:584
 msgid "Download a snapshot of the workflow?"
 msgstr "下载工作流程快照?"
 
-#: action/forms.py:293 action/forms.py:584
+#: action/forms.py:293 action/forms.py:585
 msgid "A zip file useful to review the emails sent."
 msgstr "用于查看发送的电子邮件的压缩文件。"
 
@@ -334,35 +334,35 @@ msgstr "身份验证令牌"
 msgid "Column to exclude objects to send (empty to skip step)"
 msgstr "用来排除要发送对象的列 (清空以跳过步骤）"
 
-#: action/forms.py:567 scheduler/forms.py:173
+#: action/forms.py:570 scheduler/forms.py:173
 msgid "Authentication token provided by the external platform."
 msgstr "由外部平台提供的身份认证令牌。"
 
-#: action/forms.py:601
+#: action/forms.py:602
 msgid "Canvas Host"
 msgstr ""
 
-#: action/forms.py:602
+#: action/forms.py:603
 msgid "Name of the Canvas host to send the messages"
 msgstr ""
 
-#: action/forms.py:605
+#: action/forms.py:606
 #, fuzzy
 #| msgid "Column with random values"
 msgid "Column with the Canvas ID"
 msgstr "具有随机值的新列"
 
-#: action/forms.py:607
+#: action/forms.py:608
 #, fuzzy
 #| msgid "Check/exclude users before sending?"
 msgid "Check/Exclude Canvas IDs before sending?"
 msgstr "在发送前检查/排除用户？"
 
-#: action/forms.py:637 workflow/forms.py:454
+#: action/forms.py:638 workflow/forms.py:454
 msgid "File"
 msgstr "文件"
 
-#: action/forms.py:638
+#: action/forms.py:639
 msgid "File containing a previously exported action"
 msgstr "文件包含先前导出的操作"
 
@@ -542,7 +542,7 @@ msgstr "无法创建条件信息"
 msgid "Unable to create columns field"
 msgstr "无法创建列字段"
 
-#: action/settings.py:34 ontask/settings/base.py:359
+#: action/settings.py:34 ontask/settings/base.py:360
 msgid "OnTask: Action executed"
 msgstr "OnTask:操作已执行"
 
@@ -589,7 +589,7 @@ msgstr ""
 #: action/templates/action/export_ask.html:22
 #: action/templates/action/export_done.html:15
 #: action/templates/action/item_filter.html:26
-#: action/templates/action/run_survey.html:65
+#: action/templates/action/run_survey.html:69
 #: action/templates/action/run_survey_row.html:25
 #: dataops/templates/dataops/includes/upload_buttons.html:6
 #: logs/templates/logs/view.html:12
@@ -831,7 +831,9 @@ msgid "Add a new question to the action"
 msgstr "向该动作添加新问题"
 
 #: action/templates/action/edit_in.html:92
-msgid "Create new question"
+#, fuzzy
+#| msgid "Create new question"
+msgid "Create question"
 msgstr "创建新问题"
 
 #: action/templates/action/edit_in.html:109
@@ -840,7 +842,7 @@ msgid "Edit description"
 msgstr "编辑描述"
 
 #: action/templates/action/edit_in.html:110
-#: action/templates/action/run_survey.html:50
+#: action/templates/action/run_survey.html:54
 #: dataops/templates/dataops/includes/partial_show_sql_connection.html:25
 #: scheduler/templates/scheduler/includes/partial_show_schedule_action.html:25
 #: scheduler/templates/scheduler/schedule_done.html:14
@@ -1075,7 +1077,7 @@ msgid "Schedule the execution of the action"
 msgstr "安排操作执行"
 
 #: action/templates/action/includes/partial_action_operations.html:37
-#: scheduler/views.py:200 scheduler/views.py:279 scheduler/views.py:341
+#: scheduler/views.py:200 scheduler/views.py:281 scheduler/views.py:343
 msgid "Schedule"
 msgstr "安排"
 
@@ -1235,7 +1237,7 @@ msgstr "定义要插入到正文文中的文本条件。"
 #: action/templates/action/includes/partial_condition_tab.html:9
 #, fuzzy
 #| msgid "Text Conditions"
-msgid "New Condition"
+msgid "Condition"
 msgstr "文本条件"
 
 #: action/templates/action/includes/partial_condition_tab.html:17
@@ -1384,9 +1386,10 @@ msgstr ""
 "根据表中存储的数据\n"
 "执行的新操作。"
 
-#: action/templates/action/index.html:61
-msgid "New action"
-msgstr "新操作"
+#: action/templates/action/index.html:61 scheduler/views.py:50
+#: workflow/templates/workflow/export.html:32
+msgid "Action"
+msgstr "操作"
 
 #: action/templates/action/item_filter.html:7
 msgid "Exclude items from action"
@@ -1656,7 +1659,7 @@ msgid "The file has duplicated column names"
 msgstr "文件具有重复的列名"
 
 #: dataops/csvupload.py:110 dataops/excelupload.py:131
-#: dataops/googlesheetupload.py:127 dataops/sqlcon_views.py:457
+#: dataops/googlesheetupload.py:127 dataops/sqlcon_views.py:458
 msgid ""
 "The data has no column with unique values per row. At least one column must "
 "have unique values."
@@ -2031,30 +2034,30 @@ msgstr "结果不是pandas数据帧。"
 msgid "Folder where plugins are stored"
 msgstr "存储插件的文件夹"
 
-#: dataops/sqlcon_views.py:109
+#: dataops/sqlcon_views.py:110
 msgid "A connection with this name already exists"
 msgstr "已经存在以此命名的链接"
 
-#: dataops/sqlcon_views.py:129 dataops/sqlcon_views.py:315
-#: dataops/sqlcon_views.py:352 dataops/sqlcon_views.py:420
+#: dataops/sqlcon_views.py:130 dataops/sqlcon_views.py:316
+#: dataops/sqlcon_views.py:353 dataops/sqlcon_views.py:421
 msgid "<PROTECTED>"
 msgstr "<受保护的>"
 
-#: dataops/sqlcon_views.py:415
+#: dataops/sqlcon_views.py:416
 #: dataops/templates/dataops/includes/partial_show_sql_connection.html:3
 msgid "SQL connection"
 msgstr "SQL连接"
 
-#: dataops/sqlcon_views.py:439
+#: dataops/sqlcon_views.py:440
 #, python-brace-format
 msgid "Unable to obtain data: {0}"
 msgstr "无法获取数据：{0}"
 
-#: dataops/sqlcon_views.py:447
+#: dataops/sqlcon_views.py:448
 msgid "The data frame has duplicated column names"
 msgstr "数据帧具有重复的列名"
 
-#: dataops/sqlcon_views.py:468
+#: dataops/sqlcon_views.py:469
 msgid "Sorry. The data from this connection cannot be processed."
 msgstr "对不起。无法处理来自此连接的数据。"
 
@@ -2755,257 +2758,263 @@ msgstr "从thread_local中找不到当前请求"
 msgid "Event Logs"
 msgstr "事件日志"
 
-#: logs/models.py:96
+#: logs/models.py:97
 msgid "Workflow created"
 msgstr "工作流已创建"
 
-#: logs/models.py:97
+#: logs/models.py:98
 msgid "Workflow updated"
 msgstr "工作流已更新"
 
-#: logs/models.py:98
+#: logs/models.py:99
 msgid "Workflow deleted"
 msgstr "工作流已删除"
 
-#: logs/models.py:99
+#: logs/models.py:100
 msgid "Data uploaded to workflow"
 msgstr "数据已上传至工作流"
 
-#: logs/models.py:100
+#: logs/models.py:101
 msgid "Data merged into workflow"
 msgstr "数据已合并到工作流"
 
-#: logs/models.py:101
+#: logs/models.py:102
 msgid "Failed data merge into workflow"
 msgstr "不能将数据合并到工作流"
 
-#: logs/models.py:102
+#: logs/models.py:103
 msgid "Workflow data flushed"
 msgstr "工作流数据刷新"
 
-#: logs/models.py:103
+#: logs/models.py:104
 msgid "New attribute in workflow"
 msgstr "工作流新属性"
 
-#: logs/models.py:104
+#: logs/models.py:105
 msgid "Attributes updated in workflow"
 msgstr "工作流属性更新完成"
 
-#: logs/models.py:105
+#: logs/models.py:106
 msgid "Attribute deleted"
 msgstr "属性已删除"
 
-#: logs/models.py:106
+#: logs/models.py:107
 msgid "User share added"
 msgstr "用户分享已添加"
 
-#: logs/models.py:107
+#: logs/models.py:108
 msgid "User share deleted"
 msgstr "用户分享已删除"
 
-#: logs/models.py:108 workflow/templates/workflow/import.html:7
+#: logs/models.py:109 workflow/templates/workflow/import.html:7
 #: workflow/templates/workflow/import.html:13
 #: workflow/templates/workflow/index.html:46
 msgid "Import workflow"
 msgstr "导入工作流"
 
-#: logs/models.py:109
+#: logs/models.py:110
 msgid "Workflow cloned"
 msgstr "工作流已克隆"
 
-#: logs/models.py:110
+#: logs/models.py:111
 msgid "Column added"
 msgstr "加入列"
 
-#: logs/models.py:111
+#: logs/models.py:112
 msgid "Column with formula created"
 msgstr "公式化的列已创建"
 
-#: logs/models.py:112
+#: logs/models.py:113
 msgid "Column with random values created"
 msgstr "随机值列已创建"
 
-#: logs/models.py:113
+#: logs/models.py:114
 msgid "Column renamed"
 msgstr "列更名"
 
-#: logs/models.py:114
+#: logs/models.py:115
 msgid "Column deleted"
 msgstr "列已删除"
 
-#: logs/models.py:115
+#: logs/models.py:116
 msgid "Column cloned"
 msgstr "列已克隆"
 
-#: logs/models.py:116
+#: logs/models.py:117
 msgid "Column restricted"
 msgstr "列受限"
 
-#: logs/models.py:117
+#: logs/models.py:118
 msgid "Action created"
 msgstr "动作已创建"
 
-#: logs/models.py:118
+#: logs/models.py:119
 msgid "Action updated"
 msgstr "动作已更新"
 
-#: logs/models.py:119
+#: logs/models.py:120
 msgid "Action deleted"
 msgstr "动作已删除"
 
-#: logs/models.py:120
+#: logs/models.py:121
 msgid "Action cloned"
 msgstr "动作已克隆"
 
-#: logs/models.py:121 logs/models.py:128
+#: logs/models.py:122 logs/models.py:129
 msgid "Emails sent"
 msgstr "电子邮件已发送"
 
-#: logs/models.py:122
+#: logs/models.py:123
 #, fuzzy
 #| msgid "Emails sent"
 msgid "Canvas Emails sent"
 msgstr "电子邮件已发送"
 
-#: logs/models.py:123
+#: logs/models.py:124
 msgid "Notification email sent"
 msgstr "提醒电子邮件已发送"
 
-#: logs/models.py:124
+#: logs/models.py:125
 msgid "Email read"
 msgstr "电子邮件已读"
 
-#: logs/models.py:125
+#: logs/models.py:126
 msgid "Action URL toggled"
 msgstr "动作URL切换"
 
-#: logs/models.py:126
+#: logs/models.py:127
 msgid "Action served"
 msgstr "动作已提供"
 
-#: logs/models.py:127
+#: logs/models.py:128
 msgid "Action imported"
 msgstr "动作已导入"
 
-#: logs/models.py:129
+#: logs/models.py:130
 msgid "Condition created"
 msgstr "条件已创建"
 
-#: logs/models.py:130
+#: logs/models.py:131
 msgid "Condition updated"
 msgstr "条件已更新"
 
-#: logs/models.py:131
+#: logs/models.py:132
 msgid "Condition deleted"
 msgstr "条件已删除"
 
-#: logs/models.py:132
+#: logs/models.py:133
 msgid "Condition cloned"
 msgstr "条件已克隆"
 
-#: logs/models.py:133
+#: logs/models.py:134
 msgid "Table row updated"
 msgstr "表行已更新"
 
-#: logs/models.py:134
+#: logs/models.py:135
 msgid "Table row created"
 msgstr "表行已创建"
 
-#: logs/models.py:135
+#: logs/models.py:136
 msgid "Table view created"
 msgstr "表视图已创建"
 
-#: logs/models.py:136
+#: logs/models.py:137
 msgid "Table view edited"
 msgstr "表视图已编辑"
 
-#: logs/models.py:137
+#: logs/models.py:138
 msgid "Table view deleted"
 msgstr "表视图已删除"
 
-#: logs/models.py:138
+#: logs/models.py:139
 msgid "Table view cloned"
 msgstr "表视图已克隆"
 
-#: logs/models.py:139
+#: logs/models.py:140
 msgid "Filter created"
 msgstr "过滤器已创建"
 
-#: logs/models.py:140
+#: logs/models.py:141
 msgid "Filter updated"
 msgstr "过滤器已更新"
 
-#: logs/models.py:141
+#: logs/models.py:142
 msgid "Filter deleted"
 msgstr "过滤器已删除"
 
-#: logs/models.py:142
+#: logs/models.py:143
 msgid "Plugin created"
 msgstr "插件已创建"
 
-#: logs/models.py:143
+#: logs/models.py:144
 msgid "Plugin updated"
 msgstr "插件已更新"
 
-#: logs/models.py:144
+#: logs/models.py:145
 msgid "Plugin deleted"
 msgstr "插件已删除"
 
-#: logs/models.py:145
+#: logs/models.py:146
 msgid "Plugin executed"
 msgstr "插件已执行"
 
-#: logs/models.py:146
+#: logs/models.py:147
 msgid "SQL connection created"
 msgstr "SQL连接已创建"
 
-#: logs/models.py:147
+#: logs/models.py:148
 msgid "SQL connection updated"
 msgstr "SQL连接已更新"
 
-#: logs/models.py:148
+#: logs/models.py:149
 msgid "SQL connection deleted"
 msgstr "SQL连接已删除"
 
-#: logs/models.py:149
+#: logs/models.py:150
 msgid "SQL connection cloned"
 msgstr "SQL连接已克隆"
 
-#: logs/models.py:150
+#: logs/models.py:151
 msgid "Edit scheduled email action"
 msgstr "编辑电子邮件行动计划"
 
-#: logs/models.py:151
+#: logs/models.py:152
 msgid "Delete scheduled email action"
 msgstr "删除电子邮件行动计划"
 
-#: logs/models.py:152
+#: logs/models.py:153
 msgid "Execute scheduled email action"
 msgstr "执行电子邮件行动计划"
 
-#: logs/models.py:154
+#: logs/models.py:155
 #, fuzzy
 #| msgid "Execute scheduled email action"
 msgid "Execute scheduled canvas email action"
 msgstr "执行电子邮件行动计划"
 
-#: logs/models.py:155
+#: logs/models.py:157
+#, fuzzy
+#| msgid "Execute scheduled email action"
+msgid "Delete scheduled canvas email action"
+msgstr "执行电子邮件行动计划"
+
+#: logs/models.py:158
 msgid "Download a ZIP with personalized text"
 msgstr "下载有个性化文本的压缩文件"
 
-#: logs/models.py:156
+#: logs/models.py:159
 msgid "Edit scheduled JSON action"
 msgstr "编辑JSON行动计划"
 
-#: logs/models.py:157
+#: logs/models.py:160
 msgid "Delete scheduled JSON action"
 msgstr "删除JSON行动计划"
 
-#: logs/models.py:158
+#: logs/models.py:161
 msgid "Execute scheduled JSON action"
 msgstr "执行JSON行动计划"
 
-#: logs/models.py:186 scheduler/models.py:111
+#: logs/models.py:189 scheduler/models.py:111
 msgid "payload"
 msgstr "有效载荷"
 
@@ -3127,6 +3136,12 @@ msgstr "西班牙语"
 #: ontask/settings/base.py:276
 msgid "Chinese"
 msgstr "中文"
+
+#: ontask/settings/base.py:277
+#, fuzzy
+#| msgid "Finish"
+msgid "Finnish"
+msgstr "完成"
 
 #: ontask/urls.py:30
 msgid ""
@@ -3503,10 +3518,6 @@ msgstr "操作已排程"
 msgid "The action will execute in %(n)s"
 msgstr "该操作将在 %(n)s 执行"
 
-#: scheduler/views.py:50 workflow/templates/workflow/export.html:32
-msgid "Action"
-msgstr "操作"
-
 #: scheduler/views.py:55
 msgid "Scheduled"
 msgstr "已排程"
@@ -3517,40 +3528,40 @@ msgstr "已排程"
 msgid "Edit the action scheduled for execution"
 msgstr "计划执行的操作"
 
-#: scheduler/views.py:183 scheduler/views.py:262
+#: scheduler/views.py:183 scheduler/views.py:264
 msgid "A scheduled execution of this action with this name already exists"
 msgstr "以此命名的已排程操作已经存在"
 
-#: scheduler/views.py:374
+#: scheduler/views.py:376
 msgid "Incorrect action scheduling invocation."
 msgstr "不正确的操作排程调用。"
 
-#: scheduler/views.py:383
+#: scheduler/views.py:385
 msgid "Incorrect parameters in action scheduling"
 msgstr "操作排程中的错误参数"
 
-#: scheduler/views.py:436
+#: scheduler/views.py:438
 #, fuzzy
 #| msgid "Incorrect type of action to schedule."
 msgid "This type of actions cannot be scheduled"
 msgstr "不正确的待排程的操作类型。"
 
-#: scheduler/views.py:458
+#: scheduler/views.py:460
 #, python-brace-format
 msgid "{0} days"
 msgstr "{0}天"
 
-#: scheduler/views.py:461
+#: scheduler/views.py:463
 #, python-brace-format
 msgid ", {0} hours"
 msgstr "{0}小时"
 
-#: scheduler/views.py:464
+#: scheduler/views.py:466
 #, python-brace-format
 msgid ", {0} minutes"
 msgstr "{0}分钟"
 
-#: scheduler/views.py:584
+#: scheduler/views.py:586
 msgid ""
 "Unable to schedule actions due to a misconfiguration. Ask your system "
 "administrator to enable queueing."
@@ -3558,7 +3569,7 @@ msgstr ""
 "由于错误配置，无法安排操作。请系统管理员\n"
 "启用队列。"
 
-#: scheduler/views.py:598
+#: scheduler/views.py:600
 #, fuzzy
 #| msgid "The action does not apply to any data."
 msgid "This action does not support scheduling"
@@ -3757,8 +3768,8 @@ msgstr "添加视图"
 
 #: table/templates/table/includes/partial_view_add.html:15
 #: table/templates/table/includes/partial_view_edit.html:15
-msgid "Row filter"
-msgstr "行筛选"
+msgid "Row will be shown if"
+msgstr ""
 
 #: table/templates/table/includes/partial_view_clone.html:5
 msgid "Confirm view cloning"
@@ -4591,8 +4602,8 @@ msgid "Add a new name/value pair"
 msgstr "添加一个新的名字/数值对"
 
 #: workflow/templates/workflow/includes/attributes.html:10
-msgid "New Attribute"
-msgstr "新属性"
+msgid "Attribute"
+msgstr "属性"
 
 #: workflow/templates/workflow/includes/attributes.html:18
 msgid ""
@@ -4933,9 +4944,9 @@ msgstr "关于本列的统计表"
 
 #: workflow/templates/workflow/includes/workflow_column_operations.html:26
 #, fuzzy
-#| msgid "No value for this student in this column"
-msgid "Prevent the use of values other than the ones in this column"
-msgstr "该学生在此列中没有值"
+#| msgid "Restrict the values allowed in the column"
+msgid "Restrict the use of values to the ones already in the column"
+msgstr "限制列中允许的值"
 
 #: workflow/templates/workflow/includes/workflow_column_operations.html:28
 msgid "Restrict values"
@@ -5097,6 +5108,20 @@ msgstr "无法克隆工作流"
 msgid "Workflow successfully cloned."
 msgstr "工作流已成功克隆。"
 
+#, fuzzy
+#~| msgid "No value for this student in this column"
+#~ msgid "Prevent the use of values other than the ones in this column"
+#~ msgstr "该学生在此列中没有值"
+
+#~ msgid "New action"
+#~ msgstr "新操作"
+
+#~ msgid "Row filter"
+#~ msgstr "行筛选"
+
+#~ msgid "New Attribute"
+#~ msgstr "新属性"
+
 #~ msgid "New action cannot have non-existing key column {0}"
 #~ msgstr "新操作不能有不存在的键列 {0}"
 
@@ -5120,9 +5145,6 @@ msgstr "工作流已成功克隆。"
 
 #~ msgid "Insert:"
 #~ msgstr "插入："
-
-#~ msgid "Attribute"
-#~ msgstr "属性"
 
 #~ msgid "Email"
 #~ msgstr "邮件"
@@ -5358,9 +5380,6 @@ msgstr "工作流已成功克隆。"
 
 #~ msgid "Edit column name, description, type, values, etc."
 #~ msgstr "编辑列名称、描述、类型、值等。"
-
-#~ msgid "Restrict the values allowed in the column"
-#~ msgstr "限制列中允许的值"
 
 #~ msgid "List of name=value pairs to use in the actions"
 #~ msgstr "在操作中使用的名称=值成对的列表"

@@ -54,17 +54,16 @@
       <span class="fa fa-pencil"></span> {% trans 'Edit' %}</a>
     </h1>
     <p class="help-block text-center">{{ action.description_text }}</p>
-    <div class="container justify-content-center">
-      <table class="table table-hover table-bordered" id="actioninrun-data">
-        <thead>
-          <tr>
-            {% for c in columns %}
-              <th>{{ c.name }}</th>
-            {% endfor %}
-          </tr>
-        </thead>
-      </table>
-    </div>
+    <table class="table table-hover table-bordered" style="width:100%;"
+           id="actioninrun-data">
+      <thead>
+        <tr>
+          {% for c in columns %}
+            <th>{{ c.name }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+    </table>
     <div class="text-center">
       <a class="btn btn-outline-dark spin" href="{% url 'action:index' %}"> {% trans 'Back' %}</a>
     </div>

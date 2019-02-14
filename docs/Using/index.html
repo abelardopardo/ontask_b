@@ -6,10 +6,11 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>3. Using the tool &#8212; OnTask (B.3.2.1) 1.1.0 documentation</title>
+    <title>3. Using OnTask &#8212; OnTask (B.4.0) 1.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -50,274 +51,208 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="using-the-tool">
-<span id="using"></span><h1>3. Using the tool<a class="headerlink" href="#using-the-tool" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="using-ontask">
+<span id="using"></span><h1>3. Using OnTask<a class="headerlink" href="#using-ontask" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#the-workflow" id="id5">The Workflow</a></li>
-<li><a class="reference internal" href="#workflow-details" id="id6">Workflow Details</a><ul>
-<li><a class="reference internal" href="#the-columns" id="id7">The Columns</a></li>
+<li><a class="reference internal" href="#workflow" id="id11">Workflow</a></li>
+<li><a class="reference internal" href="#data" id="id12">Data</a><ul>
+<li><a class="reference internal" href="#upload-data" id="id13">Upload Data</a><ul>
+<li><a class="reference internal" href="#upload-csv-files" id="id14">Upload CSV Files</a></li>
+<li><a class="reference internal" href="#upload-excel-files" id="id15">Upload Excel Files</a></li>
+<li><a class="reference internal" href="#upload-google-spreadsheet-files" id="id16">Upload Google Spreadsheet Files</a></li>
+<li><a class="reference internal" href="#sql-connection" id="id17">SQL connection</a></li>
+<li><a class="reference internal" href="#confirmation-step-to-upload-data" id="id18">Confirmation step to upload data</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#data-table" id="id8">Data Table</a><ul>
-<li><a class="reference internal" href="#upload-merge-data" id="id9">Upload/Merge Data</a><ul>
-<li><a class="reference internal" href="#upload-csv-files" id="id10">Upload CSV Files</a></li>
-<li><a class="reference internal" href="#upload-excel-files" id="id11">Upload Excel Files</a></li>
-<li><a class="reference internal" href="#sql-connection" id="id12">SQL connection</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#data-merge" id="id13">Data Merge</a></li>
-<li><a class="reference internal" href="#the-table" id="id14">The Table</a><ul>
-<li><a class="reference internal" href="#table-views" id="id15">Table Views</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#the-actions" id="id16">The Actions</a><ul>
-<li><a class="reference internal" href="#personalized-content" id="id17">Personalized Content</a><ul>
-<li><a class="reference internal" href="#using-column-values-attributes-and-conditions-in-a-personalized-text" id="id18">Using column values, attributes and conditions in a Personalized Text</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#personalized-json-object" id="id19">Personalized JSON Object</a></li>
-<li><a class="reference internal" href="#sending-personalized-emails" id="id20">Sending personalized emails</a></li>
-<li><a class="reference internal" href="#making-personalized-content-available-to-learners" id="id21">Making personalized content available to learners</a></li>
-<li><a class="reference internal" href="#sending-personalized-json-objects-to-another-platform" id="id22">Sending personalized JSON objects to another platform</a></li>
-<li><a class="reference internal" href="#creating-a-zip-file-with-the-personalized-text" id="id23">Creating a ZIP file with the personalized text</a><ul>
-<li><a class="reference internal" href="#uploading-feedback-files-for-a-moodle-assignment" id="id24">Uploading feedback files for a Moodle Assignment</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#surveys" id="id25">Surveys</a><ul>
-<li><a class="reference internal" href="#running-a-survey-action" id="id26">Running a survey action</a></li>
-<li><a class="reference internal" href="#offering-the-survey-to-the-learners" id="id27">Offering the survey to the learners</a></li>
+<li><a class="reference internal" href="#data-merge" id="id19">Data Merge</a><ul>
+<li><a class="reference internal" href="#step-three-select-keys-and-merge-option" id="id20">Step three: select keys and merge option</a></li>
+<li><a class="reference internal" href="#step-four-verify-upcoming-changes" id="id21">Step four: verify upcoming changes</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#the-scheduler" id="id28">The Scheduler</a><ul>
-<li><a class="reference internal" href="#scheduling-a-personalized-text-action" id="id29">Scheduling a Personalized Text Action</a></li>
-<li><a class="reference internal" href="#scheduling-a-personalized-json-action" id="id30">Scheduling a Personalized JSON Action</a></li>
-<li><a class="reference internal" href="#the-scheduler-menu" id="id31">The Scheduler Menu</a></li>
+<li><a class="reference internal" href="#table" id="id22">Table</a><ul>
+<li><a class="reference internal" href="#table-views" id="id23">Table Views</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#the-logs" id="id32">The Logs</a></li>
-<li><a class="reference internal" href="#plugins-transforming-the-data-with-your-own-code" id="id33">Plugins – Transforming the data with your own code</a><ul>
-<li><a class="reference internal" href="#plugin-requirements" id="id34">Plugin requirements</a></li>
+<li><a class="reference internal" href="#actions" id="id24">Actions</a><ul>
+<li><a class="reference internal" href="#personalized-text" id="id25">Personalized Text</a><ul>
+<li><a class="reference internal" href="#using-column-values-attributes-and-conditions-in-a-personalized-text" id="id26">Using column values, attributes and conditions in a Personalized Text</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#surveys" id="id27">Surveys</a></li>
+<li><a class="reference internal" href="#personalized-json-object" id="id28">Personalized JSON Object</a></li>
+<li><a class="reference internal" href="#personalized-canvas-email" id="id29">Personalized Canvas Email</a></li>
+<li><a class="reference internal" href="#running-actions" id="id30">Running actions</a><ul>
+<li><a class="reference internal" href="#sending-personalized-emails-personalized-text-actions" id="id31">Sending personalized emails (Personalized Text Actions)</a></li>
+<li><a class="reference internal" href="#making-personalized-content-available-to-learners" id="id32">Making personalized content available to learners</a></li>
+<li><a class="reference internal" href="#running-a-survey" id="id33">Running a survey</a></li>
+<li><a class="reference internal" href="#sending-personalized-emails-in-canvas" id="id34">Sending personalized emails in Canvas</a></li>
+<li><a class="reference internal" href="#sending-personalized-json-objects-to-another-platform" id="id35">Sending personalized JSON objects to another platform</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-a-zip-file-with-the-personalized-text" id="id36">Creating a ZIP file with the personalized text</a><ul>
+<li><a class="reference internal" href="#uploading-feedback-files-for-a-moodle-assignment" id="id37">Uploading feedback files for a Moodle Assignment</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#workflow-settings" id="id38">Workflow Settings</a><ul>
+<li><a class="reference internal" href="#workflow-operations" id="id39">Workflow Operations</a></li>
+<li><a class="reference internal" href="#column-operations" id="id40">Column Operations</a></li>
+<li><a class="reference internal" href="#scheduled-actions" id="id41">Scheduled Actions</a><ul>
+<li><a class="reference internal" href="#scheduling-a-personalized-text-action" id="id42">Scheduling a Personalized Text Action</a></li>
+<li><a class="reference internal" href="#scheduling-a-personalized-json-action" id="id43">Scheduling a Personalized JSON Action</a></li>
+<li><a class="reference internal" href="#table-with-scheduled-actions" id="id44">Table with Scheduled Actions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#view-logs" id="id45">View logs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugins-transforming-the-data-with-your-own-code" id="id46">Plugins: Transforming the data with your own code</a><ul>
+<li><a class="reference internal" href="#plugin-requirements" id="id47">Plugin requirements</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<p>In a nutshell, the idea of OnTask is to help instructors, learners and designers to exchange data  about what is happening in a learning experience to design and deploy personalized learner support actions. This last term, <em>personalized support actions</em> is purposefully vague to include any action that is offered to learners in different forms depending on personalized conditions. The typical <em>workflow</em> to use OnTask starts by uploading and combining available data about the learning experience, either provided through some platform (LMS, video platform), provided by the students (questionnaires), or reported by the instructors. The instructors then write simple rules to select a subset of students and create a resource (HTML page, a message, a visualization) so that its content depends on the data available for each learner. The following figure shows an illustration of this workflow:</p>
+<p>In a nutshell, the idea behind OnTask is to help instructors, learners and designers to exchange data  about what is happening in a learning experience to design and deploy personalized learner support actions. This last term, <em>personalized support actions</em> is purposefully vague to include any action that is offered to learners in different forms depending on personalized conditions. The typical <em>workflow</em> to use OnTask starts by uploading and combining available data about the learning experience, either extracted from some platform (LMS, video annotation, quizzes), provided by the learners (questionnaires), or captured by the instructors. The instructors then write simple rules to select a subset of students and create a resource (HTML page, a message, a visualization) so that its content depends on the data available for each learner. The following figure shows an illustration of this workflow:</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/ontask_workflow.png"><img alt="../_images/ontask_workflow.png" src="../_images/ontask_workflow.png" style="width: 100%;" /></a>
 </div>
-<p>Imagine a learning experience in which you want to provide personalized messages to the learners in three instances. In the first week, you want to send a welcome email and change slightly the text based on the student background (courses taken before this one). The second week you want to send some comments and suggestions about the participation in the forum and the text will depend on the measures of engagement obtained from the platform. Finally, you want to send a third personalized email depending on the level of engagement with the videos in the course. The idea of these messages is that you want to change the text in the message for each learner based on the information stored in the table.</p>
-<p>The main entity in the platform is a <a class="reference internal" href="#workflow"><span class="std std-ref">*workflow*</span></a> and represents a set of data capturing procedures, a table with current data, and a set of actions. The usual steps require first to populate the table with data extracted from the learning environment. In the figure we assume a variety of data sources ranging from those coming from the use of technology, self-reported by the students, or observed and reported by the instructors.</p>
-<p>These three sources are combined and stored in the second entity in OnTask: the table. Think of the table as a conventional excel sheet storing the information about the learners (one learner per row and a set of features about each learner as columns).</p>
-<p>The third entity in OnTask is the <em>personalized action</em> that is a text with elements that are selected and adapted to each learner based on a set of basic rules that depend on the student features stored in the table. This text can be included in an email, made available through a web page, or forwarded to another system for further processing.</p>
-<p>A workflow in OnTask contains a single table (rows and columns) and a set of actions. This container is conceived to manage the data and actions related to a learning experience. You may use the workflow shown in the documentation importing  the <a class="reference download internal" download="" href="../_downloads/3f296252720ca5cd234946310996f00b/initial_workflow.gz"><code class="xref download docutils literal notranslate"><span class="pre">initial</span> <span class="pre">workflow</span></code></a>.</p>
-<p>The following sections offer a more in-depth description of all these elements as well as examples with real scenarios.</p>
-<div class="section" id="the-workflow">
-<span id="workflow"></span><h2>3.1. The Workflow<a class="headerlink" href="#the-workflow" title="Permalink to this headline">¶</a></h2>
+<p>Imagine a learning experience in which you want to provide three personalized messages to the learners. In the first week, you want to send a welcome email and personalize slightly the text of this message based on the student background (courses taken before this one). The second week you want to send some comments and suggestions about the participation in the forum and the text will depend on the measures of engagement obtained from the platform. The third personalized email will vary depending on the level of engagement with the videos in the course. The idea of these messages is that you want to change the text in the message for each learner based on the information stored in the table.</p>
+<p>The main entity in OnTask is a <a class="reference internal" href="#workflow"><span class="std std-ref">workflow</span></a> that contains a <strong>table</strong> with data about the learners and a set of <strong>actions</strong>. You first need to populate the table with data extracted from the learning environment. We assume that there several data sources (coming from the use of technology, self-reported by the students, or observed and reported by the instructors). These data sources are combined and stored in the <strong>table</strong>. Think of the table as a conventional excel sheet storing the information about the learners (one learner per row and a set of features about each learner as columns).</p>
+<p>The third entity in OnTask is the <strong>action</strong> that is either a set of questions to collect information from the learner or a text with elements that are selected or ignored based on <strong>conditions</strong> that are evaluated with respect to the learner student features stored in the table. This text can be included in an email, made available through a web page, or forwarded to another system for further processing.</p>
+<p>In the remainder of this section we will use a <a class="reference download internal" download="" href="../_downloads/3f296252720ca5cd234946310996f00b/initial_workflow.gz"><code class="xref download docutils literal notranslate"><span class="pre">initial</span> <span class="pre">workflow</span></code></a> that can be downloaded and imported to your collection of workflows in OnTask.</p>
+<div class="section" id="workflow">
+<span id="id1"></span><h2>3.1. Workflow<a class="headerlink" href="#workflow" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>“But anyone who has experienced flow knows that the deep enjoyment it provides requires an equal degree of disciplined concentration.”
 -― Mihaly Csikszentmihalyi</div></blockquote>
-<p>The workflow in OnTask is simply a container that brings together the table, the operations to upload the data, and the actions to create the personalized content. The initial screen in OnTask shows the available workflows as shown in the following figure.</p>
+<p>After logging into OnTask, the users sees the home page showing the collection of workflows available to the user as shown in the following figure.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/workflow_index.png"><img alt="../_images/workflow_index.png" src="../_images/workflow_index.png" style="width: 100%;" /></a>
 </div>
-<p>Clicking in the word <em>Workflows</em> in the top menu brings you back to the list of workflows from any page in the application. Clicking in the book icon in the upper right side of the menu bar opens the documentation page.</p>
-<p>The screen includes the following operations:</p>
+<p>The navigation through the platform is done using the links in the top menu bar. The <em>Home</em> icon in the left side of the menu brings the user back to the page showing the available workflows. The book icon in the upper right side of the menu bar opens the documentation page, and the user icon provides access to the user profile (name, last name, bio, password and authentication tokens).</p>
+<p>The <strong>Home</strong> page offers the following operations:</p>
 <div class="sidebar">
 <p class="first sidebar-title">Going back</p>
-<p class="last">Remember that clicking in the <em>Workflow</em> word in the top menu corner <em>closes</em> the workflow and you see the list of available workflows again.</p>
+<p class="last">The <strong>Home</strong> link at the left corner of the top menu <em>closes</em> the workflow being manipulated and shows you the list of available workflows. The workflow is also <em>unlocked</em> so that it can be accessed by those users <a class="reference internal" href="#details-sharing"><span class="std std-ref">sharing</span></a> its access.</p>
 </div>
-<ol class="arabic simple">
-<li>Create a new workflow: Clicking in the <em>New Workflow</em> button will ask you for the name and description of the element.</li>
+<ol class="arabic" id="workflow-create">
+<li><p class="first"><em>New workflow</em> opens a dialog to set the name and description of a new workflow and then show the page to upload data in the table.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/workflow_create.png"><img alt="../_images/workflow_create.png" src="../_images/workflow_create.png" style="width: 60%;" /></a>
+</div>
+</li>
 </ol>
 <ol class="arabic" id="workflow-import" start="2">
-<li><p class="first">Importing a file containing a previously exported workflow. Clicking in the <em>Import</em> button will ask you for the new for the new workflow, the file and will let you choose to import only the data, or the data and the actions as shown in the following figure</p>
+<li><p class="first"><em>Import workflow</em> opens a dialog requesting a workflow name and a file containing a previously exported OnTask workflow as shown in the following figure:</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/workflow_import.png"><img alt="../_images/workflow_import.png" src="../_images/workflow_import.png" style="width: 100%;" /></a>
 </div>
 </li>
-<li><p class="first">Open a workflow to work on it. This is perhaps the most common initial step. Once you open a workflow, all the operations are applied to it. The name of the current workflow is shown right under the top navigation bar as shown in the following figure.</p>
+</ol>
+<p>This page also shows those workflows previously created by the user. Each workflow is shown as depicted in the following figure.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/workflow_card.png"><img alt="../_images/workflow_card.png" src="../_images/workflow_card.png" style="width: 60%;" /></a>
+</div>
+<p>The icons in the bottom of this element allow you to perform the following operations:</p>
+<ol class="arabic">
+<li><p class="first"><em>Open the workflow</em> selects the workflow for further manipulation. Once selected, workflow name is shown under the top navigation bar as illustrated in the following figure.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/navigation_bar.png"><img alt="../_images/navigation_bar.png" src="../_images/navigation_bar.png" style="width: 100%;" /></a>
 </div>
+<p>When a workflow is open, the top-bar menu appears with the structure shown in the following figure.</p>
+<div class="figure align-center">
+<img alt="../_images/tutorial_top_menu_bar.png" src="../_images/tutorial_top_menu_bar.png" />
+</div>
+<p>The menu contains the following links:</p>
+<dl class="docutils">
+<dt><span class="fa fa-home"></span> Home</dt>
+<dd><p class="first last">Link back to the home page showing the workflows available for manipulation.</p>
+</dd>
+<dt><span class="fa fa-comments"></span> Actions</dt>
+<dd><p class="first last">Create, edit and execute actions.</p>
+</dd>
+<dt><span class="fa fa-table"></span> Table</dt>
+<dd><p class="first last">Operations to visualize and manipulate the table (search for values, add a row, add a column)</p>
+</dd>
+<dt><span class="fa fa-cog"></span> Settings</dt>
+<dd><p class="first">Additional operations to view:</p>
+<dl class="last docutils">
+<dt>Workflow operations</dt>
+<dd><p class="first last">This page contains links to export, rename, clone, flush the data, or delete the workflow. It also allows you to manipulat a set of attributes, and add users to share the workflow.</p>
+</dd>
+<dt>Column operations</dt>
+<dd><p class="first last">This page shows information about the columns in the workflow.</p>
+</dd>
+<dt>Scheduled actions</dt>
+<dd><p class="first last">Shows which actions have been scheduled for execution.</p>
+</dd>
+<dt>View logs</dt>
+<dd><p class="first last">A table showing the history of operations performed on this workflow</p>
+</dd>
+</dl>
+</dd>
+<dt><span class="fa fa-user"></span> User profile</dt>
+<dd><p class="first last">Link to the user profile and logout</p>
+</dd>
+<dt><span class="fa fa-book"></span> Manual</dt>
+<dd><p class="first last">Link to the OnTask manual (this document)</p>
+</dd>
+</dl>
+<p>Once you open a workflow, the platform <em>locks it</em> so that no other user can manipulate it (see <a class="reference internal" href="#details-sharing"><span class="std std-ref">sharing a workflow</span></a>). The lock is release if the user goes back to the home page, logs out, or the session expires. If you access a workflow and another user is currently using it, the platform will tell you that is locked and show who is holding the lock.</p>
 </li>
-<li><p class="first">Rename the workflow (change either its name or its description).</p>
+<li><p class="first"><span class="fa fa-pencil"></span> <em>Change name or description</em> changes the name of the description given to the workflow.</p>
 </li>
-<li><p class="first">Clone a workflow. This operation will create an exact copy of the workflow with a name created by adding the previx <em>Copy_of_</em> to the current workflow name.</p>
+<li><p class="first"><span class="fa fa-clone"></span> <em>Create a duplicate</em> or exact copy of the workflow with the prefix <em>Copy_of_</em> added to the  workflow name.</p>
 </li>
-<li><p class="first">Flush all the data in the workflow. This operation maintains the workflow but it wipes out the data in the table.</p>
+<li><p class="first"><span class="fa fa-minus-square"></span> <em>Delete all data</em> and actions stored in the workflow (turns it into an empty workflow with just the name and the description).</p>
 </li>
-<li><p class="first">Delete the workflow.</p>
+<li><p class="first"><span class="fa fa-trash"></span> <em>Delete the workflow</em> from the system.</p>
 </li>
 </ol>
-<p>Once you open a workflow, it is locked and no other user can manipulate it (see <a class="reference internal" href="#details-sharing"><span class="std std-ref">sharing a workflow</span></a>). If you access a workflow and another user is currently using it, the platform will not allow you to see the data and will show who is holding the lock.</p>
-<p>The operations to manage a workflow all become visible once you select it by clicking on its name.</p>
 </div>
-<div class="section" id="workflow-details">
-<span id="details"></span><h2>3.2. Workflow Details<a class="headerlink" href="#workflow-details" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div>“The details are not the details. They make the design”
-– Charles Eames</div></blockquote>
-<p>After selecting a workflow to manage, the <em>details</em> page appears with a lot of information about operations, structure of the data, information about the columns, etc. The page contains the information shown in the following figure.</p>
-<div class="figure align-center">
-<img alt="../_images/workflow_details.png" src="../_images/workflow_details.png" />
-</div>
-<p>The name of the workflow is shown at the top of the page. The page includes links to additional menus with various operations on the selected workflow (some of them will be available depending on your user profile). Under the title <em>Workflow Details</em> there are buttons to access the following operations:</p>
-<dl class="docutils">
-<dt>Add a column</dt>
-<dd>This menu opens three options: create a regular column, create a column combining the values of two existing columns, or create a new column with random values.</dd>
-</dl>
-<blockquote id="details-add-column">
-<div><dl class="docutils">
-<dt>Add a regular column</dt>
-<dd><p class="first">Opens a dialog to create a new column in the table with the following fields:</p>
-<ul class="simple">
-<li>Name (mandatory): column name (shown in the table)</li>
-<li>Description: text that will be shown to the learners if the column is part of a survey action.</li>
-<li>Data type (mandatory: The possible data types are <em>number</em> (representing both integers or real numbers), <em>string</em>, <em>boolean</em> (only possible values are <em>true</em> and <em>false</em>), and <em>datetime</em> (a date and time together).</li>
-<li>An integer (mandatory) representing the position of the column in the table (a value zero will insert it at the end of the table).</li>
-<li>Two date/time values to control the visibility of the column.</li>
-<li>Comma-separated list of possible values. This field is to restrict the values in the column. The values have to be compatible with the specified data type.</li>
-<li>Initial value to assign to all cells in the column.</li>
-</ul>
-<div class="last figure align-center">
-<img alt="../_images/workflow_add_column.png" src="../_images/workflow_add_column.png" />
-</div>
-</dd>
-</dl>
-</div></blockquote>
-<blockquote id="details-add-formula-column">
-<div><dl class="docutils">
-<dt>Add a formula-derived column</dt>
-<dd>This column is created by combining the values of existing columns using one of the operations addition, product, maximum, minimum, mean, median, standard deviation, conjunction or disjunction. The formula is only applied when the column is
-created the current values of the other columns. The column is not refreshed if the operand change in the future.</dd>
-</dl>
-</div></blockquote>
-<blockquote id="details-add-random-column">
-<div><dl class="docutils">
-<dt>Add a column with random values</dt>
-<dd>This is useful to create columns for A/B testing. The new column is created with a random value from either a numeric range (starting at 0) or a set of strings.</dd>
-</dl>
-</div></blockquote>
-<dl class="docutils" id="details-attributes">
-<dt>Attributes</dt>
-<dd><p class="first">This is simply a dictionary of pairs <code class="docutils literal notranslate"><span class="pre">(name,</span> <span class="pre">value)</span></code> so that when a <code class="docutils literal notranslate"><span class="pre">name</span></code> appears in a personalized text, it is replaced by the <code class="docutils literal notranslate"><span class="pre">value</span></code>. The main use of these attributes is when a value has to appear in various locations and you may want to change all its occurrences. For example, the instructor name could be included as one of the attributes so that if it changes, modifying the attribute is the only required step.</p>
-<div class="last figure align-center">
-<img alt="../_images/workflow_attributes.png" src="../_images/workflow_attributes.png" />
-</div>
-</dd>
-</dl>
-<dl class="docutils" id="details-sharing">
-<dt>Share</dt>
-<dd><p class="first">A screen to make the workflow accessible to other users. You are supposed to know the user identification (there is no search functionality available).</p>
-<div class="last figure align-center">
-<img alt="../_images/workflow_share.png" src="../_images/workflow_share.png" />
-</div>
-</dd>
-</dl>
-<dl class="docutils" id="details-export">
-<dt>Export</dt>
-<dd><p class="first">This functionality allows you to take a snapshot of the content of the workflow and store it in a file for your records. You may select which actions are included in the exported file</p>
-<div class="figure align-center">
-<img alt="../_images/workflow_export.png" src="../_images/workflow_export.png" />
-</div>
-<p class="last">The menu offers the possibility of exporting only the data, or the data <strong>and</strong> the <a class="reference internal" href="#action"><span class="std std-ref">action</span></a> in the workflow.</p>
-</dd>
-</dl>
-<dl class="docutils" id="details-clone">
-<dt>Clone</dt>
-<dd>This function creates a new workflow duplicating the data, actions and conditions of the current workflow. The new workflow will have the same name with the prefix <em>Copy of</em>.</dd>
-</dl>
-<dl class="docutils" id="details-rename">
-<dt>Rename</dt>
-<dd><p class="first">This functionality allows to change either the name or the description of the workflow.</p>
-<div class="last figure align-center">
-<img alt="../_images/workflow_rename.png" src="../_images/workflow_rename.png" />
-</div>
-</dd>
-</dl>
-<dl class="docutils" id="details-flush-data">
-<dt>Flush data</dt>
-<dd><p class="first">This operation deletes all the data attached to the workflow, but preserves the workflow structure (that is, the name and the description only).</p>
-<div class="figure align-center">
-<img alt="../_images/workflow_flush.png" src="../_images/workflow_flush.png" />
-</div>
-<p class="last">Given the destructive nature of this operation the platform requires you to confirm this step.</p>
-</dd>
-</dl>
-<dl class="docutils" id="details-delete">
-<dt>Delete</dt>
-<dd><p class="first">Operation similar to the previous one, but now the whole workflow is deleted and therefore unselected. If executed, the platform will go back to the list of workflows as this one is no longer available for operations.</p>
-<div class="figure align-center">
-<img alt="../_images/workflow_delete.png" src="../_images/workflow_delete.png" />
-</div>
-<p class="last">As in the previous case, the platform asks for confirmation before carrying out the delete operation.</p>
-</dd>
-</dl>
-<p>Under the buttons to carry out these workflow operations the platform shows a summary of the information contained in the workflow.</p>
-<div class="section" id="the-columns">
-<span id="columns"></span><h3>3.2.1. The Columns<a class="headerlink" href="#the-columns" title="Permalink to this headline">¶</a></h3>
-<p>The data in a workflow is stored in a structure called <em>a table</em> that is made of rows and columns (similar to a spreadsheet). The details page basically shows information about the available columns.</p>
-<div class="figure align-center">
-<img alt="../_images/wokflow_columns.png" src="../_images/wokflow_columns.png" />
-</div>
-<p>Each column has a position, name (cannot contain the quotes <em>‘</em> or <em>“</em>), a type (one of integer, string, double, boolean or date/time), a field stating if the values of that column are unique for the rows, and operations. When a column is marked as <em>Unique</em>, it means that all the values it contains are different and unique for each row. Think of a column containing a passport number. Such number is different for every person. There could be several columns with this property. The application detects automatically this property in a column. You may edit and change this properly as long as the values are the adequate ones (they satisfy the uniqueness property if you try mark a column as unique). The operations available over columns are:</p>
-<dl class="docutils">
-<dt>Edit</dt>
-<dd><p class="first">It allows you to change the name, type, unique and values allowed in the column. If you are changing the column type, the application will check if the existing values are valid. If not, the change will not be allowed.
-Similarly, if the <em>Unique</em> property is selected, the application checks the
-values to make sure this property is satisfied.</p>
-<div class="figure align-center">
-<img alt="../_images/workflow_column_edit.png" src="../_images/workflow_column_edit.png" />
-</div>
-<p class="last">The column may also have a <em>validity window</em> defined by two date/times. This validity is used when executing <em>action in</em> tasks.</p>
-</dd>
-<dt>Restrict</dt>
-<dd>Assigns as <em>allowed values</em> for the column those currently stored. This operation is useful to transform a generic column into one with values limited to the current ones.</dd>
-<dt>Clone</dt>
-<dd>Clones the column in the workflow changing its name adding the prefix <em>Copy of</em> to the name.</dd>
-<dt>Delete</dt>
-<dd>Deletes the column from the workflow. If there are conditions in the actions that use this column, those conditions will be removed from the action.</dd>
-<dt>Statistics</dt>
-<dd>Shows a statistical summary of the values in the column. If the data type is <em>number</em>, the summary includes information about quartiles, a boxplot, and a histogram. For the rest of data types, the summary only includes the histogram.</dd>
-</dl>
-</div>
-</div>
-<div class="section" id="data-table">
-<span id="dataops"></span><h2>3.3. Data Table<a class="headerlink" href="#data-table" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="data">
+<span id="dataops"></span><h2>3.2. Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>“May be stories are are just data without a soul”
 – Brené Brown</div></blockquote>
-<p>This section describes the operations to upload and merge data into the table. It may be the case that this task is already done, or it is done automatically before you work with a workflow. If this is the case, you may skip this section. The data operations page offers various options to upload and merge data to the table and the process is divided into several steps. This functionality is available from the <em>Details</em>, <em>Table</em> or <em>Actions</em> screens.</p>
-<div class="section" id="upload-merge-data">
-<h3>3.3.1. Upload/Merge Data<a class="headerlink" href="#upload-merge-data" title="Permalink to this headline">¶</a></h3>
-<p>This functionality is used to upload new data in to the table, or merge new data with the one already existing in the table. There are three types of operations depending if the data is obtained form a CSV file, an Excel file, or a connection to a remote database.</p>
+<p>This section describes the operations to either upload the first set of data into the table, or merge additional data with the one already stored. This step may be done automatically before you work with a workflow. If this is the case, you may skip this section or revisit it when you need to manipulate the existing data.</p>
+<p>The data operations are divided into three categories: upload operations, merge operations, and plugin execution. All of them, together with the possibility of removing the data in the table are shown in the pull-down menu with name <strong>Manage table data</strong>.</p>
+<p>If the workflow table is empty, OnTask will request the parameters required to <a class="reference internal" href="#upload-data"><span class="std std-ref">upload data</span></a> from a given data source. On the other hand, if the workflow table already contains data, OnTask will request the parameters to perform a <em>merge operation</em> in which the existing data is combined with the data extracted from the given source.</p>
+<div class="section" id="upload-data">
+<span id="id2"></span><h3>3.2.1. Upload Data<a class="headerlink" href="#upload-data" title="Permalink to this headline">¶</a></h3>
+<p>These operations are provided to upload the initial set of data into the workflow table using a variety of sources.</p>
 <div class="section" id="upload-csv-files">
-<h4>3.3.1.1. Upload CSV Files<a class="headerlink" href="#upload-csv-files" title="Permalink to this headline">¶</a></h4>
-<p>CSV or “comma separated value” files are plain text files in which the first line contains a comma-separated list of column names, and every subsequent line contains the values of these columns for each row. It is a popular format to exchange data that can be represented as a table, and it is for this reason that OnTask allows to upload data in this format.</p>
-<p>This operation allows you to upload the values in a CSV file into the workflow table.</p>
+<h4>3.2.1.1. Upload CSV Files<a class="headerlink" href="#upload-csv-files" title="Permalink to this headline">¶</a></h4>
+<p>CSV or “comma separated value” files are plain text files in which the first line contains a comma-separated list of column names, and every subsequent line contains the values of these columns for each row. It is a popular format to exchange data that can be represented as a table (Microsoft Excel allows to save one sheet in a spreadsheet file into this format). The following figure shows the first step to perform this operation.</p>
 <div class="figure align-center">
 <img alt="../_images/dataops_csvupload.png" src="../_images/dataops_csvupload.png" />
 </div>
-<p>In some cases, the comma-separated values are surrounded by several lines that need to be ignored when processing the data. The page to upload the CSV file allows you to specify the number of lines to ignore at the start and end of the file.</p>
+<p>In some cases, the file with comma-separated values contains several lines at either the top or the bottom of that need to be skipped when processing the data. The page to upload the CSV file allows you to specify the number of lines to skip at the start and end of the file.</p>
 </div>
 <div class="section" id="upload-excel-files">
-<h4>3.3.1.2. Upload Excel Files<a class="headerlink" href="#upload-excel-files" title="Permalink to this headline">¶</a></h4>
-<p>OnTask also supports the upload of data from Excel files.</p>
+<h4>3.2.1.2. Upload Excel Files<a class="headerlink" href="#upload-excel-files" title="Permalink to this headline">¶</a></h4>
+<p>OnTask is also capable of uploading the data from one sheet of a Excel file. The following figure shows the first step to perform this operation.</p>
 <div class="figure align-center">
 <img alt="../_images/dataops_upload_excel.png" src="../_images/dataops_upload_excel.png" />
 </div>
 <p>In this case the file is assumed to have multiple <em>Sheets</em> and one of them
 has to be selected to upload the data.</p>
 </div>
+<div class="section" id="upload-google-spreadsheet-files">
+<span id="google-spreadsheet-file"></span><h4>3.2.1.3. Upload Google Spreadsheet Files<a class="headerlink" href="#upload-google-spreadsheet-files" title="Permalink to this headline">¶</a></h4>
+<p>OnTask allows you to upload a data table stored in a Google Spreadsheet that is publicly accessible.</p>
+<div class="figure align-center">
+<img alt="../_images/dataops_upload_gsheet.png" src="../_images/dataops_upload_gsheet.png" />
+</div>
+</div>
 <div class="section" id="sql-connection">
-<span id="sql-connection-run"></span><h4>3.3.1.3. SQL connection<a class="headerlink" href="#sql-connection" title="Permalink to this headline">¶</a></h4>
-<p>The third method to upload data into the current workflow is through a SQL connection to a remote database. These connections have to be <a class="reference internal" href="../Install/index.html#sql-connections"><span class="std std-ref">previously defined and configured by the system administrator</span></a>. Instructors can use them to access the content of a previously defined table in a remote database. The option to upload data with a SQL connection shows the available connections and the possibility to <em>Run</em> each one of them:</p>
+<span id="sql-connection-run"></span><h4>3.2.1.4. SQL connection<a class="headerlink" href="#sql-connection" title="Permalink to this headline">¶</a></h4>
+<p>This operation uploads the data into the current workflow table using a SQL connection to a remote database. These connections have to be <a class="reference internal" href="../Install/index.html#sql-connections"><span class="std std-ref">previously defined and configured by the system administrator</span></a>. Instructors can use them to access the content of a previously defined table in a remote database. Once selected, the platform shows the SQL connections available and the possibility to view the connection parameters (click on the connection name), or <em>Run</em> the connection to upload the data as shown in the following figure.</p>
 <div class="figure align-center">
 <img alt="../_images/dataops_SQL_available.png" src="../_images/dataops_SQL_available.png" />
 </div>
@@ -325,229 +260,291 @@ has to be selected to upload the data.</p>
 <div class="figure align-center">
 <img alt="../_images/dataops_SQL_run.png" src="../_images/dataops_SQL_run.png" />
 </div>
-<p>When uploading data for the first time, the values are prepared to be assigned as the initial content of the table. Before this assignment is done, the platform first automatically detects those columns that have unique values (no repetitions) and marks them as <em>keys</em>. Key columns are very important because the values (as they are different for every row) are used for various operation. There must be <strong>at least one key column</strong> in the workflow and it is possible to remove the <em>key</em> mark from any column and only possible to mark a column as key if the values are all different. Before assigning the data to the table, the platform also allows to change the name of the columns as shown in the Step 2 of the upload process.</p>
+</div>
+<div class="section" id="confirmation-step-to-upload-data">
+<h4>3.2.1.5. Confirmation step to upload data<a class="headerlink" href="#confirmation-step-to-upload-data" title="Permalink to this headline">¶</a></h4>
+<p>When uploading data for the first time, the values are prepared to be assigned as the initial content of the workflow table. But before this assignment is done, the platform needs you to verify some information. Upon reading the new data, OnTask will automatically detect the data type in each column and those columns that have unique values (no repetitions) and mark them as <strong>keys</strong>. Key columns are very important because their values (as they are different for every row) are required for several operations. The workflow table <strong>must have at least one key column</strong>. If here are several columns with this property, OnTask <a class="reference internal" href="#details"><span class="std std-ref">allows you to *unmark* some of them as non-key</span></a> as long as there is always one of them wih such mark. Additionally, you may <a class="reference internal" href="#details"><span class="std std-ref">mark any column as a key column</span></a> if the values are all different. The operations to manipulate column information is described in the section <a class="reference internal" href="#details"><span class="std std-ref">Workflow Operations</span></a>.</p>
+<p>Before finishing the upload step and storing the data in the table, OnTask also allows you to change the name of the columns or change the <strong>Key</strong> attribute as shown in the following figure.</p>
 <div class="figure align-center">
 <img alt="../_images/dataops_upload_merge_step2.png" src="../_images/dataops_upload_merge_step2.png" />
 </div>
-<p>After this step (if the table is empty), the data is stored and the platform shows the <a class="reference internal" href="#details"><span class="std std-ref">Workflow Details</span></a> page. If the upload operation is executed with a workflow with existing data in the table, then instead of an upload, the platform executes a <strong>merge</strong> operation.</p>
-</div>
+<p>After this step the data is stored and the platform shows the <a class="reference internal" href="#table"><span class="std std-ref">Table</span></a> page.</p>
 </div>
 </div>
 <div class="section" id="data-merge">
-<span id="id1"></span><h2>3.4. Data Merge<a class="headerlink" href="#data-merge" title="Permalink to this headline">¶</a></h2>
+<span id="id3"></span><h3>3.2.2. Data Merge<a class="headerlink" href="#data-merge" title="Permalink to this headline">¶</a></h3>
 <div class="sidebar">
 <p class="first sidebar-title">Merge a.k.a “Join”</p>
-<p class="last">Merging is a common operation in databases and is commonly known as <em>join</em>. There are several variants of join operations depending how the differences between the key columns are handled. These same variants exist when combining columns in data frames (or a table).</p>
+<p class="last">Merging is a common operation in databases and is commonly known as <em>join</em>. There are several variants of join operations depending how the differences between the key columns are handled. These same variants exist in OnTask when combining the data already existing in the table. The operation relies on the <strong>key column</strong> to merge the two sources.</p>
 </div>
-<p>A merge operation is required when uploading a set of columns with an <strong>already existing table</strong>. This operation is very common in data science contexts. One of the problems is to specify how the values in the columns are <em>matched</em> with respect to the ones already existing in the table. In other words, each new column has a set of values, but they need to be in the right order so that the information is matched appropriately for every row. The solution for this problem is to include in both the existing table and the new data being merged a <strong>unique or key column</strong>. These columns have the property that uniquely distinguish each row with a value and therefore they are used to make sure that rows with matching values in these columns are merged. When uploading data into a workflow that already contains data in its table, the platform automatically executes additional steps to complete a <em>merge</em> operation.</p>
-<p>After detecting the key columns and offering the option of changing their names, the following steps requires to identify the key columns used to match rows from the existing table and the one being uploaded.</p>
+<p>A merge operation is executed when data is uploading and the workflow <strong>already has data in its table</strong>. Although this operation is common in data science contexts, it has several variants that make it challenging to use properly. These variants derive mostly from the method used to specify how the values in the new columns are <em>matched</em> with respect to the ones already existing in the table. In other words, each new column has a set of values, but they need to be in the right order so that the information is matched appropriately for every row. For example, if the table contains a column with the age of the learners, and a new column with the gender is merged, the rows of the new column need to correspond with the learners in the existing table. The way to address this issue is to use a <strong>key column* in the existing table and another ** key column</strong> in the new data. These columns uniquely distinguish each row with a value so they are used to make sure that the information for the rows with matching values in these columns are merged. These operations are executed in a set of additional steps. The first step of the merge operation is identical to the upload operation. After detecting the column data types, the key columns and offering the option of changing their names, the next steps identify the key columns to use in the merge, the variant to merge, and shows a summary of the changes that will result from the operation.</p>
+<div class="section" id="step-three-select-keys-and-merge-option">
+<h4>3.2.2.1. Step three: select keys and merge option<a class="headerlink" href="#step-three-select-keys-and-merge-option" title="Permalink to this headline">¶</a></h4>
+<p>The following figure shows the third step of the merge operation.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/dataops_upload_merge_step3.png"><img alt="../_images/dataops_upload_merge_step3.png" src="../_images/dataops_upload_merge_step3.png" style="width: 100%;" /></a>
 </div>
+<p>The form requires the following fields:</p>
 <dl class="docutils">
 <dt>Key columns</dt>
-<dd>You have to select a key column present in the table to be merged (mandatory) and a key column from the existing table (mandatory).</dd>
+<dd>A key column in the external table about to be merged and a key column in the existing table (both fields are required).</dd>
 <dt>Merge method</dt>
-<dd><blockquote class="first">
-<div>Once you choose a merge method, a figure and explanation appear below.There are four possible merging methods:</div></blockquote>
-<dl class="last docutils">
-<dt>Select only the rows with keys in both existing <strong>and</strong> new table</dt>
-<dd><p class="first">It will select only the rows for which values in both key columns are present. Or in other words, any row for which there is no value in either of the key columns <strong>will be dropped</strong>.</p>
-<div class="last figure align-center">
-<img alt="../_images/merge_inner.png" src="../_images/merge_inner.png" />
-</div>
-</dd>
-<dt>Select all rows in either the existing or new table</dt>
-<dd><p class="first">All rows in both tables will be considered. You have to be careful with this option because it may produce columns that are no longer unique as a result.</p>
-<div class="last figure align-center">
-<img alt="../_images/merge_outer.png" src="../_images/merge_outer.png" />
-</div>
-</dd>
-<dt>Select the rows with keys in the existing table</dt>
-<dd><p class="first">Only the rows in the new table with a value in the key column that is present in the existing table will be considered, the rest will be dropped.</p>
-<div class="last figure align-center">
-<img alt="../_images/merge_left.png" src="../_images/merge_left.png" />
-</div>
-</dd>
-<dt>Select the rows with keys in the new table</dt>
-<dd><p class="first">Only the rows in the existing table with a value in the key column that is present in the key column from the new table will be considered, the rest will be dropped.</p>
-<div class="last figure align-center">
-<img alt="../_images/merge_right.png" src="../_images/merge_right.png" />
-</div>
-</dd>
+<dd>After choosing a merge method, a figure and explanation are shown below.</dd>
 </dl>
-</dd>
-</dl>
-<p>In any of these variants, for those columns that are present in both the existing table and the new table, the values of the second will update the existing ones. This updating operation may introduce non-values in some of the columns. You have to take extra care when performing this operation as it may destroy part of the existing data. In the extreme case, if you try to merge a table with a key column with no values in common with the existing key and you select the method that considers rows with keys in both the existing and new table, the result is an empty table.</p>
+<p>There are four possible merge variants:</p>
+<ol class="arabic">
+<li><p class="first"><strong>Select only the rows with keys in both existing **and</strong> new table**.
+It will select only the rows for which values in both key columns are present. Or in other words, any row for which there is no value in either of the key columns <strong>will be dropped</strong>.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/merge_inner.png"><img alt="../_images/merge_inner.png" src="../_images/merge_inner.png" style="width: 50%;" /></a>
+</div>
+</li>
+<li><p class="first"><strong>Select all rows in either the existing or new table</strong>.</p>
+<p>All rows in both tables will be considered. You have to be careful with this option because it may produce columns that are no longer unique as a result.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/merge_outer.png"><img alt="../_images/merge_outer.png" src="../_images/merge_outer.png" style="width: 50%;" /></a>
+</div>
+</li>
+<li><p class="first"><strong>Select the rows with keys in the existing table</strong>.</p>
+<p>Only the rows in the new table with a value in the key column that is present in the existing table will be considered, the rest will be dropped.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/merge_left.png"><img alt="../_images/merge_left.png" src="../_images/merge_left.png" style="width: 50%;" /></a>
+</div>
+</li>
+<li><p class="first"><strong>Select the rows with keys in the new table</strong>.</p>
+<p>Only the rows in the existing table with a value in the key column that is present in the key column from the new table will be considered, the rest will be dropped.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/merge_right.png"><img alt="../_images/merge_right.png" src="../_images/merge_right.png" style="width: 50%;" /></a>
+</div>
+</li>
+</ol>
+<p>In any of these variants, for those columns that are present in both the existing table and the new table, the values of the second will update the existing ones in the first. This update may introduce non-values in some of the rows (for example in columns for with the new data does not provide any value). Additionally, extra care needs to be taken when performing this operation as some of the merge variants may eliminate data in the existing table. In the extreme case, if you try to merge a table with a key column with no values in common with the existing key and you select the method that considers rows with keys in both the existing and new table, the result is an empty table.</p>
+</div>
+<div class="section" id="step-four-verify-upcoming-changes">
+<h4>3.2.2.2. Step four: verify upcoming changes<a class="headerlink" href="#step-four-verify-upcoming-changes" title="Permalink to this headline">¶</a></h4>
 <p>After selecting these parameters the last step is to review the effect of the operation and proceed with the merge as shown in the following figure.</p>
 <div class="figure align-center">
 <img alt="../_images/dataops_upload_merge_step4.png" src="../_images/dataops_upload_merge_step4.png" />
 </div>
 </div>
-<div class="section" id="the-table">
-<span id="table"></span><h2>3.5. The Table<a class="headerlink" href="#the-table" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+<div class="section" id="table">
+<span id="id4"></span><h2>3.3. Table<a class="headerlink" href="#table" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>“You’re here because you know something. What you know you can’t explain,
 but you feel it”
 – Morpheus, The Matrix</div></blockquote>
-<p>This functionality is to show the values stored in the workflow. Since this data can be arbitrarily large, it is likely that only a portion of the columns is shown on the screen at any given point.</p>
+<p>The information stored in the workflow table is accessed through the <span class="fa fa-table"></span> <em>Table</em> link in the top bar menu. These pages show the values stored in the workflow table. As this table can be arbitrarily large, OnTasks groups the rows into pages and offers the possibility to choose how many rows are contained in each page, as well as links to each of the pages. If the table has a large number of columns, a horizontal scroll is available to show the additional content. The order of the columns in the table can be changed by dragging them from the top row and dropping them in a new position.</p>
+<p>The following figure shows an example of the main table page.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/table.png"><img alt="../_images/table.png" src="../_images/table.png" style="width: 100%;" /></a>
 </div>
-<p>The buttons at the top of the page allow to execute several operations.</p>
+<p>The table also offers the possibility of searching for a value. The given string is used to search all the columns in the table.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/table_buttons.png"><img alt="../_images/table_buttons.png" src="../_images/table_buttons.png" style="width: 100%;" /></a>
 </div>
+<p>The buttons at the top of the page offer the following functions:</p>
 <dl class="docutils">
-<dt>Add row</dt>
+<dt><span class="fa fa-plus"></span> Row</dt>
 <dd>A form to introduce a new row in the table with one field per column.</dd>
-<dt>Add Column</dt>
-<dd>The options to add a regular column, a column with values calculated with a formula, or a column with random values (See <a class="reference internal" href="#details-add-column"><span class="std std-ref">Adding a column</span></a> for a detailed explanation).</dd>
-<dt>Manage table data</dt>
-<dd>Menu to upload/merge data to the table or execute a plugin (See <a class="reference internal" href="#dataops"><span class="std std-ref">Data Table</span></a> for a detailed explanation).</dd>
-<dt>Views</dt>
-<dd>Menu to either show a subset of the table (a view) or manage the views in the workflow (described in <a class="reference internal" href="#table-views"><span class="std std-ref">the next section</span></a>).</dd>
-<dt>Dashboard</dt>
-<dd>The dashboard is a page that shows a statistical summary for the columns shown in the table. This number may be too high, so you should consider using <a class="reference internal" href="#table-views"><span class="std std-ref">Table Views</span></a> to simplify the information shown.</dd>
-<dt>CSV Download</dt>
-<dd>This functionality allows to obtain a CSV file with the data shown on the screen. Combine this functionality wit the <a class="reference internal" href="#table-views"><span class="std std-ref">Table Views</span></a> to handle large tables.</dd>
+<dt><span class="fa fa-plus"></span> Column</dt>
+<dd>Add a new column to the table. The pull-down menu also allows to add a column with values calculated with a formula and using the existing values, or a column with random values (See <a class="reference internal" href="#details-add-column"><span class="std std-ref">Adding a column</span></a> for a detailed explanation).</dd>
+<dt><a class="reference internal" href="#dataops"><span class="std std-ref">Manage table data</span></a></dt>
+<dd>Menu to upload/merge data to the table (see <a class="reference internal" href="#dataops"><span class="std std-ref">Data</span></a> for a detailed explanation), execute a plugin, or delete the data in the table.</dd>
+<dt><span class="fa fa-eye"></span> Views</dt>
+<dd>A view is a screen showing a subset of rows and/or columns in the table. Clicking in the Views link will take you to another screen to <a class="reference internal" href="#table-views"><span class="std std-ref">manage these views</span></a>. The pull down menu offers links to access the subset of the table defined by the available views.</dd>
+<dt><span class="fa fa-dashboard"></span> Dashboard</dt>
+<dd>The dashboard shows a statistical summary for the columns shown in the table. This number may be too high, so you should consider using <a class="reference internal" href="#table-views"><span class="std std-ref">Table Views</span></a> to reduce the amount of information shown in the dashboard.</dd>
+<dt><span class="fa fa-download"></span> CSV Download</dt>
+<dd>This functionality downloads the data in the table as a CSV file. Combine this functionality with the <a class="reference internal" href="#table-views"><span class="std std-ref">Table Views</span></a> to handle large tables.</dd>
 </dl>
-<p>The rows shown in the screen are automatically grouped into pages (you may choose the number of entries per page in the upper left side of the table). Additionally, the table offers a search box in the the upper left corner. The operations in the left side of the row allow you to access a statistical summary of the values in the row, edit any of the values or delete the row.</p>
+<p>The left-most column in the  table shows the operations to manipulate a row:</p>
+<dl class="docutils">
+<dt><span class="fa fa-pencil"></span> Edit content</dt>
+<dd>This link opens a form with one field per column to modify the values in the row. The key columns are shown but not allowed to be changed.</dd>
+<dt><span class="fa fa-bar-chart"></span> Dashboard</dt>
+<dd>A dashboard showing the population measures for all the columns and a mark showing where are the values for this row.</dd>
+<dt><span class="fa fa-trash"></span> Delete</dt>
+<dd>Delete the row from the table.</dd>
+</dl>
 <div class="section" id="table-views">
-<span id="id2"></span><h3>3.5.1. Table Views<a class="headerlink" href="#table-views" title="Permalink to this headline">¶</a></h3>
-<p>Due to the potentially large size of this table in either number of rows or columns, OnTask offers the possibility to define <em>views</em>. A view is simply a table that shows a subset of columns and rows. You may define as many views as needed for the table.</p>
+<span id="id5"></span><h3>3.3.1. Table Views<a class="headerlink" href="#table-views" title="Permalink to this headline">¶</a></h3>
+<p>Due to the potentially large size of the workflow table in either number of rows or columns, OnTask offers the possibility to define <span class="fa fa-eye"></span> <em>views</em>. A view is a table that shows a subset of columns and rows of the original table. You may define as many views as needed. The link <em>Views</em> in the main table page shows the views available and the operations to manage them.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/table_views.png"><img alt="../_images/table_views.png" src="../_images/table_views.png" style="width: 100%;" /></a>
 </div>
-<p>When creating or editing the content of the view, aside from the name and the description, you may select those columns to show, and a expression to restrict the rows to those for which that expression is correct (you may leave this expression empty and all rows will be shown).</p>
+<p>The buttons at the top of the page offer the following operations:</p>
+<dl class="docutils">
+<dt>Full Table</dt>
+<dd>Go back to the page showing the entire data table.</dd>
+<dt><span class="fa fa-plus"></span> Add View</dt>
+<dd>Create a new view</dd>
+</dl>
+<p>When creating a view you need to provide a name (required), a description, a subset of columns to show (at least one of them must be a <strong>key column</strong>), and an expression to select a subset of rows. This expression is evaluated with the values of every row and if the result is <em>True</em>, the row is included in the view. The following figure shows an example of the information that is included in the definition of a view.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/table_view_edit.png"><img alt="../_images/table_view_edit.png" src="../_images/table_view_edit.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/table_view_edit.png"><img alt="../_images/table_view_edit.png" src="../_images/table_view_edit.png" style="width: 60%;" /></a>
 </div>
-<p>Once defined, you may select the view to show the corresponding data subset.</p>
+<p>Once a view is created, the following operations are available:</p>
+<dl class="docutils">
+<dt><span class="fa fa-pencil"></span> Edit</dt>
+<dd>Click in the view name to edit its elements (name, description, set of columns to show and row filter)</dd>
+<dt><span class="fa fa-eye"></span> Show</dt>
+<dd>Show the subset of the table selected by the view</dd>
+<dt><span class="fa fa-clone"></span> Clone</dt>
+<dd>Create a duplicate of this view with the prefix <em>Copy_of</em> added to its name. This operation is useful to create a new view with content that is similar to an already existing one (clone and edit).</dd>
+<dt><span class="fa fa-trash"></span> Delete</dt>
+<dd>Delete the view.</dd>
+</dl>
+<p>The page to show the subset of the table defined by the view is identical to the full table view, but the table is restricted to the appropriate columns and rows. The view shown in the previous figure defines a subset of 12 columns of the table that is rendered as shown in the following figure.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/table_view_view.png"><img alt="../_images/table_view_view.png" src="../_images/table_view_view.png" style="width: 100%;" /></a>
 </div>
-<p>The <em>Dashboard</em> and <em>CSV Download</em> buttons, when used while using a view, will apply to the selected data subset.</p>
+<p>The <span class="fa fa-dashboard"></span> <em>Dashboard</em> and <span class="fa fa-download"></span> <em>CSV Download</em> buttons, when used while in a view, will apply to the selected data subset.</p>
 </div>
 </div>
-<div class="section" id="the-actions">
-<span id="action"></span><h2>3.6. The Actions<a class="headerlink" href="#the-actions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="actions">
+<span id="action"></span><h2>3.4. Actions<a class="headerlink" href="#actions" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>“In order to carry a positive action we must develop here a positive
 vision”
 – Dalai Lama</div></blockquote>
-<p>This is the most important functionality of the platform. Actions are used exchange information with the learners, either offering a personalized document, or requesting data. A workflow contains an arbitrary number of actions shown in the <em>Table</em> page.</p>
+<p>This is the most important functionality of the platform. Actions are used exchange information with the learners or other platforms, either through personalized information, or requesting data through a survey. A workflow contains a set of actions shown when selecting <span class="fa fa-comments"></span> <em>Actions</em> page in the top-bar menu. The next figure shows an example of the actions available in one workflow.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/actions.png"><img alt="../_images/actions.png" src="../_images/actions.png" style="width: 100%;" /></a>
 </div>
-<p>Each action is identified by a name (unique) and an optional description. OnTask currently offers the following types of actions: personalized text, personalized JSON, and surveys. The action table shows also the operations available for each of them (right most column in the table shown in the previous figure).</p>
-<div class="section" id="personalized-content">
-<span id="id3"></span><h3>3.6.1. Personalized Content<a class="headerlink" href="#personalized-content" title="Permalink to this headline">¶</a></h3>
-<p>These actions allow to create a resource (similar to a HTML page) and mark certain elements with <em>conditions</em> that will control if they are included or ignored when showing the document. Think of this personalized content as a resource (message, tip, comment) you would offer learners but with content that is different depending on the data stored in the table. You may have several of these items prepared to be used at different points during the experience. The personalized content action is manipulated with the screen shown in the following figure:</p>
+<p>The buttons at the top of the page offer the following operations:</p>
+<dl class="docutils">
+<dt><span class="fa fa-plus"></span> Action</dt>
+<dd>Create a new action in the workflow. The form requires a name (unique for the current workflow), a description (optional), and the type of action. OnTask offers the following types of actions: personalized text, personalized Canvas email, personalized JSON, and surveys.</dd>
+<dt><span class="fa fa-upload"></span> Import action</dt>
+<dd>Upload an action previously downloaded from another workflow.</dd>
+</dl>
+<p>The actions in the workflow are shown in a tabular format. For each action the following main operations are offered:</p>
+<dl class="docutils">
+<dt><span class="fa fa-pencil"></span> Edit</dt>
+<dd>Click in the name action to edit its content.</dd>
+<dt><span class="fa fa-rocket"></span> Run</dt>
+<dd>Use the action to either provide personalized content or run a survey (see <a class="reference internal" href="#running-actions"><span class="std std-ref">Running actions</span></a> for more information)</dd>
+<dt><span class="fa fa-link"></span> URL</dt>
+<dd>Provide access to learners to the content of the action through a link (only available for actions of type Personalized Text)</dd>
+<dt><span class="fa fa-file-archive-o"></span> ZIP</dt>
+<dd>Download a ZIP file with as many files as selected learners in the action. Each file contains the personalized document for the learner (only available for Personalized Text actions)</dd>
+<dt><span class="fa fa-calendar"></span> Schedule</dt>
+<dd>Schedule the execution of the action for some time in the future</dd>
+<dt><span class="fa fa-pencil"></span> Rename</dt>
+<dd>Edit the name and description of the action.</dd>
+<dt><span class="fa fa-clone"></span> Clone</dt>
+<dd>Create an exact duplicate of the action adding the prefix “Copy_of” to its name.</dd>
+<dt><span class="fa fa-download"></span> Export</dt>
+<dd>Download a file containing the definition of the action suitable to be uploaded into another workflow.</dd>
+<dt><span class="fa fa-trash"></span> Delete</dt>
+<dd>Remove the action from the workflow.</dd>
+</dl>
+<div class="section" id="personalized-text">
+<span id="personalized-content"></span><h3>3.4.1. Personalized Text<a class="headerlink" href="#personalized-text" title="Permalink to this headline">¶</a></h3>
+<p>These actions allow to create a document (similar to a HTML page) and mark elements (paragraphs, sentences, images) with <em>conditions</em> that will control if they are included or ignored when showing the document. The conditions are stated in terms of the columns of the data table. Think of this personalized content as a resource (message, tip, comment) you would offer learners but with content that is different depending on the data stored in the table. You may have several of these actions prepared to be used at different points during a learning experience. The personalized text action is manipulated with the screen shown in the following figure:</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_edit_action_out.png"><img alt="../_images/action_edit_action_out.png" src="../_images/action_edit_action_out.png" style="width: 100%;" /></a>
 </div>
-<p>Before describing in detail the structure of this screen let’s explore the concept of <em>condition</em>. A condition is an expression that when evaluated will either be <strong>True</strong> or <strong>False</strong>. These expressions are commonly used in other applications such as spreadsheets or programming languages. The following image shows an example of this condition.</p>
-<div class="figure align-center">
-<img alt="../_images/action_action_out_edit_filter.png" src="../_images/action_action_out_edit_filter.png" />
+<p>The screen has three tabs: the left one contains the editor, the center one the definition of a filter (optional) to select a subset of the learners to consider for this action, and the right tab contains the conditions used in the text (if any).</p>
+<dl class="docutils" id="personalized-text-editor">
+<dt>The Personalized Text HTML Editor (left tab)</dt>
+<dd><p class="first">This is a conventional HTML editor offering the usual operations (inserting text, headings, lists, links, images, etc.) Right above the editor window you have three pull down menus to: insert a column value in the text (a placeholder), use a condition to conditionally show the text currently highlighted, or insert a <a class="reference internal" href="#details-attributes"><span class="std std-ref">workflow attribute</span></a> that will be replaced by the corresponding value.</p>
+<div class="last figure align-center">
+<a class="reference internal image-reference" href="../_images/action_edit_action_out.png"><img alt="../_images/action_edit_action_out.png" src="../_images/action_edit_action_out.png" style="width: 100%;" /></a>
 </div>
-<p>The expression in the previous figure is contained under the title <strong>Formula</strong> and can be read as:</p>
-<blockquote>
-<div>Video_1_W4 = 0 or Video_2_W4 = 0</div></blockquote>
-<p>The first element of the expression is the sub-expression <code class="docutils literal notranslate"><span class="pre">Video_1_W4</span> <span class="pre">=</span> <span class="pre">0</span></code> which contains the variable <code class="docutils literal notranslate"><span class="pre">Video_1_W4</span></code>, the equal sign, and the constant zero. The second element is a sub-expression with the variable <code class="docutils literal notranslate"><span class="pre">Video_2_W4</span></code>, the equal sign, and the constant 0. These two sub-expresssions are connected through the <strong>OR</strong> operator, which means that the expression will be <strong>True</strong> if either of the sub-expressions are <strong>True</strong>, and <strong>False</strong> in any other case. When evaluating this expression, the variables are replaced by concrete values (numbers). For example, if <code class="docutils literal notranslate"><span class="pre">Video_1_W4</span></code> is replaced by 3, and <code class="docutils literal notranslate"><span class="pre">Video_2_W4</span></code> is replaced by 4, the evaluation will transform the expression into <span class="math notranslate nohighlight">\(3 = 0 or 4 = 0\)</span>. The sub-expression <span class="math notranslate nohighlight">\(3 = 0\)</span> is clearly <strong>False</strong> and so is the other sub-expression <span class="math notranslate nohighlight">\(4 = 0\)</span>. This means the initial expression is <strong>False</strong>. result is either <strong>True</strong> or <strong>False</strong>. Another possible evaluation is if <code class="docutils literal notranslate"><span class="pre">Video_1_W4</span></code> is equal to zero (and <code class="docutils literal notranslate"><span class="pre">Video_2_W4</span></code> remains equal to 4). In this case the resulting expression is <span class="math notranslate nohighlight">\(0 = 0 or 4 = 0\)</span>. In this case, the first sub-expression is <strong>True</strong>, and although the second is <strong>False</strong>, only one is needed for the overall expression to be <strong>True</strong>.</p>
-<p>These conditions can have nested sub-expressions and get complex fairly quickly. However, the underlying mechanism to evaluate them remains the same: replace variables with values and decide the result (<strong>True</strong> or <strong>False</strong>). OnTask relies on these expressions to personalize the content of the actions. Let’s now go back to the screen to edit an action. The area has four components</p>
-<dl class="docutils">
-<dt>The filter</dt>
-<dd><p class="first">The top area contains a <em>filter</em>. This element is an expression used to decide which learners (or more precisely, the corresponding rowsin the data table that) will be selected and used in this action.</p>
-<div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_action_out_filterpart.png"><img alt="../_images/action_action_out_filterpart.png" src="../_images/action_action_out_filterpart.png" style="width: 100%;" /></a>
-</div>
-<p class="last">In the example above, the expression selects 3 out of all 14 learners in the data table. This filter is useful when you want to provide the personalized text to a sub-set of the learners. For example, you may want to send a reminder about the submission deadline the day before but only to those students that haven’t connected to the system. If you have that informatio in a column of the data table, you may create the condition that selects only those learners.</p>
 </dd>
+</dl>
+<dl class="docutils" id="personalized-text-conditions">
 <dt>The conditions</dt>
-<dd><p class="first">This area contains additional expressions called <em>conditions</em>.</p>
+<dd><p class="first">The right tab contains the <em>conditions</em>. A condition is an expression that when evaluated with respect to the values in the table for each learner will either be <strong>True</strong> or <strong>False</strong>. These expressions are commonly used in other applications such as spreadsheets or programming languages. The following screen shows an example of the content of this tab with two conditions.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_action_out_conditionpart.png"><img alt="../_images/action_action_out_conditionpart.png" src="../_images/action_action_out_conditionpart.png" style="width: 100%;" /></a>
 </div>
-<p>A condition is another expression (identical to the filter) but it will be used in the middle of the text to decide if a portion of the text will be shown or ignored. The buttons in the screen allow you to edit the expression, insert the condition to control the appearance of text in the editor (below), clone the condition, or delete it from the action.</p>
-<p class="last">For each condition, the button shows the number of learners for which the expression in that condition evaluates to <strong>True</strong>. If this value is zero, it means that any text you include in the editor surrounded by this condition will not appear for any of the learners.</p>
-</dd>
-<dt>The HTML text editor</dt>
-<dd><p class="first">This is the area to create the personalized document. It is a conventional HTML editor offering the usual functionalities (inserting text in various forms, headings, lists, links, images, etc.) Right above the editor window you have two choice menus that you can use to insert either a <a class="reference internal" href="#details-attributes"><span class="std std-ref">workflow attribute</span></a> or a column name that will be replaced by the corresponding value.</p>
-<div class="last figure align-center">
-<a class="reference internal image-reference" href="../_images/action_action_out_editorpart.png"><img alt="../_images/action_action_out_editorpart.png" src="../_images/action_action_out_editorpart.png" style="width: 100%;" /></a>
+<p>The button <span class="fa fa-plus"></span> Condition at the top of the tab opens the form to define a new condition. Once created
+The buttons in the screen allow you to edit the expression, insert the condition to control the appearance of text in the editor (below), clone the condition, or delete it from the action.</p>
+<p>Each condition shows the number of learners for which the expression in that condition evaluates to <strong>True</strong> (if this value is zero, it means that any text you include in the editor controlled by this condition will not appear for any of the learners), the name, description, and the defined formula.</p>
+<p>The icons in the bottom of the condition element allow the following operations:</p>
+<dl class="docutils">
+<dt><span class="fa fa-pencil"></span> Edit</dt>
+<dd>Open a form to edit the name, description and expression in a condition.</dd>
+<dt><span class="fa fa-clone"></span> Clone</dt>
+<dd>Create an exact duplicate of this condition with the prefix “Copy_of” added to its name. This operation is useful when creating a new condition with an expression very similar to an existing one.</dd>
+<dt><span class="fa fa-trash"></span> Delete</dt>
+<dd>Delete the condition from this action.</dd>
+</dl>
+<p>The following image shows an example of this condition.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/action_action_out_edit_condition.png"><img alt="../_images/action_action_out_edit_condition.png" src="../_images/action_action_out_edit_condition.png" style="width: 60%;" /></a>
 </div>
+<p>The expression in the previous condition is shown under the title <strong>The text will be shown if</strong> and can be read as:</p>
+<blockquote>
+<div>Correct_1_W4 equal to zero</div></blockquote>
+<p class="last">The first element is the column name <code class="docutils literal notranslate"><span class="pre">Correct_1_W4</span></code>, followed by the equal sign, and then the constant zero. When evaluating this expression, the column name is replaced by the value from the corresponding to each learner. For example, if a given learner has <code class="docutils literal notranslate"><span class="pre">Correct_1_W4</span></code> equal to 3 the evaluation will transform the expression into <span class="math notranslate nohighlight">\(3 = 0\)</span> which is <strong>False</strong>. Another possible evaluation is if another learner has <code class="docutils literal notranslate"><span class="pre">Correct_1_W4</span></code> equal to zero. After substitution of the column by the values for the learner, the resulting expression is <span class="math notranslate nohighlight">\(0 = 0\)</span>. In this case, the expression is <strong>True</strong>. Once defined this condition can be applied to a part of the personalized text. When creating the texts, the condition is evaluated with the values for each student. If the expression is true, the text is included, if not, it is ignored. This mechanism is at the heart of how OnTask personalizes the content of the actions. In the example above, the expression in the condition one of the learners in the data table.</p>
 </dd>
-<dt>The Preview button</dt>
+</dl>
+<dl class="docutils" id="personalized-text-filter">
+<dt>The filter</dt>
+<dd><p class="first">The center tab shows a <em>filter</em>. This element is an expression used to decide which learners (or more precisely, the corresponding rows in the data table that) will be selected and used in this action.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/action_action_out_filterpart.png"><img alt="../_images/action_action_out_filterpart.png" src="../_images/action_action_out_filterpart.png" style="width: 100%;" /></a>
+</div>
+<p>The filter element shows the name, description, and the formula defined. The icons at the bottom of the object provide access to the following operations:</p>
+<dl class="docutils">
+<dt><span class="fa fa-pencil"></span> Edit</dt>
+<dd>Edit the name, description, and formula of the filter.</dd>
+<dt><span class="fa fa-trash"></span> Delete</dt>
+<dd>Remove the filter from the action.</dd>
+</dl>
+<p>When editing or creating a filter, the form shows the information as in the following figure:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/action_action_out_edit_filter.png"><img alt="../_images/action_action_out_edit_filter.png" src="../_images/action_action_out_edit_filter.png" style="width: 60%;" /></a>
+</div>
+<p>The expression in this condition is shown under the title <strong>The text will be shown if</strong> and can be read as:</p>
+<blockquote>
+<div>Video_1_W4 = 0 or Video_2_W4 = 0</div></blockquote>
+<p>The first element of the expression is the sub-expression <code class="docutils literal notranslate"><span class="pre">Video_1_W4</span> <span class="pre">=</span> <span class="pre">0</span></code> which contains the variable <code class="docutils literal notranslate"><span class="pre">Video_1_W4</span></code>, the equal sign, and the constant zero. The second element is a sub-expression with the variable <code class="docutils literal notranslate"><span class="pre">Video_2_W4</span></code>, the equal sign, and the constant 0. These two sub-expressions are connected through the <strong>OR</strong> operator, which means that the expression will be <strong>True</strong> if either of the sub-expressions are <strong>True</strong>, and <strong>False</strong> in any other case. When evaluating this expression, the variables are replaced by concrete values (numbers). For example, if <code class="docutils literal notranslate"><span class="pre">Video_1_W4</span></code> is replaced by 3, and <code class="docutils literal notranslate"><span class="pre">Video_2_W4</span></code> is replaced by 4, the evaluation will transform the expression into <span class="math notranslate nohighlight">\(3 = 0 or 4 = 0\)</span>. The sub-expression <span class="math notranslate nohighlight">\(3 = 0\)</span> is clearly <strong>False</strong> and so is the other sub-expression <span class="math notranslate nohighlight">\(4 = 0\)</span>. This means the initial expression is <strong>False</strong>. result is either <strong>True</strong> or <strong>False</strong>. Another possible evaluation is if <code class="docutils literal notranslate"><span class="pre">Video_1_W4</span></code> is equal to zero (and <code class="docutils literal notranslate"><span class="pre">Video_2_W4</span></code> remains equal to 4). In this case the resulting expression is <span class="math notranslate nohighlight">\(0 = 0 or 4 = 0\)</span>. In this case, the first sub-expression is <strong>True</strong>, and although the second is <strong>False</strong>, only one is needed for the overall expression to be <strong>True</strong>.</p>
+<p class="last">These conditions can have nested sub-expressions and get complex fairly quickly. However, the underlying mechanism to evaluate them remains the same: replace variables with values and decide the result (<strong>True</strong> or <strong>False</strong>). OnTask relies on these expressions to personalize the content of the actions.</p>
+</dd>
+</dl>
+<p>The buttons at the bottom of the page offer the following operations:</p>
+<dl class="docutils">
+<dt><span class="fa fa-eye"></span> Preview</dt>
 <dd><p class="first">The Preview button shows how the text in the editor is shown for those
 learners selected by the filter (if any). After clicking in the button you
 will see a window with the resulting text. If there are any elements in the
 text that are controlled by any condition, the bottom area will show their
 values.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_action_out_preview.png"><img alt="../_images/action_action_out_preview.png" src="../_images/action_action_out_preview.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/action_action_out_preview.png"><img alt="../_images/action_action_out_preview.png" src="../_images/action_action_out_preview.png" style="width: 60%;" /></a>
 </div>
-<p>Use the arrow buttons to see all the different versions of the text
+<p class="last">Use the arrow buttons to see all the different versions of the text
 depending on the values stored in the table for each learner.</p>
-<div class="last figure align-center">
-<img alt="../_images/Ontask____howtopreviewtext.gif" src="../_images/Ontask____howtopreviewtext.gif" />
-</div>
 </dd>
-<dt>The Save button</dt>
+<dt><span class="fa fa-floppy-o"></span> Save</dt>
+<dd>This button saves the content of the text editor and continues in the same editor page.</dd>
+<dt><span class="fa fa-check"></span> Close</dt>
 <dd>This button saves the content of the text editor and returns to the page
 showing all the actions in the workflow.</dd>
 </dl>
 <div class="section" id="using-column-values-attributes-and-conditions-in-a-personalized-text">
-<h4>3.6.1.1. Using column values, attributes and conditions in a Personalized Text<a class="headerlink" href="#using-column-values-attributes-and-conditions-in-a-personalized-text" title="Permalink to this headline">¶</a></h4>
-<p>The text in these actions may include three types of elements that
-are personalized for each learner: an attribute name, a column name or a
-portion of text marked with a condition.</p>
+<span id="using-values-attributes-conditions"></span><h4>3.4.1.1. Using column values, attributes and conditions in a Personalized Text<a class="headerlink" href="#using-column-values-attributes-and-conditions-in-a-personalized-text" title="Permalink to this headline">¶</a></h4>
+<p>As previously described the <a class="reference internal" href="#personalized-text-editor"><span class="std std-ref">Personalized Text Editor</span></a> may include three per-learner personalized elements: an attribute name, a column name or a portion of text marked with a condition.</p>
 <dl class="docutils">
 <dt>Attributes</dt>
-<dd><p class="first">Attributes are simply synonyms that you may want to use in more than one
-action. For example, if you have several actions that include the name of a
-course, instead of including that name if all actions, you may define an
-<em>attribute</em> with name <em>course name</em> and value <em>Biology 101</em> and include in
-the actions the attribute name. OnTask will replace that attribute with its
-value when showing the text to the learners. If you then change the name of
-the course (or you export this workflow and import it to be used in
-anotehr course), you only need to change the attribute and the name of the
-course will appear correctly in all actions (in what is called a <em>single
-point of change</em>).</p>
-<p class="last">To insert an attribute name in the text simply place the cursor in the
-editor where you want the value of that attribute to appear and select
-the attribute from the area above the editor. The name of the attribute
-will be inserted in the text surrounded by double curly braces, (for
-example <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">course_name</span> <span class="pre">}}</span></code>. Only <a class="reference internal" href="#details-attributes"><span class="std std-ref">the attributes</span></a>
-you previously created in the details page are available.</p>
+<dd><p class="first">Attributes are simply synonyms that you may want to use in more than one action. For example, if you have several actions that include the name of a course, instead of including that name if all actions, you may define an <em>attribute</em> with name <em>course name</em> and value <em>Biology 101</em> and include in the actions the attribute name. OnTask will replace that attribute with its value when showing the text to the learners. If you then change the name of the course (or you export this workflow and import it to be used in another course), you only need to change the attribute and the name of the course will appear correctly in all actions (in what is called a <em>single point of change</em>).</p>
+<p class="last">To insert an attribute name in the text simply place the cursor in the editor where you want the value of that attribute to appear and select the attribute from the area above the editor. The name of the attribute will be inserted in the text surrounded by double curly braces, (for example <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">course_name</span> <span class="pre">}}</span></code>. Only <a class="reference internal" href="#details-attributes"><span class="std std-ref">the attributes</span></a> you previously created in the details page are available.</p>
 </dd>
 <dt>Column names</dt>
-<dd>The other element that can be personalized is a column name. For example,
-suppose you have a column in your table with the first name of the learners.
-You can use the column name to personalize the greeting in the text.
-To insert a column name, you follow the same steps used for the attribute but
-this time you select the column name from the pull-down menu. You will see
-that the name of the column appears in the text also surrounded by
-double curly braces (for example <code class="docutils literal notranslate"><span class="pre">Hi</span> <span class="pre">{{</span> <span class="pre">GivenName</span> <span class="pre">}}</span></code>. The double curly
-braces is the way OnTask has to mark that text to be personalized or
-replaced by the corresponding value for each learner extracted from the data
-table.</dd>
+<dd>The other element that can be personalized is a column name. For example, suppose you have a column in your table with the first name of the learners. You can use the column name to personalize the greeting in the text. To insert a column name, you follow the same steps used for the attribute but this time you select the column name from the pull-down menu. You will see that the name of the column appears in the text also surrounded by double curly braces (for example <code class="docutils literal notranslate"><span class="pre">Hi</span> <span class="pre">{{</span> <span class="pre">GivenName</span> <span class="pre">}}</span></code>. The double curly
+braces is the way OnTask has to mark that text to be personalized or replaced by the corresponding value for each learner extracted from the data table.</dd>
 <dt>Conditional text</dt>
-<dd><p class="first">Using a condition to control if a portion of the text is shown or
-ignored is slightly different. First highlight the text you want to appear
-depending on the condition in the
-editor. Then go to the corresponding button for the condition, click in the
-arrow next to its name, and select <em>Insert in text</em>. The text will be
-surrounded by two marks. For example
-if the condition name is <code class="docutils literal notranslate"><span class="pre">Video_active</span></code>, the text you highlighted will
-appear in the editor afer clicking in the <em>Insert in text</em> as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">Video_active</span> <span class="o">%</span><span class="p">}</span><span class="n">Good</span> <span class="n">work</span> <span class="k">with</span> <span class="n">this</span> <span class="n">week</span><span class="s1">&#39;s video{</span><span class="si">% e</span><span class="s1">ndif %}</span>
+<dd><p class="first">Using a condition to control if a portion of the text is shown or ignored is slightly different. You need to first highlight the text you want to appear depending on the condition in the editor. Then click in the pull down menu <strong>Use condition in highlighted text</strong> and select the condition to use. The text will be surrounded by two marks. For example if the condition name is <code class="docutils literal notranslate"><span class="pre">No</span> <span class="pre">Video</span> <span class="pre">1</span></code>, the text you highlighted will appear in the editor after clicking in the <em>Insert in text</em> as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">No</span> <span class="n">Video</span> <span class="mi">1</span> <span class="o">%</span><span class="p">}</span><span class="n">You</span> <span class="n">need</span> <span class="n">to</span> <span class="n">review</span> <span class="n">his</span> <span class="n">week</span><span class="s1">&#39;s video{</span><span class="si">% e</span><span class="s1">ndif %}</span>
 </pre></div>
 </div>
-<p>This format marks the message <em>Good work with this week’s video</em> to
-appear only for those learners for which the condition <code class="docutils literal notranslate"><span class="pre">Video_active</span></code>
-evaluates to <strong>True</strong> with their current values in the data table.
-Otherwise, the text will be ignored. The following figure illustrates this process.</p>
+<p>This format marks the message <em>You need to review this week’s video</em> to appear only for those learners for which the condition <code class="docutils literal notranslate"><span class="pre">No</span> <span class="pre">Video</span> <span class="pre">1</span></code> evaluates to <strong>True</strong> with their current values in the data table. Otherwise, the text will be ignored. The following figure illustrates this process.</p>
 <div class="last figure align-center">
 <a class="reference internal image-reference" href="../_images/Ontask____howtocreatetext.gif"><img alt="../_images/Ontask____howtocreatetext.gif" src="../_images/Ontask____howtocreatetext.gif" style="width: 100%;" /></a>
 </div>
@@ -555,105 +552,175 @@ Otherwise, the text will be ignored. The following figure illustrates this proce
 </dl>
 </div>
 </div>
+<div class="section" id="surveys">
+<span id="id6"></span><h3>3.4.2. Surveys<a class="headerlink" href="#surveys" title="Permalink to this headline">¶</a></h3>
+<p>The personalized text actions described in the previous section makes information available to the learners. The <em>survey</em> actions perform the operation in the opposite direction, they collect information from the learners and store it in the table. This functionality can be seen as a simplified version of other survey engines such as Google Forms, SurveyMonkey or Qualtrics. In a learning context a survey can be used by the learners to submit certain data, or by the instructor to collect annotations about learners throughout the experience. OnTask supports these two modalities.</p>
+<p>The edition of a survey action is done through a page with three tabs. The following figure shows an example of this page.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/action_edit_action_in.png"><img alt="../_images/action_edit_action_in.png" src="../_images/action_edit_action_in.png" style="width: 100%;" /></a>
+</div>
+<p>The information collected for each question will be represented in the table by a column. The editor page allows you to use any of the existing questions to be included in a survey. The three tabs in the screen offer the following functionality.</p>
+<dl class="docutils">
+<dt>Survey Questions</dt>
+<dd><p class="first">The tab in the left shows the questions that are contained in the survey. The two buttons at the top of the screen allow you to either insert an existing question (the pull-down menu will show all the column names available in the table) or create a new question. When creating a new question, the following form is used:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/action_edit_action_in_create_question.png"><img alt="../_images/action_edit_action_in_create_question.png" src="../_images/action_edit_action_in_create_question.png" style="width: 60%;" /></a>
+</div>
+<p>The field <em>Question name</em> will be used internally as the column name in the table. The <em>Description</em> field is the text shown to the learners next to the question. If the question includes a set of values allowed, the form available to the students will collect the answers using a pull-down menu with the given choices.</p>
+<p class="last">As with other tables in OnTask, if the number of elements (in this case questions) is too large, they will be divided into pages with a link to access each page, and the content of the questions is searchable.</p>
+</dd>
+<dt>Filter Learners</dt>
+<dd>The central tab in this screen is identical to <a class="reference internal" href="#personalized-text-filter"><span class="std std-ref">the filter in the personalized text action</span></a>. The tab allows to include an expression to decide if a learner is included or not in the survey. This survey has no filter defined.</dd>
+<dt>Survey parameters</dt>
+<dd><p class="first">The tab in the right of the screen shows the additional parameters to deploy the survey. More precisely the screen allows to define the text that is shown at the top of the survey (<em>Survey description</em>), the key column used to identify the users, and if the questions should be shown in different order for each user.</p>
+<div class="last figure align-center">
+<a class="reference internal image-reference" href="../_images/action_edit_action_in_parameters.png"><img alt="../_images/action_edit_action_in_parameters.png" src="../_images/action_edit_action_in_parameters.png" style="width: 100%;" /></a>
+</div>
+</dd>
+</dl>
+<p>The <em>Preview</em> button at the bottom of the page shows the content as it will be shown to the learners.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/action_action_in_preview.png"><img alt="../_images/action_action_in_preview.png" src="../_images/action_action_in_preview.png" style="width: 60%;" /></a>
+</div>
+</div>
 <div class="section" id="personalized-json-object">
-<h3>3.6.2. Personalized JSON Object<a class="headerlink" href="#personalized-json-object" title="Permalink to this headline">¶</a></h3>
-<p>This type of action allows the creation of a <cite>JSON object &lt;https://www.json.org/&gt;</cite> with content that is personalized with the same functionality as described in the section about <a class="reference internal" href="#personalized-content"><span class="std std-ref">Personalized Content</span></a>. The difference is that instead of creating a text, the action creates a JSON object that will eventually be sent to another platform for further processing. This object is also a resource that is different for every student but the difference is that instead of being prepared to be visualized, it is packaged with a structure suitable to be received by another platform through a URL.</p>
+<span id="personalized-json"></span><h3>3.4.3. Personalized JSON Object<a class="headerlink" href="#personalized-json-object" title="Permalink to this headline">¶</a></h3>
+<p>This type of action allows the creation of a <a class="reference external" href="https://www.json.org/">JSON object</a> with content that is personalized with the same functionality as described in the section about <a class="reference internal" href="#personalized-content"><span class="std std-ref">Personalized Content</span></a>. The difference is that instead of creating a text, the action creates a JSON object that will eventually be sent to another platform for further processing. This object is also a resource that is different for every student but the difference is that instead of being prepared to be visualized, it is packaged with a structure suitable to be received by another platform through a URL.</p>
 <p>The screen to create a Personalized JSON object is shown in the following figure.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_personalized_json_edit.png"><img alt="../_images/action_personalized_json_edit.png" src="../_images/action_personalized_json_edit.png" style="width: 100%;" /></a>
 </div>
-<p>The areas number 1 and 2 have the same functionality than in the case of <a class="reference internal" href="#personalized-content"><span class="std std-ref">personalized text</span></a>. The first area allows the definition of an expression to select a subset of rows in the table for processing. The second area contains the conditions that can be used within the body of the JSON object to select content (in exactly the same way as in the <a class="reference internal" href="#personalized-content"><span class="std std-ref">personalized text</span></a>). The text shown in the previous figure defines a JSON object with three fields <code class="docutils literal notranslate"><span class="pre">sid</span></code>, <code class="docutils literal notranslate"><span class="pre">midterm_total</span></code> and <code class="docutils literal notranslate"><span class="pre">msg</span></code>. The first two contain column names that will be replaced by their corresponding values. The field <code class="docutils literal notranslate"><span class="pre">msg</span></code> will include one of the two messages depending on the value of the conditions.</p>
-<p>The third area contains the editor to create the JSON object followed by an extra field to specify the target URL where the objects will be submitted.</p>
-<p>The preview button in the perosnalized JSON action shows the resulting object after verifying that the structure after evaluating the corresponding expressions is a valid JSON object.</p>
+<p>The tabs have the same functionality than in the case of <a class="reference internal" href="#personalized-content"><span class="std std-ref">personalized text</span></a>.</p>
+<dl class="docutils">
+<dt>Personalized JSON Object</dt>
+<dd>This tab contains a plain text editor to describe the structure of the object and <a class="reference internal" href="#using-values-attributes-conditions"><span class="std std-ref">insert column values, attribute values or use conditions to control the presence of elements in the object</span></a>.</dd>
+<dt>Filter Learners</dt>
+<dd>This tab allows the definition of an expression to select a subset of rows in the table for processing.</dd>
+<dt>Text Conditions</dt>
+<dd>This tab contains the conditions that can be used within the body of the JSON object to select content (in exactly the same way as in the <a class="reference internal" href="#personalized-content"><span class="std std-ref">personalized text</span></a>).</dd>
+</dl>
+<p>The text shown in the previous figure defines a JSON object with three fields <code class="docutils literal notranslate"><span class="pre">sid</span></code>, <code class="docutils literal notranslate"><span class="pre">midterm_total</span></code> and <code class="docutils literal notranslate"><span class="pre">msg</span></code>. The first two contain column names that will be replaced by their corresponding values. The field <code class="docutils literal notranslate"><span class="pre">msg</span></code> will include one of the two messages depending on the value of the conditions.</p>
+<p>The field <em>Target URL</em> is to introduce the URL where the object will be sent.</p>
+<p>The preview button in the personalized JSON action shows the resulting object after verifying that the structure after evaluating the corresponding expressions is a valid JSON object.</p>
 </div>
-<div class="section" id="sending-personalized-emails">
-<span id="personalized-emails"></span><h3>3.6.3. Sending personalized emails<a class="headerlink" href="#sending-personalized-emails" title="Permalink to this headline">¶</a></h3>
-<p>Once you created a personalized text action and verified its content using the
-<em>Preview</em> button, save its content. The right-most column shows a button with
-name <em>Email</em>. Click on that button.</p>
+<div class="section" id="personalized-canvas-email">
+<span id="id7"></span><h3>3.4.4. Personalized Canvas Email<a class="headerlink" href="#personalized-canvas-email" title="Permalink to this headline">¶</a></h3>
+<p>This type of action is only available if OnTask is <a class="reference internal" href="../Install/index.html#canvas-email-config"><span class="std std-ref">appropriately configured</span></a> to communicate with a <a class="reference external" href="https://www.canvaslms.com.au/">Canvas Learning Management System</a>. The creation of this type of action is almost identical to the <a class="reference internal" href="#personalized-content"><span class="std std-ref">Personalized Text</span></a>. The action is created selecting the corresponding action type as shown in the following figure.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/action_personalized_canvas_email_create.png"><img alt="../_images/action_personalized_canvas_email_create.png" src="../_images/action_personalized_canvas_email_create.png" style="width: 60%;" /></a>
+</div>
+<p>The page to edit this action is almost identical to the one to edit a <a class="reference internal" href="#personalized-content"><span class="std std-ref">Personalized Text actin</span></a>.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/action_personalized_canvas_email_edit.png"><img alt="../_images/action_personalized_canvas_email_edit.png" src="../_images/action_personalized_canvas_email_edit.png" style="width: 100%;" /></a>
+</div>
+<p>It contains three tabs: <em>Personalized Canvas Email</em>, <em>Text Conditions</em> and <em>Filter Learners</em>. The last two, <a class="reference internal" href="#personalized-text-conditions"><span class="std std-ref">Conditions</span></a> and <a class="reference internal" href="#personalized-text-filter"><span class="std std-ref">Filter Learners</span></a> offer the same functionality. The <em>Personalized Canvas Email</em> allows the creation of a plain text message (no HTML markup is allowed).</p>
+</div>
+<div class="section" id="running-actions">
+<span id="id8"></span><h3>3.4.5. Running actions<a class="headerlink" href="#running-actions" title="Permalink to this headline">¶</a></h3>
+<p>Once an action has been created, it can be <em>run</em>. The meaning of this term is different for the various types of actions supported in OnTask.</p>
+<div class="section" id="sending-personalized-emails-personalized-text-actions">
+<span id="personalized-emails"></span><h4>3.4.5.1. Sending personalized emails (Personalized Text Actions)<a class="headerlink" href="#sending-personalized-emails-personalized-text-actions" title="Permalink to this headline">¶</a></h4>
+<p>Once you created a personalized text action and verified its content using the <em>Preview</em> button, save its content. The right-most column has a button with name <em>Run</em>.</p>
 <div class="figure align-center">
 <img alt="../_images/action_action_ops.png" src="../_images/action_action_ops.png" />
 </div>
-<p>The following screen shows a form to introduce the required parameters to
-send the personalized text to each learner by email.</p>
+<p>If selected, the next page is a form requesting information about how to send the messages to the learners. The next figure shows an example of this page.</p>
 <div class="figure align-center">
 <img alt="../_images/action_email_request_data.png" src="../_images/action_email_request_data.png" />
 </div>
+<p>The fields in this form are:</p>
 <dl class="docutils">
-<dt>The subject</dt>
+<dt>Email subject</dt>
 <dd>A line to be included as subject of all the emails.</dd>
-<dt>The column with the email address</dt>
-<dd>OnTask needs to know where to send the email. It assumes that you have a
-column containing that information for each learner and it needs you to
-select that column.</dd>
-<dt>List of emails in CC</dt>
-<dd>A comma-separated list of emails to include in the <em>carbon copy</em> or <em>CC</em>
-email field.</dd>
-<dt>List of emails in BCC</dt>
-<dd>A comma-separated list of emails to include in the <em>blind carbon copy</em> or
-<em>BCC</em> email field.</dd>
-<dt>Send a summary message</dt>
-<dd>If you select this option OnTask will send you an email with the summary of
-this operation (number of rows in the table that were selected by the
-filter, number of emails sent, date/time of the operation, etc.</dd>
-<dt>Track email reading</dt>
-<dd>Include in the messages a HTML snipped to detect if the email is read.
-OnTask adds an extra column to the table to store the number of times the
-message is opened. This detection relies on how the email client opens the
-message and processes the included images, therefore, the information in
-this column may not accurately reflect this information.</dd>
-<dt>Snapshot of the workflow</dt>
-<dd>If you select this option, after the emails are sent, the platform returns
-you a file that contains a snapshot (picture) of the workflow. It basically
-freezes the content of the workflow and places it in a file given to you.
-You may take this file and <a class="reference internal" href="#workflow-import"><span class="std std-ref">import back the workflow</span></a>.
-In this new workflow you can check the values and messages at the time the
-operation was executed.</dd>
+<dt>Column to use for target email address</dt>
+<dd>OnTask needs to know where to send the email. It assumes that you have a column containing that information for each learner and it needs you to select that column.</dd>
+<dt>Comma separated list of CC emails</dt>
+<dd>A comma-separated list of emails to include in the <em>carbon copy</em> or <em>CC</em> email field.</dd>
+<dt>Comma separated list of BCC emails</dt>
+<dd>A comma-separated list of emails to include in the <em>blind carbon copy</em> or <em>BCC</em> email field.</dd>
 <dt>Check/exclude emails</dt>
-<dd>If selected, this option inserts an extra step in which you can eliminate
-certain emails form the action. This feature is useful to remove certain
-emails that cannot be removed with the filter.</dd>
+<dd>If selected, this option inserts an extra step in which you can eliminate certain emails form the action. This feature is useful to remove certain emails that cannot be removed with the filter.</dd>
+<dt>Send you a summary message</dt>
+<dd>If you select this option OnTask will send you an email with the summary of this operation (number of rows in the table that were selected by the filter, number of emails sent, date/time of the operation, etc.</dd>
+<dt>Track email reading</dt>
+<dd>Include in the messages a HTML snipped to detect if the email is read. OnTask adds an extra column to the table to store the number of times the message is opened. This detection relies on how the email client opens the message and processes the included images, therefore, the information in this column may not accurately reflect this information.</dd>
+<dt>Snapshot of the workflow</dt>
+<dd>If you select this option, after the emails are sent, the platform returns you a file that contains a snapshot (picture) of the workflow. It basically freezes the content of the workflow and places it in a file given to you. You may take this file and <a class="reference internal" href="#workflow-import"><span class="std std-ref">import back the workflow</span></a>. In this new workflow you can check the values and messages at the time the operation was executed.</dd>
 </dl>
-<p>Once these fields are provided, the operation is queued in a batch system and processed separated from the web application.</p>
+<p>If the option to <em>Check/exclude emails</em> has been selected, clicking in the <em>Next</em> button leads to a page where the list of emails is shown and the user can select some of them to remove from the operation. If this option is not selected, the operation to send the emails is sent to a queue for processing. The browser will show the record that contains the information about the status of this request.</p>
 </div>
 <div class="section" id="making-personalized-content-available-to-learners">
-<h3>3.6.4. Making personalized content available to learners<a class="headerlink" href="#making-personalized-content-available-to-learners" title="Permalink to this headline">¶</a></h3>
-<p>Sending a personalized email is just one possible way to make this content
-available to learner. Another one is to offer the content
-through a URL that can be given to the learners. To enable such URL click in
-the button labeled <code class="docutils literal notranslate"><span class="pre">URL</span></code> followed by either the word <code class="docutils literal notranslate"><span class="pre">(Off)</span></code> or <code class="docutils literal notranslate"><span class="pre">(On)</span></code>.</p>
+<h4>3.4.5.2. Making personalized content available to learners<a class="headerlink" href="#making-personalized-content-available-to-learners" title="Permalink to this headline">¶</a></h4>
+<p>Sending a personalized text is just one possible way to make this content available to learner. Another one is to offer the content through a URL that can be given to the learners. To enable such URL click in the icon with three dots in the right most corner of a personalized text action.</p>
 <div class="figure align-center">
 <img alt="../_images/action_action_ops.png" src="../_images/action_action_ops.png" />
 </div>
-<p>The following window shows the URL in which the content is available as well
-as the field to enable/disable it.</p>
+<p>You will see an operation labeled <code class="docutils literal notranslate"><span class="pre">URL</span></code> followed by either the word <code class="docutils literal notranslate"><span class="pre">(Off)</span></code> or <code class="docutils literal notranslate"><span class="pre">(On)</span></code>. Select that operation. The following window shows the URL in which the content is available as well as the field to enable/disable it.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_URL_on.png"><img alt="../_images/action_URL_on.png" src="../_images/action_URL_on.png" style="width: 60%;" /></a>
 </div>
-<p>In order for the learners to be able to view their personalized content,
-they have to be users of the OnTask platform. This functionality is
-conceived for a context in which OnTask authenticates users either through
-a corporate Single-sign on layer, or learners access the OnTask through the
-Learning Management System with a LTI interface (see <a class="reference internal" href="../Install/index.html#authentication"><span class="std std-ref">Authentication</span></a>).</p>
+<p>In order for the learners to be able to view their personalized content, they have to be users of the OnTask platform and their ID present in the data table. This functionality is conceived for a context in which OnTask authenticates users either through a corporate Single-sign on layer, or learners access the OnTask through the Learning Management System with a LTI interface (see <a class="reference internal" href="../Install/index.html#authentication"><span class="std std-ref">Authentication</span></a>).</p>
+</div>
+<div class="section" id="running-a-survey">
+<h4>3.4.5.3. Running a survey<a class="headerlink" href="#running-a-survey" title="Permalink to this headline">¶</a></h4>
+<p>After creating a <a class="reference internal" href="#surveys"><span class="std std-ref">survey action</span></a> it can be used in two modalities: run by the instructor, or given to the learners to fill out the data. The first modality is used as a mechanism to capture instructor observations. For example, surveys run by the instructor can be used as an attendance capturing mechanism (if the instructor has a device or procedure to capture who is in attendance). If the <em>Run</em> operation is selected, OnTask shows a table with the learners selected for the action, and the values for the survey collected so far.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/action_run_action_in.png"><img alt="../_images/action_run_action_in.png" src="../_images/action_run_action_in.png" style="width: 100%;" /></a>
+</div>
+<p>Each row contains the identifier of the student (in the previous table, the email) as a link. Instructors may click in a link available to enter the survey information or modify the already existing information for that learner.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/action_enter_data_action_in.png"><img alt="../_images/action_enter_data_action_in.png" src="../_images/action_enter_data_action_in.png" style="width: 100%;" /></a>
+</div>
+<p>After entering the information the list of students for which the data entry is still allowed.</p>
+<div class="section" id="making-the-survey-available-to-the-learners">
+<h5>3.4.5.3.1. Making the survey available to the learners<a class="headerlink" href="#making-the-survey-available-to-the-learners" title="Permalink to this headline">¶</a></h5>
+<p>The second operation available for <em>survey</em> actions is to make available the URL to learners so that they individually enter the information themselves. The right-most column of the action table contains an icon with three dots that if selected shows a set of additional operations, and one of them has the text <em>URL</em>. If selected OnTask shows the URL for the survey, the possibility of enable/disable it, or even provide a date/time window for its availability.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/action_action_in_URL.png"><img alt="../_images/action_action_in_URL.png" src="../_images/action_action_in_URL.png" style="width: 60%;" /></a>
+</div>
+<p>Once enabled, you may send the URL to the students (you may even use a personalized text action for that). Once the students click in the action, and if they are allowed to connect to OnTask as basic users, after authentication, if their email is part of the table, they will see a form with the survey questions and after answering it, the values are automatically stored in the right row and column in the table.</p>
+<p>These two survey actions are ideal to collect information about any aspect of a learning experience in a way that is centralized and available for further processing through personalized text actions. For example, users may choose from a predefined set of topics those that were more challenging. This information can then be used in a personalized text action to provide the adequate resources to each learner.</p>
+</div>
+</div>
+<div class="section" id="sending-personalized-emails-in-canvas">
+<span id="send-personalized-canvas-emails"></span><h4>3.4.5.4. Sending personalized emails in Canvas<a class="headerlink" href="#sending-personalized-emails-in-canvas" title="Permalink to this headline">¶</a></h4>
+<p>The execution of a <a class="reference internal" href="#personalized-canvas-email"><span class="std std-ref">Personalized Canvas Email</span></a> action requires additional information as shown in the following figure:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/action_personalized_canvas_email_run.png"><img alt="../_images/action_personalized_canvas_email_run.png" src="../_images/action_personalized_canvas_email_run.png" style="width: 100%;" /></a>
+</div>
+<dl class="docutils">
+<dt>Column in the table containing Canvas ID values</dt>
+<dd>This column is essential to send the emails to the platform as it is used to uniquely identify every Canvas user. The data can be obtained downloading the marks of a course as a CSV file and uploading/merging this column with the existing table.</dd>
+<dt>Email subject</dt>
+<dd>The text to use as subject for the messages.</dd>
+<dt>Canvas Host</dt>
+<dd>If there is more than one Canvas platform configured in OnTask, an additional pull-down menu will appear to select which one to use. If there is a single Canvas platform configured, it will be used by default and this field will not be shown in the form.</dd>
+<dt>Check/Exclude Canvas IDs before sending messages</dt>
+<dd>If this option is selected OnTask adds an extra step to check the identifiers that will be used and offer the possibility of excluding some of them.</dd>
+<dt>Download a snapshot of the workflow</dt>
+<dd>If selected, a snapshot of the workflow (data and actions) will be downloaded after the messages have been queued for delivery.</dd>
+</dl>
+<p>After introducing this data, OnTask will check if it has credentials for the user to access Canvas through its API. If not, the user will be redirected to a page in the Canvas Learning Management System to 1) authenticate, and 2) authorize OnTask to access the platform. If these steps are successful, the user is redirected back to OnTask and the messages are delivered. The credentials retrieved from Canvas will be reused for future executions of this action.</p>
 </div>
 <div class="section" id="sending-personalized-json-objects-to-another-platform">
-<h3>3.6.5. Sending personalized JSON objects to another platform<a class="headerlink" href="#sending-personalized-json-objects-to-another-platform" title="Permalink to this headline">¶</a></h3>
-<p>The analogous operations for personalized JSON actions is to send the resulting objects to the given URL and is available when clicking in the <code class="docutils literal notranslate"><span class="pre">Run</span></code> button. The execution of these actions require two fields.</p>
+<h4>3.4.5.5. Sending personalized JSON objects to another platform<a class="headerlink" href="#sending-personalized-json-objects-to-another-platform" title="Permalink to this headline">¶</a></h4>
+<p>The operation to <em>Run</em> a personalized JSON action sends the objects resulting from the personalization to the given URL. The page to collect the information to run these actions is shown in the next figure:</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_json_run_request_data.png"><img alt="../_images/action_json_run_request_data.png" src="../_images/action_json_run_request_data.png" style="width: 100%;" /></a>
 </div>
-<p>The first field is the column to perform a last review of the elements to send and select some of them to exclude in an extra step. If the field is empty, this step is skipped. The second field is the token to use for authentication when sending the JSON objects to the URL given when editing the action.</p>
-<p>Similarly to the email actions, once these fields are provided, the operation to send the JSON objects to the target URL is queued in a batch system and processed separated from the web application.</p>
+<p>The first field is the column to perform a last review of the elements to send and select some of them to exclude in an extra step. If the field is empty, this step is skipped. The second field is the token to use for authentication when sending the JSON objects to the URL given when editing the action. This operation assumes that such token has already been obtained and provides no additional functionality to execute that step as part of this operation.</p>
+<p>Similarly to the email actions, once these fields are provided, the operation to send the JSON objects to the target URL is queued in a batch system for processing. The browser shows the record where the status of this request is reflected.</p>
+</div>
 </div>
 <div class="section" id="creating-a-zip-file-with-the-personalized-text">
-<h3>3.6.6. Creating a ZIP file with the personalized text<a class="headerlink" href="#creating-a-zip-file-with-the-personalized-text" title="Permalink to this headline">¶</a></h3>
-<p>The personalized text actions offer the possibility of creating a ZIP file containing one HTML file per personalized text. You may use two columns and a fixed suffix to control the format of each file name.</p>
+<h3>3.4.6. Creating a ZIP file with the personalized text<a class="headerlink" href="#creating-a-zip-file-with-the-personalized-text" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="#personalized-content"><span class="std std-ref">personalized text actions</span></a> offer the possibility of creating a ZIP file containing one HTML file with the personalized text for every learner. The execution of this operation requires the use of two columns in the table and a suffix to create the file names. The operation is available clicking in the icon with three dots in the right-most column of an action in the action page. The additional information is requested through the form shown in the following figure.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_zip_request_data.png"><img alt="../_images/action_zip_request_data.png" src="../_images/action_zip_request_data.png" style="width: 100%;" /></a>
 </div>
 <p>The first part of the file name is taken from the values of a key column. The second part of the file name is taken from a second column (optional). Additionally, the user may include a third suffix to be used for the last part of the file name (if none is given the default suffix is <code class="docutils literal notranslate"><span class="pre">feedback.html</span></code>. For example if the first column has the values <code class="docutils literal notranslate"><span class="pre">submission</span> <span class="pre">01,</span> <span class="pre">submission</span> <span class="pre">02,</span> <span class="pre">submission</span> <span class="pre">03</span></code>, the second column has the names <code class="docutils literal notranslate"><span class="pre">John,</span> <span class="pre">Paul,</span> <span class="pre">Mary</span></code>, and the file suffix is empty, the ZIP file will be created with three HTML files with names <code class="docutils literal notranslate"><span class="pre">submission</span> <span class="pre">01_John_feedback.html</span></code>, <code class="docutils literal notranslate"><span class="pre">submission</span> <span class="pre">02_Paul_feedback.html</span></code> and <code class="docutils literal notranslate"><span class="pre">submission</span> <span class="pre">03_Mary_feedback.html</span></code>.</p>
 <div class="section" id="uploading-feedback-files-for-a-moodle-assignment">
-<span id="upload-feedback-to-moodle"></span><h4>3.6.6.1. Uploading feedback files for a Moodle Assignment<a class="headerlink" href="#uploading-feedback-files-for-a-moodle-assignment" title="Permalink to this headline">¶</a></h4>
+<span id="upload-feedback-to-moodle"></span><h4>3.4.6.1. Uploading feedback files for a Moodle Assignment<a class="headerlink" href="#uploading-feedback-files-for-a-moodle-assignment" title="Permalink to this headline">¶</a></h4>
 <p>One of the potential uses of the ZIP file generated from a personalized text action is to upload each file as personalized feedback of an assignment in a Moodle course. However, there are some requirements in the file names so that they are uploaded each to the appropriate location, namely:</p>
 <ol class="arabic simple">
 <li>The table must have column named <code class="docutils literal notranslate"><span class="pre">Identifier</span></code> with values starting with the word <code class="docutils literal notranslate"><span class="pre">Participant</span></code> followed by a white space and a unique number. This column can be extracted from a Moodle Assignment by downloading the <em>grading worksheet</em>:</li>
@@ -680,79 +747,171 @@ Learning Management System with a LTI interface (see <a class="reference interna
 </ol>
 </div>
 </div>
-<div class="section" id="surveys">
-<h3>3.6.7. Surveys<a class="headerlink" href="#surveys" title="Permalink to this headline">¶</a></h3>
-<p>The personalized text actions described in the previous section is
-information made available to the learners. The <em>survey</em> actions collect
-information from the learners and store it in the table. This functionality
-is a simplified version of other survey engines such as Google Forms,
-SurveyMonkey or Quantrix. In a learning context a survey can be used equally
-to ask students to submit certain data, or for an instructor to collect
-annotations about learners throughout the experience.</p>
-<p>When you edit a survey action, the editor contains the elements shown in the
-following figure:</p>
+</div>
+<div class="section" id="workflow-settings">
+<span id="id9"></span><h2>3.5. Workflow Settings<a class="headerlink" href="#workflow-settings" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the operations described in the previous sections to upload and merge data, create actions, and run these actions, there are additional operations for the workflow that can be accessed through the <span class="fa fa-cog"></span> Settings pull-down menu in the top-bar menu. The settings pages offer information about: workflow operations (export, rename, clone, etc.), column operations (change column type, rename, clone, etc.), scheduled actions, and view logs.</p>
+<div class="section" id="workflow-operations">
+<span id="details"></span><h3>3.5.1. Workflow Operations<a class="headerlink" href="#workflow-operations" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>“The details are not the details. They make the design”
+– Charles Eames</div></blockquote>
+<p>The <em>Workflow Operations</em> page is available through the <span class="fa fa-cog"></span> Settings link at the top-bar menu. The page shows the information as illustrated by the following figure.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_edit_action_in.png"><img alt="../_images/action_edit_action_in.png" src="../_images/action_edit_action_in.png" style="width: 100%;" /></a>
+<img alt="../_images/workflow_attributes.png" src="../_images/workflow_attributes.png" />
 </div>
-<p>From top to botton, the first area in the screen is a filter to restrict the
-learners in the table considered for data entry. This functionality is
-identical to the one described for the personalized text. Those learners for
-which the condition in the filter is true, area considered for data entry. The
-second area is text that will be shown at the top of the page requesting
-the data. The next section is they key column used to match the data entry
-with the user authentication, typically the column that contains the user
-email. The last section of the screen is a set of non-key table columns, each
-one of them corresponding to one question in the survey. If a column is
-included in the survey, its description text is shown as the <em>question text</em>.
-The <em>Preview</em> button at the bottom of the page shows the content as it will be
-shown to the learners.</p>
+<p>The buttons at the top of the page offer the following operations:</p>
+<dl class="docutils" id="details-export">
+<dt><span class="fa fa-download"></span> Export</dt>
+<dd><p class="first">This functionality allows you to take a snapshot of the content of the workflow and store it in a file for your records. You may select which actions are included in the exported file</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_action_out_preview.png"><img alt="../_images/action_action_out_preview.png" src="../_images/action_action_out_preview.png" style="width: 100%;" /></a>
+<img alt="../_images/workflow_export.png" src="../_images/workflow_export.png" />
 </div>
-<div class="section" id="running-a-survey-action">
-<h4>3.6.7.1. Running a survey action<a class="headerlink" href="#running-a-survey-action" title="Permalink to this headline">¶</a></h4>
-<p>After creating a <em>survey action</em> there are two operations available
-represented by the buttons with labels <em>Run</em> and <em>URL</em>. The <em>Run</em> is intended
-for the instructors to enter the data for each learner. After
-clicking the link, the platform shows a table with the learners considered
-for the survey action as well as the data collected so far. Each row contains
-a link to access the data entry screen. The table has a search box in the
-upper left corner to quickly find a person.</p>
+<p class="last">The menu offers the possibility of exporting only the data, or the data <strong>and</strong> the <a class="reference internal" href="#action"><span class="std std-ref">action</span></a> in the workflow.</p>
+</dd>
+</dl>
+<dl class="docutils" id="details-rename">
+<dt><span class="fa fa-pencil"></span> Rename</dt>
+<dd><p class="first">This functionality allows to change either the name or the description of the workflow.</p>
+<div class="last figure align-center">
+<a class="reference internal image-reference" href="../_images/workflow_rename.png"><img alt="../_images/workflow_rename.png" src="../_images/workflow_rename.png" style="width: 60%;" /></a>
+</div>
+</dd>
+</dl>
+<dl class="docutils" id="details-clone">
+<dt><span class="fa fa-clone"></span> Clone</dt>
+<dd>This function creates a new workflow duplicating the data, actions and conditions of the current workflow. The new workflow will have the same name with the prefix <em>Copy of</em>.</dd>
+</dl>
+<dl class="docutils" id="details-flush-data">
+<dt>Flush data table</dt>
+<dd><p class="first">This operation deletes all the data attached to the workflow, but preserves the workflow structure (that is, the name and the description only).</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_run_action_in.png"><img alt="../_images/action_run_action_in.png" src="../_images/action_run_action_in.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/workflow_flush.png"><img alt="../_images/workflow_flush.png" src="../_images/workflow_flush.png" style="width: 60%;" /></a>
 </div>
-<p>Instructors may click in the link available in the right-most column to
-either enter new information or modify the already existing information for
-that learner.</p>
+<p class="last">Given the destructive nature of this operation the platform requires you to confirm this step.</p>
+</dd>
+</dl>
+<dl class="docutils" id="details-delete">
+<dt><span class="fa fa-trash"></span> Delete</dt>
+<dd><p class="first">Operation similar to the previous one, but now the whole workflow is deleted and therefore unselected. If executed, the platform will go back to the list of workflows as this one is no longer available for operations.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_enter_data_action_in.png"><img alt="../_images/action_enter_data_action_in.png" src="../_images/action_enter_data_action_in.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/workflow_delete.png"><img alt="../_images/workflow_delete.png" src="../_images/workflow_delete.png" style="width: 60%;" /></a>
 </div>
-<p>After entering the information the list of students for
-which the data entry is still allowed.</p>
-</div>
-<div class="section" id="offering-the-survey-to-the-learners">
-<h4>3.6.7.2. Offering the survey to the learners<a class="headerlink" href="#offering-the-survey-to-the-learners" title="Permalink to this headline">¶</a></h4>
-<p>The second operation available for <em>survey</em> actions is to make available the
-URL to learners so that theyindividually enter the information themselves. In
-the action table each survey action has a button labeled <em>URL</em>. If you click
-in this button the screen shows the URL for the survey and the possibility of
-enable/disable it or even provide a date/time window for its availability.</p>
+<p class="last">As in the previous case, the platform asks for confirmation before carrying out the delete operation.</p>
+</dd>
+</dl>
+<p>In addition to the buttons at the top, the <em>Workflow Operations</em> page offers two additional operations shown in separated tabs.</p>
+<dl class="docutils" id="details-attributes">
+<dt>Attributes</dt>
+<dd><p class="first">This tab shows the operations to manage a dictionary of pairs <code class="docutils literal notranslate"><span class="pre">(name,</span> <span class="pre">value)</span></code>. The names can e used in personalized text and they are replaced by the <code class="docutils literal notranslate"><span class="pre">value</span></code>.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_action_in_URL.png"><img alt="../_images/action_action_in_URL.png" src="../_images/action_action_in_URL.png" style="width: 80%;" /></a>
+<img alt="../_images/workflow_attributes.png" src="../_images/workflow_attributes.png" />
 </div>
-<p>Once enabled, you may send the URL to the students (you may even use a personalized text action for that). Once the students click in the action, after authentication, and if their email is part of hte table, they will be able to enter the information and the values are automatically stored in the right row and column in the table.</p>
-<p>These survey actions are ideal to collect information about any aspect of a course in a way that is centralized and available for further processing through personalized text actions. For example, users may choose from a pre-defined set of topics those that were more challenging. This information can then be used in a personalized text action to provide the adequate resources to each learner.</p>
+<p>The <span class="fa fa-plus"></span> <em>Attribute</em> button opens a form to introduce the name and value of a new attribute. The table below this button shows the attributes available for the workflow. The name of the attribute is a link that opens the form to edit its content. The <span class="fa fa-trash"></span> icon on the right deletes the attribute.</p>
+<p class="last">The use of these attributes is to facilitate a single point of change when a value appears in multiple locations. For example, every personalized text actino is singed with the name of the instructor. If that name changes, all actions need to be edited. On the other hand, if the actions contain the name of an attribute, just changing the attribute value propagates the change to all actions.</p>
+</dd>
+</dl>
+<dl class="docutils" id="details-sharing">
+<dt>Share</dt>
+<dd><p class="first">The <em>Share</em> tab on the right of the page is used to manage the list of users that have access to this workflow. The <span class="fa fa-plus"></span> <em>User</em> button opens a form to introduce a the id of the user to share the workflow.</p>
+<div class="last figure align-center">
+<img alt="../_images/workflow_share.png" src="../_images/workflow_share.png" />
 </div>
+</dd>
+</dl>
 </div>
+<div class="section" id="column-operations">
+<span id="columns"></span><h3>3.5.2. Column Operations<a class="headerlink" href="#column-operations" title="Permalink to this headline">¶</a></h3>
+<p>The <em>Column Operations</em> page is available through the <span class="fa fa-cog"></span> Settings link at the top-bar menu.  Columns in OnTask have substantial information and operations that is condensed in this page. The information is shown as illustrated by the following figure.</p>
+<div class="figure align-center">
+<img alt="../_images/workflow_details.png" src="../_images/workflow_details.png" />
 </div>
-<div class="section" id="the-scheduler">
-<span id="scheduler"></span><h2>3.7. The Scheduler<a class="headerlink" href="#the-scheduler" title="Permalink to this headline">¶</a></h2>
+<p>The buttons at the top of the page offer the following operations</p>
+<dl class="docutils">
+<dt><span class="fa fa-plus"></span> Column</dt>
+<dd>This menu opens three options: create a regular column, create a column combining the values of two existing columns, or create a new column with random values.</dd>
+</dl>
+<blockquote id="details-add-column">
+<div><dl class="docutils">
+<dt>Add a regular column</dt>
+<dd><p class="first">Opens a dialog to create a new column in the table with the following fields:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/workflow_add_column.png"><img alt="../_images/workflow_add_column.png" src="../_images/workflow_add_column.png" style="width: 60%;" /></a>
+</div>
+<ul class="last simple">
+<li>Name (mandatory): column name (shown in the table)</li>
+<li>Description: text that will be shown to the learners if the column is part of a survey action.</li>
+<li>Data type (mandatory: The possible data types are <em>number</em> (representing both integers or real numbers), <em>string</em>, <em>boolean</em> (only possible values are <em>true</em> and <em>false</em>), and <em>datetime</em> (a date and time together).</li>
+<li>An integer (mandatory) representing the position of the column in the table (a value zero will insert it at the end of the table).</li>
+<li>Two date/time values to control the visibility of the column.</li>
+<li>Comma-separated list of possible values. This field is to restrict the values in the column. The values have to be compatible with the specified data type.</li>
+<li>Initial value to assign to all cells in the column.</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<blockquote id="details-add-formula-column">
+<div><dl class="docutils">
+<dt>Add a formula-derived column</dt>
+<dd>This column is created by combining the values of existing columns using one of the operations addition, product, maximum, minimum, mean, median, standard deviation, conjunction or disjunction. The formula is only applied when the column is
+created the current values of the other columns. The column is not refreshed if the operand change in the future.</dd>
+</dl>
+</div></blockquote>
+<blockquote id="details-add-random-column">
+<div><dl class="docutils">
+<dt>Add a column with random values</dt>
+<dd>This is useful to create columns for A/B testing. The new column is created with a random value from either a numeric range (starting at 0) or a set of strings.</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt><a class="reference internal" href="#dataops"><span class="std std-ref">Manage table data</span></a></dt>
+<dd>Menu to upload/merge data to the table (see <a class="reference internal" href="#dataops"><span class="std std-ref">Data</span></a> for a detailed explanation), execute a plugin, or delete the data in the table.</dd>
+</dl>
+<p>Below the buttons to perform these operations the workflow columns are shown. If the number of columns is large, the information is divided into pages. The field at the top right of this list performs searches in all fields of all columns (name, type, etc). Each column has the following information (from left to right):</p>
+<dl class="docutils">
+<dt>Position</dt>
+<dd>A number starting at 1. The position is used when <a class="reference internal" href="#table"><span class="std std-ref">visualizing the table</span></a>.</dd>
+<dt>Name</dt>
+<dd>Unique name for the workflow that cannot contain the quotes <em>‘</em> or <em>“</em>.</dd>
+<dt>Type</dt>
+<dd>One of integer, string, double, boolean or date/time.</dd>
+<dt>Key?</dt>
+<dd>Field stating if it is a <strong>key column</strong>, that is, the values are different or unique for all rows. OnTask detects automatically this property when the data for a new column is loaded. You may edit and change this properly as long as the two requirements are satisfied: the values have to be unique for all rows, and there must be at least one key column per workflow.</dd>
+<dt>Operations</dt>
+<dd><p class="first">The operations available for columns are:</p>
+<dl class="last docutils">
+<dt><span class="fa fa-pencil"></span> Edit</dt>
+<dd><p class="first">Available by clicking in the column name. It allows you to change the name, tunique and values allowed in the column. If the field <em>Has unique values per row</em> property is modified, OnTask checks if the values satisfy this condition.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/workflow_column_edit.png"><img alt="../_images/workflow_column_edit.png" src="../_images/workflow_column_edit.png" style="width: 60%;" /></a>
+</div>
+<p class="last">The column may also have a <em>validity window</em> defined by two date/times. This validity is used when executing <em>action in</em> tasks.</p>
+</dd>
+<dt><span class="fa fa-clone"></span> Clone</dt>
+<dd>Clones the column in the workflow changing its name adding the prefix <em>Copy of</em> to the name.</dd>
+<dt><span class="fa fa-bar-chart"></span> Statistics (only for non-key columns)</dt>
+<dd>Shows a statistical summary of the values in the column. If the data type is <em>number</em>, the summary includes information about quartiles, a boxplot, and a histogram. For the rest of data types, the summary only includes the histogram.</dd>
+<dt><span class="fa fa-compress"></span> Restrict</dt>
+<dd>Assigns as <em>allowed values</em> for the column those currently stored. This operation is useful to transform a generic column into one with values limited to the current ones.</dd>
+<dt><span class="fa fa-trash"></span> Delete</dt>
+<dd>Deletes the column from the workflow. If there are conditions in the actions that use this column, those conditions will be removed from the action.</dd>
+<dt><span class="fa fa-step-backward"></span> Make first column</dt>
+<dd>Move this column to the first position in the workflow</dd>
+<dt><span class="fa fa-step-forward"></span> Make last column</dt>
+<dd>Move this column to the last position in the workflow</dd>
+</dl>
+</dd>
+</dl>
+<p>The position of the columns can also be changed by dragging by the number (left-most column) and dropping them in the new position.</p>
+</div>
+<div class="section" id="scheduled-actions">
+<span id="scheduler"></span><h3>3.5.3. Scheduled Actions<a class="headerlink" href="#scheduled-actions" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div>“I have no regular schedule. I get up whenever I can.”
 – Jimmy Wales</div></blockquote>
-<p>The <em>personalized text</em> and <em>personalized JSON</em> actions can be scheduled to execute at some point in the future. To schedule the execution go to the <em>Actions</em> page (select the option from the top menu), click in the <em>More</em> button for the action and then in the button <em>Schedule</em>.</p>
+<p>The <a class="reference internal" href="#personalized-content"><span class="std std-ref">personalized text</span></a>, <a class="reference internal" href="#personalized-canvas-email"><span class="std std-ref">personalized canvas email</span></a> and <a class="reference internal" href="#personalized-json"><span class="std std-ref">personalized JSON object</span></a> actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the <span class="fa fa-comments"></span> <em>Actions</em> page from the top menu, click in icon with three dots in the right-most column of the action and select the operation <span class="fa fa-calendar"></span> <em>Schedule</em>.</p>
 <div class="section" id="scheduling-a-personalized-text-action">
-<span id="schedule-email"></span><h3>3.7.1. Scheduling a Personalized Text Action<a class="headerlink" href="#scheduling-a-personalized-text-action" title="Permalink to this headline">¶</a></h3>
+<span id="schedule-email"></span><h4>3.5.3.1. Scheduling a Personalized Text Action<a class="headerlink" href="#scheduling-a-personalized-text-action" title="Permalink to this headline">¶</a></h4>
 <p>The following figure shows the information requested to schedule the execution of a personalized text action (sending emails to learners):</p>
 <div class="figure align-center">
 <img alt="../_images/schedule_action_email.png" src="../_images/schedule_action_email.png" />
@@ -778,11 +937,11 @@ enable/disable it or even provide a date/time window for its availability.</p>
 <dt>Track when emails are read</dt>
 <dd>Try to detect if the email is read. OnTask adds an extra column to the table to store the number of times the message is opened. This detection relies on how the email client processes the message, therefore, the information in this column may not be accurate.</dd>
 <dt>Check/exclude emails</dt>
-<dd>If selected, this option inserts an extra step select emaisl and eleminate them from the action. This option is useful to perform a final check and remove emails that cannot be removed with action the filter.</dd>
+<dd>If selected, this option inserts an extra step showing the emails and offering the possibility to eliminate them from the action. This option is useful to perform a final check and remove emails that cannot be removed with the action filter.</dd>
 </dl>
 </div>
 <div class="section" id="scheduling-a-personalized-json-action">
-<span id="schedule-json"></span><h3>3.7.2. Scheduling a Personalized JSON Action<a class="headerlink" href="#scheduling-a-personalized-json-action" title="Permalink to this headline">¶</a></h3>
+<span id="schedule-json"></span><h4>3.5.3.2. Scheduling a Personalized JSON Action<a class="headerlink" href="#scheduling-a-personalized-json-action" title="Permalink to this headline">¶</a></h4>
 <p>The following figure shows the information requested to schedule the execution of a personalized JSON action (sending JSON object to another platform):</p>
 <div class="figure align-center">
 <img alt="../_images/schedule_action_json.png" src="../_images/schedule_action_json.png" />
@@ -798,69 +957,78 @@ enable/disable it or even provide a date/time window for its availability.</p>
 <dt>Authentication Token</dt>
 <dd>The string to be use to authenticate with the external platform.</dd>
 </dl>
-</div>
-<div class="section" id="the-scheduler-menu">
-<h3>3.7.3. The Scheduler Menu<a class="headerlink" href="#the-scheduler-menu" title="Permalink to this headline">¶</a></h3>
-<p>The <em>Scheduler</em> in the top menu is a link to a page that shows the tasks scheduled for execution in the selected workflow.</p>
+<span class="target" id="schedule-canvas"></span></div>
+<div class="section" id="table-with-scheduled-actions">
+<span id="scheduler-menu"></span><h4>3.5.3.3. Table with Scheduled Actions<a class="headerlink" href="#table-with-scheduled-actions" title="Permalink to this headline">¶</a></h4>
+<p>The table showing all the action scheduling operations can be access through the <span class="fa fa-cog"></span> <em>Settings</em> link in the top-bar menu selecting the <span class="fa fa-calendar"></span> <em>Scheduled actions</em> link. The list of scheduled actions is shown as illustrated in the following figure.</p>
 <div class="figure align-center">
-<img alt="../_images/schedule.png" src="../_images/schedule.png" />
+<a class="reference internal image-reference" href="../_images/schedule.png"><img alt="../_images/schedule.png" src="../_images/schedule.png" style="width: 100%;" /></a>
 </div>
-<p>The left-most column offers the operations to edit or delete the scheduled execution.</p>
+<p>The operations available for each operation are:</p>
+<dl class="docutils">
+<dt><span class="fa fa-pencil"></span> Edit</dt>
+<dd>This operation is accessed clicking in the name of the scheduled operation.</dd>
+<dt>Action name</dt>
+<dd>The link in this field opens the edit page for the action.</dd>
+<dt>Scheduled</dt>
+<dd>Time/date when the executing will take place</dd>
+<dt>Status</dt>
+<dd>Status of this execution</dd>
+<dt><span class="fa fa-eye"></span> View details</dt>
+<dd>View all the details for this scheduled execution (includes values in the payload)</dd>
+<dt><span class="fa fa-trash"></span> Delete</dt>
+<dd>Delete the scheduled execution.</dd>
+</dl>
 </div>
 </div>
-<div class="section" id="the-logs">
-<span id="logs"></span><h2>3.8. The Logs<a class="headerlink" href="#the-logs" title="Permalink to this headline">¶</a></h2>
-<p>The platform keeps a log of most of the operations that are executed when managing a workflow. These records are available through the <em>Logs</em> link in the navigation bar at the top of the screen.</p>
-<div class="figure">
-<img alt="../_images/logs.png" src="../_images/logs.png" />
+<div class="section" id="view-logs">
+<span id="logs"></span><h3>3.5.4. View logs<a class="headerlink" href="#view-logs" title="Permalink to this headline">¶</a></h3>
+<p>The platform keeps a log of most of the operations that are executed when managing a workflow. These records are available through the <em>View Logs</em> link in the <span class="fa fa-cog"></span> <em>Settings</em> pull down menu at the top-bar menu. The page shows information about the records in tabular form. The following figure shows an example.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/logs.png"><img alt="../_images/logs.png" src="../_images/logs.png" style="width: 100%;" /></a>
 </div>
-<p>You may download all logs as a CSV file.</p>
+<p>The <span class="fa fa-download"></span> <em>CSV Download</em> button allows to download the logs in CSV format for further processing. Additionally, the content of the table is paginated and the links to access each page are shown at the botton. The records can be searched using the box at the top right corner of the table.</p>
+</div>
 </div>
 <div class="section" id="plugins-transforming-the-data-with-your-own-code">
-<span id="plugin-run"></span><h2>3.9. Plugins – Transforming the data with your own code<a class="headerlink" href="#plugins-transforming-the-data-with-your-own-code" title="Permalink to this headline">¶</a></h2>
-<p>The additional method offered by OnTask to manipulate the data in a workflow’s table is to execute arbitrary Python code encapsulated as a Python module and placed in a predefined folder in the computer hosting the server. In the context of the platform, these Python modules are called <strong>Plugins</strong> and require some <a class="reference internal" href="../Install/index.html#plugin-install"><span class="std std-ref">previous configuration</span></a>. Before their execution, a plugin must be written and installed in the folder previously considered for that purpose.</p>
-<p>The purpose of the plugins is to allow arbitrary transformations of the data attached to a workflow. The list of plugins available for execution can be accessed through the link <em>Transform</em> in the <em>Dataops</em> top menu item.</p>
+<span id="plugin-run"></span><h2>3.6. Plugins: Transforming the data with your own code<a class="headerlink" href="#plugins-transforming-the-data-with-your-own-code" title="Permalink to this headline">¶</a></h2>
+<p>The additional method offered by OnTask to manipulate the data in a workflow table is to execute arbitrary Python code encapsulated as a Python module and placed in a predefined folder in the computer hosting the server. In the context of the platform, these Python modules are called <strong>Plugins</strong> or <strong>Transformations</strong> and require some <a class="reference internal" href="../Install/index.html#plugin-install"><span class="std std-ref">previous configuration</span></a>. Before their execution, a plugin must be written and installed in the folder previously considered for that purpose.</p>
+<p>The purpose of the plugins is to allow arbitrary transformations of the data attached to a workflow such as machine learning algorithms, predictive models, etc. The list of plugins available for execution can be accessed through the link <em>Execute plugin</em> inside the drop-down menu <em>Manage table data</em> available in both the <span class="fa fa-comments"></span> <em>Actions</em> and <span class="fa fa-table"></span> <em>Table</em> pages. The transformations available for execution are shown in a table like the one in the next figure.</p>
 <div class="figure align-center">
-<img alt="../_images/dataops_transform_list.png" src="../_images/dataops_transform_list.png" />
+<a class="reference internal image-reference" href="../_images/dataops_transform_list.png"><img alt="../_images/dataops_transform_list.png" src="../_images/dataops_transform_list.png" style="width: 100%;" /></a>
 </div>
-<p>Each plugin is shown with a (unique) name, a description, the last time the code was modified (based on the file modification time), if the plugin is ready to execute, and the link for either the <em>Run</em> operation, or a link to the diagnostics if the execution is not possible.</p>
-<p>The plugin execution request shows a form to collect the parameters required for the operation.</p>
+<p>Each transformation is shown with a the name of the internal folder in which it is installed, its (unique) name, a description, if it is ready to run, and the last time the code was modified (based on the file modification time). The link in the name opens a form to introduce the information required for execution. The following figure shows and example of this page.</p>
 <div class="figure align-center">
-<img alt="../_images/dataops_transformation_run.png" src="../_images/dataops_transformation_run.png" />
+<a class="reference internal image-reference" href="../_images/dataops_transformation_run.png"><img alt="../_images/dataops_transformation_run.png" src="../_images/dataops_transformation_run.png" style="width: 100%;" /></a>
 </div>
+<p>The information requested in this page is divided into three tabs.</p>
 <dl class="docutils">
-<dt>Input columns</dt>
-<dd>The columns from the data table that will be passed to the plugin. The plugin can define a set of <em>fixed</em> column names to extract. If this list is empty, the list is requested from the user.</dd>
-<dt>Key column for merging</dt>
-<dd>The plugins are supposed to create additional columns, and they need to be merged with the existing data. For this procedure, a key-column is needed to make sure the rows of the newly created data are correctly stored. They key column from the current data frame is added as part of the input data frame passed to the plugin.</dd>
-<dt>Output column names</dt>
-<dd>The plugins defines the names of the result columns. However, the upon execution, the user may rename any of those columns.</dd>
-<dt>Suffix to add to the result columns</dt>
-<dd>This field is provided to do a one-place renaming. If given, this suffix is added to the names of all output columns.</dd>
-<dt>Execution parameters</dt>
-<dd>This part of the form requests the pairs <em>(name, value)</em> as defined by the plugin.</dd>
+<dt>Columns to pass to the transformation</dt>
+<dd>This field is to select the subset of columns from the data table that will be passed when invoking the transformation. It is possible for a transformation to define a set of <em>fixed</em> column names as inputs. If this is the case, the field in this tab shows those names and does not allow changes.</dd>
+<dt>Columns to store the result</dt>
+<dd>The middle tab in this page includes fields to obtain the output column names (the transformation may supply suggestions, an optional suffix to add to the result column names to be able to differentiate between multiple executions of the transformation, and a key column to be use when merging the result of the plugin with the current table.</dd>
+<dt>Parameters</dt>
+<dd>This tab contains a form to pairs <em>(name, value)</em> as defined by the transformation.</dd>
 </dl>
-<p>After the appropriate data is provided the tool shows a plugin executing report showing the columns that will be created and how will they be merged with the existing data.</p>
+<p>After the data has been provided the tool shows an transformation execution report showing the columns that will be created and how will they be merged with the existing data.</p>
 <div class="section" id="plugin-requirements">
-<span id="id4"></span><h3>3.9.1. Plugin requirements<a class="headerlink" href="#plugin-requirements" title="Permalink to this headline">¶</a></h3>
-<p>The Python modules installed in the predefined folder need to satisfy various requirements to be considered for execution within OnTask. More precisely, the file <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> must contain:</p>
-<ol class="arabic simple">
-<li>Module variable <code class="docutils literal notranslate"><span class="pre">class_name</span></code> with the name of the class in the file that contains the required definitions.</li>
-</ol>
-<ol class="arabic simple">
-<li>Class field <code class="docutils literal notranslate"><span class="pre">name</span></code> with the plugin name to show to the users.</li>
-<li>Class field <code class="docutils literal notranslate"><span class="pre">escription_txt</span></code> with a string with the detailed description of what the
-plugin does</li>
-</ol>
-<p>3. Class field <code class="docutils literal notranslate"><span class="pre">input_column_names</span></code> with a potentially empty list of column names
-(strings). If the list is empty, the columns are selected by the user at
-execution time.</p>
-<p>4. Class field <code class="docutils literal notranslate"><span class="pre">output_column_names</span></code> with a non empty list of names (strings) of the
-columns to be used for the output of the transformation.</p>
-<p>5. Class field <code class="docutils literal notranslate"><span class="pre">parameters</span></code> with an optionally empty list with tuples with the following
-structure:</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">('name',</span> <span class="pre">type,</span> <span class="pre">[list</span> <span class="pre">of</span> <span class="pre">allowed</span> <span class="pre">values],</span> <span class="pre">initial</span> <span class="pre">value,</span> <span class="pre">help_text)</span></code></p>
+<span id="id10"></span><h3>3.6.1. Plugin requirements<a class="headerlink" href="#plugin-requirements" title="Permalink to this headline">¶</a></h3>
+<p>The Python modules installed in the predefined folder need to satisfy various requirements to be considered for execution within OnTask. More precisely, each plugin must be stored in its own folder (as a Python module). The file <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> in the module must contain:</p>
+<ol class="arabic">
+<li><p class="first">Module variable <code class="docutils literal notranslate"><span class="pre">class_name</span></code> with the name of the class in the file that contains the required definitions.</p>
+</li>
+<li><p class="first">The definition of a class with the name stored in the previous variable.</p>
+</li>
+<li><p class="first">Class field <code class="docutils literal notranslate"><span class="pre">name</span></code> with the plugin name to show to the users.</p>
+</li>
+<li><p class="first">Class field <code class="docutils literal notranslate"><span class="pre">escription_txt</span></code> with a string with the detailed description of what the plugin does</p>
+</li>
+<li><p class="first">Class field <code class="docutils literal notranslate"><span class="pre">input_column_names</span></code> with a potentially empty list of column names (strings). If the list is empty, the columns are selected by the user at execution time.</p>
+</li>
+<li><p class="first">Class field <code class="docutils literal notranslate"><span class="pre">output_column_names</span></code> with a non empty list of names (strings) of the columns to be used for the output of the transformation.</p>
+</li>
+<li><p class="first">Class field <code class="docutils literal notranslate"><span class="pre">parameters</span></code> with an optionally empty list with tuples with the following structure:</p>
+<p><code class="docutils literal notranslate"><span class="pre">('name',</span> <span class="pre">type,</span> <span class="pre">[list</span> <span class="pre">of</span> <span class="pre">allowed</span> <span class="pre">values],</span> <span class="pre">initial</span> <span class="pre">value,</span> <span class="pre">help_text)</span></code></p>
 <p>These elements will be requested from the user before executing the
 plugin through a form. The conditions on these values are:</p>
 <ul class="simple">
@@ -873,8 +1041,7 @@ possible values</li>
 element.</li>
 <li>Help_text a string to show as help text</li>
 </ul>
-</div></blockquote>
-<ol class="arabic" start="6">
+</li>
 <li><p class="first">Class method <code class="docutils literal notranslate"><span class="pre">run</span></code> that receives:</p>
 <ul class="simple">
 <li>a pandas data frame with the data to process</li>
@@ -890,7 +1057,7 @@ merged with the existing data.</p>
 </ol>
 <p>If a plugin does not comply with these properties the platform shows a summary of these checks to diagnose the problem.</p>
 <div class="figure align-center">
-<img alt="../_images/dataops_plugin_diagnostics.png" src="../_images/dataops_plugin_diagnostics.png" />
+<a class="reference internal image-reference" href="../_images/dataops_plugin_diagnostics.png"><img alt="../_images/dataops_plugin_diagnostics.png" src="../_images/dataops_plugin_diagnostics.png" style="width: 60%;" /></a>
 </div>
 </div>
 </div>
@@ -943,16 +1110,13 @@ merged with the existing data.</p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../Introduction/index.html">1. What is OnTask</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Install/index.html">2. Installation process</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Using the tool</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#the-workflow">3.1. The Workflow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#workflow-details">3.2. Workflow Details</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#data-table">3.3. Data Table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#data-merge">3.4. Data Merge</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-table">3.5. The Table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-actions">3.6. The Actions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-scheduler">3.7. The Scheduler</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-logs">3.8. The Logs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plugins-transforming-the-data-with-your-own-code">3.9. Plugins – Transforming the data with your own code</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Using OnTask</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#workflow">3.1. Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data">3.2. Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#table">3.3. Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#actions">3.4. Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#workflow-settings">3.5. Workflow Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plugins-transforming-the-data-with-your-own-code">3.6. Plugins: Transforming the data with your own code</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../Scenarios/index.html">4. Use Scenarios</a></li>

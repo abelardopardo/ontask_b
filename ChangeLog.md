@@ -1,4 +1,4 @@
-## 4.0.0 ()
+## 4.0 (2019-02-14)
 
 ### Fixed
 
@@ -8,11 +8,17 @@
 
 - Support for Python3/Django2
 
+- New type of personalized email actions that send messages using the Canvas API
+
 ### Changed
 
 - Datetimepicker widget changed due to incompatibilities with Django 2
 
 - Reviewed the Chinese localization
+
+- Major UI redesign to use more intuitive constructs and better use of screen space
+
+- Migration to Bootstrap 4
 
 ## 3.2.1 (2018-11-21)
 
@@ -63,6 +69,7 @@
 ### Added
 
 - Initial support for localization to Chinese
+
 ## 3.0.4 (2018-10-20)
 
 ### Changed
