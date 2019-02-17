@@ -690,7 +690,7 @@ def csvdownload(request, pk=None):
     if view:
         col_names = [x.name for x in view.columns.all()]
     else:
-        col_names = [x.name for x in workflow.get_column_names()]
+        col_names = workflow.get_column_names()
     data_frame = pandas_db.get_subframe(workflow.id, view, col_names)
 
     # Create the response object
