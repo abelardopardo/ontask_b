@@ -107,7 +107,7 @@ def store_table_in_db(data_frame,
             workflow=workflow,
             data_type=pandas_datatype_names[data_frame[cname].dtype.name],
             is_key=is_unique_column(data_frame[cname]),
-            position=Column.objects.filter(workflow=workflow).count() + 1,
+            position=workflow.columns.count() + 1
         )
         column.save()
 
@@ -356,7 +356,7 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
     # STEP 1 Rename the column names.
     src_df = src_df.rename(
         columns=dict(list(zip(merge_info['initial_column_names'],
-                         merge_info['rename_column_names']))))
+                          merge_info['rename_column_names']))))
 
     # STEP 2 Drop the columns not selected
     columns_to_upload = merge_info['columns_to_upload']
@@ -560,7 +560,6 @@ def rename_df_column(workflow, old_name, new_name):
     """
     Function to change the name of a column in the dataframe.
 
-    :param df: dataframe
     :param workflow: workflow object that is handling the data frame
     :param old_name: old column name
     :param new_name: new column name
