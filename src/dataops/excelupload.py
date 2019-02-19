@@ -1,16 +1,11 @@
 # -*- coding: utf-8 -*-
 
 
-from collections import Counter
-
-import pandas as pd
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext_lazy as _
 
-import dataops.pandas_db
-from dataops import ops
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
 from .forms import UploadExcelFileForm
@@ -44,7 +39,9 @@ def excelupload1(request):
         return redirect('workflow:index')
 
     # Bind the form with the received data
-    form = UploadExcelFileForm(request.POST or None, request.FILES or None)
+    form = UploadExcelFileForm(request.POST or None,
+                               request.FILES or None,
+                               workflow_id=workflow.id)
 
     # Process the initial loading of the form
     if request.method != 'POST':
@@ -74,89 +71,12 @@ def excelupload1(request):
                        'dtype_select': 'Excel file',
                        'prev_step': reverse('dataops:uploadmerge')})
 
-    # Process Excel file using pandas read_excel
-    try:
-        data_frame = pd.read_excel(
-            request.FILES['file'],
-            sheet_name=form.cleaned_data['sheet'],
-            index_col=False,
-            infer_datetime_format=True,
-            quotechar='"',
-        )
-
-        # Strip white space from all string columns and try to convert to
-        # datetime just in case
-        for x in list(data_frame.columns):
-            if data_frame[x].dtype.name == 'object':
-                # Column is a string!
-                data_frame[x] = data_frame[x].str.strip()
-
-                # Try the datetime conversion
-                try:
-                    series = pd.to_datetime(data_frame[x],
-                                            infer_datetime_format=True)
-                    # Datetime conversion worked! Update the data_frame
-                    data_frame[x] = series
-                except ValueError:
-                    pass
-    except Exception as e:
-        form.add_error('file',
-                       ugettext('File could not be processed ({0})').format(e))
-        return render(request,
-                      'dataops/upload1.html',
-                      {'form': form,
-                       'dtype': 'Excel',
-                       'dtype_select': 'Excel file',
-                       'prev_step': reverse('dataops:uploadmerge')})
-
-    # If the frame has repeated column names, it will not be processed.
-    if len(set(data_frame.columns)) != len(data_frame.columns):
-        dup = [x for x, v in Counter(list(data_frame.columns)) if v > 1]
-        form.add_error(
-            'file',
-            _('The file has duplicated column names') + ' (' +
-            ','.join(dup) + ').')
-        return render(request, 'dataops/upload1.html',
-                      {'form': form,
-                       'dtype': 'Excel',
-                       'dtype_select': 'Excel file',
-                       'prev_step': reverse('dataops:uploadmerge')})
-
-    # If the data frame does not have any unique key, it is not useful (no
-    # way to uniquely identify rows). There must be at least one.
-    src_is_key_column = dataops.pandas_db.are_unique_columns(data_frame)
-    if not any(src_is_key_column):
-        form.add_error(
-            'file',
-            _('The data has no column with unique values per row. '
-              'At least one column must have unique values.'))
-        return render(request, 'dataops/upload1.html',
-                      {'form': form,
-                       'dtype': 'Excel',
-                       'dtype_select': 'Excel file',
-                       'prev_step': reverse('dataops:uploadmerge')})
-
-    # Store the data frame in the DB.
-    try:
-        # Get frame info with three lists: names, types and is_key
-        frame_info = ops.store_upload_dataframe_in_db(data_frame, workflow.id)
-    except Exception as e:
-        form.add_error(
-            'file',
-            _('Sorry. This file cannot be processed.')
-        )
-        return render(request, 'dataops/upload1.html',
-                      {'form': form,
-                       'dtype': 'Excel',
-                       'dtype_select': 'Excel file',
-                       'prev_step': reverse('dataops:uploadmerge')})
-
     # Dictionary to populate gradually throughout the sequence of steps. It
     # is stored in the session.
     request.session['upload_data'] = {
-        'initial_column_names': frame_info[0],
-        'column_types': frame_info[1],
-        'src_is_key_column': frame_info[2],
+        'initial_column_names': form.frame_info[0],
+        'column_types': form.frame_info[1],
+        'src_is_key_column': form.frame_info[2],
         'step_1': reverse('dataops:excelupload1')
     }
 

@@ -60,6 +60,13 @@ class TableBasicOps(APIView):
         # Data received is a correct data frame.
         df = serializer.validated_data['data_frame']
 
+        try:
+            # Verify the data frame
+            pandas_db.verify_data_frame(df)
+        except OnTaskDataFrameNoKey as e:
+            return Response(str(e),
+                            status=status.HTTP_400_BAD_REQUEST)
+
         # Store the content in the db and...
         ops.store_dataframe_in_db(df, pk)
 

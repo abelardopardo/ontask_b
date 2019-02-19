@@ -1,25 +1,29 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import next
-from builtins import zip
 import logging
 import os.path
 import subprocess
+from builtins import next
+from builtins import zip
 from collections import OrderedDict
+from urllib.parse import urlparse, urlunparse
 
 import numpy as np
 import pandas as pd
 from django.conf import settings
 from django.core.cache import cache
 from django.db import connection
+from django.utils.translation import ugettext as _
 from sqlalchemy import create_engine
 
 from dataops.formula_evaluation import (
     NodeEvaluation,
     evaluate
 )
-from ontask import fix_pctg_in_name
+from ontask import (
+    fix_pctg_in_name, OnTaskDataFrameNoKey
+)
 
 SITE_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
@@ -284,32 +288,14 @@ def load_query(query):
     return result
 
 
-def load_df_from_csvfile(file, skiprows=0, skipfooter=0):
+def strip_and_convert_to_datetime(data_frame):
     """
-    Given a file object, try to read the content as a CSV file and transform
-    into a data frame. The skiprows and skipfooter are number of lines to skip
-    from the top and bottom of the file (see read_csv in pandas).
-
-    It also tries to convert as many columns as possible to date/time format
-    (testing the conversion on every string column).
-
-    :param filename: File object to read the CSV content
-    :param skiprows: Number of lines to skip at the top of the document
-    :param skipfooter: Number of lines to skip at the bottom of the document
-    :return: Resulting data frame, or an Exception.
+    Strip white space from all string columns and try to convert to datetime
+    just in case
+    :param data_frame:
+    :return: new data frame
     """
-    data_frame = pd.read_csv(
-        file,
-        index_col=False,
-        infer_datetime_format=True,
-        quotechar='"',
-        skiprows=skiprows,
-        skipfooter=skipfooter,
-        encoding='utf-8'
-    )
 
-    # Strip white space from all string columns and try to convert to
-    # datetime just in case
     for x in list(data_frame.columns):
         if data_frame[x].dtype.name == 'object':
             # Column is a string! Remove the leading and trailing white
@@ -324,7 +310,58 @@ def load_df_from_csvfile(file, skiprows=0, skipfooter=0):
                 data_frame[x] = series
             except (ValueError, TypeError):
                 pass
+
     return data_frame
+
+
+def load_df_from_csvfile(file, skiprows=0, skipfooter=0):
+    """
+    Given a file object, try to read the content as a CSV file and transform
+    into a data frame. The skiprows and skipfooter are number of lines to skip
+    from the top and bottom of the file (see read_csv in pandas).
+
+    It also tries to convert as many columns as possible to date/time format
+    (testing the conversion on every string column).
+
+    :param filename: File object to read the CSV content
+    :param skiprows: Number of lines to skip at the top of the document
+    :param skipfooter: Number of lines to skip at the bottom of the document
+    :return: Resulting data frame, or an Exception.
+    """
+    data_frame = pd.read_csv(file,
+                             index_col=False,
+                             infer_datetime_format=True,
+                             quotechar='"',
+                             skiprows=skiprows,
+                             skipfooter=skipfooter,
+                             encoding='utf-8')
+
+    # Strip white space from all string columns and try to convert to
+    # datetime just in case
+    return strip_and_convert_to_datetime(data_frame)
+
+
+def load_df_from_excelfile(file, sheet_name):
+    """
+    Given a file object, try to read the content as a Excel file and transform
+    into a data frame. The sheet_name is the name of the sheet to read.
+
+    It also tries to convert as many columns as possible to date/time format
+    (testing the conversion on every string column).
+
+    :param file: File object to read the CSV content
+    :param sheet_name: Sheet in the file to read
+    :return: Resulting data frame, or an Exception.
+    """
+    data_frame = pd.read_excel(file,
+                               sheet_name=sheet_name,
+                               index_col=False,
+                               infer_datetime_format=True,
+                               quotechar='"')
+
+    # Strip white space from all string columns and try to convert to
+    # datetime just in case
+    return strip_and_convert_to_datetime(data_frame)
 
 
 def load_df_from_sqlconnection(conn_item, pwd=None):
@@ -344,11 +381,51 @@ def load_df_from_sqlconnection(conn_item, pwd=None):
                                          conn_item.db_name)
 
     # Try to fetch the data
-    result = pd.read_sql(conn_item.db_table, db_connection)
+    data_frame = pd.read_sql(conn_item.db_table, db_connection)
 
     # After reading from the DB, turn all None into NaN
-    result.fillna(value=np.nan, inplace=True)
-    return result
+    data_frame.fillna(value=np.nan, inplace=True)
+
+    # Strip white space from all string columns and try to convert to
+    # datetime just in case
+    return strip_and_convert_to_datetime(data_frame)
+
+
+def load_df_from_googlesheet(url_string, skiprows=0, skipfooter=0):
+    """
+    Given a file object, try to read the content as a CSV file and transform
+    into a data frame. The skiprows and skipfooter are number of lines to skip
+    from the top and bottom of the file (see read_csv in pandas).
+
+    It also tries to convert as many columns as possible to date/time format
+    (testing the conversion on every string column).
+
+    :param url_string: URL where the file is available
+    :param skiprows: Number of lines to skip at the top of the document
+    :param skipfooter: Number of lines to skip at the bottom of the document
+    :return: Resulting data frame, or an Exception.
+    """
+
+    # Process the URL provided by google. If the URL is obtained using the
+    # GUI, it has as suffix /edit?[parameters]. This part needs to be
+    # replaced by the suffix /export?format=csv
+    # For example from:
+    # https://docs.google.com/spreadsheets/d/DOCID/edit?usp=sharing
+    # to
+    # https://docs.google.com/spreadsheets/d/DOCID/export?format = csv&gid=0
+    parse_res = urlparse(url_string)
+    if parse_res.path.endswith('/edit'):
+        url_string = urlunparse([
+            parse_res.scheme,
+            parse_res.netloc,
+            parse_res.path[:-len('/edit')] + '/export',
+            parse_res.params,
+            parse_res.query + '&format=csv',
+            parse_res.fragment
+        ])
+
+    # Process the link using pandas read_csv
+    return load_df_from_csvfile(url_string, skiprows, skipfooter)
 
 
 def store_table(data_frame, table_name):
@@ -751,7 +828,8 @@ def get_filter_query(table_name, column_names, filter_exp):
     filter_txt = ''
     filter_fields = []
     if filter_exp:
-        filter_txt, filter_fields = evaluate(filter_exp, NodeEvaluation.EVAL_SQL)
+        filter_txt, filter_fields = evaluate(filter_exp,
+                                             NodeEvaluation.EVAL_SQL)
 
     # Build the query so far appending the filter and/or the cv_tuples
     if filter_txt:
@@ -803,7 +881,8 @@ def search_table_rows(workflow_id,
     filter_txt = ''
     filter_fields = []
     if pre_filter:
-        filter_txt, filter_fields = evaluate(pre_filter, NodeEvaluation.EVAL_SQL)
+        filter_txt, filter_fields = evaluate(pre_filter,
+                                             NodeEvaluation.EVAL_SQL)
 
     if cv_tuples:
         likes = []
@@ -987,3 +1066,23 @@ def has_unique_column(data_frame):
     """
 
     return any([is_unique_column(data_frame[x]) for x in data_frame.columns])
+
+
+def verify_data_frame(data_frame):
+    """
+    Verify that the data frame complies with two properties:
+    1) The names of the columns are all different
+    2) There is at least one key column
+    :param data_frame: Data frame to verify
+    :return: None or an exception with the descripton of the problem in the text
+    """
+
+    # If the data frame does not have any unique key, it is not useful (no
+    # way to uniquely identify rows). There must be at least one.
+    if not has_unique_column(data_frame):
+        raise OnTaskDataFrameNoKey(
+            _('The data has no column with unique values per row. '
+              'At least one column must have unique values.')
+        )
+
+    return None

@@ -19,6 +19,7 @@ from dataops import ops, pandas_db
 from dataops.forms import SQLConnectionForm, SQLRequestPassword
 from dataops.models import SQLConnection
 from logs.models import Log
+from ontask import OnTaskDataFrameNoKey
 from ontask.permissions import is_instructor, is_admin
 from ontask.tables import OperationsColumn
 from workflow.models import Workflow
@@ -440,23 +441,12 @@ def sqlupload1(request, pk):
                        _('Unable to obtain data: {0}').format(e))
         return render(request, 'dataops/sqlupload1.html', context)
 
-    # If the frame has repeated column names, it will not be processed.
-    if len(set(data_frame.columns)) != len(data_frame.columns):
+    try:
+        # Verify the data frame
+        pandas_db.verify_data_frame(data_frame)
+    except OnTaskDataFrameNoKey as e:
         dup = [x for x, v in Counter(list(data_frame.columns)) if v > 1]
-        messages.error(
-            request,
-            _('The data frame has duplicated column names') + ' (' +
-            ','.join(dup) + ').')
-        return render(request, 'dataops/sqlupload1.html', context)
-
-    # If the data frame does not have any unique key, it is not useful (no
-    # way to uniquely identify rows). There must be at least one.
-    src_is_key_column = dataops.pandas_db.are_unique_columns(data_frame)
-    if not any(src_is_key_column):
-        messages.error(
-            request,
-            _('The data has no column with unique values per row. '
-              'At least one column must have unique values.'))
+        messages.error(request, str(e) + ' (' + ','.join(dup) + ').')
         return render(request, 'dataops/sqlupload1.html', context)
 
     # Store the data frame in the DB.
