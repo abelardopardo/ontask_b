@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-14 10:08+1030\n"
+"POT-Creation-Date: 2019-02-19 11:55+1030\n"
 "PO-Revision-Date: 2019-02-14 10:09+1030\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: \n"
@@ -583,7 +583,7 @@ msgstr ""
 #: action/templates/action/export_ask.html:22
 #: action/templates/action/export_done.html:15
 #: action/templates/action/item_filter.html:26
-#: action/templates/action/run_survey.html:69
+#: action/templates/action/run_survey.html:68
 #: action/templates/action/run_survey_row.html:25
 #: dataops/templates/dataops/includes/upload_buttons.html:6
 #: logs/templates/logs/view.html:12
@@ -1017,7 +1017,7 @@ msgid "URL for learners to introduce data"
 msgstr "URL para que los estudiantes introduzcan los datos"
 
 #: action/templates/action/includes/partial_action_operations.html:21
-#: dataops/forms.py:243
+#: dataops/forms.py:334
 msgid "URL"
 msgstr "URL"
 
@@ -1438,12 +1438,12 @@ msgid "Incorrect form request (it is not multipart)"
 msgstr "Petición de formulario incorrecta (no es multiplart)"
 
 #: action/views_action.py:1133 action/views_action.py:1157 logs/views.py:49
-#: logs/views.py:59 table/views.py:186 table/views.py:300 table/views.py:355
+#: logs/views.py:59 table/views.py:189 table/views.py:303 table/views.py:358
 #: workflow/views.py:428 workflow/views.py:445
 msgid "Incorrect request. Unable to process"
 msgstr "Petición incorrecta. No es posible procesarla"
 
-#: action/views_action.py:1138 table/views.py:305 table/views.py:360
+#: action/views_action.py:1138 table/views.py:308 table/views.py:363
 msgid "There is no data in the table"
 msgstr "No hay datos en la tabla"
 
@@ -1560,69 +1560,44 @@ msgstr "Intervalo en minutos para programar las tareas planificadas"
 msgid "Data Upload/Merge Operations"
 msgstr "Operaciones de carga/mezcla de datos"
 
-#: dataops/csvupload.py:52 dataops/csvupload.py:71
+#: dataops/csvupload.py:49 dataops/csvupload.py:68
 msgid "CSV file"
 msgstr "Fichero CSV"
 
-#: dataops/csvupload.py:57
+#: dataops/csvupload.py:54
 msgid "CSV upload form is not multiform"
 msgstr "El formulario de carga CSV no es multiform"
 
-#: dataops/csvupload.py:83 dataops/excelupload.py:104
-#: dataops/googlesheetupload.py:100
-#, python-brace-format
-msgid "File could not be processed ({0})"
-msgstr "No se ha podido procesar el fichero ({0})"
-
-#: dataops/csvupload.py:96 dataops/excelupload.py:117
-#: dataops/googlesheetupload.py:113
-msgid "The file has duplicated column names"
-msgstr "El fichero tienen nombres de columnas duplicados"
-
-#: dataops/csvupload.py:110 dataops/excelupload.py:131
-#: dataops/googlesheetupload.py:127 dataops/sqlcon_views.py:458
-msgid ""
-"The data has no column with unique values per row. At least one column must "
-"have unique values."
-msgstr ""
-"Los datos no tienen ninguna columna con valores únicos por cada fila. Al "
-"menos debe haber una columna con valores únicos."
-
-#: dataops/csvupload.py:125 dataops/excelupload.py:146
-#: dataops/googlesheetupload.py:142
-msgid "Sorry. This file cannot be processed."
-msgstr "Lo sentimos, pero este fichero no se puede procesar."
-
-#: dataops/excelupload.py:60
+#: dataops/excelupload.py:57
 msgid "Excel upload form is not multiform"
 msgstr "El formulario de carga Excel no es multiform"
 
-#: dataops/forms.py:35
+#: dataops/forms.py:39
 msgid "Input Columns (to read data)"
 msgstr "Columnas de entrada (leer datos)"
 
-#: dataops/forms.py:38
+#: dataops/forms.py:42
 msgid "To select a subset of the table to pass to the plugin"
 msgstr "Para seleccionar la porción de la tabla que utiliza el plugin"
 
-#: dataops/forms.py:59
+#: dataops/forms.py:63
 msgid "Key column for merging"
 msgstr "Columna clave para mezclar"
 
-#: dataops/forms.py:61
+#: dataops/forms.py:65
 msgid "One of the existing key columns to merge the results"
 msgstr "Una de las columnas clave para mezclar los resultados"
 
-#: dataops/forms.py:71
+#: dataops/forms.py:75
 #, python-brace-format
 msgid "Name for result column \"{0}\""
 msgstr "Nombre de la columna resultado \"{0}\""
 
-#: dataops/forms.py:78
+#: dataops/forms.py:82
 msgid "Suffix to add to result columns (empty to ignore)"
 msgstr "Sufijo a añadir a las columnas resultado (vacío se ignora)"
 
-#: dataops/forms.py:82
+#: dataops/forms.py:85
 msgid ""
 "Added to all output column names. Useful to keep results from several "
 "executions in separated columns."
@@ -1630,108 +1605,119 @@ msgstr ""
 "Añadido a los nombres de las columnas de salida. Útil para mantener "
 "resultados de varias ejecuciones en columnas diferentes."
 
-#: dataops/forms.py:149
+#: dataops/forms.py:153
 msgid "The plugin needs at least one input column"
 msgstr "El plugin necesita al menos una columna de entrada"
 
-#: dataops/forms.py:167
+#: dataops/forms.py:192 dataops/forms.py:196
+#, fuzzy, python-brace-format
+#| msgid "Unable to process data type "
+msgid "Unable to process file ({0})."
+msgstr "No es posible procesar el tipo de datos "
+
+#: dataops/forms.py:213
 msgid ""
 "File in CSV format (typically produced by a statistics package or Excel)"
 msgstr ""
 "Fichero en formato CSV (tipicamente creado por Excel o un paquete estadístico"
 
-#: dataops/forms.py:171 dataops/forms.py:248
+#: dataops/forms.py:217 dataops/forms.py:339
 msgid "Lines to skip at the top"
 msgstr "Ignorar líneas al comienzo"
 
-#: dataops/forms.py:172 dataops/forms.py:249
+#: dataops/forms.py:218 dataops/forms.py:340
 msgid "Number of lines to skip at the top when reading the file"
 msgstr "Número de líneas a ignorar al comienzo del fichero"
 
-#: dataops/forms.py:179 dataops/forms.py:256
+#: dataops/forms.py:225 dataops/forms.py:347
 msgid "Lines to skip at the bottom"
 msgstr "Ignorar líneas al final"
 
-#: dataops/forms.py:180 dataops/forms.py:257
+#: dataops/forms.py:226 dataops/forms.py:348
 msgid "Number of lines to skip at the bottom when reading the file"
 msgstr "Número de líneas a ignorar al final del fichero"
 
-#: dataops/forms.py:197 dataops/forms.py:203 dataops/forms.py:274
-#: dataops/forms.py:280
+#: dataops/forms.py:244 dataops/forms.py:251 dataops/forms.py:366
+#: dataops/forms.py:373
 msgid "This number has to be zero or positive"
 msgstr "Este número debe ser positivo o zero"
 
-#: dataops/forms.py:222
+#: dataops/forms.py:267 dataops/forms.py:313 dataops/forms.py:388
+#, python-brace-format
+msgid "File could not be processed ({0})"
+msgstr "No se ha podido procesar el fichero ({0})"
+
+#: dataops/forms.py:289
 msgid "File in Excel format (.xls or .xlsx)"
 msgstr "Fichero en formato Excel (.xls o .xlsx)"
 
-#: dataops/forms.py:228
+#: dataops/forms.py:295
 msgid "Sheet within the excelsheet to upload"
 msgstr "Hoja a cargar dentro del fichero"
 
-#: dataops/forms.py:244
+#: dataops/forms.py:335
 msgid "URL to access the Google Spreadsheet in CSV format"
 msgstr "URL para acceder a una Google Spreadsheet en formato CSV"
 
-#: dataops/forms.py:321
+#: dataops/forms.py:432
 msgid "Password to authenticate the database connection"
 msgstr "Clave para autenticar la conexión a la base de datos"
 
-#: dataops/forms.py:379
+#: dataops/forms.py:490
 msgid "No unique column specified"
 msgstr "No se ha especificado ninguna columna clave"
 
-#: dataops/forms.py:386
+#: dataops/forms.py:497
 msgid "- Choose row selection method -"
 msgstr "- Seleccioa el método de selección de filas -"
 
-#: dataops/forms.py:387
+#: dataops/forms.py:498
 msgid "1) Select all rows in both the existing and new table"
 msgstr "1) Selecciona todas las filas en ambas tablas, existente y nueva"
 
-#: dataops/forms.py:388
+#: dataops/forms.py:499
 msgid ""
 "2) Select only the rows with keys present in both the existing and new table"
 msgstr ""
 "2) Selecciona sólo las filas con clave en ambas tablas, existente y nueva"
 
-#: dataops/forms.py:390
+#: dataops/forms.py:501
 msgid "3) Select only the rows with keys in the existing table"
 msgstr "3) Selecciona sólo las filas con clave en la tabla existente"
 
-#: dataops/forms.py:391
+#: dataops/forms.py:502
 msgid "4) Select only the rows with keys in the new table"
 msgstr "4) Selecciona sólo las filas con la clave en la tabla nueva"
 
-#: dataops/forms.py:394
+#: dataops/forms.py:505
 msgid "Key column in the existing table to match with the new table."
 msgstr "Columna clave en la tabla existente para emparejar con la tabla nueva."
 
-#: dataops/forms.py:397
+#: dataops/forms.py:508
 msgid "Key column in the new table to match with the existing table."
 msgstr "Columna clave en la tabla nueva a emparejar con la tabla existente."
 
-#: dataops/forms.py:400
+#: dataops/forms.py:511
 msgid "Select one method to see detailed information"
 msgstr "Selecciona un método para ver más información"
 
-#: dataops/forms.py:417
+#: dataops/forms.py:528
 msgid "- Select merge option -"
 msgstr "- Selecciona la opción de mezcla -"
 
-#: dataops/forms.py:431
+#: dataops/forms.py:542
 msgid "Key Column in Existing Table"
 msgstr "Columna clave en la tabla existente"
 
-#: dataops/forms.py:438
+#: dataops/forms.py:549
 msgid "Key Column in New Table"
 msgstr "Columna clave en la nueva tabla"
 
-#: dataops/forms.py:445
+#: dataops/forms.py:556
 msgid "Method to select rows to merge/update"
 msgstr "Método para seleccionar las filas a mezclar/actualizar"
 
-#: dataops/forms.py:482
+#: dataops/forms.py:593
 msgid "Unable to process datatype"
 msgstr "No se puede processar el tipo de datos"
 
@@ -1767,7 +1753,7 @@ msgid "Evaluation error: Type {0} not allowed with operator BETWEEN"
 msgstr ""
 "Error de evaluación: El tipo {0} no está permitido con el operador BETWEEN"
 
-#: dataops/googlesheetupload.py:61 dataops/googlesheetupload.py:70
+#: dataops/googlesheetupload.py:50 dataops/googlesheetupload.py:59
 msgid "Google Sheet URL"
 msgstr "URL de Google Sheet"
 
@@ -1851,6 +1837,14 @@ msgstr "Los nuevos valores en la columna {0} no están en la categoría {1}"
 #, python-brace-format
 msgid "Type {0} not found"
 msgstr "No se ha encontrado el tipo {0}"
+
+#: dataops/pandas_db.py:1084
+msgid ""
+"The data has no column with unique values per row. At least one column must "
+"have unique values."
+msgstr ""
+"Los datos no tienen ninguna columna con valores únicos por cada fila. Al "
+"menos debe haber una columna con valores únicos."
 
 #: dataops/plugin.py:51
 msgid "This method should be implemented!"
@@ -1965,30 +1959,26 @@ msgstr "El resultado no es un data frame de Pandas."
 msgid "Folder where plugins are stored"
 msgstr "Carpeta en la que se almacenan los plugins"
 
-#: dataops/sqlcon_views.py:110
+#: dataops/sqlcon_views.py:111
 msgid "A connection with this name already exists"
 msgstr "Ya hay una conexión con este nombre"
 
-#: dataops/sqlcon_views.py:130 dataops/sqlcon_views.py:316
-#: dataops/sqlcon_views.py:353 dataops/sqlcon_views.py:421
+#: dataops/sqlcon_views.py:131 dataops/sqlcon_views.py:317
+#: dataops/sqlcon_views.py:354 dataops/sqlcon_views.py:422
 msgid "<PROTECTED>"
 msgstr "<PROTEGIDO>"
 
-#: dataops/sqlcon_views.py:416
+#: dataops/sqlcon_views.py:417
 #: dataops/templates/dataops/includes/partial_show_sql_connection.html:3
 msgid "SQL connection"
 msgstr "Conexión SQL"
 
-#: dataops/sqlcon_views.py:440
+#: dataops/sqlcon_views.py:441
 #, python-brace-format
 msgid "Unable to obtain data: {0}"
 msgstr "No es posible obtener los datos: {0}"
 
-#: dataops/sqlcon_views.py:448
-msgid "The data frame has duplicated column names"
-msgstr "El data frame tiene nombres de columnas repetidos"
-
-#: dataops/sqlcon_views.py:469
+#: dataops/sqlcon_views.py:459
 msgid "Sorry. The data from this connection cannot be processed."
 msgstr "Disculpas. Los datos de esta conexión no se pueden procesar."
 
@@ -2991,11 +2981,11 @@ msgstr "Ver el contenido del registro"
 msgid "Incorrect log number requested"
 msgstr "El número de registro es incorrecto"
 
-#: ontask/__init__.py:48
+#: ontask/__init__.py:49
 msgid "The symbol ' cannot be used in the column name."
 msgstr "El símbolo ' no se puede utilizar en el nombre de la columna."
 
-#: ontask/__init__.py:51
+#: ontask/__init__.py:52
 msgid "The symbol \" cannot be used in the column name."
 msgstr "El símbolo \" no se puede utilizar en el nombre de la columna."
 
@@ -3439,29 +3429,29 @@ msgstr ""
 msgid "This action does not support scheduling"
 msgstr "Esta acción no admite la programación"
 
-#: table/api.py:36 table/api.py:190
+#: table/api.py:40 table/api.py:201
 msgid "Unable to access the workflow"
 msgstr "Imposible acceder al flujo"
 
-#: table/api.py:81
+#: table/api.py:92
 msgid "Post request requires workflow without a table"
 msgstr "El post necesita un flujo sin tabla"
 
-#: table/api.py:220
+#: table/api.py:231
 msgid "how must be one of left, right, outer or inner"
 msgstr "how debe ser uno de left, right, outer o inner"
 
-#: table/api.py:225 table/api.py:239
+#: table/api.py:236 table/api.py:250
 #, python-brace-format
 msgid "column {0} does not contain a unique key."
 msgstr "columna {0} no contiene una clave única."
 
-#: table/api.py:233
+#: table/api.py:244
 #, python-brace-format
 msgid "column {0} not found in data frame"
 msgstr "la columna {0} no está presente en el data frame"
 
-#: table/api.py:258
+#: table/api.py:269
 msgid "Unable to perform merge operation"
 msgstr "Incapaz de ejecutar la operación de mezcla"
 
@@ -3741,15 +3731,15 @@ msgstr "Cambiar las columnas presentes en esta vista"
 msgid "A view with that name already exists"
 msgstr "Ya existe una vista con este nombre"
 
-#: table/views.py:366
+#: table/views.py:369
 msgid "Incorrect view reference"
 msgstr "Referencia a vista incorrecta"
 
-#: table/views.py:409
+#: table/views.py:412
 msgid "Incorrect URL invoked to delete a row"
 msgstr "URL incorrecta invocada para borrar una fila"
 
-#: table/views.py:481 table/views.py:513
+#: table/views.py:484 table/views.py:516
 msgid "Cannot add a view to a workflow without data"
 msgstr "No se puede añadir una vista a un flujo sin datos"
 
@@ -4954,6 +4944,15 @@ msgstr "Imposible clonar flujo"
 #: workflow/views.py:598
 msgid "Workflow successfully cloned."
 msgstr "Flujo clonado con éxito."
+
+#~ msgid "The file has duplicated column names"
+#~ msgstr "El fichero tienen nombres de columnas duplicados"
+
+#~ msgid "Sorry. This file cannot be processed."
+#~ msgstr "Lo sentimos, pero este fichero no se puede procesar."
+
+#~ msgid "The data frame has duplicated column names"
+#~ msgstr "El data frame tiene nombres de columnas repetidos"
 
 #~ msgid "Prevent the use of values other than the ones in this column"
 #~ msgstr "Restringir"

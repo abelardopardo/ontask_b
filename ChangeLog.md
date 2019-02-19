@@ -1,3 +1,15 @@
+## 4.0.1 (2019-02-19)
+
+### Fixed
+
+- Incorrect download of table data into CSV format
+
+- API table upload did not check for presence of key column
+
+### Changed
+
+- Update the chinese i18n
+
 ## 4.0 (2019-02-14)
 
 ### Fixed

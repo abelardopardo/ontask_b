@@ -19,7 +19,7 @@ msgstr ""
 
 #: action/static/action/js/action.js:27
 msgid "YOUR TEXT HERE"
-msgstr "您的文本在这里"
+msgstr "你的文本在这里"
 
 #: static/html/_static/doctools.js:195
 msgid "Permalink to this headline"
@@ -49,7 +49,7 @@ msgstr "搜索结果"
 msgid ""
 "Your search did not match any documents. Please make sure that all words are "
 "spelled correctly and that you've selected enough categories."
-msgstr "您的搜索与文档不匹配。请确保所有单词拼写正确，并选择足够多的类别。"
+msgstr "你的搜索与文档不匹配。请确保所有单词拼写正确，并选择足够多的类别。"
 
 #: static/html/_static/searchtools.js:294
 #, javascript-format
