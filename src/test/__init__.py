@@ -194,9 +194,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         cls.device_pixel_ratio = cls.selenium.execute_script(
             'return window.devicePixelRatio'
         )
-        print('Device Pixel Ratio: {0}'.format(cls.device_pixel_ratio))
-        print('Viewport width: {0}'.format(cls.viewport_width))
-        print('viewport height: {0}'.format(cls.viewport_height))
+        # print('Device Pixel Ratio: {0}'.format(cls.device_pixel_ratio))
+        # print('Viewport width: {0}'.format(cls.viewport_width))
+        # print('viewport height: {0}'.format(cls.viewport_height))
         # cls.selenium.implicitly_wait(30)
 
     @classmethod
@@ -1286,6 +1286,24 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME,
                                         'js-description-edit'))
+        )
+
+    def select_plugin_input_tab(self):
+        self.selenium.find_element_by_id('inputs-tab').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'sol-container'))
+        )
+
+    def select_plugin_output_tab(self):
+        self.selenium.find_element_by_id('outputs-tab').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.ID, 'div_id_merge_key'))
+        )
+
+    def select_plugin_parameters_tab(self):
+        self.selenium.find_element_by_id('parameters-tab').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.ID, 'parameters'))
         )
 
     def edit_condition(self, oldname, cname, cdesc, rule_tuples):

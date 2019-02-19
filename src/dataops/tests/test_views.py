@@ -613,7 +613,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         element = self.search_table_row_by_string('transform-table',
                                                   1,
                                                   'test_plugin_1')
-        element.find_element_by_link_text('Run').click()
+        element.find_element_by_link_text('Test Plugin 1 Name').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -625,13 +625,14 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
             "(//input[@name='columns'])[2]"
         ).click()
 
-        # Click outside the SOL widget
-        self.selenium.find_element_by_id('div_id_merge_key').click()
+        # Select the merge key
+        self.select_plugin_output_tab()
 
         self.selenium.find_element_by_id("id_merge_key").click()
         Select(self.selenium.find_element_by_id(
             "id_merge_key"
         )).select_by_visible_text("email")
+
         # Submit the execution
         self.selenium.find_element_by_name("Submit").click()
         WebDriverWait(self.selenium, 10).until(
@@ -657,7 +658,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         element = self.search_table_row_by_string('transform-table',
                                                   1,
                                                   'test_plugin_1')
-        element.find_element_by_link_text('Run').click()
+        element.find_element_by_link_text('Test Plugin 1 Name').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -674,10 +675,9 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "(//input[@name='columns'])[2]"
         ).click()
-        # Click outside the SOL widget
-        self.selenium.find_element_by_class_name(
-            'sol-current-selection'
-        ).click()
+
+        # Select the merge key
+        self.select_plugin_output_tab()
         self.selenium.find_element_by_id("id_merge_key").click()
         Select(self.selenium.find_element_by_id(
             "id_merge_key"
@@ -725,12 +725,13 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         element = self.search_table_row_by_string('transform-table',
                                                   1,
                                                   'test_plugin_2')
-        element.find_element_by_link_text('Run').click()
+        element.find_element_by_link_text('Test Plugin 2 Name').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
 
         # Provide the execution data
+        self.select_plugin_output_tab()
         self.selenium.find_element_by_id("id_merge_key").click()
         Select(self.selenium.find_element_by_id(
             "id_merge_key"
