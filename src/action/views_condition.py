@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse
 from django.template.loader import render_to_string
+from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
@@ -145,8 +146,8 @@ def save_condition_form(request,
             # TODO: Review!
             replacing = '{{% if {0} %}}'
             action.content = action.content.replace(
-                replacing.format(form.old_name),
-                replacing.format(condition.name))
+                escape(replacing.format(form.old_name)),
+                escape(replacing.format(condition.name)))
             action.save()
 
     # Ok, here we can say that the data in the form is correct.
