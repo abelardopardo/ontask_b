@@ -1,70 +1,72 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# This file is distributed under the same license as the OnTask package.
+# Abelardo Pardo <abelardo.pardo@gmail.com>, 2018.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-08 17:31+1030\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2019-02-22 10:48+0200\n"
+"Last-Translator: Joonas Pesonen <joonas.pesonen@helsinki.fi>\n"
+"Language-Team: \n"
+"Language: fi_FI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: action/static/action/js/action.js:27
 msgid "YOUR TEXT HERE"
-msgstr ""
+msgstr "SINUN TEKSTISI TÄHÄN"
 
 #: static/html/_static/doctools.js:195
 msgid "Permalink to this headline"
-msgstr ""
+msgstr "Ikilinkki tähän otsikkoon"
 
 #: static/html/_static/doctools.js:201
 msgid "Permalink to this definition"
-msgstr ""
+msgstr "Ikilinkki tähän määritelmään"
 
 #: static/html/_static/doctools.js:234
 msgid "Hide Search Matches"
-msgstr ""
+msgstr "Piilota hakutulokset"
 
 #: static/html/_static/searchtools.js:121
 msgid "Searching"
-msgstr ""
+msgstr "Haetaan"
 
 #: static/html/_static/searchtools.js:126
 msgid "Preparing search..."
-msgstr ""
+msgstr "Valmistellaan hakua…"
 
 #: static/html/_static/searchtools.js:290
 msgid "Search Results"
-msgstr ""
+msgstr "Hakutulokset"
 
 #: static/html/_static/searchtools.js:292
 msgid ""
 "Your search did not match any documents. Please make sure that all words are "
 "spelled correctly and that you've selected enough categories."
 msgstr ""
+"Haullasi ei löytynyt tuloksia. Tarkista oikeinkirjoitus ja varmista että "
+"olet valinnut tarvittavat kategoriat."
 
 #: static/html/_static/searchtools.js:294
 #, javascript-format
 msgid "Search finished, found %s page(s) matching the search query."
-msgstr ""
+msgstr "Haku valmis, löydettiin %s hakua vastaavaa sivua."
 
 #: static/html/_static/searchtools.js:347
 msgid ", in "
-msgstr ""
+msgstr ", kohteessa "
 
 #: static/site/js/site.js:21
 msgid "Click here to search"
-msgstr ""
+msgstr "Hae painamalla tästä"
 
 #: static/site/js/site.js:22
 msgid "No element found"
-msgstr ""
+msgstr "Elementtiä ei löytynyt"
