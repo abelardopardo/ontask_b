@@ -35,8 +35,7 @@ class SQLConnectionTableAdmin(tables.Table):
 
     def render_name(self, record):
         return format_html(
-            """<a class="js-sqlconn-edit" href="#" data-url="{0}">{1}
-            <span class="fa fa fa-pencil"></span> </a>""",
+            """<a class="js-sqlconn-edit" href="#" data-url="{0}">{1}</a>""",
             reverse('dataops:sqlconn_edit', kwargs={'pk': record['id']}),
             record['name']
         )

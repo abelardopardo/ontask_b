@@ -46,7 +46,7 @@ class AttributeTable(tables.Table):
         return format_html(
             """<a href="#" data-toggle="tooltip" 
                   class="js-attribute-edit" data-url="{0}"
-                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""",
+                  title="{1}">{2}</a>""",
             reverse('workflow:attribute_edit', kwargs={'pk': record['id']}),
             _('Edit the attribute'),
             record['name']
@@ -497,8 +497,7 @@ def column_ss(request, pk):
             'name': format_html(
                 """<a href="#" class="js-workflow-column-edit"
                   data-toggle="tooltip" data-url="{0}"
-                  title="Edit the parameters of this column">{1} 
-                  <span class="fa fa-pencil"></span></a>""",
+                  title="Edit the parameters of this column">{1}</a>""",
                 reverse('workflow:column_edit', kwargs={'pk': col.id}),
                 col.name
             ),

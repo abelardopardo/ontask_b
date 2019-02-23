@@ -103,7 +103,7 @@ class ActionTable(tables.Table):
         return format_html(
             """<a href="{0}"
                   data-toggle="tooltip"
-                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""",
+                  title="{1}">{2}</a>""",
             reverse('action:edit', kwargs={'pk': record.id}),
             _('Edit the text, conditions and filter'),
             record.name
@@ -173,7 +173,7 @@ class ColumnSelectedTable(tables.Table):
         return format_html(
             """<a href="#" data-toggle="tooltip" 
                   class="js-workflow-question-edit" data-url="{0}"
-                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""",
+                  title="{1}">{2}</a>""",
             reverse('workflow:question_edit', kwargs={'pk': record['id']}),
             _('Edit the question'),
             record['name']

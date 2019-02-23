@@ -51,7 +51,7 @@ class ViewTable(tables.Table):
         return format_html(
             """<a href="#" class="js-view-edit"
                   data-toggle="tooltip" data-url="{0}"
-                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""",
+                  title="{1}">{2}</a>""",
             reverse('table:view_edit', kwargs={'pk': record['id']}),
             _('Change the columns present in the view'),
             record['name']

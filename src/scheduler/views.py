@@ -64,7 +64,7 @@ class ScheduleActionTable(tables.Table):
         return format_html(
             """<a href="{0}"
                   data-toggle="tooltip"
-                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""",
+                  title="{1}">{2}</a>""",
             reverse('scheduler:edit', kwargs={'pk': record.id}),
             _('Edit this scheduled action execution'),
             record.name
