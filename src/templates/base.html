@@ -48,7 +48,7 @@
                 <li class="nav-item">
                   <a class="nav-link spin{% if request.path == ONTASK_BASE_URL %} active{% endif %}"
                      href="{% url 'home' %}" id="ontask-base-home"
-                     data-toggle="tooltip" title="Your workflows"><span class="fa fa-home"></span>{% if request.path == ONTASK_BASE_URL %} Home{% endif %}</a>
+                     data-toggle="tooltip" title="Your workflows"><span class="fa fa-home"></span> {% trans 'Workflows' %}</a>
                 </li>
               {% endif %}
               {% if request.session.ontask_workflow_id %}
@@ -57,17 +57,19 @@
                 <li class="nav-item">
                   <a class="nav-link spin{% if '/action/' in request.path %} active{% endif %}"
                      href="{% url 'action:index' %}"  id="ontask-base-actions"
-                     data-toggle="tooltip" title="Messages and Surveys"><span class="fa fa-comments"></span>{% if '/action' in request.path %} Actions{% endif %}</a>
+                     data-toggle="tooltip" title="Messages and Surveys">
+                    <span class="fa fa-comments"></span> {% trans 'Actions' %}</a>
                 </li>
                 <li class="nav-item"><a
                     class="nav-link spin{% if '/table/' in request.path or '/dataops' in request.path %} active{% endif %}"
                     href="{% url 'table:display' %}"  id="ontask-base-table"
-                    data-toggle="tooltip" title="Data Table"><span class="fa fa-table"></span>{% if '/table/' in request.path or '/dataops' in request.path %} Table{% endif %}</a>
+                    data-toggle="tooltip" title="Data Table">
+                  <span class="fa fa-table"></span> {% trans 'Table' %}</a>
                 </li>
                 <li class="nav-item dropdown">
                   <a href="#" class="nav-link dropdown-toggle details-menu{% if '/logs/' in request.path or '/scheduler/' in request.path or '/detail/' in request.path or '/operations/' in request.path %} active{% endif %}"
                      data-toggle="dropdown" id="ontask-base-settings">
-                   <span class="fa fa-cog"></span> {% if '/logs/' in request.path or '/scheduler/' in request.path or '/detail/' in request.path or '/operations/' in request.path %} {% trans 'Settings' %}{% endif %}
+                   <span class="fa fa-cog"></span> {% trans 'More' %}
                   </a>
                   <div class="dropdown-menu">
                     <a class="dropdown-item spin" href="{{ workflow_ops }}"
@@ -76,6 +78,7 @@
                     <a class="dropdown-item spin" href="{% url 'scheduler:index' %}"  id="ontask-base-scheduler">{% trans 'Scheduled actions' %}</a>
                     <a class="dropdown-item spin" href="{% url 'logs:index' %}" id="ontask-base-logs">{% trans 'View logs' %}</a>
                   </div>
+                </li>
               {% endif %}
             {% endblock %}
           </ul>
@@ -87,7 +90,7 @@
                     <a class="nav-link spin{% if 'sqlconns_admin' in request.path %} active{% endif %}" id="ontask-base-sqlconn"
                        data-toggle="tooltip" title="Connections to SQL databases"
                        href="{% url 'dataops:sqlconns_admin_index' %}">
-                      <span class="fa fa-database"></span>{% if '/sqlconns_admin' in request.path %} {% trans 'SQL Connections' %}{% endif %}</a></li>
+                      <span class="fa fa-database"></span> {% trans 'SQL' %}</a></li>
                   <li class="nav-item"><a class="nav-link spin" href="{% url 'admin:index' %}">{% trans 'Admin' %}</a></li>
                 {% endif %}
                 <li class="nav-item dropdown">
@@ -164,16 +167,8 @@
     {% endblock timeout %}
     <!-- Site footer -->
     {% block footer %}
-      <nav class="navbar navbar-light bg-light" id="base_footer"
-           style="height: 50px;">
-        <div class="col-lg-6 div1">
-            <span style="color: #777;">
-              &copy; {% trans 'OnTask Project' %} {% now 'Y' %}</span>
-        </div>
-        <div class="col-lg-6 div2 text-right">
-          <span class="align-middle"
-             style="color: #777;">{% trans 'Version:' %} {% ontask_version %}</span>
-        </div>
+      <nav class="navbar navbar-light bg-light" id="base_footer">
+        <span class="text-muted">&copy; {% trans 'OnTask Project' %} {% now 'Y' %} | {% trans 'Version:' %} {% ontask_version %}</span>
       </nav>
     {% endblock %}
     <script src="{% static 'site/js/initial.js' %}?v={% ontask_version %}"></script>
