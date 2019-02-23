@@ -91,9 +91,6 @@
                        href="{% url 'dataops:sqlconns_admin_index' %}">
                       <span class="fa fa-database"></span>{% if '/sqlconns_admin' in request.path %} {% trans 'SQL Connections' %}{% endif %}</a></li>
                 {% endif %}
-                <li class="nav-item"><a href="https://ontasklearning.org" class="nav-link" target="blank">{% trans 'About' %}</a></li>
-                <li class="nav-item"><a class="nav-link" href="https://www.ontasklearning.org/contact/" target="blank">
-                  {% trans 'Contact' %}</a></li>
               {% endif %}
             {% endblock %}
           </ul>
@@ -112,6 +109,10 @@
                     <a class="dropdown-item spin" href="{% url 'accounts:logout' %}">{% trans 'Logout' %}</a>
                   </div>
                 </li>
+              {% else %}
+                <li class="nav-item"><a href="https://ontasklearning.org" class="nav-link" target="blank">{% trans 'About' %}</a></li>
+                <li class="nav-item"><a class="nav-link" href="https://www.ontasklearning.org/contact/" target="blank">
+                  {% trans 'Contact' %}</a></li>
               {% endif %}
               <li class="nav-item">
                 <a href="{% static ONTASK_HELP_URL %}" class="nav-link spin"
