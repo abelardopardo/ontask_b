@@ -76,21 +76,6 @@
                     <a class="dropdown-item spin" href="{% url 'scheduler:index' %}"  id="ontask-base-scheduler">{% trans 'Scheduled actions' %}</a>
                     <a class="dropdown-item spin" href="{% url 'logs:index' %}" id="ontask-base-logs">{% trans 'View logs' %}</a>
                   </div>
-                {% if user.is_superuser %}
-                  <li class="nav-item">
-                    <a class="nav-link spin{% if 'slconns_admin' in request.path %} active{% endif %}" id="ontask-base-sqlconn"
-                       data-toggle="tooltip" title="Connections to SQL databases"
-                       href="{% url 'dataops:sqlconns_admin_index' %}">
-                      <span class="fa fa-database"></span>{% if '/sqlconns_admin' in request.path %} {% trans 'SQL Connections' %}{% endif %}</a></li>
-                {% endif %}
-              {% else %}
-                {% if user.is_superuser %}
-                  <li class="nav-item">
-                    <a class="nav-link spin{% if 'sqlconns_admin' in request.path %} active{% endif %}" id="ontask-base-sqlconn"
-                       data-toggle="tooltip" title="Connections to SQL databases"
-                       href="{% url 'dataops:sqlconns_admin_index' %}">
-                      <span class="fa fa-database"></span>{% if '/sqlconns_admin' in request.path %} {% trans 'SQL Connections' %}{% endif %}</a></li>
-                {% endif %}
               {% endif %}
             {% endblock %}
           </ul>
@@ -98,6 +83,11 @@
             {% block navbar-right %}
               {% if user.is_authenticated %}
                 {% if user.is_staff %}
+                  <li class="nav-item">
+                    <a class="nav-link spin{% if 'sqlconns_admin' in request.path %} active{% endif %}" id="ontask-base-sqlconn"
+                       data-toggle="tooltip" title="Connections to SQL databases"
+                       href="{% url 'dataops:sqlconns_admin_index' %}">
+                      <span class="fa fa-database"></span>{% if '/sqlconns_admin' in request.path %} {% trans 'SQL Connections' %}{% endif %}</a></li>
                   <li class="nav-item"><a class="nav-link spin" href="{% url 'admin:index' %}">{% trans 'Admin' %}</a></li>
                 {% endif %}
                 <li class="nav-item dropdown">
