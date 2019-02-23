@@ -1,9 +1,24 @@
-html, body{
-    height:100%;		/* For full height images */
+html {
+  position: relative;
+  min-height:100%;		/* For full height images */
 }
 
 body {
-  padding-top:35px; /* To jump over the fixed nav-bar */
+  padding-top: 40px; /* To jump over the fixed nav-bar */
+  margin-bottom: 45px;
+}
+
+#base_footer {
+  margin-top: 1ex;
+  height: 40px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+#base_footer > span {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .wflow-buttons,
@@ -80,6 +95,7 @@ body>.navbar-transparent {
 
 .navbar-brand > img {
     float: left;
+    height: 40px;
 }
 
 .navbar {
@@ -277,19 +293,6 @@ mark {
 
 div.group-conditions > label:not([class*=active]) {
     opacity: 0.3;
-}
-
-#base_footer {
-  margin-top: 1ex;
-}
-
-#base_footer .div1 {
-    float: left;
-}
-
-#base_footer .div2 {
-    float: right;
-    text-align:right;
 }
 
 .dt-center { text-align: center; }
