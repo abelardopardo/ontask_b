@@ -28,8 +28,7 @@ from action.models import Action
 from action.ops import get_workflow_action
 from dataops.pandas_db import get_table_cursor
 from logs.models import Log
-from ontask import action_session_dictionary
-from ontask import get_action_payload
+from ontask import action_session_dictionary, get_action_payload
 from ontask.permissions import is_instructor
 from ontask.tasks import (
     send_email_messages, send_json_objects,
@@ -662,11 +661,11 @@ def run_canvas_email_action(request, workflow, action):
         return redirect('action:item_filter')
 
     # Go straight to the token request step
-    return canvas_get_or_set_oauth_token(request, op_payload)
+    return canvas_get_or_set_oauth_token(request)
 
 
 @user_passes_test(is_instructor)
-def canvas_get_or_set_oauth_token(request, payload=None):
+def canvas_get_or_set_oauth_token(request):
     """
     Function that checks if the user has a Canvas OAuth token. If there is a
     token, the function goes straight to send the messages. If not, the OAuth

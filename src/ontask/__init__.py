@@ -13,7 +13,8 @@ from django.conf import settings as ontask_settings
 from ontask.celery import app as celery_app
 
 __all__ = ['celery_app', 'OnTaskException', 'is_legal_name', 'fix_pctg_in_name',
-           'OnTaskDataFrameNoKey']
+           'OnTaskDataFrameNoKey', 'action_session_dictionary',
+           'get_action_payload']
 
 __version__ = 'B.4.0.1'
 
