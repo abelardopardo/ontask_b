@@ -19,6 +19,7 @@ The tutorial is organized as a collection of tasks. Some of them require the use
    Tasks/actions
    Tasks/action_personalized_text
    Tasks/send_email
+   Tasks/email_example
    Tasks/personalized_text_url
    Tasks/action_survey
    Tasks/run_survey
