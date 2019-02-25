@@ -46,7 +46,7 @@
             {% block navbar-left %}
               {% if user.is_authenticated %}
                 <li class="nav-item">
-                  <a class="nav-link spin{% if request.path == ONTASK_BASE_URL or '/workflow/' in request.path %} active{% endif %}"
+                  <a class="nav-link spin{% if request.path == ONTASK_BASE_URL %} active{% endif %}"
                      href="{% url 'home' %}" id="ontask-base-home"
                      data-toggle="tooltip" title="Your workflows"><span class="fa fa-home"></span> {% trans 'Workflows' %}</a>
                 </li>

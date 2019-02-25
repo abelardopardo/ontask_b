@@ -10,8 +10,6 @@ from . import attribute_views, column_views, import_export_views, share_views, \
 app_name = 'workflow'
 
 urlpatterns = [
-    path('', views.index, name='index'),
-
     path('create/', views.WorkflowCreateView.as_view(), name='create'),
 
     path('<int:pk>/clone/', views.clone, name='clone'),
