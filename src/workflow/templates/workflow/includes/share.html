@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load django_tables2 %}
-<div class="container" id="workflow-share">
+<div class="container-fluid" id="workflow-share">
   <h3 class="text-center">{% trans 'Users with access to this workflow' %}</h3>
   {% if not share_table.data|length %}
     <p class="lead text-center">{% blocktrans %}Click in the <i>Add User</i> button below and provide the email for the user
@@ -14,7 +14,7 @@
     </button>
   </div>
   {% if share_table.data|length %}
-    <div class="container justify-content-center">
+    <div class="container-fluid justify-content-center">
       {% render_table share_table %}
     </div>
   {% else %}

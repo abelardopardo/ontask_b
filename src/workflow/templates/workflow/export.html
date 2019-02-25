@@ -9,7 +9,7 @@
   <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
-  <div class="container" id="workflow-export">
+  <div class="container-fluid" id="workflow-export">
     <h1 class="text-center">{% trans 'Export Workflow' %}</h1>
     <div class="row justify-content-center">
       <form action="{% url 'workflow:export_ask' wid %}" method="post"

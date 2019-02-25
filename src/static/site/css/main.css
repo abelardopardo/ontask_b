@@ -29,15 +29,15 @@ body {
 
 .ontask-card {
   cursor: pointer;
-  min-width: 250px;
-  max-width: 250px;
+  min-width: 350px;
+  max-width: 350px;
   margin-bottom: 15px;
 }
 
 .ontask-ccard {
   cursor: pointer;
-  min-width: 200px;
-  max-width: 200px;
+  min-width: 300px;
+  max-width: 300px;
 }
 
 .ontask-card .card-body,

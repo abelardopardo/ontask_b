@@ -3,14 +3,14 @@
 {% load static %}
 {% block title %}{{ block.super }}Export action{% endblock %}
 {% block container %}
-  <div class="container">
+  <div class="container-fluid">
     <h1 class="text-center">{% trans 'Export action' %}</h1>
     <p class="help-block text-center">{% trans 'Name:' %} {{ action.name }}</p>
     <p class="help-block text-center">{% trans 'Description:' %} {{ action.description }}</p>
     {% if action.is_out %}
       <p class="help-block text-center">{% trans 'Type: ' %}{{ action.get_action_type_display }}</p>
       <p class="help-block text-center">{% trans 'Content' %}</p>
-      <div class="container" style="border:solid 1px black; margin-bottom:1em;">
+      <div class="container-fluid" style="border:solid 1px black; margin-bottom:1em;">
         {{ action.content|safe }}
       </div>
     {% else %}

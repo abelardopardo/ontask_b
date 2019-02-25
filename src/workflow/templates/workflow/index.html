@@ -22,7 +22,7 @@
   </script>
 {% endblock %}
 {% block container %}
-  <div class="container" id="workflow-index">
+  <div class="container-fluid" id="workflow-index">
     {% if workflows|length %}
       <h1 class="text-center">{% trans 'Open or create a workflow' %}<super>*</super></h1>
     {% else %}
@@ -47,7 +47,7 @@
         </a>
       </div>
     </div>
-    <div class="card-deck justify-content-center" style="margin:1em 0 1em 0;">
+    <div class="card-deck justify-content-center content-row" style="margin:1em 0 1em 0;">
       {% for wflow in workflows %}
         <div class="card ontask-card" style="margin-bottom: 15px;">
           <h5 class="card-header text-center spin">{{ wflow.name }}</h5>

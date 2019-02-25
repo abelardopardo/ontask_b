@@ -9,7 +9,7 @@
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
 {% endblock scripts %}
 {% block container %}
-  <div class="container" id="zip-action-request-data">
+  <div class="container-fluid" id="zip-action-request-data">
     <h1 class="text-center">{% blocktrans with n=action.name %}ZIP for
       action "{{ n }}"{% endblocktrans %}<super>*</super></h1>
     {% if num_msgs > 0 %}

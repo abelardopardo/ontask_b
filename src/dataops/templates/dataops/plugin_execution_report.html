@@ -8,14 +8,14 @@
   <script src="{% static 'dataops/js/dataops.js' %}"></script>
 {% endblock %}
 {% block container %}
-  <div align="center" class="container">
+  <div align="center" class="container-fluid">
     <h1 class="text-center">{% trans 'Plugin execution report' %}</h1>
     {% if exec_status %}
       <h3 class="text-center">{% trans 'Incorrect execution' %}</h3>
       <p class="alert-warning text-center">{{ exec_status }}</p>
     {% else %}
       <h3 class="text-center">Correct execution</h3>
-      <div class="container justify-content-center">
+      <div class="container-fluid justify-content-center">
         <table class="table table-hover table-bordered" style="width:100%;"
                id="plugin-execution-report">
           <thead>

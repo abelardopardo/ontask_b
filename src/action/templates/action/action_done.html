@@ -11,7 +11,7 @@
 {% endblock scripts %}
 {% block container %}
   {% url 'logs:view' log_id as record_url %}
-  <div class="container" id="action-run-done">
+  <div class="container-fluid" id="action-run-done">
     <h1 class="text-center">{% trans 'Action scheduled for execution' %}</h1>
     <div class="text-center">
       <a href="{{ record_url }}">{% blocktrans %}You may check the status in

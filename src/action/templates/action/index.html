@@ -44,7 +44,7 @@
   </script>
 {% endblock %}
 {% block container %}
-  <div class="container" id="action-index">
+  <div class="container-fluid" id="action-index">
     <h1 class="text-center">{% trans 'Actions' %}</h1>
     {% if not workflow.nrows %}
       {% include 'workflow/includes/no_data.html' %}
@@ -70,7 +70,7 @@
       </div>
     </div>
     {% if table.data|length %}
-      <div class="container justify-content-center">
+      <div class="container-fluid justify-content-center">
         {% render_table table %}
       </div>
     {% endif %}

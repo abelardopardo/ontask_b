@@ -3,7 +3,7 @@
 {% load static %}
 {% block title %}{{ block.super }}{% trans 'Action scheduled' %}{% endblock %}
 {% block container %}
-  <div class="container">
+  <div class="container-fluid">
     <h1 class="text-center">{% trans 'Action scheduled for execution' %}</h1>
 
     <p class="text-center">{% blocktrans with n=tdelta %}The action will execute in {{ n }}{% endblocktrans %}</p>

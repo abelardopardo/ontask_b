@@ -9,7 +9,7 @@
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
 {% endblock scripts %}
 {% block container %}
-  <div class="container" id="email-action-request-data">
+  <div class="container-fluid" id="email-action-request-data">
     <h1 class="text-center">{% blocktrans with n=action.name %}Send emails for
       action "{{ n }}"{% endblocktrans %}</h1>
     {% if num_msgs > 0 %}

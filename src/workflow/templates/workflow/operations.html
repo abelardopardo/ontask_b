@@ -43,7 +43,7 @@
   </script>
 {% endblock %}
 {% block container %}
-  <div class="container" id="workflow-detail">
+  <div class="container-fluid" id="workflow-detail">
     <h1 class="text-center">{% trans 'Workflow Operations' %}</h1>
     {% if not workflow.nrows %}
       {% include 'workflow/includes/no_data.html' %}

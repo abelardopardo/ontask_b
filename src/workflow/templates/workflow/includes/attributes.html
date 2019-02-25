@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load django_tables2 %}
-<div class="container" id="workflow-attributes">
+<div class="container-fluid" id="workflow-attributes">
   <div class="text-center">
     <button type="button"
             class="btn btn-outline-dark js-attribute-create"
@@ -11,7 +11,7 @@
     </button>
   </div>
   {% if attribute_table.data|length %}
-    <div class="container justify-content-center">
+    <div class="container-fluid justify-content-center">
       {% render_table attribute_table %}
     </div>
   {% else %}
