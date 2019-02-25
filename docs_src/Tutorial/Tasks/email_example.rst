@@ -15,9 +15,6 @@ MP students
   "Good work with this module. Would you be able to anticipate the influence of air pollution on Kettlewell’s moths? How important are relationships (such as symbiosis) in the natural world? Lessons such as ‘Peer pressure in nature’ will help us understand how energy flows in food webs and the different types of relationships that provide a cornerstone of the natural world."
 
 VHP students
-  "Thorough work with the unit! Would you be able to describe the
-  relationship between clownfish and their sea anemone host as a
-  commensalism or a mutualism? Could you explain why hemophilia seems only to afflict males (such as in the British royal family of the 19 th
-  century)? Great work!"
+  "Thorough work with the unit! Would you be able to describe the relationship between clownfish and their sea anemone host as a commensalism or a mutualism? Could you explain why hemophilia seems only to afflict males (such as in the British royal family of the 19th century)? Great work!"
 
 
