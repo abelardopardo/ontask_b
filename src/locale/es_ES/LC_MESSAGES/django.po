@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-19 11:55+1030\n"
-"PO-Revision-Date: 2019-02-14 10:09+1030\n"
+"POT-Creation-Date: 2019-02-26 22:27+1030\n"
+"PO-Revision-Date: 2019-02-26 22:31+1030\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -71,15 +71,11 @@ msgstr "El equipo de %(site_name)s"
 msgid "Log In"
 msgstr "Iniciar sesión"
 
-#: accounts/templates/accounts/login.html:6
-msgid "Please Log In"
-msgstr "Por favor, inicie sesión"
-
-#: accounts/templates/accounts/login.html:13
+#: accounts/templates/accounts/login.html:12
 msgid "The importance of personalisation"
 msgstr "La importancia de la personalización"
 
-#: accounts/templates/accounts/login.html:14
+#: accounts/templates/accounts/login.html:13
 msgid ""
 "Learners are more likely to have an effective\n"
 "        experience\n"
@@ -102,11 +98,11 @@ msgstr ""
 "personalizar recursos basado en los datos que se obtienen de cualquier "
 "entorno de aprendizaje."
 
-#: accounts/templates/accounts/login.html:26
+#: accounts/templates/accounts/login.html:25
 msgid "The importance of feedback"
 msgstr "La importancia de la realimentación"
 
-#: accounts/templates/accounts/login.html:27
+#: accounts/templates/accounts/login.html:26
 msgid ""
 "Feedback is more effective when framed as a\n"
 "        dialogue. But such\n"
@@ -121,11 +117,11 @@ msgstr ""
 "interacción  personalizada? OnTask ayuda a los profesores y estudiantes a "
 "comenzar este diálogo."
 
-#: accounts/templates/accounts/login.html:35
+#: accounts/templates/accounts/login.html:34
 msgid "The importance of data"
 msgstr "La importancia de los datos"
 
-#: accounts/templates/accounts/login.html:36
+#: accounts/templates/accounts/login.html:35
 msgid ""
 "In the era of technology-mediated learning, data is\n"
 "        ubiquitous. But instead of providing instantaneous benefits,\n"
@@ -146,7 +142,7 @@ msgstr ""
 "OnTask establece una esta  conexión entre datos y su uso para ofrecer una "
 "solución escalable al  aprendizaje personalizado."
 
-#: accounts/templates/accounts/login.html:46
+#: accounts/templates/accounts/login.html:45
 msgid "More Information"
 msgstr "Más información"
 
@@ -219,213 +215,193 @@ msgstr "Error de sintaxis detectado en el asunto. {0}"
 msgid "Incorrect type of action"
 msgstr "Tipo de acción incorrecta"
 
-#: action/forms.py:95
+#: action/forms.py:90
 msgid "Target URL"
 msgstr "URL Destino"
 
-#: action/forms.py:102
+#: action/forms.py:97
 msgid "URL to send the personalized JSON"
 msgstr "URL para enviar el objeto JSON personalizado"
 
-#: action/forms.py:112
+#: action/forms.py:107
 msgid "Write a JSON object"
 msgstr "Introduzca un objeto JSON"
 
-#: action/forms.py:120
+#: action/forms.py:115
 msgid "Write a plain text message"
 msgstr "Escriba un mensaje en texto plano"
 
-#: action/forms.py:207
+#: action/forms.py:202
 msgid "Name cannot be empty"
 msgstr "El nombre no puede ser vacío"
 
-#: action/forms.py:232 action/forms.py:236 workflow/forms.py:168
+#: action/forms.py:227 action/forms.py:231 workflow/forms.py:168
 #: workflow/forms.py:172
 msgid "Incorrect date/time window"
 msgstr "Intervalo de fecha/hora incorrecto"
 
-#: action/forms.py:255 action/forms.py:579 scheduler/forms.py:83
+#: action/forms.py:250 action/forms.py:574 scheduler/forms.py:83
 #: scheduler/forms.py:234
 msgid "Email subject"
 msgstr "Asunto del correo"
 
-#: action/forms.py:258
+#: action/forms.py:253
 msgid "Column to use for target email address"
 msgstr "Columna con la dirección de correo"
 
-#: action/forms.py:263
+#: action/forms.py:258
 msgid "Comma separated list of CC emails"
 msgstr "Lista de emails en copia separados por comas"
 
-#: action/forms.py:267
+#: action/forms.py:262
 msgid "Comma separated list of BCC emails"
 msgstr "Lista de emails en copia oculta separados por comas"
 
-#: action/forms.py:274
+#: action/forms.py:269
 msgid "Check/exclude email addresses before sending?"
 msgstr "¿Comprobar/excluir direcciones de email antes de enviar?"
 
-#: action/forms.py:280
+#: action/forms.py:275
 msgid "Send you a summary message?"
 msgstr "¿Enviar un mensaje con el resúmen de envios?"
 
-#: action/forms.py:286
+#: action/forms.py:281
 msgid "Track email reading in an extra column?"
 msgstr "¿Rastrear la lectura del correo en una columna extra?"
 
-#: action/forms.py:292 action/forms.py:584
+#: action/forms.py:287 action/forms.py:579
 msgid "Download a snapshot of the workflow?"
 msgstr "¿Descargar un fichero con el estado actual del flujo?"
 
-#: action/forms.py:293 action/forms.py:585
+#: action/forms.py:288 action/forms.py:580
 msgid "A zip file useful to review the emails sent."
 msgstr "Un fichero zip útil para revisar los mensajes que se envían."
 
-#: action/forms.py:349 action/forms.py:354 scheduler/forms.py:308
+#: action/forms.py:344 action/forms.py:349 scheduler/forms.py:308
 #: scheduler/forms.py:313 scheduler/serializers.py:192
 #: scheduler/serializers.py:196
 msgid "The column with email addresses has incorrect values."
 msgstr "La columna con las direcciones de correo tiene valores incorrectos."
 
-#: action/forms.py:361 action/forms.py:368
+#: action/forms.py:356 action/forms.py:363
 msgid "Field needs a comma-separated list of emails."
 msgstr "Este campo necesita una lista de valores separados por comas."
 
-#: action/forms.py:379
+#: action/forms.py:374
 msgid "Key column to use for file name prefix (Participant id if Moodle ZIP)"
 msgstr ""
 "Columna clave de la que extraer el prefijo del nombre de fichero "
 "(“Participant id” si el ZIP es para Moodle)"
 
-#: action/forms.py:385
+#: action/forms.py:380
 msgid "Column to use for file name prefix (Full name if Moodle ZIP)"
 msgstr ""
 "Columna a usar para el prefijo de fichero (“Full name” si el ZIP es para "
 "Moodle)"
 
-#: action/forms.py:399
+#: action/forms.py:394
 msgid "This ZIP will be uploaded to Moodle as feedback"
 msgstr "Este ZIP será cargado en Moodle como feedback"
 
-#: action/forms.py:405
+#: action/forms.py:400
 msgid "Check/exclude users before sending?"
 msgstr "¿Comprobar/excluir usuarios antes de enviar?"
 
-#: action/forms.py:451
+#: action/forms.py:446
 msgid "Column needs to have all unique values (no empty cells)"
 msgstr "La columna no tiene valores únicos en cada celda."
 
-#: action/forms.py:459
+#: action/forms.py:454
 msgid "The two columns must be different"
 msgstr "Las dos columnas deben ser diferentes"
 
-#: action/forms.py:468
+#: action/forms.py:463
 msgid "A Moodle ZIP requires two column names"
 msgstr "Un ZIP para Moodle requiere dos columnas"
 
-#: action/forms.py:482
+#: action/forms.py:477
 msgid "Values in column must have format \"Participant [number]\""
 msgstr ""
 "Los valores en la columna deben tener el formato “Participant [número]”"
 
-#: action/forms.py:492
+#: action/forms.py:487
 msgid "Values to exclude"
 msgstr "Valores a excluir"
 
-#: action/forms.py:515
+#: action/forms.py:510
 msgid "Check/exclude items before sending?"
 msgstr "¿Comprobar/excluir elementos antes de enviarlos?"
 
-#: action/forms.py:546 scheduler/forms.py:170
+#: action/forms.py:541 scheduler/forms.py:170
 msgid "Authentication Token"
 msgstr "Ficha de autenticación"
 
-#: action/forms.py:563
+#: action/forms.py:558
 msgid "Column to exclude objects to send (empty to skip step)"
 msgstr "Columna para excluir objetos del envío (vacío para saltar este paso)"
 
-#: action/forms.py:570 scheduler/forms.py:173
+#: action/forms.py:565 scheduler/forms.py:173
 msgid "Authentication token provided by the external platform."
 msgstr "Ficha de autenticación obtenida de la plataforma externa."
 
-#: action/forms.py:602
+#: action/forms.py:597
 msgid "Canvas Host"
 msgstr "Servidor Canvas"
 
-#: action/forms.py:603
+#: action/forms.py:598
 msgid "Name of the Canvas host to send the messages"
 msgstr "Nombre del servidor Canvas al que mandar los mensajes"
 
-#: action/forms.py:606
+#: action/forms.py:601
 msgid "Column with the Canvas ID"
 msgstr "Columna con identificadores de usuario Canvas"
 
-#: action/forms.py:608
+#: action/forms.py:603
 msgid "Check/Exclude Canvas IDs before sending?"
 msgstr "¿Comprobar/excluir identificadores de Canvas antes de enviar?"
 
-#: action/forms.py:638 workflow/forms.py:454
+#: action/forms.py:633 workflow/forms.py:454
 msgid "File"
 msgstr "Fichero"
 
-#: action/forms.py:639
+#: action/forms.py:634
 msgid "File containing a previously exported action"
 msgstr "Fichero que contiene una acción previamente exportada"
 
-#: action/models.py:46
-msgid "Personalized text"
-msgstr "Texto personalizado"
-
-#: action/models.py:47
-msgid "Personalized Canvas Email"
-msgstr "Email Canvas Personalizado"
-
-#: action/models.py:48
-msgid "Survey"
-msgstr "Questionario"
-
-#: action/models.py:49
-msgid "Personalized JSON"
-msgstr "Objeto JSON personalizado"
-
-#: action/models.py:50
-msgid "TODO List"
-msgstr "Lista"
-
-#: action/models.py:64 action/models.py:382 scheduler/models.py:48
+#: action/models.py:73 action/models.py:391 scheduler/models.py:48
 msgid "name"
 msgstr "nombre"
 
-#: action/models.py:69 action/models.py:387 scheduler/models.py:53
+#: action/models.py:78 action/models.py:396 scheduler/models.py:53
 #: workflow/models.py:412
 msgid "description"
 msgstr "descripción"
 
-#: action/models.py:93
+#: action/models.py:102
 msgid "URL available to users?"
 msgstr "¿URL disponible a los usuarios?"
 
-#: action/models.py:98
+#: action/models.py:107
 msgid "Action available from"
 msgstr "Acción disponible desde"
 
-#: action/models.py:103
+#: action/models.py:112
 msgid "Action available until"
 msgstr "Acción disponible hasta"
 
-#: action/models.py:127 action/templates/action/edit_in.html:139
+#: action/models.py:136 action/templates/action/edit_in.html:139
 msgid "Shuffle questions?"
 msgstr "¿Barajar las preguntas?"
 
-#: action/models.py:392
+#: action/models.py:401
 msgid "formula"
 msgstr "fórmula"
 
-#: action/models.py:397
+#: action/models.py:406
 msgid "Columns present in this condition"
 msgstr "Columnas presentes en esta condición"
 
-#: action/models.py:403
+#: action/models.py:412
 msgid "Number of rows selected"
 msgstr "Número de filas seleccionadas"
 
@@ -540,7 +516,7 @@ msgstr "Imposible crear la información para la condición"
 msgid "Unable to create columns field"
 msgstr "Imposible crear el campo de la columna"
 
-#: action/settings.py:34 ontask/settings/base.py:360
+#: action/settings.py:34 ontask/settings/base.py:362
 msgid "OnTask: Action executed"
 msgstr "OnTask: Acción ejecutada"
 
@@ -771,10 +747,6 @@ msgstr ""
 msgid "Edit Survey"
 msgstr "Editar Questionario"
 
-#: action/templates/action/edit_in.html:40
-msgid "No columns selected."
-msgstr "No se ha seleccionado ninguna columna."
-
 #: action/templates/action/edit_in.html:64
 #: action/templates/action/edit_personalized_canvas_email.html:37
 #: action/templates/action/edit_personalized_json.html:37
@@ -899,6 +871,10 @@ msgstr "Tipo: Acción de entrada (petición de datos)"
 msgid "Columns:"
 msgstr "Columnas:"
 
+#: action/templates/action/export_ask.html:25
+msgid "Proceed with the export operation"
+msgstr "Continue con la operación de exportación"
+
 #: action/templates/action/export_ask.html:26
 #: action/templates/action/includes/partial_action_operations.html:54
 #: workflow/templates/workflow/export.html:61
@@ -917,7 +893,7 @@ msgid "Your download will start shortly"
 msgstr "Su descarga comenzará en breve"
 
 #: action/templates/action/import.html:7 action/templates/action/import.html:13
-#: action/templates/action/index.html:67
+#: action/templates/action/index.html:66
 msgid "Import action"
 msgstr "Importar acción"
 
@@ -982,11 +958,15 @@ msgstr "Actualizar"
 msgid "Insert Column Value"
 msgstr "Añadir valor de columna"
 
-#: action/templates/action/includes/partial_action_edit_out_attributes_columns.html:11
+#: action/templates/action/includes/partial_action_edit_out_attributes_columns.html:12
 msgid "Use condition in highlighted text"
 msgstr "Utilizar condición en el texto resaltado"
 
-#: action/templates/action/includes/partial_action_edit_out_attributes_columns.html:19
+#: action/templates/action/includes/partial_action_edit_out_attributes_columns.html:14
+msgid "Insert condition in text"
+msgstr "Insertar condición en el texto"
+
+#: action/templates/action/includes/partial_action_edit_out_attributes_columns.html:23
 msgid "Insert Attribute"
 msgstr "Añadir attributo"
 
@@ -1135,7 +1115,7 @@ msgstr ""
 #: action/templates/action/includes/partial_action_showurl.html:29
 #: dataops/plugin_manager.py:45 dataops/plugin_manager.py:52
 #: dataops/plugin_manager.py:60 dataops/plugin_manager.py:71
-#: dataops/plugin_manager.py:142 templates/base.html:168
+#: dataops/plugin_manager.py:142 templates/base.html:162
 msgid "Ok"
 msgstr "De acuerdo"
 
@@ -1283,7 +1263,7 @@ msgstr "Vista previa  %(index)s de %(n_items)s"
 msgid "Subject:"
 msgstr "Asunto:"
 
-#: action/templates/action/includes/partial_preview.html:40
+#: action/templates/action/includes/partial_preview.html:42
 msgid "Values:"
 msgstr "Valores:"
 
@@ -1303,15 +1283,12 @@ msgstr ""
 "Revise las condiciones en la acción \n"
 " o utilice un filtro para excluir estas filas."
 
-#: action/templates/action/index.html:8 action/templates/action/index.html:48
+#: action/templates/action/index.html:8 action/templates/action/index.html:47
+#: templates/base.html:61
 msgid "Actions"
 msgstr "Acciones"
 
-#: action/templates/action/index.html:29
-msgid "There are no actions for this workflow."
-msgstr "No hay acciones en este flujo."
-
-#: action/templates/action/index.html:52
+#: action/templates/action/index.html:51
 msgid ""
 "<strong>Next Step:</strong> Click in the <i>New action</i> below to create a "
 "new\n"
@@ -1320,10 +1297,18 @@ msgstr ""
 "<strong>Siguiente paso:</strong> Click en <i>Nueva acción</b> debajo  para "
 "crear una nueva acción y ejecutarla con los datos en la tabla."
 
-#: action/templates/action/index.html:61 scheduler/views.py:50
+#: action/templates/action/index.html:59
+msgid "New action to collect data from learners"
+msgstr "Nueva acción para obtener datos de los estudiantes"
+
+#: action/templates/action/index.html:60 scheduler/views.py:50
 #: workflow/templates/workflow/export.html:32
 msgid "Action"
 msgstr "Acción"
+
+#: action/templates/action/index.html:65
+msgid "Import action previously exported"
+msgstr "Importar acción previamente exportada"
 
 #: action/templates/action/item_filter.html:7
 msgid "Exclude items from action"
@@ -1382,88 +1367,88 @@ msgstr ""
 " un error de sintaxis en el texto de la acción. El siguiente\n"
 " mensaje puede ofrecer información para localizar el problema."
 
-#: action/views_action.py:72 action/views_action.py:163 dataops/models.py:73
+#: action/views_action.py:71 action/views_action.py:162 dataops/models.py:73
 #: dataops/templates/dataops/upload_s2.html:37 dataops/views.py:48
 #: scheduler/views.py:47 table/views.py:38 workflow/forms.py:37
 #: workflow/templates/workflow/detail.html:86 workflow/views.py:37
 msgid "Name"
 msgstr "Nombre"
 
-#: action/views_action.py:74 dataops/models.py:80
+#: action/views_action.py:73 dataops/models.py:80
 #: dataops/templates/dataops/uploadmerge.html:16 dataops/views.py:50
 #: table/views.py:42 workflow/templates/workflow/detail.html:87
 msgid "Description"
 msgstr "Descripción"
 
-#: action/views_action.py:76 dataops/models.py:86
+#: action/views_action.py:75 dataops/models.py:86
 #: dataops/templates/dataops/upload_s2.html:39
 #: workflow/templates/workflow/detail.html:88
 msgid "Type"
 msgstr "Tipo"
 
-#: action/views_action.py:78 dataops/views.py:53
+#: action/views_action.py:77 dataops/views.py:53
 msgid "Last executed"
 msgstr "Última ejecución"
 
-#: action/views_action.py:108
+#: action/views_action.py:107
 msgid "Edit the text, conditions and filter"
 msgstr "Editar el texto, condiciones y filtro"
 
-#: action/views_action.py:165
+#: action/views_action.py:164
 msgid "Description (shown to learners)"
 msgstr "Descripción (se muestra a los estudiantes)"
 
-#: action/views_action.py:178
+#: action/views_action.py:177
 msgid "Edit the question"
 msgstr "Editar pregunta"
 
-#: action/views_action.py:253
+#: action/views_action.py:252
 msgid "An action with that name already exists"
 msgstr "Ya existe una acción con este nombre"
 
-#: action/views_action.py:499 action/views_action.py:809
-#: action/views_action.py:860 action/views_action.py:902
-#: action/views_action.py:1247
+#: action/views_action.py:504 action/views_action.py:822
+#: action/views_action.py:874 action/views_action.py:917
+#: action/views_action.py:1268
 msgid "Workflow has no data. Go to \"Manage table data\" to upload data."
 msgstr ""
 "El flujo no tiene datos. Ir a \"Gestión de datos de la tabla\" para cargar "
 "los datos."
 
-#: action/views_action.py:768
+#: action/views_action.py:781
 msgid "An action with this name already exists"
 msgstr "Ya existe una acción con este nombre"
 
-#: action/views_action.py:774 workflow/import_export_views.py:119
+#: action/views_action.py:787 workflow/import_export_views.py:119
 msgid "Incorrect form request (it is not multipart)"
 msgstr "Petición de formulario incorrecta (no es multiplart)"
 
-#: action/views_action.py:1133 action/views_action.py:1157 logs/views.py:49
+#: action/views_action.py:1154 action/views_action.py:1178 logs/views.py:49
 #: logs/views.py:59 table/views.py:189 table/views.py:303 table/views.py:358
 #: workflow/views.py:428 workflow/views.py:445
 msgid "Incorrect request. Unable to process"
 msgstr "Petición incorrecta. No es posible procesarla"
 
-#: action/views_action.py:1138 table/views.py:308 table/views.py:363
+#: action/views_action.py:1159 table/views.py:308 table/views.py:363
 msgid "There is no data in the table"
 msgstr "No hay datos en la tabla"
 
-#: action/views_condition.py:97
+#: action/views_condition.py:98
 msgid "A condition with that name already exists in this action"
 msgstr "Ya existe una condición con este nombre en esta acción"
 
-#: action/views_condition.py:115
+#: action/views_condition.py:116
 msgid "A column name with that name already exists."
 msgstr "Ya existe una columna con este nombre."
 
-#: action/views_condition.py:130
+#: action/views_condition.py:131
 msgid "The workflow has an attribute with this name."
 msgstr "El flujo tiene un atributo con este nombre."
 
-#: action/views_condition.py:508
+#: action/views_condition.py:509
 msgid "Condition cannot be cloned."
 msgstr "No se ha podido clonar la condición."
 
-#: action/views_condition.py:537
+#: action/views_condition.py:538
 msgid "Action successfully cloned."
 msgstr "A acción ha sido clonada con éxito."
 
@@ -1540,7 +1525,7 @@ msgstr "Invocación de acción email Canvas incorrecta."
 msgid "Error while retrieving content for student {0}"
 msgstr "Error al acceder al contenido para el estudiante {0}"
 
-#: action/views_out.py:915
+#: action/views_out.py:919
 msgid "Incorrect item filter invocation."
 msgstr "Invocación incorrecta del filtro."
 
@@ -1610,10 +1595,9 @@ msgid "The plugin needs at least one input column"
 msgstr "El plugin necesita al menos una columna de entrada"
 
 #: dataops/forms.py:192 dataops/forms.py:196
-#, fuzzy, python-brace-format
-#| msgid "Unable to process data type "
+#, python-brace-format
 msgid "Unable to process file ({0})."
-msgstr "No es posible procesar el tipo de datos "
+msgstr "No es posible procesar el fichero ({0})"
 
 #: dataops/forms.py:213
 msgid ""
@@ -1798,7 +1782,7 @@ msgid "DB name"
 msgstr "Nombre de la base de datos"
 
 #: dataops/models.py:134 table/apps.py:9 table/templates/table/display.html:8
-#: table/templates/table/display.html:80
+#: table/templates/table/display.html:80 templates/base.html:67
 msgid "Table"
 msgstr "Tabla"
 
@@ -1959,26 +1943,26 @@ msgstr "El resultado no es un data frame de Pandas."
 msgid "Folder where plugins are stored"
 msgstr "Carpeta en la que se almacenan los plugins"
 
-#: dataops/sqlcon_views.py:111
+#: dataops/sqlcon_views.py:110
 msgid "A connection with this name already exists"
 msgstr "Ya hay una conexión con este nombre"
 
-#: dataops/sqlcon_views.py:131 dataops/sqlcon_views.py:317
-#: dataops/sqlcon_views.py:354 dataops/sqlcon_views.py:422
+#: dataops/sqlcon_views.py:130 dataops/sqlcon_views.py:316
+#: dataops/sqlcon_views.py:353 dataops/sqlcon_views.py:421
 msgid "<PROTECTED>"
 msgstr "<PROTEGIDO>"
 
-#: dataops/sqlcon_views.py:417
+#: dataops/sqlcon_views.py:416
 #: dataops/templates/dataops/includes/partial_show_sql_connection.html:3
 msgid "SQL connection"
 msgstr "Conexión SQL"
 
-#: dataops/sqlcon_views.py:441
+#: dataops/sqlcon_views.py:440
 #, python-brace-format
 msgid "Unable to obtain data: {0}"
 msgstr "No es posible obtener los datos: {0}"
 
-#: dataops/sqlcon_views.py:459
+#: dataops/sqlcon_views.py:458
 msgid "Sorry. The data from this connection cannot be processed."
 msgstr "Disculpas. Los datos de esta conexión no se pueden procesar."
 
@@ -2152,18 +2136,13 @@ msgid "Edit learner data"
 msgstr "Editas los datos del estudiante"
 
 #: dataops/templates/dataops/sql_connections.html:8
-#: dataops/templates/dataops/sql_connections.html:51
+#: dataops/templates/dataops/sql_connections.html:50
 #: dataops/templates/dataops/sql_connections_admin.html:8
-#: dataops/templates/dataops/sql_connections_admin.html:51
-#: templates/base.html:84 templates/base.html:92
+#: dataops/templates/dataops/sql_connections_admin.html:50
 msgid "SQL Connections"
 msgstr "Conexiones SQL"
 
-#: dataops/templates/dataops/sql_connections.html:30
-msgid "No sql connections available."
-msgstr "No hay ninguna conexión SQL disponible."
-
-#: dataops/templates/dataops/sql_connections.html:57
+#: dataops/templates/dataops/sql_connections.html:56
 msgid ""
 "In this page you will find the available SQL connections to\n"
 "    access data stored in external relational databases. The connections can "
@@ -2175,15 +2154,11 @@ msgstr ""
 "sólo\n"
 " las puede crear el administrador del sistema."
 
-#: dataops/templates/dataops/sql_connections_admin.html:30
-msgid "No SQL connections defined."
-msgstr "No se ha definido ninguna conexión SQL."
-
-#: dataops/templates/dataops/sql_connections_admin.html:56
+#: dataops/templates/dataops/sql_connections_admin.html:55
 msgid "Add a new SQL database connection"
 msgstr "Añadir una nueva conexión SQL a base de datos"
 
-#: dataops/templates/dataops/sql_connections_admin.html:58
+#: dataops/templates/dataops/sql_connections_admin.html:57
 msgid "New SQL connection"
 msgstr "Nueva conexión SQL"
 
@@ -2252,11 +2227,7 @@ msgstr "Tabla de la base de datos: %(n)s"
 msgid "Transform"
 msgstr "Transformar"
 
-#: dataops/templates/dataops/transform.html:28
-msgid "No transformations in this workflow."
-msgstr "No hay transformaciones en este flujo."
-
-#: dataops/templates/dataops/transform.html:48
+#: dataops/templates/dataops/transform.html:47
 msgid "Transformations"
 msgstr "Transformaciones"
 
@@ -2917,24 +2888,20 @@ msgstr "datos adicionales"
 msgid "Maximum number of logs shown to the user"
 msgstr "Número máximo de registros mostrados al usuario"
 
-#: logs/templates/logs/display.html:8 logs/templates/logs/display.html:54
+#: logs/templates/logs/display.html:8 logs/templates/logs/display.html:53
 msgid "Logs"
 msgstr "Registro"
 
-#: logs/templates/logs/display.html:38
-msgid "No logs recorded for this workflow."
-msgstr "No hay registros en este flujo."
-
-#: logs/templates/logs/display.html:59
+#: logs/templates/logs/display.html:58
 msgid "Download a CSV file containing these logs"
 msgstr "Descarga un fichero CSV con estos registros"
 
-#: logs/templates/logs/display.html:60 table/templates/table/display.html:146
+#: logs/templates/logs/display.html:59 table/templates/table/display.html:146
 #: table/templates/table/display.html:159
 msgid "CSV Download"
 msgstr "Descarga CSV"
 
-#: logs/templates/logs/display.html:75
+#: logs/templates/logs/display.html:74
 msgid ""
 "<strong><super>*</super></strong>The platform records all operations\n"
 "      performed on the workflow as <i>Logs</i>. These elements are shown in "
@@ -2981,11 +2948,31 @@ msgstr "Ver el contenido del registro"
 msgid "Incorrect log number requested"
 msgstr "El número de registro es incorrecto"
 
-#: ontask/__init__.py:49
+#: ontask/__init__.py:28
+msgid "Personalized text"
+msgstr "Texto personalizado"
+
+#: ontask/__init__.py:29
+msgid "Personalized Canvas Email"
+msgstr "Email Canvas Personalizado"
+
+#: ontask/__init__.py:30
+msgid "Survey"
+msgstr "Questionario"
+
+#: ontask/__init__.py:31
+msgid "Personalized JSON"
+msgstr "Objeto JSON personalizado"
+
+#: ontask/__init__.py:32
+msgid "TODO List"
+msgstr "Lista"
+
+#: ontask/__init__.py:74
 msgid "The symbol ' cannot be used in the column name."
 msgstr "El símbolo ' no se puede utilizar en el nombre de la columna."
 
-#: ontask/__init__.py:52
+#: ontask/__init__.py:77
 msgid "The symbol \" cannot be used in the column name."
 msgstr "El símbolo \" no se puede utilizar en el nombre de la columna."
 
@@ -3011,19 +2998,19 @@ msgstr "Typos de contenidos permitidos en las cargas"
 msgid "Maximum size allowed in file uplaods"
 msgstr "Tamaño máximo de fichero permitido en las cargas"
 
-#: ontask/settings/base.py:274
+#: ontask/settings/base.py:276
 msgid "English"
 msgstr "Inglés"
 
-#: ontask/settings/base.py:275
+#: ontask/settings/base.py:277
 msgid "Spanish"
 msgstr "Español"
 
-#: ontask/settings/base.py:276
+#: ontask/settings/base.py:278
 msgid "Chinese"
 msgstr "Chino"
 
-#: ontask/settings/base.py:277
+#: ontask/settings/base.py:279
 msgid "Finnish"
 msgstr "Finés"
 
@@ -3089,7 +3076,7 @@ msgstr "Creado nuevo perfir para {0}"
 
 #: profiles/templates/profiles/edit_profile.html:6
 #: profiles/templates/profiles/show_profile.html:5
-#: profiles/templates/profiles/show_profile.html:24 templates/base.html:111
+#: profiles/templates/profiles/show_profile.html:24 templates/base.html:101
 msgid "Profile"
 msgstr "Perfil"
 
@@ -3097,6 +3084,11 @@ msgstr "Perfil"
 #: profiles/templates/profiles/show_profile.html:13
 msgid "Edit Profile"
 msgstr "Editar perfil"
+
+#: profiles/templates/profiles/edit_profile.html:15
+#: profiles/templates/profiles/show_profile.html:16
+msgid "profile picture"
+msgstr "perfil de usuario"
 
 #: profiles/templates/profiles/edit_profile.html:20
 msgid "Personal info"
@@ -3332,6 +3324,15 @@ msgstr ""
 msgid "Delete scheduled operation"
 msgstr "Borrar la operación planificada"
 
+#: scheduler/templates/scheduler/includes/partial_scheduler_operations.html:5
+msgid "View the details of this scheduled action"
+msgstr "Ver detalles de esta acción planificada"
+
+#: scheduler/templates/scheduler/includes/partial_scheduler_operations.html:9
+#: scheduler/templates/scheduler/includes/partial_show_schedule_action.html:27
+msgid "Delete this scheduled action"
+msgstr "Borrar la acción planificada"
+
 #: scheduler/templates/scheduler/includes/partial_show_schedule_action.html:3
 msgid "Scheduled action"
 msgstr "Operación planificada"
@@ -3345,15 +3346,11 @@ msgstr "Editar esta ejecución planificada"
 msgid "Scheduled operations"
 msgstr "Operaciones planificadas"
 
-#: scheduler/templates/scheduler/index.html:24
-msgid "No scheduled operations in this workflow."
-msgstr "No hay ninguna operación planificada en este flujo."
-
-#: scheduler/templates/scheduler/index.html:43
+#: scheduler/templates/scheduler/index.html:42
 msgid "Scheduled Actions"
 msgstr "Acciones Planificadas"
 
-#: scheduler/templates/scheduler/index.html:55
+#: scheduler/templates/scheduler/index.html:54
 #, python-format
 msgid ""
 "<strong><super>*</super></strong>The execution of some of\n"
@@ -3695,27 +3692,23 @@ msgid "Dashboard for %(n)s"
 msgstr "Tablero de control para %(n)s"
 
 #: table/templates/table/view_index.html:8
-#: table/templates/table/view_index.html:55
+#: table/templates/table/view_index.html:54
 msgid "Table Views"
 msgstr "Vistas de la tabla"
 
-#: table/templates/table/view_index.html:36
-msgid "There are no views for this workflow."
-msgstr "No hay ninguna vista definida en este flujo."
-
-#: table/templates/table/view_index.html:58
+#: table/templates/table/view_index.html:57
 msgid "Full Table"
 msgstr "Tabla completa"
 
-#: table/templates/table/view_index.html:62
+#: table/templates/table/view_index.html:61
 msgid "New view for the table"
 msgstr "Nueva vista para esta tabla"
 
-#: table/templates/table/view_index.html:63
+#: table/templates/table/view_index.html:62
 msgid "Add View"
 msgstr "Añadir vista"
 
-#: table/templates/table/view_index.html:71
+#: table/templates/table/view_index.html:70
 msgid ""
 "Create views by selecting a subset of rows and columns\n"
 "      of the table to show."
@@ -3795,12 +3788,12 @@ msgstr ""
 "¡Vaya! La plataforma ha tenido un error interno. Lo lamentamos. Esperamos  "
 "solventar esta anomalía pronto."
 
-#: templates/_navbar.html:3 templates/base.html:94
+#: templates/_navbar.html:3 templates/base.html:106
 msgid "About"
 msgstr "Conózcanos"
 
 #: templates/admin/admin_title.html:1 templates/admin/base_site.html:5
-#: templates/admin/base_site.html:7 templates/base.html:104
+#: templates/admin/base_site.html:7 templates/base.html:94
 msgid "Admin"
 msgstr "Admin"
 
@@ -3808,67 +3801,92 @@ msgstr "Admin"
 msgid "Switch to Site"
 msgstr "Volver al sitio"
 
-#: templates/base.html:70
-msgid "Settings"
-msgstr "Configuración"
+#: templates/base.html:51
+msgid "Your workflows"
+msgstr "Tus flujos"
 
-#: templates/base.html:74
+#: templates/base.html:51 workflow/apps.py:9
+#: workflow/templates/workflow/index.html:8
+msgid "Workflows"
+msgstr "Flujos"
+
+#: templates/base.html:60
+msgid "Messages and Surveys"
+msgstr "Mensajes y Questionarios"
+
+#: templates/base.html:66
+msgid "Data Table"
+msgstr "Tabla de Datos"
+
+#: templates/base.html:72
+msgid "More"
+msgstr "Más"
+
+#: templates/base.html:76
 msgid "Workflow operations"
 msgstr "Operaciones para el flujo"
 
-#: templates/base.html:75
+#: templates/base.html:77
 msgid "Column operations"
 msgstr "Operaciones para las columnas"
 
-#: templates/base.html:76
+#: templates/base.html:78
 msgid "Scheduled actions"
 msgstr "Operaciones planificadas"
 
-#: templates/base.html:77
+#: templates/base.html:79
 msgid "View logs"
 msgstr "Ver eventos"
 
-#: templates/base.html:96
-msgid "Contact"
-msgstr "Contacte"
+#: templates/base.html:91
+msgid "Connections to SQL databases"
+msgstr "Conexiones a bases de datos SQL"
 
-#: templates/base.html:112 templates/base.html:201
+#: templates/base.html:93
+msgid "SQL"
+msgstr "SQL"
+
+#: templates/base.html:102 templates/base.html:187
 msgid "Logout"
 msgstr "Desconectar"
 
-#: templates/base.html:120
+#: templates/base.html:108
+msgid "Contact"
+msgstr "Contacte"
+
+#: templates/base.html:114
 msgid "Read the manual"
 msgstr "Acceso al manual"
 
-#: templates/base.html:148
+#: templates/base.html:142
 msgid "This functionality has not been implemented yet."
 msgstr "Esta función todavía no se ha implementatdo."
 
-#: templates/base.html:159
+#: templates/base.html:153
 msgid "Your session is about to expire"
 msgstr "Su sesión está a punto de expirar"
 
-#: templates/base.html:162
+#: templates/base.html:156
 msgid "Your session will expire in"
 msgstr "Su sesión va a expirar en"
 
-#: templates/base.html:163
+#: templates/base.html:157
 msgid "seconds."
 msgstr "segundos."
 
-#: templates/base.html:180
+#: templates/base.html:171
 msgid "OnTask Project"
 msgstr "Proyecto OnTask"
 
-#: templates/base.html:184
+#: templates/base.html:171
 msgid "Version:"
 msgstr "Versión:"
 
-#: templates/base.html:200
+#: templates/base.html:186
 msgid "Your session is about to expire."
 msgstr "Su sesión está a punto de expirar."
 
-#: templates/base.html:202
+#: templates/base.html:188
 msgid "Remain Connected"
 msgstr "Mantener la sesión"
 
@@ -4066,10 +4084,6 @@ msgstr "La columna {0} no existe"
 #: visualizations/vega.py:49
 msgid "To be implemented"
 msgstr "Falta implementar"
-
-#: workflow/apps.py:9 workflow/templates/workflow/index.html:8
-msgid "Workflows"
-msgstr "Flujos"
 
 #: workflow/attribute_views.py:47
 msgid "There is a column with this name. Please change."
@@ -4634,7 +4648,7 @@ msgid "Select user to allow access to the workflow"
 msgstr "Seleccione el usuario al que dar acceso al flujo"
 
 #: workflow/templates/workflow/includes/partial_share_create.html:18
-#: workflow/templates/workflow/operations.html:62
+#: workflow/templates/workflow/operations.html:61
 msgid "Share"
 msgstr "Compartir"
 
@@ -4888,15 +4902,11 @@ msgstr ""
 "elementos en una página que puede ser enviada por email, ofrecida a través \n"
 "de una URL, o enviada a otro servicio."
 
-#: workflow/templates/workflow/operations.html:30
-msgid "No attributes defined."
-msgstr "No se ha definido ningún atributo."
-
-#: workflow/templates/workflow/operations.html:47
+#: workflow/templates/workflow/operations.html:46
 msgid "Workflow Operations"
 msgstr "Operaciones del flujo"
 
-#: workflow/templates/workflow/operations.html:59
+#: workflow/templates/workflow/operations.html:58
 msgid "Attributes"
 msgstr "Attributos"
 
@@ -4937,6 +4947,10 @@ msgstr "Sólo se pueden borrar flujos que ha creado."
 msgid "There is no data in the workflow"
 msgstr "No hay datos en el flujo"
 
+#: workflow/views.py:502
+msgid "Edit the parameters of this column"
+msgstr "Editar los parámetros de esta columna"
+
 #: workflow/views.py:571
 msgid "Unable to clone workflow"
 msgstr "Imposible clonar flujo"
@@ -4944,6 +4958,39 @@ msgstr "Imposible clonar flujo"
 #: workflow/views.py:598
 msgid "Workflow successfully cloned."
 msgstr "Flujo clonado con éxito."
+
+#~ msgid "Please Log In"
+#~ msgstr "Por favor, inicie sesión"
+
+#~ msgid "No columns selected."
+#~ msgstr "No se ha seleccionado ninguna columna."
+
+#~ msgid "There are no actions for this workflow."
+#~ msgstr "No hay acciones en este flujo."
+
+#~ msgid "No sql connections available."
+#~ msgstr "No hay ninguna conexión SQL disponible."
+
+#~ msgid "No SQL connections defined."
+#~ msgstr "No se ha definido ninguna conexión SQL."
+
+#~ msgid "No transformations in this workflow."
+#~ msgstr "No hay transformaciones en este flujo."
+
+#~ msgid "No logs recorded for this workflow."
+#~ msgstr "No hay registros en este flujo."
+
+#~ msgid "No scheduled operations in this workflow."
+#~ msgstr "No hay ninguna operación planificada en este flujo."
+
+#~ msgid "There are no views for this workflow."
+#~ msgstr "No hay ninguna vista definida en este flujo."
+
+#~ msgid "Settings"
+#~ msgstr "Configuración"
+
+#~ msgid "No attributes defined."
+#~ msgstr "No se ha definido ningún atributo."
 
 #~ msgid "The file has duplicated column names"
 #~ msgstr "El fichero tienen nombres de columnas duplicados"
@@ -4993,9 +5040,6 @@ msgstr "Flujo clonado con éxito."
 #~ msgid "Email"
 #~ msgstr "Email"
 
-#~ msgid "More"
-#~ msgstr "Más"
-
 #~ msgid "Save and go back"
 #~ msgstr "Guardar y volver"
 
@@ -5007,9 +5051,6 @@ msgstr "Flujo clonado con éxito."
 
 #~ msgid "Toggle Dropdown"
 #~ msgstr "Alternar menú"
-
-#~ msgid "Insert text condition into the body."
-#~ msgstr "Insertar la condición textual en el cuerpo del mensaje."
 
 #~ msgid "Edit name, description and formula"
 #~ msgstr "Editar el nombre, descripción y fórmula"
@@ -5200,9 +5241,6 @@ msgstr "Flujo clonado con éxito."
 
 #~ msgid "Workflow name:"
 #~ msgstr "Nombre del flujo:"
-
-#~ msgid "Import workflows"
-#~ msgstr "Importar flujos"
 
 #~ msgid "Add Column"
 #~ msgstr "Añadir columna"
