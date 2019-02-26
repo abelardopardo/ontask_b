@@ -17,6 +17,7 @@ from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.html import escape
 from django.views.decorators.csrf import csrf_exempt
 
 from action.evaluate import (
@@ -878,6 +879,10 @@ def preview_response(request, pk, idx):
         show_values = ', '.join(
             ["{0} = {1}".format(x.name, row_values[x.name]) for x in act_vars]
         )
+
+    if action.action_type == Action.PERSONALIZED_CANVAS_EMAIL or \
+            action.action_type == Action.PERSONALIZED_JSON:
+        action_content = escape(action_content)
 
     # See if there is prelude content in the request
     prelude = request.GET.get('subject_content', None)

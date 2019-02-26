@@ -8,7 +8,11 @@
   </select>
   {% if conditions|length %}
     <select id="select-condition-name">
-      <option value="">- {% trans 'Use condition in highlighted text' %} -</option>
+      {% if conditions.0.action.action_type == conditions.0.action.PERSONALIZED_TEXT %}
+        <option value="">- {% trans 'Use condition in highlighted text' %} -</option>
+      {% else %}
+        <option value="">- {% trans 'Insert condition in text' %} -</option>
+      {% endif %}
       {% for cond_name in conditions %}
         <option value="{{ cond_name }}">{{ cond_name }}</option>
       {% endfor %}

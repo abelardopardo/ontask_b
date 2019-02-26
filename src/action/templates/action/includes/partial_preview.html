@@ -28,8 +28,10 @@
   {% endif %}
   <div id="preview-body" class="modal-body"
        style="text-align: left; border: solid 1px black;margin: 0 2ex 2ex 2ex;">
-    {% if action.action_type == 'personalized_json' or action.action_type == 'personalized_canvas_email' %}
+    {% if action.action_type == 'personalized_json' %}
       <pre>{{ action_content }}</pre>
+    {% elif action.action_type == 'personalized_canvas_email' %}
+      <div class="container-fluid" style="white-space: pre-wrap;">{{ action_content }}</div>
     {% else %}
       {{ action_content }}
     {% endif %}
