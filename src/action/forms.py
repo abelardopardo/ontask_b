@@ -47,20 +47,15 @@ class ActionForm(ActionUpdateForm):
     def __init__(self, *args, **kargs):
         super(ActionForm, self).__init__(*args, **kargs)
 
-        if not ontask_settings.CANVAS_INFO_DICT:
-            # If the variable CANVAS_INFO_DICT is empty, the choice for Canvas
-            # Email action should be removed.
-            self.fields['action_type'].widget.choices.remove(
-                next(x for x in Action.ACTION_TYPES
-                     if x[0] == Action.PERSONALIZED_CANVAS_EMAIL)
-            )
-
-        # Remove the todo list for the time being as it has not been
-        # implemented yet
-        self.fields['action_type'].widget.choices.remove(
-            next(x for x in Action.ACTION_TYPES
-                 if x[0] == Action.TODO_LIST)
-        )
+        self.fields['action_type'].widget.choices = \
+            Action.AVAILABLE_ACTION_TYPES
+        # Remove those actions that are not available
+        if len(Action.AVAILABLE_ACTION_TYPES) == 1:
+            # There is only one type of action. No need to generate the field.
+            # Set to value and hide
+            self.fields['action_type'].widget = forms.HiddenInput()
+            self.fields['action_type'].initial = \
+                Action.AVAILABLE_ACTION_TYPES[0][0]
 
     class Meta(object):
         model = Action

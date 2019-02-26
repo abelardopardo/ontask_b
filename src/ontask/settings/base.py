@@ -21,6 +21,8 @@ from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.messages import constants as message_constants
 
+import ontask
+
 # import ldap
 # from django_auth_ldap.config import (
 #     LDAPSearch,
@@ -361,6 +363,19 @@ EMAIL_ACTION_NOTIFICATION_SUBJECT = _("OnTask: Action executed")
 EMAIL_ACTION_NOTIFICATION_SENDER = \
     env.str('EMAIL_ACTION_NOTIFICATION_SENDER', default='')
 EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII='
+
+################################################################################
+#
+# Disabled actions
+#
+################################################################################
+DISABLED_ACTIONS = [
+    # ontask.PERSONALIZED_JSON,
+    # ontask.PERSONALIZED_CANVAS_EMAIL,
+    # ontask.PERSONALIZED_TEXT,
+    # ontask.SURVEY,
+    ontask.TODO_LIST
+]
 
 ################################################################################
 #

@@ -20,7 +20,7 @@ from dataops.formula_evaluation import (
     NodeEvaluation
 )
 from logs.models import Log
-from ontask import OnTaskException
+import ontask
 from workflow.models import Workflow, Column
 
 # Regular expressions detecting the use of a variable, or the
@@ -36,19 +36,28 @@ class Action(models.Model):
     @DynamicAttrs
     """
 
-    PERSONALIZED_TEXT = 'personalized_text'
-    PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
-    PERSONALIZED_JSON = 'personalized_json'
-    SURVEY = 'survey'
-    TODO_LIST = 'todo_list'
+    PERSONALIZED_TEXT = ontask.PERSONALIZED_TEXT
+    PERSONALIZED_CANVAS_EMAIL = ontask.PERSONALIZED_CANVAS_EMAIL
+    PERSONALIZED_JSON = ontask.PERSONALIZED_JSON
+    SURVEY = ontask.SURVEY
+    TODO_LIST = ontask.TODO_LIST
 
-    ACTION_TYPES = [
-        (PERSONALIZED_TEXT, _('Personalized text')),
-        (PERSONALIZED_CANVAS_EMAIL, _('Personalized Canvas Email')),
-        (SURVEY, _('Survey')),
-        (PERSONALIZED_JSON, _('Personalized JSON')),
-        (TODO_LIST, _('TODO List'))
-    ]
+    ACTION_TYPES = ontask.ACTION_TYPES
+
+    AVAILABLE_ACTION_TYPES = ontask.diff(
+        ACTION_TYPES,
+        [x for x in ACTION_TYPES if x[0] in settings.DISABLED_ACTIONS])
+
+    assert len(AVAILABLE_ACTION_TYPES) != 0, \
+        "All actions disabled. Review DISABLED_ACTIONS in base.py"
+
+    if not settings.CANVAS_INFO_DICT:
+        # If the variable CANVAS_INFO_DICT is empty, the choice for Canvas
+        # Email action should be removed.
+        AVAILABLE_ACTION_TYPES.remove(
+            next(x for x in AVAILABLE_ACTION_TYPES
+                 if x[0] == PERSONALIZED_CANVAS_EMAIL)
+        )
 
     workflow = models.ForeignKey(
         Workflow,
@@ -154,7 +163,7 @@ class Action(models.Model):
         if self.action_type == Action.PERSONALIZED_TEXT:
             return True
 
-        if  self.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        if self.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
             return settings.CANVAS_INFO_DICT is not None
 
         if self.action_type == Action.PERSONALIZED_JSON:
@@ -348,7 +357,7 @@ class Action(models.Model):
                     NodeEvaluation.EVAL_EXP,
                     row_values
                 )
-            except OnTaskException:
+            except ontask.OnTaskException:
                 # Something went wrong evaluating a condition. Stop.
                 return None
 

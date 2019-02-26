@@ -18,8 +18,32 @@ __all__ = ['celery_app', 'OnTaskException', 'is_legal_name', 'fix_pctg_in_name',
 
 __version__ = 'B.4.0.1'
 
+PERSONALIZED_TEXT = 'personalized_text'
+PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
+PERSONALIZED_JSON = 'personalized_json'
+SURVEY = 'survey'
+TODO_LIST = 'todo_list'
+
+ACTION_TYPES = [
+    (PERSONALIZED_TEXT, _('Personalized text')),
+    (PERSONALIZED_CANVAS_EMAIL, _('Personalized Canvas Email')),
+    (SURVEY, _('Survey')),
+    (PERSONALIZED_JSON, _('Personalized JSON')),
+    (TODO_LIST, _('TODO List'))
+]
+
 # Dictionary to store in the session the data between forms.
 action_session_dictionary = 'action_run_payload'
+
+def diff(a, b):
+    """
+    Calculate the operation a - b for two lists
+    :param a: First list
+    :param b: Second list
+    :return: Elements in first list that are not in the second list
+    """
+    second = set(b)
+    return [x for x in a if x not in second]
 
 
 def is_legal_name(val):
