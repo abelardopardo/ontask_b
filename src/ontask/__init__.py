@@ -14,7 +14,7 @@ from ontask.celery import app as celery_app
 
 __all__ = ['celery_app', 'OnTaskException', 'is_legal_name', 'fix_pctg_in_name',
            'OnTaskDataFrameNoKey', 'action_session_dictionary',
-           'get_action_payload']
+           'get_action_payload', 'simplify_datetime_str']
 
 __version__ = 'B.4.0.1'
 

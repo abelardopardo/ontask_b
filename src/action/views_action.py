@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 from future import standard_library
 
 from ontask import simplify_datetime_str
