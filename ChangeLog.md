@@ -1,3 +1,27 @@
+## 4.0.2 
+
+### Added
+
+- Possibility of disabling the type of actions available in config file (Issue #112)
+  
+### Fixed
+
+- Conditions break when renaming them (Issue #128)
+
+- Fixed incorrect highlighting of Workflows link (Issue #127)
+
+- Fixed localization in dataTables using only the URL field
+
+### Changed
+
+- Footer is now sticky to the bottom of the viewport if body is shorter (Issue #121)
+
+- Redesigned the top bar menu to include icons and text (Issue #127)
+
+- Moved contacts and about links only to the Login page (Issue #127)
+
+- Moved the SQL icon in the admin profile to the right of the menu (Issue #127)
+
 ## 4.0.1 (2019-02-19)
 
 ### Fixed
