@@ -56,13 +56,13 @@
         <button type="button" class="btn btn-outline-dark js-create-action"
                 data-url="{% url 'action:create' %}"
                 data-toggle="tooltip"
-                title="New action to collect data from learners">
+                title="{% trans 'New action to collect data from learners' %}">
           <span class="fa fa-plus"></span> {% trans 'Action' %}
         </button>
         {% if workflow.nrows %}
           <a href="{% url 'action:import' %}"
              class="btn btn-outline-dark"
-             data-toggle="tooltip" title="Import action previously exported">
+             data-toggle="tooltip" title="{% trans 'Import action previously exported' %}">
             <span class="fa fa-upload"></span> {% trans 'Import action' %}</a>
         {% endif %}
         {% include 'workflow/includes/manage_table_data.html' %}

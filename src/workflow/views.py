@@ -497,8 +497,9 @@ def column_ss(request, pk):
             'name': format_html(
                 """<a href="#" class="js-workflow-column-edit"
                   data-toggle="tooltip" data-url="{0}"
-                  title="Edit the parameters of this column">{1}</a>""",
+                  title="{1}">{2}</a>""",
                 reverse('workflow:column_edit', kwargs={'pk': col.id}),
+                _('Edit the parameters of this column'),
                 col.name
             ),
             'description': col.description_text,
