@@ -23,7 +23,7 @@
         $(document).ready(function() {
           var column_table = $('#column-table').DataTable({
             "language": {
-              url: getLanguage()
+              "url": location.protocol + getLanguage()
             },
             "stateSave": true,
             stateSaveParams: function (settings, data) {

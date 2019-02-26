@@ -25,8 +25,7 @@
             delete data.search;
           },
           "language": {
-            "emptyTable": "{% trans 'No transformations in this workflow.' %}",
-            "url": getLanguage()
+            "url": location.protocol + getLanguage()
           },
           "createdRow": function(row, data, dataIndex) {
             if (data[4] == '<span class="false">✘</span>') {
