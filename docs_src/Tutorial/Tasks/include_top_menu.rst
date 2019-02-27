@@ -9,7 +9,7 @@ The menu contains the following links:
 |fa-table| Table
   Operations to visualize and manipulate the table (search for values, add a row, add a column)
 
-|fa-cog| Settings
+|fa-cog| More
   Additional operations to view:
 
   Workflow operations

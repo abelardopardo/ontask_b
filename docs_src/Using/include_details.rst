@@ -6,7 +6,7 @@ Workflow Operations
     "The details are not the details. They make the design"
     -- Charles Eames
 
-The *Workflow Operations* page is available through the |fa-cog| Settings link at the top-bar menu. The page shows the information as illustrated by the following figure.
+The *Workflow Operations* page is available through the |fa-cog| *More* link at the top-bar menu. The page shows the information as illustrated by the following figure.
 
 .. figure:: /scaptures/workflow_attributes.png
    :align: center
@@ -88,7 +88,7 @@ Share
 Column Operations
 =================
 
-The *Column Operations* page is available through the |fa-cog| Settings link at the top-bar menu.  Columns in OnTask have substantial information and operations that is condensed in this page. The information is shown as illustrated by the following figure.
+The *Column Operations* page is available through the |fa-cog| *More* link at the top-bar menu.  Columns in OnTask have substantial information and operations that is condensed in this page. The information is shown as illustrated by the following figure.
 
 .. figure:: /scaptures/workflow_details.png
    :align: center

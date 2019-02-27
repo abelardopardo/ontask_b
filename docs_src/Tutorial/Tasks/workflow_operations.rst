@@ -3,7 +3,7 @@
 Workflow operations
 *******************
 
-The link *Workflow operations* available in the pull down menu of the |fa-cog| *Settings* link in the top bar menu leads to a page that offers information and several additional operations as shown in the following figure.
+The link *Workflow operations* available in the pull down menu of the |fa-cog| *More* link in the top bar menu leads to a page that offers information and several additional operations as shown in the following figure.
 
 .. figure:: /scaptures/tutorial_workflow_operations.png
    :align: center

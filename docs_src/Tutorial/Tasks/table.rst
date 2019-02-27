@@ -8,7 +8,7 @@ Log into the platform and open a workflow that has data in the table. Click in t
 .. figure:: /scaptures/tutorial_initial_table.png
   :align: center
 
-.. include:: /Using/include_table_top_buttons.rst
+.. include:: /Tutorial/Tasks/include_table_top_buttons.rst
 
 .. _tut_table_views:
 

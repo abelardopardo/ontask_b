@@ -289,6 +289,9 @@ rst_prolog += """
 
    <span class="fa fa-user"></span>
 
+.. |fa-database| raw:: html
+
+   <span class="fa fa-database"></span>
 """
 
 def setup(app):
