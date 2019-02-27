@@ -26,7 +26,7 @@ def display(request):
     # Try to get workflow and if not present, go to home page
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Create the context with the column names
     context = {
@@ -123,7 +123,7 @@ def view(request, pk):
     workflow = get_workflow(request)
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     # Get the log item

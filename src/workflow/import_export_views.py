@@ -23,7 +23,7 @@ def export_ask(request, pk):
     # Get the workflow
     workflow = get_workflow(request, pk)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     form = WorkflowExportRequestForm(request.POST or None,
                                      actions=workflow.actions.all(),
@@ -75,7 +75,7 @@ def export(request, data):
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the param encoding which elements to include in the export.
     action_ids = []
@@ -84,7 +84,7 @@ def export(request, data):
         try:
             action_ids = [int(x) for x in data.split(',')]
         except ValueError:
-            return redirect('workflow:index')
+            return redirect('home')
 
     response = do_export_workflow(workflow, action_ids)
 
@@ -129,4 +129,4 @@ def import_workflow(request):
         messages.error(request, status)
 
     # Go back to the list of workflows
-    return redirect('workflow:index')
+    return redirect('home')

@@ -115,7 +115,7 @@ def uploadmerge(request):
     # Get the workflow that is being used
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     return render(request,
                   'dataops/uploadmerge.html',
@@ -127,7 +127,7 @@ def transform(request):
     # Get the workflow that is being used
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Traverse the plugin folder and refresh the db content.
     refresh_plugin_data(request, workflow)
@@ -193,7 +193,7 @@ def row_update(request):
     # If there is no workflow object, go back to the index
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # If the workflow has no data, something went wrong, go back to the
     # main dataops page
@@ -282,7 +282,7 @@ def row_create(request):
     # If there is no workflow object, go back to the index
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # If the workflow has no data, the operation should not be allowed
     if workflow.nrows == 0:
@@ -360,11 +360,11 @@ def plugin_invoke(request, pk):
     # Get the workflow and the plugin information
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
     try:
         plugin_info = PluginRegistry.objects.get(pk=pk)
     except PluginRegistry.DoesNotExist:
-        return redirect('workflow:index')
+        return redirect('home')
 
     plugin_instance, msgs = load_plugin(plugin_info.filename)
     if plugin_instance is None:

@@ -482,7 +482,7 @@ def index(request):
     # Get the appropriate workflow object
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the actions
     s_items = ScheduledAction.objects.filter(
@@ -540,7 +540,7 @@ def edit(request, pk):
     # Get first the current workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Distinguish between creating a new element or editing an existing one
     new_item = request.path.endswith(reverse('scheduler:create',
@@ -553,13 +553,13 @@ def edit(request, pk):
                 Q(workflow__user=request.user) |
                 Q(workflow__shared=request.user)).distinct().get(pk=pk)
         except ObjectDoesNotExist:
-            return redirect('workflow:index')
+            return redirect('home')
         s_item = None
     else:
         # Get the scheduled action from the parameter in the URL
         s_item = ScheduledAction.objects.filter(pk=pk).first()
         if not s_item:
-            return redirect('workflow:index')
+            return redirect('home')
         action = s_item.action
 
     # Get the payload from the session, and if not, use the given one

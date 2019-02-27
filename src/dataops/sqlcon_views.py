@@ -247,7 +247,7 @@ def sqlconn_edit(request, pk):
     if not conn:
         return JsonResponse(
             {'form_is_valid': True,
-             'html_redirect': reverse('workflow:index')}
+             'html_redirect': reverse('home')}
         )
 
     # Create the form
@@ -276,7 +276,7 @@ def sqlconn_clone(request, pk):
     if not conn:
         # The view is not there. Redirect to workflow detail
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     # Get the name of the connection to clone
@@ -336,7 +336,7 @@ def sqlconn_delete(request, pk):
     if not conn:
         return JsonResponse(
             {'form_is_valid': True,
-             'html_redirect': reverse('workflow:index')}
+             'html_redirect': reverse('home')}
         )
 
     if request.method == 'POST':
@@ -362,7 +362,7 @@ def sqlconn_delete(request, pk):
 
         # In this case, the form is valid anyway
         return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('workflow:index')})
+                             'html_redirect': reverse('home')})
 
     # This is a GET request
     return JsonResponse({
@@ -398,7 +398,7 @@ def sqlupload1(request, pk):
     # Get the current workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
         # Get the connection
     conn = SQLConnection.objects.filter(pk=pk).first()

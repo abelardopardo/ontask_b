@@ -278,7 +278,7 @@ def display(request):
     """
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     return render_table_display_page(
         request,
@@ -324,7 +324,7 @@ def display_view(request, pk):
     """
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     try:
         view = View.objects.get(pk=pk, workflow=workflow)
@@ -385,7 +385,7 @@ def row_delete(request):
     """
     # We only accept ajax requests here
     if not request.is_ajax():
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Result to return
     data = {}
@@ -393,7 +393,7 @@ def row_delete(request):
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the key/value pair to delete
     key = request.GET.get('key', None)
@@ -445,7 +445,7 @@ def view_index(request):
     # Get the appropriate workflow object
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the views
     views = workflow.views.values('id',
@@ -475,7 +475,7 @@ def view_add(request):
     if not workflow:
         return JsonResponse(
             {'form_is_valid': True,
-             'html_redirect': reverse('workflow:index')}
+             'html_redirect': reverse('home')}
         )
 
     if workflow.nrows == 0:
@@ -507,7 +507,7 @@ def view_edit(request, pk):
     if not workflow:
         return JsonResponse(
             {'form_is_valid': True,
-             'html_redirect': reverse('workflow:index')}
+             'html_redirect': reverse('home')}
         )
 
     if workflow.nrows == 0:
@@ -601,7 +601,7 @@ def view_clone(request, pk):
     workflow = get_workflow(request)
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     context = {'pk': pk}  # For rendering
@@ -668,7 +668,7 @@ def csvdownload(request, pk=None):
     # Get the appropriate workflow object
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Check if dataframe is present
     if not ops.workflow_id_has_table(workflow.id):

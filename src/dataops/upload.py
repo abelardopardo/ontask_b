@@ -47,7 +47,7 @@ def upload_s2(request):
     """
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the dictionary to store information about the upload
     # is stored in the session.
@@ -242,7 +242,7 @@ def upload_s3(request):
     # Get the workflow id we are processing
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the dictionary to store information about the upload
     # is stored in the session.
@@ -358,7 +358,7 @@ def upload_s4(request):
     # Get the workflow id we are processing
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the dictionary containing the information about the upload
     upload_data = request.session.get('upload_data', None)

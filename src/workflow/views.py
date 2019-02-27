@@ -193,7 +193,7 @@ def operations(request, pk):
     # Get the appropriate workflow object
     workflow = get_workflow(request, wid=pk)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Context to render the page
     context = {
@@ -295,7 +295,7 @@ def update(request, pk):
     if not workflow:
         # Workflow is not accessible. Go back to index page.
         return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('workflow:index')})
+                             'html_redirect': reverse('home')})
 
     form = WorkflowForm(request.POST or None, instance=workflow)
 
@@ -321,7 +321,7 @@ def flush(request, pk):
     if not workflow:
         # Workflow is not accessible. Go back to index page.
         return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('workflow:index')})
+                             'html_redirect': reverse('home')})
 
     data = dict()
 
@@ -334,10 +334,10 @@ def flush(request, pk):
 
         if request.is_ajax():
             data = {'form_is_valid': True,
-                    'html_redirect': reverse('workflow:index')}
+                    'html_redirect': reverse('home')}
             return JsonResponse(data)
 
-        return redirect('workflow:index')
+        return redirect('home')
 
     if request.method == 'POST':
         # Delete the table
@@ -368,7 +368,7 @@ def delete(request, pk):
     if not workflow:
         # Workflow is not accessible. Go back to index page.
         return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('workflow:index')})
+                             'html_redirect': reverse('home')})
 
     # Ajax result
     data = dict()
@@ -380,10 +380,10 @@ def delete(request, pk):
 
         if request.is_ajax():
             data['form_is_valid'] = True
-            data['html_redirect'] = reverse('workflow:index')
+            data['html_redirect'] = reverse('home')
             return JsonResponse(data)
 
-        return redirect('workflow:index')
+        return redirect('home')
 
     if request.method == 'POST':
         # Log the event
@@ -402,7 +402,7 @@ def delete(request, pk):
 
         # In this case, the form is valid anyway
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
     else:
         data['html_form'] = \
             render_to_string('workflow/includes/partial_workflow_delete.html',
@@ -538,7 +538,7 @@ def clone(request, pk):
     workflow = get_workflow(request, pk)
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     # Initial data in the context

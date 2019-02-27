@@ -431,7 +431,7 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         self.go_to_attribute_page()
 
         # Attributes are initially empty
-        self.assertIn('No attributes defined', self.selenium.page_source)
+        self.assertIn('Attributes are pairs', self.selenium.page_source)
 
         # Create key1, value1
         self.create_attribute('key1', 'value1')

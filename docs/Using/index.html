@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>3. Using OnTask &#8212; OnTask (B.4.0.1) 1.1.0 documentation</title>
+    <title>3. Using OnTask &#8212; OnTask (B.4.1) 1.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
@@ -56,63 +56,63 @@
 <div class="contents local topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#workflow" id="id11">Workflow</a></li>
-<li><a class="reference internal" href="#data" id="id12">Data</a><ul>
-<li><a class="reference internal" href="#upload-data" id="id13">Upload Data</a><ul>
-<li><a class="reference internal" href="#upload-csv-files" id="id14">Upload CSV Files</a></li>
-<li><a class="reference internal" href="#upload-excel-files" id="id15">Upload Excel Files</a></li>
-<li><a class="reference internal" href="#upload-google-spreadsheet-files" id="id16">Upload Google Spreadsheet Files</a></li>
-<li><a class="reference internal" href="#sql-connection" id="id17">SQL connection</a></li>
-<li><a class="reference internal" href="#confirmation-step-to-upload-data" id="id18">Confirmation step to upload data</a></li>
+<li><a class="reference internal" href="#workflow" id="id10">Workflow</a></li>
+<li><a class="reference internal" href="#data" id="id11">Data</a><ul>
+<li><a class="reference internal" href="#upload-data" id="id12">Upload Data</a><ul>
+<li><a class="reference internal" href="#upload-csv-files" id="id13">Upload CSV Files</a></li>
+<li><a class="reference internal" href="#upload-excel-files" id="id14">Upload Excel Files</a></li>
+<li><a class="reference internal" href="#upload-google-spreadsheet-files" id="id15">Upload Google Spreadsheet Files</a></li>
+<li><a class="reference internal" href="#sql-connection" id="id16">SQL connection</a></li>
+<li><a class="reference internal" href="#confirmation-step-to-upload-data" id="id17">Confirmation step to upload data</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#data-merge" id="id19">Data Merge</a><ul>
-<li><a class="reference internal" href="#step-three-select-keys-and-merge-option" id="id20">Step three: select keys and merge option</a></li>
-<li><a class="reference internal" href="#step-four-verify-upcoming-changes" id="id21">Step four: verify upcoming changes</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#table" id="id22">Table</a><ul>
-<li><a class="reference internal" href="#table-views" id="id23">Table Views</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#actions" id="id24">Actions</a><ul>
-<li><a class="reference internal" href="#personalized-text" id="id25">Personalized Text</a><ul>
-<li><a class="reference internal" href="#using-column-values-attributes-and-conditions-in-a-personalized-text" id="id26">Using column values, attributes and conditions in a Personalized Text</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#surveys" id="id27">Surveys</a></li>
-<li><a class="reference internal" href="#personalized-json-object" id="id28">Personalized JSON Object</a></li>
-<li><a class="reference internal" href="#personalized-canvas-email" id="id29">Personalized Canvas Email</a></li>
-<li><a class="reference internal" href="#running-actions" id="id30">Running actions</a><ul>
-<li><a class="reference internal" href="#sending-personalized-emails-personalized-text-actions" id="id31">Sending personalized emails (Personalized Text Actions)</a></li>
-<li><a class="reference internal" href="#making-personalized-content-available-to-learners" id="id32">Making personalized content available to learners</a></li>
-<li><a class="reference internal" href="#running-a-survey" id="id33">Running a survey</a></li>
-<li><a class="reference internal" href="#sending-personalized-emails-in-canvas" id="id34">Sending personalized emails in Canvas</a></li>
-<li><a class="reference internal" href="#sending-personalized-json-objects-to-another-platform" id="id35">Sending personalized JSON objects to another platform</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#creating-a-zip-file-with-the-personalized-text" id="id36">Creating a ZIP file with the personalized text</a><ul>
-<li><a class="reference internal" href="#uploading-feedback-files-for-a-moodle-assignment" id="id37">Uploading feedback files for a Moodle Assignment</a></li>
+<li><a class="reference internal" href="#data-merge" id="id18">Data Merge</a><ul>
+<li><a class="reference internal" href="#step-three-select-keys-and-merge-option" id="id19">Step three: select keys and merge option</a></li>
+<li><a class="reference internal" href="#step-four-verify-upcoming-changes" id="id20">Step four: verify upcoming changes</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#workflow-settings" id="id38">Workflow Settings</a><ul>
-<li><a class="reference internal" href="#workflow-operations" id="id39">Workflow Operations</a></li>
-<li><a class="reference internal" href="#column-operations" id="id40">Column Operations</a></li>
-<li><a class="reference internal" href="#scheduled-actions" id="id41">Scheduled Actions</a><ul>
-<li><a class="reference internal" href="#scheduling-a-personalized-text-action" id="id42">Scheduling a Personalized Text Action</a></li>
-<li><a class="reference internal" href="#scheduling-a-personalized-json-action" id="id43">Scheduling a Personalized JSON Action</a></li>
-<li><a class="reference internal" href="#table-with-scheduled-actions" id="id44">Table with Scheduled Actions</a></li>
+<li><a class="reference internal" href="#table" id="id21">Table</a><ul>
+<li><a class="reference internal" href="#table-views" id="id22">Table Views</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#view-logs" id="id45">View logs</a></li>
+<li><a class="reference internal" href="#actions" id="id23">Actions</a><ul>
+<li><a class="reference internal" href="#personalized-text" id="id24">Personalized Text</a><ul>
+<li><a class="reference internal" href="#using-column-values-attributes-and-conditions-in-a-personalized-text" id="id25">Using column values, attributes and conditions in a Personalized Text</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#plugins-transforming-the-data-with-your-own-code" id="id46">Plugins: Transforming the data with your own code</a><ul>
-<li><a class="reference internal" href="#plugin-requirements" id="id47">Plugin requirements</a></li>
+<li><a class="reference internal" href="#surveys" id="id26">Surveys</a></li>
+<li><a class="reference internal" href="#personalized-json-object" id="id27">Personalized JSON Object</a></li>
+<li><a class="reference internal" href="#personalized-canvas-email" id="id28">Personalized Canvas Email</a></li>
+<li><a class="reference internal" href="#running-actions" id="id29">Running actions</a><ul>
+<li><a class="reference internal" href="#sending-personalized-emails-personalized-text-actions" id="id30">Sending personalized emails (Personalized Text Actions)</a></li>
+<li><a class="reference internal" href="#making-personalized-content-available-to-learners" id="id31">Making personalized content available to learners</a></li>
+<li><a class="reference internal" href="#running-a-survey" id="id32">Running a survey</a></li>
+<li><a class="reference internal" href="#sending-personalized-emails-in-canvas" id="id33">Sending personalized emails in Canvas</a></li>
+<li><a class="reference internal" href="#sending-personalized-json-objects-to-another-platform" id="id34">Sending personalized JSON objects to another platform</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-a-zip-file-with-the-personalized-text" id="id35">Creating a ZIP file with the personalized text</a><ul>
+<li><a class="reference internal" href="#uploading-feedback-files-for-a-moodle-assignment" id="id36">Uploading feedback files for a Moodle Assignment</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#additional-workflow-operations" id="id37">Additional Workflow Operations</a><ul>
+<li><a class="reference internal" href="#workflow-operations" id="id38">Workflow Operations</a></li>
+<li><a class="reference internal" href="#column-operations" id="id39">Column Operations</a></li>
+<li><a class="reference internal" href="#scheduled-actions" id="id40">Scheduled Actions</a><ul>
+<li><a class="reference internal" href="#scheduling-a-personalized-text-action" id="id41">Scheduling a Personalized Text Action</a></li>
+<li><a class="reference internal" href="#scheduling-a-personalized-json-action" id="id42">Scheduling a Personalized JSON Action</a></li>
+<li><a class="reference internal" href="#table-with-scheduled-actions" id="id43">Table with Scheduled Actions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#view-logs" id="id44">View logs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plugins-transforming-the-data-with-your-own-code" id="id45">Plugins: Transforming the data with your own code</a><ul>
+<li><a class="reference internal" href="#plugin-requirements" id="id46">Plugin requirements</a></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +179,7 @@
 <dt><span class="fa fa-table"></span> Table</dt>
 <dd><p class="first last">Operations to visualize and manipulate the table (search for values, add a row, add a column)</p>
 </dd>
-<dt><span class="fa fa-cog"></span> Settings</dt>
+<dt><span class="fa fa-cog"></span> More</dt>
 <dd><p class="first">Additional operations to view:</p>
 <dl class="last docutils">
 <dt>Workflow operations</dt>
@@ -349,15 +349,15 @@ but you feel it”
 <dt><span class="fa fa-plus"></span> Row</dt>
 <dd>A form to introduce a new row in the table with one field per column.</dd>
 <dt><span class="fa fa-plus"></span> Column</dt>
-<dd>Add a new column to the table. The pull-down menu also allows to add a column with values calculated with a formula and using the existing values, or a column with random values (See <a class="reference internal" href="#details-add-column"><span class="std std-ref">Adding a column</span></a> for a detailed explanation).</dd>
-<dt><a class="reference internal" href="#dataops"><span class="std std-ref">Manage table data</span></a></dt>
-<dd>Menu to upload/merge data to the table (see <a class="reference internal" href="#dataops"><span class="std std-ref">Data</span></a> for a detailed explanation), execute a plugin, or delete the data in the table.</dd>
+<dd>Add a new column to the table. The pull-down menu also allows to add a column with values calculated with a formula and using the existing values, or a column with random values.</dd>
+<dt>Manage table data</dt>
+<dd>Menu to upload/merge data to the table, execute a plugin, or delete the data in the table.</dd>
 <dt><span class="fa fa-eye"></span> Views</dt>
-<dd>A view is a screen showing a subset of rows and/or columns in the table. Clicking in the Views link will take you to another screen to <a class="reference internal" href="#table-views"><span class="std std-ref">manage these views</span></a>. The pull down menu offers links to access the subset of the table defined by the available views.</dd>
+<dd>A view is a screen showing a subset of rows and/or columns in the table. Clicking in the Views link will take you to another screen to manage these views. The pull down menu offers links to access the subset of the table defined by the available views.</dd>
 <dt><span class="fa fa-dashboard"></span> Dashboard</dt>
-<dd>The dashboard shows a statistical summary for the columns shown in the table. This number may be too high, so you should consider using <a class="reference internal" href="#table-views"><span class="std std-ref">Table Views</span></a> to reduce the amount of information shown in the dashboard.</dd>
+<dd>The dashboard shows a statistical summary for the columns shown in the table. This number may be too high, so you should consider using table views to reduce the amount of information shown in the dashboard.</dd>
 <dt><span class="fa fa-download"></span> CSV Download</dt>
-<dd>This functionality downloads the data in the table as a CSV file. Combine this functionality with the <a class="reference internal" href="#table-views"><span class="std std-ref">Table Views</span></a> to handle large tables.</dd>
+<dd>This functionality downloads the data in the table as a CSV file. Combine this functionality with the table views to handle large tables.</dd>
 </dl>
 <p>The left-most column in the  table shows the operations to manipulate a row:</p>
 <dl class="docutils">
@@ -748,15 +748,15 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 </div>
 </div>
 </div>
-<div class="section" id="workflow-settings">
-<span id="id9"></span><h2>3.5. Workflow Settings<a class="headerlink" href="#workflow-settings" title="Permalink to this headline">¶</a></h2>
-<p>In addition to the operations described in the previous sections to upload and merge data, create actions, and run these actions, there are additional operations for the workflow that can be accessed through the <span class="fa fa-cog"></span> Settings pull-down menu in the top-bar menu. The settings pages offer information about: workflow operations (export, rename, clone, etc.), column operations (change column type, rename, clone, etc.), scheduled actions, and view logs.</p>
+<div class="section" id="additional-workflow-operations">
+<span id="workflow-settings"></span><h2>3.5. Additional Workflow Operations<a class="headerlink" href="#additional-workflow-operations" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the operations described in the previous sections to upload and merge data, create actions, and run these actions, there are additional operations for the workflow that can be accessed through the <span class="fa fa-cog"></span> More pull-down menu in the top-bar menu. The settings pages offer information about: workflow operations (export, rename, clone, etc.), column operations (change column type, rename, clone, etc.), scheduled actions, and view logs.</p>
 <div class="section" id="workflow-operations">
 <span id="details"></span><h3>3.5.1. Workflow Operations<a class="headerlink" href="#workflow-operations" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div>“The details are not the details. They make the design”
 – Charles Eames</div></blockquote>
-<p>The <em>Workflow Operations</em> page is available through the <span class="fa fa-cog"></span> Settings link at the top-bar menu. The page shows the information as illustrated by the following figure.</p>
+<p>The <em>Workflow Operations</em> page is available through the <span class="fa fa-cog"></span> <em>More</em> link at the top-bar menu. The page shows the information as illustrated by the following figure.</p>
 <div class="figure align-center">
 <img alt="../_images/workflow_attributes.png" src="../_images/workflow_attributes.png" />
 </div>
@@ -822,7 +822,7 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 </div>
 <div class="section" id="column-operations">
 <span id="columns"></span><h3>3.5.2. Column Operations<a class="headerlink" href="#column-operations" title="Permalink to this headline">¶</a></h3>
-<p>The <em>Column Operations</em> page is available through the <span class="fa fa-cog"></span> Settings link at the top-bar menu.  Columns in OnTask have substantial information and operations that is condensed in this page. The information is shown as illustrated by the following figure.</p>
+<p>The <em>Column Operations</em> page is available through the <span class="fa fa-cog"></span> <em>More</em> link at the top-bar menu.  Columns in OnTask have substantial information and operations that is condensed in this page. The information is shown as illustrated by the following figure.</p>
 <div class="figure align-center">
 <img alt="../_images/workflow_details.png" src="../_images/workflow_details.png" />
 </div>
@@ -960,7 +960,7 @@ created the current values of the other columns. The column is not refreshed if 
 <span class="target" id="schedule-canvas"></span></div>
 <div class="section" id="table-with-scheduled-actions">
 <span id="scheduler-menu"></span><h4>3.5.3.3. Table with Scheduled Actions<a class="headerlink" href="#table-with-scheduled-actions" title="Permalink to this headline">¶</a></h4>
-<p>The table showing all the action scheduling operations can be access through the <span class="fa fa-cog"></span> <em>Settings</em> link in the top-bar menu selecting the <span class="fa fa-calendar"></span> <em>Scheduled actions</em> link. The list of scheduled actions is shown as illustrated in the following figure.</p>
+<p>The table showing all the action scheduling operations can be access through the <span class="fa fa-cog"></span> <em>More</em> link in the top-bar menu selecting the <span class="fa fa-calendar"></span> <em>Scheduled actions</em> link. The list of scheduled actions is shown as illustrated in the following figure.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/schedule.png"><img alt="../_images/schedule.png" src="../_images/schedule.png" style="width: 100%;" /></a>
 </div>
@@ -983,7 +983,7 @@ created the current values of the other columns. The column is not refreshed if 
 </div>
 <div class="section" id="view-logs">
 <span id="logs"></span><h3>3.5.4. View logs<a class="headerlink" href="#view-logs" title="Permalink to this headline">¶</a></h3>
-<p>The platform keeps a log of most of the operations that are executed when managing a workflow. These records are available through the <em>View Logs</em> link in the <span class="fa fa-cog"></span> <em>Settings</em> pull down menu at the top-bar menu. The page shows information about the records in tabular form. The following figure shows an example.</p>
+<p>The platform keeps a log of most of the operations that are executed when managing a workflow. These records are available through the <em>View Logs</em> link in the <span class="fa fa-cog"></span> <em>More</em> pull down menu at the top-bar menu. The page shows information about the records in tabular form. The following figure shows an example.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/logs.png"><img alt="../_images/logs.png" src="../_images/logs.png" style="width: 100%;" /></a>
 </div>
@@ -1012,7 +1012,7 @@ created the current values of the other columns. The column is not refreshed if 
 </dl>
 <p>After the data has been provided the tool shows an transformation execution report showing the columns that will be created and how will they be merged with the existing data.</p>
 <div class="section" id="plugin-requirements">
-<span id="id10"></span><h3>3.6.1. Plugin requirements<a class="headerlink" href="#plugin-requirements" title="Permalink to this headline">¶</a></h3>
+<span id="id9"></span><h3>3.6.1. Plugin requirements<a class="headerlink" href="#plugin-requirements" title="Permalink to this headline">¶</a></h3>
 <p>The Python modules installed in the predefined folder need to satisfy various requirements to be considered for execution within OnTask. More precisely, each plugin must be stored in its own folder (as a Python module). The file <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> in the module must contain:</p>
 <ol class="arabic">
 <li><p class="first">Module variable <code class="docutils literal notranslate"><span class="pre">class_name</span></code> with the name of the class in the file that contains the required definitions.</p>
@@ -1115,7 +1115,7 @@ merged with the existing data.</p>
 <li class="toctree-l2"><a class="reference internal" href="#data">3.2. Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#table">3.3. Table</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#actions">3.4. Actions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#workflow-settings">3.5. Workflow Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#additional-workflow-operations">3.5. Additional Workflow Operations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#plugins-transforming-the-data-with-your-own-code">3.6. Plugins: Transforming the data with your own code</a></li>
 </ul>
 </li>

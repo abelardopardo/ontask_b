@@ -75,7 +75,7 @@ def get_row_visualisations(request, view_id=None):
     # If there is no workflow object, go back to the index
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # If the workflow has no data, something went wrong, go back to the
     # workflow details page
@@ -175,7 +175,7 @@ def get_view_visualisations(request, view_id=None):
     # If there is no workflow object, go back to the index
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # If the workflow has no data, something went wrong, go back to the
     # workflow details page
@@ -258,13 +258,13 @@ def stat_column(request, pk):
 
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the column
     try:
         column = Column.objects.get(pk=pk, workflow=workflow)
     except ObjectDoesNotExist:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the dataframe
     df = pandas_db.load_from_db(workflow.id)

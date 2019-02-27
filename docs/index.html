@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>OnTask documentation &#8212; OnTask (B.4.0.1) 1.1.0 documentation</title>
+    <title>OnTask documentation &#8212; OnTask (B.4.1) 1.1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
@@ -49,7 +49,7 @@
   <div class="section" id="ontask-documentation">
 <h1>OnTask documentation<a class="headerlink" href="#ontask-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="version-ontask-version">
-<h2>Version B.4.0.1<a class="headerlink" href="#version-ontask-version" title="Permalink to this headline">¶</a></h2>
+<h2>Version B.4.1<a class="headerlink" href="#version-ontask-version" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Introduction/index.html">1. What is OnTask</a><ul>
@@ -78,7 +78,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Using/index.html#data">3.2. Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Using/index.html#table">3.3. Table</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Using/index.html#actions">3.4. Actions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Using/index.html#workflow-settings">3.5. Workflow Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Using/index.html#additional-workflow-operations">3.5. Additional Workflow Operations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Using/index.html#plugins-transforming-the-data-with-your-own-code">3.6. Plugins: Transforming the data with your own code</a></li>
 </ul>
 </li>
@@ -100,19 +100,20 @@
 <li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/actions.html">5.9. Actions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/action_personalized_text.html">5.10. Personalized text action</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/send_email.html">5.11. Sending Personalized Text through Email</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/personalized_text_url.html">5.12. Making content available through OnTask</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/action_survey.html">5.13. Surveys and/or Polls</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/run_survey.html">5.14. Run a survey</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/personalized_text_and_surveys.html">5.15. Combining personalized text and surveys</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/survey_import.html">5.16. Import a pre-defined survey</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/workflow_operations.html">5.17. Workflow operations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/workflow_details.html">5.18. Column operations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/action_personalized_json.html">5.19. Personalized JSON action</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/scheduling.html">5.20. Scheduling Actions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/merging.html">5.21. Merging Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/zip_download.html">5.22. Download a ZIP (and upload it in Moodle)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/database_upload.html">5.23. Uploading Data from a Remote Database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/plugin_write.html">5.24. Plugins: Write your own data processing code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/email_example.html">5.12. Example of Personalized Messages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/personalized_text_url.html">5.13. Making content available through OnTask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/action_survey.html">5.14. Surveys and/or Polls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/run_survey.html">5.15. Run a survey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/personalized_text_and_surveys.html">5.16. Combining personalized text and surveys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/survey_import.html">5.17. Import a pre-defined survey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/workflow_operations.html">5.18. Workflow operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/workflow_details.html">5.19. Column operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/action_personalized_json.html">5.20. Personalized JSON action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/scheduling.html">5.21. Scheduling Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/merging.html">5.22. Merging Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/zip_download.html">5.23. Download a ZIP (and upload it in Moodle)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/database_upload.html">5.24. Uploading Data from a Remote Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial/Tasks/plugin_write.html">5.25. Plugins: Write your own data processing code</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Advanced/index.html">6. Advanced Features</a><ul>

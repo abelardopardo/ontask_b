@@ -40,14 +40,14 @@ class ToBeDone(UserIsInstructor, generic.TemplateView):
 
 @login_required
 def entry(request):
-    return redirect('workflow:index')
+    return redirect('home')
 
 
 @csrf_exempt
 @xframe_options_exempt
 @lti_role_required(['Instructor', 'Student'])
 def lti_entry(request):
-    return redirect('workflow:index')
+    return redirect('home')
 
 
 # No permissions in this URL as it is supposed to be wide open to track email

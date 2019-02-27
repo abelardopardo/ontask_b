@@ -808,14 +808,14 @@ def preview_response(request, pk, idx):
         action = Action.objects.get(id=pk)
     except ObjectDoesNotExist:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     # Get the workflow to obtain row numbers
     workflow = get_workflow(request, action.workflow.id)
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     # If the request has the 'action_content', update the action

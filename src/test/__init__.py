@@ -825,6 +825,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     def create_condition(self, cname, cdesc, rule_tuples):
         # Make sure we are in the Text Condition tab
         self.select_condition_tab()
+        self.selenium.execute_script("window.scroll(0,0);")
 
         self.create_condition_base(
             "//button[contains(@class, 'js-condition-create')]",
@@ -1176,17 +1177,20 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             )
 
     def open_condition(self, cname, xpath=None):
-        # Click on the right button
-        if xpath:
-            self.selenium.find_element_by_xpath(xpath).click()
-        else:
-            self.selenium.find_element_by_xpath(
-                "//div[@id='condition-set']"
-                "/div/h5[contains(normalize-space(), '{0}')]"
+        # Select the right button element
+        if not xpath:
+            xpath = \
+                "//div[@id='condition-set']" \
+                "/div/h5[contains(normalize-space(), '{0}')]" \
                 "/../div/button[contains(@class, 'js-condition-edit')]".format(
                     cname
                 )
-            ).click()
+
+        # Wait for the element to be clickable, and click
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.XPATH, xpath))
+        )
+        self.selenium.find_element_by_xpath(xpath).click()
 
         # Wait for the modal to open
         WebDriverWait(self.selenium, 10).until(

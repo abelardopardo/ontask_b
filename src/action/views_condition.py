@@ -106,7 +106,7 @@ def save_condition_form(request,
         if not workflow:
             # Workflow is not accessible. Go back to the index.
             data['form_is_valid'] = True
-            data['html_redirect'] = reverse('workflow:index')
+            data['html_redirect'] = reverse('home')
             return JsonResponse(data)
 
         # New condition name does not collide with column name
@@ -223,7 +223,7 @@ class FilterCreateView(UserIsInstructor, generic.TemplateView):
                 Q(workflow__shared=request.user)
             ).distinct().get(pk=kwargs['pk'])
         except (KeyError, ObjectDoesNotExist):
-            return redirect('workflow:index')
+            return redirect('home')
 
         form = self.form_class()
         return save_condition_form(request,
@@ -242,7 +242,7 @@ class FilterCreateView(UserIsInstructor, generic.TemplateView):
                 Q(workflow__shared=request.user)
             ).distinct().get(pk=kwargs['pk'])
         except (KeyError, ObjectDoesNotExist):
-            return redirect('workflow:index')
+            return redirect('home')
 
         form = self.form_class(request.POST)
         return save_condition_form(request,
@@ -269,7 +269,7 @@ def edit_filter(request, pk):
             is_filter=True
         ).distinct().get(pk=pk)
     except (KeyError, ObjectDoesNotExist):
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Create the filter and populate with existing data
     form = FilterForm(request.POST or None, instance=cond_filter)
@@ -299,7 +299,7 @@ def delete_filter(request, pk):
             is_filter=True
         ).distinct().get(pk=pk)
     except (KeyError, ObjectDoesNotExist):
-        return redirect('workflow:index')
+        return redirect('home')
 
     data = dict()
     data['form_is_valid'] = False
@@ -364,7 +364,7 @@ class ConditionCreateView(UserIsInstructor, generic.TemplateView):
                 Q(workflow__shared=request.user)
             ).distinct().get(pk=kwargs['pk'])
         except (KeyError, ObjectDoesNotExist):
-            return redirect('workflow:index')
+            return redirect('home')
 
         form = self.form_class()
         return save_condition_form(request,
@@ -383,7 +383,7 @@ class ConditionCreateView(UserIsInstructor, generic.TemplateView):
                 Q(workflow__shared=request.user)
             ).distinct().get(pk=kwargs['pk'])
         except (KeyError, ObjectDoesNotExist):
-            return redirect('workflow:index')
+            return redirect('home')
 
         form = self.form_class(request.POST)
 
@@ -412,7 +412,7 @@ def edit_condition(request, pk):
         ).distinct().get(pk=pk)
     except (KeyError, ObjectDoesNotExist):
         return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('workflow:index')})
+                             'html_redirect': reverse('home')})
 
     form = ConditionForm(request.POST or None, instance=condition)
 
@@ -444,7 +444,7 @@ def delete_condition(request, pk):
         ).distinct().get(pk=pk)
     except (KeyError, ObjectDoesNotExist):
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     data = {'form_is_valid': False}
@@ -495,7 +495,7 @@ def clone(request, pk):
     # Check if the workflow is locked
     workflow = get_workflow(request)
     if not workflow:
-        return JsonResponse({'html_redirect': reverse('workflow:index')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get the condition
     condition = Condition.objects.filter(pk=pk).filter(

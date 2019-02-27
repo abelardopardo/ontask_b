@@ -78,7 +78,7 @@ def column_add(request, pk=None):
     workflow = get_workflow(request)
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     if workflow.nrows == 0:
@@ -195,7 +195,7 @@ def formula_column_add(request):
     workflow = get_workflow(request)
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     if workflow.nrows == 0:
@@ -330,7 +330,7 @@ def random_column_add(request):
     workflow = get_workflow(request)
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     if workflow.nrows == 0:
@@ -471,7 +471,7 @@ def column_edit(request, pk):
     workflow = get_workflow(request)
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     # Get the column object and make sure it belongs to the workflow
@@ -577,7 +577,7 @@ def column_delete(request, pk):
     workflow = get_workflow(request)
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     data['form_is_valid'] = False
@@ -664,7 +664,7 @@ def column_clone(request, pk):
     workflow = get_workflow(request)
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     data['form_is_valid'] = False
@@ -738,7 +738,7 @@ def column_move(request):
     workflow = get_workflow(request)
     if not workflow:
         # No workflow present
-        return JsonResponse({'html_redirect': reverse('workflow:index')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     if workflow.nrows == 0:
         # Workflow is empty
@@ -776,7 +776,7 @@ def column_move_top(request, pk):
     # Get the workflow element
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the column
     try:
@@ -803,7 +803,7 @@ def column_move_bottom(request, pk):
     # Get the workflow element
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the column
     try:
@@ -835,7 +835,7 @@ def column_restrict_values(request, pk):
     workflow = get_workflow(request)
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     data['form_is_valid'] = False

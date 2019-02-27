@@ -235,7 +235,7 @@ def save_action_form(request, form, template_name):
     # Get the corresponding workflow
     workflow = get_workflow(request)
     if not workflow:
-        redirect('workflow:index')
+        redirect('home')
 
     if is_new:  # Action is New. Update user and workflow fields
         action_item.user = request.user
@@ -305,7 +305,7 @@ def action_index(request):
     # Get the appropriate workflow object
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     return action_index_set(request)
 
@@ -323,7 +323,7 @@ def action_index_set(request, pk=None):
     # Get the appropriate workflow object
     workflow = get_workflow(request, wid=pk)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Reset object to carry action info throughout dialogs
     request.session[action_session_dictionary] = {}
@@ -401,7 +401,7 @@ def edit_description(request, pk):
     workflow = get_workflow(request)
     if not workflow:
         return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('workflow:index')})
+                             'html_redirect': reverse('home')})
 
     # Get the action
     try:
@@ -496,7 +496,7 @@ def edit_action(request, pk):
     # Try to get the workflow first
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     if workflow.nrows == 0:
         messages.error(
@@ -694,7 +694,7 @@ def export_ask(request, pk):
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     action = Action.objects.filter(pk=pk).first()
     if not action:
@@ -719,7 +719,7 @@ def export_done(request, pk):
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     action = Action.objects.filter(pk=pk).first()
     if not action:
@@ -740,7 +740,7 @@ def export_download(request, pk):
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     action = Action.objects.filter(pk=pk).first()
     if not action:
@@ -762,7 +762,7 @@ def action_import(request):
     # Get workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     form = ActionImportForm(request.POST or None, request.FILES or None)
 
@@ -814,7 +814,7 @@ def select_column_action(request, apk, cpk, key=None):
     # Check if the workflow is locked
     workflow = get_workflow(request)
     if not workflow:
-        return JsonResponse({'html_redirect': reverse('workflow:index')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     if workflow.nrows == 0:
         messages.error(
@@ -866,7 +866,7 @@ def unselect_column_action(request, apk, cpk):
     # Check if the workflow is locked
     workflow = get_workflow(request)
     if not workflow:
-        return reverse('workflow:index')
+        return reverse('home')
 
     if workflow.nrows == 0:
         messages.error(
@@ -909,7 +909,7 @@ def shuffle_questions(request, pk):
     # Check if the workflow is locked
     workflow = get_workflow(request)
     if not workflow:
-        return reverse('workflow:index')
+        return reverse('home')
 
     if workflow.nrows == 0:
         messages.error(
@@ -954,7 +954,7 @@ def showurl(request, pk):
             Q(workflow__shared=request.user)).distinct().get(pk=pk)
     except Action.DoesNotExist:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     form = EnableURLForm(request.POST or None, instance=action)
@@ -1062,7 +1062,7 @@ def delete_action(request, pk):
             Q(workflow__shared=request.user)).distinct().get(pk=pk)
     except (KeyError, ObjectDoesNotExist):
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     if request.method == 'POST':
@@ -1260,7 +1260,7 @@ def run_survey_row(request, pk):
     # Get the workflow first
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     if workflow.nrows == 0:
         messages.error(
@@ -1304,7 +1304,7 @@ def clone(request, pk):
     workflow = get_workflow(request)
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     # Initial data in the context

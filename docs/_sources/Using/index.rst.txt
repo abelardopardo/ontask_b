@@ -79,7 +79,7 @@ The icons in the bottom of this element allow you to perform the following opera
    .. figure:: /scaptures/tutorial_top_menu_bar.png
       :align: center
 
-   .. include:: include_top_menu.rst
+   .. include:: ../Tutorial/Tasks/include_top_menu.rst
 
    Once you open a workflow, the platform *locks it* so that no other user can manipulate it (see :ref:`sharing a workflow <details_sharing>`). The lock is release if the user goes back to the home page, logs out, or the session expires. If you access a workflow and another user is currently using it, the platform will tell you that is locked and show who is holding the lock.
 
@@ -265,7 +265,7 @@ The table also offers the possibility of searching for a value. The given string
    :align: center
    :width: 100%
 
-.. include:: include_table_top_buttons.rst
+.. include:: /Tutorial/Tasks/include_table_top_buttons.rst
 
 The left-most column in the  table shows the operations to manipulate a row:
 
@@ -787,10 +787,10 @@ One of the potential uses of the ZIP file generated from a personalized text act
 
 .. _workflow_settings:
 
-Workflow Settings
-*****************
+Additional Workflow Operations
+******************************
 
-In addition to the operations described in the previous sections to upload and merge data, create actions, and run these actions, there are additional operations for the workflow that can be accessed through the |fa-cog| Settings pull-down menu in the top-bar menu. The settings pages offer information about: workflow operations (export, rename, clone, etc.), column operations (change column type, rename, clone, etc.), scheduled actions, and view logs.
+In addition to the operations described in the previous sections to upload and merge data, create actions, and run these actions, there are additional operations for the workflow that can be accessed through the |fa-cog| More pull-down menu in the top-bar menu. The settings pages offer information about: workflow operations (export, rename, clone, etc.), column operations (change column type, rename, clone, etc.), scheduled actions, and view logs.
 
 .. include:: include_details.rst
 
@@ -905,7 +905,7 @@ Authentication Token
 Table with Scheduled Actions
 ----------------------------
 
-The table showing all the action scheduling operations can be access through the |fa-cog| *Settings* link in the top-bar menu selecting the |fa-calendar| *Scheduled actions* link. The list of scheduled actions is shown as illustrated in the following figure.
+The table showing all the action scheduling operations can be access through the |fa-cog| *More* link in the top-bar menu selecting the |fa-calendar| *Scheduled actions* link. The list of scheduled actions is shown as illustrated in the following figure.
 
 .. figure:: /scaptures/schedule.png
    :align: center
@@ -936,7 +936,7 @@ Status
 View logs
 =========
 
-The platform keeps a log of most of the operations that are executed when managing a workflow. These records are available through the *View Logs* link in the |fa-cog| *Settings* pull down menu at the top-bar menu. The page shows information about the records in tabular form. The following figure shows an example.
+The platform keeps a log of most of the operations that are executed when managing a workflow. These records are available through the *View Logs* link in the |fa-cog| *More* pull down menu at the top-bar menu. The page shows information about the records in tabular form. The following figure shows an example.
 
 .. figure:: /scaptures/logs.png
    :align: center

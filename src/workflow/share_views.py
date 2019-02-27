@@ -18,7 +18,7 @@ def share_create(request):
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     data = dict()
     data['form_is_valid'] = False
@@ -60,13 +60,13 @@ def share_delete(request, pk):
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # If the user does not exist, go back to home page
     try:
         user = get_user_model().objects.get(id=pk)
     except ObjectDoesNotExist:
-        return redirect('workflow:index')
+        return redirect('home')
 
     data = dict()
     data['form_is_valid'] = False

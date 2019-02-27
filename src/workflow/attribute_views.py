@@ -108,7 +108,7 @@ def attribute_create(request):
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Create the form object with the form_fields just computed
     form = AttributeItemForm(request.POST or None,
@@ -127,7 +127,7 @@ def attribute_edit(request, pk):
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the list of keys
     keys = sorted(workflow.attributes.keys())
@@ -164,7 +164,7 @@ def attribute_delete(request, pk):
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # JSON answer
     data = dict()

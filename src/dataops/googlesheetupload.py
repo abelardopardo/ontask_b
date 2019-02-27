@@ -34,7 +34,7 @@ def googlesheetupload1(request):
     # Get the current workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Bind the form with the received data
     form = UploadGoogleSheetForm(request.POST or None,
