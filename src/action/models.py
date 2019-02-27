@@ -55,8 +55,8 @@ class Action(models.Model):
         # If the variable CANVAS_INFO_DICT is empty, the choice for Canvas
         # Email action should be removed.
         AVAILABLE_ACTION_TYPES.remove(
-            next(x for x in AVAILABLE_ACTION_TYPES
-                 if x[0] == PERSONALIZED_CANVAS_EMAIL)
+            next(x for x in ACTION_TYPES
+                 if x[0] == ontask.PERSONALIZED_CANVAS_EMAIL)
         )
 
     workflow = models.ForeignKey(
