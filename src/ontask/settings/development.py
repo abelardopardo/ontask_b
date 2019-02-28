@@ -138,3 +138,36 @@ LOGGING = {
 }
 
 logging.config.dictConfig(LOGGING)
+
+GRAPH_MODELS = {
+    'group_models': True,
+    'all_applications': True,
+    'output': 'data_model.png',
+    'exclude_models': [
+        'TaskResult',
+        'SQLConnection',
+        'PluginRegistry',
+        'Site',
+        'ThumbnailDimensions',
+        'Thumbnail',
+        'Source',
+        'File',
+        'Preference',
+        'PeriodicTask',
+        'PeriodicTasks',
+        'IntervalSchedule',
+        'CrontabSchedule',
+        'SolarSchedule',
+        'Attachment',
+        'AbstractAttachment',
+        'Session',
+        'AbstractBaseSession',
+        'Profile',
+        'BaseProfile',
+        'Token',
+        'LogEntry',
+        'Group',
+        'Permission',
+        'ContentType'
+    ]
+}
