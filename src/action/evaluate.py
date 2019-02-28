@@ -203,7 +203,7 @@ def evaluate_action(action, extra_string=None,
     """
 
     # Step 1: Get the workflow to access the data and prepare data
-    workflow = Workflow.objects.get(pk=action.workflow.id)
+    workflow = action.workflow
     col_names = workflow.get_column_names()
     col_idx = -1
     if column_name and column_name in col_names:

@@ -99,12 +99,8 @@ def column_add(request, pk=None):
     action_id = None
     if pk:
         # Get the action and the columns
-        try:
-            action = Action.objects.filter(
-                Q(workflow__user=request.user) |
-                Q(workflow__shared=request.user)
-            ).distinct().get(pk=pk)
-        except ObjectDoesNotExist:
+        action = workflow.actions.filter(pk=pk).first()
+        if not action:
             messages.error(
                 request,
                 _('Cannot find action to add question.')
@@ -475,10 +471,8 @@ def column_edit(request, pk):
         return JsonResponse(data)
 
     # Get the column object and make sure it belongs to the workflow
-    try:
-        column = Column.objects.get(pk=pk,
-                                    workflow=workflow)
-    except ObjectDoesNotExist:
+    column = workflow.columns.filter(pk=pk).first()
+    if not column:
         # Something went wrong, redirect to the workflow detail page
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('workflow:detail',
@@ -584,9 +578,8 @@ def column_delete(request, pk):
     context = {'pk': pk}  # For rendering
 
     # Get the column
-    try:
-        column = Column.objects.get(pk=pk, workflow=workflow)
-    except ObjectDoesNotExist:
+    column = workflow.columns.filter(pk=pk).first()
+    if not column:
         # The column is not there. Redirect to workflow detail
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('workflow:detail',
@@ -671,9 +664,8 @@ def column_clone(request, pk):
     context = {'pk': pk}  # For rendering
 
     # Get the column
-    try:
-        column = Column.objects.get(pk=pk, workflow=workflow)
-    except ObjectDoesNotExist:
+    column = workflow.columns.filter(pk=pk).first()
+    if not column:
         # The column is not there. Redirect to workflow detail
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('workflow:detail',
@@ -842,9 +834,8 @@ def column_restrict_values(request, pk):
     context = {'pk': pk}  # For rendering
 
     # Get the column
-    try:
-        column = Column.objects.get(pk=pk, workflow=workflow)
-    except ObjectDoesNotExist:
+    column = workflow.columns.filter(pk=pk).first()
+    if not column:
         # The column is not there. Redirect to workflow detail
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('workflow:detail',

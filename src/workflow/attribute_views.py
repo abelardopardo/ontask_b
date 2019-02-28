@@ -55,10 +55,11 @@ def save_attribute_form(request, workflow, template, form, key_idx):
         return JsonResponse(data)
 
     # Check if there is a condition with that name
-    cond_names = Condition.objects.filter(
-        action__workflow=workflow
-    ).values_list('name', flat=True)
-    if attr_name in cond_names:
+    cond_name = Condition.objects.filter(
+        action__workflow=workflow,
+        name=attr_name
+    ).first()
+    if cond_name:
         form.add_error(
             'key',
             _('There is a condition already with this name.')
@@ -80,7 +81,7 @@ def save_attribute_form(request, workflow, template, form, key_idx):
         wf_attributes.pop(key)
 
         # Rename the appearances of the variable in all actions
-        for action_item in Action.objects.filter(workflow=workflow):
+        for action_item in workflow.actions.all():
             action_item.rename_variable(key, form.cleaned_data['key'])
 
     # Update value
