@@ -613,6 +613,10 @@ def edit_action_out(request, workflow, action):
     # Text is good. Update the content of the action
     action.set_content(content)
 
+    if action.action_type == Action.PERSONALIZED_JSON:
+        # Update the target_url field
+        action.target_url = form.cleaned_data['target_url']
+
     action.save()
 
     if request.POST['Submit'] == 'Submit':
