@@ -6,6 +6,7 @@
   
 ### Fixed
 
+
 - Conditions break when renaming them (Issue #128)
 
 - Fixed incorrect highlighting of Workflows link (Issue #127)

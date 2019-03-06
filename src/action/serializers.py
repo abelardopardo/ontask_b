@@ -9,11 +9,10 @@ from dataops import pandas_db, ops
 from dataops.formula_evaluation import get_variables
 from workflow.column_serializers import ColumnSerializer
 from workflow.models import Column
-from .models import Condition, Action
+from .models import Condition, Action, ActionColumnConditionTuple
 
 
 class ColumnNameSerializer(serializers.ModelSerializer):
-
     class Meta(object):
         model = Column
         fields = ('name',)
@@ -136,10 +135,15 @@ class ActionSerializer(serializers.ModelSerializer):
                 many=True,
                 required=False,
             )
+            # FIX FIX FIX
             if columns.is_valid():
                 for citem in columns.data:
                     column = action_obj.workflow.columns.get(name=citem['name'])
-                    action_obj.columns.add(column)
+                    __, __ = ActionColumnConditionTuple.objects.get_or_create(
+                        action=action_obj,
+                        column=column,
+                        condition=None
+                    )
                 action_obj.save()
             else:
                 raise Exception(_('Invalid column data'))
@@ -166,6 +170,7 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
 
     used_columns = ColumnSerializer(many=True, required=False)
 
+    # FIX FIX FIX
     columns = ColumnNameSerializer(required=False, many=True)
 
     def create(self, validated_data, **kwargs):
@@ -300,7 +305,12 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
             if columns.is_valid():
                 for citem in columns.data:
                     column = action_obj.workflow.columns.get(name=citem['name'])
-                    action_obj.columns.add(column)
+                    __, __ = \
+                        ActionColumnConditionTuple.objects.get_or_create(
+                            action=action_obj,
+                            column=column,
+                            condition=None
+                        )
             else:
                 raise Exception(_('Unable to create columns field'))
         except Exception:

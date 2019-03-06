@@ -359,7 +359,8 @@ def evaluate_row_action_in(action, context):
     """
 
     # Get the active columns attached to the action
-    columns = [c for c in action.columns.all() if c.is_active]
+    columns = [x.column for x in action.column_condition_pair.all()
+               if x.column.is_active]
 
     # Get the row values.
     selected_values = [context[c.name] for c in columns]

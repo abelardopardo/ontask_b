@@ -16,7 +16,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
-from action.models import Condition, Action
+from action.models import Condition, Action, ActionColumnConditionTuple
 from dataops import ops, formula_evaluation, pandas_db
 from logs.models import Log
 from ontask.permissions import is_instructor
@@ -96,8 +96,8 @@ def column_add(request, pk=None):
             )
         return JsonResponse(data)
 
-    action_id = None
-    if pk:
+    action = None
+    if is_question:
         # Get the action and the columns
         action = workflow.actions.filter(pk=pk).first()
         if not action:
@@ -106,7 +106,6 @@ def column_add(request, pk=None):
                 _('Cannot find action to add question.')
             )
             return JsonResponse({'html_redirect': reverse('action:index')})
-        action_id = action.id
 
     # Form to read/process data
     if is_question:
@@ -124,7 +123,7 @@ def column_add(request, pk=None):
         data['html_form'] = render_to_string(template,
                                              {'form': form,
                                               'is_question': is_question,
-                                              'action_id': action_id,
+                                              'action_id': action.id,
                                               'add': True},
                                              request=request)
 
@@ -162,7 +161,11 @@ def column_add(request, pk=None):
 
     # If the column is a question, add it to the action
     if is_question:
-        action.columns.add(column)
+        __, __ = ActionColumnConditionTuple.objects.get_or_create(
+            action=action,
+            column=column,
+            condition=None
+        )
 
     # Log the event
     if is_question:

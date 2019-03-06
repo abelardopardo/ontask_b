@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from django.db.backends.ddl_references import Columns
 from future import standard_library
 
 from ontask import simplify_datetime_str
@@ -56,7 +56,7 @@ from action.ops import (
     do_import_action,
     get_workflow_action
 )
-from .models import Action, Condition
+from .models import Action, Condition, ActionColumnConditionTuple
 
 
 #
@@ -646,13 +646,15 @@ def edit_action_in(request, workflow, action):
         filter_condition.save()
 
     # Column names suitable to insert
-    columns_selected = action.columns.filter(is_key=False).order_by(
-        'position')
+    columns_selected = Columns.objects.filter(
+        column_condition_pair__action=action,
+        is_key=False
+    ).order_by('position')
     columns_to_insert = [c for c in workflow.columns.all()
                          if not c.is_key and c not in columns_selected]
 
     # Has key column and has no-key column
-    has_no_key = action.columns.filter(is_key=False).exists()
+    has_no_key = action.column_condition_pair.filter(is_key=False).exists()
     has_empty_description = columns_selected.filter(
         description_text=''
     ).exists()
@@ -665,7 +667,10 @@ def edit_action_in(request, workflow, action):
            'total_rows': workflow.nrows,
            'query_builder_ops': workflow.get_query_builder_ops_as_str(),
            'has_data': ops.workflow_has_table(action.workflow),
-           'key_selected': action.columns.filter(is_key=True).first(),
+           'key_selected': Columns.object.filter(
+               colummn_condition_pair__action=action,
+               is_key=True
+           ).first(),
            'columns_to_insert': columns_to_insert,
            'column_selected_table': ColumnSelectedTable(
                columns_selected.values('id', 'name', 'description_text'),
@@ -708,7 +713,8 @@ def export_ask(request, pk):
     return render(request,
                   'action/export_ask.html',
                   {'action': action,
-                   'cnames': [c.name for c in action.columns.all()]})
+                   'cnames': [x.column.name
+                              for x in action.column_condition_pair.all()]})
 
 
 @user_passes_test(is_instructor)
@@ -845,15 +851,21 @@ def select_column_action(request, apk, cpk, key=None):
 
     # Parameters are correct, so add the column to the action.
     if key:
-        current_key = action.columns.filter(is_key=True).first()
-        if current_key:
-            # Remove the existing one
-            action.columns.remove(current_key)
+        action.column_condition_pair.filter(condition__is_key=True).delete()
         if column.is_key:
-            action.columns.add(column)
+            __, __ = ActionColumnConditionTuple.objects.get_or_create(
+                action=action,
+                column=column,
+                condition=None
+            )
         return JsonResponse({'html_redirect': ''})
 
-    action.columns.add(column)
+    # Insert the column in the pairs
+    __, __ = ActionColumnConditionTuple.objects.get_or_create(
+        action=action,
+        column=column,
+        condition=None
+    )
     # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})
 
@@ -895,8 +907,8 @@ def unselect_column_action(request, apk, cpk):
     except ObjectDoesNotExist:
         return redirect(reverse('action:index'))
 
-    # Parameters are correct, so add the column to the action.
-    action.columns.remove(column)
+    # Parameters are correct, so remove the column from the action.
+    action.column_condition_pair.filter(column=column).delete()
 
     return redirect(reverse('action:edit', kwargs={'pk': action.id}))
 
@@ -1126,8 +1138,9 @@ def run(request, pk):
         # Render template with active columns.
         return render(request,
                       'action/run_survey.html',
-                      {'columns': [c for c in action.columns.all() if
-                                   c.is_active],
+                      {'columns': [x.column
+                                   for x in action.column_condition_pair.all()
+                                   if x.column.is_active],
                        'action': action})
 
     if action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
@@ -1186,7 +1199,7 @@ def run_survey_ss(request, pk):
     search_value = request.POST.get('search[value]', None)
 
     # Get columns and the position of the first key
-    columns = action.columns.all()
+    columns = [x.column for x in action.column_condition_pair.all()]
     column_names = [x.name for x in columns]
     key_idx = next(idx for idx, c in enumerate(columns) if c.is_key)
 

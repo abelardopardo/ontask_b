@@ -469,6 +469,42 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
+    # Test operations with the filter
+    def test_action_05_JSON_action(self):
+        action_name = 'JSON action'
+        content_txt = '{ "name": 3 }'
+        target_url = 'https://bogus.com'
+
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
+
+        # Goto the action page
+        self.go_to_actions()
+
+        # Create new action
+        self.create_new_json_action(action_name)
+
+        # Introduce text and then the URL
+        self.select_json_text_tab()
+        self.selenium.find_element_by_id('id_content').send_keys(content_txt)
+        self.selenium.find_element_by_id('id_target_url').send_keys(target_url)
+
+        # Save action and back to action index
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Close']"
+        ).click()
+        self.wait_for_datatable('action-table_previous')
+
+        action = Action.objects.get(name=action_name)
+        self.assertTrue(action.content == content_txt)
+        self.assertTrue(action.target_url == target_url)
+
+        # End of session
+        self.logout()
+
 
 class ActionActionInCreate(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow_two_actions']
