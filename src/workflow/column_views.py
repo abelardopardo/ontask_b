@@ -97,9 +97,11 @@ def column_add(request, pk=None):
         return JsonResponse(data)
 
     action = None
+    action_id = None
     if is_question:
         # Get the action and the columns
         action = workflow.actions.filter(pk=pk).first()
+        action_id = action.id
         if not action:
             messages.error(
                 request,
@@ -123,7 +125,7 @@ def column_add(request, pk=None):
         data['html_form'] = render_to_string(template,
                                              {'form': form,
                                               'is_question': is_question,
-                                              'action_id': action.id,
+                                              'action_id': action_id,
                                               'add': True},
                                              request=request)
 
