@@ -80,19 +80,105 @@ class ConditionSerializer(serializers.ModelSerializer):
         exclude = ('id', 'action', 'created', 'modified')
 
 
+class ConditionNameSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = Condition
+        fields = ('name',)
+
+
+class ColumnConditionNameSerializer(serializers.ModelSerializer):
+    column = ColumnNameSerializer(required=True, many=False)
+
+    condition = ConditionNameSerializer(required=False, many=False)
+
+    def create(self, validated_data, **kwargs):
+        action = self.context['action']
+        tuples = []
+        if validated_data.get('columns'):
+            #
+            # Load the columns pointing to the action (if any)
+            # This is here for backward compatibility
+            #
+            columns = ColumnNameSerializer(
+                data=validated_data.get('columns'),
+                many=True,
+                required=False
+            )
+            if columns.is_valid():
+                tuples = []
+                for citem in columns.data:
+                    tuples.append(
+                        {'column': {'name': citem['name']},
+                         'condition': None}
+                    )
+            else:
+                raise Exception(_('Invalid column data'))
+        else:
+            #
+            # Load the column_condition_tuples if they exist
+            #
+            column_condition_tuple_data = validated_data.get(
+                'column_condition_tuples'
+            )
+            if column_condition_tuple_data:
+                tuples = ColumnConditionNameSerializer(
+                    data=column_condition_tuple_data,
+                    many=True,
+                    required=False
+                )
+            if not tuples.is_valid():
+                raise Exception(_('Invalid column data'))
+
+        for item in tuples:
+            condition_obj = None
+            if item['condition']:
+                condition_obj = action.conditions.get(
+                    name=item['condition']['name']
+                )
+            __, __ = \
+                ActionColumnConditionTuple.objects.get_or_create(
+                    action=action,
+                    column=action.wokflow.columns.get(
+                        name=item['column']['name']
+                    ),
+                    condition=condition_obj
+                )
+
+    class Meta(object):
+        model = ActionColumnConditionTuple
+        fields = ('column', 'condition')
+
+
 class ActionSerializer(serializers.ModelSerializer):
     conditions = ConditionSerializer(required=False, many=True)
 
-    # The columns field needs a nested serializer because at this point,
-    # the column objects must contain only the name (not the entire model).
-    # An action is connected to a workflow which has a set of columns
-    # attached to it. Thus, the column records are created through the
-    # workflow structure, and at this point in the model, only the names are
-    # required to then restore the many to many relationship.
-    columns = ColumnNameSerializer(required=False, many=True)
+    # Include the related ActionColumnConditionTuple objects
+    column_condition_tuples = serializers.SerializerMethodField(
+        'get_column_condition_tuples'
+    )
 
     # Needed for backward compatibility
     is_out = serializers.BooleanField(required=False, initial=True)
+
+    def get_column_condition_tuples(self, action):
+        """
+        Method to filter the relevant column, condition pairs and serialize its
+        content.
+        :param action: Action object being considered
+        :return: Serialized data
+        """
+
+        # Get the query
+        query_set = ActionColumnConditionTuple.filter(action=action)
+
+        # Serialize the objects
+        serializer = ColumnConditionNameSerializer(
+            instance=query_set,
+            many=True,
+            required=True
+        )
+
+        return serializer.data
 
     def create(self, validated_data, **kwargs):
         action_obj = None
@@ -129,26 +215,18 @@ class ActionSerializer(serializers.ModelSerializer):
             else:
                 raise Exception(_('Invalid condition data'))
 
-            # Load the columns pointing to the action (if any)
-            columns = ColumnNameSerializer(
-                data=validated_data.get('columns'),
-                many=True,
-                required=False,
-            )
-            # FIX FIX FIX
-            if columns.is_valid():
-                for citem in columns.data:
-                    column = action_obj.workflow.columns.get(name=citem['name'])
-                    __, __ = ActionColumnConditionTuple.objects.get_or_create(
-                        action=action_obj,
-                        column=column,
-                        condition=None
-                    )
-                action_obj.save()
-            else:
-                raise Exception(_('Invalid column data'))
+            # Load the column/condition data
+            if validated_data.get('column_condition_tuples'):
+                __ = ColumnConditionNameSerializer(
+                    data=validated_data.get('column_condition_tuples'),
+                    many=True,
+                    context={'action': action_obj}
+                )
         except Exception:
             if action_obj and action_obj.id:
+                ActionColumnConditionTuple.objects.filter(
+                    action=action_obj
+                ).delete()
                 action_obj.delete()
             raise
 
@@ -170,8 +248,27 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
 
     used_columns = ColumnSerializer(many=True, required=False)
 
-    # FIX FIX FIX
-    columns = ColumnNameSerializer(required=False, many=True)
+    column_condition_tuples = serializers.SerializerMethodField()
+
+    def get_column_condition_tuples(self, action):
+        """
+        Method to filter the relevant column, condition pairs and serialize its
+        content.
+        :param action: Action object being considered
+        :return: Serialized data
+        """
+
+        # Get the query
+        query_set = ActionColumnConditionTuple.objects.filter(action=action)
+
+        # Serialize the objects
+        serializer = ColumnConditionNameSerializer(
+            instance=query_set,
+            many=True,
+            required=True
+        )
+
+        return serializer.data
 
     def create(self, validated_data, **kwargs):
 
@@ -295,26 +392,18 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
                             name__in=col_names)
                     )
 
-            # Load the columns field
-            columns = ColumnNameSerializer(
-                data=validated_data['columns'],
-                many=True,
-                required=False,
-                context=self.context
-            )
-            if columns.is_valid():
-                for citem in columns.data:
-                    column = action_obj.workflow.columns.get(name=citem['name'])
-                    __, __ = \
-                        ActionColumnConditionTuple.objects.get_or_create(
-                            action=action_obj,
-                            column=column,
-                            condition=None
-                        )
-            else:
-                raise Exception(_('Unable to create columns field'))
+            # Load the column/condition data, if it exists
+            if validated_data.get('column_condition_tuples'):
+                __ = ColumnConditionNameSerializer(
+                    data=validated_data.get('column_condition_tuples'),
+                    many=True,
+                    context={'action': action_obj}
+                )
         except Exception:
             if action_obj and action_obj.id:
+                ActionColumnConditionTuple.objects.filter(
+                    action=action_obj
+                ).delete()
                 action_obj.delete()
             Column.objects.filter(
                 workflow=self.context['workflow'],

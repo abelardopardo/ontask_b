@@ -3,6 +3,7 @@ from django.db.backends.ddl_references import Columns
 from future import standard_library
 
 from ontask import simplify_datetime_str
+from workflow.models import Column
 
 standard_library.install_aliases()
 from builtins import next
@@ -646,7 +647,7 @@ def edit_action_in(request, workflow, action):
         filter_condition.save()
 
     # Column names suitable to insert
-    columns_selected = Columns.objects.filter(
+    columns_selected = Column.objects.filter(
         column_condition_pair__action=action,
         is_key=False
     ).order_by('position')
@@ -654,7 +655,8 @@ def edit_action_in(request, workflow, action):
                          if not c.is_key and c not in columns_selected]
 
     # Has key column and has no-key column
-    has_no_key = action.column_condition_pair.filter(is_key=False).exists()
+    has_no_key = action.column_condition_pair.filter(
+        column__is_key=False).exists()
     has_empty_description = columns_selected.filter(
         description_text=''
     ).exists()
@@ -667,8 +669,8 @@ def edit_action_in(request, workflow, action):
            'total_rows': workflow.nrows,
            'query_builder_ops': workflow.get_query_builder_ops_as_str(),
            'has_data': ops.workflow_has_table(action.workflow),
-           'key_selected': Columns.object.filter(
-               colummn_condition_pair__action=action,
+           'key_selected': Column.objects.filter(
+               column_condition_pair__action=action,
                is_key=True
            ).first(),
            'columns_to_insert': columns_to_insert,
