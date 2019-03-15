@@ -96,10 +96,12 @@ def column_add(request, pk=None):
             )
         return JsonResponse(data)
 
+    action = None
     action_id = None
-    if pk:
+    if is_question:
         # Get the action and the columns
         action = workflow.actions.filter(pk=pk).first()
+        action_id = action.id
         if not action:
             messages.error(
                 request,
