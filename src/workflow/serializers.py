@@ -59,7 +59,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
     uses a regular one for the action field (see WorkflowImportSerializer)
     """
 
-    actions = serializers.SerializerMethodField('get_filtered_actions')
+    actions = serializers.SerializerMethodField()
 
     data_frame = DataFramePandasField(
         required=False,
@@ -77,7 +77,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
                                     label="OnTask Version",
                                     help_text=_("To guarantee compability"))
 
-    def get_filtered_actions(self, workflow):
+    def get_actions(self, workflow):
         # Get the subset of actions specified in the context
         action_list = self.context.get('selected_actions', [])
         if not action_list:
