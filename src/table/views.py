@@ -17,7 +17,7 @@ from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
-from django.utils.html import format_html
+from django.utils.html import format_html, escape, urlencode
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
@@ -233,16 +233,23 @@ def render_table_display_data(request, workflow, columns, formula,
         else:
             stat_url = reverse('table:stat_row')
 
+        # Transform key name and key value into escaped strings
+        esc_key_name = escape(key_name)
+        esc_key_value = escape(row[key_idx])
         ops_string = render_to_string(
             'table/includes/partial_table_ops.html',
             {'stat_url': stat_url +
-                         '?key={0}&val={1}'.format(key_name, row[key_idx]),
+                         '?{0}'.format(urlencode(
+                             {'key': esc_key_name, 'val': esc_key_value}
+                         )),
              'edit_url': reverse('dataops:rowupdate') +
-                         '?update_key={0}&update_val={1}'.format(key_name,
-                                                                 row[
-                                                                     key_idx]),
-             'delete_key': '?key={0}&value={1}'.format(key_name,
-                                                       row[key_idx]),
+                         '?{0}'.format(urlencode(
+                             {'update_key': esc_key_name,
+                              'update_val': esc_key_value}
+                         )),
+             'delete_key': '?{0}'.format(urlencode(
+                 {'key': esc_key_name, 'value': esc_key_value}
+             )),
              'view_id': view_id}
         )
 
