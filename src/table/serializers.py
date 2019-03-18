@@ -8,6 +8,7 @@ from io import BytesIO
 import pickle
 import base64
 import json
+import pickle
 
 import pandas as pd
 from rest_framework import serializers
