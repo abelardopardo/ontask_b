@@ -531,7 +531,7 @@ def view_edit(request, pk):
         view = View.objects.filter(
             Q(workflow__user=request.user) |
             Q(workflow__shared=request.user)
-        ).distinct().prefetch_related('columns').get(pk=pk)
+        ).distinct().get(pk=pk)
     except ObjectDoesNotExist:
         return JsonResponse(
             {'form_is_valid': True,
@@ -690,7 +690,7 @@ def csvdownload(request, pk=None):
             view = View.objects.filter(
                 Q(workflow__user=request.user) |
                 Q(workflow__shared=request.user)
-            ).distinct().prefetch_related('columns').get(pk=pk)
+            ).distinct().get(pk=pk)
         except ObjectDoesNotExist:
             # Go back to show the workflow detail
             return redirect(reverse('workflow:detail',

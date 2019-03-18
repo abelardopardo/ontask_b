@@ -159,10 +159,10 @@ class PluginInfoForm(forms.Form):
 class UploadBasic(forms.Form):
     data_frame: pd.DataFrame = None
     frame_info = None
-    workflow_id = None
+    workflow = None
 
     def __init__(self, *args, **kwargs):
-        self.workflow_id = kwargs.pop(str('workflow_id'), None)
+        self.workflow = kwargs.pop(str('workflow'), None)
         super(UploadBasic, self).__init__(*args, **kwargs)
 
     def clean_data_frame(self):
@@ -186,7 +186,7 @@ class UploadBasic(forms.Form):
             # Get frame info with three lists: names, types and is_key
             self.frame_info = ops.store_upload_dataframe_in_db(
                 self.data_frame,
-                self.workflow_id)
+                self.workflow)
         except Exception as e:
             self.add_error('file',
                            _('Unable to process file ({0}).'.format(e)))

@@ -150,8 +150,8 @@ def column_add(request, pk=None):
     df = ops.data_frame_add_column(df, column, column_initial_value)
 
     # Update the column type with the value extracted from the data frame
-    column.data_type = \
-        pandas_db.pandas_datatype_names[df[column.name].dtype.name]
+    # column.data_type = \
+    #     pandas_db.pandas_datatype_names[df[column.name].dtype.name]
 
     # Update the positions of the appropriate columns
     workflow.reposition_columns(workflow.ncols + 1, column.position)
@@ -159,7 +159,7 @@ def column_add(request, pk=None):
     column.save()
 
     # Store the df to DB
-    ops.store_dataframe_in_db(df, workflow.id)
+    ops.store_dataframe_in_db(df, workflow)
 
     # If the column is a question, add it to the action
     if is_question:
@@ -300,7 +300,7 @@ def formula_column_add(request):
     column.save()
 
     # Store the df to DB
-    ops.store_dataframe_in_db(df, workflow.id)
+    ops.store_dataframe_in_db(df, workflow)
 
     # Log the event
     Log.objects.register(request.user,
@@ -441,7 +441,7 @@ def random_column_add(request):
     column.save()
 
     # Store the df to DB
-    ops.store_dataframe_in_db(df, workflow.id)
+    ops.store_dataframe_in_db(df, workflow)
 
     # Log the event
     Log.objects.register(request.user,

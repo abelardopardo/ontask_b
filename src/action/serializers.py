@@ -153,9 +153,7 @@ class ActionSerializer(serializers.ModelSerializer):
     conditions = ConditionSerializer(required=False, many=True)
 
     # Include the related ActionColumnConditionTuple objects
-    column_condition_tuples = serializers.SerializerMethodField(
-        'get_column_condition_tuples'
-    )
+    column_condition_tuples = serializers.SerializerMethodField()
 
     # Needed for backward compatibility
     is_out = serializers.BooleanField(required=False, initial=True)
@@ -368,7 +366,7 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
                         col.save()
 
                     # Store the df to DB
-                    ops.store_dataframe_in_db(df, workflow.id)
+                    ops.store_dataframe_in_db(df, workflow)
                 else:
                     raise Exception(_('Unable to create column data'))
 

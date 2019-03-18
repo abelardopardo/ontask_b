@@ -546,7 +546,7 @@ def send_messages(user,
 
         # Initial value in the data frame and store the table
         data_frame[track_col_name] = 0
-        ops.store_dataframe_in_db(data_frame, action.workflow.id)
+        ops.store_dataframe_in_db(data_frame, action.workflow)
 
     # Partition the list of emails into chunks as per the value of EMAIL_BURST
     chunk_size = len(msgs)

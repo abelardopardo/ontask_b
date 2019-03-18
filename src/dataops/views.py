@@ -329,7 +329,7 @@ def row_create(request):
                            'cancel_url': reverse('table:display')})
 
     # Restore the dataframe to the DB
-    ops.store_dataframe_in_db(df, workflow.id)
+    ops.store_dataframe_in_db(df, workflow)
 
     # Recompute all the values of the conditions in each of the actions
     for act in workflow.actions.all():

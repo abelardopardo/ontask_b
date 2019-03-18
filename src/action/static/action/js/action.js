@@ -231,9 +231,7 @@ $(function () {
                       insertColumnInActionIn);
 
   // Insert columns in action in
-  $("#parameters").on("change",
-                      "#select-key-column-name",
-                      insertColumnInActionIn);
+  $("#select-key-column-name").on("change", insertColumnInActionIn);
 
   // Toggle shuffle question
   $("#action-in-editor").on("change",

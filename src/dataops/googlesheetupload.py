@@ -39,7 +39,7 @@ def googlesheetupload1(request):
     # Bind the form with the received data
     form = UploadGoogleSheetForm(request.POST or None,
                                  request.FILES or None,
-                                 workflow_id=workflow.id)
+                                 workflow=workflow)
 
     # Process the initial loading of the form
     if request.method != 'POST':

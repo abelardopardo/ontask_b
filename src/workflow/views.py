@@ -124,6 +124,11 @@ def save_workflow_form(request, form, template_name):
                                              request=request)
         return JsonResponse(data)
 
+    # Once saved, set the table name
+    workflow_item.data_frame_table_name = \
+        pandas_db.create_table_name(workflow_item.pk)
+    workflow_item.save()
+
     # Log event
     Log.objects.register(request.user,
                          log_type,
@@ -393,10 +398,6 @@ def delete(request, pk):
                              {'id': workflow.id,
                               'name': workflow.name})
 
-        # And drop the table
-        if pandas_db.is_wf_table_in_db(workflow):
-            pandas_db.delete_table(pk)
-
         # Perform the delete operation
         workflow.delete()
 
@@ -577,7 +578,7 @@ def clone(request, pk):
 
     # Clone the data frame
     data_frame = pandas_db.load_from_db(workflow.pk)
-    ops.store_dataframe_in_db(data_frame, workflow_new.id)
+    ops.store_dataframe_in_db(data_frame, workflow_new)
 
     # Clone actions
     action.ops.clone_actions([a for a in workflow.actions.all()], workflow_new)

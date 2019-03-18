@@ -21,8 +21,10 @@ from rest_framework.renderers import JSONRenderer
 from action.models import Condition
 from dataops import pandas_db, ops
 from logs.models import Log
-from workflow.serializers import (WorkflowExportSerializer,
-                                  WorkflowImportSerializer)
+from workflow.serializers import (
+    WorkflowExportSerializer,
+    WorkflowImportSerializer
+)
 from .models import Workflow, Column
 
 
@@ -195,6 +197,43 @@ def detach_dataframe(workflow):
     workflow.save()
 
 
+def do_import_workflow_parse(user, name, file_item):
+    """
+    Three steps: read the GZIP file, create ther serializer, parse the data,
+    check for validity and create the workflow
+    :param user: User used for the operation
+    :param name: Workflow name
+    :param file_item: File item previously opened
+    :return: workflow object or raise exception
+    """
+
+    data_in = gzip.GzipFile(fileobj=file_item)
+    data = JSONParser().parse(data_in)
+
+    # Serialize content
+    workflow_data = WorkflowImportSerializer(
+        data=data,
+        context={'user': user, 'name': name}
+    )
+
+    # If anything went wrong, return the string to show to the form.
+    if not workflow_data.is_valid():
+        raise serializers.ValidationError(workflow_data.errors)
+
+    # Save the new workflow
+    workflow = workflow_data.save(user=user, name=name)
+
+    try:
+        pandas_db.check_wf_df(workflow)
+    except AssertionError:
+        # Something went wrong.
+        if workflow:
+            workflow.delete()
+        raise
+
+    return workflow
+
+
 def do_import_workflow(user, name, file_item):
     """
     Receives a name and a file item (submitted through a form) and creates
@@ -207,39 +246,18 @@ def do_import_workflow(user, name, file_item):
     """
 
     try:
-        data_in = gzip.GzipFile(fileobj=file_item)
-        data = JSONParser().parse(data_in)
+        workflow = do_import_workflow_parse(user, name, file_item)
     except IOError:
         return _('Incorrect file. Expecting a GZIP file (exported workflow).')
-
-    # Serialize content
-    workflow_data = WorkflowImportSerializer(
-        data=data,
-        context={'user': user, 'name': name}
-    )
-
-    # If anything went wrong, return the string to show to the form.
-    workflow = None
-    try:
-        if not workflow_data.is_valid():
-            return 'Unable to import the workflow' + ' (' + \
-                   workflow_data.errors + ')'
-
-        # Save the new workflow
-        workflow = workflow_data.save(user=user, name=name)
     except (TypeError, NotImplementedError) as e:
         return _('Unable to import workflow (Exception: {0})').format(e)
     except serializers.ValidationError as e:
-        return _('Unable to import workflow due to a validation error')
-    except Exception as e:
-        return _('Unable to import workflow (Exception: {0})').format(e)
-
-    try:
-        pandas_db.check_wf_df(workflow)
+        return _('Unable to import workflow. Validation error ({0}').format(e)
     except AssertionError:
         # Something went wrong.
-        workflow.delete()
         return _('Workflow data with incorrect structure.')
+    except Exception as e:
+        return _('Unable to import workflow (Exception: {0})').format(e)
 
     # Success
     # Log the event
@@ -251,19 +269,18 @@ def do_import_workflow(user, name, file_item):
     return None
 
 
-def do_export_workflow(workflow, selected_actions=None):
+def do_export_workflow_parse(workflow, selected_actions=None):
     """
-    Proceed with the workflow export.
-    :param workflow: Workflow record to export be included.
-    :param selected_actions: A subset of actions to export
-    :return: Page that shows a confirmation message and starts the download
+    Serialize the workflow and attach its content to a BytesIO object
+    :param workflow: Workflow to serialize
+    :param selected_actions: Subset of actions
+    :return: BytesIO
     """
-
-    # Create the context object for the serializer
-    context = {'selected_actions': selected_actions}
-
     # Get the info to send from the serializer
-    serializer = WorkflowExportSerializer(workflow, context=context)
+    serializer = WorkflowExportSerializer(
+        workflow,
+        context={'selected_actions': selected_actions}
+    )
     to_send = JSONRenderer().render(serializer.data)
 
     # Get the in-memory file to compress
@@ -271,6 +288,19 @@ def do_export_workflow(workflow, selected_actions=None):
     zfile = gzip.GzipFile(mode='wb', compresslevel=6, fileobj=zbuf)
     zfile.write(to_send)
     zfile.close()
+
+    return zbuf
+
+
+def do_export_workflow(workflow, selected_actions=None):
+    """
+    Proceed with the workflow export.
+    :param workflow: Workflow record to export be included.
+    :param selected_actions: A subset of actions to export
+    :return: Page that shows a confirmation message and starts the download
+    """
+    # Get the in-memory compressed file
+    zbuf = do_export_workflow_parse(workflow, selected_actions)
 
     suffix = datetime.now().strftime('%y%m%d_%H%M%S')
     # Attach the compressed value to the response and send
@@ -402,7 +432,7 @@ def clone_column(column, new_workflow=None, new_name=None):
     # Add the column to the table and update it.
     data_frame = pandas_db.load_from_db(column.workflow.id)
     data_frame[new_name] = data_frame[old_name]
-    ops.store_dataframe_in_db(data_frame, column.workflow.id)
+    ops.store_dataframe_in_db(data_frame, column.workflow)
 
     return column
 

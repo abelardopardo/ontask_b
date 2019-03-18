@@ -114,10 +114,6 @@ class Action(models.Model):
                                      null=True,
                                      default=None)
 
-    # Set of columns used in the action (either to capture data in action IN
-    # or present in any of the conditions in action OUT)
-    columns = models.ManyToManyField(Column)
-
     #
     # Field for actions PERSONALIZED_TEXT, PERSONALIZED_CAVNAS_EMAIL and
     # PERSONALIZED_JSON

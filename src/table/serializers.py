@@ -5,6 +5,7 @@ from future import standard_library
 standard_library.install_aliases()
 from builtins import object
 from io import BytesIO
+import pickle
 import base64
 import json
 
@@ -38,8 +39,6 @@ def string_to_df(value):
     of a pandas dataframe
     :return: The encoded dataframe
     """
-    output = BytesIO()
-    output.write(base64.b64decode(value))
     try:
         result = pd.read_pickle(BytesIO(base64.b64decode(value)))
     except ValueError:

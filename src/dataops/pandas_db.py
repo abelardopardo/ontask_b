@@ -4,6 +4,7 @@
 import logging
 import os.path
 import subprocess
+import sqlalchemy
 from builtins import next
 from builtins import zip
 from collections import OrderedDict
@@ -42,7 +43,8 @@ pandas_datatype_names = {
     'int64': 'integer',
     'float64': 'double',
     'bool': 'boolean',
-    'datetime64[ns]': 'datetime'
+    'datetime64[ns]': 'datetime',
+    'datetime64[ns, UTC]': 'datetime'
 }
 
 # Translation between SQL data type names, and those handled in OnTask
@@ -51,7 +53,17 @@ sql_datatype_names = {
     'bigint': 'integer',
     'double precision': 'double',
     'boolean': 'boolean',
-    'timestamp without time zone': 'datetime'
+    'timestamp without time zone': 'datetime',
+    'timestamp with time zone': 'datetime'
+}
+
+# Translation between OnTask data types and SQLAlchemy
+ontask_to_sqlalchemy = {
+    'string': sqlalchemy.UnicodeText(),
+    'integer': sqlalchemy.BigInteger(),
+    'double': sqlalchemy.Float(),
+    'boolean': sqlalchemy.Boolean(),
+    'datetime': sqlalchemy.DateTime()
 }
 
 # DB Engine to use with Pandas (required by to_sql, from_sql
@@ -178,7 +190,7 @@ def is_table_in_db(table_name):
 
 
 def is_wf_table_in_db(workflow):
-    return is_table_in_db(create_table_name(workflow.id))
+    return is_table_in_db(workflow.data_frame_table_name)
 
 
 def is_column_table_unique(pk, column_name):
@@ -428,20 +440,42 @@ def load_df_from_googlesheet(url_string, skiprows=0, skipfooter=0):
     return load_df_from_csvfile(url_string, skiprows, skipfooter)
 
 
-def store_table(data_frame, table_name):
+def store_table(data_frame, table_name, dtype=dict()):
     """
-    Store a data frame in the DB
+    Store a data frame in the DB. dtype is a dictionary of (column_name,
+    column_type) column type can be:
+
+    - 'boolean',
+    - 'datetime',
+    - 'double',
+    - 'integer',
+    - 'string'
+
+    The function will use these to translate into (respectively)
+
+    - sqlalchemy.Boolean()
+    - sqlalchemy.DateTime()
+    - sqlalchemy.Float()
+    - sqlalchemy.BigInteger()
+    - sqlalchemy.UnicodeText()
+
     :param data_frame: The data frame to store
     :param table_name: The name of the table in the DB
+    :param dictionary with (column_name, data type) to force the storage of
+    certain data types
     :return: Nothing. Side effect in the DB
     """
 
     with cache.lock(table_name):
         # We ovewrite the content and do not create an index
-        data_frame.to_sql(table_name,
-                          engine,
-                          if_exists='replace',
-                          index=False)
+        data_frame.to_sql(
+            table_name,
+            engine,
+            if_exists='replace',
+            index=False,
+            dtype=dict([(key, ontask_to_sqlalchemy[value])
+                        for key, value in dtype.items()])
+        )
 
     return
 
@@ -451,13 +485,14 @@ def delete_table(pk):
     the dual use of the database, the command has to be executed directly on
     the DB.
     """
+    table_name = create_table_name(pk)
     try:
         cursor = connection.cursor()
-        cursor.execute('DROP TABLE "{0}";'.format(create_table_name(pk)))
+        cursor.execute('DROP TABLE "{0}";'.format(table_name))
         connection.commit()
     except Exception:
         logger.error(
-            'Error while dropping table {0}'.format(create_table_name(pk))
+            'Error while dropping table {0}'.format(table_name)
         )
 
 
@@ -719,7 +754,7 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names):
     safe_column_names = [fix_pctg_in_name(x) for x in column_names]
     query = 'SELECT "{0}" FROM "{1}" WHERE ("{2}" = %s)'.format(
         '", "'.join(safe_column_names),
-        create_table_name(workflow.id),
+        workflow.data_frame_table_name,
         fix_pctg_in_name(kv_pair[0])
     )
     fields = [kv_pair[1]]

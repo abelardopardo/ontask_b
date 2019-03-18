@@ -451,7 +451,7 @@ def sqlupload1(request, pk):
     # Store the data frame in the DB.
     try:
         # Get frame info with three lists: names, types and is_key
-        frame_info = ops.store_upload_dataframe_in_db(data_frame, workflow.id)
+        frame_info = ops.store_upload_dataframe_in_db(data_frame, workflow)
     except Exception as e:
         form.add_error(
             None,

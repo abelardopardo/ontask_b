@@ -100,14 +100,14 @@ class ActionTable(tables.Table):
     )
 
     def render_name(self, record):
-        return format_html(
-            """<a href="{0}"
-                  data-toggle="tooltip"
-                  title="{1}">{2}</a>""",
-            reverse('action:edit', kwargs={'pk': record.id}),
-            _('Edit the text, conditions and filter'),
-            record.name
-        )
+        result = """<a href="{0}" data-toggle="tooltip" title="{1}">{2}</a>"""
+        if not record.is_executable:
+            result += ' <span class="fa fa-exclamation-triangle"></span>'
+
+        return format_html(result,
+                           reverse('action:edit', kwargs={'pk': record.id}),
+                           _('Edit the text, conditions and filter'),
+                           record.name)
 
     def render_action_type(self, record):
         icon = 'file-text'
@@ -148,7 +148,7 @@ class ActionTable(tables.Table):
                   'last_executed_log')
         sequence = ('action_type', 'name', 'description_text',
                     'last_executed_log')
-        exclude = ('content', 'serve_enabled', 'columns', 'filter')
+        exclude = ('content', 'serve_enabled', 'filter')
         attrs = {
             'class': 'table table-hover table-bordered',
             'style': 'width: 100%;',
@@ -512,7 +512,7 @@ def edit_action(request, pk):
         action = Action.objects.filter(
             Q(workflow__user=request.user) |
             Q(workflow__shared=request.user)
-        ).distinct().prefetch_related('columns').get(pk=pk)
+        ).distinct().get(pk=pk)
     except ObjectDoesNotExist:
         return redirect('action:index')
 
@@ -841,7 +841,7 @@ def select_column_action(request, apk, cpk, key=None):
         action = Action.objects.filter(
             Q(workflow__user=request.user) |
             Q(workflow__shared=request.user)
-        ).distinct().prefetch_related('columns').get(pk=apk)
+        ).distinct().get(pk=apk)
     except ObjectDoesNotExist:
         return JsonResponse({'html_redirect': reverse('action:index')})
 
@@ -899,7 +899,7 @@ def unselect_column_action(request, apk, cpk):
         action = Action.objects.filter(
             Q(workflow__user=request.user) |
             Q(workflow__shared=request.user)
-        ).distinct().prefetch_related('columns').get(pk=apk)
+        ).distinct().get(pk=apk)
     except ObjectDoesNotExist:
         return redirect(reverse('action:index'))
 
@@ -942,7 +942,7 @@ def shuffle_questions(request, pk):
         action = Action.objects.filter(
             Q(workflow__user=request.user) |
             Q(workflow__shared=request.user)
-        ).distinct().prefetch_related('columns').get(pk=pk)
+        ).distinct().get(pk=pk)
     except ObjectDoesNotExist:
         return redirect(reverse('action:index'))
 
