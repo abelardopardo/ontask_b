@@ -5,7 +5,6 @@ from future import standard_library
 standard_library.install_aliases()
 from builtins import object
 from io import BytesIO
-import pickle
 import base64
 import json
 import pickle
