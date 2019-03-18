@@ -22,8 +22,13 @@ def df_to_string(df):
     :param df: Pandas dataframe
     :return: Base64 encoded string of its pickled representation
     """
-    out_file = BytesIO()
-    pd.to_pickle(df, out_file)
+    try:
+        out_file = BytesIO()
+        pd.to_pickle(df, out_file)
+    except ValueError:
+        out_file = BytesIO()
+        pickle.dump(df, out_file)
+
     return base64.b64encode(out_file.getvalue())
 
 
@@ -36,7 +41,10 @@ def string_to_df(value):
     output = BytesIO()
     output.write(base64.b64decode(value))
     try:
-        result = pd.read_pickle(output)
+        result = pd.read_pickle(BytesIO(base64.b64decode(value)))
+    except ValueError:
+        result = pickle.load(BytesIO(base64.b64decode(value)),
+                             encoding='latin1')
     except Exception:
         return None
 
