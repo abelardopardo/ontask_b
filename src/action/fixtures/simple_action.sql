@@ -20,10 +20,10 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: __ONTASK_WORKFLOW_TABLE_1; Type: TABLE; Schema: public; Owner: -
+-- Name: __ONTASK_WORKFLOW_TABLE_5; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public."__ONTASK_WORKFLOW_TABLE_1" (
+CREATE TABLE public."__ONTASK_WORKFLOW_TABLE_5" (
     age double precision,
     email text,
     sid bigint,
@@ -36,13 +36,13 @@ CREATE TABLE public."__ONTASK_WORKFLOW_TABLE_1" (
 
 
 --
--- Data for Name: __ONTASK_WORKFLOW_TABLE_1; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: __ONTASK_WORKFLOW_TABLE_5; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public."__ONTASK_WORKFLOW_TABLE_1" (age, email, sid, another, name, one, registered, "when") FROM stdin;
-12	student1@bogus.com	1	bbb	Carmelo Coton	aaa	t	2017-10-11 00:33:44
-12.0999999999999996	student2@bogus.com	2	aaa	Carmelo Coton	bbb	f	2017-10-11 00:32:44
-13.1999999999999993	student3@bogus.com	3	bbb	Carmelo Coton2	aaa	t	2017-10-11 00:32:44
+COPY public."__ONTASK_WORKFLOW_TABLE_5" (age, email, sid, another, name, one, registered, "when") FROM stdin;
+12	student01@bogus.com	1	bbb	Carmelo Coton	aaa	t	2017-10-11 00:33:44
+12.0999999999999996	student02@bogus.com	2	aaa	Carmelo Coton	bbb	f	2017-10-11 00:32:44
+13.1999999999999993	student03@bogus.com	3	bbb	Carmelo Coton2	aaa	t	2017-10-11 00:32:44
 \.
 
 

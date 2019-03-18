@@ -584,6 +584,36 @@
 },
 {
     "model": "profiles.profile",
+    "pk": 7,
+    "fields": {
+        "slug": "61956bd8-4ab5-44ae-8d94-7a07bcf73031",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 8,
+    "fields": {
+        "slug": "d181c982-d6f5-4eab-83f2-0a6f0425d3be",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 10,
+    "fields": {
+        "slug": "eeecb911-f65a-4ba9-9b87-0514fa15c2a1",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
     "pk": 2,
     "fields": {
         "slug": "467cdea6-686d-45bc-ad95-a073f7241f07",
@@ -620,39 +650,39 @@
         },
         "query_builder_ops": [
             {
+                "id": "age",
+                "type": "double",
                 "validation": {
                     "step": "any"
-                },
-                "type": "double",
-                "id": "age"
+                }
             },
             {
-                "type": "string",
-                "id": "email"
+                "id": "email",
+                "type": "string"
             },
             {
-                "type": "integer",
-                "id": "sid"
+                "id": "sid",
+                "type": "integer"
             },
             {
-                "type": "string",
-                "id": "name"
+                "id": "name",
+                "type": "string"
             },
             {
-                "values": {
-                    "1": "Yes",
-                    "0": "No"
-                },
+                "id": "registered",
+                "type": "boolean",
                 "input": "radio",
+                "values": {
+                    "0": "No",
+                    "1": "Yes"
+                },
                 "operators": [
                     "equal"
-                ],
-                "type": "boolean",
-                "id": "registered"
+                ]
             },
             {
-                "type": "datetime",
-                "id": "when"
+                "id": "when",
+                "type": "datetime"
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_108",
@@ -772,8 +802,7 @@
         "active_to": null,
         "content": "<p>Hi {{ name }}</p><p>ATT:&nbsp;{{ attribute name }}</p><p>COL:&nbsp;{{ registered }}</p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>",
         "target_url": "",
-        "shuffle": false,
-        "columns": []
+        "shuffle": false
     }
 },
 {
@@ -792,11 +821,7 @@
         "active_to": null,
         "content": "{% comment %}Your action content here{% endcomment %}",
         "target_url": "",
-        "shuffle": false,
-        "columns": [
-            2927,
-            2929
-        ]
+        "shuffle": false
     }
 },
 {
@@ -810,12 +835,12 @@
             "not": false,
             "rules": [
                 {
-                    "value": "12",
-                    "field": "age",
-                    "operator": "greater",
-                    "input": "number",
+                    "id": "age",
                     "type": "double",
-                    "id": "age"
+                    "field": "age",
+                    "input": "number",
+                    "value": "12",
+                    "operator": "greater"
                 }
             ],
             "valid": true,
@@ -839,12 +864,12 @@
             "not": false,
             "rules": [
                 {
-                    "value": "1",
-                    "field": "registered",
-                    "operator": "equal",
-                    "input": "radio",
+                    "id": "registered",
                     "type": "boolean",
-                    "id": "registered"
+                    "field": "registered",
+                    "input": "radio",
+                    "value": "1",
+                    "operator": "equal"
                 }
             ],
             "valid": true,
@@ -855,6 +880,24 @@
         "created": "2017-12-08T01:33:21.687Z",
         "modified": "2017-12-08T01:33:21.687Z",
         "columns": []
+    }
+},
+{
+    "model": "action.actioncolumnconditiontuple",
+    "pk": 1,
+    "fields": {
+        "action": 254,
+        "column": 2927,
+        "condition": null
+    }
+},
+{
+    "model": "action.actioncolumnconditiontuple",
+    "pk": 2,
+    "fields": {
+        "action": 254,
+        "column": 2929,
+        "condition": null
     }
 }
 ]

@@ -680,65 +680,65 @@
         "attributes": {},
         "query_builder_ops": [
             {
+                "id": "key",
+                "type": "double",
                 "validation": {
                     "step": "any"
-                },
+                }
+            },
+            {
+                "id": "text1",
+                "type": "string"
+            },
+            {
+                "id": "text2",
+                "type": "string"
+            },
+            {
+                "id": "double1",
                 "type": "double",
-                "id": "key"
-            },
-            {
-                "type": "string",
-                "id": "text1"
-            },
-            {
-                "type": "string",
-                "id": "text2"
-            },
-            {
                 "validation": {
                     "step": "any"
-                },
-                "type": "double",
-                "id": "double1"
+                }
             },
             {
+                "id": "double2",
+                "type": "double",
                 "validation": {
                     "step": "any"
-                },
-                "type": "double",
-                "id": "double2"
+                }
             },
             {
-                "values": {
-                    "1": "Yes",
-                    "0": "No"
-                },
+                "id": "bool1",
+                "type": "boolean",
                 "input": "radio",
+                "values": {
+                    "0": "No",
+                    "1": "Yes"
+                },
                 "operators": [
                     "equal"
-                ],
-                "type": "boolean",
-                "id": "bool1"
+                ]
             },
             {
-                "values": {
-                    "1": "Yes",
-                    "0": "No"
-                },
+                "id": "bool2",
+                "type": "boolean",
                 "input": "radio",
+                "values": {
+                    "0": "No",
+                    "1": "Yes"
+                },
                 "operators": [
                     "equal"
-                ],
-                "type": "boolean",
-                "id": "bool2"
+                ]
             },
             {
-                "type": "datetime",
-                "id": "date1"
+                "id": "date1",
+                "type": "datetime"
             },
             {
-                "type": "datetime",
-                "id": "date2"
+                "id": "date2",
+                "type": "datetime"
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_1",

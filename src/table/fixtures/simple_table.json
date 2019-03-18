@@ -555,47 +555,47 @@
         "attributes": {},
         "query_builder_ops": [
             {
+                "id": "age",
+                "type": "double",
                 "validation": {
                     "step": "any"
-                },
-                "type": "double",
-                "id": "age"
+                }
             },
             {
-                "type": "string",
-                "id": "email"
+                "id": "email",
+                "type": "string"
             },
             {
-                "type": "integer",
-                "id": "sid"
+                "id": "sid",
+                "type": "integer"
             },
             {
-                "type": "string",
-                "id": "another"
+                "id": "another",
+                "type": "string"
             },
             {
-                "type": "string",
-                "id": "name"
+                "id": "name",
+                "type": "string"
             },
             {
-                "type": "string",
-                "id": "one"
+                "id": "one",
+                "type": "string"
             },
             {
-                "values": {
-                    "1": "Yes",
-                    "0": "No"
-                },
+                "id": "registered",
+                "type": "boolean",
                 "input": "radio",
+                "values": {
+                    "0": "No",
+                    "1": "Yes"
+                },
                 "operators": [
                     "equal"
-                ],
-                "type": "boolean",
-                "id": "registered"
+                ]
             },
             {
-                "type": "datetime",
-                "id": "when"
+                "id": "when",
+                "type": "datetime"
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_1",
@@ -729,132 +729,6 @@
         "categories": [],
         "active_from": null,
         "active_to": null
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1,
-    "fields": {
-        "user": [
-            "idesigner1@bogus.com"
-        ],
-        "created": "2017-11-08T00:12:08.648Z",
-        "modified": "2018-09-06T00:11:59.009Z",
-        "name": "workflow_update",
-        "workflow": 1,
-        "payload": {
-            "id": 1,
-            "name": "wflow1"
-        }
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 2,
-    "fields": {
-        "user": [
-            "idesigner1@bogus.com"
-        ],
-        "created": "2017-11-08T00:12:14.239Z",
-        "modified": "2018-09-06T00:11:59.009Z",
-        "name": "plugin_create",
-        "workflow": 1,
-        "payload": {
-            "id": 1,
-            "name": "sample"
-        }
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 3,
-    "fields": {
-        "user": [
-            "idesigner1@bogus.com"
-        ],
-        "created": "2017-11-08T00:12:25.964Z",
-        "modified": "2018-09-06T00:11:59.009Z",
-        "name": "workflow_data_upload",
-        "workflow": 1,
-        "payload": {
-            "column_names": [
-                "age",
-                "email",
-                "sid",
-                "name",
-                "registered",
-                "when"
-            ],
-            "name": "wflow1",
-            "column_types": [
-                "double",
-                "string",
-                "integer",
-                "string",
-                "boolean",
-                "datetime"
-            ],
-            "num_cols": 0,
-            "num_rows": 0,
-            "column_unique": [
-                true,
-                true,
-                true,
-                false,
-                false,
-                false
-            ],
-            "id": 1
-        }
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 4,
-    "fields": {
-        "user": [
-            "idesigner1@bogus.com"
-        ],
-        "created": "2017-11-08T00:13:01.151Z",
-        "modified": "2018-09-06T00:11:59.009Z",
-        "name": "workflow_data_merge",
-        "workflow": 1,
-        "payload": {
-            "column_names": [
-                "age",
-                "email",
-                "sid",
-                "another",
-                "name",
-                "one",
-                "registered",
-                "when"
-            ],
-            "name": "wflow1",
-            "column_types": [
-                "double",
-                "string",
-                "integer",
-                "string",
-                "string",
-                "string",
-                "boolean",
-                "datetime"
-            ],
-            "num_cols": 6,
-            "num_rows": 3,
-            "column_unique": [
-                true,
-                true,
-                true,
-                false,
-                false,
-                false,
-                false,
-                false
-            ],
-            "id": 1
-        }
     }
 }
 ]
