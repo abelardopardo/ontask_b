@@ -853,7 +853,7 @@ def select_column_action(request, apk, cpk, key=None):
 
     # Parameters are correct, so add the column to the action.
     if key:
-        action.column_condition_pair.filter(condition__is_key=True).delete()
+        action.column_condition_pair.filter(column__is_key=True).delete()
         if column.is_key:
             __, __ = ActionColumnConditionTuple.objects.get_or_create(
                 action=action,
