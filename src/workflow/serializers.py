@@ -63,6 +63,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
 
     data_frame = DataFramePandasField(
         required=False,
+        allow_null=True,
         help_text=_('This field must be the Base64 encoded '
                     'result of pandas.to_pickle() function')
     )
