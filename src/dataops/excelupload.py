@@ -44,7 +44,7 @@ def excelupload1(request):
                                workflow=workflow)
 
     # Process the initial loading of the form
-    if request.method != 'POST':
+    if request.method == 'GET':
         return render(request, 'dataops/upload1.html',
                       {'form': form,
                        'wid': workflow.id,

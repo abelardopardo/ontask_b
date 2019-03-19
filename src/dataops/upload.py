@@ -111,7 +111,7 @@ def upload_s2(request):
                                     src_key_fields)]
 
     # Process the initial loading of the form and return
-    if request.method != 'POST' or not form.is_valid():
+    if request.method == 'GET' or not form.is_valid():
         # Update the dictionary with the session information
         request.session['upload_data'] = upload_data
         context = {'form': form,

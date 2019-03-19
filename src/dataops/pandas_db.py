@@ -17,13 +17,8 @@ from django.db import connection
 from django.utils.translation import ugettext as _
 from sqlalchemy import create_engine
 
-from dataops.formula_evaluation import (
-    NodeEvaluation,
-    evaluate
-)
-from ontask import (
-    fix_pctg_in_name, OnTaskDataFrameNoKey
-)
+from dataops.formula_evaluation import NodeEvaluation, evaluate
+from ontask import fix_pctg_in_name, OnTaskDataFrameNoKey
 
 SITE_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 

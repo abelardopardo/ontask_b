@@ -937,15 +937,16 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                 else:
                     # The variable is a boolean. This breaks if the variable
                     # is an interval
-                    if rule_value == True:
+                    if rule_value is True:
                         value_idx = 2
-                    elif rule_value == False:
+                    elif rule_value is False:
                         value_idx = 1
                     else:
                         raise Exception('Unexpected rule value')
 
                     self.selenium.find_element_by_xpath(
-                        "(//input[@name='builder_rule_{0}_value_0'])[{1}]".format(
+                        "(//input[@name='builder_rule_{0}_value_0'])"
+                        "[{1}]".format(
                             idx,
                             value_idx
                         )
