@@ -34,7 +34,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(ActionActionEdit, self).tearDown()
 
     # Test action rename
@@ -524,7 +524,7 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(ActionActionInCreate, self).tearDown()
 
     # Test operations with the filter
@@ -618,7 +618,7 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(ActionActionRenameEffect, self).tearDown()
 
     # Test operations with the filter
@@ -755,7 +755,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(ActionActionZip, self).tearDown()
 
     # Test operations with the filter

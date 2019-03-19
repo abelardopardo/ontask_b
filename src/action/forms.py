@@ -200,7 +200,7 @@ class ConditionForm(forms.ModelForm):
 
         if not data.get('name'):
             self.add_error('name', _('Name cannot be empty'))
-            return  data
+            return data
 
         msg = is_legal_name(data['name'])
         if msg:
@@ -212,6 +212,7 @@ class ConditionForm(forms.ModelForm):
     class Meta(object):
         model = Condition
         fields = ('name', 'description_text', 'formula')
+
 
 class EnableURLForm(forms.ModelForm):
 
@@ -333,10 +334,12 @@ class EmailActionForm(forms.Form):
 
         # Check if the values in the email column are correct emails
         try:
-            column_data = execute_select_on_table(self.action.workflow.id,
-                                                  [],
-                                                  [],
-                                                  column_names=[email_column])
+            column_data = execute_select_on_table(
+                self.action.workflow.get_data_frame_table_name(),
+                [],
+                [],
+                column_names=[email_column]
+            )
             if not all([validate_email(x[0]) for x in column_data]):
                 # column has incorrect email addresses
                 self.add_error(
@@ -440,7 +443,10 @@ class ZipActionForm(forms.Form):
         ufname_column = data['user_fname_column']
 
         # The given column must have unique values
-        if not is_column_table_unique(self.action.workflow.pk, pcolumn):
+        if not is_column_table_unique(
+                self.action.workflow.get_data_frame_table_name(),
+                pcolumn
+        ):
             self.add_error(
                 'participant_column',
                 _('Column needs to have all unique values (no empty cells)')
@@ -465,9 +471,11 @@ class ZipActionForm(forms.Form):
                 return data
 
             # Participant columns must match the pattern 'Participant [0-9]+'
-            pcolumn_data = get_table_data(self.action.workflow.pk,
-                                          None,
-                                          column_names=[pcolumn])
+            pcolumn_data = get_table_data(
+                self.action.workflow.get_data_frame_table_name(),
+                None,
+                column_names=[pcolumn]
+            )
             if next((x for x in pcolumn_data
                      if not participant_re.search(str(x[0]))),
                     None):
@@ -494,7 +502,7 @@ class EmailExcludeForm(forms.Form):
         super(EmailExcludeForm, self).__init__(data, *args, **kwargs)
 
         self.fields['exclude_values'].choices = \
-            get_table_cursor(self.action.workflow.pk,
+            get_table_cursor(self.action.workflow.get_data_frame_table_name(),
                              self.action.get_filter(),
                              [self.column_name, self.column_name]).fetchall()
         self.fields['exclude_values'].initial = self.exclude_init

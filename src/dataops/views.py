@@ -210,10 +210,12 @@ def row_update(request):
                       {'message': _('Unable to update table row')})
 
     # Get the rows from the table
-    rows = pandas_db.execute_select_on_table(workflow.id,
-                                             [update_key],
-                                             [update_val],
-                                             workflow.get_column_names())
+    rows = pandas_db.execute_select_on_table(
+        workflow.get_data_frame_table_name(),
+        [update_key],
+        [update_val],
+        workflow.get_column_names()
+    )
 
     row_form = RowForm(request.POST or None,
                        workflow=workflow,
@@ -250,7 +252,7 @@ def row_update(request):
     if not unique_field:
         raise Exception(_('Key value not found when updating row'))
 
-    pandas_db.update_row(workflow.id,
+    pandas_db.update_row(workflow.get_data_frame_table_name(),
                          set_fields,
                          set_values,
                          [unique_field],
@@ -306,7 +308,7 @@ def row_create(request):
                 for idx in range(len(columns))]
 
     # Load the existing df from the db
-    df = pandas_db.load_from_db(workflow.id)
+    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
     # Perform the row addition in the DF first
     # df2 = pd.DataFrame([[5, 6], [7, 8]], columns=list('AB'))
@@ -412,7 +414,7 @@ def plugin_invoke(request, pk):
 
     # Get the data frame and select the appropriate columns
     try:
-        dst_df = pandas_db.load_from_db(workflow.id)
+        dst_df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
     except Exception:
         messages.error(request,
                        _('Exception while retrieving the data frame'))
@@ -524,7 +526,7 @@ def plugin_invoke(request, pk):
                       context)
 
     # Get the resulting dataframe
-    final_df = pandas_db.load_from_db(workflow.id)
+    final_df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
     # Update execution time
     plugin_info.executed = datetime.now(

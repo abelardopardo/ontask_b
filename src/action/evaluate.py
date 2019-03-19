@@ -214,7 +214,7 @@ def evaluate_action(action, extra_string=None,
 
     # Step 3: Get the table data
     result = []
-    data_frame = pandas_db.get_subframe(workflow.id,
+    data_frame = pandas_db.get_subframe(workflow.get_data_frame_table_name(),
                                         cond_filter,
                                         workflow.get_column_names())
 

@@ -72,8 +72,10 @@ class View(models.Model):
         :return: Number of rows resulting from using the formula
         """
         if not self.nrows:
-            self.nrows = \
-                pandas_db.num_rows(self.workflow.id, self.formula)
+            self.nrows = pandas_db.num_rows(
+                self.workflow.get_data_frame_table_name(),
+                self.formula
+            )
 
         return self.nrows
 

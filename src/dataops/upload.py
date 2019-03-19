@@ -119,7 +119,7 @@ def upload_s2(request):
                    'prev_step': upload_data['step_1'],
                    'df_info': df_info}
 
-        if not ops.workflow_id_has_table(workflow.id):
+        if not workflow.has_table():
             # It is an upload, not a merge, set the next step to finish
             context['next_name'] = _('Finish')
         return render(request, 'dataops/upload_s2.html', context)
@@ -141,7 +141,7 @@ def upload_s2(request):
     request.session['upload_data'] = upload_data
 
     # Load the existing DF or None if it doesn't exist
-    existing_df = pandas_db.load_from_db(workflow.id)
+    existing_df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
     if existing_df is not None:
         # This is a merge operation, so move to Step 3
@@ -152,7 +152,9 @@ def upload_s2(request):
 
     # Get the uploaded data_frame
     try:
-        data_frame = ops.load_upload_from_db(workflow.id)
+        data_frame = pandas_db.load_table(
+            workflow.get_data_frame_upload_table_name()
+        )
     except Exception:
         return render(
             request,
@@ -174,7 +176,7 @@ def upload_s2(request):
         return render(request, 'dataops/upload_s2.html', context)
 
     # Nuke the temporary table
-    pandas_db.delete_upload_table(workflow.id)
+    pandas_db.delete_upload_table(workflow.get_data_frame_upload_table_name())
 
     # Log the event
     col_info = workflow.get_column_info()
@@ -372,8 +374,12 @@ def upload_s4(request):
 
         # Get the dataframes to merge
         try:
-            dst_df = pandas_db.load_from_db(workflow.id)
-            src_df = ops.load_upload_from_db(workflow.id)
+            dst_df = pandas_db.load_from_db(
+                workflow.get_data_frame_table_name()
+            )
+            src_df = pandas_db.load_from_db(
+                workflow.get_data_frame_upload_table_name()
+            )
         except Exception:
             return render(request,
                           'error.html',
@@ -386,7 +392,9 @@ def upload_s4(request):
                                                     upload_data)
 
         # Nuke the temporary table
-        pandas_db.delete_upload_table(workflow.id)
+        pandas_db.delete_upload_table(
+            workflow.get_data_frame_upload_table_name()
+        )
 
         col_info = workflow.get_column_info()
         if status:

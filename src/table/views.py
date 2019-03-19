@@ -149,7 +149,7 @@ def render_table_display_page(request, workflow, view, columns, ajax_url):
     }
 
     # If there is a DF, add the columns
-    if ops.workflow_id_has_table(workflow.id):
+    if workflow.has_table():
         context['columns'] = columns
         context['columns_datatables'] = \
             [{'data': 'Operations'}] + \
@@ -212,7 +212,7 @@ def render_table_display_data(request, workflow, columns, formula,
         )
 
     qs = pandas_db.search_table_rows(
-        workflow.id,
+        workflow.get_data_frame_table_name(),
         cv_tuples,
         True,
         order_col_name,
@@ -311,7 +311,7 @@ def display_ss(request):
         )
 
     # If there is not DF, go to workflow details.
-    if not ops.workflow_id_has_table(workflow.id):
+    if not workflow.has_table():
         return JsonResponse({'error': _('There is no data in the table')})
 
     return render_table_display_data(
@@ -366,7 +366,7 @@ def display_view_ss(request, pk):
         )
 
     # If there is not DF, go to workflow details.
-    if not ops.workflow_id_has_table(workflow.id):
+    if not workflow.has_table():
         return JsonResponse({'error': _('There is no data in the table')})
 
     try:
@@ -420,7 +420,8 @@ def row_delete(request):
             return JsonResponse(data)
 
         # Proceed to delete the row
-        pandas_db.delete_table_row_by_key(workflow.id, (key, value))
+        pandas_db.delete_table_row_by_key(workflow.get_data_frame_table_name(),
+                                          (key, value))
 
         # Update rowcount
         workflow.nrows -= 1
@@ -678,7 +679,7 @@ def csvdownload(request, pk=None):
         return redirect('home')
 
     # Check if dataframe is present
-    if not ops.workflow_id_has_table(workflow.id):
+    if not workflow.has_table():
         # Go back to show the workflow detail
         return redirect(reverse('workflow:detail',
                                 kwargs={'pk': workflow.id}))
@@ -701,7 +702,11 @@ def csvdownload(request, pk=None):
         col_names = [x.name for x in view.columns.all()]
     else:
         col_names = workflow.get_column_names()
-    data_frame = pandas_db.get_subframe(workflow.id, view, col_names)
+    data_frame = pandas_db.get_subframe(
+        workflow.get_data_frame_table_name(),
+        view,
+        col_names
+    )
 
     # Create the response object
     response = HttpResponse(content_type='text/csv')

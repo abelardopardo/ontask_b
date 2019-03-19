@@ -113,11 +113,6 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             )
             workflow_obj.save()
 
-            # Once saved, set the table name
-            workflow_obj.data_frame_table_name = \
-                pandas_db.create_table_name(workflow_obj.pk)
-            workflow_obj.save()
-
             # Create the columns
             column_data = ColumnSerializer(
                 data=validated_data.get('columns', []),

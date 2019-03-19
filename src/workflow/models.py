@@ -20,6 +20,7 @@ from django.utils.translation import ugettext_lazy as _
 
 import ontask.templatetags.ontask_tags
 from dataops import pandas_db
+from dataops.pandas_db import is_table_in_db
 
 
 class Workflow(models.Model):
@@ -28,6 +29,10 @@ class Workflow(models.Model):
     all the information regarding the actions, conditions and such. This is
     the main object in the relational model.
     """
+
+    table_prefix = '__ONTASK_WORKFLOW_TABLE_'
+    df_table_prefix = table_prefix + '{0}'
+    upload_table_prefix = table_prefix + 'UPLOAD_{0}'
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              db_index=True,
@@ -103,6 +108,36 @@ class Workflow(models.Model):
             except:
                 raise Exception('Unable to unlock workflow {0}'.format(wid))
 
+
+    def get_data_frame_table_name(self):
+        """
+        Function to get the data_frame_table_name and update it in case it is
+        empty in the DB
+        :return: The table name to store the data frame
+        """
+        if not self.data_frame_table_name:
+            self.data_frame_table_name = self.df_table_prefix.format(self.id)
+            self.save()
+        return self.data_frame_table_name
+
+    def get_data_frame_upload_table_name(self):
+        """
+        Function to get the table name for the upload data frame and update
+        data_frame_table_name if empty.
+        :return: The table name to store the data frame
+        """
+        if not self.data_frame_table_name:
+            self.data_frame_table_name = self.df_table_prefix.format(self.id)
+            self.save()
+        return self.upload_table_prefix.format(self.id)
+
+    def has_table(self):
+        """
+        Boolean stating if there is a table storing a data frame
+        :return: True if the workflow has a table storing the data frame
+        """
+
+        return is_table_in_db(self.get_data_frame_table_name())
 
     def get_columns(self):
         """
@@ -215,7 +250,7 @@ class Workflow(models.Model):
     def data_frame(self):
         # Function used by the serializer to access the data frame in the DB
         if self.data_frame_table_name:
-            return pandas_db.load_from_db(self.id)
+            return pandas_db.load_from_db(self.get_data_frame_table_name())
 
         return None
 
@@ -321,7 +356,7 @@ class Workflow(models.Model):
         """
 
         # Step 1: Delete the data frame from the database
-        pandas_db.delete_table(self.id)
+        pandas_db.delete_table(self.get_data_frame_table_name())
 
         # Reset some of the workflow fields
         self.nrows = 0

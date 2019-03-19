@@ -141,7 +141,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
         set_values.append(value)
         log_payload.append((column.name, value))
 
-    pandas_db.update_row(action.workflow.id,
+    pandas_db.update_row(action.workflow.get_data_frame_table_name(),
                          set_fields,
                          set_values,
                          [where_field],
@@ -450,7 +450,9 @@ def send_messages(user,
     track_col_name = ''
     data_frame = None
     if track_read:
-        data_frame = pandas_db.load_from_db(action.workflow.id)
+        data_frame = pandas_db.load_from_db(
+            action.workflow.get_data_frame_table_name()
+        )
         # Make sure the column name does not collide with an existing one
         i = 0  # Suffix to rename
         while True:

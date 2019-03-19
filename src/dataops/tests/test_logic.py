@@ -65,7 +65,7 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(DataopsMatrixManipulation, self).tearDown()
 
     def parse_data_frames(self):
@@ -73,7 +73,7 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
 
         if self.workflow:
             # Get the workflow data frame
-            df_dst = load_from_db(self.workflow.id)
+            df_dst = load_from_db(self.workflow.get_data_frame_table_name())
         else:
             df_dst = pandas_db.load_df_from_csvfile(
                 io.StringIO(self.csv1),
@@ -124,7 +124,7 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
                                                 self.merge_info)
 
         # Load again the workflow data frame
-        df_dst = load_from_db(self.workflow.id)
+        df_dst = load_from_db(self.workflow.get_data_frame_table_name())
 
         # Result must be correct (None)
         self.assertEquals(result, None)

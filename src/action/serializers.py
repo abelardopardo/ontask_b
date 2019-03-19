@@ -167,7 +167,7 @@ class ActionSerializer(serializers.ModelSerializer):
         """
 
         # Get the query
-        query_set = ActionColumnConditionTuple.filter(action=action)
+        query_set = ActionColumnConditionTuple.objects.filter(action=action)
 
         # Serialize the objects
         serializer = ColumnConditionNameSerializer(
@@ -342,7 +342,8 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
                 if column_data.is_valid():
                     column_data.save()
                     workflow = self.context['workflow']
-                    df = pandas_db.load_from_db(self.context['workflow'].id)
+                    df = pandas_db.load_from_db(
+                        self.context['workflow'].get_data_frame_table_name())
                     if df is None:
                         # If there is no data frame, there is no point on
                         # adding columns.

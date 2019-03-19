@@ -81,7 +81,7 @@ class TableApiBase(test.OnTaskApiTestCase):
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(TableApiBase, self).tearDown()
 
 
@@ -100,7 +100,7 @@ class TableApiCreate(TableApiBase):
         r_df = ops.detect_datetime_columns(r_df)
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
         # Compare both elements
         self.compare_tables(r_df, df)
@@ -118,7 +118,7 @@ class TableApiCreate(TableApiBase):
         r_df = serializers.string_to_df(response.data['data_frame'])
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
         # Compare both elements
         self.compare_tables(r_df, df)
@@ -173,7 +173,7 @@ class TableApiCreate(TableApiBase):
             format='json')
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
         # Transform new table into data frame
         r_df = pd.DataFrame(self.new_table)
         r_df = ops.detect_datetime_columns(r_df)
@@ -230,7 +230,7 @@ class TableApiCreate(TableApiBase):
             format='json')
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
         # Compare both elements
         self.compare_tables(r_df, df)
@@ -256,7 +256,7 @@ class TableApiCreate(TableApiBase):
             format='json')
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
         # Compare both elements
         self.compare_tables(r_df, df)
@@ -282,7 +282,7 @@ class TableApiCreate(TableApiBase):
             format='json')
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
         # Compare both elements
         self.compare_tables(r_df, df)
@@ -331,7 +331,7 @@ class TableApiMerge(TableApiBase):
         r_df = ops.detect_datetime_columns(r_df)
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
         # Compare both elements and check wf df consistency
         self.compare_tables(r_df, df)
@@ -350,7 +350,7 @@ class TableApiMerge(TableApiBase):
         r_df = serializers.string_to_df(response.data['src_df'])
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
         # Compare both elements and check wf df consistency
         self.compare_tables(r_df, df)
@@ -561,7 +561,7 @@ class TableApiMerge(TableApiBase):
         # Result should have three rows as the initial DF
         self.assertEqual(workflow.nrows, 3)
 
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
         self.assertEqual(df[df['sid'] == 1]['newcol'].values[0],
                          self.src_df['newcol'][0])
 
@@ -592,7 +592,7 @@ class TableApiMerge(TableApiBase):
         # Result should have three rows as the initial DF
         self.assertEqual(workflow.nrows, 3)
 
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
         self.assertEqual(df[df['sid'] == 1]['newcol'].values[0],
                          self.src_df['newcol'][0])
 
@@ -625,7 +625,7 @@ class TableApiMerge(TableApiBase):
         r_df = pd.DataFrame(self.src_df2)
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
         new_df = pd.merge(df, r_df, how="outer", left_on="sid", right_on="sid")
 
         # Get the data through the API
@@ -647,7 +647,7 @@ class TableApiMerge(TableApiBase):
         self.assertEqual(workflow.ncols, 8)
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
         # Compare both elements and check wf df consistency
         self.compare_tables(df, new_df)
@@ -680,7 +680,7 @@ class TableApiMerge(TableApiBase):
         r_df = pd.DataFrame(self.src_df2)
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
         new_df = pd.merge(df, r_df, how="outer", left_on="sid", right_on="sid")
 
         # Get the data through the API
@@ -702,7 +702,7 @@ class TableApiMerge(TableApiBase):
         self.assertEqual(workflow.ncols, 8)
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
         # Compare both elements and check wf df consistency
         self.compare_tables(df, new_df)

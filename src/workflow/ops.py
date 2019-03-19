@@ -176,7 +176,7 @@ def detach_dataframe(workflow):
     :param workflow:
     :return: Nothing, the workflow object is updated
     """
-    pandas_db.delete_table(workflow.id)
+    pandas_db.delete_table(workflow.get_data_frame_table_name())
 
     # Delete number of rows and columns
     workflow.nrows = 0
@@ -327,7 +327,7 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
     """
 
     # Drop the column from the DB table storing the data frame
-    pandas_db.df_drop_column(workflow.id, column.name)
+    pandas_db.df_drop_column(workflow.get_data_frame_table_name(), column.name)
 
     # Reposition the columns above the one being deleted
     workflow.reposition_columns(column.position, workflow.ncols + 1)
@@ -382,7 +382,7 @@ def workflow_restrict_column(workflow, column):
     """
 
     # Load the data frame
-    data_frame = pandas_db.load_from_db(column.workflow.id)
+    data_frame = pandas_db.load_from_db(column.workflow.get_data_frame_table_name())
 
     cat_values = set(data_frame[column.name].dropna())
     if not cat_values:
@@ -430,7 +430,7 @@ def clone_column(column, new_workflow=None, new_name=None):
     column.workflow.reposition_columns(column.position, old_position + 1)
 
     # Add the column to the table and update it.
-    data_frame = pandas_db.load_from_db(column.workflow.id)
+    data_frame = pandas_db.load_from_db(column.workflow.get_data_frame_table_name())
     data_frame[new_name] = data_frame[old_name]
     ops.store_dataframe_in_db(data_frame, column.workflow)
 
@@ -446,7 +446,7 @@ def reposition_column_and_update_df(workflow, column, to_idx):
     :return: Content reflected in the DB
     """
 
-    # df = pandas_db.load_from_db(workflow.id)
+    # df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
     workflow.reposition_columns(column.position, to_idx)
     column.position = to_idx
     column.save()

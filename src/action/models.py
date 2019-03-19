@@ -457,7 +457,10 @@ class Condition(models.Model):
         # Case 1: Condition is a filter
         if self.is_filter:
             self.n_rows_selected = \
-                pandas_db.num_rows(self.action.workflow.id, self.formula)
+                pandas_db.num_rows(
+                    self.action.workflow.get_data_frame_table_name(),
+                    self.formula
+                )
             self.save()
 
             # Propagate the filter effect to the rest of actions.
@@ -487,7 +490,8 @@ class Condition(models.Model):
                        'valid': True
                        }
         self.n_rows_selected = pandas_db.num_rows(
-            self.action.workflow.id, formula)
+            self.action.workflow.get_data_frame_table_name(),
+            formula)
         self.save()
 
         return
@@ -550,5 +554,5 @@ class ActionColumnConditionTuple(models.Model):
         name
         """
         unique_together = ('action', 'column', 'condition')
-
+        ordering = ['column__position']
 

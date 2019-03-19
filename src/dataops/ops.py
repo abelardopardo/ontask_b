@@ -10,23 +10,15 @@ from django.utils.translation import ugettext_lazy as _, gettext
 from action.models import Condition, Action
 from dataops import formula_evaluation
 from dataops.pandas_db import (
-    create_table_name,
-    create_upload_table_name,
     store_table,
     df_column_types_rename,
-    load_table,
     get_table_data,
-    is_table_in_db,
     pandas_datatype_names,
     is_unique_column,
     are_unique_columns,
     has_unique_column)
 from table.models import View
-from workflow.models import Workflow, Column
-
-
-def load_upload_from_db(pk):
-    return load_table(create_upload_table_name(pk))
+from workflow.models import Column
 
 
 def store_table_in_db(data_frame, workflow, temporary=False, reset_keys=True):
@@ -48,28 +40,33 @@ def store_table_in_db(data_frame, workflow, temporary=False, reset_keys=True):
              the workflow
     """
 
-    if settings.DEBUG:
-        print('Storing table ', workflow.data_frame_table_name)
-
     # get column names
     df_column_names = list(data_frame.columns)
 
     # if the data frame is temporary, the procedure is much simpler
     if temporary:
+        table_name = workflow.get_data_frame_upload_table_name()
+
+        if settings.DEBUG:
+            print('Storing table ', table_name)
+
         # Get the if the columns have unique values per row
         column_unique = are_unique_columns(data_frame)
 
         # Store the table in the DB
-        store_table(data_frame, workflow.data_frame_table_name)
+        store_table(data_frame, table_name)
 
         # Get the column types
-        df_column_types = df_column_types_rename(workflow.data_frame_table_name)
+        df_column_types = df_column_types_rename(table_name)
 
         # Return a list with three list with information about the
         # data frame that will be needed in the next steps
         return [df_column_names, df_column_types, column_unique]
 
     # We are modifying an existing DF
+    if settings.DEBUG:
+        print('Storing table ', workflow.data_frame_table_name)
+
 
     # Get the workflow and its columns
     wf_cols = workflow.columns.all()
@@ -99,7 +96,7 @@ def store_table_in_db(data_frame, workflow, temporary=False, reset_keys=True):
         column = Column(
             name=cname,
             workflow=workflow,
-            data_type=pandas_datatype_names[data_frame[cname].dtype.name],
+            data_type=pandas_datatype_names.get(data_frame[cname].dtype.name),
             is_key=is_unique_column(data_frame[cname]),
             position=workflow.columns.count() + 1
         )
@@ -161,7 +158,7 @@ def store_upload_dataframe_in_db(data_frame, workflow):
              If temporary = False, return None. All this infor is stored in
              the workflow
     """
-    return store_table_in_db(data_frame, workflow, True)
+    return store_table_in_db(data_frame, workflow, temporary=True)
 
 
 def get_table_row_by_index(workflow, cond_filter, idx):
@@ -176,27 +173,17 @@ def get_table_row_by_index(workflow, cond_filter, idx):
     """
 
     # Get the data
-    data = get_table_data(workflow.id, cond_filter, workflow.get_column_names())
+    data = get_table_data(
+        workflow.get_data_frame_table_name(),
+        cond_filter,
+        workflow.get_column_names()
+    )
 
     # If the data is not there, return None
     if idx > len(data):
         return None
 
     return dict(list(zip(workflow.get_column_names(), data[idx - 1])))
-
-
-def workflow_has_table(workflow_item):
-    return is_table_in_db(workflow_item.data_frame_table_name)
-
-
-def workflow_id_has_table(workflow_id):
-    return is_table_in_db(create_table_name(workflow_id))
-
-
-def workflow_has_upload_table(workflow_item):
-    return is_table_in_db(
-        create_upload_table_name(workflow_item.id)
-    )
 
 
 def perform_overlap_update(dst_df, src_df, dst_key, src_key, how_merge):
@@ -442,7 +429,7 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
         # Condition 1: Data type is correct (there is an exception for columns
         # of type "object" in the data frame and "boolean" in the column as the
         # new resulting column may have a mix of booleans and floats.
-        df_col_type = pandas_datatype_names[new_df[col.name].dtype.name]
+        df_col_type = pandas_datatype_names.get(new_df[col.name].dtype.name)
         if col.data_type == 'boolean' and df_col_type == 'string':
             column_data_types = set([type(x) for x in new_df[col.name]])
             # Remove the NoneType and Float

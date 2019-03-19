@@ -428,10 +428,12 @@ def increase_track_count(method, get_dict):
     if column_dst:
         try:
             # Increase the relevant cell by one
-            pandas_db.increase_row_integer(action.workflow.id,
-                                           column_dst,
-                                           column_to,
-                                           msg_to)
+            pandas_db.increase_row_integer(
+                action.workflow.get_data_frame_table_name(),
+                column_dst,
+                column_to,
+                msg_to
+            )
         except Exception as e:
             log_payload['EXCEPTION_MSG'] = str(e)
         else:

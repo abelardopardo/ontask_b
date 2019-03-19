@@ -124,11 +124,6 @@ def save_workflow_form(request, form, template_name):
                                              request=request)
         return JsonResponse(data)
 
-    # Once saved, set the table name
-    workflow_item.data_frame_table_name = \
-        pandas_db.create_table_name(workflow_item.pk)
-    workflow_item.save()
-
     # Log event
     Log.objects.register(request.user,
                          log_type,
@@ -256,7 +251,7 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
         # Get the table information (if it exist)
         context['table_info'] = None
-        if ops.workflow_id_has_table(self.object.id):
+        if self.object.has_table():
             context['table_info'] = {
                 'num_rows': self.object.nrows,
                 'num_cols': self.object.ncols,
@@ -431,7 +426,7 @@ def column_ss(request, pk):
 
     # If there is no DF, there are no columns to show, this should be
     # detected before this is executed
-    if not ops.workflow_id_has_table(workflow.id):
+    if not workflow.has_table():
         return JsonResponse({'error': _('There is no data in the workflow')})
 
     # Check that the GET parameter are correctly given
@@ -577,7 +572,7 @@ def clone(request, pk):
     workflow = get_workflow(request, pk)
 
     # Clone the data frame
-    data_frame = pandas_db.load_from_db(workflow.pk)
+    data_frame = pandas_db.load_from_db(workflow.get_data_frame_table_name())
     ops.store_dataframe_in_db(data_frame, workflow_new)
 
     # Clone actions

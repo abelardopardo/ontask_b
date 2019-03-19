@@ -29,7 +29,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(DataopsSymbols, self).tearDown()
 
     def test_01_symbols(self):
@@ -377,7 +377,7 @@ class DataopsExcelUpload(test.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(DataopsExcelUpload, self).tearDown()
 
     def test_01_excelupload(self):
@@ -426,7 +426,7 @@ class DataopsExcelUploadSheet(test.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(DataopsExcelUploadSheet, self).tearDown()
 
     def test_01_excelupload_sheet(self):
@@ -478,7 +478,7 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
                   "{% if bool3 cond %}Bool 3 is true{% endif %}\\n"
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(DataopsNaNProcessing, self).tearDown()
 
     def test_01_nan_manipulation(self):
@@ -596,7 +596,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(DataopsPluginExecution, self).tearDown()
 
     def test_01_first_plugin(self):
@@ -645,7 +645,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name='Plugin test')
-        df = pandas_db.load_from_db(wflow.id)
+        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
         self.assertTrue('RESULT 1' in set(df.columns))
         self.assertTrue('RESULT 2' in set(df.columns))
         self.assertTrue(all([x == 1 for x in df['RESULT 1']]))
@@ -700,7 +700,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name='Plugin test')
-        df = pandas_db.load_from_db(wflow.id)
+        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
         self.assertTrue('RESULT 1_2' in set(df.columns))
         self.assertTrue('RESULT 2_2' in set(df.columns))
         self.assertTrue(all([x == 1 for x in df['RESULT 1_2']]))
@@ -746,7 +746,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name='Plugin test')
-        df = pandas_db.load_from_db(wflow.id)
+        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
         self.assertTrue('RESULT 3' in set(df.columns))
         self.assertTrue('RESULT 4' in set(df.columns))
         self.assertTrue(df['RESULT 3'].equals(df['A1'] + df['A2']))
@@ -779,7 +779,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(DataopsMerge, self).tearDown()
 
     def template_merge(self, method, rename=True):
@@ -854,7 +854,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_from_db(wflow.id)
+        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' in set(df.columns))
@@ -873,7 +873,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_from_db(wflow.id)
+        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' not in set(df.columns))
@@ -892,7 +892,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_from_db(wflow.id)
+        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' in set(df.columns))
@@ -911,7 +911,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_from_db(wflow.id)
+        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' in set(df.columns))
@@ -936,7 +936,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_from_db(wflow.id)
+        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' not in set(df.columns))

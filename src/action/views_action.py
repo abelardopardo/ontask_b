@@ -568,7 +568,7 @@ def edit_action_out(request, workflow, action):
                'column_names': workflow.get_column_names(),
                'selected_rows':
                    filter_condition.n_rows_selected if filter_condition else -1,
-               'has_data': ops.workflow_has_table(action.workflow),
+               'has_data': action.workflow.has_table(),
                'total_rows': workflow.nrows,
                'form': form,
                'form_filter': form_filter,
@@ -643,7 +643,10 @@ def edit_action_in(request, workflow, action):
     # Get the number of rows in DF selected by filter.
     if filter_condition:
         filter_condition.n_rows_selected = \
-            pandas_db.num_rows(action.workflow.id, filter_condition.formula)
+            pandas_db.num_rows(
+                action.workflow.get_data_frame_table_name(),
+                filter_condition.formula
+            )
         filter_condition.save()
 
     # Column names suitable to insert
@@ -668,7 +671,7 @@ def edit_action_in(request, workflow, action):
                filter_condition.n_rows_selected if filter_condition else -1,
            'total_rows': workflow.nrows,
            'query_builder_ops': workflow.get_query_builder_ops_as_str(),
-           'has_data': ops.workflow_has_table(action.workflow),
+           'has_data': action.workflow.has_table(),
            'key_selected': Column.objects.filter(
                column_condition_pair__action=action,
                is_key=True
@@ -1174,7 +1177,7 @@ def run_survey_ss(request, pk):
         )
 
     # If there is not DF, go to workflow details.
-    if not ops.workflow_id_has_table(workflow.id):
+    if not workflow.has_table():
         return JsonResponse({'error': _('There is no data in the table')})
 
     # Get the action
@@ -1219,7 +1222,7 @@ def run_survey_ss(request, pk):
 
     # Get the query set (including the filter in the action)
     qs = pandas_db.search_table_rows(
-        workflow.id,
+        workflow.get_data_frame_table_name(),
         cv_tuples,
         True,
         order_col.name,
