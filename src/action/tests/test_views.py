@@ -630,16 +630,12 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
             workflow=workflow
         )
         attributes = workflow.attributes
-        Action.objects.get(name='Check registration', workflow=workflow
-        )
+        Action.objects.get(name='Check registration', workflow=workflow)
         action_out = Action.objects.get(
             name='Detecting age',
             workflow=workflow
         )
-        condition = Condition.objects.get(
-            name='Registered',
-            action=action_out,
-        )
+        condition = Condition.objects.get(name='Registered', action=action_out)
         filter_obj = action_out.get_filter()
 
         # pre-conditions

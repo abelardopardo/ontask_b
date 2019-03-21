@@ -33,7 +33,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         super(DataopsSymbols, self).tearDown()
 
     def test_01_symbols(self):
-        symbols = '!#$%&()*+,-./:;<=>?@[\]^_`{|}~'
+        symbols = '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~'
 
         # Login
         self.login('instructor01@bogus.com')
@@ -123,7 +123,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         # Set the right columns to process
         select = Select(self.selenium.find_element_by_id(
             'select-column-name'))
-        select.select_by_visible_text('!#$%&()*+,-./:;<=>?@[\]^_`{|}~2')
+        select.select_by_visible_text('!#$%&()*+,-./\\:;<=>?@[]^_`{|}~2')
         self.wait_for_datatable('column-selected-table_previous')
         # Wait for the table to be refreshed
         WebDriverWait(self.selenium, 10).until(
@@ -237,7 +237,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.logout()
 
     def test_02_symbols(self):
-        symbols = '!#$%&()*+,-./:;<=>?@[\]^_`{|}~'
+        symbols = '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~'
 
         # Login
         self.login('instructor01@bogus.com')
