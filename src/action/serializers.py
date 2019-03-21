@@ -2,6 +2,7 @@
 
 
 from builtins import object
+
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
@@ -152,6 +153,15 @@ class ColumnConditionNameSerializer(serializers.ModelSerializer):
 class ActionSerializer(serializers.ModelSerializer):
     conditions = ConditionSerializer(required=False, many=True)
 
+    # The columns field is a legacy construct. It needs a nested serializer
+    # because at this point,
+    # the column objects must contain only the name (not the entire model).
+    # An action is connected to a workflow which has a set of columns
+    # attached to it. Thus, the column records are created through the
+    # workflow structure, and at this point in the model, only the names are
+    # required to then restore the many to many relationship.
+    columns = ColumnNameSerializer(required=False, many=True)
+
     # Include the related ActionColumnConditionTuple objects
     column_condition_tuples = serializers.SerializerMethodField()
 
@@ -220,6 +230,28 @@ class ActionSerializer(serializers.ModelSerializer):
                     many=True,
                     context={'action': action_obj}
                 )
+            elif validated_data.get('columns'):
+                # Load the columns pointing to the action (if any)
+                columns = ColumnNameSerializer(
+                    data=validated_data.get('columns'),
+                    many=True,
+                    required=False,
+                )
+                if columns.is_valid():
+                    # Legacy field "columns". Iterate over the names and create
+                    # the triplets.
+                    for citem in columns.data:
+                        __, __ = \
+                            ActionColumnConditionTuple.objects.get_or_create(
+                                action=action_obj,
+                                column=Column.objects.get(
+                                    workflow=action_obj.workflow,
+                                    name=citem['name']),
+                                condition=None
+                            )
+                else:
+                    raise Exception(_('Invalid column data'))
+
         except Exception:
             if action_obj and action_obj.id:
                 ActionColumnConditionTuple.objects.filter(
