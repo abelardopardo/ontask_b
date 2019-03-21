@@ -10,37 +10,24 @@ from django.utils.translation import ugettext_lazy as _, gettext
 from action.models import Condition, Action
 from dataops import formula_evaluation
 from dataops.pandas_db import (
-    create_table_name,
-    create_upload_table_name,
     store_table,
     df_column_types_rename,
-    load_table,
     get_table_data,
-    is_table_in_db,
     pandas_datatype_names,
     is_unique_column,
     are_unique_columns,
     has_unique_column)
 from table.models import View
-from workflow.models import Workflow, Column
+from workflow.models import Column
 
 
-def load_upload_from_db(pk):
-    return load_table(create_upload_table_name(pk))
-
-
-def store_table_in_db(data_frame,
-                      pk,
-                      table_name,
-                      temporary=False,
-                      reset_keys=True):
+def store_table_in_db(data_frame, workflow, temporary=False, reset_keys=True):
     """
     Update or create a table in the DB with the data in the data frame. It
     also updates the corresponding column information
 
     :param data_frame: Data frame to dump to DB
-    :param pk: Corresponding primary key of the workflow
-    :param table_name: Table to use in the DB
+    :param workflow: Corresponding workflow
     :param temporary: Boolean stating if the table is temporary,
            or it belongs to an existing workflow.
     :param reset_keys: Reset the value of the field is_key computing it from
@@ -53,14 +40,16 @@ def store_table_in_db(data_frame,
              the workflow
     """
 
-    if settings.DEBUG:
-        print('Storing table ', table_name)
-
     # get column names
     df_column_names = list(data_frame.columns)
 
     # if the data frame is temporary, the procedure is much simpler
     if temporary:
+        table_name = workflow.get_data_frame_upload_table_name()
+
+        if settings.DEBUG:
+            print('Storing table ', table_name)
+
         # Get the if the columns have unique values per row
         column_unique = are_unique_columns(data_frame)
 
@@ -75,9 +64,11 @@ def store_table_in_db(data_frame,
         return [df_column_names, df_column_types, column_unique]
 
     # We are modifying an existing DF
+    if settings.DEBUG:
+        print('Storing table ', workflow.get_data_frame_table_name())
+
 
     # Get the workflow and its columns
-    workflow = Workflow.objects.get(id=pk)
     wf_cols = workflow.columns.all()
 
     # Loop over the columns in the Workflow to refresh the is_key value. There
@@ -105,7 +96,7 @@ def store_table_in_db(data_frame,
         column = Column(
             name=cname,
             workflow=workflow,
-            data_type=pandas_datatype_names[data_frame[cname].dtype.name],
+            data_type=pandas_datatype_names.get(data_frame[cname].dtype.name),
             is_key=is_unique_column(data_frame[cname]),
             position=workflow.columns.count() + 1
         )
@@ -118,10 +109,12 @@ def store_table_in_db(data_frame,
     data_frame = data_frame[[x.name for x in wf_columns]]
 
     # Store the table in the DB
-    store_table(data_frame, table_name)
+    store_table(data_frame,
+                workflow.get_data_frame_table_name(),
+                dtype=dict([(x.name, x.data_type) for x in wf_columns]))
 
     # Review the column types because some "objects" are stored as booleans
-    column_types = df_column_types_rename(table_name)
+    column_types = df_column_types_rename(workflow.get_data_frame_table_name())
     for ctype, col in zip(column_types, wf_columns):
         if col.data_type != ctype:
             # If the column type in the DB is different from the one in the
@@ -133,35 +126,31 @@ def store_table_in_db(data_frame,
     workflow.nrows = data_frame.shape[0]
     workflow.ncols = data_frame.shape[1]
     workflow.set_query_builder_ops()
-    workflow.data_frame_table_name = table_name
     workflow.save()
 
     return None
 
 
-def store_dataframe_in_db(data_frame, pk, reset_keys=True):
+def store_dataframe_in_db(data_frame, workflow, reset_keys=True):
     """
     Given a dataframe and the primary key of a workflow, it dumps its content on
     a table that is rewritten every time.
 
     :param data_frame: Pandas data frame containing the data
-    :param pk: The unique key for the workflow
+    :param workflow: The workflow
     :param reset_keys: Reset the field is_key computing its value from scratch
     :return: Nothing. Side effect in the database
     """
-    return store_table_in_db(data_frame,
-                             pk,
-                             create_table_name(pk),
-                             reset_keys=reset_keys)
+    return store_table_in_db(data_frame, workflow, reset_keys=reset_keys)
 
 
-def store_upload_dataframe_in_db(data_frame, pk):
+def store_upload_dataframe_in_db(data_frame, workflow):
     """
     Given a dataframe and the primary key of a workflow, it dumps its content on
     a table that is rewritten every time.
 
     :param data_frame: Pandas data frame containing the data
-    :param pk: The unique key for the workflow
+    :param workflow: The workflow
     :return: If temporary = True, then return a list with three lists:
              - column names
              - column types
@@ -169,10 +158,7 @@ def store_upload_dataframe_in_db(data_frame, pk):
              If temporary = False, return None. All this infor is stored in
              the workflow
     """
-    return store_table_in_db(data_frame,
-                             pk,
-                             create_upload_table_name(pk),
-                             True)
+    return store_table_in_db(data_frame, workflow, temporary=True)
 
 
 def get_table_row_by_index(workflow, cond_filter, idx):
@@ -187,27 +173,17 @@ def get_table_row_by_index(workflow, cond_filter, idx):
     """
 
     # Get the data
-    data = get_table_data(workflow.id, cond_filter, workflow.get_column_names())
+    data = get_table_data(
+        workflow.get_data_frame_table_name(),
+        cond_filter,
+        workflow.get_column_names()
+    )
 
     # If the data is not there, return None
     if idx > len(data):
         return None
 
     return dict(list(zip(workflow.get_column_names(), data[idx - 1])))
-
-
-def workflow_has_table(workflow_item):
-    return is_table_in_db(create_table_name(workflow_item.id))
-
-
-def workflow_id_has_table(workflow_id):
-    return is_table_in_db(create_table_name(workflow_id))
-
-
-def workflow_has_upload_table(workflow_item):
-    return is_table_in_db(
-        create_upload_table_name(workflow_item.id)
-    )
 
 
 def perform_overlap_update(dst_df, src_df, dst_key, src_key, how_merge):
@@ -373,7 +349,7 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
 
     # If no dst_df is given, simply dump the frame in the DB
     if dst_df is None:
-        store_dataframe_in_db(src_df, workflow.id)
+        store_dataframe_in_db(src_df, workflow)
         # Reconcile the label is_key with the one in the merge_info
         for cname, uploaded, is_key in zip(merge_info['rename_column_names'],
                                            merge_info['columns_to_upload'],
@@ -453,7 +429,7 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
         # Condition 1: Data type is correct (there is an exception for columns
         # of type "object" in the data frame and "boolean" in the column as the
         # new resulting column may have a mix of booleans and floats.
-        df_col_type = pandas_datatype_names[new_df[col.name].dtype.name]
+        df_col_type = pandas_datatype_names.get(new_df[col.name].dtype.name)
         if col.data_type == 'boolean' and df_col_type == 'string':
             column_data_types = set([type(x) for x in new_df[col.name]])
             # Remove the NoneType and Float
@@ -485,7 +461,7 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
             ).format(col.name, ', '.join(col.categories))
 
     # Store the result back in the DB
-    store_dataframe_in_db(new_df, workflow.id)
+    store_dataframe_in_db(new_df, workflow)
 
     # Update the value of is_key based on "keep_key_column"
     for to_upload, cname, keep_key in zip(merge_info['columns_to_upload'],

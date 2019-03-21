@@ -530,47 +530,47 @@
         "attributes": {},
         "query_builder_ops": [
             {
+                "id": "age",
+                "type": "double",
                 "validation": {
                     "step": "any"
-                },
-                "type": "double",
-                "id": "age"
+                }
             },
             {
-                "type": "string",
-                "id": "email"
+                "id": "email",
+                "type": "string"
             },
             {
-                "type": "integer",
-                "id": "sid"
+                "id": "sid",
+                "type": "integer"
             },
             {
-                "type": "string",
-                "id": "another"
+                "id": "another",
+                "type": "string"
             },
             {
-                "type": "string",
-                "id": "name"
+                "id": "name",
+                "type": "string"
             },
             {
-                "type": "string",
-                "id": "one"
+                "id": "one",
+                "type": "string"
             },
             {
-                "values": {
-                    "1": "Yes",
-                    "0": "No"
-                },
+                "id": "registered",
+                "type": "boolean",
                 "input": "radio",
+                "values": {
+                    "0": "No",
+                    "1": "Yes"
+                },
                 "operators": [
                     "equal"
-                ],
-                "type": "boolean",
-                "id": "registered"
+                ]
             },
             {
-                "type": "datetime",
-                "id": "when"
+                "id": "when",
+                "type": "datetime"
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_5",
@@ -722,8 +722,7 @@
         "active_to": null,
         "content": "{% comment %}Your action content here{% endcomment %}",
         "target_url": "",
-        "shuffle": false,
-        "columns": []
+        "shuffle": false
     }
 }
 ]

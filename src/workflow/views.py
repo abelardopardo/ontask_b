@@ -251,7 +251,7 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
         # Get the table information (if it exist)
         context['table_info'] = None
-        if ops.workflow_id_has_table(self.object.id):
+        if self.object.has_table():
             context['table_info'] = {
                 'num_rows': self.object.nrows,
                 'num_cols': self.object.ncols,
@@ -393,10 +393,6 @@ def delete(request, pk):
                              {'id': workflow.id,
                               'name': workflow.name})
 
-        # And drop the table
-        if pandas_db.is_wf_table_in_db(workflow):
-            pandas_db.delete_table(pk)
-
         # Perform the delete operation
         workflow.delete()
 
@@ -430,7 +426,7 @@ def column_ss(request, pk):
 
     # If there is no DF, there are no columns to show, this should be
     # detected before this is executed
-    if not ops.workflow_id_has_table(workflow.id):
+    if not workflow.has_table():
         return JsonResponse({'error': _('There is no data in the workflow')})
 
     # Check that the GET parameter are correctly given
@@ -576,8 +572,8 @@ def clone(request, pk):
     workflow = get_workflow(request, pk)
 
     # Clone the data frame
-    data_frame = pandas_db.load_from_db(workflow.pk)
-    ops.store_dataframe_in_db(data_frame, workflow_new.id)
+    data_frame = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+    ops.store_dataframe_in_db(data_frame, workflow_new)
 
     # Clone actions
     action.ops.clone_actions([a for a in workflow.actions.all()], workflow_new)

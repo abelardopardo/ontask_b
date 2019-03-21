@@ -214,7 +214,7 @@ def evaluate_action(action, extra_string=None,
 
     # Step 3: Get the table data
     result = []
-    data_frame = pandas_db.get_subframe(workflow.id,
+    data_frame = pandas_db.get_subframe(workflow.get_data_frame_table_name(),
                                         cond_filter,
                                         workflow.get_column_names())
 
@@ -359,7 +359,8 @@ def evaluate_row_action_in(action, context):
     """
 
     # Get the active columns attached to the action
-    columns = [c for c in action.columns.all() if c.is_active]
+    columns = [x.column for x in action.column_condition_pair.all()
+               if x.column.is_active]
 
     # Get the row values.
     selected_values = [context[c.name] for c in columns]

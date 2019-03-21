@@ -41,10 +41,10 @@ def excelupload1(request):
     # Bind the form with the received data
     form = UploadExcelFileForm(request.POST or None,
                                request.FILES or None,
-                               workflow_id=workflow.id)
+                               workflow=workflow)
 
     # Process the initial loading of the form
-    if request.method != 'POST':
+    if request.method == 'GET':
         return render(request, 'dataops/upload1.html',
                       {'form': form,
                        'wid': workflow.id,

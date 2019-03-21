@@ -100,14 +100,14 @@ class ActionTable(tables.Table):
     )
 
     def render_name(self, record):
-        return format_html(
-            """<a href="{0}"
-                  data-toggle="tooltip"
-                  title="{1}">{2}</a>""",
-            reverse('action:edit', kwargs={'pk': record.id}),
-            _('Edit the text, conditions and filter'),
-            record.name
-        )
+        result = """<a href="{0}" data-toggle="tooltip" title="{1}">{2}</a>"""
+        if not record.is_executable:
+            result += ' <span class="fa fa-exclamation-triangle"></span>'
+
+        return format_html(result,
+                           reverse('action:edit', kwargs={'pk': record.id}),
+                           _('Edit the text, conditions and filter'),
+                           record.name)
 
     def render_action_type(self, record):
         icon = 'file-text'
@@ -148,7 +148,7 @@ class ActionTable(tables.Table):
                   'last_executed_log')
         sequence = ('action_type', 'name', 'description_text',
                     'last_executed_log')
-        exclude = ('content', 'serve_enabled', 'columns', 'filter')
+        exclude = ('content', 'serve_enabled', 'filter')
         attrs = {
             'class': 'table table-hover table-bordered',
             'style': 'width: 100%;',
@@ -512,7 +512,7 @@ def edit_action(request, pk):
         action = Action.objects.filter(
             Q(workflow__user=request.user) |
             Q(workflow__shared=request.user)
-        ).distinct().prefetch_related('columns').get(pk=pk)
+        ).distinct().get(pk=pk)
     except ObjectDoesNotExist:
         return redirect('action:index')
 
@@ -568,7 +568,7 @@ def edit_action_out(request, workflow, action):
                'column_names': workflow.get_column_names(),
                'selected_rows':
                    filter_condition.n_rows_selected if filter_condition else -1,
-               'has_data': ops.workflow_has_table(action.workflow),
+               'has_data': action.workflow.has_table(),
                'total_rows': workflow.nrows,
                'form': form,
                'form_filter': form_filter,
@@ -643,7 +643,10 @@ def edit_action_in(request, workflow, action):
     # Get the number of rows in DF selected by filter.
     if filter_condition:
         filter_condition.n_rows_selected = \
-            pandas_db.num_rows(action.workflow.id, filter_condition.formula)
+            pandas_db.num_rows(
+                action.workflow.get_data_frame_table_name(),
+                filter_condition.formula
+            )
         filter_condition.save()
 
     # Column names suitable to insert
@@ -668,7 +671,7 @@ def edit_action_in(request, workflow, action):
                filter_condition.n_rows_selected if filter_condition else -1,
            'total_rows': workflow.nrows,
            'query_builder_ops': workflow.get_query_builder_ops_as_str(),
-           'has_data': ops.workflow_has_table(action.workflow),
+           'has_data': action.workflow.has_table(),
            'key_selected': Column.objects.filter(
                column_condition_pair__action=action,
                is_key=True
@@ -841,7 +844,7 @@ def select_column_action(request, apk, cpk, key=None):
         action = Action.objects.filter(
             Q(workflow__user=request.user) |
             Q(workflow__shared=request.user)
-        ).distinct().prefetch_related('columns').get(pk=apk)
+        ).distinct().get(pk=apk)
     except ObjectDoesNotExist:
         return JsonResponse({'html_redirect': reverse('action:index')})
 
@@ -853,7 +856,7 @@ def select_column_action(request, apk, cpk, key=None):
 
     # Parameters are correct, so add the column to the action.
     if key:
-        action.column_condition_pair.filter(condition__is_key=True).delete()
+        action.column_condition_pair.filter(column__is_key=True).delete()
         if column.is_key:
             __, __ = ActionColumnConditionTuple.objects.get_or_create(
                 action=action,
@@ -899,7 +902,7 @@ def unselect_column_action(request, apk, cpk):
         action = Action.objects.filter(
             Q(workflow__user=request.user) |
             Q(workflow__shared=request.user)
-        ).distinct().prefetch_related('columns').get(pk=apk)
+        ).distinct().get(pk=apk)
     except ObjectDoesNotExist:
         return redirect(reverse('action:index'))
 
@@ -942,7 +945,7 @@ def shuffle_questions(request, pk):
         action = Action.objects.filter(
             Q(workflow__user=request.user) |
             Q(workflow__shared=request.user)
-        ).distinct().prefetch_related('columns').get(pk=pk)
+        ).distinct().get(pk=pk)
     except ObjectDoesNotExist:
         return redirect(reverse('action:index'))
 
@@ -1174,7 +1177,7 @@ def run_survey_ss(request, pk):
         )
 
     # If there is not DF, go to workflow details.
-    if not ops.workflow_id_has_table(workflow.id):
+    if not workflow.has_table():
         return JsonResponse({'error': _('There is no data in the table')})
 
     # Get the action
@@ -1219,7 +1222,7 @@ def run_survey_ss(request, pk):
 
     # Get the query set (including the filter in the action)
     qs = pandas_db.search_table_rows(
-        workflow.id,
+        workflow.get_data_frame_table_name(),
         cv_tuples,
         True,
         order_col.name,

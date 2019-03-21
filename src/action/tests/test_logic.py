@@ -35,7 +35,7 @@ class EmailActionTracking(test.OnTaskTestCase):
         pandas_db.pg_restore_table(cls.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(EmailActionTracking, self).tearDown()
 
     # Test that tracking hits are properly stored.
@@ -49,7 +49,7 @@ class EmailActionTracking(test.OnTaskTestCase):
             # No longer working due to celery
             # # Get the workflow and the data frame
             # workflow = Workflow.objects.get(name=self.wflow_name)
-            # df = pandas_db.load_from_db(workflow.id)
+            # df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
             #
             # # Check that the results have been updated in the DB (to 1)
             # for uemail in [x[1] for x in test.user_info

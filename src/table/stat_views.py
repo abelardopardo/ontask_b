@@ -3,7 +3,6 @@
 Implementation of views providing visualisation and stats
 """
 
-
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
@@ -103,16 +102,20 @@ def get_row_visualisations(request, view_id=None):
         columns_to_view = view.columns.all()
         column_names = [c.name for c in columns_to_view]
 
-        df = pandas_db.load_from_db(workflow.id, column_names, view.formula)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name(),
+                                    column_names,
+                                    view.formula)
     else:
         # No view given, fetch the entire data frame
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
     # Get the rows from the table
-    row = pandas_db.execute_select_on_table(workflow.id,
-                                            [update_key],
-                                            [update_val],
-                                            column_names)[0]
+    row = pandas_db.execute_select_on_table(
+        workflow.get_data_frame_table_name(),
+        [update_key],
+        [update_val],
+        column_names
+    )[0]
 
     vis_scripts = []
     visualizations = []
@@ -196,12 +199,12 @@ def get_view_visualisations(request, view_id=None):
             return redirect('workflow:detail', workflow.id)
         columns_to_view = view.columns.all()
 
-        df = pandas_db.load_from_db(workflow.id,
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name(),
                                     [x.name for x in columns_to_view],
                                     view.formula)
     else:
         # No view given, fetch the entire data frame
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
     vis_scripts = []
     visualizations = []
@@ -267,7 +270,7 @@ def stat_column(request, pk):
         return redirect('home')
 
     # Get the dataframe
-    df = pandas_db.load_from_db(workflow.id)
+    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
     # Extract the data to show at the top of the page
     stat_data = pandas_db.get_column_stats_from_df(df[column.name])
@@ -318,6 +321,7 @@ def stat_row_view(request, pk):
     """
 
     return get_row_visualisations(request, pk)
+
 
 @user_passes_test(is_instructor)
 def stat_table(request):

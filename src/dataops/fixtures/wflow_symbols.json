@@ -594,6 +594,46 @@
 },
 {
     "model": "profiles.profile",
+    "pk": 7,
+    "fields": {
+        "slug": "ffabf5a1-759e-41c4-ab2a-76a840794d13",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 8,
+    "fields": {
+        "slug": "54086bb8-60ac-4dec-9589-48fa6f1fbd05",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 9,
+    "fields": {
+        "slug": "9cb65ae4-a891-45e3-a115-4bffb4f9ecf2",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 10,
+    "fields": {
+        "slug": "a0ef757b-7387-4e4b-bd5e-4a49cae4491d",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
     "pk": 2,
     "fields": {
         "slug": "467cdea6-686d-45bc-ad95-a073f7241f07",
@@ -640,39 +680,39 @@
         },
         "query_builder_ops": [
             {
-                "type": "string",
-                "id": "email"
+                "id": "email",
+                "type": "string"
             },
             {
-                "type": "integer",
-                "id": "sid"
+                "id": "sid",
+                "type": "integer"
             },
             {
+                "id": "age",
+                "type": "double",
                 "validation": {
                     "step": "any"
-                },
-                "type": "double",
-                "id": "age"
+                }
             },
             {
-                "type": "string",
-                "id": "name"
+                "id": "name",
+                "type": "string"
             },
             {
-                "values": {
-                    "1": "Yes",
-                    "0": "No"
-                },
+                "id": "registered",
+                "type": "boolean",
                 "input": "radio",
+                "values": {
+                    "0": "No",
+                    "1": "Yes"
+                },
                 "operators": [
                     "equal"
-                ],
-                "type": "boolean",
-                "id": "registered"
+                ]
             },
             {
-                "type": "datetime",
-                "id": "when"
+                "id": "when",
+                "type": "datetime"
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_149",
@@ -792,11 +832,7 @@
         "active_to": null,
         "content": "{% comment %}Your action content here{% endcomment %}",
         "target_url": "",
-        "shuffle": false,
-        "columns": [
-            4786,
-            4784
-        ]
+        "shuffle": false
     }
 },
 {
@@ -815,8 +851,25 @@
         "active_to": null,
         "content": "<p><br></p>",
         "target_url": "",
-        "shuffle": false,
-        "columns": []
+        "shuffle": false
+    }
+},
+{
+    "model": "action.actioncolumnconditiontuple",
+    "pk": 1,
+    "fields": {
+        "action": 342,
+        "column": 4786,
+        "condition": null
+    }
+},
+{
+    "model": "action.actioncolumnconditiontuple",
+    "pk": 2,
+    "fields": {
+        "action": 342,
+        "column": 4784,
+        "condition": null
     }
 }
 ]

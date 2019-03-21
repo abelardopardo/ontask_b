@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-
-
+from django.db import connection
 from future import standard_library
+
+from workflow.models import Workflow
 
 standard_library.install_aliases()
 from builtins import str
@@ -10,9 +11,9 @@ from builtins import object
 import io
 import os
 import math
-
-import pandas as pd
 from PIL import Image
+import pandas as pd
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -184,7 +185,6 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         cls.selenium.set_window_size(cls.viewport_width,
                                      cls.viewport_height)
         # After setting the window size, we need to update these values
-        screen_size = cls.selenium.get_window_size()
         cls.viewport_height = cls.selenium.execute_script(
             'return window.innerHeight'
         )
@@ -937,20 +937,20 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                 else:
                     # The variable is a boolean. This breaks if the variable
                     # is an interval
-                    if rule_value == True:
+                    if rule_value is True:
                         value_idx = 2
-                    elif rule_value == False:
+                    elif rule_value is False:
                         value_idx = 1
                     else:
                         raise Exception('Unexpected rule value')
 
                     self.selenium.find_element_by_xpath(
-                        "(//input[@name='builder_rule_{0}_value_0'])[{1}]".format(
+                        "(//input[@name='builder_rule_{0}_value_0'])"
+                        "[{1}]".format(
                             idx,
                             value_idx
                         )
                     ).click()
-
             idx += 1
 
         # Save the condition
@@ -1542,3 +1542,21 @@ class ScreenTests(OnTaskLiveTestCase):
                            self.device_pixel_ratio))
             )
         img.save(self.img_path(self.prefix + ss_filename))
+
+
+def delete_all_tables():
+    """
+    Delete all tables related to existing workflows
+    :return:
+    """
+
+    cursor = connection.cursor()
+    table_list = connection.introspection.get_table_list(cursor)
+    for tinfo in table_list:
+        if not tinfo.name.startswith(Workflow.table_prefix):
+            continue
+        cursor.execute('DROP TABLE "{0}";'.format(tinfo.name))
+
+    # To make sure the table is dropped.
+    connection.commit()
+    return

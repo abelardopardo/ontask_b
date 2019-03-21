@@ -47,7 +47,10 @@ def vis_html_content(context, column_name):
     cond_filter = action.get_filter()
 
     # Get the data from the data frame
-    df = pandas_db.get_subframe(workflow.id, cond_filter, [column_name])
+    df = pandas_db.get_subframe(
+        workflow.get_data_frame_table_name(),
+        cond_filter,
+        [column_name])
 
     # Get the visualisation
     viz = PlotlyColumnHistogram(data=df, context=viz_ctx)

@@ -258,7 +258,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(WorkflowModify, self).tearDown()
 
     def test_02_workflow_column_create_delete(self):
@@ -413,7 +413,7 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(WorkflowAttribute, self).tearDown()
 
     def test_workflow_attributes(self):
@@ -514,7 +514,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(WorkflowShare, self).tearDown()
 
     def test_workflow_share(self):

@@ -34,7 +34,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(ActionActionEdit, self).tearDown()
 
     # Test action rename
@@ -192,7 +192,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Set the value to 2017-10-11T00:32:44
         self.selenium.find_element_by_name(
-            'builder_rule_1_value_0').send_keys('2017-10-11T00:32:44')
+            'builder_rule_1_value_0').send_keys('2017-10-11T00:32:44+1300')
 
         # Click in the "update filter"
         self.selenium.find_element_by_xpath(
@@ -469,6 +469,42 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
+    # Test operations with the filter
+    def test_action_05_JSON_action(self):
+        action_name = 'JSON action'
+        content_txt = '{ "name": 3 }'
+        target_url = 'https://bogus.com'
+
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
+
+        # Goto the action page
+        self.go_to_actions()
+
+        # Create new action
+        self.create_new_json_action(action_name)
+
+        # Introduce text and then the URL
+        self.select_json_text_tab()
+        self.selenium.find_element_by_id('id_content').send_keys(content_txt)
+        self.selenium.find_element_by_id('id_target_url').send_keys(target_url)
+
+        # Save action and back to action index
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Close']"
+        ).click()
+        self.wait_for_datatable('action-table_previous')
+
+        action = Action.objects.get(name=action_name)
+        self.assertTrue(action.content == content_txt)
+        self.assertTrue(action.target_url == target_url)
+
+        # End of session
+        self.logout()
+
 
 class ActionActionInCreate(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow_two_actions']
@@ -488,7 +524,7 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(ActionActionInCreate, self).tearDown()
 
     # Test operations with the filter
@@ -582,7 +618,7 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(ActionActionRenameEffect, self).tearDown()
 
     # Test operations with the filter
@@ -594,16 +630,12 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
             workflow=workflow
         )
         attributes = workflow.attributes
-        Action.objects.get(name='Check registration', workflow=workflow
-        )
+        Action.objects.get(name='Check registration', workflow=workflow)
         action_out = Action.objects.get(
             name='Detecting age',
             workflow=workflow
         )
-        condition = Condition.objects.get(
-            name='Registered',
-            action=action_out,
-        )
+        condition = Condition.objects.get(name='Registered', action=action_out)
         filter_obj = action_out.get_filter()
 
         # pre-conditions
@@ -719,7 +751,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(ActionActionZip, self).tearDown()
 
     # Test operations with the filter

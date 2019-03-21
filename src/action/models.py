@@ -114,10 +114,6 @@ class Action(models.Model):
                                      null=True,
                                      default=None)
 
-    # Set of columns used in the action (either to capture data in action IN
-    # or present in any of the conditions in action OUT)
-    columns = models.ManyToManyField(Column, related_name='actions_in')
-
     #
     # Field for actions PERSONALIZED_TEXT, PERSONALIZED_CAVNAS_EMAIL and
     # PERSONALIZED_JSON
@@ -182,8 +178,10 @@ class Action(models.Model):
 
         if self.action_type == Action.SURVEY or self.action_type == \
                 Action.TODO_LIST:
-            return self.columns.filter(is_key=True).exists() and \
-                   self.columns.filter(is_key=False).exists()
+            return self.column_condition_pair.filter(
+                column__is_key=True).exists() and \
+                self.column_condition_pair.filter(
+                    column__is_key=False).exists()
 
         raise Exception('Function is_executable not implemented for action '
                         '{0}'.format(self.get_action_type_display()))
@@ -222,9 +220,12 @@ class Action(models.Model):
             [get_variables(x.formula)
              for x in self.conditions.filter(name__in=cond_names)]
         ))
-        self.columns.add(*[x for x in self.workflow.columns.filter(
-            name__in=colnames
-        )])
+        for c in [x for x in self.workflow.columns.filter(name__in=colnames)]:
+            __, __ = ActionColumnConditionTuple.objects.get_or_create(
+                action=self,
+                column=c,
+                condition=None
+            )
 
     def get_action_conditions(self):
         """
@@ -327,8 +328,8 @@ class Action(models.Model):
             result = result.union(set(c.columns.all()))
 
         # Accumulate now those in the field columns
-        for c in self.columns.all():
-            result.add(c)
+        for x in self.column_condition_pair.all():
+            result.add(x.column)
 
         return list(result)
 
@@ -456,7 +457,10 @@ class Condition(models.Model):
         # Case 1: Condition is a filter
         if self.is_filter:
             self.n_rows_selected = \
-                pandas_db.num_rows(self.action.workflow.id, self.formula)
+                pandas_db.num_rows(
+                    self.action.workflow.get_data_frame_table_name(),
+                    self.formula
+                )
             self.save()
 
             # Propagate the filter effect to the rest of actions.
@@ -486,7 +490,8 @@ class Condition(models.Model):
                        'valid': True
                        }
         self.n_rows_selected = pandas_db.num_rows(
-            self.action.workflow.id, formula)
+            self.action.workflow.get_data_frame_table_name(),
+            formula)
         self.save()
 
         return
@@ -510,3 +515,44 @@ class Condition(models.Model):
         """
         unique_together = ('action', 'name', 'is_filter')
         ordering = ('created',)
+
+
+class ActionColumnConditionTuple(models.Model):
+    """
+    Object to represent a tuple (action, column, condition). The purpose of
+    these objects are to:
+
+    1) Represent the collection of columns attached to a regular action
+
+    2) If the action is a survey, see if the question has a condition attached
+    to it to decide its presence in the survey.
+
+    @DynamicAttrs
+    """
+
+    action = models.ForeignKey(Action,
+                               db_index=True,
+                               on_delete=models.CASCADE,
+                               null=False,
+                               blank=False,
+                               related_name='column_condition_pair')
+
+    column = models.ForeignKey(Column,
+                               on_delete=models.CASCADE,
+                               null=False,
+                               blank=False,
+                               related_name='column_condition_pair')
+    condition = models.ForeignKey(Condition,
+                                  on_delete=models.CASCADE,
+                                  null=True,
+                                  blank=False,
+                                  related_name='column_condition_pair')
+
+    class Meta(object):
+        """
+        Define the criteria of uniqueness with name in workflow and order by
+        name
+        """
+        unique_together = ('action', 'column', 'condition')
+        ordering = ['column__position']
+

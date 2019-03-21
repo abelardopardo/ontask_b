@@ -141,7 +141,7 @@ class ScreenTestFixture(ScreenTests):
         # sqlc.save()
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
+        test.delete_all_tables()
         super(ScreenTestFixture, self).tearDown()
 
     def test_sql_admin(self):

@@ -16,7 +16,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
-from action.models import Condition, Action
+from action.models import Condition, Action, ActionColumnConditionTuple
 from dataops import ops, formula_evaluation, pandas_db
 from logs.models import Log
 from ontask.permissions import is_instructor
@@ -108,7 +108,6 @@ def column_add(request, pk=None):
                 _('Cannot find action to add question.')
             )
             return JsonResponse({'html_redirect': reverse('action:index')})
-        action_id = action.id
 
     # Form to read/process data
     if is_question:
@@ -145,14 +144,14 @@ def column_add(request, pk=None):
 
     # Update the data frame, which must be stored in the form because
     # it was loaded when validating it.
-    df = pandas_db.load_from_db(workflow.id)
+    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
     # Add the column with the initial value to the dataframe
     df = ops.data_frame_add_column(df, column, column_initial_value)
 
     # Update the column type with the value extracted from the data frame
-    column.data_type = \
-        pandas_db.pandas_datatype_names[df[column.name].dtype.name]
+    # column.data_type = \
+    #     pandas_db.pandas_datatype_names[df[column.name].dtype.name]
 
     # Update the positions of the appropriate columns
     workflow.reposition_columns(workflow.ncols + 1, column.position)
@@ -160,11 +159,15 @@ def column_add(request, pk=None):
     column.save()
 
     # Store the df to DB
-    ops.store_dataframe_in_db(df, workflow.id)
+    ops.store_dataframe_in_db(df, workflow)
 
     # If the column is a question, add it to the action
     if is_question:
-        action.columns.add(column)
+        __, __ = ActionColumnConditionTuple.objects.get_or_create(
+            action=action,
+            column=column,
+            condition=None
+        )
 
     # Log the event
     if is_question:
@@ -243,7 +246,7 @@ def formula_column_add(request):
         return JsonResponse(data)
 
     # Update the data frame
-    df = pandas_db.load_from_db(workflow.id)
+    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
     try:
         # Add the column with the appropriate computation
@@ -289,7 +292,7 @@ def formula_column_add(request):
 
     # Populate the column type
     column.data_type = \
-        pandas_db.pandas_datatype_names[df[column.name].dtype.name]
+        pandas_db.pandas_datatype_names.get(df[column.name].dtype.name)
 
     # Update the positions of the appropriate columns
     workflow.reposition_columns(workflow.ncols + 1, column.position)
@@ -297,7 +300,7 @@ def formula_column_add(request):
     column.save()
 
     # Store the df to DB
-    ops.store_dataframe_in_db(df, workflow.id)
+    ops.store_dataframe_in_db(df, workflow)
 
     # Log the event
     Log.objects.register(request.user,
@@ -374,7 +377,7 @@ def random_column_add(request):
         return JsonResponse(data)
 
     # Update the data frame
-    df = pandas_db.load_from_db(workflow.id)
+    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
     # Get the values and interpret its meaning
     values = form.cleaned_data['values']
@@ -430,7 +433,7 @@ def random_column_add(request):
 
     # Populate the column type
     column.data_type = \
-        pandas_db.pandas_datatype_names[df[column.name].dtype.name]
+        pandas_db.pandas_datatype_names.get(df[column.name].dtype.name)
 
     # Update the positions of the appropriate columns
     workflow.reposition_columns(workflow.ncols + 1, column.position)
@@ -438,7 +441,7 @@ def random_column_add(request):
     column.save()
 
     # Store the df to DB
-    ops.store_dataframe_in_db(df, workflow.id)
+    ops.store_dataframe_in_db(df, workflow)
 
     # Log the event
     Log.objects.register(request.user,
@@ -520,7 +523,9 @@ def column_edit(request, pk):
 
         # If there is a new name, rename the data frame columns
         if 'name' in form.changed_data:
-            pandas_db.db_column_rename(workflow.pk, old_name, column.name)
+            pandas_db.db_column_rename(workflow.get_data_frame_table_name(),
+                                       old_name,
+                                       column.name)
             ops.rename_df_column(workflow, old_name, column.name)
 
         if 'position' in form.changed_data:
@@ -858,7 +863,7 @@ def column_restrict_values(request, pk):
     context['cname'] = column.name
 
     # Get the values from the data frame
-    df = pandas_db.load_from_db(workflow.id)
+    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
     context['values'] = ', '.join(set(df[column.name]))
 
     if request.method == 'POST':

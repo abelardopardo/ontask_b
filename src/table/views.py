@@ -17,7 +17,7 @@ from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
-from django.utils.html import format_html
+from django.utils.html import format_html, escape, urlencode
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import ugettext_lazy as _
@@ -149,7 +149,7 @@ def render_table_display_page(request, workflow, view, columns, ajax_url):
     }
 
     # If there is a DF, add the columns
-    if ops.workflow_id_has_table(workflow.id):
+    if workflow.has_table():
         context['columns'] = columns
         context['columns_datatables'] = \
             [{'data': 'Operations'}] + \
@@ -212,7 +212,7 @@ def render_table_display_data(request, workflow, columns, formula,
         )
 
     qs = pandas_db.search_table_rows(
-        workflow.id,
+        workflow.get_data_frame_table_name(),
         cv_tuples,
         True,
         order_col_name,
@@ -233,16 +233,23 @@ def render_table_display_data(request, workflow, columns, formula,
         else:
             stat_url = reverse('table:stat_row')
 
+        # Transform key name and key value into escaped strings
+        esc_key_name = escape(key_name)
+        esc_key_value = escape(row[key_idx])
         ops_string = render_to_string(
             'table/includes/partial_table_ops.html',
             {'stat_url': stat_url +
-                         '?key={0}&val={1}'.format(key_name, row[key_idx]),
+                         '?{0}'.format(urlencode(
+                             {'key': esc_key_name, 'val': esc_key_value}
+                         )),
              'edit_url': reverse('dataops:rowupdate') +
-                         '?update_key={0}&update_val={1}'.format(key_name,
-                                                                 row[
-                                                                     key_idx]),
-             'delete_key': '?key={0}&value={1}'.format(key_name,
-                                                       row[key_idx]),
+                         '?{0}'.format(urlencode(
+                             {'update_key': esc_key_name,
+                              'update_val': esc_key_value}
+                         )),
+             'delete_key': '?{0}'.format(urlencode(
+                 {'key': esc_key_name, 'value': esc_key_value}
+             )),
              'view_id': view_id}
         )
 
@@ -304,7 +311,7 @@ def display_ss(request):
         )
 
     # If there is not DF, go to workflow details.
-    if not ops.workflow_id_has_table(workflow.id):
+    if not workflow.has_table():
         return JsonResponse({'error': _('There is no data in the table')})
 
     return render_table_display_data(
@@ -359,7 +366,7 @@ def display_view_ss(request, pk):
         )
 
     # If there is not DF, go to workflow details.
-    if not ops.workflow_id_has_table(workflow.id):
+    if not workflow.has_table():
         return JsonResponse({'error': _('There is no data in the table')})
 
     try:
@@ -413,7 +420,8 @@ def row_delete(request):
             return JsonResponse(data)
 
         # Proceed to delete the row
-        pandas_db.delete_table_row_by_key(workflow.id, (key, value))
+        pandas_db.delete_table_row_by_key(workflow.get_data_frame_table_name(),
+                                          (key, value))
 
         # Update rowcount
         workflow.nrows -= 1
@@ -524,7 +532,7 @@ def view_edit(request, pk):
         view = View.objects.filter(
             Q(workflow__user=request.user) |
             Q(workflow__shared=request.user)
-        ).distinct().prefetch_related('columns').get(pk=pk)
+        ).distinct().get(pk=pk)
     except ObjectDoesNotExist:
         return JsonResponse(
             {'form_is_valid': True,
@@ -671,7 +679,7 @@ def csvdownload(request, pk=None):
         return redirect('home')
 
     # Check if dataframe is present
-    if not ops.workflow_id_has_table(workflow.id):
+    if not workflow.has_table():
         # Go back to show the workflow detail
         return redirect(reverse('workflow:detail',
                                 kwargs={'pk': workflow.id}))
@@ -683,7 +691,7 @@ def csvdownload(request, pk=None):
             view = View.objects.filter(
                 Q(workflow__user=request.user) |
                 Q(workflow__shared=request.user)
-            ).distinct().prefetch_related('columns').get(pk=pk)
+            ).distinct().get(pk=pk)
         except ObjectDoesNotExist:
             # Go back to show the workflow detail
             return redirect(reverse('workflow:detail',
@@ -694,7 +702,11 @@ def csvdownload(request, pk=None):
         col_names = [x.name for x in view.columns.all()]
     else:
         col_names = workflow.get_column_names()
-    data_frame = pandas_db.get_subframe(workflow.id, view, col_names)
+    data_frame = pandas_db.get_subframe(
+        workflow.get_data_frame_table_name(),
+        view,
+        col_names
+    )
 
     # Create the response object
     response = HttpResponse(content_type='text/csv')

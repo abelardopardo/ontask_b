@@ -600,6 +600,36 @@
 },
 {
     "model": "profiles.profile",
+    "pk": 7,
+    "fields": {
+        "slug": "93e47077-a036-4d00-86f1-4ffcbb6b1f70",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 8,
+    "fields": {
+        "slug": "0d65117c-058c-4c45-8347-4c86aa33a4af",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 10,
+    "fields": {
+        "slug": "4ec90508-d8e6-4426-8c0f-ca597f144026",
+        "picture": "",
+        "bio": null,
+        "email_verified": false
+    }
+},
+{
+    "model": "profiles.profile",
     "pk": 2,
     "fields": {
         "slug": "467cdea6-686d-45bc-ad95-a073f7241f07",
@@ -644,72 +674,72 @@
         "attributes": {},
         "query_builder_ops": [
             {
-                "type": "integer",
-                "id": "aaa"
+                "id": "aaa",
+                "type": "integer"
             },
             {
-                "type": "integer",
-                "id": "c0"
+                "id": "c0",
+                "type": "integer"
             },
             {
-                "type": "integer",
-                "id": "c1"
+                "id": "c1",
+                "type": "integer"
             },
             {
-                "type": "integer",
-                "id": "c2"
+                "id": "c2",
+                "type": "integer"
             },
             {
-                "type": "integer",
-                "id": "c3"
+                "id": "c3",
+                "type": "integer"
             },
             {
-                "type": "integer",
-                "id": "c4"
+                "id": "c4",
+                "type": "integer"
             },
             {
-                "type": "integer",
-                "id": "c5"
+                "id": "c5",
+                "type": "integer"
             },
             {
-                "type": "integer",
-                "id": "c6"
+                "id": "c6",
+                "type": "integer"
             },
             {
-                "type": "integer",
-                "id": "c7"
+                "id": "c7",
+                "type": "integer"
             },
             {
-                "type": "integer",
-                "id": "c8"
+                "id": "c8",
+                "type": "integer"
             },
             {
-                "type": "integer",
-                "id": "c9"
+                "id": "c9",
+                "type": "integer"
             },
             {
-                "values": {
-                    "1": "Yes",
-                    "0": "No"
-                },
+                "id": "c91",
+                "type": "boolean",
                 "input": "radio",
+                "values": {
+                    "0": "No",
+                    "1": "Yes"
+                },
                 "operators": [
                     "equal"
-                ],
-                "type": "boolean",
-                "id": "c91"
+                ]
             },
             {
-                "values": {
-                    "1": "Yes",
-                    "0": "No"
-                },
+                "id": "c92",
+                "type": "boolean",
                 "input": "radio",
+                "values": {
+                    "0": "No",
+                    "1": "Yes"
+                },
                 "operators": [
                     "equal"
-                ],
-                "type": "boolean",
-                "id": "c92"
+                ]
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_112",
@@ -907,358 +937,6 @@
         "categories": [],
         "active_from": null,
         "active_to": null
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1568,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2018-01-17T03:20:03.780Z",
-        "modified": "2018-09-06T00:07:04.275Z",
-        "name": "workflow_create",
-        "workflow": 112,
-        "payload": {
-            "id": 112,
-            "name": "combine columns"
-        }
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1569,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2018-01-17T03:20:37.966Z",
-        "modified": "2018-09-06T00:07:04.275Z",
-        "name": "workflow_data_upload",
-        "workflow": 112,
-        "payload": {
-            "column_names": [
-                "c0",
-                "c1",
-                "c2",
-                "c3",
-                "c4",
-                "c5",
-                "c6",
-                "c7",
-                "c8",
-                "c9"
-            ],
-            "name": "combine columns",
-            "column_types": [
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer"
-            ],
-            "num_cols": 0,
-            "num_rows": 0,
-            "column_unique": [
-                true,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false
-            ],
-            "id": 112
-        }
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1574,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2018-01-17T03:56:07.641Z",
-        "modified": "2018-09-06T00:07:04.275Z",
-        "name": "column_add",
-        "workflow": 112,
-        "payload": {
-            "column_name": "d1",
-            "id": 112,
-            "column_type": "integer",
-            "name": "combine columns"
-        }
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1575,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2018-01-17T03:56:29.106Z",
-        "modified": "2018-09-06T00:07:04.275Z",
-        "name": "column_add",
-        "workflow": 112,
-        "payload": {
-            "column_name": "d2",
-            "id": 112,
-            "column_type": "integer",
-            "name": "combine columns"
-        }
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1576,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2018-01-17T03:56:48.500Z",
-        "modified": "2018-09-06T00:07:04.275Z",
-        "name": "column_add",
-        "workflow": 112,
-        "payload": {
-            "column_name": "d3",
-            "id": 112,
-            "column_type": "integer",
-            "name": "combine columns"
-        }
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1577,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2018-01-17T03:57:18.387Z",
-        "modified": "2018-09-06T00:07:04.275Z",
-        "name": "column_add",
-        "workflow": 112,
-        "payload": {
-            "column_name": "d4",
-            "id": 112,
-            "column_type": "integer",
-            "name": "combine columns"
-        }
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1578,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2018-01-17T07:04:17.762Z",
-        "modified": "2018-09-06T00:07:04.275Z",
-        "name": "workflow_data_merge",
-        "workflow": 112,
-        "payload": {
-            "column_names": [
-                "aaa",
-                "c0",
-                "c1",
-                "c10",
-                "c11",
-                "c2",
-                "c3",
-                "c4",
-                "c5",
-                "c6",
-                "c7",
-                "c8",
-                "c9",
-                "d1",
-                "d2",
-                "d3",
-                "d4"
-            ],
-            "name": "combine columns",
-            "column_types": [
-                "integer",
-                "integer",
-                "integer",
-                "boolean",
-                "boolean",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer"
-            ],
-            "num_cols": 14,
-            "num_rows": 100,
-            "column_unique": [
-                true,
-                true,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false
-            ],
-            "id": 112
-        }
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1579,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2018-01-17T07:04:39.613Z",
-        "modified": "2018-09-06T00:07:04.275Z",
-        "name": "column_delete",
-        "workflow": 112,
-        "payload": {
-            "column_name": "d1",
-            "id": 112,
-            "name": "combine columns"
-        }
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1580,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2018-01-17T07:04:46.916Z",
-        "modified": "2018-09-06T00:07:04.275Z",
-        "name": "column_delete",
-        "workflow": 112,
-        "payload": {
-            "column_name": "d2",
-            "id": 112,
-            "name": "combine columns"
-        }
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1581,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2018-01-17T07:04:51.914Z",
-        "modified": "2018-09-06T00:07:04.275Z",
-        "name": "column_delete",
-        "workflow": 112,
-        "payload": {
-            "column_name": "d3",
-            "id": 112,
-            "name": "combine columns"
-        }
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1582,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2018-01-17T07:04:57.659Z",
-        "modified": "2018-09-06T00:07:04.275Z",
-        "name": "column_delete",
-        "workflow": 112,
-        "payload": {
-            "column_name": "d4",
-            "id": 112,
-            "name": "combine columns"
-        }
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1583,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2018-01-17T07:07:54.233Z",
-        "modified": "2018-09-06T00:07:04.275Z",
-        "name": "column_rename",
-        "workflow": 112,
-        "payload": {
-            "new_name": "c91",
-            "column_name": "c10",
-            "id": 112,
-            "name": "combine columns"
-        }
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1584,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2018-01-17T07:08:03.920Z",
-        "modified": "2018-09-06T00:07:04.275Z",
-        "name": "column_rename",
-        "workflow": 112,
-        "payload": {
-            "new_name": "c92",
-            "column_name": "c11",
-            "id": 112,
-            "name": "combine columns"
-        }
-    }
-},
-{
-    "model": "logs.log",
-    "pk": 1585,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2018-01-17T07:08:09.405Z",
-        "modified": "2018-09-06T00:07:04.275Z",
-        "name": "column_delete",
-        "workflow": 112,
-        "payload": {
-            "column_name": "aaa",
-            "id": 112,
-            "name": "combine columns"
-        }
     }
 }
 ]

@@ -19,6 +19,7 @@ from table.serializers import (
     DataFrameJSONSerializer,
     DataFrameJSONMergeSerializer
 )
+from workflow.models import Workflow
 from workflow.ops import get_workflow
 
 
@@ -68,7 +69,7 @@ class TableBasicOps(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
         # Store the content in the db and...
-        ops.store_dataframe_in_db(df, pk)
+        ops.store_dataframe_in_db(df, wflow)
 
         # Update all the counters in the conditions
         for action in wflow.actions.all():
@@ -79,16 +80,19 @@ class TableBasicOps(APIView):
     # Retrieve
     def get(self, request, pk, format=None):
         # Try to retrieve the wflow to check for permissions
-        self.get_object(pk)
+        workflow = self.get_object(pk)
         serializer = self.serializer_class(
-            {'data_frame': pandas_db.load_from_db(pk)}
+            {'data_frame':
+                pandas_db.load_from_db(workflow.get_data_frame_table_name())
+            }
         )
         return Response(serializer.data)
 
     # Create
     def post(self, request, pk, format=None):
         # If there is a table in the workflow, ignore the request
-        if pandas_db.load_from_db(pk) is not None:
+        w = Workflow.objects.get(pk=pk)
+        if pandas_db.load_from_db(w.get_data_frame_table_name()) is not None:
             raise APIException(_('Post request requires workflow without '
                                  'a table'))
         return self.override(request, pk, format)
@@ -204,9 +208,12 @@ class TableBasicMerge(APIView):
     # Retrieve
     def get(self, request, pk, format=None):
         # Try to retrieve the wflow to check for permissions
-        self.get_object(pk)
+        workflow = self.get_object(pk)
         serializer = self.serializer_class(
-            {'src_df': pandas_db.load_from_db(pk),
+            {'src_df':
+                 pandas_db.load_from_db(
+                     workflow.get_data_frame_table_name()
+                 ),
              'how': '',
              'left_on': '',
              'right_on': ''}
@@ -218,7 +225,7 @@ class TableBasicMerge(APIView):
         # Try to retrieve the wflow to check for permissions
         workflow = self.get_object(pk)
         # Get the dst_df
-        dst_df = pandas_db.load_from_db(pk)
+        dst_df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():

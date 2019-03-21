@@ -63,6 +63,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
 
     data_frame = DataFramePandasField(
         required=False,
+        allow_null=True,
         help_text=_('This field must be the Base64 encoded '
                     'result of pandas.to_pickle() function')
     )
@@ -134,14 +135,11 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             data_frame = validated_data.get('data_frame', None)
             if data_frame is not None:
                 ops.store_dataframe_in_db(data_frame,
-                                          workflow_obj.id,
+                                          workflow_obj,
                                           reset_keys=False)
 
                 # Reconcile now the information in workflow and columns with the
                 # one loaded
-                workflow_obj.data_frame_table_name = \
-                    pandas_db.create_table_name(workflow_obj.pk)
-
                 workflow_obj.ncols = validated_data['ncols']
                 workflow_obj.nrows = validated_data['nrows']
 
@@ -171,8 +169,6 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
         except Exception:
             # Get rid of the objects created
             if workflow_obj:
-                if workflow_obj.has_data_frame():
-                    pandas_db.delete_table(workflow_obj.id)
                 if workflow_obj.id:
                     workflow_obj.delete()
             raise

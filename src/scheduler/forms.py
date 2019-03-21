@@ -297,7 +297,7 @@ def scheduled_email_action_data_is_correct(action, cleaned_data):
     # Check if the values in the email column are correct emails
     try:
         column_data = execute_select_on_table(
-            action.workflow.id,
+            action.workflow.get_data_frame_table_name(),
             [],
             [],
             column_names=[item_column.name])

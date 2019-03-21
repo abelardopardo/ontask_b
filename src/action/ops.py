@@ -44,7 +44,7 @@ from action.evaluate import (
     get_row_values
 )
 from action.forms import EnterActionIn, field_prefix
-from action.models import Action
+from action.models import Action, ActionColumnConditionTuple
 from action.serializers import ActionSelfcontainedSerializer
 from dataops import pandas_db, ops
 from logs.models import Log
@@ -75,7 +75,8 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
         user_attribute_value = request.user.email
 
     # Get the active columns attached to the action
-    columns = [c for c in action.columns.all() if c.is_active]
+    columns = [x.column for x in action.column_condition_pair.all()
+               if x.column.is_active]
     if action.shuffle:
         # Shuffle the columns if needed
         random.seed(request.user)
@@ -140,7 +141,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
         set_values.append(value)
         log_payload.append((column.name, value))
 
-    pandas_db.update_row(action.workflow.id,
+    pandas_db.update_row(action.workflow.get_data_frame_table_name(),
                          set_fields,
                          set_values,
                          [where_field],
@@ -289,12 +290,13 @@ def clone_action(action, new_workflow=None, new_name=None):
 
     # Clone the columns field (in case of an action in).
     if action.is_in:
-        column_names = old_action.columns.all().values_list('name', flat=True)
-        action.columns.clear()
-        action.columns.add(
-            *list(action.workflow.columns.filter(
-                name__in=column_names
-            )))
+        action.column_condition_pair.delete()
+        for acc_tuple in old_action.column_condition_pair.all():
+            __, __ = ActionColumnConditionTuple.objects.get_or_create(
+                action=action,
+                column=acc_tuple.column,
+                condition=acc_tuple.condition
+            )
 
     # Clone the conditions
     clone_conditions(old_action.conditions.all(), action)
@@ -448,7 +450,9 @@ def send_messages(user,
     track_col_name = ''
     data_frame = None
     if track_read:
-        data_frame = pandas_db.load_from_db(action.workflow.id)
+        data_frame = pandas_db.load_from_db(
+            action.workflow.get_data_frame_table_name()
+        )
         # Make sure the column name does not collide with an existing one
         i = 0  # Suffix to rename
         while True:
@@ -544,7 +548,7 @@ def send_messages(user,
 
         # Initial value in the data frame and store the table
         data_frame[track_col_name] = 0
-        ops.store_dataframe_in_db(data_frame, action.workflow.id)
+        ops.store_dataframe_in_db(data_frame, action.workflow)
 
     # Partition the list of emails into chunks as per the value of EMAIL_BURST
     chunk_size = len(msgs)

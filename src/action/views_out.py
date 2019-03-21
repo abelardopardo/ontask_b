@@ -397,7 +397,7 @@ def action_zip_export(request):
     if user_fname_column:
         # Get the user_fname_column values
         user_fname_data = get_table_cursor(
-            action.workflow.pk,
+            action.workflow.get_data_frame_table_name(),
             None,
             column_names=[user_fname_column]
         ).fetchall()
