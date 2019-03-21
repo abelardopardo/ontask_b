@@ -40,7 +40,7 @@ docutils==0.14
 easy-thumbnails==2.5
 entrypoints==0.2.3
 et-xmlfile==1.0.1
-future==0.17.1
+future==0.16.0
 html2text==2018.1.9
 httplib2==0.12.0
 idna==2.7
@@ -94,11 +94,12 @@ pyparsing==2.3.0
 python-crontab==2.3.5
 python-dateutil==2.7.5
 pytz==2018.9
-PyYAML==4.2.b1
+PyYAML==3.13
 pyzmq==17.1.2
 qtconsole==4.4.3
 redis==2.10.6
 requests==2.20.1
+requests[security]==2.20.1
 Send2Trash==1.5.0
 simplegeneric==0.8.1
 six==1.11.0
