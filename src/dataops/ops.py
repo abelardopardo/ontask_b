@@ -65,7 +65,7 @@ def store_table_in_db(data_frame, workflow, temporary=False, reset_keys=True):
 
     # We are modifying an existing DF
     if settings.DEBUG:
-        print('Storing table ', workflow.data_frame_table_name)
+        print('Storing table ', workflow.get_data_frame_table_name())
 
 
     # Get the workflow and its columns
@@ -110,11 +110,11 @@ def store_table_in_db(data_frame, workflow, temporary=False, reset_keys=True):
 
     # Store the table in the DB
     store_table(data_frame,
-                workflow.data_frame_table_name,
+                workflow.get_data_frame_table_name(),
                 dtype=dict([(x.name, x.data_type) for x in wf_columns]))
 
     # Review the column types because some "objects" are stored as booleans
-    column_types = df_column_types_rename(workflow.data_frame_table_name)
+    column_types = df_column_types_rename(workflow.get_data_frame_table_name())
     for ctype, col in zip(column_types, wf_columns):
         if col.data_type != ctype:
             # If the column type in the DB is different from the one in the

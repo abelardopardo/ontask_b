@@ -716,7 +716,7 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names):
     safe_column_names = [fix_pctg_in_name(x) for x in column_names]
     query = 'SELECT "{0}" FROM "{1}" WHERE ("{2}" = %s)'.format(
         '", "'.join(safe_column_names),
-        workflow.data_frame_table_name,
+        workflow.get_data_frame_table_name(),
         fix_pctg_in_name(kv_pair[0])
     )
     fields = [kv_pair[1]]
