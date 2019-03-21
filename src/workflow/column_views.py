@@ -523,7 +523,7 @@ def column_edit(request, pk):
 
         # If there is a new name, rename the data frame columns
         if 'name' in form.changed_data:
-            pandas_db.db_column_rename(workflow.get_data_frame_table(),
+            pandas_db.db_column_rename(workflow.get_data_frame_table_name(),
                                        old_name,
                                        column.name)
             ops.rename_df_column(workflow, old_name, column.name)
