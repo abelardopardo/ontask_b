@@ -245,14 +245,11 @@ class Workflow(models.Model):
         """
         :return: If the workflow has a dataframe
         """
-        return not self.data_frame_table_name
+        return pandas_db.is_table_in_db(self.get_data_frame_table_name())
 
     def data_frame(self):
         # Function used by the serializer to access the data frame in the DB
-        if self.data_frame_table_name:
-            return pandas_db.load_from_db(self.get_data_frame_table_name())
-
-        return None
+        return pandas_db.load_from_db(self.get_data_frame_table_name())
 
     def is_locked(self):
         """
