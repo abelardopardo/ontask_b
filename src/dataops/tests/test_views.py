@@ -617,6 +617,9 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//input[@type='text']"))
+        )
 
         # Provide the execution data
         self.selenium.find_element_by_xpath("//input[@type='text']").click()
@@ -661,6 +664,9 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         element.find_element_by_link_text('Test Plugin 1 Name').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
+        )
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//input[@type='text']"))
         )
 
         # Provide the execution data

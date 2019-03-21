@@ -172,6 +172,9 @@ class TableApiCreate(TableApiBase):
             {'data_frame': self.new_table},
             format='json')
 
+        # Refresh wflow (has been updated)
+        workflow = Workflow.objects.get(pk=workflow.id)
+
         # Load the df from the db
         df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
         # Transform new table into data frame
@@ -181,9 +184,7 @@ class TableApiCreate(TableApiBase):
         # Compare both elements
         self.compare_tables(r_df, df)
 
-        # Refresh wflow (has been updated) and check that the rest of the
-        # information is correct
-        workflow = Workflow.objects.get(pk=workflow.id)
+        # Check that the rest of the information is correct
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
     def test_table_json_create_error(self):
@@ -229,15 +230,17 @@ class TableApiCreate(TableApiBase):
             {'data_frame': serializers.df_to_string(r_df)},
             format='json')
 
+        # Refresh wflow (has been updated)
+        workflow = Workflow.objects.get(pk=workflow.id)
+
         # Load the df from the db
         df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
         # Compare both elements
         self.compare_tables(r_df, df)
 
-        # Refresh wflow (has been updated) and check that the rest of the
+        # Check that the rest of the
         # information is correct
-        workflow = Workflow.objects.get(pk=workflow.id)
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
     def test_table_JSON_update(self):
@@ -255,13 +258,16 @@ class TableApiCreate(TableApiBase):
             {'data_frame': self.new_table},
             format='json')
 
+        # Refresh wflow (has been updated)
+        workflow = Workflow.objects.get(pk=workflow.id)
+
         # Load the df from the db
         df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
         # Compare both elements
         self.compare_tables(r_df, df)
 
-        # Refresh wflow (has been updated) and check that the rest of the
+        # Check that the rest of the
         # information is correct
         workflow = Workflow.objects.get(pk=workflow.id)
         self.assertTrue(pandas_db.check_wf_df(workflow))
@@ -281,13 +287,16 @@ class TableApiCreate(TableApiBase):
             {'data_frame': serializers.df_to_string(r_df)},
             format='json')
 
+        # Refresh wflow (has been updated)
+        workflow = Workflow.objects.get(pk=workflow.id)
+
         # Load the df from the db
         df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
         # Compare both elements
         self.compare_tables(r_df, df)
 
-        # Refresh wflow (has been updated) and check that the rest of the
+        # Check that the rest of the
         # information is correct
         workflow = Workflow.objects.get(pk=workflow.id)
         self.assertTrue(pandas_db.check_wf_df(workflow))
@@ -326,6 +335,8 @@ class TableApiMerge(TableApiBase):
         response = self.client.get(reverse('table:api_merge',
                                            kwargs={'pk': workflow.id}))
 
+        workflow = Workflow.objects.all()[0]
+
         # Transform new table into string
         r_df = pd.DataFrame(response.data['src_df'])
         r_df = ops.detect_datetime_columns(r_df)
@@ -335,7 +346,6 @@ class TableApiMerge(TableApiBase):
 
         # Compare both elements and check wf df consistency
         self.compare_tables(r_df, df)
-        workflow = Workflow.objects.all()[0]
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
     def test_table_pandas_merge_get(self):
@@ -346,6 +356,8 @@ class TableApiMerge(TableApiBase):
         response = self.client.get(reverse('table:api_pmerge',
                                            kwargs={'pk': workflow.id}))
 
+        workflow = Workflow.objects.all()[0]
+
         # Transform new table into string
         r_df = serializers.string_to_df(response.data['src_df'])
 
@@ -354,7 +366,6 @@ class TableApiMerge(TableApiBase):
 
         # Compare both elements and check wf df consistency
         self.compare_tables(r_df, df)
-        workflow = Workflow.objects.all()[0]
         self.assertTrue(pandas_db.check_wf_df(workflow))
 
     # Merge and create an empty dataset
