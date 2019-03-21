@@ -192,7 +192,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Set the value to 2017-10-11T00:32:44
         self.selenium.find_element_by_name(
-            'builder_rule_1_value_0').send_keys('2017-10-11T00:32:44')
+            'builder_rule_1_value_0').send_keys('2017-10-11T00:32:44+1300')
 
         # Click in the "update filter"
         self.selenium.find_element_by_xpath(
