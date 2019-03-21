@@ -29,7 +29,7 @@ CREATE TABLE public."__ONTASK_WORKFLOW_TABLE_149" (
     age double precision,
     name text,
     registered boolean,
-    "when" timestamp without time zone
+    "when" timestamp with time zone
 );
 
 
@@ -38,9 +38,9 @@ CREATE TABLE public."__ONTASK_WORKFLOW_TABLE_149" (
 --
 
 COPY public."__ONTASK_WORKFLOW_TABLE_149" (email, sid, age, name, registered, "when") FROM stdin;
-student01@bogus.com	1	12	Carmelo Coton	t	2017-10-11 00:33:44
-student02@bogus.com	2	12.0999999999999996	Carmelo Coton	f	2017-10-11 00:32:44
-student03@bogus.com	3	13.1999999999999993	Carmelo Coton22	t	2017-10-11 00:32:44
+student01@bogus.com	1	12	Carmelo Coton	t	2017-10-11 00:33:44 +1300
+student02@bogus.com	2	12.0999999999999996	Carmelo Coton	f	2017-10-11 00:32:44 +1300
+student03@bogus.com	3	13.1999999999999993	Carmelo Coton22	t	2017-10-11 00:32:44 +1300
 \.
 
 
