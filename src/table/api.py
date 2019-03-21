@@ -208,11 +208,11 @@ class TableBasicMerge(APIView):
     # Retrieve
     def get(self, request, pk, format=None):
         # Try to retrieve the wflow to check for permissions
-        self.get_object(pk)
+        workflow = self.get_object(pk)
         serializer = self.serializer_class(
             {'src_df':
                  pandas_db.load_from_db(
-                     self.object.get_data_frame_table_name()
+                     workflow.get_data_frame_table_name()
                  ),
              'how': '',
              'left_on': '',
