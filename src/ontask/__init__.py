@@ -6,6 +6,7 @@ Basic functions and definitions used all over the platform.
 
 import json
 import pytz
+from email_validator import validate_email
 
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings as ontask_settings
@@ -78,6 +79,13 @@ def is_legal_name(val):
 
     return None
 
+def is_correct_email(email_txt):
+    try:
+        validate_email(email_txt)
+    except ValueError:
+        return False
+
+    return True
 
 def fix_pctg_in_name(val):
     """

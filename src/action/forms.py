@@ -12,13 +12,12 @@ from django import forms
 from django.conf import settings as ontask_settings
 from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteInplaceWidget
-from validate_email import validate_email
 
 from dataops.pandas_db import (
     execute_select_on_table, get_table_cursor,
     is_column_table_unique, get_table_data
 )
-from ontask import ontask_prefs, is_legal_name
+from ontask import ontask_prefs, is_legal_name, is_correct_email
 from ontask.forms import (
     column_to_field, RestrictedFileField,
     dateTimeWidgetOptions
@@ -340,7 +339,7 @@ class EmailActionForm(forms.Form):
                 [],
                 column_names=[email_column]
             )
-            if not all([validate_email(x[0]) for x in column_data]):
+            if not all([is_correct_email(x[0]) for x in column_data]):
                 # column has incorrect email addresses
                 self.add_error(
                     'email_column',
@@ -352,14 +351,14 @@ class EmailActionForm(forms.Form):
                 _('The column with email addresses has incorrect values.')
             )
 
-        if not all([validate_email(x)
+        if not all([is_correct_email(x)
                     for x in self.cleaned_data['cc_email'].split(',') if x]):
             self.add_error(
                 'cc_email',
                 _('Field needs a comma-separated list of emails.')
             )
 
-        if not all([validate_email(x)
+        if not all([is_correct_email(x)
                     for x in self.cleaned_data['bcc_email'].split(',') if x]):
             self.add_error(
                 'bcc_email',

@@ -1,6 +1,6 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 4.1 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 4.2 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
 ## OnTask in a nutshell
 
@@ -31,7 +31,7 @@ Current Version: 4.1 ([documentation](http://ontask-version-b.readthedocs.io/en/
 
 - **NEW** Creation of ZIP file to upload feedback files in Moodle assessment
 
-- **NEW** Support for internationalization (initial versions for Spanish and Chinese)
+- **NEW** Support for internationalization (initial versions for Spanish, Chinese and Finnish)
 
 **For a detailed description of the tool, how to install it, and how to use it
 check the [OnTask Documentation](https://abelardopardo.github.io/ontask_b)**.
@@ -260,6 +260,8 @@ licenses:
 - [djangorestframework](https://pypi.python.org/pypi/djangorestframework/3.7.7) 
   BSD
 
+- [email_validator](https://github.com/JoshData/python-email-validator) CC
+
 - [easy-thumbnails](https://pypi.python.org/pypi/easy-thumbnails) BSD
 
 - [ims-lti-py](https://github.com/tophatmonocle/ims_lti_py) MIT
@@ -293,5 +295,4 @@ licenses:
 
 - [tzlocal](https://pypi.python.org/pypi/tzlocal) MIT
 
-- [validate_email](https://pypi.python.org/pypi/validate_email) LGPL
 

@@ -34,7 +34,6 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
-from validate_email import validate_email
 from django.db.models import Q
 from celery.utils.log import get_task_logger
 from rest_framework import status
@@ -50,6 +49,7 @@ from dataops import pandas_db, ops
 from logs.models import Log
 from ontask_oauth.models import OnTaskOAuthUserTokens
 from ontask_oauth.views import refresh_token
+from ontask import is_correct_email
 from workflow.models import Column
 from workflow.ops import get_workflow
 from . import settings
@@ -479,9 +479,9 @@ def send_messages(user,
         bcc_email_list = []
 
     # Check that cc and bcc contain list of valid email addresses
-    if not all([validate_email(x) for x in cc_email_list]):
+    if not all([is_correct_email(x) for x in cc_email_list]):
         return _('Invalid email address in cc email')
-    if not all([validate_email(x) for x in bcc_email_list]):
+    if not all([is_correct_email(x) for x in bcc_email_list]):
         return _('Invalid email address in bcc email')
 
     # Everything seemed to work to create the messages.

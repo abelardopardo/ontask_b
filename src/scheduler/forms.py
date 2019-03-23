@@ -9,10 +9,10 @@ from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from validate_email import validate_email
 
 from dataops.pandas_db import execute_select_on_table
 from ontask.forms import dateTimeWidgetOptions
+from ontask import is_correct_email
 from workflow.models import Column
 from .models import ScheduledAction
 
@@ -301,7 +301,7 @@ def scheduled_email_action_data_is_correct(action, cleaned_data):
             [],
             [],
             column_names=[item_column.name])
-        if not all([validate_email(x[0]) for x in column_data]):
+        if not all([is_correct_email(x[0]) for x in column_data]):
             # column has incorrect email addresses
             result.append(
                 ('item_column',
@@ -313,14 +313,14 @@ def scheduled_email_action_data_is_correct(action, cleaned_data):
              _('The column with email addresses has incorrect values.'))
         )
 
-    if not all([validate_email(x)
+    if not all([is_correct_email(x)
                 for x in cleaned_data['cc_email'].split(',') if x]):
         result.append(
             ('cc_email',
              _('This field must be a comma-separated list of emails.'))
         )
 
-    if not all([validate_email(x)
+    if not all([is_correct_email(x)
                 for x in cleaned_data['bcc_email'].split(',') if x]):
         result.append(
             ('bcc_email',

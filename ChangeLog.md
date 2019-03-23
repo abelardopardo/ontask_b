@@ -4,6 +4,8 @@
 
 - Export now allows to export a workflow without a data frame
 
+- Detection of personalized texts or JSON objects in which all conditions are false
+
 ### Fixed
 
 - Bug when handling URL creation for row edition
@@ -15,6 +17,8 @@
 - Upgraded requirements and propagated changes to adapt to Pandas 0.24
 
 - Underlying models to handle conditions and columns in actions (new many to many relation)
+
+- Switched to email_validator to validate email addresses
 
 ## 4.1 (2019-02-27)
 

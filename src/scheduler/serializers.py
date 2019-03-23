@@ -9,8 +9,8 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 from django.conf import settings
-from validate_email import validate_email
 
+from ontask import is_correct_email
 from action.models import Action
 from dataops.pandas_db import execute_select_on_table
 from scheduler.models import ScheduledAction
@@ -186,7 +186,7 @@ class ScheduledEmailSerializer(ScheduledActionSerializer):
                 [],
                 [],
                 column_names=[item_column.name])
-            if not all([validate_email(x[0]) for x in column_data]):
+            if not all([is_correct_email(x[0]) for x in column_data]):
                 # column has incorrect email addresses
                 raise APIException(
                     _('The column with email addresses has incorrect values.')
@@ -196,13 +196,13 @@ class ScheduledEmailSerializer(ScheduledActionSerializer):
                 _('The column with email addresses has incorrect values.')
             )
 
-        if not all([validate_email(x)
+        if not all([is_correct_email(x)
                     for x in payload.get('cc_email', []) if x]):
             raise APIException(
                 _('cc_email must be a comma-separated list of emails.')
             )
 
-        if not all([validate_email(x)
+        if not all([is_correct_email(x)
                     for x in payload.get('bcc_email', []) if x]):
             raise APIException(
                 _('bcc_email must be a comma-separated list of emails.')
