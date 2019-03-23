@@ -24,6 +24,14 @@ action_context_var = 'ONTASK_ACTION_CONTEXT_VARIABLE___'
 viz_number_context_var = 'ONTASK_VIZ_NUMBER_CONTEXT_VARIABLE___'
 
 
+# Regular expression and replacements replace whitespace surrounding condition
+# markup
+white_space_res = [
+    (re.compile('\n[ \t\r\f\v]*{% if '), '{% if '),
+    (re.compile('{% endif %\}[ \t\r\f\v]*\n'), '{% endif %}')
+]
+
+
 def make_xlat(*args, **kwds):
     """
     Auxuliary function to define a translator that applies multiple character
@@ -93,6 +101,21 @@ def translate(varname):
     return tr_item(varname)
 
 
+def clean_whitespace(template_text):
+    """
+    Function to detect new lines before and after the conditional template
+    macros and removes it.
+
+    :param template_text: Initial template text
+    :return: Modified template text
+    """
+
+    # Loop over the regular expressions and apply them to the given text
+    for rexp, replace in white_space_res:
+        template_text = rexp.sub(replace, template_text)
+
+    return template_text
+
 def render_template(template_text, context_dict, action=None):
     """
     Given a template text and a context, performs the rendering of the
@@ -150,7 +173,10 @@ def render_template(template_text, context_dict, action=None):
                       translate(m.group('vname')) + \
                       m.group('mup_post'),
             new_template_text)
-    # new_template_text = '{% load vis_include %}' + new_template_text
+
+    # Step 2.2 Remove pre-and post white space from the {% if %} and {% endif %}
+    # conditions (to reduce white space when using non HTML content.
+    new_template_text = clean_whitespace(new_template_text)
 
     # Step 3. Apply the translation process to the context keys
     new_context = dict([(translate(escape(x)), y)
