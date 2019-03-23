@@ -3,7 +3,6 @@
 import logging
 import os.path
 import subprocess
-import sqlalchemy
 from builtins import next
 from builtins import zip
 from collections import OrderedDict
@@ -11,6 +10,7 @@ from urllib.parse import urlparse, urlunparse
 
 import numpy as np
 import pandas as pd
+import sqlalchemy
 from django.conf import settings
 from django.core.cache import cache
 from django.db import connection
@@ -18,7 +18,7 @@ from django.utils.translation import ugettext as _
 from sqlalchemy import create_engine
 
 from dataops.formula_evaluation import NodeEvaluation, evaluate
-from ontask import fix_pctg_in_name, OnTaskDataFrameNoKey, OnTaskException
+from ontask import fix_pctg_in_name, OnTaskDataFrameNoKey
 
 SITE_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
@@ -745,6 +745,7 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names):
     # ZIP the values to create a dictionary
     return OrderedDict(list(zip(workflow.get_column_names(), qs)))
 
+
 def execute_query(query, fields):
     """
     Run a query with a list of symbols
@@ -757,6 +758,7 @@ def execute_query(query, fields):
     cursor.execute(query, fields)
 
     return cursor
+
 
 def get_column_stats_from_df(df_column):
     """

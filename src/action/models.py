@@ -5,6 +5,7 @@ from builtins import object
 import datetime
 import itertools
 import re
+from builtins import object
 
 import pytz
 from django.conf import settings
@@ -14,11 +15,9 @@ from django.db import models
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
+import ontask
 from dataops import formula_evaluation, pandas_db
-from dataops.formula_evaluation import (
-    get_variables, evaluate,
-    NodeEvaluation
-)
+from dataops.formula_evaluation import get_variables, evaluate, NodeEvaluation
 from logs.models import Log
 import ontask
 from workflow.models import Workflow, Column
@@ -35,7 +34,6 @@ class Action(models.Model):
     """
     @DynamicAttrs
     """
-
     PERSONALIZED_TEXT = ontask.PERSONALIZED_TEXT
     PERSONALIZED_CANVAS_EMAIL = ontask.PERSONALIZED_CANVAS_EMAIL
     PERSONALIZED_JSON = ontask.PERSONALIZED_JSON
@@ -65,7 +63,8 @@ class Action(models.Model):
         null=False,
         blank=False,
         on_delete=models.CASCADE,
-        related_name='actions')
+        related_name='actions'
+    )
 
     name = models.CharField(max_length=256,
                             blank=False,
@@ -114,6 +113,11 @@ class Action(models.Model):
                                      null=True,
                                      default=None)
 
+    # Index of rows with all conditions false
+    rows_all_false = JSONField(default=None,
+                               blank=True,
+                               null=True)
+
     #
     # Field for actions PERSONALIZED_TEXT, PERSONALIZED_CAVNAS_EMAIL and
     # PERSONALIZED_JSON
@@ -121,7 +125,7 @@ class Action(models.Model):
     # Text to be personalised for action OUT
     content = models.TextField(default='', null=False, blank=True)
 
-    # Text to be personalised for action OUT
+    # URL for PERSONALIZED_JSON actions
     target_url = models.TextField(default='', null=True, blank=True)
 
     #
@@ -634,6 +638,7 @@ class ActionColumnConditionTuple(models.Model):
                                null=False,
                                blank=False,
                                related_name='column_condition_pair')
+
     condition = models.ForeignKey(Condition,
                                   on_delete=models.CASCADE,
                                   null=True,

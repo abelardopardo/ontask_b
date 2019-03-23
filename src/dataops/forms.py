@@ -6,7 +6,6 @@ from builtins import next
 from builtins import range
 from builtins import str
 from builtins import zip
-from collections import Counter
 from io import TextIOWrapper
 
 import pandas as pd
@@ -184,9 +183,11 @@ class UploadBasic(forms.Form):
         # Store the data frame in the DB.
         try:
             # Get frame info with three lists: names, types and is_key
-            self.frame_info = ops.store_upload_dataframe_in_db(
+            self.frame_info = ops.store_dataframe(
                 self.data_frame,
-                self.workflow)
+                self.workflow,
+                temporary=True
+            )
         except Exception as e:
             self.add_error('file',
                            _('Unable to process file ({0}).'.format(e)))

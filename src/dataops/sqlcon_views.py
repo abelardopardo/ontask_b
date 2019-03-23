@@ -13,8 +13,6 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
-import dataops.pandas_db
-import logs
 from dataops import ops, pandas_db
 from dataops.forms import SQLConnectionForm, SQLRequestPassword
 from dataops.models import SQLConnection
@@ -168,8 +166,8 @@ def sqlconnection_admin_index(request):
                       SQLConnection.objects.all().values('id',
                                                          'name',
                                                          'description_txt'),
-                      orderable=False)
-                  })
+                      orderable=False)}
+                  )
 
 
 @user_passes_test(is_instructor)
@@ -237,8 +235,9 @@ def sqlconn_add(request):
 @user_passes_test(is_admin)
 def sqlconn_edit(request, pk):
     """
-
-    :param request:
+    Respond to the reqeust to edit a SQL CONN object
+    :param request: HTML request
+    :param pk: Primary key
     :return:
     """
 
@@ -298,7 +297,6 @@ def sqlconn_clone(request, pk):
         new_name = 'Copy_of_' + new_name
 
     # Proceed to clone the view
-    old_name = conn.name
     conn.id = None
     conn.name = new_name
     conn.save()
@@ -392,6 +390,7 @@ def sqlupload1(request, pk):
     step_1: URL name of the first step
 
     :param request: Web request
+    :param pk: primary key of the SQL conn used
     :return: Creates the upload_data dictionary in the session
     """
 
@@ -451,8 +450,10 @@ def sqlupload1(request, pk):
     # Store the data frame in the DB.
     try:
         # Get frame info with three lists: names, types and is_key
-        frame_info = ops.store_upload_dataframe_in_db(data_frame, workflow)
-    except Exception as e:
+        frame_info = ops.store_dataframe(data_frame,
+                                         workflow,
+                                         temporary=True)
+    except Exception:
         form.add_error(
             None,
             _('Sorry. The data from this connection cannot be processed.')

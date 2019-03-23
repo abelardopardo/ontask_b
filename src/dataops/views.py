@@ -63,9 +63,9 @@ class PluginRegistryTable(tables.Table):
     def render_name(self, record):
         if record.is_verified:
             return format_html(
-                """<a href="{0}"
-                      data-toggle="tooltip"
-                      title="{1}">{2}&nbsp;<span class="fa fa-rocket"></span></a>""",
+                '<a href="{0}" ' +
+                'data-toggle="tooltip" title="{1}">{2}&nbsp;<span ' +
+                'class="fa fa-rocket"></span></a>',
                 reverse('dataops:plugin_invoke', kwargs={'pk': record.id}),
                 _('Execute the transformation'),
                 record.name
@@ -331,7 +331,7 @@ def row_create(request):
                            'cancel_url': reverse('table:display')})
 
     # Restore the dataframe to the DB
-    ops.store_dataframe_in_db(df, workflow)
+    ops.store_dataframe(df, workflow)
 
     # Recompute all the values of the conditions in each of the actions
     for act in workflow.actions.all():

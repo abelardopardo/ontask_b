@@ -221,14 +221,14 @@ def load_plugin(foldername):
         # Run some additional checks in the instance and if it does not
         # comply with them, bail out.
         tests = verify_plugin(plugin_instance)
-        if not all(x == 'Ok' for x, _ in tests):
-            return (None, tests)
+        if not all(x == 'Ok' for x, __ in tests):
+            return None, tests
     except AttributeError as e:
-        return (None, [(e, _('Class instantiation'))])
+        return None, [(e, _('Class instantiation'))]
     except Exception as e:
-        return (None, [(e, _('Instance creation'))])
+        return None, [(e, _('Instance creation'))]
 
-    return (plugin_instance, tests)
+    return plugin_instance, tests
 
 
 def load_plugin_info(plugin_folder, plugin_rego=None):
@@ -296,7 +296,7 @@ def refresh_plugin_data(request, workflow):
                                 '__init__.py')).st_mtime > \
                 time.mktime(rpin.modified.timetuple()):
             # A plugin has changed
-            pinstance = load_plugin_info(rpin.filename, rpin)
+            __ = load_plugin_info(rpin.filename, rpin)
 
             # Log the event
             Log.objects.register(request.user,
@@ -336,6 +336,7 @@ def run_plugin(plugin_instance, df, merge_key, params):
     Execute the run method in a plugin with the given data frame
     :param plugin_instance: Plugin instance
     :param df: data frame to be passed as parameter
+    :param merge_key: Column to use for merging
     :param params: Parameter dictionary: (name, value)
     :return: (result, message) If message is None, result is a valid data frame
     """

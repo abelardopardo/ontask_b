@@ -279,7 +279,6 @@ def upload_s3(request):
     src_is_key_column = upload_data['src_is_key_column']
     src_unique_col_names = [v for x, v in enumerate(src_column_names)
                             if src_is_key_column[x] and columns_to_upload[x]]
-    rename_column_names = upload_data['rename_column_names']
 
     # Bind the form with the received data (remember unique columns and
     # preselected keys.)'
@@ -491,10 +490,10 @@ def upload_s4(request):
             continue
 
         # Get old name and if it is going to be loaded
-        old_name, toLoad = src_info[colname]
+        old_name, to_load = src_info[colname]
 
         # Column is not going to be loaded anyway
-        if not toLoad:
+        if not to_load:
             if colname in dst_column_names:
                 # Case 3
                 info.append((colname, False, colname + _(' (Ignored)')))

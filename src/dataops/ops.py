@@ -67,7 +67,6 @@ def store_table_in_db(data_frame, workflow, temporary=False, reset_keys=True):
     if settings.DEBUG:
         print('Storing table ', workflow.get_data_frame_table_name())
 
-
     # Get the workflow and its columns
     wf_cols = workflow.columns.all()
 
@@ -129,36 +128,6 @@ def store_table_in_db(data_frame, workflow, temporary=False, reset_keys=True):
     workflow.save()
 
     return None
-
-
-def store_dataframe_in_db(data_frame, workflow, reset_keys=True):
-    """
-    Given a dataframe and the primary key of a workflow, it dumps its content on
-    a table that is rewritten every time.
-
-    :param data_frame: Pandas data frame containing the data
-    :param workflow: The workflow
-    :param reset_keys: Reset the field is_key computing its value from scratch
-    :return: Nothing. Side effect in the database
-    """
-    return store_table_in_db(data_frame, workflow, reset_keys=reset_keys)
-
-
-def store_upload_dataframe_in_db(data_frame, workflow):
-    """
-    Given a dataframe and the primary key of a workflow, it dumps its content on
-    a table that is rewritten every time.
-
-    :param data_frame: Pandas data frame containing the data
-    :param workflow: The workflow
-    :return: If temporary = True, then return a list with three lists:
-             - column names
-             - column types
-             - column is unique
-             If temporary = False, return None. All this infor is stored in
-             the workflow
-    """
-    return store_table_in_db(data_frame, workflow, temporary=True)
 
 
 def get_table_row_by_index(workflow, cond_filter, idx):
@@ -349,7 +318,7 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
 
     # If no dst_df is given, simply dump the frame in the DB
     if dst_df is None:
-        store_dataframe_in_db(src_df, workflow)
+        store_dataframe(src_df, workflow)
         # Reconcile the label is_key with the one in the merge_info
         for cname, uploaded, is_key in zip(merge_info['rename_column_names'],
                                            merge_info['columns_to_upload'],
@@ -461,7 +430,7 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
             ).format(col.name, ', '.join(col.categories))
 
     # Store the result back in the DB
-    store_dataframe_in_db(new_df, workflow)
+    store_dataframe(new_df, workflow)
 
     # Update the value of is_key based on "keep_key_column"
     for to_upload, cname, keep_key in zip(merge_info['columns_to_upload'],
@@ -507,7 +476,7 @@ def data_frame_add_column(df, column, initial_value):
     # b = np.empty((10,), dtype=[('nnn', np.float64)] (ARRAY)
     # pd.concat([df, pd.DataFrame(b)], axis=1)
 
-    # TODO: Explore using the pd.Series
+    # Should we use pd.Series instead?
     # df2['aaa'] = pd.Series(dtype=np.int64)
 
     column_type = column.data_type

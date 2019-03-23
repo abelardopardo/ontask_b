@@ -573,7 +573,7 @@ def clone(request, pk):
 
     # Clone the data frame
     data_frame = pandas_db.load_from_db(workflow.get_data_frame_table_name())
-    ops.store_dataframe_in_db(data_frame, workflow_new)
+    ops.store_dataframe(data_frame, workflow_new)
 
     # Clone actions
     action.ops.clone_actions([a for a in workflow.actions.all()], workflow_new)

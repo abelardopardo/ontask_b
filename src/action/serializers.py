@@ -399,7 +399,7 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
                         col.save()
 
                     # Store the df to DB
-                    ops.store_dataframe_in_db(df, workflow)
+                    ops.store_dataframe(df, workflow)
                 else:
                     raise Exception(_('Unable to create column data'))
 

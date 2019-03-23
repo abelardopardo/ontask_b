@@ -69,7 +69,7 @@ class TableBasicOps(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
         # Store the content in the db and...
-        ops.store_dataframe_in_db(df, wflow)
+        ops.store_dataframe(df, wflow)
 
         # Update all the counters in the conditions
         for action in wflow.actions.all():

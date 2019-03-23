@@ -159,7 +159,7 @@ def column_add(request, pk=None):
     column.save()
 
     # Store the df to DB
-    ops.store_dataframe_in_db(df, workflow)
+    ops.store_dataframe(df, workflow)
 
     # If the column is a question, add it to the action
     if is_question:
@@ -300,7 +300,7 @@ def formula_column_add(request):
     column.save()
 
     # Store the df to DB
-    ops.store_dataframe_in_db(df, workflow)
+    ops.store_dataframe(df, workflow)
 
     # Log the event
     Log.objects.register(request.user,
@@ -441,7 +441,7 @@ def random_column_add(request):
     column.save()
 
     # Store the df to DB
-    ops.store_dataframe_in_db(df, workflow)
+    ops.store_dataframe(df, workflow)
 
     # Log the event
     Log.objects.register(request.user,

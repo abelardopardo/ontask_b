@@ -432,7 +432,7 @@ def clone_column(column, new_workflow=None, new_name=None):
     # Add the column to the table and update it.
     data_frame = pandas_db.load_from_db(column.workflow.get_data_frame_table_name())
     data_frame[new_name] = data_frame[old_name]
-    ops.store_dataframe_in_db(data_frame, column.workflow)
+    ops.store_dataframe(data_frame, column.workflow)
 
     return column
 
