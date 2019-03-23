@@ -562,6 +562,55 @@ def edit_action_out(request, workflow, action):
     form_filter = FilterForm(request.POST or None,
                              instance=action.get_filter())
 
+    # Template to use
+    template = 'action/edit_personalized_text.html'
+    if action.action_type == Action.PERSONALIZED_JSON:
+        template = 'action/edit_personalized_json.html'
+    elif action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        template = 'action/edit_personalized_canvas_email.html'
+
+    # Processing the request after receiving the text from the editor
+    if request.method == 'POST' and form.is_valid() and form_filter.is_valid():
+        # Get content
+        content = form.cleaned_data.get('content', None)
+
+        # Render the content as a template and catch potential problems.
+        # This seems to be only possible if dealing directly with Jinja2
+        # instead of Django.
+        try:
+            render_error = False
+            render_template(content, {}, action)
+        except Exception as e:
+            # Pass the django exception to the form (fingers crossed)
+            form.add_error(None, e)
+            render_error = True
+
+        if not render_error:
+            # Log the event
+            Log.objects.register(request.user,
+                                 Log.ACTION_UPDATE,
+                                 action.workflow,
+                                 {'id': action.id,
+                                  'name': action.name,
+                                  'workflow_id': workflow.id,
+                                  'workflow_name': workflow.name,
+                                  'content': content})
+
+            # Text is good. Update the content of the action
+            action.set_content(content)
+
+            if action.action_type == Action.PERSONALIZED_JSON:
+                # Update the target_url field
+                action.target_url = form.cleaned_data['target_url']
+
+            action.save()
+
+            if request.POST['Submit'] == 'Submit':
+                return redirect(request.get_full_path())
+            return redirect('action:index')
+
+    # This is a GET request or a faulty POST request
+
     # Get the filter or None
     filter_condition = action.get_filter()
 
@@ -581,60 +630,17 @@ def edit_action_out(request, workflow, action):
                'selected_rows':
                    filter_condition.n_rows_selected if filter_condition else -1,
                'has_data': action.workflow.has_table(),
+               'all_false_conditions': any([x.n_rows_selected == 0
+                                            for x in action.conditions.all()]),
+               'rows_all_false': action.get_row_all_false_count(),
                'total_rows': workflow.nrows,
                'form': form,
                'form_filter': form_filter,
                'vis_scripts': PlotlyHandler.get_engine_scripts()
                }
 
-    # Template to use
-    template = 'action/edit_personalized_text.html'
-    if action.action_type == Action.PERSONALIZED_JSON:
-        template = 'action/edit_personalized_json.html'
-    elif action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
-        template = 'action/edit_personalized_canvas_email.html'
-
-    # Processing the request after receiving the text from the editor
-    if request.method == 'GET' or not form.is_valid() or \
-            not form_filter.is_valid():
-        # Return the same form in the same page
-        return render(request, template, context=context)
-
-    # Get content
-    content = form.cleaned_data.get('content', None)
-
-    # Render the content as a template and catch potential problems.
-    # This seems to be only possible if dealing directly with Jinja2
-    # instead of Django.
-    try:
-        render_template(content, {}, action)
-    except Exception as e:
-        # Pass the django exception to the form (fingers crossed)
-        form.add_error(None, e)
-        return render(request, template, context)
-
-    # Log the event
-    Log.objects.register(request.user,
-                         Log.ACTION_UPDATE,
-                         action.workflow,
-                         {'id': action.id,
-                          'name': action.name,
-                          'workflow_id': workflow.id,
-                          'workflow_name': workflow.name,
-                          'content': content})
-
-    # Text is good. Update the content of the action
-    action.set_content(content)
-
-    if action.action_type == Action.PERSONALIZED_JSON:
-        # Update the target_url field
-        action.target_url = form.cleaned_data['target_url']
-
-    action.save()
-
-    if request.POST['Submit'] == 'Submit':
-        return redirect(request.get_full_path())
-    return redirect('action:index')
+    # Return the same form in the same page
+    return render(request, template, context=context)
 
 
 def edit_action_in(request, workflow, action):

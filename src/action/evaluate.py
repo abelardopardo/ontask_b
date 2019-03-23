@@ -299,10 +299,12 @@ def get_row_values(action, row_idx):
                                             cond_filter,
                                             row_idx)
     else:
-        result = pandas_db.get_table_row_by_key(action.workflow,
-                                                cond_filter,
-                                                row_idx,
-                                                action.workflow.get_column_names())
+        result = pandas_db.get_table_row_by_key(
+            action.workflow,
+            cond_filter,
+            row_idx,
+            action.workflow.get_column_names()
+        )
     return result
 
 
