@@ -74,7 +74,10 @@ def save_condition_form(request,
     action_content = request.POST.get('action_content', None)
     if action_content:
         action.set_content(action_content)
-        action.save()
+
+    # Reset the counter of rows with all conditions false
+    action.rows_all_false = None
+    action.save()
 
     if is_filter:
         # Process the filter form
@@ -468,6 +471,10 @@ def delete_condition(request, pk):
 
         # Perform the delete operation
         condition.delete()
+
+        # Reset the count of number of rows with all conditions false
+        condition.action.rows_all_false = None
+
         data['form_is_valid'] = True
         data['html_redirect'] = ''
         return JsonResponse(data)

@@ -18,7 +18,7 @@ from django.utils.translation import ugettext as _
 from sqlalchemy import create_engine
 
 from dataops.formula_evaluation import NodeEvaluation, evaluate
-from ontask import fix_pctg_in_name, OnTaskDataFrameNoKey
+from ontask import fix_pctg_in_name, OnTaskDataFrameNoKey, OnTaskException
 
 SITE_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
@@ -745,6 +745,18 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names):
     # ZIP the values to create a dictionary
     return OrderedDict(list(zip(workflow.get_column_names(), qs)))
 
+def execute_query(query, fields):
+    """
+    Run a query with a list of symbols
+    :param query: SQL Query text
+    :param fields: Symbols to replace in the query
+    :return: Resulting cursor
+    """
+    # Execute the query
+    cursor = connection.cursor()
+    cursor.execute(query, fields)
+
+    return cursor
 
 def get_column_stats_from_df(df_column):
     """

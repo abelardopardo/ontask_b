@@ -1,3 +1,21 @@
+## 4.2 ()
+
+### Added
+
+- Export now allows to export a workflow without a data frame
+
+### Fixed
+
+- Bug when handling URL creation for row edition
+
+- Legacy problem with Python3 numpy and pickled data
+
+### Changed
+
+- Upgraded requirements and propagated changes to adapt to Pandas 0.24
+
+- Underlying models to handle conditions and columns in actions (new many to many relation)
+
 ## 4.1 (2019-02-27)
 
 ### Added

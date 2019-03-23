@@ -16,8 +16,8 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.html import escape
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.csrf import csrf_exempt
 
 from action.evaluate import (
@@ -112,7 +112,8 @@ def run_email_action(request, workflow, action):
                       'action/action_email_step1.html',
                       {'action': action,
                        'num_msgs': num_msgs,
-                       'form': form})
+                       'form': form,
+                       'rows_all_false': action.get_row_all_false_count()})
 
     # Request is a POST and is valid
 
@@ -509,7 +510,8 @@ def run_json_action(request, workflow, action):
                       'action/request_json_data.html',
                       {'action': action,
                        'num_msgs': num_msgs,
-                       'form': form})
+                       'form': form,
+                       'rows_all_false': action.get_row_all_false_count()})
 
     # Request is a POST and is valid
 
@@ -638,7 +640,10 @@ def run_canvas_email_action(request, workflow, action):
         # Render the form
         return render(request,
                       'action/request_canvas_email_data.html',
-                      {'action': action, 'num_msgs': num_msgs, 'form': form})
+                      {'action': action,
+                       'num_msgs': num_msgs,
+                       'form': form,
+                       'rows_all_false': action.get_row_all_false_count()})
 
     # Requet is a POST and is valid
 
@@ -711,7 +716,7 @@ def canvas_get_or_set_oauth_token(request):
     # Check if the token is valid
     now = datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
     dead = token.valid_until - \
-        timedelta(seconds=ontask_settings.CANVAS_TOKEN_EXPIRY_SLACK)
+           timedelta(seconds=ontask_settings.CANVAS_TOKEN_EXPIRY_SLACK)
     if now > dead:
         try:
             refresh_token(token, oauth_instance, oauth_info)
@@ -788,15 +793,18 @@ def canvas_email_done(request, payload=None):
 
 @csrf_exempt
 @user_passes_test(is_instructor)
-def preview_response(request, pk, idx):
+def preview_next_all_false_response(request, pk, idx):
     """
-    HTML request and the primary key of an action to preview one of its
-    instances. The request must provide and additional parameter idx to
-    denote which instance to show.
+    Previews the message that has all rows incorrect in the position next to
+    the one specified by idx
 
-    :param request: HTML request object
-    :param pk: Primary key of the an action for which to do the preview
-    :param idx: Index of the reponse to preview
+    The function uses the list stored in rows_all_false and finds the next
+    index in that list (or the first one if it is the last. It then invokes
+    the preview_response method
+
+    :param request: HTTP Request object
+    :param pk: Primary key of the action
+    :param idx:
     :return:
     """
 
@@ -810,6 +818,53 @@ def preview_response(request, pk, idx):
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')
         return JsonResponse(data)
+
+    # Get the list of indeces
+    idx_list = action.rows_all_false
+
+    if not idx_list:
+        # If empty, or None, something went wrong.
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
+    # Search for the next element bigger than idx
+    next_idx = next((x for x in idx_list if x > idx), None)
+
+    if not next_idx:
+        # If nothing found, then take the first element
+        next_idx = idx_list[0]
+
+    # Return the rendering of the given element
+    return preview_response(request, pk, next_idx, action)
+
+
+@csrf_exempt
+@user_passes_test(is_instructor)
+def preview_response(request, pk, idx, action=None):
+    """
+    HTML request and the primary key of an action to preview one of its
+    instances. The request must provide and additional parameter idx to
+    denote which instance to show.
+
+    :param request: HTML request object
+    :param pk: Primary key of the an action for which to do the preview
+    :param idx: Index of the reponse to preview
+    :param action: Might have been fetched already
+    :return:
+    """
+
+    # To include in the JSON response
+    data = dict()
+
+    if not action:
+        # Action being used
+        try:
+            action = Action.objects.get(id=pk)
+        except ObjectDoesNotExist:
+            data['form_is_valid'] = True
+            data['html_redirect'] = reverse('home')
+            return JsonResponse(data)
 
     # Get the workflow to obtain row numbers
     workflow = get_workflow(request, action.workflow.id)
@@ -847,9 +902,18 @@ def preview_response(request, pk, idx):
 
     row_values = get_row_values(action, idx)
 
+    # Obtain the dictionary with the condition evaluation
+    condition_evaluation = action.get_condition_evaluation(row_values)
+
+    all_false = False
+    if action.conditions.count():
+        # If there are conditions, check if they are all false
+        all_false = all([not value
+                         for key, value in condition_evaluation.items()])
+
     # Get the dictionary containing column names, attributes and condition
     # valuations:
-    context = action.get_evaluation_context(row_values)
+    context = action.get_evaluation_context(row_values, condition_evaluation)
 
     # Evaluate the action content.
     show_values = ''
@@ -899,7 +963,8 @@ def preview_response(request, pk, idx):
                           'prv': prv,
                           'prelude': prelude,
                           'correct_json': correct_json,
-                          'show_values': show_values},
+                          'show_values': show_values,
+                          'all_false': all_false},
                          request=request)
 
     return JsonResponse(data)

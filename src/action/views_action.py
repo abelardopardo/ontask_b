@@ -33,7 +33,7 @@ from django.views import generic
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 from action.evaluate import render_template
 from dataops import ops, pandas_db
@@ -101,8 +101,20 @@ class ActionTable(tables.Table):
 
     def render_name(self, record):
         result = """<a href="{0}" data-toggle="tooltip" title="{1}">{2}</a>"""
+        danger_txt = ''
+        if record.rows_all_false and len(record.rows_all_false):
+            danger_txt = \
+                ugettext('Some users have all conditions equal to FALSE')
         if not record.is_executable:
-            result += ' <span class="fa fa-exclamation-triangle"></span>'
+            danger_txt = \
+                ugettext('Some elements in the survey are incomplete')
+
+        if danger_txt:
+            result += \
+                ' <span class="fa fa-exclamation-triangle"' \
+                ' style="color:red;"' \
+                ' data-toggle="tooltip"' \
+                ' title="{0}"></span>'.format(danger_txt)
 
         return format_html(result,
                            reverse('action:edit', kwargs={'pk': record.id}),

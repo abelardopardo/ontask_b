@@ -1,0 +1,12 @@
+{% load i18n %}
+{% if selected_rows == 0 %}
+  <p class="alert-danger text-center">{% trans 'WARNING: The filter excludes all the students' %}</p>
+{% elif all_false_conditions %}
+  <p class="alert-danger text-center">{% trans 'WARNING: Some condition evaluates to FALSE for all users' %}</p>
+{% endif %}
+{% if rows_all_false %}
+  <p class="alert-danger text-center">{% blocktrans count n=rows_all_false|length %}WARNING: {{ n }} user has all conditions equal to FALSE{% plural %}WARNING: {{ n }} users have all conditions equal to FALSE{% endblocktrans %}</p>
+{% endif %}
+
+
+

@@ -28,6 +28,7 @@
 {% block container %}
   <div class="container-fluid" id="action-out-editor">
     <h1 class="text-center">{{ action.name }}</h1>
+    {% include 'action/includes/partial_action_edit_out_warning.html' %}
     <ul class="nav nav-tabs nav-fill" id="edit-personalized-text-tabs" role="tablist">
       <li class="nav-item">
         <a class="nav-link active" id="text-tab" data-toggle="tab" href="#text" role="tab" aria-controls="text" aria-selected="true">Personalized Canvas Email</a>

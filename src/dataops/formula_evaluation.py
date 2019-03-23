@@ -5,7 +5,7 @@ import itertools
 from builtins import str
 
 from django.utils.dateparse import parse_datetime
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext
 
 from ontask import OnTaskException, fix_pctg_in_name
 

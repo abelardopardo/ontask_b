@@ -133,6 +133,11 @@ class Action(models.Model):
                                   null=False,
                                   blank=False)
 
+    # Index of rows with all conditions false
+    rows_all_false = JSONField(default=None,
+                        blank=True,
+                        null=True)
+
     def __str__(self):
         return self.name
 
@@ -180,8 +185,8 @@ class Action(models.Model):
                 Action.TODO_LIST:
             return self.column_condition_pair.filter(
                 column__is_key=True).exists() and \
-                self.column_condition_pair.filter(
-                    column__is_key=False).exists()
+                   self.column_condition_pair.filter(
+                       column__is_key=False).exists()
 
         raise Exception('Function is_executable not implemented for action '
                         '{0}'.format(self.get_action_type_display()))
@@ -312,6 +317,11 @@ class Action(models.Model):
         for cond in self.conditions.all():
             cond.update_n_rows_selected(column=column)
 
+        # Reset the counter of rows with all false conditions (will be
+        # recomputed)
+        self.rows_all_false = None
+        self.save()
+
     def used_columns(self):
         """
         Function that returns a list of the columns being used in this
@@ -333,21 +343,7 @@ class Action(models.Model):
 
         return list(result)
 
-    def get_evaluation_context(self, row_values):
-        """
-        Given an action and a set of row_values, prepare the dictionary with the
-        condition names, attribute names and column names and their
-        corresponding values.
-        :param row_values: Values to use in the evaluation of conditions.
-        :return: Context dictionary, or None if there has been some anomaly
-        """
-
-        # If no row values are given, there is nothing to do here.
-        if row_values is None:
-            # No rows satisfy the given condition
-            return None
-
-        # Step 1: Evaluate all the conditions
+    def get_condition_evaluation(self, row_values):
         condition_eval = {}
         for condition in self.conditions.filter(is_filter=False).values(
                 'name', 'is_filter', 'formula'):
@@ -361,12 +357,104 @@ class Action(models.Model):
             except ontask.OnTaskException:
                 # Something went wrong evaluating a condition. Stop.
                 return None
+        return condition_eval
+
+    def get_evaluation_context(self, row_values, condition_eval=None):
+        """
+        Given an action and a set of row_values, prepare the dictionary with the
+        condition names, attribute names and column names and their
+        corresponding values.
+        :param row_values: Values to use in the evaluation of conditions.
+        :param condition_eval: Dictionary with the condition evaluations
+        :return: Context dictionary, or None if there has been some anomaly
+        """
+
+        # If no row values are given, there is nothing to do here.
+        if row_values is None:
+            # No rows satisfy the given condition
+            return None
+
+        if not condition_eval:
+            # Step 1: Evaluate all the conditions
+            condition_eval = {}
+            for condition in self.conditions.filter(is_filter=False).values(
+                    'name', 'is_filter', 'formula'):
+                # Evaluate the condition
+                try:
+                    condition_eval[condition['name']] = evaluate(
+                        condition['formula'],
+                        NodeEvaluation.EVAL_EXP,
+                        row_values
+                    )
+                except ontask.OnTaskException:
+                    # Something went wrong evaluating a condition. Stop.
+                    return None
 
         # Step 2: Create the context with the attributes, the evaluation of the
         # conditions and the values of the columns.
         attributes = self.workflow.attributes
 
         return dict(dict(row_values, **condition_eval), **attributes)
+
+    def get_row_all_false_count(self):
+        """
+        Given a table and a list of conditions return the number of rows in which
+        all the conditions are false.
+        :return: Number of rows that have all conditions equal to false
+        """
+        if not self.rows_all_false:
+            if not self.workflow.has_data_frame():
+                # Workflow does not have a dataframe
+                raise ontask.OnTaskException(
+                    'Workflow without DF in get_table_row_count_all_false'
+                )
+
+            # Get the list of conditions (may include filter)
+            cond_list = self.conditions.all()
+
+            if not cond_list:
+                # Condition list is either None or empty. No restrictions.
+                return 0
+
+            # Workflow has a data frame and condition list is non empty
+
+            # Get the filter if there is one
+            cond_sql = ''
+            cond_fields = []
+            filter = cond_list.filter(is_filter=True).first()
+            if filter:
+                cond_sql, cond_fields = evaluate(filter.formula,
+                                                 NodeEvaluation.EVAL_SQL)
+                cond_sql += ' AND '
+                # Remove the filter
+                cond_list = cond_list.filter(is_filter=False)
+
+            # Calculate the evaluation of each of the conditions
+            cond_list_sql = [evaluate(x.formula, NodeEvaluation.EVAL_SQL)
+                             for x in cond_list]
+
+            cond_sql += \
+                '(NOT ' + ') AND (NOT '.join(
+                    [a for a, _ in cond_list_sql]) + ')'
+            cond_fields += sum([b for _, b in cond_list_sql], [])
+
+            query = 'SELECT t.position from (' \
+                    'SELECT *, ROW_NUMBER() OVER () as position FROM "{0}") as t' \
+                    ' WHERE '.format(
+                self.workflow.get_data_frame_table_name()
+            ) + cond_sql
+
+            # Run the query
+            qs = pandas_db.execute_query(query, cond_fields).fetchall()
+
+            # If the list is not empty, flatten its structure
+            if qs:
+                self.rows_all_false = [x[0] for x in qs]
+            else:
+                self.rows_all_false = qs
+            self.save()
+
+        return self.rows_all_false
 
     class Meta(object):
         """
@@ -453,6 +541,10 @@ class Condition(models.Model):
         if column and column not in self.columns.all():
             # The column is not part of this condition. Nothing to do
             return
+
+        # Reset the count of all rows with false condition
+        self.action.rows_all_false = None
+        self.action.save()
 
         # Case 1: Condition is a filter
         if self.is_filter:
@@ -555,4 +647,3 @@ class ActionColumnConditionTuple(models.Model):
         """
         unique_together = ('action', 'column', 'condition')
         ordering = ['column__position']
-

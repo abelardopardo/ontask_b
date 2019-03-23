@@ -819,3 +819,101 @@ class ActionActionZip(test.OnTaskLiveTestCase):
 
         # End of session
         self.logout()
+
+class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
+    action_name = 'simple action'
+    fixtures = ['simple_action']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'action',
+        'fixtures',
+        'simple_action.sql'
+    )
+
+    wflow_name = 'wflow1'
+    wflow_desc = 'description text for workflow 1'
+    wflow_empty = 'The workflow does not have data'
+
+    action_text = "Cond 1 = {{ cond 1 }}\\n" + \
+                  "Cond 2 = {{ cond 2 }}\\n" + \
+                  "{% if cond 1 %}Cond 1 is true{% endif %}\\n" + \
+                  "{% if cond 2 %}Cond 2 is true{% endif %}\\n"
+
+    def setUp(self):
+        super(ActionActionDetectAllFalseRows, self).setUp()
+        pandas_db.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        test.delete_all_tables()
+        super(ActionActionDetectAllFalseRows, self).tearDown()
+
+    # Test action rename
+    def test_action_detect_all_false_rows(self):
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
+
+        # Goto the action page
+        self.go_to_actions()
+
+        # Create a new action
+        self.create_new_personalized_text_action("action out", '')
+
+        # Create three conditions
+        self.select_condition_tab()
+        self.create_condition("cond 1", '', [('another', 'equal', 'bbb')])
+        self.create_condition("cond 2", '', [('age', 'greater', '12.1')])
+
+        # The action should now flag that one user has all conditions equal to
+        # False
+        self.assertIn('user has all conditions equal to FALSE',
+                      self.selenium.page_source)
+
+        # insert the action text (not needed, but...)
+        self.select_text_tab()
+        self.selenium.find_element_by_class_name('note-editing-area').click()
+        self.selenium.execute_script(
+            """$('#id_content').summernote('editor.insertText', 
+            "{0}");""".format(self.action_text)
+        )
+
+        # Click in the preview and circle around the 12 rows
+        self.open_browse_preview(1, close=False)
+
+        # The preview should now flag that this user has all conditions equal to
+        # False
+        self.assertIn('All conditions evaluate to FALSE',
+                      self.selenium.page_source)
+
+        # Close the preview
+        self.selenium.find_element_by_xpath(
+            "//div[@id='modal-item']/div/div/div/div[2]/button[2]"
+        ).click()
+        # Close modal (wail until the modal-open element disappears)
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
+
+        # Create filter
+        self.create_filter("The filter", [('another', 'equal', 'bbb')])
+
+        # The action should NOT flag that a user has all conditions equal to
+        # False
+        self.assertNotIn('user has all conditions equal to FALSE',
+                         self.selenium.page_source)
+
+        # Remove the filter
+        self.delete_filter()
+
+        # Message show now appear
+        # The action should NOT flag that a user has all conditions equal to
+        # False
+        self.assertIn('user has all conditions equal to FALSE',
+                         self.selenium.page_source)
+
+        # End of session
+        self.logout()

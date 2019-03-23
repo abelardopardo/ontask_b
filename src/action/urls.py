@@ -127,6 +127,9 @@ urlpatterns = [
     path('<int:pk>/<int:idx>/preview/',
         views_out.preview_response,
         name='preview'),
+    path('<int:pk>/<int:idx>/preview_next_all_false/',
+         views_out.preview_next_all_false_response,
+         name='preview_all_false'),
 
     # Allow url on/off toggle
     path('<int:pk>/showurl/', views_action.showurl, name='showurl'),

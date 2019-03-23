@@ -192,7 +192,7 @@ def serve_action_out(user, action, user_attribute_name):
 
     # Get the dictionary containing column names, attributes and condition
     # valuations:
-    context = action.get_evaluation_context(row_values)
+    context = action. get_evaluation_context(row_values)
     if context is None:
         payload['error'] = \
             _('Error when evaluating conditions for user {0}').format(

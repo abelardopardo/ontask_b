@@ -12,6 +12,7 @@
   <div class="container-fluid" id="json-action-request-data">
     <h1 class="text-center">{% blocktrans with n=action.name %}Send JSON objects for
       action "{{ n }}"{% endblocktrans %}</h1>
+    {% include 'action/includes/partial_action_edit_out_warning.html' %}
     {% if num_msgs > 0 %}
       <p class="text-center">{% blocktrans with n=num_msgs%}{{ n }} JSON objects will be sent.{% endblocktrans %}</p>
       <div class="row justify-content-center">

@@ -9,17 +9,32 @@
   <div class="modal-body text-center">
     <button type="button"
             class="btn btn-outline-primary js-action-preview-prv"
-            data-url="{% url 'action:preview' action.id prv %}">
-      <span class="fa fa-chevron-left"></span>
+            data-url="{% url 'action:preview' action.id prv %}"
+            data-toggle="tooltip"
+            title="{% trans 'Preview previous message' %}">
+      <span class="fa fa-angle-left"></span>
     </button>
     <button type="button" class="btn btn-outline-dark" data-dismiss="modal">{% trans 'Close' %}</button>
     <button type="button" class="btn btn-outline-primary js-action-preview-nxt"
-            data-url="{% url 'action:preview' action.id nxt %}">
-      <span class="fa fa-chevron-right"></span>
+            data-url="{% url 'action:preview' action.id nxt %}"
+            data-toggle="tooltip"
+            title="{% trans 'Preview next message' %}">
+      <span class="fa fa-angle-right"></span>
     </button>
+    {% if action.rows_all_false|length %}
+      <button type="button" class="btn btn-outline-danger js-action-preview-nxt"
+              data-url="{% url 'action:preview_all_false' action.id index %}"
+              data-toggle="tooltip"
+              title="{% trans 'Preview next message with all conditions false' %}">
+        <span class="fa fa-angle-double-right"></span>
+      </button>
+    {% endif %}
   </div>
+  {% if all_false %}
+    <p class="alert-danger text-center">{% trans 'WARNING: All conditions evaluate to FALSE' %}</p>
+  {% endif %}
   {% if not correct_json %}
-    <p class="alert-danger text-center">Incorrect JSON object. Check action text</p>
+    <p class="alert-danger text-center">{% trans 'Incorrect JSON object. Check action text' %}</p>
   {% endif %}
   {% if prelude %}
     <div class="modal-body" style="text-align: left; border: solid 1px black;margin: 0 2ex 0 2ex;">
