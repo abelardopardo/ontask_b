@@ -31,7 +31,7 @@
     {% endif %}
   </div>
   {% if all_false %}
-    <p class="alert-danger text-center">{% trans 'WARNING: All conditions evaluate to FALSE' %}</p>
+    <p class="alert-danger text-center"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'All conditions evaluate to FALSE' %}</p>
   {% endif %}
   {% if not correct_json %}
     <p class="alert-danger text-center">{% trans 'Incorrect JSON object. Check action text' %}</p>

@@ -14,7 +14,12 @@
          style="margin-bottom: 15px;">
       <h5 class="card-header js-condition-edit" data-url="{% url 'action:edit_condition' condition.id %}">{{ condition.name }}</h5>
       <div class="card-body js-condition-edit" data-url="{% url 'action:edit_condition' condition.id %}" style="min-height: 100px;">
-        <h5 class="card-subtitle mb-2 text-muted">{% blocktrans with n=condition.n_rows_selected count counter=condition.n_rows_selected %}({{ n }} learner){% plural %}({{ n }} learners){% endblocktrans %}</h5>
+        <h5 class="card-subtitle mb-2 text-muted">{% blocktrans with n=condition.n_rows_selected count counter=condition.n_rows_selected %}({{ n }} learner){% plural %}({{ n }} learners){% endblocktrans %}
+          {% if condition.n_rows_selected == 0 %}<span
+              class="fa fa-exclamation-triangle" style="color:red;"
+              data-toggle="tooltip"
+              title="Condition is false for all considered users"></span>
+        {% endif %}</h5>
         <p class="card-text">{{ condition.description_text }}</p>
         <p class="card-text"><strong>{% trans 'Formula' %}</strong><br/>{{ condition.get_formula_text }}</p>
       </div>
