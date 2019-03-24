@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-from collections import Counter
-
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import status
 from rest_framework.exceptions import APIException
@@ -83,8 +81,8 @@ class TableBasicOps(APIView):
         workflow = self.get_object(pk)
         serializer = self.serializer_class(
             {'data_frame':
-                pandas_db.load_from_db(workflow.get_data_frame_table_name())
-            }
+                 pandas_db.load_from_db(workflow.get_data_frame_table_name())
+             }
         )
         return Response(serializer.data)
 
@@ -211,9 +209,7 @@ class TableBasicMerge(APIView):
         workflow = self.get_object(pk)
         serializer = self.serializer_class(
             {'src_df':
-                 pandas_db.load_from_db(
-                     workflow.get_data_frame_table_name()
-                 ),
+                 pandas_db.load_from_db(workflow.get_data_frame_table_name()),
              'how': '',
              'left_on': '',
              'right_on': ''}

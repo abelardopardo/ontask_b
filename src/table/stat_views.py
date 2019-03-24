@@ -139,7 +139,7 @@ def get_row_visualisations(request, view_id=None):
 
         if row[idx] is None or row[idx] == '':
             visualizations.append(
-                '<p class="alert-warning">' + \
+                '<p class="alert-warning">' +
                 _('No value for this student in this column') + '</p>'
             )
 
@@ -189,7 +189,6 @@ def get_view_visualisations(request, view_id=None):
 
     # If a view is given, filter the columns
     columns_to_view = workflow.columns.all()
-    formula = None
     view = None
     if view_id:
         try:
@@ -280,8 +279,9 @@ def stat_column(request, pk):
         column,
         df[[column.name]],
         vis_scripts,
-        context={'style':
-                     'max-width:800px; max-height:450px;display:inline-block;'}
+        context={
+            'style': 'max-width:800px; max-height:450px;display:inline-block;'
+        }
     )
 
     return render(request,

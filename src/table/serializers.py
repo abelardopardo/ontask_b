@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from future import standard_library
-standard_library.install_aliases()
+# from future import standard_library
+# standard_library.install_aliases()
 from builtins import object
 from io import BytesIO
 import base64
@@ -111,14 +111,12 @@ class DataFrameBasicMergeSerializer(serializers.Serializer):
     right_on = serializers.CharField(
         required=True,
         initial='',
-        help_text=_('ID of the column in the source data frame with the unique '
-                  'key'))
+        help_text=_('ID of column in source data frame with unique key'))
 
 
 class DataFrameJSONMergeSerializer(DataFrameBasicMergeSerializer):
     src_df = DataFrameJSONField(
-        help_text=_('This field must be the JSON string encoding a pandas data '
-                  'frame')
+        help_text=_('Field must be a JSON string encoding a pandas data frame')
     )
 
 

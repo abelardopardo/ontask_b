@@ -716,7 +716,7 @@ def canvas_get_or_set_oauth_token(request):
     # Check if the token is valid
     now = datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
     dead = token.valid_until - \
-           timedelta(seconds=ontask_settings.CANVAS_TOKEN_EXPIRY_SLACK)
+        timedelta(seconds=ontask_settings.CANVAS_TOKEN_EXPIRY_SLACK)
     if now > dead:
         try:
             refresh_token(token, oauth_instance, oauth_info)

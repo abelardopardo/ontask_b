@@ -2,6 +2,7 @@
 
 
 from builtins import str
+
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
@@ -10,12 +11,16 @@ from django.views.decorators.http import require_http_methods
 
 from action.models import Action
 from ontask.permissions import is_instructor
-from .forms import (WorkflowImportForm,
-                    WorkflowExportRequestForm)
+from .forms import (
+    WorkflowImportForm,
+    WorkflowExportRequestForm
+)
 from .models import Workflow
-from .ops import (do_import_workflow,
-                  do_export_workflow,
-                  get_workflow)
+from .ops import (
+    do_import_workflow,
+    do_export_workflow,
+    get_workflow
+)
 
 
 @user_passes_test(is_instructor)

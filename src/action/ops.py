@@ -5,24 +5,26 @@ functions to process request when receiving a "serve" action, cloning
 operations when cloning conditions and actions, and sending messages.
 """
 
-from builtins import zip
-from builtins import str
 import datetime
 import gzip
 import json
 import random
+from builtins import str
+from builtins import zip
 from io import BytesIO
 from time import sleep
 
 import html2text as html2text
 import pytz
 import requests
+from celery.utils.log import get_task_logger
 from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.core import signing, mail
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail, EmailMultiAlternatives
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import Context, Template, TemplateSyntaxError
@@ -32,11 +34,9 @@ from django.utils import timezone
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _, ugettext
 from rest_framework import serializers
+from rest_framework import status
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
-from django.db.models import Q
-from celery.utils.log import get_task_logger
-from rest_framework import status
 
 from action.evaluate import (
     evaluate_row_action_out, evaluate_action,
@@ -47,9 +47,9 @@ from action.models import Action, ActionColumnConditionTuple
 from action.serializers import ActionSelfcontainedSerializer
 from dataops import pandas_db, ops
 from logs.models import Log
+from ontask import is_correct_email
 from ontask_oauth.models import OnTaskOAuthUserTokens
 from ontask_oauth.views import refresh_token
-from ontask import is_correct_email
 from workflow.models import Column
 from workflow.ops import get_workflow
 from . import settings
@@ -192,7 +192,7 @@ def serve_action_out(user, action, user_attribute_name):
 
     # Get the dictionary containing column names, attributes and condition
     # valuations:
-    context = action. get_evaluation_context(row_values)
+    context = action.get_evaluation_context(row_values)
     if context is None:
         payload['error'] = \
             _('Error when evaluating conditions for user {0}').format(
@@ -889,7 +889,7 @@ def send_json(user, action, token, key_column, exclude_values, log_item):
         idx += 1
         try:
             json_obj = json.loads(json_string[0])
-        except:
+        except Exception:
             return _('Incorrect JSON string in element number {0}').format(idx)
         json_objects.append(json_obj)
 
@@ -900,16 +900,16 @@ def send_json(user, action, token, key_column, exclude_values, log_item):
             response = requests.post(url=action.target_url,
                                      data=json_obj,
                                      headers=headers)
-            status = response.status_code
+            status_val = response.status_code
         else:
             logger.info('SEND JSON({0}): {1}'.format(
                 action.target_url,
                 json.dumps(json_obj)
             ))
-            status = 200
+            status_val = 200
 
         status_vals.append(
-            (status,
+            (status_val,
              datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)),
              json_obj)
         )
@@ -921,9 +921,9 @@ def send_json(user, action, token, key_column, exclude_values, log_item):
     }
 
     # Log all OBJ sent
-    for status, dt, json_obj in status_vals:
+    for status_val, dt, json_obj in status_vals:
         context['object'] = json.dumps(json_obj)
-        context['status'] = status
+        context['status'] = status_val
         context['json_sent_datetime'] = str(dt)
         Log.objects.register(user,
                              Log.ACTION_JSON_SENT,

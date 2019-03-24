@@ -36,7 +36,10 @@ class ColumnSerializer(serializers.ModelSerializer):
             )
 
             # Set the categories if they exists
-            column_obj.set_categories(validated_data.get('categories', []), True)
+            column_obj.set_categories(
+                validated_data.get('categories', []),
+                True
+            )
 
             if column_obj.active_from and column_obj.active_to and \
                     column_obj.active_from > column_obj.active_to:
@@ -44,7 +47,6 @@ class ColumnSerializer(serializers.ModelSerializer):
                     _('Incorrect date/times in the active window for '
                       'column {0}').format(validated_data['name']))
 
-            # TODO: Fix the position field when creating the columns
             # All tests passed, proceed to save the object.
             column_obj.save()
         except Exception as e:

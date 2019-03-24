@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import str
 import gzip
+from builtins import str
 from datetime import datetime
 from io import BytesIO
 
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
+from django.core.cache import cache
 from django.db.models import Q
 from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from django.core.cache import cache
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
@@ -25,7 +25,7 @@ from workflow.serializers import (
     WorkflowExportSerializer,
     WorkflowImportSerializer
 )
-from .models import Workflow, Column
+from .models import Workflow
 
 
 def store_workflow_in_session(request, obj):
@@ -118,8 +118,8 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
                 session = Session.objects.get(session_key=workflow.session_key)
             except Session.DoesNotExist:
                 # An exception means that the session stored as locking the
-                # workflow is no longer in the session table, so the user can access
-                # the workflow
+                # workflow is no longer in the session table, so the user can
+                # access the workflow
                 workflow.lock(request, True)
                 if update_session:
                     # If the session does not have this info, update.
@@ -131,9 +131,10 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
                 id=session.get_decoded().get('_auth_user_id')
             )
 
-            # Step 5: The workflow is locked by a session that is valid. See if the
-            # session locking happens to be from the same user (a previous session
-            # that has not been properly closed, or an API call from the same user  )
+            # Step 5: The workflow is locked by a session that is valid. See
+            # if the session locking happens to be from the same user (a
+            # previous session that has not been properly closed, or an API
+            # call from the same user  )
             if owner == request.user:
                 workflow.lock(request)
                 if update_session:
@@ -150,17 +151,17 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
                         owner.email
                     )
                 )
-                # The session currently locking the workflow
-                # has an expire date in the future from now. So, no access is granted.
+                # The session currently locking the workflow has an expire
+                # date in the future from now. So, no access is granted.
                 return None
 
-            # The workflow is locked by a session that has expired. Take the workflow
-            # and lock it with the current session.
+            # The workflow is locked by a session that has expired. Take the
+            # workflow and lock it with the current session.
             workflow.lock(request)
             if update_session:
                 # If the session does not have this info, update.
                 store_workflow_in_session(request, workflow)
-        except:
+        except Exception:
             # Something went wrong when fetching the object
             messages.error(request,
                            _('The workflow could not be accessed'))
@@ -352,7 +353,6 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
     for condition in cond_to_delete:
         if condition.is_filter:
             actions_without_filters.append(condition.action)
-            is_filter = True
 
         # Formula has the name of the deleted column. Delete it
         condition.delete()
@@ -371,18 +371,18 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
     return
 
 
-def workflow_restrict_column(workflow, column):
+def workflow_restrict_column(column):
     """
     Given a workflow and a column, modifies the column so that only the
     values already present are allowed for future updates.
 
-    :param workflow: Workflow object
     :param column: Column object to restrict
     :return: String with error or None if correct
     """
 
     # Load the data frame
-    data_frame = pandas_db.load_from_db(column.workflow.get_data_frame_table_name())
+    data_frame = pandas_db.load_from_db(
+        column.workflow.get_data_frame_table_name())
 
     cat_values = set(data_frame[column.name].dropna())
     if not cat_values:
@@ -430,7 +430,8 @@ def clone_column(column, new_workflow=None, new_name=None):
     column.workflow.reposition_columns(column.position, old_position + 1)
 
     # Add the column to the table and update it.
-    data_frame = pandas_db.load_from_db(column.workflow.get_data_frame_table_name())
+    data_frame = pandas_db.load_from_db(
+        column.workflow.get_data_frame_table_name())
     data_frame[new_name] = data_frame[old_name]
     ops.store_dataframe(data_frame, column.workflow)
 
@@ -450,5 +451,3 @@ def reposition_column_and_update_df(workflow, column, to_idx):
     workflow.reposition_columns(column.position, to_idx)
     column.position = to_idx
     column.save()
-    # FIXME Enough to simply modify the position field without DB update
-    # ops.store_dataframe_in_db(df, workflow.id)

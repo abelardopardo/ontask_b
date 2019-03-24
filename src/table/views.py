@@ -4,8 +4,8 @@ File containing functions to implement all views related to the table element.
 """
 
 from builtins import next
-from builtins import str
 from builtins import object
+from builtins import str
 from datetime import datetime
 
 import django_tables2 as tables
@@ -18,11 +18,11 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
 from django.utils.html import format_html, escape, urlencode
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.utils.translation import ugettext_lazy as _
 
-from dataops import ops, pandas_db
+from dataops import pandas_db
 from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
@@ -69,6 +69,7 @@ class ViewTable(tables.Table):
             'style': 'width: 100%;',
             'id': 'view-table'
         }
+
 
 def save_view_form(request, form, template_name):
     """
@@ -128,6 +129,7 @@ def save_view_form(request, form, template_name):
     data['html_redirect'] = ''  # Refresh the page
     return JsonResponse(data)
 
+
 def render_table_display_page(request, workflow, view, columns, ajax_url):
     """
     Function to render the content of the display page taking into account
@@ -163,6 +165,7 @@ def render_table_display_page(request, workflow, view, columns, ajax_url):
         context['view'] = view
 
     return render(request, 'table/display.html', context)
+
 
 def render_table_display_data(request, workflow, columns, formula,
                               view_id=None):
@@ -238,15 +241,13 @@ def render_table_display_data(request, workflow, columns, formula,
         esc_key_value = escape(row[key_idx])
         ops_string = render_to_string(
             'table/includes/partial_table_ops.html',
-            {'stat_url': stat_url +
-                         '?{0}'.format(urlencode(
-                             {'key': esc_key_name, 'val': esc_key_value}
-                         )),
-             'edit_url': reverse('dataops:rowupdate') +
-                         '?{0}'.format(urlencode(
-                             {'update_key': esc_key_name,
-                              'update_val': esc_key_value}
-                         )),
+            {'stat_url': stat_url + '?{0}'.format(urlencode(
+                {'key': esc_key_name, 'val': esc_key_value}
+            )),
+             'edit_url': reverse('dataops:rowupdate') + '?{0}'.format(urlencode(
+                 {'update_key': esc_key_name,
+                  'update_val': esc_key_value}
+             )),
              'delete_key': '?{0}'.format(urlencode(
                  {'key': esc_key_name, 'value': esc_key_value}
              )),
@@ -276,6 +277,7 @@ def render_table_display_data(request, workflow, columns, formula,
 
     return JsonResponse(data)
 
+
 @user_passes_test(is_instructor)
 def display(request):
     """
@@ -294,6 +296,7 @@ def display(request):
         workflow.columns.all(),
         reverse('table:display_ss')
     )
+
 
 @user_passes_test(is_instructor)
 @csrf_exempt
@@ -321,6 +324,7 @@ def display_ss(request):
         None
     )
 
+
 @user_passes_test(is_instructor)
 def display_view(request, pk):
     """
@@ -346,6 +350,7 @@ def display_view(request, pk):
         view.columns.all(),
         reverse('table:display_view_ss', kwargs={'pk': view.id})
     )
+
 
 @user_passes_test(is_instructor)
 @csrf_exempt
@@ -382,6 +387,7 @@ def display_view_ss(request, pk):
         view.formula,
         view.id
     )
+
 
 @user_passes_test(is_instructor)
 def row_delete(request):
@@ -442,6 +448,7 @@ def row_delete(request):
 
     return JsonResponse(data)
 
+
 @user_passes_test(is_instructor)
 def view_index(request):
     """
@@ -462,14 +469,13 @@ def view_index(request):
                                   'modified')
 
     # Context to render the template
-    context = {
-        'query_builder_ops': workflow.get_query_builder_ops_as_str()
-    }
+    context = {'query_builder_ops': workflow.get_query_builder_ops_as_str(),
+               'table': ViewTable(views, orderable=False)}
 
     # Build the table only if there is anything to show (prevent empty table)
-    context['table'] = ViewTable(views, orderable=False)
 
     return render(request, 'table/view_index.html', context)
+
 
 @user_passes_test(is_instructor)
 def view_add(request):
@@ -501,6 +507,7 @@ def view_add(request):
     return save_view_form(request,
                           form,
                           'table/includes/partial_view_add.html')
+
 
 @user_passes_test(is_instructor)
 def view_edit(request, pk):
@@ -548,6 +555,7 @@ def view_edit(request, pk):
                           form,
                           'table/includes/partial_view_edit.html')
 
+
 @user_passes_test(is_instructor)
 def view_delete(request, pk):
     """
@@ -593,6 +601,7 @@ def view_delete(request, pk):
         {'view': view},
         request=request)
     return JsonResponse(data)
+
 
 @user_passes_test(is_instructor)
 def view_clone(request, pk):
@@ -663,6 +672,7 @@ def view_clone(request, pk):
                           'new_view_name': view.name})
 
     return JsonResponse({'form_is_valid': True, 'html_redirect': ''})
+
 
 @user_passes_test(is_instructor)
 def csvdownload(request, pk=None):

@@ -1,44 +1,46 @@
 # -*- coding: utf-8 -*-
-from django.db.backends.ddl_references import Columns
-from future import standard_library
-
-from ontask import simplify_datetime_str
-from workflow.models import Column
-
-standard_library.install_aliases()
-from builtins import next
-from builtins import object
-from django.db import IntegrityError
-from django.utils.html import format_html
-
-from action.views_out import (
-    action_session_dictionary, run_json_action,
-    run_email_action, run_canvas_email_action
-)
-from logs.models import Log
-from visualizations.plotly import PlotlyHandler
 
 import urllib.parse
+from builtins import next
+from builtins import object
 from urllib.parse import urlencode
 
 import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 from django.db.models import Q
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
+from django.utils.html import format_html
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views import generic
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.utils.translation import ugettext_lazy as _, ugettext
 
 from action.evaluate import render_template
-from dataops import ops, pandas_db
+from action.ops import (
+    serve_action_in,
+    serve_action_out,
+    clone_action,
+    do_export_action,
+    do_import_action,
+    get_workflow_action
+)
+from action.views_out import (
+    action_session_dictionary, run_json_action,
+    run_email_action, run_canvas_email_action
+)
+from dataops import pandas_db
+from logs.models import Log
+from ontask import simplify_datetime_str
 from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
+from visualizations.plotly import PlotlyHandler
+from workflow.models import Column
 from workflow.ops import get_workflow
 from .forms import (
     ActionUpdateForm,
@@ -48,14 +50,6 @@ from .forms import (
     ActionDescriptionForm,
     ActionImportForm,
     FilterForm
-)
-from action.ops import (
-    serve_action_in,
-    serve_action_out,
-    clone_action,
-    do_export_action,
-    do_import_action,
-    get_workflow_action
 )
 from .models import Action, Condition, ActionColumnConditionTuple
 

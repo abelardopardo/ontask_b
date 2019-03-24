@@ -180,7 +180,7 @@ def save_condition_form(request,
     condition.save()
 
     # Log the event
-    formula, _ = evaluate(condition.formula, NodeEvaluation.EVAL_SQL)
+    formula, __ = evaluate(condition.formula, NodeEvaluation.EVAL_SQL)
     if is_new:
         if is_filter:
             log_type = Log.FILTER_CREATE

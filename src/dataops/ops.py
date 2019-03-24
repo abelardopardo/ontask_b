@@ -21,7 +21,7 @@ from table.models import View
 from workflow.models import Column
 
 
-def store_table_in_db(data_frame, workflow, temporary=False, reset_keys=True):
+def store_dataframe(data_frame, workflow, temporary=False, reset_keys=True):
     """
     Update or create a table in the DB with the data in the data frame. It
     also updates the corresponding column information

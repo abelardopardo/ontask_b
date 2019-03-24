@@ -14,13 +14,12 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
 from django.utils.html import format_html
+from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.utils.translation import ugettext_lazy as _
-from django.utils.html import escape
 
-import action
+import action.ops
 from dataops import ops, pandas_db
 from logs.models import Log
 from ontask.permissions import is_instructor, UserIsInstructor
@@ -107,10 +106,10 @@ def save_workflow_form(request, form, template_name):
         form.instance.nrows = 0
         form.instance.ncols = 0
         log_type = Log.WORKFLOW_CREATE
-        redirect = reverse('dataops:uploadmerge')
+        redirect_url = reverse('dataops:uploadmerge')
     else:
         log_type = Log.WORKFLOW_UPDATE
-        redirect = ''
+        redirect_url = ''
 
     # Save the instance
     try:
@@ -139,7 +138,7 @@ def save_workflow_form(request, form, template_name):
 
     # Here we can say that the form processing is done.
     data['form_is_valid'] = True
-    data['html_redirect'] = redirect
+    data['html_redirect'] = redirect_url
 
     return JsonResponse(data)
 
@@ -169,7 +168,7 @@ def index(request):
         celery_stats = None
         try:
             celery_stats = inspect().stats()
-        except Exception as e:
+        except Exception:
             pass
         if not celery_stats:
             messages.error(
@@ -226,6 +225,7 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
 
     def post(self, request, *args, **kwargs):
         del args
+        del kwargs
         form = self.form_class(request.POST)
         return save_workflow_form(request, form, self.template_name)
 
@@ -410,12 +410,11 @@ def delete(request, pk):
 @user_passes_test(is_instructor)
 @csrf_exempt
 @require_http_methods(['POST'])
-def column_ss(request, pk):
+def column_ss(request):
     """
     Given the workflow id and the request, return to DataTable the proper
     list of columns to be rendered.
     :param request: Http request received from DataTable
-    :param pk: Workflow id
     :return: Data to visualize in the table
     """
     workflow = get_workflow(request)
@@ -446,8 +445,8 @@ def column_ss(request, pk):
 
     # Get the initial set
     qs = workflow.columns.all()
-    recordsTotal = len(qs)
-    recordsFiltered = recordsTotal
+    records_total = len(qs)
+    records_filtered = records_total
 
     # Reorder if required
     if order_col:
@@ -463,7 +462,7 @@ def column_ss(request, pk):
     if search_value:
         qs = qs.filter(Q(name__icontains=search_value) |
                        Q(data_type__icontains=search_value))
-        recordsFiltered = len(qs)
+        records_filtered = len(qs)
 
     # Creating the result
     final_qs = []
@@ -510,8 +509,8 @@ def column_ss(request, pk):
     # Result to return as Ajax response
     data = {
         'draw': draw,
-        'recordsTotal': recordsTotal,
-        'recordsFiltered': recordsFiltered,
+        'records_total': records_total,
+        'records_filtered': records_filtered,
         'data': final_qs
     }
 

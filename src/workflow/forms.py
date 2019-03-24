@@ -119,7 +119,7 @@ class ColumnBasicForm(forms.ModelForm):
             # Check that the name is not present already
             if next((c for c in self.workflow.columns.all()
                      if c.id != self.instance.id and
-                        c.name == data['name']), None):
+                     c.name == data['name']), None):
                 # New column name collides with existing one
                 self.add_error(
                     'name',
@@ -373,8 +373,11 @@ class FormulaColumnAddForm(forms.ModelForm):
         ]
 
         # Populate the operand choices
-        self.fields['op_type'].choices = [('', '---')] \
-                                         + [(a, b) for a, b, _ in self.operands]
+        self.fields['op_type'].choices = \
+            [('', '---')] + [(a, b) for a, b, _ in self.operands]
+
+        # Selected columns
+        self.selected_columns = None
 
     def clean(self):
         data = super(FormulaColumnAddForm, self).clean()

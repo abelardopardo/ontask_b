@@ -3,12 +3,13 @@
 
 from builtins import object
 from builtins import str
+
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
 from action.serializers import ActionSerializer
-from dataops import ops, pandas_db
+from dataops import ops
 from table.serializers import DataFramePandasField, ViewSerializer
 from workflow.column_serializers import ColumnSerializer
 from .models import Workflow
@@ -197,5 +198,3 @@ class WorkflowLockSerializer(serializers.Serializer):
     """
 
     lock = serializers.BooleanField()
-
-

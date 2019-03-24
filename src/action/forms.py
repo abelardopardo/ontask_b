@@ -28,7 +28,7 @@ from .models import Action, Condition
 # the user and may pose a problem (injection bugs)
 field_prefix = '___ontask___select_'
 
-participant_re = re.compile('^Participant \d+$')
+participant_re = re.compile(r'^Participant \d+$')
 
 
 class ActionUpdateForm(forms.ModelForm):
@@ -480,8 +480,8 @@ class ZipActionForm(forms.Form):
                     None):
                 self.add_error(
                     'participant_column',
-                    _(
-                        'Values in column must have format "Participant [number]"')
+                    _('Values in column must have format '
+                      '"Participant [number]"')
                 )
 
         return data
@@ -598,9 +598,9 @@ class CanvasEmailActionForm(JSONBasicActionForm):
             self.fields['target_url'] = forms.ChoiceField(
                 initial=self.action.target_url,
                 required=True,
-                choices=[('', '---')] + \
-                        [(x, x) for x in
-                         sorted(ontask_settings.CANVAS_INFO_DICT.keys())],
+                choices=[('', '---')] + [(x, x) for x in sorted(
+                    ontask_settings.CANVAS_INFO_DICT.keys()
+                )],
                 label=_('Canvas Host'),
                 help_text=_('Name of the Canvas host to send the messages')
             )

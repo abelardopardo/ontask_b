@@ -18,7 +18,6 @@ var insertText = function(areaId, insert_text) {
   } else {
     insertAtCaret(areaId, insert_text);
   }
-
 }
 var insertConditionInContent = function() {
   var btn = $(this);

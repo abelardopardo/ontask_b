@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import str
-from builtins import object
 import datetime
 import json
+from builtins import object
+from builtins import str
 
 import pytz
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
 from django.contrib.sessions.models import Session
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.core.cache import cache
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
@@ -105,9 +105,8 @@ class Workflow(models.Model):
                 workflow.unlock()
             except ObjectDoesNotExist:
                 return
-            except:
+            except Exception:
                 raise Exception('Unable to unlock workflow {0}'.format(wid))
-
 
     def get_data_frame_table_name(self):
         """
@@ -328,8 +327,7 @@ class Workflow(models.Model):
         """
         Given a workflow that is supposed to be locked, it returns the user that
         is locking it.
-        :param workflow:
-        :return:
+        :return: The user object that is locking this workflow
         """
         session = Session.objects.get(session_key=self.session_key)
         session_data = session.get_decoded()
@@ -338,8 +336,9 @@ class Workflow(models.Model):
 
     def flush(self):
         """
-        Flush all the data from the workflow and propagate changes throughout the
-        relations with columns, conditions, filters, etc. These steps require:
+        Flush all the data from the workflow and propagate changes throughout
+        the relations with columns, conditions, filters, etc. These steps
+        require:
 
         1) Delete the data frame from the database
 
@@ -457,7 +456,8 @@ class Column(models.Model):
         max_length=512,
         blank=False,
         null=False,
-        choices=[(x, x) for __, x in list(pandas_db.pandas_datatype_names.items())],
+        choices=[(x, x)
+                 for __, x in list(pandas_db.pandas_datatype_names.items())],
         verbose_name=_('type of data to store in the column')
     )
 
@@ -500,7 +500,7 @@ class Column(models.Model):
     )
 
     active_to = models.DateTimeField(
-       _('Column active until'),
+        _('Column active until'),
         blank=True,
         null=True,
         default=None

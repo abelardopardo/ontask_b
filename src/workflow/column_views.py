@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import range
 import random
+from builtins import range
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
-from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
@@ -16,20 +15,23 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
-from action.models import Condition, Action, ActionColumnConditionTuple
+from action.models import Condition, ActionColumnConditionTuple
 from dataops import ops, formula_evaluation, pandas_db
 from logs.models import Log
 from ontask.permissions import is_instructor
-from .forms import (ColumnRenameForm,
-                    ColumnAddForm,
-                    FormulaColumnAddForm,
-                    RandomColumnAddForm, QuestionAddForm, QuestionRenameForm)
+from .forms import (
+    ColumnRenameForm,
+    ColumnAddForm,
+    FormulaColumnAddForm,
+    RandomColumnAddForm, QuestionAddForm, QuestionRenameForm
+)
 from .models import Column
 from .ops import (
     get_workflow,
     workflow_delete_column,
     clone_column,
-    reposition_column_and_update_df, workflow_restrict_column)
+    reposition_column_and_update_df, workflow_restrict_column
+)
 
 # These are the column operands offered through the GUI. They have immediate
 # translations onto Pandas operators over dataframes.
@@ -52,6 +54,7 @@ formula_column_operands = [
     ('any', _('any: True when any element in selected columns is true'),
      ['boolean']),
 ]
+
 
 def partition(list_in, n):
     """
@@ -417,15 +420,13 @@ def random_column_add(request):
             )
             return JsonResponse(data)
 
-        # df[column.name] = [random.choice(vals) for __ in range(workflow.nrows)]
-
     # Empty new column
     new_column = [None] * workflow.nrows
     # Create the random partitions
     partitions = partition([x for x in range(workflow.nrows)], len(vals))
     # Assign values to partitions
-    for idx, indeces in enumerate(partitions):
-        for x in indeces:
+    for idx, indexes in enumerate(partitions):
+        for x in indexes:
             new_column[x] = vals[idx]
 
     # Assign the new column to the data frame
@@ -868,7 +869,7 @@ def column_restrict_values(request, pk):
 
     if request.method == 'POST':
         # Proceed restricting the column
-        result = workflow_restrict_column(workflow, column)
+        result = workflow_restrict_column(column)
 
         if isinstance(result, str):
             # Something went wrong. Show it

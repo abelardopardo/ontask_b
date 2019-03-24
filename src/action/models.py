@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import object
 import datetime
 import itertools
 import re
@@ -19,14 +18,13 @@ import ontask
 from dataops import formula_evaluation, pandas_db
 from dataops.formula_evaluation import get_variables, evaluate, NodeEvaluation
 from logs.models import Log
-import ontask
 from workflow.models import Workflow, Column
 
 # Regular expressions detecting the use of a variable, or the
 # presence of a "{% MACRONAME variable %} construct in a string (template)
 var_use_res = [
-    re.compile('(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+\}\})'),
-    re.compile('(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})')
+    re.compile(r'(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+\}\})'),
+    re.compile(r'(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})')
 ]
 
 
@@ -137,11 +135,6 @@ class Action(models.Model):
                                   null=False,
                                   blank=False)
 
-    # Index of rows with all conditions false
-    rows_all_false = JSONField(default=None,
-                        blank=True,
-                        null=True)
-
     def __str__(self):
         return self.name
 
@@ -159,9 +152,7 @@ class Action(models.Model):
     @property
     def is_executable(self):
         """
-        Function to ask if an action is correct. All actions out are correct,
-        and action ins are correct if they have at least one key column and one
-        non-key column.
+        Function to answer if an action is ready to execute.
         :return: Boolean stating correctness
         """
 
@@ -402,9 +393,9 @@ class Action(models.Model):
 
     def get_row_all_false_count(self):
         """
-        Given a table and a list of conditions return the number of rows in which
-        all the conditions are false.
-        :return: Number of rows that have all conditions equal to false
+        Given a table and a list of conditions return the number of rows in
+        which all the conditions are false. :return: Number of rows that have
+        all conditions equal to false
         """
         if not self.rows_all_false:
             if not self.workflow.has_data_frame():
@@ -425,12 +416,12 @@ class Action(models.Model):
             # Get the filter if there is one
             cond_sql = ''
             cond_fields = []
-            filter = cond_list.filter(is_filter=True).first()
-            if filter:
-                cond_sql, cond_fields = evaluate(filter.formula,
+            filter_item = cond_list.filter(is_filter=True).first()
+            if filter_item:
+                cond_sql, cond_fields = evaluate(filter_item.formula,
                                                  NodeEvaluation.EVAL_SQL)
                 cond_sql += ' AND '
-                # Remove the filter
+                # Remove the filter_item
                 cond_list = cond_list.filter(is_filter=False)
 
             # Calculate the evaluation of each of the conditions
@@ -443,10 +434,10 @@ class Action(models.Model):
             cond_fields += sum([b for _, b in cond_list_sql], [])
 
             query = 'SELECT t.position from (' \
-                    'SELECT *, ROW_NUMBER() OVER () as position FROM "{0}") as t' \
-                    ' WHERE '.format(
-                self.workflow.get_data_frame_table_name()
-            ) + cond_sql
+                    'SELECT *, ROW_NUMBER() OVER () ' \
+                    'as position FROM "{0}") as t WHERE '.format(
+                        self.workflow.get_data_frame_table_name()
+                    ) + cond_sql
 
             # Run the query
             qs = pandas_db.execute_query(query, cond_fields).fetchall()

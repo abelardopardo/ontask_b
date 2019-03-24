@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import str
-from builtins import map
-from builtins import zip
 import re
 import string
+from builtins import map
+from builtins import str
+from builtins import zip
 
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
@@ -16,19 +16,17 @@ import dataops.formula_evaluation
 from action.forms import EnterActionIn
 from action.models import Condition, var_use_res
 from dataops import pandas_db, ops
-from workflow.models import Workflow
 
 # Variable name to store the workflow ID in the context used to render a
 # template
 action_context_var = 'ONTASK_ACTION_CONTEXT_VARIABLE___'
 viz_number_context_var = 'ONTASK_VIZ_NUMBER_CONTEXT_VARIABLE___'
 
-
 # Regular expression and replacements replace whitespace surrounding condition
 # markup
 white_space_res = [
-    (re.compile('\n[ \t\r\f\v]*{% if '), '{% if '),
-    (re.compile('{% endif %\}[ \t\r\f\v]*\n'), '{% endif %}')
+    (re.compile(r'\n[ \t\r\f\v]*{% if '), '{% if '),
+    (re.compile(r'{% endif %}[ \t\r\f\v]*\n'), '{% endif %}')
 ]
 
 
@@ -46,7 +44,7 @@ def make_xlat(*args, **kwds):
     changes to a string
     """
     adict = dict(*args, **kwds)
-    rx = re.compile('|'.join(map(re.escape, adict)))
+    rx = re.compile(r'|'.join(map(re.escape, adict)))
 
     def one_xlat(match):
         return adict[match.group(0)]
@@ -116,6 +114,7 @@ def clean_whitespace(template_text):
 
     return template_text
 
+
 def render_template(template_text, context_dict, action=None):
     """
     Given a template text and a context, performs the rendering of the
@@ -169,9 +168,8 @@ def render_template(template_text, context_dict, action=None):
     new_template_text = template_text
     for rexpr in var_use_res:
         new_template_text = rexpr.sub(
-            lambda m: m.group('mup_pre') + \
-                      translate(m.group('vname')) + \
-                      m.group('mup_post'),
+            lambda m: m.group('mup_pre') + translate(m.group('vname')) +
+            m.group('mup_post'),
             new_template_text)
 
     # Step 2.2 Remove pre-and post white space from the {% if %} and {% endif %}
@@ -382,7 +380,7 @@ def evaluate_row_action_in(action, context):
     3) Return the resulting object (HTML?)
 
     :param action: Action object.
-    :param row_values: Dictionary with pairs name/value
+    :param context: Dictionary with pairs name/value
     :return: String with the HTML content resulting from the evaluation
     """
 
@@ -409,50 +407,50 @@ def run(*script_args):
     """
     Script for testing purposes
     :param script_args:
-    :return:
+    :return: Nothing
     """
     del script_args
 
-    template = """
-    hi --{{ one }}--
-    --{% if var1 %}var1{% endif %}--
-    --{% if var2 %}var2{% endif %}-- 
-    --{% if !"# %}var3{% endif %}--
-    --{% if $%& %}var4{% endif %}--
-    --{% if '() %}var5{% endif %}--
-    --{{ +,- }}--
-    --{{ ./: }}--
-    --{{ ;<= }}--
-    --{{ >?@ }}--
-    --{{ [\] }}--
-    --{{ ^_` }}--
-    --{{ {|}~ }}--
-    --{{ this one has spaces }}--
-    --{{ OT_ The prefix }}--
-    --{{ OT_The prefix 2 }}--
-    """
+    # template = """
+    # hi --{{ one }}--
+    # --{% if var1 %}var1{% endif %}--
+    # --{% if var2 %}var2{% endif %}--
+    # --{% if !"# %}var3{% endif %}--
+    # --{% if $%& %}var4{% endif %}--
+    # --{% if '() %}var5{% endif %}--
+    # --{{ +,- }}--
+    # --{{ ./: }}--
+    # --{{ ;<= }}--
+    # --{{ >?@ }}--
+    # --{{ [\] }}--
+    # --{{ ^_` }}--
+    # --{{ {|}~ }}--
+    # --{{ this one has spaces }}--
+    # --{{ OT_ The prefix }}--
+    # --{{ OT_The prefix 2 }}--
+    # """
 
     template = '<p>Hi&nbsp;{{ !"#$%&amp;()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~ }}</p>'
 
-    context = {
-        'one': 1,
-        'var1': True,
-        'var2': True,
-        '!"#': True,
-        '$%&': True,
-        "'()": True,
-        '+,-': 'var6',
-        './:': 'var7',
-        ';<=': 'var8',
-        '>?@': 'var9',
-        '[\]': 'var10',
-        '^_`': 'var11',
-        '{|}~': 'var12',
-        'this one has spaces': 'The spaces are not a problem',
-        'OT_ The prefix': 'Prefix solved.',
-        'OT_The prefix 2': 'Prefix 2 solved',
-        'The prefix 2': 'This should NOT appear. ERROR',
-    }
+    # context = {
+    #     'one': 1,
+    #     'var1': True,
+    #     'var2': True,
+    #     '!"#': True,
+    #     '$%&': True,
+    #     "'()": True,
+    #     '+,-': 'var6',
+    #     './:': 'var7',
+    #     ';<=': 'var8',
+    #     '>?@': 'var9',
+    #     '[\]': 'var10',
+    #     '^_`': 'var11',
+    #     '{|}~': 'var12',
+    #     'this one has spaces': 'The spaces are not a problem',
+    #     'OT_ The prefix': 'Prefix solved.',
+    #     'OT_The prefix 2': 'Prefix 2 solved',
+    #     'The prefix 2': 'This should NOT appear. ERROR',
+    # }
     context = {
         '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~': 'Carmelo Coton',
     }

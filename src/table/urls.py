@@ -16,13 +16,13 @@ urlpatterns = [
     path('<int:pk>/ops/', api.TableJSONOps.as_view(), name="api_ops"),
 
     path('<int:pk>/merge/', api.TableJSONMerge.as_view(),
-        name="api_merge"),
+         name="api_merge"),
 
     # PANDAS
     path('<int:pk>/pops/', api.TablePandasOps.as_view(), name="api_pops"),
 
     path('<int:pk>/pmerge/', api.TablePandasMerge.as_view(),
-        name="api_pmerge"),
+         name="api_pmerge"),
 
     #
     # Display
@@ -32,12 +32,12 @@ urlpatterns = [
     path('display_ss/', views.display_ss, name="display_ss"),
 
     path('<int:pk>/display_view/',
-        views.display_view,
-        name="display_view"),
+         views.display_view,
+         name="display_view"),
 
     path('<int:pk>/display_view_ss/',
-        views.display_view_ss,
-        name="display_view_ss"),
+         views.display_view_ss,
+         name="display_view_ss"),
 
     path('row_delete/', views.row_delete, name="row_delete"),
 
@@ -60,18 +60,18 @@ urlpatterns = [
     path('stat_row/', stat_views.stat_row, name="stat_row"),
 
     path('<int:pk>/stat_row_view/',
-        stat_views.stat_row_view,
-        name="stat_row_view"),
+         stat_views.stat_row_view,
+         name="stat_row_view"),
 
     path('<int:pk>/stat_column/',
-        stat_views.stat_column,
-        name="stat_column"),
+         stat_views.stat_column,
+         name="stat_column"),
 
     path('stat_table/', stat_views.stat_table, name="stat_table"),
 
     path('<int:pk>/stat_table_view/',
-        stat_views.stat_table_view,
-        name="stat_table_view"),
+         stat_views.stat_table_view,
+         name="stat_table_view"),
 
     #
     # CSV Download
