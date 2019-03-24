@@ -2,8 +2,8 @@
 <div id="attribute-names" class="text-center mb-3">
   <select id="select-column-name">
     <option value="">- {% trans 'Insert Column Value' %} -</option>
-    {% for colname in column_names %}
-      <option value="{{ colname }}">{{ colname }}</option>
+    {% for column in columns %}
+      <option value="{{ column.name }}">{{ column.name }}</option>
     {% endfor %}
   </select>
   {% if conditions|length %}

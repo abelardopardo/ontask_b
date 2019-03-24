@@ -6,10 +6,14 @@ Implementation of views providing visualisation and stats
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from dataops import pandas_db
+from dataops.pandas_db import load_from_db, get_column_stats_from_df
 from ontask.permissions import is_instructor
 from table.models import View
 from visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
@@ -244,6 +248,33 @@ def get_view_visualisations(request, view_id=None):
                    'visualizations': visualizations})
 
 
+def get_column_visualization_items(workflow, column):
+    """
+    Get the visualization items (scripts and HTML) for a column
+    :param workflow: Workflow being processed
+    :param column: Column requested
+    :return: Tuple stat_data with descriptive stats, visualization scripts and
+    visualization HTML
+    """
+    # Get the dataframe
+    df = load_from_db(workflow.get_data_frame_table_name())
+
+    # Extract the data to show at the top of the page
+    stat_data = get_column_stats_from_df(df[column.name])
+
+    vis_scripts = []
+    visualizations = get_column_visualisations(
+        column,
+        df[[column.name]],
+        vis_scripts,
+        context={
+            'style': 'max-width:800px; max-height:450px;display:inline-block;'
+        }
+    )
+
+    return stat_data, vis_scripts, visualizations
+
+
 @user_passes_test(is_instructor)
 def stat_column(request, pk):
     """
@@ -268,21 +299,8 @@ def stat_column(request, pk):
     except ObjectDoesNotExist:
         return redirect('home')
 
-    # Get the dataframe
-    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
-
-    # Extract the data to show at the top of the page
-    stat_data = pandas_db.get_column_stats_from_df(df[column.name])
-
-    vis_scripts = []
-    visualizations = get_column_visualisations(
-        column,
-        df[[column.name]],
-        vis_scripts,
-        context={
-            'style': 'max-width:800px; max-height:450px;display:inline-block;'
-        }
-    )
+    stat_data, vis_scripts, visualizations = \
+        get_column_visualization_items(workflow, column)
 
     return render(request,
                   'table/stat_column.html',
@@ -291,6 +309,54 @@ def stat_column(request, pk):
                    'vis_scripts': vis_scripts,
                    'visualizations': [v.html_content for v in visualizations]}
                   )
+
+
+@user_passes_test(is_instructor)
+def stat_column_JSON(request, pk):
+    """
+    Function to respond a JSON GET request to show the column statistics
+    in a modal
+    :param request: HTTP request
+    :param pk: Column primary key
+    :return: HTML rendering of the visualization
+    """
+
+    # To include in the JSON response
+    data = dict()
+
+    # Get the workflow to obtain row numbers
+    workflow = get_workflow(request)
+    if not workflow:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
+    # Get column, must be in the workflow
+    column = workflow.columns.filter(pk=pk).first()
+    if not column or column.is_key:
+        # Something went wrong, the column requested does not belong to the
+        # workflow selected, or the column requested is a key column
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
+    # Request to see the statistics for a non-key column that belongs to the
+    # selected workflow
+
+    stat_data, vis_scripts, visualizations = \
+        get_column_visualization_items(workflow, column)
+
+    # Create the right key/value pair in the result dictionary
+    data['html_form'] = render_to_string(
+        'action/includes/partial_column_stats.html',
+        context={'column': column,
+                 'stat_data': stat_data,
+                 'vis_scripts': vis_scripts,
+                 'visualizations': [v.html_content for v in visualizations]},
+        request=request
+    )
+
+    return JsonResponse(data)
 
 
 @user_passes_test(is_instructor)

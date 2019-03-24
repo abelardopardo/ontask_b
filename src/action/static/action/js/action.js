@@ -86,37 +86,52 @@ var toggleShuffleQuestion = function () {
   });
   $('#div-spinner').hide();
 }
-var loadFormPost = function () {
-    var btn = $(this);
-    if ($(this).is('[class*="disabled"]')) {
-      return;
-    }
-    $.ajax({
-      url: $(this).attr("data-url"),
-      data: [{'name': 'action_content', 'value': get_id_content()}],
-      type: 'post',
-      dataType: 'json',
-      beforeSend: function() {
-        $(".modal-body").html("");
-        $("#modal-item").modal("show");
-      },
-      success: function(data) {
-        if (data.form_is_valid) {
-          if (data.html_redirect == "") {
-            $('#div-spinner').show();
-            window.location.reload(true);
-          } else {
-            location.href = data.html_redirect;
-          }
-          return;
+var ajax_post = function(url, data, req_type) {
+  $.ajax({
+    url: url,
+    data: data,
+    type: req_type,
+    dataType: 'json',
+    beforeSend: function() {
+      $(".modal-body").html("");
+      $("#modal-item").modal("show");
+    },
+    success: function(data) {
+      if (data.form_is_valid) {
+        if (data.html_redirect == "") {
+          $('#div-spinner').show();
+          window.location.reload(true);
+        } else {
+          location.href = data.html_redirect;
         }
-        $("#modal-item .modal-content").html(data.html_form);
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        $('#div-spinner').show();
-        location.reload(true);
+        return;
       }
-    });
+      $("#modal-item .modal-content").html(data.html_form);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      $('#div-spinner').show();
+      location.reload(true);
+    }
+  });
+}
+var loadFormPost = function () {
+  var btn = $(this);
+  if ($(this).is('[class*="disabled"]')) {
+    return;
+  }
+  ajax_post(
+    $(this).attr("data-url"),
+    [{'name': 'action_content', 'value': get_id_content()}],
+    'post'
+  );
+}
+var loadStats = function () {
+  ajax_post(
+    $(this).val(),
+    [{'name': 'action_content', 'value': get_id_content()}],
+    'get'
+  );
+  $(this).val(this.defaultSelected);
 }
 var transferFormula = function () {
   if (document.getElementById("id_formula") != null) {
@@ -212,8 +227,6 @@ $(function () {
   $("#attribute-names").on("change",
                            "#select-condition-name",
                            insertConditionInContent);
-//  $("#condition-set").on("click", ".js-condition-insert",
-//    insertConditionInContent);
 
   // Insert attribute in content
   $("#attribute-names").on("change",
@@ -231,6 +244,11 @@ $(function () {
 
   // Insert columns in action in
   $("#select-key-column-name").on("change", insertColumnInActionIn);
+
+  // View statistics in Condition tab
+  $("#condition-set-header").on("change",
+                                "#select-column-name",
+                                loadStats);
 
   // Toggle shuffle question
   $("#action-in-editor").on("change",
