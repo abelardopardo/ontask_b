@@ -1,10 +1,13 @@
-## 4.2 ()
+## 4.2 (2019-)
 
 ### Added
 
 - Export now allows to export a workflow without a data frame
 
 - Detection of personalized texts or JSON objects in which all conditions are false
+
+- Function to show column statistics when creating conditions in personalized
+  actions
 
 ### Fixed
 
@@ -20,6 +23,8 @@
 
 - Switched to email_validator to validate email addresses
 
+- Cleaner UI to insert attributes, columns, conditions in actions
+
 ## 4.1 (2019-02-27)
 
 ### Added
@@ -27,7 +32,6 @@
 - Possibility of disabling the type of actions available in config file (Issue #112)
   
 ### Fixed
-
 
 - Conditions break when renaming them (Issue #128)
 
@@ -117,11 +121,7 @@
 
 ### Changed
 
-- Reviewed the Chinese localization## 3.1.0 (2018-10-31)
-
-### Added
-
-- Initial support for localization to Chinese
+- Reviewed the Chinese localization
 
 ## 3.1.0 (2018-10-31)
 
