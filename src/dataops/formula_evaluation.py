@@ -24,7 +24,7 @@ class NodeEvaluation:
     GET_CONSTANT_FN = {
         'integer': lambda x: int(x),
         'double': lambda x: float(x),
-        'boolean': lambda x: 'Yes' if x else 'No',
+        'boolean': lambda x: True if x else False,
         'string': lambda x: str(x),
         'datetime': lambda x: parse_datetime(x)
     }
@@ -105,7 +105,8 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} equal to {1}'.format(self.node['field'], constant)
+        return '{0} equal to {1}'.format(self.node['field'],
+                                         'Yes' if constant else 'No')
 
     def _op_not_equal(self, eval_type):
         """
