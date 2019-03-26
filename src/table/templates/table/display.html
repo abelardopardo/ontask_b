@@ -115,7 +115,7 @@
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="sr-only">Toggle Dropdown</span>
               </button>
-              <div class="dropdown-menu">
+              <div class="dropdown-menu dropdown-menu-right">
               {% for v in views %}
                 <a href="{% url 'table:display_view' v.id %}"
                    class="dropdown-item spin">{{ v.name }}</a>

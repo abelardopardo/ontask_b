@@ -24,6 +24,11 @@
       {% include 'qbuilder_options.js' %}
     {% endwith %}
   </script>
+  {% if vis_scripts %}
+    {% for script_src in vis_scripts %}
+      <script src="{{ script_src|safe }}"></script>
+    {% endfor %}
+  {% endif %}
 {% endblock %}
 {% block container %}
   <div class="container-fluid" id="action-out-editor">

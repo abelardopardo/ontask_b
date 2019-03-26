@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Implementation of visualizations using the Plotly JS libarry
+Implementation of visualizations using the Plotly JS library
 """
 
-
-from builtins import str
 import json
+from builtins import str
 
 from dataops import pandas_db
 from . import VisHandler
@@ -50,8 +49,6 @@ class PlotlyHandler(VisHandler):
     def render(self):
         """
         Return the rendering in HTML fo this visualization
-        :param args:
-        :param kwargs:
         :return: String as HTML snippet
         """
         return self.html_content
@@ -143,7 +140,8 @@ class PlotlyColumnHistogram(PlotlyHandler):
         data = []
         for column in self.data.columns:
             column_dtype = \
-                pandas_db.pandas_datatype_names.get(self.data[column].dtype.name)
+                pandas_db.pandas_datatype_names.get(
+                    self.data[column].dtype.name)
         data_list = self.data[column].dropna().tolist()
         # Special case for bool and datetime. Turn into strings to be
         # treated as such

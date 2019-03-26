@@ -1,7 +1,7 @@
 {% load i18n %}
 <div class="js-action-preview-form">
   <div class="modal-header">
-    <h4 class="modal-title">{% blocktrans %}Statistics for {{ column.name }}{% endblocktrans %}</h4>
+    <h4 class="modal-title">{% blocktrans with cn=column.name %}Statistics for {{ cn }}{% endblocktrans %}</h4>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -11,7 +11,7 @@
   </div>
   <div id="preview-body" class="modal-body"
        style="border: solid 1px black;margin: 0 2ex 2ex 2ex;">
-  {% include 'table/includes/partial_stats_column.html' %}
+  {% include 'table/includes/partial_column_stats_data.html' %}
   </div>
 </div>
 

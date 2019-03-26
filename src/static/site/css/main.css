@@ -312,6 +312,11 @@ table#attribute-table {
     width:100%;
 }
 
+.dropdown-menu{
+    max-height:300px;
+    overflow-y:auto;
+}
+
 div.sol-container {
     display: table;
 }

@@ -307,9 +307,7 @@ class TutorialCaptures(ScreenTests):
                    'editor.insertText', "Dear ");
                $('#summernote').summernote('editor.saveRange');""")
 
-        select = Select(self.selenium.find_element_by_id(
-            'select-column-name'))
-        select.select_by_visible_text('GivenName')
+        self.click_dropdown_option("//div[@id='column-selector']", 'GivenName')
         self.selenium.execute_script(
             """$('#summernote').summernote('editor.saveRange');""")
 
@@ -714,9 +712,7 @@ class TutorialCaptures(ScreenTests):
         self.select_parameters_tab()
 
         # Select email column as key column
-        select = Select(self.selenium.find_element_by_id(
-            'select-key-column-name'))
-        select.select_by_visible_text('email')
+        self.click_dropdown_option("//div[@id='select-key-column-name']", 'email')
         # Table disappears (page is updating) -- Wait for spinner, and then
         # refresh
         WebDriverWait(self.selenium, 10).until_not(

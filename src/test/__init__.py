@@ -305,6 +305,22 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             )
         )
 
+    def click_dropdown_option(self, dd_xpath, option_name):
+        """
+        Given a dropdown xpath, click to open and then click in the given option
+        :param dd_xpath: xpath to locate the dropdown element (top level)
+        :param option_name: name of the option in the dropdown to click
+        :return: Nothing
+        """
+        self.selenium.find_element_by_xpath(dd_xpath).click()
+        WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
+            (By.XPATH,
+             dd_xpath + '/..//*[normalize-space() = "{0}"]'.format(option_name))
+        ))
+        self.selenium.find_element_by_xpath(
+            dd_xpath + '/..//*[normalize-space() = "{0}"]'.format(option_name)
+        ).click()
+
     def search_table_row_by_string(self, table_id, colidx, value):
         """
         Given a table id and a column index, it traverses the table searching

@@ -121,9 +121,10 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.open_action_edit('action in')
 
         # Set the right columns to process
-        select = Select(self.selenium.find_element_by_id(
-            'select-column-name'))
-        select.select_by_visible_text('!#$%&()*+,-./\\:;<=>?@[]^_`{|}~2')
+        self.click_dropdown_option(
+            "//div[@id='column-selector']",
+            '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~2'
+        )
         self.wait_for_datatable('column-selected-table_previous')
         # Wait for the table to be refreshed
         WebDriverWait(self.selenium, 10).until(
@@ -134,16 +135,13 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
 
         # Set some parameters
         self.select_parameters_tab()
-        select = Select(self.selenium.find_element_by_id(
-            'select-key-column-name'))
-        select.select_by_visible_text('sid')
+        self.click_dropdown_option("//div[@id='select-key-column-name']", 'sid')
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
         self.select_parameters_tab()
-        select = Select(self.selenium.find_element_by_id(
-            'select-key-column-name'))
-        select.select_by_visible_text('email')
+        self.click_dropdown_option("//div[@id='select-key-column-name']",
+                                   'email')
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
@@ -192,22 +190,24 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         # Edit the action out
         self.open_action_edit('action_out')
 
-        # Insert attribute
-        self.selenium.find_element_by_id("select-attribute-name").click()
-        Select(self.selenium.find_element_by_id(
-            "select-attribute-name")).select_by_visible_text(
-            "- Insert Attribute -"
+        # Click in the editor
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.CLASS_NAME, 'note-editing-area')
+            )
         )
+        self.selenium.find_element_by_class_name('note-editing-area').click()
+
+        # Insert attribute
+        self.click_dropdown_option("//div[@id='attribute-selector']",
+                                   symbols + '3')
 
         # Insert column name
-        self.selenium.find_element_by_id("select-column-name").click()
-        Select(self.selenium.find_element_by_id(
-            "select-column-name")).select_by_visible_text(symbols)
+        self.click_dropdown_option("//div[@id='column-selector']", symbols)
 
         # Insert second column name
-        self.selenium.find_element_by_id("select-column-name").click()
-        Select(self.selenium.find_element_by_id(
-            "select-column-name")).select_by_visible_text(symbols + '2')
+        self.click_dropdown_option("//div[@id='column-selector']",
+                                   symbols + '2')
 
         # Create new condition
         self.create_condition(symbols + "4",
@@ -291,10 +291,8 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         # Set the correct values for an action-in
         # Set the right columns to process
         self.select_parameters_tab()
-        select = Select(self.selenium.find_element_by_id(
-            'select-key-column-name'
-        ))
-        select.select_by_visible_text('email' + symbols)
+        self.click_dropdown_option("//div[@id='select-key-column-name']",
+                                   'email' + symbols)
         # This wait is incorrect. Don't know how to wait for an AJAX call.
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))

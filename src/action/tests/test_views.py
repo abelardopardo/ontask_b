@@ -226,13 +226,10 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # Login
         self.login('instructor01@bogus.com')
 
-        # GO TO THE WORKFLOW PAGE
+        # Open workflow page
         self.access_workflow_from_home_page(self.wflow_name)
 
-        # Goto the action page
-        self.go_to_actions()
-
-        # click in the action page
+        # Edit the action
         self.open_action_edit(self.action_name)
 
         # Add condition
@@ -249,6 +246,8 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Action now has two complementary conditions, add the conditions to
         # the message
+        self.select_text_tab()
+        self.selenium.find_element_by_class_name('note-editing-area').click()
         self.selenium.execute_script(
             """$('#id_content').summernote(
                    'editor.insertText', 
@@ -380,6 +379,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # insert the second mark
         self.select_text_tab()
+        self.selenium.find_element_by_class_name('note-editing-area').click()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "mark2");"""
         )
@@ -398,6 +398,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # insert the third mark
         self.select_text_tab()
+        self.selenium.find_element_by_class_name('note-editing-area').click()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "mark3");"""
         )
@@ -414,6 +415,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         )
         # insert the first mark
         self.select_text_tab()
+        self.selenium.find_element_by_class_name('note-editing-area').click()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "cmark1");"""
         )
@@ -432,6 +434,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         )
 
         # insert the second mark
+        self.selenium.find_element_by_class_name('note-editing-area').click()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "cmark2");"""
         )
@@ -449,6 +452,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         )
 
         # insert the third mark
+        self.selenium.find_element_by_class_name('note-editing-area').click()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "cmark3");"""
         )
@@ -550,24 +554,19 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
 
         # Select email column as key column
         self.select_parameters_tab()
-        select = Select(self.selenium.find_element_by_id(
-            'select-key-column-name'))
-        select.select_by_visible_text('email')
+        self.click_dropdown_option("//div[@id='select-key-column-name']",
+                                   'email')
         # Table disappears (page is updating) -- Wait for spinner, and then
         # refresh
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
-        # Select a new table element
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.ID, 'select-column-name')
-            )
+        self.select_questions_tab()
+        self.click_dropdown_option(
+            "//div[@id='column-selector']",
+            'registered'
         )
-        select = Select(self.selenium.find_element_by_id(
-            'select-column-name'))
-        select.select_by_visible_text('registered')
         self.wait_for_datatable('column-selected-table_previous')
 
         # Submit the action
@@ -854,9 +853,6 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
 
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page(self.wflow_name)
-
-        # Goto the action page
-        self.go_to_actions()
 
         # Create a new action
         self.create_new_personalized_text_action("action out", '')

@@ -31,13 +31,13 @@ var insertConditionInContent = function() {
   } else {
       condition_text = '';
   }
-  insert_text = "{% if " + btn.val() +
+  insert_text = "{% if " + btn.text() +
       " %}" + condition_text + "{% endif %}";
   insertText('id_content', insert_text);
   $(this).val(this.defaultSelected);
 };
 var insertAttributeInContent = function() {
-  var val = $(this).val();
+  var val = $(this).text();
   if (val == '') {
     return;
   }
@@ -45,21 +45,24 @@ var insertAttributeInContent = function() {
   $(this).val(this.defaultSelected);
 }
 var insertColumnInActionIn = function () {
-  var val = $(this).val();
-  var sel = $(this)
   $('#div-spinner').show();
-  //window.location = val;
   $.ajax({
-    url: val,
+    url: $(this).attr('data-url'),
     type: 'get',
     dataType: 'json',
     success: function (data) {
       if (typeof data.html_redirect != 'undefined') {
-        location.href = data.html_redirect;
+        if (data.html_redirect == "") {
+          $('#div-spinner').show();
+          window.location.reload(true);
+        } else {
+          location.href = data.html_redirect;
+        }
       } else {
         $('#div-spinner').hide();
       }
-      sel.children("option[value='']").remove();
+      // Remove option from menu
+      $(this).remove();
     },
     error: function(jqXHR, textStatus, errorThrown) {
       location.reload(true);
@@ -124,14 +127,6 @@ var loadFormPost = function () {
     [{'name': 'action_content', 'value': get_id_content()}],
     'post'
   );
-}
-var loadStats = function () {
-  ajax_post(
-    $(this).val(),
-    [{'name': 'action_content', 'value': get_id_content()}],
-    'get'
-  );
-  $(this).val(this.defaultSelected);
 }
 var transferFormula = function () {
   if (document.getElementById("id_formula") != null) {
@@ -223,37 +218,24 @@ $(function () {
   $("#condition-set").on("click", ".js-condition-delete", loadForm);
   $("#modal-item").on("submit", ".js-condition-delete-form", saveForm);
 
-  // Insert condition blurb in the editor
-  $("#attribute-names").on("change",
-                           "#select-condition-name",
-                           insertConditionInContent);
-
-  // Insert attribute in content
-  $("#attribute-names").on("change",
-                           "#select-attribute-name",
-                           insertAttributeInContent);
   // Insert attribute column in content
-  $("#attribute-names").on("change",
-                           "#select-column-name",
-                           insertAttributeInContent);
+  $("#insert-elements-in-editor").on("click", ".js-insert-column-name", insertAttributeInContent);
+  // Insert condition blurb in the editor
+  $("#insert-elements-in-editor").on("click", ".js-insert-condition-name", insertConditionInContent);
+  // Insert attribute in content
+  $("#insert-elements-in-editor").on("click", ".js-insert-attribute-name", insertAttributeInContent);
 
   // Insert columns in action in
-  $("#questions").on("change",
-                      "#select-column-name",
-                      insertColumnInActionIn);
+  $("#insert-questions").on("click", ".js-insert-quesion", insertColumnInActionIn);
 
   // Insert columns in action in
-  $("#select-key-column-name").on("change", insertColumnInActionIn);
-
-  // View statistics in Condition tab
-  $("#condition-set-header").on("change",
-                                "#select-column-name",
-                                loadStats);
+  $("#edit-survey-tab-content").on("click", ".js-select-key-column-name", insertColumnInActionIn);
 
   // Toggle shuffle question
-  $("#action-in-editor").on("change",
-                       "#shuffle-questions",
-                       toggleShuffleQuestion);
+  $("#action-in-editor").on("change", "#shuffle-questions", toggleShuffleQuestion);
+
+  // Show stats
+  $("#condition-set-header").on("click", ".js-show-stats", loadForm);
 
   // Preview
   $("#action-preview-done").on("click", ".js-action-preview", loadFormPost);

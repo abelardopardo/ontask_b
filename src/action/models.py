@@ -420,18 +420,23 @@ class Action(models.Model):
             if filter_item:
                 cond_sql, cond_fields = evaluate(filter_item.formula,
                                                  NodeEvaluation.EVAL_SQL)
-                cond_sql += ' AND '
                 # Remove the filter_item
                 cond_list = cond_list.filter(is_filter=False)
 
-            # Calculate the evaluation of each of the conditions
-            cond_list_sql = [evaluate(x.formula, NodeEvaluation.EVAL_SQL)
-                             for x in cond_list]
+                # If there are still some more conditions, connect them
+                if cond_list:
+                    cond_sql += ' AND '
 
-            cond_sql += \
-                '(NOT ' + ') AND (NOT '.join(
-                    [a for a, _ in cond_list_sql]) + ')'
-            cond_fields += sum([b for _, b in cond_list_sql], [])
+            # If there are conditions, add them
+            if cond_list:
+                # Calculate the evaluation of each of the conditions
+                cond_list_sql = [evaluate(x.formula, NodeEvaluation.EVAL_SQL)
+                                 for x in cond_list]
+
+                cond_sql += \
+                    '(NOT ' + ') AND (NOT '.join(
+                        [a for a, _ in cond_list_sql]) + ')'
+                cond_fields += sum([b for _, b in cond_list_sql], [])
 
             query = 'SELECT t.position from (' \
                     'SELECT *, ROW_NUMBER() OVER () ' \

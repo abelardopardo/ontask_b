@@ -248,11 +248,16 @@ def get_view_visualisations(request, view_id=None):
                    'visualizations': visualizations})
 
 
-def get_column_visualization_items(workflow, column):
+def get_column_visualization_items(workflow,
+                                   column,
+                                   max_width=800,
+                                   max_height=450):
     """
     Get the visualization items (scripts and HTML) for a column
     :param workflow: Workflow being processed
     :param column: Column requested
+    :param max_width: Maximum width attribute in pixels
+    :param max_width: Maximum height attribute in pixels
     :return: Tuple stat_data with descriptive stats, visualization scripts and
     visualization HTML
     """
@@ -267,8 +272,11 @@ def get_column_visualization_items(workflow, column):
         column,
         df[[column.name]],
         vis_scripts,
-        context={
-            'style': 'max-width:800px; max-height:450px;display:inline-block;'
+        context={'style': 'max-width:{0}px; max-height:{1}px;'
+                          'display:inline-block;'.format(
+                               max_width,
+                               max_height
+                          )
         }
     )
 
@@ -343,15 +351,17 @@ def stat_column_JSON(request, pk):
     # Request to see the statistics for a non-key column that belongs to the
     # selected workflow
 
-    stat_data, vis_scripts, visualizations = \
-        get_column_visualization_items(workflow, column)
+    stat_data, __, visualizations = \
+        get_column_visualization_items(workflow,
+                                       column,
+                                       max_height=250,
+                                       max_width=468)
 
     # Create the right key/value pair in the result dictionary
     data['html_form'] = render_to_string(
-        'action/includes/partial_column_stats.html',
+        'table/includes/partial_column_stats_modal.html',
         context={'column': column,
                  'stat_data': stat_data,
-                 'vis_scripts': vis_scripts,
                  'visualizations': [v.html_content for v in visualizations]},
         request=request
     )

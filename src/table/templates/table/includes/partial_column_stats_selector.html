@@ -1,0 +1,12 @@
+{% load i18n %}
+<div id="column-stat-selector" class="dropdown btn-group">
+  <button type="button" class="btn btn-outline-dark dropdown-toggle"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <span class="fa fa-bar-chart"></span> {% trans 'Column statistics' %}</button>
+  <div class="dropdown-menu" aria-labelledby="column-stat-selector">
+    {% for column in columns %}
+      <button type="button" class="dropdown-item js-show-stats"
+              data-url="{% url 'table:stat_column_JSON' column.id %}">{{ column.name }}</button>
+    {% endfor %}
+  </div>
+</div>

@@ -82,21 +82,28 @@
     </ul>
     <div class="tab-content pt-3 pb-3 pl-2 pr-2 tab-wrapper" id="edit-survey-tab-content">
       <div class="tab-pane fade show active" id="questions" role="tabpanel" aria-labelledby="questions-tab">
-        <div class="text-center mb-3">
-          <select id="select-column-name">
-            <option value="">- {% trans 'Insert existing question' %} -</option>
-            {% for col in columns_to_insert %}
-              <option
-                value="{% url 'action:select_column_action' action.id col.id %}">{{ col.name }}</option>
-            {% endfor %}
-          </select>
-          <button type="button"
-                  class="btn btn-outline-dark js-workflow-question-add"
-                  data-url="{% url 'workflow:question_add' action.id %}"
-                  data-toggle="tooltip"
-                  title="{% trans 'Add a new question to the action' %}">
-            <span class="fa fa-plus"></span> {% trans 'Create question' %}
-          </button>
+        <div id="insert-questions" class="text-center mb-3">
+          <div id="column-selector" class="btn-group" role="group">
+            <div class="dropdown btn-group">
+              <button type="button" class="btn btn-outline-dark dropdown-toggle"
+                      data-toggle="dropdown">
+                {% trans 'Insert existing question' %}
+              </button>
+              <div class="dropdown-menu">
+                {% for column in columns_to_insert %}
+                  <button type="button" class="dropdown-item js-insert-quesion"
+                          data-url="{% url 'action:select_column_action' action.id column.id %}">{{ column.name }}</button>
+                {% endfor %}
+              </div>
+            </div>
+            <button type="button"
+                    class="btn btn-outline-dark js-workflow-question-add"
+                    data-url="{% url 'workflow:question_add' action.id %}"
+                    data-toggle="tooltip"
+                    title="{% trans 'Add a new question to the action' %}">
+              <span class="fa fa-plus"></span> {% trans 'Create question' %}
+            </button>
+          </div>
         </div>
         <div class="container-fluid justify-content-center mb-3">
           {% render_table column_selected_table %}
@@ -120,22 +127,24 @@
         {% endif %}
         <h5 class="text-center">
           {% trans 'Key column to match the user id' %}
-          <small>
-            <select id="select-key-column-name">
+          <div id="select-key-column-name" class="dropdown btn-group">
+            <button type="button" class="btn btn-outline-dark dropdown-toggle"
+                    data-toggle="dropdown">
               {% if not key_selected %}
-                <option value="">- {% trans 'Key column' %} -</option>
+                {% trans 'Please, select Key column' %}
+              {% else %}
+                {{ key_selected.name }}
               {% endif %}
-              {% for col in action.workflow.columns.all %}
-                {% if col.is_key %}
-                  <option
-                    value="{% url 'action:select_key_column_action' action.id col.id 1 %}"
-                    {% if col == key_selected %}selected{% endif %}>
-                    {{ col.name }}
-                  </option>
+            </button>
+            <div class="dropdown-menu">
+              {% for column in action.workflow.columns.all %}
+                {% if column.is_key and column != key_selected %}
+                  <button type="button" class="dropdown-item js-select-key-column-name"
+                          data-url="{% url 'action:select_key_column_action' action.id column.id 1 %}">{{ column.name }}</button>
                 {% endif %}
               {% endfor %}
-            </select>
-          </small>
+            </div>
+          </div>
         </h5>
         <h5 class="text-center">{% trans 'Shuffle questions?' %}
           <small>
