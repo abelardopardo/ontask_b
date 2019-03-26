@@ -356,3 +356,14 @@ td.operations button {
     padding: 2px 7px;
     font-size: 10px;
 }
+
+.circle {
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  font-size: 50px;
+  color: #fff;
+  line-height: 500px;
+  text-align: center;
+  background: #000
+}
