@@ -105,7 +105,7 @@ def save_condition_form(request,
                                                  request=request)
             return JsonResponse(data)
         # Verify that the condition name does not collide with column names
-        workflow = get_workflow(request, action.workflow.id)
+        workflow = action.workflow
         if not workflow:
             # Workflow is not accessible. Go back to the index.
             data['form_is_valid'] = True
@@ -219,13 +219,18 @@ class FilterCreateView(UserIsInstructor, generic.TemplateView):
         return context
 
     def get(self, request, *args, **kwargs):
+        workflow = get_workflow(request)
+        if not workflow:
+            return redirect('home')
+
         # Get the action that is being used
-        try:
-            action = Action.objects.filter(
-                Q(workflow__user=request.user) |
-                Q(workflow__shared=request.user)
-            ).distinct().get(pk=kwargs['pk'])
-        except (KeyError, ObjectDoesNotExist):
+        action = Action.objects.filter(
+            Q(workflow__user=request.user) |
+            Q(workflow__shared=request.user),
+            pk=kwargs['pk'],
+            workflow=workflow
+        ).distinct().first()
+        if not action:
             return redirect('home')
 
         form = self.form_class()
@@ -238,13 +243,19 @@ class FilterCreateView(UserIsInstructor, generic.TemplateView):
 
     def post(self, request, *args, **kwargs):
         del args
+        workflow = get_workflow(request)
+        if not workflow:
+            return redirect('home')
+
         # Get the action that is being used
-        try:
-            action = Action.objects.filter(
-                Q(workflow__user=request.user) |
-                Q(workflow__shared=request.user)
-            ).distinct().get(pk=kwargs['pk'])
-        except (KeyError, ObjectDoesNotExist):
+        action = Action.objects.filter(
+            Q(workflow__user=request.user) |
+            Q(workflow__shared=request.user),
+            pk=kwargs['pk'],
+            workflow=workflow
+        ).distinct().first()
+
+        if not action:
             return redirect('home')
 
         form = self.form_class(request.POST)
@@ -264,14 +275,22 @@ def edit_filter(request, pk):
     :param pk: condition ID
     :return: AJAX response
     """
+
+    workflow = get_workflow(request)
+    if not workflow:
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
+
     # Get the filter
-    try:
-        cond_filter = Condition.objects.filter(
-            Q(action__workflow__user=request.user) |
-            Q(action__workflow__shared=request.user),
-            is_filter=True
-        ).distinct().get(pk=pk)
-    except (KeyError, ObjectDoesNotExist):
+    cond_filter = Condition.objects.filter(
+        Q(action__workflow__user=request.user) |
+        Q(action__workflow__shared=request.user),
+        pk=pk,
+        action__workflow=workflow,
+        is_filter=True
+    ).distinct().first()
+
+    if not cond_filter:
         return redirect('home')
 
     # Create the filter and populate with existing data
@@ -294,14 +313,22 @@ def delete_filter(request, pk):
     :param pk: Filter ID
     :return: AJAX response
     """
+
+    workflow = get_workflow(request)
+    if not workflow:
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
+
     # Get the filter
-    try:
-        cond_filter = Condition.objects.filter(
-            Q(action__workflow__user=request.user) |
-            Q(action__workflow__shared=request.user),
-            is_filter=True
-        ).distinct().get(pk=pk)
-    except (KeyError, ObjectDoesNotExist):
+    cond_filter = Condition.objects.filter(
+        Q(action__workflow__user=request.user) |
+        Q(action__workflow__shared=request.user),
+        is_filter=True,
+        pk=pk,
+        action__workflow=workflow
+    ).distinct().first()
+
+    if not cond_filter:
         return redirect('home')
 
     data = dict()
@@ -406,14 +433,23 @@ def edit_condition(request, pk):
     :param pk: Condition ID
     :return: AJAX reponse
     """
+
+    # Get the workflow
+    workflow = get_workflow(request)
+    if not workflow:
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
+
     # Get the condition
-    try:
-        condition = Condition.objects.filter(
-            Q(action__workflow__user=request.user) |
-            Q(action__workflow__shared=request.user),
-            is_filter=False
-        ).distinct().get(pk=pk)
-    except (KeyError, ObjectDoesNotExist):
+    condition = Condition.objects.filter(
+        Q(action__workflow__user=request.user) |
+        Q(action__workflow__shared=request.user),
+        is_filter=False,
+        pk=pk,
+        action__workflow=workflow
+    ).distinct().first()
+
+    if not condition:
         return JsonResponse({'form_is_valid': True,
                              'html_redirect': reverse('home')})
 
@@ -438,14 +474,20 @@ def delete_condition(request, pk):
     # AJAX result
     data = {}
 
+    workflow = get_workflow(request)
+    if not workflow:
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
+
     # Get the condition
-    try:
-        condition = Condition.objects.filter(
-            Q(action__workflow__user=request.user) |
-            Q(action__workflow__shared=request.user),
-            is_filter=False
-        ).distinct().get(pk=pk)
-    except (KeyError, ObjectDoesNotExist):
+    condition = Condition.objects.filter(
+        Q(action__workflow__user=request.user) |
+        Q(action__workflow__shared=request.user),
+        pk=pk,
+        action__workflow=workflow,
+        is_filter=False
+    ).distinct().first()
+    if not condition:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')
         return JsonResponse(data)
@@ -508,7 +550,8 @@ def clone(request, pk):
     condition = Condition.objects.filter(pk=pk).filter(
         Q(action__workflow__user=request.user) |
         Q(action__workflow__shared=request.user),
-        is_filter=False
+        is_filter=False,
+        action__workflow=workflow
     ).first()
 
     if not condition:
