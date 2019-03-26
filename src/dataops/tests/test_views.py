@@ -193,10 +193,10 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         # Click in the editor
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'note-editing-area')
+                (By.CLASS_NAME, 'note-editable')
             )
         )
-        self.selenium.find_element_by_class_name('note-editing-area').click()
+        self.selenium.find_element_by_class_name('note-editable').click()
 
         # Insert attribute
         self.click_dropdown_option("//div[@id='attribute-selector']",

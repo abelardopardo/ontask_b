@@ -247,7 +247,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # Action now has two complementary conditions, add the conditions to
         # the message
         self.select_text_tab()
-        self.selenium.find_element_by_class_name('note-editing-area').click()
+        self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
             """$('#id_content').summernote(
                    'editor.insertText', 
@@ -379,7 +379,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # insert the second mark
         self.select_text_tab()
-        self.selenium.find_element_by_class_name('note-editing-area').click()
+        self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "mark2");"""
         )
@@ -398,7 +398,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # insert the third mark
         self.select_text_tab()
-        self.selenium.find_element_by_class_name('note-editing-area').click()
+        self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "mark3");"""
         )
@@ -415,7 +415,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         )
         # insert the first mark
         self.select_text_tab()
-        self.selenium.find_element_by_class_name('note-editing-area').click()
+        self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "cmark1");"""
         )
@@ -434,7 +434,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         )
 
         # insert the second mark
-        self.selenium.find_element_by_class_name('note-editing-area').click()
+        self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "cmark2");"""
         )
@@ -452,7 +452,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         )
 
         # insert the third mark
-        self.selenium.find_element_by_class_name('note-editing-area').click()
+        self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "cmark3");"""
         )
@@ -869,7 +869,7 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
 
         # insert the action text (not needed, but...)
         self.select_text_tab()
-        self.selenium.find_element_by_class_name('note-editing-area').click()
+        self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', 
             "{0}");""".format(self.action_text)

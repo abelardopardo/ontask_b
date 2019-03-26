@@ -351,7 +351,7 @@ class EmailActionForm(forms.Form):
                 _('The column with email addresses has incorrect values.')
             )
 
-        if not all([is_correct_email(x)
+        if not all([is_correct_email(x.strip())
                     for x in self.cleaned_data['cc_email'].split(',') if x]):
             self.add_error(
                 'cc_email',

@@ -1267,7 +1267,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         self.selenium.find_element_by_id('text-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, "//div[contains(@class, 'note-editing-area')]")
+                (By.XPATH, "//div[contains(@class, 'note-editable')]")
             )
         )
 
