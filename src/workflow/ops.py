@@ -253,7 +253,7 @@ def do_import_workflow(user, name, file_item):
     except (TypeError, NotImplementedError) as e:
         return _('Unable to import workflow (Exception: {0})').format(e)
     except serializers.ValidationError as e:
-        return _('Unable to import workflow. Validation error ({0}').format(e)
+        return _('Unable to import workflow. Validation error ({0})').format(e)
     except AssertionError:
         # Something went wrong.
         return _('Workflow data with incorrect structure.')
