@@ -44,6 +44,8 @@ env_file = join(dirname(__file__), env_file_name)
 if exists(env_file):
     print('Loading environment file {0}'.format(env_file_name))
     environ.Env.read_env(str(env_file))
+else:
+    print('WARNING: File {0} not found.'.format(env_file))
 
 # Read various variables from the environment
 BASE_URL = env('BASE_URL', default='')
