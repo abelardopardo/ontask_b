@@ -87,8 +87,7 @@ class ScheduleActionTable(tables.Table):
 
         return format_html(
             '<a class="spin" href="{0}"'
-            '   data-toggle="tooltip" title="{1}">{2} '
-            '<span class="fa fa-{3}"></span></a>'.format(
+            '   data-toggle="tooltip" title="{1}">{2}'.format(
                 reverse('action:edit',
                         kwargs={'pk': record.action.id}),
                 _('Edit the action scheduled for execution'),

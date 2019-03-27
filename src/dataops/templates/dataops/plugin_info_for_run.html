@@ -37,10 +37,9 @@
            aria-selected="false">{% trans 'Parameters' %}</a>
       </li>
     </ul>
-    <form method="POST" action="">
+    <form class="pt-3 pb-3 pl-2 pr-2 tab-wrapper" method="POST" action="">
       {% csrf_token %}
-      <div class="tab-content tab-wrapper pt-3 pb-3 pl-2 pr-2"
-           id="dataops-get-plugin-info-tab-content">
+      <div class="row justify-content-center tab-content" id="dataops-get-plugin-info-tab-content">
         <div class="tab-pane fade show active" id="inputs" role="tabpanel"
              aria-labelledby="inputs-tab">
           <div class="row justify-content-center form-group{% if form.columns.errors %} has-danger{% endif %}">
@@ -52,10 +51,8 @@
             {% endif %}
           </div>
         </div>
-        <div class="tab-pane fade" id="outputs" role="tabpanel"
-             aria-labelledby="outputs-tab">
-          <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}"
-               style="border-bottom:1px solid black;padding:1ex;">
+        <div class="tab-pane fade" id="outputs" role="tabpanel" aria-labelledby="outputs-tab">
+          <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}">
             <p class="lead">{% trans 'Output column names' %}</p>
             {% for field_item in output_column_fields %}
               {{ field_item|as_crispy_field }}
@@ -69,8 +66,7 @@
             {{ form.merge_key|as_crispy_field }}
           </div>
         </div>
-        <div class="tab-pane fade" id="parameters" role="tabpanel"
-             aria-labelledby="parameters-tab">
+        <div class="tab-pane fade" id="parameters" role="tabpanel" aria-labelledby="parameters-tab">
           <div class="justify-content-center">
             <p class="lead text-center">{% trans 'Execution parameters' %}</p>
             {% for field_item in parameters %}
