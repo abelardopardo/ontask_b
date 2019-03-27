@@ -404,8 +404,9 @@ class Action(models.Model):
                     'Workflow without DF in get_table_row_count_all_false'
                 )
 
-            # Get the list of conditions (may include filter)
-            cond_list = self.conditions.all()
+            # Separate filter from conditions
+            filter_item = self.conditions.filter(is_filter=True).first()
+            cond_list = self.conditions.filter(is_filter=False).first()
 
             if not cond_list:
                 # Condition list is either None or empty. No restrictions.
@@ -413,30 +414,23 @@ class Action(models.Model):
 
             # Workflow has a data frame and condition list is non empty
 
-            # Get the filter if there is one
             cond_sql = ''
             cond_fields = []
-            filter_item = cond_list.filter(is_filter=True).first()
             if filter_item:
                 cond_sql, cond_fields = evaluate(filter_item.formula,
                                                  NodeEvaluation.EVAL_SQL)
                 # Remove the filter_item
                 cond_list = cond_list.filter(is_filter=False)
+                cond_sql += ' AND '
 
-                # If there are still some more conditions, connect them
-                if cond_list:
-                    cond_sql += ' AND '
+            # Calculate the evaluation of each of the conditions
+            cond_list_sql = [evaluate(x.formula, NodeEvaluation.EVAL_SQL)
+                             for x in cond_list]
 
-            # If there are conditions, add them
-            if cond_list:
-                # Calculate the evaluation of each of the conditions
-                cond_list_sql = [evaluate(x.formula, NodeEvaluation.EVAL_SQL)
-                                 for x in cond_list]
-
-                cond_sql += \
-                    '(NOT ' + ') AND (NOT '.join(
-                        [a for a, _ in cond_list_sql]) + ')'
-                cond_fields += sum([b for _, b in cond_list_sql], [])
+            cond_sql += \
+                '(NOT ' + ') AND (NOT '.join(
+                    [a for a, _ in cond_list_sql]) + ')'
+            cond_fields += sum([b for _, b in cond_list_sql], [])
 
             query = 'SELECT t.position from (' \
                     'SELECT *, ROW_NUMBER() OVER () ' \
