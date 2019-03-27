@@ -90,3 +90,4 @@ src/scripts/initial_instructors.csv
 src/scripts/initial_learners.csv
 src/celerybeat-schedule
 src/celerybeat.pid
+src/*/fixtures/*.gz
