@@ -1528,14 +1528,14 @@ class ScreenTests(OnTaskLiveTestCase):
         img = self._get_image(xpath)
 
         # Crop it
-        img = img.crop(
-            (math.ceil(coord['x'] * self.device_pixel_ratio),
-             math.ceil(coord['y'] * self.device_pixel_ratio),
-             math.ceil((coord['x'] + dims['width']) *
-                       self.device_pixel_ratio),
-             math.ceil((coord['y'] + dims['height']) *
-                       self.device_pixel_ratio))
-        )
+        # img = img.crop(
+        #     (math.ceil(coord['x'] * self.device_pixel_ratio),
+        #      math.ceil(coord['y'] * self.device_pixel_ratio),
+        #      math.ceil((coord['x'] + dims['width']) *
+        #                self.device_pixel_ratio),
+        #      math.ceil((coord['y'] + dims['height']) *
+        #                self.device_pixel_ratio))
+        # )
         img.save(self.img_path(self.prefix + ss_filename))
 
     def modal_ss(self, ss_filename):
