@@ -357,6 +357,11 @@ td.operations button {
     font-size: 10px;
 }
 
+
+.tooltip {
+    pointer-events: none;
+}
+
 .circle {
   width: 1.5em;
   height: 1.5em;
