@@ -1,6 +1,7 @@
 alabaster==0.7.12
 amqp==2.4.2
 appnope==0.1.0
+argon2==0.1.10
 Babel==2.6.0
 backcall==0.1.0
 billiard==3.5.0.5
