@@ -152,12 +152,8 @@ Q19. **Where do I find the details on how to install it and some more
      
 ## Contributing
 
-1. Fork it!
-2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request
-
+Check out our [Governance structure](https://github.com/abelardopardo/ontask_b/blob/master/GOVERNANCE.md) for a detailed description of the process to contribute to the project.
+ 
 ## Credits
 
 OnTask started as a project combining ideas that were present in the Student 

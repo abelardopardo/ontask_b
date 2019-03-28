@@ -6,14 +6,14 @@ The objective of the OnTask project is to provide a tool to support instructors
 in the use of data to provide personalized support actions to learners. The 
 platform has been implemented using the Python/Django stack using a wide
 collection of libraries for functionality such as REST API, Table rendering,
-data frama manipulation, etc. The code is available under MIT license. The 
+data frame manipulation, etc. The code is available under MIT license. The 
 project received initial funds (2016-2018) from the Office for Learning and 
 Teaching of the Australian Government.
 
 Users may become involved in the project through the various roles described
 below in this document, mainly: maintainers (write code, commit new versions,
 maintain the deployments), contributors (comment on functionality, help with
-feature design concents, provide feedback about use), or simply using the 
+feature design concepts, provide feedback about use), or simply using the 
 platform.
 
 Given its current size and community, the project has adopted the [BDFL governance model](http://oss-watch.ac.uk/resources/benevolentdictatorgovernancemodel). 
@@ -31,7 +31,7 @@ This role is assigned once to the person that created the project
 
 This role has the administrative rights of the repository and is responsible for
 its structure, permissions, and high level documentation. This role is also in
-charge of the roadmap, high level design decisions, and release planning.
+charge of the road-map, high level design decisions, and release planning.
 
 Current owner: Abelardo Pardo. Github user: abelardopardo
 
@@ -97,14 +97,14 @@ solved.
 
 ## Decision making process
 
-The decission making process used in the project will have three stages:
+The decision making process used in the project will have three stages:
 
 - Consultations with the contributors (optional) through the GitHub Issue system
 
 - Discussion withe the maintainers (optiona) through the GitHub Issue system or
   other channels such as private email
 
-- Final decission by the owner.
+- Final decision by the owner.
 
 ## Contribution process
 
