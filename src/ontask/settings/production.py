@@ -8,11 +8,15 @@ from .base import *  # NOQA
 # For security and performance reasons, DEBUG is turned off
 DEBUG = False
 
-# Must mention ALLOWED_HOSTS in production!
-ALLOWED_HOSTS = [os.environ['DOMAIN_NAME']]
+# Define STATIC_ROOT for the collectstatic command
+STATIC_ROOT = join(BASE_DIR(), '..', 'site', 'static')
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/dev/howto/static-files/
+STATIC_URL = BASE_URL + '/static/'
 
 # Additional middleware introduced by debug toolbar
-MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
+#if True or USE_SSL:
+# MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
 
 # Show emails to console
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -20,14 +24,17 @@ MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
 #
 # Security features
 #
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_HSTS_SECONDS = 31536000
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_SSL_REDIRECT = True
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# SECURE_BROWSER_XSS_FILTER = True
+if USE_SSL:
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+else:
+    SECURE_SSL_REDIRECT = False
 
 #
 # Folder to scan for plugins
@@ -50,9 +57,6 @@ loaders = [
 
 TEMPLATES[0]['OPTIONS'].update({"loaders": loaders})
 TEMPLATES[0].update({"APP_DIRS": False})
-
-# Define STATIC_ROOT for the collectstatic command
-STATIC_ROOT = join(BASE_DIR(), '..', 'site', 'static')
 
 # Log everything to the logs directory at the top
 LOGFILE_ROOT = join(dirname(BASE_DIR()), 'logs')

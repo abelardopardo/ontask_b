@@ -6,10 +6,11 @@ import sys
 
 from .base import *  # NOQA
 
-ALLOWED_HOSTS = ['*']
-
 # Define STATIC_ROOT for the collectstatic command
 STATIC_ROOT = join(BASE_DIR(), '..', 'site', 'static')
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/dev/howto/static-files/
+STATIC_URL = BASE_URL + '/static/'
 
 # Turn off debug while imported by Celery with a workaround
 # See http://stackoverflow.com/a/4806384
@@ -26,15 +27,6 @@ if not TESTING:
         'SHOW_TOOLBAR_CALLBACK': lambda r: True,  # enables it
         # '...
     }
-
-if DEBUG:
-    print('BASE_DIR: ' + BASE_DIR())
-    print('STATICFILES_DIRS: ' + ', '.join(STATICFILES_DIRS))
-    print('DATABASE_URL: ' + env('DATABASE_URL'))
-    print('REDIS_URL: ' + env('REDIS_URL'))
-    print('MEDIA_ROOT: ' + MEDIA_ROOT)
-    print('MEDIA_URL: ' + MEDIA_URL)
-    print('ONTASK_HELP_URL: ' + ONTASK_HELP_URL)
 
 # Additional middleware introduced by debug toolbar
 if DEBUG:

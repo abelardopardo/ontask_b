@@ -33,12 +33,12 @@ import ontask
 # Use 12factor inspired environment variables or from a file and define defaults
 env = environ.Env(
     DEBUG=(bool, False),
+    USE_SSL=(bool, False),
     SHOW_HOME_FOOTER_IMAGE=(bool, True),
-    LTI_OAUTH_CREDENTIALS=(dict, {})
+    LTI_OAUTH_CREDENTIALS=(dict, {}),
+    DOMAIN_NAME=(str, '*')
 )
 
-# Ideally move env file should be outside the git repo
-# i.e. BASE_DIR.parent.parent
 env_file_name = os.environ.get('ENV_FILENAME', 'local.env')
 env_file = join(dirname(__file__), env_file_name)
 if exists(env_file):
@@ -47,11 +47,18 @@ if exists(env_file):
 else:
     print('WARNING: File {0} not found.'.format(env_file))
 
-# Read various variables from the environment
+# Read various variables from the environment (but first from the os.env)
 BASE_URL = env('BASE_URL', default='')
-DOMAIN_NAME = env('DOMAIN_NAME')
+if 'DOMAIN_NAME' in os.environ:
+    DOMAIN_NAME = os.environ['DOMAIN_NAME']
+else:
+    DOMAIN_NAME = env('DOMAIN_NAME', '*')
 DEBUG = env('DEBUG')
 SHOW_HOME_FOOTER_IMAGE = env('SHOW_HOME_FOOTER_IMAGE')
+if 'USE_SSL' in os.environ:
+    USE_SSL = os.environ['USE_SSL']
+else:
+    USE_SSL = env('USE_SSL', False)
 
 # Build paths inside the project like this: join(BASE_DIR(), "directory")
 BASE_DIR = environ.Path(__file__) - 3
@@ -62,6 +69,9 @@ ONTASK_HELP_URL = "html/index.html"
 
 # Project root folder (needed somewhere in Django
 PROJECT_PATH = BASE_DIR()
+
+# Include ALLOWED_HOSTS
+ALLOWED_HOSTS = [DOMAIN_NAME]
 
 TEMPLATES = [
     {
@@ -168,10 +178,15 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
 
+if 'REDIS_URL' in os.environ:
+    redis_url = os.environ['REDIS_URL']
+else:
+    redis_url = env('REDIS_URL')
+
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": env('REDIS_URL'),
+        "LOCATION": redis_url,
         "TIMEOUT": 1800,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
@@ -236,10 +251,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/dev/howto/static-files/
-STATIC_URL = BASE_URL + '/static/'
 
 # Crispy Form Theme - Bootstrap 4
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -489,3 +500,26 @@ CANVAS_INFO_DICT = json.loads(env.str('CANVAS_INFO_DICT', default='{}'))
 
 # Number of seconds left in the token validity to refresh
 CANVAS_TOKEN_EXPIRY_SLACK = env.int('CANVAS_TOKEN_EXPIRY_SLACK', default=600)
+
+################################################################################
+#
+# DUMP CONFIG IN DEBUG
+#
+################################################################################
+if True or DEBUG:
+    print('DEBUG', DEBUG)
+    print('BASE_DIR:', BASE_DIR())
+    print('STATICFILES_DIRS:', ', '.join(STATICFILES_DIRS))
+    # print('STATIC_ROOT:', STATIC_ROOT)
+    # print('STATIC_URL:', STATIC_URL)
+    print('DATABASE_URL:', env('DATABASE_URL'))
+    print('REDIS_URL:', env('REDIS_URL'))
+    print('MEDIA_ROOT:', MEDIA_ROOT)
+    print('MEDIA_URL:', MEDIA_URL)
+    print('ONTASK_HELP_URL:', ONTASK_HELP_URL)
+    print('REDIS_URL:', redis_url)
+    print('DOMAIN_NAME:', DOMAIN_NAME)
+    print('USE_SSL:', USE_SSL)
+    print('ALLOWED_HOSTS:', ALLOWED_HOSTS)
+    print('INSTALLED_APPS:', INSTALLED_APPS)
+
