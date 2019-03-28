@@ -171,10 +171,10 @@
         <span class="text-muted">&copy; {% trans 'OnTask Project' %} {% now 'Y' %} | {% trans 'Version:' %} {% ontask_version %}</span>
       </nav>
     {% endblock %}
-    <script src="{% static 'site/js/initial.js' %}?v={% ontask_version %}"></script>
+    <script type="text/javascript" src="{% static 'site/js/initial.js' %}?v={% ontask_version %}"></script>
     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
     {% ontask_bootstrap_js %}
-    <script src="{% static 'site/js/site.js' %}?v={% ontask_version %}"></script>
+    <script type="text/javascript" src="{% static 'site/js/site.js' %}?v={% ontask_version %}"></script>
     {% block scripts %}
     {% endblock scripts %}
     {% if user.is_authenticated %}
