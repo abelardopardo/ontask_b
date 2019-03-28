@@ -132,7 +132,7 @@ Q15. **After a course finishes, there seems to be quite a lot of information
      can either archive it for future reference or share your actions, rules,
      views, etc with other user.
   
-Q16. **Can I use OnTask with my institutional authentication?** Yes. OnTaks 
+Q16. **Can I use OnTask with my institutional authentication?** Yes. OnTask 
      comes with the basic functionality to be compatible with the most common 
      authentication mechanisms such as LTI, LDAP, Shibboleth, etc.
   
