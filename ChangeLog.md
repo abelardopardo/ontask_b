@@ -1,3 +1,9 @@
+## 4.2.1 (2019-03-27)
+
+### Changed
+
+- Updated localization files
+
 ## 4.2 (2019-03-27)
 
 ### Added
