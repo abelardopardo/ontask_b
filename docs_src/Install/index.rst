@@ -116,7 +116,7 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
    TIME_ZONE=[YOUR LOCAL PYTHON TIME ZONE]
    BASE_URL=''
    DOMAIN_NAME=[YOUR DOMAIN NAME]
-   USE_URL=True
+   USE_SSL=True
    SHOW_HOME_FOOTER_IMAGE=True
    # syntax: DATABASE_URL=postgres://username:password@127.0.0.1:5432/database
    DATABASE_URL=postgres://[PSQLUSERNAME]:[PSQLPWD]@127.0.0.1:5432/ontask
