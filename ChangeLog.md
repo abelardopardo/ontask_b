@@ -2,6 +2,8 @@
 
 ### Changed
 
+- Production configuration file needs USE_SSL=True to use HTTPS
+
 - Updated localization files
 
 ## 4.2 (2019-03-27)
