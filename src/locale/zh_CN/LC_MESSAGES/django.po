@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 11:39+1100\n"
+"POT-Creation-Date: 2019-03-29 18:47+1100\n"
 "PO-Revision-Date: 2018-11-11 18:47+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -456,6 +456,7 @@ msgid "OAuth token refreshed"
 msgstr "OAuth令牌已刷新"
 
 #: action/ops.py:800
+#, python-brace-format
 msgid "Unable to deliver message (code {0})"
 msgstr "无法传递信息（code{0}）"
 
@@ -530,6 +531,7 @@ msgid "Action scheduled for execution"
 msgstr "计划执行的操作"
 
 #: action/templates/action/action_done.html:17
+#, python-format
 msgid ""
 "You may check the status in\n"
 "      log number %(log_id)s."
@@ -562,6 +564,7 @@ msgid "Email action"
 msgstr "电子邮件操作"
 
 #: action/templates/action/action_email_step1.html:13
+#, python-format
 msgid ""
 "Send emails for\n"
 "      action \"%(n)s\""
@@ -677,6 +680,7 @@ msgid "ZIP action"
 msgstr "压缩文件操作"
 
 #: action/templates/action/action_zip_step1.html:13
+#, python-format
 msgid ""
 "ZIP for\n"
 "      action \"%(n)s\""
@@ -1212,6 +1216,7 @@ msgid "Filter"
 msgstr "筛选标签"
 
 #: action/templates/action/includes/partial_filter_tab.html:18
+#, python-format
 msgid "Edit the filter (%(n)s rows satisfy this condition)"
 msgstr "编辑筛选标签(%(n)s行来满足此条件）"
 
@@ -1316,6 +1321,7 @@ msgid "Canvas Email action"
 msgstr "Canvas电子邮件操作"
 
 #: action/templates/action/request_canvas_email_data.html:13
+#, python-format
 msgid ""
 "Send Canvas Email for\n"
 "      action \"%(n)s\""
@@ -1585,6 +1591,8 @@ msgid "The plugin needs at least one input column"
 msgstr "该插件需要至少一个输入列"
 
 #: dataops/forms.py:193 dataops/forms.py:197
+#, fuzzy, python-brace-format
+#| msgid "Unable to process file ({0})."
 msgid "Unable to process file ({0})."
 msgstr "不能处理数据类型 "
 
