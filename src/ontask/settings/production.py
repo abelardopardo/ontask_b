@@ -15,8 +15,8 @@ STATIC_ROOT = join(BASE_DIR(), '..', 'site', 'static')
 STATIC_URL = BASE_URL + '/static/'
 
 # Additional middleware introduced by debug toolbar
-#if True or USE_SSL:
-# MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
+if True or USE_SSL:
+    MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
 
 # Show emails to console
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
