@@ -406,7 +406,7 @@ class Action(models.Model):
 
             # Separate filter from conditions
             filter_item = self.conditions.filter(is_filter=True).first()
-            cond_list = self.conditions.filter(is_filter=False).first()
+            cond_list = self.conditions.filter(is_filter=False)
 
             if not cond_list:
                 # Condition list is either None or empty. No restrictions.
