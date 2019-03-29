@@ -26,6 +26,7 @@ from dataops import pandas_db
 from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
+from visualizations.plotly import PlotlyHandler
 from workflow.ops import get_workflow
 from .forms import ViewAddForm
 from .models import View
@@ -147,7 +148,8 @@ def render_table_display_page(request, workflow, view, columns, ajax_url):
         'query_builder_ops': workflow.get_query_builder_ops_as_str(),
         'ajax_url': ajax_url,
         'views': workflow.views.all(),
-        'no_actions': workflow.actions.count() == 0
+        'no_actions': workflow.actions.count() == 0,
+        'vis_scripts': PlotlyHandler.get_engine_scripts()
     }
 
     # If there is a DF, add the columns

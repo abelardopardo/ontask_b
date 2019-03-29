@@ -13,6 +13,9 @@ $(function () {
   $("#modal-item").on("submit", ".js-workflow-random-column-add-form",
   saveForm);
 
+  // Show stats
+  $("#column-stat-selector").on("click", ".js-show-stats", loadForm);
+
   // Column Edit
   $("#table-data").on("click", ".js-column-edit", loadForm);
   $("#modal-item").on("submit", ".js-column-edit-form", saveForm);

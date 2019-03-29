@@ -70,7 +70,12 @@
     {% with js_var='qbuilder_options' allow_empty='true' empty_rules=True %}
       {% include 'qbuilder_options.js' %}
     {% endwith %}
-</script>
+  </script>
+  {% if vis_scripts %}
+    {% for script_src in vis_scripts %}
+      <script src="{{ script_src|safe }}"></script>
+    {% endfor %}
+  {% endif %}
 {% endblock %}
 {% block container %}
   <div id="table-content" class="container-fluid">
@@ -139,6 +144,7 @@
                title="{% trans 'Dashboard created with the view data' %}">
               <span class="fa fa-dashboard"></span> {% trans 'Dashboard' %}
             </a>
+            {% include 'table/includes/partial_column_stats_selector.html' %}
             <a href="{% url 'table:csvdownload_view' view.id %}" download
                class="btn btn-outline-dark js-logs-download"
                data-toggle="tooltip"
@@ -152,6 +158,7 @@
                title="{% trans 'Dashboard created with the table data' %}">
               <span class="fa fa-dashboard"></span> {% trans 'Dashboard' %}
             </a>
+            {% include 'table/includes/partial_column_stats_selector.html' %}
             <a href="{% url 'table:csvdownload' %}"
                class="btn btn-outline-dark"
                data-toggle="tooltip"

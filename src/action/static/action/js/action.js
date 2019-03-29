@@ -235,7 +235,7 @@ $(function () {
   $("#action-in-editor").on("change", "#shuffle-questions", toggleShuffleQuestion);
 
   // Show stats
-  $("#condition-set-header").on("click", ".js-show-stats", loadForm);
+  $("#column-stat-selector").on("click", ".js-show-stats", loadForm);
 
   // Preview
   $("#action-preview-done").on("click", ".js-action-preview", loadFormPost);
