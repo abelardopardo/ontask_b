@@ -68,7 +68,7 @@ Desktop.ini
 # 2to3 baks
 *.bak
 
-/logs
+/logs/*.log
 .idea
 .git_OLD
 
