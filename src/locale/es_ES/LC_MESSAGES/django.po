@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-26 15:51+1030\n"
+"POT-Creation-Date: 2019-03-29 11:39+1100\n"
 "PO-Revision-Date: 2019-03-26 16:06+1030\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: \n"
@@ -368,11 +368,11 @@ msgstr "Fichero"
 msgid "File containing a previously exported action"
 msgstr "Fichero que contiene una acción previamente exportada"
 
-#: action/models.py:70 action/models.py:480 scheduler/models.py:48
+#: action/models.py:70 action/models.py:474 scheduler/models.py:48
 msgid "name"
 msgstr "nombre"
 
-#: action/models.py:75 action/models.py:485 scheduler/models.py:53
+#: action/models.py:75 action/models.py:479 scheduler/models.py:53
 #: workflow/models.py:443
 msgid "description"
 msgstr "descripción"
@@ -393,15 +393,15 @@ msgstr "Acción disponible hasta"
 msgid "Shuffle questions?"
 msgstr "¿Barajar las preguntas?"
 
-#: action/models.py:490
+#: action/models.py:484
 msgid "formula"
 msgstr "fórmula"
 
-#: action/models.py:495
+#: action/models.py:489
 msgid "Columns present in this condition"
 msgstr "Columnas presentes en esta condición"
 
-#: action/models.py:501
+#: action/models.py:495
 msgid "Number of rows selected"
 msgstr "Número de filas seleccionadas"
 
@@ -513,7 +513,7 @@ msgstr "Imposible crear los datos para la columna"
 msgid "Unable to create condition information"
 msgstr "Imposible crear la información para la condición"
 
-#: action/settings.py:34 ontask/settings/base.py:362
+#: action/settings.py:34 ontask/settings/base.py:375
 msgid "OnTask: Action executed"
 msgstr "OnTask: Acción ejecutada"
 
@@ -607,7 +607,7 @@ msgstr "Se enviarán %(n)s mensajes."
 #: dataops/templates/dataops/includes/partial_sqlconn_clone.html:15
 #: dataops/templates/dataops/includes/partial_sqlconn_delete.html:14
 #: dataops/templates/dataops/includes/upload_buttons.html:3
-#: dataops/templates/dataops/plugin_info_for_run.html:83
+#: dataops/templates/dataops/plugin_info_for_run.html:79
 #: dataops/templates/dataops/row_create.html:23
 #: dataops/templates/dataops/row_create.html:33
 #: dataops/templates/dataops/row_filter.html:24
@@ -993,7 +993,7 @@ msgstr "Enviar mensajes personalizados"
 
 #: action/templates/action/includes/partial_action_operations.html:6
 #: dataops/templates/dataops/includes/partial_sqlconn_runop.html:4
-#: dataops/templates/dataops/plugin_info_for_run.html:87
+#: dataops/templates/dataops/plugin_info_for_run.html:83
 msgid "Run"
 msgstr "Ejecutar"
 
@@ -1023,7 +1023,7 @@ msgid "Schedule the execution of the action"
 msgstr "Planificar la ejecución de la acción"
 
 #: action/templates/action/includes/partial_action_operations.html:37
-#: scheduler/views.py:200 scheduler/views.py:281 scheduler/views.py:343
+#: scheduler/views.py:199 scheduler/views.py:280 scheduler/views.py:342
 msgid "Schedule"
 msgstr "Planificar"
 
@@ -1743,33 +1743,33 @@ msgstr "Método para seleccionar las filas a mezclar/actualizar"
 msgid "Unable to process datatype"
 msgstr "No se puede processar el tipo de datos"
 
-#: dataops/formula_evaluation.py:425
+#: dataops/formula_evaluation.py:426
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator LESS"
 msgstr ""
 "Error de evaluación: El tipo {0} no está permitido con el operador LESS"
 
-#: dataops/formula_evaluation.py:459
+#: dataops/formula_evaluation.py:460
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator LESS OR EQUAL"
 msgstr ""
 "Error de evaluación: El tipo {0} no está permitido con el operador LESS OR "
 "EQUAL"
 
-#: dataops/formula_evaluation.py:495
+#: dataops/formula_evaluation.py:496
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator GREATER"
 msgstr ""
 "Error de evaluación: El tipo {0} no está permitido con el operador GREATER"
 
-#: dataops/formula_evaluation.py:530
+#: dataops/formula_evaluation.py:531
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator GREATER OR EQUAL"
 msgstr ""
 "Error de evaluación: El tipo {0} no está permitido con el operador GREATER "
 "OR EQUAL"
 
-#: dataops/formula_evaluation.py:561 dataops/formula_evaluation.py:602
+#: dataops/formula_evaluation.py:562 dataops/formula_evaluation.py:603
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator BETWEEN"
 msgstr ""
@@ -2137,19 +2137,19 @@ msgstr "Columnas en las que almacenar el resultado"
 msgid "Parameters"
 msgstr "Parámetros"
 
-#: dataops/templates/dataops/plugin_info_for_run.html:48
+#: dataops/templates/dataops/plugin_info_for_run.html:47
 msgid "Input columns"
 msgstr "Columnas de entrada"
 
-#: dataops/templates/dataops/plugin_info_for_run.html:59
+#: dataops/templates/dataops/plugin_info_for_run.html:56
 msgid "Output column names"
 msgstr "Nombres de las columnas de salida"
 
-#: dataops/templates/dataops/plugin_info_for_run.html:75
+#: dataops/templates/dataops/plugin_info_for_run.html:71
 msgid "Execution parameters"
 msgstr "Parámetros de ejecución"
 
-#: dataops/templates/dataops/plugin_info_for_run.html:86
+#: dataops/templates/dataops/plugin_info_for_run.html:82
 msgid "Run the plugin"
 msgstr "Ejecutar el plugin"
 
@@ -2534,7 +2534,7 @@ msgstr ""
 msgid "Finish"
 msgstr "Terminar"
 
-#: dataops/upload.py:162 dataops/views.py:420
+#: dataops/upload.py:162 dataops/views.py:419
 msgid "Exception while retrieving the data frame"
 msgstr "Ha habido una excepción mientras se accedía al data frame"
 
@@ -2550,11 +2550,11 @@ msgstr "La operación de mezcla ha fallado."
 msgid " (Ignored)"
 msgstr " (Ignorada)"
 
-#: dataops/upload.py:509 dataops/views.py:560
+#: dataops/upload.py:509 dataops/views.py:559
 msgid " (New)"
 msgstr " (Nueva)"
 
-#: dataops/upload.py:511 dataops/views.py:565
+#: dataops/upload.py:511 dataops/views.py:564
 msgid " (Update)"
 msgstr " (Actualizar)"
 
@@ -2566,19 +2566,19 @@ msgstr " (Renombrada)"
 msgid "Folder"
 msgstr "Carpeta"
 
-#: dataops/views.py:70
+#: dataops/views.py:69
 msgid "Execute the transformation"
 msgstr "Ejecutar la transformación"
 
-#: dataops/views.py:210
+#: dataops/views.py:209
 msgid "Unable to update table row"
 msgstr "No oes posible actualizar la fila en la tabla"
 
-#: dataops/views.py:253
+#: dataops/views.py:252
 msgid "Key value not found when updating row"
 msgstr "No se ha encontrado el valor clave al actaulizar la fila"
 
-#: dataops/views.py:324
+#: dataops/views.py:323
 #, python-brace-format
 msgid ""
 "Repeated value in column {0}. It must be different to maintain Key property"
@@ -2586,16 +2586,16 @@ msgstr ""
 "Valor repetido en la columna {0}. Debe ser diferente para que la columna "
 "siga siendo clave"
 
-#: dataops/views.py:375
+#: dataops/views.py:374
 #, python-brace-format
 msgid "Unable to instantiate plugin \"{0}\""
 msgstr "No es posible instanciar el plugi \"{0}\""
 
-#: dataops/views.py:386
+#: dataops/views.py:385
 msgid "Workflow does not have the correct columns to run this plugin"
 msgstr "El flujo no tiene las columnas necesarias para ejecutar este plugin"
 
-#: dataops/views.py:468
+#: dataops/views.py:467
 msgid "Incorrect number of rows in result data frame."
 msgstr "Número de filas incorrecto en el data frame resultante."
 
@@ -3036,19 +3036,19 @@ msgstr "Typos de contenidos permitidos en las cargas"
 msgid "Maximum size allowed in file uplaods"
 msgstr "Tamaño máximo de fichero permitido en las cargas"
 
-#: ontask/settings/base.py:276
+#: ontask/settings/base.py:289
 msgid "English"
 msgstr "Inglés"
 
-#: ontask/settings/base.py:277
+#: ontask/settings/base.py:290
 msgid "Spanish"
 msgstr "Español"
 
-#: ontask/settings/base.py:278
+#: ontask/settings/base.py:291
 msgid "Chinese"
 msgstr "Chino"
 
-#: ontask/settings/base.py:279
+#: ontask/settings/base.py:292
 msgid "Finnish"
 msgstr "Finés"
 
@@ -3417,42 +3417,42 @@ msgstr "La acción se ejecutará en %(n)s"
 msgid "Scheduled"
 msgstr "Planificado"
 
-#: scheduler/views.py:94
+#: scheduler/views.py:93
 msgid "Edit the action scheduled for execution"
 msgstr "Editar la acción planificada para ejecutar"
 
-#: scheduler/views.py:183 scheduler/views.py:264
+#: scheduler/views.py:182 scheduler/views.py:263
 msgid "A scheduled execution of this action with this name already exists"
 msgstr "Ya existe una ejecución planificada de esta acción con este nombre"
 
-#: scheduler/views.py:376
+#: scheduler/views.py:375
 msgid "Incorrect action scheduling invocation."
 msgstr "Datos incorrectos para planificar una acción."
 
-#: scheduler/views.py:385
+#: scheduler/views.py:384
 msgid "Incorrect parameters in action scheduling"
 msgstr "Parámetros incorrectos para planificar la acción"
 
-#: scheduler/views.py:438
+#: scheduler/views.py:437
 msgid "This type of actions cannot be scheduled"
 msgstr "Este tipo de acciones no pueden programarse"
 
-#: scheduler/views.py:460
+#: scheduler/views.py:459
 #, python-brace-format
 msgid "{0} days"
 msgstr "{0} días"
 
-#: scheduler/views.py:463
+#: scheduler/views.py:462
 #, python-brace-format
 msgid ", {0} hours"
 msgstr ", {0} horas"
 
-#: scheduler/views.py:466
+#: scheduler/views.py:465
 #, python-brace-format
 msgid ", {0} minutes"
 msgstr ", {0} minutos"
 
-#: scheduler/views.py:586
+#: scheduler/views.py:585
 msgid ""
 "Unable to schedule actions due to a misconfiguration. Ask your system "
 "administrator to enable queueing."
@@ -3460,7 +3460,7 @@ msgstr ""
 "No es posible planificar la acción por una incorrecta configuración.  "
 "Contacte al administrador para activar la cola de ejecución."
 
-#: scheduler/views.py:600
+#: scheduler/views.py:599
 msgid "This action does not support scheduling"
 msgstr "Esta acción no admite la programación"
 
