@@ -51,10 +51,11 @@ Current maintainers (Github users):
 
 - Shizu Zhang (responsible for the Chinese localization)
 
+
 ### Contributors
 
 This group includes any person that has contributed with any type of information
-to the project: reporting issues, suggesting improvements, disseminating the
+to the project: (reporting issues)[https://github.com/abelardopardo/ontask_b/issues], suggesting improvements, disseminating the
 use of the tool, organising events, etc.
 
 ### Community Members
@@ -89,7 +90,7 @@ objective of the project.
 The project support will be done mainly through the "Issues" section of the 
 GitHub repository. Any requests, questions, concerns, suggestions, etc, should
 be created in that platform. The owner and maintainers will then decide how 
-these issues can be addressed and solved.
+these [issues](https://github.com/abelardopardo/ontask_b/issues) can be addressed and solved.
 
 The project cannot make any guarantees on how this process is managed in terms
 of issues to be solved or, if they are addressed, the time it will take to be
@@ -118,5 +119,5 @@ The contributions to the project could be as any of the following:
   a pull request needs to be issued so that the new code is merged with the
   appropriate branch of the project.
 
-- Proposing, reporting or commenting issues found in the platform through the Issues section of the GitHub platform
+- Proposing, reporting or [commenting issues](https://github.com/abelardopardo/ontask_b/issues) found in the platform through the Issues section of the GitHub platform
 
