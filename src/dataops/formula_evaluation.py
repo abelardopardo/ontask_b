@@ -437,7 +437,9 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} is less than {1}'.format(self.node['field'], constant)
+        return '{0} is non empty and less than {1}'.format(
+            self.node['field'], constant
+        )
 
     def _op_less_or_equal(self, eval_type):
         """
@@ -472,8 +474,10 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} is less than or equal to {1}'.format(self.node['field'],
-                                                         constant)
+        return '{0} is non empty and less than or equal to {1}'.format(
+            self.node['field'],
+            constant
+        )
 
     def _op_greater(self, eval_type):
         """
@@ -508,7 +512,9 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} is greater than {1}'.format(self.node['field'], constant)
+        return '{0} is non empty and greater than {1}'.format(
+            self.node['field'], constant
+        )
 
     def _op_greater_or_equal(self, eval_type):
         """
@@ -543,8 +549,10 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} is greater than or equal to {1}'.format(self.node['field'],
-                                                            constant)
+        return '{0} is non empty and greater than or equal to {1}'.format(
+            self.node['field'],
+            constant
+        )
 
     def _op_between(self, eval_type):
         """
@@ -586,9 +594,11 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} is between {1} and {2}'.format(self.node['field'],
-                                                   str(self.node['value'][0]),
-                                                   str(self.node['value'][1]))
+        return '{0} is non empty and between {1} and {2}'.format(
+            self.node['field'],
+            str(self.node['value'][0]),
+            str(self.node['value'][1])
+        )
 
     def _op_not_between(self, eval_type):
         """
@@ -630,7 +640,7 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} is not between {1} and {2}'.format(
+        return '{0} is empty or not between {1} and {2}'.format(
             self.node['field'],
             str(self.node['value'][0]),
             str(self.node['value'][1])
