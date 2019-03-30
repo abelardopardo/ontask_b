@@ -1,5 +1,5 @@
 {% load i18n %}
-<div id="filter-set-header" class="text-center">
+<div id="filter-set-header" class="text-center my-3">
   {% if filter_condition %}
     <div id="filter-set" class="card-deck justify-content-center" style="margin:1em 0 1em 0;">
       <div class="card ontask-ccard text-center" style="margin-bottom: 15px;">
@@ -28,12 +28,12 @@
       </div>
     </div>
   {% else %}
-    <p class="text-center">{% trans 'All learners considered for this action.' %}</p>
     <button type="button"
         class="btn btn-outline-dark js-filter-create{% if not has_data %} disabled{% endif %} mb-3"
         data-url="{% url 'action:create_filter' action.id %}"
         data-type="filter">
       <span class="glyphicon glyphicon-plus"></span> {% trans 'Add Filter' %}</button>
+    <p class="text-center">{% trans 'All learners considered for this action.' %}</p>
   {% endif %}
 </div>
 

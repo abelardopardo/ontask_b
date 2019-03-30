@@ -1,5 +1,5 @@
 {% load i18n %}
-<div id="action-preview-done" class="text-center">
+<div id="action-preview-done" class="text-center my-2">
   <button type="button"
           class="btn btn-outline-info js-action-preview {% if selected_rows == 0 %}disabled{% endif %}"
           data-url="{% url 'action:preview' action.id 1 %}"

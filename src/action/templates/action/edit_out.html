@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load ontask_tags %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Edit Personalized Text' %}{% endblock %}
+{% block extrahead %}
+  <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
+  {% ontask_datetimepicker_css %}
+  {{ form.media.css }}
+{% endblock extrahead %}
+{% block scripts %}
+  {% ontask_datetimepicker_js %}
+  {{ form.media.js }}
+  <script src="{% static 'site/js/query-builder.standalone.min.js' %}"></script>
+  {% with country=LANGUAGE_CODE|country %}
+    <script src="{% static 'site/js/query-builder.'|add:country|add:'.js' %}"></script>
+  {% endwith %}
+  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
+  <script type="text/javascript">
+    {% with js_var='qbuilder_options' allow_empty='false' %}
+      {% include 'qbuilder_options.js' %}
+    {% endwith %}
+    {% if load_summernote %}
+      $(document).ready(function() {
+        if (document.getElementById("id_content") != null) {
+          initSummernote();
+        }
+      });
+      $("#id_content").on("summernote.paste",function(e,ne) {
+        var bufferText = ((ne.originalEvent || ne).clipboardData || window.clipboardData).getData('Text');
+        ne.preventDefault();
+        document.execCommand('insertText', false, bufferText);
+      });
+    {% endif %}
+  </script>
+  {% if vis_scripts %}
+    {% for script_src in vis_scripts %}
+      <script src="{{ script_src|safe }}"></script>
+    {% endfor %}
+  {% endif %}
+{% endblock %}
+{% block container %}
+  <div class="container-fluid" id="action-out-editor">
+    <h1 class="text-center">{{ action.name }}</h1>
+    <form action="" enctype="multipart/form-data" method="POST">
+      {% csrf_token %}
+      {% include 'action/includes/partial_action_preview_done_buttons.html' %}
+      {% include 'action/includes/partial_action_edit_out_warning.html' %}
+      <div class="container h-100 py-2">
+        <ul class="nav nav-tabs border-0" id="edit-personalized-text-tabs" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active border border-primary border-bottom-0"
+               id="text-tab" data-toggle="tab" href="#text" role="tab"
+               aria-controls="text" aria-selected="true">{{ title }}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link border border-primary border-bottom-0" id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="false">{% trans 'Filter Learners' %}
+              {% if not filter_condition %}{% trans '(Empty)' %}{% else %}{% blocktrans with n=selected_rows tot=total_rows count counter=selected_rows %}({{ n }} learner of {{ tot }}){% plural %}({{ n }} learners of {{ tot }}){% endblocktrans %}{% endif %}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link border border-primary border-bottom-0" id="conditions-tab" data-toggle="tab" href="#conditions" role="tab" aria-controls="conditions" aria-selected="false">{% trans 'Text Conditions' %} ({{ conditions|length }})</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="edit-personalized-text-tab-content">
+          <div class="tab-pane px-3 fade show active border border-primary"
+               id="text" role="tabpanel" aria-labelledby="text-tab">
+            <div id="html-editor">
+              {% include 'action/includes/partial_action_edit_out_attributes_columns.html' %}
+              {{ form|crispy|safe }}
+            </div>
+          </div>
+          <div class="tab-pane px-3 fade show border border-primary" id="filter"
+               role="tabpanel" aria-labelledby="filter-tab">
+            {% include 'action/includes/partial_filter_tab.html' %}
+          </div>
+          <div class="tab-pane px-3 fade show border border-primary"
+               id="conditions" role="tabpanel" aria-labelledby="conditions-tab">
+            {% include 'action/includes/partial_condition_tab.html' %}
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  {% include 'modal.html' %}
+{% endblock container %}
+

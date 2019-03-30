@@ -556,12 +556,16 @@ def edit_action_out(request, workflow, action):
     form_filter = FilterForm(request.POST or None,
                              instance=action.get_filter())
 
-    # Template to use
+    # Select the title for the page and the flag to load summernote
     template = 'action/edit_personalized_text.html'
-    if action.action_type == Action.PERSONALIZED_JSON:
-        template = 'action/edit_personalized_json.html'
+    load_summernote = action.action_type == Action.PERSONALIZED_TEXT
+    title = 'YOUR TITLE SHOULD BE HERE!!'
+    if load_summernote:
+        title = ugettext('Personalized Text')
+    elif action.action_type == Action.PERSONALIZED_JSON:
+        title = ugettext('Personalized JSON Object')
     elif action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
-        template = 'action/edit_personalized_canvas_email.html'
+        title = ugettext('Personalized Canvas Email')
 
     # Processing the request after receiving the text from the editor
     if request.method == 'POST' and form.is_valid() and form_filter.is_valid():
@@ -616,6 +620,8 @@ def edit_action_out(request, workflow, action):
     # Context to render the form
     context = {'filter_condition': filter_condition,
                'action': action,
+               'title': title,
+               'load_summernote': load_summernote,
                'conditions': conditions,
                'other_conditions': Condition.objects.filter(
                    action__workflow=workflow, is_filter=False
@@ -637,7 +643,7 @@ def edit_action_out(request, workflow, action):
                }
 
     # Return the same form in the same page
-    return render(request, template, context=context)
+    return render(request, 'action/edit_out.html', context=context)
 
 
 def edit_action_in(request, workflow, action):
