@@ -82,11 +82,6 @@ $(function () {
   $("#column-table").on("click", ".js-column-restrict", loadForm);
   $("#modal-item").on("submit", ".js-column-restrict-form", saveForm);
 
-  // Detect workflow name before delete
-  $(document).on("keyup", '.textEnable', function() {
-    $(".button-enable").prop( "disabled", $(this).val() != $(this).attr('data-value'));
-  });
-
   $(".card").hover(function(){
     $(this).css("background-color", "lightgray");
   }, function(){

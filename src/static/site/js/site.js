@@ -161,3 +161,8 @@ $('#modal-item').on('hide.bs.modal', function (e) {
     delete qbuilder_options['rules'];
   }
 })
+// Detect workflow name before operation
+$(document).on("keyup", '.textEnable', function() {
+  $(".button-enable").prop( "disabled", $(this).val() != $(this).attr('data-value'));
+});
+
