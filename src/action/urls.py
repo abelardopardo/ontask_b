@@ -179,5 +179,7 @@ urlpatterns = [
     path('<int:pk>/clone_condition/',
          views_condition.clone,
          name='clone_condition'),
-
+    path('<int:pk>/<int:action_pk>/clone_condition/',
+         views_condition.clone,
+         name='clone_condition'),
 ]

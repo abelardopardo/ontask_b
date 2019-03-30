@@ -532,12 +532,13 @@ def delete_condition(request, pk):
 @user_passes_test(is_instructor)
 @csrf_exempt
 @require_http_methods(['POST'])
-def clone(request, pk):
+def clone(request, pk, action_pk=None):
     """
     JSON request to clone a condition. The post request must come with the
     action_content
     :param request: Request object
     :param pk: id of the condition to clone
+    :param action_pk: Primary key of the action to receive the condition
     :return: JSON response
     """
 
@@ -559,6 +560,14 @@ def clone(request, pk):
                        _('Condition cannot be cloned.'))
         return JsonResponse({'html_redirect': reverse('action:index')})
 
+    if action_pk:
+        action = workflow.actions.filter(pk=action_pk).first()
+        if not action:
+            # The given action is not attached to the workflow
+            return JsonResponse({'html_redirect': reverse('home')})
+    else:
+        action = condition.action
+
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content', None)
     if action_content:
@@ -566,14 +575,15 @@ def clone(request, pk):
         condition.action.save()
 
     # Get the new name appending as many times as needed the 'Copy of '
-    new_name = 'Copy of ' + condition.name
-    while condition.action.conditions.filter(name=new_name).exists():
+    # new_name = 'Copy of ' + condition.name
+    new_name = condition.name
+    while action.conditions.filter(name=new_name).exists():
         new_name = 'Copy of ' + new_name
 
     old_id = condition.id
     old_name = condition.name
     condition = ops.clone_condition(condition,
-                                    new_action=None,
+                                    new_action=action,
                                     new_name=new_name)
 
     # Log event
@@ -585,7 +595,7 @@ def clone(request, pk):
                           'name_old': old_name,
                           'name_new': condition.name})
 
-    messages.success(request, _('Action successfully cloned.'))
+    messages.success(request, _('Condition successfully cloned.'))
 
     # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})

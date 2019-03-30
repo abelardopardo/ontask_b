@@ -617,6 +617,9 @@ def edit_action_out(request, workflow, action):
     context = {'filter_condition': filter_condition,
                'action': action,
                'conditions': conditions,
+               'other_conditions': Condition.objects.filter(
+                   action__workflow=workflow, is_filter=False
+               ).exclude(action=action),
                'query_builder_ops': workflow.get_query_builder_ops_as_str(),
                'attribute_names': [x for x in
                                    list(workflow.attributes.keys())],
