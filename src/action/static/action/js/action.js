@@ -281,6 +281,10 @@ $(function () {
   }, function(){
     $(this).css("background-color", "white");
   });
+  $("#id_confirm_items").on("change", function(){
+    $("#next-step-on").prop('hidden', !$(this).is(":checked"));
+    $("#next-step-off").prop('hidden', $(this).is(":checked"))
+  });
 });
 window.onload = function(){
   if (document.getElementById("id_exclude_values") != null) {

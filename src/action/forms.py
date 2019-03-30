@@ -285,7 +285,7 @@ class EmailActionForm(forms.Form):
         initial=False,
         required=False,
         label=_('Download a snapshot of the workflow?'),
-        help_text=_('A zip file useful to review the emails sent.')
+        help_text=_('A zip file is useful to review the emails sent.')
     )
 
     def __init__(self, *args, **kargs):
@@ -584,7 +584,7 @@ class CanvasEmailActionForm(JSONBasicActionForm):
         initial=False,
         required=False,
         label=_('Download a snapshot of the workflow?'),
-        help_text=_('A zip file useful to review the emails sent.')
+        help_text=_('A zip file is useful to review the emails sent.')
     )
 
     def __init__(self, *args, **kargs):
