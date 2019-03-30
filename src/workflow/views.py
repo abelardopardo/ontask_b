@@ -509,8 +509,8 @@ def column_ss(request):
     # Result to return as Ajax response
     data = {
         'draw': draw,
-        'records_total': records_total,
-        'records_filtered': records_filtered,
+        'recordsTotal': records_total,
+        'recordsFiltered': records_filtered,
         'data': final_qs
     }
 
