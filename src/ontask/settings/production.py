@@ -8,14 +8,8 @@ from .base import *  # NOQA
 # For security and performance reasons, DEBUG is turned off
 DEBUG = False
 
-# Define STATIC_ROOT for the collectstatic command
-STATIC_ROOT = join(BASE_DIR(), '..', 'site', 'static')
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/dev/howto/static-files/
-STATIC_URL = BASE_URL + '/static/'
-
 # Additional middleware introduced by debug toolbar
-if True or USE_SSL:
+if USE_SSL:
     MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
 
 # Show emails to console

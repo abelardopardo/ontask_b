@@ -62,7 +62,14 @@ else:
 
 # Build paths inside the project like this: join(BASE_DIR(), "directory")
 BASE_DIR = environ.Path(__file__) - 3
+
+# Static, media and documentation information
 STATICFILES_DIRS = [join(BASE_DIR(), 'static')]
+# Define STATIC_ROOT for the collectstatic command
+STATIC_ROOT = join(BASE_DIR(), '..', 'site', 'static')
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/dev/howto/static-files/
+STATIC_URL = BASE_URL + '/static/'
 MEDIA_ROOT = join(BASE_DIR(), 'media')
 MEDIA_URL = BASE_URL + "/media/"
 ONTASK_HELP_URL = "html/index.html"
@@ -506,12 +513,12 @@ CANVAS_TOKEN_EXPIRY_SLACK = env.int('CANVAS_TOKEN_EXPIRY_SLACK', default=600)
 # DUMP CONFIG IN DEBUG
 #
 ################################################################################
-if True or DEBUG:
+if DEBUG:
     print('DEBUG', DEBUG)
     print('BASE_DIR:', BASE_DIR())
     print('STATICFILES_DIRS:', ', '.join(STATICFILES_DIRS))
-    # print('STATIC_ROOT:', STATIC_ROOT)
-    # print('STATIC_URL:', STATIC_URL)
+    print('STATIC_ROOT:', STATIC_ROOT)
+    print('STATIC_URL:', STATIC_URL)
     print('DATABASE_URL:', env('DATABASE_URL'))
     print('REDIS_URL:', env('REDIS_URL'))
     print('MEDIA_ROOT:', MEDIA_ROOT)
@@ -521,5 +528,4 @@ if True or DEBUG:
     print('DOMAIN_NAME:', DOMAIN_NAME)
     print('USE_SSL:', USE_SSL)
     print('ALLOWED_HOSTS:', ALLOWED_HOSTS)
-    print('INSTALLED_APPS:', INSTALLED_APPS)
 
