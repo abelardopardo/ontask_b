@@ -213,6 +213,7 @@ $(function () {
 
   // Clone Condition
   $("#condition-set").on("click", ".js-condition-clone", conditionClone);
+  $("#condition-clone").on("click", ".js-condition-clone", conditionClone);
 
   // Delete Condition
   $("#condition-set").on("click", ".js-condition-delete", loadForm);
