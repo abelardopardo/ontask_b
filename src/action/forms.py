@@ -551,7 +551,7 @@ class JSONActionForm(JSONBasicActionForm):
         widget=forms.Textarea(
             attrs={
                 'rows': 1,
-                'cols': 120,
+                'cols': 80,
                 # 'placeholder':
                 #     _('Authentication token to communicate with the platform')
             }
@@ -565,13 +565,11 @@ class JSONActionForm(JSONBasicActionForm):
             _('Column to exclude objects to send (empty to skip step)')
         self.fields['key_column'].required = False
 
-        self.fields.pop('confirm_items')
-
         self.fields['token'].initial = self.op_payload.get('token', '')
         self.fields['token'].help_text = \
             _('Authentication token provided by the external platform.')
 
-        self.order_fields(['key_column', 'token'])
+        self.order_fields(['key_column', 'token', 'confirm_items'])
 
 
 class CanvasEmailActionForm(JSONBasicActionForm):

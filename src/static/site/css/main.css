@@ -362,13 +362,22 @@ td.operations button {
     pointer-events: none;
 }
 
-.circle {
-  width: 1.5em;
-  height: 1.5em;
+.circle-solid, .circle {
+  width: 1.2em;
+  height: 1.2em;
   border-radius: 50%;
-  font-size: 50px;
-  color: #fff;
-  line-height: 500px;
+  font-size: 25px;
+  line-height: 26px;
   text-align: center;
+}
+
+.circle {
+  border: solid 1pt black;
+  color: #000;
+  background: #fff
+}
+
+.circle-solid {
+  color: #fff;
   background: #000
 }

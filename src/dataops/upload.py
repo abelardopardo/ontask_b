@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import zip
 from builtins import range
+from builtins import zip
+
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
@@ -117,6 +118,7 @@ def upload_s2(request):
         context = {'form': form,
                    'wid': workflow.id,
                    'prev_step': upload_data['step_1'],
+                   'valuerange': range(5) if workflow.has_table() else range(3),
                    'df_info': df_info}
 
         if not workflow.has_table():
@@ -172,6 +174,7 @@ def upload_s2(request):
         context = {'form': form,
                    'wid': workflow.id,
                    'prev_step': upload_data['step_1'],
+                   'valuerange': range(5) if workflow.has_table() else range(3),
                    'df_info': df_info}
         return render(request, 'dataops/upload_s2.html', context)
 
@@ -295,18 +298,22 @@ def upload_s3(request):
     if request.method != 'POST':
         # Update the dictionary with the session information
         request.session['upload_data'] = upload_data
-        return render(request, 'dataops/upload_s3.html',
-                      {'form': form,
-                       'prev_step': reverse('dataops:upload_s2'),
-                       'wid': workflow.id})
+        return render(
+            request, 'dataops/upload_s3.html',
+            {'form': form,
+             'valuerange': range(5),
+             'prev_step': reverse('dataops:upload_s2'),
+             'wid': workflow.id})
 
     # We are processing a post request with the information given by the user
 
     # If the form is not valid, re-visit (nothing is checked so far...)
     if not form.is_valid():
-        return render(request, 'dataops/upload_s3.html',
-                      {'form': form,
-                       'prev_step': reverse('dataops:upload_s3')})
+        return render(
+            request, 'dataops/upload_s3.html',
+            {'form': form,
+             'valuerange': range(5),
+             'prev_step': reverse('dataops:upload_s3')})
 
     # Get the keys and merge method and store them in the session dict
     upload_data['dst_selected_key'] = form.cleaned_data['dst_key']
@@ -523,4 +530,5 @@ def upload_s4(request):
     return render(request, 'dataops/upload_s4.html',
                   {'prev_step': reverse('dataops:upload_s3'),
                    'info': info,
+                   'valuerange': range(5),
                    'next_name': 'Finish'})

@@ -7,7 +7,7 @@ from django.utils.translation import ugettext as _
 
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
-from .forms import UploadCSVFileForm, UploadS3FileForm
+from .forms import UploadS3FileForm
 
 
 @user_passes_test(is_instructor)
@@ -42,21 +42,25 @@ def s3upload1(request):
 
     # Process the initial loading of the form
     if request.method == 'GET':
-        return render(request, 'dataops/upload1.html',
-                      {'form': form,
-                       'wid': workflow.id,
-                       'dtype': 'S3 CSV',
-                       'dtype_select': _('S3 CSV file'),
-                       'prev_step': reverse('dataops:uploadmerge')})
+        return render(
+            request, 'dataops/upload1.html',
+            {'form': form,
+             'wid': workflow.id,
+             'dtype': 'S3 CSV',
+             'dtype_select': _('S3 CSV file'),
+             'valuerange': range(5) if workflow.has_table() else range(3),
+             'prev_step': reverse('dataops:uploadmerge')})
 
     # If not valid, this is probably because the file submitted was too big
     if not form.is_valid():
-        return render(request, 'dataops/upload1.html',
-                      {'form': form,
-                       'wid': workflow.id,
-                       'dtype': 'S3 CSV',
-                       'dtype_select': _('S3 CSV file'),
-                       'prev_step': reverse('dataops:uploadmerge')})
+        return render(
+            request, 'dataops/upload1.html',
+            {'form': form,
+             'wid': workflow.id,
+             'dtype': 'S3 CSV',
+             'dtype_select': _('S3 CSV file'),
+             'valuerange': range(5) if workflow.has_table() else range(3),
+             'prev_step': reverse('dataops:uploadmerge')})
 
     # Dictionary to populate gradually throughout the sequence of steps. It
     # is stored in the session.

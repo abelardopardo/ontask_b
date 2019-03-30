@@ -412,6 +412,7 @@ def sqlupload1(request, pk):
                'wid': workflow.id,
                'dtype': 'SQL',
                'dtype_select': _('SQL connection'),
+               'valuerange': range(5) if workflow.has_table() else range(3),
                'prev_step': reverse('dataops:sqlconns_instructor_index'),
                'conn_type': conn.conn_type,
                'conn_driver': conn.conn_driver,

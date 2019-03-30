@@ -42,12 +42,12 @@ from action.evaluate import (
     evaluate_row_action_out, evaluate_action,
     get_row_values
 )
-from action.forms import EnterActionIn, field_prefix
+from action.forms import EnterActionIn, field_prefix, EmailExcludeForm
 from action.models import Action, ActionColumnConditionTuple
 from action.serializers import ActionSelfcontainedSerializer
 from dataops import pandas_db, ops
 from logs.models import Log
-from ontask import is_correct_email
+from ontask import is_correct_email, get_action_payload
 from ontask_oauth.models import OnTaskOAuthUserTokens
 from ontask_oauth.views import refresh_token
 from workflow.models import Column
@@ -971,3 +971,43 @@ def get_workflow_action(request, pk):
         return None
 
     return workflow, action
+
+
+def run_action_item_filter(request):
+    """
+    Offer a select widget to tick students to exclude from the email.
+    :param request: HTTP request (GET)
+    :return: HTTP response
+    """
+
+    # Get the payload from the session, and if not, use the given one
+    payload = get_action_payload(request)
+    if not payload:
+        # Something is wrong with this execution. Return to the action table.
+        messages.error(request, _('Incorrect item filter invocation.'))
+        return redirect('action:index')
+
+    # Get the information from the payload
+    action = Action.objects.get(pk=payload['action_id'])
+
+    form = EmailExcludeForm(request.POST or None,
+                            action=action,
+                            column_name=payload['item_column'],
+                            exclude_values=payload.get('exclude_values', list))
+    context = {
+        'form': form,
+        'action': action,
+        'button_label': payload['button_label'],
+        'valuerange': range(payload.get('valuerange', 0)),
+        'step': payload.get('step', 0),
+        'prev_step': payload['prev_url']
+    }
+
+    # Process the initial loading of the form and return
+    if request.method != 'POST' or not form.is_valid():
+        return render(request, 'action/item_filter.html', context)
+
+    # Updating the content of the exclude_values in the payload
+    payload['exclude_values'] = form.cleaned_data['exclude_values']
+
+    return redirect(payload['post_url'])

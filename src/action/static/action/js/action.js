@@ -163,6 +163,11 @@ var conditionClone = function() {
     },
   });
 }
+var select_next_button = function(e) {
+  $("#step_sequence").prop('hidden', !e.is(":checked"));
+  $("#next-step-on").prop('hidden', !e.is(":checked"));
+  $("#next-step-off").prop('hidden', e.is(":checked"));
+}
 $(function () {
   $("#checkAll").click(function () {
        $("input[id*='id_upload_']").prop("checked", this.checked);
@@ -281,10 +286,9 @@ $(function () {
   }, function(){
     $(this).css("background-color", "white");
   });
-  $("#id_confirm_items").on("change", function(){
-    $("#next-step-on").prop('hidden', !$(this).is(":checked"));
-    $("#next-step-off").prop('hidden', $(this).is(":checked"))
-  });
+  $("#id_confirm_items").on("change", function(e) {
+    select_next_button($(this));
+  })
 });
 window.onload = function(){
   if (document.getElementById("id_exclude_values") != null) {
@@ -299,6 +303,7 @@ $(document).ready(function() {
   $(document.body).on("click", "a[data-toggle]", function(event) {
     location.hash = this.getAttribute("href");
   });
+  select_next_button($("#id_confirm_items"));
 });
 $(window).on("popstate", function() {
   var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");

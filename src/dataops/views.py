@@ -118,7 +118,8 @@ def uploadmerge(request):
 
     return render(request,
                   'dataops/uploadmerge.html',
-                  {'nrows': workflow.nrows})
+                  {'valuerange':
+                       range(5) if workflow.has_table() else range(3)})
 
 
 @user_passes_test(is_instructor)

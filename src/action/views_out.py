@@ -39,8 +39,7 @@ from ontask_oauth.models import OnTaskOAuthUserTokens
 from ontask_oauth.views import get_initial_token_step1, refresh_token
 from workflow.ops import get_workflow
 from .forms import (
-    EmailActionForm, JSONActionForm, EmailExcludeForm,
-    ZipActionForm, CanvasEmailActionForm
+    EmailActionForm, JSONActionForm, ZipActionForm, CanvasEmailActionForm
 )
 
 html_body = """<!DOCTYPE html>
@@ -109,10 +108,11 @@ def run_email_action(request, workflow, action):
 
         # Render the form
         return render(request,
-                      'action/action_email_step1.html',
+                      'action/request_email_data.html',
                       {'action': action,
                        'num_msgs': num_msgs,
                        'form': form,
+                       'valuerange': range(2),
                        'rows_all_false': action.get_row_all_false_count()})
 
     # Request is a POST and is valid
@@ -132,6 +132,8 @@ def run_email_action(request, workflow, action):
         # Create a dictionary in the session to carry over all the information
         # to execute the next pages
         op_payload['button_label'] = ugettext('Send')
+        op_payload['valuerange'] = 2
+        op_payload['step'] = 2
         request.session[action_session_dictionary] = op_payload
 
         return redirect('action:item_filter')
@@ -286,6 +288,8 @@ def zip_action(request, pk):
         # Create a dictionary in the session to carry over all the information
         # to execute the next pages
         op_payload['button_label'] = ugettext('Create ZIP')
+        op_payload['valuerange'] = 2
+        op_payload['step'] = 2
         request.session[action_session_dictionary] = op_payload
 
         return redirect('action:item_filter')
@@ -511,6 +515,7 @@ def run_json_action(request, workflow, action):
                       {'action': action,
                        'num_msgs': num_msgs,
                        'form': form,
+                       'valuerange': range(2),
                        'rows_all_false': action.get_row_all_false_count()})
 
     # Request is a POST and is valid
@@ -524,6 +529,8 @@ def run_json_action(request, workflow, action):
         # Create a dictionary in the session to carry over all the information
         # to execute the next pages
         op_payload['button_label'] = ugettext('Send')
+        op_payload['valuerange'] = 2
+        op_payload['step'] = 2
         request.session[action_session_dictionary] = op_payload
 
         return redirect('action:item_filter')
@@ -643,6 +650,7 @@ def run_canvas_email_action(request, workflow, action):
                       {'action': action,
                        'num_msgs': num_msgs,
                        'form': form,
+                       'valuerange': range(2),
                        'rows_all_false': action.get_row_all_false_count()})
 
     # Requet is a POST and is valid
@@ -661,6 +669,8 @@ def run_canvas_email_action(request, workflow, action):
     if op_payload['confirm_items']:
         # Create a dictionary in the session to carry over all the information
         # to execute the next pages
+        op_payload['valuerange'] = 2
+        op_payload['step'] = 2
         op_payload['button_label'] = ugettext('Send')
         request.session[action_session_dictionary] = op_payload
 
@@ -968,41 +978,3 @@ def preview_response(request, pk, idx, action=None):
                          request=request)
 
     return JsonResponse(data)
-
-
-def run_action_item_filter(request):
-    """
-    Offer a select widget to tick students to exclude from the email.
-    :param request: HTTP request (GET)
-    :return: HTTP response
-    """
-
-    # Get the payload from the session, and if not, use the given one
-    payload = get_action_payload(request)
-    if not payload:
-        # Something is wrong with this execution. Return to the action table.
-        messages.error(request, _('Incorrect item filter invocation.'))
-        return redirect('action:index')
-
-    # Get the information from the payload
-    action = Action.objects.get(pk=payload['action_id'])
-
-    form = EmailExcludeForm(request.POST or None,
-                            action=action,
-                            column_name=payload['item_column'],
-                            exclude_values=payload.get('exclude_values', list))
-    context = {
-        'form': form,
-        'action': action,
-        'button_label': payload['button_label'],
-        'prev_step': payload['prev_url']
-    }
-
-    # Process the initial loading of the form and return
-    if request.method != 'POST' or not form.is_valid():
-        return render(request, 'action/item_filter.html', context)
-
-    # Updating the content of the exclude_values in the payload
-    payload['exclude_values'] = form.cleaned_data['exclude_values']
-
-    return redirect(payload['post_url'])

@@ -7,7 +7,8 @@
 {% block title %}{{ block.super }}{% trans 'Data Upload/Merge' %}{% endblock %}
 {% block container %}
 <div class="container-fluid">
-  <h1 class="text-center">{% trans 'Data upload/merge operations' %}</h1>
+  {% include 'step_by_step.html' with valuerange=valuerange step=1 %}
+  <h1 class="text-center">{% trans 'Select the type of data source' %}</h1>
   <div class="container-fluid justify-content-center">
     <table class="table table-hover table-bordered" id="dataops-table">
       <thead>

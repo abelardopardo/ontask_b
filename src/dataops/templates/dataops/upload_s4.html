@@ -10,7 +10,8 @@
 {% endblock %}
 {% block container %}
   <div class="container-fluid">
-    <h1 class="text-center">{% trans 'Step 4: Review and confirm' %}</h1>
+    {% include 'step_by_step.html' with valuerange=valuerange step=5 %}
+    <h1 class="text-center">{% trans 'Review and confirm' %}</h1>
     <div class="row justify-content-center">
       <form method="POST" action="">
         {% csrf_token %}

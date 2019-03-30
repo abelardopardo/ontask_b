@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.urls import path
 
+import action.ops
 from . import views_action, views_condition, views_out
 
 app_name = 'action'
@@ -59,7 +60,7 @@ urlpatterns = [
     # Personalised text and JSON action steps
     #
     path('item_filter/',
-         views_out.run_action_item_filter,
+         action.ops.run_action_item_filter,
          name='item_filter'),
 
     #
