@@ -85,10 +85,8 @@ def display_ss(request):
     final_qs = []
     for item in qs[start:start + length]:
         row = [
-            """<a href="{0}" class="btn btn-outline-dark spin"
-                  data-toggle="tooltip" title="{1}">
-                  <span class="fa fa-eye"></span> {2}
-                </a>""".format(
+            """<a href="{0}" class="spin"
+                  data-toggle="tooltip" title="{1}">{2}</a>""".format(
                 reverse('logs:view', kwargs={'pk': item[0]}),
                 ugettext('View log content'),
                 item[0]
