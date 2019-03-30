@@ -395,6 +395,104 @@ class UploadGoogleSheetForm(UploadBasic):
         return data
 
 
+# Step 1 of the S3 CSV upload
+class UploadS3FileForm(UploadBasic):
+    """
+    Form to read a csv file from a S3 bucket. It requires entering the access
+    key as well as the secret access key. It also allows to specify the
+    number of lines to skip at the top and the bottom of the file. This
+    functionality is offered by the underlyng function read_csv in Pandas
+    """
+
+    aws_access_key = forms.CharField(
+        max_length=512,
+        required=False,
+        initial='',
+        help_text=_('AWS S3 Bucket access key'))
+
+    aws_secret_access_key = forms.CharField(
+        max_length=512,
+        required=False,
+        initial='',
+        help_text=_('AWS S3 Bucket secret access key'))
+
+    aws_bucket_name = forms.CharField(
+        max_length=512,
+        required=True,
+        initial='',
+        help_text=_('AWS S3 Bucket name'))
+
+    aws_file_key = forms.CharField(
+        max_length=512,
+        required=True,
+        initial='',
+        help_text=_('AWS S3 Bucket file path'))
+
+    skip_lines_at_top = forms.IntegerField(
+        label=_('Lines to skip at the top'),
+        help_text=_("Number of lines to skip at the top when reading the "
+                    "file"),
+        initial=0,
+        required=False
+    )
+
+    skip_lines_at_bottom = forms.IntegerField(
+        label=_('Lines to skip at the bottom'),
+        help_text=_("Number of lines to skip at the bottom when reading the "
+                    "file"),
+        initial=0,
+        required=False
+    )
+
+    def clean(self):
+        """
+        Function to check that the integers are positive.
+        :return: The cleaned data
+        """
+
+        data = super(UploadS3FileForm, self).clean()
+
+        done = False
+        if data['skip_lines_at_top'] < 0:
+            self.add_error(
+                'skip_lines_at_top',
+                _('This number has to be zero or positive')
+            )
+            done = True
+
+        if data['skip_lines_at_bottom'] < 0:
+            self.add_error(
+                'skip_lines_at_bottom',
+                _('This number has to be zero or positive')
+            )
+            done = True
+
+        if done:
+            return data
+
+        # Process S3 file using pandas read_excel
+        try:
+            self.data_frame = pandas_db.load_df_from_s3(
+                self.cleaned_data['aws_access_key'],
+                self.cleaned_data['aws_secret_access_key'],
+                self.cleaned_data['aws_bucket_name'],
+                self.cleaned_data['aws_file_key'],
+                self.cleaned_data['skip_lines_at_top'],
+                self.cleaned_data['skip_lines_at_bottom']
+            )
+        except Exception as e:
+            self.add_error(
+                None,
+                _('S3 bucket file could not be processed ({0})').format(e)
+            )
+            return data
+
+        # Check the conditions in the data frame
+        self.clean_data_frame()
+
+        return data
+
+
 class SQLConnectionForm(forms.ModelForm):
     """
     Form to read data from SQL. We collect information to create a Database URI

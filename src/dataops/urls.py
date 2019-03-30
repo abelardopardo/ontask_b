@@ -3,9 +3,15 @@
 
 from django.urls import path
 
-import dataops.upload
-import dataops.views
-from . import views, csvupload, excelupload, sqlcon_views, googlesheetupload
+from . import (
+    views,
+    csvupload,
+    excelupload,
+    sqlcon_views,
+    googlesheetupload,
+    upload,
+    s3upload
+)
 
 app_name = 'dataops'
 urlpatterns = [
@@ -41,12 +47,15 @@ urlpatterns = [
          googlesheetupload.googlesheetupload1,
          name='googlesheetupload1'),
 
+    # S3 Bucket CSV Upload/Merge
+    path('s3upload1/', s3upload.s3upload1, name='s3upload1'),
+
     # Upload/Merge
-    path('upload_s2/', dataops.upload.upload_s2, name='upload_s2'),
+    path('upload_s2/', upload.upload_s2, name='upload_s2'),
 
-    path('upload_s3/', dataops.upload.upload_s3, name='upload_s3'),
+    path('upload_s3/', upload.upload_s3, name='upload_s3'),
 
-    path('upload_s4/', dataops.upload.upload_s4, name='upload_s4'),
+    path('upload_s4/', upload.upload_s4, name='upload_s4'),
 
     # SQL Connections
     path('sqlconns_admin',

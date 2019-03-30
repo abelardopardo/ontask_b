@@ -78,6 +78,28 @@
         </tr>
         <tr>
           <td class="text-center" style="vertical-align: middle;">
+            <a href="{% url 'dataops:s3upload1' %}"
+               class="btn btn-outline-primary">
+              <span class="fa fa-plus"></span>
+              {% trans 'S3 CSV Upload/Merge' %}
+            </a>
+          </td>
+          <td style="vertical-align:middle">
+            {% trans 'Upload data from a CSV file in a S3 Bucket.' %}<br/>
+            {% blocktrans %}
+            Given the key, secret, bucket name and file path to a CSV file,
+            upload or merge its content.
+            {% endblocktrans %}
+            <br/>
+            {% blocktrans %}
+            If the workflow table has data, the operation will ask you
+            to match a key column in your table with a key column in the sheet
+            so that the rows can be matched.
+            {% endblocktrans %}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center" style="vertical-align: middle;">
             <a href="{% url 'dataops:sqlconns_instructor_index' %}" class="btn btn-outline-primary">
               <span class="fa fa-plus"></span>
               {% trans 'SQL Connection' %}

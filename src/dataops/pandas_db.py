@@ -15,6 +15,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.db import connection
 from django.utils.translation import ugettext as _
+from smart_open import smart_open
 from sqlalchemy import create_engine
 
 from dataops.formula_evaluation import NodeEvaluation, evaluate
@@ -320,6 +321,50 @@ def load_df_from_excelfile(file, sheet_name):
                                index_col=False,
                                infer_datetime_format=True,
                                quotechar='"')
+
+    # Strip white space from all string columns and try to convert to
+    # datetime just in case
+    return strip_and_convert_to_datetime(data_frame)
+
+
+def load_df_from_s3(aws_key,
+                    aws_secret,
+                    bucket_name,
+                    file_path,
+                    skiprows=0,
+                    skipfooter=0):
+    """
+    Given a file object, try to read the content as a Excel file and transform
+    into a data frame. The sheet_name is the name of the sheet to read.
+
+    It also tries to convert as many columns as possible to date/time format
+    (testing the conversion on every string column).
+
+    :param aws_key: Key to access the S3 bucket
+    :param aws_secret: Secret to access the S3 bucket
+    :param bucket_name: Bucket name
+    :param file_path: Path to access the file within the bucket
+    :param skiprows: Number of lines to skip at the top of the document
+    :param skipfooter: Number of lines to skip at the bottom of the document
+    :return: Resulting data frame, or an Exception.
+    """
+
+    path_prefix = ''
+    if aws_key and aws_secret:
+        # If key/secret are given, create prefix
+        path_prefix = '{0}:{1}@'.format(aws_key, aws_secret)
+
+    data_frame = pd.read_csv(
+        smart_open('s3://{0}{1}/{2}'.format(path_prefix,
+                                            bucket_name,
+                                            file_path)),
+        index_col=False,
+        infer_datetime_format=True,
+        quotechar='"',
+        skiprows=skiprows,
+        skipfooter=skipfooter,
+        encoding='utf-8'
+    )
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case

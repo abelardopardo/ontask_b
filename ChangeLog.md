@@ -1,3 +1,9 @@
+## 4.3 ()
+
+### Added
+
+- Read S3 buckets with possibility of providing Key/Secret
+
 ## 4.2.1 (2019-03-29)
 
 ### Changed
