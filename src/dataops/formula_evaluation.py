@@ -375,7 +375,7 @@ class NodeEvaluation:
             # SQL evaluation
             varname = fix_pctg_in_name(self.node['field'])
 
-            result = '(\"{0}\" is null)'.format(varname)
+            result = '("{0}" is null)'.format(varname)
 
             return result, []
 
@@ -398,7 +398,7 @@ class NodeEvaluation:
             # SQL evaluation
             varname = fix_pctg_in_name(self.node['field'])
 
-            result = '(\"{0}\" is not null)'.format(varname)
+            result = '("{0}" is not null)'.format(varname)
 
             return result, []
 
@@ -431,7 +431,7 @@ class NodeEvaluation:
             # SQL evaluation
             varname = fix_pctg_in_name(self.node['field'])
 
-            result = '"{0}"'.format(varname) + ' < %s'
+            result = '("{0}" < %s) AND ("{0}" is not null)'.format(varname)
             result_fields = [str(constant)]
 
             return result, result_fields
@@ -466,7 +466,7 @@ class NodeEvaluation:
             # SQL evaluation
             varname = fix_pctg_in_name(self.node['field'])
 
-            result = '"{0}"'.format(varname) + ' <= %s'
+            result = '("{0}" <= %s) AND ("{0}" is not null)'.format(varname)
             result_fields = [str(constant)]
 
             return result, result_fields
@@ -502,7 +502,7 @@ class NodeEvaluation:
             # SQL evaluation
             varname = fix_pctg_in_name(self.node['field'])
 
-            result = '"{0}"'.format(varname) + ' > %s'
+            result = '("{0}" > %s) AND ("{0}" is not null)'.format(varname)
             result_fields = [str(constant)]
 
             return result, result_fields
@@ -537,7 +537,7 @@ class NodeEvaluation:
             # SQL evaluation
             varname = fix_pctg_in_name(self.node['field'])
 
-            result = '"{0}"'.format(varname) + ' >= %s'
+            result = '("{0}" >= %s) AND ("{0}" is not null)'.format(varname)
             result_fields = [str(constant)]
 
             return result, result_fields
@@ -576,7 +576,10 @@ class NodeEvaluation:
             # SQL evaluation
             varname = fix_pctg_in_name(self.node['field'])
 
-            result = '"{0}"'.format(varname) + ' BETWEEN %s AND %s'
+            result = \
+                '("{0}" BETWEEN %s AND %s) AND ("{0}" is not null)'.format(
+                    varname
+                )
             result_fields = [str(self.node['value'][0]),
                              str(self.node['value'][1])]
 
@@ -617,7 +620,10 @@ class NodeEvaluation:
             # SQL evaluation
             varname = fix_pctg_in_name(self.node['field'])
 
-            result = '"{0}"'.format(varname) + ' NOT BETWEEN %s AND %s'
+            result = \
+                '("{0}" NOT BETWEEN %s AND %s) OR ("{0}" is null)'.format(
+                    varname
+                )
             result_fields = [str(self.node['value'][0]),
                              str(self.node['value'][1])]
 

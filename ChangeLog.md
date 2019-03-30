@@ -8,9 +8,13 @@
 
 - Workflow delete now requires typing workflow name for security reasons
 
+- Steps requiring multiple steps now have numbers at the top of the screen (suggested by University of Auckland's group a while ago)
+
 ### Fixed
 
 - Incorrect number of entries shown at bottom of column page
+
+- Error when evaluating numeric conditions in the presence of null values
 
 ## 4.2.1 (2019-03-29)
 
