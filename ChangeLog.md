@@ -6,6 +6,8 @@
 
 - Possibility to clone conditions from other actions
 
+- Workflow delete now requires typing workflow name for security reasons
+
 ### Fixed
 
 - Incorrect number of entries shown at bottom of column page
