@@ -4,6 +4,12 @@
 
 - Read S3 buckets with possibility of providing Key/Secret
 
+- Possibility to clone conditions from other actions
+
+### Fixed
+
+- Incorrect number of entries shown at bottom of column page
+
 ## 4.2.1 (2019-03-29)
 
 ### Changed
