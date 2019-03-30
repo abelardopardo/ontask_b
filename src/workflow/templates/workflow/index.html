@@ -31,21 +31,19 @@
     {% if not nwflows %}
       <p class="text-center small"><strong>Next Step:</strong> The main element in OnTask is a <i>Workflow<super>*</super></i>. Start by first creating a workflow element using the <i>New Workflow</i> button below, and then upload data in its table.</p>
     {% endif %}
-    <div class="row justify-content-center">
-      <div class="mb-3 btn-group" role="group">
-        <button type="button" class="btn btn-outline-dark js-create-workflow"
-                data-url="{% url 'workflow:create' %}"
+    <div class="text-center mb-3">
+      <button type="button" class="btn btn-outline-dark js-create-workflow"
+              data-url="{% url 'workflow:create' %}"
+              data-toggle="tooltip"
+              title="{% trans 'Provide the name and description for a new workflow' %}">
+        <span class="fa fa-plus"></span> {% trans 'New workflow' %}
+      </button>
+      <a href="{% url 'workflow:import' %}" class="btn btn-outline-dark spin"
                 data-toggle="tooltip"
-                title="{% trans 'Provide the name and description for a new workflow' %}">
-          <span class="fa fa-plus"></span> {% trans 'New workflow' %}
-        </button>
-        <a href="{% url 'workflow:import' %}" class="btn btn-outline-dark spin"
-                  data-toggle="tooltip"
-                  title="{% trans 'Import a file with an OnTask workflow' %}">
-          <span class="fa fa-upload"></span>
-            {% trans 'Import workflow' %}
-        </a>
-      </div>
+                title="{% trans 'Import a file with an OnTask workflow' %}">
+        <span class="fa fa-upload"></span>
+          {% trans 'Import workflow' %}
+      </a>
     </div>
     <div class="card-deck justify-content-center content-row" style="margin:1em 0 1em 0;">
       {% for wflow in workflows %}

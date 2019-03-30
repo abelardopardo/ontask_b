@@ -20,28 +20,39 @@
     <h1 class="text-center">
       {% blocktrans with n=pinstance.name %}Transformation "{{ n }}"{% endblocktrans %}
     </h1>
-    <ul class="nav nav-tabs nav-fill" id="dataops-get-plugin-info-tabs" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active" id="inputs-tab" data-toggle="tab" href="#inputs"
-           role="tab" aria-controls="inputs"
-           aria-selected="true">{% trans 'Columns to pass to the transformation' %}</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="outputs-tab" data-toggle="tab" href="#outputs"
-           role="tab" aria-controls="outputs"
-           aria-selected="false">{% trans 'Columns to store the result' %}</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="parameters-tab" data-toggle="tab" href="#parameters"
-           role="tab" aria-controls="parameters"
-           aria-selected="false">{% trans 'Parameters' %}</a>
-      </li>
-    </ul>
-    <form class="pt-3 pb-3 pl-2 pr-2 tab-wrapper" method="POST" action="">
+    <form method="POST" action="">
       {% csrf_token %}
-      <div class="row justify-content-center tab-content" id="dataops-get-plugin-info-tab-content">
-        <div class="tab-pane fade show active" id="inputs" role="tabpanel"
-             aria-labelledby="inputs-tab">
+      <div class="text-center my-3">
+        <a class="btn btn-outline-dark spin" href="{% url 'dataops:transform' %}">{% trans 'Cancel' %}</a>
+        <button type="submit" name="Submit" value="Submit"
+                class="btn btn-outline-primary spin" data-toggle="tooltip"
+                title="{% trans 'Run the plugin' %}">
+          <span class="fa fa-rocket"></span> {% trans 'Run' %}</button>
+      </div>
+      <ul class="nav nav-tabs border-0 justify-content-center"
+          id="dataops-get-plugin-info-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active border border-primary border-bottom-0"
+             id="inputs-tab" data-toggle="tab" href="#inputs"
+             role="tab" aria-controls="inputs"
+             aria-selected="true">{% trans 'Columns to pass to the transformation' %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link border border-primary border-bottom-0"
+             id="outputs-tab" data-toggle="tab" href="#outputs"
+             role="tab" aria-controls="outputs"
+             aria-selected="false">{% trans 'Columns to store the result' %}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link border border-primary border-bottom-0"
+             id="parameters-tab" data-toggle="tab" href="#parameters"
+             role="tab" aria-controls="parameters"
+             aria-selected="false">{% trans 'Parameters' %}</a>
+        </li>
+      </ul>
+      <div class="tab-content" id="dataops-get-plugin-info-tab-content">
+        <div class="tab-pane px-3 fade show active border border-primary"
+             id="inputs" role="tabpanel" aria-labelledby="inputs-tab">
           <div class="row justify-content-center form-group{% if form.columns.errors %} has-danger{% endif %}">
             {% if pinstance.input_column_names %}
               <p class="lead">{% trans 'Input columns' %}</p>
@@ -51,36 +62,39 @@
             {% endif %}
           </div>
         </div>
-        <div class="tab-pane fade" id="outputs" role="tabpanel" aria-labelledby="outputs-tab">
-          <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}">
-            <p class="lead">{% trans 'Output column names' %}</p>
-            {% for field_item in output_column_fields %}
-              {{ field_item|as_crispy_field }}
-            {% endfor %}
+        <div class="tab-pane px-3 fade show border border-primary"
+             id="outputs" role="tabpanel" aria-labelledby="outputs-tab">
+          <div class="row justify-content-center">
+            <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %} my-3">
+              <p class="lead">{% trans 'Output column names' %}</p>
+              {% for field_item in output_column_fields %}
+                {{ field_item|as_crispy_field }}
+              {% endfor %}
+            </div>
           </div>
-          <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}"
-               style="border-bottom:1px solid black;padding:1ex;">
-            {{ form.out_column_suffix|as_crispy_field }}
+          <div class="row justify-content-center">
+            <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}"
+                 style="border-bottom:1px solid black;padding:1ex;">
+              {{ form.out_column_suffix|as_crispy_field }}
+            </div>
           </div>
-          <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}">
-            {{ form.merge_key|as_crispy_field }}
+          <div class="row justify-content-center">
+            <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}">
+              {{ form.merge_key|as_crispy_field }}
+            </div>
           </div>
         </div>
-        <div class="tab-pane fade" id="parameters" role="tabpanel" aria-labelledby="parameters-tab">
-          <div class="justify-content-center">
+        <div class="tab-pane px-3 fade show border border-primary"
+             id="parameters" role="tabpanel" aria-labelledby="parameters-tab">
+          <div class="justify-content-center my-3">
             <p class="lead text-center">{% trans 'Execution parameters' %}</p>
             {% for field_item in parameters %}
-              {{ field_item|as_crispy_field }}
+              <div class="row justify-content-center">
+                {{ field_item|as_crispy_field }}
+              </div>
             {% endfor %}
           </div>
         </div>
-      </div>
-      <div class="text-center">
-        <a class="btn btn-outline-dark spin" href="{% url 'dataops:transform' %}">{% trans 'Cancel' %}</a>
-        <button type="submit" name="Submit" value="Submit"
-                class="btn btn-outline-primary spin" data-toggle="tooltip"
-                title="{% trans 'Run the plugin' %}">
-          <span class="fa fa-rocket"></span> {% trans 'Run' %}</button>
       </div>
     </form>
   </div>

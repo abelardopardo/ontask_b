@@ -90,22 +90,16 @@
       {% include 'workflow/includes/no_actions.html' %}
     {% endif %}
     <div id="table-operation-buttons">
-      <div class="text-center">
-        <div class="btn-group mb-3">
-          {% if columns %}
-            <a href="{% url 'dataops:rowcreate' %}"
-               class="btn btn-outline-dark spin"
-               data-toggle="tooltip"
-               title="{% trans 'Add a new row to the table' %}">
-              <span class="fa fa-plus"></span> {% trans 'Row' %}
-            </a>
-            {% include 'workflow/includes/add_column_menu.html' %}
-          {% endif %}
-          {% include 'workflow/includes/manage_table_data.html' %}
-        </div>
-      </div>
-      <div class="text-center">
-        <div class="btn-group mb-3">
+      <div class="text-center mb-3">
+        {% if columns %}
+          <a href="{% url 'dataops:rowcreate' %}"
+             class="btn btn-outline-dark spin"
+             data-toggle="tooltip"
+             title="{% trans 'Add a new row to the table' %}">
+            <span class="fa fa-plus"></span> {% trans 'Row' %}
+          </a>
+          {% include 'workflow/includes/add_column_menu.html' %}
+        {% endif %}
         {% if columns %}
           <div class="dropdown btn-group">
             <a href="{% url 'table:view_index' %}"
@@ -167,7 +161,7 @@
             </a>
           {% endif %}
         {% endif %}
-      </div>
+        {% include 'workflow/includes/manage_table_data.html' %}
       </div>
     </div>
     {% if columns %}

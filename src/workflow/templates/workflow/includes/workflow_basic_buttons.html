@@ -1,12 +1,5 @@
 {% load i18n %}
-<div class="mb-3 btn-group">
-  {% comment %}
-  <a href="{% url 'workflow:detail' workflow.id %}"
-     class="btn btn-outline-dark btn-sm spin" data-toggle="tooltip"
-     title="{% trans 'Open the workflow to manipulate its data and actions' %}">
-      <span class="fa fa-book"></span> {% trans 'Open' %}
-  </a>
-  {% endcomment %}
+<div class="mb-3">
   {% if request.user == workflow.user %}
     <button type="button"
             class="btn btn-outline-dark btn-sm js-workflow-update align-middle"

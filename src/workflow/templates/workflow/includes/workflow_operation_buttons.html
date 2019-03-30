@@ -1,37 +1,35 @@
 {% load i18n %}
-<div class="mb-3 btn-group" role="group">
+<div class="text-center my-3">
   <a href="{% url 'workflow:export_ask' workflow.id %}"
      class="btn btn-outline-dark spin"
-     data-toggle="tooltip"
-     title="{% trans 'Export the workflow and its actions' %}">
+     data-toggle="tooltip" title="{% trans 'Export the workflow and its actions' %}">
     <span class="fa fa-download"></span> {% trans 'Export' %}
   </a>
   {% if request.user == workflow.user %}
-    <button type="button" style="width:100%;"
-            class="btn btn-outline-dark js-workflow-update align-middle"
+    <button type="button"
+            class="btn btn-outline-dark js-workflow-update"
             data-url="{% url 'workflow:update' workflow.id %}" data-toggle="tooltip"
       title="{% trans 'Change the name and description of this workflow' %}">
         <span class="fa fa-pencil"></span> {% trans 'Rename' %}
     </button>
-    <button type="button" style="width:100%;"
-            class="btn btn-outline-dark js-workflow-clone align-middle"
+    <button type="button"
+            class="btn btn-outline-dark js-workflow-clone"
             data-url="{% url 'workflow:clone' workflow.id %}" data-toggle="tooltip"
             title="{% trans 'Create a duplicate of this workflow' %}">
       <span class="fa fa fa-clone"></span> {% trans 'Clone' %}
     </button>
     {% if workflow.nrows %}
-      <button type="button" style="width:100%;"
+      <button type="button"
               class="btn btn-outline-dark js-workflow-flush"
               data-url="{% url 'workflow:flush' workflow.id %}" data-toggle="tooltip"
               title="{% trans 'Delete the data in the table of this workflow' %}">
         <span class="fa fa-floppy-remove"></span> {% trans 'Flush data table' %}
       </button>
     {% endif %}
-    <button type="button" style="width:100%;"
+    <button type="button"
             class="btn btn-outline-danger js-workflow-delete"
             data-url="{% url 'workflow:delete' workflow.id %}" data-toggle="tooltip"
             title="{% trans 'Delete this workflow' %}">
-      <span class="fa fa-trash"></span> {% trans 'Delete' %}
-    </button>
+      <span class="fa fa-trash"></span> {% trans 'Delete' %}</button>
   {% endif %}
 </div>
