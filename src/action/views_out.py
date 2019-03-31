@@ -916,7 +916,7 @@ def preview_response(request, pk, idx, action=None):
     condition_evaluation = action.get_condition_evaluation(row_values)
 
     all_false = False
-    if action.conditions.count():
+    if action.conditions.filter(is_filter=False).count():
         # If there are conditions, check if they are all false
         all_false = all([not value
                          for key, value in condition_evaluation.items()])
