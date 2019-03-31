@@ -19,11 +19,13 @@ class OntaskTestPlugin(object):
     plugin does
 
     3. Field input_column_names: A potentially empty list of column names 
-    (strings). If the list is empty, the columns are selected by the userat 
+    (strings). If the list is empty, the columns are selected by the user at
     execution time.
 
-    4. Field output_column_names: Non empty list of names (strings) of the 
-    columns to be used for the output of the transformation.
+    4. Field output_column_names: List of names (strings) of the
+    columns to be used for the output of the transformation. If the list is
+    empty, the column names in this variable need to be set by the plugin
+    according to the result.
 
     5. Field parameters: an optionally empty list with tuples with the following
     structure:
