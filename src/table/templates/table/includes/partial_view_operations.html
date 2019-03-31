@@ -1,19 +1,19 @@
 {% load i18n %}
-<div class="btn-group">
+<div class="shadow btn-group">
   <a href="{% url 'table:display_view' id %}"
-     class="btn btn-sm btn-light"
+     class="shadow btn btn-sm btn-light"
      data-toggle="tooltip"
      title="{% trans 'Access the table with this view' %}">
      <span class="fa fa-eye"></span></a>
   <button type="button"
-          class="btn btn-sm btn-light js-view-clone"
+          class="shadow btn btn-sm btn-light js-view-clone"
           data-url="{% url 'table:view_clone' id %}"
           data-toggle="tooltip"
           title="{% trans 'Create an identical view' %}">
     <span class="fa fa fa-clone"></span>
   </button>
   <button type="button"
-          class="btn btn-sm btn-light js-view-delete"
+          class="shadow btn btn-sm btn-light js-view-delete"
           data-url="{% url 'table:view_delete' id %}"
           data-toggle="tooltip"
           title="{% trans 'Delete the view' %}">

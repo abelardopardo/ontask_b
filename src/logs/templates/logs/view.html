@@ -7,9 +7,9 @@
   <h1 class="text-center">{% trans 'Log' %} {{ log_item.id }}: {{ log_item.name }}</h1>
   <p class="text-center">{% trans 'Last modified' %}: {{ log_item.modified }}</p>
   <h4 class="text-center">{% trans 'Payload:' %}</h4>
-  <pre class="border border-primary">{{ json_pretty }}</pre>
+  <pre class="shadow border border-primary">{{ json_pretty }}</pre>
   <div class="text-center">
-    <a href="{% url 'logs:index' %}" class="btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
+    <a href="{% url 'logs:index' %}" class="shadow btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
     </div>
 </div>
 {% endblock container %}

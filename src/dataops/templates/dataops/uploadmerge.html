@@ -10,7 +10,7 @@
   {% include 'step_by_step.html' with valuerange=valuerange step=1 %}
   <h1 class="text-center">{% trans 'Select the type of data source' %}</h1>
   <div class="container-fluid justify-content-center">
-    <table class="table table-hover table-bordered" id="dataops-table">
+    <table class="table table-hover table-bordered shadow" id="dataops-table">
       <thead>
         <tr>
           <th class="text-center">{% trans 'Operation' %}</th>
@@ -20,7 +20,7 @@
       <tbody>
         <tr>
           <td class="text-center" style="vertical-align: middle;">
-            <a href="{% url 'dataops:csvupload1' %}" class="btn btn-outline-primary">
+            <a href="{% url 'dataops:csvupload1' %}" class="shadow btn btn-outline-primary">
               <span class="fa fa-plus"></span>
               {% trans 'CSV' %}
             </a>
@@ -38,7 +38,7 @@
         </tr>
         <tr>
           <td class="text-center" style="vertical-align: middle;">
-            <a href="{% url 'dataops:excelupload1' %}" class="btn btn-outline-primary">
+            <a href="{% url 'dataops:excelupload1' %}" class="shadow btn btn-outline-primary">
               <span class="fa fa-plus"></span>
               {% trans 'Excel' %}
             </a>
@@ -59,7 +59,7 @@
         </tr>
         <tr>
           <td class="text-center" style="vertical-align: middle;">
-            <a href="{% url 'dataops:googlesheetupload1' %}" class="btn btn-outline-primary">
+            <a href="{% url 'dataops:googlesheetupload1' %}" class="shadow btn btn-outline-primary">
               <span class="fa fa-plus"></span>
               {% trans 'Google Sheet' %}
             </a>
@@ -80,7 +80,7 @@
         <tr>
           <td class="text-center" style="vertical-align: middle;">
             <a href="{% url 'dataops:s3upload1' %}"
-               class="btn btn-outline-primary">
+               class="shadow btn btn-outline-primary">
               <span class="fa fa-plus"></span>
               {% trans 'S3 Bucket CSV' %}
             </a>
@@ -101,7 +101,7 @@
         </tr>
         <tr>
           <td class="text-center" style="vertical-align: middle;">
-            <a href="{% url 'dataops:sqlconns_instructor_index' %}" class="btn btn-outline-primary">
+            <a href="{% url 'dataops:sqlconns_instructor_index' %}" class="shadow btn btn-outline-primary">
               <span class="fa fa-plus"></span>
               {% trans 'SQL Connection' %}
             </a>

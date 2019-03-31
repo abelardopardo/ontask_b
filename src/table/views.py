@@ -66,7 +66,7 @@ class ViewTable(tables.Table):
         fields = ('name', 'description_text', 'operations')
         sequence = ('name', 'description_text', 'operations')
         attrs = {
-            'class': 'table table-hover table-bordered',
+            'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
             'id': 'view-table'
         }

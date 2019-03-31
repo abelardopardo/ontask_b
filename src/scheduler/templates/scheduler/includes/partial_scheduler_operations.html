@@ -1,11 +1,11 @@
 {% load i18n %}
-<div class="btn-group">
+<div class="shadow btn-group">
   <button type="button"
      data-url="{% url 'scheduler:view' id %}" data-toggle="tooltip"
      title="{% trans 'View the details of this scheduled action' %}"
-     class="btn btn-sm btn-light js-scheduler-view">
+     class="shadow btn btn-sm btn-light js-scheduler-view">
     <span class="fa fa-eye"></span></button>
-  <button type="button" class="btn btn-sm btn-light js-scheduler-delete"
+  <button type="button" class="shadow btn btn-sm btn-light js-scheduler-delete"
           data-toggle="tooltip" title="{% trans 'Delete this scheduled action' %}"
           data-url="{% url 'scheduler:delete' id %}">
     <span class="fa fa-trash"></span></button>

@@ -156,7 +156,7 @@ class ActionTable(tables.Table):
                     'last_executed_log')
         exclude = ('content', 'serve_enabled', 'filter')
         attrs = {
-            'class': 'table table-hover table-bordered',
+            'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
             'id': 'action-table'
         }
@@ -190,7 +190,7 @@ class ColumnSelectedTable(tables.Table):
         sequence = ('name', 'description_text', 'operations')
 
         attrs = {
-            'class': 'table table-hover table-bordered',
+            'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
             'id': 'column-selected-table'
         }

@@ -8,21 +8,21 @@
   </div>
   <div class="modal-body text-center">
     <button type="button"
-            class="btn btn-outline-primary js-action-preview-prv"
+            class="shadow btn btn-outline-primary js-action-preview-prv"
             data-url="{% url 'action:preview' action.id prv %}"
             data-toggle="tooltip"
             title="{% trans 'Preview previous message' %}">
       <span class="fa fa-angle-left"></span>
     </button>
-    <button type="button" class="btn btn-outline-dark" data-dismiss="modal">{% trans 'Close' %}</button>
-    <button type="button" class="btn btn-outline-primary js-action-preview-nxt"
+    <button type="button" class="shadow btn btn-outline-dark" data-dismiss="modal">{% trans 'Close' %}</button>
+    <button type="button" class="shadow btn btn-outline-primary js-action-preview-nxt"
             data-url="{% url 'action:preview' action.id nxt %}"
             data-toggle="tooltip"
             title="{% trans 'Preview next message' %}">
       <span class="fa fa-angle-right"></span>
     </button>
     {% if action.rows_all_false|length %}
-      <button type="button" class="btn btn-outline-danger js-action-preview-nxt"
+      <button type="button" class="shadow btn btn-outline-danger js-action-preview-nxt"
               data-url="{% url 'action:preview_all_false' action.id index %}"
               data-toggle="tooltip"
               title="{% trans 'Preview next message with all conditions false' %}">

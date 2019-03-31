@@ -1,7 +1,7 @@
 {% load i18n %}
 <div id="condition-set-header" class="text-center my-3">
   <button type="button"
-          class="btn btn-outline-dark js-condition-create{% if not has_data %} disabled{% endif %}"
+          class="shadow btn btn-outline-dark js-condition-create{% if not has_data %} disabled{% endif %}"
           data-url="{% url 'action:create_condition' action.id %}"
           data-toggle="tooltip"
           title="{% trans 'Define a text condition to insert in the text body below.' %}">
@@ -11,7 +11,7 @@
 </div>
 <div id="condition-set" class="card-deck justify-content-center" style="margin:1em 0 1em 0;">
   {% for condition in conditions %}
-    <div class="card ontask-ccard text-center"
+    <div class="shadow card ontask-ccard text-center"
          style="margin-bottom: 15px;">
       <h5 class="card-header js-condition-edit" data-url="{% url 'action:edit_condition' condition.id %}">{{ condition.name }}</h5>
       <div class="card-body js-condition-edit" data-url="{% url 'action:edit_condition' condition.id %}" style="min-height: 100px;">
@@ -26,20 +26,20 @@
       </div>
       <div class="cond-buttons">
         <button type="button"
-                class="btn btn-light btn-sm js-condition-edit"
+                class="shadow btn btn-light btn-sm js-condition-edit"
                 data-url="{% url 'action:edit_condition' condition.id %}"
                 data-toggle="tooltip"
                 title="{% blocktrans with n=condition.n_rows_selected %}Edit the condition ({{ n }} rows satisfy this condition){% endblocktrans %}"><span class="fa fa-pencil"></span>
         </button>
         <button type="button"
-           class="btn btn-light btn-sm js-condition-clone"
+           class="shadow btn btn-light btn-sm js-condition-clone"
            data-url="{% url 'action:clone_condition' condition.id %}"
            data-toggle="tooltip"
            title="{% trans 'Create an exact copy of this condition' %}">
           <span class="fa fa-clone"></span>
         </button>
         <button type="button"
-                class="btn btn-light btn-sm js-condition-delete"
+                class="shadow btn btn-light btn-sm js-condition-delete"
                 data-url="{% url 'action:delete_condition' condition.id %}"
                 data-toggle="tooltip"
                 title="{% trans 'Delete the condition' %}">

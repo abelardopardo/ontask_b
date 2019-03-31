@@ -99,7 +99,7 @@ class PluginRegistryTable(tables.Table):
                     'last_exec')
 
         attrs = {
-            'class': 'table table-hover table-bordered',
+            'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
             'id': 'transform-table'
         }

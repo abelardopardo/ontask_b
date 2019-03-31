@@ -57,30 +57,30 @@
     <h1 class="text-center">{{ action.name }}</h1>
     <div class="text-center my-3">
       <button type="button"
-              class="btn btn-outline-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
+              class="shadow btn btn-outline-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
               data-url="{% url 'action:preview' action.id 1 %}"
               data-toggle="tooltip"
               title="{% trans 'See the content as shown to each learner' %}">
         <span class="fa fa fa-eye"></span> {% trans 'Preview' %}
       </button>
       <a href="{% url 'action:index' %}"
-              class="btn btn-outline-primary spin"
+              class="shadow btn btn-outline-primary spin"
               data-toggle="tooltip"
               data-placement="auto"
               title="{% trans 'Save action and go back to action table' %}">
         <span class="fa fa-check"></span> {% trans 'Done' %}</a>
     </div>
     {% if not has_no_key %}
-      <p class="alert-danger text-center">{% trans 'There must be at least one question (non-key column) in the survey.' %}</p>
+      <p class="shadow alert-danger text-center">{% trans 'There must be at least one question (non-key column) in the survey.' %}</p>
     {% endif %}
     {% if has_empty_description %}
-      <p class="alert-danger text-center">{% trans 'All questions should have non-empty descriptions.' %}</p>
+      <p class="shadow alert-danger text-center">{% trans 'All questions should have non-empty descriptions.' %}</p>
     {% endif %}
     {% if not action.description_text %}
-      <p class="text-center alert-danger">{% trans 'No description text provided in Survey Parameters' %}</p>
+      <p class="shadow text-center alert-danger">{% trans 'No description text provided in Survey Parameters' %}</p>
     {% endif %}
     {% if not key_selected %}
-      <p class="alert-danger text-center" style="margin-top:1ex;">{% trans 'You need to specify a key column in Survey Parameters' %}</p>
+      <p class="shadow alert-danger text-center" style="margin-top:1ex;">{% trans 'You need to specify a key column in Survey Parameters' %}</p>
     {% endif %}
     <ul class="nav nav-tabs border-0 justify-content-center"
         id="edit-personalized-text-tabs" role="tablist">
@@ -100,16 +100,16 @@
       </li>
     </ul>
     <div class="tab-content" id="edit-survey-tab-content">
-      <div class="tab-pane px-3 fade show active border border-primary"
+      <div class="shadow rounded tab-pane px-3 fade show active border border-primary"
            id="questions" role="tabpanel" aria-labelledby="questions-tab">
         <div id="insert-questions" class="text-center mt-3">
           <div id="column-selector">
             <div class="dropdown btn-group">
-              <button type="button" class="btn btn-outline-dark dropdown-toggle"
+              <button type="button" class="shadow btn btn-outline-dark dropdown-toggle"
                       data-toggle="dropdown">
                 {% trans 'Insert existing question' %}
               </button>
-              <div class="dropdown-menu">
+              <div class="shadow dropdown-menu">
                 {% for column in columns_to_insert %}
                   <button type="button" class="dropdown-item js-insert-quesion"
                           data-url="{% url 'action:select_column_action' action.id column.id %}">{{ column.name }}</button>
@@ -117,7 +117,7 @@
               </div>
             </div>
             <button type="button"
-                    class="btn btn-outline-dark js-workflow-question-add"
+                    class="shadow btn btn-outline-dark js-workflow-question-add"
                     data-url="{% url 'workflow:question_add' action.id %}"
                     data-toggle="tooltip"
                     title="{% trans 'Add a new question to the action' %}">
@@ -129,16 +129,16 @@
           {% render_table column_selected_table %}
         </div>
       </div>
-      <div class="tab-pane px-3 fade show border border-primary"
+      <div class="shadow rounded tab-pane px-3 fade show border border-primary"
            id="filter" role="tabpanel" aria-labelledby="filter-tab">
         {% include 'action/includes/partial_filter_tab.html' %}
       </div>
-      <div class="tab-pane px-3 fade show border border-primary"
+      <div class="shadow rounded tab-pane px-3 fade show border border-primary"
            id="parameters" role="tabpanel" aria-labelledby="parameters-tab">
         <div class="my-3">
           <h5 class="text-center">Survey description (shown to learners)
             <button type="button"
-                    class="btn btn-sm btn-outline-dark js-description-edit"
+                    class="shadow btn btn-sm btn-outline-dark js-description-edit"
                     data-url="{% url 'action:edit_description' action.id %}"
                     data-type="filter"
                     data-toggle="tooltip"
@@ -146,12 +146,12 @@
               <span class="fa fa-pencil"></span> {% trans 'Edit' %}</button>
           </h5>
           {% if action.description_text %}
-            <p class="lead text-center">{{ action.description_text }}</p>
+            <p class="border border-dark lead text-center">{{ action.description_text }}</p>
           {% endif %}
           <h5 class="text-center">
             {% trans 'Key column to match the user id' %}
             <div id="select-key-column-name" class="dropdown btn-group">
-              <button type="button" class="btn btn-outline-dark dropdown-toggle"
+              <button type="button" class="shadow btn btn-outline-dark dropdown-toggle"
                       data-toggle="dropdown">
                 {% if not key_selected %}
                   {% trans 'Please, select Key column' %}
@@ -159,7 +159,7 @@
                   {{ key_selected.name }}
                 {% endif %}
               </button>
-              <div class="dropdown-menu">
+              <div class="shadow dropdown-menu">
                 {% for column in action.workflow.columns.all %}
                   {% if column.is_key and column != key_selected %}
                     <button type="button" class="dropdown-item js-select-key-column-name"

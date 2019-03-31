@@ -26,7 +26,7 @@
         <p class="text-center">{% trans 'Number of actions:' %} {{ nactions }}</p>
         {% if nactions > 0 %}
           <p class="text-center">{% trans 'Select the actions to export:' %}</p>
-          <table class="table dataTable">
+          <table class="table dataTable shadow">
             <thead>
               <tr>
                 <th class="text-center">{% trans 'Action' %}</th>
@@ -55,8 +55,8 @@
           </table>
         {% endif %}
         <div class="text-center">
-          <a class="btn btn-outline-dark spin" href="{% url 'workflow:operations' wid %}">{% trans 'Cancel' %}</a>
-          <button class="btn btn-outline-primary btn-space"
+          <a class="shadow btn btn-outline-dark spin" href="{% url 'workflow:operations' wid %}">{% trans 'Cancel' %}</a>
+          <button class="shadow btn btn-outline-primary btn-space"
                   type="Submit" name="Submit" value="Submit">
             <span class="fa fa-download"></span> {% trans 'Export' %}</button>
         </div>

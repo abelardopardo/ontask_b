@@ -6,7 +6,7 @@
   </button>
 </div>
 <div class="modal-body">
-  <table class="table" width="100%">
+  <table class="table shadow" width="100%">
     {% for c_key, c_val in c_vals.items %}
       {% if c_key != 'id' %}
         <tr><td>{{ c_key }}</td><td>{{ c_val }}</td></tr>
@@ -15,22 +15,22 @@
   </table>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-outline-dark" data-dismiss="modal">{% trans 'Close' %}
+  <button type="button" class="shadow btn btn-outline-dark" data-dismiss="modal">{% trans 'Close' %}
   </button>
   {% if request.user.is_superuser %}
-    <button type="button" class="btn btn-outline-primary js-sqlconn-edit"
+    <button type="button" class="shadow btn btn-outline-primary js-sqlconn-edit"
             data-url="{% url 'dataops:sqlconn_edit' id %}"
             data-toggle="tooltip"
             title="{% trans 'Edit SQL connection parameters' %}.">
       <span class="fa fa-pencil"></span> {% trans 'Edit' %}
     </button>
-    <button type="button" class="btn btn-outline-primary js-sqlconn-clone"
+    <button type="button" class="shadow btn btn-outline-primary js-sqlconn-clone"
             data-url="{% url 'dataops:sqlconn_clone' id %}"
             data-toggle="tooltip"
             title="{% trans 'Create an exact duplicate of this connection' %}">
         <span class="fa fa fa-clone"></span> {% trans 'Clone' %}
     </button>
-    <button type="button" class="btn btn-outline-danger js-sqlconn-delete"
+    <button type="button" class="shadow btn btn-outline-danger js-sqlconn-delete"
             data-url="{% url 'dataops:sqlconn_delete' id %}"
             data-toggle="tooltip"
             title="{% trans 'Delete SQL connection' %}">

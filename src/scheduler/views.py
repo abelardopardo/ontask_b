@@ -116,7 +116,7 @@ class ScheduleActionTable(tables.Table):
         sequence = ('name', 'action', 'execute', 'status', 'operations')
 
         attrs = {
-            'class': 'table table-hover table-bordered',
+            'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
             'id': 'scheduler-table'
         }

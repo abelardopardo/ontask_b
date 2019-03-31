@@ -43,7 +43,7 @@ class SQLConnectionTableAdmin(tables.Table):
         fields = ('name', 'description_txt')
         sequence = ('name', 'description_txt', 'operations')
         attrs = {
-            'class': 'table table-hover table-bordered',
+            'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
             'id': 'sqlconn-admin-table'
         }
@@ -70,7 +70,7 @@ class SQLConnectionTableRun(tables.Table):
 
         sequence = ('name', 'description_txt', 'operations')
         attrs = {
-            'class': 'table table-hover table-bordered',
+            'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
             'id': 'sqlconn-instructor-table'
         }

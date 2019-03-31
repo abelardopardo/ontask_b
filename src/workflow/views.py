@@ -54,7 +54,7 @@ class AttributeTable(tables.Table):
     class Meta(object):
         fields = ('name', 'value', 'operations')
         attrs = {
-            'class': 'table',
+            'class': 'table shadow',
             'style': 'width: 100%;',
             'id': 'attribute-table'
         }
@@ -80,7 +80,7 @@ class WorkflowShareTable(tables.Table):
         sequence = ('email', 'operations')
 
         attrs = {
-            'class': 'table',
+            'class': 'table shadow',
             'style': 'width: 100%;',
             'id': 'share-table',
             'th': {'class': 'dt-body-center'}

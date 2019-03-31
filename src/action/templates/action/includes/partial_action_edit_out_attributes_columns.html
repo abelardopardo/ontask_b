@@ -2,11 +2,11 @@
 <div id="insert-elements-in-editor" class="text-center my-3">
   <div id="column-selector">
     <div class="dropdown btn-group">
-      <button type="button" class="btn btn-outline-dark dropdown-toggle"
+      <button type="button" class="shadow btn btn-outline-dark dropdown-toggle"
               data-toggle="dropdown">
         {% trans 'Insert Column Value' %}
       </button>
-      <div class="dropdown-menu">
+      <div class="shadow dropdown-menu">
         {% for column in columns %}
           <button type="button" class="dropdown-item js-insert-column-name">{{ column.name }}</button>
         {% endfor %}
@@ -14,7 +14,7 @@
     </div>
     {% if conditions|length %}
       <div id="condition-selector" class="dropdown btn-group">
-        <button type="button" class="btn btn-outline-dark dropdown-toggle"
+        <button type="button" class="shadow btn btn-outline-dark dropdown-toggle"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {% if conditions.0.action.action_type == conditions.0.action.PERSONALIZED_TEXT %}
             {% trans 'Use condition in highlighted text' %}
@@ -22,7 +22,7 @@
             {% trans 'Insert condition in text' %}
           {% endif %}
         </button>
-        <div class="dropdown-menu" aria-labelledby="condition-selector">
+        <div class="shadow dropdown-menu" aria-labelledby="condition-selector">
           {% for cond_name in conditions %}
             <button type="button" class="dropdown-item js-insert-condition-name">{{ cond_name }}</button>
           {% endfor %}
@@ -31,11 +31,11 @@
     {% endif %}
     {% if attribute_names %}
       <div id="attribute-selector" class="dropdown btn-group">
-        <button type="button" class="btn btn-outline-dark dropdown-toggle"
+        <button type="button" class="shadow btn btn-outline-dark dropdown-toggle"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {% trans 'Insert Attribute' %}
         </button>
-        <div class="dropdown-menu" aria-labelledby="attribute-selector">
+        <div class="shadow dropdown-menu" aria-labelledby="attribute-selector">
           {% for attr in attribute_names %}
             <button type="button" class="dropdown-item js-insert-attribute-name">{{ attr }}</button>
           {% endfor %}

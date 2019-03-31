@@ -22,10 +22,10 @@
         {% csrf_token %}
         {{ form|crispy }}
         <div class="text-center">
-          <a type="button" class="btn btn-outline-dark"
+          <a type="button" class="shadow btn btn-outline-dark"
              href="{% url 'scheduler:index' %}"> {% trans 'Cancel' %}</a>
           <button type="Submit" name="Submit" value="Send"
-                  class="btn btn-outline-primary spin">{% trans 'Next' %}</button>
+                  class="shadow btn btn-outline-primary spin">{% trans 'Next' %}</button>
         </div>
       </form>
     </div>

@@ -52,7 +52,7 @@
       action to execute based on the data stored in the table.{% endblocktrans %}</p>
     {% endif %}
     <div class="text-center mb-3">
-      <button type="button" class="btn btn-outline-dark js-create-action"
+      <button type="button" class="shadow btn btn-outline-dark js-create-action"
               data-url="{% url 'action:create' %}"
               data-toggle="tooltip"
               title="{% trans 'New action to collect data from learners' %}">
@@ -60,7 +60,7 @@
       </button>
       {% if workflow.nrows %}
         <a href="{% url 'action:import' %}"
-           class="btn btn-outline-dark"
+           class="shadow btn btn-outline-dark"
            data-toggle="tooltip" title="{% trans 'Import action previously exported' %}">
           <span class="fa fa-upload"></span> {% trans 'Import action' %}</a>
       {% endif %}
