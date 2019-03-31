@@ -84,11 +84,11 @@
     {% endif %}
     <ul class="nav nav-tabs border-0 justify-content-center"
         id="edit-personalized-text-tabs" role="tablist">
-      <li class="nav-item">
+      <li class="nav-item pr-1">
         <a class="nav-link active border border-primary border-bottom-0"
            id="questions-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="true">Survey Questions</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item pr-1">
         <a class="nav-link border border-primary border-bottom-0"
            id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="false">Filter Learners
           {% if not filter_condition %}(Empty){% else %}{% blocktrans with n=selected_rows tot=total_rows count counter=selected_rows %}({{ n }} learner of {{ tot }}){% plural %}({{ n }} learners of {{ tot }}){% endblocktrans %}{% endif %}
