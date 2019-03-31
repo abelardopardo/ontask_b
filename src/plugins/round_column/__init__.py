@@ -4,10 +4,12 @@ from __future__ import unicode_literals, print_function
 import pandas as pd
 import numpy as np
 
+from dataops.plugin import OnTaskPluginAbstract
+
 class_name = 'RoundColumn'
 
 
-class RoundColumn(object):
+class RoundColumn(OnTaskPluginAbstract):
     """
     Plugin that receives a set of columns of type double and tries to round
     their numbers to a number of decimal places. The parameters are:
@@ -19,6 +21,9 @@ class RoundColumn(object):
     """
 
     def __init__(self):
+
+        super(RoundColumn, self).__init__()
+
         self.name = 'Round column'
         self.description_txt = self.__doc__
         self.input_column_names = list()
@@ -68,14 +73,10 @@ class RoundColumn(object):
                 return 'Column {0} has incorrect type'
 
         # And now perform the rounding
+        result_df = pd.DataFrame(data_frame[merge_key])
         for column_name in self.input_column_names:
 
-            data_frame.update(
-                data_frame[column_name].round(decimal_places),
-                join='left',
-                overwrite=True
-            )
-            # Add the column name to the output column name
-            self.output_column_names.append(column_name)
+            result_df[column_name + self.output_suffix] = \
+                data_frame[column_name].round(decimal_places)
 
-        return data_frame
+        return result_df

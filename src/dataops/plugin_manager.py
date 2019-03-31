@@ -328,27 +328,3 @@ def refresh_plugin_data(request, workflow):
                              Log.PLUGIN_CREATE,
                              workflow,
                              {'id': rpin.id, 'name': rpin.filename})
-
-
-def run_plugin(plugin_instance, df, merge_key, params):
-    """
-    Execute the run method in a plugin with the given data frame
-    :param plugin_instance: Plugin instance
-    :param df: data frame to be passed as parameter
-    :param merge_key: Column to use for merging
-    :param params: Parameter dictionary: (name, value)
-    :return: (result, message) If message is None, result is a valid data frame
-    """
-
-    # Try the execution and catch any exception
-    try:
-        new_df = plugin_instance.run(df, merge_key, parameters=params)
-    except Exception as e:
-        return None, str(e)
-
-    # If plugin does not return a data frame, flag as error
-    if not isinstance(new_df, pd.DataFrame):
-        return None, _('Result is not a pandas data frame.')
-
-    # Execution was correct
-    return new_df, None

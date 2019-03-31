@@ -10,13 +10,11 @@
   {% endif %}
 {% endblock scripts %}
 {% block container %}
-  {% url 'logs:view' log_id as record_url %}
-  <div class="container-fluid" id="action-run-done">
+
+  <div class="container-fluid text-center" id="action-run-done">
     <h1 class="text-center">{% trans 'Action scheduled for execution' %}</h1>
-    <div class="text-center">
-      <a href="{{ record_url }}">{% blocktrans %}You may check the status in
-      log number {{ log_id }}.{% endblocktrans %}</a>
-    </div>
+    <a href="{% url 'logs:view' log_id %}">{% blocktrans %}You may check the status in
+    log number {{ log_id }}.{% endblocktrans %}</a>
     <div class="text-center">
       <a class="btn btn-outline-dark spin" href="{% url 'action:index' %}">{% trans 'Back' %}</a>
     </div>

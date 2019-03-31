@@ -3,12 +3,14 @@ from __future__ import unicode_literals, print_function
 
 import pandas as pd
 
+from dataops.plugin import OnTaskPluginAbstract
+
 # The field class_name contains the name of the class to load to execute the
 # plugin.
 class_name = 'OnTaskTestPlugin'
 
 
-class OntaskTestPlugin(object):
+class OntaskTestPlugin(OnTaskPluginAbstract):
     """
     Example of a class that implements the OnTask plugin interface. The
     objects of this class have to provide the following elements:
@@ -24,10 +26,13 @@ class OntaskTestPlugin(object):
 
     4. Field output_column_names: List of names (strings) of the
     columns to be used for the output of the transformation. If the list is
-    empty, the column names in this variable need to be set by the plugin
-    according to the result.
+    empty, the column names will be taken from the input list with an optional
+    suffix to be added.
 
-    5. Field parameters: an optionally empty list with tuples with the following
+    5. Field output_column_suffix: (optionally empty) string to add to the name
+    of the output columns
+
+    6. Field parameters: an optionally empty list with tuples with the following
     structure:
 
       ('name', type, [list of allowed values], initial value, help_text)
@@ -44,7 +49,7 @@ class OntaskTestPlugin(object):
         element.
       - Help_text a string to show as help text
 
-    6. Method "run" that receives:
+    7. Method "run" that receives:
        - a pandas data frame with the data to process
        - a string with the name of the key column that will be used to merge
        the result.
@@ -57,10 +62,15 @@ class OntaskTestPlugin(object):
     """
 
     def __init__(self):
+
+        # Call the constructor in the superclass
+        super(OntaskTestPlugin).__init__()
+
         self.name = 'Plugin Template'
         self.description_txt = 'Example of plugin description'
         self.input_column_names = list()
         self.output_column_names = ['RESULT 1', 'RESULT 2']
+        self.output_suffix = ''
         self.parameters = [
             ('param string', 'string', ['v1', 'v2'], 'v1', 'help param string'),
             ('param integer', 'integer', [], None, 'help param integer'),

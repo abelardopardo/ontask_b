@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import str
 import datetime
+from builtins import str
+import pandas as pd
+from datetime import datetime
 
 import pytz
 from celery import shared_task
@@ -10,12 +12,17 @@ from celery.utils.log import get_task_logger
 from django.conf import settings as ontask_settings
 from django.contrib.auth import get_user_model
 from django.core import signing
+from django.utils.translation import ugettext
 
 from action.models import Action
 from action.ops import send_messages, send_json, send_canvas_messages
+import dataops.ops as ops
 from dataops import pandas_db
+from dataops.models import PluginRegistry
+from dataops.plugin_manager import load_plugin
 from logs.models import Log
 from scheduler.models import ScheduledAction
+from workflow.models import Workflow
 
 logger = get_task_logger('celery_execution')
 
@@ -130,8 +137,6 @@ def send_canvas_email_messages(user_id,
     :param action_id: Id of Action object from where the messages are taken
     :param subject: String for the email subject
     :param email_column: Name of the column to extract email addresses
-    :param from_email: String with email from sender
-    :param token: String to include as authorisation token
     :param exclude_values: List of values to exclude from the mailing
     :param target_url: The name of the server to use to send email
     :param log_id: Id of the log object where the status has to be reflected
@@ -451,3 +456,174 @@ def increase_track_count(method, get_dict):
                          log_payload)
 
     return
+
+
+@shared_task
+def run_plugin(user_id,
+               workflow_id,
+               plugin_id,
+               input_column_names,
+               output_column_names,
+               output_suffix,
+               merge_key,
+               parameters,
+               log_id):
+
+    """
+
+    Execute the run method in a plugin with the dataframe from the given
+    workflow
+
+    :param user_id: Id of User object that is executing the action
+    :param workflow_id: Id of workflow being processed
+    :param plugin_id: Id of the plugin being executed
+    :param input_column_names: List of input column names
+    :param output_column_names: List of output column names
+    :param output_suffix: Suffix that is added to the output column names
+    :param merge_key: Key column to use in the merge
+    :param parameters: Dictionary with the parameters to execute the plug in
+    :param log_id: Id of the log object where the status has to be reflected
+    :return: Nothing, the result is stored in the log with log_id
+    """
+
+    log_item = Log.objects.filter(pk=log_id).first()
+    if not log_item:
+        # Not much can be done here. Call has no place to report error...
+        logger.error(
+            ugettext('Incorrect execution request with log_id {0}').format(
+                log_id
+            )
+        )
+        return False
+
+    # Get the objects
+    user = get_user_model().objects.get(id=user_id)
+    if not user:
+        log_item.payload['status'] = \
+            ugettext('Unable to find user with id {0}').format(user_id)
+        log_item.save()
+        return False
+
+    # Get the workflow and the plugin information
+    workflow = Workflow.objects.filter(user=user, pk=workflow_id).first()
+    if not workflow:
+        # Update the message in the payload
+        log_item.payload['status'] = \
+            ugettext('Unable to find workflow with id {0}').format(workflow_id)
+        log_item.save()
+
+        return False
+
+    try:
+        plugin_info = PluginRegistry.objects.get(pk=plugin_id)
+    except PluginRegistry.DoesNotExist:
+        log_item.payload['status'] = \
+            ugettext('Unable to load plugin with id {0}').format(plugin_id)
+        log_item.save()
+        return False
+
+    plugin_instance, msgs = load_plugin(plugin_info.filename)
+    if plugin_instance is None:
+        log_item.payload['status'] = \
+            ugettext('Unable to instantiate plugin "{0}"').format(
+                plugin_info.name
+            )
+        log_item.save()
+        return False
+
+    # Get the data frame
+    try:
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+    except Exception:
+        log_item.payload['status'] = \
+            ugettext('Exception while retrieving the data frame')
+        log_item.save()
+        return False
+
+    # Select the columns in input_column_names
+    sub_df = df[input_column_names + [merge_key]]
+
+    # Set the input/output columns, and the suffix
+    if not plugin_instance.input_column_names:
+        plugin_instance.input_column_names = input_column_names
+    plugin_instance.output_column_names = output_column_names
+    plugin_instance.output_suffix = output_suffix
+
+    # Set the status to "executing" before calling the function
+    log_item.payload['status'] = 'Executing'
+    log_item.save()
+
+    # Try the execution and catch any exception
+    try:
+        new_df = plugin_instance.run(sub_df, merge_key, parameters=parameters)
+    except Exception as e:
+        log_item.payload['status'] = \
+            ugettext('Error while executing plugin: {0}').format(e)
+        log_item.save()
+        return False
+
+    # If plugin does not return a data frame, flag as error
+    if not isinstance(new_df, pd.DataFrame):
+        log_item.payload['status'] = \
+            ugettext('Plugin executed but did not return a pandas data frame.')
+        log_item.save()
+        return False
+
+    # Execution is DONE. Now we have to perform various additional checks
+
+    # Result has the same number of rows
+    if new_df.shape[0] != df.shape[0]:
+        log_item.payload['status'] = \
+            ugettext('Incorrect number of rows in result data frame.')
+        log_item.save()
+        return False
+
+    # Result column names are consistent
+    if set(new_df.columns) != \
+            set([merge_key] + plugin_instance.output_column_names):
+        log_item.payload['status'] = \
+            ugettext('Incorrect columns in result data frame.')
+        log_item.save()
+        return False
+
+    # Proceed with the merge
+    try:
+        result = ops.perform_dataframe_upload_merge(
+            workflow,
+            df,
+            new_df,
+            {'how_merge': 'left',
+             'dst_selected_key': merge_key,
+             'src_selected_key': merge_key,
+             'initial_column_names': list(new_df.columns),
+             'rename_column_names': list(new_df.columns),
+             'columns_to_upload': [True] * len(list(new_df.columns))}
+        )
+    except Exception as e:
+        log_item.payload['status'] = \
+            ugettext('Error while merging result ({0}).').format(e)
+        log_item.save()
+        return False
+
+    if isinstance(result, str):
+        log_item.payload['status'] = \
+            ugettext('Error while merging result ({0}).').format(result)
+        log_item.save()
+        return False
+
+    # List of pairs (column name, column type) in the result to create the
+    # log event
+    result_columns = list(zip(
+        list(new_df.columns),
+        pandas_db.df_column_types_rename(new_df)))
+    log_item.payload['status'] = 'Execution finished successfully'
+    log_item.payload['result_columns'] = result_columns
+    log_item.save()
+
+    # Update execution time in the plugin
+    plugin_info.executed = datetime.now(
+        pytz.timezone(ontask_settings.TIME_ZONE)
+    )
+    plugin_info.save()
+
+    return True
