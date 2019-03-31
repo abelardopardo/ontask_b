@@ -61,9 +61,7 @@ def verify_plugin_elements(plugin_instance):
         check_idx += 1
 
         result[check_idx] = _('Not found')
-        if not (plugin_instance.output_column_names and
-                isinstance(plugin_instance.output_column_names, list) and
-                len(plugin_instance.output_column_names) > 0 and
+        if not (isinstance(plugin_instance.output_column_names, list) and
                 all(isinstance(s, str) for s in
                     plugin_instance.output_column_names)):
             result[check_idx] = _('Incorrect type/value')
@@ -160,7 +158,8 @@ def verify_plugin(plugin_instance):
     3. Presence of a list of strings (possibly empty) with name
        "input_column_names"
 
-    4. Presence of a non-empty list of strings with name "output_column_names"
+    4. Presence of a list of strings with name "output_column_names". If the
+       list is empty, the columns present in the result will be used.
 
     5. Presence of a dictionary with name "parametes" that contains the
        tuples of the form:
@@ -186,7 +185,7 @@ def verify_plugin(plugin_instance):
         _('Presence of a field with name "input_column_names" storing a ('
           'possible empty) list of strings'),
         _('Presence of a field with name "output_column_names" storing a '
-          'non-empty list of strings'),
+          '(possibly empty) list of strings'),
         _('Presence of a (possible empty) list of tuples with name '
           '"parameters". The tuples must have six '
           'elements: name (a string), type (one of "double", "integer", '

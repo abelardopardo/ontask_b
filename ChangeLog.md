@@ -41,6 +41,8 @@
 - Function to show column statistics when creating conditions in personalized
   actions
 
+- New plugin to round numeric column to a number of decimal places
+
 ### Fixed
 
 - Bug when handling URL creation for row edition

@@ -64,14 +64,16 @@
         </div>
         <div class="tab-pane px-3 fade show border border-primary"
              id="outputs" role="tabpanel" aria-labelledby="outputs-tab">
-          <div class="row justify-content-center">
-            <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %} my-3">
-              <p class="lead">{% trans 'Output column names' %}</p>
-              {% for field_item in output_column_fields %}
-                {{ field_item|as_crispy_field }}
-              {% endfor %}
+          {% if output_column_fields %}
+            <div class="row justify-content-center">
+              <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %} my-3">
+                <p class="lead">{% trans 'Output column names' %}</p>
+                {% for field_item in output_column_fields %}
+                  {{ field_item|as_crispy_field }}
+                {% endfor %}
+              </div>
             </div>
-          </div>
+          {% endif %}
           <div class="row justify-content-center">
             <div class="form-group{% if form.merge_key.errors %} has-danger{% endif %}"
                  style="border-bottom:1px solid black;padding:1ex;">
