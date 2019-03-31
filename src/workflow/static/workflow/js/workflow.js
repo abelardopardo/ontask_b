@@ -36,8 +36,8 @@ $(function () {
   $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
 
   // Add/Edit attribute
-  $("#workflow-attributes").on("click", ".js-attribute-create", loadForm);
-  $("#workflow-attributes").on("click", ".js-attribute-edit", loadForm);
+  $("#attribute").on("click", ".js-attribute-create", loadForm);
+  $("#attribute").on("click", ".js-attribute-edit", loadForm);
   $("#modal-item").on("submit", ".js-attribute-create-form", saveForm);
 
   // Delete attribute
@@ -45,7 +45,7 @@ $(function () {
   $("#modal-item").on("submit", ".js-attribute-delete-form", saveForm);
 
   // Add Share
-  $("#workflow-shared").on("click", ".js-share-create", loadForm);
+  $("#share").on("click", ".js-share-create", loadForm);
   $("#modal-item").on("submit", ".js-share-create-form", saveForm);
 
   // Delete share

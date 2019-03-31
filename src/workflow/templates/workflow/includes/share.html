@@ -1,24 +1,22 @@
 {% load i18n %}
 {% load django_tables2 %}
-<div class="container-fluid" id="workflow-share">
-  <h3 class="text-center">{% trans 'Users with access to this workflow' %}</h3>
-  {% if not share_table.data|length %}
-    <p class="lead text-center">{% blocktrans %}Click in the <i>Add User</i> button below and provide the email for the user
-      with whom you want to share the workflow.{% endblocktrans %}</p>
-  {% endif %}
-  <div class="row justify-content-center mb-3" id="workflow-shared">
-    <button type="button"
-            class="btn btn-outline-dark btn-sm js-share-create"
-            data-url="{% url 'workflow:share_create' %}">
-      <span class="fa fa-plus"></span> User
-    </button>
-  </div>
-  {% if share_table.data|length %}
-    <div class="container-fluid justify-content-center">
-      {% render_table share_table %}
-    </div>
-  {% else %}
-    <p class="text-center">{% blocktrans %}You may select users by their email
-    so that they can access this workflow.{% endblocktrans %}</p>
-  {% endif %}
+<h3 class="text-center">{% trans 'Users with access to this workflow' %}</h3>
+{% if not share_table.data|length %}
+  <p class="lead text-center">{% blocktrans %}Click in the <i>Add User</i> button below and provide the email for the user
+    with whom you want to share the workflow.{% endblocktrans %}</p>
+{% endif %}
+<div class="row justify-content-center mb-3">
+  <button type="button"
+          class="btn btn-outline-dark js-share-create"
+          data-url="{% url 'workflow:share_create' %}">
+    <span class="fa fa-plus"></span> User
+  </button>
 </div>
+{% if share_table.data|length %}
+  <div class="container-fluid justify-content-center">
+    {% render_table share_table %}
+  </div>
+{% else %}
+  <p class="text-center">{% blocktrans %}You may select users by their email
+  so that they can access this workflow.{% endblocktrans %}</p>
+{% endif %}
