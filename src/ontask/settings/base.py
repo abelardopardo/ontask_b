@@ -72,6 +72,7 @@ AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default='')
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = { 'CacheControl': 'max-age=86400', }
 AWS_LOCATION = 'static'
+MEDIA_LOCATION = 'media'
 STATICFILES_DIRS = [join(BASE_DIR(), 'static')]
 # Define STATIC_ROOT for the collectstatic command
 STATIC_ROOT = join(BASE_DIR(), '..', 'site', 'static')
@@ -83,9 +84,9 @@ else:
     STATIC_URL = BASE_URL + '/static/'
 MEDIA_ROOT = join(BASE_DIR(), 'media')
 if AWS_ACCESS_KEY_ID:
-    MEDIA_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+    MEDIA_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, MEDIA_LOCATION)
 else:
-    MEDIA_URL = BASE_URL + "/media/"
+    MEDIA_URL = BASE_URL + MEDIA_LOCATION
 ONTASK_HELP_URL = "html/index.html"
 
 # Project root folder (needed somewhere in Django
