@@ -82,7 +82,10 @@ if AWS_ACCESS_KEY_ID:
 else:
     STATIC_URL = BASE_URL + '/static/'
 MEDIA_ROOT = join(BASE_DIR(), 'media')
-MEDIA_URL = BASE_URL + "/media/"
+if AWS_ACCESS_KEY_ID:
+    MEDIA_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+else:
+    MEDIA_URL = BASE_URL + "/media/"
 ONTASK_HELP_URL = "html/index.html"
 
 # Project root folder (needed somewhere in Django
