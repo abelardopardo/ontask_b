@@ -45,9 +45,9 @@
           {% trans 'Import workflow' %}
       </a>
     </div>
-    <div class="card-deck justify-content-center content-row" style="margin:1em 0 1em 0;">
+    <div class="card-deck content-row">
       {% for wflow in workflows %}
-        <div class="shadow card ontask-card" style="margin-bottom: 15px;">
+        <div class="shadow card ontask-card mx-auto mb-3">
           <h5 class="card-header text-center spin">{{ wflow.name }}</h5>
           <div class="card-body spin">
             <p class="card-text">{{ wflow.description_text }}</p>
