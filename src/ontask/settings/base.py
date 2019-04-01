@@ -52,13 +52,13 @@ BASE_URL = env('BASE_URL', default='')
 if 'DOMAIN_NAME' in os.environ:
     DOMAIN_NAME = os.environ['DOMAIN_NAME']
 else:
-    DOMAIN_NAME = env('DOMAIN_NAME', '*')
+    DOMAIN_NAME = env('DOMAIN_NAME', default='*')
 DEBUG = env('DEBUG')
 SHOW_HOME_FOOTER_IMAGE = env('SHOW_HOME_FOOTER_IMAGE')
 if 'USE_SSL' in os.environ:
     USE_SSL = os.environ['USE_SSL']
 else:
-    USE_SSL = env('USE_SSL', False)
+    USE_SSL = env('USE_SSL', default=False)
 
 # Build paths inside the project like this: join(BASE_DIR(), "directory")
 BASE_DIR = environ.Path(__file__) - 3
@@ -66,9 +66,9 @@ BASE_DIR = environ.Path(__file__) - 3
 #
 # Static, media and documentation information
 #
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', '')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', '')
-AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', '')
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', default='')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', default='')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default='')
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = { 'CacheControl': 'max-age=86400', }
 AWS_LOCATION = 'static'
@@ -126,7 +126,7 @@ TEMPLATES = [
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # Raises ImproperlyConfigured exception if SECRET_KEY not in os.environ
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY', default='')
 
 # Application definition
 
@@ -205,7 +205,7 @@ AUTHENTICATION_BACKENDS = [
 if 'REDIS_URL' in os.environ:
     redis_url = os.environ['REDIS_URL']
 else:
-    redis_url = env('REDIS_URL')
+    redis_url = env('REDIS_URL', default='redis://localhost:6379')
 
 CACHES = {
     "default": {
@@ -268,7 +268,7 @@ DATABASES = {
     'default': env.db(),
 }
 
-TIME_ZONE = env('TIME_ZONE')
+TIME_ZONE = env('TIME_ZONE', default='UTC')
 
 USE_I18N = True
 
@@ -444,8 +444,8 @@ SCHEDULER_MINUTE_STEP = 15
 # CELERY parameters
 #
 ################################################################################
-CELERY_BROKER_URL = env('REDIS_URL')
-CELERY_RESULT_BACKEND = env('REDIS_URL')
+CELERY_BROKER_URL = redis_url
+CELERY_RESULT_BACKEND = redis_url
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -499,7 +499,7 @@ CELERY_BEAT_SCHEDULE = {
 #
 # LTI Authentication
 #
-LTI_OAUTH_CREDENTIALS = env('LTI_OAUTH_CREDENTIALS')
+LTI_OAUTH_CREDENTIALS = env('LTI_OAUTH_CREDENTIALS', default='')
 
 ################################################################################
 #
@@ -536,8 +536,8 @@ if DEBUG:
     print('STATICFILES_DIRS:', ', '.join(STATICFILES_DIRS))
     print('STATIC_ROOT:', STATIC_ROOT)
     print('STATIC_URL:', STATIC_URL)
-    print('DATABASE_URL:', env('DATABASE_URL'))
-    print('REDIS_URL:', env('REDIS_URL'))
+    print('DATABASE_URL:', DATABASES['default'])
+    print('REDIS_URL:', redis_url)
     print('MEDIA_ROOT:', MEDIA_ROOT)
     print('MEDIA_URL:', MEDIA_URL)
     print('ONTASK_HELP_URL:', ONTASK_HELP_URL)
