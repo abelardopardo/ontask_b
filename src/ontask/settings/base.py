@@ -33,7 +33,7 @@ def get_from_os_or_env(key, env, default_value):
     :return: value assigned to key or default value
     """
     if key in os.environ:
-        return os.environ['key']
+        return os.environ[key]
     return env(key, default=default_value)
 
 # import ldap
