@@ -107,7 +107,7 @@ def ontask_handler404(request, exception):
     return response
 
 
-def ontask_handler500(request, exception):
+def ontask_handler500(request):
     response = render(request, '500.html', {})
     response.status_code = 500
     return response
