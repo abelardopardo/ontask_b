@@ -89,25 +89,25 @@ def under_construction(request):
     return render(request, 'under_construction.html', {})
 
 
-def ontask_handler400(request):
+def ontask_handler400(request, exception):
     response = render(request, '400.html', {})
     response.status_code = 400
     return response
 
 
-def ontask_handler403(request):
+def ontask_handler403(request, exception):
     response = render(request, '403.html', {})
     response.status_code = 403
     return response
 
 
-def ontask_handler404(request):
+def ontask_handler404(request, exception):
     response = render(request, '404.html', {})
     response.status_code = 404
     return response
 
 
-def ontask_handler500(request):
+def ontask_handler500(request, exception):
     response = render(request, '500.html', {})
     response.status_code = 500
     return response
