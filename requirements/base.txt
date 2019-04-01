@@ -34,6 +34,7 @@ django-jquery==3.1.0
 django-modeltranslation==0.13
 django-redis==4.10.0
 django-siteprefs==1.0.0
+django-storages==1.7.1
 django-summernote==0.8.11.4
 django-tables2==2.0.5
 django-timezone-field==3.0

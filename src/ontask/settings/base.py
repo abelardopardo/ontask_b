@@ -63,13 +63,24 @@ else:
 # Build paths inside the project like this: join(BASE_DIR(), "directory")
 BASE_DIR = environ.Path(__file__) - 3
 
+#
 # Static, media and documentation information
+#
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', '')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', '')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', '')
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_OBJECT_PARAMETERS = { 'CacheControl': 'max-age=86400', }
+AWS_LOCATION = 'static'
 STATICFILES_DIRS = [join(BASE_DIR(), 'static')]
 # Define STATIC_ROOT for the collectstatic command
 STATIC_ROOT = join(BASE_DIR(), '..', 'site', 'static')
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
-STATIC_URL = BASE_URL + '/static/'
+if AWS_ACCESS_KEY_ID:
+    STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+else:
+    STATIC_URL = BASE_URL + '/static/'
 MEDIA_ROOT = join(BASE_DIR(), 'media')
 MEDIA_URL = BASE_URL + "/media/"
 ONTASK_HELP_URL = "html/index.html"
@@ -154,6 +165,9 @@ INSTALLED_APPS = [
     'scheduler.apps.SchedulerConfig',
     'ontask_oauth.apps.OnTaskOauthConfig',
 ]
+
+if AWS_ACCESS_KEY_ID:
+    INSTALLED_APPS += ['storages']
 
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
