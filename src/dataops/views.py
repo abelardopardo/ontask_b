@@ -367,8 +367,8 @@ def plugin_invoke(request, pk):
     if not celery_stats:
         messages.error(
             request,
-            _('Unable to send emails due to a misconfiguration. '
-              'Ask your system administrator to enable email queueing.'))
+            _('Unable to run plugins due to a misconfiguration. '
+              'Ask your system administrator to enable queueing.'))
         return redirect(reverse('table:display'))
 
     # Get the workflow and the plugin information
@@ -469,8 +469,8 @@ def plugin_invoke(request, pk):
                                      'status': 'preparing execution'})
 
     # Call the plugin execution
-    run_plugin(request.user.id,
-    # run_plugin.delay(request.user.id,
+    # run_plugin(request.user.id,
+    run_plugin.delay(request.user.id,
                      workflow.id,
                      pk,
                      input_column_names,
