@@ -23,6 +23,19 @@ from django.contrib.messages import constants as message_constants
 
 import ontask
 
+def get_from_os_or_env(key, env, default_value):
+    """
+    Given a key, search for its value first in the os environment, then in the
+    given environment and if not present, return the default
+    :param key: key to search
+    :param env: env object to use (see django-environ)
+    :param default_value: return if not found
+    :return: value assigned to key or default value
+    """
+    if key in os.environ:
+        return os.environ['key']
+    return env(key, default=default_value)
+
 # import ldap
 # from django_auth_ldap.config import (
 #     LDAPSearch,
@@ -49,16 +62,10 @@ else:
 
 # Read various variables from the environment (but first from the os.env)
 BASE_URL = env('BASE_URL', default='')
-if 'DOMAIN_NAME' in os.environ:
-    DOMAIN_NAME = os.environ['DOMAIN_NAME']
-else:
-    DOMAIN_NAME = env('DOMAIN_NAME', default='*')
+DOMAIN_NAME = get_from_os_or_env('DOMAIN_NAME', env, '*')
 DEBUG = env('DEBUG')
 SHOW_HOME_FOOTER_IMAGE = env('SHOW_HOME_FOOTER_IMAGE')
-if 'USE_SSL' in os.environ:
-    USE_SSL = os.environ['USE_SSL']
-else:
-    USE_SSL = env('USE_SSL', default=False)
+USE_SSL = get_from_os_or_env('USE_SSL', env, False)
 
 # Build paths inside the project like this: join(BASE_DIR(), "directory")
 BASE_DIR = environ.Path(__file__) - 3
@@ -66,14 +73,14 @@ BASE_DIR = environ.Path(__file__) - 3
 #
 # Static, media and documentation information
 #
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', default='')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', default='')
-AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default='')
+AWS_ACCESS_KEY_ID = get_from_os_or_env('AWS_ACCESS_KEY_ID', env, '')
+AWS_SECRET_ACCESS_KEY = get_from_os_or_env('AWS_SECRET_ACCESS_KEY', env, '')
+AWS_STORAGE_BUCKET_NAME = get_from_os_or_env('AWS_STORAGE_BUCKET_NAME', env, '')
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = { 'CacheControl': 'max-age=86400', }
-AWS_LOCATION = 'static'
-MEDIA_LOCATION = 'media'
-STATICFILES_DIRS = [join(BASE_DIR(), 'static')]
+AWS_LOCATION = get_from_os_or_env('AWS_LOCATION', env, 'static')
+MEDIA_LOCATION = get_from_os_or_env('MEDIA_LOCATION', env, 'media')
+STATICFILES_DIRS = [join(BASE_DIR(), AWS_LOCATION)]
 # Define STATIC_ROOT for the collectstatic command
 STATIC_ROOT = join(BASE_DIR(), '..', 'site', 'static')
 # Static files (CSS, JavaScript, Images)
@@ -203,11 +210,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
 
-if 'REDIS_URL' in os.environ:
-    redis_url = os.environ['REDIS_URL']
-else:
-    redis_url = env('REDIS_URL', default='redis://localhost:6379')
-
+redis_url = get_from_os_or_env('REDIS_URL', env, 'redis://localhost:6379')
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
