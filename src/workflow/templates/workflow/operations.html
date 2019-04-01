@@ -54,22 +54,22 @@
       <ul class="nav nav-tabs border-0 justify-content-center"
           id="workflow-operation-tabs" role="tablist">
         <li class="nav-item pr-1">
-          <a class="nav-link active border border-primary border-bottom-0"
+          <a class="nav-link active border border-dark border-bottom-0"
              id="attribute-tab" data-toggle="tab" href="#attribute" role="tab"
              aria-controls="text" aria-selected="true">{% trans 'Attributes' %}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link border border-primary border-bottom-0"
+          <a class="nav-link border border-dark border-bottom-0"
              id="share-tab" data-toggle="tab" href="#share" role="tab"
              aria-controls="filter" aria-selected="false">{% trans 'Share' %}</a>
         </li>
       </ul>
       <div class="tab-content" id="edit-personalized-text-tab-content">
-        <div class="shadow rounded tab-pane px-3 py-3 fade show active border border-primary"
+        <div class="shadow rounded tab-pane px-3 py-3 fade show active border border-dark"
              id="attribute" role="tabpanel" aria-labelledby="attribute-tab">
           {% include 'workflow/includes/attributes.html' %}
         </div>
-        <div class="shadow rounded tab-pane px-3 py-3 fade show border border-primary"
+        <div class="shadow rounded tab-pane px-3 py-3 fade show border border-dark"
              id="share" role="tabpanel" aria-labelledby="share-tab">
           {% include 'workflow/includes/share.html' %}
         </div>

@@ -32,26 +32,26 @@
       <ul class="nav nav-tabs border-0 justify-content-center"
           id="dataops-get-plugin-info-tabs" role="tablist">
         <li class="nav-item pr-1">
-          <a class="nav-link active border border-primary border-bottom-0"
+          <a class="nav-link active border border-dark border-bottom-0"
              id="inputs-tab" data-toggle="tab" href="#inputs"
              role="tab" aria-controls="inputs"
              aria-selected="true">{% trans 'Columns to pass to the transformation' %}</a>
         </li>
         <li class="nav-item pr-1">
-          <a class="nav-link border border-primary border-bottom-0"
+          <a class="nav-link border border-dark border-bottom-0"
              id="outputs-tab" data-toggle="tab" href="#outputs"
              role="tab" aria-controls="outputs"
              aria-selected="false">{% trans 'Columns to store the result' %}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link border border-primary border-bottom-0"
+          <a class="nav-link border border-dark border-bottom-0"
              id="parameters-tab" data-toggle="tab" href="#parameters"
              role="tab" aria-controls="parameters"
              aria-selected="false">{% trans 'Parameters' %}</a>
         </li>
       </ul>
       <div class="tab-content" id="dataops-get-plugin-info-tab-content">
-        <div class="shadow rounded tab-pane px-3 fade show active border border-primary"
+        <div class="shadow rounded tab-pane px-3 fade show active border border-dark"
              id="inputs" role="tabpanel" aria-labelledby="inputs-tab">
           <div class="row justify-content-center form-group{% if form.columns.errors %} has-danger{% endif %}">
             {% if pinstance.input_column_names %}
@@ -62,7 +62,7 @@
             {% endif %}
           </div>
         </div>
-        <div class="shadow rounded tab-pane px-3 fade show border border-primary"
+        <div class="shadow rounded tab-pane px-3 fade show border border-dark"
              id="outputs" role="tabpanel" aria-labelledby="outputs-tab">
           {% if output_column_fields %}
             <div class="row justify-content-center">
@@ -86,7 +86,7 @@
             </div>
           </div>
         </div>
-        <div class="shadow rounded tab-pane px-3 fade show border border-primary"
+        <div class="shadow rounded tab-pane px-3 fade show border border-dark"
              id="parameters" role="tabpanel" aria-labelledby="parameters-tab">
           <div class="justify-content-center my-3">
             <p class="lead text-center">{% trans 'Execution parameters' %}</p>

@@ -85,22 +85,22 @@
     <ul class="nav nav-tabs border-0 justify-content-center"
         id="edit-personalized-text-tabs" role="tablist">
       <li class="nav-item pr-1">
-        <a class="nav-link active border border-primary border-bottom-0"
+        <a class="nav-link active border border-dark border-bottom-0"
            id="questions-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="true">Survey Questions</a>
       </li>
       <li class="nav-item pr-1">
-        <a class="nav-link border border-primary border-bottom-0"
+        <a class="nav-link border border-dark border-bottom-0"
            id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="false">Filter Learners
           {% if not filter_condition %}(Empty){% else %}{% blocktrans with n=selected_rows tot=total_rows count counter=selected_rows %}({{ n }} learner of {{ tot }}){% plural %}({{ n }} learners of {{ tot }}){% endblocktrans %}{% endif %}
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link border border-primary border-bottom-0"
+        <a class="nav-link border border-dark border-bottom-0"
            id="parameters-tab" data-toggle="tab" href="#parameters" role="tab" aria-controls="parameters" aria-selected="false">Survey parameters</a>
       </li>
     </ul>
     <div class="tab-content" id="edit-survey-tab-content">
-      <div class="shadow rounded tab-pane px-3 fade show active border border-primary"
+      <div class="shadow rounded tab-pane px-3 fade show active border border-dark"
            id="questions" role="tabpanel" aria-labelledby="questions-tab">
         <div id="insert-questions" class="text-center mt-3">
           <div id="column-selector">
@@ -129,11 +129,11 @@
           {% render_table column_selected_table %}
         </div>
       </div>
-      <div class="shadow rounded tab-pane px-3 fade show border border-primary"
+      <div class="shadow rounded tab-pane px-3 fade show border border-dark"
            id="filter" role="tabpanel" aria-labelledby="filter-tab">
         {% include 'action/includes/partial_filter_tab.html' %}
       </div>
-      <div class="shadow rounded tab-pane px-3 fade show border border-primary"
+      <div class="shadow rounded tab-pane px-3 fade show border border-dark"
            id="parameters" role="tabpanel" aria-labelledby="parameters-tab">
         <div class="my-3">
           <h5 class="text-center">Survey description (shown to learners)

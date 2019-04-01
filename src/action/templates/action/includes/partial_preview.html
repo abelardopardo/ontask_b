@@ -37,11 +37,11 @@
     <p class="alert-danger text-center">{% trans 'Incorrect JSON object. Check action text' %}</p>
   {% endif %}
   {% if prelude %}
-    <div class="modal-body border border-primary mx-3">
+    <div class="modal-body border border-dark mx-3">
       <strong>{% trans 'Subject:' %}</strong> {{ prelude }}
     </div>
   {% endif %}
-  <div id="preview-body" class="modal-body border border-primary mx-3">
+  <div id="preview-body" class="modal-body border border-dark mx-3">
     {% if action.action_type == 'personalized_json' %}
       <pre>{{ action_content }}</pre>
     {% elif action.action_type == 'personalized_canvas_email' %}
@@ -51,7 +51,7 @@
     {% endif %}
   </div>
   {% if action.is_out and show_values %}
-    <div id="preview-variables" class="modal-body border border-primary mx-3 mb-3">
+    <div id="preview-variables" class="modal-body border border-dark mx-3 mb-3">
       <strong>{% trans 'Values:' %}</strong> {{ show_values }}
     </div>
   {% endif %}

@@ -52,32 +52,32 @@
         <ul class="nav nav-tabs border-0 justify-content-center"
             id="edit-personalized-text-tabs" role="tablist">
           <li class="nav-item pr-1">
-            <a class="nav-link active border border-primary border-bottom-0"
+            <a class="nav-link active border border-dark border-bottom-0"
                id="text-tab" data-toggle="tab" href="#text" role="tab"
                aria-controls="text" aria-selected="true">{{ title }}</a>
           </li>
           <li class="nav-item pr-1">
-            <a class="nav-link border border-primary border-bottom-0" id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="false">{% trans 'Filter Learners' %}
+            <a class="nav-link border border-dark border-bottom-0" id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="false">{% trans 'Filter Learners' %}
               {% if not filter_condition %}{% trans '(Empty)' %}{% else %}{% blocktrans with n=selected_rows tot=total_rows count counter=selected_rows %}({{ n }} learner of {{ tot }}){% plural %}({{ n }} learners of {{ tot }}){% endblocktrans %}{% endif %}
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link border border-primary border-bottom-0" id="conditions-tab" data-toggle="tab" href="#conditions" role="tab" aria-controls="conditions" aria-selected="false">{% trans 'Text Conditions' %} ({{ conditions|length }})</a>
+            <a class="nav-link border border-dark border-bottom-0" id="conditions-tab" data-toggle="tab" href="#conditions" role="tab" aria-controls="conditions" aria-selected="false">{% trans 'Text Conditions' %} ({{ conditions|length }})</a>
           </li>
         </ul>
         <div class="tab-content" id="edit-personalized-text-tab-content">
-          <div class="shadow rounded tab-pane px-3 fade show active border border-primary"
+          <div class="shadow rounded tab-pane px-3 fade show active border border-dark"
                id="text" role="tabpanel" aria-labelledby="text-tab">
             <div id="html-editor">
               {% include 'action/includes/partial_action_edit_out_attributes_columns.html' %}
               {{ form|crispy|safe }}
             </div>
           </div>
-          <div class="shadow rounded tab-pane px-3 fade show border border-primary"
+          <div class="shadow rounded tab-pane px-3 fade show border border-dark"
                id="filter" role="tabpanel" aria-labelledby="filter-tab">
             {% include 'action/includes/partial_filter_tab.html' %}
           </div>
-          <div class="shadow rounded tab-pane px-3 fade show border border-primary"
+          <div class="shadow rounded tab-pane px-3 fade show border border-dark"
                id="conditions" role="tabpanel" aria-labelledby="conditions-tab">
             {% include 'action/includes/partial_condition_tab.html' %}
           </div>
