@@ -14,6 +14,8 @@
 
 - Editor pages to use tabs in more intuitive ways
 
+- Added shadow to a few elements to improve UI 
+
 ### Fixed
 
 - Incorrect number of entries shown at bottom of column page
