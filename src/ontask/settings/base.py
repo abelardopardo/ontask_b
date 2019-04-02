@@ -23,18 +23,41 @@ from django.contrib.messages import constants as message_constants
 
 import ontask
 
-def get_from_os_or_env(key, env, default_value):
+
+################################################################################
+#
+# DUMP CONFIG IN DEBUG
+#
+################################################################################
+def dump_config():
+    print('DEBUG', DEBUG)
+    print('BASE_DIR:', BASE_DIR())
+    print('STATICFILES_DIRS:', ', '.join(STATICFILES_DIRS))
+    print('STATIC_ROOT:', STATIC_ROOT)
+    print('STATIC_URL:', STATIC_URL)
+    print('DATABASE_URL:', DATABASES['default'])
+    print('REDIS_URL:', redis_url)
+    print('MEDIA_ROOT:', MEDIA_ROOT)
+    print('MEDIA_URL:', MEDIA_URL)
+    print('ONTASK_HELP_URL:', ONTASK_HELP_URL)
+    print('REDIS_URL:', redis_url)
+    print('DOMAIN_NAME:', DOMAIN_NAME)
+    print('USE_SSL:', USE_SSL)
+    print('ALLOWED_HOSTS:', ALLOWED_HOSTS)
+
+
+def get_from_os_or_env(key, env_obj, default_value):
     """
     Given a key, search for its value first in the os environment, then in the
     given environment and if not present, return the default
     :param key: key to search
-    :param env: env object to use (see django-environ)
+    :param env_obj: env object to use (see django-environ)
     :param default_value: return if not found
     :return: value assigned to key or default value
     """
     if key in os.environ:
         return os.environ[key]
-    return env(key, default=default_value)
+    return env_obj(key, default=default_value)
 
 # import ldap
 # from django_auth_ldap.config import (
@@ -42,6 +65,7 @@ def get_from_os_or_env(key, env, default_value):
 #     GroupOfNamesType,
 #     LDAPGroupQuery
 # )
+
 
 # Use 12factor inspired environment variables or from a file and define defaults
 env = environ.Env(
@@ -77,7 +101,7 @@ AWS_ACCESS_KEY_ID = get_from_os_or_env('AWS_ACCESS_KEY_ID', env, '')
 AWS_SECRET_ACCESS_KEY = get_from_os_or_env('AWS_SECRET_ACCESS_KEY', env, '')
 AWS_STORAGE_BUCKET_NAME = get_from_os_or_env('AWS_STORAGE_BUCKET_NAME', env, '')
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-AWS_S3_OBJECT_PARAMETERS = { 'CacheControl': 'max-age=86400', }
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 AWS_LOCATION = get_from_os_or_env('AWS_LOCATION', env, 'static')
 MEDIA_LOCATION = get_from_os_or_env('MEDIA_LOCATION', env, 'media')
 STATICFILES_DIRS = [join(BASE_DIR(), AWS_LOCATION)]
@@ -334,10 +358,12 @@ SUMMERNOTE_CONFIG = {
         'disableDragAndDrop': True,
     },
     'css': (
-        '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/theme/base16-dark.min.css',
+        '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/'
+        'theme/base16-dark.min.css',
     ),
     'css_for_inplace': (
-        '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/theme/base16-dark.min.css',
+        '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/'
+        'theme/base16-dark.min.css',
     ),
     'codemirror': {
         'theme': 'base16-dark',
@@ -355,7 +381,9 @@ SUMMERNOTE_CONFIG = {
 # DATA UPLOAD FILES
 #
 ################################################################################
-DATAOPS_CONTENT_TYPES = '["text/csv", "application/json", "application/gzip", "application/x-gzip", "application/vnd.ms-excel"]'
+DATAOPS_CONTENT_TYPES = '["text/csv", "application/json", ' \
+                        '"application/gzip", "application/x-gzip", ' \
+                        '"application/vnd.ms-excel"]'
 DATAOPS_MAX_UPLOAD_SIZE = 209715200  # 200 MB
 
 # Raise because default of 1000 is too short
@@ -403,7 +431,8 @@ The OnTask Support Team
 EMAIL_ACTION_NOTIFICATION_SUBJECT = _("OnTask: Action executed")
 EMAIL_ACTION_NOTIFICATION_SENDER = \
     env.str('EMAIL_ACTION_NOTIFICATION_SENDER', default='')
-EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII='
+EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC' \
+                     '0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII='
 
 ################################################################################
 #
@@ -528,25 +557,4 @@ CANVAS_INFO_DICT = json.loads(env.str('CANVAS_INFO_DICT', default='{}'))
 
 # Number of seconds left in the token validity to refresh
 CANVAS_TOKEN_EXPIRY_SLACK = env.int('CANVAS_TOKEN_EXPIRY_SLACK', default=600)
-
-################################################################################
-#
-# DUMP CONFIG IN DEBUG
-#
-################################################################################
-if DEBUG:
-    print('DEBUG', DEBUG)
-    print('BASE_DIR:', BASE_DIR())
-    print('STATICFILES_DIRS:', ', '.join(STATICFILES_DIRS))
-    print('STATIC_ROOT:', STATIC_ROOT)
-    print('STATIC_URL:', STATIC_URL)
-    print('DATABASE_URL:', DATABASES['default'])
-    print('REDIS_URL:', redis_url)
-    print('MEDIA_ROOT:', MEDIA_ROOT)
-    print('MEDIA_URL:', MEDIA_URL)
-    print('ONTASK_HELP_URL:', ONTASK_HELP_URL)
-    print('REDIS_URL:', redis_url)
-    print('DOMAIN_NAME:', DOMAIN_NAME)
-    print('USE_SSL:', USE_SSL)
-    print('ALLOWED_HOSTS:', ALLOWED_HOSTS)
 
