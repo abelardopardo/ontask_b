@@ -48,7 +48,7 @@ def get_execution_items(user_id, action_id, log_id):
 
     # Update some fields in the log
     log_item.payload['datetime'] = \
-        str(datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)))
+        str(datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)))
     log_item.payload['filter_present'] = action.get_filter() is not None
     log_item.save()
 
@@ -239,7 +239,7 @@ def execute_scheduled_actions(debug):
     :return:
     """
     # Get the current date/time
-    now = datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
+    now = datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
 
     # Get all the actions that are pending
     s_items = ScheduledAction.objects.filter(
