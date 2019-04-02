@@ -5,17 +5,16 @@ import logging.config
 
 from .base import *  # NOQA
 
-# Additional middleware introduced by debug toolbar
-if USE_SSL:
-    MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
-
 # Show emails to console
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+################################################################################
 #
 # Security features
 #
+################################################################################
 if USE_SSL:
+    MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_BROWSER_XSS_FILTER = True
     SESSION_COOKIE_SECURE = True
@@ -31,17 +30,6 @@ else:
     CSRF_COOKIE_SECURE = False
     SECURE_SSL_REDIRECT = False
 
-#
-# Folder to scan for plugins
-#
-DATAOPS_PLUGIN_DIRECTORY = os.path.join(PROJECT_PATH, 'plugins')
-
-#
-# Execute the JSON transfers for the required actions
-#
-EXECUTE_ACTION_JSON_TRANSFER = env.bool('EXECUTE_ACTION_JSON_TRANSFER',
-                                        default=True)
-
 # Cache the templates in memory for speed-up
 loaders = [
     ('django.template.loaders.cached.Loader', [
@@ -52,9 +40,6 @@ loaders = [
 
 TEMPLATES[0]['OPTIONS'].update({"loaders": loaders})
 TEMPLATES[0].update({"APP_DIRS": False})
-
-# Log everything to the logs directory at the top
-LOGFILE_ROOT = join(dirname(BASE_DIR()), 'logs')
 
 # Reset logging
 LOGGING_CONFIG = None
@@ -74,25 +59,25 @@ LOGGING = {
         'django_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'django.log'),
+            'filename': join(LOG_FOLDER, 'django.log'),
             'formatter': 'verbose'
         },
         'proj_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'project.log'),
+            'filename': join(LOG_FOLDER, 'project.log'),
             'formatter': 'verbose'
         },
         'script_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'script.log'),
+            'filename': join(LOG_FOLDER, 'script.log'),
             'formatter': 'verbose'
         },
         'celery_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'celery.log'),
+            'filename': join(LOG_FOLDER, 'celery.log'),
             'formatter': 'verbose'
         },
         'console': {

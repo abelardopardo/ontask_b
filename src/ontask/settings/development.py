@@ -33,18 +33,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 THUMBNAIL_DEBUG = True
 
 # Allow internal IPs for debugging
-INTERNAL_IPS = [
-    '127.0.0.1',
-    '0.0.0.1',
-    'localhost',
-]
-
-# Log everything to the logs directory at the top
-LOGFILE_ROOT = join(BASE_DIR(), '..', 'logs')
+INTERNAL_IPS = ['127.0.0.1', '0.0.0.1', 'localhost']
 
 # Reset logging
 # (see http://www.caktusgroup.com/blog/2015/01/27/Django-Logging-Configuration-logging_config-default-settings-logger/)
-
 LOGGING_CONFIG = None
 LOGGING = {
     'version': 1,
@@ -62,25 +54,25 @@ LOGGING = {
         'django_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'django.log'),
+            'filename': join(LOG_FOLDER, 'django.log'),
             'formatter': 'verbose'
         },
         'proj_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'project.log'),
+            'filename': join(LOG_FOLDER, 'project.log'),
             'formatter': 'verbose'
         },
         'script_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'script.log'),
+            'filename': join(LOG_FOLDER, 'script.log'),
             'formatter': 'verbose'
         },
         'celery_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'celery.log'),
+            'filename': join(LOG_FOLDER, 'celery.log'),
             'formatter': 'verbose'
         },
         'console': {

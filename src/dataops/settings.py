@@ -10,13 +10,13 @@ from django.utils.translation import ugettext_lazy as _
 
 PLUGIN_DIRECTORY = getattr(settings,
                            'DATAOPS_PLUGIN_DIRECTORY',
-                           os.path.join(settings.PROJECT_PATH,
+                           os.path.join(settings.BASE_DIR,
                                         'plugins'))
 
 # Get the plugin path in the sys.path
 plugin_folder = PLUGIN_DIRECTORY
 if not os.path.isabs(plugin_folder):
-    plugin_folder = os.path.join(settings.PROJECT_PATH, plugin_folder)
+    plugin_folder = os.path.join(settings.BASE_DIR, plugin_folder)
 if plugin_folder not in sys.path:
     sys.path.insert(0, plugin_folder)
 

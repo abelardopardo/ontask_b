@@ -28,8 +28,8 @@ Are you upgrading from version < 4.0 to 4.0 or later?
 
 The upgrade to 4.0 or later requires version 2.7 and 3.6 both installed and available in the system. Django versions 2.0 and later require Python 3 but certain additional libraries used by OnTask have not been fully ported yet and still require the use of Python 2.7. Make sure both versions are available before proceeding to the upgrade.
 
-Installing the required tools
-*****************************
+Required tools
+**************
 
 The following installation steps assume that you are deploying OnTask in a production web server capable of serving pages using the HTTPS protocol.
 
@@ -84,7 +84,7 @@ In the following sections we assume that you can open a command line interpreter
    ``python-pip`` for Python 2.7 and ``python3-pip`` for Python 3.6). This tool will be used by both Python and Django to install additional libraries required to execute OnTask.
 
 Download, install and configure OnTask
-======================================
+**************************************
 
 1. Download or clone a copy of `OnTask <https://github.com/abelardopardo/ontask_b>`_.
 
@@ -108,9 +108,181 @@ Download, install and configure OnTask
    This command downloads  a set of libraries and modules and installs them as
    part of the python libraries in the system. 
 
-At this point you have the major modules in place. The next steps include the configuration of the Django environment to run OnTask. If you plan to install a **development** instance of OnTask, using a plain text editor (nano, vim, Emacs or similar) in a command line interpreter, open the file ``manage.py`` in the ``src`` folder of the project. Modify line 10 replacing the value ``"ontask.settings.production"`` by ``"ontask.settings.development"``. Save and close the file.
+OnTask Configuration
+====================
 
-Using the same plain text editor create a file with name ``local.env`` in the folder ``src/ontask/settings`` with the following content (note there is no space between variable names and the equal sign)::
+The next steps describe the configuration of the Django environment to run OnTask.
+This configuration is divided into in three groups of variables:
+
+Environment variables (*env* level)
+
+  These are variables defined by the operating system and available to OnTask upon execution. The values are obtained at the start of the deployment. Changing these variables usually requires re-deploying the platform (for example if you are using a container platform like docker). These variables can only store strings.
+
+Configuration file (*conf* level)
+
+  The configuration file contains a set of variable definitions that are fixed for the given platform. The values are written in a file and kept within the system file readable by the application (in the ``src/ontask/settings`` folder). This variables can store strings, booleans, basic lists and dictionaries.
+
+Configuration script (*script* level)
+
+  This is a python file that is read first by Django during its start-up procedure. The variables in this script can be defined using any python expression and may have arbitrarily complex expressions and operations (even function calls).
+
+OnTask processes the variables in these context in the following stages:
+
+1) The environment varibles are loaded (if present)
+
+2) The configuration file is loaded. If the file contains a definition for an environment variable, this is considered only if there is no value provided by the environment. In other words, an empty set of environment variables can be written in the configuration file and their values are considered. On the opposite side, if all environment variables are defined, any additional definition in the configuration file is ignored.
+
+3) The initialization script is loaded with all the variables previously defined available.
+
+.. _configuration_environment:
+
+Environment variables
+---------------------
+
+The following variables, if defined in the environment, are considered by OnTask upon start.
+
+- ``AWS_ACCESS_KEY_ID``
+
+  Amazon Web Services access key id. This value is used when the static files in the server are served from a S3 bucket.
+
+  Default: ``''``
+
+- ``AWS_SECRET_ACCESS_KEY``
+
+  Amazon Web Services secret attached to the given Access Key.
+
+  Default: ``''``
+
+- ``AWS_STORAGE_BUCKET_NAME``
+
+  Name of the S3 Bucket used to serve the static content
+
+  Default: ``''``
+
+- ``AWS_LOCATION``
+
+  Path within the AWS S3 Bucket where the static files are located
+
+  Default: ``static``
+
+- ``BASE_URL``
+
+  Suffix that follows the hostname when accessing OnTask once deployed. This is to allow OnTask to be deployed as part of a larger webserver when the application is accessed as, for example, ``hostname.com/suffix/ontask``.
+
+  Default: ``''``
+
+- ``DJANGO_SETTINGS_MODULE``
+
+  Python expression pointing to the configuration script or initial module (python file) to execute on start up. Two of these modules are provided in the folder ``src/ontask/settings``. The file ``development.py`` provides definitions recommended for a development environment. The file ``production.py`` provides the suggested definitions for a production deployment. Both scripts load the definitions in the module ``base.py``. These scripts contain configuration definitions described in :ref:`configuration_script`.
+
+  Default: ``ontask.settings.production``
+
+- ``DOMAIN_NAME``
+
+  Host name used to serve the application.
+
+  Default: ``localhost``
+
+- ``LOG_FOLDER``
+
+  Folder where to store the logs produced by the tool
+
+  Default: ``logs`` folder at the root of the project
+
+- ``ENV_FILENAME``
+
+  Name for the configuration file. It must be in the folder ``src/ontask/settings``
+
+  Default: ``local.env``
+
+- ``MEDIA_LOCATION``
+
+  URL suffix to be used by OnTask to access the media files in folder ``src/media``.
+
+  Default: ``/media/``
+
+- ``RDS_DB_NAME``, ``RDS_DB_USERNAME``, ``RDS_DB_PASSWORD``, ``RDS_DB_HOSTNAME``, ``RDS_DB_PORT``
+
+  Parameters to access the platform database: database name, username, password, hostname and port respectively.
+
+  Default: All empty strings.
+
+- ``SECRET_KEY``
+
+  Random string of characters used to generate internal hashes. It should be kept secret. If not defined the platform will raise an error upon start.
+
+  Default: ``''``
+
+- ``STATIC_URL_SUFFIX``
+
+  URL suffix to be used by OnTask to access the static files. This definition is ignored if ``AWS_ACCESS_KEY_ID`` is defined as it is assumed that the static content is served through AWS.
+
+  Default: ``/static``
+
+- ``TIME_ZONE``
+
+  String provided by the package ``pytz`` to identify the time zone in which the server is running. If you want to know the name of the time zone used by your platform execute the following command::
+
+    python3 -c 'import tzlocal; print(tzlocal.get_localzone().zone)'
+
+  Default: ``UTC``
+
+Remember that if any of these variables is undefined in the execution environment, they still can be defined in the configuration file.
+
+.. _configuration_file:
+
+Configuration file
+------------------
+
+Using a plain text editor create a file with name ``local.env`` in folder ``src/ontask/settings`` (or a file with the name assigned to the environment variable ``ENV_FILENAME`` as described in :ref:`configuration_environment`). Include in this file either:
+
+- the assignment of a variable from those described in :ref:`configuration_environment` that has no environment definition, or
+
+- the assignment of any of the following variables for which you want a value different than the default.
+
+The variables suitable to be included in the configuration file are:
+
+- ``ALLOWED_HOSTS``
+
+  Comma-separated list of host names used to validate the HTTP requests received by the platform. It helps to avoid processing requests that fake their Host headers. If OnTask is going to be hosted in ``www.yoursite.com``, then you may want to define it as ``www.yoursite.com,yoursite.com``. By default the platform allows request with any Host header.
+
+  Default: ``[*]`` (any connection from any host)
+
+- ``DEBUG``
+
+  Flag to control if the execution is in DEBUG mode.
+
+  Default: ``False``
+
+- ``EMAIL_USE_TLS``
+
+  Boolean to choose if the communication with the email service (if defined) should use TLS. See Django Settings for more detailed information about this variable.
+
+  Default: ``False``
+
+- ``EMAIL_USE_SSL``
+
+  Boolean to choose if the communication with the email service (if defined) should use SSL. See Django Settings for more detailed information about this variable.
+
+- ``REDIS_URL``
+
+  List of URLs to access the cache service for OnTask. If there are several of these services, they can be specified as a comma-separated list such as ``'rediscache://master:6379,slave1:6379,slave2:6379/1'`` (see `Django Environ <https://github.com/joke2k/django-environ>`_
+
+  Default: ``rediscache:://localhost:6379``
+
+- ``SHOW_HOME_FOOTER_IMAGE``
+
+  Boolean to control the appearance of a footer image in the home page. If true, the file ``project_consortium.gif`` is shown from the media folder.
+
+  Default: ``False``
+
+- ``USE_SSL``
+
+  Boolean to control if the server should use SSL for communication. There are several security features that are enabled with using SSL.
+
+  Default: ``False``
+
+Here is an example of a minimalistic configuration file (note there is no space between variable names and the equal signs)::
 
    DEBUG=False
    TIME_ZONE=[YOUR LOCAL PYTHON TIME ZONE]
@@ -122,24 +294,14 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
    DATABASE_URL=postgres://[PSQLUSERNAME]:[PSQLPWD]@127.0.0.1:5432/ontask
    REDIS_URL=[YOUR REDIS URL]
    SECRET_KEY=
-   #
-   # LTI
-   #
-   LTI_OAUTH_CREDENTIALS=test=secret,test2=reallysecret
 
-#. Open a command interpreter and execute the following python command::
-
-     python -c 'import tzlocal; print(tzlocal.get_localzone().zone)'
-
-   Replace ``[YOUR LOCAL PYTHON TIME ZONE]`` in the ``local.env`` file by the
-   description of your time zone produced by the previous command.
+#. Replace ``[YOUR LOCAL PYTHON TIME ZONE]`` with the description of your time zone (see the definition of the variable ``TIME_ZONE`` in :ref:`configuration_environment`.
 
 #. If OnTask is going to be served from a location different from the root of your server (for example ``myhost.com/ontask``, then modify the value of the variable ``BASE_URL`` with the suffix that should follow the domain name (in the example, ``/ontask``).
 
 #. Modify the line starting with ``DOMAIN_NAME=`` and change the field ``[YOUR DOMAIN NAME``] with the domain name of the machine hosting OnTask.
 
-#. If you want to disable the appearance of the banner image in the login
-   page set the value of the variable ``SHOW_HOME_FOOTER_IMAGE`` to False.
+#. If you want to disable the appearance of the banner image in the login page set the value of the variable ``SHOW_HOME_FOOTER_IMAGE`` to False.
 
 #. Modify the line starting with ``DATABASE_URL=`` and change the
    field ``[PSQLUSERNAME]`` with the name of the Postgresql user created in the
@@ -162,16 +324,33 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
 
      SECRET_KEY=4o93jf0572094jv...
 
-#. Modify the line starting with ``LTI_OAUTH_CREDENTIALS`` and include a
-   comma-separated list of pairs key=secret for LTI authentication. See the
-   section  :ref:`authentication` for more details about this type of
-   authentication.
+.. _configuration_script:
 
-#. Create a new folder with name ``logs`` in the OnTask top folder (next to the ``requirements`` folder). This folder **is different** from the folder with the same name in the ``src`` folder.
+Configuration script
+--------------------
+
+The additional variables for configuration are directly defined in the modules ``base.py``, ``development.py`` and ``production.py``. Modify the python code to perform additional configuration considering:
+
+1) The script ``base.py`` is always executed first
+
+2) The choice between ``develoment.py`` or ``production.py`` is decided based on the environment variable ``DJANGO_SETTINGS_MODULE`` and the default value is ``production.py``
+
+.. _log_directory:
+
+Log directory
+-------------
+
+1. Create a new folder with name ``logs`` in the OnTask top folder (next to the ``requirements`` folder). This folder **is different** from the folder with the same name in the ``src`` folder.
 
 #. If at some point during the following steps you want to reset the content of the database, run the commands ``dropdb`` and ``createdb`` explained in :ref:`install_postgresql`.
 
-#. Execute the following command from the ``src`` folder to create the database internal structure::
+
+OnTask Installation
+===================
+
+Once you have OnTask installed and configured and the tools Redis and Postgresql running, the next step is to create the initial database configuration, documentation, additional site files, and deploy.
+
+1. Execute the following command from the ``src`` folder to create the database internal structure::
 
      python3 manage.py migrate
 
@@ -249,8 +428,8 @@ Using the same plain text editor create a file with name ``local.env`` in the fo
 
 .. _scheduling_tasks:
 
-Configure the Distributed Task Queue Celery
-===========================================
+Configure the Distributed Task Queue
+====================================
 
 There are various tasks that need to be executed by OnTask outside the web
 server. The solution adopted is to use `Celery
@@ -525,7 +704,7 @@ the `documentation of the django-auth-ldap module
 Email Configuration
 *******************
 
-OnTask relies on the functionality included in Django to send emails from the application. The following variables must be defined in the file ``local.env``:
+OnTask relies on the functionality included in Django to send emails from the application. The following variables are defined in the file ``base.py``:
 
 - ``EMAIL_HOST``: Host providing the SMTP service,
 - ``EMAIL_PORT``: Port to communicate with the host,
@@ -569,7 +748,7 @@ If OnTask is not served from the root of your web server, make sure you include 
 Canvas Email Configuration
 **************************
 
-OnTask allows to send personalized emails to the user inbox in an instance of a `Canvas Learning Management System <https://www.canvaslms.com.au/>`_ using its API. Configuring this functionality requires permission from Canvas to access its API using OAuth2 authentication. Once this authorization is obtained, the following variables need to be defined in the file ``local.env`` configuration file:
+OnTask allows to send personalized emails to the user inbox in an instance of a `Canvas Learning Management System <https://www.canvaslms.com.au/>`_ using its API. Configuring this functionality requires permission from Canvas to access its API using OAuth2 authentication. Once this authorization is obtained, the following variables need to be defined in the file ``base.py`` configuration file:
 
 - ``CANVAS_INFO_DICT``: A dictionary with elements pairs containing the identifier for a Canvas instance that will be shown to the user and a dictionary with the following configuration parameters:
 
@@ -587,7 +766,16 @@ OnTask allows to send personalized emails to the user inbox in an instance of a 
 
   - ``aux_params``: A dictionary with additional parameters. The dictionary may include a value for the key ``burst`` to limit the number of consecutive API invocations (to prevent throttling) and a value for the key ``pause`` with the number of seconds to separate bursts. Here is an example of the definition of this variable in the ``local.env`` file::
 
-      CANVAS_INFO_DICT={"Server one": {"domain_port": "yourcanvasdomain.edu", "client_id": "10000000000001", "client_secret": "YZnGjbkopt9MpSq2fujUOgbeVZ8NdkdCeGF2ufhWZdBKAZvNCuuTOWXHotsWMu6X", "authorize_url": "http://{0}/login/oauth2/auth", "access_token_url": "http://{0}/login/oauth2/token", "conversation_url": "http://{0}/api/v1/conversations", "aux_params": {"burst": 10, "pause": 5}}}
+      CANVAS_INFO_DICT = {
+          "Server one":
+              {"domain_port": "yourcanvasdomain.edu",
+               "client_id": "10000000000001",
+               "client_secret": "YZnGjbkopt9MpSq2fujUO",
+               "authorize_url": "http://{0}/login/oauth2/auth",
+               "access_token_url": "http://{0}/login/oauth2/token",
+               "conversation_url": "http://{0}/api/v1/conversations",
+               "aux_params": {"burst": 10, "pause": 5}}
+       }
 
 - ``CANVAS_TOKEN_EXPIRY_SLACK``: The number of seconds to renew a token before it expires. For example, if the variable is 300, any API call performed with a token five minutes before it expires will prompt a token refresh. Here is an example of such definition in ``local.env``::
 

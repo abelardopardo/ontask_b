@@ -14,7 +14,6 @@ import os
 from os.path import dirname, join, exists
 
 import environ
-import json
 from celery.schedules import crontab
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -30,33 +29,34 @@ import ontask
 #
 ################################################################################
 def dump_config():
-    print('DEBUG', DEBUG)
+    print('DEBUG:', DEBUG)
     print('BASE_DIR:', BASE_DIR())
     print('STATICFILES_DIRS:', ', '.join(STATICFILES_DIRS))
     print('STATIC_ROOT:', STATIC_ROOT)
     print('STATIC_URL:', STATIC_URL)
     print('DATABASE_URL:', DATABASES['default'])
-    print('REDIS_URL:', redis_url)
+    print('REDIS_URL:', REDIS_URL)
     print('MEDIA_ROOT:', MEDIA_ROOT)
     print('MEDIA_URL:', MEDIA_URL)
     print('ONTASK_HELP_URL:', ONTASK_HELP_URL)
-    print('REDIS_URL:', redis_url)
+    print('REDIS_URL:', REDIS_URL)
     print('DOMAIN_NAME:', DOMAIN_NAME)
     print('USE_SSL:', USE_SSL)
     print('ALLOWED_HOSTS:', ALLOWED_HOSTS)
 
 
-def get_from_os_or_env(key, env_obj, default_value):
+def get_from_os_or_env(key, env_obj, default_value=''):
     """
     Given a key, search for its value first in the os environment, then in the
     given environment and if not present, return the default
     :param key: key to search
     :param env_obj: env object to use (see django-environ)
-    :param default_value: return if not found
+    :param default_value: value to return if not found
     :return: value assigned to key or default value
     """
     if key in os.environ:
         return os.environ[key]
+
     return env_obj(key, default=default_value)
 
 # import ldap
@@ -68,14 +68,7 @@ def get_from_os_or_env(key, env_obj, default_value):
 
 
 # Use 12factor inspired environment variables or from a file and define defaults
-env = environ.Env(
-    DEBUG=(bool, False),
-    USE_SSL=(bool, False),
-    SHOW_HOME_FOOTER_IMAGE=(bool, True),
-    LTI_OAUTH_CREDENTIALS=(dict, {}),
-    DOMAIN_NAME=(str, '*')
-)
-
+env = environ.Env()
 env_file_name = os.environ.get('ENV_FILENAME', 'local.env')
 env_file = join(dirname(__file__), env_file_name)
 if exists(env_file):
@@ -84,47 +77,96 @@ if exists(env_file):
 else:
     print('WARNING: File {0} not found.'.format(env_file))
 
-# Read various variables from the environment (but first from the os.env)
-BASE_URL = env('BASE_URL', default='')
-DOMAIN_NAME = get_from_os_or_env('DOMAIN_NAME', env, '*')
-DEBUG = env('DEBUG')
-SHOW_HOME_FOOTER_IMAGE = env('SHOW_HOME_FOOTER_IMAGE')
-USE_SSL = get_from_os_or_env('USE_SSL', env, False)
+################################################################################
+#
+# CONFIGURATION VARIABLES (Os Environment)
+#
+################################################################################
+AWS_ACCESS_KEY_ID = get_from_os_or_env('AWS_ACCESS_KEY_ID', env)
+AWS_SECRET_ACCESS_KEY = get_from_os_or_env('AWS_SECRET_ACCESS_KEY', env)
+AWS_STORAGE_BUCKET_NAME = get_from_os_or_env('AWS_STORAGE_BUCKET_NAME', env)
+AWS_LOCATION = get_from_os_or_env('AWS_LOCATION', env, 'static')
 
-# Build paths inside the project like this: join(BASE_DIR(), "directory")
+BASE_URL = get_from_os_or_env('BASE_URL', env)
+
+DATAOPS_PLUGIN_DIRECTORY = get_from_os_or_env('DATAOPS_PLUGIN_DIRECTORY', env)
+
+DOMAIN_NAME = get_from_os_or_env('DOMAIN_NAME', env, 'localhost')
+
+LOG_FOLDER = get_from_os_or_env('LOG_FOLDER', env)
+
+MEDIA_LOCATION = get_from_os_or_env('MEDIA_LOCATION', env, '/media/')
+
+# Database parameters
+RDS_DB_NAME = get_from_os_or_env('RDS_DB_NAME', env)
+RDS_USERNAME = get_from_os_or_env('RDS_USERNAME', env)
+RDS_PASSWORD = get_from_os_or_env('RDS_PASSWORD', env)
+RDS_HOSTNAME = get_from_os_or_env('RDS_HOSTNAME', env)
+RDS_PORT = get_from_os_or_env('RDS_PORT', env)
+
+# SECURITY WARNING: keep the secret key used in production secret!
+# Raises ImproperlyConfigured exception if SECRET_KEY not defined
+SECRET_KEY = get_from_os_or_env('SECRET_KEY', env, '')
+STATIC_URL_SUFFIX = get_from_os_or_env('STATIC_URL_SUFFIX', env, '/static/')
+
+TIME_ZONE = get_from_os_or_env('TIME_ZONE', env, 'UTC')
+
+################################################################################
+#
+# CONFIGURATION VARIABLES (Conf File)
+#
+################################################################################
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
+DATABASE_URL = env.db()
+DEBUG = env.bool('DEBUG', default=False)
+
+EXECUTE_ACTION_JSON_TRANSFER = env.bool('EXECUTE_ACTION_JSON_TRANSFER',
+                                        default=False)
+
+REDIS_URL = env.cache('REDIS_URL', env, 'rediscache://localhost:6379')
+
+SHOW_HOME_FOOTER_IMAGE = env.bool('SHOW_HOME_FOOTER_IMAGE', default=False)
+
+USE_SSL = env.bool('USE_SSL', default=False)
+
+################################################################################
+#
+# Additional variables
+#
+################################################################################
+# Path to the root of the project
 BASE_DIR = environ.Path(__file__) - 3
 
-#
-# Static, media and documentation information
-#
-AWS_ACCESS_KEY_ID = get_from_os_or_env('AWS_ACCESS_KEY_ID', env, '')
-AWS_SECRET_ACCESS_KEY = get_from_os_or_env('AWS_SECRET_ACCESS_KEY', env, '')
-AWS_STORAGE_BUCKET_NAME = get_from_os_or_env('AWS_STORAGE_BUCKET_NAME', env, '')
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
-AWS_LOCATION = get_from_os_or_env('AWS_LOCATION', env, 'static')
-MEDIA_LOCATION = get_from_os_or_env('MEDIA_LOCATION', env, 'media')
-STATICFILES_DIRS = [join(BASE_DIR(), AWS_LOCATION)]
-# Define STATIC_ROOT for the collectstatic command
-STATIC_ROOT = join(BASE_DIR(), '..', 'site', 'static')
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/dev/howto/static-files/
-if AWS_ACCESS_KEY_ID:
-    STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
-else:
-    STATIC_URL = BASE_URL + '/static/'
+
+if not DATAOPS_PLUGIN_DIRECTORY:
+    DATAOPS_PLUGIN_DIRECTORY = os.path.join(BASE_DIR, 'plugins')
+
+# Locale paths
+LOCALE_PATHS = [join(BASE_DIR, 'locale')]
+
+# Log everything to the logs directory at the top
+if not LOG_FOLDER:
+    LOG_FOLDER = join(BASE_DIR(), '..', 'logs')
+
 MEDIA_ROOT = join(BASE_DIR(), 'media')
 if AWS_ACCESS_KEY_ID:
     MEDIA_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, MEDIA_LOCATION)
 else:
     MEDIA_URL = BASE_URL + MEDIA_LOCATION
+
+if AWS_ACCESS_KEY_ID:
+    STATICFILES_DIRS = [join(BASE_DIR(), AWS_LOCATION)]
+    STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+else:
+    STATICFILES_DIRS = [join(BASE_DIR(), STATIC_URL_SUFFIX)]
+    STATIC_URL = BASE_URL + STATIC_URL_SUFFIX
+
+STATIC_ROOT = join(BASE_DIR(), '..', 'site', 'static')
+
+# URL pointing to the documentation
 ONTASK_HELP_URL = "html/index.html"
-
-# Project root folder (needed somewhere in Django
-PROJECT_PATH = BASE_DIR()
-
-# Include ALLOWED_HOSTS
-ALLOWED_HOSTS = [DOMAIN_NAME]
 
 TEMPLATES = [
     {
@@ -156,12 +198,7 @@ TEMPLATES = [
     },
 ]
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# Raises ImproperlyConfigured exception if SECRET_KEY not in os.environ
-SECRET_KEY = env('SECRET_KEY', default='')
-
 # Application definition
-
 INSTALLED_APPS = [
     'django_extensions',
     'django.contrib.auth',
@@ -225,8 +262,6 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.BCryptPasswordHasher',
 ]
 
-LOCALE_PATHS = [join(PROJECT_PATH, 'locale')]
-
 AUTHENTICATION_BACKENDS = [
     'django_auth_lti.backends.LTIAuthBackend',
     'django.contrib.auth.backends.RemoteUserBackend',
@@ -234,11 +269,10 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
 
-redis_url = get_from_os_or_env('REDIS_URL', env, 'redis://localhost:6379')
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": redis_url,
+        "LOCATION": REDIS_URL,
         "TIMEOUT": 1800,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
@@ -246,12 +280,12 @@ CACHES = {
         },
     }
 }
-
 # Cache time to live is 15 minutes
 CACHE_TTL = 60 * 30
+
+
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_CACHE_ALIAS = "default"
-
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 1800  # set just 30 mins
 SESSION_SAVE_EVERY_REQUEST = True  # Needed to make sure timeout above works
@@ -287,16 +321,20 @@ ROOT_URLCONF = 'ontask.urls'
 
 WSGI_APPLICATION = 'ontask.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/dev/ref/settings/#databases
-
-DATABASES = {
-    # Raises ImproperlyConfigured exception if DATABASE_URL not in
-    # os.environ
-    'default': env.db(),
-}
-
-TIME_ZONE = env('TIME_ZONE', default='UTC')
+if 'RDS_DB_NAME' in os.environ:
+    # Cater for AWS-style RDS definition in containers
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': RDS_DB_NAME,
+            'USER': RDS_USERNAME,
+            'PASSWORD': RDS_PASSWORD,
+            'HOST': RDS_HOSTNAME,
+            'PORT': RDS_PORT,
+        }
+    }
+else:
+    DATABASES = { 'default': DATABASE_URL, }
 
 USE_I18N = True
 
@@ -314,12 +352,6 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
 
-################################################################################
-#
-# Authentication Settings
-#
-################################################################################
-AUTH_USER_MODEL = 'authtools.User'
 LOGIN_REDIRECT_URL = reverse_lazy("home")
 LOGIN_URL = reverse_lazy("accounts:login")
 
@@ -331,12 +363,18 @@ SITE_ID = 1
 
 ################################################################################
 #
+# Authentication Settings
+#
+################################################################################
+AUTH_USER_MODEL = 'authtools.User'
+
+################################################################################
+#
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/
 #
 ################################################################################
 LANGUAGE_CODE = 'en-us'
-
 LANGUAGES = (
     ('en-us', _('English')),
     ('es-es', _('Spanish')),
@@ -391,20 +429,70 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
 ################################################################################
 #
+# Disabled actions
+#
+################################################################################
+DISABLED_ACTIONS = [
+    # ontask.PERSONALIZED_JSON,
+    # ontask.PERSONALIZED_CANVAS_EMAIL,
+    # ontask.PERSONALIZED_TEXT,
+    # ontask.SURVEY,
+    ontask.TODO_LIST
+]
+
+################################################################################
+#
+# Log configuration
+#
+################################################################################
+LOGS_MAX_LIST_SIZE = 200
+SHORT_DATETIME_FORMAT = 'r'
+
+################################################################################
+#
+# Scheduler configuration
+#
+################################################################################
+SCHEDULER_MINUTE_STEP = 15
+
+################################################################################
+#
+# CELERY parameters
+#
+################################################################################
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_BEAT_SCHEDULE = {
+    'ontask_scheduler': {
+        'task': 'ontask.tasks.execute_scheduled_actions',
+        'schedule': crontab(minute='*/{0}'.format(SCHEDULER_MINUTE_STEP)),
+        'args': (DEBUG,)
+    }
+}
+
+################################################################################
+#
 # Email sever configuration
 #
 ################################################################################
-EMAIL_HOST = env.str('EMAIL_HOST', default='')
-EMAIL_PORT = env.str('EMAIL_PORT', default='')
-EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', default='')
-EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD', default='')
-EMAIL_USE_TLS = env.bool('EMAIL_HOST_TLS', default=False)
-EMAIL_USE_SSL = env.bool('EMAIL_HOST_SSL', default=False)
-
+# Host, port, user and password to open the communication thorugh SMTP
+EMAIL_HOST = ''
+EMAIL_PORT = ''
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+# The from field when sending notification messages
+EMAIL_ACTION_NOTIFICATION_SENDER = ''
+# Use of TLS or SSL (see Django configuration)
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False
 # Number of emails to send out in a burst (before pausing)
-EMAIL_BURST = env.int('EMAIL_BURST', default=0)
+EMAIL_BURST = 0
 # Pause between bursts (in seconds)
-EMAIL_BURST_PAUSE = env.int('EMAIL_BURST_PAUSE', default=0)
+EMAIL_BURST_PAUSE = 0
 
 # Additional email related variables
 EMAIL_ACTION_NOTIFICATION_TEMPLATE = """
@@ -429,74 +517,59 @@ The OnTask Support Team
 </body></html>"""
 
 EMAIL_ACTION_NOTIFICATION_SUBJECT = _("OnTask: Action executed")
-EMAIL_ACTION_NOTIFICATION_SENDER = \
-    env.str('EMAIL_ACTION_NOTIFICATION_SENDER', default='')
 EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC' \
                      '0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII='
 
 ################################################################################
 #
-# Disabled actions
+# LTI Authentication
+#
+# In the next variable define a dictionary with name:secret pairs.
 #
 ################################################################################
-DISABLED_ACTIONS = [
-    # ontask.PERSONALIZED_JSON,
-    # ontask.PERSONALIZED_CANVAS_EMAIL,
-    # ontask.PERSONALIZED_TEXT,
-    # ontask.SURVEY,
-    ontask.TODO_LIST
-]
+LTI_OAUTH_CREDENTIALS = {}
 
 ################################################################################
 #
-# Log configuration
+# CANVAS API ENTRY POINTS
 #
-################################################################################
-LOGS_MAX_LIST_SIZE = 200
-SHORT_DATETIME_FORMAT = 'r'
+# The  variable must contain a dictionary with the following elements:
+#
+#   "Server name or domain descriptor (shown to the user": {
+#      domain_port: VALUE,
+#      client_id: VALUE,
+#      client_secret: VALUE ,
+#      authorize_url: VALUE (format {0} for domain_port),
+#      access_token_url: VALUE (format {0} for domain_port),
+#      conversation_URL: VALUE (format {0} for domain_port),
+#      aux_params: DICT with additional parameters)
+#    }
+#  For example:
+#
+# CANVAS_INFO_DICT={
+#     "Server one": {
+#         "domain_port": "yourcanvasdomain.edu",
+#         "client_id": "10000000000001",
+#         "client_secret":
+#             "YZnGjbkopt9MpSq2fujUOgbeVZ8NdkdCeGF2ufhWZdBKAZvNCuuTOWXHotsWMu6X",
+#         "authorize_url": "http://{0}/login/oauth2/auth",
+#         "access_token_url": "http://{0}/login/oauth2/token",
+#         "conversation_url": "http://{0}/api/v1/conversations",
+#         "aux_params": {"burst": 10, "pause": 5}
+#     }
+# }
+CANVAS_INFO_DICT = {}
+# Number of seconds left in the token validity to refresh
+CANVAS_TOKEN_EXPIRY_SLACK = env.int('CANVAS_TOKEN_EXPIRY_SLACK', default=600)
 
 ################################################################################
-#
-# Execute JSON transfer: If False, the personalized JSON and Canvas email
-# do not send the data but instead log the content of the JSON objects through
-# the logger
-#
-################################################################################
-EXECUTE_ACTION_JSON_TRANSFER = env.bool('EXECUTE_ACTION_JSON_TRANSFER',
-                                        default=False)
-
-################################################################################
-#
-# Scheduler configuration
-#
-################################################################################
-SCHEDULER_MINUTE_STEP = 15
-
-################################################################################
-#
-# CELERY parameters
-#
-################################################################################
-CELERY_BROKER_URL = redis_url
-CELERY_RESULT_BACKEND = redis_url
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = TIME_ZONE
-CELERY_BEAT_SCHEDULE = {
-    'ontask_scheduler': {
-        'task': 'ontask.tasks.execute_scheduled_actions',
-        'schedule': crontab(minute='*/{0}'.format(SCHEDULER_MINUTE_STEP)),
-        'args': (DEBUG,)
-    }
-}
-
 #
 # LDAP AUTHENTICATION
 #
+################################################################################
 # Variables taken from local.env
-# AUTH_LDAP_SERVER_URI = env('AUTH_LDAP_SERVER_URI')
-# AUTH_LDAP_BIND_PASSWORD = env('AUTH_LDAP_BIND_PASSWORD')
+# AUTH_LDAP_SERVER_URI = get_from_os_or_env('AUTH_LDAP_SERVER_URI', env)
+# AUTH_LDAP_BIND_PASSWORD = get_from_os_or_env('AUTH_LDAP_BIND_PASSWORD', env)
 
 # Additional configuration variables (read django-auth-ldap documentation)
 # AUTH_LDAP_CONNECTION_OPTIONS = {
@@ -527,34 +600,3 @@ CELERY_BEAT_SCHEDULE = {
 # AUTH_LDAP_FIND_GROUP_PERMS = True
 # AUTH_LDAP_CACHE_GROUPS = True
 # AUTH_LDAP_GROUP_CACHE_TIMEOUT = 300
-
-
-#
-# LTI Authentication
-#
-LTI_OAUTH_CREDENTIALS = env('LTI_OAUTH_CREDENTIALS', default='')
-
-################################################################################
-#
-# CANVAS API ENTRY POINTS
-#
-################################################################################
-CANVAS_INFO_DICT = json.loads(env.str('CANVAS_INFO_DICT', default='{}'))
-# The string in the .env file must be a single line JSON encoding of a
-# dictionary with the following elements:
-#   "Server name or domain descriptor (shown to the user": {
-#      domain_port: VALUE,
-#      client_id: VALUE,
-#      client_secret: VALUE ,
-#      authorize_url: VALUE (format {0} for domain_port),
-#      access_token_url: VALUE (format {0} for domain_port),
-#      conversation_URL: VALUE (format {0} for domain_port),
-#      aux_params: DICT with additional parameters)
-#    }
-#  For example:
-#
-#  CANVAS_INFO_DICT={"Server one": {"domain_port": "yourcanvasdomain.edu", "client_id": "10000000000001", "client_secret": "YZnGjbkopt9MpSq2fujUOgbeVZ8NdkdCeGF2ufhWZdBKAZvNCuuTOWXHotsWMu6X", "authorize_url": "http://{0}/login/oauth2/auth", "access_token_url": "http://{0}/login/oauth2/token", "conversation_url": "http://{0}/api/v1/conversations", "aux_params": {"burst": 10, "pause": 5}}}
-
-# Number of seconds left in the token validity to refresh
-CANVAS_TOKEN_EXPIRY_SLACK = env.int('CANVAS_TOKEN_EXPIRY_SLACK', default=600)
-

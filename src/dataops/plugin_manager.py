@@ -24,7 +24,7 @@ def get_plugin_path():
     if os.path.isabs(plugin_folder):
         return plugin_folder
 
-    return os.path.join(django_settings.PROJECT_PATH, plugin_folder)
+    return os.path.join(django_settings.BASE_DIR, plugin_folder)
 
 
 def verify_plugin_elements(plugin_instance):
