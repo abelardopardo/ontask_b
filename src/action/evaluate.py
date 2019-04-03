@@ -16,6 +16,7 @@ import dataops.formula_evaluation
 from action.forms import EnterActionIn
 from action.models import Condition, var_use_res
 from dataops import pandas_db, ops
+from dataops.pandas_db import get_table_cursor
 from workflow.models import Workflow
 
 # Variable name to store the workflow ID in the context used to render a
@@ -214,11 +215,11 @@ def evaluate_action(action, extra_string=None,
 
     # Step 3: Get the table data
     result = []
-    data_frame = pandas_db.get_subframe(workflow.id,
-                                        cond_filter,
-                                        workflow.get_column_names())
+    data_table = get_table_cursor(workflow.id,
+                                  cond_filter,
+                                  workflow.get_column_names())
 
-    for __, row in data_frame.iterrows():
+    for row in data_table:
 
         # Get the dict(col_name, value)
         row_values = dict(list(zip(col_names, row)))
