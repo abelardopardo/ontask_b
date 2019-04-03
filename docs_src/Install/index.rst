@@ -358,7 +358,7 @@ Once you have OnTask installed and configured and the tools Redis and Postgresql
 
 #. Execute the following command to upload to the platform some initial data structures::
 
-     python3 manage.py runscript -v1 --traceback initial_data
+     python3 manage.py initialize_db
 
    The command should run without any error or exception. If you need to create additional users before deploying the platform, read the section :ref:`bulk_user_creation`.
 
@@ -886,17 +886,17 @@ data in a CSV file through the following steps:
 
 2. From the ``src`` folder run the command::
 
-     $ python manage.py runscript initial_data --script-args "-d scripts/initial_learners.csv"
+     $ python manage.py initialize_db scripts/initial_learners.csv"
 
    If you have the user emails in a file with a different column name, you
    may provide the script that name (instead of the default ``email`` using
    the option ``-e``::
 
-     $ python manage.py runscript initial_data --script-args "-d -e your_email_column_name scripts/initial_learners.csv"
+     $ python manage.py initialize_db -e your_email_column_name scripts/initial_learners.csv"
 
    If you want to create user accounts for instructors, you need to specify
    this with the option ``-i`` in the script::
 
-     $ python manage.py runscript initial_data --script-args "-d -e your_email_column_name -i scripts/initial_learners.csv"
+     $ python manage.py initialize_db -e your_email_column_name -i scripts/initial_learners.csv"
 
 

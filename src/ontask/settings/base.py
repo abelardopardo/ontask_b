@@ -16,9 +16,9 @@ from os.path import dirname, join, exists
 import environ
 from celery.schedules import crontab
 from django.contrib import messages
+from django.contrib.messages import constants as message_constants
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.messages import constants as message_constants
 
 import ontask
 
@@ -58,6 +58,7 @@ def get_from_os_or_env(key, env_obj, default_value=''):
         return os.environ[key]
 
     return env_obj(key, default=default_value)
+
 
 # import ldap
 # from django_auth_ldap.config import (
@@ -107,7 +108,7 @@ RDS_PORT = get_from_os_or_env('RDS_PORT', env)
 # SECURITY WARNING: keep the secret key used in production secret!
 # Raises ImproperlyConfigured exception if SECRET_KEY not defined
 SECRET_KEY = get_from_os_or_env('SECRET_KEY', env, '')
-STATIC_URL_SUFFIX = get_from_os_or_env('STATIC_URL_SUFFIX', env, '/static/')
+STATIC_URL_SUFFIX = get_from_os_or_env('STATIC_URL_SUFFIX', env, 'static')
 
 TIME_ZONE = get_from_os_or_env('TIME_ZONE', env, 'UTC')
 
@@ -123,7 +124,13 @@ DEBUG = env.bool('DEBUG', default=False)
 EXECUTE_ACTION_JSON_TRANSFER = env.bool('EXECUTE_ACTION_JSON_TRANSFER',
                                         default=False)
 
-REDIS_URL = env.cache('REDIS_URL', env, 'rediscache://localhost:6379')
+REDIS_URL = env.cache_url(
+    'REDIS_URL',
+    default='rediscache://localhost:6379/'
+            '?client_class=django_redis.client.DefaultClient'
+            '&timeout=1000'
+            '&key_prefix=ontask'
+)
 
 SHOW_HOME_FOOTER_IMAGE = env.bool('SHOW_HOME_FOOTER_IMAGE', default=False)
 
@@ -136,19 +143,20 @@ USE_SSL = env.bool('USE_SSL', default=False)
 ################################################################################
 # Path to the root of the project
 BASE_DIR = environ.Path(__file__) - 3
+PROJECT_DIR = environ.Path(__file__) - 4
 
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
 if not DATAOPS_PLUGIN_DIRECTORY:
-    DATAOPS_PLUGIN_DIRECTORY = os.path.join(BASE_DIR, 'plugins')
+    DATAOPS_PLUGIN_DIRECTORY = os.path.join(BASE_DIR(), 'plugins')
 
 # Locale paths
-LOCALE_PATHS = [join(BASE_DIR, 'locale')]
+LOCALE_PATHS = [join(BASE_DIR(), 'locale')]
 
 # Log everything to the logs directory at the top
 if not LOG_FOLDER:
-    LOG_FOLDER = join(BASE_DIR(), '..', 'logs')
+    LOG_FOLDER = join(PROJECT_DIR(), '..', 'logs')
 
 MEDIA_ROOT = join(BASE_DIR(), 'media')
 if AWS_ACCESS_KEY_ID:
@@ -161,9 +169,9 @@ if AWS_ACCESS_KEY_ID:
     STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 else:
     STATICFILES_DIRS = [join(BASE_DIR(), STATIC_URL_SUFFIX)]
-    STATIC_URL = BASE_URL + STATIC_URL_SUFFIX
+    STATIC_URL = BASE_URL + '/' + STATIC_URL_SUFFIX + '/'
 
-STATIC_ROOT = join(BASE_DIR(), '..', 'site', 'static')
+STATIC_ROOT = join(PROJECT_DIR(), 'site', 'static')
 
 # URL pointing to the documentation
 ONTASK_HELP_URL = "html/index.html"
@@ -269,20 +277,9 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": REDIS_URL,
-        "TIMEOUT": 1800,
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "KEY_PREFIX": "ontask"
-        },
-    }
-}
+CACHES = { "default": REDIS_URL }
 # Cache time to live is 15 minutes
 CACHE_TTL = 60 * 30
-
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_CACHE_ALIAS = "default"
@@ -334,7 +331,7 @@ if 'RDS_DB_NAME' in os.environ:
         }
     }
 else:
-    DATABASES = { 'default': DATABASE_URL, }
+    DATABASES = {'default': DATABASE_URL, }
 
 USE_I18N = True
 
