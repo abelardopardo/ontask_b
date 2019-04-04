@@ -90,7 +90,9 @@ AWS_LOCATION = get_from_os_or_env('AWS_LOCATION', env, 'static')
 
 BASE_URL = get_from_os_or_env('BASE_URL', env)
 
-DATAOPS_PLUGIN_DIRECTORY = get_from_os_or_env('DATAOPS_PLUGIN_DIRECTORY', env)
+DATAOPS_PLUGIN_DIRECTORY = get_from_os_or_env('DATAOPS_PLUGIN_DIRECTORY',
+                                              env,
+                                              '')
 
 DOMAIN_NAME = get_from_os_or_env('DOMAIN_NAME', env, 'localhost')
 
@@ -141,8 +143,9 @@ USE_SSL = env.bool('USE_SSL', default=False)
 # Additional variables
 #
 ################################################################################
-# Path to the root of the project
+# Path to the src folder
 BASE_DIR = environ.Path(__file__) - 3
+# Path to the project root (where the SRC folder is)
 PROJECT_DIR = environ.Path(__file__) - 4
 
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
@@ -156,7 +159,7 @@ LOCALE_PATHS = [join(BASE_DIR(), 'locale')]
 
 # Log everything to the logs directory at the top
 if not LOG_FOLDER:
-    LOG_FOLDER = join(PROJECT_DIR(), '..', 'logs')
+    LOG_FOLDER = join(PROJECT_DIR(), 'logs')
 
 MEDIA_ROOT = join(BASE_DIR(), 'media')
 if AWS_ACCESS_KEY_ID:
