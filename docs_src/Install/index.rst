@@ -128,7 +128,7 @@ Configuration script (*script* level)
 
 OnTask processes the variables in these context in the following stages:
 
-1) The environment varibles are loaded (if present)
+1) The environment variables are loaded (if present)
 
 2) The configuration file is loaded. If the file contains a definition for an environment variable, this is considered only if there is no value provided by the environment. In other words, an empty set of environment variables can be written in the configuration file and their values are considered. On the opposite side, if all environment variables are defined, any additional definition in the configuration file is ignored.
 
@@ -167,9 +167,15 @@ The following variables, if defined in the environment, are considered by OnTask
 
 - ``BASE_URL``
 
-  Suffix that follows the hostname when accessing OnTask once deployed. This is to allow OnTask to be deployed as part of a larger webserver when the application is accessed as, for example, ``hostname.com/suffix/ontask``.
+  Suffix that follows the host name when accessing OnTask once deployed. This is to allow OnTask to be deployed as part of a larger web server when the application is accessed as, for example, ``hostname.com/suffix/ontask``.
 
   Default: ``''``
+
+- ``DATAOPS_PLUGIN_DIRECTORY``
+
+  Folder in the local file system containing the OnTask plugins.
+
+  Default: `src/plugins`
 
 - ``DJANGO_SETTINGS_MODULE``
 
@@ -203,7 +209,7 @@ The following variables, if defined in the environment, are considered by OnTask
 
 - ``RDS_DB_NAME``, ``RDS_DB_USERNAME``, ``RDS_DB_PASSWORD``, ``RDS_DB_HOSTNAME``, ``RDS_DB_PORT``
 
-  Parameters to access the platform database: database name, username, password, hostname and port respectively.
+  Parameters to access the platform database: database name, username, password, host name and port respectively.
 
   Default: All empty strings.
 
@@ -215,9 +221,9 @@ The following variables, if defined in the environment, are considered by OnTask
 
 - ``STATIC_URL_SUFFIX``
 
-  URL suffix to be used by OnTask to access the static files. This definition is ignored if ``AWS_ACCESS_KEY_ID`` is defined as it is assumed that the static content is served through AWS.
+  URL suffix to be used by OnTask to access the static files. This definition is ignored if ``AWS_ACCESS_KEY_ID`` is defined as it is assumed that the static content is served through AWS. Make sure this value is not terminated by a slash.
 
-  Default: ``/static``
+  Default: ``static``
 
 - ``TIME_ZONE``
 
@@ -248,21 +254,21 @@ The variables suitable to be included in the configuration file are:
 
   Default: ``[*]`` (any connection from any host)
 
+- ``DATABASE_URL`` **(Required)**
+
+  URL encoding the connection to the database. String of the format ``postgres://username:password@host:port/database``
+
 - ``DEBUG``
 
   Flag to control if the execution is in DEBUG mode.
 
   Default: ``False``
 
-- ``EMAIL_USE_TLS``
+- ``EXECUTE_ACTION_JSON_TRANSFER``
 
-  Boolean to choose if the communication with the email service (if defined) should use TLS. See Django Settings for more detailed information about this variable.
+  Boolean stating if the JSON transfers should be executed when sending persnalized text.
 
   Default: ``False``
-
-- ``EMAIL_USE_SSL``
-
-  Boolean to choose if the communication with the email service (if defined) should use SSL. See Django Settings for more detailed information about this variable.
 
 - ``REDIS_URL``
 
@@ -284,16 +290,17 @@ The variables suitable to be included in the configuration file are:
 
 Here is an example of a minimalistic configuration file (note there is no space between variable names and the equal signs)::
 
-   DEBUG=False
-   TIME_ZONE=[YOUR LOCAL PYTHON TIME ZONE]
    BASE_URL=''
-   DOMAIN_NAME=[YOUR DOMAIN NAME]
-   USE_SSL=True
-   SHOW_HOME_FOOTER_IMAGE=True
-   # syntax: DATABASE_URL=postgres://username:password@127.0.0.1:5432/database
    DATABASE_URL=postgres://[PSQLUSERNAME]:[PSQLPWD]@127.0.0.1:5432/ontask
+   DEBUG=False
+   DOMAIN_NAME=[YOUR DOMAIN NAME]
+   EXECUTE_ACTION_JSON_TRANSFER=True
    REDIS_URL=[YOUR REDIS URL]
-   SECRET_KEY=
+   SHOW_HOME_FOOTER_IMAGE=False
+   TIME_ZONE=[YOUR LOCAL PYTHON TIME ZONE]
+   USE_SSL=True
+   # syntax: DATABASE_URL=postgres://username:password@127.0.0.1:5432/database
+   SECRET_KEY=aaabbbcccddd
 
 #. Replace ``[YOUR LOCAL PYTHON TIME ZONE]`` with the description of your time zone (see the definition of the variable ``TIME_ZONE`` in :ref:`configuration_environment`.
 
@@ -329,7 +336,7 @@ Here is an example of a minimalistic configuration file (note there is no space 
 Configuration script
 --------------------
 
-The additional variables for configuration are directly defined in the modules ``base.py``, ``development.py`` and ``production.py``. Modify the python code to perform additional configuration considering:
+The additional configuration variables are directly in the modules ``base.py``, ``development.py`` and ``production.py`` in the folder ``src/ontask/settings``. Modify the python code to perform additional configuration considering:
 
 1) The script ``base.py`` is always executed first
 
@@ -340,15 +347,14 @@ The additional variables for configuration are directly defined in the modules `
 Log directory
 -------------
 
-1. Create a new folder with name ``logs`` in the OnTask top folder (next to the ``requirements`` folder). This folder **is different** from the folder with the same name in the ``src`` folder.
+Create a new folder with name ``logs`` in the OnTask top folder, next to the ``requirements`` folder, or in the location defined in the variable ``LOG_FOLDER``. This folder **is different** from the folder with the same name in the ``src`` folder.
 
-#. If at some point during the following steps you want to reset the content of the database, run the commands ``dropdb`` and ``createdb`` explained in :ref:`install_postgresql`.
 
 
 OnTask Installation
 ===================
 
-Once you have OnTask installed and configured and the tools Redis and Postgresql running, the next step is to create the initial database configuration, documentation, additional site files, and deploy.
+Once you have OnTask installed and configured and the tools Redis and Postgresql running, the next step is to create the initial database configuration, documentation, additional site files, and deploy. If at some point during the following steps you want to reset the content of the database, run the commands ``dropdb`` and ``createdb`` explained in :ref:`install_postgresql`.
 
 1. Execute the following command from the ``src`` folder to create the database internal structure::
 
@@ -886,17 +892,17 @@ data in a CSV file through the following steps:
 
 2. From the ``src`` folder run the command::
 
-     $ python manage.py initialize_db scripts/initial_learners.csv"
+     $ python3 manage.py initialize_db scripts/initial_learners.csv"
 
    If you have the user emails in a file with a different column name, you
    may provide the script that name (instead of the default ``email`` using
    the option ``-e``::
 
-     $ python manage.py initialize_db -e your_email_column_name scripts/initial_learners.csv"
+     $ python3 manage.py initialize_db -e your_email_column_name scripts/initial_learners.csv"
 
    If you want to create user accounts for instructors, you need to specify
    this with the option ``-i`` in the script::
 
-     $ python manage.py initialize_db -e your_email_column_name -i scripts/initial_learners.csv"
+     $ python3 manage.py initialize_db -e your_email_column_name -i scripts/initial_learners.csv"
 
 
