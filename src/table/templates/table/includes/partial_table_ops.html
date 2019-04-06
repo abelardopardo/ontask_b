@@ -1,12 +1,12 @@
 {% load i18n %}
-<div class="shadow btn-group">
-  <a class="shadow btn btn-sm btn-light spin" href="{{ edit_url }}"
+<div class="btn-group">
+  <a class="btn btn-sm btn-light spin" href="{{ edit_url }}"
      title="{% trans 'Edit the values in this row' %}">
     <span class="fa fa-pencil"></span></a>
-  <a href="{{ stat_url }}" class="shadow btn btn-sm btn-light spin"
+  <a href="{{ stat_url }}" class="btn btn-sm btn-light spin"
      title="{% trans 'Compare values in the row with the rest of the table' %}">
     <span class="fa fa-bar-chart"></span></a>
-  <button type="button" class="shadow btn btn-sm btn-light js-row-delete"
+  <button type="button" class="btn btn-sm btn-light js-row-delete"
      data-url="{% url 'table:row_delete' %}{{ delete_key }}"
      title="{% trans 'Delete this row' %}">
     <span class="fa fa-trash"></span></button>

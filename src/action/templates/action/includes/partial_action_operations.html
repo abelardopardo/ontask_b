@@ -1,11 +1,11 @@
 {% load i18n %}
 <div class=" btn-group" role="group">
   <a href="{% url 'action:run' id %}"
-     class="shadow btn btn-light btn-sm spin {% if not is_executable %}disabled{% endif %}"
+     class="btn btn-light btn-sm spin {% if not is_executable %}disabled{% endif %}"
      data-toggle="tooltip"
      title="{% if action_tval == 'survey' or action_tval == 'todo_list' %}{% trans 'Enter data manually' %}{% elif action_tval == 'personalized_json' %}{% trans 'Send personalised JSONs' %}{% else %}{% trans 'Send personalised text' %}{% endif %}"><span class="fa fa-rocket"></span> {% trans 'Run' %}</a>
   <div class="dropdown">
-    <button class="shadow btn btn-light btn-sm" type="button" id="actionMoreOperations"
+    <button class="btn btn-light btn-sm" type="button" id="actionMoreOperations"
             data-toggle="dropdown"><span class="fa fa-ellipsis-h"></span></button>
     <div class="shadow dropdown-menu dropdown-menu-right" aria-labelledby="actionMoreOperations">
       {% if action_tval != 'personalized_canvas_email' and action_val != 'personalized_json' %}
