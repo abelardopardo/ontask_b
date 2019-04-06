@@ -63,7 +63,7 @@ def trck(request):
     # Push the tracking to the asynchronous queue
     increase_track_count.delay(request.method, request.GET)
 
-    return HttpResponse(settings.PIXEL, content_type='image/png')
+    return  HttpResponse(status=200)
 
 
 @login_required

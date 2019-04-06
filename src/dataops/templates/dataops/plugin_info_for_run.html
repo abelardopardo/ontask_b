@@ -53,10 +53,10 @@
       <div class="tab-content" id="dataops-get-plugin-info-tab-content">
         <div class="shadow rounded tab-pane px-3 fade show active border border-dark"
              id="inputs" role="tabpanel" aria-labelledby="inputs-tab">
-          <div class="row justify-content-center form-group{% if form.columns.errors %} has-danger{% endif %}">
+          <div class="text-center form-group{% if form.columns.errors %} has-danger{% endif %}">
             {% if pinstance.input_column_names %}
-              <p class="lead">{% trans 'Input columns' %}</p>
-              <p>{{ pinstance.input_column_names|join:", " }}</p>
+              <p class="my-3">{% trans 'Input columns' %}</p>
+              <p class="lead">{{ pinstance.input_column_names|join:", " }}</p>
             {% else %}
               {{ form.columns|as_crispy_field }}
             {% endif %}
