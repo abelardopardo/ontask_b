@@ -508,8 +508,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
         # Go to CSV Upload/Merge
         self.selenium.find_element_by_xpath(
-            "//table[@id='dataops-table']//a[normalize-space()='CSV "
-            "Upload/Merge']").click()
+            "//table[@id='dataops-table']//a[normalize-space()='CSV']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
                 (By.XPATH, "//form")
@@ -521,8 +520,8 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
         # Go to CSV Upload/Merge
         self.selenium.find_element_by_xpath(
-            "//table[@id='dataops-table']//a[normalize-space()='Excel "
-            "Upload/Merge']").click()
+            "//table[@id='dataops-table']"
+            "//a[normalize-space()='Excel']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
                 (By.XPATH, "//form")
@@ -535,7 +534,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         # Go to CSV Upload/Merge
         self.selenium.find_element_by_xpath(
             "//table[@id='dataops-table']//a[normalize-space()='Google "
-            "Sheet Upload/Merge']").click()
+            "Sheet']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
                 (By.XPATH, "//form")
@@ -1264,6 +1263,11 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         self.wait_for_datatable('table-data_previous')
 
     def select_text_tab(self):
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, "text-tab")
+            )
+        )
         self.selenium.find_element_by_id('text-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1272,6 +1276,11 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         )
 
     def select_json_text_tab(self):
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, "text-tab")
+            )
+        )
         self.selenium.find_element_by_id('text-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1280,6 +1289,11 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         )
 
     def select_canvas_text_tab(self):
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, "text-tab")
+            )
+        )
         self.selenium.find_element_by_id('text-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1293,6 +1307,11 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         filter tab
         :return:
         """
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, "filter-tab")
+            )
+        )
         self.selenium.find_element_by_id('filter-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1306,6 +1325,11 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         condition tab
         :return:
         """
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, "conditions-tab")
+            )
+        )
         self.selenium.find_element_by_id('conditions-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1314,12 +1338,22 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         )
 
     def select_share_tab(self):
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, "share-tab")
+            )
+        )
         self.selenium.find_element_by_id('share-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME, 'js-share-create'))
         )
 
     def select_questions_tab(self):
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, "questions-tab")
+            )
+        )
         self.selenium.find_element_by_id('questions-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME,
@@ -1327,6 +1361,11 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         )
 
     def select_parameters_tab(self):
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, "parameters-tab")
+            )
+        )
         self.selenium.find_element_by_id('parameters-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME,
@@ -1334,6 +1373,11 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         )
 
     def select_plugin_input_tab(self):
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, "inputs-tab")
+            )
+        )
         self.selenium.find_element_by_id('inputs-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME, 'sol-container'))
@@ -1346,6 +1390,11 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         )
 
     def select_plugin_parameters_tab(self):
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, "parameters-tab")
+            )
+        )
         self.selenium.find_element_by_id('parameters-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.ID, 'parameters'))

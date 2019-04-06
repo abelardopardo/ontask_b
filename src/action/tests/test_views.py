@@ -312,11 +312,14 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Click the send button
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Next']").click()
+            "//button[normalize-space()='Send']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, "//body/div/h1"),
                 'Action scheduled for execution')
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
         # There should be a message on that page

@@ -77,7 +77,7 @@ class TutorialCaptures(ScreenTests):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
-                                             'Step 2: Select Columns')
+                                             'Select Columns')
         )
 
         # Uncheck two elements
@@ -197,7 +197,7 @@ class TutorialCaptures(ScreenTests):
         # Merge data from Moodle
         #
         self.go_to_upload_merge()
-        self.selenium.find_element_by_link_text("CSV Upload/Merge").click()
+        self.selenium.find_element_by_link_text("CSV").click()
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Upload/Merge CSV')
         )
@@ -267,8 +267,7 @@ class TutorialCaptures(ScreenTests):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.XPATH, "//body/div/h1"),
-                'Step 4: Review and confirm')
+                (By.XPATH, "//body/div/h1"), 'Review and confirm')
         )
 
         # Picture of the body

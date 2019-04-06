@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 import logging.config
-import sys
 
 from .base import *  # NOQA
 
@@ -10,6 +9,9 @@ from .base import *  # NOQA
 # See http://stackoverflow.com/a/4806384
 if "celery" in sys.argv[0]:
     DEBUG = False
+else:
+    print('Forcing synchronous execution in Celery')
+    CELERY_TASK_ALWAYS_EAGER = True
 
 # Django Debug Toolbar
 if DEBUG:
@@ -151,3 +153,5 @@ GRAPH_MODELS = {
         'ContentType'
     ]
 }
+
+dump_config()

@@ -239,7 +239,7 @@ def evaluate_action(action, extra_string=None,
 
     # Step 3: Get the table data
     result = []
-    data_table = get_table_cursor(workflow.id,
+    data_table = get_table_cursor(workflow.get_data_frame_table_name(),
                                   cond_filter,
                                   workflow.get_column_names())
 

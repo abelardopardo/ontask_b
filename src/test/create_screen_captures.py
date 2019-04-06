@@ -300,7 +300,7 @@ class ScreenTestFixture(ScreenTests):
         self.go_to_upload_merge()
         self.body_ss('dataops_datauploadmerge.png')
 
-        self.selenium.find_element_by_link_text("CSV Upload/Merge").click()
+        self.selenium.find_element_by_link_text("CSV").click()
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Upload/Merge CSV')
         )
@@ -369,8 +369,7 @@ class ScreenTestFixture(ScreenTests):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.XPATH, "//body/div/h1"),
-                'Step 4: Review and confirm')
+                (By.XPATH, "//body/div/h1"), 'Review and confirm')
         )
 
         # Picture of the body

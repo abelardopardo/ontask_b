@@ -161,6 +161,23 @@ def is_table_in_db(table_name):
     )
 
 
+def is_column_in_table(table_name, column_name):
+    """
+    Check if ta column is in the table
+    :param table_name: Table used for the check
+    :param column_name: Column used for the check
+    :return: Boolean
+    """
+
+    query = 'SELECT EXISTS (SELECT 1 FROM information_schema.columns WHERE ' \
+        'table_name=%s and column_name=%s)'
+
+    cursor = connection.cursor()
+    cursor.execute(query, [table_name, column_name])
+
+    return cursor.fetchone()[0]
+
+
 def is_column_table_unique(table_name, column_name):
     """
     Given a table_name, see if the given column has unique values

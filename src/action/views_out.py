@@ -192,7 +192,6 @@ def email_action_done(request, payload=None):
                                      'track_read': track_read})
 
     # Send the emails!
-    # send_email_messages(request.user.id,
     send_email_messages.delay(request.user.id,
                               action.id,
                               subject,
@@ -579,7 +578,6 @@ def json_done(request, payload=None):
                                      'target_url': action.target_url})
 
     # Send the objects
-    # send_json_objects(request.user.id,
     send_json_objects.delay(request.user.id,
                             action.id,
                             token,
@@ -782,7 +780,6 @@ def canvas_email_done(request, payload=None):
                                      'subject': subject})
 
     # Send the emails!
-    # send_canvas_email_messages(request.user.id,
     send_canvas_email_messages.delay(request.user.id,
                                      action.id,
                                      subject,

@@ -35,8 +35,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
 
         # Go to CSV Upload/Merge
         self.selenium.find_element_by_xpath(
-            "//table[@id='dataops-table']//a[normalize-space()='CSV "
-            "Upload/Merge']").click()
+            "//table[@id='dataops-table']//a[normalize-space()='CSV']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
                 (By.XPATH, "//form")
@@ -57,7 +56,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
-                                             'Step 2: Select Columns')
+                                             'Select Columns')
         )
 
         # Change the name of one of the columns
@@ -113,7 +112,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
-                                             'Step 2: Select Columns')
+                                             'Select Columns')
         )
 
         # Change the name of sid2 to sid
@@ -130,8 +129,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         # Wait for the upload/merge
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.XPATH, "//body/div/h1"),
-                'Step 3: Select Keys and Merge Option')
+                (By.XPATH, "//body/div/h1"), 'Select Keys and Merge Option')
         )
 
         # Select SID in the first key
@@ -151,8 +149,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         # Wait for the upload/merge
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.XPATH, "//body/div/h1"),
-                'Step 4: Review and confirm')
+                (By.XPATH, "//body/div/h1"), 'Review and confirm')
         )
 
         # Click on the FINISH button
@@ -191,8 +188,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
 
         # Go to the CSV upload step 1
         self.selenium.find_element_by_xpath(
-            "//table[@id='dataops-table']//a[normalize-space()='CSV "
-            "Upload/Merge']").click()
+            "//table[@id='dataops-table']//a[normalize-space()='CSV']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
                 (By.XPATH, "//form")
@@ -220,7 +216,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
-                                             'Step 2: Select Columns')
+                                             'Select Columns')
         )
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))

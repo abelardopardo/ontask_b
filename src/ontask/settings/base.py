@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 from __future__ import unicode_literals
 
 import os
+import sys
 from os.path import dirname, join, exists
 
 import environ
@@ -43,6 +44,8 @@ def dump_config():
     print('DOMAIN_NAME:', DOMAIN_NAME)
     print('USE_SSL:', USE_SSL)
     print('ALLOWED_HOSTS:', ALLOWED_HOSTS)
+    print('TESTING:', TESTING)
+    print('CELERY_TASK_ALWAYS_EAGER:', CELERY_TASK_ALWAYS_EAGER)
 
 
 def get_from_os_or_env(key, env_obj, default_value=''):
@@ -126,7 +129,7 @@ DEBUG = env.bool('DEBUG', default=False)
 EXECUTE_ACTION_JSON_TRANSFER = env.bool('EXECUTE_ACTION_JSON_TRANSFER',
                                         default=False)
 
-REDIS_URL = env.cache_url(
+REDIS_URL = env.cache(
     'REDIS_URL',
     default='rediscache://localhost:6379/'
             '?client_class=django_redis.client.DefaultClient'
@@ -156,6 +159,9 @@ if not DATAOPS_PLUGIN_DIRECTORY:
 
 # Locale paths
 LOCALE_PATHS = [join(BASE_DIR(), 'locale')]
+
+# Variable flagging that this is a test enviromnet
+TESTING = sys.argv[1:2] == ['test']
 
 # Log everything to the logs directory at the top
 if not LOG_FOLDER:
@@ -280,7 +286,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
 
-CACHES = { "default": REDIS_URL }
+CACHES = {"default": REDIS_URL}
 # Cache time to live is 15 minutes
 CACHE_TTL = 60 * 30
 
@@ -460,9 +466,9 @@ SCHEDULER_MINUTE_STEP = 15
 # CELERY parameters
 #
 ################################################################################
-CELERY_BROKER_URL = REDIS_URL
-CELERY_RESULT_BACKEND = REDIS_URL
-CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_BROKER_URL = REDIS_URL['LOCATION']
+CELERY_RESULT_BACKEND = REDIS_URL['LOCATION']
+CELERY_ACCEPT_CONTENT = ['application/json', 'pickle']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
@@ -473,6 +479,7 @@ CELERY_BEAT_SCHEDULE = {
         'args': (DEBUG,)
     }
 }
+CELERY_TASK_ALWAYS_EAGER = TESTING
 
 ################################################################################
 #

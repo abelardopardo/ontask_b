@@ -8,6 +8,7 @@ from django.shortcuts import reverse
 
 import test
 from dataops import pandas_db
+from workflow.models import Workflow
 
 
 class EmailActionTracking(test.OnTaskTestCase):
@@ -20,9 +21,15 @@ class EmailActionTracking(test.OnTaskTestCase):
     )
 
     trck_tokens = [
-        "eyJhY3Rpb24iOjIsInRvIjoic3R1ZGVudDFAYm9ndXMuY29tIiwiY29sdW1uX2RzdCI6IkVtYWlsUmVhZF8xIiwic2VuZGVyIjoiaWRlc2lnbmVyMUBib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCJ9:1eBtw5:MwH1axNDQq9HpgcP6jRvp7cAFmI",
-        "eyJhY3Rpb24iOjIsInRvIjoic3R1ZGVudDJAYm9ndXMuY29tIiwiY29sdW1uX2RzdCI6IkVtYWlsUmVhZF8xIiwic2VuZGVyIjoiaWRlc2lnbmVyMUBib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCJ9:1eBtw5:FFS1EXjdgJjc37ZVOcW22aIegR4",
-        "eyJhY3Rpb24iOjIsInRvIjoic3R1ZGVudDNAYm9ndXMuY29tIiwiY29sdW1uX2RzdCI6IkVtYWlsUmVhZF8xIiwic2VuZGVyIjoiaWRlc2lnbmVyMUBib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCJ9:1eBtw5:V0KhNWbcY3YPTfJXRagPaeJae4M"
+        "eyJhY3Rpb24iOjIsInNlbmRlciI6Imluc3RydWN0b3IwMUBib2d1cy5jb20iLCJ0by"
+        "I6InN0dWRlbnQwMUBib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCIsImNvbHVtbl"
+        "9kc3QiOiJFbWFpbFJlYWRfMSJ9:1hCeQr:oax6nggj9kBkSdz1oFXfYVz8R4I",
+        "eyJhY3Rpb24iOjIsInNlbmRlciI6Imluc3RydWN0b3IwMUBib2d1cy5jb20iLCJ0byI6I"
+        "nN0dWRlbnQwMkBib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCIsImNvbHVtbl9kc3Q"
+        "iOiJFbWFpbFJlYWRfMSJ9:1hCeQr:nLzLJRAGgiJhZWyJ-D6oGXlIY_E",
+        "eyJhY3Rpb24iOjIsInNlbmRlciI6Imluc3RydWN0b3IwMUBib2d1cy5jb20iLCJ0byI6In"
+        "N0dWRlbnQwM0Bib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCIsImNvbHVtbl9kc3Qi"
+        "OiJFbWFpbFJlYWRfMSJ9:1hCeQr:5LuQISOvahDaiYuOYUufdfYRT_o"
     ]
 
     wflow_name = 'wflow1'
@@ -46,15 +53,14 @@ class EmailActionTracking(test.OnTaskTestCase):
             for trck in self.trck_tokens:
                 self.client.get(reverse('trck') + '?v=' + trck)
 
-            # No longer working due to celery
-            # # Get the workflow and the data frame
-            # workflow = Workflow.objects.get(name=self.wflow_name)
-            # df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
-            #
-            # # Check that the results have been updated in the DB (to 1)
-            # for uemail in [x[1] for x in test.user_info
-            #                if x[1].startswith('student')]:
-            #     self.assertEqual(
-            #         int(df.loc[df['email'] == uemail, 'EmailRead_1'].values[0]),
-            #         idx
-            #     )
+            # Get the workflow and the data frame
+            workflow = Workflow.objects.get(name=self.wflow_name)
+            df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+
+            # Check that the results have been updated in the DB (to 1)
+            for uemail in [x[1] for x in test.user_info
+                           if x[1].startswith('student')]:
+                self.assertEqual(
+                    int(df.loc[df['email'] == uemail, 'EmailRead_1'].values[0]),
+                    idx
+                )
