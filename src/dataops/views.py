@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
+import json
 from builtins import object
 from builtins import range
 from builtins import str
@@ -18,7 +19,6 @@ from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.cache import cache_page
 
 import dataops.ops as ops
 import dataops.pandas_db
@@ -105,7 +105,6 @@ class PluginRegistryTable(tables.Table):
         }
 
 
-@cache_page(60 * 15)
 @user_passes_test(is_instructor)
 def uploadmerge(request):
     # Get the workflow that is being used
@@ -458,27 +457,28 @@ def plugin_invoke(request, pk):
             ]
 
     # Log the event with the status "preparing invocation"
-    log_item = Log.objects.register(request.user,
-                                    Log.PLUGIN_EXECUTE,
-                                    workflow,
-                                    {'id': plugin_info.id,
-                                     'name': plugin_info.name,
-                                     'input_column_names': input_column_names,
-                                     'output_column_names': output_column_names,
-                                     'parameters': parameters,
-                                     'status': 'preparing execution'})
+    log_item = Log.objects.register(
+        request.user,
+        Log.PLUGIN_EXECUTE,
+        workflow,
+        {'id': plugin_info.id,
+         'name': plugin_info.name,
+         'input_column_names': input_column_names,
+         'output_column_names': output_column_names,
+         'parameters': json.dumps(parameters, default=str),
+         'status': 'preparing execution'})
 
-    # Call the plugin execution
-    # run_plugin(request.user.id,
-    run_plugin.delay(request.user.id,
-                     workflow.id,
-                     pk,
-                     input_column_names,
-                     output_column_names,
-                     suffix,
-                     form.cleaned_data['merge_key'],
-                     parameters,
-                     log_item.id)
+    run_plugin.apply_async(
+        (request.user.id,
+         workflow.id,
+         pk,
+         input_column_names,
+         output_column_names,
+         suffix,
+         form.cleaned_data['merge_key'],
+         parameters,
+         log_item.id),
+        serializer='pickle')
 
     # Successful processing.
     return render(request,

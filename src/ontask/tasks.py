@@ -3,9 +3,9 @@
 
 import datetime
 from builtins import str
-import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 
+import pandas as pd
 import pytz
 from celery import shared_task
 from celery.utils.log import get_task_logger
@@ -14,9 +14,9 @@ from django.contrib.auth import get_user_model
 from django.core import signing
 from django.utils.translation import ugettext
 
+import dataops.ops as ops
 from action.models import Action
 from action.ops import send_messages, send_json, send_canvas_messages
-import dataops.ops as ops
 from dataops import pandas_db
 from dataops.models import PluginRegistry
 from dataops.plugin_manager import load_plugin
@@ -244,7 +244,7 @@ def execute_scheduled_actions(debug):
     # Get all the actions that are pending
     s_items = ScheduledAction.objects.filter(
         status=ScheduledAction.STATUS_PENDING,
-        execute__lt=now + datetime.timedelta(minutes=1)
+        execute__lt=now + timedelta(minutes=1)
     )
     logger.info(str(s_items.count()) + ' actions pending execution')
 
@@ -423,6 +423,11 @@ def increase_track_count(method, get_dict):
     column_to = track_id.get('column_to', '')
     msg_to = track_id.get('to', '')
 
+    column = action.workflow.columns.filter(name=column_dst).first()
+    if not column:
+        # If the column does not exist, we are done
+        return
+
     log_payload = {'to': msg_to,
                    'email_column': column_to,
                    'column_dst': column_dst
@@ -468,7 +473,6 @@ def run_plugin(user_id,
                merge_key,
                parameters,
                log_id):
-
     """
 
     Execute the run method in a plugin with the dataframe from the given
@@ -531,6 +535,16 @@ def run_plugin(user_id,
         log_item.save()
         return False
 
+    # Check that the list if inputs is consistent
+    if (plugin_instance.input_column_names and input_column_names) or (
+            not plugin_instance.input_column_names and not input_column_names):
+        log_item.payload['status'] = \
+            ugettext('Inconsisten inputs when invoking plugin "{0}"').format(
+                plugin_info.name
+            )
+        log_item.save()
+        return False
+
     # Get the data frame
     try:
         df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
@@ -540,14 +554,17 @@ def run_plugin(user_id,
         log_item.save()
         return False
 
-    # Select the columns in input_column_names
-    sub_df = df[input_column_names + [merge_key]]
-
     # Set the input/output columns, and the suffix
     if not plugin_instance.input_column_names:
         plugin_instance.input_column_names = input_column_names
+    if not input_column_names:
+        input_column_names = plugin_instance.input_column_names
+
     plugin_instance.output_column_names = output_column_names
     plugin_instance.output_suffix = output_suffix
+
+    # Select the columns in input_column_names
+    sub_df = df[input_column_names + [merge_key]]
 
     # Set the status to "executing" before calling the function
     log_item.payload['status'] = 'Executing'
