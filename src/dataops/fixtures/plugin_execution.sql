@@ -36,9 +36,9 @@ CREATE TABLE public."__ONTASK_WORKFLOW_TABLE_35" (
 --
 
 COPY public."__ONTASK_WORKFLOW_TABLE_35" (email, "student id", "A1", "A2") FROM stdin;
-fake_addess1@bogus_email.com	111	0	1
-fake_addess3@bogus_email.com	333	1	1
-fake_addess2@bogus_email.com	222	1	0
+fake_addess1@bogus.com	111	0	1
+fake_addess3@bogus.com	333	1	1
+fake_addess2@bogus.com	222	1	0
 \.
 
 
