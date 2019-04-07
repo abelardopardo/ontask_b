@@ -82,7 +82,7 @@ def is_legal_name(val):
 def is_correct_email(email_txt):
     try:
         validate_email(email_txt)
-    except ValueError:
+    except (ValueError, AttributeError):
         return False
 
     return True
