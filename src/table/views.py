@@ -9,6 +9,8 @@ from builtins import str
 from datetime import datetime
 
 import django_tables2 as tables
+import pytz
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
@@ -258,7 +260,11 @@ def render_table_display_data(request, workflow, columns, formula,
 
         # Element to add to the final queryset
         new_element['Operations'] = ops_string
-        values = [x.strftime('%Y-%m-%d %H:%M:%S %z')
+        # values = [x.strftime('%Y-%m-%d %H:%M:%S %z')
+        #           if isinstance(x, datetime) else x for x in list(row)]
+        values = [x.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime(
+            '%Y-%m-%d %H:%M:%S %z'
+        )
                   if isinstance(x, datetime) else x for x in list(row)]
         new_element.update(zip(column_names, values))
 
