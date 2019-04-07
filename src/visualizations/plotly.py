@@ -15,7 +15,10 @@ class PlotlyHandler(VisHandler):
     Handler to produce Plotly visualizations.
     """
 
-    head_scripts = ["//cdn.plot.ly/plotly-latest.min.js"]
+    # head_scripts = ["//cdn.plot.ly/plotly-latest.min.js"]
+    head_scripts = [
+        "//cdn.plot.ly/plotly-cartesian-latest.min.js"
+    ]
 
     html_skel = """<div id="{id}" style="{style}"></div>
         <script>Plotly.newPlot('{id}', {data}, 
