@@ -2,7 +2,6 @@ function insertAtCaret(areaId, text) {
     var txtarea = document.getElementById(areaId);
     var scrollPos = txtarea.scrollTop;
     var caretPos = txtarea.selectionStart;
-
     var front = (txtarea.value).substring(0, caretPos);
     var back = (txtarea.value).substring(txtarea.selectionEnd, txtarea.value.length);
     txtarea.value = front + text + back;
@@ -41,6 +40,7 @@ var insertAttributeInContent = function() {
   if (val == '') {
     return;
   }
+  $("#id_content").summernote('createRange');
   insertText('id_content', "{{ " + val + " }}");
   $(this).val(this.defaultSelected);
 }
