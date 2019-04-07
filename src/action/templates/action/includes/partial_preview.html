@@ -30,30 +30,32 @@
       </button>
     {% endif %}
   </div>
-  {% if all_false %}
-    <p class="alert-danger text-center"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'All conditions evaluate to FALSE' %}</p>
-  {% endif %}
-  {% if not correct_json %}
-    <p class="alert-danger text-center">{% trans 'Incorrect JSON object. Check action text' %}</p>
-  {% endif %}
-  {% if prelude %}
-    <div class="modal-body border border-dark mx-3">
-      <strong>{% trans 'Subject:' %}</strong> {{ prelude }}
+  <div class="mx-3 my-3">
+    {% if all_false %}
+      <p class="alert-danger text-center"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'All conditions evaluate to FALSE' %}</p>
+    {% endif %}
+    {% if not correct_json %}
+      <p class="alert-danger text-center">{% trans 'Incorrect JSON object. Check action text' %}</p>
+    {% endif %}
+    {% if prelude %}
+      <div class="modal-body border border-dark">
+        <strong>{% trans 'Subject:' %}</strong> {{ prelude }}
+      </div>
+    {% endif %}
+    <div id="preview-body" class="modal-body border border-dark">
+      {% if action.action_type == 'personalized_json' %}
+        <pre>{{ action_content }}</pre>
+      {% elif action.action_type == 'personalized_canvas_email' %}
+        <div class="container-fluid" style="white-space: pre-wrap;">{{ action_content }}</div>
+      {% else %}
+        {{ action_content }}
+      {% endif %}
     </div>
-  {% endif %}
-  <div id="preview-body" class="modal-body border border-dark mx-3">
-    {% if action.action_type == 'personalized_json' %}
-      <pre>{{ action_content }}</pre>
-    {% elif action.action_type == 'personalized_canvas_email' %}
-      <div class="container-fluid" style="white-space: pre-wrap;">{{ action_content }}</div>
-    {% else %}
-      {{ action_content }}
+    {% if action.is_out and show_values %}
+      <div id="preview-variables" class="modal-body border border-dark">
+        <strong>{% trans 'Values:' %}</strong> {{ show_values }}
+      </div>
     {% endif %}
   </div>
-  {% if action.is_out and show_values %}
-    <div id="preview-variables" class="modal-body border border-dark mx-3 mb-3">
-      <strong>{% trans 'Values:' %}</strong> {{ show_values }}
-    </div>
-  {% endif %}
 </div>
 
