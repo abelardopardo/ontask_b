@@ -4,6 +4,7 @@
 import itertools
 from builtins import str
 
+import pandas as pd
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext
 
@@ -38,6 +39,16 @@ class NodeEvaluation:
         """
         self.node = node
         self.given_variables = given_variables
+
+    @staticmethod
+    def is_null(value):
+        """
+        Checking for null or nan or
+        :param value: Value to check if it is null
+        :return: Boolean
+        """
+
+        return value is None or pd.isna(value)
 
     def get_constant(self):
         """
@@ -93,7 +104,7 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and varvalue == constant
+            return (not self.is_null(varvalue)) and varvalue == constant
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -122,7 +133,7 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and varvalue != constant
+            return (not self.is_null(varvalue)) and varvalue != constant
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -150,7 +161,7 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and varvalue.startswith(constant)
+            return (not self.is_null(varvalue)) and varvalue.startswith(constant)
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -179,7 +190,8 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and not varvalue.startswith(constant)
+            return (not self.is_null(varvalue)) and \
+                   not varvalue.startswith(constant)
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -209,7 +221,8 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and varvalue.find(constant) != -1
+            return (not self.is_null(varvalue)) and \
+                   varvalue.find(constant) != -1
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -238,7 +251,8 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and varvalue.find(constant) == -1
+            return (not self.is_null(varvalue)) and \
+                   varvalue.find(constant) == -1
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -267,7 +281,7 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and varvalue.endswith(constant)
+            return (not self.is_null(varvalue)) and varvalue.endswith(constant)
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -296,7 +310,8 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and (not varvalue.endswith(constant))
+            return (not self.is_null(varvalue)) and \
+                   (not varvalue.endswith(constant))
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -321,7 +336,7 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and varvalue == ''
+            return (not self.is_null(varvalue)) and varvalue == ''
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -345,7 +360,7 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and varvalue != ''
+            return (not self.is_null(varvalue)) and varvalue != ''
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -368,8 +383,7 @@ class NodeEvaluation:
 
         if eval_type == self.EVAL_EXP:
             # Python evaluation
-            varvalue = self.get_value()
-            return varvalue is None
+            return self.is_null(self.get_value())
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -391,8 +405,7 @@ class NodeEvaluation:
 
         if eval_type == self.EVAL_EXP:
             # Python evaluation
-            varvalue = self.get_value()
-            return varvalue is not None
+            return not self.is_null(self.get_value())
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -420,7 +433,7 @@ class NodeEvaluation:
             # Python evaluation
             varvalue = self.get_value()
             if self.node['type'] in ('integer', 'double', 'datetime'):
-                return (varvalue is not None) and varvalue < constant
+                return (not self.is_null(varvalue)) and varvalue < constant
             raise Exception(
                 ugettext(
                     'Evaluation error: Type {0} not allowed with operator LESS'
@@ -456,7 +469,7 @@ class NodeEvaluation:
             # Python evaluation
             varvalue = self.get_value()
             if self.node['type'] in ('integer', 'double', 'datetime'):
-                return (varvalue is not None) and varvalue <= constant
+                return (not self.is_null(varvalue)) and varvalue <= constant
             raise Exception(
                 ugettext(
                     'Evaluation error: Type {0} not allowed '
@@ -494,7 +507,7 @@ class NodeEvaluation:
             # Python evaluation
             varvalue = self.get_value()
             if self.node['type'] in ('integer', 'double', 'datetime'):
-                return (varvalue is not None) and varvalue > constant
+                return (not self.is_null(varvalue)) and varvalue > constant
             raise Exception(
                 ugettext(
                     'Evaluation error: Type {0} not allowed '
@@ -531,7 +544,7 @@ class NodeEvaluation:
             # Python evaluation
             varvalue = self.get_value()
             if self.node['type'] in ('integer', 'double', 'datetime'):
-                return (varvalue is not None) and varvalue >= constant
+                return (not self.is_null(varvalue)) and varvalue >= constant
             raise Exception(
                 ugettext(
                     'Evaluation error: Type {0} not allowed '
@@ -564,6 +577,9 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
+            if self.is_null(varvalue):
+                return False
+
             if self.node['type'] not in ('integer', 'double', 'datetime'):
                 raise Exception(
                     ugettext(
@@ -578,7 +594,7 @@ class NodeEvaluation:
                 self.node['value'][1]
             )
 
-            return (varvalue is not None) and left <= varvalue <= right
+            return left <= varvalue <= right
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -610,6 +626,9 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
+            if self.is_null(varvalue):
+                return False
+
             if self.node['type'] not in ('integer', 'double', 'datetime'):
                 raise Exception(
                     ugettext(
@@ -624,7 +643,7 @@ class NodeEvaluation:
                 self.node['value'][1]
             )
 
-            return (varvalue is not None) and not left <= varvalue <= right
+            return not left <= varvalue <= right
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation

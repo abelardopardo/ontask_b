@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 
 
-import io
 import datetime
+import io
 import os
 
 import pandas as pd
+from django.conf import settings
 
 import test
-from django.conf import settings
+from action.models import Action
 from dataops import pandas_db
 from dataops.formula_evaluation import evaluate, NodeEvaluation
 from dataops.ops import perform_dataframe_upload_merge
-from dataops.pandas_db import get_filter_query, load_from_db
+from dataops.pandas_db import get_filter_query, load_from_db, get_table_cursor
 from workflow.models import Workflow
 
 
@@ -567,3 +568,58 @@ class FormulaEvaluation(test.OnTaskTestCase):
                             '{0}between',
                             'datetime', ['2017-01-01T00:00:00',
                                          '2018-09-13T00:00:00'])
+
+
+class ConditionSetEvaluation(test.OnTaskTestCase):
+    fixtures = ['test_condition_evaluation']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'dataops',
+        'fixtures',
+        'test_condition_evaluation.sql'
+    )
+    action_name = 'Test action'
+
+    def __init__(self, *args, **kwargs):
+        super(ConditionSetEvaluation, self).__init__(*args, **kwargs)
+
+    def setUp(self):
+        super(ConditionSetEvaluation, self).setUp()
+        pandas_db.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        test.delete_all_tables()
+        super(ConditionSetEvaluation, self).tearDown()
+
+    def test_eval_conditions(self):
+        # Get the action first
+        self.action = Action.objects.get(name=self.action_name)
+
+        # Get wflow table, filter and column names
+        wflow_table = self.action.workflow.get_data_frame_table_name()
+        cond_filter = self.action.get_filter()
+        column_names = self.action.workflow.get_column_names()
+        conditions = self.action.conditions.filter(is_filter=False)
+
+        # Get dataframe
+        df = pandas_db.get_subframe(wflow_table, cond_filter, column_names)
+
+        # Get the query set
+        qs = get_table_cursor(wflow_table, cond_filter, column_names)
+
+        # Iterate over the rows in the dataframe and compare
+        for idx, row in enumerate(qs):
+            row_value_df = dict(list(zip(column_names, df.loc[idx, :])))
+            row_value_qs = dict(list(zip(column_names, row)))
+
+            cond_eval1 = [evaluate(x.formula,
+                                   NodeEvaluation.EVAL_EXP,
+                                   row_value_df)
+                          for x in conditions]
+
+            cond_eval2 = [evaluate(x.formula,
+                                   NodeEvaluation.EVAL_EXP,
+                                   row_value_qs)
+                          for x in conditions]
+
+            assert cond_eval1 == cond_eval2

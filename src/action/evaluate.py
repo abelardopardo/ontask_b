@@ -14,7 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 
 import dataops.formula_evaluation
 from action.forms import EnterActionIn
-from action.models import Condition, var_use_res
+from action.models import var_use_res
 from dataops import pandas_db, ops
 from dataops.pandas_db import get_table_cursor
 
@@ -170,7 +170,7 @@ def render_template(template_text, context_dict, action=None):
     for rexpr in var_use_res:
         new_template_text = rexpr.sub(
             lambda m: m.group('mup_pre') + translate(m.group('vname')) +
-            m.group('mup_post'),
+                      m.group('mup_post'),
             new_template_text)
 
     # Step 2.2 Remove pre-and post white space from the {% if %} and {% endif %}
@@ -255,9 +255,8 @@ def evaluate_action(action, extra_string=None,
 
         # Step 3: Evaluate all the conditions
         condition_eval = {}
-        for condition in Condition.objects.filter(
-                action__id=action.id
-        ).values('is_filter', 'formula', 'name'):
+        for condition in action.conditions.filter(
+            is_filter=False).values('formula', 'name'):
             if condition['is_filter']:
                 # Filter can be skipped in this stage
                 continue
