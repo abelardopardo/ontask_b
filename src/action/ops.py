@@ -23,7 +23,7 @@ from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.core import signing, mail
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.mail import send_mail, EmailMultiAlternatives, EmailMessage
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -511,18 +511,31 @@ def send_messages(user,
         else:
             track_str = ''
 
-        # Get the plain text content and bundle it together with the HTML in
-        # a message to be added to the list.
-        text_content = html2text.html2text(msg_body)
-        msg = EmailMultiAlternatives(
-            msg_subject,
-            text_content,
-            from_email,
-            [msg_to],
-            bcc=bcc_email_list,
-            cc=cc_email_list
-        )
-        msg.attach_alternative(msg_body + track_str, "text/html")
+        if ontask_settings.EMAIL_HTML_ONLY:
+            # Message only has the HTML text
+            msg = EmailMessage(
+                msg_subject,
+                msg_body + track_str,
+                from_email,
+                [msg_to],
+                bcc=bcc_email_list,
+                cc=cc_email_list
+            )
+            msg.content_subtype = "html"  # Main content is now text/html
+        else:
+            # Get the plain text content and bundle it together with the HTML in
+            # a message to be added to the list.
+            text_content = html2text.html2text(msg_body)
+            msg = EmailMultiAlternatives(
+                msg_subject,
+                text_content,
+                from_email,
+                [msg_to],
+                bcc=bcc_email_list,
+                cc=cc_email_list
+            )
+            msg.attach_alternative(msg_body + track_str, "text/html")
+
         msgs.append(msg)
         track_ids.append(track_str)
 
