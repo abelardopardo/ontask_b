@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import json
 import os
 import sys
 from os.path import dirname, join, exists
@@ -565,7 +566,7 @@ LTI_OAUTH_CREDENTIALS = {}
 #         "aux_params": {"burst": 10, "pause": 5}
 #     }
 # }
-CANVAS_INFO_DICT = {}
+CANVAS_INFO_DICT = json.loads(env.str('CANVAS_INFO_DICT', default='{}'))
 # Number of seconds left in the token validity to refresh
 CANVAS_TOKEN_EXPIRY_SLACK = env.int('CANVAS_TOKEN_EXPIRY_SLACK', default=600)
 

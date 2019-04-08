@@ -1,4 +1,4 @@
-## 4.3 ()
+## 4.3 (2019-04-??)
 
 ### Added
 
@@ -15,6 +15,8 @@
 - Editor pages to use tabs in more intuitive ways
 
 - Added shadow to a few elements to improve UI 
+
+- Updated dependencies to include supervisor and celery now supporting Python3
 
 ### Fixed
 

@@ -1597,15 +1597,22 @@ class ScreenTests(OnTaskLiveTestCase):
         coord = b_footer.location
         dims = b_footer.size
 
+        # If the bottom of the content is before the footer, crop
         if (coord['y'] + dims['height'] * self.device_pixel_ratio) \
                 < self.viewport_height:
             img = img.crop(
                 (0,
                  0,
                  math.ceil(dims['width'] * self.device_pixel_ratio),
-                 math.ceil((coord['y'] + dims['height']) *
+                 math.ceil((coord['y'] + dims['height'] + 5) *
                            self.device_pixel_ratio))
             )
+
+        # If the height of the image is larger than the view_port, crop
+        img_width, img_height = img.size
+        if img_height > self.viewport_height:
+            img = img.crop((0, 0, self.viewport_width, self.viewport_height))
+
         img.save(self.img_path(self.prefix + ss_filename))
 
 

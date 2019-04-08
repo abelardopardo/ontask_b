@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 18:47+1100\n"
+"POT-Creation-Date: 2019-04-08 07:51+0930\n"
 "PO-Revision-Date: 2019-03-27 10:12+0200\n"
 "Last-Translator: Joonas Pesonen <joonas.pesonen@helsinki.fi>\n"
 "Language-Team: \n"
@@ -196,7 +196,7 @@ msgstr ""
 msgid "Actions, Conditions, Filters, Emails"
 msgstr "Toiminnot, Ehdot, Suodattimet, Sähköpostit"
 
-#: action/evaluate.py:188 action/evaluate.py:192
+#: action/evaluate.py:189 action/evaluate.py:193
 #, python-brace-format
 msgid "Name {0} is reserved."
 msgstr "Nimi {0} on varattu."
@@ -240,7 +240,7 @@ msgstr "Nimi ei voi olla tyhjä"
 msgid "Incorrect date/time window"
 msgstr "Virheellinen päivämäärä/aikaikkuna"
 
-#: action/forms.py:250 action/forms.py:581 scheduler/forms.py:83
+#: action/forms.py:250 action/forms.py:579 scheduler/forms.py:83
 #: scheduler/forms.py:234
 msgid "Email subject"
 msgstr "Sähköpostin otsikko"
@@ -269,12 +269,14 @@ msgstr "Lähetetäänkö sinulle yhteenvetoviesti?"
 msgid "Track email reading in an extra column?"
 msgstr "Jäljitetäänkö sähköpostin lukemista ylimääräisessä sarakkeessa?"
 
-#: action/forms.py:287 action/forms.py:586
+#: action/forms.py:287 action/forms.py:584
 msgid "Download a snapshot of the workflow?"
 msgstr "Lataa tilannevedos työnkulusta?"
 
-#: action/forms.py:288 action/forms.py:587
-msgid "A zip file useful to review the emails sent."
+#: action/forms.py:288 action/forms.py:585
+#, fuzzy
+#| msgid "A zip file useful to review the emails sent."
+msgid "A zip file is useful to review the emails sent."
 msgstr ""
 "Zip-tiedosto on hyödyöllinen lähetettyjen sähköpostiviestien tarkasteluun."
 
@@ -340,31 +342,31 @@ msgstr "Autentikaatiotietue"
 msgid "Column to exclude objects to send (empty to skip step)"
 msgstr "Sarake, jossa lähetyksessä ohteet (jätä tyhjäksi ohittaaksesi)"
 
-#: action/forms.py:572 scheduler/forms.py:173
+#: action/forms.py:570 scheduler/forms.py:173
 msgid "Authentication token provided by the external platform."
 msgstr "Ulkoisen järjestelmän tarjoama autentikaatiotietue."
 
-#: action/forms.py:604
+#: action/forms.py:602
 msgid "Canvas Host"
 msgstr "Canvas Host"
 
-#: action/forms.py:605
+#: action/forms.py:603
 msgid "Name of the Canvas host to send the messages"
 msgstr "Canvas-isännän nimi johon viestit lähetetään"
 
-#: action/forms.py:608
+#: action/forms.py:606
 msgid "Column with the Canvas ID"
 msgstr "Sarake, jossa on Canvas ID"
 
-#: action/forms.py:610
+#: action/forms.py:608
 msgid "Check/Exclude Canvas IDs before sending?"
 msgstr "Tarkista/sulje pois Canvas ID:itä ennen lähettämistä?"
 
-#: action/forms.py:640 workflow/forms.py:459
+#: action/forms.py:638 workflow/forms.py:459
 msgid "File"
 msgstr "Tiedosto"
 
-#: action/forms.py:641
+#: action/forms.py:639
 msgid "File containing a previously exported action"
 msgstr "TIedosto, joka sisältää aiemmin viedyn toiminnon"
 
@@ -389,7 +391,7 @@ msgstr "Toiminto saatavilla alkaen"
 msgid "Action available until"
 msgstr "Toiminto saatavilla saakka"
 
-#: action/models.py:134 action/templates/action/edit_in.html:149
+#: action/models.py:134 action/templates/action/edit_in.html:172
 msgid "Shuffle questions?"
 msgstr "Sekoita kysymykset?"
 
@@ -477,6 +479,10 @@ msgstr "Viestin toimittaminen epäonnistui (koodi {0})"
 msgid "Incorrect JSON string in element number {0}"
 msgstr "Virheellinen JSON-string elemenissä numero {0}"
 
+#: action/ops.py:987
+msgid "Incorrect item filter invocation."
+msgstr "Virheellinen suodattimen kutsu."
+
 #: action/serializers.py:57 table/serializers.py:159
 msgid "Incorrect column data"
 msgstr "Virheellinen sarakedata"
@@ -512,7 +518,7 @@ msgstr "Sarakedatan luonti epäonnistui"
 msgid "Unable to create condition information"
 msgstr "Ehdon luonti epäonnistui"
 
-#: action/settings.py:34 ontask/settings/base.py:375
+#: action/settings.py:34 ontask/settings/base.py:526
 msgid "OnTask: Action executed"
 msgstr "OnTask: Toiminto suoritettu"
 
@@ -555,7 +561,7 @@ msgstr ""
 #: action/templates/action/action_zip_done.html:15
 #: action/templates/action/export_ask.html:21
 #: action/templates/action/export_done.html:15
-#: action/templates/action/item_filter.html:26
+#: action/templates/action/item_filter.html:27
 #: action/templates/action/run_survey.html:68
 #: action/templates/action/run_survey_row.html:25
 #: dataops/templates/dataops/includes/upload_buttons.html:6
@@ -570,110 +576,6 @@ msgstr ""
 #: workflow/templates/workflow/export_done.html:15
 msgid "Back"
 msgstr "Takaisin"
-
-#: action/templates/action/action_email_step1.html:7
-msgid "Email action"
-msgstr "Sähköpostitoiminto"
-
-#: action/templates/action/action_email_step1.html:13
-#, python-format
-msgid ""
-"Send emails for\n"
-"      action \"%(n)s\""
-msgstr ""
-"Lähetä sähköpostit\n"
-"      toiminnoille ”%(n)s”"
-
-#: action/templates/action/action_email_step1.html:17
-#: action/templates/action/request_canvas_email_data.html:17
-#, python-format
-msgid "%(n)s Emails will be sent."
-msgstr "%(n)s sähköpostia lähetetään."
-
-#: action/templates/action/action_email_step1.html:24
-#: action/templates/action/action_zip_step1.html:23
-#: action/templates/action/import.html:19
-#: action/templates/action/includes/partial_action_clone.html:15
-#: action/templates/action/includes/partial_action_create.html:15
-#: action/templates/action/includes/partial_action_delete.html:14
-#: action/templates/action/includes/partial_action_edit_description.html:16
-#: action/templates/action/includes/partial_action_update.html:16
-#: action/templates/action/includes/partial_condition_addedit.html:29
-#: action/templates/action/includes/partial_condition_delete.html:16
-#: action/templates/action/includes/partial_filter_addedit.html:24
-#: action/templates/action/includes/partial_filter_delete.html:14
-#: action/templates/action/item_filter.html:24
-#: action/templates/action/request_canvas_email_data.html:24
-#: action/templates/action/request_json_data.html:24
-#: dataops/templates/dataops/includes/partial_sqlconn_addedit.html:27
-#: dataops/templates/dataops/includes/partial_sqlconn_clone.html:15
-#: dataops/templates/dataops/includes/partial_sqlconn_delete.html:14
-#: dataops/templates/dataops/includes/upload_buttons.html:3
-#: dataops/templates/dataops/plugin_info_for_run.html:79
-#: dataops/templates/dataops/row_create.html:23
-#: dataops/templates/dataops/row_create.html:33
-#: dataops/templates/dataops/row_filter.html:24
-#: dataops/templates/dataops/row_filter.html:34
-#: scheduler/templates/scheduler/edit.html:26
-#: scheduler/templates/scheduler/includes/partial_scheduler_delete.html:17
-#: table/templates/table/includes/partial_row_delete.html:14
-#: table/templates/table/includes/partial_view_add.html:19
-#: table/templates/table/includes/partial_view_clone.html:15
-#: table/templates/table/includes/partial_view_delete.html:14
-#: table/templates/table/includes/partial_view_edit.html:19
-#: workflow/templates/workflow/export.html:58
-#: workflow/templates/workflow/import.html:20
-#: workflow/templates/workflow/includes/partial_attribute_create.html:15
-#: workflow/templates/workflow/includes/partial_attribute_delete.html:15
-#: workflow/templates/workflow/includes/partial_attribute_edit.html:15
-#: workflow/templates/workflow/includes/partial_column_addedit.html:28
-#: workflow/templates/workflow/includes/partial_column_clone.html:15
-#: workflow/templates/workflow/includes/partial_column_delete.html:21
-#: workflow/templates/workflow/includes/partial_column_restrict.html:16
-#: workflow/templates/workflow/includes/partial_formula_column_add.html:17
-#: workflow/templates/workflow/includes/partial_question_addedit.html:27
-#: workflow/templates/workflow/includes/partial_random_column_add.html:17
-#: workflow/templates/workflow/includes/partial_share_create.html:15
-#: workflow/templates/workflow/includes/partial_share_delete.html:14
-#: workflow/templates/workflow/includes/partial_workflow_clone.html:15
-#: workflow/templates/workflow/includes/partial_workflow_create.html:18
-#: workflow/templates/workflow/includes/partial_workflow_delete.html:15
-#: workflow/templates/workflow/includes/partial_workflow_flush.html:15
-#: workflow/templates/workflow/includes/partial_workflow_update.html:15
-msgid "Cancel"
-msgstr "Peruuta"
-
-#: action/templates/action/action_email_step1.html:27
-#: action/templates/action/action_zip_step1.html:26
-#: action/templates/action/edit_in.html:165
-#: action/templates/action/includes/partial_action_preview_done_buttons.html:8
-#: action/templates/action/request_canvas_email_data.html:27
-#: action/templates/action/request_json_data.html:27
-msgid "Preview"
-msgstr "Esikatselu"
-
-#: action/templates/action/action_email_step1.html:30
-#: action/templates/action/action_zip_step1.html:29
-#: action/templates/action/request_canvas_email_data.html:30
-#: action/templates/action/request_json_data.html:30
-#: dataops/templates/dataops/includes/upload_buttons.html:10
-#: scheduler/templates/scheduler/edit.html:28
-msgid "Next"
-msgstr "Seuraava"
-
-#: action/templates/action/action_email_step1.html:35
-#: action/templates/action/action_zip_step1.html:34
-#: action/templates/action/request_canvas_email_data.html:35
-#: action/templates/action/request_json_data.html:35
-msgid "The action does not apply to any data."
-msgstr "Toiminto ei koske tietoja."
-
-#: action/templates/action/action_email_step1.html:36
-#: action/templates/action/action_zip_step1.html:35
-#: action/templates/action/request_canvas_email_data.html:36
-#: action/templates/action/request_json_data.html:36
-msgid "Review the action filter"
-msgstr "Tarkista toimintosuodatin"
 
 #: action/templates/action/action_unavailable.html:2
 msgid ""
@@ -708,6 +610,91 @@ msgstr ""
 #, python-format
 msgid "A ZIP with %(n)s files will be created."
 msgstr "Luodaan ZIP, jossa %(n)s tiedostoa."
+
+#: action/templates/action/action_zip_step1.html:23
+#: action/templates/action/import.html:19
+#: action/templates/action/includes/partial_action_clone.html:15
+#: action/templates/action/includes/partial_action_create.html:15
+#: action/templates/action/includes/partial_action_delete.html:14
+#: action/templates/action/includes/partial_action_edit_description.html:16
+#: action/templates/action/includes/partial_action_update.html:16
+#: action/templates/action/includes/partial_condition_addedit.html:29
+#: action/templates/action/includes/partial_condition_delete.html:16
+#: action/templates/action/includes/partial_filter_addedit.html:24
+#: action/templates/action/includes/partial_filter_delete.html:14
+#: action/templates/action/item_filter.html:25
+#: action/templates/action/request_canvas_email_data.html:27
+#: action/templates/action/request_email_data.html:27
+#: action/templates/action/request_json_data.html:27
+#: dataops/templates/dataops/includes/partial_sqlconn_addedit.html:27
+#: dataops/templates/dataops/includes/partial_sqlconn_clone.html:15
+#: dataops/templates/dataops/includes/partial_sqlconn_delete.html:14
+#: dataops/templates/dataops/includes/upload_buttons.html:3
+#: dataops/templates/dataops/plugin_info_for_run.html:26
+#: dataops/templates/dataops/row_create.html:23
+#: dataops/templates/dataops/row_create.html:33
+#: dataops/templates/dataops/row_filter.html:24
+#: dataops/templates/dataops/row_filter.html:34
+#: scheduler/templates/scheduler/edit.html:26
+#: scheduler/templates/scheduler/includes/partial_scheduler_delete.html:17
+#: table/templates/table/includes/partial_row_delete.html:14
+#: table/templates/table/includes/partial_view_add.html:19
+#: table/templates/table/includes/partial_view_clone.html:15
+#: table/templates/table/includes/partial_view_delete.html:14
+#: table/templates/table/includes/partial_view_edit.html:19
+#: workflow/templates/workflow/export.html:58
+#: workflow/templates/workflow/import.html:20
+#: workflow/templates/workflow/includes/partial_attribute_create.html:15
+#: workflow/templates/workflow/includes/partial_attribute_delete.html:15
+#: workflow/templates/workflow/includes/partial_attribute_edit.html:15
+#: workflow/templates/workflow/includes/partial_column_addedit.html:28
+#: workflow/templates/workflow/includes/partial_column_clone.html:15
+#: workflow/templates/workflow/includes/partial_column_delete.html:21
+#: workflow/templates/workflow/includes/partial_column_restrict.html:16
+#: workflow/templates/workflow/includes/partial_formula_column_add.html:17
+#: workflow/templates/workflow/includes/partial_question_addedit.html:27
+#: workflow/templates/workflow/includes/partial_random_column_add.html:17
+#: workflow/templates/workflow/includes/partial_share_create.html:15
+#: workflow/templates/workflow/includes/partial_share_delete.html:14
+#: workflow/templates/workflow/includes/partial_workflow_clone.html:15
+#: workflow/templates/workflow/includes/partial_workflow_create.html:18
+#: workflow/templates/workflow/includes/partial_workflow_delete.html:16
+#: workflow/templates/workflow/includes/partial_workflow_flush.html:16
+#: workflow/templates/workflow/includes/partial_workflow_update.html:15
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: action/templates/action/action_zip_step1.html:26
+#: action/templates/action/edit_in.html:64
+#: action/templates/action/includes/partial_action_preview_done_buttons.html:8
+#: action/templates/action/request_canvas_email_data.html:30
+#: action/templates/action/request_email_data.html:30
+#: action/templates/action/request_json_data.html:30
+msgid "Preview"
+msgstr "Esikatselu"
+
+#: action/templates/action/action_zip_step1.html:29
+#: action/templates/action/request_canvas_email_data.html:33
+#: action/templates/action/request_email_data.html:33
+#: action/templates/action/request_json_data.html:33
+#: dataops/templates/dataops/includes/upload_buttons.html:10
+#: scheduler/templates/scheduler/edit.html:28
+msgid "Next"
+msgstr "Seuraava"
+
+#: action/templates/action/action_zip_step1.html:34
+#: action/templates/action/request_canvas_email_data.html:38
+#: action/templates/action/request_email_data.html:41
+#: action/templates/action/request_json_data.html:41
+msgid "The action does not apply to any data."
+msgstr "Toiminto ei koske tietoja."
+
+#: action/templates/action/action_zip_step1.html:35
+#: action/templates/action/request_canvas_email_data.html:39
+#: action/templates/action/request_email_data.html:42
+#: action/templates/action/request_json_data.html:42
+msgid "Review the action filter"
+msgstr "Tarkista toimintosuodatin"
 
 #: action/templates/action/action_zip_step1.html:37
 msgid ""
@@ -748,51 +735,61 @@ msgstr ""
 msgid "Edit Survey"
 msgstr "Muokkaa kyselyä"
 
-#: action/templates/action/edit_in.html:59
+#: action/templates/action/edit_in.html:63
+msgid "See the content as shown to each learner"
+msgstr "Katso sisältö sellaisena, kun se näkyy kullekkin oppijalle"
+
+#: action/templates/action/edit_in.html:70
+msgid "Save action and go back to action table"
+msgstr "Tallenna toiminto ja palaa toimintotaulukkoon"
+
+#: action/templates/action/edit_in.html:71
+msgid "Done"
+msgstr "Valmis"
+
+#: action/templates/action/edit_in.html:74
 msgid "There must be at least one question (non-key column) in the survey."
 msgstr ""
 "Kyselyssä on oltava vähintään yksi kysymys (sarake, joka ei ole avainsarake)."
 
-#: action/templates/action/edit_in.html:62
+#: action/templates/action/edit_in.html:77
 msgid "All questions should have non-empty descriptions."
 msgstr "Kaikkien kysymysten kuvausten tulee olla epätyhjiä."
 
-#: action/templates/action/edit_in.html:65
+#: action/templates/action/edit_in.html:80
 msgid "No description text provided in Survey Parameters"
 msgstr "Kuvaustekstiä ei löydy kyselyn parametreista"
 
-#: action/templates/action/edit_in.html:68
+#: action/templates/action/edit_in.html:83
 msgid "You need to specify a key column in Survey Parameters"
 msgstr "Sinun on määritettävä avainsarake kyselyn parametreissa"
 
-#: action/templates/action/edit_in.html:76
-#: action/templates/action/edit_personalized_canvas_email.html:43
-#: action/templates/action/edit_personalized_json.html:43
-#: action/templates/action/edit_personalized_text.html:52
+#: action/templates/action/edit_in.html:94
+#: action/templates/action/edit_out.html:61
 #, python-format
 msgid "(%(n)s learner of %(tot)s)"
 msgid_plural "(%(n)s learners of %(tot)s)"
 msgstr[0] "(%(n)s oppija valittu, yhteensä %(tot)s)"
 msgstr[1] "(%(n)s oppijaa valittu, yhteensä %(tot)s)"
 
-#: action/templates/action/edit_in.html:90
+#: action/templates/action/edit_in.html:110
 msgid "Insert existing question"
 msgstr "Lisää olemassaoleva kysymys"
 
-#: action/templates/action/edit_in.html:103
+#: action/templates/action/edit_in.html:123
 msgid "Add a new question to the action"
 msgstr "Lisää uusi kysymys toimintoon"
 
-#: action/templates/action/edit_in.html:104
+#: action/templates/action/edit_in.html:124
 msgid "Create question"
 msgstr "Luo uusi kysymys"
 
-#: action/templates/action/edit_in.html:122
+#: action/templates/action/edit_in.html:145
 #: action/templates/action/includes/partial_action_edit_description.html:7
 msgid "Edit description"
 msgstr "Muokkaa kuvausta"
 
-#: action/templates/action/edit_in.html:123
+#: action/templates/action/edit_in.html:146
 #: action/templates/action/run_survey.html:54
 #: dataops/templates/dataops/includes/partial_show_sql_connection.html:25
 #: scheduler/templates/scheduler/includes/partial_show_schedule_action.html:25
@@ -800,48 +797,27 @@ msgstr "Muokkaa kuvausta"
 msgid "Edit"
 msgstr "Muokkaa"
 
-#: action/templates/action/edit_in.html:129
+#: action/templates/action/edit_in.html:152
 msgid "Key column to match the user id"
 msgstr "Avainsarake, joka vastaa käyttäjätunnusta (user id)"
 
-#: action/templates/action/edit_in.html:134
+#: action/templates/action/edit_in.html:157
 msgid "Please, select Key column"
 msgstr "Valitse avainsarake, kiitos"
 
-#: action/templates/action/edit_in.html:164
-msgid "See the content as shown to each learner"
-msgstr "Katso sisältö sellaisena, kun se näkyy kullekkin oppijalle"
-
-#: action/templates/action/edit_in.html:171
-msgid "Save action and go back to action table"
-msgstr "Tallenna toiminto ja palaa toimintotaulukkoon"
-
-#: action/templates/action/edit_in.html:172
-msgid "Done"
-msgstr "Valmis"
-
-#: action/templates/action/edit_personalized_canvas_email.html:7
-msgid "Edit Personalized Canvas Email"
-msgstr "Muokkaa personoitua Canvas-sähköpostiviestiä"
-
-#: action/templates/action/edit_personalized_json.html:7
-#: action/templates/action/edit_personalized_text.html:7
+#: action/templates/action/edit_out.html:7
 msgid "Edit Personalized Text"
 msgstr "Muokkaa personoitua tekstiä"
 
-#: action/templates/action/edit_personalized_text.html:48
-msgid "Personalized Text"
-msgstr "Personoitu teksti"
-
-#: action/templates/action/edit_personalized_text.html:51
+#: action/templates/action/edit_out.html:60
 msgid "Filter Learners"
 msgstr "Suodata oppijoita"
 
-#: action/templates/action/edit_personalized_text.html:52
+#: action/templates/action/edit_out.html:61
 msgid "(Empty)"
 msgstr "(Tyhjä)"
 
-#: action/templates/action/edit_personalized_text.html:56
+#: action/templates/action/edit_out.html:65
 msgid "Text Conditions"
 msgstr "Tekstin ehdot"
 
@@ -876,7 +852,7 @@ msgstr "Jatka vientioperaatiota"
 #: action/templates/action/export_ask.html:25
 #: action/templates/action/includes/partial_action_operations.html:54
 #: workflow/templates/workflow/export.html:61
-#: workflow/templates/workflow/includes/workflow_operation_buttons.html:7
+#: workflow/templates/workflow/includes/workflow_operation_buttons.html:6
 msgid "Export"
 msgstr "Vie"
 
@@ -891,7 +867,7 @@ msgid "Your download will start shortly"
 msgstr "Lataus alkaa pian"
 
 #: action/templates/action/import.html:7 action/templates/action/import.html:13
-#: action/templates/action/index.html:66
+#: action/templates/action/index.html:65
 msgid "Import action"
 msgstr "Tuo toiminto"
 
@@ -995,7 +971,7 @@ msgstr "Lähetä personoitu teksti"
 
 #: action/templates/action/includes/partial_action_operations.html:6
 #: dataops/templates/dataops/includes/partial_sqlconn_runop.html:4
-#: dataops/templates/dataops/plugin_info_for_run.html:83
+#: dataops/templates/dataops/plugin_info_for_run.html:30
 msgid "Run"
 msgstr "Suorita"
 
@@ -1034,8 +1010,8 @@ msgid "Change name and/or description"
 msgstr "Muuta nimeä ja/tai kuvausta"
 
 #: action/templates/action/includes/partial_action_operations.html:43
-#: workflow/templates/workflow/includes/workflow_basic_buttons.html:16
-#: workflow/templates/workflow/includes/workflow_operation_buttons.html:14
+#: workflow/templates/workflow/includes/workflow_basic_buttons.html:8
+#: workflow/templates/workflow/includes/workflow_operation_buttons.html:13
 msgid "Rename"
 msgstr "Nimeä uudelleen"
 
@@ -1045,9 +1021,9 @@ msgstr "Luo samanlainen toiminto"
 
 #: action/templates/action/includes/partial_action_operations.html:49
 #: dataops/templates/dataops/includes/partial_show_sql_connection.html:31
-#: workflow/templates/workflow/includes/workflow_basic_buttons.html:23
+#: workflow/templates/workflow/includes/workflow_basic_buttons.html:15
 #: workflow/templates/workflow/includes/workflow_column_operations.html:13
-#: workflow/templates/workflow/includes/workflow_operation_buttons.html:20
+#: workflow/templates/workflow/includes/workflow_operation_buttons.html:19
 msgid "Clone"
 msgstr "Kopioi"
 
@@ -1063,9 +1039,9 @@ msgstr "Poista toiminto"
 #: dataops/templates/dataops/includes/partial_show_sql_connection.html:37
 #: profiles/templates/profiles/show_profile.html:68
 #: scheduler/templates/scheduler/includes/partial_show_schedule_action.html:29
-#: workflow/templates/workflow/includes/workflow_basic_buttons.html:36
+#: workflow/templates/workflow/includes/workflow_basic_buttons.html:28
 #: workflow/templates/workflow/includes/workflow_column_operations.html:36
-#: workflow/templates/workflow/includes/workflow_operation_buttons.html:34
+#: workflow/templates/workflow/includes/workflow_operation_buttons.html:33
 msgid "Delete"
 msgstr "Poista"
 
@@ -1127,8 +1103,8 @@ msgstr ""
 
 #: action/templates/action/includes/partial_action_showurl.html:29
 #: dataops/plugin_manager.py:45 dataops/plugin_manager.py:52
-#: dataops/plugin_manager.py:60 dataops/plugin_manager.py:71
-#: dataops/plugin_manager.py:142 templates/base.html:162
+#: dataops/plugin_manager.py:60 dataops/plugin_manager.py:69
+#: dataops/plugin_manager.py:140 templates/base.html:162
 msgid "Ok"
 msgstr "Ok"
 
@@ -1161,6 +1137,12 @@ msgstr "Teksti näytetään jos"
 msgid "Update condition"
 msgstr "Päivitä ehto"
 
+#: action/templates/action/includes/partial_condition_clone.html:6
+#, fuzzy
+#| msgid "Delete the condition"
+msgid "Clone other conditions"
+msgstr "Poista ehto"
+
 #: action/templates/action/includes/partial_condition_delete.html:5
 msgid "Confirm condition deletion"
 msgstr "Vahvista ehdon poistaminen"
@@ -1182,40 +1164,40 @@ msgstr ""
 msgid "Delete condition"
 msgstr "Poista ehto"
 
-#: action/templates/action/includes/partial_condition_tab.html:8
+#: action/templates/action/includes/partial_condition_tab.html:7
 msgid "Define a text condition to insert in the text body below."
 msgstr "Määritä tekstiehto alla olevaan viestisisältöön lisättäväksi."
 
-#: action/templates/action/includes/partial_condition_tab.html:9
+#: action/templates/action/includes/partial_condition_tab.html:8
 msgid "Condition"
 msgstr "Ehto"
 
-#: action/templates/action/includes/partial_condition_tab.html:19
+#: action/templates/action/includes/partial_condition_tab.html:17
 #, python-format
 msgid "(%(n)s learner)"
 msgid_plural "(%(n)s learners)"
 msgstr[0] "(%(n)s opiskelija)"
 msgstr[1] "(%(n)s opiskelijaa)"
 
-#: action/templates/action/includes/partial_condition_tab.html:26
+#: action/templates/action/includes/partial_condition_tab.html:24
 #: action/templates/action/includes/partial_filter_tab.html:11
 msgid "Formula"
 msgstr "Kaava"
 
-#: action/templates/action/includes/partial_condition_tab.html:33
+#: action/templates/action/includes/partial_condition_tab.html:31
 #, python-format
 msgid "Edit the condition (%(n)s rows satisfy this condition)"
 msgstr "Muokkaa ehtoa (%(n)s riviä täyttää tämän ehdon)"
 
-#: action/templates/action/includes/partial_condition_tab.html:39
+#: action/templates/action/includes/partial_condition_tab.html:37
 msgid "Create an exact copy of this condition"
 msgstr "Luo tarkka kopio tästä ehdosta"
 
-#: action/templates/action/includes/partial_condition_tab.html:46
+#: action/templates/action/includes/partial_condition_tab.html:44
 msgid "Delete the condition"
 msgstr "Poista ehto"
 
-#: action/templates/action/includes/partial_condition_tab.html:53
+#: action/templates/action/includes/partial_condition_tab.html:51
 msgid "Create conditions to show/hide text in the message (optional)"
 msgstr ""
 "Luo ehtoja, joilla näytetään tai piilotetaan viestin osia (valinnainen)"
@@ -1259,13 +1241,13 @@ msgstr "Muokkaa suodatinta (%(n)s riviä täyttää tämän ehdon)"
 msgid "Delete the filter"
 msgstr "Poista suodatin"
 
-#: action/templates/action/includes/partial_filter_tab.html:31
-msgid "All learners considered for this action."
-msgstr "Kaikki oppijat huomioidaan tässä toiminnossa."
-
-#: action/templates/action/includes/partial_filter_tab.html:36
+#: action/templates/action/includes/partial_filter_tab.html:35
 msgid "Add Filter"
 msgstr "Lisää suodatin"
+
+#: action/templates/action/includes/partial_filter_tab.html:36
+msgid "All learners considered for this action."
+msgstr "Kaikki oppijat huomioidaan tässä toiminnossa."
 
 #: action/templates/action/includes/partial_preview.html:4
 #, python-format
@@ -1284,19 +1266,19 @@ msgstr "Esikatsele seuraava viesti"
 msgid "Preview next message with all conditions false"
 msgstr "Esikatsele seuraava viesti niin, että kaikki ehdot ovat epätosia"
 
-#: action/templates/action/includes/partial_preview.html:34
+#: action/templates/action/includes/partial_preview.html:35
 msgid "All conditions evaluate to FALSE"
 msgstr "Kaikki ehdot saavat arvon FALSE"
 
-#: action/templates/action/includes/partial_preview.html:37
+#: action/templates/action/includes/partial_preview.html:38
 msgid "Incorrect JSON object. Check action text"
 msgstr "Virheellinen JSON-objekti. Tarkista toiminnon teksti"
 
-#: action/templates/action/includes/partial_preview.html:41
+#: action/templates/action/includes/partial_preview.html:42
 msgid "Subject:"
 msgstr "Aihe:"
 
-#: action/templates/action/includes/partial_preview.html:57
+#: action/templates/action/includes/partial_preview.html:56
 msgid "Values:"
 msgstr "Arvot:"
 
@@ -1321,25 +1303,30 @@ msgid "Actions"
 msgstr "Toiminnot"
 
 #: action/templates/action/index.html:51
+#, fuzzy
+#| msgid ""
+#| "<strong>Next Step:</strong> Click in the <i>New action</i> below to "
+#| "create a new\n"
+#| "      action to execute based on the data stored in the table."
 msgid ""
-"<strong>Next Step:</strong> Click in the <i>New action</i> below to create a "
-"new\n"
+"<strong>Next Step:</strong> Click in the <span class=\"fa fa-plus\"></span> "
+"<i>Action</i> below to create a new\n"
 "      action to execute based on the data stored in the table."
 msgstr ""
 "<strong>Seuraava vaihe:</strong> Napsauta alla olevaa <i>Uusi toiminto</i>-"
 "painiketta luodaksesi uuden toiminnon, joka suoritetaan taulukossa olevien "
 "tietojen perusteella."
 
-#: action/templates/action/index.html:59
+#: action/templates/action/index.html:58
 msgid "New action to collect data from learners"
 msgstr "Uusi toiminto datan keräämiseen oppijoilta"
 
-#: action/templates/action/index.html:60 scheduler/views.py:50
+#: action/templates/action/index.html:59 scheduler/views.py:50
 #: workflow/templates/workflow/export.html:32
 msgid "Action"
 msgstr "Toiminto"
 
-#: action/templates/action/index.html:65
+#: action/templates/action/index.html:64
 msgid "Import action previously exported"
 msgstr "Tuo aiemmin viety toiminto"
 
@@ -1347,7 +1334,7 @@ msgstr "Tuo aiemmin viety toiminto"
 msgid "Exclude items from action"
 msgstr "Rajaa tietyt kohteet pois toiminnosta"
 
-#: action/templates/action/item_filter.html:17
+#: action/templates/action/item_filter.html:18
 msgid "Select items to exclude from action"
 msgstr "Valitse kohteet, jotka rajataan pois toiminnosta"
 
@@ -1355,7 +1342,7 @@ msgstr "Valitse kohteet, jotka rajataan pois toiminnosta"
 msgid "Canvas Email action"
 msgstr "Canvas-sähköpostitoiminto"
 
-#: action/templates/action/request_canvas_email_data.html:13
+#: action/templates/action/request_canvas_email_data.html:16
 #, python-format
 msgid ""
 "Send Canvas Email for\n"
@@ -1364,18 +1351,43 @@ msgstr ""
 "Lähetä Canvas-sähköpostit\n"
 "      toiminnolle ”%(n)s”"
 
+#: action/templates/action/request_canvas_email_data.html:20
+#: action/templates/action/request_email_data.html:20
+#, python-format
+msgid "%(n)s Emails will be sent."
+msgstr "%(n)s sähköpostia lähetetään."
+
+#: action/templates/action/request_email_data.html:7
+msgid "Email action"
+msgstr "Sähköpostitoiminto"
+
+#: action/templates/action/request_email_data.html:16
+#, python-format
+msgid ""
+"Send emails for\n"
+"      action \"%(n)s\""
+msgstr ""
+"Lähetä sähköpostit\n"
+"      toiminnoille ”%(n)s”"
+
+#: action/templates/action/request_email_data.html:36
+#: action/templates/action/request_json_data.html:36 action/views_out.py:134
+#: action/views_out.py:530 action/views_out.py:672
+msgid "Send"
+msgstr "Lähetä"
+
 #: action/templates/action/request_json_data.html:7
 msgid "JSON action"
 msgstr "JSON-toiminto"
 
-#: action/templates/action/request_json_data.html:13
+#: action/templates/action/request_json_data.html:16
 #, python-format
 msgid ""
 "Send JSON objects for\n"
 "      action \"%(n)s\""
 msgstr "Lähetä JSON-objektit toiminnolle \"%(n)s\""
 
-#: action/templates/action/request_json_data.html:17
+#: action/templates/action/request_json_data.html:20
 #, python-format
 msgid "%(n)s JSON objects will be sent."
 msgstr "%(n)s JSON-objektia lähetetään."
@@ -1398,25 +1410,25 @@ msgstr ""
 "syntaksivirhe. Katso, onko seuraava viesti hyödyllinen ongelman löytämiseksi."
 
 #: action/views_action.py:66 action/views_action.py:169 dataops/models.py:73
-#: dataops/templates/dataops/upload_s2.html:37 dataops/views.py:48
-#: scheduler/views.py:47 table/views.py:38 workflow/forms.py:37
-#: workflow/templates/workflow/detail.html:86 workflow/views.py:36
+#: dataops/templates/dataops/upload_s2.html:38 dataops/views.py:45
+#: scheduler/views.py:47 table/views.py:41 workflow/forms.py:37
+#: workflow/templates/workflow/detail.html:84 workflow/views.py:36
 msgid "Name"
 msgstr "Nimi"
 
 #: action/views_action.py:68 dataops/models.py:80
-#: dataops/templates/dataops/uploadmerge.html:16 dataops/views.py:50
-#: table/views.py:42 workflow/templates/workflow/detail.html:87
+#: dataops/templates/dataops/uploadmerge.html:17 dataops/views.py:47
+#: table/views.py:45 workflow/templates/workflow/detail.html:85
 msgid "Description"
 msgstr "Kuvaus"
 
 #: action/views_action.py:70 dataops/models.py:86
-#: dataops/templates/dataops/upload_s2.html:39
-#: workflow/templates/workflow/detail.html:88
+#: dataops/templates/dataops/upload_s2.html:40
+#: workflow/templates/workflow/detail.html:86
 msgid "Type"
 msgstr "Tyyppi"
 
-#: action/views_action.py:72 dataops/views.py:53
+#: action/views_action.py:72 dataops/views.py:50
 msgid "Last executed"
 msgstr "Viimeksi suoritettu"
 
@@ -1444,29 +1456,43 @@ msgstr "Muokkaa kysymystä"
 msgid "An action with that name already exists"
 msgstr "Tämän niminen toiminto on jo olemassa"
 
-#: action/views_action.py:511 action/views_action.py:849
-#: action/views_action.py:907 action/views_action.py:950
-#: action/views_action.py:1302
+#: action/views_action.py:511 action/views_action.py:858
+#: action/views_action.py:916 action/views_action.py:959
+#: action/views_action.py:1311
 msgid "Workflow has no data. Go to \"Manage table data\" to upload data."
 msgstr ""
 "Työnkululla ei ole dataa. Siirry kohteeseen ”Hallitse taulukkodataa” "
 "ladataksesi dataa."
 
-#: action/views_action.py:808
+#: action/views_action.py:564
+msgid "Personalized Text"
+msgstr "Personoitu teksti"
+
+#: action/views_action.py:566
+#, fuzzy
+#| msgid "Personalized JSON"
+msgid "Personalized JSON Object"
+msgstr "Personoitu JSON"
+
+#: action/views_action.py:568 ontask/__init__.py:30
+msgid "Personalized Canvas Email"
+msgstr "Personoitu Canvas-sähköposti"
+
+#: action/views_action.py:817
 msgid "An action with this name already exists"
 msgstr "Tämänniminen toiminto nimi on jo olemassa"
 
-#: action/views_action.py:814 workflow/import_export_views.py:124
+#: action/views_action.py:823 workflow/import_export_views.py:124
 msgid "Incorrect form request (it is not multipart)"
 msgstr "Väärän muotoinen pyyntö (ei ole moniosainen)"
 
-#: action/views_action.py:1188 action/views_action.py:1212 logs/views.py:49
-#: logs/views.py:59 table/views.py:192 table/views.py:313 table/views.py:370
+#: action/views_action.py:1197 action/views_action.py:1221 logs/views.py:49
+#: logs/views.py:59 table/views.py:196 table/views.py:321 table/views.py:378
 #: workflow/views.py:423 workflow/views.py:440
 msgid "Incorrect request. Unable to process"
 msgstr "Virheellinen pyyntö. Ei voi käsitellä"
 
-#: action/views_action.py:1193 table/views.py:318 table/views.py:375
+#: action/views_action.py:1202 table/views.py:326 table/views.py:383
 msgid "There is no data in the table"
 msgstr "Taulukossa ei ole dataa"
 
@@ -1482,15 +1508,17 @@ msgstr "Tämänniminen sarake on jo olemassa."
 msgid "The workflow has an attribute with this name."
 msgstr "Työnkulussa on tämänniminen attribuutti."
 
-#: action/views_condition.py:559
+#: action/views_condition.py:560
 msgid "Condition cannot be cloned."
 msgstr "Ehtoa ei voida kopioida."
 
-#: action/views_condition.py:588
-msgid "Action successfully cloned."
+#: action/views_condition.py:598
+#, fuzzy
+#| msgid "Action successfully cloned."
+msgid "Condition successfully cloned."
 msgstr "Toiminto kopioitu onnistuneesti."
 
-#: action/views_out.py:89
+#: action/views_out.py:88
 msgid ""
 "Unable to send emails due to a misconfiguration. Ask your system "
 "administrator to enable email queueing."
@@ -1498,31 +1526,27 @@ msgstr ""
 "Sähköposteja ei voi lähettää konfiguraatio-ongelman vuoksi. Pyydä "
 "järjestelmänvalvojaa kytkemään sähköpostiviestijono käyttöön."
 
-#: action/views_out.py:134 action/views_out.py:526 action/views_out.py:664
-msgid "Send"
-msgstr "Lähetä"
-
-#: action/views_out.py:162
+#: action/views_out.py:164
 msgid "Incorrect email action invocation."
 msgstr "Virheellinen sähköpostitoiminnon kutsu."
 
-#: action/views_out.py:288
+#: action/views_out.py:289
 msgid "Create ZIP"
 msgstr "Luo ZIP"
 
-#: action/views_out.py:316 action/views_out.py:367
+#: action/views_out.py:319 action/views_out.py:370
 msgid "Incorrect ZIP action invocation."
 msgstr "Virheellinen ZIP-toiminnon kutsu."
 
-#: action/views_out.py:390
+#: action/views_out.py:393
 msgid "Unable to generate zip:"
 msgstr "Zip-pakettia ei voida luoda:"
 
-#: action/views_out.py:395
+#: action/views_out.py:398
 msgid "The resulting ZIP is empty"
 msgstr "Tuloksena oleva ZIP on tyhjä"
 
-#: action/views_out.py:492
+#: action/views_out.py:495
 msgid ""
 "Unable to send json objects due to a misconfiguration. Ask your system "
 "administrator to enable JSON queueing."
@@ -1530,11 +1554,11 @@ msgstr ""
 "JSON-objekteja ei voida lähettää konfiguraatio-ongelman vuoksi. Pyydä "
 "järjestelmänvalvojaa ottamaan JSON-jonot käyttöön."
 
-#: action/views_out.py:554
+#: action/views_out.py:560
 msgid "Incorrect JSON action invocation."
 msgstr "Virheellinen JSON-toiminnon kutsu."
 
-#: action/views_out.py:622
+#: action/views_out.py:627
 msgid ""
 "Unable to send Canvas emails due to a misconfiguration. Ask your system "
 "administrator to enable message queueing."
@@ -1542,30 +1566,26 @@ msgstr ""
 "Canvas-sähköposteja ei voi lähettää konfiguraatio-ongelman vuoksi. Pyydä "
 "järjestelmänvalvojaa kytkemään viestijono käyttöön."
 
-#: action/views_out.py:689
+#: action/views_out.py:697
 msgid "Incorrect canvas oauth request invocation."
 msgstr "Virheellinen canvas oauth -pyynnön kutsu."
 
-#: action/views_out.py:695 ontask_oauth/views.py:158
+#: action/views_out.py:703 ontask_oauth/views.py:158
 msgid "Internal error. Empty OAuth Instance name"
 msgstr "Sisäinen virhe. OAuth -instanssin nimi on tyhjä"
 
-#: action/views_out.py:700 ontask_oauth/views.py:163
+#: action/views_out.py:708 ontask_oauth/views.py:163
 msgid "Internal error. Invalid OAuth Dict element"
 msgstr "Sisäinen virhe. OAuth Dict -elementti ei ole kelvollinen"
 
-#: action/views_out.py:750
+#: action/views_out.py:758
 msgid "Incorrect canvas email action invocation."
 msgstr "Virheellinen canvas-sähköpostitoiminnon kutsu."
 
-#: action/views_out.py:932
+#: action/views_out.py:939
 #, python-brace-format
 msgid "Error while retrieving content for student {0}"
 msgstr "Virhe haettaessa sisältöä opiskelijalle {0}"
-
-#: action/views_out.py:984
-msgid "Incorrect item filter invocation."
-msgstr "Virheellinen suodattimen kutsu."
 
 #: core/apps.py:9
 msgid "Core Configuration"
@@ -1583,15 +1603,15 @@ msgstr "Minuutin aikaväli ohjelmien ajastukseen"
 msgid "Data Upload/Merge Operations"
 msgstr "Tietojen lataus / yhdistäminen"
 
-#: dataops/csvupload.py:49 dataops/csvupload.py:68
+#: dataops/csvupload.py:50 dataops/csvupload.py:72
 msgid "CSV file"
 msgstr "CSV-tiedosto"
 
-#: dataops/csvupload.py:54
+#: dataops/csvupload.py:57
 msgid "CSV upload form is not multiform"
 msgstr "CSV-latauslomake ei ole monimuotoinen"
 
-#: dataops/excelupload.py:57
+#: dataops/excelupload.py:59
 msgid "Excel upload form is not multiform"
 msgstr "Excel-latauslomake ei ole monimuotoinen"
 
@@ -1643,24 +1663,24 @@ msgid ""
 msgstr ""
 "Tiedosto CSV-muodossa (tuotetaan yleensä tilastopaketilla tai Excelillä)"
 
-#: dataops/forms.py:218 dataops/forms.py:340
+#: dataops/forms.py:218 dataops/forms.py:340 dataops/forms.py:432
 msgid "Lines to skip at the top"
 msgstr "Ohitettavat rivit yläreunassa"
 
-#: dataops/forms.py:219 dataops/forms.py:341
+#: dataops/forms.py:219 dataops/forms.py:341 dataops/forms.py:433
 msgid "Number of lines to skip at the top when reading the file"
 msgstr "Yläreunasta ohitettavien rivien määrä tiedostoa luettaessa"
 
-#: dataops/forms.py:226 dataops/forms.py:348
+#: dataops/forms.py:226 dataops/forms.py:348 dataops/forms.py:440
 msgid "Lines to skip at the bottom"
 msgstr "Ohitettavat rivit alareunassa"
 
-#: dataops/forms.py:227 dataops/forms.py:349
+#: dataops/forms.py:227 dataops/forms.py:349 dataops/forms.py:441
 msgid "Number of lines to skip at the bottom when reading the file"
 msgstr "Alareunassa ohitettavien rivien määrä tiedostoa luettaessa"
 
 #: dataops/forms.py:245 dataops/forms.py:252 dataops/forms.py:367
-#: dataops/forms.py:374
+#: dataops/forms.py:374 dataops/forms.py:459 dataops/forms.py:466
 msgid "This number has to be zero or positive"
 msgstr "Tämän numeron on oltava nolla tai positiivinen"
 
@@ -1681,99 +1701,121 @@ msgstr "Ladattava välilehti Excel-tiedoston sisältä"
 msgid "URL to access the Google Spreadsheet in CSV format"
 msgstr "Google Spreadsheet URL CSV-formaatissa"
 
-#: dataops/forms.py:433
+#: dataops/forms.py:411
+msgid "AWS S3 Bucket access key"
+msgstr ""
+
+#: dataops/forms.py:417
+msgid "AWS S3 Bucket secret access key"
+msgstr ""
+
+#: dataops/forms.py:423
+msgid "AWS S3 Bucket name"
+msgstr ""
+
+#: dataops/forms.py:429
+msgid "AWS S3 Bucket file path"
+msgstr ""
+
+#: dataops/forms.py:486
+#, fuzzy, python-brace-format
+#| msgid "File could not be processed ({0})"
+msgid "S3 bucket file could not be processed ({0})"
+msgstr "Tiedostoa ei voitu käsitellä ({0})"
+
+#: dataops/forms.py:531
 msgid "Password to authenticate the database connection"
 msgstr "Salasana tietokantayhteyden muodostamiseksi"
 
-#: dataops/forms.py:491
+#: dataops/forms.py:589
 msgid "No unique column specified"
 msgstr "Ei yksilöllistä saraketta"
 
-#: dataops/forms.py:498
+#: dataops/forms.py:596
 msgid "- Choose row selection method -"
 msgstr "- Valitse rivin valintamenetelmä -"
 
-#: dataops/forms.py:499
+#: dataops/forms.py:597
 msgid "1) Select all rows in both the existing and new table"
 msgstr "1) Valitse kaikki rivit sekä nykyisessä että uudessa taulukossa"
 
-#: dataops/forms.py:500
+#: dataops/forms.py:598
 msgid ""
 "2) Select only the rows with keys present in both the existing and new table"
 msgstr ""
 "2) Valitse vain rivit, joissa on sekä nykyisessä että uudessa taulukossa "
 "olevat avaimet"
 
-#: dataops/forms.py:502
+#: dataops/forms.py:600
 msgid "3) Select only the rows with keys in the existing table"
 msgstr "3) Valitse vain rivit, joilla on nykyisen taulukon avaimet"
 
-#: dataops/forms.py:503
+#: dataops/forms.py:601
 msgid "4) Select only the rows with keys in the new table"
 msgstr "4) Valitse vain rivit, joilla on avaimet uudessa taulukossa"
 
-#: dataops/forms.py:506
+#: dataops/forms.py:604
 msgid "Key column in the existing table to match with the new table."
 msgstr ""
 "Nykyisen taulukon avainsarake, josta saadaan vastaavuus uuteen taulukkoon."
 
-#: dataops/forms.py:509
+#: dataops/forms.py:607
 msgid "Key column in the new table to match with the existing table."
 msgstr ""
 "Uuden taulukon avainsarake, josta saadaan vastaavuus nykyiseen taulukkoon."
 
-#: dataops/forms.py:512
+#: dataops/forms.py:610
 msgid "Select one method to see detailed information"
 msgstr "Valitse yksi menetelmä nähdäksesi yksityiskohtaiset tiedot"
 
-#: dataops/forms.py:529
+#: dataops/forms.py:627
 msgid "- Select merge option -"
 msgstr "- Valitse yhdistämisvaihtoehto -"
 
-#: dataops/forms.py:543
+#: dataops/forms.py:641
 msgid "Key Column in Existing Table"
 msgstr "Avainsarake nykyisessä taulukossa"
 
-#: dataops/forms.py:550
+#: dataops/forms.py:648
 msgid "Key Column in New Table"
 msgstr "Avainsarake uudessa taulukossa"
 
-#: dataops/forms.py:557
+#: dataops/forms.py:655
 msgid "Method to select rows to merge/update"
 msgstr "Rivinvalintamenetelmä yhdistämiseen/päivittämiseen"
 
-#: dataops/forms.py:594
+#: dataops/forms.py:692
 msgid "Unable to process datatype"
 msgstr "Tietotyyppiä ei voida käsitellä"
 
-#: dataops/formula_evaluation.py:426
+#: dataops/formula_evaluation.py:439
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator LESS"
 msgstr "Virhe: Tyyppi {0} ei ole sallittu operaattorin LESS yhteydessä"
 
-#: dataops/formula_evaluation.py:460
+#: dataops/formula_evaluation.py:475
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator LESS OR EQUAL"
 msgstr ""
 "Virhe: Tyyppi {0} ei ole sallittu operaattorin LESS OR EQUAL yhteydessä"
 
-#: dataops/formula_evaluation.py:496
+#: dataops/formula_evaluation.py:513
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator GREATER"
 msgstr "Virhe: Tyyppi {0} ei ole sallittu operaattorin GREATER yhteydessä"
 
-#: dataops/formula_evaluation.py:531
+#: dataops/formula_evaluation.py:550
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator GREATER OR EQUAL"
 msgstr ""
 "Virhe: Tyyppi {0} ei ole sallittu operaattorin GREATER OR EQUAL yhteydessä"
 
-#: dataops/formula_evaluation.py:562 dataops/formula_evaluation.py:603
+#: dataops/formula_evaluation.py:586 dataops/formula_evaluation.py:635
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator BETWEEN"
 msgstr "Virhe: Tyyppi {0} ei ole sallittu operaattorin BETWEEN yhteydessä"
 
-#: dataops/googlesheetupload.py:50 dataops/googlesheetupload.py:59
+#: dataops/googlesheetupload.py:51 dataops/googlesheetupload.py:62
 msgid "Google Sheet URL"
 msgstr "Google Sheet URL"
 
@@ -1818,7 +1860,7 @@ msgid "DB name"
 msgstr "Tietokannan nimi"
 
 #: dataops/models.py:134 table/apps.py:9 table/templates/table/display.html:8
-#: table/templates/table/display.html:80 templates/base.html:67
+#: table/templates/table/display.html:85 templates/base.html:67
 msgid "Table"
 msgstr "Taulu"
 
@@ -1858,7 +1900,7 @@ msgstr "Sarakkeen {0} uudet arvot eivät kuulu luokkiin {1}"
 msgid "Type {0} not found"
 msgstr "Tyyppiä {0} ei löytynyt"
 
-#: dataops/pandas_db.py:1096
+#: dataops/pandas_db.py:1158
 msgid ""
 "The data has no column with unique values per row. At least one column must "
 "have unique values."
@@ -1866,67 +1908,67 @@ msgstr ""
 "Datassa ei ole saraketta, jossa on yksilölliset arvot riviä kohden. Ainakin "
 "yhdessä sarakkeessa on oltava yksilölliset arvot."
 
-#: dataops/plugin.py:51
+#: dataops/plugin.py:59
 msgid "This method should be implemented!"
 msgstr "Tämä menetelmä tulisi toteuttaa!"
 
 #: dataops/plugin_manager.py:41 dataops/plugin_manager.py:48
 #: dataops/plugin_manager.py:55 dataops/plugin_manager.py:63
-#: dataops/plugin_manager.py:74
+#: dataops/plugin_manager.py:72
 msgid "Not found"
 msgstr "Ei löydetty"
 
 #: dataops/plugin_manager.py:43 dataops/plugin_manager.py:50
-#: dataops/plugin_manager.py:58 dataops/plugin_manager.py:76
+#: dataops/plugin_manager.py:58 dataops/plugin_manager.py:74
 msgid "Incorrect type"
 msgstr "Virheellinen tyyppi"
 
-#: dataops/plugin_manager.py:69
+#: dataops/plugin_manager.py:67
 msgid "Incorrect type/value"
 msgstr "Virheellinen tyyppi/arvo"
 
-#: dataops/plugin_manager.py:84
+#: dataops/plugin_manager.py:82
 msgid "Key values should be strings"
 msgstr "Avainarvojen tulisi olla merkkijonoja"
 
-#: dataops/plugin_manager.py:90
+#: dataops/plugin_manager.py:88
 msgid "First tuple element should be as string"
 msgstr "Ensimmäisen tuple-elementin tulisi olla merkkijono"
 
-#: dataops/plugin_manager.py:106
+#: dataops/plugin_manager.py:104
 #, python-brace-format
 msgid "Incorrect type \"{0}\" in parameter"
 msgstr "Väärä tyyppi \"{0}\" parametrissa"
 
-#: dataops/plugin_manager.py:113
+#: dataops/plugin_manager.py:111
 msgid "Parameter of type datetime cannot have list of allowed values"
 msgstr "Tyypin datetime-parametrilla ei voi olla listaa sallittuja arvoja"
 
-#: dataops/plugin_manager.py:118
+#: dataops/plugin_manager.py:116
 msgid "Incorrect list of allowed value"
 msgstr "Virheellinen lista sallitusta arvosta"
 
-#: dataops/plugin_manager.py:122 workflow/forms.py:251
+#: dataops/plugin_manager.py:120 workflow/forms.py:251
 msgid "Incorrect initial value"
 msgstr "Virheellinen alkuarvo"
 
-#: dataops/plugin_manager.py:129
+#: dataops/plugin_manager.py:127
 msgid "Help text must be as string"
 msgstr "Ohjetekstin on oltava merkkijono"
 
-#: dataops/plugin_manager.py:140
+#: dataops/plugin_manager.py:138
 msgid "Incorrect run method"
 msgstr "Virheellinen suoritusmenetelmä"
 
-#: dataops/plugin_manager.py:184
+#: dataops/plugin_manager.py:183
 msgid "Presence of a string field with name \"name\""
 msgstr "”name” -nimisen merkkijonon olemassaolo"
 
-#: dataops/plugin_manager.py:185
+#: dataops/plugin_manager.py:184
 msgid "Presence of a string field with name \"description_txt\""
 msgstr "”description_txt” -nimisen merkkijonon olemassaolo"
 
-#: dataops/plugin_manager.py:186
+#: dataops/plugin_manager.py:185
 msgid ""
 "Presence of a field with name \"input_column_names\" storing a (possible "
 "empty) list of strings"
@@ -1934,13 +1976,19 @@ msgstr ""
 "\"input_column_names\" -nimisen (mahdollisesti tyhjän) merkkijonolistan "
 "olemassaolo"
 
-#: dataops/plugin_manager.py:188
+#: dataops/plugin_manager.py:187
+#, fuzzy
+#| msgid ""
+#| "Presence of a field with name \"input_column_names\" storing a (possible "
+#| "empty) list of strings"
 msgid ""
-"Presence of a field with name \"output_column_names\" storing a non-empty "
-"list of strings"
-msgstr "”output_column_names” -nimisen epätyhjän merkkijonolistan olemassaolo"
+"Presence of a field with name \"output_column_names\" storing a (possibly "
+"empty) list of strings"
+msgstr ""
+"\"input_column_names\" -nimisen (mahdollisesti tyhjän) merkkijonolistan "
+"olemassaolo"
 
-#: dataops/plugin_manager.py:190
+#: dataops/plugin_manager.py:189
 msgid ""
 "Presence of a (possible empty) list of tuples with name \"parameters\". The "
 "tuples must have six elements: name (a string), type (one of \"double\", "
@@ -1955,37 +2003,39 @@ msgstr ""
 "sallituista arvoista, oikeantyyppinen alkuarvo sekä ohjeviesti joka "
 "näytetään kun parametria pyydetään."
 
-#: dataops/plugin_manager.py:227
+#: dataops/plugin_manager.py:226
 msgid "Class instantiation"
 msgstr "Luokan ilmentymä"
 
-#: dataops/plugin_manager.py:229
+#: dataops/plugin_manager.py:228
 msgid "Instance creation"
 msgstr "Instanssin luominen"
 
-#: dataops/plugin_manager.py:324
+#: dataops/plugin_manager.py:323
 #, python-brace-format
 msgid "Unable to load plugin in folder \"{0}\"."
 msgstr "Liitännäistä ei voida ladata kansioon \"{0}\"."
 
-#: dataops/plugin_manager.py:352
-msgid "Result is not a pandas data frame."
-msgstr "Tulos ei ole pandas data frame."
+#: dataops/s3upload.py:50 dataops/s3upload.py:61
+#, fuzzy
+#| msgid "CSV file"
+msgid "S3 CSV file"
+msgstr "CSV-tiedosto"
 
 #: dataops/settings.py:31
 msgid "Folder where plugins are stored"
 msgstr "Kansio, johon liitännäiset tallennetaan"
 
-#: dataops/sqlcon_views.py:108
+#: dataops/sqlcon_views.py:107
 msgid "A connection with this name already exists"
 msgstr "Tämänniminen yhteys on jo olemassa"
 
-#: dataops/sqlcon_views.py:128 dataops/sqlcon_views.py:314
-#: dataops/sqlcon_views.py:351 dataops/sqlcon_views.py:420
+#: dataops/sqlcon_views.py:127 dataops/sqlcon_views.py:313
+#: dataops/sqlcon_views.py:350 dataops/sqlcon_views.py:420
 msgid "<PROTECTED>"
 msgstr "<PROTECTED>"
 
-#: dataops/sqlcon_views.py:415
+#: dataops/sqlcon_views.py:414
 #: dataops/templates/dataops/includes/partial_show_sql_connection.html:3
 msgid "SQL connection"
 msgstr "SQL-yhteys"
@@ -2090,24 +2140,24 @@ msgid "Plugin Execution"
 msgstr "Liitännäisen suorittaminen"
 
 #: dataops/templates/dataops/plugin_execution_report.html:12
-msgid "Plugin execution report"
-msgstr "Liitännäisen suorittamisen raportti"
+#, fuzzy
+#| msgid "Action scheduled for execution"
+msgid "Plugin scheduled for execution"
+msgstr "Toiminto on ajastettu suoritettavaksi"
 
 #: dataops/templates/dataops/plugin_execution_report.html:14
-msgid "Incorrect execution"
-msgstr "Virheellinen suoritus"
+#, fuzzy, python-format
+#| msgid ""
+#| "You may check the status in\n"
+#| "      log number %(log_id)s."
+msgid ""
+"You may check the\n"
+"        status in log number %(log_id)s."
+msgstr ""
+"Voit tarkistaa tilan\n"
+"         lokitalleenteesta numero %(log_id)s."
 
-#: dataops/templates/dataops/plugin_execution_report.html:23
-#: dataops/templates/dataops/upload_s4.html:25
-msgid "Existing Table"
-msgstr "Olemassaoleva taulukko"
-
-#: dataops/templates/dataops/plugin_execution_report.html:25
-#: dataops/templates/dataops/upload_s4.html:27
-msgid "New Data"
-msgstr "Uudet tiedot"
-
-#: dataops/templates/dataops/plugin_execution_report.html:46
+#: dataops/templates/dataops/plugin_execution_report.html:19
 msgid "Continue"
 msgstr "Jatka"
 
@@ -2120,33 +2170,33 @@ msgstr "Suorita muunnos"
 msgid "Transformation \"%(n)s\""
 msgstr "Muunnos ”%(n)s”"
 
-#: dataops/templates/dataops/plugin_info_for_run.html:27
+#: dataops/templates/dataops/plugin_info_for_run.html:29
+msgid "Run the plugin"
+msgstr "Suorita liitännäinen"
+
+#: dataops/templates/dataops/plugin_info_for_run.html:38
 msgid "Columns to pass to the transformation"
 msgstr "Muunnokselle välitettävät sarakkeet"
 
-#: dataops/templates/dataops/plugin_info_for_run.html:32
+#: dataops/templates/dataops/plugin_info_for_run.html:44
 msgid "Columns to store the result"
 msgstr "Sarakkeet tuloksen tallentamiseen"
 
-#: dataops/templates/dataops/plugin_info_for_run.html:37
+#: dataops/templates/dataops/plugin_info_for_run.html:50
 msgid "Parameters"
 msgstr "Parametrit"
 
-#: dataops/templates/dataops/plugin_info_for_run.html:47
+#: dataops/templates/dataops/plugin_info_for_run.html:58
 msgid "Input columns"
 msgstr "Syötesarakkeet"
 
-#: dataops/templates/dataops/plugin_info_for_run.html:56
+#: dataops/templates/dataops/plugin_info_for_run.html:70
 msgid "Output column names"
 msgstr "Tulossarakkeiden nimet"
 
-#: dataops/templates/dataops/plugin_info_for_run.html:71
+#: dataops/templates/dataops/plugin_info_for_run.html:92
 msgid "Execution parameters"
 msgstr "Suoritusparametrit"
-
-#: dataops/templates/dataops/plugin_info_for_run.html:82
-msgid "Run the plugin"
-msgstr "Suorita liitännäinen"
 
 #: dataops/templates/dataops/row_create.html:8
 #: dataops/templates/dataops/row_create.html:17
@@ -2271,43 +2321,49 @@ msgstr "Muunnokset"
 msgid "Upload/Merge"
 msgstr "Lataa/Yhdistä"
 
-#: dataops/templates/dataops/upload1.html:13
-msgid "Step 1: Select"
+#: dataops/templates/dataops/upload1.html:14
+#, fuzzy
+#| msgid "Step 1: Select"
+msgid "Select"
 msgstr "Vaihe 1: Valitse"
 
 #: dataops/templates/dataops/upload_s2.html:7
 msgid "Upload/Merge CSV"
 msgstr "Lataa/Yhdistä CSV"
 
-#: dataops/templates/dataops/upload_s2.html:13
-msgid "Step 2: Select Columns"
+#: dataops/templates/dataops/upload_s2.html:14
+#, fuzzy
+#| msgid "Step 2: Select Columns"
+msgid "Select Columns"
 msgstr "Vaihe 2: Valitse sarakkeet"
 
-#: dataops/templates/dataops/upload_s2.html:34
+#: dataops/templates/dataops/upload_s2.html:35
 msgid "Load"
 msgstr "Lataa"
 
-#: dataops/templates/dataops/upload_s2.html:38
+#: dataops/templates/dataops/upload_s2.html:39
 msgid "Rename to"
 msgstr "Nimeä uudelleen"
 
-#: dataops/templates/dataops/upload_s2.html:40
-#: dataops/templates/dataops/upload_s4.html:33
-#: dataops/templates/dataops/upload_s4.html:35
-#: dataops/templates/dataops/upload_s4.html:39
-#: dataops/templates/dataops/upload_s4.html:46
+#: dataops/templates/dataops/upload_s2.html:41
+#: dataops/templates/dataops/upload_s4.html:34
+#: dataops/templates/dataops/upload_s4.html:36
+#: dataops/templates/dataops/upload_s4.html:40
+#: dataops/templates/dataops/upload_s4.html:47
 msgid "Key"
 msgstr "Avain"
 
-#: dataops/templates/dataops/upload_s2.html:53
+#: dataops/templates/dataops/upload_s2.html:54
 msgid "Keep?"
 msgstr "Säilytä?"
 
-#: dataops/templates/dataops/upload_s3.html:13
-msgid "Step 3: Select Keys and Merge Option"
+#: dataops/templates/dataops/upload_s3.html:14
+#, fuzzy
+#| msgid "Step 3: Select Keys and Merge Option"
+msgid "Select Keys and Merge Option"
 msgstr "Vaihe 3: Valitse avaimet ja yhdistämisvalinnat"
 
-#: dataops/templates/dataops/upload_s3.html:20
+#: dataops/templates/dataops/upload_s3.html:21
 msgid ""
 "Selects all the rows from\n"
 "          both the existing\n"
@@ -2320,11 +2376,11 @@ msgstr ""
 "solujen, joilla on avaimet molemmissa taulukoissa, arvot päivitetään jos "
 "uudella taulukolla on ei-tyhjä arvo (solu 4B pysyy arvolla <i>b</i> )."
 
-#: dataops/templates/dataops/upload_s3.html:26
+#: dataops/templates/dataops/upload_s3.html:27
 msgid "Merge using all the keys in either the existing or new table"
 msgstr "Yhdistä käyttäen kaikkia avaimia nykyisessä tai uudessa taulukossa"
 
-#: dataops/templates/dataops/upload_s3.html:30
+#: dataops/templates/dataops/upload_s3.html:31
 msgid ""
 "Selects only those rows for\n"
 "          which the key is in both tables (the\n"
@@ -2343,13 +2399,13 @@ msgstr ""
 "Tulosrivien solut päivitetään vain, jos uusi arvo ei ole tyhjä (solu 4B "
 "pysyy arvolla <i>b</i> )."
 
-#: dataops/templates/dataops/upload_s3.html:38
+#: dataops/templates/dataops/upload_s3.html:39
 msgid "Merge using only the keys in both the existing and new table"
 msgstr ""
 "Yhdistä käyttäen vain avaimia jotka ovat sekä nykyisessä että uudessa "
 "taulukossa"
 
-#: dataops/templates/dataops/upload_s3.html:42
+#: dataops/templates/dataops/upload_s3.html:43
 msgid ""
 "Selects only the rows with\n"
 "          key values\n"
@@ -2366,11 +2422,11 @@ msgstr ""
 "ei ole olemassa (alla olevat rivit 5 ja 6). Tulosrivien solut päivitetään "
 "vain, jos uusi arvo ei ole tyhjä (solu 4B pysyy arvolla <i>b</i> )."
 
-#: dataops/templates/dataops/upload_s3.html:50
+#: dataops/templates/dataops/upload_s3.html:51
 msgid "Merge using only the keys in the existing table"
 msgstr "Yhdistä käyttäen vain olemassa olevan taulukon avaimia"
 
-#: dataops/templates/dataops/upload_s3.html:54
+#: dataops/templates/dataops/upload_s3.html:55
 msgid ""
 "Selects only the rows with\n"
 "          key values present in the new table. This\n"
@@ -2386,7 +2442,7 @@ msgstr ""
 "Tulosrivien solut päivitetään vain, jos uusi arvo ei ole tyhjä (solu 4B "
 "pysyy arvolla <i>b</i> )."
 
-#: dataops/templates/dataops/upload_s3.html:61
+#: dataops/templates/dataops/upload_s3.html:62
 msgid "Merge using only the keys in the new table"
 msgstr "Yhdistä käyttämällä vain uuden taulukon avaimia"
 
@@ -2394,27 +2450,39 @@ msgstr "Yhdistä käyttämällä vain uuden taulukon avaimia"
 msgid "Review Operation"
 msgstr "Tarkista toimenpide"
 
-#: dataops/templates/dataops/upload_s4.html:13
-msgid "Step 4: Review and confirm"
+#: dataops/templates/dataops/upload_s4.html:14
+#, fuzzy
+#| msgid "Step 4: Review and confirm"
+msgid "Review and confirm"
 msgstr "Vaihe 4: Tarkista ja vahvista"
+
+#: dataops/templates/dataops/upload_s4.html:26
+msgid "Existing Table"
+msgstr "Olemassaoleva taulukko"
+
+#: dataops/templates/dataops/upload_s4.html:28
+msgid "New Data"
+msgstr "Uudet tiedot"
 
 #: dataops/templates/dataops/uploadmerge.html:7
 msgid "Data Upload/Merge"
 msgstr "Tietojen lataus/yhdistäminen"
 
-#: dataops/templates/dataops/uploadmerge.html:10
-msgid "Data upload/merge operations"
-msgstr "Tietojen lataus- ja yhdistämistoimenpiteet"
+#: dataops/templates/dataops/uploadmerge.html:11
+#, fuzzy
+#| msgid "Select the actions to export:"
+msgid "Select the type of data source"
+msgstr "Valitse vietävät toiminnot:"
 
-#: dataops/templates/dataops/uploadmerge.html:15
+#: dataops/templates/dataops/uploadmerge.html:16
 msgid "Operation"
 msgstr "Toimenpide"
 
-#: dataops/templates/dataops/uploadmerge.html:24
-msgid "CSV Upload/Merge"
-msgstr "CSV lataus/yhdistäminen"
+#: dataops/templates/dataops/uploadmerge.html:25
+msgid "CSV"
+msgstr ""
 
-#: dataops/templates/dataops/uploadmerge.html:28
+#: dataops/templates/dataops/uploadmerge.html:29
 msgid ""
 "Upload data contained in a CSV file (typically\n"
 "            saved using a spreadsheet or other data manipulation package)."
@@ -2423,7 +2491,7 @@ msgstr ""
 "taulukkolaskentaohjelmalla tai muulla tietojenkäsittelypaketilla "
 "tallennettu)."
 
-#: dataops/templates/dataops/uploadmerge.html:30
+#: dataops/templates/dataops/uploadmerge.html:31
 msgid ""
 "If the table is empty, the data will be simply\n"
 "            loaded detecting those columns that have unique values for "
@@ -2433,7 +2501,7 @@ msgstr ""
 "Jos taulukko on tyhjä, tiedot ladataan yksinkertaisesti tunnistamalla ne "
 "sarakkeet, joilla on yksilölliset arvot jokaiselle riville."
 
-#: dataops/templates/dataops/uploadmerge.html:33
+#: dataops/templates/dataops/uploadmerge.html:34
 msgid ""
 "If the workflow table has data, the operation will\n"
 "            ask you to match a key column in your table with a key column "
@@ -2443,15 +2511,15 @@ msgstr ""
 "Jos työnkulun taulukossa on tietoja, toimenpide pyytää sinua määrittämään "
 "taulukkojen yhteydet avainsarakkeilla, jotta rivit voidaan sovittaa yhteen."
 
-#: dataops/templates/dataops/uploadmerge.html:42
-msgid "Excel Upload/Merge"
-msgstr "Excel-tiedoston lataus/yhdistäminen"
+#: dataops/templates/dataops/uploadmerge.html:43
+msgid "Excel"
+msgstr ""
 
-#: dataops/templates/dataops/uploadmerge.html:46
+#: dataops/templates/dataops/uploadmerge.html:47
 msgid "Upload data from Excel file."
 msgstr "Lataa tiedot Excel-tiedostosta."
 
-#: dataops/templates/dataops/uploadmerge.html:47
+#: dataops/templates/dataops/uploadmerge.html:48
 msgid ""
 "\n"
 "            Given a file name and the name of a sheet, upload or merge the\n"
@@ -2462,7 +2530,7 @@ msgstr ""
 "Kun olet antanut tiedoston ja välilehden nimen,\n"
 "lataa tai yhdistä Excel-tiedoston sisältö."
 
-#: dataops/templates/dataops/uploadmerge.html:52
+#: dataops/templates/dataops/uploadmerge.html:53
 msgid ""
 "\n"
 "            If the workflow table has data, the operation will ask you\n"
@@ -2476,15 +2544,17 @@ msgstr ""
 "yhteys taulukon avainsarakkeen ja ladattavan tiedoston avainsarakkeen\n"
 "välille, jotta rivit voidaan sovittaa yhteen."
 
-#: dataops/templates/dataops/uploadmerge.html:63
-msgid "Google Sheet Upload/Merge"
-msgstr "Google Sheet lataus/yhdistäminen"
+#: dataops/templates/dataops/uploadmerge.html:64
+#, fuzzy
+#| msgid "Google Sheet URL"
+msgid "Google Sheet"
+msgstr "Google Sheet URL"
 
-#: dataops/templates/dataops/uploadmerge.html:67
+#: dataops/templates/dataops/uploadmerge.html:68
 msgid "Upload data from a Google Sheet file."
 msgstr "Lataa tiedot Google Sheet -tiedostosta."
 
-#: dataops/templates/dataops/uploadmerge.html:68
+#: dataops/templates/dataops/uploadmerge.html:69
 msgid ""
 "\n"
 "            Given the URL pointing to a publicly available Google Sheet "
@@ -2495,7 +2565,8 @@ msgstr ""
 "Anna julkisesti saatavilla olevan Google Sheet -tiedoston URL-osoite "
 "ladataksesi tai yhdistääksesi sen tietoja."
 
-#: dataops/templates/dataops/uploadmerge.html:72
+#: dataops/templates/dataops/uploadmerge.html:73
+#: dataops/templates/dataops/uploadmerge.html:95
 msgid ""
 "\n"
 "            If the workflow table has data, the operation will ask you\n"
@@ -2509,66 +2580,93 @@ msgstr ""
 "yhteys taulukon avainsarakkeen ja ladattavan tiedoston avainsarakkeen\n"
 "välille, jotta rivit voidaan sovittaa yhteen."
 
-#: dataops/templates/dataops/uploadmerge.html:83
+#: dataops/templates/dataops/uploadmerge.html:85
+msgid "S3 Bucket CSV"
+msgstr ""
+
+#: dataops/templates/dataops/uploadmerge.html:89
+#, fuzzy
+#| msgid "Upload data from a Google Sheet file."
+msgid "Upload data from a CSV file in a S3 Bucket."
+msgstr "Lataa tiedot Google Sheet -tiedostosta."
+
+#: dataops/templates/dataops/uploadmerge.html:90
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "            Given the URL pointing to a publicly available Google Sheet "
+#| "upload or merge its content.\n"
+#| "            "
+msgid ""
+"\n"
+"            Given the key, secret, bucket name and file path to a CSV file,\n"
+"            upload or merge its content.\n"
+"            "
+msgstr ""
+"\n"
+"Anna julkisesti saatavilla olevan Google Sheet -tiedoston URL-osoite "
+"ladataksesi tai yhdistääksesi sen tietoja."
+
+#: dataops/templates/dataops/uploadmerge.html:106
 msgid "SQL Connection"
 msgstr "SQL-yhteys"
 
-#: dataops/templates/dataops/uploadmerge.html:87
+#: dataops/templates/dataops/uploadmerge.html:110
 msgid ""
 "Upload data stored in a remote database by\n"
 "            defining connections."
 msgstr ""
 "Lähetä tietokantaan tallennettuja tietoja määrittämällä tietokantayhteydet."
 
-#: dataops/upload.py:124
+#: dataops/upload.py:126
 msgid "Finish"
 msgstr "Valmis"
 
-#: dataops/upload.py:162 dataops/views.py:419
+#: dataops/upload.py:164 ontask/tasks.py:553
 msgid "Exception while retrieving the data frame"
 msgstr "Poikkeus datakehyksen noutamisessa"
 
-#: dataops/upload.py:385
+#: dataops/upload.py:392
 msgid "Exception while loading data frame"
 msgstr "Poikkeus datakehyksen lataamisessa"
 
-#: dataops/upload.py:413
+#: dataops/upload.py:420
 msgid "Merge operation failed."
 msgstr "Yhdistäminen epäonnistui."
 
-#: dataops/upload.py:499 dataops/upload.py:502
+#: dataops/upload.py:506 dataops/upload.py:509
 msgid " (Ignored)"
 msgstr " (Ohitettu)"
 
-#: dataops/upload.py:509 dataops/views.py:559
+#: dataops/upload.py:516
 msgid " (New)"
 msgstr " (Uusi)"
 
-#: dataops/upload.py:511 dataops/views.py:564
+#: dataops/upload.py:518
 msgid " (Update)"
 msgstr " (Päivitä)"
 
-#: dataops/upload.py:515
+#: dataops/upload.py:522
 msgid " (Renamed)"
 msgstr " (Uudelleennimetty)"
 
-#: dataops/views.py:46
+#: dataops/views.py:43
 msgid "Folder"
 msgstr "Kansio"
 
-#: dataops/views.py:69
+#: dataops/views.py:66
 msgid "Execute the transformation"
 msgstr "Suorita muutos"
 
-#: dataops/views.py:209
+#: dataops/views.py:206
 msgid "Unable to update table row"
 msgstr "Taulukon riviä ei voida päivittää"
 
-#: dataops/views.py:252
+#: dataops/views.py:249
 msgid "Key value not found when updating row"
 msgstr "Avainarvoa ei löydy riviä päivittäessä"
 
-#: dataops/views.py:323
+#: dataops/views.py:320
 #, python-brace-format
 msgid ""
 "Repeated value in column {0}. It must be different to maintain Key property"
@@ -2576,19 +2674,27 @@ msgstr ""
 "Toistuva arvo sarakkeessa {0}. Avain-ominaisuuden säilyttämiseksi arvon on "
 "oltava eroava"
 
-#: dataops/views.py:374
+#: dataops/views.py:369
+#, fuzzy
+#| msgid ""
+#| "Unable to schedule actions due to a misconfiguration. Ask your system "
+#| "administrator to enable queueing."
+msgid ""
+"Unable to run plugins due to a misconfiguration. Ask your system "
+"administrator to enable queueing."
+msgstr ""
+"Toimintoja ei voida ajastaa konfiguraatiovirheen vuoksi. Pyydä "
+"järjestelmänvalvojaa ottamaan käyttöön jonotustoiminto."
+
+#: dataops/views.py:386 ontask/tasks.py:532
 #, python-brace-format
 msgid "Unable to instantiate plugin \"{0}\""
 msgstr "Liitännäistä \"{0}\" ei voitu valmistella"
 
-#: dataops/views.py:385
+#: dataops/views.py:397
 msgid "Workflow does not have the correct columns to run this plugin"
 msgstr ""
 "Työnkululla ei ole tarvittavia sarakkeita tämän liitännäisen suorittamiseksi"
-
-#: dataops/views.py:467
-msgid "Incorrect number of rows in result data frame."
-msgstr "Virheellinen rivien lukumäärä tulostietokehyksessä."
 
 #: django_auth_lti/middleware.py:35
 msgid "improperly configured: requeset has no user attr"
@@ -2707,7 +2813,7 @@ msgstr "Käyttäjän osuus poistettu"
 
 #: logs/models.py:109 workflow/templates/workflow/import.html:7
 #: workflow/templates/workflow/import.html:13
-#: workflow/templates/workflow/index.html:46
+#: workflow/templates/workflow/index.html:45
 msgid "Import workflow"
 msgstr "Työnkulun tuonti"
 
@@ -2924,13 +3030,19 @@ msgid "Download a CSV file containing these logs"
 msgstr "Lataa nämä lokit sisältävä CSV-tiedosto"
 
 #: logs/templates/logs/display.html:59 table/templates/table/display.html:146
-#: table/templates/table/display.html:159
+#: table/templates/table/display.html:160
 msgid "CSV Download"
 msgstr "CSV-lataus"
 
 #: logs/templates/logs/display.html:74
+#, fuzzy
+#| msgid ""
+#| "<strong><super>*</super></strong>The platform records all operations\n"
+#| "      performed on the workflow as <i>Logs</i>. These elements are shown "
+#| "in the table above. You can view its content\n"
+#| "      by clicking on its number."
 msgid ""
-"<strong><super>*</super></strong>The platform records all operations\n"
+"The platform records all operations\n"
 "      performed on the workflow as <i>Logs</i>. These elements are shown in "
 "the table above. You can view its content\n"
 "      by clicking on its number."
@@ -2967,21 +3079,17 @@ msgstr "Päivä/Aika"
 msgid "Event type"
 msgstr "Tapahtumatyyppi"
 
-#: logs/views.py:93
+#: logs/views.py:91
 msgid "View log content"
 msgstr "Näytä lokin sisältö"
 
-#: logs/views.py:138
+#: logs/views.py:136
 msgid "Incorrect log number requested"
 msgstr "Virheellinen lokinumero pyydetty"
 
 #: ontask/__init__.py:29
 msgid "Personalized text"
 msgstr "Personoitu teksti"
-
-#: ontask/__init__.py:30
-msgid "Personalized Canvas Email"
-msgstr "Personoitu Canvas-sähköposti"
 
 #: ontask/__init__.py:31
 msgid "Survey"
@@ -3026,21 +3134,78 @@ msgstr "Sallitut sisältötyypit"
 msgid "Maximum size allowed in file uplaods"
 msgstr "Suurin sallittu koko tiedostolatauksissa"
 
-#: ontask/settings/base.py:289
+#: ontask/settings/base.py:385
 msgid "English"
 msgstr "englanti"
 
-#: ontask/settings/base.py:290
+#: ontask/settings/base.py:386
 msgid "Spanish"
 msgstr "espanja"
 
-#: ontask/settings/base.py:291
+#: ontask/settings/base.py:387
 msgid "Chinese"
 msgstr "kiina"
 
-#: ontask/settings/base.py:292
+#: ontask/settings/base.py:388
 msgid "Finnish"
 msgstr "suomi"
+
+#: ontask/tasks.py:497
+#, fuzzy, python-brace-format
+#| msgid "Incorrect execution due to absence of token"
+msgid "Incorrect execution request with log_id {0}"
+msgstr "Virheellinen suoritus, token puuttuu"
+
+#: ontask/tasks.py:507
+#, fuzzy, python-brace-format
+#| msgid "Unable to instantiate plugin \"{0}\""
+msgid "Unable to find user with id {0}"
+msgstr "Liitännäistä \"{0}\" ei voitu valmistella"
+
+#: ontask/tasks.py:516
+#, fuzzy, python-brace-format
+#| msgid "Unable to import workflow (Exception: {0})"
+msgid "Unable to find workflow with id {0}"
+msgstr "Työnkulkua ei voida tuoda (poikkeus: {0})"
+
+#: ontask/tasks.py:525
+#, fuzzy, python-brace-format
+#| msgid "Unable to load plugin in folder \"{0}\"."
+msgid "Unable to load plugin with id {0}"
+msgstr "Liitännäistä ei voida ladata kansioon \"{0}\"."
+
+#: ontask/tasks.py:542
+#, python-brace-format
+msgid "Inconsisten inputs when invoking plugin \"{0}\""
+msgstr ""
+
+#: ontask/tasks.py:578
+#, fuzzy, python-brace-format
+#| msgid "Error while retrieving content for student {0}"
+msgid "Error while executing plugin: {0}"
+msgstr "Virhe haettaessa sisältöä opiskelijalle {0}"
+
+#: ontask/tasks.py:585
+#, fuzzy
+#| msgid "Result is not a pandas data frame."
+msgid "Plugin executed but did not return a pandas data frame."
+msgstr "Tulos ei ole pandas data frame."
+
+#: ontask/tasks.py:594
+msgid "Incorrect number of rows in result data frame."
+msgstr "Virheellinen rivien lukumäärä tulostietokehyksessä."
+
+#: ontask/tasks.py:602
+#, fuzzy
+#| msgid "Incorrect number of rows in result data frame."
+msgid "Incorrect columns in result data frame."
+msgstr "Virheellinen rivien lukumäärä tulostietokehyksessä."
+
+#: ontask/tasks.py:621 ontask/tasks.py:627
+#, fuzzy, python-brace-format
+#| msgid "Error while retrieving content for student {0}"
+msgid "Error while merging result ({0})."
+msgstr "Virhe haettaessa sisältöä opiskelijalle {0}"
 
 #: ontask/urls.py:30
 msgid ""
@@ -3379,9 +3544,16 @@ msgid "Scheduled Actions"
 msgstr "Ajastetut toiminnot"
 
 #: scheduler/templates/scheduler/index.html:54
-#, python-format
+#, fuzzy, python-format
+#| msgid ""
+#| "<strong><super>*</super></strong>The execution of some of\n"
+#| "      the actions can be scheduled for a time in the future. This page "
+#| "shows those planned executions. To schedule the\n"
+#| "      execution of one action, go to the <a href=\"%(actionindex)s"
+#| "\">Actions</a> menu and select the operation <i>Schedule\n"
+#| "      </i> for an action."
 msgid ""
-"<strong><super>*</super></strong>The execution of some of\n"
+"The execution of some of\n"
 "      the actions can be scheduled for a time in the future. This page shows "
 "those planned executions. To schedule the\n"
 "      execution of one action, go to the <a href=\"%(actionindex)s"
@@ -3566,43 +3738,43 @@ msgstr "Ei arvoa tälle opiskelijalle tässä sarakkeessa"
 msgid "Unable to provide visualisation without data."
 msgstr "Visualisointia ei voida näyttää ilman tietoja."
 
-#: table/templates/table/display.html:94
+#: table/templates/table/display.html:98
 msgid "Add a new row to the table"
 msgstr "Lisää uusi rivi taulukkoon"
 
-#: table/templates/table/display.html:95
+#: table/templates/table/display.html:99
 msgid "Row"
 msgstr "Rivi"
 
-#: table/templates/table/display.html:109
+#: table/templates/table/display.html:108
 msgid "Views available for this table"
 msgstr "Tämän taulukon näkymät"
 
-#: table/templates/table/display.html:110
+#: table/templates/table/display.html:109
 msgid "Views"
 msgstr "Näkymät"
 
-#: table/templates/table/display.html:132
+#: table/templates/table/display.html:131
 msgid "Change elements in view"
 msgstr "Muuta näkymän elementtejä"
 
-#: table/templates/table/display.html:133
+#: table/templates/table/display.html:132
 #: table/templates/table/includes/partial_view_edit.html:8
 msgid "Edit view"
 msgstr "Muokkaa näkymää"
 
-#: table/templates/table/display.html:139
+#: table/templates/table/display.html:138
 msgid "Dashboard created with the view data"
 msgstr "Dashboard näkymän tiedoilla"
 
-#: table/templates/table/display.html:140
+#: table/templates/table/display.html:139
 #: table/templates/table/display.html:153
 #: table/templates/table/stat_view.html:24
 msgid "Dashboard"
 msgstr "Dashboard"
 
 #: table/templates/table/display.html:145
-#: table/templates/table/display.html:158
+#: table/templates/table/display.html:159
 msgid "Download a CSV file containing this table"
 msgstr "Lataa tämä taulukko CSV-tiedostona"
 
@@ -3610,7 +3782,7 @@ msgstr "Lataa tämä taulukko CSV-tiedostona"
 msgid "Dashboard created with the table data"
 msgstr "Taulukon tiedoista luotu dashboard"
 
-#: table/templates/table/display.html:180
+#: table/templates/table/display.html:181
 msgid ""
 "You may drag-and-drop a column header to change its position in the table"
 msgstr ""
@@ -3748,23 +3920,23 @@ msgid ""
 "      of the table to show."
 msgstr "Luo näkymiä valitsemalla osajoukko taulukon riveistä ja sarakkeista."
 
-#: table/views.py:56
+#: table/views.py:59
 msgid "Change the columns present in the view"
 msgstr "Muuta näkymässä näytettäviä sarakkeita"
 
-#: table/views.py:111
+#: table/views.py:114
 msgid "A view with that name already exists"
 msgstr "Tämänniminen näkymä on jo olemassa"
 
-#: table/views.py:381
+#: table/views.py:389
 msgid "Incorrect view reference"
 msgstr "Virheellinen näkymän viittaus"
 
-#: table/views.py:425
+#: table/views.py:433
 msgid "Incorrect URL invoked to delete a row"
 msgstr "Virheellinen URL-osoite kutsuttu rivin poistamiseksi"
 
-#: table/views.py:498 table/views.py:531
+#: table/views.py:506 table/views.py:539
 msgid "Cannot add a view to a workflow without data"
 msgstr "Et voi lisätä näkymää työnkulkuun ilman tietoja"
 
@@ -4417,11 +4589,11 @@ msgstr "Lisätiedot"
 msgid "Column Operations"
 msgstr "Saraketoimenpiteet"
 
-#: workflow/templates/workflow/detail.html:89
+#: workflow/templates/workflow/detail.html:87
 msgid "Key?"
 msgstr "Avain?"
 
-#: workflow/templates/workflow/detail.html:95
+#: workflow/templates/workflow/detail.html:93
 msgid ""
 "You may drag and drop the columns from the left-most cell to change their "
 "position in the workflow."
@@ -4485,21 +4657,28 @@ msgstr "Lisää uusi sarake, jossa on satunnaisia arvoja"
 msgid "Column with random values"
 msgstr "Sarake, jossa on satunnaisia arvoja"
 
-#: workflow/templates/workflow/includes/attributes.html:9
+#: workflow/templates/workflow/includes/attributes.html:8
 msgid "Add a new name/value pair"
 msgstr "Lisää uusi nimi/arvo -pari"
 
-#: workflow/templates/workflow/includes/attributes.html:10
+#: workflow/templates/workflow/includes/attributes.html:9
 msgid "Attribute"
 msgstr "Ominaisuus"
 
-#: workflow/templates/workflow/includes/attributes.html:18
+#: workflow/templates/workflow/includes/attributes.html:15
+#, fuzzy
+#| msgid ""
+#| "Attributes are pairs <code>(name, value)</code>.\n"
+#| "      Define a pair\n"
+#| "      when you need to use a value in various places and that value may "
+#| "change over\n"
+#| "      time."
 msgid ""
 "Attributes are pairs <code>(name, value)</code>.\n"
-"      Define a pair\n"
-"      when you need to use a value in various places and that value may "
-"change over\n"
-"      time."
+"    Define a pair\n"
+"    when you need to use a value in various places and that value may change "
+"over\n"
+"    time."
 msgstr ""
 "Attribuutit ovat pareja <code>(nimi, arvo)</code>.\n"
 "Määritä pari,\n"
@@ -4527,14 +4706,14 @@ msgid "Execute plugin"
 msgstr "Suorita liitännäinen"
 
 #: workflow/templates/workflow/includes/manage_table_data.html:22
-#: workflow/templates/workflow/includes/workflow_basic_buttons.html:28
-#: workflow/templates/workflow/includes/workflow_operation_buttons.html:26
-#: workflow/templates/workflow/index.html:84
+#: workflow/templates/workflow/includes/workflow_basic_buttons.html:20
+#: workflow/templates/workflow/includes/workflow_operation_buttons.html:25
+#: workflow/templates/workflow/index.html:82
 msgid "Delete the data in the table of this workflow"
 msgstr "Poista tiedot tämän työnkulun taulukosta"
 
 #: workflow/templates/workflow/includes/manage_table_data.html:23
-#: workflow/templates/workflow/includes/workflow_operation_buttons.html:27
+#: workflow/templates/workflow/includes/workflow_operation_buttons.html:26
 msgid "Flush data table"
 msgstr "Tyhjennä datataulukko"
 
@@ -4680,7 +4859,7 @@ msgid "Select user to allow access to the workflow"
 msgstr "Valitse käyttäjä antaaksesi pääsyn työnkulkuun"
 
 #: workflow/templates/workflow/includes/partial_share_create.html:18
-#: workflow/templates/workflow/operations.html:61
+#: workflow/templates/workflow/operations.html:64
 msgid "Share"
 msgstr "Jaa"
 
@@ -4751,7 +4930,14 @@ msgid ""
 msgstr ""
 "Tämä toimenpide poistaa myös kaikki siihen liittyvät ehdot ja toiminnot."
 
-#: workflow/templates/workflow/includes/partial_workflow_delete.html:18
+#: workflow/templates/workflow/includes/partial_workflow_delete.html:13
+#: workflow/templates/workflow/includes/partial_workflow_flush.html:13
+#, fuzzy
+#| msgid "Users with access to this workflow"
+msgid "Type the name of the workflow:"
+msgstr "Käyttäjät, joilla on pääsy tähän työnkulkuun"
+
+#: workflow/templates/workflow/includes/partial_workflow_delete.html:19
 msgid "Delete workflow"
 msgstr "Poista työnkulku"
 
@@ -4769,7 +4955,7 @@ msgstr "Haluatko varmasti tyhjentää tiedot työnkulussa <strong>%(n)s</strong>
 msgid "This operation will also remove actions, table views and records."
 msgstr "Tämä toiminto poistaa myös toiminnot, näkymät ja tietueet."
 
-#: workflow/templates/workflow/includes/partial_workflow_flush.html:18
+#: workflow/templates/workflow/includes/partial_workflow_flush.html:19
 msgid "Flush workflow data"
 msgstr "Tyhjennä työnkulun tiedot"
 
@@ -4777,46 +4963,55 @@ msgstr "Tyhjennä työnkulun tiedot"
 msgid "Rename workflow"
 msgstr "Nimeä työnkulku uudelleen"
 
-#: workflow/templates/workflow/includes/share.html:4
+#: workflow/templates/workflow/includes/share.html:3
 msgid "Users with access to this workflow"
 msgstr "Käyttäjät, joilla on pääsy tähän työnkulkuun"
 
-#: workflow/templates/workflow/includes/share.html:6
+#: workflow/templates/workflow/includes/share.html:5
+#, fuzzy
+#| msgid ""
+#| "Click in the <i>Add User</i> button below and provide the email for the "
+#| "user\n"
+#| "      with whom you want to share the workflow."
 msgid ""
 "Click in the <i>Add User</i> button below and provide the email for the "
 "user\n"
-"      with whom you want to share the workflow."
+"    with whom you want to share the workflow."
 msgstr ""
 "Napsauta alla olevaa <i>Lisää käyttäjä</i> -painiketta ja anna sen käyttäjän "
 "sähköpostiosoite, jolle haluat jakaa työnkulun."
 
-#: workflow/templates/workflow/includes/share.html:21
+#: workflow/templates/workflow/includes/share.html:20
+#, fuzzy
+#| msgid ""
+#| "You may select users by their email\n"
+#| "    so that they can access this workflow."
 msgid ""
 "You may select users by their email\n"
-"    so that they can access this workflow."
+"  so that they can access this workflow."
 msgstr ""
 "Voit valita käyttäjiä sähköpostiosoitteiden perusteella niin, että he saavat "
 "pääsyn tähän työnkulkuun."
 
-#: workflow/templates/workflow/includes/workflow_basic_buttons.html:15
-#: workflow/templates/workflow/includes/workflow_operation_buttons.html:13
-#: workflow/templates/workflow/index.html:72
+#: workflow/templates/workflow/includes/workflow_basic_buttons.html:7
+#: workflow/templates/workflow/includes/workflow_operation_buttons.html:12
+#: workflow/templates/workflow/index.html:70
 msgid "Change the name and description of this workflow"
 msgstr "Muuta työnkulun nimeä ja kuvausta"
 
-#: workflow/templates/workflow/includes/workflow_basic_buttons.html:21
-#: workflow/templates/workflow/includes/workflow_operation_buttons.html:19
-#: workflow/templates/workflow/index.html:78
+#: workflow/templates/workflow/includes/workflow_basic_buttons.html:13
+#: workflow/templates/workflow/includes/workflow_operation_buttons.html:18
+#: workflow/templates/workflow/index.html:76
 msgid "Create a duplicate of this workflow"
 msgstr "Luo kopio tästä työnkulusta"
 
-#: workflow/templates/workflow/includes/workflow_basic_buttons.html:30
+#: workflow/templates/workflow/includes/workflow_basic_buttons.html:22
 msgid "Flush Data"
 msgstr "Tyhjennä tiedot"
 
-#: workflow/templates/workflow/includes/workflow_basic_buttons.html:35
-#: workflow/templates/workflow/includes/workflow_operation_buttons.html:33
-#: workflow/templates/workflow/index.html:90
+#: workflow/templates/workflow/includes/workflow_basic_buttons.html:27
+#: workflow/templates/workflow/includes/workflow_operation_buttons.html:32
+#: workflow/templates/workflow/index.html:88
 msgid "Delete this workflow"
 msgstr "Poista tämä työnkulku"
 
@@ -4844,7 +5039,7 @@ msgstr "Tee ensimmäiseksi sarakkeeksi"
 msgid "Make last column"
 msgstr "Tee viimeiseksi sarakkeeksi"
 
-#: workflow/templates/workflow/includes/workflow_operation_buttons.html:6
+#: workflow/templates/workflow/includes/workflow_operation_buttons.html:5
 msgid "Export the workflow and its actions"
 msgstr "Vie työnkulku ja sen toiminnot"
 
@@ -4852,48 +5047,48 @@ msgstr "Vie työnkulku ja sen toiminnot"
 msgid "Open or create a workflow"
 msgstr "Avaa tai luo työnkulku"
 
-#: workflow/templates/workflow/index.html:39
+#: workflow/templates/workflow/index.html:38
 msgid "Provide the name and description for a new workflow"
 msgstr "Anna uuden työnkulun nimi ja kuvaus"
 
-#: workflow/templates/workflow/index.html:40
+#: workflow/templates/workflow/index.html:39
 msgid "New workflow"
 msgstr "Uusi työnkulku"
 
-#: workflow/templates/workflow/index.html:44
+#: workflow/templates/workflow/index.html:43
 msgid "Import a file with an OnTask workflow"
 msgstr "Tuo tiedosto, jossa on OnTask-työnkulku"
 
-#: workflow/templates/workflow/index.html:57
+#: workflow/templates/workflow/index.html:55
 #, python-format
 msgid "%(counter)s row,"
 msgid_plural "%(counter)s rows,"
 msgstr[0] "%(counter)s rivi,"
 msgstr[1] "%(counter)s riviä,"
 
-#: workflow/templates/workflow/index.html:58
+#: workflow/templates/workflow/index.html:56
 #, python-format
 msgid "%(counter)s column,"
 msgid_plural "%(counter)s columns,"
 msgstr[0] "%(counter)s sarake,"
 msgstr[1] "%(counter)s saraketta,"
 
-#: workflow/templates/workflow/index.html:59
+#: workflow/templates/workflow/index.html:57
 #, python-format
 msgid "%(counter)s action"
 msgid_plural "%(counter)s actions"
 msgstr[0] "%(counter)s toiminto"
 msgstr[1] "%(counter)s toimintoa"
 
-#: workflow/templates/workflow/index.html:65
+#: workflow/templates/workflow/index.html:63
 msgid "Open the workflow to manipulate its data and actions"
 msgstr "Avaa työnkulku muokataksesi sen tietoja ja toimintoja"
 
-#: workflow/templates/workflow/index.html:66
+#: workflow/templates/workflow/index.html:64
 msgid "Open"
 msgstr "Avaa"
 
-#: workflow/templates/workflow/index.html:98
+#: workflow/templates/workflow/index.html:96
 msgid ""
 "A workflow contains a <i>table\n"
 "    </i> with data about a set of learners and <i>a\n"
@@ -4930,7 +5125,7 @@ msgstr ""
 msgid "Workflow Operations"
 msgstr "Työnkulun toimenpiteet"
 
-#: workflow/templates/workflow/operations.html:58
+#: workflow/templates/workflow/operations.html:59
 msgid "Attributes"
 msgstr "Attribuutit"
 
@@ -4982,6 +5177,33 @@ msgstr "Työnkulkua ei voi kopioida"
 #: workflow/views.py:593
 msgid "Workflow successfully cloned."
 msgstr "Työnkulku kopioitiin onnistuneesti."
+
+#~ msgid "Edit Personalized Canvas Email"
+#~ msgstr "Muokkaa personoitua Canvas-sähköpostiviestiä"
+
+#~ msgid ""
+#~ "Presence of a field with name \"output_column_names\" storing a non-empty "
+#~ "list of strings"
+#~ msgstr ""
+#~ "”output_column_names” -nimisen epätyhjän merkkijonolistan olemassaolo"
+
+#~ msgid "Plugin execution report"
+#~ msgstr "Liitännäisen suorittamisen raportti"
+
+#~ msgid "Incorrect execution"
+#~ msgstr "Virheellinen suoritus"
+
+#~ msgid "Data upload/merge operations"
+#~ msgstr "Tietojen lataus- ja yhdistämistoimenpiteet"
+
+#~ msgid "CSV Upload/Merge"
+#~ msgstr "CSV lataus/yhdistäminen"
+
+#~ msgid "Excel Upload/Merge"
+#~ msgstr "Excel-tiedoston lataus/yhdistäminen"
+
+#~ msgid "Google Sheet Upload/Merge"
+#~ msgstr "Google Sheet lataus/yhdistäminen"
 
 #~ msgid "Unable to create columns field"
 #~ msgstr "Sarakket -kentän luonti epäonnistui"

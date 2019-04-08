@@ -13,8 +13,8 @@ from .base import *  # NOQA
 # Security features
 #
 ################################################################################
+MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
 if USE_SSL:
-    MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_BROWSER_XSS_FILTER = True
     SESSION_COOKIE_SECURE = True

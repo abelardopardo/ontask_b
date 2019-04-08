@@ -13,7 +13,7 @@
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
 {% endblock scripts %}
 {% block container %}
-  <div class="container-fluid" id="email-schedule-send">
+  <div class="container" id="email-schedule-send">
     <h1 class="text-center">{% trans 'Schedule Action Execution' %}</h1>
     <p class="text-center">{% blocktrans with n=now %}Time now is {{ n }}{% endblocktrans %}</p>
     <p class="lead text-center">{{ action.name }}</p>

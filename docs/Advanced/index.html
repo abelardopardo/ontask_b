@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>6. Advanced Features &#8212; OnTask (B.4.2.1) 1.1.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>6. Advanced Features &#8212; OnTask (B.4.3) 1.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
@@ -64,12 +62,12 @@ parameters.</p>
 <p>When manipulating the elements in the table there are two versions of the
 basic operations (create a table, update a table, merge).</p>
 <ol class="arabic simple">
-<li>Pandas Version. This version handles the encoding of data frames using the
+<li><p>Pandas Version. This version handles the encoding of data frames using the
 pandas pickle encoding. This encoding has the advantage that maintains the
 elements of the dataframe intact. In other words, when the data frame is
 decoded from the pandas pickle format back to a regular dataframe, the same
-initial dataframe is obtained.</li>
-<li>JSON Version. This version encodes the dataframes in JSON. The problem
+initial dataframe is obtained.</p></li>
+<li><p>JSON Version. This version encodes the dataframes in JSON. The problem
 with this format is that values such as NaN and NaT (not a time) are not
 allowed by JSON, and they are substituted by empty strings. This change
 may have significant effects on the dataframe, specially on the types of
@@ -78,7 +76,7 @@ with any element with value NaT and it is first extracted through the JSON
 interface, and then uploaded again, the NaT value is transformed into an
 empty string, and Pandas will no longer recognise that column as
 datetime, but instead it will render the column of type string. This my
-have also an effect on how rules and actions are evaluated.</li>
+have also an effect on how rules and actions are evaluated.</p></li>
 </ol>
 <p>If OnTask is hosted in a server like Apache, you may need to check your
 configuration so that it allows the processing of the <code class="docutils literal notranslate"><span class="pre">HTTP_AUTHORIZATION</span></code>
@@ -153,8 +151,6 @@ header.</p>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
