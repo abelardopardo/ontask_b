@@ -18,7 +18,13 @@ if DEBUG:
     INSTALLED_APPS += ['debug_toolbar']
 
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
-if not TESTING:
+if TESTING:
+    EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+else:
+    # Show emails to console in DEBUG mode
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
     DEBUG_TOOLBAR_CONFIG = {
         'SHOW_TOOLBAR_CALLBACK': lambda r: True,  # enables it
         # '...
@@ -27,9 +33,6 @@ if not TESTING:
 # Additional middleware introduced by debug toolbar
 if DEBUG:
     MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
-
-# Show emails to console in DEBUG mode
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Show thumbnail generation errors
 THUMBNAIL_DEBUG = True

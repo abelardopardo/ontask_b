@@ -127,9 +127,11 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 DATABASE_URL = env.db()
 DEBUG = env.bool('DEBUG', default=False)
 
+# JSON execution
 EXECUTE_ACTION_JSON_TRANSFER = env.bool('EXECUTE_ACTION_JSON_TRANSFER',
                                         default=False)
 
+# CACHE
 REDIS_URL = env.cache(
     'REDIS_URL',
     default='rediscache://localhost:6379/'
@@ -138,8 +140,10 @@ REDIS_URL = env.cache(
             '&key_prefix=ontask'
 )
 
+# Login page
 SHOW_HOME_FOOTER_IMAGE = env.bool('SHOW_HOME_FOOTER_IMAGE', default=False)
 
+# USE SSL
 USE_SSL = env.bool('USE_SSL', default=False)
 
 ################################################################################
@@ -381,7 +385,7 @@ AUTH_USER_MODEL = 'authtools.User'
 # https://docs.djangoproject.com/en/dev/topics/i18n/
 #
 ################################################################################
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = env('LANGUAGE_CODE', default='en-us')
 LANGUAGES = (
     ('en-us', _('English')),
     ('es-es', _('Spanish')),
@@ -429,7 +433,7 @@ SUMMERNOTE_CONFIG = {
 DATAOPS_CONTENT_TYPES = '["text/csv", "application/json", ' \
                         '"application/gzip", "application/x-gzip", ' \
                         '"application/vnd.ms-excel"]'
-DATAOPS_MAX_UPLOAD_SIZE = 209715200  # 200 MB
+DATAOPS_MAX_UPLOAD_SIZE = env.int('DATAOPS_MAX_UPLOAD_SIZE', default=209715200)
 
 # Raise because default of 1000 is too short
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
@@ -460,7 +464,7 @@ SHORT_DATETIME_FORMAT = 'r'
 # Scheduler configuration
 #
 ################################################################################
-SCHEDULER_MINUTE_STEP = 15
+SCHEDULER_MINUTE_STEP = env.int('SCHEDULER_MINUTE_STEP', default=15)
 
 ################################################################################
 #
@@ -488,19 +492,23 @@ CELERY_TASK_ALWAYS_EAGER = TESTING
 #
 ################################################################################
 # Host, port, user and password to open the communication thorugh SMTP
-EMAIL_HOST = ''
-EMAIL_PORT = ''
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+# EMAIL
+EMAIL_HOST = env('EMAIL_HOST', default='')
+EMAIL_PORT = env('EMAIL_PORT', default='')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
 # The from field when sending notification messages
-EMAIL_ACTION_NOTIFICATION_SENDER = ''
+EMAIL_ACTION_NOTIFICATION_SENDER = env('EMAIL_ACTION_NOTIFICATION_SENDER',
+                                       default='')
+# Include HTML only email or HTML and text
+EMAIL_HTML_ONLY = env.bool('EMAIL_HTML_ONLY', default=True)
 # Use of TLS or SSL (see Django configuration)
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = False
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=False)
+EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL', default=False)
 # Number of emails to send out in a burst (before pausing)
-EMAIL_BURST = 0
+EMAIL_BURST = env.int('EMAIL_BURST', default=0)
 # Pause between bursts (in seconds)
-EMAIL_BURST_PAUSE = 0
+EMAIL_BURST_PAUSE = env.int('EMAIL_BURST_PAUSE', default=0)
 
 # Additional email related variables
 EMAIL_ACTION_NOTIFICATION_TEMPLATE = """
@@ -535,7 +543,7 @@ EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC' \
 # In the next variable define a dictionary with name:secret pairs.
 #
 ################################################################################
-LTI_OAUTH_CREDENTIALS = {}
+LTI_OAUTH_CREDENTIALS = env.dict('LTI_OAUTH_CREDENTIALS', default={})
 
 ################################################################################
 #
