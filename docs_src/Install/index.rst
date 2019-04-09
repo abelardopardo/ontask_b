@@ -10,8 +10,8 @@ Requirements
 
 OnTask has been developed as a `Django <https://www.djangoproject.com/>`_ application. Django is a high-level, python-based web framework that supports a rich set of functionality typically required in applications like OnTask. But as with many other applications, OnTask requires a set of additional applications for its execution:
 
-- Python 2.7 **and** Python 3.6
-- Django 2.1.4
+- Python 3.7
+- Django 2.2
 - Additional Django modules (included in the requirements/base.txt) file
 - Redis 
 - PostgreSQL (version 9.5 or later)
@@ -23,10 +23,15 @@ Are you upgrading from a version < 2.8 to 2.8 or later?
 
 If you are upgrading OnTask from a version lower than 2.8 to 2.8 or later, you need to disable the ``crontab`` used to execute tasks asynchronously from the web server. Starting in version 2.8 those tasks are executed by an application called ``celery`` that is managed using ``supervisor`` (see :ref:`scheduling_tasks`).
 
-Are you upgrading from version < 4.0 to 4.0 or later?
-*****************************************************
+Are you upgrading from version < 4.0 to 4.2?
+********************************************
 
 The upgrade to 4.0 or later requires version 2.7 and 3.6 both installed and available in the system. Django versions 2.0 and later require Python 3 but certain additional libraries used by OnTask have not been fully ported yet and still require the use of Python 2.7. Make sure both versions are available before proceeding to the upgrade.
+
+Are you upgrading from version < 4.3 to 4.3?
+********************************************
+
+The  upgrade to 4.3 or later no longer requires two versions of Python. It only requires Python 3.7. Make sure the application is only using version 3.7
 
 Required tools
 **************
@@ -74,14 +79,13 @@ Install and Configure PostgreSQL
 Install Python 3
 ================
 
-In the following sections we assume that you can open a command line interpreter and you can execute the two python interpreters for versions 2.7 and 3.6.
+In the following sections we assume that you can open a command line interpreter and you can execute the two python interpreter for version 3.7.
 
 1. Install `python <https://www.python.org/>`_
 
-#. Verify that the two python interpreters can run and have each the right version (2.7 and 3.6) using the command line interpreter (typically ``python --version`` or ``python3 --version``).
+#. Verify that the interpreter can run and has the right version (3.7) using the command line interpreter (either ``python --version`` or ``python3 --version``).
 
-#. Install `pip <https://pip.pypa.io/en/stable/>`__ (the package may be called
-   ``python-pip`` for Python 2.7 and ``python3-pip`` for Python 3.6). This tool will be used by both Python and Django to install additional libraries required to execute OnTask.
+#. Install `pip <https://pip.pypa.io/en/stable/>`__ (the package may be called ``python3-pip`` for Python 3.7). This tool will be used to install additional libraries required to execute OnTask.
 
 Download, install and configure OnTask
 **************************************
@@ -96,12 +100,13 @@ Download, install and configure OnTask
    *production* instance, and the third is the same list if you intend to run a
    *development* instance.
 
-#. If you plan to run a production instance of OnTask execute the command (you may need administrative privileges to execute this command)::
+#. If you plan to run a production instance of OnTask execute the command::
 
      pip3 install -r requirements/production.txt
 
-   Alternatively, if you plan to run a development instance of OnTask,
-   execute the command::
+   You may need administrative privileges to execute this command.
+
+   If you plan to run a development instance of OnTask, execute the command::
 
      pip3 install -r requirements/development.txt
 
@@ -216,7 +221,7 @@ The following variables, if defined in the environment, are considered by OnTask
 
   Default: ``15``
 
-``SECRET_KEY``
+``SECRET_KEY`` **(Required)**
   Random string of characters used to generate internal hashes. It should be kept secret. If not defined the platform will raise an error upon start.
 
   Default: ``''``
@@ -429,16 +434,13 @@ Configure the Distributed Task Queue
 ====================================
 
 There are various tasks that need to be executed by OnTask outside the web
-server. The solution adopted is to use `Celery
-<http://www.celeryproject.org/>`_, `Supervisor <http://supervisord.org/>`_ (a
-process control system) and `Redis <https://redis.io/>`_. Redis
-has been configured in a previous step. This section explains how to set
-up the distributed task queue and make sure it is continuously executing in
-parallel with the web server.
+server. The solution adopted is to use `Celery <http://www.celeryproject.org/>`_, `Supervisor <http://supervisord.org/>`_ (a process control system) and `Redis <https://redis.io/>`_. Redis has been configured in a previous step. This section explains how to set up the distributed task queue and make sure it is continuously executing in parallel with the web server.
 
-1. Install the application ``supervisor`` using **pip2**. This application makes sure the application Celery is continuously running in the background and in communication with the server. As of now, the application can only run through Python 2 (an upgrade in the future may remove this anomaly). For this reason, the package has to be installed with the following command (using Python 2.7)::
+1. Install the application ``supervisor`` using **pip3**::
 
-     pip2 install supervisor
+     pip3 install supervisor
+
+   This application makes sure the task queue program  Celery is continuously running in the background and in communication with the server.
 
 2. Check that the binaries ``supervisord``, ``supervisorctl`` and ``celery``
    are installed in your system.

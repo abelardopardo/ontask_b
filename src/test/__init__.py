@@ -1534,8 +1534,9 @@ class ScreenTests(OnTaskLiveTestCase):
     prefix = ''
     workflow_name = 'BIOL1011'
     description = 'Course on Cell Biology'
-    modal_xpath = "//div[@id='modal-item']/div[@class='modal-dialog']/div[" \
-                  "@class='modal-content']"
+    modal_xpath = "//div[@id='modal-item']" \
+                  "/div[contains(@class, 'modal-dialog')]" \
+                  "/div[@class='modal-content']"
 
     @staticmethod
     def img_path(f):
@@ -1593,9 +1594,9 @@ class ScreenTests(OnTaskLiveTestCase):
     def body_ss(self, ss_filename):
         img = self._get_image('//body')
 
-        b_footer = self.selenium.find_element_by_id('base_footer')
-        coord = b_footer.location
-        dims = b_footer.size
+        body = self.selenium.find_element_by_id('base_footer')
+        coord = body.location
+        dims = body.size
 
         # If the bottom of the content is before the footer, crop
         if (coord['y'] + dims['height'] * self.device_pixel_ratio) \

@@ -36,13 +36,13 @@ After logging into OnTask, the users sees the home page showing the collection o
    :align: center
    :width: 100%
 
-The navigation through the platform is done using the links in the top menu bar. The *Home* icon in the left side of the menu brings the user back to the page showing the available workflows. The book icon in the upper right side of the menu bar opens the documentation page, and the user icon provides access to the user profile (name, last name, bio, password and authentication tokens).
+The navigation through the platform is done using the links in the top menu bar. The *Workflows* icon in the left side of the menu brings the user back to the page showing the available workflows. The book icon in the upper right side of the menu bar opens the documentation page, and the user icon provides access to the user profile (name, last name, bio, password and authentication tokens).
 
-The **Home** page offers the following operations:
+The home page offers the following operations:
 
 .. sidebar:: Going back
 
-   The **Home** link at the left corner of the top menu *closes* the workflow being manipulated and shows you the list of available workflows. The workflow is also *unlocked* so that it can be accessed by those users :ref:`sharing <details_sharing>` its access.
+   The **Workflows** link at the left corner of the top menu *closes* the workflow being manipulated and shows you the list of available workflows. The workflow is also *unlocked* so that it can be accessed by those users :ref:`sharing <details_sharing>` its access.
 
 .. _workflow_create:
 

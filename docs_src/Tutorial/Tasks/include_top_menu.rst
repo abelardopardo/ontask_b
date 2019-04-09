@@ -1,6 +1,6 @@
 The menu contains the following links:
 
-|fa-home| Home
+|fa-home| Workflows
   Link back to the home page showing the workflows available for manipulation.
 
 |fa-comments| Actions
