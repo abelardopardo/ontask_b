@@ -9,7 +9,7 @@
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
 {% endblock scripts %}
 {% block container %}
-  <div class="container-fluid" id="canvas-email-action-request-data">
+  <div class="container" id="canvas-email-action-request-data">
     <div id="step_sequence" hidden>
       {% include 'step_by_step.html' with valuerange=valuerange step=1 %}
     </div>

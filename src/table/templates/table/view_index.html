@@ -50,7 +50,7 @@
   </script>
 {% endblock %}
 {% block container %}
-  <div class="container-fluid" id="view-content">
+  <div class="container" id="view-content">
     <h1 class="text-center">{% trans 'Table Views' %}</h1>
     <div class="text-center mb-3">
       <a class="shadow btn btn-outline-dark spin"
@@ -63,7 +63,7 @@
       </button>
     </div>
     {% if table.data|length %}
-      <div class="container-fluid justify-content-center">
+      <div class="row justify-content-center">
         {% render_table table %}
       </div>
     {% else %}

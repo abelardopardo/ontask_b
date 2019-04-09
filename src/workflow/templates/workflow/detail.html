@@ -61,7 +61,7 @@
   {% endif %}
 {% endblock %}
 {% block container %}
-  <div class="container-fluid" id="workflow-detail">
+  <div class="container" id="workflow-detail">
     <h2 class="text-center">{% trans 'Column Operations' %}</h2>
     {% if not table_info %}
       {% include 'workflow/includes/no_data.html' %}
@@ -75,7 +75,7 @@
       {% include 'workflow/includes/manage_table_data.html' %}
     </div>
     {% if table_info %}
-      <div class="container-fluid justify-content-center">
+      <div class="justify-content-center">
         <table class="table table-hover table-bordered shadow"
                id="column-table" data-url="{% url 'workflow:column_move' %}">
           <thead>

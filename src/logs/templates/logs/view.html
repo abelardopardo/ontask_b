@@ -3,7 +3,7 @@
 {% load static %}
 {% block title %}{{ block.super }}{% trans 'Log View' %}{% endblock %}
 {% block container %}
-<div class="container-fluid">
+<div class="container">
   <h1 class="text-center">{% trans 'Log' %} {{ log_item.id }}: {{ log_item.name }}</h1>
   <p class="text-center">{% trans 'Last modified' %}: {{ log_item.modified }}</p>
   <h4 class="text-center">{% trans 'Payload:' %}</h4>

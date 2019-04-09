@@ -9,7 +9,7 @@
   <script src="{% static 'dataops/js/dataops.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
-  <div class="container-fluid" id="sql-load-step1">
+  <div class="container" id="sql-load-step1">
     <h1 class="text-center">{% blocktrans with n=dtype_select %}Step 1: Establish a {{ n }}{% endblocktrans %}</h1>
 
     <p class="text-center">{% trans 'The data will be accessed with the following parameters:' %}</p>

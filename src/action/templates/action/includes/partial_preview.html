@@ -46,7 +46,7 @@
       {% if action.action_type == 'personalized_json' %}
         <pre>{{ action_content }}</pre>
       {% elif action.action_type == 'personalized_canvas_email' %}
-        <div class="container-fluid" style="white-space: pre-wrap;">{{ action_content }}</div>
+        <div style="white-space: pre-wrap;">{{ action_content }}</div>
       {% else %}
         {{ action_content }}
       {% endif %}

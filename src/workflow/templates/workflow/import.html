@@ -9,7 +9,7 @@
   <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
-  <div class="container-fluid" id="workflow-import">
+  <div class="container" id="workflow-import">
     <h1 class="text-center">{% trans 'Import workflow' %}</h1>
     <div class="row justify-content-center">
       <form action="{% url 'workflow:import' %}" method="post" enctype="multipart/form-data">

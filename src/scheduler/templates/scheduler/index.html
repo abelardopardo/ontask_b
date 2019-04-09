@@ -38,7 +38,7 @@
   </script>
 {% endblock %}
 {% block container %}
-  <div class="container-fluid" id="scheduler-index">
+  <div class="container" id="scheduler-index">
     <h1 class="text-center">{% trans 'Scheduled Actions' %}<super>*</super></h1>
     {% if not workflow.nrows %}
       {% include 'workflow/includes/no_data.html' %}
@@ -46,7 +46,7 @@
       {% include 'workflow/includes/no_actions.html' %}
     {% endif %}
     {% if table.data|length %}
-      <div class="container-fluid justify-content-center">
+      <div class="row">
         {% render_table table %}
       </div>
     {% endif %}

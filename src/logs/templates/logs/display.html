@@ -49,7 +49,7 @@
   </script>
 {% endblock %}
 {% block container %}
-  <div class="container-fluid">
+  <div class="container">
     <h1 class="text-center">{% trans 'Logs' %}<super>*</super></h1>
     <div class="text-center" id="log-table-page">
       <a href="{% url 'logs:export' workflow.id %}" download
@@ -59,7 +59,7 @@
         <span class="fa fa-download"></span> {% trans 'CSV Download' %}
       </a>
     </div>
-    <div class="container-fluid justify-content-center">
+    <div class="justify-content-center">
       <table class="table table-hover table-bordered shadow"
              id="log-table">
         <thead>

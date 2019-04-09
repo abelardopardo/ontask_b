@@ -16,7 +16,7 @@
   <script src="{% static 'dataops/js/dataops.js' %}"></script>
 {% endblock %}
 {% block container %}
-  <div class="container-fluid" id="dataops-get-plugin-info-to-run">
+  <div class="container" id="dataops-get-plugin-info-to-run">
     <h1 class="text-center">
       {% blocktrans with n=pinstance.name %}Transformation "{{ n }}"{% endblocktrans %}
     </h1>
@@ -50,7 +50,7 @@
              aria-selected="false">{% trans 'Parameters' %}</a>
         </li>
       </ul>
-      <div class="tab-content" id="dataops-get-plugin-info-tab-content">
+      <div class="tab-content text-center" id="dataops-get-plugin-info-tab-content">
         <div class="shadow rounded tab-pane px-3 fade show active border border-dark"
              id="inputs" role="tabpanel" aria-labelledby="inputs-tab">
           <div class="text-center form-group{% if form.columns.errors %} has-danger{% endif %}">

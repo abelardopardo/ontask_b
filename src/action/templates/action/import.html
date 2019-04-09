@@ -9,7 +9,7 @@
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
-  <div class="container-fluid">
+  <div class="container">
     <h1 class="text-center">{% trans 'Import action' %}</h1>
     <div class="row justify-content-center">
       <form action="{% url 'action:import' %}" method="post" enctype="multipart/form-data">

@@ -9,10 +9,10 @@
   <script src="{% static 'dataops/js/dataops.js' %}?v={% ontask_version %}"></script>
 {% endblock %}
 {% block container %}
-<div class="container-fluid">
+<div class="container">
   {% include 'step_by_step.html' with valuerange=valuerange step=3 %}
   <h1 class="text-center">{% trans 'Select Columns' %}</h1>
-  <div class="container-fluid justify-content-center">
+  <div class="justify-content-center">
     <form method="POST" action="">
       {% csrf_token %}
       {% include 'dataops/includes/upload_buttons.html' %}

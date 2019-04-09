@@ -13,7 +13,7 @@
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
 {% endblock scripts %}
 {% block container %}
-<div class="container-fluid" id="action-filter-items">
+<div class="container" id="action-filter-items">
   {% include 'step_by_step.html' with valuerange=valuerange step=step %}
   <h1 class="text-center">{% blocktrans with n=action.name %}Select items to exclude from action{% endblocktrans %}</h1>
   <div class="row justify-content-center">
