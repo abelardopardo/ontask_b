@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-08 07:51+0930\n"
+"POT-Creation-Date: 2019-04-11 07:29+0930\n"
 "PO-Revision-Date: 2019-04-08 09:21+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: \n"
@@ -71,23 +71,25 @@ msgstr "El equipo de %(site_name)s"
 msgid "Log In"
 msgstr "Iniciar sesión"
 
-#: accounts/templates/accounts/login.html:12
+#: accounts/templates/accounts/login.html:13
 msgid "The importance of personalisation"
 msgstr "La importancia de la personalización"
 
-#: accounts/templates/accounts/login.html:13
+#: accounts/templates/accounts/login.html:14
 msgid ""
 "Learners are more likely to have an effective\n"
-"        experience\n"
-"        when their environment is personalised. Resources, comments,\n"
-"        suggestions and feedback that take into account the reality of each\n"
-"        learner are much more effective than those addressing an entire\n"
-"        cohort. But personalisation has traditionally been based on highly\n"
-"        detailed pre-conceived models of learner behaviour. OnTask offers "
+"          experience\n"
+"          when their environment is personalised. Resources, comments,\n"
+"          suggestions and feedback that take into account the reality of "
+"each\n"
+"          learner are much more effective than those addressing an entire\n"
+"          cohort. But personalisation has traditionally been based on "
+"highly\n"
+"          detailed pre-conceived models of learner behaviour. OnTask offers "
 "an\n"
-"        environment to personalise resources based on data collected from "
+"          environment to personalise resources based on data collected from "
 "any\n"
-"        learning environment."
+"          learning environment."
 msgstr ""
 "La experiencia de aprendizaje de un estudiante es más efectiva cuando el "
 "entorno está personalizado. Recursos, comentarios, sugeréncias o "
@@ -98,18 +100,20 @@ msgstr ""
 "personalizar recursos basado en los datos que se obtienen de cualquier "
 "entorno de aprendizaje."
 
-#: accounts/templates/accounts/login.html:25
+#: accounts/templates/accounts/login.html:26
 msgid "The importance of feedback"
 msgstr "La importancia de la realimentación"
 
-#: accounts/templates/accounts/login.html:26
+#: accounts/templates/accounts/login.html:27
 msgid ""
 "Feedback is more effective when framed as a\n"
-"        dialogue. But such\n"
-"        dialogue will be highly dependent on the personal situation of each\n"
-"        learner. How can we combine knowledge about the learners with the\n"
-"        need to have personalised interaction? OnTask will help instructors\n"
-"        and learners to initiate this dialogue."
+"          dialogue. But such\n"
+"          dialogue will be highly dependent on the personal situation of "
+"each\n"
+"          learner. How can we combine knowledge about the learners with the\n"
+"          need to have personalised interaction? OnTask will help "
+"instructors\n"
+"          and learners to initiate this dialogue."
 msgstr ""
 "La realimentación es más efectiva cuando se enmarca como un diálogo. Pero "
 "ese diálogo depende de la situación personal de cada estudiante. ¿Cómo "
@@ -117,21 +121,22 @@ msgstr ""
 "interacción  personalizada? OnTask ayuda a los profesores y estudiantes a "
 "comenzar este diálogo."
 
-#: accounts/templates/accounts/login.html:34
+#: accounts/templates/accounts/login.html:35
 msgid "The importance of data"
 msgstr "La importancia de los datos"
 
-#: accounts/templates/accounts/login.html:35
+#: accounts/templates/accounts/login.html:36
 msgid ""
 "In the era of technology-mediated learning, data is\n"
-"        ubiquitous. But instead of providing instantaneous benefits,\n"
-"        this abundance brings a serious challenge to tranform data into\n"
-"      actionable knowledge. It is not enough to have data, it is essential\n"
-"        to use data to support a clearly identified objective in the\n"
-"        learning environment. How can this support be articulated?\n"
-"        How can it be used in multiple environments? OnTask\n"
-"      establishes this connection between data and its use to provide a\n"
-"        scalable solution to learning personalisation."
+"          ubiquitous. But instead of providing instantaneous benefits,\n"
+"          this abundance brings a serious challenge to tranform data into\n"
+"        actionable knowledge. It is not enough to have data, it is "
+"essential\n"
+"          to use data to support a clearly identified objective in the\n"
+"          learning environment. How can this support be articulated?\n"
+"          How can it be used in multiple environments? OnTask\n"
+"        establishes this connection between data and its use to provide a\n"
+"          scalable solution to learning personalisation."
 msgstr ""
 "En la era del aprendizaje mediado por tecnología, los datos son "
 "omnipresentes. Pero en lugar de ofrecer beneficios instantáneos, esta "
@@ -142,7 +147,7 @@ msgstr ""
 "OnTask establece una esta  conexión entre datos y su uso para ofrecer una "
 "solución escalable al  aprendizaje personalizado."
 
-#: accounts/templates/accounts/login.html:45
+#: accounts/templates/accounts/login.html:46
 msgid "More Information"
 msgstr "Más información"
 
@@ -441,44 +446,44 @@ msgstr "Dirección de correo incorrecta en el CC"
 msgid "Invalid email address in bcc email"
 msgstr "Dirección de correo incorrecta en el BCC"
 
-#: action/ops.py:626
+#: action/ops.py:639
 #, python-brace-format
 msgid "Syntax error detected in OnTask notification template ({0})"
 msgstr ""
 "Error de sintaxis detectdado en la plantilla de notificación OnTask ({0})"
 
-#: action/ops.py:655
+#: action/ops.py:668
 #, python-brace-format
 msgid "An error occurred when sending your notification: {0}"
 msgstr "Se ha produciro un error al enviar la notificación: {0}"
 
-#: action/ops.py:704
+#: action/ops.py:717
 msgid "Unable to find OAuth Information Record"
 msgstr "No se ha encontrado información de OAuth para este elemento"
 
-#: action/ops.py:713
+#: action/ops.py:726
 msgid "Incorrect execution due to absence of token"
 msgstr "Ejecución incorrecta debido a la ausencia de token"
 
-#: action/ops.py:761
+#: action/ops.py:774
 msgid "Message successfuly sent"
 msgstr "Mensaje enviado"
 
-#: action/ops.py:775
+#: action/ops.py:788
 msgid "OAuth token refreshed"
 msgstr "Autentificador OAuth renovado"
 
-#: action/ops.py:800
+#: action/ops.py:813
 #, python-brace-format
 msgid "Unable to deliver message (code {0})"
 msgstr "No se puede enviar el mensaje: (código {0})"
 
-#: action/ops.py:893
+#: action/ops.py:906
 #, python-brace-format
 msgid "Incorrect JSON string in element number {0}"
 msgstr "Texto incorrecto en objeto JSON en elemento número {0}"
 
-#: action/ops.py:987
+#: action/ops.py:1000
 msgid "Incorrect item filter invocation."
 msgstr "Invocación incorrecta del filtro."
 
@@ -517,7 +522,7 @@ msgstr "Imposible crear los datos para la columna"
 msgid "Unable to create condition information"
 msgstr "Imposible crear la información para la condición"
 
-#: action/settings.py:34 ontask/settings/base.py:526
+#: action/settings.py:34 ontask/settings/base.py:535
 msgid "OnTask: Action executed"
 msgstr "OnTask: Acción ejecutada"
 
@@ -542,12 +547,12 @@ msgstr "Campo destinatario en los correos de notificación"
 msgid "Action execution"
 msgstr "Ejecución de la acción"
 
-#: action/templates/action/action_done.html:15
+#: action/templates/action/action_done.html:14
 #: scheduler/templates/scheduler/schedule_done.html:7
 msgid "Action scheduled for execution"
 msgstr "Acción planificada para su ejecución"
 
-#: action/templates/action/action_done.html:17
+#: action/templates/action/action_done.html:16
 #, python-format
 msgid ""
 "You may check the status in\n"
@@ -555,7 +560,7 @@ msgid ""
 msgstr ""
 "Puedes comprobar el estado de la ejecución en el registro número %(log_id)s."
 
-#: action/templates/action/action_done.html:21
+#: action/templates/action/action_done.html:20
 #: action/templates/action/action_zip_done.html:15
 #: action/templates/action/export_ask.html:21
 #: action/templates/action/export_done.html:15
@@ -3088,19 +3093,19 @@ msgstr "Typos de contenidos permitidos en las cargas"
 msgid "Maximum size allowed in file uplaods"
 msgstr "Tamaño máximo de fichero permitido en las cargas"
 
-#: ontask/settings/base.py:385
+#: ontask/settings/base.py:390
 msgid "English"
 msgstr "Inglés"
 
-#: ontask/settings/base.py:386
+#: ontask/settings/base.py:391
 msgid "Spanish"
 msgstr "Español"
 
-#: ontask/settings/base.py:387
+#: ontask/settings/base.py:392
 msgid "Chinese"
 msgstr "Chino"
 
-#: ontask/settings/base.py:388
+#: ontask/settings/base.py:393
 msgid "Finnish"
 msgstr "Finés"
 
@@ -4040,21 +4045,25 @@ msgstr "Mantener la sesión"
 msgid "OnTask Error"
 msgstr "Error OnTask"
 
-#: templates/critical_error.html:8
+#: templates/critical_error.html:7
 msgid "Internal Error"
 msgstr "Error interno"
 
-#: templates/critical_error.html:11
+#: templates/critical_error.html:10
 msgid "Oops. We have detected an internal error."
 msgstr "¡Vaya! Hemos detectado un error interno."
 
-#: templates/critical_error.html:15
+#: templates/critical_error.html:14
+#, fuzzy
+#| msgid ""
+#| "The following message is trying to explain what\n"
+#| "      happened."
 msgid ""
 "The following message is trying to explain what\n"
-"      happened."
+"        happened."
 msgstr "El siguiente mensaje intenta explicar lo que ha pasado."
 
-#: templates/critical_error.html:22
+#: templates/critical_error.html:21
 msgid "Referrer:"
 msgstr "Referencia:"
 
@@ -5112,6 +5121,69 @@ msgstr "Imposible clonar flujo"
 msgid "Workflow successfully cloned."
 msgstr "Flujo clonado con éxito."
 
+#~ msgid ""
+#~ "Learners are more likely to have an effective\n"
+#~ "        experience\n"
+#~ "        when their environment is personalised. Resources, comments,\n"
+#~ "        suggestions and feedback that take into account the reality of "
+#~ "each\n"
+#~ "        learner are much more effective than those addressing an entire\n"
+#~ "        cohort. But personalisation has traditionally been based on "
+#~ "highly\n"
+#~ "        detailed pre-conceived models of learner behaviour. OnTask offers "
+#~ "an\n"
+#~ "        environment to personalise resources based on data collected from "
+#~ "any\n"
+#~ "        learning environment."
+#~ msgstr ""
+#~ "La experiencia de aprendizaje de un estudiante es más efectiva cuando el "
+#~ "entorno está personalizado. Recursos, comentarios, sugeréncias o "
+#~ "realimentación que tiene en cuenta la realidad de cada estudiante son más "
+#~ "efectivos que aquellos que van dirigidos a un grupo en general. Pero "
+#~ "hasta ahora la personalización se ha implementado mediante modelos muy "
+#~ "detallados del comportamiento del estudiante. OnTask ofrece un entorno "
+#~ "para personalizar recursos basado en los datos que se obtienen de "
+#~ "cualquier entorno de aprendizaje."
+
+#~ msgid ""
+#~ "Feedback is more effective when framed as a\n"
+#~ "        dialogue. But such\n"
+#~ "        dialogue will be highly dependent on the personal situation of "
+#~ "each\n"
+#~ "        learner. How can we combine knowledge about the learners with "
+#~ "the\n"
+#~ "        need to have personalised interaction? OnTask will help "
+#~ "instructors\n"
+#~ "        and learners to initiate this dialogue."
+#~ msgstr ""
+#~ "La realimentación es más efectiva cuando se enmarca como un diálogo. Pero "
+#~ "ese diálogo depende de la situación personal de cada estudiante. ¿Cómo "
+#~ "podemos  combinar el conocimiento del estudiante con la necesidad de una "
+#~ "interacción  personalizada? OnTask ayuda a los profesores y estudiantes a "
+#~ "comenzar este diálogo."
+
+#~ msgid ""
+#~ "In the era of technology-mediated learning, data is\n"
+#~ "        ubiquitous. But instead of providing instantaneous benefits,\n"
+#~ "        this abundance brings a serious challenge to tranform data into\n"
+#~ "      actionable knowledge. It is not enough to have data, it is "
+#~ "essential\n"
+#~ "        to use data to support a clearly identified objective in the\n"
+#~ "        learning environment. How can this support be articulated?\n"
+#~ "        How can it be used in multiple environments? OnTask\n"
+#~ "      establishes this connection between data and its use to provide a\n"
+#~ "        scalable solution to learning personalisation."
+#~ msgstr ""
+#~ "En la era del aprendizaje mediado por tecnología, los datos son "
+#~ "omnipresentes. Pero en lugar de ofrecer beneficios instantáneos, esta "
+#~ "abundancia plantea el reto importante de transformar datos en "
+#~ "conocimiento útil. No es suficiente  tener datos, es esencial utilizar "
+#~ "estos datos para apoyar alguno de los  objetivos del entorno de "
+#~ "aprendizaje. ¿Cómo podemos articular este apoyo?  ¿Cómo podemos "
+#~ "utilizarlo en múltiples entornos? OnTask establece una esta  conexión "
+#~ "entre datos y su uso para ofrecer una solución escalable al  aprendizaje "
+#~ "personalizado."
+
 #~ msgid "Edit Personalized Canvas Email"
 #~ msgstr "Editar Email de Canvas Personalizado"
 
@@ -5519,69 +5591,3 @@ msgstr "Flujo clonado con éxito."
 
 #~ msgid "Facilitating conversations at scale"
 #~ msgstr "Facilitando conversaciones a escala"
-
-#~ msgid ""
-#~ "Learners are more likely to have an effective\n"
-#~ "          experience\n"
-#~ "          when their environment is personalised. Resources, comments,\n"
-#~ "          suggestions and feedback that take into account the reality of "
-#~ "each\n"
-#~ "          learner are much more effective than those addressing an "
-#~ "entire\n"
-#~ "          cohort. But personalisation has traditionally been based on "
-#~ "highly\n"
-#~ "          detailed pre-conceived models of learner behaviour. OnTask "
-#~ "offers an\n"
-#~ "          environment to personalise resources based on data collected "
-#~ "from any\n"
-#~ "          learning environment."
-#~ msgstr ""
-#~ "La experiencia de aprendizaje de un estudiante es más efectiva cuando el "
-#~ "entorno está personalizado. Recursos, comentarios, sugeréncias o "
-#~ "realimentación que tiene en cuenta la realidad de cada estudiante son más "
-#~ "efectivos que aquellos que van dirigidos a un grupo en general. Pero "
-#~ "hasta ahora la personalización se ha implementado mediante modelos muy "
-#~ "detallados del comportamiento del estudiante. OnTask ofrece un entorno "
-#~ "para personalizar recursos basado en los datos que se obtienen de "
-#~ "cualquier entorno de aprendizaje."
-
-#~ msgid ""
-#~ "Feedback is more effective when framed as a\n"
-#~ "          dialogue. But such\n"
-#~ "          dialogue will be highly dependent on the personal situation of "
-#~ "each\n"
-#~ "          learner. How can we combine knowledge about the learners with "
-#~ "the\n"
-#~ "          need to have personalised interaction? OnTask will help "
-#~ "instructors\n"
-#~ "          and learners to initiate this dialogue."
-#~ msgstr ""
-#~ "La realimentación es más efectiva cuando se enmarca como un diálogo. Pero "
-#~ "ese diálogo depende de la situación personal de cada estudiante. ¿Cómo "
-#~ "podemos  combinar el conocimiento del estudiante con la necesidad de una "
-#~ "interacción  personalizada? OnTask ayuda a los profesores y estudiantes a "
-#~ "comenzar este diálogo."
-
-#~ msgid ""
-#~ "In the era of technology-mediated learning, data is\n"
-#~ "          ubiquitous. But instead of providing instantaneous benefits,\n"
-#~ "          this abundance brings a serious challenge to tranform data "
-#~ "into\n"
-#~ "        actionable knowledge. It is not enough to have data, it is "
-#~ "essential\n"
-#~ "          to use data to support a clearly identified objective in the\n"
-#~ "          learning environment. How can this support be articulated?\n"
-#~ "          How can it be used in multiple environments? OnTask\n"
-#~ "        establishes this connection between data and its use to provide "
-#~ "a\n"
-#~ "          scalable solution to learning personalisation."
-#~ msgstr ""
-#~ "En la era del aprendizaje mediado por tecnología, los datos son "
-#~ "omnipresentes. Pero en lugar de ofrecer beneficios instantáneos, esta "
-#~ "abundancia plantea el reto importante de transformar datos en "
-#~ "conocimiento útil. No es suficiente  tener datos, es esencial utilizar "
-#~ "estos datos para apoyar alguno de los  objetivos del entorno de "
-#~ "aprendizaje. ¿Cómo podemos articular este apoyo?  ¿Cómo podemos "
-#~ "utilizarlo en múltiples entornos? OnTask establece una esta  conexión "
-#~ "entre datos y su uso para ofrecer una solución escalable al  aprendizaje "
-#~ "personalizado."

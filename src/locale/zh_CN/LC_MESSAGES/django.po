@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-08 07:51+0930\n"
+"POT-Creation-Date: 2019-04-11 07:29+0930\n"
 "PO-Revision-Date: 2018-11-11 18:47+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -69,23 +69,40 @@ msgstr "%(site_name)s团队"
 msgid "Log In"
 msgstr "登陆"
 
-#: accounts/templates/accounts/login.html:12
+#: accounts/templates/accounts/login.html:13
 msgid "The importance of personalisation"
 msgstr "个性化的重要性"
 
-#: accounts/templates/accounts/login.html:13
+#: accounts/templates/accounts/login.html:14
+#, fuzzy
+#| msgid ""
+#| "Learners are more likely to have an effective\n"
+#| "        experience\n"
+#| "        when their environment is personalised. Resources, comments,\n"
+#| "        suggestions and feedback that take into account the reality of "
+#| "each\n"
+#| "        learner are much more effective than those addressing an entire\n"
+#| "        cohort. But personalisation has traditionally been based on "
+#| "highly\n"
+#| "        detailed pre-conceived models of learner behaviour. OnTask offers "
+#| "an\n"
+#| "        environment to personalise resources based on data collected from "
+#| "any\n"
+#| "        learning environment."
 msgid ""
 "Learners are more likely to have an effective\n"
-"        experience\n"
-"        when their environment is personalised. Resources, comments,\n"
-"        suggestions and feedback that take into account the reality of each\n"
-"        learner are much more effective than those addressing an entire\n"
-"        cohort. But personalisation has traditionally been based on highly\n"
-"        detailed pre-conceived models of learner behaviour. OnTask offers "
+"          experience\n"
+"          when their environment is personalised. Resources, comments,\n"
+"          suggestions and feedback that take into account the reality of "
+"each\n"
+"          learner are much more effective than those addressing an entire\n"
+"          cohort. But personalisation has traditionally been based on "
+"highly\n"
+"          detailed pre-conceived models of learner behaviour. OnTask offers "
 "an\n"
-"        environment to personalise resources based on data collected from "
+"          environment to personalise resources based on data collected from "
 "any\n"
-"        learning environment."
+"          learning environment."
 msgstr ""
 "学习者在个性化环境中更有可能获得一个\n"
 "有效的体验。在考虑到每个学生具体情况时，\n"
@@ -94,39 +111,65 @@ msgstr ""
 "对学习者行为预获的模型。基于从学习环境中收集的数据，OnTask提供了\n"
 "一个可以将资源个性化的环境。"
 
-#: accounts/templates/accounts/login.html:25
+#: accounts/templates/accounts/login.html:26
 msgid "The importance of feedback"
 msgstr "反馈的重要性"
 
-#: accounts/templates/accounts/login.html:26
+#: accounts/templates/accounts/login.html:27
+#, fuzzy
+#| msgid ""
+#| "Feedback is more effective when framed as a\n"
+#| "        dialogue. But such\n"
+#| "        dialogue will be highly dependent on the personal situation of "
+#| "each\n"
+#| "        learner. How can we combine knowledge about the learners with "
+#| "the\n"
+#| "        need to have personalised interaction? OnTask will help "
+#| "instructors\n"
+#| "        and learners to initiate this dialogue."
 msgid ""
 "Feedback is more effective when framed as a\n"
-"        dialogue. But such\n"
-"        dialogue will be highly dependent on the personal situation of each\n"
-"        learner. How can we combine knowledge about the learners with the\n"
-"        need to have personalised interaction? OnTask will help instructors\n"
-"        and learners to initiate this dialogue."
+"          dialogue. But such\n"
+"          dialogue will be highly dependent on the personal situation of "
+"each\n"
+"          learner. How can we combine knowledge about the learners with the\n"
+"          need to have personalised interaction? OnTask will help "
+"instructors\n"
+"          and learners to initiate this dialogue."
 msgstr ""
 "反馈以对话的形式会更有效。但是这样的对话\n"
 "将高度依赖于学习者的个人情况。我们该如何\n"
 "将我们对于学习者的了解与其个性化的交流需求\n"
 "结合起来呢？OnTask将帮助教师与学生发起这样的对话。"
 
-#: accounts/templates/accounts/login.html:34
+#: accounts/templates/accounts/login.html:35
 msgid "The importance of data"
 msgstr "数据的重要性"
 
-#: accounts/templates/accounts/login.html:35
+#: accounts/templates/accounts/login.html:36
+#, fuzzy
+#| msgid ""
+#| "In the era of technology-mediated learning, data is\n"
+#| "        ubiquitous. But instead of providing instantaneous benefits,\n"
+#| "        this abundance brings a serious challenge to tranform data into\n"
+#| "      actionable knowledge. It is not enough to have data, it is "
+#| "essential\n"
+#| "        to use data to support a clearly identified objective in the\n"
+#| "        learning environment. How can this support be articulated?\n"
+#| "        How can it be used in multiple environments? OnTask\n"
+#| "      establishes this connection between data and its use to provide a\n"
+#| "        scalable solution to learning personalisation."
 msgid ""
 "In the era of technology-mediated learning, data is\n"
-"        ubiquitous. But instead of providing instantaneous benefits,\n"
-"        this abundance brings a serious challenge to tranform data into\n"
-"      actionable knowledge. It is not enough to have data, it is essential\n"
-"        to use data to support a clearly identified objective in the\n"
-"        learning environment. How can this support be articulated?\n"
-"        How can it be used in multiple environments? OnTask\n"
-"      establishes this connection between data and its use to provide a\n"
-"        scalable solution to learning personalisation."
+"          ubiquitous. But instead of providing instantaneous benefits,\n"
+"          this abundance brings a serious challenge to tranform data into\n"
+"        actionable knowledge. It is not enough to have data, it is "
+"essential\n"
+"          to use data to support a clearly identified objective in the\n"
+"          learning environment. How can this support be articulated?\n"
+"          How can it be used in multiple environments? OnTask\n"
+"        establishes this connection between data and its use to provide a\n"
+"          scalable solution to learning personalisation."
 msgstr ""
 "在以科技为媒介的学习时代，数据是\n"
 "无处不在的。这样大量的数据不仅没有带来瞬时效益，\n"
@@ -138,7 +181,7 @@ msgstr ""
 "在数据和数据运用中间建立了一种联系，为个性化学习提供了\n"
 "一个可以扩展的方案。"
 
-#: accounts/templates/accounts/login.html:45
+#: accounts/templates/accounts/login.html:46
 msgid "More Information"
 msgstr "更多信息"
 
@@ -431,43 +474,43 @@ msgstr "抄送电子邮件中的无效电子邮件地址"
 msgid "Invalid email address in bcc email"
 msgstr "密件抄送电子邮件中的无效电子邮件地址"
 
-#: action/ops.py:626
+#: action/ops.py:639
 #, python-brace-format
 msgid "Syntax error detected in OnTask notification template ({0})"
 msgstr "在OnTask通知模板中检测到的语法错误 ({0}）"
 
-#: action/ops.py:655
+#: action/ops.py:668
 #, python-brace-format
 msgid "An error occurred when sending your notification: {0}"
 msgstr "发送通知时发生错误：{0}"
 
-#: action/ops.py:704
+#: action/ops.py:717
 msgid "Unable to find OAuth Information Record"
 msgstr "找不到OAUTH信息记录"
 
-#: action/ops.py:713
+#: action/ops.py:726
 msgid "Incorrect execution due to absence of token"
 msgstr "因为令牌缺失造成的不正确的执行"
 
-#: action/ops.py:761
+#: action/ops.py:774
 msgid "Message successfuly sent"
 msgstr "信息已发送"
 
-#: action/ops.py:775
+#: action/ops.py:788
 msgid "OAuth token refreshed"
 msgstr "OAuth令牌已刷新"
 
-#: action/ops.py:800
+#: action/ops.py:813
 #, python-brace-format
 msgid "Unable to deliver message (code {0})"
 msgstr "无法传递信息（code{0}）"
 
-#: action/ops.py:893
+#: action/ops.py:906
 #, python-brace-format
 msgid "Incorrect JSON string in element number {0}"
 msgstr "元素编号{0}中的错误JSON字符串"
 
-#: action/ops.py:987
+#: action/ops.py:1000
 msgid "Incorrect item filter invocation."
 msgstr "不正确的项目筛选标签调用。"
 
@@ -506,7 +549,7 @@ msgstr "无法创建列数据"
 msgid "Unable to create condition information"
 msgstr "无法创建条件信息"
 
-#: action/settings.py:34 ontask/settings/base.py:526
+#: action/settings.py:34 ontask/settings/base.py:535
 msgid "OnTask: Action executed"
 msgstr "OnTask:操作已执行"
 
@@ -531,12 +574,12 @@ msgstr "发送：通知电子邮件中的字段"
 msgid "Action execution"
 msgstr "操作执行"
 
-#: action/templates/action/action_done.html:15
+#: action/templates/action/action_done.html:14
 #: scheduler/templates/scheduler/schedule_done.html:7
 msgid "Action scheduled for execution"
 msgstr "计划执行的操作"
 
-#: action/templates/action/action_done.html:17
+#: action/templates/action/action_done.html:16
 #, python-format
 msgid ""
 "You may check the status in\n"
@@ -545,7 +588,7 @@ msgstr ""
 "您可以检查\n"
 "日志记录号%(log_id)s的状态。"
 
-#: action/templates/action/action_done.html:21
+#: action/templates/action/action_done.html:20
 #: action/templates/action/action_zip_done.html:15
 #: action/templates/action/export_ask.html:21
 #: action/templates/action/export_done.html:15
@@ -780,7 +823,7 @@ msgstr "匹配用户ID的键列"
 
 #: action/templates/action/edit_in.html:157
 msgid "Please, select Key column"
-msgstr "求和：为选择列求和"
+msgstr "请选择键列"
 
 #: action/templates/action/edit_out.html:7
 msgid "Edit Personalized Text"
@@ -1231,7 +1274,7 @@ msgstr "预览下一条信息"
 
 #: action/templates/action/includes/partial_preview.html:28
 msgid "Preview next message with all conditions false"
-msgstr "预览下一条信息，所有条件false"
+msgstr "预览下一条信息，所有条件错误"
 
 #: action/templates/action/includes/partial_preview.html:35
 msgid "All conditions evaluate to FALSE"
@@ -1424,7 +1467,7 @@ msgstr "以那个名称命名的操作已经存在"
 #: action/views_action.py:916 action/views_action.py:959
 #: action/views_action.py:1311
 msgid "Workflow has no data. Go to \"Manage table data\" to upload data."
-msgstr "工作流没有数据。到\"Manage table data\"上传数据 。"
+msgstr "工作流没有数据。到\"管理桌面数据\"上传数据 。"
 
 #: action/views_action.py:564
 msgid "Personalized Text"
@@ -1663,25 +1706,25 @@ msgstr "以csv格式访问谷歌电子表格的网址"
 
 #: dataops/forms.py:411
 msgid "AWS S3 Bucket access key"
-msgstr ""
+msgstr "AWS S3存储桶访问公匙"
 
 #: dataops/forms.py:417
 msgid "AWS S3 Bucket secret access key"
-msgstr ""
+msgstr "AWS S3存储桶访问私钥"
 
 #: dataops/forms.py:423
 msgid "AWS S3 Bucket name"
-msgstr ""
+msgstr "AWS S3存储桶名称"
 
 #: dataops/forms.py:429
 msgid "AWS S3 Bucket file path"
-msgstr ""
+msgstr "AWS S3存储桶文件路径"
 
 #: dataops/forms.py:486
 #, fuzzy, python-brace-format
 #| msgid "File could not be processed ({0})"
 msgid "S3 bucket file could not be processed ({0})"
-msgstr "无法处理文件({0})"
+msgstr "S3存储桶文件无法处理({0})"
 
 #: dataops/forms.py:531
 msgid "Password to authenticate the database connection"
@@ -1799,7 +1842,7 @@ msgstr "用户"
 
 #: dataops/models.py:110
 msgid "Requires password?"
-msgstr "需要密码吗？"
+msgstr "是否需要密码？"
 
 #: dataops/models.py:115
 msgid "Host"
@@ -1869,7 +1912,7 @@ msgstr "这个方法应该实现！"
 #: dataops/plugin_manager.py:55 dataops/plugin_manager.py:63
 #: dataops/plugin_manager.py:72
 msgid "Not found"
-msgstr "未找到"
+msgstr "未发现"
 
 #: dataops/plugin_manager.py:43 dataops/plugin_manager.py:50
 #: dataops/plugin_manager.py:58 dataops/plugin_manager.py:74
@@ -1974,7 +2017,7 @@ msgstr "无法在文件夹\"{0}\"中加载插件。"
 #, fuzzy
 #| msgid "CSV file"
 msgid "S3 CSV file"
-msgstr "CSV文件"
+msgstr "S3 CSV文件"
 
 #: dataops/settings.py:31
 msgid "Folder where plugins are stored"
@@ -2280,7 +2323,7 @@ msgstr "上传/合并"
 #, fuzzy
 #| msgid "Step 1: Select"
 msgid "Select"
-msgstr "步骤一：选择"
+msgstr "选择"
 
 #: dataops/templates/dataops/upload_s2.html:7
 msgid "Upload/Merge CSV"
@@ -2290,7 +2333,7 @@ msgstr "上传/合并 CSV"
 #, fuzzy
 #| msgid "Step 2: Select Columns"
 msgid "Select Columns"
-msgstr "步骤二：选择列"
+msgstr "选择列"
 
 #: dataops/templates/dataops/upload_s2.html:35
 msgid "Load"
@@ -2316,7 +2359,7 @@ msgstr "是否保留？"
 #, fuzzy
 #| msgid "Step 3: Select Keys and Merge Option"
 msgid "Select Keys and Merge Option"
-msgstr "步骤三：选择键并合并选项"
+msgstr "选择键并合并选项"
 
 #: dataops/templates/dataops/upload_s3.html:21
 msgid ""
@@ -2406,7 +2449,7 @@ msgstr "审查操作"
 #, fuzzy
 #| msgid "Step 4: Review and confirm"
 msgid "Review and confirm"
-msgstr "步骤四：检查并确认"
+msgstr "检查并确认"
 
 #: dataops/templates/dataops/upload_s4.html:26
 msgid "Existing Table"
@@ -2432,7 +2475,7 @@ msgstr "操作"
 
 #: dataops/templates/dataops/uploadmerge.html:25
 msgid "CSV"
-msgstr ""
+msgstr "CSV文件"
 
 #: dataops/templates/dataops/uploadmerge.html:29
 msgid ""
@@ -2466,7 +2509,7 @@ msgstr ""
 
 #: dataops/templates/dataops/uploadmerge.html:43
 msgid "Excel"
-msgstr ""
+msgstr "Excel"
 
 #: dataops/templates/dataops/uploadmerge.html:47
 msgid "Upload data from Excel file."
@@ -2539,13 +2582,13 @@ msgstr ""
 
 #: dataops/templates/dataops/uploadmerge.html:85
 msgid "S3 Bucket CSV"
-msgstr ""
+msgstr "S3 存储桶 CSV"
 
 #: dataops/templates/dataops/uploadmerge.html:89
 #, fuzzy
 #| msgid "Upload data from a Google Sheet file."
 msgid "Upload data from a CSV file in a S3 Bucket."
-msgstr "从谷歌表格文件中上传数据。"
+msgstr "从S3存储桶中上传一个CSV文件中的数据。"
 
 #: dataops/templates/dataops/uploadmerge.html:90
 #, fuzzy
@@ -2561,7 +2604,7 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"给定指向公开可用的Google工作表\n"
+"给定钥匙，密钥，存储桶名称以及文件路径指向的CSV文件，\n"
 "上传或合并其内容的URL。\n"
 " "
 
@@ -2937,27 +2980,27 @@ msgstr "SQL连接已克隆"
 
 #: logs/models.py:151
 msgid "Edit scheduled email action"
-msgstr "编辑电子邮件行动计划"
+msgstr "编辑已排程的电子邮件操作"
 
 #: logs/models.py:152
 msgid "Delete scheduled email action"
-msgstr "删除电子邮件行动计划"
+msgstr "删除已排程的电子邮件行动操作"
 
 #: logs/models.py:153
 msgid "Execute scheduled email action"
-msgstr "执行电子邮件行动计划"
+msgstr "执行已排程的电子邮件行动"
 
 #: logs/models.py:155
 #, fuzzy
 #| msgid "Execute scheduled email action"
 msgid "Execute scheduled canvas email action"
-msgstr "执行canvas电子邮件行动计划"
+msgstr "执行已排程的canvas电子邮件行动"
 
 #: logs/models.py:157
 #, fuzzy
 #| msgid "Execute scheduled email action"
 msgid "Delete scheduled canvas email action"
-msgstr "执行电子邮件行动计划"
+msgstr "删除已排程的canvas电子邮件行动"
 
 #: logs/models.py:158
 msgid "Download a ZIP with personalized text"
@@ -2965,15 +3008,15 @@ msgstr "下载有个性化文本的压缩文件"
 
 #: logs/models.py:159
 msgid "Edit scheduled JSON action"
-msgstr "编辑JSON行动计划"
+msgstr "编辑已排程的JSON行动"
 
 #: logs/models.py:160
 msgid "Delete scheduled JSON action"
-msgstr "删除JSON行动计划"
+msgstr "删除已排程的JSON行动"
 
 #: logs/models.py:161
 msgid "Execute scheduled JSON action"
-msgstr "执行JSON行动计划"
+msgstr "执行已排程的JSON行动"
 
 #: logs/models.py:189 scheduler/models.py:111
 msgid "payload"
@@ -3098,19 +3141,19 @@ msgstr "允许上传的内容类型"
 msgid "Maximum size allowed in file uplaods"
 msgstr "允许上传的最大文件尺寸"
 
-#: ontask/settings/base.py:385
+#: ontask/settings/base.py:390
 msgid "English"
 msgstr "英语"
 
-#: ontask/settings/base.py:386
+#: ontask/settings/base.py:391
 msgid "Spanish"
 msgstr "西班牙语"
 
-#: ontask/settings/base.py:387
+#: ontask/settings/base.py:392
 msgid "Chinese"
 msgstr "中文"
 
-#: ontask/settings/base.py:388
+#: ontask/settings/base.py:393
 #, fuzzy
 #| msgid "Finish"
 msgid "Finnish"
@@ -3120,42 +3163,42 @@ msgstr "芬兰语"
 #, fuzzy, python-brace-format
 #| msgid "Incorrect execution due to absence of token"
 msgid "Incorrect execution request with log_id {0}"
-msgstr "因为令牌缺失造成的不正确的执行"
+msgstr "log_id {0}的错误执行请求"
 
 #: ontask/tasks.py:507
 #, fuzzy, python-brace-format
 #| msgid "Unable to instantiate plugin \"{0}\""
 msgid "Unable to find user with id {0}"
-msgstr "无法实例化插件\"{0}\""
+msgstr "使用身份证{0}无法找到用户"
 
 #: ontask/tasks.py:516
 #, fuzzy, python-brace-format
 #| msgid "Unable to import workflow (Exception: {0})"
 msgid "Unable to find workflow with id {0}"
-msgstr "无法导入工作流 (Exception: {0})"
+msgstr "使用身份证{0}无法找到工作流"
 
 #: ontask/tasks.py:525
 #, fuzzy, python-brace-format
 #| msgid "Unable to load plugin in folder \"{0}\"."
 msgid "Unable to load plugin with id {0}"
-msgstr "无法在文件夹\"{0}\"中加载插件。"
+msgstr "使用身份证{0}无法加载插件。"
 
 #: ontask/tasks.py:542
 #, python-brace-format
 msgid "Inconsisten inputs when invoking plugin \"{0}\""
-msgstr ""
+msgstr "调用插件\"{0}\"时输入不一致"
 
 #: ontask/tasks.py:578
 #, fuzzy, python-brace-format
 #| msgid "Error while retrieving content for student {0}"
 msgid "Error while executing plugin: {0}"
-msgstr "检索学生{0}内容时出错"
+msgstr "执行插件{0}时出错"
 
 #: ontask/tasks.py:585
 #, fuzzy
 #| msgid "Result is not a pandas data frame."
 msgid "Plugin executed but did not return a pandas data frame."
-msgstr "结果不是pandas数据结构。"
+msgstr "插件已执行，但是并没有返回pandas数据结构。"
 
 #: ontask/tasks.py:594
 msgid "Incorrect number of rows in result data frame."
@@ -3165,7 +3208,7 @@ msgstr "结果数据帧中的行数不正确。"
 #, fuzzy
 #| msgid "Incorrect number of rows in result data frame."
 msgid "Incorrect columns in result data frame."
-msgstr "结果数据帧中的行数不正确。"
+msgstr "结果数据帧中的列数不正确。"
 
 #: ontask/tasks.py:621 ontask/tasks.py:627
 #, fuzzy, python-brace-format
@@ -3500,14 +3543,14 @@ msgstr "删除已排程的操作"
 #, fuzzy
 #| msgid "Obtain the data from the SQL connection"
 msgid "View the details of this scheduled action"
-msgstr "从SQL连接中获取数据"
+msgstr "查看已排程的操作的细节"
 
 #: scheduler/templates/scheduler/includes/partial_scheduler_operations.html:9
 #: scheduler/templates/scheduler/includes/partial_show_schedule_action.html:27
 #, fuzzy
 #| msgid "Delete scheduled JSON action"
 msgid "Delete this scheduled action"
-msgstr "删除JSON行动计划"
+msgstr "删除这个已排程的操作"
 
 #: scheduler/templates/scheduler/includes/partial_show_schedule_action.html:3
 #, fuzzy
@@ -3550,7 +3593,7 @@ msgid ""
 "\">Actions</a> menu and select the operation <i>Schedule\n"
 "      </i> for an action."
 msgstr ""
-"<strong><super>*</super></strong>操作的执行可以\n"
+"某些操作的执行可以\n"
 "安排在将来的某个时间。本页面显示了那些执行计划。如需安排一个操作的执行,\n"
 "找到<a href=\"%(actionindex)s\">操作</a>菜单，\n"
 "为操作选择<i>排程</i>行动。"
@@ -4022,17 +4065,17 @@ msgstr "工作表"
 
 #: templates/base.html:60
 msgid "Messages and Surveys"
-msgstr ""
+msgstr "信息与调查"
 
 #: templates/base.html:66
 #, fuzzy
 #| msgid "Table"
 msgid "Data Table"
-msgstr "表格"
+msgstr "数据表格"
 
 #: templates/base.html:72
 msgid "More"
-msgstr "更多"
+msgstr "更多信息"
 
 #: templates/base.html:76
 #, fuzzy
@@ -4114,21 +4157,25 @@ msgstr "保持连接"
 msgid "OnTask Error"
 msgstr "OnTask错误"
 
-#: templates/critical_error.html:8
+#: templates/critical_error.html:7
 msgid "Internal Error"
 msgstr "内部错误"
 
-#: templates/critical_error.html:11
+#: templates/critical_error.html:10
 msgid "Oops. We have detected an internal error."
 msgstr "哎呀。我们检测到一个内部错误。"
 
-#: templates/critical_error.html:15
+#: templates/critical_error.html:14
+#, fuzzy
+#| msgid ""
+#| "The following message is trying to explain what\n"
+#| "      happened."
 msgid ""
 "The following message is trying to explain what\n"
-"      happened."
+"        happened."
 msgstr "下面的信息将试图解释发生了什么。"
 
-#: templates/critical_error.html:22
+#: templates/critical_error.html:21
 msgid "Referrer:"
 msgstr "推荐人："
 
@@ -4282,7 +4329,7 @@ msgstr "重置密码"
 
 #: templates/thanks.html:7
 msgid "Thanks"
-msgstr "感谢"
+msgstr "谢谢"
 
 #: templates/under_construction.html:7
 msgid "This functionality is under construction."
@@ -4330,35 +4377,35 @@ msgstr "求和：为选择列求和"
 
 #: workflow/column_views.py:44
 msgid "prod: Product of the selected columns"
-msgstr "prod：选定列的产品"
+msgstr "产品：选定列的产品"
 
 #: workflow/column_views.py:45
 msgid "max: Maximum of the selected columns"
-msgstr "max:选定列的最大值"
+msgstr "最大值:选定列的最大值"
 
 #: workflow/column_views.py:46
 msgid "min: Minimum of the selected columns"
-msgstr "min:选定列的最小值"
+msgstr "最小值:选定列的最小值"
 
 #: workflow/column_views.py:47
 msgid "mean: Mean of the selected columns"
-msgstr "mean:选定列的平均值"
+msgstr "平均值:选定列的平均值"
 
 #: workflow/column_views.py:48
 msgid "median: Median of the selected columns"
-msgstr "median:选定列的中位数"
+msgstr "中位数:选定列的中位数"
 
 #: workflow/column_views.py:50
 msgid "std: Standard deviation over the selected columns"
-msgstr "std:选定列的标准差"
+msgstr "标准差:选定列的标准差"
 
 #: workflow/column_views.py:52
 msgid "all: True when all elements in selected columns are true"
-msgstr "all:当选定列中的所有元素都为真时则为真"
+msgstr "全部值:当选定列中的所有元素都为真时则为真"
 
 #: workflow/column_views.py:54
 msgid "any: True when any element in selected columns is true"
-msgstr "any:当选定列中的任何元素为真时则为真"
+msgstr "任意值:当选定列中的任何元素为真时则为真"
 
 #: workflow/column_views.py:93
 msgid "Cannot add question to a workflow without data"
@@ -4542,7 +4589,7 @@ msgstr "列将活跃直到"
 #: workflow/models.py:576
 #, python-format
 msgid "Unsupported type %(type)s"
-msgstr "不支持类型 %(type)s"
+msgstr "不支持类型%(type)s"
 
 #: workflow/ops.py:90
 msgid "Incorrect workflow request"
@@ -4560,7 +4607,7 @@ msgstr "无法访问工作流"
 #: workflow/ops.py:254 workflow/ops.py:261
 #, python-brace-format
 msgid "Unable to import workflow (Exception: {0})"
-msgstr "无法导入工作流 (Exception: {0})"
+msgstr "无法导入工作流(Exception: {0})"
 
 #: workflow/ops.py:256
 #, fuzzy, python-brace-format
@@ -5398,10 +5445,10 @@ msgstr "工作流已成功克隆。"
 #~ msgstr "设置中丢失LTI_OAUTH_CREDENTIALS"
 
 #~ msgid "Could not get a secret for key {0}"
-#~ msgstr "无法获得密钥{0}的秘密"
+#~ msgstr "无法获得密钥{0}的私钥"
 
 #~ msgid "using key/secret {0}/{1}"
-#~ msgstr "使用密钥/秘密{0}/{1}"
+#~ msgstr "使用密钥/私钥{0}/{1}"
 
 #~ msgid "request is secure: {0}"
 #~ msgstr "请求是安全的：{0}"

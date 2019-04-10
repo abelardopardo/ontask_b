@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-08 07:51+0930\n"
-"PO-Revision-Date: 2019-03-27 10:12+0200\n"
+"POT-Creation-Date: 2019-04-11 07:29+0930\n"
+"PO-Revision-Date: 2019-04-09 15:00+0300\n"
 "Last-Translator: Joonas Pesonen <joonas.pesonen@helsinki.fi>\n"
 "Language-Team: \n"
 "Language: fi_FI\n"
@@ -69,79 +69,83 @@ msgstr "%(site_name)s ylläpito"
 msgid "Log In"
 msgstr "Kirjaudu sisään"
 
-#: accounts/templates/accounts/login.html:12
+#: accounts/templates/accounts/login.html:13
 msgid "The importance of personalisation"
 msgstr "Personoinnin tärkeys"
 
-#: accounts/templates/accounts/login.html:13
+#: accounts/templates/accounts/login.html:14
 msgid ""
 "Learners are more likely to have an effective\n"
-"        experience\n"
-"        when their environment is personalised. Resources, comments,\n"
-"        suggestions and feedback that take into account the reality of each\n"
-"        learner are much more effective than those addressing an entire\n"
-"        cohort. But personalisation has traditionally been based on highly\n"
-"        detailed pre-conceived models of learner behaviour. OnTask offers "
+"          experience\n"
+"          when their environment is personalised. Resources, comments,\n"
+"          suggestions and feedback that take into account the reality of "
+"each\n"
+"          learner are much more effective than those addressing an entire\n"
+"          cohort. But personalisation has traditionally been based on "
+"highly\n"
+"          detailed pre-conceived models of learner behaviour. OnTask offers "
 "an\n"
-"        environment to personalise resources based on data collected from "
+"          environment to personalise resources based on data collected from "
 "any\n"
-"        learning environment."
+"          learning environment."
 msgstr ""
-"Oppijoiden kokemukset ovat mielekkäämpiä,\n"
-"kun oppimisympäristö on personoitu. Resurssit, kommentit,\n"
-"ehdotukset ja palaute ovat huomattavasti vaikuttavampia,\n"
-"jos oppijan oma todellisuus otetaan huomioon sen sijaan\n"
-"että koko ryhmälle tarjottaisiin samanlaista sisältöä.\n"
-"Personointi on perinteisesti vaatinut pitkälle erikoistuneita,\n"
-"ennalta rakennettuja malleja oppijoiden käyttäytymisestä.\n"
-"OnTask tarjoaa ympäristön, jossa resursseja voidaan personoida\n"
-"mistä tahansa oppimisympäristöstä kerätyn datan avulla."
+"La experiencia de aprendizaje de un estudiante es más efectiva cuando el "
+"entorno está personalizado. Recursos, comentarios, sugeréncias o "
+"realimentación que tiene en cuenta la realidad de cada estudiante son más "
+"efectivos que aquellos que van dirigidos a un grupo en general. Pero hasta "
+"ahora la personalización se ha implementado mediante modelos muy detallados "
+"del comportamiento del estudiante. OnTask ofrece un entorno para "
+"personalizar recursos basado en los datos que se obtienen de cualquier "
+"entorno de aprendizaje."
 
-#: accounts/templates/accounts/login.html:25
+#: accounts/templates/accounts/login.html:26
 msgid "The importance of feedback"
 msgstr "Palautteen tärkeys"
 
-#: accounts/templates/accounts/login.html:26
+#: accounts/templates/accounts/login.html:27
 msgid ""
 "Feedback is more effective when framed as a\n"
-"        dialogue. But such\n"
-"        dialogue will be highly dependent on the personal situation of each\n"
-"        learner. How can we combine knowledge about the learners with the\n"
-"        need to have personalised interaction? OnTask will help instructors\n"
-"        and learners to initiate this dialogue."
+"          dialogue. But such\n"
+"          dialogue will be highly dependent on the personal situation of "
+"each\n"
+"          learner. How can we combine knowledge about the learners with the\n"
+"          need to have personalised interaction? OnTask will help "
+"instructors\n"
+"          and learners to initiate this dialogue."
 msgstr ""
-"Palaute on tehokkainta dialogin muodossa.\n"
-"Mutta dialogisuus riippuu suuresti kunkin oppijan\n"
-"henkilökohtaisesta tilanteesta. Kuinka voisimme yhdistää\n"
-"tiedot oppijasta ja henkilökohtaisen vuorovaikutuksen?\n"
-"OnTask auttaa opettajia ja oppijoita dialogin käynnistämisessä."
+"La realimentación es más efectiva cuando se enmarca como un diálogo. Pero "
+"ese diálogo depende de la situación personal de cada estudiante. ¿Cómo "
+"podemos  combinar el conocimiento del estudiante con la necesidad de una "
+"interacción  personalizada? OnTask ayuda a los profesores y estudiantes a "
+"comenzar este diálogo."
 
-#: accounts/templates/accounts/login.html:34
+#: accounts/templates/accounts/login.html:35
 msgid "The importance of data"
 msgstr "Datan tärkeys"
 
-#: accounts/templates/accounts/login.html:35
+#: accounts/templates/accounts/login.html:36
 msgid ""
 "In the era of technology-mediated learning, data is\n"
-"        ubiquitous. But instead of providing instantaneous benefits,\n"
-"        this abundance brings a serious challenge to tranform data into\n"
-"      actionable knowledge. It is not enough to have data, it is essential\n"
-"        to use data to support a clearly identified objective in the\n"
-"        learning environment. How can this support be articulated?\n"
-"        How can it be used in multiple environments? OnTask\n"
-"      establishes this connection between data and its use to provide a\n"
-"        scalable solution to learning personalisation."
+"          ubiquitous. But instead of providing instantaneous benefits,\n"
+"          this abundance brings a serious challenge to tranform data into\n"
+"        actionable knowledge. It is not enough to have data, it is "
+"essential\n"
+"          to use data to support a clearly identified objective in the\n"
+"          learning environment. How can this support be articulated?\n"
+"          How can it be used in multiple environments? OnTask\n"
+"        establishes this connection between data and its use to provide a\n"
+"          scalable solution to learning personalisation."
 msgstr ""
-"Teknologiavälitteisen oppimisen aikakaudella dataa on kaikkialla.\n"
-"Mutta välittömien etujen sijaan datan runsaudesta seuraa haaste:\n"
-"kuinka dataa saataisiin muutettua käytännössä hyödylliseksi tiedoksi?\n"
-"Pelkkä datan omistaminen ei riitä, vaan dataa tulee käyttää niin, että\n"
-"se auttaa määritettyjen tavoitteiden saavuttamista. Mitä tämä tarkoittaa\n"
-"Käytännössä erilaisissa ympäristöissä? OnTask luo yhteyden datan ja\n"
-"Datan käytön välille ja tarjoaa skaalautuvan ratkaisun oppimisen "
-"personointiin."
+"En la era del aprendizaje mediado por tecnología, los datos son "
+"omnipresentes. Pero en lugar de ofrecer beneficios instantáneos, esta "
+"abundancia plantea el reto importante de transformar datos en conocimiento "
+"útil. No es suficiente  tener datos, es esencial utilizar estos datos para "
+"apoyar alguno de los  objetivos del entorno de aprendizaje. ¿Cómo podemos "
+"articular este apoyo?  ¿Cómo podemos utilizarlo en múltiples entornos? "
+"OnTask establece una esta  conexión entre datos y su uso para ofrecer una "
+"solución escalable al  aprendizaje personalizado."
 
-#: accounts/templates/accounts/login.html:45
+#: accounts/templates/accounts/login.html:46
 msgid "More Information"
 msgstr "Lisätietoja"
 
@@ -274,8 +278,6 @@ msgid "Download a snapshot of the workflow?"
 msgstr "Lataa tilannevedos työnkulusta?"
 
 #: action/forms.py:288 action/forms.py:585
-#, fuzzy
-#| msgid "A zip file useful to review the emails sent."
 msgid "A zip file is useful to review the emails sent."
 msgstr ""
 "Zip-tiedosto on hyödyöllinen lähetettyjen sähköpostiviestien tarkasteluun."
@@ -443,43 +445,43 @@ msgstr "Sähköpostiosoite cc-kentässä ei ole kelvollinen"
 msgid "Invalid email address in bcc email"
 msgstr "Sähköpostiosoite bcc-kentässä ei ole kelvollinen"
 
-#: action/ops.py:626
+#: action/ops.py:639
 #, python-brace-format
 msgid "Syntax error detected in OnTask notification template ({0})"
 msgstr "Syntaksivirhe havaittu OnTask ilmoituspohjassa ({0})"
 
-#: action/ops.py:655
+#: action/ops.py:668
 #, python-brace-format
 msgid "An error occurred when sending your notification: {0}"
 msgstr "Virhe lähettäessä ilmoitusta: {0}"
 
-#: action/ops.py:704
+#: action/ops.py:717
 msgid "Unable to find OAuth Information Record"
 msgstr "OAuth Information Record ei löytynyt"
 
-#: action/ops.py:713
+#: action/ops.py:726
 msgid "Incorrect execution due to absence of token"
 msgstr "Virheellinen suoritus, token puuttuu"
 
-#: action/ops.py:761
+#: action/ops.py:774
 msgid "Message successfuly sent"
 msgstr "Viestin lähetys onnistui"
 
-#: action/ops.py:775
+#: action/ops.py:788
 msgid "OAuth token refreshed"
 msgstr "OAuth token virkistetty"
 
-#: action/ops.py:800
+#: action/ops.py:813
 #, python-brace-format
 msgid "Unable to deliver message (code {0})"
 msgstr "Viestin toimittaminen epäonnistui (koodi {0})"
 
-#: action/ops.py:893
+#: action/ops.py:906
 #, python-brace-format
 msgid "Incorrect JSON string in element number {0}"
 msgstr "Virheellinen JSON-string elemenissä numero {0}"
 
-#: action/ops.py:987
+#: action/ops.py:1000
 msgid "Incorrect item filter invocation."
 msgstr "Virheellinen suodattimen kutsu."
 
@@ -518,7 +520,7 @@ msgstr "Sarakedatan luonti epäonnistui"
 msgid "Unable to create condition information"
 msgstr "Ehdon luonti epäonnistui"
 
-#: action/settings.py:34 ontask/settings/base.py:526
+#: action/settings.py:34 ontask/settings/base.py:535
 msgid "OnTask: Action executed"
 msgstr "OnTask: Toiminto suoritettu"
 
@@ -543,12 +545,12 @@ msgstr "Vastaanottajakenttä sähköposti-ilmoituksissa"
 msgid "Action execution"
 msgstr "Toiminnon suoritus"
 
-#: action/templates/action/action_done.html:15
+#: action/templates/action/action_done.html:14
 #: scheduler/templates/scheduler/schedule_done.html:7
 msgid "Action scheduled for execution"
 msgstr "Toiminto on ajastettu suoritettavaksi"
 
-#: action/templates/action/action_done.html:17
+#: action/templates/action/action_done.html:16
 #, python-format
 msgid ""
 "You may check the status in\n"
@@ -557,7 +559,7 @@ msgstr ""
 "Voit tarkistaa tilan\n"
 "         lokitalleenteesta numero %(log_id)s."
 
-#: action/templates/action/action_done.html:21
+#: action/templates/action/action_done.html:20
 #: action/templates/action/action_zip_done.html:15
 #: action/templates/action/export_ask.html:21
 #: action/templates/action/export_done.html:15
@@ -1138,10 +1140,8 @@ msgid "Update condition"
 msgstr "Päivitä ehto"
 
 #: action/templates/action/includes/partial_condition_clone.html:6
-#, fuzzy
-#| msgid "Delete the condition"
 msgid "Clone other conditions"
-msgstr "Poista ehto"
+msgstr "Kopioi muut ehdot"
 
 #: action/templates/action/includes/partial_condition_delete.html:5
 msgid "Confirm condition deletion"
@@ -1303,17 +1303,12 @@ msgid "Actions"
 msgstr "Toiminnot"
 
 #: action/templates/action/index.html:51
-#, fuzzy
-#| msgid ""
-#| "<strong>Next Step:</strong> Click in the <i>New action</i> below to "
-#| "create a new\n"
-#| "      action to execute based on the data stored in the table."
 msgid ""
 "<strong>Next Step:</strong> Click in the <span class=\"fa fa-plus\"></span> "
 "<i>Action</i> below to create a new\n"
 "      action to execute based on the data stored in the table."
 msgstr ""
-"<strong>Seuraava vaihe:</strong> Napsauta alla olevaa <i>Uusi toiminto</i>-"
+"<strong>Seuraava vaihe:</strong> Napsauta alla olevaa <i>Toiminto</i>-"
 "painiketta luodaksesi uuden toiminnon, joka suoritetaan taulukossa olevien "
 "tietojen perusteella."
 
@@ -1469,10 +1464,8 @@ msgid "Personalized Text"
 msgstr "Personoitu teksti"
 
 #: action/views_action.py:566
-#, fuzzy
-#| msgid "Personalized JSON"
 msgid "Personalized JSON Object"
-msgstr "Personoitu JSON"
+msgstr "Personoitu JSON-objekti"
 
 #: action/views_action.py:568 ontask/__init__.py:30
 msgid "Personalized Canvas Email"
@@ -1513,10 +1506,8 @@ msgid "Condition cannot be cloned."
 msgstr "Ehtoa ei voida kopioida."
 
 #: action/views_condition.py:598
-#, fuzzy
-#| msgid "Action successfully cloned."
 msgid "Condition successfully cloned."
-msgstr "Toiminto kopioitu onnistuneesti."
+msgstr "Ehto kopioitu onnistuneesti."
 
 #: action/views_out.py:88
 msgid ""
@@ -1703,25 +1694,24 @@ msgstr "Google Spreadsheet URL CSV-formaatissa"
 
 #: dataops/forms.py:411
 msgid "AWS S3 Bucket access key"
-msgstr ""
+msgstr "AWS S3 Bucket pääsyavain"
 
 #: dataops/forms.py:417
 msgid "AWS S3 Bucket secret access key"
-msgstr ""
+msgstr "AWS S3 Bucket salainen pääsyavain"
 
 #: dataops/forms.py:423
 msgid "AWS S3 Bucket name"
-msgstr ""
+msgstr "AWS S3 Bucket nimi"
 
 #: dataops/forms.py:429
 msgid "AWS S3 Bucket file path"
-msgstr ""
+msgstr "AWS S3 Bucket tiedostopolku"
 
 #: dataops/forms.py:486
-#, fuzzy, python-brace-format
-#| msgid "File could not be processed ({0})"
+#, python-brace-format
 msgid "S3 bucket file could not be processed ({0})"
-msgstr "Tiedostoa ei voitu käsitellä ({0})"
+msgstr "S3 bucket tiedostoa ei voitu käsitellä ({0})"
 
 #: dataops/forms.py:531
 msgid "Password to authenticate the database connection"
@@ -1977,16 +1967,12 @@ msgstr ""
 "olemassaolo"
 
 #: dataops/plugin_manager.py:187
-#, fuzzy
-#| msgid ""
-#| "Presence of a field with name \"input_column_names\" storing a (possible "
-#| "empty) list of strings"
 msgid ""
 "Presence of a field with name \"output_column_names\" storing a (possibly "
 "empty) list of strings"
 msgstr ""
-"\"input_column_names\" -nimisen (mahdollisesti tyhjän) merkkijonolistan "
-"olemassaolo"
+"”output_column_names” -nimisen (mahdollisesti tyhjän) merkkijonolistan "
+"tallentavan sarakkeen olemassaolo"
 
 #: dataops/plugin_manager.py:189
 msgid ""
@@ -2017,10 +2003,8 @@ msgid "Unable to load plugin in folder \"{0}\"."
 msgstr "Liitännäistä ei voida ladata kansioon \"{0}\"."
 
 #: dataops/s3upload.py:50 dataops/s3upload.py:61
-#, fuzzy
-#| msgid "CSV file"
 msgid "S3 CSV file"
-msgstr "CSV-tiedosto"
+msgstr "S3 CSV-tiedosto"
 
 #: dataops/settings.py:31
 msgid "Folder where plugins are stored"
@@ -2140,16 +2124,11 @@ msgid "Plugin Execution"
 msgstr "Liitännäisen suorittaminen"
 
 #: dataops/templates/dataops/plugin_execution_report.html:12
-#, fuzzy
-#| msgid "Action scheduled for execution"
 msgid "Plugin scheduled for execution"
-msgstr "Toiminto on ajastettu suoritettavaksi"
+msgstr "Liitännäinen on ajastettu suoritettavaksi"
 
 #: dataops/templates/dataops/plugin_execution_report.html:14
-#, fuzzy, python-format
-#| msgid ""
-#| "You may check the status in\n"
-#| "      log number %(log_id)s."
+#, python-format
 msgid ""
 "You may check the\n"
 "        status in log number %(log_id)s."
@@ -2322,20 +2301,16 @@ msgid "Upload/Merge"
 msgstr "Lataa/Yhdistä"
 
 #: dataops/templates/dataops/upload1.html:14
-#, fuzzy
-#| msgid "Step 1: Select"
 msgid "Select"
-msgstr "Vaihe 1: Valitse"
+msgstr "Valitse"
 
 #: dataops/templates/dataops/upload_s2.html:7
 msgid "Upload/Merge CSV"
 msgstr "Lataa/Yhdistä CSV"
 
 #: dataops/templates/dataops/upload_s2.html:14
-#, fuzzy
-#| msgid "Step 2: Select Columns"
 msgid "Select Columns"
-msgstr "Vaihe 2: Valitse sarakkeet"
+msgstr "Valitse sarakkeet"
 
 #: dataops/templates/dataops/upload_s2.html:35
 msgid "Load"
@@ -2358,10 +2333,8 @@ msgid "Keep?"
 msgstr "Säilytä?"
 
 #: dataops/templates/dataops/upload_s3.html:14
-#, fuzzy
-#| msgid "Step 3: Select Keys and Merge Option"
 msgid "Select Keys and Merge Option"
-msgstr "Vaihe 3: Valitse avaimet ja yhdistämisvalinnat"
+msgstr "Valitse avaimet ja yhdistämisvalinnat"
 
 #: dataops/templates/dataops/upload_s3.html:21
 msgid ""
@@ -2451,10 +2424,8 @@ msgid "Review Operation"
 msgstr "Tarkista toimenpide"
 
 #: dataops/templates/dataops/upload_s4.html:14
-#, fuzzy
-#| msgid "Step 4: Review and confirm"
 msgid "Review and confirm"
-msgstr "Vaihe 4: Tarkista ja vahvista"
+msgstr "Tarkista ja vahvista"
 
 #: dataops/templates/dataops/upload_s4.html:26
 msgid "Existing Table"
@@ -2469,10 +2440,8 @@ msgid "Data Upload/Merge"
 msgstr "Tietojen lataus/yhdistäminen"
 
 #: dataops/templates/dataops/uploadmerge.html:11
-#, fuzzy
-#| msgid "Select the actions to export:"
 msgid "Select the type of data source"
-msgstr "Valitse vietävät toiminnot:"
+msgstr "Valitse tietolähdetyyppi"
 
 #: dataops/templates/dataops/uploadmerge.html:16
 msgid "Operation"
@@ -2480,7 +2449,7 @@ msgstr "Toimenpide"
 
 #: dataops/templates/dataops/uploadmerge.html:25
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
 #: dataops/templates/dataops/uploadmerge.html:29
 msgid ""
@@ -2513,7 +2482,7 @@ msgstr ""
 
 #: dataops/templates/dataops/uploadmerge.html:43
 msgid "Excel"
-msgstr ""
+msgstr "Excel"
 
 #: dataops/templates/dataops/uploadmerge.html:47
 msgid "Upload data from Excel file."
@@ -2545,10 +2514,8 @@ msgstr ""
 "välille, jotta rivit voidaan sovittaa yhteen."
 
 #: dataops/templates/dataops/uploadmerge.html:64
-#, fuzzy
-#| msgid "Google Sheet URL"
 msgid "Google Sheet"
-msgstr "Google Sheet URL"
+msgstr "Google Sheet"
 
 #: dataops/templates/dataops/uploadmerge.html:68
 msgid "Upload data from a Google Sheet file."
@@ -2582,21 +2549,13 @@ msgstr ""
 
 #: dataops/templates/dataops/uploadmerge.html:85
 msgid "S3 Bucket CSV"
-msgstr ""
+msgstr "S3 Bucket CSV"
 
 #: dataops/templates/dataops/uploadmerge.html:89
-#, fuzzy
-#| msgid "Upload data from a Google Sheet file."
 msgid "Upload data from a CSV file in a S3 Bucket."
-msgstr "Lataa tiedot Google Sheet -tiedostosta."
+msgstr "Lataa tiedot S3 Bucket:ssa olevasta CSV-tiedostosta"
 
 #: dataops/templates/dataops/uploadmerge.html:90
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "            Given the URL pointing to a publicly available Google Sheet "
-#| "upload or merge its content.\n"
-#| "            "
 msgid ""
 "\n"
 "            Given the key, secret, bucket name and file path to a CSV file,\n"
@@ -2604,7 +2563,7 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"Anna julkisesti saatavilla olevan Google Sheet -tiedoston URL-osoite "
+"Anna avain, salaisuus, bucket-nimi ja tiedostopolku CSV-tiedostoon "
 "ladataksesi tai yhdistääksesi sen tietoja."
 
 #: dataops/templates/dataops/uploadmerge.html:106
@@ -2675,15 +2634,11 @@ msgstr ""
 "oltava eroava"
 
 #: dataops/views.py:369
-#, fuzzy
-#| msgid ""
-#| "Unable to schedule actions due to a misconfiguration. Ask your system "
-#| "administrator to enable queueing."
 msgid ""
 "Unable to run plugins due to a misconfiguration. Ask your system "
 "administrator to enable queueing."
 msgstr ""
-"Toimintoja ei voida ajastaa konfiguraatiovirheen vuoksi. Pyydä "
+"Liitännäisiä ei voida suorittaa konfiguraatiovirheen vuoksi. Pyydä "
 "järjestelmänvalvojaa ottamaan käyttöön jonotustoiminto."
 
 #: dataops/views.py:386 ontask/tasks.py:532
@@ -3035,21 +2990,15 @@ msgid "CSV Download"
 msgstr "CSV-lataus"
 
 #: logs/templates/logs/display.html:74
-#, fuzzy
-#| msgid ""
-#| "<strong><super>*</super></strong>The platform records all operations\n"
-#| "      performed on the workflow as <i>Logs</i>. These elements are shown "
-#| "in the table above. You can view its content\n"
-#| "      by clicking on its number."
 msgid ""
 "The platform records all operations\n"
 "      performed on the workflow as <i>Logs</i>. These elements are shown in "
 "the table above. You can view its content\n"
 "      by clicking on its number."
 msgstr ""
-"<super> <strong>*</strong> </super> Alusta tallentaa kaikki työnkulussa "
-"suoritetut toiminnot <i>Lokiin</i>. Nämä elementit on esitetty yllä olevassa "
-"taulukossa. Voit tarkastella sen sisältöä napsauttamalla sen numeroa."
+"Alusta tallentaa kaikki työnkulussa suoritetut toiminnot <i>Lokiin</i>. Nämä "
+"elementit on esitetty yllä olevassa taulukossa. Voit tarkastella sen "
+"sisältöä napsauttamalla sen numeroa."
 
 #: logs/templates/logs/view.html:4
 msgid "Log View"
@@ -3134,78 +3083,68 @@ msgstr "Sallitut sisältötyypit"
 msgid "Maximum size allowed in file uplaods"
 msgstr "Suurin sallittu koko tiedostolatauksissa"
 
-#: ontask/settings/base.py:385
+#: ontask/settings/base.py:390
 msgid "English"
 msgstr "englanti"
 
-#: ontask/settings/base.py:386
+#: ontask/settings/base.py:391
 msgid "Spanish"
 msgstr "espanja"
 
-#: ontask/settings/base.py:387
+#: ontask/settings/base.py:392
 msgid "Chinese"
 msgstr "kiina"
 
-#: ontask/settings/base.py:388
+#: ontask/settings/base.py:393
 msgid "Finnish"
 msgstr "suomi"
 
 #: ontask/tasks.py:497
-#, fuzzy, python-brace-format
-#| msgid "Incorrect execution due to absence of token"
+#, python-brace-format
 msgid "Incorrect execution request with log_id {0}"
-msgstr "Virheellinen suoritus, token puuttuu"
+msgstr "Virheellinen suorituspyyntö, log_id {0}"
 
 #: ontask/tasks.py:507
-#, fuzzy, python-brace-format
-#| msgid "Unable to instantiate plugin \"{0}\""
+#, python-brace-format
 msgid "Unable to find user with id {0}"
-msgstr "Liitännäistä \"{0}\" ei voitu valmistella"
+msgstr "Ei löydetty käyttäjää, jolla id {0}"
 
 #: ontask/tasks.py:516
-#, fuzzy, python-brace-format
-#| msgid "Unable to import workflow (Exception: {0})"
+#, python-brace-format
 msgid "Unable to find workflow with id {0}"
-msgstr "Työnkulkua ei voida tuoda (poikkeus: {0})"
+msgstr "Ei löydetty työnkulkua, jolla id {0}"
 
 #: ontask/tasks.py:525
-#, fuzzy, python-brace-format
-#| msgid "Unable to load plugin in folder \"{0}\"."
+#, python-brace-format
 msgid "Unable to load plugin with id {0}"
-msgstr "Liitännäistä ei voida ladata kansioon \"{0}\"."
+msgstr "Liitännäisen id {0} lataus epäonnistui"
 
 #: ontask/tasks.py:542
 #, python-brace-format
 msgid "Inconsisten inputs when invoking plugin \"{0}\""
-msgstr ""
+msgstr "Epäyhtenäiset syötteet kutsuessa liitännäistä ”{0}”"
 
 #: ontask/tasks.py:578
-#, fuzzy, python-brace-format
-#| msgid "Error while retrieving content for student {0}"
+#, python-brace-format
 msgid "Error while executing plugin: {0}"
-msgstr "Virhe haettaessa sisältöä opiskelijalle {0}"
+msgstr "Virhe suorittaessa liitännäistä: {0}"
 
 #: ontask/tasks.py:585
-#, fuzzy
-#| msgid "Result is not a pandas data frame."
 msgid "Plugin executed but did not return a pandas data frame."
-msgstr "Tulos ei ole pandas data frame."
+msgstr "Suoritettu liitännäinen ei palauttanut pandas data framea"
 
 #: ontask/tasks.py:594
 msgid "Incorrect number of rows in result data frame."
 msgstr "Virheellinen rivien lukumäärä tulostietokehyksessä."
 
 #: ontask/tasks.py:602
-#, fuzzy
-#| msgid "Incorrect number of rows in result data frame."
 msgid "Incorrect columns in result data frame."
-msgstr "Virheellinen rivien lukumäärä tulostietokehyksessä."
+msgstr "Virheellisiä sarakkeita tulos data framessa."
 
 #: ontask/tasks.py:621 ontask/tasks.py:627
-#, fuzzy, python-brace-format
-#| msgid "Error while retrieving content for student {0}"
+#, python-brace-format
 msgid "Error while merging result ({0})."
-msgstr "Virhe haettaessa sisältöä opiskelijalle {0}"
+msgstr "Virhe yhdistäessä tulosta ({0})."
 
 #: ontask/urls.py:30
 msgid ""
@@ -3544,14 +3483,7 @@ msgid "Scheduled Actions"
 msgstr "Ajastetut toiminnot"
 
 #: scheduler/templates/scheduler/index.html:54
-#, fuzzy, python-format
-#| msgid ""
-#| "<strong><super>*</super></strong>The execution of some of\n"
-#| "      the actions can be scheduled for a time in the future. This page "
-#| "shows those planned executions. To schedule the\n"
-#| "      execution of one action, go to the <a href=\"%(actionindex)s"
-#| "\">Actions</a> menu and select the operation <i>Schedule\n"
-#| "      </i> for an action."
+#, python-format
 msgid ""
 "The execution of some of\n"
 "      the actions can be scheduled for a time in the future. This page shows "
@@ -3560,11 +3492,10 @@ msgid ""
 "\">Actions</a> menu and select the operation <i>Schedule\n"
 "      </i> for an action."
 msgstr ""
-"<super> <strong>*</strong> </super> Joidenkin toimontojen suoritus voidaan "
-"ajastaa tulevaisuuteen. Tämä sivu näyttää suunnitellut suoritukset. Jos "
-"haluat ajastaa yhden toimenpiteen suorittamisen, siirry <a href="
-"\"%(actionindex)s\">Toiminnot</a> -valikkoon ja valitse <i>Ajastus</i> "
-"haluamasi toiminnon kohdalla."
+"Joidenkin toimontojen suoritus voidaan ajastaa tulevaisuuteen. Tämä sivu "
+"näyttää suunnitellut suoritukset. Jos haluat ajastaa yhden toimenpiteen "
+"suorittamisen, siirry <a href=\"%(actionindex)s\">Toiminnot</a> -valikkoon "
+"ja valitse <i>Ajastus</i> haluamasi toiminnon kohdalla."
 
 #: scheduler/templates/scheduler/schedule_done.html:4
 msgid "Action scheduled"
@@ -4098,21 +4029,25 @@ msgstr "Pysy kirjautuneena"
 msgid "OnTask Error"
 msgstr "OnTask-virhe"
 
-#: templates/critical_error.html:8
+#: templates/critical_error.html:7
 msgid "Internal Error"
 msgstr "Sisäinen virhe"
 
-#: templates/critical_error.html:11
+#: templates/critical_error.html:10
 msgid "Oops. We have detected an internal error."
 msgstr "Oho. Olemme havainneet sisäisen virheen."
 
-#: templates/critical_error.html:15
+#: templates/critical_error.html:14
+#, fuzzy
+#| msgid ""
+#| "The following message is trying to explain what\n"
+#| "      happened."
 msgid ""
 "The following message is trying to explain what\n"
-"      happened."
+"        happened."
 msgstr "Seuraava viesti yrittää selittää, mitä tapahtui."
 
-#: templates/critical_error.html:22
+#: templates/critical_error.html:21
 msgid "Referrer:"
 msgstr "Viittaaja:"
 
@@ -4666,13 +4601,6 @@ msgid "Attribute"
 msgstr "Ominaisuus"
 
 #: workflow/templates/workflow/includes/attributes.html:15
-#, fuzzy
-#| msgid ""
-#| "Attributes are pairs <code>(name, value)</code>.\n"
-#| "      Define a pair\n"
-#| "      when you need to use a value in various places and that value may "
-#| "change over\n"
-#| "      time."
 msgid ""
 "Attributes are pairs <code>(name, value)</code>.\n"
 "    Define a pair\n"
@@ -4680,7 +4608,7 @@ msgid ""
 "over\n"
 "    time."
 msgstr ""
-"Attribuutit ovat pareja <code>(nimi, arvo)</code>.\n"
+"Attribuutit ovat pareja <code>(name, value)</code>.\n"
 "Määritä pari,\n"
 "kun tarvitset tiettyä arvoa useissa paikoissa ja arvo saattaa muuttua ajan "
 "myötä."
@@ -4932,10 +4860,8 @@ msgstr ""
 
 #: workflow/templates/workflow/includes/partial_workflow_delete.html:13
 #: workflow/templates/workflow/includes/partial_workflow_flush.html:13
-#, fuzzy
-#| msgid "Users with access to this workflow"
 msgid "Type the name of the workflow:"
-msgstr "Käyttäjät, joilla on pääsy tähän työnkulkuun"
+msgstr "Syötä työnkulun nimi:"
 
 #: workflow/templates/workflow/includes/partial_workflow_delete.html:19
 msgid "Delete workflow"
@@ -4968,11 +4894,6 @@ msgid "Users with access to this workflow"
 msgstr "Käyttäjät, joilla on pääsy tähän työnkulkuun"
 
 #: workflow/templates/workflow/includes/share.html:5
-#, fuzzy
-#| msgid ""
-#| "Click in the <i>Add User</i> button below and provide the email for the "
-#| "user\n"
-#| "      with whom you want to share the workflow."
 msgid ""
 "Click in the <i>Add User</i> button below and provide the email for the "
 "user\n"
@@ -4982,10 +4903,6 @@ msgstr ""
 "sähköpostiosoite, jolle haluat jakaa työnkulun."
 
 #: workflow/templates/workflow/includes/share.html:20
-#, fuzzy
-#| msgid ""
-#| "You may select users by their email\n"
-#| "    so that they can access this workflow."
 msgid ""
 "You may select users by their email\n"
 "  so that they can access this workflow."
@@ -5177,6 +5094,69 @@ msgstr "Työnkulkua ei voi kopioida"
 #: workflow/views.py:593
 msgid "Workflow successfully cloned."
 msgstr "Työnkulku kopioitiin onnistuneesti."
+
+#~ msgid ""
+#~ "Learners are more likely to have an effective\n"
+#~ "        experience\n"
+#~ "        when their environment is personalised. Resources, comments,\n"
+#~ "        suggestions and feedback that take into account the reality of "
+#~ "each\n"
+#~ "        learner are much more effective than those addressing an entire\n"
+#~ "        cohort. But personalisation has traditionally been based on "
+#~ "highly\n"
+#~ "        detailed pre-conceived models of learner behaviour. OnTask offers "
+#~ "an\n"
+#~ "        environment to personalise resources based on data collected from "
+#~ "any\n"
+#~ "        learning environment."
+#~ msgstr ""
+#~ "Oppijoiden kokemukset ovat mielekkäämpiä,\n"
+#~ "kun oppimisympäristö on personoitu. Resurssit, kommentit,\n"
+#~ "ehdotukset ja palaute ovat huomattavasti vaikuttavampia,\n"
+#~ "jos oppijan oma todellisuus otetaan huomioon sen sijaan\n"
+#~ "että koko ryhmälle tarjottaisiin samanlaista sisältöä.\n"
+#~ "Personointi on perinteisesti vaatinut pitkälle erikoistuneita,\n"
+#~ "ennalta rakennettuja malleja oppijoiden käyttäytymisestä.\n"
+#~ "OnTask tarjoaa ympäristön, jossa resursseja voidaan personoida\n"
+#~ "mistä tahansa oppimisympäristöstä kerätyn datan avulla."
+
+#~ msgid ""
+#~ "Feedback is more effective when framed as a\n"
+#~ "        dialogue. But such\n"
+#~ "        dialogue will be highly dependent on the personal situation of "
+#~ "each\n"
+#~ "        learner. How can we combine knowledge about the learners with "
+#~ "the\n"
+#~ "        need to have personalised interaction? OnTask will help "
+#~ "instructors\n"
+#~ "        and learners to initiate this dialogue."
+#~ msgstr ""
+#~ "Palaute on tehokkainta dialogin muodossa.\n"
+#~ "Mutta dialogisuus riippuu suuresti kunkin oppijan\n"
+#~ "henkilökohtaisesta tilanteesta. Kuinka voisimme yhdistää\n"
+#~ "tiedot oppijasta ja henkilökohtaisen vuorovaikutuksen?\n"
+#~ "OnTask auttaa opettajia ja oppijoita dialogin käynnistämisessä."
+
+#~ msgid ""
+#~ "In the era of technology-mediated learning, data is\n"
+#~ "        ubiquitous. But instead of providing instantaneous benefits,\n"
+#~ "        this abundance brings a serious challenge to tranform data into\n"
+#~ "      actionable knowledge. It is not enough to have data, it is "
+#~ "essential\n"
+#~ "        to use data to support a clearly identified objective in the\n"
+#~ "        learning environment. How can this support be articulated?\n"
+#~ "        How can it be used in multiple environments? OnTask\n"
+#~ "      establishes this connection between data and its use to provide a\n"
+#~ "        scalable solution to learning personalisation."
+#~ msgstr ""
+#~ "Teknologiavälitteisen oppimisen aikakaudella dataa on kaikkialla.\n"
+#~ "Mutta välittömien etujen sijaan datan runsaudesta seuraa haaste:\n"
+#~ "kuinka dataa saataisiin muutettua käytännössä hyödylliseksi tiedoksi?\n"
+#~ "Pelkkä datan omistaminen ei riitä, vaan dataa tulee käyttää niin, että\n"
+#~ "se auttaa määritettyjen tavoitteiden saavuttamista. Mitä tämä tarkoittaa\n"
+#~ "Käytännössä erilaisissa ympäristöissä? OnTask luo yhteyden datan ja\n"
+#~ "Datan käytön välille ja tarjoaa skaalautuvan ratkaisun oppimisen "
+#~ "personointiin."
 
 #~ msgid "Edit Personalized Canvas Email"
 #~ msgstr "Muokkaa personoitua Canvas-sähköpostiviestiä"
@@ -5582,69 +5562,3 @@ msgstr "Työnkulku kopioitiin onnistuneesti."
 
 #~ msgid "Facilitating conversations at scale"
 #~ msgstr "Facilitando conversaciones a escala"
-
-#~ msgid ""
-#~ "Learners are more likely to have an effective\n"
-#~ "          experience\n"
-#~ "          when their environment is personalised. Resources, comments,\n"
-#~ "          suggestions and feedback that take into account the reality of "
-#~ "each\n"
-#~ "          learner are much more effective than those addressing an "
-#~ "entire\n"
-#~ "          cohort. But personalisation has traditionally been based on "
-#~ "highly\n"
-#~ "          detailed pre-conceived models of learner behaviour. OnTask "
-#~ "offers an\n"
-#~ "          environment to personalise resources based on data collected "
-#~ "from any\n"
-#~ "          learning environment."
-#~ msgstr ""
-#~ "La experiencia de aprendizaje de un estudiante es más efectiva cuando el "
-#~ "entorno está personalizado. Recursos, comentarios, sugeréncias o "
-#~ "realimentación que tiene en cuenta la realidad de cada estudiante son más "
-#~ "efectivos que aquellos que van dirigidos a un grupo en general. Pero "
-#~ "hasta ahora la personalización se ha implementado mediante modelos muy "
-#~ "detallados del comportamiento del estudiante. OnTask ofrece un entorno "
-#~ "para personalizar recursos basado en los datos que se obtienen de "
-#~ "cualquier entorno de aprendizaje."
-
-#~ msgid ""
-#~ "Feedback is more effective when framed as a\n"
-#~ "          dialogue. But such\n"
-#~ "          dialogue will be highly dependent on the personal situation of "
-#~ "each\n"
-#~ "          learner. How can we combine knowledge about the learners with "
-#~ "the\n"
-#~ "          need to have personalised interaction? OnTask will help "
-#~ "instructors\n"
-#~ "          and learners to initiate this dialogue."
-#~ msgstr ""
-#~ "La realimentación es más efectiva cuando se enmarca como un diálogo. Pero "
-#~ "ese diálogo depende de la situación personal de cada estudiante. ¿Cómo "
-#~ "podemos  combinar el conocimiento del estudiante con la necesidad de una "
-#~ "interacción  personalizada? OnTask ayuda a los profesores y estudiantes a "
-#~ "comenzar este diálogo."
-
-#~ msgid ""
-#~ "In the era of technology-mediated learning, data is\n"
-#~ "          ubiquitous. But instead of providing instantaneous benefits,\n"
-#~ "          this abundance brings a serious challenge to tranform data "
-#~ "into\n"
-#~ "        actionable knowledge. It is not enough to have data, it is "
-#~ "essential\n"
-#~ "          to use data to support a clearly identified objective in the\n"
-#~ "          learning environment. How can this support be articulated?\n"
-#~ "          How can it be used in multiple environments? OnTask\n"
-#~ "        establishes this connection between data and its use to provide "
-#~ "a\n"
-#~ "          scalable solution to learning personalisation."
-#~ msgstr ""
-#~ "En la era del aprendizaje mediado por tecnología, los datos son "
-#~ "omnipresentes. Pero en lugar de ofrecer beneficios instantáneos, esta "
-#~ "abundancia plantea el reto importante de transformar datos en "
-#~ "conocimiento útil. No es suficiente  tener datos, es esencial utilizar "
-#~ "estos datos para apoyar alguno de los  objetivos del entorno de "
-#~ "aprendizaje. ¿Cómo podemos articular este apoyo?  ¿Cómo podemos "
-#~ "utilizarlo en múltiples entornos? OnTask establece una esta  conexión "
-#~ "entre datos y su uso para ofrecer una solución escalable al  aprendizaje "
-#~ "personalizado."
