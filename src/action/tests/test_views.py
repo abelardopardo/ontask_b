@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function
 import os
 
 from django.conf import settings
+from django.core.mail import outbox
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait, Select
@@ -330,6 +331,9 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
                 'You may check the status in log number'
             )
         )
+
+        # Check that the email has been properly stored
+        assert len(outbox) == 3
 
         # Go to the table page
         self.go_to_table()
