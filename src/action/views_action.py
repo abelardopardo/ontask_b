@@ -96,7 +96,7 @@ class ActionTable(tables.Table):
     def render_name(self, record):
         result = """<a href="{0}" data-toggle="tooltip" title="{1}">{2}</a>"""
         danger_txt = ''
-        if record.get_rows_all_false() and len(record.get_rows_all_false()):
+        if record.get_row_all_false_count():
             danger_txt = \
                 ugettext('Some users have all conditions equal to FALSE')
         if not record.is_executable:
