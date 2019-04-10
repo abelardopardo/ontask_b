@@ -31,13 +31,13 @@ bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6
 # Datatables
 #
 datatables_bootstrap_css = \
-    """<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/v/bs4/dt-1.10.19/cr-1.5.0/r-2.2.2/fc-3.2.5/rr-1.2.4/sc-1.5.0/datatables.min.css"/>"""
+    """<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/r-2.2.2/fc-3.2.5/rr-1.2.4/sc-1.5.0/datatables.min.css"/>"""
 
 datatables_jquery_js = \
-    """<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>"""
+    """<script src="//cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>"""
 
 datatables_bootstrap_js = \
-    """<script type="text/javascript" src="//cdn.datatables.net/v/bs4/dt-1.10.19/cr-1.5.0/r-2.2.2/fc-3.2.5/rr-1.2.4/sc-1.5.0/datatables.min.js"></script>"""
+    """<script type="text/javascript" src="//cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/r-2.2.2/fc-3.2.5/rr-1.2.4/sc-1.5.0/datatables.min.js"></script>"""
 
 #
 # Datetimepicker:
