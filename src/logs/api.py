@@ -2,9 +2,8 @@
 
 
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 
-from ontask.permissions import IsOwner, UserIsInstructor
+from ontask.permissions import UserIsInstructor
 from .models import Log
 from .serializers import LogSerializer
 

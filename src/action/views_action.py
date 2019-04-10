@@ -613,9 +613,7 @@ def edit_action_out(request, workflow, action):
     filter_condition = action.get_filter()
 
     # Conditions to show in the page.
-    conditions = Condition.objects.filter(
-        action=action, is_filter=False
-    ).order_by('created')
+    conditions = action.conditions.filter(is_filter=False).order_by('created')
 
     # Context to render the form
     context = {'filter_condition': filter_condition,
