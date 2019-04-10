@@ -272,12 +272,12 @@ The variables suitable to be included in the configuration file are:
   Default: ``False``
 
 ``REDIS_URL``
-  List of URLs to access the cache service for OnTask. If there are several of these services, they can be specified as a comma-separated list such as ``'rediscache://master:6379,slave1:6379,slave2:6379/1'`` (see `Django Environ <https://github.com/joke2k/django-environ>`_
+  List of URLs to access the cache service for OnTask. If there are several of these services, they can be specified as a comma-separated list such as ``'rediscache://master:6379,slave1:6379,slave2:6379/1'`` (see `Django Environ <https://github.com/joke2k/django-environ>`_)
 
   Default: ``rediscache:://localhost:6379??client_class=django_redis.client.DefaultClient&timeout=1000&key_prefix=ontask``
 
 ``SHOW_HOME_FOOTER_IMAGE``
-  Boolean to control the appearance of a footer image in the home page. If true, the file ``project_consortium.gif`` is shown from the media folder.
+  Boolean to control the appearance of a footer image in the home page. If true, the file ``footer_image.gif`` is shown from the media folder.
 
   Default: ``False``
 
@@ -290,6 +290,7 @@ There are additional variables to configure :ref:`Email <email_config>` and :ref
 
 Here is an example of a minimalistic configuration file (note there is no space between variable names and the equal signs)::
 
+   ALLOWED_HOSTS=HOSTNAME1,HOSTNAME2
    BASE_URL=''
    # syntax: DATABASE_URL=postgres://username:password@127.0.0.1:5432/database
    DATABASE_URL=postgres://[PSQLUSERNAME]:[PSQLPWD]@127.0.0.1:5432/ontask
@@ -301,11 +302,9 @@ Here is an example of a minimalistic configuration file (note there is no space 
    USE_SSL=True
    SECRET_KEY=[SEE BELOW]
 
-#. Replace ``[YOUR LOCAL PYTHON TIME ZONE]`` with the description of your time zone (see the definition of the variable ``TIME_ZONE`` in :ref:`configuration_environment`.
+1. Replace ``HOSTNAME1``, ``HOSTNAME2`` with a comma-separated list of hostnames of the platform hosting the tool.
 
 #. If OnTask is going to be served from a location different from the root of your server (for example ``myhost.com/ontask``, then modify the value of the variable ``BASE_URL`` with the suffix that should follow the domain name (in the example, ``/ontask``).
-
-#. Modify the line starting with ``DOMAIN_NAME=`` and change the field ``[YOUR DOMAIN NAME``] with the domain name of the machine hosting OnTask.
 
 #. Modify the line starting with ``DATABASE_URL=`` and change the
    field ``[PSQLUSERNAME]`` with the name of the Postgresql user created in the
@@ -314,9 +313,13 @@ Here is an example of a minimalistic configuration file (note there is no space 
    the last part of the line accordingly (replace *ontask* by the name of
    your database).
 
+#. Modify the line starting with ``DOMAIN_NAME=`` and change the field ``[YOUR DOMAIN NAME``] with the domain name of the machine hosting OnTask.
+
 #. Replace the string ``[YOUR REDIS URL]`` with the URL where Redis can be
    accessed. This is typically something similar to
    ``redis://127.0.0.1:6379/1``.
+
+#. Replace ``[YOUR LOCAL PYTHON TIME ZONE]`` with the description of your time zone (see the definition of the variable ``TIME_ZONE`` in :ref:`configuration_environment`.
 
 #. Open a command interpreter and execute the following python command::
 
@@ -333,7 +336,7 @@ Here is an example of a minimalistic configuration file (note there is no space 
 Configuration script
 --------------------
 
-The additional configuration variables are directly in the modules ``base.py``, ``development.py`` and ``production.py`` in the folder ``src/ontask/settings``. Modify the python code to perform additional configuration considering:
+The are some additional configuration variables that directly defined in the modules ``base.py``, ``development.py`` and ``production.py`` in the folder ``src/ontask/settings``. Modify the python code to perform additional configuration considering:
 
 1) The script ``base.py`` is always executed first
 
@@ -516,7 +519,7 @@ If you have OnTask already configured and running, here are the steps to
 follow to upgrade to a new version. If you are upgrading from a version below
 2.8 to 2.8 or higher read :ref:`scheduling_tasks`.
 
-If you are upgrading from a version below 4.0, make sure that:
+If you are upgrading from a version below 4.0 to version 4.2 make sure that:
 
 - Versions 2.7 and 3 of Python are properly installed.
 
@@ -543,7 +546,7 @@ After verifying the previous requirements, proceed with the following steps.
 
 - Refresh the list of requirements::
 
-    pip install -r requirements/production.txt
+    pip3 install -r requirements/production.txt
 
 - Go to the sub-folder containing the tool documentation::
 
@@ -559,15 +562,15 @@ After verifying the previous requirements, proceed with the following steps.
 
 - Collect all files to be served statically::
 
-    python manage.py collectstatic
+    python3 manage.py collectstatic
 
 - Apply the migrations to the database::
 
-    python manage.py migrate
+    python3 manage.py migrate
 
 - Check that the configuration is ready to run::
 
-    python manage.py check --deploy
+    python3 manage.py check --deploy
 
 - Restart the ``supervisord`` configuration::
 

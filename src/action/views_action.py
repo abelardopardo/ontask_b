@@ -76,8 +76,8 @@ class ActionTable(tables.Table):
     #
     #  Action type               |  Email  |  ZIP |  URL  |  RUN  |
     #  ------------------------------------------------------------
-    #  Personalized text         |    X    |   X  |   X   |       |
-    #  Personalized canvas email |    X    |      |       |       |
+    #  Personalized text         |    X    |   X  |   X   |   X   |
+    #  Personalized canvas email |    X    |      |       |   X   |
     #  Personalized JSON         |         |      |   ?   |   X   |
     #  Survey                    |         |      |   X   |   X   |
     #  Todo List                 |         |      |   X   |   X   |
