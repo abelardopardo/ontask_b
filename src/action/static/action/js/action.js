@@ -252,6 +252,7 @@ $(function () {
   $("#zip-action-request-data").on("click", ".js-action-preview", loadForm);
   $("#json-action-request-data").on("click", ".js-action-preview", loadForm);
   $("#action-in-editor").on("click", ".js-action-preview", loadForm);
+  $("#email-schedule-send").on("click", ".js-action-preview", loadForm);
   $(".modal-content").on("click", ".js-action-preview-nxt", loadForm);
   $(".modal-content").on("click", ".js-action-preview-prv", loadForm);
 
