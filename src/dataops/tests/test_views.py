@@ -998,3 +998,33 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # End of session
         self.logout()
+
+class DataopsEmptyKeyAfterMerge(DataopsMerge):
+    wf_name = 'Test Empty Key after Merge'
+    fixtures = ['test_empty_key_after_merge']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'dataops',
+        'fixtures',
+        'test_empty_key_after_merge.sql'
+    )
+    merge_file = os.path.join(
+        settings.BASE_DIR(),
+        'dataops',
+        'fixtures',
+        'test_empty_key_after_merge.csv'
+    )
+
+    def test_merge(self):
+        self.template_merge('outer', rename=False)
+
+        # Assert the presence of the error in the page
+        self.assertIn('Merge operation failed.', self.selenium.page_source)
+
+        # Assert additional properties
+        wflow = Workflow.objects.get(name=self.wf_name)
+        self.assertTrue(wflow.columns.get(name='key1').is_key,
+                        'Column key1 has lost is key property')
+        self.assertTrue(wflow.columns.get(name='key2').is_key,
+                        'Column key2 has lost is key property')
+        self.logout()

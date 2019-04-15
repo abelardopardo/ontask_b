@@ -429,6 +429,18 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
                 'New values in column {0} are not in categories {1}'
             ).format(col.name, ', '.join(col.categories))
 
+        # Condition 3: If the column is marked as a key column, it should
+        # maintain that property.
+        if col.is_key:
+            if not is_unique_column(new_df[col.name]):
+                return gettext(
+                    'Column {0} looses its "key" property through this merge. '
+                    'Either remove this property from the column or remove the '
+                    'rows that cause this problem in the new dataset'.format(
+                        col.name
+                    )
+                )
+
     # Store the result back in the DB
     store_dataframe(new_df, workflow)
 

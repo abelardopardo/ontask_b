@@ -416,8 +416,7 @@ def upload_s4(request):
                                   'column_unique': col_info[2],
                                   'error_msg': status})
 
-            messages.error(request,
-                           _('Merge operation failed.') + ' (' + status + ')'),
+            messages.error(request, _('Merge operation failed. ') + status),
             return redirect(reverse('table:display'))
 
         # Log the event
