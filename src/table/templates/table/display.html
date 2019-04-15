@@ -179,7 +179,8 @@
           </tr>
         </thead>
       </table>
-      <p class="text-center">{% trans 'You may drag-and-drop a column header to change its position in the table' %}</p>
+      {% include 'table/includes/partial_type_legend.html' %}
+      <p class="text-center">{% trans 'You may drag and drop a column header to change its position in the table' %}</p>
     {% endif %}
   </div>
   {% include 'modal.html' %}

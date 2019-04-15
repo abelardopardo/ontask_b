@@ -22,21 +22,21 @@
       if (document.getElementById("column-table") != null) {
         $(document).ready(function() {
           var column_table = $('#column-table').DataTable({
-            "autoWidth": false,
-            "language": {
-              "url": location.protocol + getLanguage()
+            autoWidth: false,
+            language: {
+              url: location.protocol + getLanguage()
             },
-            "stateSave": true,
+            stateSave: true,
             stateSaveParams: function (settings, data) {
               delete data.search;
             },
-            "processing": true,
-            "serverSide": true,
-            "ajax": {
+            processing: true,
+            serverSide: true,
+            ajax: {
               url: "{% url 'workflow:column_ss' %}",
               type: 'POST',
             },
-            "columns": [
+            columns: [
               {"data": "number", "class": "dt-center"},
               {"data": "name", "class": "dt-center"},
               {"data": "description"},
@@ -44,15 +44,18 @@
               {"data": "key", "class": "dt-center"},
               {"data": "operations", "class": "dt-center"},
             ],
-            "columnDefs": [
+            columnDefs: [
               {"orderable": false, "targets": 5},
               {"searchable": false, "targets": "operations"},
             ],
-            "drawCallback": function(settings) {
+            drawCallback: function(settings) {
               $('[data-toggle="tooltip"]').tooltip({ trigger: "hover"});
             },
             colReorder: false,
             rowReorder: { dataSrc: 'name' },
+            createdRow: function( row, data, dataIndex){
+              $(row).addClass('column-type-' + data['type_name']);
+            }
           });
           // Process the column reorder events
           column_table.on("row-reordered", row_reordered);
@@ -91,6 +94,7 @@
           </thead>
         </table>
       </div>
+      {% include 'table/includes/partial_type_legend.html' %}
       <p class="text-center">{% blocktrans %}You may drag and drop the columns from the left-most cell to change their position in the workflow.{% endblocktrans %}</p>
     {% endif %}
   </div>

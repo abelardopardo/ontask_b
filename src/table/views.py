@@ -159,7 +159,9 @@ def render_table_display_page(request, workflow, view, columns, ajax_url):
         context['columns'] = columns
         context['columns_datatables'] = \
             [{'data': 'Operations'}] + \
-            [{'data': c.name.replace('.', '\\.')} for c in columns]
+            [{'data': c.name.replace('.', '\\.'),
+              'className': 'dt-center column-type-' + c.data_type}
+             for c in columns]
     else:
         context['columns'] = None
         context['columns_datatables'] = []

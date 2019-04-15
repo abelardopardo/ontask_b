@@ -499,6 +499,7 @@ def column_ss(request):
             ),
             'description': col.description_text,
             'type': format_html(col_data_type_str),
+            'type_name': col.data_type,
             'key': '<span class="true">✔</span>' if col.is_key else '',
             'operations': ops_string
         })
