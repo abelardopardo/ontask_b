@@ -116,26 +116,7 @@ class ActionTable(tables.Table):
                            record.name)
 
     def render_action_type(self, record):
-        icon = 'file-text'
-        title = 'Personalized text'
-        if record.action_type == Action.PERSONALIZED_TEXT:
-            icon = 'file-text'
-            title = 'Personalized text'
-        elif record.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
-            icon = 'envelope-square'
-            title = 'Personalized Canvas Email'
-        elif record.action_type == Action.PERSONALIZED_JSON:
-            icon = 'code'
-            title = 'Personalized JSON'
-        elif record.action_type == Action.SURVEY:
-            icon = 'question-circle-o'
-            title = 'Survey'
-        return format_html(
-            """<div data-toggle="tooltip" title="{0}">
-                 <span class="fa fa-{1}"></span></div>""",
-            title,
-            icon
-        )
+        return record.action_type
 
     def render_last_executed_log(self, record):
         log_item = record.last_executed_log
