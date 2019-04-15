@@ -29,6 +29,7 @@
     if (document.getElementById("column-selected-table") != null) {
       $(document).ready(function() {
         $('#column-selected-table').DataTable({
+          "autoWidth": false,
           "search": {
             "caseInsensitive": true,
           },

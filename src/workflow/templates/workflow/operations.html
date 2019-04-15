@@ -18,6 +18,7 @@
     if (document.getElementById("attribute-table") != null) {
       $(document).ready(function() {
         var attribute_table = $('#attribute-table').DataTable({
+          "autoWidth": false,
           "search": {
             "caseInsensitive": true,
           },
