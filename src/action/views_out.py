@@ -112,8 +112,7 @@ def run_email_action(request, workflow, action):
                       {'action': action,
                        'num_msgs': num_msgs,
                        'form': form,
-                       'valuerange': range(2),
-                       'rows_all_false': action.get_row_all_false_count()})
+                       'valuerange': range(2)})
 
     # Request is a POST and is valid
 

@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import str
-from past.utils import old_div
-from builtins import object
 import datetime
+from builtins import object
 
 import django_tables2 as tables
 import pytz
@@ -18,18 +16,19 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse
 from django.template.loader import render_to_string
-from django.utils.html import format_html, escape
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django_tables2 import A
+from past.utils import old_div
 
 from action.models import Action
 from action.views_out import action_session_dictionary
-from .forms import EmailScheduleForm, JSONScheduleForm, CanvasEmailScheduleForm
 from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from scheduler.models import ScheduledAction
 from workflow.ops import get_workflow
+from .forms import EmailScheduleForm, JSONScheduleForm, CanvasEmailScheduleForm
 
 
 class ScheduleActionTable(tables.Table):

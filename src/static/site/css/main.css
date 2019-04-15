@@ -315,8 +315,9 @@ table td,
 }
 
 /* Wflow name */
-#wflow-name.alert {
+#wflow-name {
     padding: 0ex;
+    background: #b9dbff;
 }
 
 mark {
