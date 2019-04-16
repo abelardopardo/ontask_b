@@ -277,11 +277,11 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
 
         # Verify that everything appears normally
         self.assertIn(escape(symbols), self.selenium.page_source)
-        self.assertIn('<td class=" dt-center">12</td>',
+        self.assertIn('<td class=" dt-center column-type-double">12</td>',
                       self.selenium.page_source)
-        self.assertIn('<td class=" dt-center">12.1</td>',
+        self.assertIn('<td class=" dt-center column-type-double">12.1</td>',
                       self.selenium.page_source)
-        self.assertIn('<td class=" dt-center">13.2</td>',
+        self.assertIn('<td class=" dt-center column-type-double">13.2</td>',
                       self.selenium.page_source)
 
         # Go to the actions page
@@ -360,11 +360,11 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.go_to_table()
 
         # Assert the new values
-        self.assertIn('<td class=" dt-center">14</td>',
+        self.assertIn('<td class=" dt-center column-type-double">14</td>',
                       self.selenium.page_source)
-        self.assertIn('<td class=" dt-center">15</td>',
+        self.assertIn('<td class=" dt-center column-type-double">15</td>',
                       self.selenium.page_source)
-        self.assertIn('<td class=" dt-center">16</td>',
+        self.assertIn('<td class=" dt-center column-type-double">16</td>',
                       self.selenium.page_source)
 
         assert pandas_db.check_wf_df(Workflow.objects.get(name='sss'))
@@ -956,14 +956,13 @@ class DataopsMerge(test.OnTaskLiveTestCase):
         self.logout()
 
     def test_04_merge_right(self):
-        self.template_merge('right')
+        self.template_merge('right', rename=False)
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
         df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
-        self.assertTrue('key2' in set(df.columns))
         self.assertTrue('text3' in set(df.columns))
         self.assertTrue('double3' in set(df.columns))
         self.assertTrue('bool3' in set(df.columns))
