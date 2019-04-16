@@ -393,6 +393,10 @@ def workflow_restrict_column(column):
     column.set_categories(list(cat_values))
     column.save()
 
+    # Re-evaluate the operands in the workflow
+    column.workflow.set_query_builder_ops()
+    column.workflow.save()
+
     # Correct execution
     return None
 
