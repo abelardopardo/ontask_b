@@ -407,33 +407,34 @@ def edit_description(request, pk):
     form = ActionDescriptionForm(request.POST or None,
                                  instance=action)
 
-    # Process the POST
-    if request.method == 'POST' and form.is_valid():
-        # Save item in the DB
-        action.save()
+    if request.method == 'GET' or not form.is_valid():
+        data['html_form'] = render_to_string(
+            'action/includes/partial_action_edit_description.html',
+            {'form': form, 'action': action},
+            request=request)
 
-        # Log the event
-        Log.objects.register(request.user,
-                             Log.ACTION_UPDATE,
-                             action.workflow,
-                             {'id': action.id,
-                              'name': action.name,
-                              'workflow_id': workflow.id,
-                              'workflow_name': workflow.name})
-
-        # Request is correct
-        data['form_is_valid'] = True
-        data['html_redirect'] = ''
-
-        # Enough said. Respond.
         return JsonResponse(data)
 
-    data['html_form'] = render_to_string(
-        'action/includes/partial_action_edit_description.html',
-        {'form': form, 'action': action},
-        request=request)
+    # Process the POST
+    # Save item in the DB
+    action.save()
 
+    # Log the event
+    Log.objects.register(request.user,
+                         Log.ACTION_UPDATE,
+                         action.workflow,
+                         {'id': action.id,
+                          'name': action.name,
+                          'workflow_id': workflow.id,
+                          'workflow_name': workflow.name})
+
+    # Request is correct
+    data['form_is_valid'] = True
+    data['html_redirect'] = ''
+
+    # Enough said. Respond.
     return JsonResponse(data)
+
 
 
 @user_passes_test(is_instructor)
