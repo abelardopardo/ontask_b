@@ -8,15 +8,9 @@ from rest_framework import serializers
 
 from dataops import pandas_db, ops
 from dataops.formula_evaluation import get_variables
-from workflow.column_serializers import ColumnSerializer
+from workflow.column_serializers import ColumnSerializer, ColumnNameSerializer
 from workflow.models import Column
 from .models import Condition, Action, ActionColumnConditionTuple
-
-
-class ColumnNameSerializer(serializers.ModelSerializer):
-    class Meta(object):
-        model = Column
-        fields = ('name',)
 
 
 class ConditionSerializer(serializers.ModelSerializer):
@@ -90,60 +84,25 @@ class ConditionNameSerializer(serializers.ModelSerializer):
 class ColumnConditionNameSerializer(serializers.ModelSerializer):
     column = ColumnNameSerializer(required=True, many=False)
 
-    condition = ConditionNameSerializer(required=False, many=False)
+    condition = ConditionNameSerializer(required=False,
+                                        allow_null=True,
+                                        many=False)
 
     def create(self, validated_data, **kwargs):
         action = self.context['action']
-        tuples = []
-        if validated_data.get('columns'):
-            #
-            # Load the columns pointing to the action (if any)
-            # This is here for backward compatibility
-            #
-            columns = ColumnNameSerializer(
-                data=validated_data.get('columns'),
-                many=True,
-                required=False
-            )
-            if columns.is_valid():
-                tuples = []
-                for citem in columns.data:
-                    tuples.append(
-                        {'column': {'name': citem['name']},
-                         'condition': None}
-                    )
-            else:
-                raise Exception(_('Invalid column data'))
-        else:
-            #
-            # Load the column_condition_tuples if they exist
-            #
-            column_condition_tuple_data = validated_data.get(
-                'column_condition_tuples'
-            )
-            if column_condition_tuple_data:
-                tuples = ColumnConditionNameSerializer(
-                    data=column_condition_tuple_data,
-                    many=True,
-                    required=False
-                )
-            if not tuples.is_valid():
-                raise Exception(_('Invalid column data'))
 
-        for item in tuples:
-            condition_obj = None
-            if item['condition']:
-                condition_obj = action.conditions.get(
-                    name=item['condition']['name']
-                )
-            __, __ = \
-                ActionColumnConditionTuple.objects.get_or_create(
-                    action=action,
-                    column=action.wokflow.columns.get(
-                        name=item['column']['name']
-                    ),
-                    condition=condition_obj
-                )
+        condition_obj = None
+        if validated_data.get('condition', {}):
+            condition_obj = action.conditions.get(
+                name=validated_data['condition']['name']
+            )
+        ActionColumnConditionTuple.objects.get_or_create(
+            action=action,
+            column=action.workflow.columns.get(
+                name=validated_data['column']['name']
+            ),
+            condition=condition_obj
+        )
 
     class Meta(object):
         model = ActionColumnConditionTuple
@@ -163,30 +122,44 @@ class ActionSerializer(serializers.ModelSerializer):
     columns = ColumnNameSerializer(required=False, many=True)
 
     # Include the related ActionColumnConditionTuple objects
-    column_condition_tuples = serializers.SerializerMethodField()
-
+    column_condition_pair = ColumnConditionNameSerializer(many=True,
+                                                          required=False)
     # Needed for backward compatibility
     is_out = serializers.BooleanField(required=False, initial=True)
 
-    def get_column_condition_tuples(self, action):
-        """
-        Method to filter the relevant column, condition pairs and serialize its
-        content.
-        :param action: Action object being considered
-        :return: Serialized data
-        """
-
-        # Get the query
-        query_set = ActionColumnConditionTuple.objects.filter(action=action)
-
-        # Serialize the objects
-        serializer = ColumnConditionNameSerializer(
-            instance=query_set,
+    def create_column_condition_pairs(self, validated_data, action_obj):
+        # Load the columns pointing to the action (if any) LEGACY FIELD!!
+        columns = ColumnNameSerializer(
+            data=validated_data.get('columns', []),
             many=True,
-            required=True
+            required=False,
+        )
+        if columns.is_valid():
+            # Legacy field "columns". Iterate over the names and create
+            # the triplets.
+            for citem in columns.data:
+                __, __ = \
+                    ActionColumnConditionTuple.objects.get_or_create(
+                        action=action_obj,
+                        column=Column.objects.get(
+                            workflow=action_obj.workflow,
+                            name=citem['name']),
+                        condition=None
+                    )
+        else:
+            raise Exception(_('Invalid column data'))
+
+        # Parse the column_condition_pair
+        column_condition_pairs = ColumnConditionNameSerializer(
+            data=validated_data.get('column_condition_pair', []),
+            many=True,
+            context={'action': action_obj}
         )
 
-        return serializer.data
+        if column_condition_pairs.is_valid():
+            column_condition_pairs.save()
+        else:
+            raise Exception(_('Invalid column condition pair data'))
 
     def create(self, validated_data, **kwargs):
         action_obj = None
@@ -223,35 +196,8 @@ class ActionSerializer(serializers.ModelSerializer):
             else:
                 raise Exception(_('Invalid condition data'))
 
-            # Load the column/condition data
-            if validated_data.get('column_condition_tuples'):
-                __ = ColumnConditionNameSerializer(
-                    data=validated_data.get('column_condition_tuples'),
-                    many=True,
-                    context={'action': action_obj}
-                )
-            elif validated_data.get('columns'):
-                # Load the columns pointing to the action (if any)
-                columns = ColumnNameSerializer(
-                    data=validated_data.get('columns'),
-                    many=True,
-                    required=False,
-                )
-                if columns.is_valid():
-                    # Legacy field "columns". Iterate over the names and create
-                    # the triplets.
-                    for citem in columns.data:
-                        __, __ = \
-                            ActionColumnConditionTuple.objects.get_or_create(
-                                action=action_obj,
-                                column=Column.objects.get(
-                                    workflow=action_obj.workflow,
-                                    name=citem['name']),
-                                condition=None
-                            )
-                else:
-                    raise Exception(_('Invalid column data'))
-
+            # Process the fields columns (legacy) and column_condition_pairs
+            self.create_column_condition_pairs(validated_data, action_obj)
         except Exception:
             if action_obj and action_obj.id:
                 ActionColumnConditionTuple.objects.filter(
@@ -273,97 +219,45 @@ class ActionSerializer(serializers.ModelSerializer):
                    'last_executed_log')
 
 
-class ActionSelfcontainedSerializer(serializers.ModelSerializer):
-    conditions = ConditionSerializer(required=False, many=True)
-
+class ActionSelfcontainedSerializer(ActionSerializer):
     used_columns = ColumnSerializer(many=True, required=False)
 
-    column_condition_tuples = serializers.SerializerMethodField()
-
-    def get_column_condition_tuples(self, action):
-        """
-        Method to filter the relevant column, condition pairs and serialize its
-        content.
-        :param action: Action object being considered
-        :return: Serialized data
-        """
-
-        # Get the query
-        query_set = ActionColumnConditionTuple.objects.filter(action=action)
-
-        # Serialize the objects
-        serializer = ColumnConditionNameSerializer(
-            instance=query_set,
-            many=True,
-            required=True
-        )
-
-        return serializer.data
-
     def create(self, validated_data, **kwargs):
-
-        # Process first the used_columns field to get a sense of how many
-        # columns, their type how many of them new, etc. etc.
         new_columns = []
-        for citem in validated_data['used_columns']:
-            cname = citem.get('name', None)
-            if not cname:
-                raise Exception(_('Incorrect column name {0}.').format(cname))
-            col = Column.objects.filter(workflow=self.context['workflow'],
-                                        name=cname).first()
-            if not col:
-                # new column
-                # if citem['is_key']:
-                #     raise Exception(
-                #         _('New action cannot have non-existing key '
-                #           'column {0}').format(cname))
-
-                # Accumulate the new columns just in case we have to undo
-                # the changes
-                new_columns.append(citem)
-                continue
-
-            # existing column
-            if col.data_type != citem.get('data_type', None) or \
-                    col.is_key != citem['is_key'] or \
-                    set(col.categories) != set(citem['categories']):
-                # The two columns are different
-                raise Exception(
-                    _('Imported column {0} is different from existing '
-                      'one.').format(cname)
-                )
-
-            # Update the column categories (just in case the new one has a
-            # different order)
-            col.set_categories(citem['categories'])
-
-        new_column_names = [x['name'] for x in new_columns]
-
-        action_type = validated_data.get('action_type', None)
-        if not action_type:
-            if validated_data.get('is_out'):
-                action_type = Action.PERSONALIZED_TEXT
-            else:
-                action_type = Action.SURVEY
-
-        action_obj = None
         try:
-            # used_columns has been verified.
-            action_obj = Action(
-                workflow=self.context['workflow'],
-                name=validated_data['name'],
-                description_text=validated_data['description_text'],
-                action_type=action_type,
-                serve_enabled=validated_data['serve_enabled'],
-                active_from=validated_data['active_from'],
-                active_to=validated_data['active_to'],
-                content=validated_data.get('content', ''),
-                target_url=validated_data.get('target_url', None),
-                shuffle=validated_data.get('shuffle', False)
-            )
+            # Process first the used_columns field to get a sense of how many
+            # columns, their type how many of them new, etc. etc.
+            for citem in validated_data['used_columns']:
+                cname = citem.get('name', None)
+                if not cname:
+                    raise Exception(
+                        _('Incorrect column name {0}.').format(cname))
+                col = Column.objects.filter(workflow=self.context['workflow'],
+                                            name=cname).first()
+                if not col:
+                    # Accumulate the new columns just in case we have to undo
+                    # the changes
+                    new_columns.append(citem)
+                    continue
 
-            action_obj.save()
+                # existing column
+                if col.data_type != citem.get('data_type', None) or \
+                        col.is_key != citem['is_key'] or \
+                        set(col.categories) != set(citem['categories']):
+                    # The two columns are different
+                    raise Exception(
+                        _('Imported column {0} is different from existing '
+                          'one.').format(cname)
+                    )
 
+                # Update the column categories (just in case the new one has a
+                # different order)
+                col.set_categories(citem['categories'])
+
+            # Remember the column names to remove them if needed
+            new_column_names = [x['name'] for x in new_columns]
+
+            # Create the new columns if they have been requested
             if new_columns:
                 # There are some new columns that need to be created
                 column_data = ColumnSerializer(data=new_columns,
@@ -377,12 +271,6 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
                     df = pandas_db.load_from_db(
                         self.context['workflow'].get_data_frame_table_name())
                     if df is None:
-                        # If there is no data frame, there is no point on
-                        # adding columns.
-                        Column.objects.filter(
-                            workflow=self.context['workflow'],
-                            name__in=new_column_names).delete()
-                        action_obj.delete()
                         raise Exception(
                             _('Action cannot be imported with and '
                               'empty data table')
@@ -403,42 +291,12 @@ class ActionSelfcontainedSerializer(serializers.ModelSerializer):
                 else:
                     raise Exception(_('Unable to create column data'))
 
-            # Load the conditions pointing to the action
-            condition_data = ConditionSerializer(
-                data=validated_data.get('conditions', []),
-                many=True,
-                context={'action': action_obj})
-            if condition_data.is_valid():
-                condition_data.save()
-            else:
-                raise Exception(_('Unable to create condition information'))
+            # Create the action, conditions and columns/condition-column pairs
+            action_obj = super().create(validated_data, **kwargs)
 
-            # Update the condition variables for each formula if not present
-            for condition in action_obj.conditions.all():
-                if condition.columns.all().count() == 0:
-                    col_names = get_variables(condition.formula)
-                    # Add the corresponding columns to the condition
-                    condition.columns.set(
-                        self.context['workflow'].columns.filter(
-                            name__in=col_names)
-                    )
-
-            # Load the column/condition data, if it exists
-            if validated_data.get('column_condition_tuples'):
-                __ = ColumnConditionNameSerializer(
-                    data=validated_data.get('column_condition_tuples'),
-                    many=True,
-                    context={'action': action_obj}
-                )
         except Exception:
-            if action_obj and action_obj.id:
-                ActionColumnConditionTuple.objects.filter(
-                    action=action_obj
-                ).delete()
-                action_obj.delete()
-            Column.objects.filter(
-                workflow=self.context['workflow'],
-                name__in=new_column_names).delete()
+            if new_columns:
+                [x.delete() for x in new_columns]
             raise
 
         return action_obj
