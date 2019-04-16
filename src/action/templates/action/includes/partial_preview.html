@@ -42,7 +42,7 @@
         <strong>{% trans 'Subject:' %}</strong> {{ prelude }}
       </div>
     {% endif %}
-    <div id="preview-body" class="modal-body border border-dark">
+    <div id="preview-body" class="modal-body shadow border border-dark">
       {% if action.action_type == 'personalized_json' %}
         <pre>{{ action_content }}</pre>
       {% elif action.action_type == 'personalized_canvas_email' %}
@@ -52,7 +52,7 @@
       {% endif %}
     </div>
     {% if action.is_out and show_values %}
-      <div id="preview-variables" class="modal-body border border-dark">
+      <div id="preview-variables" class="modal-body shadow border border-dark">
         <strong>{% trans 'Values:' %}</strong> {{ show_values }}
       </div>
     {% endif %}

@@ -7,13 +7,13 @@
 {% endif %}
 <div class="row justify-content-center mb-3">
   <button type="button"
-          class="shadow btn btn-outline-dark js-share-create"
+          class="btn btn-outline-dark js-share-create"
           data-url="{% url 'workflow:share_create' %}">
     <span class="fa fa-plus"></span> User
   </button>
 </div>
 {% if share_table.data|length %}
-  <div class="row justify-content-center">
+  <div class="justify-content-center">
     {% render_table share_table %}
   </div>
 {% else %}

@@ -2,7 +2,7 @@
 <div id="insert-elements-in-editor" class="text-center my-3">
   <div id="column-selector">
     <div class="dropdown btn-group">
-      <button type="button" class="shadow btn btn-outline-dark dropdown-toggle"
+      <button type="button" class="btn btn-outline-dark dropdown-toggle"
               data-toggle="dropdown">
         {% trans 'Insert Column Value' %}
       </button>
@@ -14,7 +14,7 @@
     </div>
     {% if conditions|length %}
       <div id="condition-selector" class="dropdown btn-group">
-        <button type="button" class="shadow btn btn-outline-dark dropdown-toggle"
+        <button type="button" class="btn btn-outline-dark dropdown-toggle"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {% if conditions.0.action.action_type == conditions.0.action.PERSONALIZED_TEXT %}
             {% trans 'Use condition in highlighted text' %}
@@ -31,7 +31,7 @@
     {% endif %}
     {% if attribute_names %}
       <div id="attribute-selector" class="dropdown btn-group">
-        <button type="button" class="shadow btn btn-outline-dark dropdown-toggle"
+        <button type="button" class="btn btn-outline-dark dropdown-toggle"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {% trans 'Insert Attribute' %}
         </button>
