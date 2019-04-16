@@ -116,8 +116,9 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} equal to {1}'.format(self.node['field'],
-                                         'Yes' if constant else 'No')
+        return '{0} &equals; {1} and not empty'.format(
+            self.node['field'], constant
+        )
 
     def _op_not_equal(self, eval_type):
         """
@@ -145,7 +146,9 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} not equal to {1}'.format(self.node['field'], constant)
+        return '{0} &ne; {1} and not empty'.format(
+            self.node['field'], constant
+        )
 
     def _op_begins_with(self, eval_type):
         """
@@ -161,7 +164,9 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (not self.is_null(varvalue)) and varvalue.startswith(constant)
+            return (not self.is_null(varvalue)) and varvalue.startswith(
+                constant
+            )
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -190,8 +195,9 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (not self.is_null(varvalue)) and \
-                   not varvalue.startswith(constant)
+            return (not self.is_null(varvalue)) and not varvalue.startswith(
+                constant
+            )
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -222,7 +228,7 @@ class NodeEvaluation:
             # Python evaluation
             varvalue = self.get_value()
             return (not self.is_null(varvalue)) and \
-                   varvalue.find(constant) != -1
+                varvalue.find(constant) != -1
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -252,7 +258,7 @@ class NodeEvaluation:
             # Python evaluation
             varvalue = self.get_value()
             return (not self.is_null(varvalue)) and \
-                   varvalue.find(constant) == -1
+                varvalue.find(constant) == -1
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -450,7 +456,7 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} is non empty and less than {1}'.format(
+        return '{0} &lt; {1} and not empty'.format(
             self.node['field'], constant
         )
 
@@ -487,7 +493,7 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} is non empty and less than or equal to {1}'.format(
+        return '{0} &#8924; {1} and not empty'.format(
             self.node['field'],
             constant
         )
@@ -525,7 +531,7 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} is non empty and greater than {1}'.format(
+        return '{0} &gt; {1} and not empty'.format(
             self.node['field'], constant
         )
 
@@ -562,7 +568,7 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} is non empty and greater than or equal to {1}'.format(
+        return '{0} &#8925; {1} and not empty'.format(
             self.node['field'],
             constant
         )
@@ -610,9 +616,9 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} is non empty and between {1} and {2}'.format(
-            self.node['field'],
+        return '{0} &#8924; {1} &#8924; {2} and not empty'.format(
             str(self.node['value'][0]),
+            self.node['field'],
             str(self.node['value'][1])
         )
 
@@ -659,7 +665,7 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} is empty or not between {1} and {2}'.format(
+        return '{0} &lt; {1} or {0} &gt; {2} or {0} is empty'.format(
             self.node['field'],
             str(self.node['value'][0]),
             str(self.node['value'][1])
