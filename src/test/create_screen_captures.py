@@ -158,7 +158,7 @@ class ScreenTestFixture(ScreenTests):
         # click in the edit element
         self.selenium.find_element_by_xpath(
             "//table[@id='sqlconn-admin-table']"
-            "//tr/td[1][normalize-space() = 'Remote server']"
+            "//tr/td[1][normalize-space() = 'remote server']"
         ).click()
         self.wait_for_modal_open()
 
@@ -785,7 +785,7 @@ Course Coordinator""")
 
         # Click the schedule button
         self.selenium.find_element_by_xpath(
-            "//button[@type='Submit']"
+            "//button[@id='next-step-off']"
         ).click()
         self.wait_for_page(title='OnTask :: Action scheduled')
 
@@ -819,7 +819,7 @@ Course Coordinator""")
 
         # Click the schedule button
         self.selenium.find_element_by_xpath(
-            "//button[@type='Submit']"
+            "//button[@id='next-step-off']"
         ).click()
         self.wait_for_page(title='OnTask :: Action scheduled')
 

@@ -251,10 +251,10 @@ This configuration is divided into in three groups of variables:</p>
 <dt><code class="docutils literal notranslate"><span class="pre">EXECUTE_ACTION_JSON_TRANSFER</span></code></dt><dd><p>Boolean stating if the JSON transfers should be executed when sending persnalized text.</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">REDIS_URL</span></code></dt><dd><p>List of URLs to access the cache service for OnTask. If there are several of these services, they can be specified as a comma-separated list such as <code class="docutils literal notranslate"><span class="pre">'rediscache://master:6379,slave1:6379,slave2:6379/1'</span></code> (see <a class="reference external" href="https://github.com/joke2k/django-environ">Django Environ</a></p>
+<dt><code class="docutils literal notranslate"><span class="pre">REDIS_URL</span></code></dt><dd><p>List of URLs to access the cache service for OnTask. If there are several of these services, they can be specified as a comma-separated list such as <code class="docutils literal notranslate"><span class="pre">'rediscache://master:6379,slave1:6379,slave2:6379/1'</span></code> (see <a class="reference external" href="https://github.com/joke2k/django-environ">Django Environ</a>)</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">rediscache:://localhost:6379??client_class=django_redis.client.DefaultClient&amp;timeout=1000&amp;key_prefix=ontask</span></code></p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">SHOW_HOME_FOOTER_IMAGE</span></code></dt><dd><p>Boolean to control the appearance of a footer image in the home page. If true, the file <code class="docutils literal notranslate"><span class="pre">project_consortium.gif</span></code> is shown from the media folder.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">SHOW_HOME_FOOTER_IMAGE</span></code></dt><dd><p>Boolean to control the appearance of a footer image in the home page. If true, the file <code class="docutils literal notranslate"><span class="pre">footer_image.gif</span></code> is shown from the media folder.</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">USE_SSL</span></code></dt><dd><p>Boolean to control if the server should use SSL for communication. There are several security features that are enabled with using SSL.</p>
@@ -263,7 +263,8 @@ This configuration is divided into in three groups of variables:</p>
 </dl>
 <p>There are additional variables to configure <a class="reference internal" href="#email-config"><span class="std std-ref">Email</span></a> and <a class="reference internal" href="#canvas-email-config"><span class="std std-ref">Canvas Email</span></a>.</p>
 <p>Here is an example of a minimalistic configuration file (note there is no space between variable names and the equal signs):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BASE_URL</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALLOWED_HOSTS</span><span class="o">=</span><span class="n">HOSTNAME1</span><span class="p">,</span><span class="n">HOSTNAME2</span>
+<span class="n">BASE_URL</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
 <span class="c1"># syntax: DATABASE_URL=postgres://username:password@127.0.0.1:5432/database</span>
 <span class="n">DATABASE_URL</span><span class="o">=</span><span class="n">postgres</span><span class="p">:</span><span class="o">//</span><span class="p">[</span><span class="n">PSQLUSERNAME</span><span class="p">]:[</span><span class="n">PSQLPWD</span><span class="p">]</span><span class="nd">@127</span><span class="o">.</span><span class="mf">0.0</span><span class="o">.</span><span class="mi">1</span><span class="p">:</span><span class="mi">5432</span><span class="o">/</span><span class="n">ontask</span>
 <span class="n">DEBUG</span><span class="o">=</span><span class="kc">False</span>
@@ -276,18 +277,19 @@ This configuration is divided into in three groups of variables:</p>
 </pre></div>
 </div>
 <ol class="arabic">
-<li><p>Replace <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">LOCAL</span> <span class="pre">PYTHON</span> <span class="pre">TIME</span> <span class="pre">ZONE]</span></code> with the description of your time zone (see the definition of the variable <code class="docutils literal notranslate"><span class="pre">TIME_ZONE</span></code> in <a class="reference internal" href="#configuration-environment"><span class="std std-ref">Environment variables</span></a>.</p></li>
+<li><p>Replace <code class="docutils literal notranslate"><span class="pre">HOSTNAME1</span></code>, <code class="docutils literal notranslate"><span class="pre">HOSTNAME2</span></code> with a comma-separated list of hostnames of the platform hosting the tool.</p></li>
 <li><p>If OnTask is going to be served from a location different from the root of your server (for example <code class="docutils literal notranslate"><span class="pre">myhost.com/ontask</span></code>, then modify the value of the variable <code class="docutils literal notranslate"><span class="pre">BASE_URL</span></code> with the suffix that should follow the domain name (in the example, <code class="docutils literal notranslate"><span class="pre">/ontask</span></code>).</p></li>
-<li><p>Modify the line starting with <code class="docutils literal notranslate"><span class="pre">DOMAIN_NAME=</span></code> and change the field <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">DOMAIN</span> <span class="pre">NAME</span></code>] with the domain name of the machine hosting OnTask.</p></li>
 <li><p>Modify the line starting with <code class="docutils literal notranslate"><span class="pre">DATABASE_URL=</span></code> and change the
 field <code class="docutils literal notranslate"><span class="pre">[PSQLUSERNAME]</span></code> with the name of the Postgresql user created in the
 previous step (the one that could access the ontask database and run
 queries). If you decided to use a different name for the database, adjust
 the last part of the line accordingly (replace <em>ontask</em> by the name of
 your database).</p></li>
+<li><p>Modify the line starting with <code class="docutils literal notranslate"><span class="pre">DOMAIN_NAME=</span></code> and change the field <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">DOMAIN</span> <span class="pre">NAME</span></code>] with the domain name of the machine hosting OnTask.</p></li>
 <li><p>Replace the string <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">REDIS</span> <span class="pre">URL]</span></code> with the URL where Redis can be
 accessed. This is typically something similar to
 <code class="docutils literal notranslate"><span class="pre">redis://127.0.0.1:6379/1</span></code>.</p></li>
+<li><p>Replace <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">LOCAL</span> <span class="pre">PYTHON</span> <span class="pre">TIME</span> <span class="pre">ZONE]</span></code> with the description of your time zone (see the definition of the variable <code class="docutils literal notranslate"><span class="pre">TIME_ZONE</span></code> in <a class="reference internal" href="#configuration-environment"><span class="std std-ref">Environment variables</span></a>.</p></li>
 <li><p>Open a command interpreter and execute the following python command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import random; import string; print(&quot;&quot;.join([random.SystemRandom().choice(string.digits + string.ascii_letters + string.punctuation) for i in range(100)]))&#39;</span>
 </pre></div>
@@ -303,7 +305,7 @@ different content after the equal sign):</p>
 </div>
 <div class="section" id="configuration-script">
 <span id="id2"></span><h4>2.6.1.3. Configuration script<a class="headerlink" href="#configuration-script" title="Permalink to this headline">¶</a></h4>
-<p>The additional configuration variables are directly in the modules <code class="docutils literal notranslate"><span class="pre">base.py</span></code>, <code class="docutils literal notranslate"><span class="pre">development.py</span></code> and <code class="docutils literal notranslate"><span class="pre">production.py</span></code> in the folder <code class="docutils literal notranslate"><span class="pre">src/ontask/settings</span></code>. Modify the python code to perform additional configuration considering:</p>
+<p>The are some additional configuration variables that directly defined in the modules <code class="docutils literal notranslate"><span class="pre">base.py</span></code>, <code class="docutils literal notranslate"><span class="pre">development.py</span></code> and <code class="docutils literal notranslate"><span class="pre">production.py</span></code> in the folder <code class="docutils literal notranslate"><span class="pre">src/ontask/settings</span></code>. Modify the python code to perform additional configuration considering:</p>
 <ol class="arabic simple">
 <li><p>The script <code class="docutils literal notranslate"><span class="pre">base.py</span></code> is always executed first</p></li>
 <li><p>The choice between <code class="docutils literal notranslate"><span class="pre">develoment.py</span></code> or <code class="docutils literal notranslate"><span class="pre">production.py</span></code> is decided based on the environment variable <code class="docutils literal notranslate"><span class="pre">DJANGO_SETTINGS_MODULE</span></code> and the default value is <code class="docutils literal notranslate"><span class="pre">production.py</span></code></p></li>
@@ -399,16 +401,13 @@ only deploy a <strong>production</strong> version.</p>
 <div class="section" id="configure-the-distributed-task-queue">
 <span id="scheduling-tasks"></span><h3>2.6.3. Configure the Distributed Task Queue<a class="headerlink" href="#configure-the-distributed-task-queue" title="Permalink to this headline">¶</a></h3>
 <p>There are various tasks that need to be executed by OnTask outside the web
-server. The solution adopted is to use <a class="reference external" href="http://www.celeryproject.org/">Celery</a>, <a class="reference external" href="http://supervisord.org/">Supervisor</a> (a
-process control system) and <a class="reference external" href="https://redis.io/">Redis</a>. Redis
-has been configured in a previous step. This section explains how to set
-up the distributed task queue and make sure it is continuously executing in
-parallel with the web server.</p>
+server. The solution adopted is to use <a class="reference external" href="http://www.celeryproject.org/">Celery</a>, <a class="reference external" href="http://supervisord.org/">Supervisor</a> (a process control system) and <a class="reference external" href="https://redis.io/">Redis</a>. Redis has been configured in a previous step. This section explains how to set up the distributed task queue and make sure it is continuously executing in parallel with the web server.</p>
 <ol class="arabic">
-<li><p>Install the application <code class="docutils literal notranslate"><span class="pre">supervisor</span></code> using <strong>pip2</strong>. This application makes sure the application Celery is continuously running in the background and in communication with the server. As of now, the application can only run through Python 2 (an upgrade in the future may remove this anomaly). For this reason, the package has to be installed with the following command (using Python 2.7):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip2</span> <span class="n">install</span> <span class="n">supervisor</span>
+<li><p>Install the application <code class="docutils literal notranslate"><span class="pre">supervisor</span></code> using <strong>pip3</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">supervisor</span>
 </pre></div>
 </div>
+<p>This application makes sure the task queue program  Celery is continuously running in the background and in communication with the server.</p>
 </li>
 <li><p>Check that the binaries <code class="docutils literal notranslate"><span class="pre">supervisord</span></code>, <code class="docutils literal notranslate"><span class="pre">supervisorctl</span></code> and <code class="docutils literal notranslate"><span class="pre">celery</span></code>
 are installed in your system.</p></li>
@@ -483,7 +482,7 @@ script <code class="docutils literal notranslate"><span class="pre">scheduler_sc
 <p>If you have OnTask already configured and running, here are the steps to
 follow to upgrade to a new version. If you are upgrading from a version below
 2.8 to 2.8 or higher read <a class="reference internal" href="#scheduling-tasks"><span class="std std-ref">Configure the Distributed Task Queue</span></a>.</p>
-<p>If you are upgrading from a version below 4.0, make sure that:</p>
+<p>If you are upgrading from a version below 4.0 to version 4.2 make sure that:</p>
 <ul class="simple">
 <li><p>Versions 2.7 and 3 of Python are properly installed.</p></li>
 <li><p>The library <code class="docutils literal notranslate"><span class="pre">Celery</span></code> is installed as part of the Python 3 system and the binary is executed using Python 3.</p></li>
@@ -504,7 +503,7 @@ commands.</p></li>
 </div>
 </li>
 <li><p>Refresh the list of requirements:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">/</span><span class="n">production</span><span class="o">.</span><span class="n">txt</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">/</span><span class="n">production</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
 </li>
@@ -524,17 +523,17 @@ commands.</p></li>
 </div>
 </li>
 <li><p>Collect all files to be served statically:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">collectstatic</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">collectstatic</span>
 </pre></div>
 </div>
 </li>
 <li><p>Apply the migrations to the database:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span>
 </pre></div>
 </div>
 </li>
 <li><p>Check that the configuration is ready to run:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">check</span> <span class="o">--</span><span class="n">deploy</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">check</span> <span class="o">--</span><span class="n">deploy</span>
 </pre></div>
 </div>
 </li>

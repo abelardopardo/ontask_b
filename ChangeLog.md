@@ -1,4 +1,4 @@
-## 4.3 (2019-04-??)
+## 4.3 (2019-04-16)
 
 ### Added
 
@@ -10,6 +10,12 @@
 
 - Steps requiring multiple steps now have numbers at the top of the screen (suggested by University of Auckland's group a while ago)
 
+- Functionality to reset the password (needs email configured) and to remain connected (1 month)
+
+- Color coding to distinguish the type of columns and the type of actions
+
+- Button to preview emails when scheduling an action for future execution
+
 ### Changed
 
 - Editor pages to use tabs in more intuitive ways
@@ -18,6 +24,12 @@
 
 - Updated dependencies to include supervisor and celery now supporting Python3
 
+- UI using large modals to take advantage of larger screens
+
+- Significant revamp of how the configuration file is structured
+
+- Library dependencies are now aligned and the new version does not require Python 2.7 and 3 at the same time. Only Python 3.
+
 ### Fixed
 
 - Incorrect number of entries shown at bottom of column page
@@ -25,6 +37,12 @@
 - Error when evaluating numeric conditions in the presence of null values
 
 - Focus now goes to the tag with invalid params in plugin execution
+
+- Allowed the configuration of HTML email or text + html email (Issue #140)
+
+- Error allowing a key column to loose this property through a merge (Issue #142)
+
+- Error in serialization handling the new Condition/Column pairs
 
 ## 4.2.1 (2019-03-29)
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-11 07:29+0930\n"
+"POT-Creation-Date: 2019-04-16 15:48+0930\n"
 "PO-Revision-Date: 2018-11-11 18:47+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,19 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 2.2\n"
 
-#: accounts/forms.py:17
+#: accounts/forms.py:20
 msgid "Email address"
 msgstr "电子邮件地址"
 
-#: accounts/forms.py:20
+#: accounts/forms.py:23
 msgid "Enter Email"
 msgstr "输入电子邮箱"
 
-#: accounts/forms.py:21
+#: accounts/forms.py:24
 msgid "Enter Password"
 msgstr "输入密码"
 
-#: accounts/forms.py:25 accounts/templates/accounts/signup.html:11
+#: accounts/forms.py:28 accounts/templates/accounts/signup.html:11
 #: templates/registration/password_reset_complete.html:13
 msgid "Log in"
 msgstr "登陆"
@@ -40,30 +40,44 @@ msgid "OnTask Login"
 msgstr "OnTask登陆"
 
 #: accounts/templates/accounts/emails/password-reset-email.html:2
-#, python-format
+#, fuzzy, python-format
+#| msgid ""
+#| "You're receiving this email because you requested a password reset for "
+#| "your user account at %(site_name)s."
 msgid ""
-"You're receiving this email because you requested a password reset for your "
-"user account at %(site_name)s."
+"Greetings.\n"
+"\n"
+"You received this email because you requested a password reset for your user "
+"account at %(site_name)s."
 msgstr ""
 "你收到本邮件是因为你要求重置你的\n"
 "用户账户%(site_name)s的密码。"
 
-#: accounts/templates/accounts/emails/password-reset-email.html:4
-msgid "Please go to the following page and choose a new password:"
+#: accounts/templates/accounts/emails/password-reset-email.html:6
+#, fuzzy
+#| msgid "Please go to the following page and choose a new password:"
+msgid "Please click in the following link and choose a new password:"
 msgstr "请到以下页面选择一个新密码:"
 
-#: accounts/templates/accounts/emails/password-reset-email.html:8
-msgid "Your login email, in case you've forgotten, is same this email address:"
-msgstr "以防遗忘，你的登陆邮箱与本邮件地址相同:"
-
 #: accounts/templates/accounts/emails/password-reset-email.html:10
-msgid "Thanks for using our site!"
-msgstr "感谢使用我们的网站！"
+msgid "Your login email is"
+msgstr ""
 
 #: accounts/templates/accounts/emails/password-reset-email.html:12
-#, python-format
-msgid "The %(site_name)s team"
+msgid "Regards"
+msgstr ""
+
+#: accounts/templates/accounts/emails/password-reset-email.html:14
+#, fuzzy, python-format
+#| msgid "The %(site_name)s team"
+msgid "The team behind %(site_name)s"
 msgstr "%(site_name)s团队"
+
+#: accounts/templates/accounts/emails/password-reset-subject.txt:1
+#, fuzzy, python-format
+#| msgid "Password reset confirmation"
+msgid "Password reset on %(site_name)s"
+msgstr "密码重置确认"
 
 #: accounts/templates/accounts/login.html:5
 msgid "Log In"
@@ -197,19 +211,32 @@ msgid "Password Reset Done"
 msgstr "密码重置完成"
 
 #: accounts/templates/accounts/password-reset-done.html:5
-msgid "Password Reset Email Sent"
+#, fuzzy
+#| msgid "Password Reset Email Sent"
+msgid "Password reset email sent"
 msgstr "重置密码邮件已发送"
 
 #: accounts/templates/accounts/password-reset-done.html:9
-msgid ""
-"Please check your mail. You would have received a password\n"
-"    reset mail from us."
-msgstr "请查收邮件。你将收到一封我们发送的密码重置邮件。"
+msgid "Please check your mail."
+msgstr ""
+
+#: accounts/templates/accounts/password-reset-done.html:11
+msgid "Back to login page"
+msgstr ""
 
 #: accounts/templates/accounts/password-reset.html:4
-#: accounts/templates/accounts/password-reset.html:5
 msgid "Password Reset"
 msgstr "设置新密码"
+
+#: accounts/templates/accounts/password-reset.html:5
+#: templates/registration/password_reset_confirm.html:14
+#: templates/registration/password_reset_confirm.html:15
+#: templates/registration/password_reset_done.html:6
+#: templates/registration/password_reset_form.html:9
+#: templates/registration/password_reset_form.html:13
+#: templates/registration/password_reset_form.html:14
+msgid "Password reset"
+msgstr "密码重置"
 
 #: accounts/templates/accounts/signup.html:4
 msgid "Sign Up"
@@ -223,7 +250,7 @@ msgstr "免费注册"
 msgid "Already signed up?"
 msgstr "已注册？"
 
-#: accounts/views.py:44
+#: accounts/views.py:49
 msgid ""
 "Your password was changed, hence you have been logged out. Please relogin"
 msgstr "密码已更改。请重新登录"
@@ -422,7 +449,7 @@ msgstr "可用的操作来自"
 msgid "Action available until"
 msgstr "操作可用直到"
 
-#: action/models.py:134 action/templates/action/edit_in.html:172
+#: action/models.py:134 action/templates/action/edit_in.html:173
 msgid "Shuffle questions?"
 msgstr "调整问题？"
 
@@ -514,40 +541,41 @@ msgstr "元素编号{0}中的错误JSON字符串"
 msgid "Incorrect item filter invocation."
 msgstr "不正确的项目筛选标签调用。"
 
-#: action/serializers.py:57 table/serializers.py:159
+#: action/serializers.py:51 table/serializers.py:159
 msgid "Incorrect column data"
 msgstr "不正确的列数据"
 
-#: action/serializers.py:116 action/serializers.py:131
-#: action/serializers.py:253
+#: action/serializers.py:150
 msgid "Invalid column data"
 msgstr "无效列数据"
 
-#: action/serializers.py:224
+#: action/serializers.py:162
+#, fuzzy
+#| msgid "Invalid condition data"
+msgid "Invalid column condition pair data"
+msgstr "无效条件数据"
+
+#: action/serializers.py:197
 msgid "Invalid condition data"
 msgstr "无效条件数据"
 
-#: action/serializers.py:311
+#: action/serializers.py:234
 #, python-brace-format
 msgid "Incorrect column name {0}."
 msgstr "无效列名{0}。"
 
-#: action/serializers.py:332
+#: action/serializers.py:249
 #, python-brace-format
 msgid "Imported column {0} is different from existing one."
 msgstr "导入列{0}与现有的列不同。"
 
-#: action/serializers.py:387
+#: action/serializers.py:275
 msgid "Action cannot be imported with and empty data table"
 msgstr "不能用空数据表导入操作"
 
-#: action/serializers.py:404
+#: action/serializers.py:292
 msgid "Unable to create column data"
 msgstr "无法创建列数据"
-
-#: action/serializers.py:414
-msgid "Unable to create condition information"
-msgstr "无法创建条件信息"
 
 #: action/settings.py:34 ontask/settings/base.py:535
 msgid "OnTask: Action executed"
@@ -593,7 +621,7 @@ msgstr ""
 #: action/templates/action/export_ask.html:21
 #: action/templates/action/export_done.html:15
 #: action/templates/action/item_filter.html:27
-#: action/templates/action/run_survey.html:68
+#: action/templates/action/run_survey.html:69
 #: action/templates/action/run_survey_row.html:25
 #: dataops/templates/dataops/includes/upload_buttons.html:6
 #: logs/templates/logs/view.html:12
@@ -662,7 +690,7 @@ msgstr "%(n)s文件的压缩文件即将被创建。"
 #: dataops/templates/dataops/row_create.html:33
 #: dataops/templates/dataops/row_filter.html:24
 #: dataops/templates/dataops/row_filter.html:34
-#: scheduler/templates/scheduler/edit.html:26
+#: scheduler/templates/scheduler/edit.html:27
 #: scheduler/templates/scheduler/includes/partial_scheduler_delete.html:17
 #: table/templates/table/includes/partial_row_delete.html:14
 #: table/templates/table/includes/partial_view_add.html:19
@@ -692,11 +720,12 @@ msgid "Cancel"
 msgstr "取消"
 
 #: action/templates/action/action_zip_step1.html:26
-#: action/templates/action/edit_in.html:64
+#: action/templates/action/edit_in.html:65
 #: action/templates/action/includes/partial_action_preview_done_buttons.html:8
 #: action/templates/action/request_canvas_email_data.html:30
 #: action/templates/action/request_email_data.html:30
 #: action/templates/action/request_json_data.html:30
+#: scheduler/templates/scheduler/edit.html:30
 msgid "Preview"
 msgstr "预览"
 
@@ -705,7 +734,7 @@ msgstr "预览"
 #: action/templates/action/request_email_data.html:33
 #: action/templates/action/request_json_data.html:33
 #: dataops/templates/dataops/includes/upload_buttons.html:10
-#: scheduler/templates/scheduler/edit.html:28
+#: scheduler/templates/scheduler/edit.html:33
 msgid "Next"
 msgstr "下一步"
 
@@ -757,71 +786,71 @@ msgstr ""
 msgid "Edit Survey"
 msgstr "编辑调查"
 
-#: action/templates/action/edit_in.html:63
+#: action/templates/action/edit_in.html:64
 msgid "See the content as shown to each learner"
 msgstr "看到每个学习者所看到的内容"
 
-#: action/templates/action/edit_in.html:70
+#: action/templates/action/edit_in.html:71
 msgid "Save action and go back to action table"
 msgstr "保存操作并返回到操作表"
 
-#: action/templates/action/edit_in.html:71
+#: action/templates/action/edit_in.html:72
 msgid "Done"
 msgstr "完成"
 
-#: action/templates/action/edit_in.html:74
+#: action/templates/action/edit_in.html:75
 msgid "There must be at least one question (non-key column) in the survey."
 msgstr "必须至少有一个非键列。"
 
-#: action/templates/action/edit_in.html:77
+#: action/templates/action/edit_in.html:78
 msgid "All questions should have non-empty descriptions."
 msgstr "所有问题都应该有非空的描述。"
 
-#: action/templates/action/edit_in.html:80
+#: action/templates/action/edit_in.html:81
 msgid "No description text provided in Survey Parameters"
 msgstr "未提供描述文本"
 
-#: action/templates/action/edit_in.html:83
+#: action/templates/action/edit_in.html:84
 msgid "You need to specify a key column in Survey Parameters"
 msgstr "您需要指定一个键列"
 
-#: action/templates/action/edit_in.html:94
+#: action/templates/action/edit_in.html:95
 #: action/templates/action/edit_out.html:61
 #, python-format
 msgid "(%(n)s learner of %(tot)s)"
 msgid_plural "(%(n)s learners of %(tot)s)"
 msgstr[0] "%(tot)s) 中有(%(n)s 学习者"
 
-#: action/templates/action/edit_in.html:110
+#: action/templates/action/edit_in.html:111
 msgid "Insert existing question"
 msgstr "插入现有问题"
 
-#: action/templates/action/edit_in.html:123
+#: action/templates/action/edit_in.html:124
 msgid "Add a new question to the action"
 msgstr "向该动作添加新问题"
 
-#: action/templates/action/edit_in.html:124
+#: action/templates/action/edit_in.html:125
 msgid "Create question"
 msgstr "创建问题"
 
-#: action/templates/action/edit_in.html:145
+#: action/templates/action/edit_in.html:146
 #: action/templates/action/includes/partial_action_edit_description.html:7
 msgid "Edit description"
 msgstr "编辑描述"
 
-#: action/templates/action/edit_in.html:146
-#: action/templates/action/run_survey.html:54
+#: action/templates/action/edit_in.html:147
+#: action/templates/action/run_survey.html:55
 #: dataops/templates/dataops/includes/partial_show_sql_connection.html:25
 #: scheduler/templates/scheduler/includes/partial_show_schedule_action.html:25
 #: scheduler/templates/scheduler/schedule_done.html:14
 msgid "Edit"
 msgstr "编辑"
 
-#: action/templates/action/edit_in.html:152
+#: action/templates/action/edit_in.html:153
 msgid "Key column to match the user id"
 msgstr "匹配用户ID的键列"
 
-#: action/templates/action/edit_in.html:157
+#: action/templates/action/edit_in.html:158
 msgid "Please, select Key column"
 msgstr "请选择键列"
 
@@ -887,7 +916,7 @@ msgid "Your download will start shortly"
 msgstr "下载将马上开始"
 
 #: action/templates/action/import.html:7 action/templates/action/import.html:13
-#: action/templates/action/index.html:65
+#: action/templates/action/index.html:88
 msgid "Import action"
 msgstr "导入操作"
 
@@ -970,7 +999,7 @@ msgstr "该筛选标签排除所有学习者！"
 msgid "Some condition evaluates to FALSE for all users"
 msgstr "某些情况对于所有用户评估为FALSE"
 
-#: action/templates/action/includes/partial_action_edit_out_warning.html:8
+#: action/templates/action/includes/partial_action_edit_out_warning.html:10
 #, python-format
 msgid "%(n)s user has all conditions equal to FALSE"
 msgid_plural "%(n)s users have all conditions equal to FALSE"
@@ -1020,7 +1049,8 @@ msgid "Schedule the execution of the action"
 msgstr "安排操作执行"
 
 #: action/templates/action/includes/partial_action_operations.html:37
-#: scheduler/views.py:199 scheduler/views.py:280 scheduler/views.py:342
+#: scheduler/templates/scheduler/edit.html:36 scheduler/views.py:198
+#: scheduler/views.py:279 scheduler/views.py:341
 msgid "Schedule"
 msgstr "安排"
 
@@ -1126,11 +1156,11 @@ msgstr "好"
 msgid "Update action"
 msgstr "更新操作"
 
-#: action/templates/action/includes/partial_column_selected_operations.html:5
+#: action/templates/action/includes/partial_column_selected_operations.html:4
 msgid "Create an exact duplicate of this question"
 msgstr "创建这个问题的精确副本"
 
-#: action/templates/action/includes/partial_column_selected_operations.html:10
+#: action/templates/action/includes/partial_column_selected_operations.html:9
 msgid "Remove question from this survey"
 msgstr "从这个调查中移除问题"
 
@@ -1307,12 +1337,12 @@ msgid ""
 "  or use a filter to exclude these entries."
 msgstr "审查此操作的条件或使用筛选标签排除这些条目。"
 
-#: action/templates/action/index.html:8 action/templates/action/index.html:47
+#: action/templates/action/index.html:8 action/templates/action/index.html:70
 #: templates/base.html:61
 msgid "Actions"
 msgstr "操作"
 
-#: action/templates/action/index.html:51
+#: action/templates/action/index.html:74
 #, fuzzy
 #| msgid ""
 #| "<strong>Next Step:</strong> Click in the <i>New action</i> below to "
@@ -1327,16 +1357,16 @@ msgstr ""
 "根据表中存储的数据\n"
 "执行的新操作。"
 
-#: action/templates/action/index.html:58
+#: action/templates/action/index.html:81
 msgid "New action to collect data from learners"
 msgstr "创建新操作来收集学习者数据"
 
-#: action/templates/action/index.html:59 scheduler/views.py:50
+#: action/templates/action/index.html:82 scheduler/views.py:49
 #: workflow/templates/workflow/export.html:32
 msgid "Action"
 msgstr "操作"
 
-#: action/templates/action/index.html:64
+#: action/templates/action/index.html:87
 msgid "Import action previously exported"
 msgstr "文件包含先前导出的操作"
 
@@ -1377,8 +1407,8 @@ msgid ""
 msgstr "为操作\"%(n)s\"发送电子邮件"
 
 #: action/templates/action/request_email_data.html:36
-#: action/templates/action/request_json_data.html:36 action/views_out.py:134
-#: action/views_out.py:530 action/views_out.py:672
+#: action/templates/action/request_json_data.html:36 action/views_out.py:133
+#: action/views_out.py:529 action/views_out.py:671
 msgid "Send"
 msgstr "发送"
 
@@ -1416,22 +1446,22 @@ msgstr ""
 "语法错误。看看以下信息能否\n"
 "帮助你找到问题。"
 
-#: action/views_action.py:66 action/views_action.py:169 dataops/models.py:73
+#: action/views_action.py:66 action/views_action.py:150 dataops/models.py:73
 #: dataops/templates/dataops/upload_s2.html:38 dataops/views.py:45
-#: scheduler/views.py:47 table/views.py:41 workflow/forms.py:37
-#: workflow/templates/workflow/detail.html:84 workflow/views.py:36
+#: scheduler/views.py:46 table/views.py:41 workflow/forms.py:37
+#: workflow/templates/workflow/detail.html:88 workflow/views.py:36
 msgid "Name"
 msgstr "名称"
 
 #: action/views_action.py:68 dataops/models.py:80
 #: dataops/templates/dataops/uploadmerge.html:17 dataops/views.py:47
-#: table/views.py:45 workflow/templates/workflow/detail.html:85
+#: table/views.py:45 workflow/templates/workflow/detail.html:89
 msgid "Description"
 msgstr "描述"
 
 #: action/views_action.py:70 dataops/models.py:86
 #: dataops/templates/dataops/upload_s2.html:40
-#: workflow/templates/workflow/detail.html:86
+#: workflow/templates/workflow/detail.html:90
 msgid "Type"
 msgstr "类型"
 
@@ -1451,55 +1481,55 @@ msgstr "问卷调查中的某些元素不完整"
 msgid "Edit the text, conditions and filter"
 msgstr "编辑文本、条件和筛选标签"
 
-#: action/views_action.py:171
+#: action/views_action.py:152
 msgid "Description (shown to learners)"
 msgstr "描述(展示给学习者看)"
 
-#: action/views_action.py:184
+#: action/views_action.py:165
 msgid "Edit the question"
 msgstr "编辑问题"
 
-#: action/views_action.py:259
+#: action/views_action.py:240
 msgid "An action with that name already exists"
 msgstr "以那个名称命名的操作已经存在"
 
-#: action/views_action.py:511 action/views_action.py:858
-#: action/views_action.py:916 action/views_action.py:959
-#: action/views_action.py:1311
+#: action/views_action.py:493 action/views_action.py:838
+#: action/views_action.py:896 action/views_action.py:939
+#: action/views_action.py:1291
 msgid "Workflow has no data. Go to \"Manage table data\" to upload data."
 msgstr "工作流没有数据。到\"管理桌面数据\"上传数据 。"
 
-#: action/views_action.py:564
+#: action/views_action.py:546
 msgid "Personalized Text"
 msgstr "个性化文本"
 
-#: action/views_action.py:566
+#: action/views_action.py:548
 #, fuzzy
 #| msgid "Personalized JSON"
 msgid "Personalized JSON Object"
 msgstr "个性化的JSON"
 
-#: action/views_action.py:568 ontask/__init__.py:30
+#: action/views_action.py:550 ontask/__init__.py:30
 #, fuzzy
 #| msgid "Personalized text"
 msgid "Personalized Canvas Email"
 msgstr "个性化的Canvas邮件"
 
-#: action/views_action.py:817
+#: action/views_action.py:797
 msgid "An action with this name already exists"
 msgstr "本名称命名的操作已经存在"
 
-#: action/views_action.py:823 workflow/import_export_views.py:124
+#: action/views_action.py:803 workflow/import_export_views.py:124
 msgid "Incorrect form request (it is not multipart)"
 msgstr "错误的表单请求(此非多部分的)"
 
-#: action/views_action.py:1197 action/views_action.py:1221 logs/views.py:49
-#: logs/views.py:59 table/views.py:196 table/views.py:321 table/views.py:378
+#: action/views_action.py:1177 action/views_action.py:1201 logs/views.py:49
+#: logs/views.py:59 table/views.py:198 table/views.py:323 table/views.py:380
 #: workflow/views.py:423 workflow/views.py:440
 msgid "Incorrect request. Unable to process"
 msgstr "不正确的请求。不能处理"
 
-#: action/views_action.py:1202 table/views.py:326 table/views.py:383
+#: action/views_action.py:1182 table/views.py:328 table/views.py:385
 msgid "There is no data in the table"
 msgstr "表格中没有数据"
 
@@ -1531,27 +1561,27 @@ msgid ""
 "administrator to enable email queueing."
 msgstr "错误配置，不能发送邮件。让系统管理员将邮件加入列队。"
 
-#: action/views_out.py:164
+#: action/views_out.py:163
 msgid "Incorrect email action invocation."
 msgstr "不正确的电子邮件操作调动。"
 
-#: action/views_out.py:289
+#: action/views_out.py:288
 msgid "Create ZIP"
 msgstr "创建压缩文件"
 
-#: action/views_out.py:319 action/views_out.py:370
+#: action/views_out.py:318 action/views_out.py:369
 msgid "Incorrect ZIP action invocation."
 msgstr "不正确的压缩文件操作调动。"
 
-#: action/views_out.py:393
+#: action/views_out.py:392
 msgid "Unable to generate zip:"
 msgstr "无法生成压缩文件:"
 
-#: action/views_out.py:398
+#: action/views_out.py:397
 msgid "The resulting ZIP is empty"
 msgstr "生成的压缩文件是空的"
 
-#: action/views_out.py:495
+#: action/views_out.py:494
 msgid ""
 "Unable to send json objects due to a misconfiguration. Ask your system "
 "administrator to enable JSON queueing."
@@ -1559,33 +1589,33 @@ msgstr ""
 "配置错误，不能发送json对象。请求\n"
 "系统管理员将JSON加入列队。"
 
-#: action/views_out.py:560
+#: action/views_out.py:559
 msgid "Incorrect JSON action invocation."
 msgstr "不正确的JSON操作调动。"
 
-#: action/views_out.py:627
+#: action/views_out.py:626
 msgid ""
 "Unable to send Canvas emails due to a misconfiguration. Ask your system "
 "administrator to enable message queueing."
 msgstr "错误配置，不能发送Canvas电子邮件。让系统管理员将邮件加入列队。"
 
-#: action/views_out.py:697
+#: action/views_out.py:696
 msgid "Incorrect canvas oauth request invocation."
 msgstr "canvas oauth请求调用不正确。"
 
-#: action/views_out.py:703 ontask_oauth/views.py:158
+#: action/views_out.py:702 ontask_oauth/views.py:158
 msgid "Internal error. Empty OAuth Instance name"
 msgstr "内部错误。清空OAuth事例名称"
 
-#: action/views_out.py:708 ontask_oauth/views.py:163
+#: action/views_out.py:707 ontask_oauth/views.py:163
 msgid "Internal error. Invalid OAuth Dict element"
 msgstr "内部错误。无效的OAuth Dict元素。"
 
-#: action/views_out.py:758
+#: action/views_out.py:757
 msgid "Incorrect canvas email action invocation."
 msgstr "不正确的canvas电子邮件处理程序调动。"
 
-#: action/views_out.py:939
+#: action/views_out.py:938
 #, python-brace-format
 msgid "Error while retrieving content for student {0}"
 msgstr "检索学生{0}内容时出错"
@@ -1787,27 +1817,27 @@ msgstr "选择要合并/更新的行的方法"
 msgid "Unable to process datatype"
 msgstr "不能处理数据类型"
 
-#: dataops/formula_evaluation.py:439
+#: dataops/formula_evaluation.py:445
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator LESS"
 msgstr "评估错误：操作为LESS时，类型{0}无法执行"
 
-#: dataops/formula_evaluation.py:475
+#: dataops/formula_evaluation.py:481
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator LESS OR EQUAL"
 msgstr "评估错误：操作为LESS或EQUAL时类型{0}无法执行"
 
-#: dataops/formula_evaluation.py:513
+#: dataops/formula_evaluation.py:519
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator GREATER"
 msgstr "评估错误：操作为GREATER时，类型{0}无法执行"
 
-#: dataops/formula_evaluation.py:550
+#: dataops/formula_evaluation.py:556
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator GREATER OR EQUAL"
 msgstr "评估错误：操作为GREATER或EQUAL时，类型{0}无法执行"
 
-#: dataops/formula_evaluation.py:586 dataops/formula_evaluation.py:635
+#: dataops/formula_evaluation.py:592 dataops/formula_evaluation.py:641
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator BETWEEN"
 msgstr "评估错误：操作为BETWEEN时，类型{0}无法执行"
@@ -1857,7 +1887,7 @@ msgid "DB name"
 msgstr "数据库名称"
 
 #: dataops/models.py:134 table/apps.py:9 table/templates/table/display.html:8
-#: table/templates/table/display.html:85 templates/base.html:67
+#: table/templates/table/display.html:86 templates/base.html:67
 msgid "Table"
 msgstr "表格"
 
@@ -1890,7 +1920,15 @@ msgstr "列{0}中的新值不是类型号"
 msgid "New values in column {0} are not in categories {1}"
 msgstr "列{0}中的新值不在类别{1}中。"
 
-#: dataops/ops.py:496
+#: dataops/ops.py:437
+#, python-brace-format
+msgid ""
+"Column {0} looses its \"key\" property through this merge. Either remove "
+"this property from the column or remove the rows that cause this problem in "
+"the new dataset"
+msgstr ""
+
+#: dataops/ops.py:508
 #, python-brace-format
 msgid "Type {0} not found"
 msgstr "未找到类型{0}"
@@ -2051,7 +2089,7 @@ msgid "Diagnostics"
 msgstr "故障诊断"
 
 #: dataops/templates/dataops/includes/partial_diagnostics.html:13
-#: scheduler/views.py:59
+#: scheduler/views.py:58
 msgid "Status"
 msgstr "状态"
 
@@ -2216,13 +2254,13 @@ msgid "Edit learner data"
 msgstr "编辑学生数据"
 
 #: dataops/templates/dataops/sql_connections.html:8
-#: dataops/templates/dataops/sql_connections.html:50
+#: dataops/templates/dataops/sql_connections.html:51
 #: dataops/templates/dataops/sql_connections_admin.html:8
-#: dataops/templates/dataops/sql_connections_admin.html:50
+#: dataops/templates/dataops/sql_connections_admin.html:51
 msgid "SQL Connections"
 msgstr "SQL连接"
 
-#: dataops/templates/dataops/sql_connections.html:56
+#: dataops/templates/dataops/sql_connections.html:57
 msgid ""
 "In this page you will find the available SQL connections to\n"
 "    access data stored in external relational databases. The connections can "
@@ -2235,11 +2273,11 @@ msgstr ""
 "只能\n"
 "由系统管理员创建。"
 
-#: dataops/templates/dataops/sql_connections_admin.html:55
+#: dataops/templates/dataops/sql_connections_admin.html:56
 msgid "Add a new SQL database connection"
 msgstr "添加新的SQL数据库连接"
 
-#: dataops/templates/dataops/sql_connections_admin.html:57
+#: dataops/templates/dataops/sql_connections_admin.html:58
 msgid "New SQL connection"
 msgstr "新的SQL连接"
 
@@ -2310,7 +2348,7 @@ msgstr "数据库表格：%(n)s"
 msgid "Transform"
 msgstr "转换"
 
-#: dataops/templates/dataops/transform.html:47
+#: dataops/templates/dataops/transform.html:48
 msgid "Transformations"
 msgstr "转换"
 
@@ -2632,23 +2670,25 @@ msgstr "检索数据帧时发生异常"
 msgid "Exception while loading data frame"
 msgstr "加载数据帧时异常"
 
-#: dataops/upload.py:420
-msgid "Merge operation failed."
+#: dataops/upload.py:419
+#, fuzzy
+#| msgid "Merge operation failed."
+msgid "Merge operation failed. "
 msgstr "合并操作失败。"
 
-#: dataops/upload.py:506 dataops/upload.py:509
+#: dataops/upload.py:505 dataops/upload.py:508
 msgid " (Ignored)"
 msgstr "(忽略)"
 
-#: dataops/upload.py:516
+#: dataops/upload.py:515
 msgid " (New)"
 msgstr "(新的)"
 
-#: dataops/upload.py:518
+#: dataops/upload.py:517
 msgid " (Update)"
 msgstr "(更新)"
 
-#: dataops/upload.py:522
+#: dataops/upload.py:521
 msgid " (Renamed)"
 msgstr "(重命名的)"
 
@@ -3026,20 +3066,20 @@ msgstr "有效载荷"
 msgid "Maximum number of logs shown to the user"
 msgstr "向用户显示的日志的最大数量"
 
-#: logs/templates/logs/display.html:8 logs/templates/logs/display.html:53
+#: logs/templates/logs/display.html:8 logs/templates/logs/display.html:54
 msgid "Logs"
 msgstr "日志"
 
-#: logs/templates/logs/display.html:58
+#: logs/templates/logs/display.html:59
 msgid "Download a CSV file containing these logs"
 msgstr "下载包含这些日志的CSV文件"
 
-#: logs/templates/logs/display.html:59 table/templates/table/display.html:146
-#: table/templates/table/display.html:160
+#: logs/templates/logs/display.html:60 table/templates/table/display.html:147
+#: table/templates/table/display.html:161
 msgid "CSV Download"
 msgstr "CSV下载"
 
-#: logs/templates/logs/display.html:74
+#: logs/templates/logs/display.html:75
 #, fuzzy
 #| msgid ""
 #| "<strong><super>*</super></strong>The platform records all operations\n"
@@ -3516,7 +3556,7 @@ msgstr "个性化JSON需要有效载荷中的令牌。"
 msgid "Schedule Action Execution"
 msgstr "安排操作执行"
 
-#: scheduler/templates/scheduler/edit.html:18
+#: scheduler/templates/scheduler/edit.html:19
 #, python-format
 msgid "Time now is %(n)s"
 msgstr "现在的时间是%(n)s"
@@ -3539,13 +3579,13 @@ msgstr ""
 msgid "Delete scheduled operation"
 msgstr "删除已排程的操作"
 
-#: scheduler/templates/scheduler/includes/partial_scheduler_operations.html:5
+#: scheduler/templates/scheduler/includes/partial_scheduler_operations.html:4
 #, fuzzy
 #| msgid "Obtain the data from the SQL connection"
 msgid "View the details of this scheduled action"
 msgstr "查看已排程的操作的细节"
 
-#: scheduler/templates/scheduler/includes/partial_scheduler_operations.html:9
+#: scheduler/templates/scheduler/includes/partial_scheduler_operations.html:8
 #: scheduler/templates/scheduler/includes/partial_show_schedule_action.html:27
 #, fuzzy
 #| msgid "Delete scheduled JSON action"
@@ -3559,7 +3599,7 @@ msgid "Scheduled action"
 msgstr "已排程的操作"
 
 #: scheduler/templates/scheduler/includes/partial_show_schedule_action.html:24
-#: scheduler/views.py:69
+#: scheduler/views.py:68
 #, fuzzy
 #| msgid "Edit scheduled email action"
 msgid "Edit this scheduled action execution"
@@ -3569,13 +3609,13 @@ msgstr "编辑此计划的操作执行"
 msgid "Scheduled operations"
 msgstr "已排程的操作"
 
-#: scheduler/templates/scheduler/index.html:42
+#: scheduler/templates/scheduler/index.html:43
 #, fuzzy
 #| msgid "Scheduled operations"
 msgid "Scheduled Actions"
 msgstr "已排程的操作"
 
-#: scheduler/templates/scheduler/index.html:54
+#: scheduler/templates/scheduler/index.html:55
 #, fuzzy, python-format
 #| msgid ""
 #| "<strong><super>*</super></strong>The execution of some of\n"
@@ -3607,50 +3647,50 @@ msgstr "操作已排程"
 msgid "The action will execute in %(n)s"
 msgstr "该操作将在%(n)s执行"
 
-#: scheduler/views.py:55
+#: scheduler/views.py:54
 msgid "Scheduled"
 msgstr "已排程"
 
-#: scheduler/views.py:93
+#: scheduler/views.py:92
 #, fuzzy
 #| msgid "Action scheduled for execution"
 msgid "Edit the action scheduled for execution"
 msgstr "编辑计划执行的操作"
 
-#: scheduler/views.py:182 scheduler/views.py:263
+#: scheduler/views.py:181 scheduler/views.py:262
 msgid "A scheduled execution of this action with this name already exists"
 msgstr "以此命名的已排程操作已经存在"
 
-#: scheduler/views.py:375
+#: scheduler/views.py:374
 msgid "Incorrect action scheduling invocation."
 msgstr "不正确的操作排程调用。"
 
-#: scheduler/views.py:384
+#: scheduler/views.py:383
 msgid "Incorrect parameters in action scheduling"
 msgstr "操作排程中的错误参数"
 
-#: scheduler/views.py:437
+#: scheduler/views.py:436
 #, fuzzy
 #| msgid "Incorrect type of action to schedule."
 msgid "This type of actions cannot be scheduled"
 msgstr "无法编排此类操作"
 
-#: scheduler/views.py:459
+#: scheduler/views.py:458
 #, python-brace-format
 msgid "{0} days"
 msgstr "{0}天"
 
-#: scheduler/views.py:462
+#: scheduler/views.py:461
 #, python-brace-format
 msgid ", {0} hours"
 msgstr "{0}小时"
 
-#: scheduler/views.py:465
+#: scheduler/views.py:464
 #, python-brace-format
 msgid ", {0} minutes"
 msgstr "{0}分钟"
 
-#: scheduler/views.py:585
+#: scheduler/views.py:584
 msgid ""
 "Unable to schedule actions due to a misconfiguration. Ask your system "
 "administrator to enable queueing."
@@ -3658,7 +3698,7 @@ msgstr ""
 "由于错误配置，无法安排操作。请系统管理员\n"
 "启用队列。"
 
-#: scheduler/views.py:599
+#: scheduler/views.py:598
 #, fuzzy
 #| msgid "The action does not apply to any data."
 msgid "This action does not support scheduling"
@@ -3777,53 +3817,56 @@ msgstr "该学生在此列中没有值"
 msgid "Unable to provide visualisation without data."
 msgstr "没有数据，无法提供可视化。"
 
-#: table/templates/table/display.html:98
+#: table/templates/table/display.html:99
 msgid "Add a new row to the table"
 msgstr "向表中添加新行"
 
-#: table/templates/table/display.html:99
+#: table/templates/table/display.html:100
 msgid "Row"
 msgstr "行"
 
-#: table/templates/table/display.html:108
+#: table/templates/table/display.html:109
 msgid "Views available for this table"
 msgstr "此表可用的视图"
 
-#: table/templates/table/display.html:109
+#: table/templates/table/display.html:110
 msgid "Views"
 msgstr "视图"
 
-#: table/templates/table/display.html:131
+#: table/templates/table/display.html:132
 msgid "Change elements in view"
 msgstr "在视图中更改元素"
 
-#: table/templates/table/display.html:132
+#: table/templates/table/display.html:133
 #: table/templates/table/includes/partial_view_edit.html:8
 msgid "Edit view"
 msgstr "编辑视图"
 
-#: table/templates/table/display.html:138
+#: table/templates/table/display.html:139
 msgid "Dashboard created with the view data"
 msgstr "用视图数据创建仪表板"
 
-#: table/templates/table/display.html:139
-#: table/templates/table/display.html:153
+#: table/templates/table/display.html:140
+#: table/templates/table/display.html:154
 #: table/templates/table/stat_view.html:24
 msgid "Dashboard"
 msgstr "仪表板"
 
-#: table/templates/table/display.html:145
-#: table/templates/table/display.html:159
+#: table/templates/table/display.html:146
+#: table/templates/table/display.html:160
 msgid "Download a CSV file containing this table"
 msgstr "下载包含此表的CSV文件"
 
-#: table/templates/table/display.html:152
+#: table/templates/table/display.html:153
 msgid "Dashboard created with the table data"
 msgstr "用表数据创建仪表板"
 
-#: table/templates/table/display.html:181
+#: table/templates/table/display.html:183
+#, fuzzy
+#| msgid ""
+#| "You may drag-and-drop a column header to change its position in the table"
 msgid ""
-"You may drag-and-drop a column header to change its position in the table"
+"You may drag and drop a column header to change its position in the table"
 msgstr "可以拖放列标题以更改其在表中的位置。"
 
 #: table/templates/table/includes/partial_column_stats_data.html:51
@@ -3943,25 +3986,25 @@ msgid "Dashboard for %(n)s"
 msgstr "%(n)s的仪表板"
 
 #: table/templates/table/view_index.html:8
-#: table/templates/table/view_index.html:54
+#: table/templates/table/view_index.html:55
 msgid "Table Views"
 msgstr "表视图"
 
-#: table/templates/table/view_index.html:57
+#: table/templates/table/view_index.html:58
 #, fuzzy
 #| msgid "Table"
 msgid "Full Table"
 msgstr "全表格"
 
-#: table/templates/table/view_index.html:61
+#: table/templates/table/view_index.html:62
 msgid "New view for the table"
 msgstr "本表的新视图"
 
-#: table/templates/table/view_index.html:62
+#: table/templates/table/view_index.html:63
 msgid "Add View"
 msgstr "添加视图"
 
-#: table/templates/table/view_index.html:70
+#: table/templates/table/view_index.html:71
 msgid ""
 "Create views by selecting a subset of rows and columns\n"
 "      of the table to show."
@@ -3977,15 +4020,15 @@ msgstr "更改视图中的列"
 msgid "A view with that name already exists"
 msgstr "具有该名称的视图已经存在"
 
-#: table/views.py:389
+#: table/views.py:391
 msgid "Incorrect view reference"
 msgstr "错误视图引用"
 
-#: table/views.py:433
+#: table/views.py:435
 msgid "Incorrect URL invoked to delete a row"
 msgstr "调用不正确的网址来删除行"
 
-#: table/views.py:506 table/views.py:539
+#: table/views.py:508 table/views.py:541
 msgid "Cannot add a view to a workflow without data"
 msgstr "无法在没有数据的情况下向工作流添加视图"
 
@@ -4255,15 +4298,6 @@ msgstr "密码设置成功。可以登陆了。"
 #: templates/registration/password_reset_confirm.html:10
 msgid "Password reset confirmation"
 msgstr "密码重置确认"
-
-#: templates/registration/password_reset_confirm.html:14
-#: templates/registration/password_reset_confirm.html:15
-#: templates/registration/password_reset_done.html:6
-#: templates/registration/password_reset_form.html:9
-#: templates/registration/password_reset_form.html:13
-#: templates/registration/password_reset_form.html:14
-msgid "Password reset"
-msgstr "密码重置"
 
 #: templates/registration/password_reset_confirm.html:21
 msgid "Enter new password"
@@ -4649,17 +4683,17 @@ msgstr "无法保存列信息"
 msgid "Details"
 msgstr "详细信息"
 
-#: workflow/templates/workflow/detail.html:65
+#: workflow/templates/workflow/detail.html:69
 #, fuzzy
 #| msgid "Operations"
 msgid "Column Operations"
 msgstr "列操作"
 
-#: workflow/templates/workflow/detail.html:87
+#: workflow/templates/workflow/detail.html:91
 msgid "Key?"
 msgstr "密钥？"
 
-#: workflow/templates/workflow/detail.html:93
+#: workflow/templates/workflow/detail.html:98
 msgid ""
 "You may drag and drop the columns from the left-most cell to change their "
 "position in the workflow."
@@ -4932,7 +4966,7 @@ msgid "Select user to allow access to the workflow"
 msgstr "选择用户以允许访问工作流"
 
 #: workflow/templates/workflow/includes/partial_share_create.html:18
-#: workflow/templates/workflow/operations.html:64
+#: workflow/templates/workflow/operations.html:65
 msgid "Share"
 msgstr "分享"
 
@@ -5200,13 +5234,13 @@ msgstr ""
 "文本或其他元素来获得个性化。页面可以通过电子邮件\n"
 "发送给学习者，通过HTML地址显示，或者发送到另一台机器。"
 
-#: workflow/templates/workflow/operations.html:46
+#: workflow/templates/workflow/operations.html:47
 #, fuzzy
 #| msgid "More workflow operations"
 msgid "Workflow Operations"
 msgstr "工作流操作"
 
-#: workflow/templates/workflow/operations.html:59
+#: workflow/templates/workflow/operations.html:60
 msgid "Attributes"
 msgstr "属性"
 
@@ -5255,13 +5289,28 @@ msgstr "工作流中没有数据"
 msgid "Edit the parameters of this column"
 msgstr "编辑此行的值"
 
-#: workflow/views.py:566
+#: workflow/views.py:567
 msgid "Unable to clone workflow"
 msgstr "无法克隆工作流"
 
-#: workflow/views.py:593
+#: workflow/views.py:594
 msgid "Workflow successfully cloned."
 msgstr "工作流已成功克隆。"
+
+#~ msgid ""
+#~ "Your login email, in case you've forgotten, is same this email address:"
+#~ msgstr "以防遗忘，你的登陆邮箱与本邮件地址相同:"
+
+#~ msgid "Thanks for using our site!"
+#~ msgstr "感谢使用我们的网站！"
+
+#~ msgid ""
+#~ "Please check your mail. You would have received a password\n"
+#~ "    reset mail from us."
+#~ msgstr "请查收邮件。你将收到一封我们发送的密码重置邮件。"
+
+#~ msgid "Unable to create condition information"
+#~ msgstr "无法创建条件信息"
 
 #~ msgid "Edit Personalized Canvas Email"
 #~ msgstr "编辑个性化Canvas电子邮件"
