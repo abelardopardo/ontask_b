@@ -40,7 +40,9 @@ var insertAttributeInContent = function() {
   if (val == '') {
     return;
   }
-  $("#id_content").summernote('createRange');
+  if (typeof $('#id_content').summernote != 'undefined') {
+    $("#id_content").summernote('createRange');
+  }
   insertText('id_content', "{{ " + val + " }}");
   $(this).val(this.defaultSelected);
 }
@@ -232,7 +234,7 @@ $(function () {
   $("#insert-elements-in-editor").on("click", ".js-insert-attribute-name", insertAttributeInContent);
 
   // Insert columns in action in
-  $("#insert-questions").on("click", ".js-insert-quesion", insertColumnInActionIn);
+  $("#insert-questions").on("click", ".js-insert-question", insertColumnInActionIn);
 
   // Insert columns in action in
   $("#edit-survey-tab-content").on("click", ".js-select-key-column-name", insertColumnInActionIn);
