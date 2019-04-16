@@ -171,7 +171,7 @@ class ColumnSelectedTable(tables.Table):
         sequence = ('name', 'description_text', 'operations')
 
         attrs = {
-            'class': 'table table-hover table-bordered shadow',
+            'class': 'table table-hover table-bordered',
             'style': 'width: 100%;',
             'id': 'column-selected-table'
         }

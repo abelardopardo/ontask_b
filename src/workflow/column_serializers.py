@@ -59,3 +59,9 @@ class ColumnSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Column
         exclude = ('id', 'workflow')
+
+
+class ColumnNameSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = Column
+        fields = ('name',)

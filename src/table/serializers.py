@@ -13,7 +13,7 @@ import pandas as pd
 from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
 
-from action.serializers import ColumnNameSerializer
+from workflow.column_serializers import ColumnNameSerializer
 from dataops import ops
 from .models import View
 

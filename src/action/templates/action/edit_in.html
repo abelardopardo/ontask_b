@@ -106,19 +106,19 @@
         <div id="insert-questions" class="text-center mt-3">
           <div id="column-selector">
             <div class="dropdown btn-group">
-              <button type="button" class="shadow btn btn-outline-dark dropdown-toggle"
+              <button type="button" class="btn btn-outline-dark dropdown-toggle"
                       data-toggle="dropdown">
                 {% trans 'Insert existing question' %}
               </button>
               <div class="shadow dropdown-menu">
                 {% for column in columns_to_insert %}
-                  <button type="button" class="dropdown-item js-insert-quesion"
+                  <button type="button" class="dropdown-item js-insert-question"
                           data-url="{% url 'action:select_column_action' action.id column.id %}">{{ column.name }}</button>
                 {% endfor %}
               </div>
             </div>
             <button type="button"
-                    class="shadow btn btn-outline-dark js-workflow-question-add"
+                    class="btn btn-outline-dark js-workflow-question-add"
                     data-url="{% url 'workflow:question_add' action.id %}"
                     data-toggle="tooltip"
                     title="{% trans 'Add a new question to the action' %}">
@@ -139,7 +139,7 @@
         <div class="my-3">
           <h5 class="text-center">Survey description (shown to learners)
             <button type="button"
-                    class="shadow btn btn-sm btn-outline-dark js-description-edit"
+                    class="btn btn-outline-dark js-description-edit"
                     data-url="{% url 'action:edit_description' action.id %}"
                     data-type="filter"
                     data-toggle="tooltip"
@@ -152,7 +152,7 @@
           <h5 class="text-center">
             {% trans 'Key column to match the user id' %}
             <div id="select-key-column-name" class="dropdown btn-group">
-              <button type="button" class="shadow btn btn-outline-dark dropdown-toggle"
+              <button type="button" class="btn btn-outline-dark dropdown-toggle"
                       data-toggle="dropdown">
                 {% if not key_selected %}
                   {% trans 'Please, select Key column' %}
