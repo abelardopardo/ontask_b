@@ -31,7 +31,7 @@ class TutorialCaptures(ScreenTests):
         "Jane Doe"
 
     def setUp(self):
-        super(TutorialCaptures, self).setUp()
+        super().setUp()
         test.create_users()
 
     def test(self):

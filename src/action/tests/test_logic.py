@@ -38,12 +38,12 @@ class EmailActionTracking(test.OnTaskTestCase):
 
     @classmethod
     def setUpClass(cls):
-        super(EmailActionTracking, cls).setUpClass()
+        super().setUpClass()
         pandas_db.pg_restore_table(cls.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(EmailActionTracking, self).tearDown()
+        super().tearDown()
 
     # Test that tracking hits are properly stored.
     def test_tracking(self):

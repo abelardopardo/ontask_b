@@ -28,7 +28,7 @@ class ToolConsumer(LaunchParamsMixin, RequestValidatorMixin, object):
         self.consumer_secret = consumer_secret
 
         # Call superclass initializers
-        super(ToolConsumer, self).__init__()
+        super().__init__()
 
         self.non_spec_params = defaultdict(lambda: None)
 

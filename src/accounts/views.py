@@ -19,13 +19,13 @@ class LoginView(bracesviews.AnonymousRequiredMixin,
     form_class = forms.LoginForm
 
     def get_context_data(self, **kwargs):
-        context = super(LoginView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['ONTASK_SHOW_HOME_FOOTER_IMAGE'] = \
             settings.SHOW_HOME_FOOTER_IMAGE
         return context
 
     def form_valid(self, form):
-        redirect = super(LoginView, self).form_valid(form)
+        redirect = super().form_valid(form)
         remember_me = form.cleaned_data.get('remember_me')
         if remember_me is True:
             ONE_MONTH = 30*24*60*60
@@ -48,7 +48,7 @@ class PasswordChangeView(authviews.PasswordChangeView):
         messages.success(self.request,
                          _("Your password was changed, "
                            "hence you have been logged out. Please relogin"))
-        return super(PasswordChangeView, self).form_valid(form)
+        return super().form_valid(form)
 
 
 class PasswordResetView(authviews.PasswordResetView):

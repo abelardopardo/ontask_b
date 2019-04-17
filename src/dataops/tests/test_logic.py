@@ -58,16 +58,16 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
     }
 
     def __init__(self, *args, **kwargs):
-        super(DataopsMatrixManipulation, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.workflow = None
 
     def setUp(self):
-        super(DataopsMatrixManipulation, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(DataopsMatrixManipulation, self).tearDown()
+        super().tearDown()
 
     def parse_data_frames(self):
         # Parse the two CSV strings and return as data frames
@@ -581,15 +581,15 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
     action_name = 'Test action'
 
     def __init__(self, *args, **kwargs):
-        super(ConditionSetEvaluation, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def setUp(self):
-        super(ConditionSetEvaluation, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(ConditionSetEvaluation, self).tearDown()
+        super().tearDown()
 
     def test_eval_conditions(self):
         # Get the action first

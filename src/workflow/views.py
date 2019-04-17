@@ -215,7 +215,7 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
     template_name = 'workflow/includes/partial_workflow_create.html'
 
     def get_context_data(self, **kwargs):
-        context = super(WorkflowCreateView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         return context
 
     def get(self, request, *args, **kwargs):
@@ -239,7 +239,7 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
     context_object_name = 'workflow'
 
     def get_object(self, queryset=None):
-        old_obj = super(WorkflowDetailView, self).get_object(queryset=queryset)
+        old_obj = super().get_object(queryset=queryset)
 
         # Check if the workflow is locked
         obj = get_workflow(self.request, old_obj.id)
@@ -247,7 +247,7 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
     def get_context_data(self, **kwargs):
 
-        context = super(WorkflowDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         # Get the table information (if it exist)
         context['table_info'] = None

@@ -12,7 +12,7 @@ class WorkflowApiCreate(test.OnTaskApiTestCase):
     fixtures = ['simple_workflow']
 
     def setUp(self):
-        super(WorkflowApiCreate, self).setUp()
+        super().setUp()
         # Get the token for authentication and set credentials in client
         token = Token.objects.get(user__email='instructor01@bogus.com')
         auth = 'Token ' + token.key

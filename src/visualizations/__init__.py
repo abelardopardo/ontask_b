@@ -16,7 +16,7 @@ class VisHandler(with_metaclass(ABCMeta, object)):
     @abstractmethod
     def __init__(self, data, *args, **kwargs):
         self.data = data
-        super(VisHandler, self).__init__()
+        super().__init__()
 
     @staticmethod
     @abstractmethod

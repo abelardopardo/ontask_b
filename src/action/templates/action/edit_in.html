@@ -25,7 +25,6 @@
     {% with js_var='qbuilder_options' allow_empty='false' %}
       {% include 'qbuilder_options.js' %}
     {% endwith %}
-    console.log(getLanguage())
     if (document.getElementById("column-selected-table") != null) {
       $(document).ready(function() {
         $('#column-selected-table').DataTable({

@@ -73,7 +73,7 @@ class TableApiBase(test.OnTaskApiTestCase):
     }
 
     def setUp(self):
-        super(TableApiBase, self).setUp()
+        super().setUp()
         # Get the token for authentication and set credentials in client
         token = Token.objects.get(user__email='instructor01@bogus.com')
         auth = 'Token ' + token.key
@@ -82,7 +82,7 @@ class TableApiBase(test.OnTaskApiTestCase):
 
     def tearDown(self):
         test.delete_all_tables()
-        super(TableApiBase, self).tearDown()
+        super().tearDown()
 
 
 class TableApiCreate(TableApiBase):

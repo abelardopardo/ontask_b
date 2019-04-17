@@ -47,7 +47,7 @@ LAUNCH_DATA_PARAMETERS = [
 
 class LaunchParamsMixin(object):
     def __init__(self):
-        super(LaunchParamsMixin, self).__init__()
+        super().__init__()
 
         for param in LAUNCH_DATA_PARAMETERS:
             setattr(self, param, None)

@@ -113,7 +113,7 @@ class OnTaskTestCase(TransactionTestCase):
     def tearDownClass(cls):
         # Close the db_engine
         pandas_db.destroy_db_engine(pandas_db.engine)
-        super(OnTaskTestCase, cls).tearDownClass()
+        super().tearDownClass()
 
 
 class OnTaskApiTestCase(APITransactionTestCase):
@@ -121,7 +121,7 @@ class OnTaskApiTestCase(APITransactionTestCase):
     def tearDownClass(cls):
         # Close the db_engine
         pandas_db.destroy_db_engine(pandas_db.engine)
-        super(OnTaskApiTestCase, cls).tearDownClass()
+        super().tearDownClass()
 
     def compare_wflows(self, jwflow, workflow):
         # Name and description match the one in the db
@@ -176,7 +176,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
-        super(OnTaskLiveTestCase, cls).setUpClass()
+        super().setUpClass()
         fp = webdriver.FirefoxProfile()
         fp.set_preference("dom.file.createInChild", True)
         fp.set_preference("font.size.variable.x-western", 14)
@@ -203,7 +203,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     def tearDownClass(cls):
         cls.selenium.quit()
         pandas_db.destroy_db_engine(pandas_db.engine)
-        super(OnTaskLiveTestCase, cls).tearDownClass()
+        super().tearDownClass()
 
     def open(self, url):
         self.selenium.get("%s%s" % (self.live_server_url, url))

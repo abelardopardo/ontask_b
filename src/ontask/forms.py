@@ -38,10 +38,10 @@ class RestrictedFileField(forms.FileField):
         self.max_upload_size = kwargs.pop('max_upload_size', None)
         if not self.max_upload_size:
             self.max_upload_size = int(ontask.ontask_prefs.MAX_UPLOAD_SIZE)
-        super(RestrictedFileField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def clean(self, *args, **kwargs):
-        data = super(RestrictedFileField, self).clean(*args, **kwargs)
+        data = super().clean(*args, **kwargs)
         try:
             if data.content_type in self.content_types:
                 if data.size > self.max_upload_size:

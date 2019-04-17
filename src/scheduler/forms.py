@@ -42,13 +42,13 @@ class ScheduleForm(forms.ModelForm):
         confirm_items = kwargs.pop('confirm_items')
 
         # Call the parent constructor
-        super(ScheduleForm, self).__init__(data, *args, **kwargs)
+        super().__init__(data, *args, **kwargs)
 
         self.fields['item_column'].queryset = columns
         self.fields['confirm_items'].initial = confirm_items
 
     def clean(self):
-        data = super(ScheduleForm, self).clean()
+        data = super().clean()
 
         # The executed time must be in the future
         now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
@@ -109,7 +109,7 @@ class EmailScheduleForm(ScheduleForm):
     def __init__(self, data, *args, **kwargs):
 
         # Call the parent constructor
-        super(EmailScheduleForm, self).__init__(data, *args, **kwargs)
+        super().__init__(data, *args, **kwargs)
 
         self.fields['item_column'].label = _('Column in the table containing '
                                              'the email')
@@ -139,7 +139,7 @@ class EmailScheduleForm(ScheduleForm):
 
     def clean(self):
 
-        data = super(EmailScheduleForm, self).clean()
+        data = super().clean()
 
         errors = scheduled_email_action_data_is_correct(
             self.action,
@@ -184,7 +184,7 @@ class JSONScheduleForm(ScheduleForm):
     def __init__(self, data, *args, **kwargs):
 
         # Call the parent constructor
-        super(JSONScheduleForm, self).__init__(data, *args, **kwargs)
+        super().__init__(data, *args, **kwargs)
 
         self.fields['item_column'].label = _('Column to select elements ('
                                              'empty to skip)')
@@ -197,7 +197,7 @@ class JSONScheduleForm(ScheduleForm):
 
     def clean(self):
 
-        data = super(JSONScheduleForm, self).clean()
+        data = super().clean()
 
         errors = scheduled_json_action_data_is_correct(
             self.action,
@@ -237,7 +237,7 @@ class CanvasEmailScheduleForm(JSONScheduleForm):
 
     def __init__(self, data, *args, **kwargs):
         # Call the parent constructor
-        super(CanvasEmailScheduleForm, self).__init__(data, *args, **kwargs)
+        super().__init__(data, *args, **kwargs)
 
         self.fields['item_column'].label = _('Column in the table containing '
                                              'the Canvas ID')

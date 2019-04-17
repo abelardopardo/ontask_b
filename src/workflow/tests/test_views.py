@@ -18,7 +18,7 @@ from action.models import Action
 
 class WorkflowInitial(test.OnTaskLiveTestCase):
     def setUp(self):
-        super(WorkflowInitial, self).setUp()
+        super().setUp()
         test.create_users()
 
     def test_01_workflow_create_upload_merge_column_edit(self):
@@ -250,12 +250,12 @@ class WorkflowModify(test.OnTaskLiveTestCase):
     )
 
     def setUp(self):
-        super(WorkflowModify, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(WorkflowModify, self).tearDown()
+        super().tearDown()
 
     def test_02_workflow_column_create_delete(self):
         new_cols = [
@@ -405,12 +405,12 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
     )
 
     def setUp(self):
-        super(WorkflowAttribute, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(WorkflowAttribute, self).tearDown()
+        super().tearDown()
 
     def test_workflow_attributes(self):
         categories = 'aaa, bbb, ccc'
@@ -506,12 +506,12 @@ class WorkflowShare(test.OnTaskLiveTestCase):
     )
 
     def setUp(self):
-        super(WorkflowShare, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(WorkflowShare, self).tearDown()
+        super().tearDown()
 
     def test_workflow_share(self):
         # Login

@@ -7,7 +7,7 @@ class RequestValidatorMixin:
     '''
 
     def __init__(self):
-        super(RequestValidatorMixin, self).__init__()
+        super().__init__()
 
         self.oauth_server = oauth2.Server()
         signature_method = oauth2.SignatureMethod_HMAC_SHA1()

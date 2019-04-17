@@ -214,7 +214,7 @@ class FilterCreateView(UserIsInstructor, generic.TemplateView):
     template_name = 'action/includes/partial_filter_addedit.html'
 
     def get_context_data(self, **kwargs):
-        context = super(FilterCreateView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['add'] = True
         return context
 
@@ -383,7 +383,7 @@ class ConditionCreateView(UserIsInstructor, generic.TemplateView):
     template_name = 'action/includes/partial_condition_addedit.html'
 
     def get_context_data(self, **kwargs):
-        context = super(ConditionCreateView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         return context
 
     def get(self, request, *args, **kwargs):

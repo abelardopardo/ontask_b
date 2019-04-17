@@ -256,7 +256,7 @@ def evaluate_action(action, extra_string=None,
         # Step 3: Evaluate all the conditions
         condition_eval = {}
         for condition in action.conditions.filter(
-            is_filter=False).values('formula', 'name'):
+                is_filter=False).values('formula', 'name'):
             if condition['is_filter']:
                 # Filter can be skipped in this stage
                 continue

@@ -22,7 +22,7 @@ from test import ElementHasFullOpacity, ScreenTests
 class ScreenTutorialTest(ScreenTests):
 
     def setUp(self):
-        super(ScreenTutorialTest, self).setUp()
+        super().setUp()
         test.create_users()
 
     def test_ss_00(self):
@@ -63,7 +63,7 @@ class ScreenTutorialTest(ScreenTests):
 class ScreenImportTest(ScreenTests):
 
     def setUp(self):
-        super(ScreenImportTest, self).setUp()
+        super().setUp()
         test.create_users()
 
     def test_ss_01(self):
@@ -122,7 +122,7 @@ class ScreenTestFixture(ScreenTests):
     wflow_name = 'combine columns'
 
     def setUp(self):
-        super(ScreenTestFixture, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
         # Insert a SQL Connection
@@ -142,7 +142,7 @@ class ScreenTestFixture(ScreenTests):
 
     def tearDown(self):
         test.delete_all_tables()
-        super(ScreenTestFixture, self).tearDown()
+        super().tearDown()
 
     def test_sql_admin(self):
         # Login

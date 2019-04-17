@@ -27,7 +27,7 @@ class PlotlyHandler(VisHandler):
 
     def __init__(self, data, *args, **kwargs):
 
-        super(PlotlyHandler, self).__init__(data, *args, **kwargs)
+        super().__init__(data, *args, **kwargs)
 
         self.format_dict = {
             'style': ''
@@ -64,7 +64,7 @@ class PlotlyBoxPlot(PlotlyHandler):
 
     def __init__(self, data, *args, **kwargs):
 
-        super(PlotlyBoxPlot, self).__init__(data, *args, **kwargs)
+        super().__init__(data, *args, **kwargs)
 
         self.format_dict['id'] = 'boxplot-id'
         # Transfer the keys to the formatting dictionary
@@ -127,7 +127,7 @@ class PlotlyColumnHistogram(PlotlyHandler):
 
     def __init__(self, data, *args, **kwargs):
 
-        super(PlotlyColumnHistogram, self).__init__(data, *args, **kwargs)
+        super().__init__(data, *args, **kwargs)
 
         self.format_dict['id'] = 'histogram-id'
 
@@ -236,7 +236,7 @@ class PlotlyGauge(PlotlyHandler):
         for key, value in list(kwargs.pop('context', {}).items()):
             self.format_dict[key] = value
 
-        super(PlotlyGauge, self).__init__(data, *args, **kwargs)
+        super().__init__(data, *args, **kwargs)
 
         data = []
         for column in self.data.columns:

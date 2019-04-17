@@ -31,12 +31,12 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
     wflow_empty = 'The workflow does not have data'
 
     def setUp(self):
-        super(ActionActionEdit, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(ActionActionEdit, self).tearDown()
+        super().tearDown()
 
     # Test action rename
     def test_action_00_rename(self):
@@ -531,12 +531,12 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
     wflow_empty = 'The workflow does not have data'
 
     def setUp(self):
-        super(ActionActionInCreate, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(ActionActionInCreate, self).tearDown()
+        super().tearDown()
 
     # Test operations with the filter
     def test_action_01_data_entry(self):
@@ -620,12 +620,12 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
     wflow_name = 'wflow2'
 
     def setUp(self):
-        super(ActionActionRenameEffect, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(ActionActionRenameEffect, self).tearDown()
+        super().tearDown()
 
     # Test operations with the filter
     def test_action_01_rename_column_condition_attribute(self):
@@ -753,12 +753,12 @@ class ActionActionZip(test.OnTaskLiveTestCase):
     wflow_name = 'wflow2'
 
     def setUp(self):
-        super(ActionActionZip, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(ActionActionZip, self).tearDown()
+        super().tearDown()
 
     # Test operations with the filter
     def test_action_01_zip(self):
@@ -846,12 +846,12 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
                   "{% if cond 2 %}Cond 2 is true{% endif %}\\n"
 
     def setUp(self):
-        super(ActionActionDetectAllFalseRows, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(ActionActionDetectAllFalseRows, self).tearDown()
+        super().tearDown()
 
     # Test action rename
     def test_action_detect_all_false_rows(self):

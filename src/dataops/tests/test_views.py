@@ -27,12 +27,12 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
     )
 
     def setUp(self):
-        super(DataopsSymbols, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(DataopsSymbols, self).tearDown()
+        super().tearDown()
 
     def test_01_symbols(self):
         symbols = '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~'
@@ -378,7 +378,7 @@ class DataopsExcelUpload(test.OnTaskLiveTestCase):
 
     def tearDown(self):
         test.delete_all_tables()
-        super(DataopsExcelUpload, self).tearDown()
+        super().tearDown()
 
     def test_01_excelupload(self):
         # Login
@@ -427,7 +427,7 @@ class DataopsExcelUploadSheet(test.OnTaskLiveTestCase):
 
     def tearDown(self):
         test.delete_all_tables()
-        super(DataopsExcelUploadSheet, self).tearDown()
+        super().tearDown()
 
     def test_01_excelupload_sheet(self):
         # Login
@@ -479,7 +479,7 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
 
     def tearDown(self):
         test.delete_all_tables()
-        super(DataopsNaNProcessing, self).tearDown()
+        super().tearDown()
 
     def test_01_nan_manipulation(self):
         # Login
@@ -591,12 +591,12 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
     )
 
     def setUp(self):
-        super(DataopsPluginExecution, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(DataopsPluginExecution, self).tearDown()
+        super().tearDown()
 
     def test_01_first_plugin(self):
         # Login
@@ -824,12 +824,12 @@ class DataopsMerge(test.OnTaskLiveTestCase):
     )
 
     def setUp(self):
-        super(DataopsMerge, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(DataopsMerge, self).tearDown()
+        super().tearDown()
 
     def template_merge(self, method, rename=True):
         # Login

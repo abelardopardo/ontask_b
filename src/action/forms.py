@@ -35,7 +35,7 @@ class ActionUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop(str('workflow_user'), None)
         self.workflow = kwargs.pop(str('action_workflow'), None)
-        super(ActionUpdateForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     class Meta(object):
         model = Action
@@ -44,7 +44,7 @@ class ActionUpdateForm(forms.ModelForm):
 
 class ActionForm(ActionUpdateForm):
     def __init__(self, *args, **kargs):
-        super(ActionForm, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         self.fields['action_type'].widget.choices = \
             Action.AVAILABLE_ACTION_TYPES
@@ -75,7 +75,7 @@ class EditActionOutForm(forms.ModelForm):
 
     def __init__(self, *args, **kargs):
 
-        super(EditActionOutForm, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         # Personalized text, canvas email
         if self.instance.action_type == Action.PERSONALIZED_TEXT:
@@ -129,7 +129,7 @@ class EnterActionIn(forms.Form):
         self.values = kargs.pop('values', None)
         self.show_key = kargs.pop('show_key', False)
 
-        super(EnterActionIn, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         # If no initial values have been given, replicate a list of Nones
         if not self.values:
@@ -160,7 +160,7 @@ class FilterForm(forms.ModelForm):
     """
 
     def __init__(self, *args, **kwargs):
-        super(FilterForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # Required enforced in the server (not in the browser)
         self.fields['formula'].required = False
@@ -181,7 +181,7 @@ class ConditionForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
 
-        super(ConditionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # Required enforced in the server (not in the browser)
         self.fields['formula'].required = False
@@ -195,7 +195,7 @@ class ConditionForm(forms.ModelForm):
             self.old_name = self.instance.name
 
     def clean(self):
-        data = super(ConditionForm, self).clean()
+        data = super().clean()
 
         if not data.get('name'):
             self.add_error('name', _('Name cannot be empty'))
@@ -216,7 +216,7 @@ class ConditionForm(forms.ModelForm):
 class EnableURLForm(forms.ModelForm):
 
     def clean(self):
-        data = super(EnableURLForm, self).clean()
+        data = super().clean()
 
         # Check the datetimes. One needs to be after the other
         a_from = self.cleaned_data['active_from']
@@ -293,7 +293,7 @@ class EmailActionForm(forms.Form):
         self.action = kargs.pop('action')
         self.op_payload = kargs.pop('op_payload')
 
-        super(EmailActionForm, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         # Set the initial values from the payload
         self.fields['subject'].initial = self.op_payload.get('subject', '')
@@ -327,7 +327,7 @@ class EmailActionForm(forms.Form):
             [(x, x) for x in self.column_names]
 
     def clean(self):
-        data = super(EmailActionForm, self).clean()
+        data = super().clean()
 
         email_column = self.cleaned_data['email_column']
 
@@ -407,7 +407,7 @@ class ZipActionForm(forms.Form):
         self.action = kargs.pop('action')
         self.op_payload = kargs.pop('op_payload')
 
-        super(ZipActionForm, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         # Set the initial values from the payload
         user_fname_column = self.op_payload.get('user_fname_column', None)
@@ -435,7 +435,7 @@ class ZipActionForm(forms.Form):
             'confirm_users', False)
 
     def clean(self):
-        data = super(ZipActionForm, self).clean()
+        data = super().clean()
 
         # Participant column must be unique
         pcolumn = data['participant_column']
@@ -498,7 +498,7 @@ class EmailExcludeForm(forms.Form):
         self.column_name = kwargs.pop('column_name', None)
         self.exclude_init = kwargs.pop('exclude_values', list)
 
-        super(EmailExcludeForm, self).__init__(data, *args, **kwargs)
+        super().__init__(data, *args, **kwargs)
 
         self.fields['exclude_values'].choices = \
             get_table_cursor(self.action.workflow.get_data_frame_table_name(),
@@ -522,7 +522,7 @@ class JSONBasicActionForm(forms.Form):
         self.column_names = kargs.pop('column_names')
         self.op_payload = kargs.pop('op_payload')
 
-        super(JSONBasicActionForm, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         # Handle the key column setting the initial value if given and
         # selecting the choices
@@ -559,7 +559,7 @@ class JSONActionForm(JSONBasicActionForm):
     )
 
     def __init__(self, *args, **kargs):
-        super(JSONActionForm, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         self.fields['key_column'].label = \
             _('Column to exclude objects to send (empty to skip step)')
@@ -588,7 +588,7 @@ class CanvasEmailActionForm(JSONBasicActionForm):
     def __init__(self, *args, **kargs):
         self.action = kargs.pop('action')
 
-        super(CanvasEmailActionForm, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         if len(ontask_settings.CANVAS_INFO_DICT) > 1:
             # Add the target_url field if the system has more than one entry

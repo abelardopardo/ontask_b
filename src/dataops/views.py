@@ -55,7 +55,7 @@ class PluginRegistryTable(tables.Table):
 
         self.request = kwargs.get("request", None)
 
-        super(PluginRegistryTable, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def render_name(self, record):
         if record.is_verified:

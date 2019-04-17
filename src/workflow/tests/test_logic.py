@@ -69,12 +69,12 @@ class WorkflowImport(test.OnTaskLiveTestCase):
     )
 
     def setUp(self):
-        super(WorkflowImport, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(WorkflowImport, self).tearDown()
+        super().tearDown()
 
     def test_import_complete(self):
 

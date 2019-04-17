@@ -44,7 +44,7 @@ class PluginInfoForm(forms.Form):
         self.workflow = kwargs.pop('workflow', None)
         self.plugin_instance = kwargs.pop('plugin_instance', None)
 
-        super(PluginInfoForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         if self.plugin_instance.input_column_names:
             # The set of columns is fixed, remove the field.
@@ -143,7 +143,7 @@ class PluginInfoForm(forms.Form):
 
     def clean(self):
 
-        data = super(PluginInfoForm, self).clean()
+        data = super().clean()
 
         columns = data.get('columns', None)
         if columns and columns.count() == 0:
@@ -162,7 +162,7 @@ class UploadBasic(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.workflow = kwargs.pop(str('workflow'), None)
-        super(UploadBasic, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def clean_data_frame(self):
         """
@@ -236,7 +236,7 @@ class UploadCSVFileForm(UploadBasic):
         :return: The cleaned data
         """
 
-        data = super(UploadCSVFileForm, self).clean()
+        data = super().clean()
 
         done = False
         if data['skip_lines_at_top'] < 0:
@@ -301,7 +301,7 @@ class UploadExcelFileForm(UploadBasic):
         :return: The cleaned data
         """
 
-        data = super(UploadExcelFileForm, self).clean()
+        data = super().clean()
 
         # # Process Excel file using pandas read_excel
         try:
@@ -358,7 +358,7 @@ class UploadGoogleSheetForm(UploadBasic):
         :return: The cleaned data
         """
 
-        data = super(UploadGoogleSheetForm, self).clean()
+        data = super().clean()
 
         done = False
         if data['skip_lines_at_top'] < 0:
@@ -450,7 +450,7 @@ class UploadS3FileForm(UploadBasic):
         :return: The cleaned data
         """
 
-        data = super(UploadS3FileForm, self).clean()
+        data = super().clean()
 
         done = False
         if data['skip_lines_at_top'] < 0:
@@ -549,7 +549,7 @@ class SelectColumnUploadForm(forms.Form):
         self.is_key = kargs.pop('is_key')
         self.keep_key = kargs.pop('keep_key')
 
-        super(SelectColumnUploadForm, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         # Create as many fields as the given columns
         for idx, (c, upload) in enumerate(zip(self.column_names,
@@ -576,7 +576,7 @@ class SelectColumnUploadForm(forms.Form):
                 )
 
     def clean(self):
-        cleaned_data = super(SelectColumnUploadForm, self).clean()
+        cleaned_data = super().clean()
 
         upload_list = [cleaned_data.get('upload_%s' % i, False)
                        for i in range(len(self.column_names))]
@@ -632,7 +632,7 @@ class SelectKeysForm(forms.Form):
                   if v[0] == how_merge),
                  None)
 
-        super(SelectKeysForm, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         self.fields['dst_key'] = \
             forms.ChoiceField(initial=dst_choice_initial,
@@ -669,7 +669,7 @@ class RowFilterForm(forms.Form):
         self.key_names = [x.name for x in columns if x.is_key]
         self.key_types = [x.data_type for x in columns if x.is_key]
 
-        super(RowFilterForm, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         for name, field_type in zip(self.key_names, self.key_types):
             if field_type == 'string':
@@ -703,7 +703,7 @@ class RowForm(forms.Form):
         self.workflow = kargs.pop('workflow', None)
         self.initial_values = kargs.pop('initial_values', None)
 
-        super(RowForm, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         if not self.workflow:
             return

@@ -355,7 +355,7 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
     form_class = ActionUpdateForm
 
     def get_object(self, queryset=None):
-        obj = super(ActionUpdateView, self).get_object(queryset=queryset)
+        obj = super().get_object(queryset=queryset)
         if obj.workflow.id != self.request.session['ontask_workflow_id']:
             raise Http404()
 

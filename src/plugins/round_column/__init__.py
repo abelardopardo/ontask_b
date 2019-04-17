@@ -22,7 +22,7 @@ class RoundColumn(OnTaskPluginAbstract):
 
     def __init__(self):
 
-        super(RoundColumn, self).__init__()
+        super().__init__()
 
         self.name = 'Round column'
         self.description_txt = self.__doc__

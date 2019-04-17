@@ -17,7 +17,7 @@ class ViewAddForm(forms.ModelForm):
     def __init__(self, data, *args, **kwargs):
         self.workflow = kwargs.pop('workflow', None)
 
-        super(ViewAddForm, self).__init__(data, *args, **kwargs)
+        super().__init__(data, *args, **kwargs)
 
         # Rename some of the fields
         self.fields['name'].label = _('View name')
@@ -35,7 +35,7 @@ class ViewAddForm(forms.ModelForm):
 
     def clean(self):
 
-        data = super(ViewAddForm, self).clean()
+        data = super().clean()
 
         if data['columns'].count() == 0:
             self.add_error(

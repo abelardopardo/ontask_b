@@ -165,7 +165,7 @@ class ScheduledEmailSerializer(ScheduledActionSerializer):
     def extra_validation(self, validated_data):
 
         action, execute, item_column, exclude_values, payload = \
-            super(ScheduledEmailSerializer, self).extra_validation(
+            super().extra_validation(
                 validated_data
             )
 
@@ -216,7 +216,7 @@ class ScheduledJSONSerializer(ScheduledActionSerializer):
     def extra_validation(self, validated_data):
 
         action, execute, item_column, exclude_values, payload = \
-            super(ScheduledJSONSerializer, self).extra_validation(
+            super().extra_validation(
                 validated_data
             )
 

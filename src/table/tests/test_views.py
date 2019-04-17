@@ -26,12 +26,12 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
     wflow_name = 'combine columns'
 
     def setUp(self):
-        super(TableDerivedColumns, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(TableDerivedColumns, self).tearDown()
+        super().tearDown()
 
     # Test operations with all derived columns
     def test_table_create_derived_columns(self):
@@ -348,12 +348,12 @@ class TableViews(test.OnTaskLiveTestCase):
     wflow_name = 'combine columns'
 
     def setUp(self):
-        super(TableViews, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(TableViews, self).tearDown()
+        super().tearDown()
 
     # Test operations with all derived columns
     def test_table_views(self):
@@ -545,12 +545,12 @@ class TableInsertRow(test.OnTaskLiveTestCase):
     wflow_name = 'combine columns'
 
     def setUp(self):
-        super(TableInsertRow, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
-        super(TableInsertRow, self).tearDown()
+        super().tearDown()
 
     # Test operations with all derived columns
     def test_table_insert_row(self):
