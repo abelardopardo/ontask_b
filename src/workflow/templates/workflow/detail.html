@@ -45,6 +45,11 @@
               {"data": "operations", "class": "dt-center"},
             ],
             columnDefs: [
+              {"targets": 3,
+               createdCell: function(td, cellData, rowData, row, col){
+                 $(td).addClass('column-type-' + cellData);
+               }
+              },
               {"orderable": false, "targets": 5},
               {"searchable": false, "targets": "operations"},
             ],
@@ -53,13 +58,12 @@
             },
             colReorder: false,
             rowReorder: { dataSrc: 'name' },
-            createdRow: function( row, data, dataIndex){
-              $(row).addClass('column-type-' + data['type_name']);
-            }
+
           });
           // Process the column reorder events
           column_table.on("row-reordered", row_reordered);
         });
+        // Set attributes in the header elements
       }
     </script>
   {% endif %}

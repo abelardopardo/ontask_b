@@ -10,7 +10,8 @@
 {% endblock %}
 {% block container %}
   <div class="container" id="sql-load-step1">
-    <h1 class="text-center">{% blocktrans with n=dtype_select %}Step 1: Establish a {{ n }}{% endblocktrans %}</h1>
+    {% include 'step_by_step.html' with valuerange=valuerange step=2 %}
+    <h1 class="text-center">{% blocktrans with n=dtype_select %}Establish a {{ n }}{% endblocktrans %}</h1>
 
     <p class="text-center">{% trans 'The data will be accessed with the following parameters:' %}</p>
 

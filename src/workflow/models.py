@@ -542,6 +542,16 @@ class Column(models.Model):
         else:
             self.categories = to_store
 
+    def get_simplified_data_type(self):
+        """
+        :return: The simplified data type using "number" for either integer or
+        double
+        """
+        if self.data_type == 'integer' or self.data_type == 'double':
+            return 'number'
+
+        return self.data_type
+
     @staticmethod
     def validate_column_value(data_type, value):
         """

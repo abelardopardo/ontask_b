@@ -53,17 +53,17 @@ body {
   margin-top: 6px;
 }
 
-:not(td).column-type-integer, :not(td).column-type-double {
-  background: #aed2f0; /* linear-gradient(60deg, #e4aa54, #de9428); */
+.column-type-number {
+  background: #aed2f0;
 }
-:not(td).column-type-string {
-  background: #f1b1b1; /* linear-gradient(60deg, #e4aa54, #de9428); */
+.column-type-string {
+  background: #f1b1b1;
 }
-:not(td).column-type-boolean {
-  background: #f1e09d; /* linear-gradient(60deg, #f55a4e, #f32c1e); */
+.column-type-boolean {
+  background: #f1e09d;
 }
-not(td).column-type-datetime {
-  background: #a5dcbf; /* linear-gradient(60deg, #a9a1b5, #8f859f); */
+.column-type-datetime {
+  background: #a5dcbf;
 }
 
 .action-type-personalized-text {

@@ -472,21 +472,6 @@ def column_ss(request):
             {'id': col.id, 'is_key': col.is_key}
         )
 
-        # The data type for integers or doubles is shown as 'number'
-        col_data_type = col.data_type
-        col_data_type_str = """<div data-toggle="tooltip" title="{0}">
-                 <span class="fa fa-{1}"></span></div>"""
-        if col_data_type == 'string':
-            col_data_type_str = col_data_type_str.format('Text', 'italic')
-        elif col_data_type == 'integer' or col_data_type == 'double':
-            col_data_type_str = col_data_type_str.format('Number', 'percent')
-        elif col_data_type == 'boolean':
-            col_data_type_str = col_data_type_str.format('True/False',
-                                                         'toggle-on')
-        elif col_data_type == 'datetime':
-            col_data_type_str = col_data_type_str.format('Date/Time',
-                                                         'calendar-o')
-
         final_qs.append({
             'number': col.position,
             'name': format_html(
@@ -498,8 +483,7 @@ def column_ss(request):
                 col.name
             ),
             'description': col.description_text,
-            'type': format_html(col_data_type_str),
-            'type_name': col.data_type,
+            'type': col.get_simplified_data_type(),
             'key': '<span class="true">✔</span>' if col.is_key else '',
             'operations': ops_string
         })

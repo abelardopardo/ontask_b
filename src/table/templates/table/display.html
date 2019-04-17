@@ -67,6 +67,14 @@
         });
         table_data.on("column-reorder", column_reorder);
       });
+      // Add data types as class attributes
+      column_types = {{ column_types|safe }};
+      $.each($('#table-data thead tr th').get(), function(idx, val){
+        var coltype = column_types[idx];
+        if (coltype != '') {
+          $(val).addClass('column-type-' + coltype);
+        }
+      });
     }
     {% with js_var='qbuilder_options' allow_empty='true' empty_rules=True %}
       {% include 'qbuilder_options.js' %}
