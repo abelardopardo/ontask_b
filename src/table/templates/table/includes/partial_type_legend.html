@@ -1,6 +1,9 @@
-<div class="row justify-content-center">
-  <span class="legend-circle column-type-string"></span>&nbsp;String&nbsp;|&nbsp;
-  <span class="legend-circle column-type-number"></span>&nbsp;Number&nbsp;|&nbsp;
-  <span class="legend-circle column-type-boolean"></span>&nbsp;Boolean&nbsp;|&nbsp;
-  <span class="legend-circle column-type-datetime"></span>&nbsp;Datetime
-</div>
+{% load cache %}
+{% cache 3600 table_partial_type_legend %}
+  <div class="row justify-content-center">
+    <span class="legend-circle column-type-string"></span>&nbsp;String&nbsp;|&nbsp;
+    <span class="legend-circle column-type-number"></span>&nbsp;Number&nbsp;|&nbsp;
+    <span class="legend-circle column-type-boolean"></span>&nbsp;Boolean&nbsp;|&nbsp;
+    <span class="legend-circle column-type-datetime"></span>&nbsp;Datetime
+  </div>
+{% endcache %}

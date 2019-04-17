@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.functional import cached_property
 
 from workflow.models import Workflow
 
@@ -218,6 +219,6 @@ class Log(models.Model):
                                 self.name,
                                 self.payload)
 
-    @property
+    @cached_property
     def log_useremail(self):
         return self.user.email

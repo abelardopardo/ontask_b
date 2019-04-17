@@ -13,6 +13,7 @@ from django.core.validators import URLValidator
 from django.db import models
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
+from django.utils.functional import cached_property
 
 import ontask
 from dataops import formula_evaluation, pandas_db
@@ -149,7 +150,7 @@ class Action(models.Model):
         return not ((self.active_from and now < self.active_from) or
                     (self.active_to and self.active_to < now))
 
-    @property
+    @cached_property
     def is_executable(self):
         """
         Function to answer if an action is ready to execute.
@@ -186,12 +187,12 @@ class Action(models.Model):
         raise Exception('Function is_executable not implemented for action '
                         '{0}'.format(self.get_action_type_display()))
 
-    @property
+    @cached_property
     def is_in(self):
         return self.action_type == Action.SURVEY or \
                self.action_type == Action.TODO_LIST
 
-    @property
+    @cached_property
     def is_out(self):
         return not self.is_in
 

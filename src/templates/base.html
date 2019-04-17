@@ -3,6 +3,7 @@
 {% load staticfiles %}
 {% load thumbnail %}
 {% load i18n %}
+{% load cache %}
 <html{% if LANGUAGE_CODE %} lang="{{ LANGUAGE_CODE }}"{% endif %}>
   <head>
     <meta charset="utf-8">
@@ -31,9 +32,11 @@
     {% block navbar %}
     <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
       {% block navbar-brand %}
-        <a class="navbar-brand" href="#">
-          <img src="{% static 'site/img/logo.png' %}" height="30" alt="logo">
-        </a>
+        {% cache 3600 site-navbar-brand %}
+          <a class="navbar-brand" href="#">
+            <img src="{% static 'site/img/logo.png' %}" height="30" alt="logo">
+          </a>
+        {% endcache %}
       {% endblock %}
       {% block navbar-menu %}
         <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -82,40 +85,42 @@
               {% endif %}
             {% endblock %}
           </ul>
-          <ul class="nav ml-auto">
-            {% block navbar-right %}
-              {% if user.is_authenticated %}
-                {% if user.is_staff %}
-                  <li class="nav-item">
-                    <a class="nav-link spin{% if 'sqlconns_admin' in request.path %} active{% endif %}" id="ontask-base-sqlconn"
-                       data-toggle="tooltip" title="{% trans 'Connections to SQL databases' %}"
-                       href="{% url 'dataops:sqlconns_admin_index' %}">
-                      <span class="fa fa-database"></span> {% trans 'SQL' %}</a></li>
-                  <li class="nav-item"><a class="nav-link spin" href="{% url 'admin:index' %}">{% trans 'Admin' %}</a></li>
+          {% cache 3600 site-navbar-right request.user.username %}
+            <ul class="nav ml-auto">
+              {% block navbar-right %}
+                {% if user.is_authenticated %}
+                  {% if user.is_staff %}
+                    <li class="nav-item">
+                      <a class="nav-link spin{% if 'sqlconns_admin' in request.path %} active{% endif %}" id="ontask-base-sqlconn"
+                         data-toggle="tooltip" title="{% trans 'Connections to SQL databases' %}"
+                         href="{% url 'dataops:sqlconns_admin_index' %}">
+                        <span class="fa fa-database"></span> {% trans 'SQL' %}</a></li>
+                    <li class="nav-item"><a class="nav-link spin" href="{% url 'admin:index' %}">{% trans 'Admin' %}</a></li>
+                  {% endif %}
+                  <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle profile-menu" data-toggle="dropdown">
+                     <span class="fa fa-user"></span>
+                    </a>
+                    <div class="shadow dropdown-menu dropdown-menu-right">
+                      <a class="dropdown-item spin" href="{% url 'profiles:show_self' %}">{% trans 'Profile' %}</a>
+                      <a class="dropdown-item spin" href="{% url 'accounts:logout' %}">{% trans 'Logout' %}</a>
+                    </div>
+                  </li>
+                {% else %}
+                  <li class="nav-item"><a href="https://ontasklearning.org" class="nav-link" target="blank">{% trans 'About' %}</a></li>
+                  <li class="nav-item"><a class="nav-link" href="https://www.ontasklearning.org/contact/" target="blank">
+                    {% trans 'Contact' %}</a></li>
                 {% endif %}
-                <li class="nav-item dropdown">
-                  <a href="#" class="nav-link dropdown-toggle profile-menu" data-toggle="dropdown">
-                   <span class="fa fa-user"></span>
-                  </a>
-                  <div class="shadow dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item spin" href="{% url 'profiles:show_self' %}">{% trans 'Profile' %}</a>
-                    <a class="dropdown-item spin" href="{% url 'accounts:logout' %}">{% trans 'Logout' %}</a>
-                  </div>
+                <li class="nav-item">
+                  <a href="{% static ONTASK_HELP_URL %}" class="nav-link spin"
+                     data-toggle="tooltip"
+                     data-placement="bottom"
+                     title="{% trans 'Read the manual' %}">
+                    <span class="fa fa-book"></span></a>
                 </li>
-              {% else %}
-                <li class="nav-item"><a href="https://ontasklearning.org" class="nav-link" target="blank">{% trans 'About' %}</a></li>
-                <li class="nav-item"><a class="nav-link" href="https://www.ontasklearning.org/contact/" target="blank">
-                  {% trans 'Contact' %}</a></li>
-              {% endif %}
-              <li class="nav-item">
-                <a href="{% static ONTASK_HELP_URL %}" class="nav-link spin"
-                   data-toggle="tooltip"
-                   data-placement="bottom"
-                   title="{% trans 'Read the manual' %}">
-                  <span class="fa fa-book"></span></a>
-              </li>
-            {% endblock %}
-          </ul>
+              {% endblock %}
+            </ul>
+          {% endcache %}
         </div>
       {% endblock %}
     </nav>
@@ -144,32 +149,36 @@
       </div>
     {% endblock container %}
     {% block timeout %}
-      <div class="modal fade" id="session-expire-warning-modal"
-           aria-hidden="true" data-keyboard="false" data-backdrop="static"
-           tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">{% trans 'Your session is about to expire' %}</h4>
-            </div>
-            <div class="modal-body">
-              {% trans 'Your session will expire in' %}
-              <span id="seconds-timer"></span>{% trans 'seconds.' %}
-            </div>
-            <div class="modal-footer">
-              <button type="button"
-                      class="shadow btn btn-outline-primary">
-                <span class="fa fa-check"></span> {% trans 'Ok' %}</button>
+      {% cache 3600 site-timeout %}
+        <div class="modal fade" id="session-expire-warning-modal"
+             aria-hidden="true" data-keyboard="false" data-backdrop="static"
+             tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">{% trans 'Your session is about to expire' %}</h4>
+              </div>
+              <div class="modal-body">
+                {% trans 'Your session will expire in' %}
+                <span id="seconds-timer"></span>{% trans 'seconds.' %}
+              </div>
+              <div class="modal-footer">
+                <button type="button"
+                        class="shadow btn btn-outline-primary">
+                  <span class="fa fa-check"></span> {% trans 'Ok' %}</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      {% endcache %}
     {% endblock timeout %}
     <!-- Site footer -->
     {% block footer %}
-      <nav class="navbar navbar-light bg-light" id="base_footer">
-        <span class="text-muted">&copy; {% trans 'OnTask Project' %} {% now 'Y' %} | {% trans 'Version:' %} {% ontask_version %}</span>
-      </nav>
+      {% cache 3600 site-footer %}
+        <nav class="navbar navbar-light bg-light" id="base_footer">
+          <span class="text-muted">&copy; {% trans 'OnTask Project' %} {% now 'Y' %} | {% trans 'Version:' %} {% ontask_version %}</span>
+        </nav>
+      {% endcache %}
     {% endblock %}
     <script type="text/javascript" src="{% static 'site/js/initial.js' %}?v={% ontask_version %}"></script>
     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>

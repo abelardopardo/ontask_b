@@ -63,7 +63,7 @@ class View(models.Model):
         Number of columns considered by this view
         :return: Number of elements in the columns relation
         """
-        return self.columns.all().count()
+        return self.columns.count()
 
     @property
     def num_rows(self):
