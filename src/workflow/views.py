@@ -255,7 +255,7 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
             context['table_info'] = {
                 'num_rows': self.object.nrows,
                 'num_cols': self.object.ncols,
-                'num_actions': self.object.actions.all().count(),
+                'num_actions': self.object.actions.count(),
                 'num_attributes': len(self.object.attributes)}
 
         # put the number of key columns in the context

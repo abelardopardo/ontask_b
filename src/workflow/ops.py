@@ -365,7 +365,7 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
     # If a column disappears, the views that contain only that column need to
     # disappear as well as they are no longer relevant.
     for view in workflow.views.all():
-        if view.columns.all().count() == 0:
+        if view.columns.count() == 0:
             view.delete()
 
     return

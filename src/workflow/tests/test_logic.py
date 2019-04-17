@@ -49,7 +49,7 @@ class WorkflowImportExport(test.OnTaskTestCase):
         data = JSONParser().parse(data_in)
 
         # Compare the data with the current workflow
-        self.assertEqual(workflow.actions.all().count(),
+        self.assertEqual(workflow.actions.count(),
                          len(data['actions']))
         self.assertEqual(workflow.nrows,
                          data['nrows'])
@@ -118,7 +118,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
                          w2.description_text)
 
         # Equal number of columns
-        self.assertEqual(w1.columns.all().count(), w2.columns.all().count())
+        self.assertEqual(w1.columns.count(), w2.columns.count())
 
         # Identical attributes
         self.assertEqual(w1.attributes, w2.attributes)
@@ -134,16 +134,16 @@ class WorkflowImport(test.OnTaskLiveTestCase):
             self.assertEqual(x.is_key, y.is_key)
 
         # Equal number of actions
-        self.assertEqual(w1.actions.all().count(),
-                         w2.actions.all().count())
+        self.assertEqual(w1.actions.count(),
+                         w2.actions.count())
 
         # Equal names and content in the conditions
         for x, y in zip(w1.actions.all(), w2.actions.all()):
             self.assertEqual(x.name, y.name)
             self.assertEqual(x.description_text, y.description_text)
             self.assertEqual(x.content, y.content)
-            self.assertEqual(x.conditions.all().count(),
-                             y.conditions.all().count())
+            self.assertEqual(x.conditions.count(),
+                             y.conditions.count())
             for c1, c2 in zip(x.conditions.all(), y.conditions.all()):
                 self.assertEqual(c1.name, c2.name)
                 self.assertEqual(c1.description_text,
