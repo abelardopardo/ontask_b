@@ -139,6 +139,31 @@ var setDateTimePickers = function() {
     $('.ontask-datetimepicker').datetimepicker(dtp_opts);
   }
 };
+var assignColumn = function () {
+  $('#div-spinner').show();
+  $.ajax({
+    url: $(this).attr('data-url'),
+    type: 'get',
+    dataType: 'json',
+    success: function (data) {
+      if (typeof data.html_redirect != 'undefined') {
+        if (data.html_redirect == "") {
+          $('#div-spinner').show();
+          window.location.reload(true);
+        } else {
+          location.href = data.html_redirect;
+        }
+      } else {
+        $('#div-spinner').hide();
+      }
+      // Remove option from menu
+      $(this).remove();
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      location.reload(true);
+    }
+  });
+}
 $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip({
     trigger: "hover",
