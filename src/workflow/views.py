@@ -181,7 +181,7 @@ def index(request):
 
 
 @user_passes_test(is_instructor)
-def operations(request, pk):
+def operations(request):
     """
     Http request to serve the operations page for the workflow
     :param request: HTTP Request
