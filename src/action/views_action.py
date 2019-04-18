@@ -392,11 +392,11 @@ def edit_description(request, pk):
                              'html_redirect': reverse('home')})
 
     # Get the action
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
+    action = Action.objects.filter(
+        pk=pk).filter(
+        Q(workflow__user=request.user) |
+        Q(workflow__shared=request.user)).first()
+    if not action:
         return JsonResponse({'form_is_valid': True,
                              'html_redirect': reverse('action:index')})
 
