@@ -46,31 +46,6 @@ var insertAttributeInContent = function() {
   insertText('id_content', "{{ " + val + " }}");
   $(this).val(this.defaultSelected);
 }
-var insertColumnInActionIn = function () {
-  $('#div-spinner').show();
-  $.ajax({
-    url: $(this).attr('data-url'),
-    type: 'get',
-    dataType: 'json',
-    success: function (data) {
-      if (typeof data.html_redirect != 'undefined') {
-        if (data.html_redirect == "") {
-          $('#div-spinner').show();
-          window.location.reload(true);
-        } else {
-          location.href = data.html_redirect;
-        }
-      } else {
-        $('#div-spinner').hide();
-      }
-      // Remove option from menu
-      $(this).remove();
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      location.reload(true);
-    }
-  });
-}
 var toggleShuffleQuestion = function () {
   $('#div-spinner').show();
   $.ajax({
@@ -234,10 +209,10 @@ $(function () {
   $("#insert-elements-in-editor").on("click", ".js-insert-attribute-name", insertAttributeInContent);
 
   // Insert columns in action in
-  $("#insert-questions").on("click", ".js-insert-question", insertColumnInActionIn);
+  $("#insert-questions").on("click", ".js-insert-question", assignColumn);
 
   // Insert columns in action in
-  $("#edit-survey-tab-content").on("click", ".js-select-key-column-name", insertColumnInActionIn);
+  $("#edit-survey-tab-content").on("click", ".js-select-key-column-name", assignColumn);
 
   // Toggle shuffle question
   $("#action-in-editor").on("change", "#shuffle-questions", toggleShuffleQuestion);
