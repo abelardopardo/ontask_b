@@ -196,6 +196,14 @@ class Workflow(models.Model):
         """
         return list(self.columns.all().values_list('is_key', flat=True))
 
+    def get_unique_columns(self):
+        """
+        Function to access the Column unique.
+
+        :return: List with column types
+        """
+        return self.columns.filter(is_key=True)
+
     def set_query_builder_ops(self):
         """
         Update the JS structure with the initial operators and names for the
