@@ -886,6 +886,26 @@ def get_column_stats_from_df(df_column):
     return result
 
 
+def get_text_column_hash(table_name, column_name):
+    """
+    Calculate and return the MD5 hash of a text column
+    :param table_name: table to use
+    :param column_name: column to pull the values
+    :return: MD5 hash of the concatenation of the column values
+    """
+
+    query = 'SELECT MD5(STRING_AGG("{0}", \' \')) FROM "{1}";'.format(
+        column_name,
+        table_name
+    )
+
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        result = cursor.fetchone()[0]
+
+    return result
+
+
 def get_filter_query(table_name, column_names, filter_exp):
     """
 
