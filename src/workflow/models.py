@@ -38,7 +38,8 @@ class Workflow(models.Model):
                              db_index=True,
                              on_delete=models.CASCADE,
                              null=False,
-                             blank=False)
+                             blank=False,
+                             related_name='workflows_owner')
 
     name = models.CharField(max_length=512, blank=False)
 
@@ -88,8 +89,11 @@ class Workflow(models.Model):
     # Workflows shared among users. One workflow can be shared with many
     # users, and many users can have this workflow as available to them.
     shared = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                    related_name='shared_workflows')
+                                    related_name='workflows_shared')
 
+
+    lusers = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                    related_name='workflows_user')
     @staticmethod
     def unlock_workflow_by_id(wid):
         """

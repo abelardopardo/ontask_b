@@ -151,14 +151,12 @@ def index(request):
         Workflow.unlock_workflow_by_id(wid)
     request.session.pop('ontask_workflow_name', None)
 
-    # Get the available workflows
-    workflows = Workflow.objects.filter(
-        Q(user=request.user) | Q(shared=request.user)
-    ).distinct().order_by('name')
+    workflows = request.user.workflows_owner.all() \
+                | request.user.workflows_shared.all()
 
     # We include the table only if it is not empty.
     context = {
-        'workflows': workflows,
+        'workflows': workflows.order_by('name'),
         'nwflows': len(workflows)
     }
 
