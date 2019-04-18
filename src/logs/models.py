@@ -43,6 +43,7 @@ class Log(models.Model):
     WORKFLOW_SHARE_DELETE = 'workflow_share_delete'
     WORKFLOW_IMPORT = 'workflow_import'
     WORKFLOW_CLONE = 'workflow_clone'
+    WORKFLOW_UPDATE_LUSERS = 'workflow_update_lusers'
     COLUMN_ADD = 'column_add'
     QUESTION_ADD = 'question_add'
     COLUMN_ADD_FORMULA = 'column_add_formula'
@@ -109,6 +110,7 @@ class Log(models.Model):
         (WORKFLOW_SHARE_DELETE, _('User share deleted')),
         (WORKFLOW_IMPORT, _('Import workflow')),
         (WORKFLOW_CLONE, _('Workflow cloned')),
+        (WORKFLOW_UPDATE_LUSERS, _('Update list of workflow users')),
         (COLUMN_ADD, _('Column added')),
         (COLUMN_ADD_FORMULA, _('Column with formula created')),
         (COLUMN_ADD_RANDOM, _('Column with random values created')),
