@@ -6,10 +6,9 @@ Basic functions and definitions used all over the platform.
 
 import json
 import pytz
-from email_validator import validate_email
-
-from django.utils.translation import ugettext_lazy as _
 from django.conf import settings as ontask_settings
+from django.utils.translation import ugettext_lazy as _
+from email_validator import validate_email
 
 from ontask.celery import app as celery_app
 
@@ -35,6 +34,7 @@ ACTION_TYPES = [
 
 # Dictionary to store in the session the data between forms.
 action_session_dictionary = 'action_run_payload'
+
 
 def diff(a, b):
     """
@@ -64,7 +64,7 @@ def is_legal_name(val):
     In principle, arbitrary combinations of the following symbols should be
     handle by OnTask::
 
-      !#$%&()*+,-./:;<=>?@[\]^_`{|}~
+      !#$%&()*+,-./:;<=>?@[\\]^_`{|}~
 
     :param val: String with the column name
     :return: String with a message suggesting changes, or None if string correct
@@ -79,6 +79,7 @@ def is_legal_name(val):
 
     return None
 
+
 def is_correct_email(email_txt):
     try:
         validate_email(email_txt)
@@ -86,6 +87,7 @@ def is_correct_email(email_txt):
         return False
 
     return True
+
 
 def fix_pctg_in_name(val):
     """
@@ -113,10 +115,12 @@ def get_action_payload(request):
 
     return request.session.get(action_session_dictionary, None)
 
+
 def simplify_datetime_str(dtime):
     return dtime.astimezone(
                     pytz.timezone(ontask_settings.TIME_ZONE)
                 ).strftime('%Y-%m-%d %H:%M:%S %z')
+
 
 class OnTaskException(Exception):
     """
