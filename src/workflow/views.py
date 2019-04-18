@@ -26,6 +26,7 @@ from logs.models import Log
 from ontask import is_correct_email
 from ontask.permissions import is_instructor, UserIsInstructor
 from ontask.tables import OperationsColumn
+from ontask.tasks import workflow_update_lusers
 from .forms import WorkflowForm
 from .models import Workflow
 from .ops import get_workflow
@@ -610,10 +611,9 @@ def assign_luser_column(request, pk=None):
     if not pk:
         # Empty pk, means reset the field.
         workflow.luser_email_column = None
-        workflow.luser_email_column_hash = ''
+        workflow.luser_email_column_md5 = ''
         workflow.save()
         return JsonResponse({'html_redirect': ''})
-
 
     # Get the column
     column = workflow.columns.filter(pk=pk).first()
@@ -638,10 +638,34 @@ def assign_luser_column(request, pk=None):
         )
         return JsonResponse({'html_redirect': ''})
 
-    # Make the assignment and obtain the MD5
+    # Update the column
     workflow.luser_email_column = column
-    workflow.luser_email_column_hash = get_text_column_hash(table_name,
-                                                            column.name)
     workflow.save()
 
+    # Calculate the MD5 value
+    md5_hash = get_text_column_hash(table_name, column.name)
+
+    if workflow.luser_email_column_md5 != md5_hash:
+        # Change detected, run the update in batch mode
+        workflow.luser_email_column_md5 = md5_hash
+
+        # Log the event with the status "preparing updating"
+        log_item = Log.objects.register(
+            request.user,
+            Log.WORKFLOW_UPDATE_LUSERS,
+            workflow,
+            {'id': workflow.id,
+             'column': column.name,
+             'status': 'preparing updating'}
+        )
+
+        # Push the update of lusers to batch processing
+        workflow_update_lusers.delay(request.user.id,
+                                     workflow.id,
+                                     log_item.id)
+
+    messages.success(
+        request,
+        _('The list of workflow users will be updated shortly.')
+    )
     return JsonResponse({'html_redirect': ''})

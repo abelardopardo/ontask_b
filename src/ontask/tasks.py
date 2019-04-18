@@ -23,6 +23,7 @@ from dataops.plugin_manager import load_plugin
 from logs.models import Log
 from scheduler.models import ScheduledAction
 from workflow.models import Workflow
+from workflow.ops import do_workflow_update_lusers
 
 logger = get_task_logger('celery_execution')
 
@@ -644,3 +645,60 @@ def run_plugin(user_id,
     plugin_info.save()
 
     return True
+
+
+@shared_task
+def workflow_update_lusers(user_id,
+                           workflow_id,
+                           log_id):
+    """
+    Recalculate the elements in field lusers of the workflow based on the fields
+    luser_email_column and luser_email_column_MD5
+
+    :param user_id: Id of User object that is executing the action
+    :param workflow_id: Id of workflow being processed
+    :param log_id: Id of the log object where the status has to be reflected
+    :return: Nothing, the result is stored in the log with log_id
+    """
+
+    log_item = Log.objects.filter(pk=log_id).first()
+    if not log_item:
+        # Not much can be done here. Call has no place to report error...
+        logger.error(
+            ugettext('Incorrect execution request with log_id {0}').format(
+                log_id
+            )
+        )
+        return False
+
+    # Get the objects
+    user = get_user_model().objects.prefetch_related(
+        'workflows_owner'
+    ).filter(id=user_id).first()
+
+    if not user:
+        log_item.payload['status'] = \
+            ugettext('Unable to find user with id {0}').format(user_id)
+        log_item.save()
+        return False
+
+    # Get the workflow and the plugin information
+    workflow = user.workflows_owner.filter(pk=workflow_id).select_related(
+        'luser_email_column'
+    ).first()
+    if not workflow:
+        # Update the message in the payload
+        log_item.payload['status'] = \
+            ugettext('Unable to find workflow with id {0}').format(workflow_id)
+        log_item.save()
+
+        return False
+
+    # Proceed with the operation
+    try:
+        do_workflow_update_lusers(workflow, log_item)
+    except Exception as e:
+        log_item.payload['status'] = \
+            ugettext('Error while updating leaners emails ({0}).').format(e)
+        log_item.save()
+        return False

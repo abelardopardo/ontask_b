@@ -13,7 +13,8 @@ from django.core.cache import cache
 from django.db.models import Q
 from django.http import HttpResponse
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.crypto import get_random_string
+from django.utils.translation import ugettext_lazy as _, ugettext
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
@@ -458,3 +459,46 @@ def reposition_column_and_update_df(workflow, column, to_idx):
     workflow.reposition_columns(column.position, to_idx)
     column.position = to_idx
     column.save()
+
+def do_workflow_update_lusers(workflow, log_item):
+    """
+    Recalculate the elements in the field lusers of the workflow based on the
+     fields luser_email_column and luser_email_column_MD5
+
+    :param workflow: Workflow to update
+    :param log_item: Log where to leave the status of the operation
+    :return: Changes in the lusers ManyToMany relationships
+    """
+
+    # Get the column content
+    emails = pandas_db.get_table_data(
+        workflow.get_data_frame_table_name(),
+        None,
+        [workflow.luser_email_column.name]
+    )
+
+    result = []
+    created = 0
+    for uemail, in emails:
+        luser = get_user_model().objects.filter(email=uemail).first()
+        if not luser:
+            # Create user
+            luser = get_user_model().objects.create_user(
+                email=uemail,
+                password=get_random_string(length=50)
+            )
+            created += 1
+
+        result.append(luser)
+
+    # Assign result
+    workflow.lusers.set(result)
+
+    # Report status
+    log_item.payload['total_users'] = len(emails)
+    log_item.payload['new_users'] = created
+    log_item.payload['status'] = \
+      ugettext('Learner emails successfully updated.')
+    log_item.save()
+
+    return
