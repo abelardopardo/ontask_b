@@ -21,7 +21,9 @@ from django.views.decorators.http import require_http_methods
 
 import action.ops
 from dataops import ops, pandas_db
+from dataops.pandas_db import get_text_column_hash
 from logs.models import Log
+from ontask import is_correct_email
 from ontask.permissions import is_instructor, UserIsInstructor
 from ontask.tables import OperationsColumn
 from .forms import WorkflowForm
@@ -185,12 +187,11 @@ def operations(request):
     """
     Http request to serve the operations page for the workflow
     :param request: HTTP Request
-    :param pk: primary key of the workflow
     :return:
     """
 
     # Get the appropriate workflow object
-    workflow = get_workflow(request, wid=pk)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return redirect('home')
 
@@ -204,7 +205,9 @@ def operations(request):
         ),
         'share_table': WorkflowShareTable(
             workflow.shared.values('email', 'id').order_by('email')
-        )
+        ),
+        'unique_columns': workflow.get_unique_columns(),
+        'key_selected': workflow.luser_email_column,
     }
 
     return render(request, 'workflow/operations.html', context)
@@ -580,3 +583,67 @@ def clone(request, pk):
     data['html_redirect'] = ""  # Reload page
 
     return JsonResponse(data)
+
+
+@user_passes_test(is_instructor)
+def assign_luser_column(request, pk=None):
+    """
+    AJAX view to assign the column with id PK to the field luser_email_column
+    and calculate the hash
+
+    :param request: HTTP request
+    :param pk: Column id
+    :return: JSON data
+    """
+
+    # Get the current workflow
+    workflow = get_workflow(request, None, prefetch_related='columns')
+    if not workflow:
+        return JsonResponse({'html_redirect': reverse('home')})
+
+    if workflow.nrows == 0:
+        messages.error(
+            request,
+            _('Workflow has no data. '
+              'Go to "Manage table data" to upload data.')
+        )
+        return JsonResponse({'html_redirect': reverse('action:index')})
+
+    if not pk:
+        # Empty pk, means reset the field.
+        workflow.luser_email_column = None
+        workflow.luser_email_column_hash = ''
+        workflow.save()
+        return JsonResponse({'html_redirect': ''})
+
+
+    # Get the column
+    column = workflow.columns.filter(pk=pk).first()
+
+    if not column:
+        messages.error(
+            request,
+            _('Incorrect column selected. Please select a key column.')
+        )
+        return JsonResponse({'html_redirect': ''})
+
+    table_name = workflow.get_data_frame_table_name()
+
+    # Get the column content
+    emails = pandas_db.get_table_data(table_name, None, [column.name])
+
+    # Verify that the column as a valid set of emails
+    if not all([is_correct_email(x[0]) for x in emails]):
+        messages.error(
+            request,
+            _('The selected column does not contain email addresses.')
+        )
+        return JsonResponse({'html_redirect': ''})
+
+    # Make the assignment and obtain the MD5
+    workflow.luser_email_column = column
+    workflow.luser_email_column_hash = get_text_column_hash(table_name,
+                                                            column.name)
+    workflow.save()
+
+    return JsonResponse({'html_redirect': ''})

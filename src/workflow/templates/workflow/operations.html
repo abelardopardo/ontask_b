@@ -59,10 +59,15 @@
              id="attribute-tab" data-toggle="tab" href="#attribute" role="tab"
              aria-controls="text" aria-selected="true">{% trans 'Attributes' %}</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item pr-1">
           <a class="nav-link border border-dark border-bottom-0"
              id="share-tab" data-toggle="tab" href="#share" role="tab"
-             aria-controls="filter" aria-selected="false">{% trans 'Share' %}</a>
+             aria-controls="filter" aria-selected="false">{% trans 'Share with Instructors' %}</a>
+        </li>
+        <li class="nav-item pr-1">
+          <a class="nav-link border border-dark border-bottom-0"
+             id="learners-tab" data-toggle="tab" href="#learners" role="tab"
+             aria-controls="text" aria-selected="true">{% trans 'Learners' %}</a>
         </li>
       </ul>
       <div class="tab-content" id="edit-personalized-text-tab-content">
@@ -73,6 +78,10 @@
         <div class="shadow rounded tab-pane px-3 py-3 fade show border border-dark"
              id="share" role="tabpanel" aria-labelledby="share-tab">
           {% include 'workflow/includes/share.html' %}
+        </div>
+        <div class="shadow rounded tab-pane px-3 py-3 fade show border border-dark"
+             id="learners" role="tabpanel" aria-labelledby="share-tab">
+          {% include 'workflow/includes/learners.html' %}
         </div>
       </div>
     {% else %}

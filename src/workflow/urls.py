@@ -50,6 +50,14 @@ urlpatterns = [
          share_views.share_delete,
          name='share_delete'),
 
+    # Assign learner user email column
+    path('assign_luser_column/',
+         views.assign_luser_column,
+         name='assign_luser_column'),
+    path('<int:pk>/assign_luser_column/',
+         views.assign_luser_column,
+         name='assign_luser_column'),
+
     # Column manipulation
     path('column_add/', column_views.column_add, name='column_add'),
     path('<int:pk>/question_add/', column_views.column_add,

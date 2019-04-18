@@ -1,0 +1,31 @@
+{% load i18n %}
+<h3 class="text-center">{% trans 'Column with learner emails to access this workflow' %}</h3>
+{% if not share_table.data|length %}
+  <p class="text-center">{% blocktrans %}Select a column with the email addresses of the learners to grant them access to the personalized content in this workflow. Leave empty if such access is not required.{% endblocktrans %}</p>
+{% endif %}
+
+<h5 class="text-center">
+  {% trans "Key column with the learners' email" %}
+  <div id="select-key-column-name" class="dropdown btn-group">
+    <button type="button" class="btn btn-outline-dark dropdown-toggle"
+            data-toggle="dropdown">
+      {% if not key_selected %}
+        {% trans 'Key column' %}
+      {% else %}
+        {{ key_selected.name }}
+      {% endif %}
+    </button>
+    <div class="shadow dropdown-menu">
+      {% if key_selected %}
+        <button type="button" class="dropdown-item js-select-key-column-name"
+                data-url="{% url 'workflow:assign_luser_column' %}">{% trans 'No key' %}</button>
+      {% endif %}
+      {% for column in workflow.get_unique_columns %}
+        {% if column != key_selected %}
+          <button type="button" class="dropdown-item js-select-key-column-name"
+                  data-url="{% url 'workflow:assign_luser_column' column.id %}">{{ column.name }}</button>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</h5>
