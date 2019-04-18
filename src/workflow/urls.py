@@ -19,7 +19,7 @@ urlpatterns = [
     path('<int:pk>/flush/', views.flush, name='flush'),
     path('<int:pk>/detail/', views.WorkflowDetailView.as_view(),
          name='detail'),
-    path('<int:pk>/operations/', views.operations, name='operations'),
+    path('operations/', views.operations, name='operations'),
 
     # Column table manipulation
     path('column_ss/', views.column_ss, name='column_ss'),
