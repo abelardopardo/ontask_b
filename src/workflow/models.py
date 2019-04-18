@@ -90,6 +90,19 @@ class Workflow(models.Model):
     shared = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                     related_name='shared_workflows')
 
+    # Column stipulating where are the learner email values (or empty)
+    luser_email_column = models.ForeignKey('Column',
+                                           on_delete=models.CASCADE,
+                                           null=True,
+                                           blank=False,
+                                           related_name='luser_email_column')
+
+    # MD5 to detect changes in the previous column
+    luser_email_column_md5 = models.CharField(max_length=32,
+                                              default='',
+                                              null=False,
+                                              blank=True)
+
     @staticmethod
     def unlock_workflow_by_id(wid):
         """
