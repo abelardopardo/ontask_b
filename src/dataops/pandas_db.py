@@ -153,12 +153,12 @@ def pg_restore_table(filename):
 
 
 def is_table_in_db(table_name):
-    cursor = connection.cursor()
-    return next(
-        (True for x in connection.introspection.get_table_list(cursor)
-         if x.name == table_name),
-        False
-    )
+    with connection.cursor() as cursor:
+        return next(
+            (True for x in connection.introspection.get_table_list(cursor)
+             if x.name == table_name),
+            False
+        )
 
 
 def is_column_in_table(table_name, column_name):
@@ -170,10 +170,10 @@ def is_column_in_table(table_name, column_name):
     """
 
     query = 'SELECT EXISTS (SELECT 1 FROM information_schema.columns WHERE ' \
-        'table_name=%s and column_name=%s)'
+            'table_name=%s and column_name=%s)'
 
-    cursor = connection.cursor()
-    cursor.execute(query, [table_name, column_name])
+    with connection.cursor() as cursor:
+        cursor.execute(query, [table_name, column_name])
 
     return cursor.fetchone()[0]
 
@@ -192,8 +192,8 @@ def is_column_table_unique(table_name, column_name):
     )
 
     # Get the result
-    cursor = connection.cursor()
-    cursor.execute(query, [])
+    with connection.cursor() as cursor:
+        cursor.execute(query, [])
 
     return cursor.fetchone()[0]
 
@@ -504,9 +504,9 @@ def delete_table(table_name):
     :return: Drop the table in the DB
     """
     try:
-        cursor = connection.cursor()
-        cursor.execute('DROP TABLE "{0}";'.format(table_name))
-        connection.commit()
+        with connection.cursor() as cursor:
+            cursor.execute('DROP TABLE "{0}";'.format(table_name))
+            connection.commit()
     except Exception:
         logger.error(
             'Error while dropping table {0}'.format(table_name)
@@ -520,9 +520,9 @@ def delete_upload_table(table_name):
     directly on the DB.
     :param table_name: table to drop
     """
-    cursor = connection.cursor()
-    cursor.execute('DROP TABLE "{0}"'.format(table_name))
-    connection.commit()
+    with connection.cursor() as cursor:
+        cursor.execute('DROP TABLE "{0}"'.format(table_name))
+        connection.commit()
 
 
 def get_table_column_types(table_name):
@@ -530,9 +530,13 @@ def get_table_column_types(table_name):
     :param table_name: Table name
     :return: List of pairs (column name, SQL type)
     """
-    cursor = connection.cursor()
-    cursor.execute("""select column_name, data_type from 
-    INFORMATION_SCHEMA.COLUMNS where table_name = '{0}'""".format(table_name))
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "select column_name, data_type from"
+            "INFORMATION_SCHEMA.COLUMNS where table_name = '{0}'".format(
+                table_name
+            )
+        )
 
     return cursor.fetchall()
 
@@ -561,13 +565,13 @@ def db_column_rename(table, old_name, new_name):
     :param new_name: New name of the column
     :return: Nothing. Change reflected in the database table
     """
-    cursor = connection.cursor()
     query = """ALTER TABLE "{0}" RENAME "{1}" TO "{2}" """.format(
         table,
         old_name,
         new_name
     )
-    cursor.execute(query)
+    with connection.cursor() as cursor:
+        cursor.execute(query)
 
 
 def df_drop_column(table_name, column_name):
@@ -582,8 +586,8 @@ def df_drop_column(table_name, column_name):
         table_name,
         column_name
     )
-    cursor = connection.cursor()
-    cursor.execute(query)
+    with connection.cursor() as cursor:
+        cursor.execute(query)
 
 
 def get_subframe(table_name, cond_filter, column_names):
@@ -641,10 +645,12 @@ def get_table_cursor(table_name, cond_filter, column_names):
 
 def get_table_data(table_name, cond_filter, column_names):
     # Get first the cursor
-    cursor = get_table_cursor(table_name, cond_filter, column_names)
+    with connection.cursor() as cursor:
+        cursor = get_table_cursor(table_name, cond_filter, column_names)
+        result = cursor.fetchall()
 
     # Return the data
-    return cursor.fetchall()
+    return result
 
 
 def execute_select_on_table(table_name, fields, values, column_names):
@@ -667,19 +673,19 @@ def execute_select_on_table(table_name, fields, values, column_names):
     # Add the table
     query += ' FROM "{0}"'.format(table_name)
 
-    # See if the action has a filter or not
-    cursor = connection.cursor()
-    if fields:
-        query += ' WHERE ' + \
-                 ' AND '.join(['"{0}" = %s'.format(fix_pctg_in_name(x))
-                               for x in fields])
-        cursor.execute(query, values)
-    else:
-        # Execute the query
-        cursor.execute(query)
+    with connection.cursor() as cursor:
+        # See if the action has a filter or not
+        if fields:
+            query += ' WHERE ' + \
+                     ' AND '.join(['"{0}" = %s'.format(fix_pctg_in_name(x))
+                                   for x in fields])
+            cursor.execute(query, values)
+        else:
+            # Execute the query
+            cursor.execute(query)
+        result = cursor.fetchall()
 
-    # Get the data
-    return cursor.fetchall()
+    return result
 
 
 def query_to_dicts(query_string, *query_args):
@@ -687,15 +693,14 @@ def query_to_dicts(query_string, *query_args):
     Run a simple query and produce a generator that returns the results as
     a bunch of dictionaries with keys for the column values selected.
     """
-    cursor = connection.cursor()
-    cursor.execute(query_string, query_args)
-    col_names = [desc[0] for desc in cursor.description]
-    while True:
-        row = cursor.fetchone()
-        if row is None:
-            break
-        row_dict = OrderedDict(list(zip(col_names, row)))
-        yield row_dict
+    with connection.cursor() as cursor:
+        col_names = [desc[0] for desc in cursor.description]
+        while True:
+            row = cursor.fetchone()
+            if row is None:
+                break
+            row_dict = OrderedDict(list(zip(col_names, row)))
+            yield row_dict
     return
 
 
@@ -731,9 +736,9 @@ def update_row(table_name,
     parameters = set_values + where_values
 
     # Execute the query
-    cursor = connection.cursor()
-    cursor.execute(query, parameters)
-    connection.commit()
+    with connection.cursor() as cursor:
+        cursor.execute(query, parameters)
+        connection.commit()
 
 
 def increase_row_integer(table_name, set_field, where_field, where_value):
@@ -756,9 +761,9 @@ def increase_row_integer(table_name, set_field, where_field, where_value):
     )
 
     # Execute the query
-    cursor = connection.cursor()
-    cursor.execute(query, [where_value])
-    connection.commit()
+    with connection.cursor() as cursor:
+        cursor.execute(query, [where_value])
+        connection.commit()
 
 
 def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names):
@@ -791,11 +796,11 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names):
         fields = fields + filter_fields
 
     # Execute the query
-    cursor = connection.cursor()
-    cursor.execute(query, fields)
+    with connection.cursor() as cursor:
+        cursor.execute(query, fields)
 
-    # Get the data
-    qs = cursor.fetchall()
+        # Get the data
+        qs = cursor.fetchall()
 
     # If there is anything different than one element, return None
     if len(qs) != 1:
@@ -1002,11 +1007,11 @@ def search_table_rows(table_name,
         query += ' DESC'
 
     # Execute the query
-    cursor = connection.cursor()
-    cursor.execute(query, fields)
+    with connection.cursor() as cursor:
+        cursor.execute(query, fields)
+        result = cursor.fetchall()
 
-    # Get the data
-    return cursor.fetchall()
+    return result
 
 
 def delete_table_row_by_key(table_name, kv_pair):
@@ -1028,8 +1033,8 @@ def delete_table_row_by_key(table_name, kv_pair):
     fields = [kv_pair[1]]
 
     # Execute the query
-    cursor = connection.cursor()
-    cursor.execute(query, fields)
+    with connection.cursor() as cursor:
+        cursor.execute(query, fields)
 
 
 def num_rows(table_name, cond_filter=None):
@@ -1058,9 +1063,11 @@ def num_rows_by_name(table_name, cond_filter=None):
         cond_filter, fields = evaluate(cond_filter, NodeEvaluation.EVAL_SQL)
         query += ' WHERE ' + cond_filter
 
-    cursor = connection.cursor()
-    cursor.execute(query, fields)
-    return cursor.fetchone()[0]
+    with connection.cursor() as cursor:
+        cursor.execute(query, fields)
+        result = cursor.fetchone()[0]
+
+    return result
 
 
 def check_wf_df(workflow):
