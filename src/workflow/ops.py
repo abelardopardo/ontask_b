@@ -83,7 +83,7 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
             workflow = Workflow.objects.filter(
                 id=wid).filter(
                 Q(user=request.user) | Q(shared__id=request.user.id)
-            ).first()
+            )
 
             if not workflow:
                 # The object was not found.
@@ -97,6 +97,9 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
             # Apply prefetch if given
             if prefetch_related:
                 workflow = workflow.prefetch_related(prefetch_related)
+
+            # And get the unique element from the query set
+            workflow = workflow.first()
 
             # Step 2: If the workflow is locked by this user session, return
             # correct result (the session_key may be None if using the API)
