@@ -283,22 +283,6 @@ def save_action_form(request, form, template_name):
 
 
 @user_passes_test(is_instructor)
-def action_index(request):
-    """
-    Render the list of actions attached to a workflow.
-    :param request: Request object
-    :return: HTTP response with the table.
-    """
-
-    # Get the appropriate workflow object
-    workflow = get_workflow(request)
-    if not workflow:
-        return redirect('home')
-
-    return action_index_set(request)
-
-
-@user_passes_test(is_instructor)
 def action_index_set(request, pk=None):
     """
     Set the workflow in the session object (if not given) and create the page
@@ -309,7 +293,9 @@ def action_index_set(request, pk=None):
     """
 
     # Get the appropriate workflow object
-    workflow = get_workflow(request, wid=pk)
+    workflow = get_workflow(request,
+                            wid=pk,
+                            prefetch_related='actions')
     if not workflow:
         return redirect('home')
 
@@ -317,11 +303,13 @@ def action_index_set(request, pk=None):
     request.session[action_session_dictionary] = {}
     request.session.save()
 
+    qs = workflow.actions.all()
+
     return render(request,
                   'action/index.html',
                   {'workflow': workflow,
-                   'table': ActionTable(workflow.actions.all(),
-                                        orderable=False)})
+                   'table': ActionTable(qs, orderable=False)}
+                  )
 
 
 class ActionCreateView(UserIsInstructor, generic.TemplateView):
