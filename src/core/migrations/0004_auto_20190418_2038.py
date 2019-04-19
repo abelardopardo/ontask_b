@@ -2,9 +2,10 @@
 
 from django.db import migrations
 from django.contrib.auth import get_user_model
-from core.models import OnTaskUser
 
 def create_ontask_user_info(apps, schema_editor):
+
+    OnTaskUser = apps.get_model('core', 'OnTaskUser')
 
     # Get all the existing ontask users first
     ousers_id = [x.user.id for x in OnTaskUser.objects.all()]
