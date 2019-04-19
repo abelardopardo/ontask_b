@@ -57,8 +57,7 @@ class AttributeTable(tables.Table):
     class Meta(object):
         fields = ('name', 'value', 'operations')
         attrs = {
-            'class': 'table shadow',
-            'style': 'width: 100%;',
+            'class': 'table',
             'id': 'attribute-table'
         }
 
@@ -190,9 +189,22 @@ def operations(request):
     """
 
     # Get the appropriate workflow object
-    workflow = get_workflow(request, prefetch_related='columns')
+    workflow = get_workflow(request,
+                            select_related='luser_email_column',
+                            prefetch_related=['columns',
+                                              'shared'])
     if not workflow:
         return redirect('home')
+
+    # Check if lusers is active and if so, if it needs to be refreshed
+    if workflow.luser_email_column:
+        md5_hash = get_text_column_hash(
+            workflow.get_data_frame_table_name(),
+            workflow.luser_email_column.name)
+        if md5_hash != workflow.luser_email_column_md5:
+            # Information is outdated
+            workflow.lusers_is_outdated = True
+            workflow.save()
 
     # Context to render the page
     context = {
@@ -205,8 +217,7 @@ def operations(request):
         'share_table': WorkflowShareTable(
             workflow.shared.values('email', 'id').order_by('email')
         ),
-        'unique_columns': workflow.get_unique_columns(),
-        'key_selected': workflow.luser_email_column,
+        'unique_columns': workflow.get_unique_columns()
     }
 
     return render(request, 'workflow/operations.html', context)
@@ -612,6 +623,7 @@ def assign_luser_column(request, pk=None):
         # Empty pk, means reset the field.
         workflow.luser_email_column = None
         workflow.luser_email_column_md5 = ''
+        workflow.lusers.set([])
         workflow.save()
         return JsonResponse({'html_redirect': ''})
 
@@ -663,6 +675,9 @@ def assign_luser_column(request, pk=None):
         workflow_update_lusers.delay(request.user.id,
                                      workflow.id,
                                      log_item.id)
+
+    workflow.lusers_is_outdated = False
+    workflow.save()
 
     messages.success(
         request,

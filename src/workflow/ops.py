@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-
 import gzip
 from builtins import str
 from datetime import datetime
 from io import BytesIO
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
@@ -93,11 +93,17 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
 
             # Apply select if given
             if select_related:
-                workflow = workflow.select_related(select_related)
+                if isinstance(select_related, list):
+                    workflow = workflow.select_related(*select_related)
+                else:
+                    workflow = workflow.select_related(select_related)
 
             # Apply prefetch if given
             if prefetch_related:
-                workflow = workflow.prefetch_related(prefetch_related)
+                if isinstance(prefetch_related, list):
+                    workflow = workflow.prefetch_related(*prefetch_related)
+                else:
+                    workflow = workflow.prefetch_related(prefetch_related)
 
             # And get the unique element from the query set
             workflow = workflow.first()
@@ -460,6 +466,7 @@ def reposition_column_and_update_df(workflow, column, to_idx):
     column.position = to_idx
     column.save()
 
+
 def do_workflow_update_lusers(workflow, log_item):
     """
     Recalculate the elements in the field lusers of the workflow based on the
@@ -483,9 +490,14 @@ def do_workflow_update_lusers(workflow, log_item):
         luser = get_user_model().objects.filter(email=uemail).first()
         if not luser:
             # Create user
+            if settings.DEBUG:
+                # Define users with the same password in development
+                password='boguspwd'
+            else:
+                password = get_random_string(length=50)
             luser = get_user_model().objects.create_user(
                 email=uemail,
-                password=get_random_string(length=50)
+                password=password
             )
             created += 1
 
@@ -497,8 +509,9 @@ def do_workflow_update_lusers(workflow, log_item):
     # Report status
     log_item.payload['total_users'] = len(emails)
     log_item.payload['new_users'] = created
-    log_item.payload['status'] = \
-      ugettext('Learner emails successfully updated.')
+    log_item.payload['status'] = ugettext(
+        'Learner emails successfully updated.'
+    )
     log_item.save()
 
     return

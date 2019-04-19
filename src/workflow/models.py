@@ -105,7 +105,15 @@ class Workflow(models.Model):
                                               blank=True)
 
     lusers = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                    default=None,
                                     related_name='workflows_luser')
+
+    # Boolean that flags if the lusers field needs to be updated
+    lusers_is_outdated = models.BooleanField(
+        default=False,
+        verbose_name=_('Is lusers outdated?'),
+        null=False,
+        blank=False)
 
     @staticmethod
     def unlock_workflow_by_id(wid):
