@@ -85,7 +85,7 @@
               {% endif %}
             {% endblock %}
           </ul>
-          {% cache 3600 site-navbar-right request.user.username %}
+          {% cache 3600 site-navbar-right request.user.email %}
             <ul class="nav ml-auto">
               {% block navbar-right %}
                 {% if user.is_authenticated %}
