@@ -11,7 +11,7 @@ urlpatterns = [
     # Action CRUD
     #
     # List them all
-    path('', views_action.action_index, name='index'),
+    path('', views_action.action_index_set, name='index'),
     path('<int:pk>/index/', views_action.action_index_set, name='index_set'),
 
     # Create an action of type 0: in, 1: Out
