@@ -532,13 +532,14 @@ def get_table_column_types(table_name):
     """
     with connection.cursor() as cursor:
         cursor.execute(
-            "select column_name, data_type from"
+            "select column_name, data_type from "
             "INFORMATION_SCHEMA.COLUMNS where table_name = '{0}'".format(
                 table_name
             )
         )
+        result = cursor.fetchall()
 
-    return cursor.fetchall()
+    return result
 
 
 def df_column_types_rename(table_name):
@@ -693,14 +694,15 @@ def query_to_dicts(query_string, *query_args):
     Run a simple query and produce a generator that returns the results as
     a bunch of dictionaries with keys for the column values selected.
     """
-    with connection.cursor() as cursor:
-        col_names = [desc[0] for desc in cursor.description]
-        while True:
-            row = cursor.fetchone()
-            if row is None:
-                break
-            row_dict = OrderedDict(list(zip(col_names, row)))
-            yield row_dict
+    cursor = connection.cursor()
+    col_names = [desc[0] for desc in cursor.description]
+    while True:
+        row = cursor.fetchone()
+        if row is None:
+            break
+        row_dict = OrderedDict(list(zip(col_names, row)))
+        yield row_dict
+
     return
 
 
