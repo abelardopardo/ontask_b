@@ -9,7 +9,6 @@ from rest_framework import serializers
 from dataops import pandas_db, ops
 from dataops.formula_evaluation import get_variables
 from workflow.column_serializers import ColumnSerializer, ColumnNameSerializer
-from workflow.models import Column
 from .models import Condition, Action, ActionColumnConditionTuple
 
 
@@ -141,9 +140,9 @@ class ActionSerializer(serializers.ModelSerializer):
                 __, __ = \
                     ActionColumnConditionTuple.objects.get_or_create(
                         action=action_obj,
-                        column=Column.objects.get(
-                            workflow=action_obj.workflow,
-                            name=citem['name']),
+                        column=action_obj.workflow.columns.get(
+                            name=citem['name']
+                        ),
                         condition=None
                     )
         else:
@@ -232,8 +231,9 @@ class ActionSelfcontainedSerializer(ActionSerializer):
                 if not cname:
                     raise Exception(
                         _('Incorrect column name {0}.').format(cname))
-                col = Column.objects.filter(workflow=self.context['workflow'],
-                                            name=cname).first()
+                col = self.context['workflow'].columns.filter(
+                    name=cname
+                ).first()
                 if not col:
                     # Accumulate the new columns just in case we have to undo
                     # the changes
@@ -276,8 +276,7 @@ class ActionSelfcontainedSerializer(ActionSerializer):
                               'empty data table')
                         )
 
-                    for col in Column.objects.filter(
-                            workflow=workflow,
+                    for col in workflow.columns.filter(
                             name__in=new_column_names):
                         # Add the column with the initial value
                         df = ops.data_frame_add_column(df, col, None)

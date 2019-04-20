@@ -673,7 +673,7 @@ def view_clone(request, pk):
 
     # Clone the columns
     view.columns.clear()
-    view.columns.add(*list(View.objects.get(pk=pk).columns.all()))
+    view.columns.add(*list(workflow.views.get(pk=pk).columns.all()))
 
     # Log the event
     Log.objects.register(request.user,

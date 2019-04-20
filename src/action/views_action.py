@@ -39,7 +39,6 @@ from ontask import simplify_datetime_str
 from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
 from visualizations.plotly import PlotlyHandler
-from workflow.models import Column
 from workflow.ops import get_workflow
 from .forms import (
     ActionUpdateForm,
@@ -350,14 +349,13 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
         return obj
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class(instance=Action.objects.get(pk=kwargs['pk']))
+        form = self.form_class(instance=self.get_object())
         return save_action_form(request,
                                 form,
                                 self.template_name)
 
     def post(self, request, **kwargs):
-        form = self.form_class(request.POST,
-                               instance=Action.objects.get(pk=kwargs['pk']))
+        form = self.form_class(request.POST, instance=self.get_object())
         return save_action_form(request,
                                 form,
                                 self.template_name)
@@ -645,7 +643,7 @@ def edit_action_in(request, workflow, action):
         filter_condition.save()
 
     # Column names suitable to insert
-    columns_selected = Column.objects.filter(
+    columns_selected = workflow.actions.filter(
         column_condition_pair__action=action,
         is_key=False
     ).order_by('position')
@@ -667,7 +665,7 @@ def edit_action_in(request, workflow, action):
            'total_rows': workflow.nrows,
            'query_builder_ops': workflow.get_query_builder_ops_as_str(),
            'has_data': action.workflow.has_table(),
-           'key_selected': Column.objects.filter(
+           'key_selected': workflow.columns.filter(
                column_condition_pair__action=action,
                is_key=True
            ).first(),
@@ -962,12 +960,20 @@ def showurl(request, pk):
     # AJAX result
     data = {'form_is_valid': False}
 
+    # Get the current workflow
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
     # Get the action object
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except Action.DoesNotExist:
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')
         return JsonResponse(data)
@@ -1363,8 +1369,7 @@ def clone(request, pk):
 
     # Get the new name appending as many times as needed the 'Copy of '
     new_name = 'Copy of ' + action.name
-    while Action.objects.filter(name=new_name,
-                                workflow=workflow).exists():
+    while workflow.actions.filter(name=new_name).exists():
         new_name = 'Copy of ' + new_name
 
     old_id = action.id

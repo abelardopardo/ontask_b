@@ -966,7 +966,7 @@ def get_workflow_action(request, pk):
     """
 
     # Get the workflow first
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         return None
 
@@ -977,10 +977,10 @@ def get_workflow_action(request, pk):
         return None
 
     # Get the action
-    action = Action.objects.filter(
-        pk=pk).filter(
-        Q(workflow__user=request.user) |
-        Q(workflow__shared=request.user)
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
     ).prefetch_related(
         'column_condition_pair'
     ).first()

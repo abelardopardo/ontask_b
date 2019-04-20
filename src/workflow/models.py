@@ -418,9 +418,6 @@ class Workflow(models.Model):
         if from_idx == to_idx:
             return
 
-        # if from_idx == -1:
-        #    from_idx = Column.objects.filter(workflow=workflow).count() + 1
-
         if from_idx < to_idx:
             cols = self.columns.filter(position__gt=from_idx,
                                        position__lte=to_idx)

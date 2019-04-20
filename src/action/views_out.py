@@ -152,6 +152,10 @@ def email_action_done(request, payload=None):
     :return: HTTP response
     """
 
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        return redirect('home')
+
     # Get the payload from the session if not given
     if payload is None:
         payload = get_action_payload(request)
@@ -163,7 +167,10 @@ def email_action_done(request, payload=None):
             return redirect('action:index')
 
     # Get the information from the payload
-    action = Action.objects.get(pk=payload['action_id'])
+    action = workflow.actions.filter(pk=payload['action_id']).first()
+    if not action:
+        return redirect('home')
+
     subject = payload['subject']
     email_column = payload['item_column']
     cc_email = [x.strip() for x in payload['cc_email'].split(',') if x]
@@ -307,6 +314,10 @@ def zip_action_done(request, payload=None):
     :return: HTTP response
     """
 
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        return redirect('home')
+
     # Get the payload from the session if not given
     if payload is None:
         payload = get_action_payload(request)
@@ -321,7 +332,9 @@ def zip_action_done(request, payload=None):
         request.session[action_session_dictionary] = payload
 
     # Get the information from the payload
-    action = Action.objects.get(pk=payload['action_id'])
+    action = workflow.actions.filter(pk=payload['action_id']).first()
+    if not action:
+        return redirect('home')
     participant_column = payload['item_column']
     user_fname_column = payload.get('user_fname_column', None)
     file_suffix = payload['file_suffix']
@@ -359,6 +372,11 @@ def action_zip_export(request):
     :return: Response (download)
     """
 
+    # Get the workflow first
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        return redirect('home')
+
     # Get the payload from the session if not given
     payload = get_action_payload(request)
 
@@ -369,7 +387,9 @@ def action_zip_export(request):
         return redirect('action:index')
 
     # Get the information from the payload
-    action = Action.objects.get(pk=payload['action_id'])
+    action = workflow.actions.filter(pk=payload['action_id']).first()
+    if not action:
+        return redirect('home')
     user_fname_column = payload['user_fname_column']
     participant_column = payload['item_column']
     file_suffix = payload['file_suffix']
@@ -548,6 +568,10 @@ def json_done(request, payload=None):
     :return: HTTP response
     """
 
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        return redirect('home')
+
     # Get the payload from the session if not given
     if payload is None:
         payload = get_action_payload(request)
@@ -559,7 +583,9 @@ def json_done(request, payload=None):
             return redirect('action:index')
 
     # Get the information from the payload
-    action = Action.objects.get(pk=payload['action_id'])
+    action = workflow.actions.filter(pk=payload['action_id']).first()
+    if not action:
+        return redirect('home')
     token = payload['token']
     key_column = payload['item_column']
     exclude_values = payload.get('exclude_values', [])
@@ -745,6 +771,10 @@ def canvas_email_done(request, payload=None):
     empty, the ditionary is taken from the session.
     :return: HTTP response
     """
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        return redirect('home')
+
     # Get the payload from the session if not given
     if payload is None:
         payload = get_action_payload(request)
@@ -757,7 +787,9 @@ def canvas_email_done(request, payload=None):
             return redirect('action:index')
 
     # Get the information from the payload
-    action = Action.objects.get(pk=payload['action_id'])
+    action = workflow.actions.filter(pk=payload['action_id']).first()
+    if not action:
+        return redirect('home')
     subject = payload['subject']
     email_column = payload['item_column']
     export_wf = payload['export_wf']

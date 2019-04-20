@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait, Select
 
 import test
-from action.models import Action, Column, Condition
+from action.models import Action, Condition
 from dataops import pandas_db
 from dataops.formula_evaluation import has_variable
 from workflow.models import Workflow
@@ -631,10 +631,7 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
     def test_action_01_rename_column_condition_attribute(self):
         # First get objects for future checks
         workflow = Workflow.objects.get(name=self.wflow_name)
-        column = Column.objects.get(
-            name='registered',
-            workflow=workflow
-        )
+        column = workflow.columns.get(name='registered')
         attributes = workflow.attributes
         Action.objects.get(name='Check registration', workflow=workflow)
         action_out = Action.objects.get(
@@ -705,8 +702,10 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         self.edit_condition('Registered', 'Registered new', None, [])
 
         # Refresh variables
-        workflow = Workflow.objects.get(pk=workflow.id)
-        column = Column.objects.get(pk=column.id)
+        workflow = Workflow.objects.prefetch_related('columns').get(
+            pk=workflow.id
+        )
+        column = workflow.columns.get(pk=column.id)
         attributes = workflow.attributes
         action_out = Action.objects.get(pk=action_out.id)
         condition = Condition.objects.get(pk=condition.id)

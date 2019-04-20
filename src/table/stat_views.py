@@ -177,7 +177,7 @@ def get_view_visualisations(request, view_id=None):
     significant overlap.
     """
     # If there is no workflow object, go back to the index
-    workflow = get_workflow(request, prefetch_related='columns')
+    workflow = get_workflow(request, prefetch_related=['columns', 'views'])
     if not workflow:
         return redirect('home')
 
@@ -192,7 +192,7 @@ def get_view_visualisations(request, view_id=None):
     columns_to_view = workflow.columns.all()
     view = None
     if view_id:
-        view = View.objects.filter(pk=view_id).first()
+        view = workflow.vhews.filter(pk=view_id).first()
         if not view:
             # View not found. Redirect to workflow detail
             return redirect('workflow:detail', workflow.id)

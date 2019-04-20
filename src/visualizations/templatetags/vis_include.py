@@ -6,10 +6,8 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from action.evaluate import action_context_var, viz_number_context_var, tr_item
-from action.models import Condition
 from dataops import pandas_db
 from visualizations.plotly import PlotlyColumnHistogram
-from workflow.models import Column
 
 register = template.Library()
 
@@ -22,7 +20,7 @@ def vis_html_content(context, column_name):
     workflow = action.workflow
 
     # Check if the column is correct
-    if not Column.objects.filter(workflow=workflow, name=column_name).exists():
+    if not workflow.columns.filter(name=column_name).exists():
         raise Exception(_('Column {0} does not exist').format(column_name))
 
     # Get the visualization number to generate unique IDs

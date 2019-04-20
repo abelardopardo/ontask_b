@@ -17,7 +17,6 @@ from dataops.pandas_db import (
     is_unique_column,
     are_unique_columns,
     has_unique_column)
-from table.models import View
 from workflow.models import Column
 
 
@@ -523,19 +522,19 @@ def rename_df_column(workflow, old_name, new_name):
     :return: Workflow object updated
     """
 
-    # Rename the appearances of the variable in all conditions/filters
-    conditions = Condition.objects.filter(action__workflow=workflow)
-    for cond in conditions:
-        cond.formula = formula_evaluation.rename_variable(
-            cond.formula, old_name, new_name)
-        cond.save()
-
     # Rename the appearances of the variable in all actions
-    for action_item in Action.objects.filter(workflow=workflow):
+    for action_item in workflow.actions.prefetch_related('conditions').all():
         action_item.rename_variable(old_name, new_name)
 
+        # Rename the appearances of the variable in all conditions/filters
+        conditions = action_item.conditionns.all()
+        for cond in conditions:
+            cond.formula = formula_evaluation.rename_variable(
+                cond.formula, old_name, new_name)
+            cond.save()
+
     # Rename the appearances of the variable in the formulas in the views
-    for view in View.objects.filter(workflow=workflow):
+    for view in workflow.views.all():
         view.formula = formula_evaluation.rename_variable(
             view.formula,
             old_name,

@@ -483,7 +483,8 @@ def index(request):
 
     # Get the actions
     s_items = ScheduledAction.objects.filter(
-        action__workflow=workflow.id)
+        action__workflow=workflow.id
+    )
 
     return render(request,
                   'scheduler/index.html',
@@ -511,7 +512,7 @@ def view(request, pk):
 
     # Get the scheduled action
     sch_obj = ScheduledAction.objects.filter(action__workflow=workflow,
-                                             pk=pk)
+                                             pk=pk).first()
 
     if not sch_obj:
         # Connection object not found, go to table of sql connections
@@ -521,7 +522,7 @@ def view(request, pk):
 
     data['html_form'] = render_to_string(
         'scheduler/includes/partial_show_schedule_action.html',
-        {'s_vals': sch_obj.values()[0], 'id': sch_obj[0].id}
+        {'s_vals': sch_obj.values(), 'id': sch_obj.id}
     )
     return JsonResponse(data)
 
@@ -610,9 +611,16 @@ def delete(request, pk):
     # JSON response object
     data = dict()
 
+    # Get first the current workflow
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
     # Get the appropriate scheduled action
     s_item = ScheduledAction.objects.filter(
-        action__workflow__user=request.user,
+        action__workflow=workflow,
         pk=pk
     ).first()
     if not s_item:

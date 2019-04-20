@@ -11,7 +11,7 @@ from rest_framework.authtoken.models import Token
 import test
 from dataops import pandas_db, ops
 from table import serializers
-from workflow.models import Workflow, Column
+from workflow.models import Workflow
 from workflow.ops import workflow_delete_column
 
 
@@ -626,10 +626,7 @@ class TableApiMerge(TableApiBase):
         # Drop the column with booleans because the data type is lost
         workflow_delete_column(
             workflow,
-            Column.objects.get(
-                workflow=workflow,
-                name='registered'
-            )
+            workflow.columns.get(name='registered')
         )
 
         # Transform new table into string
@@ -681,10 +678,7 @@ class TableApiMerge(TableApiBase):
         # Drop the column with booleans because the data type is lost
         workflow_delete_column(
             workflow,
-            Column.objects.get(
-                workflow=workflow,
-                name='registered'
-            )
+            workflow.columns.get(name='registered')
         )
 
         # Transform new table into string

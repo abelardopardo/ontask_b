@@ -468,7 +468,8 @@ def column_edit(request, pk):
     is_question = 'question_edit' in request.path_info
 
     # Get the workflow element
-    workflow = get_workflow(request, prefetch_related='columns')
+    workflow = get_workflow(request,
+                            prefetch_related=['columns', 'views', 'actions'])
     if not workflow:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')
