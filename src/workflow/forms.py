@@ -10,7 +10,6 @@ import pandas as pd
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 
 from dataops import pandas_db
@@ -516,12 +515,12 @@ class SharedForm(forms.Form):
     def clean(self):
         data = super().clean()
 
-        try:
-            self.user_obj = get_user_model().objects.get(
-                email__iexact=data['user_email']
-            )
-        except ObjectDoesNotExist:
+        self.user_obj = get_user_model().objects.filter(
+            email__iexact=data['user_email']
+        ).first()
+        if not self.user_obj:
             self.add_error('user_email', _('User not found'))
+            return data
 
         if self.user_obj == self.request_user:
             self.add_error(
@@ -531,8 +530,7 @@ class SharedForm(forms.Form):
 
         if self.user_obj in self.workflow.shared.all():
             self.add_error(
-                'user_email',
-                _("User already in the list")
+                'user_email', _("User already in the list")
             )
 
         return data

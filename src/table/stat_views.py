@@ -5,7 +5,6 @@ Implementation of views providing visualisation and stats
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
@@ -17,7 +16,6 @@ from dataops.pandas_db import load_from_db, get_column_stats_from_df
 from ontask.permissions import is_instructor
 from table.models import View
 from visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
-from workflow.models import Column
 from workflow.ops import get_workflow
 
 
@@ -76,7 +74,7 @@ def get_column_visualisations(column, col_data, vis_scripts,
 
 def get_row_visualisations(request, view_id=None):
     # If there is no workflow object, go back to the index
-    workflow = get_workflow(request, prefetch_related='columns')
+    workflow = get_workflow(request, prefetch_related=['columns', 'views'])
     if not workflow:
         return redirect('home')
 
@@ -98,9 +96,8 @@ def get_row_visualisations(request, view_id=None):
     columns_to_view = workflow.columns.all()
     column_names = workflow.get_column_names()
     if view_id:
-        try:
-            view = View.objects.get(pk=view_id)
-        except ObjectDoesNotExist:
+        view = workflow.views.filter(pk=view_id).first()
+        if not view:
             # View not found. Redirect to workflow detail
             return redirect('workflow:detail', workflow.id)
         columns_to_view = view.columns.all()
@@ -195,9 +192,8 @@ def get_view_visualisations(request, view_id=None):
     columns_to_view = workflow.columns.all()
     view = None
     if view_id:
-        try:
-            view = View.objects.get(pk=view_id)
-        except ObjectDoesNotExist:
+        view = View.objects.filter(pk=view_id).first()
+        if not view:
             # View not found. Redirect to workflow detail
             return redirect('workflow:detail', workflow.id)
         columns_to_view = view.columns.all()

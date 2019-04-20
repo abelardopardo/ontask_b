@@ -11,7 +11,6 @@ from celery.task.control import inspect
 from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
@@ -817,10 +816,15 @@ def preview_next_all_false_response(request, pk, idx):
     # To include in the JSON response
     data = dict()
 
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
     # Action being used
-    try:
-        action = Action.objects.get(id=pk)
-    except ObjectDoesNotExist:
+    action = workflow.actions.filter(id=pk).first()
+    if not action:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')
         return JsonResponse(data)
@@ -866,15 +870,11 @@ def preview_response(request, pk, idx, action=None):
     # Get the workflow to obtain row numbers
     if not action:
         workflow = get_workflow(request, prefetch_related='actions')
-    else:
-        workflow = get_workflow(request)
+        if not workflow:
+            data['form_is_valid'] = True
+            data['html_redirect'] = reverse('home')
+            return JsonResponse(data)
 
-    if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
-
-    if not action:
         # Action being used
         action = workflow.actions.filter(id=pk).prefetch_related(
             'conditions'
@@ -883,6 +883,8 @@ def preview_response(request, pk, idx, action=None):
             data['form_is_valid'] = True
             data['html_redirect'] = reverse('home')
             return JsonResponse(data)
+    else:
+        workflow = action.workflow
 
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content', None)

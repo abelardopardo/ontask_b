@@ -13,7 +13,6 @@ import pytz
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
@@ -571,15 +570,24 @@ def view_delete(request, pk):
     :param pk: primary key of the view to delete
     :return: AJAX response to handle the form.
     """
+    # Get the workflow element
+    workflow = get_workflow(request, prefetch_related='views')
+    if not workflow:
+        return JsonResponse(
+            {'form_is_valid': True,
+             'html_redirect': reverse('home')}
+        )
+
     # Data to send as JSON response, in principle, assume form is not valid
     data = {'form_is_valid': False}
 
     # Get the appropriate action object
-    try:
-        view = View.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except (KeyError, ObjectDoesNotExist):
+    view = workflow.views.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not view:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('table:view_index')
         return JsonResponse(data)

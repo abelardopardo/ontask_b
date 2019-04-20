@@ -17,7 +17,6 @@ import pandas as pd
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import reverse
 from django.test import TransactionTestCase, LiveServerTestCase
 from rest_framework.authtoken.models import Token
@@ -71,9 +70,8 @@ def create_users():
     create_groups()
 
     for uname, uemail, glist, suser in user_info:
-        try:
-            uobj = get_user_model().objects.get(email=uemail)
-        except ObjectDoesNotExist:
+        uobj = get_user_model().objects.filter(email=uemail).first()
+        if not uobj:
             uobj = get_user_model().objects.create_user(
                 name=uname,
                 email=uemail,

@@ -292,9 +292,8 @@ class Workflow(models.Model):
             # No key in the workflow, then it is not locked.
             return False
 
-        try:
-            session = Session.objects.get(session_key=self.session_key)
-        except ObjectDoesNotExist:
+        session = Session.objects.filter(session_key=self.session_key).first()
+        if not session:
             # Session does not exist, then it is not locked
             return False
 

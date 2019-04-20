@@ -8,7 +8,6 @@ from urllib.parse import urlencode
 import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test, login_required
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import Http404, JsonResponse
@@ -1040,9 +1039,10 @@ def serve(request, action_id):
     user_attribute_name = params.get('uatn', 'email')
 
     # Get the action object
-    try:
-        action = Action.objects.get(pk=int(action_id))
-    except ObjectDoesNotExist:
+    action = Action.objects.filter(pk=int(action_id)).prefetch_related(
+        'conditions'
+    ).first()
+    if not action:
         raise Http404
 
     # If it is not enabled, reject the request
@@ -1071,12 +1071,20 @@ def delete_action(request, pk):
     # JSON response object
     data = dict()
 
+    # Get the current workflow
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
     # Get the appropriate action object
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except (KeyError, ObjectDoesNotExist):
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')
         return JsonResponse(data)
@@ -1320,7 +1328,7 @@ def clone(request, pk):
     data = dict()
 
     # Get the current workflow
-    workflow = get_workflow(request, prefetch_related='action')
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')

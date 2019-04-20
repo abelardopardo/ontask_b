@@ -12,7 +12,6 @@ import pandas as pd
 from celery.task.control import inspect
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, reverse
@@ -150,9 +149,8 @@ def diagnose(request, pk):
     data = dict()
 
     # Action being used
-    try:
-        plugin = PluginRegistry.objects.get(id=pk)
-    except ObjectDoesNotExist:
+    plugin = PluginRegistry.objects.filter(id=pk).first()
+    if not plugin:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('dataops:transform')
         return JsonResponse(data)

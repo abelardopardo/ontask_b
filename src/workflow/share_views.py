@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
@@ -64,9 +63,8 @@ def share_delete(request, pk):
         return redirect('home')
 
     # If the user does not exist, go back to home page
-    try:
-        user = get_user_model().objects.get(id=pk)
-    except ObjectDoesNotExist:
+    user = get_user_model().objects.filter(id=pk).first()
+    if not user:
         return redirect('home')
 
     data = dict()

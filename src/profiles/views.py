@@ -5,7 +5,6 @@ from django.views import generic
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework.authtoken.models import Token
 from django.utils.translation import ugettext_lazy as _
@@ -81,16 +80,11 @@ def reset_token(request):
     :param request:
     :return:
     """
-    tk = None
-    try:
-        # Get the token to see if it exists
-        tk = Token.objects.get(user=request.user)
-    except ObjectDoesNotExist:
-        pass
+    tk = Token.objects.filter(user=request.user).first()
 
     if tk:
         # Delete it if detected.
-        Token.objects.get(user=request.user).delete()
+        tk.delete()
 
     # Create the new one
     Token.objects.create(user=request.user)
