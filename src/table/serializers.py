@@ -148,12 +148,14 @@ class ViewSerializer(serializers.ModelSerializer):
             columns = ColumnNameSerializer(
                 data=validated_data.get('columns'),
                 many=True,
-                required=False,
+                required=False
             )
             if columns.is_valid():
-                for citem in columns.data:
-                    column = view_obj.workflow.columns.get(name=citem['name'])
-                    view_obj.columns.add(column)
+                view_column_names = [x['name'] for x in columns.data]
+                view_obj.columns.set(
+                    [x for x in self.context['columns']
+                     if x.name in view_column_names]
+                )
                 view_obj.save()
             else:
                 raise Exception(_('Incorrect column data'))

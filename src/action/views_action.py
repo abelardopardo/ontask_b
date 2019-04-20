@@ -643,7 +643,7 @@ def edit_action_in(request, workflow, action):
         filter_condition.save()
 
     # Column names suitable to insert
-    columns_selected = workflow.actions.filter(
+    columns_selected = workflow.columns.filter(
         column_condition_pair__action=action,
         is_key=False
     ).order_by('position')

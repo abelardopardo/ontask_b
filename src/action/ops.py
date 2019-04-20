@@ -376,7 +376,10 @@ def do_import_action(user, workflow, name, file_item):
     # Serialize content
     action_data = ActionSelfcontainedSerializer(
         data=data,
-        context={'user': user, 'name': name, 'workflow': workflow}
+        context={'user': user,
+                 'name': name,
+                 'workflow': workflow,
+                 'columns': workflow.columns.all()}
     )
 
     # If anything goes wrong, return a string to show in the page.

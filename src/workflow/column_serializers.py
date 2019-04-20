@@ -9,8 +9,15 @@ from dataops.pandas_db import pandas_datatype_names
 from workflow.models import Column
 
 
+try:
+    profile
+except NameError:
+    profile = lambda x: x
+
+
 class ColumnSerializer(serializers.ModelSerializer):
 
+    @profile
     def create(self, validated_data, **kwargs):
 
         # Preliminary checks

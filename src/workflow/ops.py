@@ -207,7 +207,6 @@ def detach_dataframe(workflow):
     # Save the workflow with the new fields.
     workflow.save()
 
-
 def do_import_workflow_parse(user, name, file_item):
     """
     Three steps: read the GZIP file, create ther serializer, parse the data,
