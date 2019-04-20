@@ -89,6 +89,7 @@ def store_dataframe(data_frame, workflow, temporary=False, reset_keys=True):
 
     # Loop over the remaining columns in the data frame and create the new
     # column objects in the workflow
+    new_columns = []
     for cname in df_column_names:
         # Create the new column
         column = Column(
@@ -99,9 +100,10 @@ def store_dataframe(data_frame, workflow, temporary=False, reset_keys=True):
             position=workflow.columns.count() + 1
         )
         column.save()
+        new_columns.append(column)
 
     # Get the new set of columns with names
-    wf_columns = workflow.columns.all()
+    wf_columns = list(workflow.columns.all()) + new_columns
 
     # Reorder the columns in the data frame
     data_frame = data_frame[[x.name for x in wf_columns]]
