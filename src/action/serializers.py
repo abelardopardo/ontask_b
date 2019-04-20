@@ -11,7 +11,6 @@ from dataops.formula_evaluation import get_variables
 from workflow.column_serializers import ColumnSerializer, ColumnNameSerializer
 from .models import Condition, Action, ActionColumnConditionTuple
 
-
 try:
     profile
 except NameError:
@@ -138,42 +137,46 @@ class ActionSerializer(serializers.ModelSerializer):
                                       validated_data,
                                       action_obj,
                                       wflow_columns):
-        # Load the columns pointing to the action (if any) LEGACY FIELD!!
-        columns = ColumnNameSerializer(
-            data=validated_data.get('columns', []),
-            many=True,
-            required=False,
-        )
-        if columns.is_valid():
-            # Legacy field "columns". Iterate over the names and create
-            # the triplets.
-            # First get the column names returned by the seralizer
-            column_names = [x['name'] for x in columns.data]
-            # List for bulk creation of objects
-            bulk_list = [
-                ActionColumnConditionTuple.objects.get_or_create(
-                    action=action_obj,
-                    column=x,
-                    condition=None
-                )
-                for x in wflow_columns if x.name in column_names]
-            # Create the objects
-            ActionColumnConditionTuple.objects.bulk_create(bulk_list)
-        else:
-            raise Exception(_('Invalid column data'))
 
-        # Parse the column_condition_pair
-        column_condition_pairs = ColumnConditionNameSerializer(
-            data=validated_data.get('column_condition_pair', []),
-            many=True,
-            context={'action': action_obj,
-                     'columns': wflow_columns}
-        )
+        field_data = validated_data.get('columns', [])
+        if field_data:
+            # Load the columns pointing to the action (if any) LEGACY FIELD!!
+            columns = ColumnNameSerializer(data=field_data,
+                                           many=True,
+                                           required=False)
+            if columns.is_valid():
+                # Legacy field "columns". Iterate over the names and create
+                # the triplets.
+                # First get the column names returned by the seralizer
+                column_names = [x['name'] for x in columns.data]
+                # List for bulk creation of objects
+                bulk_list = [
+                    ActionColumnConditionTuple(
+                        action=action_obj,
+                        column=x,
+                        condition=None
+                    )
+                    for x in wflow_columns if x.name in column_names
+                ]
+                # Create the objects
+                ActionColumnConditionTuple.objects.bulk_create(bulk_list)
+            else:
+                raise Exception(_('Invalid column data'))
 
-        if column_condition_pairs.is_valid():
-            column_condition_pairs.save()
-        else:
-            raise Exception(_('Invalid column condition pair data'))
+        field_data = validated_data.get('column_condition_pair', [])
+        if field_data:
+            # Parse the column_condition_pair
+            column_condition_pairs = ColumnConditionNameSerializer(
+                data=field_data,
+                many=True,
+                context={'action': action_obj,
+                         'columns': wflow_columns}
+            )
+
+            if column_condition_pairs.is_valid():
+                column_condition_pairs.save()
+            else:
+                raise Exception(_('Invalid column condition pair data'))
 
     @profile
     def create(self, validated_data, **kwargs):
