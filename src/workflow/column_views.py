@@ -6,7 +6,6 @@ from builtins import range
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import redirect
@@ -25,12 +24,11 @@ from .forms import (
     FormulaColumnAddForm,
     RandomColumnAddForm, QuestionAddForm, QuestionRenameForm
 )
-from .models import Column
 from .ops import (
     get_workflow,
     workflow_delete_column,
     clone_column,
-    reposition_column_and_update_df, workflow_restrict_column
+    workflow_restrict_column
 )
 
 # These are the column operands offered through the GUI. They have immediate
@@ -78,7 +76,7 @@ def column_add(request, pk=None):
     is_question = pk is not None
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related=['actions', 'columns'])
     if not workflow:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')
@@ -196,7 +194,7 @@ def formula_column_add(request):
     data = {'form_is_valid': False}
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')
@@ -331,7 +329,7 @@ def random_column_add(request):
     data = {'form_is_valid': False}
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')
@@ -470,7 +468,7 @@ def column_edit(request, pk):
     is_question = 'question_edit' in request.path_info
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')
@@ -576,7 +574,7 @@ def column_delete(request, pk):
     data = dict()  # JSON response
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related=['columns', 'actions'])
     if not workflow:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')
@@ -662,7 +660,7 @@ def column_clone(request, pk):
     data = dict()  # JSON response
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')
@@ -696,8 +694,7 @@ def column_clone(request, pk):
     # Get the new name appending as many times as needed the 'Copy of '
     old_name = column.name
     new_name = 'Copy_of_' + old_name
-    while Column.objects.filter(name=new_name,
-                                workflow=column.workflow).exists():
+    while workflow.columns.filter(name=new_name).exists():
         new_name = 'Copy_of_' + new_name
 
     # Proceed to clone the column
@@ -735,7 +732,7 @@ def column_move(request):
     """
 
     # Check if the workflow is locked
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         # No workflow present
         return JsonResponse({'html_redirect': reverse('home')})
@@ -759,7 +756,7 @@ def column_move(request):
 
     # Two correct condition names, perform the swap
     # workflow.reposition_columns(from_col, to_col.position)
-    reposition_column_and_update_df(workflow, from_col, to_col.position)
+    from_col.reposition_and_update_df(to_col.position)
 
     return JsonResponse({})
 
@@ -774,19 +771,18 @@ def column_move_top(request, pk):
     """
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return redirect('home')
 
     # Get the column
-    try:
-        column = workflow.columns.get(pk=pk)
-    except ObjectDoesNotExist:
+    column = workflow.columns.filter(pk=pk).first()
+    if not column:
         return redirect('workflow:detail', pk=workflow.id)
 
     # The workflow and column objects have been correctly obtained
     if column.position > 1:
-        reposition_column_and_update_df(workflow, column, 1)
+        column.reposition_and_update_df(1)
 
     return redirect('workflow:detail', pk=workflow.id)
 
@@ -801,19 +797,18 @@ def column_move_bottom(request, pk):
     """
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return redirect('home')
 
     # Get the column
-    try:
-        column = workflow.columns.get(pk=pk)
-    except ObjectDoesNotExist:
+    column = workflow.columns.filter(pk=pk).first()
+    if not column:
         return redirect('workflow:detail', pk=workflow.id)
 
     # The workflow and column objects have been correctly obtained
     if column.position < workflow.ncols:
-        reposition_column_and_update_df(workflow, column, workflow.ncols)
+        column.reposition_and_update_df(workflow.ncols)
 
     return redirect('workflow:detail', pk=workflow.id)
 
@@ -832,7 +827,7 @@ def column_restrict_values(request, pk):
     data = dict()  # JSON response
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')

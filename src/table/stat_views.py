@@ -76,7 +76,7 @@ def get_column_visualisations(column, col_data, vis_scripts,
 
 def get_row_visualisations(request, view_id=None):
     # If there is no workflow object, go back to the index
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return redirect('home')
 
@@ -180,7 +180,7 @@ def get_view_visualisations(request, view_id=None):
     significant overlap.
     """
     # If there is no workflow object, go back to the index
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return redirect('home')
 
@@ -297,14 +297,13 @@ def stat_column(request, pk):
     :return: Render the page
     """
 
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return redirect('home')
 
     # Get the column
-    try:
-        column = Column.objects.get(pk=pk, workflow=workflow)
-    except ObjectDoesNotExist:
+    column = workflow.columns.filter(pk=pk).first()
+    if not column:
         return redirect('home')
 
     stat_data, vis_scripts, visualizations = \
@@ -333,7 +332,7 @@ def stat_column_JSON(request, pk):
     data = dict()
 
     # Get the workflow to obtain row numbers
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')

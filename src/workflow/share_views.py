@@ -16,7 +16,7 @@ from .ops import get_workflow
 @user_passes_test(is_instructor)
 def share_create(request):
     # Get the workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='shared')
     if not workflow:
         return redirect('home')
 
@@ -33,6 +33,7 @@ def share_create(request):
             # proceed with the update
             workflow.shared.add(form.user_obj)
             workflow.save()
+            workflow.save_m2m()
 
             # Log the event
             Log.objects.register(request.user,
@@ -58,7 +59,7 @@ def share_create(request):
 @user_passes_test(is_instructor)
 def share_delete(request, pk):
     # Get the workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='shared')
     if not workflow:
         return redirect('home')
 
@@ -74,6 +75,7 @@ def share_delete(request, pk):
     if request.method == 'POST':
         workflow.shared.remove(user)
         workflow.save()
+        workflow.save_m2m()
 
         # Log the event
         Log.objects.register(request.user,

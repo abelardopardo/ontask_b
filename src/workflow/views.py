@@ -191,8 +191,7 @@ def operations(request):
     # Get the appropriate workflow object
     workflow = get_workflow(request,
                             select_related='luser_email_column',
-                            prefetch_related=['columns',
-                                              'shared'])
+                            prefetch_related=['columns', 'shared'])
     if not workflow:
         return redirect('home')
 
@@ -255,7 +254,9 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
         old_obj = super().get_object(queryset=queryset)
 
         # Check if the workflow is locked
-        obj = get_workflow(self.request, old_obj.id)
+        obj = get_workflow(self.request,
+                           old_obj.id,
+                           prefetch_related=['actions', 'columns'])
         return obj
 
     def get_context_data(self, **kwargs):
@@ -430,7 +431,7 @@ def column_ss(request):
     :param request: Http request received from DataTable
     :return: Data to visualize in the table
     """
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return JsonResponse(
             {'error': _('Incorrect request. Unable to process')}
@@ -458,7 +459,7 @@ def column_ss(request):
 
     # Get the initial set
     qs = workflow.columns.all()
-    records_total = len(qs)
+    records_total = qs.count()
     records_filtered = records_total
 
     # Reorder if required
@@ -475,7 +476,7 @@ def column_ss(request):
     if search_value:
         qs = qs.filter(Q(name__icontains=search_value) |
                        Q(data_type__icontains=search_value))
-        records_filtered = len(qs)
+        records_filtered = qs.count()
 
     # Creating the result
     final_qs = []
@@ -566,7 +567,7 @@ def clone(request, pk):
 
     # Get the initial object back
     workflow_new = workflow
-    workflow = get_workflow(request, pk)
+    workflow = get_workflow(request, pk, prefetch_related='actions')
 
     # Clone the data frame
     data_frame = pandas_db.load_from_db(workflow.get_data_frame_table_name())
@@ -607,7 +608,11 @@ def assign_luser_column(request, pk=None):
     """
 
     # Get the current workflow
-    workflow = get_workflow(request, None, prefetch_related='columns')
+    if pk:
+        workflow = get_workflow(request, prefetch_related='columns')
+    else:
+        workflow = get_workflow(request, prefetch_related='lusers')
+
     if not workflow:
         return JsonResponse({'html_redirect': reverse('home')})
 

@@ -22,7 +22,6 @@ from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.core import signing, mail
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail, EmailMultiAlternatives, EmailMessage
 from django.db.models import Q
 from django.http import HttpResponse
@@ -286,7 +285,9 @@ def clone_action(action, new_workflow=None, new_name=None):
     action.save()
 
     # Get back the old action
-    old_action = Action.objects.get(id=old_id)
+    old_action = Action.objects.prefetch_related(
+        'column_condition_pair', 'conditions'
+    ).get(id=old_id)
 
     # Clone the columns field (in case of an action in).
     if action.is_in:
@@ -976,11 +977,14 @@ def get_workflow_action(request, pk):
         return None
 
     # Get the action
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
+    action = Action.objects.filter(
+        pk=pk).filter(
+        Q(workflow__user=request.user) |
+        Q(workflow__shared=request.user)
+    ).prefetch_related(
+        'column_condition_pair'
+    ).first()
+    if not action:
         return None
 
     return workflow, action

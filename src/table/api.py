@@ -34,7 +34,7 @@ class TableBasicOps(APIView):
     permission_classes = (UserIsInstructor,)
 
     def get_object(self, pk):
-        workflow = get_workflow(self.request, pk)
+        workflow = get_workflow(self.request, pk, prefetch_related='actions')
         if workflow is None:
             raise APIException(_('Unable to access the workflow'))
         return workflow
@@ -198,7 +198,7 @@ class TableBasicMerge(APIView):
     permission_classes = (UserIsInstructor,)
 
     def get_object(self, pk):
-        workflow = get_workflow(self.request, pk)
+        workflow = get_workflow(self.request, pk, prefetch_related='columns')
         if workflow is None:
             raise APIException(_('Unable to access the workflow'))
         return workflow

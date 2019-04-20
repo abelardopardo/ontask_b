@@ -193,6 +193,12 @@ def save_action_form(request, form, template_name):
     :return: JSON response
     """
 
+    # Get the corresponding workflow
+    workflow = get_workflow(request)
+    if not workflow:
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
+
     # JSON payload
     data = dict()
 
@@ -219,11 +225,6 @@ def save_action_form(request, form, template_name):
 
     # Is this a new action?
     is_new = action_item.pk is None
-
-    # Get the corresponding workflow
-    workflow = get_workflow(request)
-    if not workflow:
-        redirect('home')
 
     if is_new:  # Action is New. Update user and workflow fields
         action_item.user = request.user
@@ -374,16 +375,17 @@ def edit_description(request, pk):
     """
 
     # Try to get the workflow first
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         return JsonResponse({'form_is_valid': True,
                              'html_redirect': reverse('home')})
 
     # Get the action
-    action = Action.objects.filter(
-        pk=pk).filter(
-        Q(workflow__user=request.user) |
-        Q(workflow__shared=request.user)).first()
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
     if not action:
         return JsonResponse({'form_is_valid': True,
                              'html_redirect': reverse('action:index')})
@@ -424,7 +426,6 @@ def edit_description(request, pk):
     return JsonResponse(data)
 
 
-
 @user_passes_test(is_instructor)
 @csrf_exempt
 def action_out_save_content(request, pk):
@@ -436,21 +437,25 @@ def action_out_save_content(request, pk):
     """
 
     # Try to get the workflow first
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        return JsonResponse({})
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
 
     # Get the action
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
-        return JsonResponse({})
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not filter:
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
 
     # Wrong type of action.
     if action.is_in:
-        return JsonResponse({})
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
 
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content')
@@ -458,7 +463,7 @@ def action_out_save_content(request, pk):
         action.set_content(action_content)
         action.save()
 
-    return JsonResponse({})
+    return JsonResponse({'form_is_valid': True, 'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)
@@ -471,7 +476,8 @@ def edit_action(request, pk):
     """
 
     # Try to get the workflow first
-    workflow = get_workflow(request)
+    workflow = get_workflow(request,
+                            prefetch_related=['actions', 'columns'])
     if not workflow:
         return redirect('home')
 
@@ -484,12 +490,13 @@ def edit_action(request, pk):
         return redirect(reverse('action:index'))
 
     # Get the action and the columns
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)
-        ).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
+        messages.error(request, _('Incorrect action request'))
         return redirect('action:index')
 
     if action.action_type == Action.PERSONALIZED_TEXT:
@@ -695,11 +702,13 @@ def export_ask(request, pk):
     """
 
     # Get the workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         return redirect('home')
 
-    action = Action.objects.filter(pk=pk).first()
+    action = workflow.actions.filter(pk=pk).prefetch_related(
+        'column_condition_pair'
+    ).first()
     if not action:
         return redirect('action:index')
 
@@ -721,11 +730,11 @@ def export_done(request, pk):
     """
 
     # Get the workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         return redirect('home')
 
-    action = Action.objects.filter(pk=pk).first()
+    action = workflow.actions.filter(pk=pk).first()
     if not action:
         return redirect('action:index')
 
@@ -742,11 +751,11 @@ def export_download(request, pk):
     """
 
     # Get the workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         return redirect('home')
 
-    action = Action.objects.filter(pk=pk).first()
+    action = workflow.actions.filter(pk=pk).first()
     if not action:
         return redirect('action:index')
 
@@ -764,7 +773,7 @@ def action_import(request):
     """
 
     # Get workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         return redirect('home')
 
@@ -777,8 +786,7 @@ def action_import(request):
         return render(request, 'action/import.html', context)
 
     new_action_name = form.cleaned_data['name']
-    if Action.objects.filter(
-            workflow=workflow,
+    if workflow.actions.filter(
             workflow__user=request.user,
             name=new_action_name).exists():
         # There is an action with this name. Return error.
@@ -816,7 +824,7 @@ def select_column_action(request, apk, cpk, key=None):
     :return: JSON response
     """
     # Check if the workflow is locked
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related=['columns', 'actions'])
     if not workflow:
         return JsonResponse({'html_redirect': reverse('home')})
 
@@ -829,18 +837,17 @@ def select_column_action(request, apk, cpk, key=None):
         return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Get the action and the columns
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)
-        ).distinct().get(pk=apk)
-    except ObjectDoesNotExist:
+    action = workflow.actions.filter(
+        pk=apk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
         return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Get the column
-    try:
-        column = action.workflow.columns.get(pk=cpk)
-    except ObjectDoesNotExist:
+    column = workflow.columns.get(pk=cpk).first()
+    if not column:
         return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Parameters are correct, so add the column to the action.
@@ -874,7 +881,7 @@ def unselect_column_action(request, apk, cpk):
     :return: JSON response
     """
     # Check if the workflow is locked
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related=['actions', 'columns'])
     if not workflow:
         return reverse('home')
 
@@ -887,18 +894,17 @@ def unselect_column_action(request, apk, cpk):
         return redirect(reverse('action:index'))
 
     # Get the action and the columns
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)
-        ).distinct().get(pk=apk)
-    except ObjectDoesNotExist:
+    action = workflow.actions.filter(
+        pk=apk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
         return redirect(reverse('action:index'))
 
     # Get the column
-    try:
-        column = action.workflow.columns.get(pk=cpk)
-    except ObjectDoesNotExist:
+    column = workflow.columns.get(pk=cpk).first()
+    if not column:
         return redirect(reverse('action:index'))
 
     # Parameters are correct, so remove the column from the action.
@@ -917,7 +923,7 @@ def shuffle_questions(request, pk):
     """
 
     # Check if the workflow is locked
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         return reverse('home')
 
@@ -929,13 +935,13 @@ def shuffle_questions(request, pk):
         )
         return redirect(reverse('action:index'))
 
-    # Get the action and the columns
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)
-        ).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
+    # Get the action
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
         return redirect(reverse('action:index'))
 
     action.shuffle = not action.shuffle
@@ -1159,7 +1165,7 @@ def run_survey_ss(request, pk):
     :return:
     """
 
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         return JsonResponse(
             {'error': _('Incorrect request. Unable to process')}
@@ -1170,11 +1176,12 @@ def run_survey_ss(request, pk):
         return JsonResponse({'error': _('There is no data in the table')})
 
     # Get the action
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
         return redirect('action:index')
 
     # Check that the GET parameter are correctly given
@@ -1269,7 +1276,7 @@ def run_survey_row(request, pk):
     """
 
     # Get the workflow first
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         return redirect('home')
 
@@ -1282,11 +1289,12 @@ def run_survey_row(request, pk):
         return redirect(reverse('action:index'))
 
     # Get the action
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
         return redirect('action:index')
 
     # If the action is an "out" action, return to index
@@ -1312,7 +1320,7 @@ def clone(request, pk):
     data = dict()
 
     # Get the current workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='action')
     if not workflow:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')
@@ -1323,11 +1331,12 @@ def clone(request, pk):
     context = {'pk': pk}  # For rendering
 
     # Get the action
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('action:index')
         return JsonResponse(data)

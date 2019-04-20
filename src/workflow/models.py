@@ -585,6 +585,17 @@ class Column(models.Model):
 
         return self.data_type
 
+    def reposition_and_update_df(self, to_idx):
+        """
+
+        :param to_idx: Destination index of the given column
+        :return: Content reflected in the DB
+        """
+
+        self.workflow.reposition_columns(self.position, to_idx)
+        self.position = to_idx
+        self.save()
+
     @staticmethod
     def validate_column_value(data_type, value):
         """

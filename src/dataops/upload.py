@@ -46,7 +46,7 @@ def upload_s2(request):
     :param request: Web request
     :return: the dictionary upload_data in the session object
     """
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return redirect('home')
 
@@ -245,7 +245,7 @@ def upload_s3(request):
     :return: the dictionary upload_data in the session object
     """
     # Get the workflow id we are processing
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return redirect('home')
 
@@ -364,7 +364,7 @@ def upload_s4(request):
     :return:
     """
     # Get the workflow id we are processing
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return redirect('home')
 

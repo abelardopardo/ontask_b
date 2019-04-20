@@ -26,7 +26,7 @@ from .ops import (
 @user_passes_test(is_instructor)
 def export_ask(request, pk):
     # Get the workflow
-    workflow = get_workflow(request, pk)
+    workflow = get_workflow(request, pk, prefetch_related='actions')
     if not workflow:
         return redirect('home')
 
@@ -39,7 +39,7 @@ def export_ask(request, pk):
         'name': workflow.name,
         'nrows': workflow.nrows,
         'ncols': workflow.ncols,
-        'nactions': Action.objects.filter(workflow=workflow).count(),
+        'nactions': workflow.actions.count(),
         'wid': workflow.id
     }
 
@@ -47,9 +47,7 @@ def export_ask(request, pk):
         if form.is_valid():
             to_include = []
             for idx, a_id in enumerate(
-                    Action.objects.filter(
-                        workflow=workflow
-                    ).values_list("id", flat=True)
+                    workflow.actions.all().values_list("id", flat=True)
             ):
                 if form.cleaned_data['select_%s' % idx]:
                     to_include.append(str(a_id))
@@ -78,7 +76,7 @@ def export(request, data):
     """
 
     # Get the workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         return redirect('home')
 

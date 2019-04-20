@@ -296,7 +296,7 @@ def display(request):
     :param request: HTTP request
     :return: Initial rendering of the page with the table skeleton
     """
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return redirect('home')
 
@@ -318,7 +318,7 @@ def display_ss(request):
     :param request: HTTP request from dataTables
     :return: AJAX response
     """
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return JsonResponse(
             {'error': _('Incorrect request. Unable to process')}
@@ -344,13 +344,12 @@ def display_view(request, pk):
     :param pk: PK of the view to use
     :return: Initial rendering of the page with the table skeleton
     """
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='views')
     if not workflow:
         return redirect('home')
 
-    try:
-        view = View.objects.get(pk=pk, workflow=workflow)
-    except ObjectDoesNotExist:
+    view = workflow.views.filter(pk=pk).prefetch_related('columns').first()
+    if not view:
         # The view has not been found, so it must be due to a session expire
         return redirect('table:display')
 
@@ -375,7 +374,7 @@ def display_view_ss(request, pk):
     :return: AJAX response
     """
 
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='views')
     if not workflow:
         return JsonResponse(
             {'error': _('Incorrect request. Unable to process')}
@@ -385,9 +384,8 @@ def display_view_ss(request, pk):
     if not workflow.has_table():
         return JsonResponse({'error': _('There is no data in the table')})
 
-    try:
-        view = View.objects.get(pk=pk, workflow=workflow)
-    except ObjectDoesNotExist:
+    view = workflow.views.filter(pk=pk).prefetch_related('columns').first()
+    if not view:
         # The view has not been found, so it must be due to a session expire
         return JsonResponse({'error': _('Incorrect view reference')})
 
@@ -415,7 +413,7 @@ def row_delete(request):
     data = {}
 
     # Get the workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         return redirect('home')
 
@@ -469,7 +467,7 @@ def view_index(request):
     """
 
     # Get the appropriate workflow object
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='views')
     if not workflow:
         return redirect('home')
 
@@ -496,7 +494,7 @@ def view_add(request):
     :return: AJAX response
     """
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return JsonResponse(
             {'form_is_valid': True,
@@ -529,7 +527,7 @@ def view_edit(request, pk):
     :return: AJAX Response
     """
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='views')
     if not workflow:
         return JsonResponse(
             {'form_is_valid': True,
@@ -546,21 +544,19 @@ def view_edit(request, pk):
         )
 
     # Get the view
-    try:
-        view = View.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)
-        ).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
+    view = workflow.views.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).prefetch_related('columns').first()
+    if not view:
         return JsonResponse(
             {'form_is_valid': True,
              'html_redirect': reverse('table:view_index')}
         )
 
     # Form to read/process data
-    form = ViewAddForm(request.POST or None,
-                       instance=view,
-                       workflow=workflow)
+    form = ViewAddForm(request.POST or None, instance=view, workflow=workflow)
 
     return save_view_form(request,
                           form,
@@ -626,7 +622,7 @@ def view_clone(request, pk):
     data = {'form_is_valid': False}
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='views')
     if not workflow:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')
@@ -635,9 +631,8 @@ def view_clone(request, pk):
     context = {'pk': pk}  # For rendering
 
     # Get the view
-    try:
-        view = View.objects.get(pk=pk, workflow=workflow)
-    except ObjectDoesNotExist:
+    view = workflow.views.filter(pk=pk)
+    if not view:
         # The view is not there. Redirect to workflow detail
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('workflow:detail',
@@ -659,8 +654,7 @@ def view_clone(request, pk):
 
     # Get the new name appending as many times as needed the 'Copy of '
     new_name = 'Copy_of_' + view.name
-    while View.objects.filter(name=new_name,
-                              workflow=view.workflow).exists():
+    while workflow.views.filter(name=new_name).exists():
         new_name = 'Copy_of_' + new_name
 
     # Proceed to clone the view
@@ -695,7 +689,7 @@ def csvdownload(request, pk=None):
     """
 
     # Get the appropriate workflow object
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related=['columns', 'views'])
     if not workflow:
         return redirect('home')
 
@@ -708,12 +702,12 @@ def csvdownload(request, pk=None):
     # Get the columns from the view (if given)
     view = None
     if pk:
-        try:
-            view = View.objects.filter(
-                Q(workflow__user=request.user) |
-                Q(workflow__shared=request.user)
-            ).distinct().get(pk=pk)
-        except ObjectDoesNotExist:
+        view = workflow.views.filter(
+            pk=pk
+        ).filter(
+            Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+        ).prefetch_selected('columns').first()
+        if not view:
             # Go back to show the workflow detail
             return redirect(reverse('workflow:detail',
                                     kwargs={'pk': workflow.id}))

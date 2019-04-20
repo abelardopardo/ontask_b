@@ -43,7 +43,7 @@ def display(request):
 @require_http_methods(['POST'])
 def display_ss(request):
     # Try to get workflow and if not present, go to home page
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='logs')
     if not workflow:
         return JsonResponse(
             {'error': _('Incorrect request. Unable to process')}

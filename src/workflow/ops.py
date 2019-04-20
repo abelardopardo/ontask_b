@@ -452,21 +452,6 @@ def clone_column(column, new_workflow=None, new_name=None):
     return column
 
 
-def reposition_column_and_update_df(workflow, column, to_idx):
-    """
-
-    :param workflow: Workflow object for which the repositioning is done
-    :param column: column object to relocate
-    :param to_idx: Destination index of the given column
-    :return: Content reflected in the DB
-    """
-
-    # df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
-    workflow.reposition_columns(column.position, to_idx)
-    column.position = to_idx
-    column.save()
-
-
 def do_workflow_update_lusers(workflow, log_item):
     """
     Recalculate the elements in the field lusers of the workflow based on the

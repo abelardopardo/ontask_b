@@ -863,21 +863,26 @@ def preview_response(request, pk, idx, action=None):
     # To include in the JSON response
     data = dict()
 
-    if not action:
-        # Action being used
-        try:
-            action = Action.objects.get(id=pk)
-        except ObjectDoesNotExist:
-            data['form_is_valid'] = True
-            data['html_redirect'] = reverse('home')
-            return JsonResponse(data)
-
     # Get the workflow to obtain row numbers
-    workflow = get_workflow(request, action.workflow.id)
+    if not action:
+        workflow = get_workflow(request, prefetch_related='actions')
+    else:
+        workflow = get_workflow(request)
+
     if not workflow:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('home')
         return JsonResponse(data)
+
+    if not action:
+        # Action being used
+        action = workflow.actions.filter(id=pk).prefetch_related(
+            'conditions'
+        ).first()
+        if not action:
+            data['form_is_valid'] = True
+            data['html_redirect'] = reverse('home')
+            return JsonResponse(data)
 
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content', None)

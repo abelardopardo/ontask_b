@@ -187,7 +187,7 @@ def row_update(request):
     """
 
     # If there is no workflow object, go back to the index
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return redirect('home')
 
@@ -229,19 +229,18 @@ def row_update(request):
     # Create the query to update the row
     set_fields = []
     set_values = []
-    columns = workflow.get_columns()
-    unique_names = [c.name for c in columns if c.is_key]
+    unique_names = workflow.get_unique_columns().values_list('name', flat=True)
     unique_field = None
     unique_value = None
     log_payload = []
-    for idx, col in enumerate(columns):
+    for idx, colname in enumerate(unique_names):
         value = row_form.cleaned_data[FIELD_PREFIX + '%s' % idx]
-        set_fields.append(col.name)
+        set_fields.append(colname)
         set_values.append(value)
-        log_payload.append((col.name, str(value)))
+        log_payload.append((colname, str(value)))
 
-        if not unique_field and col.name in unique_names:
-            unique_field = col.name
+        if not unique_field and colname in unique_names:
+            unique_field = colname
             unique_value = value
 
     # If there is no unique key, something went wrong.
@@ -278,7 +277,8 @@ def row_create(request):
     """
 
     # If there is no workflow object, go back to the index
-    workflow = get_workflow(request)
+    workflow = get_workflow(request,
+                            prefetch_related=['columns', 'actions'])
     if not workflow:
         return redirect('home')
 
@@ -313,7 +313,7 @@ def row_create(request):
     df = df.append(new_row, ignore_index=True)
 
     # Verify that the unique columns remain unique
-    for ucol in [c for c in columns if c.is_key]:
+    for ucol in [c for c in columns.filter(is_key=True)]:
         if not dataops.pandas_db.is_unique_column(df[ucol.name]):
             form.add_error(
                 None,
@@ -371,7 +371,7 @@ def plugin_invoke(request, pk):
         return redirect(reverse('table:display'))
 
     # Get the workflow and the plugin information
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return redirect('home')
     try:

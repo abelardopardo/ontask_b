@@ -478,7 +478,7 @@ def index(request):
     """
 
     # Get the appropriate workflow object
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         return redirect('home')
 
@@ -536,7 +536,7 @@ def edit(request, pk):
     """
 
     # Get first the current workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         return redirect('home')
 
@@ -545,12 +545,13 @@ def edit(request, pk):
                                              kwargs={'pk': pk}))
 
     if new_item:
-        try:
-            action = Action.objects.filter(
-                workflow=workflow).filter(
-                Q(workflow__user=request.user) |
-                Q(workflow__shared=request.user)).distinct().get(pk=pk)
-        except ObjectDoesNotExist:
+        action = workflow.actions.filter(
+            pk=pk
+        ).filter(
+            Q(workflow__user=request.user) |
+            Q(workflow__shared=request.user)
+        ).first()
+        if not action:
             return redirect('home')
         s_item = None
     else:
