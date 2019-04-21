@@ -27,6 +27,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.firefox.options import Options
 
 from action.models import Action
 from dataops import pandas_db
@@ -175,10 +176,12 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        options = Options()
+        options.headless = True
         fp = webdriver.FirefoxProfile()
         fp.set_preference("dom.file.createInChild", True)
         fp.set_preference("font.size.variable.x-western", 14)
-        cls.selenium = webdriver.Firefox(firefox_profile=fp)
+        cls.selenium = webdriver.Firefox(options=options, firefox_profile=fp)
         # cls.selenium = webdriver.Chrome()
         cls.selenium.set_window_size(cls.viewport_width,
                                      cls.viewport_height)
