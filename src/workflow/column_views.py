@@ -544,6 +544,11 @@ def column_edit(request, pk):
         # Save the column information
         form.save()
 
+        # Go back to the DB because the prefetch columns are not valid any more
+        workflow = Workflow.objects.prefetch_related('columns').get(
+            pk=workflow.id
+        )
+
         # Changes in column require rebuilding the query_builder_ops
         workflow.set_query_builder_ops()
 
