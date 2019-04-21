@@ -82,8 +82,7 @@ class WorkflowShareTable(tables.Table):
         sequence = ('email', 'operations')
 
         attrs = {
-            'class': 'table shadow',
-            'style': 'width: 100%;',
+            'class': 'table',
             'id': 'share-table',
             'th': {'class': 'dt-body-center'}
         }
