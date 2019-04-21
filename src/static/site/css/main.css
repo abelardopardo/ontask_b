@@ -53,7 +53,7 @@ body {
   margin-top: 6px;
 }
 
-.column-type-number {
+.column-type-number, .column-type-integer, .column-type-double {
   background: #aed2f0;
 }
 .column-type-string {

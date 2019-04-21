@@ -576,10 +576,19 @@ class Column(models.Model):
         :return: The simplified data type using "number" for either integer or
         double
         """
-        if self.data_type == 'integer' or self.data_type == 'double':
-            return 'number'
+        if self.data_type == 'string':
+            return 'Text'
 
-        return self.data_type
+        if self.data_type == 'integer' or self.data_type == 'double':
+            return 'Number'
+
+        if self.data_type == 'datetime':
+            return 'Date and time'
+
+        if self.data_type == 'boolean':
+            return 'True/False'
+
+        raise Exception('Unexpected data type {0}'.format(self.data_type))
 
     def reposition_and_update_df(self, to_idx):
         """
