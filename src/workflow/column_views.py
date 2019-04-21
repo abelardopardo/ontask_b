@@ -18,6 +18,7 @@ from action.models import Condition, ActionColumnConditionTuple
 from dataops import ops, formula_evaluation, pandas_db
 from logs.models import Log
 from ontask.permissions import is_instructor
+from workflow.models import Workflow
 from .forms import (
     ColumnRenameForm,
     ColumnAddForm,
@@ -139,6 +140,12 @@ def column_add(request, pk=None):
     # Save the column object attached to the form
     column = form.save(commit=False)
 
+    # Catch the special case of integer type and no initial value. Pandas
+    # encodes it as NaN but a cycle through the database transforms it into
+    # a string. To avoid this case, integer + empty value => double
+    if column.data_type == 'integer' and not column_initial_value:
+        column.data_type = 'double'
+
     # Fill in the remaining fields in the column
     column.workflow = workflow
     column.is_key = False
@@ -157,7 +164,9 @@ def column_add(request, pk=None):
     # Update the positions of the appropriate columns
     workflow.reposition_columns(workflow.ncols + 1, column.position)
 
+    # Save column and clear prefetch queryset
     column.save()
+    workflow = Workflow.objects.prefetch_related('columns').get(pk=workflow.id)
 
     # Store the df to DB
     ops.store_dataframe(df, workflow)

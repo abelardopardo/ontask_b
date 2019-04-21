@@ -90,6 +90,7 @@ def store_dataframe(data_frame, workflow, temporary=False, reset_keys=True):
     # Loop over the remaining columns in the data frame and create the new
     # column objects in the workflow
     new_columns = []
+    idx = workflow.columns.count() + 1
     for cname in df_column_names:
         # Create the new column
         column = Column(
@@ -97,10 +98,11 @@ def store_dataframe(data_frame, workflow, temporary=False, reset_keys=True):
             workflow=workflow,
             data_type=pandas_datatype_names.get(data_frame[cname].dtype.name),
             is_key=is_unique_column(data_frame[cname]),
-            position=workflow.columns.count() + 1
+            position=idx
         )
         column.save()
         new_columns.append(column)
+        idx += 1
 
     # Get the new set of columns with names
     wf_columns = list(workflow.columns.all()) + new_columns

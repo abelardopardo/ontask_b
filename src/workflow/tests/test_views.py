@@ -93,7 +93,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         self.assert_column_name_type('registered', 'True/False', 5)
 
         # Sixth when and datetime
-        self.assert_column_name_type('when', 'Date/Time', 6)
+        self.assert_column_name_type('when', 'Date and time', 6)
 
         # Go to CSV Upload/Merge Step 1
         self.go_to_csv_upload_merge_step_1()
@@ -261,9 +261,10 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         new_cols = [
             ('newc1', 'string', 'male,female', ''),
             ('newc2', 'boolean', '', 'True'),
-            ('newc3', 'integer', '0, 10, 20, 30', '0'),
-            ('newc4', 'integer', '0, 0.5, 1, 1.5, 2', '0'),
-            ('newc5', 'datetime', '', '2017-10-11 00:00:00.000+11:00'),
+            ('newc3', 'integer', '', ''),
+            ('newc4', 'integer', '0, 10, 20, 30', '0'),
+            ('newc5', 'integer', '0, 0.5, 1, 1.5, 2', '0'),
+            ('newc6', 'datetime', '', '2017-10-11 00:00:00.000+11:00'),
         ]
 
         # Login
@@ -292,7 +293,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         self.assert_column_name_type('age', 'Number', 1)
 
         # ADD COLUMNS
-        idx = 6
+        idx = 5
         for cname, ctype, clist, cinit in new_cols:
             # ADD A NEW COLUMN
             self.add_column(cname, ctype, clist, cinit, idx)
@@ -300,7 +301,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
             idx += 1
 
         # CHECK THAT THE COLUMNS HAVE BEEN CREATED (starting in the sixth)
-        idx = 6
+        idx = 5
         for cname, ctype, _, _ in new_cols:
             if ctype == 'integer' or ctype == 'double':
                 ctype = 'Number'
@@ -309,7 +310,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
             elif ctype == 'boolean':
                 ctype = 'True/False'
             elif ctype == 'datetime':
-                ctype = 'Date/Time'
+                ctype = 'Date and time'
 
             self.assert_column_name_type(cname, ctype, idx)
             idx += 1
