@@ -47,7 +47,15 @@
             columnDefs: [
               {"targets": 3,
                createdCell: function(td, cellData, rowData, row, col){
-                 $(td).addClass('column-type-' + cellData);
+                 if (cellData == 'Text') {
+                   $(td).addClass('column-type-string');
+                 } else if (cellData == 'Number') {
+                   $(td).addClass('column-type-number');
+                 } else if (cellData == 'True/False') {
+                   $(td).addClass('column-type-boolean');
+                 } else {
+                   $(td).addClass('column-type-datetime');
+                 }
                }
               },
               {"orderable": false, "targets": 5},
@@ -63,7 +71,6 @@
           // Process the column reorder events
           column_table.on("row-reordered", row_reordered);
         });
-        // Set attributes in the header elements
       }
     </script>
   {% endif %}
