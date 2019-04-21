@@ -1500,30 +1500,22 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         :param row_idx: Row index in the table (search if none is given)
         :return: Nothing
         """
-        icon_name = 'fa-italic'
-        if col_type == 'Number':
-            icon_name = 'fa-percent'
-        elif col_type == 'True/False':
-            icon_name = 'fa-toggle-on'
-        elif col_type == 'Date/Time':
-            icon_name = 'fa-calendar-o'
-
         if row_idx:
             xpath_txt = \
                 "//table[@id='column-table']" \
                 "//tr[{0}]/td[2][normalize-space() = '{1}']" \
-                "/../td[4]/div/span[contains(@class, '{2}')]".format(
+                "/../td[4][normalize-space() = '{2}']".format(
                     row_idx,
                     name,
-                    icon_name
+                    col_type
                 )
         else:
             xpath_txt = \
                 "//table[@id='column-table']" \
                 "//tr/td[2][normalize-space() = '{0}']" \
-                "/../td[4]/div/span[contains(@class, '{1}')]".format(
+                "/../td[4][normalize-space() = '{1}']".format(
                     name,
-                    icon_name
+                    col_type
                 )
 
         self.assertIsNotNone(self.selenium.find_element_by_xpath(xpath_txt))
