@@ -49,6 +49,11 @@
             {"className": "dt-center", "targets": "_all"},
             {"orderable": false, "targets": 0},
             {"searchable": false, "targets": 0},
+            {"targets": 0,
+             createdCell: function(td, cellData, rowData, row, col){
+               $(td).addClass('align-middle');
+             }
+            },
           ],
           "drawCallback": function(settings) {
              // Needed to enable tooltips in ajax produced content
