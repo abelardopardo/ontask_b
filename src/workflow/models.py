@@ -111,7 +111,6 @@ class Workflow(models.Model):
     # Boolean that flags if the lusers field needs to be updated
     lusers_is_outdated = models.BooleanField(
         default=False,
-        verbose_name=_('Is lusers outdated?'),
         null=False,
         blank=False)
 

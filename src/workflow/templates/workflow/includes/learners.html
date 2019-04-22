@@ -38,10 +38,10 @@
 {% if workflow.luser_email_column and workflow.lusers_is_outdated %}
   <h5 class="text-center">
     <div class="text-center">
-      {% trans 'Student email information has changed!' %}
+      {% trans 'Learner email information has changed' %}
       <button type="button" class="pl-3 btn btn-outline-danger js-select-key-column-name"
               data-url="{% url 'workflow:assign_luser_column' workflow.luser_email_column.id %}">
-        {% trans 'Refresh student list' %}</button>
+        {% trans 'Refresh learner list' %}</button>
     </div>
   </h5>
 {% endif %}
