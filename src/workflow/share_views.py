@@ -32,7 +32,6 @@ def share_create(request):
             # proceed with the update
             workflow.shared.add(form.user_obj)
             workflow.save()
-            workflow.save_m2m()
 
             # Log the event
             Log.objects.register(request.user,
@@ -73,7 +72,6 @@ def share_delete(request, pk):
     if request.method == 'POST':
         workflow.shared.remove(user)
         workflow.save()
-        workflow.save_m2m()
 
         # Log the event
         Log.objects.register(request.user,

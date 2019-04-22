@@ -166,6 +166,7 @@ def column_add(request, pk=None):
 
     # Save column and clear prefetch queryset
     column.save()
+    form.save_m2m()
     workflow = Workflow.objects.prefetch_related('columns').get(pk=workflow.id)
 
     # Store the df to DB
@@ -244,7 +245,7 @@ def formula_column_add(request):
 
     # Save the instance
     try:
-        column = form.save()
+        column.save()
         form.save_m2m()
     except IntegrityError:
         form.add_error('name', _('A column with that name already exists'))
@@ -307,7 +308,9 @@ def formula_column_add(request):
     # Update the positions of the appropriate columns
     workflow.reposition_columns(workflow.ncols + 1, column.position)
 
+    # Save column and refresh the prefetched related in the workflow
     column.save()
+    workflow = Workflow.objects.prefetch_related('columns').get(pk=workflow.id)
 
     # Store the df to DB
     ops.store_dataframe(df, workflow)
@@ -447,6 +450,7 @@ def random_column_add(request):
     workflow.reposition_columns(workflow.ncols + 1, column.position)
 
     column.save()
+    workflow = Workflow.objects.prefetch_related('columns').get(pk=workflow.id)
 
     # Store the df to DB
     ops.store_dataframe(df, workflow)
@@ -542,7 +546,7 @@ def column_edit(request, pk):
             workflow.reposition_columns(old_position, column.position)
 
         # Save the column information
-        form.save()
+        column.save()
 
         # Go back to the DB because the prefetch columns are not valid any more
         workflow = Workflow.objects.prefetch_related('columns').get(

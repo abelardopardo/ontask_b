@@ -388,7 +388,7 @@ class ConditionCreateView(UserIsInstructor, generic.TemplateView):
             return redirect('home')
 
         # Get the action that is being used
-        action = workflow.action.filter(
+        action = workflow.actions.filter(
             pk=kwargs['pk']
         ).filter(
             Q(workflow__user=request.user) | Q(workflow__shared=request.user)
@@ -418,7 +418,7 @@ class ConditionCreateView(UserIsInstructor, generic.TemplateView):
             pk=kwargs['pk']
         ).filter(
             Q(workflow__user=request.user) | Q(workflow__shared=request.user)
-        ).filter()
+        ).first()
         if not action:
             return redirect('home')
 

@@ -637,7 +637,7 @@ def view_clone(request, pk):
     context = {'pk': pk}  # For rendering
 
     # Get the view
-    view = workflow.views.filter(pk=pk)
+    view = workflow.views.filter(pk=pk).first()
     if not view:
         # The view is not there. Redirect to workflow detail
         data['form_is_valid'] = True

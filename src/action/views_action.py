@@ -843,7 +843,7 @@ def select_column_action(request, apk, cpk, key=None):
         return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Get the column
-    column = workflow.columns.get(pk=cpk).first()
+    column = workflow.columns.filter(pk=cpk).first()
     if not column:
         return JsonResponse({'html_redirect': reverse('action:index')})
 
@@ -900,7 +900,7 @@ def unselect_column_action(request, apk, cpk):
         return redirect(reverse('action:index'))
 
     # Get the column
-    column = workflow.columns.get(pk=cpk).first()
+    column = workflow.columns.filter(pk=cpk).first()
     if not column:
         return redirect(reverse('action:index'))
 
