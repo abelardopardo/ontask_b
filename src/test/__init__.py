@@ -169,6 +169,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     viewport_height = 2880
     viewport_width = 1024
     device_pixel_ratio = 1
+    headless = True
 
     class_and_text_xpath = \
         "//{0}[contains(@class, '{1}') and normalize-space(text()) = '{2}']"
@@ -177,7 +178,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        options.headless = True
+        options.headless = cls.headless
         fp = webdriver.FirefoxProfile()
         fp.set_preference("dom.file.createInChild", True)
         fp.set_preference("font.size.variable.x-western", 14)
@@ -378,17 +379,13 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     def go_to_actions(self):
         # Goto the action page
         self.selenium.find_element_by_id('ontask-base-actions').click()
-        # Wait for page to refresh
-        # WebDriverWait(self.selenium, 10).until(
-        #     EC.presence_of_element_located((By.ID, 'action-index'))
-        # )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH, "//button[normalize-space() = 'Manage table data']")
             )
-        )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
         self.assertIn('Manage table data', self.selenium.page_source)
         self.assertIn('js-create-action', self.selenium.page_source)

@@ -174,8 +174,9 @@ def is_column_in_table(table_name, column_name):
 
     with connection.cursor() as cursor:
         cursor.execute(query, [table_name, column_name])
+        result = cursor.fetchone()[0]
 
-    return cursor.fetchone()[0]
+    return result
 
 
 def is_column_table_unique(table_name, column_name):
@@ -194,8 +195,9 @@ def is_column_table_unique(table_name, column_name):
     # Get the result
     with connection.cursor() as cursor:
         cursor.execute(query, [])
+        result = cursor.fetchone()[0]
 
-    return cursor.fetchone()[0]
+    return result
 
 
 def load_from_db(table_name, columns=None, filter_exp=None):

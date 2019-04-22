@@ -2,12 +2,12 @@
 
 
 from builtins import zip
+
 import numpy as np
 import pandas as pd
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _, gettext
 
-from action.models import Condition, Action
 from dataops import formula_evaluation
 from dataops.pandas_db import (
     store_table,
@@ -16,8 +16,9 @@ from dataops.pandas_db import (
     pandas_datatype_names,
     is_unique_column,
     are_unique_columns,
-    has_unique_column)
-from workflow.models import Column
+    has_unique_column
+)
+from workflow.models import Column, Workflow
 
 
 def store_dataframe(data_frame, workflow, temporary=False, reset_keys=True):
@@ -104,8 +105,9 @@ def store_dataframe(data_frame, workflow, temporary=False, reset_keys=True):
         new_columns.append(column)
         idx += 1
 
-    # Get the new set of columns with names
-    wf_columns = list(workflow.columns.all()) + new_columns
+    # Refresh the workflow object and its set of columns
+    workflow = Workflow.objects.prefetch_related('columns').get(pk=workflow.id)
+    wf_columns = workflow.columns.all()
 
     # Reorder the columns in the data frame
     data_frame = data_frame[[x.name for x in wf_columns]]
@@ -531,7 +533,7 @@ def rename_df_column(workflow, old_name, new_name):
         action_item.rename_variable(old_name, new_name)
 
         # Rename the appearances of the variable in all conditions/filters
-        conditions = action_item.conditionns.all()
+        conditions = action_item.conditions.all()
         for cond in conditions:
             cond.formula = formula_evaluation.rename_variable(
                 cond.formula, old_name, new_name)
