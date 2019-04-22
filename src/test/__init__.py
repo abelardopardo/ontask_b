@@ -166,9 +166,10 @@ class OnTaskApiTestCase(APITransactionTestCase):
 
 
 class OnTaskLiveTestCase(LiveServerTestCase):
-    viewport_height = 2880
+    viewport_height = 1024
     viewport_width = 1024
     device_pixel_ratio = 1
+    max_image_height = 1440
     headless = True
 
     class_and_text_xpath = \
@@ -184,8 +185,19 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         fp.set_preference("font.size.variable.x-western", 14)
         cls.selenium = webdriver.Firefox(options=options, firefox_profile=fp)
         # cls.selenium = webdriver.Chrome()
-        cls.selenium.set_window_size(cls.viewport_width,
-                                     cls.viewport_height)
+
+        # Detect the type of screen being used
+        cls.device_pixel_ratio = cls.selenium.execute_script(
+            'return window.devicePixelRatio'
+        )
+        print('Device Pixel Ratio: {0}'.format(cls.device_pixel_ratio))
+        print('Viewport width: {0}'.format(cls.viewport_width))
+        print('viewport height: {0}'.format(cls.viewport_height))
+
+        cls.selenium.set_window_size(
+            cls.viewport_width * cls.device_pixel_ratio,
+            cls.viewport_height * cls.device_pixel_ratio)
+
         # After setting the window size, we need to update these values
         cls.viewport_height = cls.selenium.execute_script(
             'return window.innerHeight'
@@ -193,12 +205,6 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         cls.viewport_width = cls.selenium.execute_script(
             'return window.innerWidth'
         )
-        cls.device_pixel_ratio = cls.selenium.execute_script(
-            'return window.devicePixelRatio'
-        )
-        print('Device Pixel Ratio: {0}'.format(cls.device_pixel_ratio))
-        print('Viewport width: {0}'.format(cls.viewport_width))
-        print('viewport height: {0}'.format(cls.viewport_height))
         # cls.selenium.implicitly_wait(30)
 
     @classmethod
@@ -1523,7 +1529,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
 class ScreenTests(OnTaskLiveTestCase):
     viewport_width = 1040
-    viewport_height = 2800
+    viewport_height = 1440
     prefix = ''
     workflow_name = 'BIOL1011'
     description = 'Course on Cell Biology'
