@@ -6,12 +6,13 @@ from django.contrib.auth import get_user_model
 def create_ontask_user_info(apps, schema_editor):
 
     OnTaskUser = apps.get_model('core', 'OnTaskUser')
+    User = apps.get_model('authtools', 'User')
 
     # Get all the existing ontask users first
     ousers_id = [x.user.id for x in OnTaskUser.objects.all()]
 
     # Get the regular users with not corresponding ontask user
-    users = get_user_model().objects.exclude(id__in=ousers_id)
+    users = User.objects.exclude(id__in=ousers_id)
 
     # Remaining users in list need to have an OnTask element
     for user in users:
