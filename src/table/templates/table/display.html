@@ -131,10 +131,16 @@
                 <span class="sr-only">Toggle Dropdown</span>
               </button>
               <div class="shadow dropdown-menu dropdown-menu-right">
-              {% for v in views %}
-                <a href="{% url 'table:display_view' v.id %}"
-                   class="dropdown-item spin">{{ v.name }}</a>
-              {% endfor %}
+                {% for v in views %}
+                  {% if v != view %}
+                    <a href="{% url 'table:display_view' v.id %}"
+                       class="dropdown-item spin">{{ v.name }}</a>
+                  {% endif %}
+                {% endfor %}
+                {% if view %}
+                  <a class="dropdown-item spin"
+                     href="{% url 'table:display' %}">Full table</a>
+                {% endif%}
               </div>
             {% endif %}
           </div>
@@ -147,7 +153,6 @@
                     data-toggle="tooltip" title="{% trans 'Change elements in view' %}">
               <span class="fa fa-pencil"></span> {% trans 'Edit view' %}
             </button>
-            <a class="shadow btn btn-outline-dark spin" href="{% url 'table:display' %}">Full table</a>
             <a href="{% url 'table:stat_table_view' view.id %}"
                class="shadow btn btn-outline-dark spin"
                data-toggle="tooltip"
