@@ -1,3 +1,23 @@
+## 4.3.1 (2019-04-22)
+
+### Added
+
+- Preliminary backend functionality to deploy a learner page (still under construction)
+
+- Increase the use of cache for portions of the pages
+
+### Changed
+
+- Import/export operations to improve performance
+
+- Backend management of DB queries to prefetch related relations and improve performance
+
+### Fixed
+
+- Error when creating an empty column of type integer 
+
+- Legacy errors in migrations when handling some models
+
 ## 4.3 (2019-04-16)
 
 ### Added
