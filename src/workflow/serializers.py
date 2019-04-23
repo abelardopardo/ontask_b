@@ -194,7 +194,8 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
         #           'query_builder_ops', 'columns', 'data_frame', 'actions')
 
         exclude = ('id', 'user', 'created', 'modified', 'data_frame_table_name',
-                   'session_key', 'shared')
+                   'session_key', 'shared', 'luser_email_column',
+                   'luser_email_column_md5', 'lusers', 'lusers_is_outdated')
 
 
 class WorkflowImportSerializer(WorkflowExportSerializer):

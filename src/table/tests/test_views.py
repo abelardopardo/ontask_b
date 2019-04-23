@@ -482,7 +482,10 @@ class TableViews(test.OnTaskLiveTestCase):
             'Showing 1 to 10 of 42 entries (filtered from 100 total entries)',
             self.selenium.page_source)
 
-        # Go back to the full table
+        # Click in views button and go back to the full table
+        self.selenium.find_element_by_xpath(
+            "//div[@id='table-operation-buttons']/div/div[2]/button"
+        ).click()
         self.selenium.find_element_by_link_text("Full table").click()
         # Wait for the table to be refreshed
         WebDriverWait(self.selenium, 10).until(
@@ -613,7 +616,7 @@ class TableInsertRow(test.OnTaskLiveTestCase):
         element = self.selenium.find_element_by_xpath(
             "//table[@id='table-data']"
             "//tr/td[2][normalize-space() = '100']/"
-            "../td[1]/div/button"
+            "../td[1]/button"
         )
         ActionChains(self.selenium).move_to_element(element).click().perform()
         self.wait_for_modal_open()
