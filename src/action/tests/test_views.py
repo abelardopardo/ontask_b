@@ -612,9 +612,7 @@ class ActionActionInPersonalized(test.OnTaskLiveTestCase):
         'test_personalized_survey.sql'
     )
 
-    # wflow_name = 'wflow2'
-    # wflow_desc = 'Simple workflow structure with two type of actions'
-    # wflow_empty = 'The workflow does not have data'
+    wflow_name = 'Test personalized survey'
 
     def setUp(self):
         super().setUp()
@@ -635,6 +633,91 @@ class ActionActionInPersonalized(test.OnTaskLiveTestCase):
         # Goto the action page
         self.go_to_actions()
 
+        # Open action in
+        self.open_action_edit('Survey')
+
+        # Select the condition tab
+        self.select_condition_tab()
+
+        # Create two conditions
+        self.create_condition('Text 1 is null', '',
+                              [('text1', 'is null', None)])
+        self.create_condition('Text 2 is null', '',
+                              [('text2', 'is null', None)])
+
+        # Go back to the questions
+        self.select_questions_tab()
+
+        # Select conditions to both questions
+        self.select_questions_condition('text1', 'Text 1 is null')
+        self.select_questions_condition('text2', 'Text 2 is null')
+
+        # Click the preview buttion
+        self.open_preview()
+
+        # Check there is a single field and click in next
+        for __ in range(8):
+            # There should be a single form field in the preview
+            inputs = self.selenium.find_elements_by_xpath(
+                "//div[@class='js-action-preview-form']//input"
+            )
+            self.assertEqual(len(inputs), 1)
+
+            # Click in the next button
+            self.selenium.find_element_by_class_name(
+                'js-action-preview-nxt').click()
+
+            WebDriverWait(self.selenium, 10).until(
+                EC.element_to_be_clickable(
+                    (By.CLASS_NAME, 'js-action-preview-nxt')
+                )
+            )
+
+        # Close the modal
+        self.cancel_modal()
+
+        # Done. Back to the table of actions
+        self.selenium.find_element_by_link_text('Done').click()
+        self.wait_for_datatable('action-table_previous')
+
+        # Run the action
+        self.open_action_run('Survey', True)
+
+        # Click in the first element of the survey and wait for form
+        self.selenium.find_element_by_link_text('1.0').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, 'id____ontask___select_2')
+            )
+        )
+
+        # There should be only three fields here (csrf, key, field)
+        inputs = self.selenium.find_elements_by_xpath(
+            "//div[@id='action-row-datainput']//input"
+        )
+        self.assertEqual(len(inputs), 3)
+
+        # Enter text in the third field
+        inputs[2].clear()
+        inputs[2].send_keys('text')
+
+        # Click in the update button
+        self.selenium.find_element_by_xpath(
+            "//div[@id='action-row-datainput']//form//button[@type = 'submit']"
+        ).click()
+        self.wait_for_datatable('actioninrun-data_previous')
+
+        # Click in the same link
+        self.selenium.find_element_by_link_text('1.0').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, 'action-row-datainput')
+            )
+        )
+
+        # There should be a "No responses required message"
+        self.assertIn('No responses required at this time',
+                      self.selenium.page_source)
 
         # End of session
         self.logout()
@@ -862,6 +945,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
+
 class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
     action_name = 'simple action'
     fixtures = ['simple_action']
@@ -952,7 +1036,7 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
         # The action should NOT flag that a user has all conditions equal to
         # False
         self.assertIn('user has all conditions equal to FALSE',
-                         self.selenium.page_source)
+                      self.selenium.page_source)
 
         # End of session
         self.logout()
