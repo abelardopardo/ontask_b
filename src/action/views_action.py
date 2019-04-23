@@ -198,8 +198,8 @@ class ColumnSelectedTable(tables.Table):
         }
 
         row_attrs = {
-            'class': lambda record:
-            'danger' if not record['description_text'] else '',
+            'class': lambda record: 'danger' \
+                if not record['column__description_text'] else '',
         }
 
 

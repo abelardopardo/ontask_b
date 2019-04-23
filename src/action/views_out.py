@@ -899,14 +899,14 @@ def preview_response(request, pk, idx, action=None):
     # To include in the JSON response
     data = dict()
 
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
     # Get the workflow to obtain row numbers
     if not action:
-        workflow = get_workflow(request, prefetch_related='actions')
-        if not workflow:
-            data['form_is_valid'] = True
-            data['html_redirect'] = reverse('home')
-            return JsonResponse(data)
-
         # Action being used
         action = workflow.actions.filter(id=pk).prefetch_related(
             'conditions'
@@ -915,8 +915,6 @@ def preview_response(request, pk, idx, action=None):
             data['form_is_valid'] = True
             data['html_redirect'] = reverse('home')
             return JsonResponse(data)
-    else:
-        workflow = action.workflow
 
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content', None)
@@ -929,9 +927,7 @@ def preview_response(request, pk, idx, action=None):
 
     # Get the total number of items
     filter_obj = action.get_filter()
-    n_items = filter_obj.n_rows_selected if filter_obj else -1
-    if n_items == -1:
-        n_items = workflow.nrows
+    n_items = filter_obj.n_rows_selected if filter_obj else workflow.nrows
 
     # Set the idx to a legal value just in case
     if not 1 <= idx <= n_items:
@@ -949,16 +945,16 @@ def preview_response(request, pk, idx, action=None):
 
     # Obtain the dictionary with the condition evaluation
     condition_evaluation = action.get_condition_evaluation(row_values)
+    # Get the dictionary containing column names, attributes and condition
+    # valuations:
+    context = action.get_evaluation_context(row_values, condition_evaluation)
+
 
     all_false = False
     if action.conditions.filter(is_filter=False).count():
         # If there are conditions, check if they are all false
         all_false = all([not value
                          for key, value in condition_evaluation.items()])
-
-    # Get the dictionary containing column names, attributes and condition
-    # valuations:
-    context = action.get_evaluation_context(row_values, condition_evaluation)
 
     # Evaluate the action content.
     show_values = ''
