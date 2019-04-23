@@ -102,13 +102,12 @@ class ColumnConditionNameSerializer(serializers.ModelSerializer):
             condition_obj = action.conditions.get(
                 name=validated_data['condition']['name']
             )
-        objt = ActionColumnConditionTuple.objects.get_or_create(
+        return ActionColumnConditionTuple.objects.get_or_create(
             action=action,
             column=next(x for x in columns
                         if x.name == validated_data['column']['name']),
             condition=condition_obj
         )
-        return obj
 
     class Meta(object):
         model = ActionColumnConditionTuple
