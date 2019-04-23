@@ -973,7 +973,7 @@ def preview_response(request, pk, idx, action=None):
             _("Error while retrieving content for student {0}").format(idx)
     else:
         # Get the conditions used in the action content
-        act_cond = action.get_action_conditions()
+        act_cond = action.get_used_conditions()
         # Get the variables/columns from the conditions
         act_vars = set().union(
             *[x.columns.all()

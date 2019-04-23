@@ -216,7 +216,7 @@ class Action(models.Model):
         self.clean_new_lines()
 
         # Update the list of columns used in the action
-        cond_names = self.get_action_conditions()
+        cond_names = self.get_used_conditions()
         colnames = list(itertools.chain.from_iterable(
             [get_variables(x.formula)
              for x in self.conditions.filter(name__in=cond_names)]
@@ -228,7 +228,7 @@ class Action(models.Model):
                 condition=None
             )
 
-    def get_action_conditions(self):
+    def get_used_conditions(self):
         """
         Return the list of contition names used in the macros contained in
         the action content field
@@ -236,10 +236,16 @@ class Action(models.Model):
         """
 
         result = []
-        # Loop over the regular expressions, match the expressions and extract
-        # the list of vname fields.
-        for rexpr in var_use_res:
-            result += [x.group('vname') for x in rexpr.finditer(self.content)]
+
+        if self.is_out:
+            # Loop over the regular expressions, match the expressions and extract
+            # the list of vname fields.
+            for rexpr in var_use_res:
+                result += [x.group('vname') for x in rexpr.finditer(self.content)]
+        else:
+            result = [x.condition for x in self.column_condition_pair.all()
+                      if x.condition]
+
         return result
 
     def clean_new_lines(self):
