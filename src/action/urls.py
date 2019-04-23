@@ -104,6 +104,14 @@ urlpatterns = [
          views_action.shuffle_questions,
          name='shuffle_questions'),
 
+    # Select condition for a column/question
+    path('<int:tpk>/<int:condpk>/select_condition/',
+         views_action.select_condition,
+         name='edit_in_select_condition'),
+    path('<int:tpk>/select_condition/',
+         views_action.select_condition,
+         name='edit_in_select_condition'),
+
     #
     # RUN SURVEY
     #

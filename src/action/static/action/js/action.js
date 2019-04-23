@@ -214,6 +214,9 @@ $(function () {
   // Insert columns in action in
   $("#edit-survey-tab-content").on("click", ".js-select-key-column-name", assignColumn);
 
+  // Insert columns in action in
+  $("#edit-survey-tab-content").on("click", ".js-select-condition", assignColumn);
+
   // Toggle shuffle question
   $("#action-in-editor").on("change", "#shuffle-questions", toggleShuffleQuestion);
 

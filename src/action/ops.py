@@ -74,23 +74,27 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
         user_attribute_value = request.user.email
 
     # Get the active columns attached to the action
-    columns = [x.column for x in action.column_condition_pair.all()
-               if x.column.is_active]
+    tuples = [x for x in action.column_condition_pair.all()
+              if x.column.is_active]
+
     if action.shuffle:
         # Shuffle the columns if needed
         random.seed(request.user)
-        random.shuffle(columns)
+        random.shuffle(tuples)
 
     # Get the row values. User_instance has the record used for verification
-    row_pairs = pandas_db.get_table_row_by_key(
-        action.workflow,
-        None,
-        (user_attribute_name, user_attribute_value),
-        [c.name for c in columns]
-    )
+    # User_instance has the record used for verification
+    row_values = get_row_values(action,
+                                (user_attribute_name, user_attribute_value))
+    # Obtain the dictionary with the condition evaluation
+    condition_evaluation = action.get_condition_evaluation(row_values)
+    # Get the dictionary containing column names, attributes and condition
+    # valuations:
+    context = action.get_evaluation_context(row_values, condition_evaluation)
+    values = [context[x.column.name] for x in tuples]
 
     # If the data has not been found, flag
-    if not row_pairs:
+    if not row_values:
         if not is_inst:
             return render(request, '404.html', {})
 
@@ -100,22 +104,22 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
 
     # Bind the form with the existing data
     form = EnterActionIn(request.POST or None,
-                         columns=columns,
-                         values=list(row_pairs.values()),
+                         tuples=tuples,
+                         context=context,
+                         values=values,
                          show_key=is_inst)
 
     cancel_url = None
     if is_inst:
         cancel_url = reverse('action:run', kwargs={'pk': action.id})
 
-    # Create the context
-    context = {'form': form,
-               'action': action,
-               'cancel_url': cancel_url}
-
     if request.method == 'GET' or not form.is_valid() or \
             request.POST.get('lti_version', None):
-        return render(request, 'action/run_survey_row.html', context)
+        return render(request,
+                      'action/run_survey_row.html',
+                      {'form': form,
+                       'action': action,
+                       'cancel_url': cancel_url})
 
     # Post with different data. # Update content in the DB
     set_fields = []
@@ -124,21 +128,25 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
     where_value = request.user.email
     log_payload = []
     # Create the SET name = value part of the query
-    for idx, column in enumerate(columns):
-        if not is_inst and column.is_key:
+    for idx, item in enumerate(tuples):
+        if not is_inst and item.column.is_key:
             # If it is a learner request and a key column, skip
             continue
 
+        # Skip the element if there is a condition and it is false
+        if item.condition and not context[item.condition.name]:
+            continue
+
         value = form.cleaned_data[field_prefix + '%s' % idx]
-        if column.is_key:
+        if item.column.is_key:
             # Remember one unique key for selecting the row
-            where_field = column.name
+            where_field = item.column.name
             where_value = value
             continue
 
-        set_fields.append(column.name)
+        set_fields.append(item.column.name)
         set_values.append(value)
-        log_payload.append((column.name, value))
+        log_payload.append((item.column.name, value))
 
     pandas_db.update_row(action.workflow.get_data_frame_table_name(),
                          set_fields,

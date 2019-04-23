@@ -41,9 +41,9 @@
             "url": location.protocol + getLanguage()
           },
           "columnDefs": [
-            {"className": "dt-center", "targets": [0, 2]},
-            {"orderable": false, "targets": 2},
-            {"searchable": false, "targets": 2},
+            {"className": "dt-center", "targets": [0, 2, 3]},
+            {"orderable": false, "targets": 3},
+            {"searchable": false, "targets": 3},
           ],
           colReorder: false,
           rowReorder: false,
@@ -51,6 +51,11 @@
       });
     }
   </script>
+  {% if vis_scripts %}
+    {% for script_src in vis_scripts %}
+      <script src="{{ script_src|safe }}"></script>
+    {% endfor %}
+  {% endif %}
 {% endblock %}
 {% block container %}
   <div class="container" id="action-in-editor">
@@ -70,22 +75,27 @@
               title="{% trans 'Save action and go back to action table' %}">
         <span class="fa fa-check"></span> {% trans 'Done' %}</a>
     </div>
+    {% include 'action/includes/partial_action_edit_out_warning.html' %}
     {% if not has_no_key %}
       <p class="shadow alert-danger text-center">{% trans 'There must be at least one question (non-key column) in the survey.' %}</p>
     {% endif %}
-    {% if has_empty_description %}
-      <p class="shadow alert-danger text-center">{% trans 'All questions should have non-empty descriptions.' %}</p>
+    {% if any_empty_description %}
+      <p class="shadow alert-danger text-center"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'All questions should have non-empty descriptions.' %}</p>
     {% endif %}
     {% if not action.description_text %}
-      <p class="shadow text-center alert-danger">{% trans 'No description text provided in Survey Parameters' %}</p>
+      <p class="shadow text-center alert-danger"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'No description text provided in Survey Parameters' %}</p>
     {% endif %}
     {% if not key_selected %}
-      <p class="shadow alert-danger text-center" style="margin-top:1ex;">{% trans 'You need to specify a key column in Survey Parameters' %}</p>
+      <p class="shadow alert-danger text-center" style="margin-top:1ex;"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'You need to specify a key column in Survey Parameters' %}</p>
     {% endif %}
     <ul class="nav nav-tabs border-0 justify-content-center"
         id="edit-personalized-text-tabs" role="tablist">
       <li class="nav-item pr-1">
         <a class="nav-link active border border-dark border-bottom-0"
+           id="parameters-tab" data-toggle="tab" href="#parameters" role="tab" aria-controls="parameters" aria-selected="false">Survey parameters</a>
+      </li>
+      <li class="nav-item pr-1">
+        <a class="nav-link border border-dark border-bottom-0"
            id="questions-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="true">Survey Questions</a>
       </li>
       <li class="nav-item pr-1">
@@ -95,12 +105,58 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link border border-dark border-bottom-0"
-           id="parameters-tab" data-toggle="tab" href="#parameters" role="tab" aria-controls="parameters" aria-selected="false">Survey parameters</a>
+        <a class="nav-link border border-dark border-bottom-0" id="conditions-tab" data-toggle="tab" href="#conditions" role="tab" aria-controls="conditions" aria-selected="false">{% trans 'Conditions' %} ({{ conditions|length }})</a>
       </li>
     </ul>
     <div class="tab-content" id="edit-survey-tab-content">
       <div class="shadow rounded tab-pane px-3 fade show active border border-dark"
+           id="parameters" role="tabpanel" aria-labelledby="parameters-tab">
+        <div class="my-3">
+          <h5 class="text-center">Survey description (shown to learners)
+            <button type="button"
+                    class="btn btn-outline-dark js-description-edit"
+                    data-url="{% url 'action:edit_description' action.id %}"
+                    data-type="filter"
+                    data-toggle="tooltip"
+                    title="{% trans 'Edit description' %}">
+              <span class="fa fa-pencil"></span> {% trans 'Edit' %}</button>
+          </h5>
+          {% if action.description_text %}
+            <p class="border border-dark lead text-center">{{ action.description_text }}</p>
+          {% endif %}
+          <h5 class="text-center">
+            {% trans 'Key column to match the user id' %}
+            <div id="select-key-column-name" class="dropdown btn-group">
+              <button type="button" class="btn btn-outline-dark dropdown-toggle"
+                      data-toggle="dropdown">
+                {% if not key_selected %}
+                  {% trans 'Please, select Key column' %}
+                {% else %}
+                  {{ key_selected.column.name }}
+                {% endif %}
+              </button>
+              <div class="shadow dropdown-menu">
+                {% for column in key_columns %}
+                  {% if column.is_key and column != key_selected.column %}
+                    <button type="button" class="dropdown-item js-select-key-column-name"
+                            data-url="{% url 'action:select_key_column_action' action.id column.id 1 %}">{{ column.name }}</button>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </h5>
+          <h5 class="text-center">{% trans 'Shuffle questions?' %}
+            <small>
+              <input id="shuffle-questions"
+                     {% if action.shuffle %}checked{% endif %}
+                     data-toggle="toggle"
+                     data-url="{% url 'action:shuffle_questions' action.id %}"
+                     type="checkbox"/>
+            </small>
+          </h5>
+        </div>
+      </div>
+      <div class="shadow rounded tab-pane px-3 fade show border border-dark"
            id="questions" role="tabpanel" aria-labelledby="questions-tab">
         <div id="insert-questions" class="text-center mt-3">
           <div id="column-selector">
@@ -125,7 +181,7 @@
             </button>
           </div>
         </div>
-  <div class="justify-content-center mb-3">
+        <div class="justify-content-center mb-3">
           {% render_table column_selected_table %}
         </div>
       </div>
@@ -134,51 +190,8 @@
         {% include 'action/includes/partial_filter_tab.html' %}
       </div>
       <div class="shadow rounded tab-pane px-3 fade show border border-dark"
-           id="parameters" role="tabpanel" aria-labelledby="parameters-tab">
-        <div class="my-3">
-          <h5 class="text-center">Survey description (shown to learners)
-            <button type="button"
-                    class="btn btn-outline-dark js-description-edit"
-                    data-url="{% url 'action:edit_description' action.id %}"
-                    data-type="filter"
-                    data-toggle="tooltip"
-                    title="{% trans 'Edit description' %}">
-              <span class="fa fa-pencil"></span> {% trans 'Edit' %}</button>
-          </h5>
-          {% if action.description_text %}
-            <p class="border border-dark lead text-center">{{ action.description_text }}</p>
-          {% endif %}
-          <h5 class="text-center">
-            {% trans 'Key column to match the user id' %}
-            <div id="select-key-column-name" class="dropdown btn-group">
-              <button type="button" class="btn btn-outline-dark dropdown-toggle"
-                      data-toggle="dropdown">
-                {% if not key_selected %}
-                  {% trans 'Please, select Key column' %}
-                {% else %}
-                  {{ key_selected.name }}
-                {% endif %}
-              </button>
-              <div class="shadow dropdown-menu">
-                {% for column in action.workflow.columns.all %}
-                  {% if column.is_key and column != key_selected %}
-                    <button type="button" class="dropdown-item js-select-key-column-name"
-                            data-url="{% url 'action:select_key_column_action' action.id column.id 1 %}">{{ column.name }}</button>
-                  {% endif %}
-                {% endfor %}
-              </div>
-            </div>
-          </h5>
-          <h5 class="text-center">{% trans 'Shuffle questions?' %}
-            <small>
-              <input id="shuffle-questions"
-                     {% if action.shuffle %}checked{% endif %}
-                     data-toggle="toggle"
-                     data-url="{% url 'action:shuffle_questions' action.id %}"
-                     type="checkbox"/>
-            </small>
-          </h5>
-        </div>
+           id="conditions" role="tabpanel" aria-labelledby="conditions-tab">
+        {% include 'action/includes/partial_condition_tab.html' %}
       </div>
     </div>
   </div>

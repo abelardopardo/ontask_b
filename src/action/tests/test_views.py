@@ -603,6 +603,43 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
         self.logout()
 
 
+class ActionActionInPersonalized(test.OnTaskLiveTestCase):
+    fixtures = ['test_personalized_survey']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'action',
+        'fixtures',
+        'test_personalized_survey.sql'
+    )
+
+    # wflow_name = 'wflow2'
+    # wflow_desc = 'Simple workflow structure with two type of actions'
+    # wflow_empty = 'The workflow does not have data'
+
+    def setUp(self):
+        super().setUp()
+        pandas_db.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        test.delete_all_tables()
+        super().tearDown()
+
+    # Test operations with the filter
+    def test_action_01_condition_and_run(self):
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
+
+        # Goto the action page
+        self.go_to_actions()
+
+
+        # End of session
+        self.logout()
+
+
 class ActionActionRenameEffect(test.OnTaskLiveTestCase):
     """This test case is to check the effect of renaming columns, attributes
        and conditions. These name changes need to propagate throughout various
