@@ -51,7 +51,7 @@
         {{ action_content }}
       {% endif %}
     </div>
-    {% if action.is_out and show_values %}
+    {% if show_values %}
       <div id="preview-variables" class="modal-body shadow border border-dark">
         <strong>{% trans 'Values:' %}</strong> {{ show_values }}
       </div>

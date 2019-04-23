@@ -13,14 +13,15 @@
       </div>
     </div>
     {% if conditions|length %}
+      {% if conditions.0.action.action_type == conditions.0.action.PERSONALIZED_TEXT %}
+        {% trans 'Use condition in highlighted text' as header %}
+      {% else %}
+        {% trans 'Insert condition in text' as header %}
+      {% endif %}
       <div id="condition-selector" class="dropdown btn-group">
         <button type="button" class="btn btn-outline-dark dropdown-toggle"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {% if conditions.0.action.action_type == conditions.0.action.PERSONALIZED_TEXT %}
-            {% trans 'Use condition in highlighted text' %}
-          {% else %}
-            {% trans 'Insert condition in text' %}
-          {% endif %}
+          {{ header }}
         </button>
         <div class="shadow dropdown-menu" aria-labelledby="condition-selector">
           {% for cond_name in conditions %}

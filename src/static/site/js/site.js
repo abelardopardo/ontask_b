@@ -143,7 +143,7 @@ var assignColumn = function () {
   $('#div-spinner').show();
   $.ajax({
     url: $(this).attr('data-url'),
-    type: 'get',
+    type: 'post',
     dataType: 'json',
     success: function (data) {
       if (typeof data.html_redirect != 'undefined') {

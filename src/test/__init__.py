@@ -1364,6 +1364,32 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                                         'js-workflow-question-add'))
         )
 
+    def select_questions_condition(self, qname, cname):
+        # Click in the pull down menu
+        element = self.selenium.find_element_by_xpath(
+            "//table[@id='column-selected-table']"
+            "//td[1][normalize-space() = '{0}']/"
+            "../td[3]/div/button".format(qname))
+        element.click()
+        # Click in the condition name
+        self.selenium.find_element_by_xpath(
+            "//table[@id='column-selected-table']"
+            "//td[1][normalize-space() = '{0}']/"
+            "../td[3]/div/div/button[normalize-space() = '{1}']".format(
+                qname,
+                cname
+            )
+        ).click()
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH,
+                 "//button[contains(@class, 'js-workflow-question-add')]")
+            )
+        )
+
     def select_parameters_tab(self):
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(

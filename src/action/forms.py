@@ -124,34 +124,42 @@ class EnterActionIn(forms.Form):
 
     def __init__(self, *args, **kargs):
 
-        # Store the instance
-        self.columns = kargs.pop('columns', None)
+        # Store the parameters
+        self.tuples = kargs.pop('tuples', None)
+        self.context = kargs.pop('context', None)
         self.values = kargs.pop('values', None)
         self.show_key = kargs.pop('show_key', False)
+        self.is_empty = True
 
         super().__init__(*args, **kargs)
 
         # If no initial values have been given, replicate a list of Nones
         if not self.values:
-            self.values = [None] * len(self.columns)
+            self.values = [None] * len(self.tuples)
 
-        for idx, column in enumerate(self.columns):
+        for idx, item in enumerate(self.tuples):
 
             # Skip the key columns if flag is true
-            if not self.show_key and column.is_key:
+            if not self.show_key and item.column.is_key:
+                continue
+
+            # Skip the element if there is a condition and it is false
+            if item.condition and not self.context[item.condition.name]:
                 continue
 
             self.fields[field_prefix + '%s' % idx] = \
-                column_to_field(column,
+                column_to_field(item.column,
                                 self.values[idx],
-                                label=column.description_text)
+                                label=item.column.description_text)
 
-            if column.is_key:
+            if item.column.is_key:
                 self.fields[field_prefix + '%s' % idx].widget.attrs[
                     'readonly'
                 ] = 'readonly'
                 self.fields[field_prefix + '%s' % idx].disabled = True
-
+            else:
+                # We are adding at least one field to be filled
+                self.is_empty = False
 
 class FilterForm(forms.ModelForm):
     """

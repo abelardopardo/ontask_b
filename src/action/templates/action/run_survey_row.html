@@ -14,21 +14,29 @@
 {% block container %}
   <div class="container" id="action-row-datainput">
     <h1 class="text-center">{{ action.name }}</h1>
-    <p class="lead text-center">{{ action.description_text }}</p>
-    <div class="row justify-content-center">
-      <form action="" method="post">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <div class="text-center">
-          {% if cancel_url %}
-            <a type="button" class="shadow btn btn-outline-dark spin"
-               href="{{ cancel_url }}"> {% trans 'Back' %}</a>
-          {% endif %}
-          <button type="submit" name="submit" value="update"
-                  class="shadow btn btn-outline-primary">
-            <span class="fa fa-check"></span> {% trans 'Update' %}</button>
-        </div>
-      </form>
+    {% if form.is_empty %}
+      <div class="text-center">
+        <p>{% trans 'No responses required at this time' %}</p>
+        <a type="button" class="shadow btn btn-outline-dark spin"
+           href="{{ cancel_url }}"> {% trans 'Back' %}</a>
+      </div>
+    {% else %}
+      <p class="lead text-center">{{ action.description_text }}</p>
+      <div class="row justify-content-center">
+        <form action="" method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="text-center">
+            {% if cancel_url %}
+              <a type="button" class="shadow btn btn-outline-dark spin"
+                 href="{{ cancel_url }}"> {% trans 'Back' %}</a>
+            {% endif %}
+            <button type="submit" name="submit" value="update"
+                    class="shadow btn btn-outline-primary">
+              <span class="fa fa-check"></span> {% trans 'Update' %}</button>
+          </div>
+        </form>
+      {% endif %}
     </div>
   </div>
 {% endblock container %}

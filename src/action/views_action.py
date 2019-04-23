@@ -145,28 +145,51 @@ class ColumnSelectedTable(tables.Table):
     """
     Table to render the columns selected for a given action in
     """
-    name = tables.Column(verbose_name=_('Name'))
-    description_text = tables.Column(
+
+    column__name = tables.Column(verbose_name=_('Name'))
+    column__description_text = tables.Column(
         verbose_name=_('Description (shown to learners)'),
         default='',
+    )
+    # condition = tables.Column(verbose_name=_('Condition controlling question'))
+    condition = tables.Column(
+        verbose_name=_('Condition'),
+        empty_values=[-1]
     )
 
     # Template to render the extra column created dynamically
     ops_template = 'action/includes/partial_column_selected_operations.html'
 
-    def render_name(self, record):
+    def __init__(self, *args, **kwargs):
+        self.condition_list = kwargs.pop('condition_list')
+        super().__init__(*args, **kwargs)
+
+    def render_column__name(self, record):
         return format_html(
             """<a href="#" data-toggle="tooltip" 
                   class="js-workflow-question-edit" data-url="{0}"
                   title="{1}">{2}</a>""",
-            reverse('workflow:question_edit', kwargs={'pk': record['id']}),
+            reverse('workflow:question_edit',
+                    kwargs={'pk': record['column__id']}),
             _('Edit the question'),
-            record['name']
+            record['column__name']
+        )
+
+    def render_condition(self, record):
+        return render_to_string(
+            'action/includes/partial_column_selected_condition.html',
+            {'id': record['id'],
+             'cond_selected': record['condition__name'],
+             'conditions': self.condition_list
+             }
         )
 
     class Meta(object):
-        fields = ('id', 'name', 'description_text', 'operations')
-        sequence = ('name', 'description_text', 'operations')
+        fields = ('column__id', 'column__name', 'column__description_text',
+                  'condition', 'operations')
+        sequence = ('column__name', 'column__description_text',
+                    'condition',
+                    'operations')
 
         attrs = {
             'class': 'table table-hover table-bordered',
@@ -175,8 +198,8 @@ class ColumnSelectedTable(tables.Table):
         }
 
         row_attrs = {
-            'class': lambda record:
-            'danger' if not record['description_text'] else '',
+            'class': lambda record: 'danger' \
+                if not record['column__description_text'] else '',
         }
 
 
@@ -587,7 +610,7 @@ def edit_action_out(request, workflow, action):
     filter_condition = action.get_filter()
 
     # Conditions to show in the page.
-    conditions = action.conditions.filter(is_filter=False).order_by('created')
+    conditions = action.conditions.filter(is_filter=False)
 
     # Context to render the form
     context = {'filter_condition': filter_condition,
@@ -620,73 +643,93 @@ def edit_action_out(request, workflow, action):
 
 def edit_action_in(request, workflow, action):
     """
-    View to handle the AJAX form to edit an action in (filter + columns).
+    View to handle the form to edit an action in questions + filter
     :param request: Request object
     :param workflow: workflow
     :param action: Action
     :return: HTTP response
     """
 
-    form_filter = FilterForm(request.POST or None,
-                             instance=action.get_filter())
+    # All tuples (action, column, condition) to consider
+    tuples = action.column_condition_pair.all()
 
-    # Get filter or None
-    filter_condition = action.get_filter()
-
-    # Get the number of rows in DF selected by filter.
-    if filter_condition:
-        filter_condition.n_rows_selected = \
-            pandas_db.num_rows(
-                action.workflow.get_data_frame_table_name(),
-                filter_condition.formula
-            )
-        filter_condition.save()
-
-    # Column names suitable to insert
-    columns_selected = workflow.columns.filter(
-        column_condition_pair__action=action,
-        is_key=False
-    ).order_by('position')
-    columns_to_insert = [c for c in workflow.columns.all()
-                         if not c.is_key and c not in columns_selected]
-
-    # Has key column and has no-key column
-    has_no_key = action.column_condition_pair.filter(
-        column__is_key=False).exists()
-    has_empty_description = columns_selected.filter(
-        description_text=''
+    # Columns
+    all_columns = workflow.columns.all()
+    key_columns = all_columns.filter(is_key=True)
+    columns_to_insert = all_columns.exclude(
+        column_condition_pair__action=action
+    ).exclude(
+        is_key=True
+    ).distinct().order_by('position')
+    any_empty_description = tuples.filter(
+        column__description_text='',
+        column__is_key=False,
     ).exists()
+    key_selected = tuples.filter(column__is_key=True).first()
+    has_no_key = tuples.filter(column__is_key=False).exists()
+
+    # Conditions
+    filter_condition = action.get_filter()
+    all_conditions = action.conditions.filter(is_filter=False)
+
+    # # Get the number of rows in DF selected by filter.
+    # if filter_condition:
+    #     filter_condition.n_rows_selected = \
+    #         pandas_db.num_rows(
+    #             action.workflow.get_data_frame_table_name(),
+    #             filter_condition.formula
+    #         )
+    #     filter_condition.save()
 
     # Create the context info.
-    ctx = {'action': action,
-           'filter_condition': filter_condition,
-           'selected_rows':
-               filter_condition.n_rows_selected if filter_condition else -1,
-           'total_rows': workflow.nrows,
-           'query_builder_ops': workflow.get_query_builder_ops_as_str(),
-           'has_data': action.workflow.has_table(),
-           'key_selected': workflow.columns.filter(
-               column_condition_pair__action=action,
-               is_key=True
-           ).first(),
-           'columns_to_insert': columns_to_insert,
-           'column_selected_table': ColumnSelectedTable(
-               columns_selected.values('id', 'name', 'description_text'),
-               orderable=False,
-               extra_columns=[
-                   ('operations',
-                    OperationsColumn(
-                        verbose_name='',
-                        template_file=ColumnSelectedTable.ops_template,
-                        template_context=lambda record: {'id': record['id'],
-                                                         'aid': action.id})
-                    )]
-           ),
-           'has_no_key': has_no_key,
-           'form_filter': form_filter,
-           'has_empty_description': has_empty_description}
+    context = {
+        'action': action,
+        # Workflow elements
+        'total_rows': workflow.nrows,
+        'query_builder_ops': workflow.get_query_builder_ops_as_str(),
+        'has_data': workflow.has_table(),
+        'selected_rows':
+            filter_condition.n_rows_selected if filter_condition else -1,
+        'all_false_conditions': any([x.n_rows_selected == 0
+                                     for x in all_conditions]),
+        # Column elements
+        'columns': all_columns,
+        'key_columns': key_columns,
+        'key_selected': key_selected,
+        'has_no_key': has_no_key,
+        'any_empty_description': any_empty_description,
+        'columns_to_insert': columns_to_insert,
+        'column_selected_table': ColumnSelectedTable(
+            tuples.filter(column__is_key=False).values(
+                'id',
+                'column__id',
+                'column__name',
+                'column__description_text',
+                'condition__name'
+            ),
+            orderable=False,
+            extra_columns=[
+                ('operations',
+                 OperationsColumn(
+                     verbose_name='',
+                     template_file=ColumnSelectedTable.ops_template,
+                     template_context=lambda record: {
+                         'id': record['column__id'],
+                         'aid': action.id}
+                 )
+                )
+            ],
+            condition_list=all_conditions,
+        ),
+        # Conditions
+        'filter_condition': filter_condition,
+        'selected_rows':
+            filter_condition.n_rows_selected if filter_condition else -1,
+        'conditions': all_conditions,
+        'vis_scripts': PlotlyHandler.get_engine_scripts()
+    }
 
-    return render(request, 'action/edit_in.html', ctx)
+    return render(request, 'action/edit_in.html', context)
 
 
 @user_passes_test(is_instructor)
@@ -811,6 +854,8 @@ def action_import(request):
 
 
 @user_passes_test(is_instructor)
+@csrf_exempt
+@require_http_methods(['POST'])
 def select_column_action(request, apk, cpk, key=None):
     """
     Operation to add a column to action in
@@ -908,6 +953,63 @@ def unselect_column_action(request, apk, cpk):
     action.column_condition_pair.filter(column=column).delete()
 
     return redirect(reverse('action:edit', kwargs={'pk': action.id}))
+
+
+@user_passes_test(is_instructor)
+@csrf_exempt
+@require_http_methods(['POST'])
+def select_condition(request, tpk, condpk=None):
+    """
+    Operation to add a column to action in
+    :param request: Request object
+    :param tpk: tuple ActionColumnCondition PK
+    :param condpk: Condition PK
+    :return: JSON response
+    """
+    # Check if the workflow is locked
+    workflow = get_workflow(request, prefetch_related=['columns', 'actions'])
+    if not workflow:
+        return JsonResponse({'html_redirect': reverse('home')})
+
+    if workflow.nrows == 0:
+        messages.error(
+            request,
+            _('Workflow has no data. '
+              'Go to "Manage table data" to upload data.')
+        )
+        return JsonResponse({'html_redirect': reverse('action:index')})
+
+    tuple = ActionColumnConditionTuple.objects.filter(pk=tpk).first()
+    if not tuple:
+        return JsonResponse({'html_redirect': reverse('action:index')})
+
+    # Get the action and the columns
+    # action = workflow.actions.filter(
+    #     pk=apk
+    # ).filter(
+    #     Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    # ).first()
+    # if not action:
+    #     return JsonResponse({'html_redirect': reverse('action:index')})
+    #
+    # # Get the column
+    # column = workflow.columns.filter(pk=colpk).first()
+    # if not column:
+    #     return JsonResponse({'html_redirect': reverse('action:index')})
+    #
+    condition = None
+    if condpk:
+        # Get the condition
+        condition = tuple.action.conditions.filter(pk=condpk).first()
+        if not condition:
+            return JsonResponse({'html_redirect': reverse('action:index')})
+
+    # Assign the condition to the tuple and save
+    tuple.condition = condition
+    tuple.save()
+
+    # Refresh the page to show the column in the list.
+    return JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)

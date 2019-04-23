@@ -385,13 +385,12 @@ def evaluate_row_action_in(action, context):
     """
 
     # Get the active columns attached to the action
-    columns = [x.column for x in action.column_condition_pair.all()
-               if x.column.is_active]
+    tuples = [x for x in action.column_condition_pair.all()
+              if x.column.is_active]
 
-    # Get the row values.
-    selected_values = [context[c.name] for c in columns]
+    values = [context[x.column.name] for x in tuples]
 
-    form = EnterActionIn(None, columns=columns, values=selected_values)
+    form = EnterActionIn(None, tuples=tuples, context=context, values=values)
 
     # Render the form
     return Template(

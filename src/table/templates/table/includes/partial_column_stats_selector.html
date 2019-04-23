@@ -5,8 +5,10 @@
     <span class="fa fa-bar-chart"></span> {% trans 'Column statistics' %}</button>
   <div class="shadow dropdown-menu" aria-labelledby="column-stat-selector">
     {% for column in columns %}
-      <button type="button" class="dropdown-item js-show-stats"
-              data-url="{% url 'table:stat_column_JSON' column.id %}">{{ column.name }}</button>
+      {% if not column.is_key %}
+        <button type="button" class="dropdown-item js-show-stats"
+                data-url="{% url 'table:stat_column_JSON' column.id %}">{{ column.name }}</button>
+      {% endif %}
     {% endfor %}
   </div>
 </div>
