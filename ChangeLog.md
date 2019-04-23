@@ -1,3 +1,9 @@
+## 4.3.2 (2019-04-23)
+
+### Fixed
+
+- Error when exporting/importing workflows with luser field
+
 ## 4.3.1 (2019-04-22)
 
 ### Added
