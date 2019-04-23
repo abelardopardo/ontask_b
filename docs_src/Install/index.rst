@@ -10,7 +10,7 @@ Requirements
 
 OnTask has been developed as a `Django <https://www.djangoproject.com/>`_ application. Django is a high-level, python-based web framework that supports a rich set of functionality typically required in applications like OnTask. But as with many other applications, OnTask requires a set of additional applications for its execution:
 
-- Python 3.7
+- Python 3
 - Django 2.2
 - Additional Django modules (included in the requirements/base.txt) file
 - Redis 
@@ -31,7 +31,7 @@ The upgrade to 4.0 or later requires version 2.7 and 3.6 both installed and avai
 Are you upgrading from version < 4.3 to 4.3?
 ********************************************
 
-The  upgrade to 4.3 or later no longer requires two versions of Python. It only requires Python 3.7. Make sure the application is only using version 3.7
+The  upgrade to 4.3 or later no longer requires two versions of Python. It only requires Python 3. Make sure the application is only using version 3.
 
 Required tools
 **************
@@ -79,13 +79,13 @@ Install and Configure PostgreSQL
 Install Python 3
 ================
 
-In the following sections we assume that you can open a command line interpreter and you can execute the two python interpreter for version 3.7.
+In the following sections we assume that you can open a command line interpreter and you can execute the two python interpreter for version 3.
 
 1. Install `python <https://www.python.org/>`_
 
-#. Verify that the interpreter can run and has the right version (3.7) using the command line interpreter (either ``python --version`` or ``python3 --version``).
+#. Verify that the interpreter can run and has the right version (3) using the command line interpreter (either ``python --version`` or ``python3 --version``).
 
-#. Install `pip <https://pip.pypa.io/en/stable/>`__ (the package may be called ``python3-pip`` for Python 3.7). This tool will be used to install additional libraries required to execute OnTask.
+#. Install `pip <https://pip.pypa.io/en/stable/>`__ (the package may be called ``python3-pip`` for Python 3). This tool will be used to install additional libraries required to execute OnTask.
 
 Download, install and configure OnTask
 **************************************
