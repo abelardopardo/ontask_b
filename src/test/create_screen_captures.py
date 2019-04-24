@@ -52,7 +52,13 @@ class ScreenTutorialTest(ScreenTests):
         # Close the modal.
         desc.send_keys(Keys.RETURN)
         self.wait_for_modal_close()
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//table[@id='dataops-table']")
+            )
+        )
 
+        self.body_ss('dataops_datauploadmerge2.png')
         # End of session
         self.logout()
 

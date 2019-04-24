@@ -4,6 +4,8 @@
 
 - The presence of a question in a survey can be controlled by a condition. Surveys now have conditions that can be assigned to questions.
 
+- Support to deploy a development server using docker (Issue #81)
+
 ## 4.3.2 (2019-04-23)
 
 ### Fixed

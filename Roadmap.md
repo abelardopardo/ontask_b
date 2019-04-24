@@ -1,17 +1,17 @@
 # Roadmap
 
-Pending release:
+## Pending release:
 
 - Include conditions to control appearance of questions in survey
 
-Upcoming features (in no particular order)
+- Support for a development platform in containers (Docker)
 
-1) Plugin that reads from Moodle logs and creates a table
+## Upcoming features (in no particular order)
+
+1) Plugin that reads from Moodle logs and creates a table that is merged (in batch mode)
 
 2) Plugin that rounds a column with float values
 
 3) Load content from Canvas gradebook through API
 
-4) Support for a development platform in containers
-
-5) Explore unfolding a "learner platform" functionality condensing multiple workflows
+4) Explore unfolding a "learner platform" functionality condensing multiple workflows

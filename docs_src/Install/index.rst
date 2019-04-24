@@ -952,7 +952,9 @@ Creating a Development Server using Docker
 
 You may use `Docker <https://docker.com>` to create a set of containers that run a **development** server. The file ``docker-compose.yml`` and the folder ``docker`` contains the configuration files to create the required images and instantiate them as containers. The current configuration creates three containers: one running Postgresql, one running Redis (cache), and the third runs the web server (Apache) with the wsgi connector, and ``supervisord`` controlling the executing of two Celery workers (one for asynchronous tasks, and one for scheduled ones).
 
-After installing Docker in your computer, the sequence of commands to start the server is::
+The server running in the docker container needs an extra configuration file with the database and redis connection pointing to the right locations within the docker network.
+
+After installing the Docker environment in your computer and creating the configuration file for the server running in the container, the sequence of commands to start the server is::
 
   docker-compose build
   docker-compose up

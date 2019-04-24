@@ -16,7 +16,7 @@ Click in the button and enter its name and a description.
 
 After creating the workflow, the next screen has the menu to upload data to the table. The current workflow is shown underneath the top menu as shown in the following figure (the string *BIOL1011* with a blue background).
 
-.. figure:: /scaptures/dataops_datauploadmerge.png
+.. figure:: /scaptures/dataops_datauploadmerge2.png
    :align: center
 
 You can always click in the |fa-home| *Home* link at the top menu to go back to the home page and select a different workflow to open (or create a new one).
