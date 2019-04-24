@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import json
 import urllib.parse
 from builtins import next
 from builtins import object
@@ -1524,10 +1525,26 @@ def timeline(request, pk=None):
                    Log.SCHEDULE_JSON_EDIT,
                    Log.SCHEDULE_CANVAS_EMAIL_EXECUTE]
 
-    # Filter the logs to display
-    logs = workflow.logs.filter(name__in=event_names)
+    if action:
+        logs = workflow.logs.filter(payload__action_id=action.id)
+    else:
+        logs = workflow.logs.all()
 
-    return render(request, 'action/timeline.html', { 'event_list': logs})
+    # Filter the logs to display and transform into values (process the json
+    # and the long value for the log name
+    logs = [
+        {'id': x.id,
+         'name': x.get_name_display(),
+         'modified': x.modified,
+         'payload': json.dumps(x.payload, indent=2),
+         'action_name': x.payload['action'],
+         'action_id': x.payload['action_id']}
+        for x in logs.filter(name__in=event_names)
+    ]
+
+    return render(request,
+                  'action/timeline.html',
+                  {'event_list': logs, 'action': action})
 
 
 @login_required

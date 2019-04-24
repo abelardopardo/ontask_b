@@ -88,6 +88,7 @@ class Log(models.Model):
     SCHEDULE_EMAIL_EDIT = 'schedule_email_edit'
     SCHEDULE_EMAIL_DELETE = 'schedule_email_delete'
     SCHEDULE_EMAIL_EXECUTE = 'schedule_email_execute'
+    SCHEDULE_CANVAS_EMAIL_EDIT = 'schedule_canvas_email_edit'
     SCHEDULE_CANVAS_EMAIL_EXECUTE = 'schedule_canvas_email_execute'
     SCHEDULE_CANVAS_EMAIL_DELETE = 'schedule_canvas_email_delete'
     DOWNLOAD_ZIP_ACTION = 'download_zip_action'
@@ -154,6 +155,8 @@ class Log(models.Model):
         (SCHEDULE_EMAIL_EDIT, _('Edit scheduled email action')),
         (SCHEDULE_EMAIL_DELETE, _('Delete scheduled email action')),
         (SCHEDULE_EMAIL_EXECUTE, _('Execute scheduled email action')),
+        (SCHEDULE_CANVAS_EMAIL_EDIT,
+         _('Edit scheduled canvas email action')),
         (SCHEDULE_CANVAS_EMAIL_EXECUTE,
          _('Execute scheduled canvas email action')),
         (SCHEDULE_CANVAS_EMAIL_DELETE,
