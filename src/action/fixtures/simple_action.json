@@ -35,8 +35,8 @@
     "model": "sites.site",
     "pk": 1,
     "fields": {
-        "domain": "127.0.0.1:8000",
-        "name": "127.0.0.1:8000"
+        "domain": "127.0.0.1",
+        "name": "127.0.0.1"
     }
 },
 {
@@ -76,7 +76,7 @@
     "pk": 3,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$Y25uQ3NERU1LVVlr$Y0ZqAnyp83/Hcu6cwcylyA",
-        "last_login": "2018-09-04T22:01:58.043Z",
+        "last_login": "2019-04-24T07:09:07.338Z",
         "is_superuser": false,
         "email": "instructor01@bogus.com",
         "is_staff": false,
@@ -405,6 +405,61 @@
     }
 },
 {
+    "model": "core.ontaskuser",
+    "pk": 10,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 9,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 5,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 6,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 7,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 8,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 3,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 4,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 1,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 2,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 11,
+    "fields": {}
+},
+{
     "model": "profiles.profile",
     "pk": 10,
     "fields": {
@@ -524,7 +579,7 @@
         "name": "wflow1",
         "description_text": "description text for workflow 1",
         "created": "2017-11-06T05:30:28.050Z",
-        "modified": "2017-11-06T23:06:04.187Z",
+        "modified": "2019-04-24T07:15:57.175Z",
         "nrows": 3,
         "ncols": 8,
         "attributes": {},
@@ -574,8 +629,12 @@
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_5",
-        "session_key": "736yrktalnv8m571qyb48k8b8t3wvk0u",
-        "shared": []
+        "session_key": "",
+        "luser_email_column": null,
+        "luser_email_column_md5": "",
+        "lusers_is_outdated": false,
+        "shared": [],
+        "lusers": []
     }
 },
 {
@@ -714,15 +773,49 @@
         "name": "simple action",
         "description_text": "action description text",
         "created": "2017-11-06T22:15:41.165Z",
-        "modified": "2018-09-04T21:59:35.367Z",
+        "modified": "2019-04-24T07:14:21.394Z",
         "last_executed_log": null,
         "action_type": "personalized_text",
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
+        "rows_all_false": [
+            2
+        ],
         "content": "{% comment %}Your action content here{% endcomment %}",
         "target_url": "",
         "shuffle": false
+    }
+},
+{
+    "model": "action.condition",
+    "pk": 1,
+    "fields": {
+        "action": 2,
+        "name": "bbb",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "another",
+                    "type": "string",
+                    "field": "another",
+                    "input": "text",
+                    "value": "bbb",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "n_rows_selected": 2,
+        "is_filter": false,
+        "created": "2019-04-24T07:14:20.855Z",
+        "modified": "2019-04-24T07:14:20.932Z",
+        "columns": [
+            267
+        ]
     }
 }
 ]
