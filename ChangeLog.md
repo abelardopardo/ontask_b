@@ -6,6 +6,8 @@
 
 - Support to deploy a development server using docker (Issue #81)
 
+- Timeline visualization of action executions. In a single page the timeline of the execution of either all the actions, or a single one.
+
 ## 4.3.3 (2019-04-24)
 
 ### Fixed
