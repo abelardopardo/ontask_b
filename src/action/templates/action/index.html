@@ -86,6 +86,10 @@
            class="shadow btn btn-outline-dark"
            data-toggle="tooltip" title="{% trans 'Import action previously exported' %}">
           <span class="fa fa-upload"></span> {% trans 'Import action' %}</a>
+        <a href="{% url 'action:timeline' %}"
+           class="shadow btn btn-outline-dark"
+           data-toggle="tooltip" title="{% trans 'See when the actions were executed' %}">
+          <span class="fa fa-clock-o"></span> {% trans 'Timeline' %}</a>
       {% endif %}
       {% include 'workflow/includes/manage_table_data.html' %}
     </div>

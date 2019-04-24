@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}OnTask{% endblock %}
+{% block container %}
+<div class="container my-3">
+  <h1 class="text-center">{% trans 'Timeline' %}</h1>
+  {% if event_list %}
+    <ul class="timeline">
+      {% for event in event_list %}
+        <li>
+          <a href="{% url 'action:edit' event.payload.action_id ">
+            {{ event.payload.action }}</a>
+          <a href="#" class="float-right">{{ event.modified }}</a>
+          <p>{{ event.payload }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-center">No action executions have been registered so far.</p>
+  {% endif %}
+  <div class="text-center">
+    <a href="{{request.META.HTTP_REFERER}}"
+       class="shadow btn btn-outline-dark spin">
+      <span class="fa fa-triangle-left"></span> {% trans 'Back' %}
+    </a>
+  </div>
+</div>
+{% endblock container %}

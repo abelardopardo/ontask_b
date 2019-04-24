@@ -1495,6 +1495,41 @@ def clone(request, pk):
     return redirect(reverse('action:index'))
 
 
+@user_passes_test(is_instructor)
+def timeline(request, pk=None):
+    """
+    Page to show a vertical timeline of action executions
+    :param request: HTTP request
+    :param pk: Action PK. If none, all of them are considered
+    :return: HTTP response
+    """
+
+    # Get the workflow first
+    workflow = get_workflow(request, prefetch_related='logs')
+    if not workflow:
+        return redirect('home')
+
+    action = None
+    if pk:
+        action = workflow.actions.filter(pk=pk).first()
+        if not action:
+            # The action is not part of the selected workflow
+            return redirect('home')
+
+    event_names = [Log.SCHEDULE_EMAIL_EXECUTE,
+                   Log.DOWNLOAD_ZIP_ACTION,
+                   Log.SCHEDULE_JSON_EXECUTE,
+                   Log.SCHEDULE_CANVAS_EMAIL_EXECUTE,
+                   Log.SCHEDULE_EMAIL_EDIT,
+                   Log.SCHEDULE_JSON_EDIT,
+                   Log.SCHEDULE_CANVAS_EMAIL_EXECUTE]
+
+    # Filter the logs to display
+    logs = workflow.logs.filter(name__in=event_names)
+
+    return render(request, 'action/timeline.html', { 'event_list': logs})
+
+
 @login_required
 def thanks(request):
     """
@@ -1503,3 +1538,4 @@ def thanks(request):
     :return:
     """
     return render(request, 'thanks.html', {})
+

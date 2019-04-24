@@ -15,7 +15,11 @@ urlpatterns = [
     path('<int:pk>/index/', views_action.action_index_set, name='index_set'),
 
     # Create an action of type 0: in, 1: Out
-    path('create', views_action.ActionCreateView.as_view(), name='create'),
+    path('create/', views_action.ActionCreateView.as_view(), name='create'),
+
+    # Show timeline
+    path('timeline/', views_action.timeline, name='timeline'),
+    path('<int:pk>/timeline/', views_action.timeline, name='timeline'),
 
     # Edit action Out
     path('<int:pk>/edit/', views_action.edit_action, name='edit'),
