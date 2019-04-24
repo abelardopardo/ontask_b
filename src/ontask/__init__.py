@@ -16,7 +16,7 @@ __all__ = ['celery_app', 'OnTaskException', 'is_legal_name', 'fix_pctg_in_name',
            'OnTaskDataFrameNoKey', 'action_session_dictionary',
            'get_action_payload', 'simplify_datetime_str', 'is_correct_email']
 
-__version__ = 'B.4.3.2'
+__version__ = 'B.4.3.3'
 
 PERSONALIZED_TEXT = 'personalized_text'
 PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'

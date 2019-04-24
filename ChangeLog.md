@@ -6,6 +6,12 @@
 
 - Support to deploy a development server using docker (Issue #81)
 
+## 4.3.3 (2019-04-24)
+
+### Fixed
+
+- Error when evaluating conditions
+
 ## 4.3.2 (2019-04-23)
 
 ### Fixed
