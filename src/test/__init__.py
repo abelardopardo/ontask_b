@@ -170,7 +170,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     viewport_width = 1024
     device_pixel_ratio = 1
     max_image_height = 1440
-    headless = True
+    headless = False
 
     class_and_text_xpath = \
         "//{0}[contains(@class, '{1}') and normalize-space(text()) = '{2}']"
@@ -343,7 +343,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
         return self.selenium.find_element_by_xpath(
             "//table[@id='{0}']/tbody/tr"
-            "/td[{1}][normalize-space() = '{2}']/..".format(
+            "/td[{1}][starts-with(normalize-space(), '{2}')]/..".format(
                 table_id, colidx, value
             )
         )
