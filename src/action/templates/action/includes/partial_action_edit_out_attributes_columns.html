@@ -1,25 +1,46 @@
 {% load i18n %}
-<div id="attribute-names" class="text-center mb-3">
-  <select id="select-column-name">
-    <option value="">- {% trans 'Insert Column Value' %} -</option>
-    {% for colname in column_names %}
-      <option value="{{ colname }}">{{ colname }}</option>
-    {% endfor %}
-  </select>
-  {% if conditions|length %}
-    <select id="select-condition-name">
-      <option value="">- {% trans 'Use condition in highlighted text' %} -</option>
-      {% for cond_name in conditions %}
-        <option value="{{ cond_name }}">{{ cond_name }}</option>
-      {% endfor %}
-    </select>
-  {% endif %}
-  {% if attribute_names %}
-    <select id="select-attribute-name">
-      <option value="">- {% trans 'Insert Attribute' %} -</option>
-      {% for attr in attribute_names %}
-        <option value="{{ attr }}">{{ attr }}</option>
-      {% endfor %}
-    </select>
-  {% endif %}
+<div id="insert-elements-in-editor" class="text-center my-3">
+  <div id="column-selector">
+    <div class="dropdown btn-group">
+      <button type="button" class="btn btn-outline-dark dropdown-toggle"
+              data-toggle="dropdown">
+        {% trans 'Insert Column Value' %}
+      </button>
+      <div class="shadow dropdown-menu">
+        {% for column in columns %}
+          <button type="button" class="dropdown-item js-insert-column-name">{{ column.name }}</button>
+        {% endfor %}
+      </div>
+    </div>
+    {% if conditions|length %}
+      <div id="condition-selector" class="dropdown btn-group">
+        <button type="button" class="btn btn-outline-dark dropdown-toggle"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {% if conditions.0.action.action_type == conditions.0.action.PERSONALIZED_TEXT %}
+            {% trans 'Use condition in highlighted text' %}
+          {% else %}
+            {% trans 'Insert condition in text' %}
+          {% endif %}
+        </button>
+        <div class="shadow dropdown-menu" aria-labelledby="condition-selector">
+          {% for cond_name in conditions %}
+            <button type="button" class="dropdown-item js-insert-condition-name">{{ cond_name }}</button>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    {% if attribute_names %}
+      <div id="attribute-selector" class="dropdown btn-group">
+        <button type="button" class="btn btn-outline-dark dropdown-toggle"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {% trans 'Insert Attribute' %}
+        </button>
+        <div class="shadow dropdown-menu" aria-labelledby="attribute-selector">
+          {% for attr in attribute_names %}
+            <button type="button" class="dropdown-item js-insert-attribute-name">{{ attr }}</button>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
 </div>

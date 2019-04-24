@@ -40,14 +40,14 @@ class ToBeDone(UserIsInstructor, generic.TemplateView):
 
 @login_required
 def entry(request):
-    return redirect('workflow:index')
+    return redirect('home')
 
 
 @csrf_exempt
 @xframe_options_exempt
 @lti_role_required(['Instructor', 'Student'])
 def lti_entry(request):
-    return redirect('workflow:index')
+    return redirect('home')
 
 
 # No permissions in this URL as it is supposed to be wide open to track email
@@ -63,7 +63,7 @@ def trck(request):
     # Push the tracking to the asynchronous queue
     increase_track_count.delay(request.method, request.GET)
 
-    return HttpResponse(settings.PIXEL, content_type='image/png')
+    return  HttpResponse(status=200)
 
 
 @login_required
@@ -89,19 +89,19 @@ def under_construction(request):
     return render(request, 'under_construction.html', {})
 
 
-def ontask_handler400(request):
+def ontask_handler400(request, exception):
     response = render(request, '400.html', {})
     response.status_code = 400
     return response
 
 
-def ontask_handler403(request):
+def ontask_handler403(request, exception):
     response = render(request, '403.html', {})
     response.status_code = 403
     return response
 
 
-def ontask_handler404(request):
+def ontask_handler404(request, exception):
     response = render(request, '404.html', {})
     response.status_code = 404
     return response

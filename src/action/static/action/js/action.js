@@ -2,7 +2,6 @@ function insertAtCaret(areaId, text) {
     var txtarea = document.getElementById(areaId);
     var scrollPos = txtarea.scrollTop;
     var caretPos = txtarea.selectionStart;
-
     var front = (txtarea.value).substring(0, caretPos);
     var back = (txtarea.value).substring(txtarea.selectionEnd, txtarea.value.length);
     txtarea.value = front + text + back;
@@ -18,7 +17,6 @@ var insertText = function(areaId, insert_text) {
   } else {
     insertAtCaret(areaId, insert_text);
   }
-
 }
 var insertConditionInContent = function() {
   var btn = $(this);
@@ -32,40 +30,21 @@ var insertConditionInContent = function() {
   } else {
       condition_text = '';
   }
-  insert_text = "{% if " + btn.val() +
+  insert_text = "{% if " + btn.text() +
       " %}" + condition_text + "{% endif %}";
   insertText('id_content', insert_text);
   $(this).val(this.defaultSelected);
 };
 var insertAttributeInContent = function() {
-  var val = $(this).val();
+  var val = $(this).text();
   if (val == '') {
     return;
   }
+  if (typeof $('#id_content').summernote != 'undefined') {
+    $("#id_content").summernote('createRange');
+  }
   insertText('id_content', "{{ " + val + " }}");
   $(this).val(this.defaultSelected);
-}
-var insertColumnInActionIn = function () {
-  var val = $(this).val();
-  var sel = $(this)
-  $('#div-spinner').show();
-  //window.location = val;
-  $.ajax({
-    url: val,
-    type: 'get',
-    dataType: 'json',
-    success: function (data) {
-      if (typeof data.html_redirect != 'undefined') {
-        location.href = data.html_redirect;
-      } else {
-        $('#div-spinner').hide();
-      }
-      sel.children("option[value='']").remove();
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      location.reload(true);
-    }
-  });
 }
 var toggleShuffleQuestion = function () {
   $('#div-spinner').show();
@@ -87,37 +66,44 @@ var toggleShuffleQuestion = function () {
   });
   $('#div-spinner').hide();
 }
-var loadFormPost = function () {
-    var btn = $(this);
-    if ($(this).is('[class*="disabled"]')) {
-      return;
-    }
-    $.ajax({
-      url: $(this).attr("data-url"),
-      data: [{'name': 'action_content', 'value': get_id_content()}],
-      type: 'post',
-      dataType: 'json',
-      beforeSend: function() {
-        $(".modal-body").html("");
-        $("#modal-item").modal("show");
-      },
-      success: function(data) {
-        if (data.form_is_valid) {
-          if (data.html_redirect == "") {
-            $('#div-spinner').show();
-            window.location.reload(true);
-          } else {
-            location.href = data.html_redirect;
-          }
-          return;
+var ajax_post = function(url, data, req_type) {
+  $.ajax({
+    url: url,
+    data: data,
+    type: req_type,
+    dataType: 'json',
+    beforeSend: function() {
+      $(".modal-body").html("");
+      $("#modal-item").modal("show");
+    },
+    success: function(data) {
+      if (data.form_is_valid) {
+        if (data.html_redirect == "") {
+          $('#div-spinner').show();
+          window.location.reload(true);
+        } else {
+          location.href = data.html_redirect;
         }
-        $("#modal-item .modal-content").html(data.html_form);
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        $('#div-spinner').show();
-        location.reload(true);
+        return;
       }
-    });
+      $("#modal-item .modal-content").html(data.html_form);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      $('#div-spinner').show();
+      location.reload(true);
+    }
+  });
+}
+var loadFormPost = function () {
+  var btn = $(this);
+  if ($(this).is('[class*="disabled"]')) {
+    return;
+  }
+  ajax_post(
+    $(this).attr("data-url"),
+    [{'name': 'action_content', 'value': get_id_content()}],
+    'post'
+  );
 }
 var transferFormula = function () {
   if (document.getElementById("id_formula") != null) {
@@ -153,6 +139,11 @@ var conditionClone = function() {
       location.reload(true);
     },
   });
+}
+var select_next_button = function(e) {
+  $("#step_sequence").prop('hidden', !e.is(":checked"));
+  $("#next-step-on").prop('hidden', !e.is(":checked"));
+  $("#next-step-off").prop('hidden', e.is(":checked"));
 }
 $(function () {
   $("#checkAll").click(function () {
@@ -204,41 +195,30 @@ $(function () {
 
   // Clone Condition
   $("#condition-set").on("click", ".js-condition-clone", conditionClone);
+  $("#condition-clone").on("click", ".js-condition-clone", conditionClone);
 
   // Delete Condition
   $("#condition-set").on("click", ".js-condition-delete", loadForm);
   $("#modal-item").on("submit", ".js-condition-delete-form", saveForm);
 
-  // Insert condition blurb in the editor
-  $("#attribute-names").on("change",
-                           "#select-condition-name",
-                           insertConditionInContent);
-//  $("#condition-set").on("click", ".js-condition-insert",
-//    insertConditionInContent);
-
-  // Insert attribute in content
-  $("#attribute-names").on("change",
-                           "#select-attribute-name",
-                           insertAttributeInContent);
   // Insert attribute column in content
-  $("#attribute-names").on("change",
-                           "#select-column-name",
-                           insertAttributeInContent);
+  $("#insert-elements-in-editor").on("click", ".js-insert-column-name", insertAttributeInContent);
+  // Insert condition blurb in the editor
+  $("#insert-elements-in-editor").on("click", ".js-insert-condition-name", insertConditionInContent);
+  // Insert attribute in content
+  $("#insert-elements-in-editor").on("click", ".js-insert-attribute-name", insertAttributeInContent);
 
   // Insert columns in action in
-  $("#questions").on("change",
-                      "#select-column-name",
-                      insertColumnInActionIn);
+  $("#insert-questions").on("click", ".js-insert-question", assignColumn);
 
   // Insert columns in action in
-  $("#parameters").on("change",
-                      "#select-key-column-name",
-                      insertColumnInActionIn);
+  $("#edit-survey-tab-content").on("click", ".js-select-key-column-name", assignColumn);
 
   // Toggle shuffle question
-  $("#action-in-editor").on("change",
-                       "#shuffle-questions",
-                       toggleShuffleQuestion);
+  $("#action-in-editor").on("change", "#shuffle-questions", toggleShuffleQuestion);
+
+  // Show stats
+  $("#column-stat-selector").on("click", ".js-show-stats", loadForm);
 
   // Preview
   $("#action-preview-done").on("click", ".js-action-preview", loadFormPost);
@@ -249,6 +229,7 @@ $(function () {
   $("#zip-action-request-data").on("click", ".js-action-preview", loadForm);
   $("#json-action-request-data").on("click", ".js-action-preview", loadForm);
   $("#action-in-editor").on("click", ".js-action-preview", loadForm);
+  $("#email-schedule-send").on("click", ".js-action-preview", loadForm);
   $(".modal-content").on("click", ".js-action-preview-nxt", loadForm);
   $(".modal-content").on("click", ".js-action-preview-prv", loadForm);
 
@@ -283,6 +264,9 @@ $(function () {
   }, function(){
     $(this).css("background-color", "white");
   });
+  $("#id_confirm_items").on("change", function(e) {
+    select_next_button($(this));
+  })
 });
 window.onload = function(){
   if (document.getElementById("id_exclude_values") != null) {
@@ -297,6 +281,7 @@ $(document).ready(function() {
   $(document.body).on("click", "a[data-toggle]", function(event) {
     location.hash = this.getAttribute("href");
   });
+  select_next_button($("#id_confirm_items"));
 });
 $(window).on("popstate", function() {
   var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");

@@ -1,10 +1,10 @@
 {% load i18n %}
 <div class="dropdown btn-group">
-  <button class="btn btn-outline-dark dropdown-toggle" type="button"
+  <button class="shadow btn btn-outline-dark dropdown-toggle" type="button"
           id="manageTableOperations" data-toggle="dropdown">
     {% trans 'Manage table data' %}
   </button>
-  <div class="dropdown-menu" aria-labelledby="manageTableOperations">
+  <div class="shadow dropdown-menu" aria-labelledby="manageTableOperations">
     <a href="{% url 'dataops:uploadmerge' %}"
        class="dropdown-item spin"
        data-toggle="tooltip"
@@ -12,7 +12,7 @@
       {% trans 'Upload or merge data' %}</a>
     <a href="{% url 'dataops:transform' %}"
        class="dropdown-item spin"
-       data-toggle="tooltip"
+       data-toggle="tooltip" data-container="body" data-placement="left"
        title="{% trans 'Execute one of the available plugins' %}">
       {% trans 'Execute plugin' %}</a>
     {% if workflow.nrows %}

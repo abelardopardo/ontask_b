@@ -1,6 +1,6 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 4.0.0 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 4.3.2 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
 ## OnTask in a nutshell
 
@@ -31,7 +31,7 @@ Current Version: 4.0.0 ([documentation](http://ontask-version-b.readthedocs.io/e
 
 - **NEW** Creation of ZIP file to upload feedback files in Moodle assessment
 
-- **NEW** Support for internationalization (initial versions for Spanish and Chinese)
+- **NEW** Support for internationalization (initial versions for Spanish, Chinese and Finnish)
 
 **For a detailed description of the tool, how to install it, and how to use it
 check the [OnTask Documentation](https://abelardopardo.github.io/ontask_b)**.
@@ -132,7 +132,7 @@ Q15. **After a course finishes, there seems to be quite a lot of information
      can either archive it for future reference or share your actions, rules,
      views, etc with other user.
   
-Q16. **Can I use OnTask with my institutional authentication?** Yes. OnTaks 
+Q16. **Can I use OnTask with my institutional authentication?** Yes. OnTask 
      comes with the basic functionality to be compatible with the most common 
      authentication mechanisms such as LTI, LDAP, Shibboleth, etc.
   
@@ -152,12 +152,8 @@ Q19. **Where do I find the details on how to install it and some more
      
 ## Contributing
 
-1. Fork it!
-2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request
-
+Check out our [Governance structure](https://github.com/abelardopardo/ontask_b/blob/master/GOVERNANCE.md) for a detailed description of the process to contribute to the project.
+ 
 ## Credits
 
 OnTask started as a project combining ideas that were present in the Student 
@@ -260,6 +256,8 @@ licenses:
 - [djangorestframework](https://pypi.python.org/pypi/djangorestframework/3.7.7) 
   BSD
 
+- [email_validator](https://github.com/JoshData/python-email-validator) CC
+
 - [easy-thumbnails](https://pypi.python.org/pypi/easy-thumbnails) BSD
 
 - [ims-lti-py](https://github.com/tophatmonocle/ims_lti_py) MIT
@@ -293,5 +291,4 @@ licenses:
 
 - [tzlocal](https://pypi.python.org/pypi/tzlocal) MIT
 
-- [validate_email](https://pypi.python.org/pypi/validate_email) LGPL
 

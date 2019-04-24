@@ -2,61 +2,46 @@
 from __future__ import unicode_literals
 
 import logging.config
-import sys
 
 from .base import *  # NOQA
-
-ALLOWED_HOSTS = ['*']
-
-# Define STATIC_ROOT for the collectstatic command
-STATIC_ROOT = join(BASE_DIR(), '..', 'site', 'static')
 
 # Turn off debug while imported by Celery with a workaround
 # See http://stackoverflow.com/a/4806384
 if "celery" in sys.argv[0]:
     DEBUG = False
+else:
+    print('Forcing synchronous execution in Celery')
+    CELERY_TASK_ALWAYS_EAGER = True
 
 # Django Debug Toolbar
-INSTALLED_APPS += ['debug_toolbar']
+if DEBUG:
+    INSTALLED_APPS += ['debug_toolbar']
 
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
-if not TESTING:
+if TESTING:
+    EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+else:
+    # Show emails to console in DEBUG mode
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
     DEBUG_TOOLBAR_CONFIG = {
         'SHOW_TOOLBAR_CALLBACK': lambda r: True,  # enables it
         # '...
     }
 
-if DEBUG:
-    print('BASE_DIR: ' + BASE_DIR())
-    print('STATICFILES_DIRS: ' + ', '.join(STATICFILES_DIRS))
-    print('DATABASE_URL: ' + env('DATABASE_URL'))
-    print('REDIS_URL: ' + env('REDIS_URL'))
-    print('MEDIA_ROOT: ' + MEDIA_ROOT)
-    print('MEDIA_URL: ' + MEDIA_URL)
-    print('ONTASK_HELP_URL: ' + ONTASK_HELP_URL)
-
 # Additional middleware introduced by debug toolbar
-MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
-
-# Show emails to console in DEBUG mode
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+if DEBUG:
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
 # Show thumbnail generation errors
 THUMBNAIL_DEBUG = True
 
 # Allow internal IPs for debugging
-INTERNAL_IPS = [
-    '127.0.0.1',
-    '0.0.0.1',
-    'localhost',
-]
-
-# Log everything to the logs directory at the top
-LOGFILE_ROOT = join(BASE_DIR(), '..', 'logs')
+INTERNAL_IPS = ['127.0.0.1', '0.0.0.1', 'localhost']
 
 # Reset logging
 # (see http://www.caktusgroup.com/blog/2015/01/27/Django-Logging-Configuration-logging_config-default-settings-logger/)
-
 LOGGING_CONFIG = None
 LOGGING = {
     'version': 1,
@@ -74,25 +59,25 @@ LOGGING = {
         'django_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'django.log'),
+            'filename': join(LOG_FOLDER, 'django.log'),
             'formatter': 'verbose'
         },
         'proj_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'project.log'),
+            'filename': join(LOG_FOLDER, 'project.log'),
             'formatter': 'verbose'
         },
         'script_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'script.log'),
+            'filename': join(LOG_FOLDER, 'script.log'),
             'formatter': 'verbose'
         },
         'celery_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'celery.log'),
+            'filename': join(LOG_FOLDER, 'celery.log'),
             'formatter': 'verbose'
         },
         'console': {
@@ -138,3 +123,38 @@ LOGGING = {
 }
 
 logging.config.dictConfig(LOGGING)
+
+GRAPH_MODELS = {
+    'group_models': True,
+    'all_applications': True,
+    'output': 'data_model.png',
+    'exclude_models': [
+        'TaskResult',
+        'SQLConnection',
+        'PluginRegistry',
+        'Site',
+        'ThumbnailDimensions',
+        'Thumbnail',
+        'Source',
+        'File',
+        'Preference',
+        'PeriodicTask',
+        'PeriodicTasks',
+        'IntervalSchedule',
+        'CrontabSchedule',
+        'SolarSchedule',
+        'Attachment',
+        'AbstractAttachment',
+        'Session',
+        'AbstractBaseSession',
+        'Profile',
+        'BaseProfile',
+        'Token',
+        'LogEntry',
+        'Group',
+        'Permission',
+        'ContentType'
+    ]
+}
+
+dump_config()

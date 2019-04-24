@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 import os
+from time import sleep
 
 from django.conf import settings
 from django.utils.html import escape
@@ -12,6 +13,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 import test
 from dataops import pandas_db
+from dataops.pandas_db import is_column_in_table
 from workflow.models import Workflow
 
 
@@ -25,15 +27,15 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
     )
 
     def setUp(self):
-        super(DataopsSymbols, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
-        super(DataopsSymbols, self).tearDown()
+        test.delete_all_tables()
+        super().tearDown()
 
     def test_01_symbols(self):
-        symbols = '!#$%&()*+,-./:;<=>?@[\]^_`{|}~'
+        symbols = '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~'
 
         # Login
         self.login('instructor01@bogus.com')
@@ -121,9 +123,10 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.open_action_edit('action in')
 
         # Set the right columns to process
-        select = Select(self.selenium.find_element_by_id(
-            'select-column-name'))
-        select.select_by_visible_text('!#$%&()*+,-./:;<=>?@[\]^_`{|}~2')
+        self.click_dropdown_option(
+            "//div[@id='column-selector']",
+            '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~2'
+        )
         self.wait_for_datatable('column-selected-table_previous')
         # Wait for the table to be refreshed
         WebDriverWait(self.selenium, 10).until(
@@ -134,16 +137,13 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
 
         # Set some parameters
         self.select_parameters_tab()
-        select = Select(self.selenium.find_element_by_id(
-            'select-key-column-name'))
-        select.select_by_visible_text('sid')
+        self.click_dropdown_option("//div[@id='select-key-column-name']", 'sid')
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
         self.select_parameters_tab()
-        select = Select(self.selenium.find_element_by_id(
-            'select-key-column-name'))
-        select.select_by_visible_text('email')
+        self.click_dropdown_option("//div[@id='select-key-column-name']",
+                                   'email')
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
@@ -192,22 +192,24 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         # Edit the action out
         self.open_action_edit('action_out')
 
-        # Insert attribute
-        self.selenium.find_element_by_id("select-attribute-name").click()
-        Select(self.selenium.find_element_by_id(
-            "select-attribute-name")).select_by_visible_text(
-            "- Insert Attribute -"
+        # Click in the editor
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.CLASS_NAME, 'note-editable')
+            )
         )
+        self.selenium.find_element_by_class_name('note-editable').click()
+
+        # Insert attribute
+        self.click_dropdown_option("//div[@id='attribute-selector']",
+                                   symbols + '3')
 
         # Insert column name
-        self.selenium.find_element_by_id("select-column-name").click()
-        Select(self.selenium.find_element_by_id(
-            "select-column-name")).select_by_visible_text(symbols)
+        self.click_dropdown_option("//div[@id='column-selector']", symbols)
 
         # Insert second column name
-        self.selenium.find_element_by_id("select-column-name").click()
-        Select(self.selenium.find_element_by_id(
-            "select-column-name")).select_by_visible_text(symbols + '2')
+        self.click_dropdown_option("//div[@id='column-selector']",
+                                   symbols + '2')
 
         # Create new condition
         self.create_condition(symbols + "4",
@@ -237,7 +239,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.logout()
 
     def test_02_symbols(self):
-        symbols = '!#$%&()*+,-./:;<=>?@[\]^_`{|}~'
+        symbols = '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~'
 
         # Login
         self.login('instructor01@bogus.com')
@@ -291,10 +293,8 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         # Set the correct values for an action-in
         # Set the right columns to process
         self.select_parameters_tab()
-        select = Select(self.selenium.find_element_by_id(
-            'select-key-column-name'
-        ))
-        select.select_by_visible_text('email' + symbols)
+        self.click_dropdown_option("//div[@id='select-key-column-name']",
+                                   'email' + symbols)
         # This wait is incorrect. Don't know how to wait for an AJAX call.
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
@@ -377,8 +377,8 @@ class DataopsExcelUpload(test.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
-        super(DataopsExcelUpload, self).tearDown()
+        test.delete_all_tables()
+        super().tearDown()
 
     def test_01_excelupload(self):
         # Login
@@ -426,8 +426,8 @@ class DataopsExcelUploadSheet(test.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
-        super(DataopsExcelUploadSheet, self).tearDown()
+        test.delete_all_tables()
+        super().tearDown()
 
     def test_01_excelupload_sheet(self):
         # Login
@@ -478,8 +478,8 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
                   "{% if bool3 cond %}Bool 3 is true{% endif %}\\n"
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
-        super(DataopsNaNProcessing, self).tearDown()
+        test.delete_all_tables()
+        super().tearDown()
 
     def test_01_nan_manipulation(self):
         # Login
@@ -489,8 +489,7 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
 
         # Go to CSV Upload/Merge
         self.selenium.find_element_by_xpath(
-            "//table[@id='dataops-table']//a[normalize-space()='CSV "
-            "Upload/Merge']").click()
+            "//table[@id='dataops-table']//a[normalize-space()='CSV']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
                 (By.XPATH, "//form")
@@ -526,7 +525,7 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_name("Submit").click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
-                                             'Step 2: Select Columns')
+                                             'Select Columns')
         )
 
         # Select all the columns for upload
@@ -535,7 +534,7 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, "//body/div/h1"),
-                'Step 3: Select Keys and Merge Option')
+                'Select Keys and Merge Option')
         )
 
         # Choose the default options for the merge (key and outer)
@@ -546,7 +545,7 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, "//body/div/h1"),
-                'Step 4: Review and confirm')
+                'Review and confirm')
         )
 
         # Check the merge summary and proceed
@@ -592,12 +591,12 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
     )
 
     def setUp(self):
-        super(DataopsPluginExecution, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
-        super(DataopsPluginExecution, self).tearDown()
+        test.delete_all_tables()
+        super().tearDown()
 
     def test_01_first_plugin(self):
         # Login
@@ -613,9 +612,12 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         element = self.search_table_row_by_string('transform-table',
                                                   1,
                                                   'test_plugin_1')
-        element.find_element_by_link_text('Run').click()
+        element.find_element_by_link_text('Test Plugin 1 Name').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
+        )
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//input[@type='text']"))
         )
 
         # Provide the execution data
@@ -625,41 +627,65 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
             "(//input[@name='columns'])[2]"
         ).click()
 
-        # Click outside the SOL widget
-        self.selenium.find_element_by_id('div_id_merge_key').click()
+        # Select the merge key
+        self.select_plugin_output_tab()
 
         self.selenium.find_element_by_id("id_merge_key").click()
         Select(self.selenium.find_element_by_id(
             "id_merge_key"
         )).select_by_visible_text("email")
+
         # Submit the execution
         self.selenium.find_element_by_name("Submit").click()
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'plugin-execution-report'))
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//body/div/h1"),
+                'Plugin scheduled for execution')
         )
 
-        # Done. Click continue.
-        self.selenium.find_element_by_link_text('Continue').click()
-        self.wait_for_datatable('table-data_previous')
+        # There should be a message on that page
+        self.assertTrue(
+            self.selenium.find_element_by_xpath(
+                "//div[@id='plugin-run-done']/div/a"
+            ).text.startswith(
+                'You may check the status in log number'
+            )
+        )
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name='Plugin test')
-        df = pandas_db.load_from_db(wflow.id)
-        self.assertTrue('RESULT 1' in set(df.columns))
-        self.assertTrue('RESULT 2' in set(df.columns))
+        # Wait maximum 10 seconds for the data frame to be updated
+        idx = 0
+        while (not is_column_in_table(wflow.get_data_frame_table_name(),
+                                     'RESULT 1') or
+               not is_column_in_table(wflow.get_data_frame_table_name(),
+                                      'RESULT 2')) and idx < 10:
+            print(not is_column_in_table(wflow.get_data_frame_table_name(),
+                                     'RESULT 1'))
+            print(not is_column_in_table(wflow.get_data_frame_table_name(),
+                                     'RESULT 2'))
+            sleep(1)
+            idx += 1
+
+        self.assertTrue(idx != 10)
+        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
         self.assertTrue(all([x == 1 for x in df['RESULT 1']]))
         self.assertTrue(all([x == 2 for x in df['RESULT 2']]))
 
         # Second execution, this time adding a suffix to the column
+        self.go_to_actions()
         self.go_to_transform()
 
         # Click in the first plugin
         element = self.search_table_row_by_string('transform-table',
                                                   1,
                                                   'test_plugin_1')
-        element.find_element_by_link_text('Run').click()
+        element.find_element_by_link_text('Test Plugin 1 Name').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
+        )
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//input[@type='text']"))
         )
 
         # Provide the execution data
@@ -674,10 +700,9 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "(//input[@name='columns'])[2]"
         ).click()
-        # Click outside the SOL widget
-        self.selenium.find_element_by_class_name(
-            'sol-current-selection'
-        ).click()
+
+        # Select the merge key
+        self.select_plugin_output_tab()
         self.selenium.find_element_by_id("id_merge_key").click()
         Select(self.selenium.find_element_by_id(
             "id_merge_key"
@@ -691,18 +716,32 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         # Submit the execution
         self.selenium.find_element_by_name("Submit").click()
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'plugin-execution-report'))
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//body/div/h1"),
+                'Plugin scheduled for execution')
         )
 
-        # Done. Click continue.
-        self.selenium.find_element_by_link_text('Continue').click()
-        self.wait_for_datatable('table-data_previous')
+        # There should be a message on that page
+        self.assertTrue(
+            self.selenium.find_element_by_xpath(
+                "//div[@id='plugin-run-done']/div/a"
+            ).text.startswith(
+                'You may check the status in log number'
+            )
+        )
 
         # Assert the content of the dataframe
+        # Wait maximum 10 seconds for the data frame to be updated
         wflow = Workflow.objects.get(name='Plugin test')
-        df = pandas_db.load_from_db(wflow.id)
-        self.assertTrue('RESULT 1_2' in set(df.columns))
-        self.assertTrue('RESULT 2_2' in set(df.columns))
+        idx = 0
+        while (not is_column_in_table(wflow.get_data_frame_table_name(),
+                                      'RESULT 1_2') or
+               not is_column_in_table(wflow.get_data_frame_table_name(),
+                                      'RESULT 2_2')) and idx < 10:
+            sleep(1)
+            idx += 1
+        self.assertTrue(idx != 10)
+        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
         self.assertTrue(all([x == 1 for x in df['RESULT 1_2']]))
         self.assertTrue(all([x == 2 for x in df['RESULT 2_2']]))
 
@@ -725,27 +764,38 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         element = self.search_table_row_by_string('transform-table',
                                                   1,
                                                   'test_plugin_2')
-        element.find_element_by_link_text('Run').click()
+        element.find_element_by_link_text('Test Plugin 2 Name').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
 
         # Provide the execution data
+        self.select_plugin_output_tab()
         self.selenium.find_element_by_id("id_merge_key").click()
         Select(self.selenium.find_element_by_id(
             "id_merge_key"
         )).select_by_visible_text("email")
         # Submit the execution
         self.selenium.find_element_by_name("Submit").click()
-        self.wait_for_page(element_id='plugin-execution-report')
 
-        # Done. Click continue.
-        self.selenium.find_element_by_link_text('Continue').click()
-        self.wait_for_datatable('table-data_previous')
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//body/div/h1"),
+                'Plugin scheduled for execution')
+        )
+
+        # There should be a message on that page
+        self.assertTrue(
+            self.selenium.find_element_by_xpath(
+                "//div[@id='plugin-run-done']/div/a"
+            ).text.startswith(
+                'You may check the status in log number'
+            )
+        )
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name='Plugin test')
-        df = pandas_db.load_from_db(wflow.id)
+        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
         self.assertTrue('RESULT 3' in set(df.columns))
         self.assertTrue('RESULT 4' in set(df.columns))
         self.assertTrue(df['RESULT 3'].equals(df['A1'] + df['A2']))
@@ -774,12 +824,12 @@ class DataopsMerge(test.OnTaskLiveTestCase):
     )
 
     def setUp(self):
-        super(DataopsMerge, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
-        super(DataopsMerge, self).tearDown()
+        test.delete_all_tables()
+        super().tearDown()
 
     def template_merge(self, method, rename=True):
         # Login
@@ -792,7 +842,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
         self.go_to_upload_merge()
 
         # Dataops/Merge CSV Merge Step 1
-        self.selenium.find_element_by_link_text("CSV Upload/Merge").click()
+        self.selenium.find_element_by_link_text("CSV").click()
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Upload/Merge CSV')
         )
@@ -838,7 +888,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, "//body/div/h1"),
-                'Step 4: Review and confirm')
+                'Review and confirm')
         )
 
         # Dataops/Merge CSV Merge Step 4
@@ -853,7 +903,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_from_db(wflow.id)
+        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' in set(df.columns))
@@ -872,7 +922,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_from_db(wflow.id)
+        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' not in set(df.columns))
@@ -891,7 +941,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_from_db(wflow.id)
+        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' in set(df.columns))
@@ -906,14 +956,13 @@ class DataopsMerge(test.OnTaskLiveTestCase):
         self.logout()
 
     def test_04_merge_right(self):
-        self.template_merge('right')
+        self.template_merge('right', rename=False)
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_from_db(wflow.id)
+        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
-        self.assertTrue('key2' in set(df.columns))
         self.assertTrue('text3' in set(df.columns))
         self.assertTrue('double3' in set(df.columns))
         self.assertTrue('bool3' in set(df.columns))
@@ -935,7 +984,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_from_db(wflow.id)
+        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' not in set(df.columns))
@@ -947,4 +996,34 @@ class DataopsMerge(test.OnTaskLiveTestCase):
         assert pandas_db.check_wf_df(Workflow.objects.get(name='Testing Merge'))
 
         # End of session
+        self.logout()
+
+class DataopsEmptyKeyAfterMerge(DataopsMerge):
+    wf_name = 'Test Empty Key after Merge'
+    fixtures = ['test_empty_key_after_merge']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'dataops',
+        'fixtures',
+        'test_empty_key_after_merge.sql'
+    )
+    merge_file = os.path.join(
+        settings.BASE_DIR(),
+        'dataops',
+        'fixtures',
+        'test_empty_key_after_merge.csv'
+    )
+
+    def test_merge(self):
+        self.template_merge('outer', rename=False)
+
+        # Assert the presence of the error in the page
+        self.assertIn('Merge operation failed.', self.selenium.page_source)
+
+        # Assert additional properties
+        wflow = Workflow.objects.get(name=self.wf_name)
+        self.assertTrue(wflow.columns.get(name='key1').is_key,
+                        'Column key1 has lost is key property')
+        self.assertTrue(wflow.columns.get(name='key2').is_key,
+                        'Column key2 has lost is key property')
         self.logout()

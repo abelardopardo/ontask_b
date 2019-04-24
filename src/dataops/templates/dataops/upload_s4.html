@@ -10,15 +10,16 @@
 {% endblock %}
 {% block container %}
   <div class="container">
-    <h1 class="text-center">{% trans 'Step 4: Review and confirm' %}</h1>
+    {% include 'step_by_step.html' with valuerange=valuerange step=5 %}
+    <h1 class="text-center">{% trans 'Review and confirm' %}</h1>
     <div class="row justify-content-center">
       <form method="POST" action="">
         {% csrf_token %}
         {% include 'dataops/includes/upload_buttons.html' %}
       </form>
     </div>
-    <div class="container justify-content-center">
-      <table class="table table-hover table-bordered" id="workflow-detail"
+    <div class="justify-content-center">
+      <table class="table table-hover table-bordered shadow" id="workflow-detail"
              style="width:100%;">
         <thead>
           <tr>

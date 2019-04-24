@@ -1,44 +1,44 @@
 # -*- coding: utf-8 -*-
 
-
-from future import standard_library
-
-from ontask import simplify_datetime_str
-
-standard_library.install_aliases()
+import urllib.parse
 from builtins import next
 from builtins import object
-from django.db import IntegrityError
-from django.utils.html import format_html
-
-from action.views_out import (
-    action_session_dictionary, run_json_action,
-    run_email_action, run_canvas_email_action
-)
-from logs.models import Log
-from visualizations.plotly import PlotlyHandler
-
-import urllib.parse
 from urllib.parse import urlencode
 
 import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test, login_required
-from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 from django.db.models import Q
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
+from django.utils.html import format_html
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views import generic
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.utils.translation import ugettext_lazy as _
 
 from action.evaluate import render_template
-from dataops import ops, pandas_db
+from action.ops import (
+    serve_action_in,
+    serve_action_out,
+    clone_action,
+    do_export_action,
+    do_import_action,
+    get_workflow_action
+)
+from action.views_out import (
+    action_session_dictionary, run_json_action,
+    run_email_action, run_canvas_email_action
+)
+from dataops import pandas_db
+from logs.models import Log
+from ontask import simplify_datetime_str
 from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
+from visualizations.plotly import PlotlyHandler
 from workflow.ops import get_workflow
 from .forms import (
     ActionUpdateForm,
@@ -49,15 +49,7 @@ from .forms import (
     ActionImportForm,
     FilterForm
 )
-from action.ops import (
-    serve_action_in,
-    serve_action_out,
-    clone_action,
-    do_export_action,
-    do_import_action,
-    get_workflow_action
-)
-from .models import Action, Condition
+from .models import Action, Condition, ActionColumnConditionTuple
 
 
 #
@@ -82,8 +74,8 @@ class ActionTable(tables.Table):
     #
     #  Action type               |  Email  |  ZIP |  URL  |  RUN  |
     #  ------------------------------------------------------------
-    #  Personalized text         |    X    |   X  |   X   |       |
-    #  Personalized canvas email |    X    |      |       |       |
+    #  Personalized text         |    X    |   X  |   X   |   X   |
+    #  Personalized canvas email |    X    |      |       |   X   |
     #  Personalized JSON         |         |      |   ?   |   X   |
     #  Survey                    |         |      |   X   |   X   |
     #  Todo List                 |         |      |   X   |   X   |
@@ -100,36 +92,29 @@ class ActionTable(tables.Table):
     )
 
     def render_name(self, record):
-        return format_html(
-            """<a href="{0}"
-                  data-toggle="tooltip"
-                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""",
-            reverse('action:edit', kwargs={'pk': record.id}),
-            _('Edit the text, conditions and filter'),
-            record.name
-        )
+        result = """<a href="{0}" data-toggle="tooltip" title="{1}">{2}</a>"""
+        danger_txt = ''
+        if record.get_row_all_false_count():
+            danger_txt = \
+                ugettext('Some users have all conditions equal to FALSE')
+        if not record.is_executable:
+            danger_txt = \
+                ugettext('Some elements in the survey are incomplete')
+
+        if danger_txt:
+            result += \
+                ' <span class="fa fa-exclamation-triangle"' \
+                ' style="color:red;"' \
+                ' data-toggle="tooltip"' \
+                ' title="{0}"></span>'.format(danger_txt)
+
+        return format_html(result,
+                           reverse('action:edit', kwargs={'pk': record.id}),
+                           _('Edit the text, conditions and filter'),
+                           record.name)
 
     def render_action_type(self, record):
-        icon = 'file-text'
-        title = 'Personalized text'
-        if record.action_type == Action.PERSONALIZED_TEXT:
-            icon = 'file-text'
-            title = 'Personalized text'
-        elif record.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
-            icon = 'envelope-square'
-            title = 'Personalized Canvas Email'
-        elif record.action_type == Action.PERSONALIZED_JSON:
-            icon = 'code'
-            title = 'Personalized JSON'
-        elif record.action_type == Action.SURVEY:
-            icon = 'question-circle-o'
-            title = 'Survey'
-        return format_html(
-            """<div data-toggle="tooltip" title="{0}">
-                 <span class="fa fa-{1}"></span></div>""",
-            title,
-            icon
-        )
+        return record.action_type
 
     def render_last_executed_log(self, record):
         log_item = record.last_executed_log
@@ -148,9 +133,9 @@ class ActionTable(tables.Table):
                   'last_executed_log')
         sequence = ('action_type', 'name', 'description_text',
                     'last_executed_log')
-        exclude = ('content', 'serve_enabled', 'columns', 'filter')
+        exclude = ('content', 'serve_enabled', 'filter')
         attrs = {
-            'class': 'table table-hover table-bordered',
+            'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
             'id': 'action-table'
         }
@@ -173,7 +158,7 @@ class ColumnSelectedTable(tables.Table):
         return format_html(
             """<a href="#" data-toggle="tooltip" 
                   class="js-workflow-question-edit" data-url="{0}"
-                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""",
+                  title="{1}">{2}</a>""",
             reverse('workflow:question_edit', kwargs={'pk': record['id']}),
             _('Edit the question'),
             record['name']
@@ -194,6 +179,7 @@ class ColumnSelectedTable(tables.Table):
             'danger' if not record['description_text'] else '',
         }
 
+
 def save_action_form(request, form, template_name):
     """
     Function to process JSON POST requests when creating a new action. It
@@ -201,10 +187,15 @@ def save_action_form(request, form, template_name):
     record.
     :param request: Request object
     :param form: Form to be used in the request/render
-    :param action_type: Type of action
     :param template_name: Template for rendering the content
     :return: JSON response
     """
+
+    # Get the corresponding workflow
+    workflow = get_workflow(request)
+    if not workflow:
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
 
     # JSON payload
     data = dict()
@@ -233,11 +224,6 @@ def save_action_form(request, form, template_name):
     # Is this a new action?
     is_new = action_item.pk is None
 
-    # Get the corresponding workflow
-    workflow = get_workflow(request)
-    if not workflow:
-        redirect('workflow:index')
-
     if is_new:  # Action is New. Update user and workflow fields
         action_item.user = request.user
         action_item.workflow = workflow
@@ -247,7 +233,7 @@ def save_action_form(request, form, template_name):
     try:
         action_item.save()
         form.save_m2m()  # Propagate the save effect to M2M relations
-    except IntegrityError as e:
+    except IntegrityError:
         # There is an action with this name already
         form.add_error('name',
                        _('An action with that name already exists'))
@@ -294,20 +280,6 @@ def save_action_form(request, form, template_name):
     # Enough said. Respond.
     return JsonResponse(data)
 
-@user_passes_test(is_instructor)
-def action_index(request):
-    """
-    Render the list of actions attached to a workflow.
-    :param request: Request object
-    :return: HTTP response with the table.
-    """
-
-    # Get the appropriate workflow object
-    workflow = get_workflow(request)
-    if not workflow:
-        return redirect('workflow:index')
-
-    return action_index_set(request)
 
 @user_passes_test(is_instructor)
 def action_index_set(request, pk=None):
@@ -320,19 +292,24 @@ def action_index_set(request, pk=None):
     """
 
     # Get the appropriate workflow object
-    workflow = get_workflow(request, wid=pk)
+    workflow = get_workflow(request,
+                            wid=pk,
+                            prefetch_related='actions')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Reset object to carry action info throughout dialogs
     request.session[action_session_dictionary] = {}
     request.session.save()
 
+    qs = workflow.actions.all()
+
     return render(request,
                   'action/index.html',
                   {'workflow': workflow,
-                   'table': ActionTable(workflow.actions.all(),
-                                        orderable=False)})
+                   'table': ActionTable(qs, orderable=False)}
+                  )
+
 
 class ActionCreateView(UserIsInstructor, generic.TemplateView):
     """
@@ -353,6 +330,7 @@ class ActionCreateView(UserIsInstructor, generic.TemplateView):
                                 form,
                                 self.template_name)
 
+
 class ActionUpdateView(UserIsInstructor, generic.DetailView):
     """
     CBV to handle the update (as in name and description) action.
@@ -364,24 +342,24 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
     form_class = ActionUpdateForm
 
     def get_object(self, queryset=None):
-        obj = super(ActionUpdateView, self).get_object(queryset=queryset)
+        obj = super().get_object(queryset=queryset)
         if obj.workflow.id != self.request.session['ontask_workflow_id']:
             raise Http404()
 
         return obj
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class(instance=Action.objects.get(pk=kwargs['pk']))
+        form = self.form_class(instance=self.get_object())
         return save_action_form(request,
                                 form,
                                 self.template_name)
 
     def post(self, request, **kwargs):
-        form = self.form_class(request.POST,
-                               instance=Action.objects.get(pk=kwargs['pk']))
+        form = self.form_class(request.POST, instance=self.get_object())
         return save_action_form(request,
                                 form,
                                 self.template_name)
+
 
 @user_passes_test(is_instructor)
 def edit_description(request, pk):
@@ -394,17 +372,18 @@ def edit_description(request, pk):
     """
 
     # Try to get the workflow first
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('workflow:index')})
+                             'html_redirect': reverse('home')})
 
     # Get the action
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
         return JsonResponse({'form_is_valid': True,
                              'html_redirect': reverse('action:index')})
 
@@ -415,33 +394,34 @@ def edit_description(request, pk):
     form = ActionDescriptionForm(request.POST or None,
                                  instance=action)
 
-    # Process the POST
-    if request.method == 'POST' and form.is_valid():
-        # Save item in the DB
-        action.save()
+    if request.method == 'GET' or not form.is_valid():
+        data['html_form'] = render_to_string(
+            'action/includes/partial_action_edit_description.html',
+            {'form': form, 'action': action},
+            request=request)
 
-        # Log the event
-        Log.objects.register(request.user,
-                             Log.ACTION_UPDATE,
-                             action.workflow,
-                             {'id': action.id,
-                              'name': action.name,
-                              'workflow_id': workflow.id,
-                              'workflow_name': workflow.name})
-
-        # Request is correct
-        data['form_is_valid'] = True
-        data['html_redirect'] = ''
-
-        # Enough said. Respond.
         return JsonResponse(data)
 
-    data['html_form'] = render_to_string(
-        'action/includes/partial_action_edit_description.html',
-        {'form': form, 'action': action},
-        request=request)
+    # Process the POST
+    # Save item in the DB
+    action.save()
 
+    # Log the event
+    Log.objects.register(request.user,
+                         Log.ACTION_UPDATE,
+                         action.workflow,
+                         {'id': action.id,
+                          'name': action.name,
+                          'workflow_id': workflow.id,
+                          'workflow_name': workflow.name})
+
+    # Request is correct
+    data['form_is_valid'] = True
+    data['html_redirect'] = ''
+
+    # Enough said. Respond.
     return JsonResponse(data)
+
 
 @user_passes_test(is_instructor)
 @csrf_exempt
@@ -454,21 +434,25 @@ def action_out_save_content(request, pk):
     """
 
     # Try to get the workflow first
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        return JsonResponse({})
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
 
     # Get the action
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
-        return JsonResponse({})
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not filter:
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
 
     # Wrong type of action.
     if action.is_in:
-        return JsonResponse({})
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
 
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content')
@@ -476,7 +460,8 @@ def action_out_save_content(request, pk):
         action.set_content(action_content)
         action.save()
 
-    return JsonResponse({})
+    return JsonResponse({'form_is_valid': True, 'html_redirect': ''})
+
 
 @user_passes_test(is_instructor)
 def edit_action(request, pk):
@@ -488,25 +473,27 @@ def edit_action(request, pk):
     """
 
     # Try to get the workflow first
-    workflow = get_workflow(request)
+    workflow = get_workflow(request,
+                            prefetch_related=['actions', 'columns'])
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     if workflow.nrows == 0:
         messages.error(
             request,
-            _(
-                'Workflow has no data. Go to "Manage table data" to upload data.')
+            _('Workflow has no data. '
+              'Go to "Manage table data" to upload data.')
         )
         return redirect(reverse('action:index'))
 
     # Get the action and the columns
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)
-        ).distinct().prefetch_related('columns').get(pk=pk)
-    except ObjectDoesNotExist:
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
+        messages.error(request, _('Incorrect action request'))
         return redirect('action:index')
 
     if action.action_type == Action.PERSONALIZED_TEXT:
@@ -526,11 +513,13 @@ def edit_action(request, pk):
         return redirect(reverse('under_construction'), {})
         # return edit_action_in(request, workflow, action)
 
+
 def edit_action_out(request, workflow, action):
     """
     View to handle the form to edit an action OUT (editor, conditions,
     filters, etc).
     :param request: Request object
+    :param workflow: The workflow with the action
     :param action: Action
     :return: HTML response
     """
@@ -541,75 +530,93 @@ def edit_action_out(request, workflow, action):
     form_filter = FilterForm(request.POST or None,
                              instance=action.get_filter())
 
+    # Select the title for the page and the flag to load summernote
+    template = 'action/edit_personalized_text.html'
+    load_summernote = action.action_type == Action.PERSONALIZED_TEXT
+    title = 'YOUR TITLE SHOULD BE HERE!!'
+    if load_summernote:
+        title = ugettext('Personalized Text')
+    elif action.action_type == Action.PERSONALIZED_JSON:
+        title = ugettext('Personalized JSON Object')
+    elif action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        title = ugettext('Personalized Canvas Email')
+
+    # Processing the request after receiving the text from the editor
+    if request.method == 'POST' and form.is_valid() and form_filter.is_valid():
+        # Get content
+        content = form.cleaned_data.get('content', None)
+
+        # Render the content as a template and catch potential problems.
+        # This seems to be only possible if dealing directly with Jinja2
+        # instead of Django.
+        try:
+            render_error = False
+            render_template(content, {}, action)
+        except Exception as e:
+            # Pass the django exception to the form (fingers crossed)
+            form.add_error(None, e)
+            render_error = True
+
+        if not render_error:
+            # Log the event
+            Log.objects.register(request.user,
+                                 Log.ACTION_UPDATE,
+                                 action.workflow,
+                                 {'id': action.id,
+                                  'name': action.name,
+                                  'workflow_id': workflow.id,
+                                  'workflow_name': workflow.name,
+                                  'content': content})
+
+            # Text is good. Update the content of the action
+            action.set_content(content)
+
+            if action.action_type == Action.PERSONALIZED_JSON:
+                # Update the target_url field
+                action.target_url = form.cleaned_data['target_url']
+
+            action.save()
+
+            if request.POST['Submit'] == 'Submit':
+                return redirect(request.get_full_path())
+            return redirect('action:index')
+
+    # This is a GET request or a faulty POST request
+
     # Get the filter or None
     filter_condition = action.get_filter()
 
     # Conditions to show in the page.
-    conditions = Condition.objects.filter(
-        action=action, is_filter=False
-    ).order_by('created')
+    conditions = action.conditions.filter(is_filter=False).order_by('created')
 
     # Context to render the form
     context = {'filter_condition': filter_condition,
                'action': action,
+               'title': title,
+               'load_summernote': load_summernote,
                'conditions': conditions,
+               'other_conditions': Condition.objects.filter(
+                   action__workflow=workflow, is_filter=False
+               ).exclude(action=action),
                'query_builder_ops': workflow.get_query_builder_ops_as_str(),
                'attribute_names': [x for x in
                                    list(workflow.attributes.keys())],
-               'column_names': workflow.get_column_names(),
+               'columns': workflow.columns.filter(is_key=False),
                'selected_rows':
                    filter_condition.n_rows_selected if filter_condition else -1,
-               'has_data': ops.workflow_has_table(action.workflow),
+               'has_data': action.workflow.has_table(),
+               'all_false_conditions': any([x.n_rows_selected == 0
+                                            for x in action.conditions.all()]),
+               'rows_all_false': action.get_row_all_false_count(),
                'total_rows': workflow.nrows,
                'form': form,
                'form_filter': form_filter,
                'vis_scripts': PlotlyHandler.get_engine_scripts()
                }
 
-    # Template to use
-    template = 'action/edit_personalized_text.html'
-    if action.action_type == Action.PERSONALIZED_JSON:
-        template = 'action/edit_personalized_json.html'
-    elif action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
-        template = 'action/edit_personalized_canvas_email.html'
+    # Return the same form in the same page
+    return render(request, 'action/edit_out.html', context=context)
 
-    # Processing the request after receiving the text from the editor
-    if request.method == 'GET' or not form.is_valid() or \
-            not form_filter.is_valid():
-        # Return the same form in the same page
-        return render(request, template, context=context)
-
-    # Get content
-    content = form.cleaned_data.get('content', None)
-
-    # Render the content as a template and catch potential problems.
-    # This seems to be only possible if dealing directly with Jinja2
-    # instead of Django.
-    try:
-        render_template(content, {}, action)
-    except Exception as e:
-        # Pass the django exception to the form (fingers crossed)
-        form.add_error(None, e)
-        return render(request, template, context)
-
-    # Log the event
-    Log.objects.register(request.user,
-                         Log.ACTION_UPDATE,
-                         action.workflow,
-                         {'id': action.id,
-                          'name': action.name,
-                          'workflow_id': workflow.id,
-                          'workflow_name': workflow.name,
-                          'content': content})
-
-    # Text is good. Update the content of the action
-    action.set_content(content)
-
-    action.save()
-
-    if request.POST['Submit'] == 'Submit':
-        return redirect(request.get_full_path())
-    return redirect('action:index')
 
 def edit_action_in(request, workflow, action):
     """
@@ -629,17 +636,23 @@ def edit_action_in(request, workflow, action):
     # Get the number of rows in DF selected by filter.
     if filter_condition:
         filter_condition.n_rows_selected = \
-            pandas_db.num_rows(action.workflow.id, filter_condition.formula)
+            pandas_db.num_rows(
+                action.workflow.get_data_frame_table_name(),
+                filter_condition.formula
+            )
         filter_condition.save()
 
     # Column names suitable to insert
-    columns_selected = action.columns.filter(is_key=False).order_by(
-        'position')
+    columns_selected = workflow.columns.filter(
+        column_condition_pair__action=action,
+        is_key=False
+    ).order_by('position')
     columns_to_insert = [c for c in workflow.columns.all()
                          if not c.is_key and c not in columns_selected]
 
     # Has key column and has no-key column
-    has_no_key = action.columns.filter(is_key=False).exists()
+    has_no_key = action.column_condition_pair.filter(
+        column__is_key=False).exists()
     has_empty_description = columns_selected.filter(
         description_text=''
     ).exists()
@@ -651,8 +664,11 @@ def edit_action_in(request, workflow, action):
                filter_condition.n_rows_selected if filter_condition else -1,
            'total_rows': workflow.nrows,
            'query_builder_ops': workflow.get_query_builder_ops_as_str(),
-           'has_data': ops.workflow_has_table(action.workflow),
-           'key_selected': action.columns.filter(is_key=True).first(),
+           'has_data': action.workflow.has_table(),
+           'key_selected': workflow.columns.filter(
+               column_condition_pair__action=action,
+               is_key=True
+           ).first(),
            'columns_to_insert': columns_to_insert,
            'column_selected_table': ColumnSelectedTable(
                columns_selected.values('id', 'name', 'description_text'),
@@ -672,6 +688,7 @@ def edit_action_in(request, workflow, action):
 
     return render(request, 'action/edit_in.html', ctx)
 
+
 @user_passes_test(is_instructor)
 def export_ask(request, pk):
     """
@@ -682,11 +699,13 @@ def export_ask(request, pk):
     """
 
     # Get the workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
-    action = Action.objects.filter(pk=pk).first()
+    action = workflow.actions.filter(pk=pk).prefetch_related(
+        'column_condition_pair'
+    ).first()
     if not action:
         return redirect('action:index')
 
@@ -694,7 +713,9 @@ def export_ask(request, pk):
     return render(request,
                   'action/export_ask.html',
                   {'action': action,
-                   'cnames': [c.name for c in action.columns.all()]})
+                   'cnames': [x.column.name
+                              for x in action.column_condition_pair.all()]})
+
 
 @user_passes_test(is_instructor)
 def export_done(request, pk):
@@ -706,15 +727,16 @@ def export_done(request, pk):
     """
 
     # Get the workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
-    action = Action.objects.filter(pk=pk).first()
+    action = workflow.actions.filter(pk=pk).first()
     if not action:
         return redirect('action:index')
 
     return render(request, 'action/export_done.html', {'action': action})
+
 
 @user_passes_test(is_instructor)
 def export_download(request, pk):
@@ -726,17 +748,18 @@ def export_download(request, pk):
     """
 
     # Get the workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
-    action = Action.objects.filter(pk=pk).first()
+    action = workflow.actions.filter(pk=pk).first()
     if not action:
         return redirect('action:index')
 
     response = do_export_action(action)
 
     return response
+
 
 @user_passes_test(is_instructor)
 def action_import(request):
@@ -747,9 +770,9 @@ def action_import(request):
     """
 
     # Get workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     form = ActionImportForm(request.POST or None, request.FILES or None)
 
@@ -760,8 +783,7 @@ def action_import(request):
         return render(request, 'action/import.html', context)
 
     new_action_name = form.cleaned_data['name']
-    if Action.objects.filter(
-            workflow=workflow,
+    if workflow.actions.filter(
             workflow__user=request.user,
             name=new_action_name).exists():
         # There is an action with this name. Return error.
@@ -787,6 +809,7 @@ def action_import(request):
     # Go back to the list of actions
     return redirect('action:index')
 
+
 @user_passes_test(is_instructor)
 def select_column_action(request, apk, cpk, key=None):
     """
@@ -798,46 +821,52 @@ def select_column_action(request, apk, cpk, key=None):
     :return: JSON response
     """
     # Check if the workflow is locked
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related=['columns', 'actions'])
     if not workflow:
-        return JsonResponse({'html_redirect': reverse('workflow:index')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     if workflow.nrows == 0:
         messages.error(
             request,
-            _(
-                'Workflow has no data. Go to "Manage table data" to upload data.')
+            _('Workflow has no data. '
+              'Go to "Manage table data" to upload data.')
         )
         return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Get the action and the columns
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)
-        ).distinct().prefetch_related('columns').get(pk=apk)
-    except ObjectDoesNotExist:
+    action = workflow.actions.filter(
+        pk=apk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
         return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Get the column
-    try:
-        column = action.workflow.columns.get(pk=cpk)
-    except ObjectDoesNotExist:
+    column = workflow.columns.filter(pk=cpk).first()
+    if not column:
         return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Parameters are correct, so add the column to the action.
     if key:
-        current_key = action.columns.filter(is_key=True).first()
-        if current_key:
-            # Remove the existing one
-            action.columns.remove(current_key)
+        action.column_condition_pair.filter(column__is_key=True).delete()
         if column.is_key:
-            action.columns.add(column)
+            __, __ = ActionColumnConditionTuple.objects.get_or_create(
+                action=action,
+                column=column,
+                condition=None
+            )
         return JsonResponse({'html_redirect': ''})
 
-    action.columns.add(column)
+    # Insert the column in the pairs
+    __, __ = ActionColumnConditionTuple.objects.get_or_create(
+        action=action,
+        column=column,
+        condition=None
+    )
     # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})
+
 
 @user_passes_test(is_instructor)
 def unselect_column_action(request, apk, cpk):
@@ -849,37 +878,37 @@ def unselect_column_action(request, apk, cpk):
     :return: JSON response
     """
     # Check if the workflow is locked
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related=['actions', 'columns'])
     if not workflow:
-        return reverse('workflow:index')
+        return reverse('home')
 
     if workflow.nrows == 0:
         messages.error(
             request,
-            _(
-                'Workflow has no data. Go to "Manage table data" to upload data.')
+            _('Workflow has no data. '
+              'Go to "Manage table data" to upload data.')
         )
         return redirect(reverse('action:index'))
 
     # Get the action and the columns
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)
-        ).distinct().prefetch_related('columns').get(pk=apk)
-    except ObjectDoesNotExist:
+    action = workflow.actions.filter(
+        pk=apk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
         return redirect(reverse('action:index'))
 
     # Get the column
-    try:
-        column = action.workflow.columns.get(pk=cpk)
-    except ObjectDoesNotExist:
+    column = workflow.columns.filter(pk=cpk).first()
+    if not column:
         return redirect(reverse('action:index'))
 
-    # Parameters are correct, so add the column to the action.
-    action.columns.remove(column)
+    # Parameters are correct, so remove the column from the action.
+    action.column_condition_pair.filter(column=column).delete()
 
     return redirect(reverse('action:edit', kwargs={'pk': action.id}))
+
 
 @user_passes_test(is_instructor)
 def shuffle_questions(request, pk):
@@ -891,31 +920,32 @@ def shuffle_questions(request, pk):
     """
 
     # Check if the workflow is locked
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        return reverse('workflow:index')
+        return reverse('home')
 
     if workflow.nrows == 0:
         messages.error(
             request,
-            _(
-                'Workflow has no data. Go to "Manage table data" to upload data.')
+            _('Workflow has no data. '
+              'Go to "Manage table data" to upload data.')
         )
         return redirect(reverse('action:index'))
 
-    # Get the action and the columns
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)
-        ).distinct().prefetch_related('columns').get(pk=pk)
-    except ObjectDoesNotExist:
+    # Get the action
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
         return redirect(reverse('action:index'))
 
     action.shuffle = not action.shuffle
     action.save()
 
     return JsonResponse({'shuffle': action.shuffle})
+
 
 @user_passes_test(is_instructor)
 def showurl(request, pk):
@@ -930,14 +960,22 @@ def showurl(request, pk):
     # AJAX result
     data = {'form_is_valid': False}
 
-    # Get the action object
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except Action.DoesNotExist:
+    # Get the current workflow
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
+    # Get the action object
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     form = EnableURLForm(request.POST or None, instance=action)
@@ -971,6 +1009,7 @@ def showurl(request, pk):
         request=request)
 
     return JsonResponse(data)
+
 
 # This method only requires the user to be authenticated since it is conceived
 #  to serve content that is not only for instructors.
@@ -1006,9 +1045,10 @@ def serve(request, action_id):
     user_attribute_name = params.get('uatn', 'email')
 
     # Get the action object
-    try:
-        action = Action.objects.get(pk=int(action_id))
-    except ObjectDoesNotExist:
+    action = Action.objects.filter(pk=int(action_id)).prefetch_related(
+        'conditions'
+    ).first()
+    if not action:
         raise Http404
 
     # If it is not enabled, reject the request
@@ -1024,6 +1064,7 @@ def serve(request, action_id):
 
     return serve_action_in(request, action, user_attribute_name, False)
 
+
 @user_passes_test(is_instructor)
 def delete_action(request, pk):
     """
@@ -1036,14 +1077,22 @@ def delete_action(request, pk):
     # JSON response object
     data = dict()
 
-    # Get the appropriate action object
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except (KeyError, ObjectDoesNotExist):
+    # Get the current workflow
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
+    # Get the appropriate action object
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     if request.method == 'POST':
@@ -1070,6 +1119,7 @@ def delete_action(request, pk):
         {'action': action},
         request=request)
     return JsonResponse(data)
+
 
 @user_passes_test(is_instructor)
 def run(request, pk):
@@ -1102,8 +1152,9 @@ def run(request, pk):
         # Render template with active columns.
         return render(request,
                       'action/run_survey.html',
-                      {'columns': [c for c in action.columns.all() if
-                                   c.is_active],
+                      {'columns': [x.column
+                                   for x in action.column_condition_pair.all()
+                                   if x.column.is_active],
                        'action': action})
 
     if action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
@@ -1114,6 +1165,7 @@ def run(request, pk):
 
     # Incorrect type of action.
     return redirect(reverse('action:index'))
+
 
 @user_passes_test(is_instructor)
 @csrf_exempt
@@ -1127,22 +1179,23 @@ def run_survey_ss(request, pk):
     :return:
     """
 
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         return JsonResponse(
             {'error': _('Incorrect request. Unable to process')}
         )
 
     # If there is not DF, go to workflow details.
-    if not ops.workflow_id_has_table(workflow.id):
+    if not workflow.has_table():
         return JsonResponse({'error': _('There is no data in the table')})
 
     # Get the action
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
         return redirect('action:index')
 
     # Check that the GET parameter are correctly given
@@ -1161,7 +1214,7 @@ def run_survey_ss(request, pk):
     search_value = request.POST.get('search[value]', None)
 
     # Get columns and the position of the first key
-    columns = action.columns.all()
+    columns = [x.column for x in action.column_condition_pair.all()]
     column_names = [x.name for x in columns]
     key_idx = next(idx for idx, c in enumerate(columns) if c.is_key)
 
@@ -1179,7 +1232,7 @@ def run_survey_ss(request, pk):
 
     # Get the query set (including the filter in the action)
     qs = pandas_db.search_table_rows(
-        workflow.id,
+        workflow.get_data_frame_table_name(),
         cv_tuples,
         True,
         order_col.name,
@@ -1223,6 +1276,7 @@ def run_survey_ss(request, pk):
 
     return JsonResponse(data)
 
+
 @user_passes_test(is_instructor)
 def run_survey_row(request, pk):
     """
@@ -1236,24 +1290,25 @@ def run_survey_row(request, pk):
     """
 
     # Get the workflow first
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     if workflow.nrows == 0:
         messages.error(
             request,
-            _(
-                'Workflow has no data. Go to "Manage table data" to upload data.')
+            _('Workflow has no data. '
+              'Go to "Manage table data" to upload data.')
         )
         return redirect(reverse('action:index'))
 
     # Get the action
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
         return redirect('action:index')
 
     # If the action is an "out" action, return to index
@@ -1264,6 +1319,7 @@ def run_survey_row(request, pk):
     user_attribute_name = request.GET.get('uatn', 'email')
 
     return serve_action_in(request, action, user_attribute_name, True)
+
 
 @user_passes_test(is_instructor)
 def clone(request, pk):
@@ -1278,10 +1334,10 @@ def clone(request, pk):
     data = dict()
 
     # Get the current workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     # Initial data in the context
@@ -1289,11 +1345,12 @@ def clone(request, pk):
     context = {'pk': pk}  # For rendering
 
     # Get the action
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).first()
+    if not action:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('action:index')
         return JsonResponse(data)
@@ -1312,8 +1369,7 @@ def clone(request, pk):
 
     # Get the new name appending as many times as needed the 'Copy of '
     new_name = 'Copy of ' + action.name
-    while Action.objects.filter(name=new_name,
-                                workflow=workflow).exists():
+    while workflow.actions.filter(name=new_name).exists():
         new_name = 'Copy of ' + new_name
 
     old_id = action.id
@@ -1335,6 +1391,7 @@ def clone(request, pk):
                      'Action successfully cloned.')
 
     return redirect(reverse('action:index'))
+
 
 @login_required
 def thanks(request):

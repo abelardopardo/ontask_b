@@ -63,7 +63,7 @@ class View(models.Model):
         Number of columns considered by this view
         :return: Number of elements in the columns relation
         """
-        return self.columns.all().count()
+        return self.columns.count()
 
     @property
     def num_rows(self):
@@ -72,8 +72,10 @@ class View(models.Model):
         :return: Number of rows resulting from using the formula
         """
         if not self.nrows:
-            self.nrows = \
-                pandas_db.num_rows(self.workflow.id, self.formula)
+            self.nrows = pandas_db.num_rows(
+                self.workflow.get_data_frame_table_name(),
+                self.formula
+            )
 
         return self.nrows
 

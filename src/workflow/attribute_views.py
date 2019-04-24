@@ -5,22 +5,23 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
-from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from action.models import Condition, Action
+from action.models import Condition
 from logs.models import Log
 from ontask.permissions import is_instructor
 from .forms import (AttributeItemForm)
 from .ops import (get_workflow)
 
 
-def save_attribute_form(request, workflow, template, form, key_idx):
+def save_attribute_form(request, workflow, template, form, attr_idx):
     """
     Function to process the AJAX request to create or update an attribute
     :param request: Request object received
     :param workflow: current workflow being manipulated
+    :param template: Template to render in the response
     :param form: Form used to ask for data
+    :param attr_idx: Index of the attribute being manipulated
     :return: AJAX reponse
     """
 
@@ -31,7 +32,7 @@ def save_attribute_form(request, workflow, template, form, key_idx):
         data['html_form'] = render_to_string(
             template,
             {'form': form,
-             'id': key_idx},
+             'id': attr_idx},
             request=request)
 
         return JsonResponse(data)
@@ -49,16 +50,17 @@ def save_attribute_form(request, workflow, template, form, key_idx):
         data['html_form'] = render_to_string(
             template,
             {'form': form,
-             'id': key_idx},
+             'id': attr_idx},
             request=request)
 
         return JsonResponse(data)
 
     # Check if there is a condition with that name
-    cond_names = Condition.objects.filter(
-        action__workflow=workflow
-    ).values_list('name', flat=True)
-    if attr_name in cond_names:
+    cond_name = Condition.objects.filter(
+        action__workflow=workflow,
+        name=attr_name
+    ).first()
+    if cond_name:
         form.add_error(
             'key',
             _('There is a condition already with this name.')
@@ -66,7 +68,7 @@ def save_attribute_form(request, workflow, template, form, key_idx):
         data['html_form'] = render_to_string(
             'workflow/includes/partial_attribute_create.html',
             {'form': form,
-             'id': key_idx},
+             'id': attr_idx},
             request=request)
 
         return JsonResponse(data)
@@ -75,12 +77,12 @@ def save_attribute_form(request, workflow, template, form, key_idx):
     wf_attributes = workflow.attributes
 
     # If key_idx is not -1, this means we are editing an existing pair
-    if key_idx != -1:
-        key = sorted(wf_attributes.keys())[key_idx]
+    if attr_idx != -1:
+        key = sorted(wf_attributes.keys())[attr_idx]
         wf_attributes.pop(key)
 
         # Rename the appearances of the variable in all actions
-        for action_item in Action.objects.filter(workflow=workflow):
+        for action_item in workflow.actions.all():
             action_item.rename_variable(key, form.cleaned_data['key'])
 
     # Update value
@@ -108,7 +110,7 @@ def attribute_create(request):
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Create the form object with the form_fields just computed
     form = AttributeItemForm(request.POST or None,
@@ -127,7 +129,7 @@ def attribute_edit(request, pk):
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the list of keys
     keys = sorted(workflow.attributes.keys())
@@ -164,7 +166,7 @@ def attribute_delete(request, pk):
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # JSON answer
     data = dict()

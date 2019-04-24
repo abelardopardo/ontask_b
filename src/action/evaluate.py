@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import str
-from builtins import map
-from builtins import zip
 import re
 import string
+from builtins import map
+from builtins import str
+from builtins import zip
 
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
@@ -14,14 +14,21 @@ from django.utils.translation import ugettext_lazy as _
 
 import dataops.formula_evaluation
 from action.forms import EnterActionIn
-from action.models import Condition, var_use_res
+from action.models import var_use_res
 from dataops import pandas_db, ops
-from workflow.models import Workflow
+from dataops.pandas_db import get_table_cursor
 
 # Variable name to store the workflow ID in the context used to render a
 # template
 action_context_var = 'ONTASK_ACTION_CONTEXT_VARIABLE___'
 viz_number_context_var = 'ONTASK_VIZ_NUMBER_CONTEXT_VARIABLE___'
+
+# Regular expression and replacements replace whitespace surrounding condition
+# markup
+white_space_res = [
+    (re.compile(r'\n[ \t\r\f\v]*{% if '), '{% if '),
+    (re.compile(r'{% endif %}[ \t\r\f\v]*\n'), '{% endif %}')
+]
 
 
 def make_xlat(*args, **kwds):
@@ -38,7 +45,7 @@ def make_xlat(*args, **kwds):
     changes to a string
     """
     adict = dict(*args, **kwds)
-    rx = re.compile('|'.join(map(re.escape, adict)))
+    rx = re.compile(r'|'.join(map(re.escape, adict)))
 
     def one_xlat(match):
         return adict[match.group(0)]
@@ -91,6 +98,22 @@ def translate(varname):
 
     # Return the new variable name surrounded by the detected marks.
     return tr_item(varname)
+
+
+def clean_whitespace(template_text):
+    """
+    Function to detect new lines before and after the conditional template
+    macros and removes it.
+
+    :param template_text: Initial template text
+    :return: Modified template text
+    """
+
+    # Loop over the regular expressions and apply them to the given text
+    for rexp, replace in white_space_res:
+        template_text = rexp.sub(replace, template_text)
+
+    return template_text
 
 
 def render_template(template_text, context_dict, action=None):
@@ -146,11 +169,13 @@ def render_template(template_text, context_dict, action=None):
     new_template_text = template_text
     for rexpr in var_use_res:
         new_template_text = rexpr.sub(
-            lambda m: m.group('mup_pre') + \
-                      translate(m.group('vname')) + \
+            lambda m: m.group('mup_pre') + translate(m.group('vname')) +
                       m.group('mup_post'),
             new_template_text)
-    # new_template_text = '{% load vis_include %}' + new_template_text
+
+    # Step 2.2 Remove pre-and post white space from the {% if %} and {% endif %}
+    # conditions (to reduce white space when using non HTML content.
+    new_template_text = clean_whitespace(new_template_text)
 
     # Step 3. Apply the translation process to the context keys
     new_context = dict([(translate(escape(x)), y)
@@ -203,7 +228,7 @@ def evaluate_action(action, extra_string=None,
     """
 
     # Step 1: Get the workflow to access the data and prepare data
-    workflow = Workflow.objects.get(pk=action.workflow.id)
+    workflow = action.workflow
     col_names = workflow.get_column_names()
     col_idx = -1
     if column_name and column_name in col_names:
@@ -214,11 +239,11 @@ def evaluate_action(action, extra_string=None,
 
     # Step 3: Get the table data
     result = []
-    data_frame = pandas_db.get_subframe(workflow.id,
-                                        cond_filter,
-                                        workflow.get_column_names())
+    data_table = get_table_cursor(workflow.get_data_frame_table_name(),
+                                  cond_filter,
+                                  workflow.get_column_names())
 
-    for __, row in data_frame.iterrows():
+    for row in data_table:
 
         # Get the dict(col_name, value)
         row_values = dict(list(zip(col_names, row)))
@@ -230,9 +255,8 @@ def evaluate_action(action, extra_string=None,
 
         # Step 3: Evaluate all the conditions
         condition_eval = {}
-        for condition in Condition.objects.filter(
-                action__id=action.id
-        ).values('is_filter', 'formula', 'name'):
+        for condition in action.conditions.filter(
+                is_filter=False).values('formula', 'name'):
             if condition['is_filter']:
                 # Filter can be skipped in this stage
                 continue
@@ -299,10 +323,12 @@ def get_row_values(action, row_idx):
                                             cond_filter,
                                             row_idx)
     else:
-        result = pandas_db.get_table_row_by_key(action.workflow,
-                                                cond_filter,
-                                                row_idx,
-                                                action.workflow.get_column_names())
+        result = pandas_db.get_table_row_by_key(
+            action.workflow,
+            cond_filter,
+            row_idx,
+            action.workflow.get_column_names()
+        )
     return result
 
 
@@ -354,12 +380,13 @@ def evaluate_row_action_in(action, context):
     3) Return the resulting object (HTML?)
 
     :param action: Action object.
-    :param row_values: Dictionary with pairs name/value
+    :param context: Dictionary with pairs name/value
     :return: String with the HTML content resulting from the evaluation
     """
 
     # Get the active columns attached to the action
-    columns = [c for c in action.columns.all() if c.is_active]
+    columns = [x.column for x in action.column_condition_pair.all()
+               if x.column.is_active]
 
     # Get the row values.
     selected_values = [context[c.name] for c in columns]
@@ -380,50 +407,50 @@ def run(*script_args):
     """
     Script for testing purposes
     :param script_args:
-    :return:
+    :return: Nothing
     """
     del script_args
 
-    template = """
-    hi --{{ one }}--
-    --{% if var1 %}var1{% endif %}--
-    --{% if var2 %}var2{% endif %}-- 
-    --{% if !"# %}var3{% endif %}--
-    --{% if $%& %}var4{% endif %}--
-    --{% if '() %}var5{% endif %}--
-    --{{ +,- }}--
-    --{{ ./: }}--
-    --{{ ;<= }}--
-    --{{ >?@ }}--
-    --{{ [\] }}--
-    --{{ ^_` }}--
-    --{{ {|}~ }}--
-    --{{ this one has spaces }}--
-    --{{ OT_ The prefix }}--
-    --{{ OT_The prefix 2 }}--
-    """
+    # template = """
+    # hi --{{ one }}--
+    # --{% if var1 %}var1{% endif %}--
+    # --{% if var2 %}var2{% endif %}--
+    # --{% if !"# %}var3{% endif %}--
+    # --{% if $%& %}var4{% endif %}--
+    # --{% if '() %}var5{% endif %}--
+    # --{{ +,- }}--
+    # --{{ ./: }}--
+    # --{{ ;<= }}--
+    # --{{ >?@ }}--
+    # --{{ [\] }}--
+    # --{{ ^_` }}--
+    # --{{ {|}~ }}--
+    # --{{ this one has spaces }}--
+    # --{{ OT_ The prefix }}--
+    # --{{ OT_The prefix 2 }}--
+    # """
 
     template = '<p>Hi&nbsp;{{ !"#$%&amp;()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~ }}</p>'
 
-    context = {
-        'one': 1,
-        'var1': True,
-        'var2': True,
-        '!"#': True,
-        '$%&': True,
-        "'()": True,
-        '+,-': 'var6',
-        './:': 'var7',
-        ';<=': 'var8',
-        '>?@': 'var9',
-        '[\]': 'var10',
-        '^_`': 'var11',
-        '{|}~': 'var12',
-        'this one has spaces': 'The spaces are not a problem',
-        'OT_ The prefix': 'Prefix solved.',
-        'OT_The prefix 2': 'Prefix 2 solved',
-        'The prefix 2': 'This should NOT appear. ERROR',
-    }
+    # context = {
+    #     'one': 1,
+    #     'var1': True,
+    #     'var2': True,
+    #     '!"#': True,
+    #     '$%&': True,
+    #     "'()": True,
+    #     '+,-': 'var6',
+    #     './:': 'var7',
+    #     ';<=': 'var8',
+    #     '>?@': 'var9',
+    #     '[\]': 'var10',
+    #     '^_`': 'var11',
+    #     '{|}~': 'var12',
+    #     'this one has spaces': 'The spaces are not a problem',
+    #     'OT_ The prefix': 'Prefix solved.',
+    #     'OT_The prefix 2': 'Prefix 2 solved',
+    #     'The prefix 2': 'This should NOT appear. ERROR',
+    # }
     context = {
         '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~': 'Carmelo Coton',
     }

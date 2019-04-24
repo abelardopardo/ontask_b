@@ -2,11 +2,11 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse
 from django.template.loader import render_to_string
+from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
@@ -22,10 +22,11 @@ from logs.models import Log
 from ontask.permissions import is_instructor, UserIsInstructor
 from workflow.ops import get_workflow
 from .forms import ConditionForm, FilterForm
-from .models import Action, Condition
+from .models import Condition
 
 
 def save_condition_form(request,
+                        workflow,
                         form,
                         template_name,
                         action,
@@ -35,6 +36,7 @@ def save_condition_form(request,
     Function to process the AJAX form to create and update conditions and
     filters.
     :param request: HTTP request
+    :param workflow: workflow object where the action/condition is inserted
     :param form: Form being used to ask for the fields
     :param template_name: Template being used to render the form
     :param action: The action to which the condition is attached to
@@ -73,7 +75,10 @@ def save_condition_form(request,
     action_content = request.POST.get('action_content', None)
     if action_content:
         action.set_content(action_content)
-        action.save()
+
+    # Reset the counter of rows with all conditions false
+    action.rows_all_false = None
+    action.save()
 
     if is_filter:
         # Process the filter form
@@ -86,9 +91,8 @@ def save_condition_form(request,
             return JsonResponse(data)
     else:
         # Verify that the condition name does not exist yet (Uniqueness FIX)
-        qs = Condition.objects.filter(
+        qs = action.conditions.filter(
             name=form.cleaned_data['name'],
-            action=action,
             is_filter=False)
         if (is_new and qs.exists()) or \
                 (not is_new and qs.filter(~Q(id=condition_id)).exists()):
@@ -100,14 +104,6 @@ def save_condition_form(request,
                                                  context,
                                                  request=request)
             return JsonResponse(data)
-        # Verify that the condition name does not collide with column names
-        workflow = get_workflow(request, action.workflow.id)
-        if not workflow:
-            # Workflow is not accessible. Go back to the index.
-            data['form_is_valid'] = True
-            data['html_redirect'] = reverse('workflow:index')
-            return JsonResponse(data)
-
         # New condition name does not collide with column name
         if form.cleaned_data['name'] in workflow.get_column_names():
             form.add_error(
@@ -145,8 +141,8 @@ def save_condition_form(request,
             # TODO: Review!
             replacing = '{{% if {0} %}}'
             action.content = action.content.replace(
-                replacing.format(form.old_name),
-                replacing.format(condition.name))
+                escape(replacing.format(form.old_name)),
+                escape(replacing.format(condition.name)))
             action.save()
 
     # Ok, here we can say that the data in the form is correct.
@@ -168,15 +164,14 @@ def save_condition_form(request,
 
     # Update the columns field
     condition.columns.set(
-        action.workflow.columns.filter(
-            name__in=get_variables(condition.formula))
+        workflow.columns.filter(name__in=get_variables(condition.formula))
     )
 
     # Update the condition
     condition.save()
 
     # Log the event
-    formula, _ = evaluate(condition.formula, NodeEvaluation.EVAL_SQL)
+    formula, __ = evaluate(condition.formula, NodeEvaluation.EVAL_SQL)
     if is_new:
         if is_filter:
             log_type = Log.FILTER_CREATE
@@ -191,7 +186,7 @@ def save_condition_form(request,
     # Log the event
     Log.objects.register(request.user,
                          log_type,
-                         condition.action.workflow,
+                         workflow,
                          {'id': condition.id,
                           'name': condition.name,
                           'selected_rows': condition.n_rows_selected,
@@ -210,22 +205,28 @@ class FilterCreateView(UserIsInstructor, generic.TemplateView):
     template_name = 'action/includes/partial_filter_addedit.html'
 
     def get_context_data(self, **kwargs):
-        context = super(FilterCreateView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['add'] = True
         return context
 
     def get(self, request, *args, **kwargs):
+        workflow = get_workflow(request,
+                                prefetch_related=['actions', 'columns'])
+        if not workflow:
+            return redirect('home')
+
         # Get the action that is being used
-        try:
-            action = Action.objects.filter(
-                Q(workflow__user=request.user) |
-                Q(workflow__shared=request.user)
-            ).distinct().get(pk=kwargs['pk'])
-        except (KeyError, ObjectDoesNotExist):
-            return redirect('workflow:index')
+        action = workflow.actions.filter(
+            pk=kwargs['pk']
+        ).filter(
+            Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+        ).distinct().first()
+        if not action:
+            return redirect('home')
 
         form = self.form_class()
         return save_condition_form(request,
+                                   workflow,
                                    form,
                                    self.template_name,
                                    action,
@@ -234,17 +235,23 @@ class FilterCreateView(UserIsInstructor, generic.TemplateView):
 
     def post(self, request, *args, **kwargs):
         del args
+        workflow = get_workflow(request,
+                                prefetch_related=['actions', 'columns'])
+        if not workflow:
+            return redirect('home')
+
         # Get the action that is being used
-        try:
-            action = Action.objects.filter(
-                Q(workflow__user=request.user) |
-                Q(workflow__shared=request.user)
-            ).distinct().get(pk=kwargs['pk'])
-        except (KeyError, ObjectDoesNotExist):
-            return redirect('workflow:index')
+        action = workflow.actions.filter(
+            pk=kwargs['pk']
+        ).filter(
+            Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+        ).first()
+        if not action:
+            return redirect('home')
 
         form = self.form_class(request.POST)
         return save_condition_form(request,
+                                   workflow,
                                    form,
                                    self.template_name,
                                    action,
@@ -260,21 +267,31 @@ def edit_filter(request, pk):
     :param pk: condition ID
     :return: AJAX response
     """
+
+    workflow = get_workflow(request, prefetch_related='columns')
+    if not workflow:
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
+
     # Get the filter
-    try:
-        cond_filter = Condition.objects.filter(
-            Q(action__workflow__user=request.user) |
-            Q(action__workflow__shared=request.user),
-            is_filter=True
-        ).distinct().get(pk=pk)
-    except (KeyError, ObjectDoesNotExist):
-        return redirect('workflow:index')
+    cond_filter = Condition.objects.filter(
+        pk=pk
+    ).filter(
+        Q(action__workflow__user=request.user) |
+        Q(action__workflow__shared=request.user),
+        action__workflow=workflow,
+        is_filter=True
+    ).select_related('action').first()
+
+    if not cond_filter:
+        return redirect('home')
 
     # Create the filter and populate with existing data
     form = FilterForm(request.POST or None, instance=cond_filter)
 
     # Render the form with the Condition information
     return save_condition_form(request,
+                               workflow,
                                form,
                                'action/includes/partial_filter_addedit.html',
                                cond_filter.action,
@@ -290,15 +307,24 @@ def delete_filter(request, pk):
     :param pk: Filter ID
     :return: AJAX response
     """
+
+    workflow = get_workflow(request, prefetch_related='columns')
+    if not workflow:
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
+
     # Get the filter
-    try:
-        cond_filter = Condition.objects.filter(
-            Q(action__workflow__user=request.user) |
-            Q(action__workflow__shared=request.user),
-            is_filter=True
-        ).distinct().get(pk=pk)
-    except (KeyError, ObjectDoesNotExist):
-        return redirect('workflow:index')
+    cond_filter = Condition.objects.filter(
+        pk=pk
+    ).filter(
+        Q(action__workflow__user=request.user) |
+        Q(action__workflow__shared=request.user),
+        action__workflow=workflow,
+        is_filter=True
+    ).select_related('action').first()
+
+    if not cond_filter:
+        return redirect('home')
 
     data = dict()
     data['form_is_valid'] = False
@@ -352,21 +378,27 @@ class ConditionCreateView(UserIsInstructor, generic.TemplateView):
     template_name = 'action/includes/partial_condition_addedit.html'
 
     def get_context_data(self, **kwargs):
-        context = super(ConditionCreateView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         return context
 
     def get(self, request, *args, **kwargs):
+        # Get the workflow
+        workflow = get_workflow(request, prefetch_related='actions')
+        if not workflow:
+            return redirect('home')
+
         # Get the action that is being used
-        try:
-            action = Action.objects.filter(
-                Q(workflow__user=request.user) |
-                Q(workflow__shared=request.user)
-            ).distinct().get(pk=kwargs['pk'])
-        except (KeyError, ObjectDoesNotExist):
-            return redirect('workflow:index')
+        action = workflow.actions.filter(
+            pk=kwargs['pk']
+        ).filter(
+            Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+        ).first()
+        if not action:
+            return redirect('home')
 
         form = self.form_class()
         return save_condition_form(request,
+                                   workflow,
                                    form,
                                    self.template_name,
                                    action,
@@ -375,18 +407,25 @@ class ConditionCreateView(UserIsInstructor, generic.TemplateView):
 
     def post(self, request, *args, **kwargs):
         del args
+
+        # Get the workflow
+        workflow = get_workflow(request, prefetch_related='actions')
+        if not workflow:
+            return redirect('home')
+
         # Get the action that is being used
-        try:
-            action = Action.objects.filter(
-                Q(workflow__user=request.user) |
-                Q(workflow__shared=request.user)
-            ).distinct().get(pk=kwargs['pk'])
-        except (KeyError, ObjectDoesNotExist):
-            return redirect('workflow:index')
+        action = workflow.actions.filter(
+            pk=kwargs['pk']
+        ).filter(
+            Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+        ).first()
+        if not action:
+            return redirect('home')
 
         form = self.form_class(request.POST)
 
         return save_condition_form(request,
+                                   workflow,
                                    form,
                                    self.template_name,
                                    action,
@@ -402,21 +441,33 @@ def edit_condition(request, pk):
     :param pk: Condition ID
     :return: AJAX reponse
     """
-    # Get the condition
-    try:
-        condition = Condition.objects.filter(
-            Q(action__workflow__user=request.user) |
-            Q(action__workflow__shared=request.user),
-            is_filter=False
-        ).distinct().get(pk=pk)
-    except (KeyError, ObjectDoesNotExist):
+
+    # Get the workflow
+    workflow = get_workflow(request, prefetch_related='columns')
+    if not workflow:
         return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('workflow:index')})
+                             'html_redirect': reverse('home')})
+
+    # Get the condition
+    condition = Condition.objects.filter(
+        pk=pk
+    ).filter(
+        Q(action__workflow__user=request.user) |
+        Q(action__workflow__shared=request.user),
+        is_filter=False,
+        action__workflow=workflow
+    ).select_related('action').first()
+
+    if not condition:
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
 
     form = ConditionForm(request.POST or None, instance=condition)
 
     # Render the form with the Condition information
-    return save_condition_form(request, form,
+    return save_condition_form(request,
+                               workflow,
+                               form,
                                'action/includes/partial_condition_addedit.html',
                                condition.action,
                                condition,
@@ -434,16 +485,23 @@ def delete_condition(request, pk):
     # AJAX result
     data = {}
 
+    workflow = get_workflow(request, prefetch_related='columns')
+    if not workflow:
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
+
     # Get the condition
-    try:
-        condition = Condition.objects.filter(
-            Q(action__workflow__user=request.user) |
-            Q(action__workflow__shared=request.user),
-            is_filter=False
-        ).distinct().get(pk=pk)
-    except (KeyError, ObjectDoesNotExist):
+    condition = Condition.objects.filter(
+        pk=pk
+    ).filter(
+        Q(action__workflow__user=request.user) |
+        Q(action__workflow__shared=request.user),
+        action__workflow=workflow,
+        is_filter=False
+    ).select_related('action').first()
+    if not condition:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     data = {'form_is_valid': False}
@@ -467,6 +525,10 @@ def delete_condition(request, pk):
 
         # Perform the delete operation
         condition.delete()
+
+        # Reset the count of number of rows with all conditions false
+        condition.action.rows_all_false = None
+
         data['form_is_valid'] = True
         data['html_redirect'] = ''
         return JsonResponse(data)
@@ -482,31 +544,41 @@ def delete_condition(request, pk):
 @user_passes_test(is_instructor)
 @csrf_exempt
 @require_http_methods(['POST'])
-def clone(request, pk):
+def clone(request, pk, action_pk=None):
     """
     JSON request to clone a condition. The post request must come with the
     action_content
     :param request: Request object
     :param pk: id of the condition to clone
+    :param action_pk: Primary key of the action to receive the condition
     :return: JSON response
     """
 
     # Check if the workflow is locked
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        return JsonResponse({'html_redirect': reverse('workflow:index')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get the condition
     condition = Condition.objects.filter(pk=pk).filter(
         Q(action__workflow__user=request.user) |
         Q(action__workflow__shared=request.user),
-        is_filter=False
-    ).first()
+        is_filter=False,
+        action__workflow=workflow
+    ).select_related('action').first()
 
     if not condition:
         messages.error(request,
                        _('Condition cannot be cloned.'))
         return JsonResponse({'html_redirect': reverse('action:index')})
+
+    if action_pk:
+        action = workflow.actions.filter(pk=action_pk).first()
+        if not action:
+            # The given action is not attached to the workflow
+            return JsonResponse({'html_redirect': reverse('home')})
+    else:
+        action = condition.action
 
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content', None)
@@ -515,14 +587,15 @@ def clone(request, pk):
         condition.action.save()
 
     # Get the new name appending as many times as needed the 'Copy of '
-    new_name = 'Copy of ' + condition.name
-    while condition.action.conditions.filter(name=new_name).exists():
+    # new_name = 'Copy of ' + condition.name
+    new_name = condition.name
+    while action.conditions.filter(name=new_name).exists():
         new_name = 'Copy of ' + new_name
 
     old_id = condition.id
     old_name = condition.name
     condition = ops.clone_condition(condition,
-                                    new_action=None,
+                                    new_action=action,
                                     new_name=new_name)
 
     # Log event
@@ -534,7 +607,7 @@ def clone(request, pk):
                           'name_old': old_name,
                           'name_new': condition.name})
 
-    messages.success(request, _('Action successfully cloned.'))
+    messages.success(request, _('Condition successfully cloned.'))
 
     # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})

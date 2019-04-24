@@ -21,7 +21,7 @@ class Scenario3Captures(ScreenTests):
     description = 'Scenario 3 in the documentation'
 
     def setUp(self):
-        super(Scenario3Captures, self).setUp()
+        super().setUp()
         test.create_users()
 
     def test(self):

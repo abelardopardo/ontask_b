@@ -1,9 +1,24 @@
-html, body{
-    height:100%;		/* For full height images */
+html {
+  position: relative;
+  min-height:100%;		/* For full height images */
 }
 
 body {
-  padding-top:35px; /* To jump over the fixed nav-bar */
+  padding-top: 40px; /* To jump over the fixed nav-bar */
+  margin-bottom: 45px;
+}
+
+#base_footer {
+  margin-top: 1ex;
+  height: 40px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+#base_footer > span {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .wflow-buttons,
@@ -14,15 +29,15 @@ body {
 
 .ontask-card {
   cursor: pointer;
-  min-width: 250px;
-  max-width: 250px;
+  min-width: 350px;
+  max-width: 350px;
   margin-bottom: 15px;
 }
 
 .ontask-ccard {
   cursor: pointer;
-  min-width: 200px;
-  max-width: 200px;
+  min-width: 300px;
+  max-width: 300px;
 }
 
 .ontask-card .card-body,
@@ -30,11 +45,43 @@ body {
   min-height: 100px;
 }
 
-.tab-wrapper {
-  border-left: 1px solid #dee2e6;
-  border-right: 1px solid #dee2e6;
-  border-bottom: 1px solid #dee2e6;
+.legend-circle {
+  width: .75em;
+  height: .75em;
+  border-radius: 50%;
+  border: 1px solid darkgray;
+  margin-top: 6px;
 }
+
+.column-type-number, .column-type-integer, .column-type-double {
+  background: #aed2f0;
+}
+.column-type-string {
+  background: #f1b1b1;
+}
+.column-type-boolean {
+  background: #f1e09d;
+}
+.column-type-datetime {
+  background: #a5dcbf;
+}
+
+.action-type-personalized-text {
+  background: #d1eebe;
+}
+.action-type-personalized-canvas-email {
+  background: #faf6c7;
+}
+.action-type-personalized-json {
+  background: #f7d9bd;
+}
+.action-type-survey {
+  background: #aed2f0;
+}
+.action-type-todo-list {
+  background: #c46a71;
+}
+
 #preview-variables {
   background-color: rgba(0,0,0,.125);
 }
@@ -80,6 +127,7 @@ body>.navbar-transparent {
 
 .navbar-brand > img {
     float: left;
+    height: 40px;
 }
 
 .navbar {
@@ -267,8 +315,9 @@ table td,
 }
 
 /* Wflow name */
-#wflow-name.alert {
+#wflow-name {
     padding: 0ex;
+    background: #b9dbff;
 }
 
 mark {
@@ -277,19 +326,6 @@ mark {
 
 div.group-conditions > label:not([class*=active]) {
     opacity: 0.3;
-}
-
-#base_footer {
-  margin-top: 1ex;
-}
-
-#base_footer .div1 {
-    float: left;
-}
-
-#base_footer .div2 {
-    float: right;
-    text-align:right;
 }
 
 .dt-center { text-align: center; }
@@ -307,6 +343,11 @@ table#attribute-table {
 
 .dropdown-menu .btn {
     width:100%;
+}
+
+.dropdown-menu{
+    max-height:300px;
+    overflow-y:auto;
 }
 
 div.sol-container {
@@ -347,4 +388,29 @@ td.operations button {
 .js-action-showurl > span.badge {
     padding: 2px 7px;
     font-size: 10px;
+}
+
+
+.tooltip {
+    pointer-events: none;
+}
+
+.circle-solid, .circle {
+  width: 1.2em;
+  height: 1.2em;
+  border-radius: 50%;
+  font-size: 25px;
+  line-height: 26px;
+  text-align: center;
+}
+
+.circle {
+  border: solid 1pt black;
+  color: #000;
+  background: #fff
+}
+
+.circle-solid {
+  color: #fff;
+  background: #000
 }

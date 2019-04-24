@@ -14,18 +14,19 @@
 {% endblock scripts %}
 {% block container %}
 <div class="container" id="action-filter-items">
+  {% include 'step_by_step.html' with valuerange=valuerange step=step %}
   <h1 class="text-center">{% blocktrans with n=action.name %}Select items to exclude from action{% endblocktrans %}</h1>
   <div class="row justify-content-center">
     <form action="" method="post">
       {% csrf_token %}
       {{ form|crispy }}
       <div class="text-center">
-        <a type="button" class="btn btn-outline-dark spin"
+        <a type="button" class="shadow btn btn-outline-dark spin"
            href="{% url 'action:index' %}"> {% trans 'Cancel' %}</a>
-        <a class="btn btn-outline-primary spin" href="{{ prev_step }}">
+        <a class="shadow btn btn-outline-primary spin" href="{{ prev_step }}">
           <span class="fa fa-triangle-left"></span> {% trans 'Back' %}</a>
         <button type="Submit" name="Submit" value="Submit"
-                class="btn btn-outline-primary btn-space"> {{ button_label }}</button>
+                class="shadow btn btn-outline-primary btn-space"> {{ button_label }}</button>
       </div>
     </form>
   </div>

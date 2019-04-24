@@ -20,20 +20,20 @@
       {% csrf_token %}
       <div class="text-center">
         {% if cancel_url %}
-          <a class="btn btn-outline-dark spin" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
+          <a class="shadow btn btn-outline-dark spin" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
         {% endif %}
         <button type="submit" name="submit" value="update"
-                class="btn btn-outline-primary">
+                class="shadow btn btn-outline-primary">
           <span class="fa fa-check"></span> {% trans 'Add' %}
         </button>
       </div>
       {{ form|crispy }}
       <div class="text-center">
         {% if cancel_url %}
-          <a class="btn btn-outline-dark spin" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
+          <a class="shadow btn btn-outline-dark spin" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
         {% endif %}
         <button type="submit" name="submit" value="update"
-                class="btn btn-outline-primary">
+                class="shadow btn btn-outline-primary">
           <span class="fa fa-check"></span> {% trans 'Add' %}
         </button>
       </div>

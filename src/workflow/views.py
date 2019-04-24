@@ -14,17 +14,19 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
 from django.utils.html import format_html
+from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.utils.translation import ugettext_lazy as _
-from django.utils.html import escape
 
-import action
+import action.ops
 from dataops import ops, pandas_db
+from dataops.pandas_db import get_text_column_hash
 from logs.models import Log
+from ontask import is_correct_email
 from ontask.permissions import is_instructor, UserIsInstructor
 from ontask.tables import OperationsColumn
+from ontask.tasks import workflow_update_lusers
 from .forms import WorkflowForm
 from .models import Workflow
 from .ops import get_workflow
@@ -46,7 +48,7 @@ class AttributeTable(tables.Table):
         return format_html(
             """<a href="#" data-toggle="tooltip" 
                   class="js-attribute-edit" data-url="{0}"
-                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""",
+                  title="{1}">{2}</a>""",
             reverse('workflow:attribute_edit', kwargs={'pk': record['id']}),
             _('Edit the attribute'),
             record['name']
@@ -56,7 +58,6 @@ class AttributeTable(tables.Table):
         fields = ('name', 'value', 'operations')
         attrs = {
             'class': 'table',
-            'style': 'width: 100%;',
             'id': 'attribute-table'
         }
 
@@ -82,7 +83,6 @@ class WorkflowShareTable(tables.Table):
 
         attrs = {
             'class': 'table',
-            'style': 'width: 100%;',
             'id': 'share-table',
             'th': {'class': 'dt-body-center'}
         }
@@ -107,10 +107,10 @@ def save_workflow_form(request, form, template_name):
         form.instance.nrows = 0
         form.instance.ncols = 0
         log_type = Log.WORKFLOW_CREATE
-        redirect = reverse('dataops:uploadmerge')
+        redirect_url = reverse('dataops:uploadmerge')
     else:
         log_type = Log.WORKFLOW_UPDATE
-        redirect = ''
+        redirect_url = ''
 
     # Save the instance
     try:
@@ -139,7 +139,7 @@ def save_workflow_form(request, form, template_name):
 
     # Here we can say that the form processing is done.
     data['form_is_valid'] = True
-    data['html_redirect'] = redirect
+    data['html_redirect'] = redirect_url
 
     return JsonResponse(data)
 
@@ -152,14 +152,12 @@ def index(request):
         Workflow.unlock_workflow_by_id(wid)
     request.session.pop('ontask_workflow_name', None)
 
-    # Get the available workflows
-    workflows = Workflow.objects.filter(
-        Q(user=request.user) | Q(shared=request.user)
-    ).distinct().order_by('name')
+    workflows = request.user.workflows_owner.all() \
+                | request.user.workflows_shared.all()
 
     # We include the table only if it is not empty.
     context = {
-        'workflows': workflows,
+        'workflows': workflows.order_by('name'),
         'nwflows': len(workflows)
     }
 
@@ -169,7 +167,7 @@ def index(request):
         celery_stats = None
         try:
             celery_stats = inspect().stats()
-        except Exception as e:
+        except Exception:
             pass
         if not celery_stats:
             messages.error(
@@ -182,18 +180,29 @@ def index(request):
 
 
 @user_passes_test(is_instructor)
-def operations(request, pk):
+def operations(request):
     """
     Http request to serve the operations page for the workflow
     :param request: HTTP Request
-    :param pk: primary key of the workflow
     :return:
     """
 
     # Get the appropriate workflow object
-    workflow = get_workflow(request, wid=pk)
+    workflow = get_workflow(request,
+                            select_related='luser_email_column',
+                            prefetch_related=['columns', 'shared'])
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
+
+    # Check if lusers is active and if so, if it needs to be refreshed
+    if workflow.luser_email_column:
+        md5_hash = get_text_column_hash(
+            workflow.get_data_frame_table_name(),
+            workflow.luser_email_column.name)
+        if md5_hash != workflow.luser_email_column_md5:
+            # Information is outdated
+            workflow.lusers_is_outdated = True
+            workflow.save()
 
     # Context to render the page
     context = {
@@ -205,7 +214,8 @@ def operations(request, pk):
         ),
         'share_table': WorkflowShareTable(
             workflow.shared.values('email', 'id').order_by('email')
-        )
+        ),
+        'unique_columns': workflow.get_unique_columns()
     }
 
     return render(request, 'workflow/operations.html', context)
@@ -216,7 +226,7 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
     template_name = 'workflow/includes/partial_workflow_create.html'
 
     def get_context_data(self, **kwargs):
-        context = super(WorkflowCreateView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         return context
 
     def get(self, request, *args, **kwargs):
@@ -226,6 +236,7 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
 
     def post(self, request, *args, **kwargs):
         del args
+        del kwargs
         form = self.form_class(request.POST)
         return save_workflow_form(request, form, self.template_name)
 
@@ -239,23 +250,25 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
     context_object_name = 'workflow'
 
     def get_object(self, queryset=None):
-        old_obj = super(WorkflowDetailView, self).get_object(queryset=queryset)
+        old_obj = super().get_object(queryset=queryset)
 
         # Check if the workflow is locked
-        obj = get_workflow(self.request, old_obj.id)
+        obj = get_workflow(self.request,
+                           old_obj.id,
+                           prefetch_related=['actions', 'columns'])
         return obj
 
     def get_context_data(self, **kwargs):
 
-        context = super(WorkflowDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         # Get the table information (if it exist)
         context['table_info'] = None
-        if ops.workflow_id_has_table(self.object.id):
+        if self.object.has_table():
             context['table_info'] = {
                 'num_rows': self.object.nrows,
                 'num_cols': self.object.ncols,
-                'num_actions': self.object.actions.all().count(),
+                'num_actions': self.object.actions.count(),
                 'num_attributes': len(self.object.attributes)}
 
         # put the number of key columns in the context
@@ -295,7 +308,7 @@ def update(request, pk):
     if not workflow:
         # Workflow is not accessible. Go back to index page.
         return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('workflow:index')})
+                             'html_redirect': reverse('home')})
 
     form = WorkflowForm(request.POST or None, instance=workflow)
 
@@ -321,7 +334,7 @@ def flush(request, pk):
     if not workflow:
         # Workflow is not accessible. Go back to index page.
         return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('workflow:index')})
+                             'html_redirect': reverse('home')})
 
     data = dict()
 
@@ -334,10 +347,10 @@ def flush(request, pk):
 
         if request.is_ajax():
             data = {'form_is_valid': True,
-                    'html_redirect': reverse('workflow:index')}
+                    'html_redirect': reverse('home')}
             return JsonResponse(data)
 
-        return redirect('workflow:index')
+        return redirect('home')
 
     if request.method == 'POST':
         # Delete the table
@@ -368,7 +381,7 @@ def delete(request, pk):
     if not workflow:
         # Workflow is not accessible. Go back to index page.
         return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('workflow:index')})
+                             'html_redirect': reverse('home')})
 
     # Ajax result
     data = dict()
@@ -380,10 +393,10 @@ def delete(request, pk):
 
         if request.is_ajax():
             data['form_is_valid'] = True
-            data['html_redirect'] = reverse('workflow:index')
+            data['html_redirect'] = reverse('home')
             return JsonResponse(data)
 
-        return redirect('workflow:index')
+        return redirect('home')
 
     if request.method == 'POST':
         # Log the event
@@ -393,16 +406,12 @@ def delete(request, pk):
                              {'id': workflow.id,
                               'name': workflow.name})
 
-        # And drop the table
-        if pandas_db.is_wf_table_in_db(workflow):
-            pandas_db.delete_table(pk)
-
         # Perform the delete operation
         workflow.delete()
 
         # In this case, the form is valid anyway
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
     else:
         data['html_form'] = \
             render_to_string('workflow/includes/partial_workflow_delete.html',
@@ -414,15 +423,14 @@ def delete(request, pk):
 @user_passes_test(is_instructor)
 @csrf_exempt
 @require_http_methods(['POST'])
-def column_ss(request, pk):
+def column_ss(request):
     """
     Given the workflow id and the request, return to DataTable the proper
     list of columns to be rendered.
     :param request: Http request received from DataTable
-    :param pk: Workflow id
     :return: Data to visualize in the table
     """
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return JsonResponse(
             {'error': _('Incorrect request. Unable to process')}
@@ -430,7 +438,7 @@ def column_ss(request, pk):
 
     # If there is no DF, there are no columns to show, this should be
     # detected before this is executed
-    if not ops.workflow_id_has_table(workflow.id):
+    if not workflow.has_table():
         return JsonResponse({'error': _('There is no data in the workflow')})
 
     # Check that the GET parameter are correctly given
@@ -450,8 +458,8 @@ def column_ss(request, pk):
 
     # Get the initial set
     qs = workflow.columns.all()
-    recordsTotal = len(qs)
-    recordsFiltered = recordsTotal
+    records_total = qs.count()
+    records_filtered = records_total
 
     # Reorder if required
     if order_col:
@@ -467,7 +475,7 @@ def column_ss(request, pk):
     if search_value:
         qs = qs.filter(Q(name__icontains=search_value) |
                        Q(data_type__icontains=search_value))
-        recordsFiltered = len(qs)
+        records_filtered = qs.count()
 
     # Creating the result
     final_qs = []
@@ -477,33 +485,18 @@ def column_ss(request, pk):
             {'id': col.id, 'is_key': col.is_key}
         )
 
-        # The data type for integers or doubles is shown as 'number'
-        col_data_type = col.data_type
-        col_data_type_str = """<div data-toggle="tooltip" title="{0}">
-                 <span class="fa fa-{1}"></span></div>"""
-        if col_data_type == 'string':
-            col_data_type_str = col_data_type_str.format('Text', 'italic')
-        elif col_data_type == 'integer' or col_data_type == 'double':
-            col_data_type_str = col_data_type_str.format('Number', 'percent')
-        elif col_data_type == 'boolean':
-            col_data_type_str = col_data_type_str.format('True/False',
-                                                         'toggle-on')
-        elif col_data_type == 'datetime':
-            col_data_type_str = col_data_type_str.format('Date/Time',
-                                                         'calendar-o')
-
         final_qs.append({
             'number': col.position,
             'name': format_html(
                 """<a href="#" class="js-workflow-column-edit"
                   data-toggle="tooltip" data-url="{0}"
-                  title="Edit the parameters of this column">{1} 
-                  <span class="fa fa-pencil"></span></a>""",
+                  title="{1}">{2}</a>""",
                 reverse('workflow:column_edit', kwargs={'pk': col.id}),
+                _('Edit the parameters of this column'),
                 col.name
             ),
             'description': col.description_text,
-            'type': format_html(col_data_type_str),
+            'type': col.get_simplified_data_type(),
             'key': '<span class="true">✔</span>' if col.is_key else '',
             'operations': ops_string
         })
@@ -514,8 +507,8 @@ def column_ss(request, pk):
     # Result to return as Ajax response
     data = {
         'draw': draw,
-        'recordsTotal': recordsTotal,
-        'recordsFiltered': recordsFiltered,
+        'recordsTotal': records_total,
+        'recordsFiltered': records_filtered,
         'data': final_qs
     }
 
@@ -538,7 +531,7 @@ def clone(request, pk):
     workflow = get_workflow(request, pk)
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     # Initial data in the context
@@ -573,11 +566,11 @@ def clone(request, pk):
 
     # Get the initial object back
     workflow_new = workflow
-    workflow = get_workflow(request, pk)
+    workflow = get_workflow(request, pk, prefetch_related='actions')
 
     # Clone the data frame
-    data_frame = pandas_db.load_from_db(workflow.pk)
-    ops.store_dataframe_in_db(data_frame, workflow_new.id)
+    data_frame = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+    ops.store_dataframe(data_frame, workflow_new)
 
     # Clone actions
     action.ops.clone_actions([a for a in workflow.actions.all()], workflow_new)
@@ -600,3 +593,98 @@ def clone(request, pk):
     data['html_redirect'] = ""  # Reload page
 
     return JsonResponse(data)
+
+
+@user_passes_test(is_instructor)
+def assign_luser_column(request, pk=None):
+    """
+    AJAX view to assign the column with id PK to the field luser_email_column
+    and calculate the hash
+
+    :param request: HTTP request
+    :param pk: Column id
+    :return: JSON data
+    """
+
+    # Get the current workflow
+    if pk:
+        workflow = get_workflow(request, prefetch_related='columns')
+    else:
+        workflow = get_workflow(request, prefetch_related='lusers')
+
+    if not workflow:
+        return JsonResponse({'html_redirect': reverse('home')})
+
+    if workflow.nrows == 0:
+        messages.error(
+            request,
+            _('Workflow has no data. '
+              'Go to "Manage table data" to upload data.')
+        )
+        return JsonResponse({'html_redirect': reverse('action:index')})
+
+    if not pk:
+        # Empty pk, means reset the field.
+        workflow.luser_email_column = None
+        workflow.luser_email_column_md5 = ''
+        workflow.lusers.set([])
+        workflow.save()
+        return JsonResponse({'html_redirect': ''})
+
+    # Get the column
+    column = workflow.columns.filter(pk=pk).first()
+
+    if not column:
+        messages.error(
+            request,
+            _('Incorrect column selected. Please select a key column.')
+        )
+        return JsonResponse({'html_redirect': ''})
+
+    table_name = workflow.get_data_frame_table_name()
+
+    # Get the column content
+    emails = pandas_db.get_table_data(table_name, None, [column.name])
+
+    # Verify that the column as a valid set of emails
+    if not all([is_correct_email(x[0]) for x in emails]):
+        messages.error(
+            request,
+            _('The selected column does not contain email addresses.')
+        )
+        return JsonResponse({'html_redirect': ''})
+
+    # Update the column
+    workflow.luser_email_column = column
+    workflow.save()
+
+    # Calculate the MD5 value
+    md5_hash = get_text_column_hash(table_name, column.name)
+
+    if workflow.luser_email_column_md5 != md5_hash:
+        # Change detected, run the update in batch mode
+        workflow.luser_email_column_md5 = md5_hash
+
+        # Log the event with the status "preparing updating"
+        log_item = Log.objects.register(
+            request.user,
+            Log.WORKFLOW_UPDATE_LUSERS,
+            workflow,
+            {'id': workflow.id,
+             'column': column.name,
+             'status': 'preparing updating'}
+        )
+
+        # Push the update of lusers to batch processing
+        workflow_update_lusers.delay(request.user.id,
+                                     workflow.id,
+                                     log_item.id)
+
+    workflow.lusers_is_outdated = False
+    workflow.save()
+
+    messages.success(
+        request,
+        _('The list of workflow users will be updated shortly.')
+    )
+    return JsonResponse({'html_redirect': ''})

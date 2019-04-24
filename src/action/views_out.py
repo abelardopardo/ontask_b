@@ -11,11 +11,11 @@ from celery.task.control import inspect
 from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.csrf import csrf_exempt
 
@@ -28,8 +28,7 @@ from action.models import Action
 from action.ops import get_workflow_action
 from dataops.pandas_db import get_table_cursor
 from logs.models import Log
-from ontask import action_session_dictionary
-from ontask import get_action_payload
+from ontask import action_session_dictionary, get_action_payload
 from ontask.permissions import is_instructor
 from ontask.tasks import (
     send_email_messages, send_json_objects,
@@ -39,8 +38,7 @@ from ontask_oauth.models import OnTaskOAuthUserTokens
 from ontask_oauth.views import get_initial_token_step1, refresh_token
 from workflow.ops import get_workflow
 from .forms import (
-    EmailActionForm, JSONActionForm, EmailExcludeForm,
-    ZipActionForm, CanvasEmailActionForm
+    EmailActionForm, JSONActionForm, ZipActionForm, CanvasEmailActionForm
 )
 
 html_body = """<!DOCTYPE html>
@@ -109,10 +107,11 @@ def run_email_action(request, workflow, action):
 
         # Render the form
         return render(request,
-                      'action/action_email_step1.html',
+                      'action/request_email_data.html',
                       {'action': action,
                        'num_msgs': num_msgs,
-                       'form': form})
+                       'form': form,
+                       'valuerange': range(2)})
 
     # Request is a POST and is valid
 
@@ -131,6 +130,8 @@ def run_email_action(request, workflow, action):
         # Create a dictionary in the session to carry over all the information
         # to execute the next pages
         op_payload['button_label'] = ugettext('Send')
+        op_payload['valuerange'] = 2
+        op_payload['step'] = 2
         request.session[action_session_dictionary] = op_payload
 
         return redirect('action:item_filter')
@@ -151,6 +152,10 @@ def email_action_done(request, payload=None):
     :return: HTTP response
     """
 
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        return redirect('home')
+
     # Get the payload from the session if not given
     if payload is None:
         payload = get_action_payload(request)
@@ -162,7 +167,10 @@ def email_action_done(request, payload=None):
             return redirect('action:index')
 
     # Get the information from the payload
-    action = Action.objects.get(pk=payload['action_id'])
+    action = workflow.actions.filter(pk=payload['action_id']).first()
+    if not action:
+        return redirect('home')
+
     subject = payload['subject']
     email_column = payload['item_column']
     cc_email = [x.strip() for x in payload['cc_email'].split(',') if x]
@@ -189,7 +197,6 @@ def email_action_done(request, payload=None):
                                      'track_read': track_read})
 
     # Send the emails!
-    # send_email_messages(request.user.id,
     send_email_messages.delay(request.user.id,
                               action.id,
                               subject,
@@ -285,6 +292,8 @@ def zip_action(request, pk):
         # Create a dictionary in the session to carry over all the information
         # to execute the next pages
         op_payload['button_label'] = ugettext('Create ZIP')
+        op_payload['valuerange'] = 2
+        op_payload['step'] = 2
         request.session[action_session_dictionary] = op_payload
 
         return redirect('action:item_filter')
@@ -305,6 +314,10 @@ def zip_action_done(request, payload=None):
     :return: HTTP response
     """
 
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        return redirect('home')
+
     # Get the payload from the session if not given
     if payload is None:
         payload = get_action_payload(request)
@@ -319,7 +332,9 @@ def zip_action_done(request, payload=None):
         request.session[action_session_dictionary] = payload
 
     # Get the information from the payload
-    action = Action.objects.get(pk=payload['action_id'])
+    action = workflow.actions.filter(pk=payload['action_id']).first()
+    if not action:
+        return redirect('home')
     participant_column = payload['item_column']
     user_fname_column = payload.get('user_fname_column', None)
     file_suffix = payload['file_suffix']
@@ -357,6 +372,11 @@ def action_zip_export(request):
     :return: Response (download)
     """
 
+    # Get the workflow first
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        return redirect('home')
+
     # Get the payload from the session if not given
     payload = get_action_payload(request)
 
@@ -367,7 +387,9 @@ def action_zip_export(request):
         return redirect('action:index')
 
     # Get the information from the payload
-    action = Action.objects.get(pk=payload['action_id'])
+    action = workflow.actions.filter(pk=payload['action_id']).first()
+    if not action:
+        return redirect('home')
     user_fname_column = payload['user_fname_column']
     participant_column = payload['item_column']
     file_suffix = payload['file_suffix']
@@ -397,7 +419,7 @@ def action_zip_export(request):
     if user_fname_column:
         # Get the user_fname_column values
         user_fname_data = get_table_cursor(
-            action.workflow.pk,
+            action.workflow.get_data_frame_table_name(),
             None,
             column_names=[user_fname_column]
         ).fetchall()
@@ -509,19 +531,23 @@ def run_json_action(request, workflow, action):
                       'action/request_json_data.html',
                       {'action': action,
                        'num_msgs': num_msgs,
-                       'form': form})
+                       'form': form,
+                       'valuerange': range(2),
+                       'rows_all_false': action.get_row_all_false_count()})
 
     # Request is a POST and is valid
 
     # Collect the information from the form
     op_payload['item_column'] = form.cleaned_data['key_column']
-    op_payload['confirm_items'] = form.cleaned_data['confirm_items']
+    op_payload['confirm_items'] = form.cleaned_data['key_column'] != ''
     op_payload['token'] = form.cleaned_data['token']
 
     if op_payload['confirm_items']:
         # Create a dictionary in the session to carry over all the information
         # to execute the next pages
         op_payload['button_label'] = ugettext('Send')
+        op_payload['valuerange'] = 2
+        op_payload['step'] = 2
         request.session[action_session_dictionary] = op_payload
 
         return redirect('action:item_filter')
@@ -542,6 +568,10 @@ def json_done(request, payload=None):
     :return: HTTP response
     """
 
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        return redirect('home')
+
     # Get the payload from the session if not given
     if payload is None:
         payload = get_action_payload(request)
@@ -553,9 +583,11 @@ def json_done(request, payload=None):
             return redirect('action:index')
 
     # Get the information from the payload
-    action = Action.objects.get(pk=payload['action_id'])
+    action = workflow.actions.filter(pk=payload['action_id']).first()
+    if not action:
+        return redirect('home')
     token = payload['token']
-    key_column = payload['key_column']
+    key_column = payload['item_column']
     exclude_values = payload.get('exclude_values', [])
 
     # Log the event
@@ -570,7 +602,6 @@ def json_done(request, payload=None):
                                      'target_url': action.target_url})
 
     # Send the objects
-    # send_json_objects(request.user.id,
     send_json_objects.delay(request.user.id,
                             action.id,
                             token,
@@ -638,7 +669,11 @@ def run_canvas_email_action(request, workflow, action):
         # Render the form
         return render(request,
                       'action/request_canvas_email_data.html',
-                      {'action': action, 'num_msgs': num_msgs, 'form': form})
+                      {'action': action,
+                       'num_msgs': num_msgs,
+                       'form': form,
+                       'valuerange': range(2),
+                       'rows_all_false': action.get_row_all_false_count()})
 
     # Requet is a POST and is valid
 
@@ -656,17 +691,19 @@ def run_canvas_email_action(request, workflow, action):
     if op_payload['confirm_items']:
         # Create a dictionary in the session to carry over all the information
         # to execute the next pages
+        op_payload['valuerange'] = 2
+        op_payload['step'] = 2
         op_payload['button_label'] = ugettext('Send')
         request.session[action_session_dictionary] = op_payload
 
         return redirect('action:item_filter')
 
     # Go straight to the token request step
-    return canvas_get_or_set_oauth_token(request, op_payload)
+    return canvas_get_or_set_oauth_token(request)
 
 
 @user_passes_test(is_instructor)
-def canvas_get_or_set_oauth_token(request, payload=None):
+def canvas_get_or_set_oauth_token(request):
     """
     Function that checks if the user has a Canvas OAuth token. If there is a
     token, the function goes straight to send the messages. If not, the OAuth
@@ -711,7 +748,7 @@ def canvas_get_or_set_oauth_token(request, payload=None):
     # Check if the token is valid
     now = datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
     dead = token.valid_until - \
-        timedelta(seconds=ontask_settings.CANVAS_TOKEN_EXPIRY_SLACK)
+           timedelta(seconds=ontask_settings.CANVAS_TOKEN_EXPIRY_SLACK)
     if now > dead:
         try:
             refresh_token(token, oauth_instance, oauth_info)
@@ -734,6 +771,10 @@ def canvas_email_done(request, payload=None):
     empty, the ditionary is taken from the session.
     :return: HTTP response
     """
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        return redirect('home')
+
     # Get the payload from the session if not given
     if payload is None:
         payload = get_action_payload(request)
@@ -746,7 +787,9 @@ def canvas_email_done(request, payload=None):
             return redirect('action:index')
 
     # Get the information from the payload
-    action = Action.objects.get(pk=payload['action_id'])
+    action = workflow.actions.filter(pk=payload['action_id']).first()
+    if not action:
+        return redirect('home')
     subject = payload['subject']
     email_column = payload['item_column']
     export_wf = payload['export_wf']
@@ -767,7 +810,6 @@ def canvas_email_done(request, payload=None):
                                      'subject': subject})
 
     # Send the emails!
-    # send_canvas_email_messages(request.user.id,
     send_canvas_email_messages.delay(request.user.id,
                                      action.id,
                                      subject,
@@ -788,7 +830,60 @@ def canvas_email_done(request, payload=None):
 
 @csrf_exempt
 @user_passes_test(is_instructor)
-def preview_response(request, pk, idx):
+def preview_next_all_false_response(request, pk, idx):
+    """
+    Previews the message that has all rows incorrect in the position next to
+    the one specified by idx
+
+    The function uses the list stored in rows_all_false and finds the next
+    index in that list (or the first one if it is the last. It then invokes
+    the preview_response method
+
+    :param request: HTTP Request object
+    :param pk: Primary key of the action
+    :param idx:
+    :return:
+    """
+
+    # To include in the JSON response
+    data = dict()
+
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
+    # Action being used
+    action = workflow.actions.filter(id=pk).first()
+    if not action:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
+    # Get the list of indeces
+    idx_list = action.rows_all_false
+
+    if not idx_list:
+        # If empty, or None, something went wrong.
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
+    # Search for the next element bigger than idx
+    next_idx = next((x for x in idx_list if x > idx), None)
+
+    if not next_idx:
+        # If nothing found, then take the first element
+        next_idx = idx_list[0]
+
+    # Return the rendering of the given element
+    return preview_response(request, pk, next_idx, action)
+
+
+@csrf_exempt
+@user_passes_test(is_instructor)
+def preview_response(request, pk, idx, action=None):
     """
     HTML request and the primary key of an action to preview one of its
     instances. The request must provide and additional parameter idx to
@@ -797,26 +892,31 @@ def preview_response(request, pk, idx):
     :param request: HTML request object
     :param pk: Primary key of the an action for which to do the preview
     :param idx: Index of the reponse to preview
+    :param action: Might have been fetched already
     :return:
     """
 
     # To include in the JSON response
     data = dict()
 
-    # Action being used
-    try:
-        action = Action.objects.get(id=pk)
-    except ObjectDoesNotExist:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
-        return JsonResponse(data)
-
     # Get the workflow to obtain row numbers
-    workflow = get_workflow(request, action.workflow.id)
-    if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
-        return JsonResponse(data)
+    if not action:
+        workflow = get_workflow(request, prefetch_related='actions')
+        if not workflow:
+            data['form_is_valid'] = True
+            data['html_redirect'] = reverse('home')
+            return JsonResponse(data)
+
+        # Action being used
+        action = workflow.actions.filter(id=pk).prefetch_related(
+            'conditions'
+        ).first()
+        if not action:
+            data['form_is_valid'] = True
+            data['html_redirect'] = reverse('home')
+            return JsonResponse(data)
+    else:
+        workflow = action.workflow
 
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content', None)
@@ -847,9 +947,18 @@ def preview_response(request, pk, idx):
 
     row_values = get_row_values(action, idx)
 
+    # Obtain the dictionary with the condition evaluation
+    condition_evaluation = action.get_condition_evaluation(row_values)
+
+    all_false = False
+    if action.conditions.filter(is_filter=False).count():
+        # If there are conditions, check if they are all false
+        all_false = all([not value
+                         for key, value in condition_evaluation.items()])
+
     # Get the dictionary containing column names, attributes and condition
     # valuations:
-    context = action.get_evaluation_context(row_values)
+    context = action.get_evaluation_context(row_values, condition_evaluation)
 
     # Evaluate the action content.
     show_values = ''
@@ -880,6 +989,10 @@ def preview_response(request, pk, idx):
             ["{0} = {1}".format(x.name, row_values[x.name]) for x in act_vars]
         )
 
+    if action.action_type == Action.PERSONALIZED_CANVAS_EMAIL or \
+            action.action_type == Action.PERSONALIZED_JSON:
+        action_content = escape(action_content)
+
     # See if there is prelude content in the request
     prelude = request.GET.get('subject_content', None)
     if prelude:
@@ -895,45 +1008,8 @@ def preview_response(request, pk, idx):
                           'prv': prv,
                           'prelude': prelude,
                           'correct_json': correct_json,
-                          'show_values': show_values},
+                          'show_values': show_values,
+                          'all_false': all_false},
                          request=request)
 
     return JsonResponse(data)
-
-
-def run_action_item_filter(request):
-    """
-    Offer a select widget to tick students to exclude from the email.
-    :param request: HTTP request (GET)
-    :return: HTTP response
-    """
-
-    # Get the payload from the session, and if not, use the given one
-    payload = get_action_payload(request)
-    if not payload:
-        # Something is wrong with this execution. Return to the action table.
-        messages.error(request, _('Incorrect item filter invocation.'))
-        return redirect('action:index')
-
-    # Get the information from the payload
-    action = Action.objects.get(pk=payload['action_id'])
-
-    form = EmailExcludeForm(request.POST or None,
-                            action=action,
-                            column_name=payload['item_column'],
-                            exclude_values=payload.get('exclude_values', list))
-    context = {
-        'form': form,
-        'action': action,
-        'button_label': payload['button_label'],
-        'prev_step': payload['prev_url']
-    }
-
-    # Process the initial loading of the form and return
-    if request.method != 'POST' or not form.is_valid():
-        return render(request, 'action/item_filter.html', context)
-
-    # Updating the content of the exclude_values in the payload
-    payload['exclude_values'] = form.cleaned_data['exclude_values']
-
-    return redirect(payload['post_url'])

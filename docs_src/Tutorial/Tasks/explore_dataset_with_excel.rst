@@ -1,7 +1,7 @@
 .. _exploring_data_with_spreadsheet:
 
 Exploring the data with a spreadsheet
-=====================================
+*************************************
 
 Open the file ``student_list.csv`` with a recent version of Excel. Select all the data in the spreadsheet (you can use ``Crtl-A`` or ``Cmd-A`` in OSX) as shown in the following figure:
 
@@ -29,7 +29,7 @@ The cells in the top row are the names of the columns contained in the file. If 
 The menu allows you to sort the rows according to the value in the column (the buttons `Ascending` and `Descending`) and *filter* or select some of the rows to be viewed. In the example, the column contains four values that you can select individually. Click in the bottom part of the window to select/discard values and verify that the content of the table changes (only a subset of rows is shown). You may view all rows by choosing the item `(Select All)`. Repeat this procedure with the columns with names `Program`, `Enrolment Type`, `Attendance`, `Gender` and `Course Code`. Once you select a value with the filter, type ``Crtl-up`` (``CMD-up`` in OSX) to move to the top of the table. Hold the Shift key and press ``Crtl-down`` (``Cmd-down`` in OSX) and the entire row should be selected. At the bottom of the Excel screen you will see the number of elements selected as a quick way to know the number of rows. Repeat the previous procedure and find out how many students are local, HECS or international.
 
 Questions
----------
+=========
 
 1. How many students are in your class?
 

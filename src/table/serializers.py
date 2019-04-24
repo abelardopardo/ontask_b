@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 
 
-from future import standard_library
-standard_library.install_aliases()
+# from future import standard_library
+# standard_library.install_aliases()
 from builtins import object
 from io import BytesIO
 import base64
 import json
+import pickle
 
 import pandas as pd
 from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
 
-from action.serializers import ColumnNameSerializer
+from workflow.column_serializers import ColumnNameSerializer
 from dataops import ops
 from .models import View
 
@@ -22,8 +23,13 @@ def df_to_string(df):
     :param df: Pandas dataframe
     :return: Base64 encoded string of its pickled representation
     """
-    out_file = BytesIO()
-    pd.to_pickle(df, out_file)
+    try:
+        out_file = BytesIO()
+        pd.to_pickle(df, out_file)
+    except ValueError:
+        out_file = BytesIO()
+        pickle.dump(df, out_file)
+
     return base64.b64encode(out_file.getvalue())
 
 
@@ -33,10 +39,11 @@ def string_to_df(value):
     of a pandas dataframe
     :return: The encoded dataframe
     """
-    output = BytesIO()
-    output.write(base64.b64decode(value))
     try:
-        result = pd.read_pickle(output)
+        result = pd.read_pickle(BytesIO(base64.b64decode(value)))
+    except ValueError:
+        result = pickle.load(BytesIO(base64.b64decode(value)),
+                             encoding='latin1')
     except Exception:
         return None
 
@@ -104,14 +111,12 @@ class DataFrameBasicMergeSerializer(serializers.Serializer):
     right_on = serializers.CharField(
         required=True,
         initial='',
-        help_text=_('ID of the column in the source data frame with the unique '
-                  'key'))
+        help_text=_('ID of column in source data frame with unique key'))
 
 
 class DataFrameJSONMergeSerializer(DataFrameBasicMergeSerializer):
     src_df = DataFrameJSONField(
-        help_text=_('This field must be the JSON string encoding a pandas data '
-                  'frame')
+        help_text=_('Field must be a JSON string encoding a pandas data frame')
     )
 
 
@@ -143,12 +148,14 @@ class ViewSerializer(serializers.ModelSerializer):
             columns = ColumnNameSerializer(
                 data=validated_data.get('columns'),
                 many=True,
-                required=False,
+                required=False
             )
             if columns.is_valid():
-                for citem in columns.data:
-                    column = view_obj.workflow.columns.get(name=citem['name'])
-                    view_obj.columns.add(column)
+                view_column_names = [x['name'] for x in columns.data]
+                view_obj.columns.set(
+                    [x for x in self.context['columns']
+                     if x.name in view_column_names]
+                )
                 view_obj.save()
             else:
                 raise Exception(_('Incorrect column data'))

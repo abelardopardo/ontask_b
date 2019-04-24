@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
@@ -16,9 +15,9 @@ from .ops import get_workflow
 @user_passes_test(is_instructor)
 def share_create(request):
     # Get the workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='shared')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     data = dict()
     data['form_is_valid'] = False
@@ -58,15 +57,14 @@ def share_create(request):
 @user_passes_test(is_instructor)
 def share_delete(request, pk):
     # Get the workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='shared')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # If the user does not exist, go back to home page
-    try:
-        user = get_user_model().objects.get(id=pk)
-    except ObjectDoesNotExist:
-        return redirect('workflow:index')
+    user = get_user_model().objects.filter(id=pk).first()
+    if not user:
+        return redirect('home')
 
     data = dict()
     data['form_is_valid'] = False

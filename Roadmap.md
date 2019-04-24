@@ -1,10 +1,13 @@
 # Roadmap
 
-1) Migration to Django 2 and Python 3 (in Beta)
+Upcoming features (in no particular order)
 
-2) Functionality to send personalized emails through Canvas (in Beta)
+1) Plugin that reads from Moodle logs and creates a table
 
-3) Migrate to Bootstrap 4
+2) Plugin that rounds a column with float values
 
-4) Upload of Canvas Gradebook    
+3) Load content from Canvas gradebook through API
 
+4) Include conditions to control appearance of questions in survey
+
+5) Explore unfolding a "learner platform" functionality condensing multiple workflows

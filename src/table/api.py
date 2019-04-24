@@ -1,20 +1,23 @@
 # -*- coding: utf-8 -*-
 
 
+from django.utils.translation import ugettext_lazy as _
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.utils.translation import ugettext_lazy as _
 
 import dataops.pandas_db
 from dataops import pandas_db, ops
+from ontask import OnTaskDataFrameNoKey
 from ontask.permissions import UserIsInstructor
 from table.serializers import (
     DataFramePandasMergeSerializer,
     DataFramePandasSerializer,
     DataFrameJSONSerializer,
-    DataFrameJSONMergeSerializer)
+    DataFrameJSONMergeSerializer
+)
+from workflow.models import Workflow
 from workflow.ops import get_workflow
 
 
@@ -31,7 +34,7 @@ class TableBasicOps(APIView):
     permission_classes = (UserIsInstructor,)
 
     def get_object(self, pk):
-        workflow = get_workflow(self.request, pk)
+        workflow = get_workflow(self.request, pk, prefetch_related='actions')
         if workflow is None:
             raise APIException(_('Unable to access the workflow'))
         return workflow
@@ -56,8 +59,15 @@ class TableBasicOps(APIView):
         # Data received is a correct data frame.
         df = serializer.validated_data['data_frame']
 
+        try:
+            # Verify the data frame
+            pandas_db.verify_data_frame(df)
+        except OnTaskDataFrameNoKey as e:
+            return Response(str(e),
+                            status=status.HTTP_400_BAD_REQUEST)
+
         # Store the content in the db and...
-        ops.store_dataframe_in_db(df, pk)
+        ops.store_dataframe(df, wflow)
 
         # Update all the counters in the conditions
         for action in wflow.actions.all():
@@ -68,16 +78,19 @@ class TableBasicOps(APIView):
     # Retrieve
     def get(self, request, pk, format=None):
         # Try to retrieve the wflow to check for permissions
-        self.get_object(pk)
+        workflow = self.get_object(pk)
         serializer = self.serializer_class(
-            {'data_frame': pandas_db.load_from_db(pk)}
+            {'data_frame':
+                 pandas_db.load_from_db(workflow.get_data_frame_table_name())
+             }
         )
         return Response(serializer.data)
 
     # Create
     def post(self, request, pk, format=None):
         # If there is a table in the workflow, ignore the request
-        if pandas_db.load_from_db(pk) is not None:
+        w = Workflow.objects.get(pk=pk)
+        if pandas_db.load_from_db(w.get_data_frame_table_name()) is not None:
             raise APIException(_('Post request requires workflow without '
                                  'a table'))
         return self.override(request, pk, format)
@@ -185,7 +198,7 @@ class TableBasicMerge(APIView):
     permission_classes = (UserIsInstructor,)
 
     def get_object(self, pk):
-        workflow = get_workflow(self.request, pk)
+        workflow = get_workflow(self.request, pk, prefetch_related='columns')
         if workflow is None:
             raise APIException(_('Unable to access the workflow'))
         return workflow
@@ -193,9 +206,10 @@ class TableBasicMerge(APIView):
     # Retrieve
     def get(self, request, pk, format=None):
         # Try to retrieve the wflow to check for permissions
-        self.get_object(pk)
+        workflow = self.get_object(pk)
         serializer = self.serializer_class(
-            {'src_df': pandas_db.load_from_db(pk),
+            {'src_df':
+                 pandas_db.load_from_db(workflow.get_data_frame_table_name()),
              'how': '',
              'left_on': '',
              'right_on': ''}
@@ -207,7 +221,7 @@ class TableBasicMerge(APIView):
         # Try to retrieve the wflow to check for permissions
         workflow = self.get_object(pk)
         # Get the dst_df
-        dst_df = pandas_db.load_from_db(pk)
+        dst_df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():

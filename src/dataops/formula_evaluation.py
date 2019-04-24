@@ -4,8 +4,9 @@
 import itertools
 from builtins import str
 
+import pandas as pd
 from django.utils.dateparse import parse_datetime
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext
 
 from ontask import OnTaskException, fix_pctg_in_name
 
@@ -24,7 +25,7 @@ class NodeEvaluation:
     GET_CONSTANT_FN = {
         'integer': lambda x: int(x),
         'double': lambda x: float(x),
-        'boolean': lambda x: x is True,
+        'boolean': lambda x: True if x else False,
         'string': lambda x: str(x),
         'datetime': lambda x: parse_datetime(x)
     }
@@ -38,6 +39,16 @@ class NodeEvaluation:
         """
         self.node = node
         self.given_variables = given_variables
+
+    @staticmethod
+    def is_null(value):
+        """
+        Checking for null or nan or
+        :param value: Value to check if it is null
+        :return: Boolean
+        """
+
+        return value is None or pd.isna(value)
 
     def get_constant(self):
         """
@@ -93,7 +104,7 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and varvalue == constant
+            return (not self.is_null(varvalue)) and varvalue == constant
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -105,7 +116,9 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} equal to {1}'.format(self.node['field'], constant)
+        return '{0} &equals; {1} and not empty'.format(
+            self.node['field'], constant
+        )
 
     def _op_not_equal(self, eval_type):
         """
@@ -121,7 +134,7 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and varvalue != constant
+            return (not self.is_null(varvalue)) and varvalue != constant
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -133,7 +146,9 @@ class NodeEvaluation:
             return result, result_fields
 
         # Text evaluation
-        return '{0} not equal to {1}'.format(self.node['field'], constant)
+        return '{0} &ne; {1} and not empty'.format(
+            self.node['field'], constant
+        )
 
     def _op_begins_with(self, eval_type):
         """
@@ -149,7 +164,9 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and varvalue.startswith(constant)
+            return (not self.is_null(varvalue)) and varvalue.startswith(
+                constant
+            )
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -178,7 +195,9 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and not varvalue.startswith(constant)
+            return (not self.is_null(varvalue)) and not varvalue.startswith(
+                constant
+            )
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -208,7 +227,8 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and varvalue.find(constant) != -1
+            return (not self.is_null(varvalue)) and \
+                varvalue.find(constant) != -1
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -237,7 +257,8 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and varvalue.find(constant) == -1
+            return (not self.is_null(varvalue)) and \
+                varvalue.find(constant) == -1
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -266,7 +287,7 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and varvalue.endswith(constant)
+            return (not self.is_null(varvalue)) and varvalue.endswith(constant)
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -295,7 +316,8 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and (not varvalue.endswith(constant))
+            return (not self.is_null(varvalue)) and \
+                   (not varvalue.endswith(constant))
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -320,7 +342,7 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and varvalue == ''
+            return (not self.is_null(varvalue)) and varvalue == ''
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -344,7 +366,7 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
-            return (varvalue is not None) and varvalue != ''
+            return (not self.is_null(varvalue)) and varvalue != ''
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -367,14 +389,13 @@ class NodeEvaluation:
 
         if eval_type == self.EVAL_EXP:
             # Python evaluation
-            varvalue = self.get_value()
-            return varvalue is None
+            return self.is_null(self.get_value())
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
             varname = fix_pctg_in_name(self.node['field'])
 
-            result = '(\"{0}\" is null)'.format(varname)
+            result = '("{0}" is null)'.format(varname)
 
             return result, []
 
@@ -390,14 +411,13 @@ class NodeEvaluation:
 
         if eval_type == self.EVAL_EXP:
             # Python evaluation
-            varvalue = self.get_value()
-            return varvalue is not None
+            return not self.is_null(self.get_value())
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
             varname = fix_pctg_in_name(self.node['field'])
 
-            result = '(\"{0}\" is not null)'.format(varname)
+            result = '("{0}" is not null)'.format(varname)
 
             return result, []
 
@@ -419,7 +439,7 @@ class NodeEvaluation:
             # Python evaluation
             varvalue = self.get_value()
             if self.node['type'] in ('integer', 'double', 'datetime'):
-                return (varvalue is not None) and varvalue < constant
+                return (not self.is_null(varvalue)) and varvalue < constant
             raise Exception(
                 ugettext(
                     'Evaluation error: Type {0} not allowed with operator LESS'
@@ -430,13 +450,15 @@ class NodeEvaluation:
             # SQL evaluation
             varname = fix_pctg_in_name(self.node['field'])
 
-            result = '"{0}"'.format(varname) + ' < %s'
+            result = '("{0}" < %s) AND ("{0}" is not null)'.format(varname)
             result_fields = [str(constant)]
 
             return result, result_fields
 
         # Text evaluation
-        return '{0} is less than {1}'.format(self.node['field'], constant)
+        return '{0} &lt; {1} and not empty'.format(
+            self.node['field'], constant
+        )
 
     def _op_less_or_equal(self, eval_type):
         """
@@ -453,7 +475,7 @@ class NodeEvaluation:
             # Python evaluation
             varvalue = self.get_value()
             if self.node['type'] in ('integer', 'double', 'datetime'):
-                return (varvalue is not None) and varvalue <= constant
+                return (not self.is_null(varvalue)) and varvalue <= constant
             raise Exception(
                 ugettext(
                     'Evaluation error: Type {0} not allowed '
@@ -465,14 +487,16 @@ class NodeEvaluation:
             # SQL evaluation
             varname = fix_pctg_in_name(self.node['field'])
 
-            result = '"{0}"'.format(varname) + ' <= %s'
+            result = '("{0}" <= %s) AND ("{0}" is not null)'.format(varname)
             result_fields = [str(constant)]
 
             return result, result_fields
 
         # Text evaluation
-        return '{0} is less than or equal to {1}'.format(self.node['field'],
-                                                         constant)
+        return '{0} &#8924; {1} and not empty'.format(
+            self.node['field'],
+            constant
+        )
 
     def _op_greater(self, eval_type):
         """
@@ -489,7 +513,7 @@ class NodeEvaluation:
             # Python evaluation
             varvalue = self.get_value()
             if self.node['type'] in ('integer', 'double', 'datetime'):
-                return (varvalue is not None) and varvalue > constant
+                return (not self.is_null(varvalue)) and varvalue > constant
             raise Exception(
                 ugettext(
                     'Evaluation error: Type {0} not allowed '
@@ -501,13 +525,15 @@ class NodeEvaluation:
             # SQL evaluation
             varname = fix_pctg_in_name(self.node['field'])
 
-            result = '"{0}"'.format(varname) + ' > %s'
+            result = '("{0}" > %s) AND ("{0}" is not null)'.format(varname)
             result_fields = [str(constant)]
 
             return result, result_fields
 
         # Text evaluation
-        return '{0} is greater than {1}'.format(self.node['field'], constant)
+        return '{0} &gt; {1} and not empty'.format(
+            self.node['field'], constant
+        )
 
     def _op_greater_or_equal(self, eval_type):
         """
@@ -524,7 +550,7 @@ class NodeEvaluation:
             # Python evaluation
             varvalue = self.get_value()
             if self.node['type'] in ('integer', 'double', 'datetime'):
-                return (varvalue is not None) and varvalue >= constant
+                return (not self.is_null(varvalue)) and varvalue >= constant
             raise Exception(
                 ugettext(
                     'Evaluation error: Type {0} not allowed '
@@ -536,14 +562,16 @@ class NodeEvaluation:
             # SQL evaluation
             varname = fix_pctg_in_name(self.node['field'])
 
-            result = '"{0}"'.format(varname) + ' >= %s'
+            result = '("{0}" >= %s) AND ("{0}" is not null)'.format(varname)
             result_fields = [str(constant)]
 
             return result, result_fields
 
         # Text evaluation
-        return '{0} is greater than or equal to {1}'.format(self.node['field'],
-                                                            constant)
+        return '{0} &#8925; {1} and not empty'.format(
+            self.node['field'],
+            constant
+        )
 
     def _op_between(self, eval_type):
         """
@@ -555,6 +583,9 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
+            if self.is_null(varvalue):
+                return False
+
             if self.node['type'] not in ('integer', 'double', 'datetime'):
                 raise Exception(
                     ugettext(
@@ -569,22 +600,27 @@ class NodeEvaluation:
                 self.node['value'][1]
             )
 
-            return (varvalue is not None) and left <= varvalue <= right
+            return left <= varvalue <= right
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
             varname = fix_pctg_in_name(self.node['field'])
 
-            result = '"{0}"'.format(varname) + ' BETWEEN %s AND %s'
+            result = \
+                '("{0}" BETWEEN %s AND %s) AND ("{0}" is not null)'.format(
+                    varname
+                )
             result_fields = [str(self.node['value'][0]),
                              str(self.node['value'][1])]
 
             return result, result_fields
 
         # Text evaluation
-        return '{0} is between {1} and {2}'.format(self.node['field'],
-                                                   str(self.node['value'][0]),
-                                                   str(self.node['value'][1]))
+        return '{0} &#8924; {1} &#8924; {2} and not empty'.format(
+            str(self.node['value'][0]),
+            self.node['field'],
+            str(self.node['value'][1])
+        )
 
     def _op_not_between(self, eval_type):
         """
@@ -596,6 +632,9 @@ class NodeEvaluation:
         if eval_type == self.EVAL_EXP:
             # Python evaluation
             varvalue = self.get_value()
+            if self.is_null(varvalue):
+                return False
+
             if self.node['type'] not in ('integer', 'double', 'datetime'):
                 raise Exception(
                     ugettext(
@@ -610,20 +649,23 @@ class NodeEvaluation:
                 self.node['value'][1]
             )
 
-            return (varvalue is not None) and not left <= varvalue <= right
+            return not left <= varvalue <= right
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
             varname = fix_pctg_in_name(self.node['field'])
 
-            result = '"{0}"'.format(varname) + ' NOT BETWEEN %s AND %s'
+            result = \
+                '("{0}" NOT BETWEEN %s AND %s) OR ("{0}" is null)'.format(
+                    varname
+                )
             result_fields = [str(self.node['value'][0]),
                              str(self.node['value'][1])]
 
             return result, result_fields
 
         # Text evaluation
-        return '{0} is not between {1} and {2}'.format(
+        return '{0} &lt; {1} or {0} &gt; {2} or {0} is empty'.format(
             self.node['field'],
             str(self.node['value'][0]),
             str(self.node['value'][1])

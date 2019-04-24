@@ -1,20 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>4.1. Scenario? I don’t even know what the tool does &#8212; OnTask (B.3.2.1) 1.1.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>4.1. Scenario? I don’t even know what the tool does &#8212; OnTask (B.4.3.2) 1.1.0 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="4.2. Scenario 2: Send email to all students with tailored text" href="../scenario_02/index.html" />
@@ -53,52 +53,41 @@
   <div class="section" id="scenario-i-don-t-even-know-what-the-tool-does">
 <span id="scenario-01"></span><h1>4.1. Scenario? I don’t even know what the tool does<a class="headerlink" href="#scenario-i-don-t-even-know-what-the-tool-does" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li>CSV data file: <a class="reference download internal" download="" href="../../_downloads/0ea3c2248eb325018b7de51e44b39ef9/scenario_01_data.csv"><code class="xref download docutils literal notranslate"><span class="pre">Scenario</span> <span class="pre">1</span> <span class="pre">Data</span> <span class="pre">File</span></code></a>.</li>
-<li>Workflow data file: <a class="reference download internal" download="" href="../../_downloads/aabd0dfe3bb01045b5988f474a935c10/scenario_01_wflow.gz"><code class="xref download docutils literal notranslate"><span class="pre">Scenario</span> <span class="pre">1</span> <span class="pre">Workflow</span> <span class="pre">File</span></code></a>.</li>
+<li><p>CSV data file: <a class="reference download internal" download="" href="../../_downloads/0ea3c2248eb325018b7de51e44b39ef9/scenario_01_data.csv"><code class="xref download docutils literal notranslate"><span class="pre">Scenario</span> <span class="pre">1</span> <span class="pre">Data</span> <span class="pre">File</span></code></a>.</p></li>
+<li><p>Workflow data file: <a class="reference download internal" download="" href="../../_downloads/aabd0dfe3bb01045b5988f474a935c10/scenario_01_wflow.gz"><code class="xref download docutils literal notranslate"><span class="pre">Scenario</span> <span class="pre">1</span> <span class="pre">Workflow</span> <span class="pre">File</span></code></a>.</p></li>
 </ul>
 <p>Suppose you have a course with 500 students and they take the course as part of four programs named FASS, FEIT, FSCI, SMED in different disciplines. They are all related, but at the same time different. You would like to send them a text explaining the connection between the material studied in the course and their discipline. The task would then consist of drafting four email texts each of them explaining the connection respectively with FASS, FEIT, FSCI and SMED, and then send the appropriate message to each student.</p>
 <p>Suppose now that you <a class="reference download internal" download="" href="../../_downloads/0ea3c2248eb325018b7de51e44b39ef9/scenario_01_data.csv"><code class="xref download docutils literal notranslate"><span class="pre">do</span> <span class="pre">have</span> <span class="pre">the</span> <span class="pre">class</span> <span class="pre">listing</span> <span class="pre">in</span> <span class="pre">an</span> <span class="pre">excel</span> <span class="pre">sheet</span></code></a>. The table has the names of the students (one student per row), and the column named <em>Program</em> contains for each student one of four possible values “FASS”, “FSCI”, “FEIT” or “SMED”.</p>
 <div class="admonition-steps admonition">
-<p class="first admonition-title">Steps</p>
-<ol class="last arabic">
-<li><p class="first">Create a new workflow (click in the <em>New Workflow</em> button in the home page of the tool). Introduce a name and a description (optional) for this workflow.</p>
-</li>
-<li><p class="first">Open the newly created workflow by clicking its name. A page titled <em>Workflow Details</em> will be shown.</p>
-</li>
-<li><p class="first">The page says that there is no data uploaded yet, and to upload it you need to click in the <em>Dataops</em> link either at the bottom of the text or at the context menu at the top.</p>
-</li>
-<li><p class="first">A new page titled <em>Upload/Merge</em> appears. Select the option <em>CSV Upload/Merge</em> and follow the instructions to upload the <a class="reference download internal" download="" href="../../_downloads/0ea3c2248eb325018b7de51e44b39ef9/scenario_01_data.csv"><code class="xref download docutils literal notranslate"><span class="pre">CSV</span> <span class="pre">file</span></code></a> (select all the columns to upload)</p>
-</li>
-<li><p class="first">Click the <em>Details</em> page to see a summary of the elements in the workflow: 500 rows, 10 columns, 4 actions and 0 attributes. All the steps up to here can be done by <a class="reference download internal" download="" href="../../_downloads/aabd0dfe3bb01045b5988f474a935c10/scenario_01_wflow.gz"><code class="xref download docutils literal notranslate"><span class="pre">importing</span> <span class="pre">the</span> <span class="pre">given</span> <span class="pre">workflow</span> <span class="pre">file</span></code></a>.</p>
-</li>
-<li><p class="first">Click the <em>Table</em> link at the top of the page and browse through the data included in the workflow. Locate the column called <em>Program</em> and verify that it has the correct values.</p>
-</li>
-<li><p class="first">Click the <em>Actions</em> link at the top of the page. The new page contains a list of actions available for this workflow. Click on the button to create a <em>New Action Out</em> to send an email to the students in the SMED program. Choose an name and description (optional) for the action, for example <em>Email students in SMED</em>.</p>
-</li>
-<li><p class="first">We now create a filter that selects only those students for which the column <em>Program</em> has the name <em>SMED</em>. Click in the <em>Add Filter</em> button at the top of the page and in the new screen introduce the elements shown in the following figure:</p>
+<p class="admonition-title">Steps</p>
+<ol class="arabic">
+<li><p>Create a new workflow (click in the <em>New Workflow</em> button in the home page of the tool). Introduce a name and a description (optional) for this workflow.</p></li>
+<li><p>Open the newly created workflow by clicking its name. A page titled <em>Workflow Details</em> will be shown.</p></li>
+<li><p>The page says that there is no data uploaded yet, and to upload it you need to click in the <em>Dataops</em> link either at the bottom of the text or at the context menu at the top.</p></li>
+<li><p>A new page titled <em>Upload/Merge</em> appears. Select the option <em>CSV Upload/Merge</em> and follow the instructions to upload the <a class="reference download internal" download="" href="../../_downloads/0ea3c2248eb325018b7de51e44b39ef9/scenario_01_data.csv"><code class="xref download docutils literal notranslate"><span class="pre">CSV</span> <span class="pre">file</span></code></a> (select all the columns to upload)</p></li>
+<li><p>Click the <em>Details</em> page to see a summary of the elements in the workflow: 500 rows, 10 columns, 4 actions and 0 attributes. All the steps up to here can be done by <a class="reference download internal" download="" href="../../_downloads/aabd0dfe3bb01045b5988f474a935c10/scenario_01_wflow.gz"><code class="xref download docutils literal notranslate"><span class="pre">importing</span> <span class="pre">the</span> <span class="pre">given</span> <span class="pre">workflow</span> <span class="pre">file</span></code></a>.</p></li>
+<li><p>Click the <em>Table</em> link at the top of the page and browse through the data included in the workflow. Locate the column called <em>Program</em> and verify that it has the correct values.</p></li>
+<li><p>Click the <em>Actions</em> link at the top of the page. The new page contains a list of actions available for this workflow. Click on the button to create a <em>New Action Out</em> to send an email to the students in the SMED program. Choose an name and description (optional) for the action, for example <em>Email students in SMED</em>.</p></li>
+<li><p>We now create a filter that selects only those students for which the column <em>Program</em> has the name <em>SMED</em>. Click in the <em>Add Filter</em> button at the top of the page and in the new screen introduce the elements shown in the following figure:</p>
 <div class="figure align-center">
 <img alt="../../_images/scenario_01_action_filter.png" src="../../_images/scenario_01_action_filter.png" />
 </div>
 <p>The filter has name <em>Students in MED</em> and the students are selected if the given <em>Formula</em> is true. In other words, if the <em>Program</em> column is equal to <em>SMED</em>. Create the filter.</p>
 </li>
-<li><p class="first">Once the filter is created the top of the <em>Action Out</em> screen now shows how many students have been selected by the filter (in this example 129 out of 500).</p>
-</li>
-<li><p class="first">Write now the greeting at the top of the text area and select from the pull-down menu labeled <em>Insert column name</em> the <em>GivenName</em>. You will see how the string <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">GivenName</span> <span class="pre">}}</span></code> is inserted in the text. This is the way OnTask has to mark that the string with the double curly braces should be replaced by the value of the column <em>GivenName</em>.</p>
-</li>
-<li><p class="first">Complete the rest of the message with a text explaining why the material and activities in this course are relevant to the <em>SMED</em> program. The <em>Action Out</em> screen should look similar to the one shown in the following figure:</p>
+<li><p>Once the filter is created the top of the <em>Action Out</em> screen now shows how many students have been selected by the filter (in this example 129 out of 500).</p></li>
+<li><p>Write now the greeting at the top of the text area and select from the pull-down menu labeled <em>Insert column name</em> the <em>GivenName</em>. You will see how the string <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">GivenName</span> <span class="pre">}}</span></code> is inserted in the text. This is the way OnTask has to mark that the string with the double curly braces should be replaced by the value of the column <em>GivenName</em>.</p></li>
+<li><p>Complete the rest of the message with a text explaining why the material and activities in this course are relevant to the <em>SMED</em> program. The <em>Action Out</em> screen should look similar to the one shown in the following figure:</p>
 <div class="figure align-center">
 <img alt="../../_images/scenario_01_action_SMED.png" src="../../_images/scenario_01_action_SMED.png" />
 </div>
 </li>
-<li><p class="first">Once you are satisfied with how the text read, click in the <em>Preview</em> button at the bottom of the page and you will see how the message is produced by changing the name of the student (the rest of the text remains the same). Use the arrows to traverse the list of 129 students in this group.</p>
-</li>
-<li><p class="first">Save and close the <em>Action Out</em>. You go back to the screen showing you all the actions in the workflow (you can see the one we just created). If you click in the <em>Email</em> button, you will be asked for some extra data such as the email subject, the column to use as email address and some options to track email reading or even obtain a snapshot (duplicate) of the workflow as it is right now for future reference.</p>
+<li><p>Once you are satisfied with how the text read, click in the <em>Preview</em> button at the bottom of the page and you will see how the message is produced by changing the name of the student (the rest of the text remains the same). Use the arrows to traverse the list of 129 students in this group.</p></li>
+<li><p>Save and close the <em>Action Out</em>. You go back to the screen showing you all the actions in the workflow (you can see the one we just created). If you click in the <em>Email</em> button, you will be asked for some extra data such as the email subject, the column to use as email address and some options to track email reading or even obtain a snapshot (duplicate) of the workflow as it is right now for future reference.</p>
 <div class="figure align-center">
 <img alt="../../_images/scenario_01_action_SMED_email.png" src="../../_images/scenario_01_action_SMED_email.png" />
 </div>
 </li>
-<li><p class="first">That’s it! You now can create three additional similar messages to send emails to the students in the other three programs (FEIT, FASS and FSCI) with an almost identical rule (changing the condition in the filter and the email text).</p>
-</li>
+<li><p>That’s it! You now can create three additional similar messages to send emails to the students in the other three programs (FEIT, FASS and FSCI) with an almost identical rule (changing the condition in the filter and the email text).</p></li>
 </ol>
 </div>
 </div>
@@ -150,7 +139,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../Introduction/index.html">1. What is OnTask</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Install/index.html">2. Installation process</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../Using/index.html">3. Using the tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Using/index.html">3. Using OnTask</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. Use Scenarios</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">4.1. Scenario? I don’t even know what the tool does</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../scenario_02/index.html">4.2. Scenario 2: Send email to all students with tailored text</a></li>
@@ -178,8 +167,6 @@
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>

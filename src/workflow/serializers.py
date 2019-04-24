@@ -3,15 +3,21 @@
 
 from builtins import object
 from builtins import str
+
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
 from action.serializers import ActionSerializer
-from dataops import ops, pandas_db
+from dataops.pandas_db import store_table
 from table.serializers import DataFramePandasField, ViewSerializer
 from workflow.column_serializers import ColumnSerializer
 from .models import Workflow
+
+try:
+    profile
+except NameError:
+    profile = lambda x: x
 
 
 class WorkflowListSerializer(serializers.ModelSerializer):
@@ -59,10 +65,11 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
     uses a regular one for the action field (see WorkflowImportSerializer)
     """
 
-    actions = serializers.SerializerMethodField('get_filtered_actions')
+    actions = serializers.SerializerMethodField()
 
     data_frame = DataFramePandasField(
         required=False,
+        allow_null=True,
         help_text=_('This field must be the Base64 encoded '
                     'result of pandas.to_pickle() function')
     )
@@ -77,7 +84,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
                                     label="OnTask Version",
                                     help_text=_("To guarantee compability"))
 
-    def get_filtered_actions(self, workflow):
+    def get_actions(self, workflow):
         # Get the subset of actions specified in the context
         action_list = self.context.get('selected_actions', [])
         if not action_list:
@@ -96,6 +103,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
 
         return serializer.data
 
+    @profile
     def create(self, validated_data, **kwargs):
 
         # Initial values
@@ -119,29 +127,30 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
                 context={'workflow': workflow_obj})
             # And save its content
             if column_data.is_valid():
-                column_data.save()
+                columns = column_data.save()
             else:
                 raise Exception(_('Unable to save column information'))
 
             # If there is any column with position = 0, recompute (this is to
             # guarantee backward compatibility.
-            if workflow_obj.columns.filter(position=0).exists():
-                for idx, c in enumerate(workflow_obj.columns.all()):
+            if any([c.position == 0 for c in columns]):
+                for idx, c in enumerate(columns):
                     c.position = idx + 1
                     c.save()
 
             # Load the data frame
             data_frame = validated_data.get('data_frame', None)
             if data_frame is not None:
-                ops.store_dataframe_in_db(data_frame,
-                                          workflow_obj.id,
-                                          reset_keys=False)
+                # ops.store_dataframe(data_frame, workflow_obj, reset_keys=False)
+                # Store the table in the DB
+                store_table(
+                    data_frame,
+                    workflow_obj.get_data_frame_table_name(),
+                    dtype=dict([(x.name, x.data_type)
+                                for x in workflow_obj.columns.all()]))
 
                 # Reconcile now the information in workflow and columns with the
                 # one loaded
-                workflow_obj.data_frame_table_name = \
-                    pandas_db.create_table_name(workflow_obj.pk)
-
                 workflow_obj.ncols = validated_data['ncols']
                 workflow_obj.nrows = validated_data['nrows']
 
@@ -151,7 +160,8 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             action_data = ActionSerializer(
                 data=validated_data.get('actions', []),
                 many=True,
-                context={'workflow': workflow_obj}
+                context={'workflow': workflow_obj,
+                         'columns': columns}
             )
             if action_data.is_valid():
                 action_data.save()
@@ -162,7 +172,8 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             view_data = ViewSerializer(
                 data=validated_data.get('views', []),
                 many=True,
-                context={'workflow': workflow_obj}
+                context={'workflow': workflow_obj,
+                         'columns': columns}
             )
             if view_data.is_valid():
                 view_data.save()
@@ -171,8 +182,6 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
         except Exception:
             # Get rid of the objects created
             if workflow_obj:
-                if workflow_obj.has_data_frame():
-                    pandas_db.delete_table(workflow_obj.id)
                 if workflow_obj.id:
                     workflow_obj.delete()
             raise
@@ -185,7 +194,8 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
         #           'query_builder_ops', 'columns', 'data_frame', 'actions')
 
         exclude = ('id', 'user', 'created', 'modified', 'data_frame_table_name',
-                   'session_key', 'shared')
+                   'session_key', 'shared', 'luser_email_column',
+                   'luser_email_column_md5', 'lusers', 'lusers_is_outdated')
 
 
 class WorkflowImportSerializer(WorkflowExportSerializer):
@@ -203,5 +213,3 @@ class WorkflowLockSerializer(serializers.Serializer):
     """
 
     lock = serializers.BooleanField()
-
-

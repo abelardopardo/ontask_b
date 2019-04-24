@@ -16,6 +16,7 @@
   <script type="text/javascript">
     $(document).ready(function() {
       $('#log-table').DataTable({
+        "autoWidth": false,
         "search": {
           "caseInsensitive": true,
         },
@@ -35,8 +36,7 @@
           {"className": "dt-center", "targets": "_all"},
         ],
         "language": {
-          "emptyTable": "{% trans 'No logs recorded for this workflow.' %}",
-          "url": getLanguage()
+            "url": location.protocol + getLanguage()
         },
         "searchDelay": 500,
         "drawCallback": function(settings) {
@@ -54,14 +54,14 @@
     <h1 class="text-center">{% trans 'Logs' %}<super>*</super></h1>
     <div class="text-center" id="log-table-page">
       <a href="{% url 'logs:export' workflow.id %}" download
-         class="btn btn-outline-dark btn-sm js-logs-download"
+         class="shadow btn btn-outline-dark btn-sm js-logs-download"
          data-toggle="tooltip"
          title="{% trans 'Download a CSV file containing these logs' %}">
         <span class="fa fa-download"></span> {% trans 'CSV Download' %}
       </a>
     </div>
-    <div class="container justify-content-center">
-      <table class="table table-hover table-bordered"
+    <div class="justify-content-center">
+      <table class="table table-hover table-bordered shadow"
              id="log-table">
         <thead>
           <tr>
@@ -72,7 +72,7 @@
         </thead>
       </table>
     </div>
-    <p class="text-left">{% blocktrans %}<strong><super>*</super></strong>The platform records all operations
+    <p class="text-left small"><strong><super>*</super></strong>{% blocktrans %}The platform records all operations
       performed on the workflow as <i>Logs</i>. These elements are shown in the table above. You can view its content
       by clicking on its number.{% endblocktrans %}</p>
   </div>

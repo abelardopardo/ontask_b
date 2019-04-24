@@ -1,7 +1,7 @@
 .. _the_dataset:
 
 The Dataset
-===========
+***********
 
 OnTask relies on the existence of data about how learners interact in a given experience. This activity offers an *artificially generated* data set to explore the functionality in the platform.
 
@@ -56,7 +56,7 @@ File ``all_data.csv``
 .. _key_columns:
 
 Key columns
------------
+===========
 
 Each file in the dataset contains the data in *Comma Separated Values* or CSV. This format assumes that 1) the first line has the names of the columns separated by commas, and every line below that one contains the data for a row with the values also separated by commas. This format is used to store information with a structure similar to a table (rows and columns).
 

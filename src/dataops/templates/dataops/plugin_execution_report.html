@@ -8,41 +8,14 @@
   <script src="{% static 'dataops/js/dataops.js' %}"></script>
 {% endblock %}
 {% block container %}
-  <div align="center" class="container">
-    <h1 class="text-center">{% trans 'Plugin execution report' %}</h1>
-    {% if exec_status %}
-      <h3 class="text-center">{% trans 'Incorrect execution' %}</h3>
-      <p class="alert-warning text-center">{{ exec_status }}</p>
-    {% else %}
-      <h3 class="text-center">Correct execution</h3>
-      <div class="container justify-content-center">
-        <table class="table table-hover table-bordered" style="width:100%;"
-               id="plugin-execution-report">
-          <thead>
-            <tr>
-              <th class="text-center">{% trans 'Existing Table' %}</th>
-              <th class="text-center"><button class=" fa fa-arrow-left"></button></th>
-              <th class="text-center">{% trans 'New Data' %}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in info %}
-              <tr {% if item.1 == key %}class="success"{% endif %}>
-                <td class="text-center" style="max-width:220px">{{ item.0 }}</td>
-                <td class="text-center">
-                  {% if item.1 %}
-                    <button class=" fa fa-arrow-left"></button>
-                  {% endif %}
-                </td>
-                <td class="text-center">{{ item.1 }}</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    {% endif %}
+  <div class="container" id="plugin-run-done">
+    <h1 class="text-center">{% trans 'Plugin scheduled for execution' %}</h1>
+    <div class="text-center my-3">
+      <a href="{% url 'logs:view' log_id %}">{% blocktrans %}You may check the
+        status in log number {{ log_id }}.{% endblocktrans %}</a>
+    </div>
     <div class="text-center">
-      <a class="btn btn-outline-dark" href="{% url 'table:display' %}">
+      <a class="shadow btn btn-outline-dark" href="{% url 'table:display' %}">
         {% trans 'Continue' %}
       </a>
     </div>

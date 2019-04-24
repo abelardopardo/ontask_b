@@ -5,7 +5,6 @@ from django.views import generic
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework.authtoken.models import Token
 from django.utils.translation import ugettext_lazy as _
@@ -34,7 +33,7 @@ class ShowProfile(LoginRequiredMixin, generic.TemplateView):
         kwargs["tokens"] = OnTaskOAuthUserTokens.objects.filter(
             user=user
         )
-        return super(ShowProfile, self).get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
 
 class EditProfile(LoginRequiredMixin, generic.TemplateView):
@@ -47,7 +46,7 @@ class EditProfile(LoginRequiredMixin, generic.TemplateView):
             kwargs["user_form"] = forms.UserForm(instance=user)
         if "profile_form" not in kwargs:
             kwargs["profile_form"] = forms.ProfileForm(instance=user.profile)
-        return super(EditProfile, self).get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         user = self.request.user
@@ -61,7 +60,7 @@ class EditProfile(LoginRequiredMixin, generic.TemplateView):
                              "Please check the details."))
             user_form = forms.UserForm(instance=user)
             profile_form = forms.ProfileForm(instance=user.profile)
-            return super(EditProfile, self).get(request,
+            return super().get(request,
                                                 user_form=user_form,
                                                 profile_form=profile_form)
         # Both forms are fine. Time to save!
@@ -81,16 +80,11 @@ def reset_token(request):
     :param request:
     :return:
     """
-    tk = None
-    try:
-        # Get the token to see if it exists
-        tk = Token.objects.get(user=request.user)
-    except ObjectDoesNotExist:
-        pass
+    tk = Token.objects.filter(user=request.user).first()
 
     if tk:
         # Delete it if detected.
-        Token.objects.get(user=request.user).delete()
+        tk.delete()
 
     # Create the new one
     Token.objects.create(user=request.user)

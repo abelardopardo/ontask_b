@@ -352,42 +352,8 @@ def create_forum_data(all_students):
                 forum_student_data['Questions ' + str(week_n)] = 0
                 continue
 
-            #
-            # Views
-            #
-            # International students very high
-            # Part time, high
-            # Rest, normal
-            #
-            # All of them correlate with the midterm score
-            #
+            # Number of maximum items for this week
             max_items = week_contributions[week_n - 2]
-
-            if student_info['Enrolment Type'] == 'International':
-                views = \
-                    int(round(random.normalvariate(max_items *
-                                                   midterm_score / 10,
-                                                   max_items * 0.3)))
-            elif student_info['Attendance'] == 'Part Time':
-                views = \
-                    int(round(random.normalvariate(max_items * 0.8 *
-                                                   midterm_score / 10,
-                                                   max_items * 0.2)))
-            else:
-                views = \
-                    int(round(random.normalvariate(max_items * 0.5 *
-                                                   midterm_score / 10,
-                                                   max_items * 0.15)))
-            if views > max_items:
-                views = max_items
-            if views < 0:
-                views = 0
-
-            # Insert the value in the student forum data
-            forum_student_data['Views ' + str(week_n)] = views
-
-            # Accumulate for the final field
-            views_acc += views
 
             #
             # Contributions
@@ -437,6 +403,46 @@ def create_forum_data(all_students):
 
             # Accumulate for the final field
             questions_acc += questions
+
+            #
+            # Views
+            #
+            # International students very high
+            # Part time, high
+            # Rest, normal
+            #
+            # All of them correlate with the midterm score
+            #
+            if student_info['Enrolment Type'] == 'International':
+                views = \
+                    int(round(random.normalvariate(max_items *
+                                                   midterm_score / 10,
+                                                   max_items * 0.3)))
+            elif student_info['Attendance'] == 'Part Time':
+                views = \
+                    int(round(random.normalvariate(max_items * 0.8 *
+                                                   midterm_score / 10,
+                                                   max_items * 0.2)))
+            else:
+                views = \
+                    int(round(random.normalvariate(max_items * 0.5 *
+                                                   midterm_score / 10,
+                                                   max_items * 0.15)))
+            if views > max_items:
+                views = max_items
+            if views < 0:
+                views = 0
+
+            # Make sure "views" is not less than contr or quesitons
+            if views < contr or views < questions:
+                views = max(contr, questions)
+
+            # Insert the value in the student forum data
+            forum_student_data['Views ' + str(week_n)] = views
+
+            # Accumulate for the final field
+            views_acc += views
+
 
         forum_student_data['Days online'] = days_online_acc
         forum_student_data['Views'] = views_acc

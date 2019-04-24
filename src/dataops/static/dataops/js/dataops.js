@@ -77,5 +77,13 @@ $(window).on("popstate", function() {
   var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
   $("a[href='" + anchor + "']").tab("show");
 });
-
-
+$('#dataops-get-plugin-info-to-run form').validate({
+    ignore: ".ignore",
+    invalidHandler: function(e, validator){
+        if(validator.errorList.length) {
+          $('#dataops-get-plugin-info-tabs a[href="#' + jQuery(validator.errorList[0].element).closest(
+            ".tab-pane").attr('id') + '"]').tab('show')
+          $('#div-spinner').hide();
+        }
+    }
+});

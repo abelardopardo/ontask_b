@@ -1,25 +1,26 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import str
-from builtins import object
 import datetime
 import json
+from builtins import object
+from builtins import str
 
 import pytz
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
 from django.contrib.sessions.models import Session
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.core.cache import cache
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
 import ontask.templatetags.ontask_tags
 from dataops import pandas_db
+from dataops.pandas_db import is_table_in_db
 
 
 class Workflow(models.Model):
@@ -29,11 +30,16 @@ class Workflow(models.Model):
     the main object in the relational model.
     """
 
+    table_prefix = '__ONTASK_WORKFLOW_TABLE_'
+    df_table_prefix = table_prefix + '{0}'
+    upload_table_prefix = table_prefix + 'UPLOAD_{0}'
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              db_index=True,
                              on_delete=models.CASCADE,
                              null=False,
-                             blank=False)
+                             blank=False,
+                             related_name='workflows_owner')
 
     name = models.CharField(max_length=512, blank=False)
 
@@ -83,7 +89,30 @@ class Workflow(models.Model):
     # Workflows shared among users. One workflow can be shared with many
     # users, and many users can have this workflow as available to them.
     shared = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                    related_name='shared_workflows')
+                                    related_name='workflows_shared')
+
+    # Column stipulating where are the learner email values (or empty)
+    luser_email_column = models.ForeignKey('Column',
+                                           on_delete=models.CASCADE,
+                                           null=True,
+                                           blank=False,
+                                           related_name='luser_email_column')
+
+    # MD5 to detect changes in the previous column
+    luser_email_column_md5 = models.CharField(max_length=32,
+                                              default='',
+                                              null=False,
+                                              blank=True)
+
+    lusers = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                    default=None,
+                                    related_name='workflows_luser')
+
+    # Boolean that flags if the lusers field needs to be updated
+    lusers_is_outdated = models.BooleanField(
+        default=False,
+        null=False,
+        blank=False)
 
     @staticmethod
     def unlock_workflow_by_id(wid):
@@ -100,9 +129,38 @@ class Workflow(models.Model):
                 workflow.unlock()
             except ObjectDoesNotExist:
                 return
-            except:
+            except Exception:
                 raise Exception('Unable to unlock workflow {0}'.format(wid))
 
+    def get_data_frame_table_name(self):
+        """
+        Function to get the data_frame_table_name and update it in case it is
+        empty in the DB
+        :return: The table name to store the data frame
+        """
+        if not self.data_frame_table_name:
+            self.data_frame_table_name = self.df_table_prefix.format(self.id)
+            self.save()
+        return self.data_frame_table_name
+
+    def get_data_frame_upload_table_name(self):
+        """
+        Function to get the table name for the upload data frame and update
+        data_frame_table_name if empty.
+        :return: The table name to store the data frame
+        """
+        if not self.data_frame_table_name:
+            self.data_frame_table_name = self.df_table_prefix.format(self.id)
+            self.save()
+        return self.upload_table_prefix.format(self.id)
+
+    def has_table(self):
+        """
+        Boolean stating if there is a table storing a data frame
+        :return: True if the workflow has a table storing the data frame
+        """
+
+        return is_table_in_db(self.get_data_frame_table_name())
 
     def get_columns(self):
         """
@@ -149,6 +207,14 @@ class Workflow(models.Model):
         """
         return list(self.columns.all().values_list('is_key', flat=True))
 
+    def get_unique_columns(self):
+        """
+        Function to access the Column unique.
+
+        :return: List with column types
+        """
+        return self.columns.filter(is_key=True)
+
     def set_query_builder_ops(self):
         """
         Update the JS structure with the initial operators and names for the
@@ -167,7 +233,7 @@ class Workflow(models.Model):
             if column.data_type == 'boolean':
                 # Boolean will only use EQUAL and Yes/No as choices
                 item['input'] = 'radio'
-                item['values'] = {1: 'Yes', 0: 'No'}
+                item['values'] = {True: 'Yes', False: 'No'}
                 item['operators'] = ['equal', 'is_null', 'is_not_null']
                 result.append(item)
                 continue
@@ -210,14 +276,11 @@ class Workflow(models.Model):
         """
         :return: If the workflow has a dataframe
         """
-        return not self.data_frame_table_name
+        return pandas_db.is_table_in_db(self.get_data_frame_table_name())
 
     def data_frame(self):
         # Function used by the serializer to access the data frame in the DB
-        if self.data_frame_table_name:
-            return pandas_db.load_from_db(self.id)
-
-        return None
+        return pandas_db.load_from_db(self.get_data_frame_table_name())
 
     def is_locked(self):
         """
@@ -228,9 +291,8 @@ class Workflow(models.Model):
             # No key in the workflow, then it is not locked.
             return False
 
-        try:
-            session = Session.objects.get(session_key=self.session_key)
-        except ObjectDoesNotExist:
+        session = Session.objects.filter(session_key=self.session_key).first()
+        if not session:
             # Session does not exist, then it is not locked
             return False
 
@@ -296,8 +358,7 @@ class Workflow(models.Model):
         """
         Given a workflow that is supposed to be locked, it returns the user that
         is locking it.
-        :param workflow:
-        :return:
+        :return: The user object that is locking this workflow
         """
         session = Session.objects.get(session_key=self.session_key)
         session_data = session.get_decoded()
@@ -306,8 +367,9 @@ class Workflow(models.Model):
 
     def flush(self):
         """
-        Flush all the data from the workflow and propagate changes throughout the
-        relations with columns, conditions, filters, etc. These steps require:
+        Flush all the data from the workflow and propagate changes throughout
+        the relations with columns, conditions, filters, etc. These steps
+        require:
 
         1) Delete the data frame from the database
 
@@ -321,7 +383,7 @@ class Workflow(models.Model):
         """
 
         # Step 1: Delete the data frame from the database
-        pandas_db.delete_table(self.id)
+        pandas_db.delete_table(self.get_data_frame_table_name())
 
         # Reset some of the workflow fields
         self.nrows = 0
@@ -354,9 +416,6 @@ class Workflow(models.Model):
         # If the indeces are identical, nothing needs to be moved.
         if from_idx == to_idx:
             return
-
-        # if from_idx == -1:
-        #    from_idx = Column.objects.filter(workflow=workflow).count() + 1
 
         if from_idx < to_idx:
             cols = self.columns.filter(position__gt=from_idx,
@@ -425,7 +484,8 @@ class Column(models.Model):
         max_length=512,
         blank=False,
         null=False,
-        choices=[(x, x) for __, x in list(pandas_db.pandas_datatype_names.items())],
+        choices=[(x, x)
+                 for __, x in list(pandas_db.pandas_datatype_names.items())],
         verbose_name=_('type of data to store in the column')
     )
 
@@ -468,7 +528,7 @@ class Column(models.Model):
     )
 
     active_to = models.DateTimeField(
-       _('Column active until'),
+        _('Column active until'),
         blank=True,
         null=True,
         default=None
@@ -509,6 +569,36 @@ class Column(models.Model):
             self.categories = [x.isoformat() for x in to_store]
         else:
             self.categories = to_store
+
+    def get_simplified_data_type(self):
+        """
+        :return: The simplified data type using "number" for either integer or
+        double
+        """
+        if self.data_type == 'string':
+            return 'Text'
+
+        if self.data_type == 'integer' or self.data_type == 'double':
+            return 'Number'
+
+        if self.data_type == 'datetime':
+            return 'Date and time'
+
+        if self.data_type == 'boolean':
+            return 'True/False'
+
+        raise Exception('Unexpected data type {0}'.format(self.data_type))
+
+    def reposition_and_update_df(self, to_idx):
+        """
+
+        :param to_idx: Destination index of the given column
+        :return: Content reflected in the DB
+        """
+
+        self.workflow.reposition_columns(self.position, to_idx)
+        self.position = to_idx
+        self.save()
 
     @staticmethod
     def validate_column_value(data_type, value):

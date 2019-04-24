@@ -18,6 +18,7 @@
   <script type="text/javascript">
     $(document).ready(function() {
       var action_table = $('#action-table').DataTable({
+        "autoWidth": false,
         "search": {
           "caseInsensitive": true,
         },
@@ -26,10 +27,31 @@
           delete data.search;
         },
         "language": {
-          "emptyTable": "{% trans 'There are no actions for this workflow.' %}",
-          "url": getLanguage()
+          "url": location.protocol + getLanguage()
         },
         "columnDefs": [
+          {"targets": 0,
+           "createdCell": function(td, cellData, rowData, row, col) {
+             $(td).html('<div data-toggle="tooltip"><span class="fa"></span</div>');
+             if (cellData == 'personalized_text') {
+               $(td).addClass('action-type-personalized-text');
+               $('div', td).attr('title', 'Personalized text');
+               $('div > span', td).addClass('fa-file-text');
+             } else if (cellData == 'personalized_canvas_email') {
+               $(td).addClass('action-type-personalized-canvas-email');
+               $('div', td).attr('title', 'Personalized Canvas Email');
+               $('div > span', td).addClass('fa-envelope-square');
+             } else if (cellData == 'personalized_json') {
+               $(td).addClass('action-type-personalized-json');
+               $('div', td).attr('title', 'Personalized JSON');
+               $('div > span', td).addClass('fa-code');
+             } else if (cellData == 'survey') {
+               $(td).addClass('action-type-survey');
+               $('div', td).attr('title', 'Survey');
+               $('div > span', td).addClass('fa-question-circle-o');
+             }
+           }
+          },
           {"className": "dt-center", "targets": [0, 3, 4]},
           {"orderable": false, "targets": 4},
           {"searchable": false, "targets": 4},
@@ -49,30 +71,29 @@
     {% if not workflow.nrows %}
       {% include 'workflow/includes/no_data.html' %}
     {% elif not workflow.actions.all|length %}
-      <p class="lead text-center">{% blocktrans %}<strong>Next Step:</strong> Click in the <i>New action</i> below to create a new
+      <p class="lead text-center">{% blocktrans %}<strong>Next Step:</strong> Click in the <span class="fa fa-plus"></span> <i>Action</i> below to create a new
       action to execute based on the data stored in the table.{% endblocktrans %}</p>
     {% endif %}
     <div class="text-center mb-3">
-      <div class="btn-group" role="group">
-        <button type="button" class="btn btn-sm btn-outline-dark js-create-action"
-                data-url="{% url 'action:create' %}"
-                data-toggle="tooltip"
-                title="New action to collect data from learners">
-          <span class="fa fa-plus"></span> {% trans 'New action' %}
-        </button>
-        {% if workflow.nrows %}
-          <a href="{% url 'action:import' %}"
-             class="btn btn-outline-dark"
-             data-toggle="tooltip" title="Import action previously exported">
-            <span class="fa fa-upload"></span> {% trans 'Import action' %}</a>
-        {% endif %}
-        {% include 'workflow/includes/manage_table_data.html' %}
-      </div>
+      <button type="button" class="shadow btn btn-outline-dark js-create-action"
+              data-url="{% url 'action:create' %}"
+              data-toggle="tooltip"
+              title="{% trans 'New action to collect data from learners' %}">
+        <span class="fa fa-plus"></span> {% trans 'Action' %}
+      </button>
+      {% if workflow.nrows %}
+        <a href="{% url 'action:import' %}"
+           class="shadow btn btn-outline-dark"
+           data-toggle="tooltip" title="{% trans 'Import action previously exported' %}">
+          <span class="fa fa-upload"></span> {% trans 'Import action' %}</a>
+      {% endif %}
+      {% include 'workflow/includes/manage_table_data.html' %}
     </div>
     {% if table.data|length %}
-      <div class="container justify-content-center">
+      <div class="justify-content-center">
         {% render_table table %}
       </div>
+      {% include 'action/includes/partial_type_legend.html' %}
     {% endif %}
   </div>
   {% include 'modal.html' %}

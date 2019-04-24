@@ -12,13 +12,13 @@
   </div>
   <div class="modal-body">
     {{ form|crispy }}
-    <label class="control-label">{% trans 'Row filter' %}</label>
+    <label class="control-label">{% trans 'Row will be shown if' %}</label>
     <div id="builder"></div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" data-dismiss="modal">{% trans 'Cancel' %}
+    <button type="button" class="shadow btn btn-outline-dark" data-dismiss="modal">{% trans 'Cancel' %}
     </button>
-    <button type="submit" class="btn btn-outline-primary">
+    <button type="submit" class="shadow btn btn-outline-primary">
       <span class="fa fa-check"></span> {% trans 'Save view' %}</button>
   </div>
 </form>

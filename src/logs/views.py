@@ -26,7 +26,7 @@ def display(request):
     # Try to get workflow and if not present, go to home page
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Create the context with the column names
     context = {
@@ -43,7 +43,7 @@ def display(request):
 @require_http_methods(['POST'])
 def display_ss(request):
     # Try to get workflow and if not present, go to home page
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='logs')
     if not workflow:
         return JsonResponse(
             {'error': _('Incorrect request. Unable to process')}
@@ -85,10 +85,8 @@ def display_ss(request):
     final_qs = []
     for item in qs[start:start + length]:
         row = [
-            """<a href="{0}" class="btn btn-outline-dark spin"
-                  data-toggle="tooltip" title="{1}">
-                  <span class="fa fa-eye"></span> {2}
-                </a>""".format(
+            """<a href="{0}" class="spin"
+                  data-toggle="tooltip" title="{1}">{2}</a>""".format(
                 reverse('logs:view', kwargs={'pk': item[0]}),
                 ugettext('View log content'),
                 item[0]
@@ -123,7 +121,7 @@ def view(request, pk):
     workflow = get_workflow(request)
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     # Get the log item

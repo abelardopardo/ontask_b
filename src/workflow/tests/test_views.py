@@ -18,7 +18,7 @@ from action.models import Action
 
 class WorkflowInitial(test.OnTaskLiveTestCase):
     def setUp(self):
-        super(WorkflowInitial, self).setUp()
+        super().setUp()
         test.create_users()
 
     def test_01_workflow_create_upload_merge_column_edit(self):
@@ -35,8 +35,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
 
         # Go to CSV Upload/Merge
         self.selenium.find_element_by_xpath(
-            "//table[@id='dataops-table']//a[normalize-space()='CSV "
-            "Upload/Merge']").click()
+            "//table[@id='dataops-table']//a[normalize-space()='CSV']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
                 (By.XPATH, "//form")
@@ -57,7 +56,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
-                                             'Step 2: Select Columns')
+                                             'Select Columns')
         )
 
         # Change the name of one of the columns
@@ -94,7 +93,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         self.assert_column_name_type('registered', 'True/False', 5)
 
         # Sixth when and datetime
-        self.assert_column_name_type('when', 'Date/Time', 6)
+        self.assert_column_name_type('when', 'Date and time', 6)
 
         # Go to CSV Upload/Merge Step 1
         self.go_to_csv_upload_merge_step_1()
@@ -113,7 +112,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
-                                             'Step 2: Select Columns')
+                                             'Select Columns')
         )
 
         # Change the name of sid2 to sid
@@ -130,8 +129,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         # Wait for the upload/merge
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.XPATH, "//body/div/h1"),
-                'Step 3: Select Keys and Merge Option')
+                (By.XPATH, "//body/div/h1"), 'Select Keys and Merge Option')
         )
 
         # Select SID in the first key
@@ -151,8 +149,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         # Wait for the upload/merge
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.XPATH, "//body/div/h1"),
-                'Step 4: Review and confirm')
+                (By.XPATH, "//body/div/h1"), 'Review and confirm')
         )
 
         # Click on the FINISH button
@@ -191,8 +188,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
 
         # Go to the CSV upload step 1
         self.selenium.find_element_by_xpath(
-            "//table[@id='dataops-table']//a[normalize-space()='CSV "
-            "Upload/Merge']").click()
+            "//table[@id='dataops-table']//a[normalize-space()='CSV']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
                 (By.XPATH, "//form")
@@ -220,7 +216,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
-                                             'Step 2: Select Columns')
+                                             'Select Columns')
         )
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
@@ -254,20 +250,21 @@ class WorkflowModify(test.OnTaskLiveTestCase):
     )
 
     def setUp(self):
-        super(WorkflowModify, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
-        super(WorkflowModify, self).tearDown()
+        test.delete_all_tables()
+        super().tearDown()
 
     def test_02_workflow_column_create_delete(self):
         new_cols = [
             ('newc1', 'string', 'male,female', ''),
             ('newc2', 'boolean', '', 'True'),
-            ('newc3', 'integer', '0, 10, 20, 30', '0'),
-            ('newc4', 'integer', '0, 0.5, 1, 1.5, 2', '0'),
-            ('newc5', 'datetime', '', '2017-10-11 00:00:00.000+11:00'),
+            ('newc3', 'integer', '', ''),
+            ('newc4', 'integer', '0, 10, 20, 30', '0'),
+            ('newc5', 'integer', '0, 0.5, 1, 1.5, 2', '0'),
+            ('newc6', 'datetime', '', '2017-10-11 00:00:00.000+11:00'),
         ]
 
         # Login
@@ -296,7 +293,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         self.assert_column_name_type('age', 'Number', 1)
 
         # ADD COLUMNS
-        idx = 6
+        idx = 5
         for cname, ctype, clist, cinit in new_cols:
             # ADD A NEW COLUMN
             self.add_column(cname, ctype, clist, cinit, idx)
@@ -304,7 +301,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
             idx += 1
 
         # CHECK THAT THE COLUMNS HAVE BEEN CREATED (starting in the sixth)
-        idx = 6
+        idx = 5
         for cname, ctype, _, _ in new_cols:
             if ctype == 'integer' or ctype == 'double':
                 ctype = 'Number'
@@ -313,7 +310,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
             elif ctype == 'boolean':
                 ctype = 'True/False'
             elif ctype == 'datetime':
-                ctype = 'Date/Time'
+                ctype = 'Date and time'
 
             self.assert_column_name_type(cname, ctype, idx)
             idx += 1
@@ -409,12 +406,12 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
     )
 
     def setUp(self):
-        super(WorkflowAttribute, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
-        super(WorkflowAttribute, self).tearDown()
+        test.delete_all_tables()
+        super().tearDown()
 
     def test_workflow_attributes(self):
         categories = 'aaa, bbb, ccc'
@@ -431,7 +428,7 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         self.go_to_attribute_page()
 
         # Attributes are initially empty
-        self.assertIn('No attributes defined', self.selenium.page_source)
+        self.assertIn('Attributes are pairs', self.selenium.page_source)
 
         # Create key1, value1
         self.create_attribute('key1', 'value1')
@@ -510,12 +507,12 @@ class WorkflowShare(test.OnTaskLiveTestCase):
     )
 
     def setUp(self):
-        super(WorkflowShare, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
-        super(WorkflowShare, self).tearDown()
+        test.delete_all_tables()
+        super().tearDown()
 
     def test_workflow_share(self):
         # Login
@@ -584,7 +581,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
 
         # Wait for the  page to reload.
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'js-attribute-create'))
+            EC.element_to_be_clickable((By.CLASS_NAME, 'js-share-create'))
         )
 
         # Value now should be in the table
@@ -595,7 +592,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
 
         # Check that the shared users are properly stored in the workflow
         workflow = Workflow.objects.all()[0]
-        self.assertEqual(workflow.shared.all().count(), 2)
+        self.assertEqual(workflow.shared.count(), 2)
         users = workflow.shared.all().values_list('email', flat=True)
         self.assertTrue('instructor02@bogus.com' in users)
         self.assertTrue('superuser@bogus.com' in users)
@@ -633,7 +630,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
         )
         # Check that the shared users are properly stored in the workflow
         workflow = Workflow.objects.all()[0]
-        self.assertEqual(workflow.shared.all().count(), 1)
+        self.assertEqual(workflow.shared.count(), 1)
         users = workflow.shared.all().values_list('email', flat=True)
         self.assertTrue('instructor02@bogus.com' in users)
 

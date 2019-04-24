@@ -1,22 +1,27 @@
 {% load i18n %}
-<div id="condition-set-header" class="text-center">
+<div id="condition-set-header" class="text-center my-3">
   <button type="button"
-          class="btn btn-sm btn-outline-dark js-condition-create{% if not has_data %} disabled{% endif %}"
+          class="btn btn-outline-dark js-condition-create{% if not has_data %} disabled{% endif %}"
           data-url="{% url 'action:create_condition' action.id %}"
-          style="margin-bottom: 0.5ex;"
           data-toggle="tooltip"
           title="{% trans 'Define a text condition to insert in the text body below.' %}">
-    <span class="fa fa-plus"></span> {% trans 'New Condition' %}</button>
+    <span class="fa fa-plus"></span> {% trans 'Condition' %}</button>
+  {% include 'action/includes/partial_condition_clone.html' %}
+  {% include 'table/includes/partial_column_stats_selector.html' %}
 </div>
-<div id="condition-set" class="card-deck justify-content-center" style="margin:1em 0 1em 0;">
+<div id="condition-set" class="card-deck justify-content-center my-3">
   {% for condition in conditions %}
-    <div class="card ontask-ccard text-center"
-         style="margin-bottom: 15px;">
+    <div class="shadow card ontask-ccard text-center mx-auto mb-3">
       <h5 class="card-header js-condition-edit" data-url="{% url 'action:edit_condition' condition.id %}">{{ condition.name }}</h5>
       <div class="card-body js-condition-edit" data-url="{% url 'action:edit_condition' condition.id %}" style="min-height: 100px;">
-        <h5 class="card-subtitle mb-2 text-muted">{% blocktrans with n=condition.n_rows_selected count counter=condition.n_rows_selected %}({{ n }} learner){% plural %}({{ n }} learners){% endblocktrans %}</h5>
+        <h5 class="card-subtitle mb-2 text-muted">{% blocktrans with n=condition.n_rows_selected count counter=condition.n_rows_selected %}({{ n }} learner){% plural %}({{ n }} learners){% endblocktrans %}
+          {% if condition.n_rows_selected == 0 %}<span
+              class="fa fa-exclamation-triangle" style="color:red;"
+              data-toggle="tooltip"
+              title="Condition is false for all considered users"></span>
+        {% endif %}</h5>
         <p class="card-text">{{ condition.description_text }}</p>
-        <p class="card-text"><strong>{% trans 'Formula' %}</strong><br/>{{ condition.get_formula_text }}</p>
+        <p class="card-text"><strong>{% trans 'Formula' %}</strong><br/>{{ condition.get_formula_text|safe }}</p>
       </div>
       <div class="cond-buttons">
         <button type="button"

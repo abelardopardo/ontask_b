@@ -13,12 +13,11 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
-import dataops.pandas_db
-import logs
 from dataops import ops, pandas_db
 from dataops.forms import SQLConnectionForm, SQLRequestPassword
 from dataops.models import SQLConnection
 from logs.models import Log
+from ontask import OnTaskDataFrameNoKey
 from ontask.permissions import is_instructor, is_admin
 from ontask.tables import OperationsColumn
 from workflow.models import Workflow
@@ -34,8 +33,7 @@ class SQLConnectionTableAdmin(tables.Table):
 
     def render_name(self, record):
         return format_html(
-            """<a class="js-sqlconn-edit" href="#" data-url="{0}">{1}
-            <span class="fa fa fa-pencil"></span> </a>""",
+            """<a class="js-sqlconn-edit" href="#" data-url="{0}">{1}</a>""",
             reverse('dataops:sqlconn_edit', kwargs={'pk': record['id']}),
             record['name']
         )
@@ -45,7 +43,7 @@ class SQLConnectionTableAdmin(tables.Table):
         fields = ('name', 'description_txt')
         sequence = ('name', 'description_txt', 'operations')
         attrs = {
-            'class': 'table table-hover table-bordered',
+            'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
             'id': 'sqlconn-admin-table'
         }
@@ -72,7 +70,7 @@ class SQLConnectionTableRun(tables.Table):
 
         sequence = ('name', 'description_txt', 'operations')
         attrs = {
-            'class': 'table table-hover table-bordered',
+            'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
             'id': 'sqlconn-instructor-table'
         }
@@ -167,8 +165,8 @@ def sqlconnection_admin_index(request):
                       SQLConnection.objects.all().values('id',
                                                          'name',
                                                          'description_txt'),
-                      orderable=False)
-                  })
+                      orderable=False)}
+                  )
 
 
 @user_passes_test(is_instructor)
@@ -236,8 +234,9 @@ def sqlconn_add(request):
 @user_passes_test(is_admin)
 def sqlconn_edit(request, pk):
     """
-
-    :param request:
+    Respond to the reqeust to edit a SQL CONN object
+    :param request: HTML request
+    :param pk: Primary key
     :return:
     """
 
@@ -246,7 +245,7 @@ def sqlconn_edit(request, pk):
     if not conn:
         return JsonResponse(
             {'form_is_valid': True,
-             'html_redirect': reverse('workflow:index')}
+             'html_redirect': reverse('home')}
         )
 
     # Create the form
@@ -275,7 +274,7 @@ def sqlconn_clone(request, pk):
     if not conn:
         # The view is not there. Redirect to workflow detail
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     # Get the name of the connection to clone
@@ -297,7 +296,6 @@ def sqlconn_clone(request, pk):
         new_name = 'Copy_of_' + new_name
 
     # Proceed to clone the view
-    old_name = conn.name
     conn.id = None
     conn.name = new_name
     conn.save()
@@ -335,7 +333,7 @@ def sqlconn_delete(request, pk):
     if not conn:
         return JsonResponse(
             {'form_is_valid': True,
-             'html_redirect': reverse('workflow:index')}
+             'html_redirect': reverse('home')}
         )
 
     if request.method == 'POST':
@@ -361,7 +359,7 @@ def sqlconn_delete(request, pk):
 
         # In this case, the form is valid anyway
         return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('workflow:index')})
+                             'html_redirect': reverse('home')})
 
     # This is a GET request
     return JsonResponse({
@@ -391,13 +389,14 @@ def sqlupload1(request, pk):
     step_1: URL name of the first step
 
     :param request: Web request
+    :param pk: primary key of the SQL conn used
     :return: Creates the upload_data dictionary in the session
     """
 
     # Get the current workflow
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
         # Get the connection
     conn = SQLConnection.objects.filter(pk=pk).first()
@@ -413,6 +412,7 @@ def sqlupload1(request, pk):
                'wid': workflow.id,
                'dtype': 'SQL',
                'dtype_select': _('SQL connection'),
+               'valuerange': range(5) if workflow.has_table() else range(3),
                'prev_step': reverse('dataops:sqlconns_instructor_index'),
                'conn_type': conn.conn_type,
                'conn_driver': conn.conn_driver,
@@ -439,30 +439,21 @@ def sqlupload1(request, pk):
                        _('Unable to obtain data: {0}').format(e))
         return render(request, 'dataops/sqlupload1.html', context)
 
-    # If the frame has repeated column names, it will not be processed.
-    if len(set(data_frame.columns)) != len(data_frame.columns):
+    try:
+        # Verify the data frame
+        pandas_db.verify_data_frame(data_frame)
+    except OnTaskDataFrameNoKey as e:
         dup = [x for x, v in Counter(list(data_frame.columns)) if v > 1]
-        messages.error(
-            request,
-            _('The data frame has duplicated column names') + ' (' +
-            ','.join(dup) + ').')
-        return render(request, 'dataops/sqlupload1.html', context)
-
-    # If the data frame does not have any unique key, it is not useful (no
-    # way to uniquely identify rows). There must be at least one.
-    src_is_key_column = dataops.pandas_db.are_unique_columns(data_frame)
-    if not any(src_is_key_column):
-        messages.error(
-            request,
-            _('The data has no column with unique values per row. '
-              'At least one column must have unique values.'))
+        messages.error(request, str(e) + ' (' + ','.join(dup) + ').')
         return render(request, 'dataops/sqlupload1.html', context)
 
     # Store the data frame in the DB.
     try:
         # Get frame info with three lists: names, types and is_key
-        frame_info = ops.store_upload_dataframe_in_db(data_frame, workflow.id)
-    except Exception as e:
+        frame_info = ops.store_dataframe(data_frame,
+                                         workflow,
+                                         temporary=True)
+    except Exception:
         form.add_error(
             None,
             _('Sorry. The data from this connection cannot be processed.')

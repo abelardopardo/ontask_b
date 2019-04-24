@@ -136,7 +136,7 @@ def main():
     s = pd.Series(['student{:02}@bogus.com'.format(x)
                    for x in range(1, num_rows + 1)])
     df = pd.DataFrame(data=s, columns=['email'])
-    for qidx in range(1, len(self.input_column_names) + 1):
+    for qidx in range(1, len(plugin_instance.input_column_names) + 1):
         df['SPQ_Q{:02}'.format(qidx)] = [answers[random.randint(0, 4)]
                                          for __ in range(num_rows)]
 

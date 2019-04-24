@@ -1,10 +1,10 @@
 {% load i18n %}
 <div class="dropdown btn-group">
-  <button class="btn btn-outline-dark dropdown-toggle" type="button"
+  <button class="shadow btn btn-outline-dark dropdown-toggle" type="button"
           id="addColumnOperations"
           data-toggle="dropdown"><span class="fa fa-plus"></span> {% trans 'Column' %}
   </button>
-  <div class="dropdown-menu" aria-labelledby="addColumnOpertions">
+  <div class="shadow dropdown-menu" aria-labelledby="addColumnOpertions">
     <button type="button" class="dropdown-item js-workflow-column-add"
             data-url="{% url 'workflow:column_add' %}"
             data-toggle="tooltip"

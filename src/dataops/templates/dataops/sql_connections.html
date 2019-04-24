@@ -18,6 +18,7 @@
       // Required for DataTables
       $(document).ready(function() {
         var sqlconn_table = $('#sqlconn-instructor-table').DataTable({
+          "autoWidth": false,
           "search": {
             "caseInsensitive": true,
           },
@@ -27,8 +28,7 @@
           },
           "order": [[0, "asc"]],
           "language": {
-              "emptyTable": "{% trans 'No sql connections available.' %}",
-              "url": getLanguage()
+            "url": location.protocol + getLanguage()
           },
           "columnDefs": [
               {"className": "dt-center", "targets": [0, 2]},

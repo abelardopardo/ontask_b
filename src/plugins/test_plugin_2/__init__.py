@@ -55,7 +55,7 @@ class OnTaskTestPlugin(object):
     """
 
     def __init__(self):
-        self.name = 'Test Plungin 2 Name'
+        self.name = 'Test Plugin 2 Name'
         self.description_txt = 'Test Plugin 2 Description Text'
         self.input_column_names = ['A1', 'A2']
         self.output_column_names = ['RESULT 3', 'RESULT 4']

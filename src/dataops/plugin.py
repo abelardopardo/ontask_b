@@ -22,8 +22,14 @@ class OnTaskPluginAbstract(with_metaclass(ABCMeta, object)):
 
     num_column_input_to = 0
 
+    output_suffix = ''
+
     def __init__(self):
-        pass
+        self.name = ''
+        self.description_txt = ''
+        self.num_column_input_from = 0
+        self.num_column_input_to = 0
+        self.output_suffix = ''
 
     def get_name(self):
         return self.name
@@ -37,14 +43,16 @@ class OnTaskPluginAbstract(with_metaclass(ABCMeta, object)):
     def get_num_column_input_to(self):
         return self.num_column_input_to
 
-    def run(self, data_frame):
+    def run(self, data_frame, merge_key, parameters=dict):
         """
         Method to ovewrite. Receives a data frame wih a number of columns
-         between num_column_input_from and num_column_input_to and returns
-         a pandas data frame structure that is appended to the existing
-         one (after column renaming).
+        between num_column_input_from and num_column_input_to and returns a
+        pandas data frame structure that is appended to the existing one (
+        after column renaming).
 
         :param data_frame: Input data for the plugin
+        :param merge_key: column name used for merging
+        :param parameters: dictionary with the parameters
         :return: a Pandas data_frame to append to the existing one
         """
 

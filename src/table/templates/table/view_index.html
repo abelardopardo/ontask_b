@@ -25,6 +25,7 @@
   <script type="text/javascript">
     $(document).ready(function() {
       $('#view-table').DataTable({
+        "autoWidth": false,
         "search": {
           "caseInsensitive": true,
         },
@@ -33,8 +34,7 @@
           delete data.search;
         },
         "language": {
-          "infoEmpty": "{% trans 'There are no views for this workflow.' %}",
-          "url": getLanguage()
+          "url": location.protocol + getLanguage()
         },
         "columnDefs": [
           {"className": "dt-center", "targets": [0, 2]},
@@ -54,9 +54,9 @@
   <div class="container" id="view-content">
     <h1 class="text-center">{% trans 'Table Views' %}</h1>
     <div class="text-center mb-3">
-      <a class="btn btn-outline-dark spin"
+      <a class="shadow btn btn-outline-dark spin"
          href="{% url 'table:display' %}">{% trans 'Full Table' %}</a>
-      <button type="button" class="btn btn-outline-dark js-view-add"
+      <button type="button" class="shadow btn btn-outline-dark js-view-add"
               data-url="{% url 'table:view_add' %}"
               data-toggle="tooltip"
               title="{% trans 'New view for the table' %}">
@@ -64,7 +64,7 @@
       </button>
     </div>
     {% if table.data|length %}
-      <div class="container justify-content-center">
+      <div class="justify-content-center">
         {% render_table table %}
       </div>
     {% else %}

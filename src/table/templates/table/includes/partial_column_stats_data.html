@@ -1,0 +1,53 @@
+{% load i18n %}
+{% if stat_data %}
+  {% if column.data_type == 'integer' or column.data_type == 'double' %}
+    <div class="justify-content-center">
+      <table class="table table-hover table-bordered shadow"
+             id="stat-column-a" role="grid" aria-describedby="stat-column_info">
+        <thead>
+          <tr role="row">
+            <th class="dt-center">Min</th>
+            <th class="dt-center">Q1</th>
+            <th class="dt-center">Median</th>
+            <th class="dt-center">Q3</th>
+            <th class="dt-center">Max</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr role="row">
+            <td class="dt-center">{{ stat_data.min }}</td>
+            <td class="dt-center">{{ stat_data.q1 }}</td>
+            <td class="dt-center">{{ stat_data.median }}</td>
+            <td class="dt-center">{{ stat_data.q3 }}</td>
+            <td class="dt-center">{{ stat_data.max }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table table-hover table-bordered shadow"
+             id="stat-column-b" role="grid" aria-describedby="stat-column_info">
+        <thead>
+          <tr role="row">
+            <th class="dt-center">Mean</th>
+            <th class="dt-center">Std</th>
+            <th class="dt-center">Mode</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr role="row">
+            <td class="dt-center">{{ stat_data.mean }}</td>
+            <td class="dt-center">{{ stat_data.std }}</td>
+            <td class="dt-center">{{ stat_data.mode }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+  <div class="row justify-content-center">
+    {% for vis_item in visualizations %}
+      {{ vis_item|safe }}
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="alert-warning text-center">{% trans 'Column has no data' %}</p>
+{% endif %}
+

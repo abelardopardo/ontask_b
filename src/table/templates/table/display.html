@@ -28,6 +28,7 @@
       // Required for DataTables
       $(document).ready(function() {
         var table_data = $('#table-data').DataTable({
+          "autoWidth": false,
           "search": {
             "caseInsensitive": true,
           },
@@ -48,6 +49,11 @@
             {"className": "dt-center", "targets": "_all"},
             {"orderable": false, "targets": 0},
             {"searchable": false, "targets": 0},
+            {"targets": 0,
+             createdCell: function(td, cellData, rowData, row, col){
+               $(td).addClass('align-middle');
+             }
+            },
           ],
           "drawCallback": function(settings) {
              // Needed to enable tooltips in ajax produced content
@@ -66,11 +72,26 @@
         });
         table_data.on("column-reorder", column_reorder);
       });
+      // Add data types as class attributes
+      {% if column_types %}
+        column_types = {{ column_types|safe }};
+        $.each($('#table-data thead tr th').get(), function(idx, val){
+          var coltype = column_types[idx];
+          if (coltype != '') {
+            $(val).addClass('column-type-' + coltype);
+          }
+        });
+      {% endif %}
     }
     {% with js_var='qbuilder_options' allow_empty='true' empty_rules=True %}
       {% include 'qbuilder_options.js' %}
     {% endwith %}
-</script>
+  </script>
+  {% if vis_scripts %}
+    {% for script_src in vis_scripts %}
+      <script src="{{ script_src|safe }}"></script>
+    {% endfor %}
+  {% endif %}
 {% endblock %}
 {% block container %}
   <div id="table-content" class="container">
@@ -85,41 +106,41 @@
       {% include 'workflow/includes/no_actions.html' %}
     {% endif %}
     <div id="table-operation-buttons">
-      <div class="text-center">
-        <div class="btn-group mb-3">
-          {% if columns %}
-            <a href="{% url 'dataops:rowcreate' %}"
-               class="btn btn-outline-dark spin"
-               data-toggle="tooltip"
-               title="{% trans 'Add a new row to the table' %}">
-              <span class="fa fa-plus"></span> {% trans 'Row' %}
-            </a>
-            {% include 'workflow/includes/add_column_menu.html' %}
-          {% endif %}
-          {% include 'workflow/includes/manage_table_data.html' %}
-        </div>
-      </div>
-      <div class="text-center">
-      <div class="btn-group mb-3">
+      <div class="text-center mb-3">
+        {% if columns %}
+          <a href="{% url 'dataops:rowcreate' %}"
+             class="shadow btn btn-outline-dark spin"
+             data-toggle="tooltip"
+             title="{% trans 'Add a new row to the table' %}">
+            <span class="fa fa-plus"></span> {% trans 'Row' %}
+          </a>
+          {% include 'workflow/includes/add_column_menu.html' %}
+        {% endif %}
         {% if columns %}
           <div class="dropdown btn-group">
             <a href="{% url 'table:view_index' %}"
-               class="btn btn-outline-dark spin"
+               class="shadow btn btn-outline-dark spin"
                data-toggle="tooltip"
                title="{% trans 'Views available for this table' %}">
               <span class="fa fa fa-eye"></span> {% trans 'Views' %}
             </a>
             {% if views %}
-              <button type="button" data-toggle="dropdown"
-                      class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
+              <button type="button"
+                      class="shadow btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="sr-only">Toggle Dropdown</span>
               </button>
-              <div class="dropdown-menu">
-              {% for v in views %}
-                <a href="{% url 'table:display_view' v.id %}"
-                   class="dropdown-item spin">{{ v.name }}</a>
-              {% endfor %}
+              <div class="shadow dropdown-menu dropdown-menu-right">
+                {% for v in views %}
+                  {% if v != view %}
+                    <a href="{% url 'table:display_view' v.id %}"
+                       class="dropdown-item spin">{{ v.name }}</a>
+                  {% endif %}
+                {% endfor %}
+                {% if view %}
+                  <a class="dropdown-item spin"
+                     href="{% url 'table:display' %}">Full table</a>
+                {% endif%}
               </div>
             {% endif %}
           </div>
@@ -127,44 +148,45 @@
         {% if columns %}
           {% if view %}
             <button type="button"
-                    class="btn btn-outline-dark js-view-edit align-middle"
+                    class="shadow btn btn-outline-dark js-view-edit align-middle"
                     data-url="{% url 'table:view_edit' view.id %}"
                     data-toggle="tooltip" title="{% trans 'Change elements in view' %}">
               <span class="fa fa-pencil"></span> {% trans 'Edit view' %}
             </button>
-            <a class="btn btn-outline-dark spin" href="{% url 'table:display' %}">Full table</a>
             <a href="{% url 'table:stat_table_view' view.id %}"
-               class="btn btn-outline-dark spin"
+               class="shadow btn btn-outline-dark spin"
                data-toggle="tooltip"
                title="{% trans 'Dashboard created with the view data' %}">
               <span class="fa fa-dashboard"></span> {% trans 'Dashboard' %}
             </a>
+            {% include 'table/includes/partial_column_stats_selector.html' %}
             <a href="{% url 'table:csvdownload_view' view.id %}" download
-               class="btn btn-outline-dark js-logs-download"
+               class="shadow btn btn-outline-dark js-logs-download"
                data-toggle="tooltip"
                title="{% trans 'Download a CSV file containing this table' %}">
               <span class="fa fa-download"></span> {% trans 'CSV Download' %}
             </a>
           {% else %}
             <a href="{% url 'table:stat_table' %}"
-               class="btn btn-outline-dark spin"
+               class="shadow btn btn-outline-dark spin"
                data-toggle="tooltip"
                title="{% trans 'Dashboard created with the table data' %}">
               <span class="fa fa-dashboard"></span> {% trans 'Dashboard' %}
             </a>
+            {% include 'table/includes/partial_column_stats_selector.html' %}
             <a href="{% url 'table:csvdownload' %}"
-               class="btn btn-outline-dark"
+               class="shadow btn btn-outline-dark"
                data-toggle="tooltip"
                title="{% trans 'Download a CSV file containing this table' %}">
               <span class="fa fa-download"></span> {% trans 'CSV Download' %}
             </a>
           {% endif %}
         {% endif %}
+        {% include 'workflow/includes/manage_table_data.html' %}
       </div>
     </div>
-    </div>
     {% if columns %}
-      <table class="table table-hover table-bordered" style="width: 100%;"
+      <table class="table table-hover table-bordered shadow w-100"
              id="table-data" data-url="{% url 'workflow:column_move' %}">
         <thead>
           <tr>
@@ -177,7 +199,8 @@
           </tr>
         </thead>
       </table>
-      <p class="text-center">{% trans 'You may drag-and-drop a column header to change its position in the table' %}</p>
+      {% include 'table/includes/partial_type_legend.html' %}
+      <p class="text-center">{% trans 'You may drag and drop a column header to change its position in the table' %}</p>
     {% endif %}
   </div>
   {% include 'modal.html' %}

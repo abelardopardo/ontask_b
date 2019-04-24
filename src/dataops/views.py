@@ -1,35 +1,31 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import zip
-from builtins import range
+import json
 from builtins import object
-from datetime import datetime
+from builtins import range
+from builtins import str
+from builtins import zip
 
 import django_tables2 as tables
 import pandas as pd
-import pytz
-from builtins import str
-from django.conf import settings as ontask_settings
+from celery.task.control import inspect
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _, ugettext
-from django.views.decorators.cache import cache_page
+from django.utils.translation import ugettext_lazy as _
 
 import dataops.ops as ops
 import dataops.pandas_db
 from dataops import pandas_db
 from dataops.forms import PluginInfoForm
-from dataops.plugin_manager import run_plugin
 from logs.models import Log
 from ontask.permissions import is_instructor
-from ontask.tables import OperationsColumn
+from ontask.tasks import run_plugin
 from workflow.ops import get_workflow
 from .forms import RowForm, FIELD_PREFIX
 from .models import PluginRegistry
@@ -58,14 +54,13 @@ class PluginRegistryTable(tables.Table):
 
         self.request = kwargs.get("request", None)
 
-        super(PluginRegistryTable, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def render_name(self, record):
         if record.is_verified:
             return format_html(
-                """<a href="{0}"
-                      data-toggle="tooltip"
-                      title="{1}">{2}&nbsp;<span class="fa fa-rocket"></span></a>""",
+                '<a href="{0}" ' +
+                'data-toggle="tooltip" title="{1}">{2}',
                 reverse('dataops:plugin_invoke', kwargs={'pk': record.id}),
                 _('Execute the transformation'),
                 record.name
@@ -103,23 +98,23 @@ class PluginRegistryTable(tables.Table):
                     'last_exec')
 
         attrs = {
-            'class': 'table table-hover table-bordered',
+            'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
             'id': 'transform-table'
         }
 
 
-@cache_page(60 * 15)
 @user_passes_test(is_instructor)
 def uploadmerge(request):
     # Get the workflow that is being used
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     return render(request,
                   'dataops/uploadmerge.html',
-                  {'nrows': workflow.nrows})
+                  {'valuerange':
+                       range(5) if workflow.has_table() else range(3)})
 
 
 @user_passes_test(is_instructor)
@@ -127,7 +122,7 @@ def transform(request):
     # Get the workflow that is being used
     workflow = get_workflow(request)
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Traverse the plugin folder and refresh the db content.
     refresh_plugin_data(request, workflow)
@@ -154,9 +149,8 @@ def diagnose(request, pk):
     data = dict()
 
     # Action being used
-    try:
-        plugin = PluginRegistry.objects.get(id=pk)
-    except ObjectDoesNotExist:
+    plugin = PluginRegistry.objects.filter(id=pk).first()
+    if not plugin:
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('dataops:transform')
         return JsonResponse(data)
@@ -191,9 +185,9 @@ def row_update(request):
     """
 
     # If there is no workflow object, go back to the index
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # If the workflow has no data, something went wrong, go back to the
     # main dataops page
@@ -210,10 +204,12 @@ def row_update(request):
                       {'message': _('Unable to update table row')})
 
     # Get the rows from the table
-    rows = pandas_db.execute_select_on_table(workflow.id,
-                                             [update_key],
-                                             [update_val],
-                                             workflow.get_column_names())
+    rows = pandas_db.execute_select_on_table(
+        workflow.get_data_frame_table_name(),
+        [update_key],
+        [update_val],
+        workflow.get_column_names()
+    )
 
     row_form = RowForm(request.POST or None,
                        workflow=workflow,
@@ -231,26 +227,25 @@ def row_update(request):
     # Create the query to update the row
     set_fields = []
     set_values = []
-    columns = workflow.get_columns()
-    unique_names = [c.name for c in columns if c.is_key]
+    unique_names = workflow.get_unique_columns().values_list('name', flat=True)
     unique_field = None
     unique_value = None
     log_payload = []
-    for idx, col in enumerate(columns):
+    for idx, colname in enumerate(unique_names):
         value = row_form.cleaned_data[FIELD_PREFIX + '%s' % idx]
-        set_fields.append(col.name)
+        set_fields.append(colname)
         set_values.append(value)
-        log_payload.append((col.name, str(value)))
+        log_payload.append((colname, str(value)))
 
-        if not unique_field and col.name in unique_names:
-            unique_field = col.name
+        if not unique_field and colname in unique_names:
+            unique_field = colname
             unique_value = value
 
     # If there is no unique key, something went wrong.
     if not unique_field:
         raise Exception(_('Key value not found when updating row'))
 
-    pandas_db.update_row(workflow.id,
+    pandas_db.update_row(workflow.get_data_frame_table_name(),
                          set_fields,
                          set_values,
                          [unique_field],
@@ -280,9 +275,10 @@ def row_create(request):
     """
 
     # If there is no workflow object, go back to the index
-    workflow = get_workflow(request)
+    workflow = get_workflow(request,
+                            prefetch_related=['columns', 'actions'])
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # If the workflow has no data, the operation should not be allowed
     if workflow.nrows == 0:
@@ -306,7 +302,7 @@ def row_create(request):
                 for idx in range(len(columns))]
 
     # Load the existing df from the db
-    df = pandas_db.load_from_db(workflow.id)
+    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
     # Perform the row addition in the DF first
     # df2 = pd.DataFrame([[5, 6], [7, 8]], columns=list('AB'))
@@ -315,7 +311,7 @@ def row_create(request):
     df = df.append(new_row, ignore_index=True)
 
     # Verify that the unique columns remain unique
-    for ucol in [c for c in columns if c.is_key]:
+    for ucol in [c for c in columns.filter(is_key=True)]:
         if not dataops.pandas_db.is_unique_column(df[ucol.name]):
             form.add_error(
                 None,
@@ -329,7 +325,7 @@ def row_create(request):
                            'cancel_url': reverse('table:display')})
 
     # Restore the dataframe to the DB
-    ops.store_dataframe_in_db(df, workflow.id)
+    ops.store_dataframe(df, workflow)
 
     # Recompute all the values of the conditions in each of the actions
     for act in workflow.actions.all():
@@ -357,14 +353,29 @@ def plugin_invoke(request, pk):
     :return: Page offering to select the columns to invoke
     """
 
+    # Verify that celery is running!
+    celery_stats = None
+    try:
+        celery_stats = inspect().stats()
+    except Exception:
+        pass
+
+    # If the stats are empty, celery is not running.
+    if not celery_stats:
+        messages.error(
+            request,
+            _('Unable to run plugins due to a misconfiguration. '
+              'Ask your system administrator to enable queueing.'))
+        return redirect(reverse('table:display'))
+
     # Get the workflow and the plugin information
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
     try:
         plugin_info = PluginRegistry.objects.get(pk=pk)
     except PluginRegistry.DoesNotExist:
-        return redirect('workflow:index')
+        return redirect('home')
 
     plugin_instance, msgs = load_plugin(plugin_info.filename)
     if plugin_instance is None:
@@ -410,163 +421,64 @@ def plugin_invoke(request, pk):
 
     # POST is correct proceed with execution
 
-    # Get the data frame and select the appropriate columns
-    try:
-        dst_df = pandas_db.load_from_db(workflow.id)
-    except Exception:
-        messages.error(request,
-                       _('Exception while retrieving the data frame'))
-        return render(request, 'error.html', {})
+    # Prepare the data to invoke the plugin, namely:
+    # input_column_names (list)
+    # output_column_names (list)
+    # merge_key (string)
+    # parameters (dictionary)
 
     # Take the list of inputs from the form if empty list is given.
+    input_column_names = []
     if not plugin_instance.input_column_names:
-        plugin_instance.input_column_names = \
-            [c.name for c in form.cleaned_data['columns']]
+        input_column_names = [c.name for c in form.cleaned_data['columns']]
 
-    # Get the proper subset of the data frame
-    sub_df = dst_df[[form.cleaned_data['merge_key']] +
-                    plugin_instance.input_column_names]
+    output_column_names = []
+    if plugin_instance.output_column_names:
+        # Process the output columns
+        for idx, __ in enumerate(plugin_instance.output_column_names):
+            new_cname = form.cleaned_data[FIELD_PREFIX + 'output_%s' % idx]
+            output_column_names.append(new_cname)
+    else:
+        # Plugin instance has an empty set of output files, clone the input
+        output_column_names = input_column_names[:]
 
-    # Process the output columns
-    for idx, output_cname in enumerate(plugin_instance.output_column_names):
-        new_cname = form.cleaned_data[FIELD_PREFIX + 'output_%s' % idx]
-        if form.cleaned_data['out_column_suffix']:
-            new_cname += form.cleaned_data['out_column_suffix']
-        plugin_instance.output_column_names[idx] = new_cname
+    suffix = form.cleaned_data['out_column_suffix']
+    if suffix:
+        # A suffix has been provided, add it to the list of outputs
+        output_column_names = [x + suffix for x in output_column_names]
 
     # Pack the parameters
-    params = dict()
+    parameters = {}
     for idx, tpl in enumerate(plugin_instance.parameters):
-        params[tpl[0]] = form.cleaned_data[FIELD_PREFIX + 'parameter_%s' % idx]
+        parameters[tpl[0]] = form.cleaned_data[
+            FIELD_PREFIX + 'parameter_%s' % idx
+            ]
 
-    # Execute the plugin
-    result_df, status = run_plugin(plugin_instance,
-                                   sub_df,
-                                   form.cleaned_data['merge_key'],
-                                   params)
+    # Log the event with the status "preparing invocation"
+    log_item = Log.objects.register(
+        request.user,
+        Log.PLUGIN_EXECUTE,
+        workflow,
+        {'id': plugin_info.id,
+         'name': plugin_info.name,
+         'input_column_names': input_column_names,
+         'output_column_names': output_column_names,
+         'parameters': json.dumps(parameters, default=str),
+         'status': 'preparing execution'})
 
-    if status is not None:
-        context['exec_status'] = status
+    run_plugin.apply_async(
+        (request.user.id,
+         workflow.id,
+         pk,
+         input_column_names,
+         output_column_names,
+         suffix,
+         form.cleaned_data['merge_key'],
+         parameters,
+         log_item.id),
+        serializer='pickle')
 
-        # Log the event
-        Log.objects.register(request.user,
-                             Log.PLUGIN_EXECUTE,
-                             workflow,
-                             {'id': plugin_info.id,
-                              'name': plugin_info.name,
-                              'status': status})
-
-        return render(request,
-                      'dataops/plugin_execution_report.html',
-                      context)
-
-    # Additional checks
-    # Result has the same number of rows
-    if result_df.shape[0] != dst_df.shape[0]:
-        status = _('Incorrect number of rows in result data frame.')
-        context['exec_status'] = status
-
-        # Log the event
-        Log.objects.register(request.user,
-                             Log.PLUGIN_EXECUTE,
-                             workflow,
-                             {'id': plugin_info.id,
-                              'name': plugin_info.name,
-                              'status': status})
-
-        return render(request,
-                      'dataops/plugin_execution_report.html',
-                      context)
-
-    # Result column names are consistent
-    if set(result_df.columns) != \
-            set([form.cleaned_data['merge_key']] +
-                plugin_instance.output_column_names):
-        status = 'Incorrect columns in result data frame.'
-        context['exec_status'] = status
-
-        # Log the event
-        Log.objects.register(request.user,
-                             Log.PLUGIN_EXECUTE,
-                             workflow,
-                             {'id': plugin_info.id,
-                              'name': plugin_info.name,
-                              'status': status})
-
-        return render(request,
-                      'dataops/plugin_execution_report.html',
-                      context)
-
-    # Proceed with the merge
-    try:
-        result = ops.perform_dataframe_upload_merge(
-            workflow,
-            dst_df,
-            result_df,
-            {'how_merge': 'left',
-             'dst_selected_key': form.cleaned_data['merge_key'],
-             'src_selected_key': form.cleaned_data['merge_key'],
-             'initial_column_names': list(result_df.columns),
-             'rename_column_names': list(result_df.columns),
-             'columns_to_upload': [True] * len(list(result_df.columns))}
-        )
-    except Exception as e:
-        context['exec_status'] = e
-        return render(request,
-                      'dataops/plugin_execution_report.html',
-                      context)
-
-    if isinstance(result, str):
-        # Something went wrong
-        context['exec_status'] = result
-        return render(request,
-                      'dataops/plugin_execution_report.html',
-                      context)
-
-    # Get the resulting dataframe
-    final_df = pandas_db.load_from_db(workflow.id)
-
-    # Update execution time
-    plugin_info.executed = datetime.now(
-        pytz.timezone(ontask_settings.TIME_ZONE)
-    )
-    plugin_info.save()
-
-    # List of pairs (column name, column type) in the result to create the
-    # log event
-    result_columns = list(zip(
-        list(result_df.columns),
-        pandas_db.df_column_types_rename(result_df)))
-
-    # Log the event
-    Log.objects.register(request.user,
-                         Log.PLUGIN_EXECUTE,
-                         workflow,
-                         {'id': plugin_info.id,
-                          'name': plugin_info.name,
-                          'status': status,
-                          'result_columns': result_columns})
-
-    # Create the table information to show in the report.
-    column_info = []
-    dst_names = list(dst_df.columns)
-    result_names = list(result_df.columns)
-    for c in list(final_df.columns):
-        if c not in result_names:
-            column_info.append((c, ''))
-        elif c not in dst_names:
-            column_info.append(('', c + ugettext(' (New)')))
-        else:
-            if c == form.cleaned_data['merge_key']:
-                column_info.append((c, c))
-            else:
-                column_info.append((c + ugettext(' (Update)'), c))
-
-    context['info'] = column_info
-    context['key'] = form.cleaned_data['merge_key']
-    context['id'] = workflow.id
-
-    # Redirect to the notification page with the proper info
+    # Successful processing.
     return render(request,
                   'dataops/plugin_execution_report.html',
-                  context)
+                  {'log_id': log_item.id})

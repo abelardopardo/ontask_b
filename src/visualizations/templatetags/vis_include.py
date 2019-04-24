@@ -2,15 +2,12 @@
 from __future__ import unicode_literals
 
 from django import template
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from action.evaluate import action_context_var, viz_number_context_var, tr_item
-from action.models import Condition
 from dataops import pandas_db
 from visualizations.plotly import PlotlyColumnHistogram
-from workflow.models import Column
 
 register = template.Library()
 
@@ -23,7 +20,7 @@ def vis_html_content(context, column_name):
     workflow = action.workflow
 
     # Check if the column is correct
-    if not Column.objects.filter(workflow=workflow, name=column_name).exists():
+    if not workflow.columns.filter(name=column_name).exists():
         raise Exception(_('Column {0} does not exist').format(column_name))
 
     # Get the visualization number to generate unique IDs
@@ -47,7 +44,10 @@ def vis_html_content(context, column_name):
     cond_filter = action.get_filter()
 
     # Get the data from the data frame
-    df = pandas_db.get_subframe(workflow.id, cond_filter, [column_name])
+    df = pandas_db.get_subframe(
+        workflow.get_data_frame_table_name(),
+        cond_filter,
+        [column_name])
 
     # Get the visualisation
     viz = PlotlyColumnHistogram(data=df, context=viz_ctx)

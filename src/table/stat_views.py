@@ -3,18 +3,19 @@
 Implementation of views providing visualisation and stats
 """
 
-
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import ObjectDoesNotExist
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from dataops import pandas_db
+from dataops.pandas_db import load_from_db, get_column_stats_from_df
 from ontask.permissions import is_instructor
 from table.models import View
 from visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
-from workflow.models import Column
 from workflow.ops import get_workflow
 
 
@@ -73,9 +74,9 @@ def get_column_visualisations(column, col_data, vis_scripts,
 
 def get_row_visualisations(request, view_id=None):
     # If there is no workflow object, go back to the index
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related=['columns', 'views'])
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # If the workflow has no data, something went wrong, go back to the
     # workflow details page
@@ -95,24 +96,27 @@ def get_row_visualisations(request, view_id=None):
     columns_to_view = workflow.columns.all()
     column_names = workflow.get_column_names()
     if view_id:
-        try:
-            view = View.objects.get(pk=view_id)
-        except ObjectDoesNotExist:
+        view = workflow.views.filter(pk=view_id).first()
+        if not view:
             # View not found. Redirect to workflow detail
             return redirect('workflow:detail', workflow.id)
         columns_to_view = view.columns.all()
         column_names = [c.name for c in columns_to_view]
 
-        df = pandas_db.load_from_db(workflow.id, column_names, view.formula)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name(),
+                                    column_names,
+                                    view.formula)
     else:
         # No view given, fetch the entire data frame
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
     # Get the rows from the table
-    row = pandas_db.execute_select_on_table(workflow.id,
-                                            [update_key],
-                                            [update_val],
-                                            column_names)[0]
+    row = pandas_db.execute_select_on_table(
+        workflow.get_data_frame_table_name(),
+        [update_key],
+        [update_val],
+        column_names
+    )[0]
 
     vis_scripts = []
     visualizations = []
@@ -136,7 +140,7 @@ def get_row_visualisations(request, view_id=None):
 
         if row[idx] is None or row[idx] == '':
             visualizations.append(
-                '<p class="alert-warning">' + \
+                '<p class="alert-warning">' +
                 _('No value for this student in this column') + '</p>'
             )
 
@@ -173,9 +177,9 @@ def get_view_visualisations(request, view_id=None):
     significant overlap.
     """
     # If there is no workflow object, go back to the index
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related=['columns', 'views'])
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # If the workflow has no data, something went wrong, go back to the
     # workflow details page
@@ -186,22 +190,20 @@ def get_view_visualisations(request, view_id=None):
 
     # If a view is given, filter the columns
     columns_to_view = workflow.columns.all()
-    formula = None
     view = None
     if view_id:
-        try:
-            view = View.objects.get(pk=view_id)
-        except ObjectDoesNotExist:
+        view = workflow.vhews.filter(pk=view_id).first()
+        if not view:
             # View not found. Redirect to workflow detail
             return redirect('workflow:detail', workflow.id)
         columns_to_view = view.columns.all()
 
-        df = pandas_db.load_from_db(workflow.id,
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name(),
                                     [x.name for x in columns_to_view],
                                     view.formula)
     else:
         # No view given, fetch the entire data frame
-        df = pandas_db.load_from_db(workflow.id)
+        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
     vis_scripts = []
     visualizations = []
@@ -242,6 +244,41 @@ def get_view_visualisations(request, view_id=None):
                    'visualizations': visualizations})
 
 
+def get_column_visualization_items(workflow,
+                                   column,
+                                   max_width=800,
+                                   max_height=450):
+    """
+    Get the visualization items (scripts and HTML) for a column
+    :param workflow: Workflow being processed
+    :param column: Column requested
+    :param max_width: Maximum width attribute in pixels
+    :param max_width: Maximum height attribute in pixels
+    :return: Tuple stat_data with descriptive stats, visualization scripts and
+    visualization HTML
+    """
+    # Get the dataframe
+    df = load_from_db(workflow.get_data_frame_table_name())
+
+    # Extract the data to show at the top of the page
+    stat_data = get_column_stats_from_df(df[column.name])
+
+    vis_scripts = []
+    visualizations = get_column_visualisations(
+        column,
+        df[[column.name]],
+        vis_scripts,
+        context={'style': 'max-width:{0}px; max-height:{1}px;'
+                          'display:inline-block;'.format(
+                               max_width,
+                               max_height
+                          )
+        }
+    )
+
+    return stat_data, vis_scripts, visualizations
+
+
 @user_passes_test(is_instructor)
 def stat_column(request, pk):
     """
@@ -256,30 +293,17 @@ def stat_column(request, pk):
     :return: Render the page
     """
 
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the column
-    try:
-        column = Column.objects.get(pk=pk, workflow=workflow)
-    except ObjectDoesNotExist:
-        return redirect('workflow:index')
+    column = workflow.columns.filter(pk=pk).first()
+    if not column:
+        return redirect('home')
 
-    # Get the dataframe
-    df = pandas_db.load_from_db(workflow.id)
-
-    # Extract the data to show at the top of the page
-    stat_data = pandas_db.get_column_stats_from_df(df[column.name])
-
-    vis_scripts = []
-    visualizations = get_column_visualisations(
-        column,
-        df[[column.name]],
-        vis_scripts,
-        context={'style':
-                     'max-width:800px; max-height:450px;display:inline-block;'}
-    )
+    stat_data, vis_scripts, visualizations = \
+        get_column_visualization_items(workflow, column)
 
     return render(request,
                   'table/stat_column.html',
@@ -288,6 +312,56 @@ def stat_column(request, pk):
                    'vis_scripts': vis_scripts,
                    'visualizations': [v.html_content for v in visualizations]}
                   )
+
+
+@user_passes_test(is_instructor)
+def stat_column_JSON(request, pk):
+    """
+    Function to respond a JSON GET request to show the column statistics
+    in a modal
+    :param request: HTTP request
+    :param pk: Column primary key
+    :return: HTML rendering of the visualization
+    """
+
+    # To include in the JSON response
+    data = dict()
+
+    # Get the workflow to obtain row numbers
+    workflow = get_workflow(request, prefetch_related='columns')
+    if not workflow:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
+    # Get column, must be in the workflow
+    column = workflow.columns.filter(pk=pk).first()
+    if not column or column.is_key:
+        # Something went wrong, the column requested does not belong to the
+        # workflow selected, or the column requested is a key column
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
+    # Request to see the statistics for a non-key column that belongs to the
+    # selected workflow
+
+    stat_data, __, visualizations = \
+        get_column_visualization_items(workflow,
+                                       column,
+                                       max_height=250,
+                                       max_width=468)
+
+    # Create the right key/value pair in the result dictionary
+    data['html_form'] = render_to_string(
+        'table/includes/partial_column_stats_modal.html',
+        context={'column': column,
+                 'stat_data': stat_data,
+                 'visualizations': [v.html_content for v in visualizations]},
+        request=request
+    )
+
+    return JsonResponse(data)
 
 
 @user_passes_test(is_instructor)
@@ -318,6 +392,7 @@ def stat_row_view(request, pk):
     """
 
     return get_row_visualisations(request, pk)
+
 
 @user_passes_test(is_instructor)
 def stat_table(request):

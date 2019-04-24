@@ -43,7 +43,7 @@ class ToolProvider(LaunchParamsMixin, RequestValidatorMixin, object):
         self.consumer_secret = consumer_secret
 
         # Call superclass initializers
-        super(ToolProvider, self).__init__()
+        super().__init__()
 
         self.non_spec_params = defaultdict(lambda: None)
         self.outcome_requests = []

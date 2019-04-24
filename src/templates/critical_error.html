@@ -3,23 +3,22 @@
 {% load static %}
 {% block title %}{% trans 'OnTask Error' %}{% endblock %}
 {% block container %}
-<!-- the margin top should be passed to the style!!! -->
-<div class="container" style="margin-top:50px;">
-  <h1 class="text-center">{% trans 'Internal Error' %}</h1>
+  <div class="container my-3">
+    <h1 class="text-center">{% trans 'Internal Error' %}</h1>
 
-  <p class="text-center">
-    {% blocktrans %}Oops. We have detected an internal error.{% endblocktrans %}
-  </p>
-  {% if message %}
     <p class="text-center">
-      {% blocktrans %}The following message is trying to explain what
-      happened.{% endblocktrans %}
+      {% blocktrans %}Oops. We have detected an internal error.{% endblocktrans %}
     </p>
-    <p class="text-center">{{ message }}</p>
-  {% endif %}
-  <hr/>
-  {% if meta %}
-    <p class="text-center"><strong>{% trans 'Referrer:' %}</strong> {{ meta }}</p>
-  {% endif %}
-</div>
+    {% if message %}
+      <p class="text-center">
+        {% blocktrans %}The following message is trying to explain what
+        happened.{% endblocktrans %}
+      </p>
+      <p class="text-center">{{ message }}</p>
+    {% endif %}
+    <hr/>
+    {% if meta %}
+      <p class="text-center"><strong>{% trans 'Referrer:' %}</strong> {{ meta }}</p>
+    {% endif %}
+  </div>
 {% endblock container %}

@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import range
 import random
+from builtins import range
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
-from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
@@ -16,20 +14,23 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
-from action.models import Condition, Action
+from action.models import Condition, ActionColumnConditionTuple
 from dataops import ops, formula_evaluation, pandas_db
 from logs.models import Log
 from ontask.permissions import is_instructor
-from .forms import (ColumnRenameForm,
-                    ColumnAddForm,
-                    FormulaColumnAddForm,
-                    RandomColumnAddForm, QuestionAddForm, QuestionRenameForm)
-from .models import Column
+from workflow.models import Workflow
+from .forms import (
+    ColumnRenameForm,
+    ColumnAddForm,
+    FormulaColumnAddForm,
+    RandomColumnAddForm, QuestionAddForm, QuestionRenameForm
+)
 from .ops import (
     get_workflow,
     workflow_delete_column,
     clone_column,
-    reposition_column_and_update_df, workflow_restrict_column)
+    workflow_restrict_column
+)
 
 # These are the column operands offered through the GUI. They have immediate
 # translations onto Pandas operators over dataframes.
@@ -53,6 +54,7 @@ formula_column_operands = [
      ['boolean']),
 ]
 
+
 def partition(list_in, n):
     """
     Given a list and n, returns a list with n lists, and inside each of them a
@@ -75,10 +77,10 @@ def column_add(request, pk=None):
     is_question = pk is not None
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related=['actions', 'columns'])
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     if workflow.nrows == 0:
@@ -96,21 +98,18 @@ def column_add(request, pk=None):
             )
         return JsonResponse(data)
 
+    action = None
     action_id = None
-    if pk:
+    if is_question:
         # Get the action and the columns
-        try:
-            action = Action.objects.filter(
-                Q(workflow__user=request.user) |
-                Q(workflow__shared=request.user)
-            ).distinct().get(pk=pk)
-        except ObjectDoesNotExist:
+        action = workflow.actions.filter(pk=pk).first()
+        action_id = action.id
+        if not action:
             messages.error(
                 request,
                 _('Cannot find action to add question.')
             )
             return JsonResponse({'html_redirect': reverse('action:index')})
-        action_id = action.id
 
     # Form to read/process data
     if is_question:
@@ -141,32 +140,45 @@ def column_add(request, pk=None):
     # Save the column object attached to the form
     column = form.save(commit=False)
 
+    # Catch the special case of integer type and no initial value. Pandas
+    # encodes it as NaN but a cycle through the database transforms it into
+    # a string. To avoid this case, integer + empty value => double
+    if column.data_type == 'integer' and not column_initial_value:
+        column.data_type = 'double'
+
     # Fill in the remaining fields in the column
     column.workflow = workflow
     column.is_key = False
 
     # Update the data frame, which must be stored in the form because
     # it was loaded when validating it.
-    df = pandas_db.load_from_db(workflow.id)
+    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
     # Add the column with the initial value to the dataframe
     df = ops.data_frame_add_column(df, column, column_initial_value)
 
     # Update the column type with the value extracted from the data frame
-    column.data_type = \
-        pandas_db.pandas_datatype_names[df[column.name].dtype.name]
+    # column.data_type = \
+    #     pandas_db.pandas_datatype_names[df[column.name].dtype.name]
 
     # Update the positions of the appropriate columns
     workflow.reposition_columns(workflow.ncols + 1, column.position)
 
+    # Save column and clear prefetch queryset
     column.save()
+    form.save_m2m()
+    workflow = Workflow.objects.prefetch_related('columns').get(pk=workflow.id)
 
     # Store the df to DB
-    ops.store_dataframe_in_db(df, workflow.id)
+    ops.store_dataframe(df, workflow)
 
     # If the column is a question, add it to the action
     if is_question:
-        action.columns.add(column)
+        __, __ = ActionColumnConditionTuple.objects.get_or_create(
+            action=action,
+            column=column,
+            condition=None
+        )
 
     # Log the event
     if is_question:
@@ -192,10 +204,10 @@ def formula_column_add(request):
     data = {'form_is_valid': False}
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     if workflow.nrows == 0:
@@ -233,7 +245,7 @@ def formula_column_add(request):
 
     # Save the instance
     try:
-        column = form.save()
+        column.save()
         form.save_m2m()
     except IntegrityError:
         form.add_error('name', _('A column with that name already exists'))
@@ -245,7 +257,7 @@ def formula_column_add(request):
         return JsonResponse(data)
 
     # Update the data frame
-    df = pandas_db.load_from_db(workflow.id)
+    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
     try:
         # Add the column with the appropriate computation
@@ -291,15 +303,17 @@ def formula_column_add(request):
 
     # Populate the column type
     column.data_type = \
-        pandas_db.pandas_datatype_names[df[column.name].dtype.name]
+        pandas_db.pandas_datatype_names.get(df[column.name].dtype.name)
 
     # Update the positions of the appropriate columns
     workflow.reposition_columns(workflow.ncols + 1, column.position)
 
+    # Save column and refresh the prefetched related in the workflow
     column.save()
+    workflow = Workflow.objects.prefetch_related('columns').get(pk=workflow.id)
 
     # Store the df to DB
-    ops.store_dataframe_in_db(df, workflow.id)
+    ops.store_dataframe(df, workflow)
 
     # Log the event
     Log.objects.register(request.user,
@@ -327,10 +341,10 @@ def random_column_add(request):
     data = {'form_is_valid': False}
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     if workflow.nrows == 0:
@@ -376,7 +390,7 @@ def random_column_add(request):
         return JsonResponse(data)
 
     # Update the data frame
-    df = pandas_db.load_from_db(workflow.id)
+    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
 
     # Get the values and interpret its meaning
     values = form.cleaned_data['values']
@@ -416,15 +430,13 @@ def random_column_add(request):
             )
             return JsonResponse(data)
 
-        # df[column.name] = [random.choice(vals) for __ in range(workflow.nrows)]
-
     # Empty new column
     new_column = [None] * workflow.nrows
     # Create the random partitions
     partitions = partition([x for x in range(workflow.nrows)], len(vals))
     # Assign values to partitions
-    for idx, indeces in enumerate(partitions):
-        for x in indeces:
+    for idx, indexes in enumerate(partitions):
+        for x in indexes:
             new_column[x] = vals[idx]
 
     # Assign the new column to the data frame
@@ -432,15 +444,16 @@ def random_column_add(request):
 
     # Populate the column type
     column.data_type = \
-        pandas_db.pandas_datatype_names[df[column.name].dtype.name]
+        pandas_db.pandas_datatype_names.get(df[column.name].dtype.name)
 
     # Update the positions of the appropriate columns
     workflow.reposition_columns(workflow.ncols + 1, column.position)
 
     column.save()
+    workflow = Workflow.objects.prefetch_related('columns').get(pk=workflow.id)
 
     # Store the df to DB
-    ops.store_dataframe_in_db(df, workflow.id)
+    ops.store_dataframe(df, workflow)
 
     # Log the event
     Log.objects.register(request.user,
@@ -468,17 +481,16 @@ def column_edit(request, pk):
     is_question = 'question_edit' in request.path_info
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request,
+                            prefetch_related=['columns', 'views', 'actions'])
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     # Get the column object and make sure it belongs to the workflow
-    try:
-        column = Column.objects.get(pk=pk,
-                                    workflow=workflow)
-    except ObjectDoesNotExist:
+    column = workflow.columns.filter(pk=pk).first()
+    if not column:
         # Something went wrong, redirect to the workflow detail page
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('workflow:detail',
@@ -524,7 +536,9 @@ def column_edit(request, pk):
 
         # If there is a new name, rename the data frame columns
         if 'name' in form.changed_data:
-            pandas_db.db_column_rename(workflow.pk, old_name, column.name)
+            pandas_db.db_column_rename(workflow.get_data_frame_table_name(),
+                                       old_name,
+                                       column.name)
             ops.rename_df_column(workflow, old_name, column.name)
 
         if 'position' in form.changed_data:
@@ -532,7 +546,12 @@ def column_edit(request, pk):
             workflow.reposition_columns(old_position, column.position)
 
         # Save the column information
-        form.save()
+        column.save()
+
+        # Go back to the DB because the prefetch columns are not valid any more
+        workflow = Workflow.objects.prefetch_related('columns').get(
+            pk=workflow.id
+        )
 
         # Changes in column require rebuilding the query_builder_ops
         workflow.set_query_builder_ops()
@@ -574,19 +593,18 @@ def column_delete(request, pk):
     data = dict()  # JSON response
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related=['columns', 'actions'])
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     data['form_is_valid'] = False
     context = {'pk': pk}  # For rendering
 
     # Get the column
-    try:
-        column = Column.objects.get(pk=pk, workflow=workflow)
-    except ObjectDoesNotExist:
+    column = workflow.columns.filter(pk=pk).first()
+    if not column:
         # The column is not there. Redirect to workflow detail
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('workflow:detail',
@@ -661,19 +679,18 @@ def column_clone(request, pk):
     data = dict()  # JSON response
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     data['form_is_valid'] = False
     context = {'pk': pk}  # For rendering
 
     # Get the column
-    try:
-        column = Column.objects.get(pk=pk, workflow=workflow)
-    except ObjectDoesNotExist:
+    column = workflow.columns.filter(pk=pk).first()
+    if not column:
         # The column is not there. Redirect to workflow detail
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('workflow:detail',
@@ -696,8 +713,7 @@ def column_clone(request, pk):
     # Get the new name appending as many times as needed the 'Copy of '
     old_name = column.name
     new_name = 'Copy_of_' + old_name
-    while Column.objects.filter(name=new_name,
-                                workflow=column.workflow).exists():
+    while workflow.columns.filter(name=new_name).exists():
         new_name = 'Copy_of_' + new_name
 
     # Proceed to clone the column
@@ -735,10 +751,10 @@ def column_move(request):
     """
 
     # Check if the workflow is locked
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         # No workflow present
-        return JsonResponse({'html_redirect': reverse('workflow:index')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     if workflow.nrows == 0:
         # Workflow is empty
@@ -759,7 +775,7 @@ def column_move(request):
 
     # Two correct condition names, perform the swap
     # workflow.reposition_columns(from_col, to_col.position)
-    reposition_column_and_update_df(workflow, from_col, to_col.position)
+    from_col.reposition_and_update_df(to_col.position)
 
     return JsonResponse({})
 
@@ -774,19 +790,18 @@ def column_move_top(request, pk):
     """
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the column
-    try:
-        column = workflow.columns.get(pk=pk)
-    except ObjectDoesNotExist:
+    column = workflow.columns.filter(pk=pk).first()
+    if not column:
         return redirect('workflow:detail', pk=workflow.id)
 
     # The workflow and column objects have been correctly obtained
     if column.position > 1:
-        reposition_column_and_update_df(workflow, column, 1)
+        column.reposition_and_update_df(1)
 
     return redirect('workflow:detail', pk=workflow.id)
 
@@ -801,19 +816,18 @@ def column_move_bottom(request, pk):
     """
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the column
-    try:
-        column = workflow.columns.get(pk=pk)
-    except ObjectDoesNotExist:
+    column = workflow.columns.filter(pk=pk).first()
+    if not column:
         return redirect('workflow:detail', pk=workflow.id)
 
     # The workflow and column objects have been correctly obtained
     if column.position < workflow.ncols:
-        reposition_column_and_update_df(workflow, column, workflow.ncols)
+        column.reposition_and_update_df(workflow.ncols)
 
     return redirect('workflow:detail', pk=workflow.id)
 
@@ -832,19 +846,18 @@ def column_restrict_values(request, pk):
     data = dict()  # JSON response
 
     # Get the workflow element
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:index')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     data['form_is_valid'] = False
     context = {'pk': pk}  # For rendering
 
     # Get the column
-    try:
-        column = Column.objects.get(pk=pk, workflow=workflow)
-    except ObjectDoesNotExist:
+    column = workflow.columns.filter(pk=pk).first()
+    if not column:
         # The column is not there. Redirect to workflow detail
         data['form_is_valid'] = True
         data['html_redirect'] = reverse('workflow:detail',
@@ -865,12 +878,12 @@ def column_restrict_values(request, pk):
     context['cname'] = column.name
 
     # Get the values from the data frame
-    df = pandas_db.load_from_db(workflow.id)
+    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
     context['values'] = ', '.join(set(df[column.name]))
 
     if request.method == 'POST':
         # Proceed restricting the column
-        result = workflow_restrict_column(workflow, column)
+        result = workflow_restrict_column(column)
 
         if isinstance(result, str):
             # Something went wrong. Show it

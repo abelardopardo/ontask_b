@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+#
 from __future__ import unicode_literals
 
 from django import template
-from django.conf import settings
 from django.utils.html import format_html
 from django.contrib.staticfiles.templatetags.staticfiles import static
 
@@ -10,7 +10,10 @@ import ontask
 
 register = template.Library()
 
-jquery = """<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>"""
+jquery = \
+    """<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+       <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/additional-methods.min.js"></script>"""
 
 #
 # Bootstrap

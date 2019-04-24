@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.functional import cached_property
 
 from workflow.models import Workflow
 
@@ -42,6 +43,7 @@ class Log(models.Model):
     WORKFLOW_SHARE_DELETE = 'workflow_share_delete'
     WORKFLOW_IMPORT = 'workflow_import'
     WORKFLOW_CLONE = 'workflow_clone'
+    WORKFLOW_UPDATE_LUSERS = 'workflow_update_lusers'
     COLUMN_ADD = 'column_add'
     QUESTION_ADD = 'question_add'
     COLUMN_ADD_FORMULA = 'column_add_formula'
@@ -87,6 +89,7 @@ class Log(models.Model):
     SCHEDULE_EMAIL_DELETE = 'schedule_email_delete'
     SCHEDULE_EMAIL_EXECUTE = 'schedule_email_execute'
     SCHEDULE_CANVAS_EMAIL_EXECUTE = 'schedule_canvas_email_execute'
+    SCHEDULE_CANVAS_EMAIL_DELETE = 'schedule_canvas_email_delete'
     DOWNLOAD_ZIP_ACTION = 'download_zip_action'
     SCHEDULE_JSON_EDIT = 'schedule_json_edit'
     SCHEDULE_JSON_DELETE = 'schedule_json_delete'
@@ -107,6 +110,7 @@ class Log(models.Model):
         (WORKFLOW_SHARE_DELETE, _('User share deleted')),
         (WORKFLOW_IMPORT, _('Import workflow')),
         (WORKFLOW_CLONE, _('Workflow cloned')),
+        (WORKFLOW_UPDATE_LUSERS, _('Update list of workflow users')),
         (COLUMN_ADD, _('Column added')),
         (COLUMN_ADD_FORMULA, _('Column with formula created')),
         (COLUMN_ADD_RANDOM, _('Column with random values created')),
@@ -152,6 +156,8 @@ class Log(models.Model):
         (SCHEDULE_EMAIL_EXECUTE, _('Execute scheduled email action')),
         (SCHEDULE_CANVAS_EMAIL_EXECUTE,
          _('Execute scheduled canvas email action')),
+        (SCHEDULE_CANVAS_EMAIL_DELETE,
+         _('Delete scheduled canvas email action')),
         (DOWNLOAD_ZIP_ACTION, _('Download a ZIP with personalized text')),
         (SCHEDULE_JSON_EDIT, _('Edit scheduled JSON action')),
         (SCHEDULE_JSON_DELETE, _('Delete scheduled JSON action')),
@@ -215,6 +221,6 @@ class Log(models.Model):
                                 self.name,
                                 self.payload)
 
-    @property
+    @cached_property
     def log_useremail(self):
         return self.user.email

@@ -29,27 +29,25 @@
       <h1 class="text-center">{% trans 'Create a workflow' %}<super>*</super></h1>
     {% endif %}
     {% if not nwflows %}
-      <p class="lead text-center"><strong>Next Step:</strong> The main element in OnTask is a <i>Workflow<super>*</super></i>. Start by first creating a workflow element using the <i>New Workflow</i> button below, and then upload data in its table.</p>
+      <p class="text-center"><strong>Next Step:</strong> The main element in OnTask is a <i>Workflow<super>*</super></i>. Start by first creating a workflow element using the <i>New Workflow</i> button below, and then upload data in its table.</p>
     {% endif %}
-    <div class="row justify-content-center">
-      <div class="mb-3 btn-group" role="group">
-        <button type="button" class="btn btn-outline-dark js-create-workflow"
-                data-url="{% url 'workflow:create' %}"
+    <div class="text-center mb-3">
+      <button type="button" class="shadow btn btn-outline-dark js-create-workflow"
+              data-url="{% url 'workflow:create' %}"
+              data-toggle="tooltip"
+              title="{% trans 'Provide the name and description for a new workflow' %}">
+        <span class="fa fa-plus"></span> {% trans 'New workflow' %}
+      </button>
+      <a href="{% url 'workflow:import' %}" class="shadow btn btn-outline-dark spin"
                 data-toggle="tooltip"
-                title="{% trans 'Provide the name and description for a new workflow' %}">
-          <span class="fa fa-plus"></span> {% trans 'New workflow' %}
-        </button>
-        <a href="{% url 'workflow:import' %}" class="btn btn-outline-dark spin"
-                  data-toggle="tooltip"
-                  title="{% trans 'Import a file with an OnTask workflow' %}">
-          <span class="fa fa-upload"></span>
-            {% trans 'Import workflow' %}
-        </a>
-      </div>
+                title="{% trans 'Import a file with an OnTask workflow' %}">
+        <span class="fa fa-upload"></span>
+          {% trans 'Import workflow' %}
+      </a>
     </div>
-    <div class="card-deck justify-content-center" style="margin:1em 0 1em 0;">
+    <div class="card-deck justify-content-center my-3">
       {% for wflow in workflows %}
-        <div class="card ontask-card" style="margin-bottom: 15px;">
+        <div class="shadow card ontask-card mx-auto mb-3">
           <h5 class="card-header text-center spin">{{ wflow.name }}</h5>
           <div class="card-body spin">
             <p class="card-text">{{ wflow.description_text }}</p>
@@ -58,7 +56,7 @@
         {% blocktrans count counter=wflow.ncols %}{{ counter }} column,{% plural %}{{ counter }} columns,{% endblocktrans %}
         {% blocktrans count counter=wflow.actions.all|length %}{{ counter }} action{% plural %}{{ counter }} actions{% endblocktrans %}.</p>
           </div>
-          <div class="wflow-buttons">
+          <div class="wflow-buttons text-center">
             <a href="{% url 'action:index_set' wflow.id %}"
                class="btn btn-light btn-sm card-link spin"
                data-toggle="tooltip"
@@ -95,7 +93,7 @@
         </div>
       {% endfor %}
     </div>
-    <p class="text-left"><strong><super>*</super></strong>{% blocktrans %}A workflow contains a <i>table
+    <p class="text-left small"><strong><super>*</super></strong>{% blocktrans %}A workflow contains a <i>table
     </i> with data about a set of learners and <i>a
       collection of actions</i>. The table is organised by <i>columns</i> and the information in each row corresponds
       to one learner. The actions will behave differently depending on the values stored for every learner and a set

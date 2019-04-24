@@ -1,12 +1,10 @@
 {% load i18n %}
-<div class="btn-group">
-  <button type="button" class="btn btn-sm btn-light js-column-clone align-middle"
-          data-url="{% url 'workflow:column_clone' id %}" data-toggle="tooltip"
-          title="{% trans 'Create an exact duplicate of this question' %}">
-      <span class="fa fa fa-clone"></span>
-  </button>
-  <a href="{% url 'action:unselect_column_action' aid id  %}"
-     class="btn btn-sm btn-light spin" data-toggle="tooltip"
-     title="{% trans 'Remove question from this survey' %}">
-    <span class="fa fa-trash"></span></a>
-</div>
+<button type="button" class="btn btn-sm btn-light js-column-clone align-middle"
+        data-url="{% url 'workflow:column_clone' id %}" data-toggle="tooltip"
+        title="{% trans 'Create an exact duplicate of this question' %}">
+    <span class="fa fa fa-clone"></span>
+</button>
+<a href="{% url 'action:unselect_column_action' aid id  %}"
+   class="btn btn-sm btn-light spin" data-toggle="tooltip"
+   title="{% trans 'Remove question from this survey' %}">
+  <span class="fa fa-trash"></span></a>

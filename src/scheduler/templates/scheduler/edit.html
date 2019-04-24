@@ -15,6 +15,7 @@
 {% block container %}
   <div class="container" id="email-schedule-send">
     <h1 class="text-center">{% trans 'Schedule Action Execution' %}</h1>
+    {% include 'action/includes/partial_action_edit_out_warning.html' %}
     <p class="text-center">{% blocktrans with n=now %}Time now is {{ n }}{% endblocktrans %}</p>
     <p class="lead text-center">{{ action.name }}</p>
     <div class="row justify-content-center">
@@ -22,12 +23,20 @@
         {% csrf_token %}
         {{ form|crispy }}
         <div class="text-center">
-          <a type="button" class="btn btn-outline-dark"
+          <a type="button" class="shadow btn btn-outline-dark"
              href="{% url 'scheduler:index' %}"> {% trans 'Cancel' %}</a>
-          <button type="Submit" name="Submit" value="Send"
-                  class="btn btn-outline-primary spin">{% trans 'Next' %}</button>
+          <button type="button" class="shadow btn btn-outline-info js-action-preview"
+                  data-url="{% url 'action:preview' action.id 1 %}">
+            <span class="fa fa fa-eye"></span> {% trans 'Preview' %}</button>
+          <button type="Submit" name="Submit" value="Submit" id="next-step-on" hidden
+                  class="shadow btn btn-outline-primary btn-space spin">
+            <span class="fa fa-angle-right"></span> {% trans 'Next' %}</button>
+          <button type="Submit" name="Submit" value="Submit" id="next-step-off"
+                  class="shadow btn btn-outline-primary btn-space spin">
+            <span class="fa fa-angle-right"></span> {% trans 'Schedule' %}</button>
         </div>
       </form>
     </div>
   </div>
+  {% include 'modal.html' %}
 {% endblock container %}

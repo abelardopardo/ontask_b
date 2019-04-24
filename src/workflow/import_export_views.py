@@ -2,6 +2,7 @@
 
 
 from builtins import str
+
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
@@ -10,20 +11,24 @@ from django.views.decorators.http import require_http_methods
 
 from action.models import Action
 from ontask.permissions import is_instructor
-from .forms import (WorkflowImportForm,
-                    WorkflowExportRequestForm)
+from .forms import (
+    WorkflowImportForm,
+    WorkflowExportRequestForm
+)
 from .models import Workflow
-from .ops import (do_import_workflow,
-                  do_export_workflow,
-                  get_workflow)
+from .ops import (
+    do_import_workflow,
+    do_export_workflow,
+    get_workflow
+)
 
 
 @user_passes_test(is_instructor)
 def export_ask(request, pk):
     # Get the workflow
-    workflow = get_workflow(request, pk)
+    workflow = get_workflow(request, pk, prefetch_related='actions')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     form = WorkflowExportRequestForm(request.POST or None,
                                      actions=workflow.actions.all(),
@@ -34,7 +39,7 @@ def export_ask(request, pk):
         'name': workflow.name,
         'nrows': workflow.nrows,
         'ncols': workflow.ncols,
-        'nactions': Action.objects.filter(workflow=workflow).count(),
+        'nactions': workflow.actions.count(),
         'wid': workflow.id
     }
 
@@ -42,9 +47,7 @@ def export_ask(request, pk):
         if form.is_valid():
             to_include = []
             for idx, a_id in enumerate(
-                    Action.objects.filter(
-                        workflow=workflow
-                    ).values_list("id", flat=True)
+                    workflow.actions.all().values_list("id", flat=True)
             ):
                 if form.cleaned_data['select_%s' % idx]:
                     to_include.append(str(a_id))
@@ -73,9 +76,9 @@ def export(request, data):
     """
 
     # Get the workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the param encoding which elements to include in the export.
     action_ids = []
@@ -84,7 +87,7 @@ def export(request, data):
         try:
             action_ids = [int(x) for x in data.split(',')]
         except ValueError:
-            return redirect('workflow:index')
+            return redirect('home')
 
     response = do_export_workflow(workflow, action_ids)
 
@@ -129,4 +132,4 @@ def import_workflow(request):
         messages.error(request, status)
 
     # Go back to the list of workflows
-    return redirect('workflow:index')
+    return redirect('home')

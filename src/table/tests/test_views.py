@@ -26,12 +26,12 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
     wflow_name = 'combine columns'
 
     def setUp(self):
-        super(TableDerivedColumns, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
-        super(TableDerivedColumns, self).tearDown()
+        test.delete_all_tables()
+        super().tearDown()
 
     # Test operations with all derived columns
     def test_table_create_derived_columns(self):
@@ -308,7 +308,9 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
         self.wait_close_modal_refresh_table('table-data_previous')
 
         # Check that the data is correct
-        df = pandas_db.load_from_db(Workflow.objects.all()[0].id)
+        df = pandas_db.load_from_db(
+            Workflow.objects.all()[0].get_data_frame_table_name()
+        )
 
         # d1 = c1 + c2
         self.assertTrue((df['d1'] == df[['c1', 'c2']].sum(axis=1)).all())
@@ -346,12 +348,12 @@ class TableViews(test.OnTaskLiveTestCase):
     wflow_name = 'combine columns'
 
     def setUp(self):
-        super(TableViews, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
-        super(TableViews, self).tearDown()
+        test.delete_all_tables()
+        super().tearDown()
 
     # Test operations with all derived columns
     def test_table_views(self):
@@ -480,7 +482,10 @@ class TableViews(test.OnTaskLiveTestCase):
             'Showing 1 to 10 of 42 entries (filtered from 100 total entries)',
             self.selenium.page_source)
 
-        # Go back to the full table
+        # Click in views button and go back to the full table
+        self.selenium.find_element_by_xpath(
+            "//div[@id='table-operation-buttons']/div/div[2]/button"
+        ).click()
         self.selenium.find_element_by_link_text("Full table").click()
         # Wait for the table to be refreshed
         WebDriverWait(self.selenium, 10).until(
@@ -543,12 +548,12 @@ class TableInsertRow(test.OnTaskLiveTestCase):
     wflow_name = 'combine columns'
 
     def setUp(self):
-        super(TableInsertRow, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
-        super(TableInsertRow, self).tearDown()
+        test.delete_all_tables()
+        super().tearDown()
 
     # Test operations with all derived columns
     def test_table_insert_row(self):
@@ -611,7 +616,7 @@ class TableInsertRow(test.OnTaskLiveTestCase):
         element = self.selenium.find_element_by_xpath(
             "//table[@id='table-data']"
             "//tr/td[2][normalize-space() = '100']/"
-            "../td[1]/div/button"
+            "../td[1]/button"
         )
         ActionChains(self.selenium).move_to_element(element).click().perform()
         self.wait_for_modal_open()

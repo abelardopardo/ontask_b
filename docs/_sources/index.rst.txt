@@ -5,8 +5,12 @@
    Use: # * = - ^ " as heading hierarchy
 
 ############################################
-OnTask documentation (Ver. |ontask_version|)
+OnTask documentation
 ############################################
+
+************************
+Version |ontask_version|
+************************
 
 .. toctree::
    :numbered:

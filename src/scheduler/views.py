@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import str
-from past.utils import old_div
-from builtins import object
 import datetime
+from builtins import object
 
 import django_tables2 as tables
 import pytz
@@ -12,24 +10,24 @@ from celery.task.control import inspect
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse
 from django.template.loader import render_to_string
-from django.utils.html import format_html, escape
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django_tables2 import A
+from past.utils import old_div
 
 from action.models import Action
 from action.views_out import action_session_dictionary
-from .forms import EmailScheduleForm, JSONScheduleForm, CanvasEmailScheduleForm
 from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from scheduler.models import ScheduledAction
 from workflow.ops import get_workflow
+from .forms import EmailScheduleForm, JSONScheduleForm, CanvasEmailScheduleForm
 
 
 class ScheduleActionTable(tables.Table):
@@ -64,7 +62,7 @@ class ScheduleActionTable(tables.Table):
         return format_html(
             """<a href="{0}"
                   data-toggle="tooltip"
-                  title="{1}">{2} <span class="fa fa-pencil"></span></a>""",
+                  title="{1}">{2}</a>""",
             reverse('scheduler:edit', kwargs={'pk': record.id}),
             _('Edit this scheduled action execution'),
             record.name
@@ -87,8 +85,7 @@ class ScheduleActionTable(tables.Table):
 
         return format_html(
             '<a class="spin" href="{0}"'
-            '   data-toggle="tooltip" title="{1}">{2} '
-            '<span class="fa fa-{3}"></span></a>'.format(
+            '   data-toggle="tooltip" title="{1}">{2}'.format(
                 reverse('action:edit',
                         kwargs={'pk': record.action.id}),
                 _('Edit the action scheduled for execution'),
@@ -117,7 +114,7 @@ class ScheduleActionTable(tables.Table):
         sequence = ('name', 'action', 'execute', 'status', 'operations')
 
         attrs = {
-            'class': 'table table-hover table-bordered',
+            'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
             'id': 'scheduler-table'
         }
@@ -219,6 +216,8 @@ def save_canvas_email_schedule(request, action, schedule_item,
     :param op_payload: dictionary to carry over the request to the next step
     :return:
     """
+
+    return render(request, 'under_construction.html', {})
 
     # Create the form to ask for the email subject and other information
     form = CanvasEmailScheduleForm(
@@ -478,13 +477,14 @@ def index(request):
     """
 
     # Get the appropriate workflow object
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Get the actions
     s_items = ScheduledAction.objects.filter(
-        action__workflow=workflow.id)
+        action__workflow=workflow.id
+    )
 
     return render(request,
                   'scheduler/index.html',
@@ -512,7 +512,7 @@ def view(request, pk):
 
     # Get the scheduled action
     sch_obj = ScheduledAction.objects.filter(action__workflow=workflow,
-                                             pk=pk)
+                                             pk=pk).first()
 
     if not sch_obj:
         # Connection object not found, go to table of sql connections
@@ -522,7 +522,7 @@ def view(request, pk):
 
     data['html_form'] = render_to_string(
         'scheduler/includes/partial_show_schedule_action.html',
-        {'s_vals': sch_obj.values()[0], 'id': sch_obj[0].id}
+        {'s_vals': sch_obj.values(), 'id': sch_obj.id}
     )
     return JsonResponse(data)
 
@@ -536,28 +536,29 @@ def edit(request, pk):
     """
 
     # Get first the current workflow
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        return redirect('workflow:index')
+        return redirect('home')
 
     # Distinguish between creating a new element or editing an existing one
     new_item = request.path.endswith(reverse('scheduler:create',
                                              kwargs={'pk': pk}))
 
     if new_item:
-        try:
-            action = Action.objects.filter(
-                workflow=workflow).filter(
-                Q(workflow__user=request.user) |
-                Q(workflow__shared=request.user)).distinct().get(pk=pk)
-        except ObjectDoesNotExist:
-            return redirect('workflow:index')
+        action = workflow.actions.filter(
+            pk=pk
+        ).filter(
+            Q(workflow__user=request.user) |
+            Q(workflow__shared=request.user)
+        ).first()
+        if not action:
+            return redirect('home')
         s_item = None
     else:
         # Get the scheduled action from the parameter in the URL
         s_item = ScheduledAction.objects.filter(pk=pk).first()
         if not s_item:
-            return redirect('workflow:index')
+            return redirect('home')
         action = s_item.action
 
     # Get the payload from the session, and if not, use the given one
@@ -610,9 +611,16 @@ def delete(request, pk):
     # JSON response object
     data = dict()
 
+    # Get first the current workflow
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
     # Get the appropriate scheduled action
     s_item = ScheduledAction.objects.filter(
-        action__workflow__user=request.user,
+        action__workflow=workflow,
         pk=pk
     ).first()
     if not s_item:
@@ -632,6 +640,8 @@ def delete(request, pk):
         log_type = Log.SCHEDULE_EMAIL_DELETE
     elif s_item.action.action_type == Action.PERSONALIZED_JSON:
         log_type = Log.SCHEDULE_JSON_DELETE
+    elif s_item.action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        log_type = Log.SCHEDULE_CANVAS_EMAIL_DELETE
 
     # Log the event
     if s_item.item_column:

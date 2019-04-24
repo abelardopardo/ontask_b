@@ -1,4 +1,149 @@
-## 4.0.0 ()
+## 4.3.2 (2019-04-23)
+
+### Fixed
+
+- Error when exporting/importing workflows with luser field
+
+## 4.3.1 (2019-04-22)
+
+### Added
+
+- Preliminary backend functionality to deploy a learner page (still under construction)
+
+- Increase the use of cache for portions of the pages
+
+### Changed
+
+- Import/export operations to improve performance
+
+- Backend management of DB queries to prefetch related relations and improve performance
+
+### Fixed
+
+- Error when creating an empty column of type integer 
+
+- Legacy errors in migrations when handling some models
+
+## 4.3 (2019-04-16)
+
+### Added
+
+- Read S3 buckets with possibility of providing Key/Secret
+
+- Possibility to clone conditions from other actions
+
+- Workflow delete now requires typing workflow name for security reasons
+
+- Steps requiring multiple steps now have numbers at the top of the screen (suggested by University of Auckland's group a while ago)
+
+- Functionality to reset the password (needs email configured) and to remain connected (1 month)
+
+- Color coding to distinguish the type of columns and the type of actions
+
+- Button to preview emails when scheduling an action for future execution
+
+### Changed
+
+- Editor pages to use tabs in more intuitive ways
+
+- Added shadow to a few elements to improve UI 
+
+- Updated dependencies to include supervisor and celery now supporting Python3
+
+- UI using large modals to take advantage of larger screens
+
+- Significant revamp of how the configuration file is structured
+
+- Library dependencies are now aligned and the new version does not require Python 2.7 and 3 at the same time. Only Python 3.
+
+### Fixed
+
+- Incorrect number of entries shown at bottom of column page
+
+- Error when evaluating numeric conditions in the presence of null values
+
+- Focus now goes to the tag with invalid params in plugin execution
+
+- Allowed the configuration of HTML email or text + html email (Issue #140)
+
+- Error allowing a key column to loose this property through a merge (Issue #142)
+
+- Error in serialization handling the new Condition/Column pairs
+
+## 4.2.1 (2019-03-29)
+
+### Changed
+
+- Production configuration file needs USE_SSL=True to use HTTPS
+
+- Updated localization files
+
+## 4.2 (2019-03-27)
+
+### Added
+
+- Export now allows to export a workflow without a data frame
+
+- Detection of personalized texts or JSON objects in which all conditions are false
+
+- Function to show column statistics when creating conditions in personalized
+  actions
+
+- New plugin to round numeric column to a number of decimal places
+
+### Fixed
+
+- Bug when handling URL creation for row edition
+
+- Legacy problem with Python3 numpy and pickled data
+
+### Changed
+
+- Upgraded requirements and propagated changes to adapt to Pandas 0.24
+
+- Underlying models to handle conditions and columns in actions (new many to many relation)
+
+- Switched to email_validator to validate email addresses
+
+- Cleaner UI to insert attributes, columns, conditions in actions
+
+## 4.1 (2019-02-27)
+
+### Added
+
+- Possibility of disabling the type of actions available in config file (Issue #112)
+  
+### Fixed
+
+- Conditions break when renaming them (Issue #128)
+
+- Fixed incorrect highlighting of Workflows link (Issue #127)
+
+- Fixed localization in dataTables using only the URL field
+
+### Changed
+
+- Footer is now sticky to the bottom of the viewport if body is shorter (Issue #121)
+
+- Redesigned the top bar menu to include icons and text (Issue #127)
+
+- Moved contacts and about links only to the Login page (Issue #127)
+
+- Moved the SQL icon in the admin profile to the right of the menu (Issue #127)
+
+## 4.0.1 (2019-02-19)
+
+### Fixed
+
+- Incorrect download of table data into CSV format
+
+- API table upload did not check for presence of key column
+
+### Changed
+
+- Update the chinese i18n
+
+## 4.0 (2019-02-14)
 
 ### Fixed
 
@@ -8,11 +153,17 @@
 
 - Support for Python3/Django2
 
+- New type of personalized email actions that send messages using the Canvas API
+
 ### Changed
 
 - Datetimepicker widget changed due to incompatibilities with Django 2
 
 - Reviewed the Chinese localization
+
+- Major UI redesign to use more intuitive constructs and better use of screen space
+
+- Migration to Bootstrap 4
 
 ## 3.2.1 (2018-11-21)
 
@@ -52,17 +203,14 @@
 
 ### Changed
 
-- Reviewed the Chinese localization## 3.1.0 (2018-10-31)
-
-### Added
-
-- Initial support for localization to Chinese
+- Reviewed the Chinese localization
 
 ## 3.1.0 (2018-10-31)
 
 ### Added
 
 - Initial support for localization to Chinese
+
 ## 3.0.4 (2018-10-20)
 
 ### Changed

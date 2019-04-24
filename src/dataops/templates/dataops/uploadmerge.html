@@ -7,9 +7,10 @@
 {% block title %}{{ block.super }}{% trans 'Data Upload/Merge' %}{% endblock %}
 {% block container %}
 <div class="container">
-  <h1 class="text-center">{% trans 'Data upload/merge operations' %}</h1>
-  <div class="container justify-content-center">
-    <table class="table table-hover table-bordered" id="dataops-table">
+  {% include 'step_by_step.html' with valuerange=valuerange step=1 %}
+  <h1 class="text-center">{% trans 'Select the type of data source' %}</h1>
+  <div class="justify-content-center">
+    <table class="table table-hover table-bordered shadow" id="dataops-table">
       <thead>
         <tr>
           <th class="text-center">{% trans 'Operation' %}</th>
@@ -19,9 +20,9 @@
       <tbody>
         <tr>
           <td class="text-center" style="vertical-align: middle;">
-            <a href="{% url 'dataops:csvupload1' %}" class="btn btn-outline-primary">
+            <a href="{% url 'dataops:csvupload1' %}" class="shadow btn btn-outline-primary">
               <span class="fa fa-plus"></span>
-              {% trans 'CSV Upload/Merge' %}
+              {% trans 'CSV' %}
             </a>
           </td>
           <td style="vertical-align:middle">
@@ -37,9 +38,9 @@
         </tr>
         <tr>
           <td class="text-center" style="vertical-align: middle;">
-            <a href="{% url 'dataops:excelupload1' %}" class="btn btn-outline-primary">
+            <a href="{% url 'dataops:excelupload1' %}" class="shadow btn btn-outline-primary">
               <span class="fa fa-plus"></span>
-              {% trans 'Excel Upload/Merge' %}
+              {% trans 'Excel' %}
             </a>
           </td>
           <td style="vertical-align:middle">
@@ -58,9 +59,9 @@
         </tr>
         <tr>
           <td class="text-center" style="vertical-align: middle;">
-            <a href="{% url 'dataops:googlesheetupload1' %}" class="btn btn-outline-primary">
+            <a href="{% url 'dataops:googlesheetupload1' %}" class="shadow btn btn-outline-primary">
               <span class="fa fa-plus"></span>
-              {% trans 'Google Sheet Upload/Merge' %}
+              {% trans 'Google Sheet' %}
             </a>
           </td>
           <td style="vertical-align:middle">
@@ -78,7 +79,29 @@
         </tr>
         <tr>
           <td class="text-center" style="vertical-align: middle;">
-            <a href="{% url 'dataops:sqlconns_instructor_index' %}" class="btn btn-outline-primary">
+            <a href="{% url 'dataops:s3upload1' %}"
+               class="shadow btn btn-outline-primary">
+              <span class="fa fa-plus"></span>
+              {% trans 'S3 Bucket CSV' %}
+            </a>
+          </td>
+          <td style="vertical-align:middle">
+            {% trans 'Upload data from a CSV file in a S3 Bucket.' %}<br/>
+            {% blocktrans %}
+            Given the key, secret, bucket name and file path to a CSV file,
+            upload or merge its content.
+            {% endblocktrans %}
+            <br/>
+            {% blocktrans %}
+            If the workflow table has data, the operation will ask you
+            to match a key column in your table with a key column in the sheet
+            so that the rows can be matched.
+            {% endblocktrans %}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center" style="vertical-align: middle;">
+            <a href="{% url 'dataops:sqlconns_instructor_index' %}" class="shadow btn btn-outline-primary">
               <span class="fa fa-plus"></span>
               {% trans 'SQL Connection' %}
             </a>

@@ -10,7 +10,6 @@ import pandas as pd
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 
 from dataops import pandas_db
@@ -22,7 +21,7 @@ from .models import Workflow, Column
 class WorkflowForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('workflow_user', None)
-        super(WorkflowForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     class Meta(object):
         model = Workflow
@@ -46,13 +45,13 @@ class AttributeItemForm(forms.Form):
         key = kwargs.pop('key', '')
         value = kwargs.pop('value', '')
 
-        super(AttributeItemForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields['key'].initial = key
         self.fields['value'].initial = value
 
     def clean(self):
-        data = super(AttributeItemForm, self).clean()
+        data = super().clean()
 
         # Name is legal
         msg = is_legal_name(data['key'])
@@ -89,7 +88,7 @@ class ColumnBasicForm(forms.ModelForm):
         self.workflow = kwargs.pop('workflow', None)
         self.data_frame = None
 
-        super(ColumnBasicForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields['raw_categories'].initial = \
             ', '.join([str(x) for x in self.instance.get_categories()])
@@ -100,11 +99,13 @@ class ColumnBasicForm(forms.ModelForm):
 
     def clean(self):
 
-        data = super(ColumnBasicForm, self).clean()
+        data = super().clean()
 
         # Load the data frame from the DB for various checks and leave it in
         # the form for future use
-        self.data_frame = pandas_db.load_from_db(self.workflow.id)
+        self.data_frame = pandas_db.load_from_db(
+            self.workflow.get_data_frame_table_name()
+        )
 
         # Column name must be a legal variable name
         if 'name' in self.changed_data:
@@ -117,7 +118,7 @@ class ColumnBasicForm(forms.ModelForm):
             # Check that the name is not present already
             if next((c for c in self.workflow.columns.all()
                      if c.id != self.instance.id and
-                        c.name == data['name']), None):
+                     c.name == data['name']), None):
                 # New column name collides with existing one
                 self.add_error(
                     'name',
@@ -189,7 +190,7 @@ class ColumnBasicForm(forms.ModelForm):
 class QuestionAddForm(ColumnBasicForm):
 
     def __init__(self, *args, **kwargs):
-        super(QuestionAddForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields['name'].label = _('Question name')
         self.fields['description_text'].label = \
@@ -200,7 +201,7 @@ class QuestionAddForm(ColumnBasicForm):
         self.fields['active_to'].label = _('Question active until')
 
     def clean(self):
-        data = super(QuestionAddForm, self).clean()
+        data = super().clean()
 
         # Check and force a correct column index
         ncols = self.workflow.columns.count()
@@ -226,13 +227,13 @@ class ColumnAddForm(ColumnBasicForm):
 
     def __init__(self, *args, **kwargs):
 
-        super(ColumnAddForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields['data_type'].choices = self.data_type_choices[1:]
 
     def clean(self):
 
-        data = super(ColumnAddForm, self).clean()
+        data = super().clean()
 
         # Try to convert the initial value ot the right type
         initial_value = data['initial_value']
@@ -257,7 +258,7 @@ class ColumnAddForm(ColumnBasicForm):
                 )
 
         # Check and force a correct column index
-        ncols = Column.objects.filter(workflow__id=self.workflow.id).count()
+        ncols = self.workflow.columns.count()
         if data['position'] < 1 or data['position'] > ncols:
             data['position'] = ncols + 1
 
@@ -272,7 +273,7 @@ class ColumnAddForm(ColumnBasicForm):
 class QuestionRenameForm(ColumnBasicForm):
 
     def __init__(self, *args, **kwargs):
-        super(QuestionRenameForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields['name'].label = _('Question name')
         self.fields['description_text'].label = \
@@ -285,7 +286,7 @@ class QuestionRenameForm(ColumnBasicForm):
         self.fields['data_type'].disabled = True
 
     def clean(self):
-        data = super(QuestionRenameForm, self).clean()
+        data = super().clean()
 
         # Check and force a correct column index
         ncols = self.workflow.columns.count()
@@ -303,13 +304,13 @@ class ColumnRenameForm(ColumnBasicForm):
 
     def __init__(self, *args, **kwargs):
 
-        super(ColumnRenameForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields['data_type'].disabled = True
 
     def clean(self):
 
-        data = super(ColumnRenameForm, self).clean()
+        data = super().clean()
 
         # Check if there has been a change in the 'is_key' status
         if 'is_key' in self.changed_data:
@@ -335,7 +336,7 @@ class ColumnRenameForm(ColumnBasicForm):
                 return data
 
         # Check and force a correct column index
-        ncols = Column.objects.filter(workflow__id=self.workflow.id).count()
+        ncols = self.workflow.columns.count()
         if data['position'] < 1 or data['position'] > ncols:
             data['position'] = ncols
 
@@ -363,7 +364,7 @@ class FormulaColumnAddForm(forms.ModelForm):
         # Workflow columns
         self.wf_columns = kwargs.pop('columns')
 
-        super(FormulaColumnAddForm, self).__init__(data, *args, **kwargs)
+        super().__init__(data, *args, **kwargs)
 
         # Populate the column choices
         self.fields['columns'].choices = [
@@ -371,11 +372,14 @@ class FormulaColumnAddForm(forms.ModelForm):
         ]
 
         # Populate the operand choices
-        self.fields['op_type'].choices = [('', '---')] \
-                                         + [(a, b) for a, b, _ in self.operands]
+        self.fields['op_type'].choices = \
+            [('', '---')] + [(a, b) for a, b, _ in self.operands]
+
+        # Selected columns
+        self.selected_columns = None
 
     def clean(self):
-        data = super(FormulaColumnAddForm, self).clean()
+        data = super().clean()
 
         # If there are no columns given, return
         column_idx_str = data.get('columns')
@@ -471,7 +475,7 @@ class WorkflowExportRequestForm(forms.Form):
         # Should the labels be included?
         self.put_labels = kargs.pop('put_labels', False)
 
-        super(WorkflowExportRequestForm, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         # Create as many fields as the given columns
         for i, a in enumerate(self.actions):
@@ -506,17 +510,17 @@ class SharedForm(forms.Form):
         self.workflow = kwargs.pop('workflow')
         self.user_obj = None
 
-        super(SharedForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def clean(self):
-        data = super(SharedForm, self).clean()
+        data = super().clean()
 
-        try:
-            self.user_obj = get_user_model().objects.get(
-                email__iexact=data['user_email']
-            )
-        except ObjectDoesNotExist:
+        self.user_obj = get_user_model().objects.filter(
+            email__iexact=data['user_email']
+        ).first()
+        if not self.user_obj:
             self.add_error('user_email', _('User not found'))
+            return data
 
         if self.user_obj == self.request_user:
             self.add_error(
@@ -526,8 +530,7 @@ class SharedForm(forms.Form):
 
         if self.user_obj in self.workflow.shared.all():
             self.add_error(
-                'user_email',
-                _("User already in the list")
+                'user_email', _("User already in the list")
             )
 
         return data

@@ -3,52 +3,53 @@
 {% load l10n %}
 {% load crispy_forms_tags %}
 {% block title %}{{ block.super }}{% trans "Log In" %}{% endblock %}
-{% block form_heading %}{% trans "Please Log In" %}{% endblock %}
 {% block form %}
   {% crispy form %}
 {% endblock form %}
 {% block extra_material %}
-  <div class="row">
-    <div class="col-lg-4">
-      <h2>{% trans 'The importance of personalisation' %}</h2>
-      <p>{% blocktrans %}Learners are more likely to have an effective
-        experience
-        when their environment is personalised. Resources, comments,
-        suggestions and feedback that take into account the reality of each
-        learner are much more effective than those addressing an entire
-        cohort. But personalisation has traditionally been based on highly
-        detailed pre-conceived models of learner behaviour. OnTask offers an
-        environment to personalise resources based on data collected from any
-        learning environment.{% endblocktrans %}
-      </p>
-    </div>
-    <div class="col-lg-4">
-      <h2>{% trans 'The importance of feedback' %}</h2>
-      <p>{% blocktrans %}Feedback is more effective when framed as a
-        dialogue. But such
-        dialogue will be highly dependent on the personal situation of each
-        learner. How can we combine knowledge about the learners with the
-        need to have personalised interaction? OnTask will help instructors
-        and learners to initiate this dialogue.{% endblocktrans %}</p>
-    </div>
-    <div class="col-lg-4">
-      <h2>{% trans 'The importance of data' %}</h2>
-      <p>{% blocktrans %}In the era of technology-mediated learning, data is
-        ubiquitous. But instead of providing instantaneous benefits,
-        this abundance brings a serious challenge to tranform data into
-      actionable knowledge. It is not enough to have data, it is essential
-        to use data to support a clearly identified objective in the
-        learning environment. How can this support be articulated?
-        How can it be used in multiple environments? OnTask
-      establishes this connection between data and its use to provide a
-        scalable solution to learning personalisation.{% endblocktrans %}</p>
-      <p><a class="btn btn-outline-primary" href="https://ontasklearning.org"
-            role="button">{% trans 'More Information' %} &raquo;</a></p>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">
+        <h2>{% trans 'The importance of personalisation' %}</h2>
+        <p>{% blocktrans %}Learners are more likely to have an effective
+          experience
+          when their environment is personalised. Resources, comments,
+          suggestions and feedback that take into account the reality of each
+          learner are much more effective than those addressing an entire
+          cohort. But personalisation has traditionally been based on highly
+          detailed pre-conceived models of learner behaviour. OnTask offers an
+          environment to personalise resources based on data collected from any
+          learning environment.{% endblocktrans %}
+        </p>
+      </div>
+      <div class="col-lg-4">
+        <h2>{% trans 'The importance of feedback' %}</h2>
+        <p>{% blocktrans %}Feedback is more effective when framed as a
+          dialogue. But such
+          dialogue will be highly dependent on the personal situation of each
+          learner. How can we combine knowledge about the learners with the
+          need to have personalised interaction? OnTask will help instructors
+          and learners to initiate this dialogue.{% endblocktrans %}</p>
+      </div>
+      <div class="col-lg-4">
+        <h2>{% trans 'The importance of data' %}</h2>
+        <p>{% blocktrans %}In the era of technology-mediated learning, data is
+          ubiquitous. But instead of providing instantaneous benefits,
+          this abundance brings a serious challenge to tranform data into
+        actionable knowledge. It is not enough to have data, it is essential
+          to use data to support a clearly identified objective in the
+          learning environment. How can this support be articulated?
+          How can it be used in multiple environments? OnTask
+        establishes this connection between data and its use to provide a
+          scalable solution to learning personalisation.{% endblocktrans %}</p>
+        <p><a class="shadow btn btn-outline-primary" href="https://ontasklearning.org"
+              role="button">{% trans 'More Information' %} &raquo;</a></p>
+      </div>
     </div>
   </div>
   {% if ONTASK_SHOW_HOME_FOOTER_IMAGE %}
     <div class="container-fluid">
-      <img src="{{ MEDIA_URL }}/project_consortium.gif"
+      <img src="{{ MEDIA_URL }}footer_image.gif"
            alt="OnTask Logo Set" style="width:100%;"/>
     </div>
   {% endif %}

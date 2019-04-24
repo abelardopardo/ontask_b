@@ -1,25 +1,111 @@
 .. _details:
 
-Workflow Details
-----------------
+Workflow Operations
+===================
 
     "The details are not the details. They make the design"
     -- Charles Eames
 
-After selecting a workflow to manage, the *details* page appears with a lot of information about operations, structure of the data, information about the columns, etc. The page contains the information shown in the following figure.
+The *Workflow Operations* page is available through the |fa-cog| *More* link at the top-bar menu. The page shows the information as illustrated by the following figure.
+
+.. figure:: /scaptures/workflow_attributes.png
+   :align: center
+
+The buttons at the top of the page offer the following operations:
+
+.. _details_export:
+
+|fa-download| Export
+  This functionality allows you to take a snapshot of the content of the workflow and store it in a file for your records. You may select which actions are included in the exported file
+
+  .. figure:: /scaptures/workflow_export.png
+     :align: center
+
+  The menu offers the possibility of exporting only the data, or the data **and** the :ref:`action <action>` in the workflow.
+
+.. _details_rename:
+
+|fa-pencil| Rename
+  This functionality allows to change either the name or the description of the workflow.
+
+  .. figure:: /scaptures/workflow_rename.png
+     :align: center
+     :width: 60%
+
+.. _details_clone:
+
+|fa-clone| Clone
+  This function creates a new workflow duplicating the data, actions and conditions of the current workflow. The new workflow will have the same name with the prefix *Copy of*.
+
+.. _details_flush_data:
+
+Flush data table
+  This operation deletes all the data attached to the workflow, but preserves the workflow structure (that is, the name and the description only).
+
+  .. figure:: /scaptures/workflow_flush.png
+     :align: center
+     :width: 60%
+
+  Given the destructive nature of this operation the platform requires you to confirm this step.
+
+.. _details_delete:
+
+|fa-trash| Delete
+  Operation similar to the previous one, but now the whole workflow is deleted and therefore unselected. If executed, the platform will go back to the list of workflows as this one is no longer available for operations.
+
+  .. figure:: /scaptures/workflow_delete.png
+     :align: center
+     :width: 60%
+
+  As in the previous case, the platform asks for confirmation before carrying out the delete operation.
+
+In addition to the buttons at the top, the *Workflow Operations* page offers two additional operations shown in separated tabs.
+
+
+.. _details_attributes:
+
+Attributes
+  This tab shows the operations to manage a dictionary of pairs ``(name, value)``. The names can e used in personalized text and they are replaced by the ``value``.
+
+  .. figure:: /scaptures/workflow_attributes.png
+     :align: center
+
+  The |fa-plus| *Attribute* button opens a form to introduce the name and value of a new attribute. The table below this button shows the attributes available for the workflow. The name of the attribute is a link that opens the form to edit its content. The |fa-trash| icon on the right deletes the attribute.
+
+  The use of these attributes is to facilitate a single point of change when a value appears in multiple locations. For example, every personalized text actino is singed with the name of the instructor. If that name changes, all actions need to be edited. On the other hand, if the actions contain the name of an attribute, just changing the attribute value propagates the change to all actions.
+
+.. _details_sharing:
+
+Share
+  The *Share* tab on the right of the page is used to manage the list of users that have access to this workflow. The |fa-plus| *User* button opens a form to introduce a the id of the user to share the workflow.
+
+  .. figure:: /scaptures/workflow_share.png
+     :align: center
+
+
+.. _columns:
+
+Column Operations
+=================
+
+The *Column Operations* page is available through the |fa-cog| *More* link at the top-bar menu.  Columns in OnTask have substantial information and operations that is condensed in this page. The information is shown as illustrated by the following figure.
 
 .. figure:: /scaptures/workflow_details.png
    :align: center
 
-The name of the workflow is shown at the top of the page. The page includes links to additional menus with various operations on the selected workflow (some of them will be available depending on your user profile). Under the title *Workflow Details* there are buttons to access the following operations:
+The buttons at the top of the page offer the following operations
 
-Add a column
+|fa-plus| Column
   This menu opens three options: create a regular column, create a column combining the values of two existing columns, or create a new column with random values.
 
 .. _details_add_column:
 
   Add a regular column
     Opens a dialog to create a new column in the table with the following fields:
+
+    .. figure:: /scaptures/workflow_add_column.png
+       :align: center
+       :width: 60%
 
     - Name (mandatory): column name (shown in the table)
 
@@ -35,9 +121,6 @@ Add a column
 
     - Initial value to assign to all cells in the column.
 
-    .. figure:: /scaptures/workflow_add_column.png
-       :align: center
-
 .. _details_add_formula_column:
 
   Add a formula-derived column
@@ -49,99 +132,52 @@ Add a column
   Add a column with random values
     This is useful to create columns for A/B testing. The new column is created with a random value from either a numeric range (starting at 0) or a set of strings.
 
-.. _details_attributes:
-
-Attributes
-  This is simply a dictionary of pairs ``(name, value)`` so that when a ``name`` appears in a personalized text, it is replaced by the ``value``. The main use of these attributes is when a value has to appear in various locations and you may want to change all its occurrences. For example, the instructor name could be included as one of the attributes so that if it changes, modifying the attribute is the only required step.
-
-  .. figure:: /scaptures/workflow_attributes.png
-     :align: center
-
-.. _details_sharing:
-
-Share
-  A screen to make the workflow accessible to other users. You are supposed to know the user identification (there is no search functionality available).
-
-  .. figure:: /scaptures/workflow_share.png
-     :align: center
-
-.. _details_export:
-
-Export
-  This functionality allows you to take a snapshot of the content of the workflow and store it in a file for your records. You may select which actions are included in the exported file
-
-  .. figure:: /scaptures/workflow_export.png
-     :align: center
-
-  The menu offers the possibility of exporting only the data, or the data **and** the :ref:`action <action>` in the workflow.
-
-.. _details_clone:
-
-Clone
-  This function creates a new workflow duplicating the data, actions and conditions of the current workflow. The new workflow will have the same name with the prefix *Copy of*.
-
-.. _details_rename:
-
-Rename
-  This functionality allows to change either the name or the description of the workflow.
-
-  .. figure:: /scaptures/workflow_rename.png
-     :align: center
-
-.. _details_flush_data:
-
-Flush data
-  This operation deletes all the data attached to the workflow, but preserves the workflow structure (that is, the name and the description only).
-
-  .. figure:: /scaptures/workflow_flush.png
-     :align: center
-
-  Given the destructive nature of this operation the platform requires you to confirm this step.
-
-.. _details_delete:
-
-Delete
-  Operation similar to the previous one, but now the whole workflow is deleted and therefore unselected. If executed, the platform will go back to the list of workflows as this one is no longer available for operations.
-
-  .. figure:: /scaptures/workflow_delete.png
-     :align: center
-
-  As in the previous case, the platform asks for confirmation before carrying out the delete operation.
-
-Under the buttons to carry out these workflow operations the platform shows a summary of the information contained in the workflow.
-
-.. _columns:
-
-The Columns
-^^^^^^^^^^^
-
-The data in a workflow is stored in a structure called *a table* that is made of rows and columns (similar to a spreadsheet). The details page basically shows information about the available columns.
-
-.. figure:: /scaptures/wokflow_columns.png
-   :align: center
-
-Each column has a position, name (cannot contain the quotes *'* or *"*), a type (one of integer, string, double, boolean or date/time), a field stating if the values of that column are unique for the rows, and operations. When a column is marked as *Unique*, it means that all the values it contains are different and unique for each row. Think of a column containing a passport number. Such number is different for every person. There could be several columns with this property. The application detects automatically this property in a column. You may edit and change this properly as long as the values are the adequate ones (they satisfy the uniqueness property if you try mark a column as unique). The operations available over columns are:
-
-Edit
-  It allows you to change the name, type, unique and values allowed in the column. If you are changing the column type, the application will check if the existing values are valid. If not, the change will not be allowed.
-  Similarly, if the *Unique* property is selected, the application checks the
-  values to make sure this property is satisfied.
-
-  .. figure:: /scaptures/workflow_column_edit.png
-     :align: center
-
-  The column may also have a *validity window* defined by two date/times. This validity is used when executing *action in* tasks.
-
-Restrict
-  Assigns as *allowed values* for the column those currently stored. This operation is useful to transform a generic column into one with values limited to the current ones.
-
-Clone
-  Clones the column in the workflow changing its name adding the prefix *Copy of* to the name.
-
-Delete
-  Deletes the column from the workflow. If there are conditions in the actions that use this column, those conditions will be removed from the action.
-
-Statistics
-  Shows a statistical summary of the values in the column. If the data type is *number*, the summary includes information about quartiles, a boxplot, and a histogram. For the rest of data types, the summary only includes the histogram.
+:ref:`Manage table data <dataops>`
+  Menu to upload/merge data to the table (see :ref:`dataops` for a detailed explanation), execute a plugin, or delete the data in the table.
 
 
+Below the buttons to perform these operations the workflow columns are shown. If the number of columns is large, the information is divided into pages. The field at the top right of this list performs searches in all fields of all columns (name, type, etc). Each column has the following information (from left to right):
+
+Position
+  A number starting at 1. The position is used when :ref:`visualizing the table <table>`.
+
+Name
+  Unique name for the workflow that cannot contain the quotes *'* or *"*.
+
+Type
+  One of integer, string, double, boolean or date/time.
+
+Key?
+  Field stating if it is a **key column**, that is, the values are different or unique for all rows. OnTask detects automatically this property when the data for a new column is loaded. You may edit and change this properly as long as the two requirements are satisfied: the values have to be unique for all rows, and there must be at least one key column per workflow.
+
+Operations
+  The operations available for columns are:
+
+  |fa-pencil| Edit
+    Available by clicking in the column name. It allows you to change the name, tunique and values allowed in the column. If the field *Has unique values per row* property is modified, OnTask checks if the values satisfy this condition.
+
+    .. figure:: /scaptures/workflow_column_edit.png
+       :align: center
+       :width: 60%
+
+    The column may also have a *validity window* defined by two date/times. This validity is used when executing *action in* tasks.
+
+  |fa-clone| Clone
+    Clones the column in the workflow changing its name adding the prefix *Copy of* to the name.
+
+  |fa-bar-chart| Statistics (only for non-key columns)
+    Shows a statistical summary of the values in the column. If the data type is *number*, the summary includes information about quartiles, a boxplot, and a histogram. For the rest of data types, the summary only includes the histogram.
+
+  |fa-compress| Restrict
+    Assigns as *allowed values* for the column those currently stored. This operation is useful to transform a generic column into one with values limited to the current ones.
+
+  |fa-trash| Delete
+    Deletes the column from the workflow. If there are conditions in the actions that use this column, those conditions will be removed from the action.
+
+  |fa-step-backward| Make first column
+    Move this column to the first position in the workflow
+
+  |fa-step-forward| Make last column
+    Move this column to the last position in the workflow
+
+The position of the columns can also be changed by dragging by the number (left-most column) and dropping them in the new position.

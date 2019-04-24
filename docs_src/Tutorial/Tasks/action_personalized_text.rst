@@ -1,30 +1,34 @@
 .. _tut_personalized_text_action:
 
 Personalized text action
-========================
+************************
 
 Click on the button to create a *New Action*, provide a name, a description (optional) and select the type *Personalized text*.
 
 .. figure:: /scaptures/tutorial_personalized_text_create.png
    :align: center
+   :width: 60%
 
-The next screen is the *personalized text action editor*. The functions in this page are divided into three areas.
+The next screen is the *personalized text action editor*. The functions in this page are divided into three areas represented by the tabs: Personalized Text, Filter Learners and Text Conditions. The following figure shows and example of this page.
 
 .. figure:: /scaptures/tutorial_personalized_text_editor.png
    :align: center
 
-1. This section allows to define a *filter*, or a condition to select a subset of the learners for which this action will be considered.
+Personalized Text
+  This area is the HTML text editor to write the content to personalize. It contains pull-down menus to insert column values and attributes.
 
-2. This section contains the conditions to be used in the personalized text.
+Filter Learners
+  This section allows to define a *filter*, or a condition to select a subset of the learners for which this action will be considered.
 
-3. This area is the HTML text editor to write the content to personalize.
+Text Conditions
+  This section contains the conditions to be used in the personalized text.
 
-Place the cursor in the text area and start the text with a salutation. Then click in the pull down menu next to *Insert* with the value *Column name*. Select the column *GivenName*. The string `{{ GivenName}}` appears in the text area. This notation is to instruct the next steps to replace the value among double curly braces with the name of each student.
+Place the cursor in the text area and start the text with a salutation. Then click in the pull down menu next to *Insert Column Value*. Select the column *GivenName*. The string `{{ GivenName}}` appears in the text area. This notation is to instruct the next steps to replace the value among double curly braces with the name of each student.
 
 .. figure:: /scaptures/tutorial_personalized_text_editor_with_column.png
    :align: center
 
-Click now in the button *New* in the **Text Conditions** area. A form appears to introduce the name, description and a formula. The formula may contain any combination of Boolean operators connecting column names. For example, the condition::
+Select the *Text Conditions* tab and click in the |fa-plus| *Condition* . A form appears to introduce the name, description and a formula. The formula may contain any combination of Boolean operators connecting column names. For example, the condition::
 
   Program equal to FASS
 
@@ -32,14 +36,17 @@ can be encoded in the formula as shown in the following figure
 
 .. figure:: /scaptures/tutorial_condition_program_FASS.png
    :align: center
+   :width: 60%
 
 We now are going to use this condition to control the appearance of text in the editor. You need to perform the following three steps:
+
+- Switch to the Personalized Text editor tab.
 
 - Write a sentence in the editor with a message that should apply only to those students in the FASS program.
 
 - Select it with the mouse.
 
-- Click in the arrow button next to the condition name and select *Insert in text*.
+- Click in the pull down menu with the text *Use condition in highlighted text*
 
 The result of these steps is shown in the following figure
 
@@ -60,12 +67,13 @@ Repeat the procedure and create three more conditions such that they are true if
 .. _tut_action_filter_definition:
 
 Selecting only a subset of learners
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+===================================
 
 In some cases, you may want to create a personalized text only for a subset of the learners. This can be done defining a *Filter* at the top of the screen (area 1). For example, the following filter:
 
 .. figure:: /scaptures/tutorial_personalized_text_filter.png
    :align: center
+   :width: 60%
 
 selects only those learners for which the column *Attendance* in the table has the value *Full Time*. Upon closing the small window with the filter data, the editor screen contains information about how many learners are being selected by that filter.
 
@@ -80,5 +88,6 @@ The button with name *Preview* at the bottom of the editor allows you to see the
 
 .. figure:: /scaptures/tutorial_personalized_text_preview.png
    :align: center
+   :width: 60%
 
 The bottom part of the screen shows the values of those columns that were used to evaluate the conditions required in the text. You may use the arrows at the top of the screen to review the message and see how it is changing from learner to learner.

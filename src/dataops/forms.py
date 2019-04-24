@@ -6,17 +6,20 @@ from builtins import next
 from builtins import range
 from builtins import str
 from builtins import zip
+from io import TextIOWrapper
 
+import pandas as pd
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _, ugettext
 
 import ontask.ontask_prefs
+from dataops import pandas_db, ops
 from dataops.models import SQLConnection
+from ontask import OnTaskDataFrameNoKey
 from ontask.forms import (
-    RestrictedFileField, column_to_field,
-    dateTimeWidgetOptions
+    RestrictedFileField, column_to_field, dateTimeWidgetOptions
 )
 
 # Field prefix to use in forms to avoid using column names (they are given by
@@ -41,9 +44,9 @@ class PluginInfoForm(forms.Form):
         self.workflow = kwargs.pop('workflow', None)
         self.plugin_instance = kwargs.pop('plugin_instance', None)
 
-        super(PluginInfoForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
-        if self.plugin_instance.input_column_names != []:
+        if self.plugin_instance.input_column_names:
             # The set of columns is fixed, remove the field.
             self.fields.pop('columns')
         else:
@@ -78,9 +81,9 @@ class PluginInfoForm(forms.Form):
             label=_('Suffix to add to result columns (empty to ignore)'),
             strip=True,
             required=False,
-            help_text=
-            _('Added to all output column names. Useful to keep results from '
-              'several executions in separated columns.')
+            help_text=_('Added to all output column names. '
+                        'Useful to keep results from '
+                        'several executions in separated columns.')
         )
 
         for idx, (k, p_type, p_allow, p_init, p_help) in \
@@ -140,7 +143,7 @@ class PluginInfoForm(forms.Form):
 
     def clean(self):
 
-        data = super(PluginInfoForm, self).clean()
+        data = super().clean()
 
         columns = data.get('columns', None)
         if columns and columns.count() == 0:
@@ -152,8 +155,52 @@ class PluginInfoForm(forms.Form):
         return data
 
 
+class UploadBasic(forms.Form):
+    data_frame: pd.DataFrame = None
+    frame_info = None
+    workflow = None
+
+    def __init__(self, *args, **kwargs):
+        self.workflow = kwargs.pop(str('workflow'), None)
+        super().__init__(*args, **kwargs)
+
+    def clean_data_frame(self):
+        """
+        Function to check that the integers are positive.
+        :return: The cleaned data
+        """
+
+        try:
+            # Verify the data frame
+            pandas_db.verify_data_frame(self.data_frame)
+        except OnTaskDataFrameNoKey as e:
+            self.add_error('file', e)
+            # FIX Once django-bootstrap4 fixes the bug preventing file feedback
+            # showing. REMOVE
+            self.add_error(None, e)
+            return
+
+        # Store the data frame in the DB.
+        try:
+            # Get frame info with three lists: names, types and is_key
+            self.frame_info = ops.store_dataframe(
+                self.data_frame,
+                self.workflow,
+                temporary=True
+            )
+        except Exception as e:
+            self.add_error('file',
+                           _('Unable to process file ({0}).'.format(e)))
+            # FIX Once django-bootstrap4 fixes the bug preventing file feedback
+            # showing. REMOVE
+            self.add_error(None,
+                           _('Unable to process file ({0}).'.format(e)))
+
+        return
+
+
 # Step 1 of the CSV upload
-class UploadCSVFileForm(forms.Form):
+class UploadCSVFileForm(UploadBasic):
     """
     Form to read a csv file. It also allows to specify the number of lines to
     skip at the top and the bottom of the file. This functionality is offered
@@ -189,25 +236,46 @@ class UploadCSVFileForm(forms.Form):
         :return: The cleaned data
         """
 
-        data = super(UploadCSVFileForm, self).clean()
+        data = super().clean()
 
+        done = False
         if data['skip_lines_at_top'] < 0:
             self.add_error(
                 'skip_lines_at_top',
                 _('This number has to be zero or positive')
             )
+            done = True
 
         if data['skip_lines_at_bottom'] < 0:
             self.add_error(
                 'skip_lines_at_bottom',
                 _('This number has to be zero or positive')
             )
+            done = True
+
+        if done:
+            return data
+
+        # Process CSV file using pandas read_csv
+        try:
+            self.data_frame = pandas_db.load_df_from_csvfile(
+                TextIOWrapper(self.files['file'].file,
+                              encoding=self.data.encoding),
+                self.cleaned_data['skip_lines_at_top'],
+                self.cleaned_data['skip_lines_at_bottom'])
+        except Exception as e:
+            self.add_error('file',
+                           _('File could not be processed ({0})').format(e))
+            return data
+
+        # Check the conditions in the data frame
+        self.clean_data_frame()
 
         return data
 
 
-# Step 1 of the CSV upload
-class UploadExcelFileForm(forms.Form):
+# Step 1 of the Excel upload
+class UploadExcelFileForm(UploadBasic):
     """
     Form to read an Excel file.
     """
@@ -227,9 +295,33 @@ class UploadExcelFileForm(forms.Form):
         initial='',
         help_text=_('Sheet within the excelsheet to upload'))
 
+    def clean(self):
+        """
+        Function to check that the integers are positive.
+        :return: The cleaned data
+        """
 
-# Step 1 of the CSV upload
-class UploadGoogleSheetForm(forms.Form):
+        data = super().clean()
+
+        # # Process Excel file using pandas read_excel
+        try:
+            self.data_frame = pandas_db.load_df_from_excelfile(
+                self.files['file'],
+                data['sheet']
+            )
+        except Exception as e:
+            self.add_error('file',
+                           _('File could not be processed ({0})').format(e))
+            return data
+
+        # Check the conditions in the data frame
+        self.clean_data_frame()
+
+        return data
+
+
+# Step 1 of the GoogleSheet upload
+class UploadGoogleSheetForm(UploadBasic):
     """
     Form to read a Google Sheet file through a URL. It also allows to specify
     the number of lines to skip at the top and the bottom of the file. This
@@ -266,19 +358,137 @@ class UploadGoogleSheetForm(forms.Form):
         :return: The cleaned data
         """
 
-        data = super(UploadGoogleSheetForm, self).clean()
+        data = super().clean()
 
+        done = False
         if data['skip_lines_at_top'] < 0:
             self.add_error(
                 'skip_lines_at_top',
                 _('This number has to be zero or positive')
             )
+            done = True
 
         if data['skip_lines_at_bottom'] < 0:
             self.add_error(
                 'skip_lines_at_bottom',
                 _('This number has to be zero or positive')
             )
+            done = True
+
+        if done:
+            return data
+
+        try:
+            self.data_frame = pandas_db.load_df_from_googlesheet(
+                data['google_url'],
+                self.cleaned_data['skip_lines_at_top'],
+                self.cleaned_data['skip_lines_at_bottom']
+            )
+        except Exception as e:
+            self.add_error(None,
+                           _('File could not be processed ({0})').format(e))
+            return data
+
+        # Check the conditions in the data frame
+        self.clean_data_frame()
+
+        return data
+
+
+# Step 1 of the S3 CSV upload
+class UploadS3FileForm(UploadBasic):
+    """
+    Form to read a csv file from a S3 bucket. It requires entering the access
+    key as well as the secret access key. It also allows to specify the
+    number of lines to skip at the top and the bottom of the file. This
+    functionality is offered by the underlyng function read_csv in Pandas
+    """
+
+    aws_access_key = forms.CharField(
+        max_length=512,
+        required=False,
+        initial='',
+        help_text=_('AWS S3 Bucket access key'))
+
+    aws_secret_access_key = forms.CharField(
+        max_length=512,
+        required=False,
+        initial='',
+        help_text=_('AWS S3 Bucket secret access key'))
+
+    aws_bucket_name = forms.CharField(
+        max_length=512,
+        required=True,
+        initial='',
+        help_text=_('AWS S3 Bucket name'))
+
+    aws_file_key = forms.CharField(
+        max_length=512,
+        required=True,
+        initial='',
+        help_text=_('AWS S3 Bucket file path'))
+
+    skip_lines_at_top = forms.IntegerField(
+        label=_('Lines to skip at the top'),
+        help_text=_("Number of lines to skip at the top when reading the "
+                    "file"),
+        initial=0,
+        required=False
+    )
+
+    skip_lines_at_bottom = forms.IntegerField(
+        label=_('Lines to skip at the bottom'),
+        help_text=_("Number of lines to skip at the bottom when reading the "
+                    "file"),
+        initial=0,
+        required=False
+    )
+
+    def clean(self):
+        """
+        Function to check that the integers are positive.
+        :return: The cleaned data
+        """
+
+        data = super().clean()
+
+        done = False
+        if data['skip_lines_at_top'] < 0:
+            self.add_error(
+                'skip_lines_at_top',
+                _('This number has to be zero or positive')
+            )
+            done = True
+
+        if data['skip_lines_at_bottom'] < 0:
+            self.add_error(
+                'skip_lines_at_bottom',
+                _('This number has to be zero or positive')
+            )
+            done = True
+
+        if done:
+            return data
+
+        # Process S3 file using pandas read_excel
+        try:
+            self.data_frame = pandas_db.load_df_from_s3(
+                self.cleaned_data['aws_access_key'],
+                self.cleaned_data['aws_secret_access_key'],
+                self.cleaned_data['aws_bucket_name'],
+                self.cleaned_data['aws_file_key'],
+                self.cleaned_data['skip_lines_at_top'],
+                self.cleaned_data['skip_lines_at_bottom']
+            )
+        except Exception as e:
+            self.add_error(
+                None,
+                _('S3 bucket file could not be processed ({0})').format(e)
+            )
+            return data
+
+        # Check the conditions in the data frame
+        self.clean_data_frame()
 
         return data
 
@@ -339,7 +549,7 @@ class SelectColumnUploadForm(forms.Form):
         self.is_key = kargs.pop('is_key')
         self.keep_key = kargs.pop('keep_key')
 
-        super(SelectColumnUploadForm, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         # Create as many fields as the given columns
         for idx, (c, upload) in enumerate(zip(self.column_names,
@@ -366,7 +576,7 @@ class SelectColumnUploadForm(forms.Form):
                 )
 
     def clean(self):
-        cleaned_data = super(SelectColumnUploadForm, self).clean()
+        cleaned_data = super().clean()
 
         upload_list = [cleaned_data.get('upload_%s' % i, False)
                        for i in range(len(self.column_names))]
@@ -422,7 +632,7 @@ class SelectKeysForm(forms.Form):
                   if v[0] == how_merge),
                  None)
 
-        super(SelectKeysForm, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         self.fields['dst_key'] = \
             forms.ChoiceField(initial=dst_choice_initial,
@@ -459,7 +669,7 @@ class RowFilterForm(forms.Form):
         self.key_names = [x.name for x in columns if x.is_key]
         self.key_types = [x.data_type for x in columns if x.is_key]
 
-        super(RowFilterForm, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         for name, field_type in zip(self.key_names, self.key_types):
             if field_type == 'string':
@@ -493,7 +703,7 @@ class RowForm(forms.Form):
         self.workflow = kargs.pop('workflow', None)
         self.initial_values = kargs.pop('initial_values', None)
 
-        super(RowForm, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
         if not self.workflow:
             return

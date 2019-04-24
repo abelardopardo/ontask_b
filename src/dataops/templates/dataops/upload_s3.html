@@ -10,7 +10,8 @@
 {% endblock %}
 {% block container %}
 <div class="container">
-  <h1 class="text-center">{% trans 'Step 3: Select Keys and Merge Option' %}</h1>
+  {% include 'step_by_step.html' with valuerange=valuerange step=4 %}
+  <h1 class="text-center">{% trans 'Select Keys and Merge Option' %}</h1>
   <div class="row justify-content-center">
     <form method="POST" action="">
       {% csrf_token %}
@@ -22,7 +23,7 @@
           and new table for the update. For cells in rows with keys in both
           tables, the values are updated if the new table has a non-empty value
           (cell 4B remains with value <i>b</i>).{% endblocktrans %}</p>
-        <img src="{{ MEDIA_URL }}/merge_outer.png"
+        <img src="{{ MEDIA_URL }}merge_outer.png"
              alt="{% trans 'Merge using all the keys in either the existing or new table' %}"
              style="width:400px;"/>
       </div>
@@ -34,7 +35,7 @@
         6 of the new table are removed. The cells in the result rows are
         updated only if the new value is non-empty (cell 4B remains with value
         <i>b</i>).{% endblocktrans %}</p>
-        <img src="{{ MEDIA_URL }}/merge_inner.png"
+        <img src="{{ MEDIA_URL }}merge_inner.png"
              alt="{% trans 'Merge using only the keys in both the existing and new table' %}"
              style="width:400px;"/>
       </div>
@@ -46,7 +47,7 @@
         the existing one (rows 5 and 6 in the figure below). The cells in the
         result rows are updated only if the new value is non-empty (cell 4B
         remains with value <i>b</i>).{% endblocktrans %}</p>
-        <img src="{{ MEDIA_URL }}/merge_left.png"
+        <img src="{{ MEDIA_URL }}merge_left.png"
              alt="{% trans 'Merge using only the keys in the existing table' %}"
              style="width:400px;"/>
       </div>
@@ -57,7 +58,7 @@
         in the new table (rows 1 and 2 in the figure below). The cells in the
         result rows are updated only if the new value is non-empty (cell 4B
         remains with value <i>b</i>).{% endblocktrans %}</p>
-        <img src="{{ MEDIA_URL }}/merge_right.png"
+        <img src="{{ MEDIA_URL }}merge_right.png"
              alt="{% trans 'Merge using only the keys in the new table' %}"
              style="width:400px;"/>
       </div>

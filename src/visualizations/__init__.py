@@ -3,10 +3,10 @@
 Implementation of visualizations using the Vega JS libarry
 """
 
-
 from builtins import object
 from abc import ABCMeta, abstractmethod
 from future.utils import with_metaclass
+
 
 class VisHandler(with_metaclass(ABCMeta, object)):
     id = None
@@ -16,7 +16,7 @@ class VisHandler(with_metaclass(ABCMeta, object)):
     @abstractmethod
     def __init__(self, data, *args, **kwargs):
         self.data = data
-        super(VisHandler, self).__init__()
+        super().__init__()
 
     @staticmethod
     @abstractmethod
@@ -40,8 +40,7 @@ class VisHandler(with_metaclass(ABCMeta, object)):
     def render(self):
         """
         Return the rendering in HTML fo this visualization
-        :param args:
-        :param kwargs:
+
         :return: String as HTML snippet
         """
         pass

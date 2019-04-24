@@ -5,40 +5,30 @@ import logging.config
 
 from .base import *  # NOQA
 
-# For security and performance reasons, DEBUG is turned off
-DEBUG = False
-
-# Must mention ALLOWED_HOSTS in production!
-ALLOWED_HOSTS = [os.environ['DOMAIN_NAME']]
-
-# Additional middleware introduced by debug toolbar
-MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
-
 # Show emails to console
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+################################################################################
 #
 # Security features
 #
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_HSTS_SECONDS = 31536000
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_SSL_REDIRECT = True
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-
-#
-# Folder to scan for plugins
-#
-DATAOPS_PLUGIN_DIRECTORY = os.path.join(PROJECT_PATH, 'plugins')
-
-#
-# Execute the JSON transfers for the required actions
-#
-EXECUTE_ACTION_JSON_TRANSFER = env.bool('EXECUTE_ACTION_JSON_TRANSFER',
-                                        default=True)
+################################################################################
+MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
+if USE_SSL:
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+else:
+    SECURE_CONTENT_TYPE_NOSNIFF = False
+    SECURE_BROWSER_XSS_FILTER = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SECURE_SSL_REDIRECT = False
 
 # Cache the templates in memory for speed-up
 loaders = [
@@ -50,12 +40,6 @@ loaders = [
 
 TEMPLATES[0]['OPTIONS'].update({"loaders": loaders})
 TEMPLATES[0].update({"APP_DIRS": False})
-
-# Define STATIC_ROOT for the collectstatic command
-STATIC_ROOT = join(BASE_DIR(), '..', 'site', 'static')
-
-# Log everything to the logs directory at the top
-LOGFILE_ROOT = join(dirname(BASE_DIR()), 'logs')
 
 # Reset logging
 LOGGING_CONFIG = None
@@ -75,25 +59,25 @@ LOGGING = {
         'django_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'django.log'),
+            'filename': join(LOG_FOLDER, 'django.log'),
             'formatter': 'verbose'
         },
         'proj_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'project.log'),
+            'filename': join(LOG_FOLDER, 'project.log'),
             'formatter': 'verbose'
         },
         'script_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'script.log'),
+            'filename': join(LOG_FOLDER, 'script.log'),
             'formatter': 'verbose'
         },
         'celery_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOGFILE_ROOT, 'celery.log'),
+            'filename': join(LOG_FOLDER, 'celery.log'),
             'formatter': 'verbose'
         },
         'console': {

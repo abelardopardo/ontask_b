@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import object
 import datetime
 import itertools
 import re
+from builtins import object
 
 import pytz
 from django.conf import settings
@@ -13,21 +13,19 @@ from django.core.validators import URLValidator
 from django.db import models
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
+from django.utils.functional import cached_property
 
+import ontask
 from dataops import formula_evaluation, pandas_db
-from dataops.formula_evaluation import (
-    get_variables, evaluate,
-    NodeEvaluation
-)
+from dataops.formula_evaluation import get_variables, evaluate, NodeEvaluation
 from logs.models import Log
-from ontask import OnTaskException
 from workflow.models import Workflow, Column
 
 # Regular expressions detecting the use of a variable, or the
 # presence of a "{% MACRONAME variable %} construct in a string (template)
 var_use_res = [
-    re.compile('(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+\}\})'),
-    re.compile('(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})')
+    re.compile(r'(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+\}\})'),
+    re.compile(r'(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})')
 ]
 
 
@@ -35,20 +33,28 @@ class Action(models.Model):
     """
     @DynamicAttrs
     """
+    PERSONALIZED_TEXT = ontask.PERSONALIZED_TEXT
+    PERSONALIZED_CANVAS_EMAIL = ontask.PERSONALIZED_CANVAS_EMAIL
+    PERSONALIZED_JSON = ontask.PERSONALIZED_JSON
+    SURVEY = ontask.SURVEY
+    TODO_LIST = ontask.TODO_LIST
 
-    PERSONALIZED_TEXT = 'personalized_text'
-    PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
-    PERSONALIZED_JSON = 'personalized_json'
-    SURVEY = 'survey'
-    TODO_LIST = 'todo_list'
+    ACTION_TYPES = ontask.ACTION_TYPES
 
-    ACTION_TYPES = [
-        (PERSONALIZED_TEXT, _('Personalized text')),
-        (PERSONALIZED_CANVAS_EMAIL, _('Personalized Canvas Email')),
-        (SURVEY, _('Survey')),
-        (PERSONALIZED_JSON, _('Personalized JSON')),
-        (TODO_LIST, _('TODO List'))
-    ]
+    AVAILABLE_ACTION_TYPES = ontask.diff(
+        ACTION_TYPES,
+        [x for x in ACTION_TYPES if x[0] in settings.DISABLED_ACTIONS])
+
+    assert len(AVAILABLE_ACTION_TYPES) != 0, \
+        "All actions disabled. Review DISABLED_ACTIONS in base.py"
+
+    if not settings.CANVAS_INFO_DICT:
+        # If the variable CANVAS_INFO_DICT is empty, the choice for Canvas
+        # Email action should be removed.
+        AVAILABLE_ACTION_TYPES.remove(
+            next(x for x in ACTION_TYPES
+                 if x[0] == ontask.PERSONALIZED_CANVAS_EMAIL)
+        )
 
     workflow = models.ForeignKey(
         Workflow,
@@ -56,7 +62,8 @@ class Action(models.Model):
         null=False,
         blank=False,
         on_delete=models.CASCADE,
-        related_name='actions')
+        related_name='actions'
+    )
 
     name = models.CharField(max_length=256,
                             blank=False,
@@ -105,9 +112,10 @@ class Action(models.Model):
                                      null=True,
                                      default=None)
 
-    # Set of columns used in the action (either to capture data in action IN
-    # or present in any of the conditions in action OUT)
-    columns = models.ManyToManyField(Column, related_name='actions_in')
+    # Index of rows with all conditions false
+    rows_all_false = JSONField(default=None,
+                               blank=True,
+                               null=True)
 
     #
     # Field for actions PERSONALIZED_TEXT, PERSONALIZED_CAVNAS_EMAIL and
@@ -116,7 +124,7 @@ class Action(models.Model):
     # Text to be personalised for action OUT
     content = models.TextField(default='', null=False, blank=True)
 
-    # Text to be personalised for action OUT
+    # URL for PERSONALIZED_JSON actions
     target_url = models.TextField(default='', null=True, blank=True)
 
     #
@@ -142,19 +150,17 @@ class Action(models.Model):
         return not ((self.active_from and now < self.active_from) or
                     (self.active_to and self.active_to < now))
 
-    @property
+    @cached_property
     def is_executable(self):
         """
-        Function to ask if an action is correct. All actions out are correct,
-        and action ins are correct if they have at least one key column and one
-        non-key column.
+        Function to answer if an action is ready to execute.
         :return: Boolean stating correctness
         """
 
         if self.action_type == Action.PERSONALIZED_TEXT:
             return True
 
-        if  self.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        if self.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
             return settings.CANVAS_INFO_DICT is not None
 
         if self.action_type == Action.PERSONALIZED_JSON:
@@ -173,18 +179,20 @@ class Action(models.Model):
 
         if self.action_type == Action.SURVEY or self.action_type == \
                 Action.TODO_LIST:
-            return self.columns.filter(is_key=True).exists() and \
-                   self.columns.filter(is_key=False).exists()
+            return self.column_condition_pair.filter(
+                column__is_key=True).exists() and \
+                   self.column_condition_pair.filter(
+                       column__is_key=False).exists()
 
         raise Exception('Function is_executable not implemented for action '
                         '{0}'.format(self.get_action_type_display()))
 
-    @property
+    @cached_property
     def is_in(self):
         return self.action_type == Action.SURVEY or \
                self.action_type == Action.TODO_LIST
 
-    @property
+    @cached_property
     def is_out(self):
         return not self.is_in
 
@@ -213,9 +221,12 @@ class Action(models.Model):
             [get_variables(x.formula)
              for x in self.conditions.filter(name__in=cond_names)]
         ))
-        self.columns.add(*[x for x in self.workflow.columns.filter(
-            name__in=colnames
-        )])
+        for c in [x for x in self.workflow.columns.filter(name__in=colnames)]:
+            __, __ = ActionColumnConditionTuple.objects.get_or_create(
+                action=self,
+                column=c,
+                condition=None
+            )
 
     def get_action_conditions(self):
         """
@@ -302,6 +313,11 @@ class Action(models.Model):
         for cond in self.conditions.all():
             cond.update_n_rows_selected(column=column)
 
+        # Reset the counter of rows with all false conditions (will be
+        # recomputed)
+        self.rows_all_false = None
+        self.save()
+
     def used_columns(self):
         """
         Function that returns a list of the columns being used in this
@@ -318,26 +334,12 @@ class Action(models.Model):
             result = result.union(set(c.columns.all()))
 
         # Accumulate now those in the field columns
-        for c in self.columns.all():
-            result.add(c)
+        for x in self.column_condition_pair.all():
+            result.add(x.column)
 
         return list(result)
 
-    def get_evaluation_context(self, row_values):
-        """
-        Given an action and a set of row_values, prepare the dictionary with the
-        condition names, attribute names and column names and their
-        corresponding values.
-        :param row_values: Values to use in the evaluation of conditions.
-        :return: Context dictionary, or None if there has been some anomaly
-        """
-
-        # If no row values are given, there is nothing to do here.
-        if row_values is None:
-            # No rows satisfy the given condition
-            return None
-
-        # Step 1: Evaluate all the conditions
+    def get_condition_evaluation(self, row_values):
         condition_eval = {}
         for condition in self.conditions.filter(is_filter=False).values(
                 'name', 'is_filter', 'formula'):
@@ -348,15 +350,106 @@ class Action(models.Model):
                     NodeEvaluation.EVAL_EXP,
                     row_values
                 )
-            except OnTaskException:
+            except ontask.OnTaskException:
                 # Something went wrong evaluating a condition. Stop.
                 return None
+        return condition_eval
+
+    def get_evaluation_context(self, row_values, condition_eval=None):
+        """
+        Given an action and a set of row_values, prepare the dictionary with the
+        condition names, attribute names and column names and their
+        corresponding values.
+        :param row_values: Values to use in the evaluation of conditions.
+        :param condition_eval: Dictionary with the condition evaluations
+        :return: Context dictionary, or None if there has been some anomaly
+        """
+
+        # If no row values are given, there is nothing to do here.
+        if row_values is None:
+            # No rows satisfy the given condition
+            return None
+
+        if not condition_eval:
+            # Step 1: Evaluate all the conditions
+            condition_eval = {}
+            for condition in self.conditions.filter(is_filter=False).values(
+                    'name', 'is_filter', 'formula'):
+                # Evaluate the condition
+                try:
+                    condition_eval[condition['name']] = evaluate(
+                        condition['formula'],
+                        NodeEvaluation.EVAL_EXP,
+                        row_values
+                    )
+                except ontask.OnTaskException:
+                    # Something went wrong evaluating a condition. Stop.
+                    return None
 
         # Step 2: Create the context with the attributes, the evaluation of the
         # conditions and the values of the columns.
         attributes = self.workflow.attributes
 
         return dict(dict(row_values, **condition_eval), **attributes)
+
+    def get_row_all_false_count(self):
+        """
+        Given a table and a list of conditions return the number of rows in
+        which all the conditions are false. :return: Number of rows that have
+        all conditions equal to false
+        """
+        if not self.rows_all_false:
+            if not self.workflow.has_data_frame():
+                # Workflow does not have a dataframe
+                raise ontask.OnTaskException(
+                    'Workflow without DF in get_table_row_count_all_false'
+                )
+
+            # Separate filter from conditions
+            filter_item = self.conditions.filter(is_filter=True).first()
+            cond_list = self.conditions.filter(is_filter=False)
+
+            if not cond_list:
+                # Condition list is either None or empty. No restrictions.
+                return 0
+
+            # Workflow has a data frame and condition list is non empty
+
+            cond_sql = ''
+            cond_fields = []
+            if filter_item:
+                cond_sql, cond_fields = evaluate(filter_item.formula,
+                                                 NodeEvaluation.EVAL_SQL)
+                # Remove the filter_item
+                cond_list = cond_list.filter(is_filter=False)
+                cond_sql += ' AND '
+
+            # Calculate the evaluation of each of the conditions
+            cond_list_sql = [evaluate(x.formula, NodeEvaluation.EVAL_SQL)
+                             for x in cond_list]
+
+            cond_sql += \
+                '(NOT ' + ') AND (NOT '.join(
+                    [a for a, _ in cond_list_sql]) + ')'
+            cond_fields += sum([b for _, b in cond_list_sql], [])
+
+            query = 'SELECT t.position from (' \
+                    'SELECT *, ROW_NUMBER() OVER () ' \
+                    'as position FROM "{0}") as t WHERE '.format(
+                        self.workflow.get_data_frame_table_name()
+                    ) + cond_sql
+
+            # Run the query
+            qs = pandas_db.execute_query(query, cond_fields).fetchall()
+
+            # If the list is not empty, flatten its structure
+            if qs:
+                self.rows_all_false = [x[0] for x in qs]
+            else:
+                self.rows_all_false = qs
+            self.save()
+
+        return self.rows_all_false
 
     class Meta(object):
         """
@@ -444,10 +537,17 @@ class Condition(models.Model):
             # The column is not part of this condition. Nothing to do
             return
 
+        # Reset the count of all rows with false condition
+        self.action.rows_all_false = None
+        self.action.save()
+
         # Case 1: Condition is a filter
         if self.is_filter:
             self.n_rows_selected = \
-                pandas_db.num_rows(self.action.workflow.id, self.formula)
+                pandas_db.num_rows(
+                    self.action.workflow.get_data_frame_table_name(),
+                    self.formula
+                )
             self.save()
 
             # Propagate the filter effect to the rest of actions.
@@ -477,7 +577,8 @@ class Condition(models.Model):
                        'valid': True
                        }
         self.n_rows_selected = pandas_db.num_rows(
-            self.action.workflow.id, formula)
+            self.action.workflow.get_data_frame_table_name(),
+            formula)
         self.save()
 
         return
@@ -501,3 +602,44 @@ class Condition(models.Model):
         """
         unique_together = ('action', 'name', 'is_filter')
         ordering = ('created',)
+
+
+class ActionColumnConditionTuple(models.Model):
+    """
+    Object to represent a tuple (action, column, condition). The purpose of
+    these objects are to:
+
+    1) Represent the collection of columns attached to a regular action
+
+    2) If the action is a survey, see if the question has a condition attached
+    to it to decide its presence in the survey.
+
+    @DynamicAttrs
+    """
+
+    action = models.ForeignKey(Action,
+                               db_index=True,
+                               on_delete=models.CASCADE,
+                               null=False,
+                               blank=False,
+                               related_name='column_condition_pair')
+
+    column = models.ForeignKey(Column,
+                               on_delete=models.CASCADE,
+                               null=False,
+                               blank=False,
+                               related_name='column_condition_pair')
+
+    condition = models.ForeignKey(Condition,
+                                  on_delete=models.CASCADE,
+                                  null=True,
+                                  blank=False,
+                                  related_name='column_condition_pair')
+
+    class Meta(object):
+        """
+        Define the criteria of uniqueness with name in workflow and order by
+        name
+        """
+        unique_together = ('action', 'column', 'condition')
+        ordering = ['column__position']

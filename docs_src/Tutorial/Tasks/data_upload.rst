@@ -1,7 +1,7 @@
 .. _data_upload:
 
 Data Upload
-===========
+***********
 
 Log into the platform and:
 
@@ -13,7 +13,9 @@ The following page allows you to upload data from three sources:
 
 - a CSV (comma separated values) file,
 
-- an Excel file, or
+- an Excel file,
+
+- a publicly available Google Sheet, or
 
 - a SQL connection to a relational database.
 

@@ -188,7 +188,114 @@ texinfo_documents = [
 # -- Additional Options --------------------------------------------------
 
 rst_prolog = '.. |ontask_version| replace:: %s\n' % ontask.__version__
+rst_prolog += """
+.. |fa-book| raw:: html
 
+   <span class="fa fa-book"></span>
+   
+.. |fa-pencil| raw:: html
+
+   <span class="fa fa-pencil"></span>
+   
+.. |fa-clone| raw:: html
+
+   <span class="fa fa-clone"></span>
+   
+.. |fa-minus-square| raw:: html
+
+   <span class="fa fa-minus-square"></span>
+   
+.. |fa-trash| raw:: html
+
+   <span class="fa fa-trash"></span>
+   
+.. |fa-plus| raw:: html
+
+   <span class="fa fa-plus"></span>
+   
+.. |fa-eye| raw:: html
+
+   <span class="fa fa-eye"></span>
+   
+.. |fa-dashboard| raw:: html
+
+   <span class="fa fa-dashboard"></span>
+
+.. |fa-download| raw:: html
+
+   <span class="fa fa-download"></span>
+
+.. |fa-upload| raw:: html
+
+   <span class="fa fa-upload"></span>
+
+.. |fa-bar-chart| raw:: html
+
+   <span class="fa fa-bar-chart"></span>
+
+.. |fa-calendar| raw:: html
+
+   <span class="fa fa-calendar"></span>
+
+.. |fa-home| raw:: html
+
+   <span class="fa fa-home"></span>
+
+.. |fa-table| raw:: html
+
+   <span class="fa fa-table"></span>
+
+.. |fa-comments| raw:: html
+
+   <span class="fa fa-comments"></span>
+
+.. |fa-rocket| raw:: html
+
+   <span class="fa fa-rocket"></span>
+
+.. |fa-link| raw:: html
+
+   <span class="fa fa-link"></span>
+
+.. |fa-file-archive-o| raw:: html
+
+   <span class="fa fa-file-archive-o"></span>
+
+.. |fa-floppy-o| raw:: html
+
+   <span class="fa fa-floppy-o"></span>
+
+.. |fa-check| raw:: html
+
+   <span class="fa fa-check"></span>
+
+.. |fa-cog| raw:: html
+
+   <span class="fa fa-cog"></span>
+
+.. |fa-compress| raw:: html
+
+   <span class="fa fa-compress"></span>
+
+.. |fa-step-forward| raw:: html
+
+   <span class="fa fa-step-forward"></span>
+
+.. |fa-step-backward| raw:: html
+
+   <span class="fa fa-step-backward"></span>
+
+.. |fa-user| raw:: html
+
+   <span class="fa fa-user"></span>
+
+.. |fa-database| raw:: html
+
+   <span class="fa fa-database"></span>
+"""
 
 def setup(app):
     app.add_stylesheet('css/custom.css')  # may also be an URL
+    app.add_stylesheet(
+        "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    )

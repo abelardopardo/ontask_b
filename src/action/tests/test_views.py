@@ -4,12 +4,13 @@ from __future__ import unicode_literals, print_function
 import os
 
 from django.conf import settings
+from django.core import mail
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait, Select
 
 import test
-from action.models import Action, Column, Condition
+from action.models import Action, Condition
 from dataops import pandas_db
 from dataops.formula_evaluation import has_variable
 from workflow.models import Workflow
@@ -30,12 +31,12 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
     wflow_empty = 'The workflow does not have data'
 
     def setUp(self):
-        super(ActionActionEdit, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
-        super(ActionActionEdit, self).tearDown()
+        test.delete_all_tables()
+        super().tearDown()
 
     # Test action rename
     def test_action_00_rename(self):
@@ -192,7 +193,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Set the value to 2017-10-11T00:32:44
         self.selenium.find_element_by_name(
-            'builder_rule_1_value_0').send_keys('2017-10-11T00:32:44')
+            'builder_rule_1_value_0').send_keys('2017-10-11T00:32:44+1300')
 
         # Click in the "update filter"
         self.selenium.find_element_by_xpath(
@@ -226,13 +227,10 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # Login
         self.login('instructor01@bogus.com')
 
-        # GO TO THE WORKFLOW PAGE
+        # Open workflow page
         self.access_workflow_from_home_page(self.wflow_name)
 
-        # Goto the action page
-        self.go_to_actions()
-
-        # click in the action page
+        # Edit the action
         self.open_action_edit(self.action_name)
 
         # Add condition
@@ -249,6 +247,8 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Action now has two complementary conditions, add the conditions to
         # the message
+        self.select_text_tab()
+        self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
             """$('#id_content').summernote(
                    'editor.insertText', 
@@ -313,11 +313,14 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Click the send button
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Next']").click()
+            "//button[normalize-space()='Send']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, "//body/div/h1"),
                 'Action scheduled for execution')
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
         # There should be a message on that page
@@ -328,6 +331,9 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
                 'You may check the status in log number'
             )
         )
+
+        # Check that the email has been properly stored
+        assert len(mail.outbox) == 3
 
         # Go to the table page
         self.go_to_table()
@@ -380,6 +386,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # insert the second mark
         self.select_text_tab()
+        self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "mark2");"""
         )
@@ -398,6 +405,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # insert the third mark
         self.select_text_tab()
+        self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "mark3");"""
         )
@@ -414,6 +422,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         )
         # insert the first mark
         self.select_text_tab()
+        self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "cmark1");"""
         )
@@ -432,6 +441,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         )
 
         # insert the second mark
+        self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "cmark2");"""
         )
@@ -449,6 +459,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         )
 
         # insert the third mark
+        self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
             """$('#id_content').summernote('editor.insertText', "cmark3");"""
         )
@@ -469,6 +480,42 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
+    # Test operations with the filter
+    def test_action_05_JSON_action(self):
+        action_name = 'JSON action'
+        content_txt = '{ "name": 3 }'
+        target_url = 'https://bogus.com'
+
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
+
+        # Goto the action page
+        self.go_to_actions()
+
+        # Create new action
+        self.create_new_json_action(action_name)
+
+        # Introduce text and then the URL
+        self.select_json_text_tab()
+        self.selenium.find_element_by_id('id_content').send_keys(content_txt)
+        self.selenium.find_element_by_id('id_target_url').send_keys(target_url)
+
+        # Save action and back to action index
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Close']"
+        ).click()
+        self.wait_for_datatable('action-table_previous')
+
+        action = Action.objects.get(name=action_name)
+        self.assertTrue(action.content == content_txt)
+        self.assertTrue(action.target_url == target_url)
+
+        # End of session
+        self.logout()
+
 
 class ActionActionInCreate(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow_two_actions']
@@ -484,12 +531,12 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
     wflow_empty = 'The workflow does not have data'
 
     def setUp(self):
-        super(ActionActionInCreate, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
-        super(ActionActionInCreate, self).tearDown()
+        test.delete_all_tables()
+        super().tearDown()
 
     # Test operations with the filter
     def test_action_01_data_entry(self):
@@ -514,24 +561,19 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
 
         # Select email column as key column
         self.select_parameters_tab()
-        select = Select(self.selenium.find_element_by_id(
-            'select-key-column-name'))
-        select.select_by_visible_text('email')
+        self.click_dropdown_option("//div[@id='select-key-column-name']",
+                                   'email')
         # Table disappears (page is updating) -- Wait for spinner, and then
         # refresh
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
-        # Select a new table element
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.ID, 'select-column-name')
-            )
+        self.select_questions_tab()
+        self.click_dropdown_option(
+            "//div[@id='column-selector']",
+            'registered'
         )
-        select = Select(self.selenium.find_element_by_id(
-            'select-column-name'))
-        select.select_by_visible_text('registered')
         self.wait_for_datatable('column-selected-table_previous')
 
         # Submit the action
@@ -578,32 +620,25 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
     wflow_name = 'wflow2'
 
     def setUp(self):
-        super(ActionActionRenameEffect, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
-        super(ActionActionRenameEffect, self).tearDown()
+        test.delete_all_tables()
+        super().tearDown()
 
     # Test operations with the filter
     def test_action_01_rename_column_condition_attribute(self):
         # First get objects for future checks
         workflow = Workflow.objects.get(name=self.wflow_name)
-        column = Column.objects.get(
-            name='registered',
-            workflow=workflow
-        )
+        column = workflow.columns.get(name='registered')
         attributes = workflow.attributes
-        Action.objects.get(name='Check registration', workflow=workflow
-        )
+        Action.objects.get(name='Check registration', workflow=workflow)
         action_out = Action.objects.get(
             name='Detecting age',
             workflow=workflow
         )
-        condition = Condition.objects.get(
-            name='Registered',
-            action=action_out,
-        )
+        condition = Condition.objects.get(name='Registered', action=action_out)
         filter_obj = action_out.get_filter()
 
         # pre-conditions
@@ -667,8 +702,10 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         self.edit_condition('Registered', 'Registered new', None, [])
 
         # Refresh variables
-        workflow = Workflow.objects.get(pk=workflow.id)
-        column = Column.objects.get(pk=column.id)
+        workflow = Workflow.objects.prefetch_related('columns').get(
+            pk=workflow.id
+        )
+        column = workflow.columns.get(pk=column.id)
         attributes = workflow.attributes
         action_out = Action.objects.get(pk=action_out.id)
         condition = Condition.objects.get(pk=condition.id)
@@ -715,12 +752,12 @@ class ActionActionZip(test.OnTaskLiveTestCase):
     wflow_name = 'wflow2'
 
     def setUp(self):
-        super(ActionActionZip, self).setUp()
+        super().setUp()
         pandas_db.pg_restore_table(self.filename)
 
     def tearDown(self):
-        pandas_db.delete_all_tables()
-        super(ActionActionZip, self).tearDown()
+        test.delete_all_tables()
+        super().tearDown()
 
     # Test operations with the filter
     def test_action_01_zip(self):
@@ -784,6 +821,101 @@ class ActionActionZip(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Next']").click()
         self.wait_for_page(element_id='zip-action-done')
+
+        # End of session
+        self.logout()
+
+class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
+    action_name = 'simple action'
+    fixtures = ['simple_action']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'action',
+        'fixtures',
+        'simple_action.sql'
+    )
+
+    wflow_name = 'wflow1'
+    wflow_desc = 'description text for workflow 1'
+    wflow_empty = 'The workflow does not have data'
+
+    action_text = "Cond 1 = {{ cond 1 }}\\n" + \
+                  "Cond 2 = {{ cond 2 }}\\n" + \
+                  "{% if cond 1 %}Cond 1 is true{% endif %}\\n" + \
+                  "{% if cond 2 %}Cond 2 is true{% endif %}\\n"
+
+    def setUp(self):
+        super().setUp()
+        pandas_db.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        test.delete_all_tables()
+        super().tearDown()
+
+    # Test action rename
+    def test_action_detect_all_false_rows(self):
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
+
+        # Create a new action
+        self.create_new_personalized_text_action("action out", '')
+
+        # Create three conditions
+        self.select_condition_tab()
+        self.create_condition("cond 1", '', [('another', 'equal', 'bbb')])
+        self.create_condition("cond 2", '', [('age', 'greater', '12.1')])
+
+        # The action should now flag that one user has all conditions equal to
+        # False
+        self.assertIn('user has all conditions equal to FALSE',
+                      self.selenium.page_source)
+
+        # insert the action text (not needed, but...)
+        self.select_text_tab()
+        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.execute_script(
+            """$('#id_content').summernote('editor.insertText', 
+            "{0}");""".format(self.action_text)
+        )
+
+        # Click in the preview and circle around the 12 rows
+        self.open_browse_preview(1, close=False)
+
+        # The preview should now flag that this user has all conditions equal to
+        # False
+        self.assertIn('All conditions evaluate to FALSE',
+                      self.selenium.page_source)
+
+        # Close the preview
+        self.selenium.find_element_by_xpath(
+            "//div[@id='modal-item']/div/div/div/div[2]/button[2]"
+        ).click()
+        # Close modal (wail until the modal-open element disappears)
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, 'modal-open')
+            )
+        )
+
+        # Create filter
+        self.create_filter("The filter", [('another', 'equal', 'bbb')])
+
+        # The action should NOT flag that a user has all conditions equal to
+        # False
+        self.assertNotIn('user has all conditions equal to FALSE',
+                         self.selenium.page_source)
+
+        # Remove the filter
+        self.delete_filter()
+
+        # Message show now appear
+        # The action should NOT flag that a user has all conditions equal to
+        # False
+        self.assertIn('user has all conditions equal to FALSE',
+                         self.selenium.page_source)
 
         # End of session
         self.logout()

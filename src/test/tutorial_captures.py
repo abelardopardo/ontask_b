@@ -20,8 +20,18 @@ class TutorialCaptures(ScreenTests):
     workflow_name = 'BIOL1011'
     description = 'Course on Cell Biology'
 
+    script1 = "Dear {{ GivenName }}\n"
+    script2 = \
+        "{% if Program is FASS %}Some suggestions for FASS{% endif %}\n"
+    script3 = \
+        "{% if Program is FSCI %}Some suggestions for FSCI{% endif %}\n" + \
+        "{% if Program is FEIT %}Some suggestions for FEIT{% endif %}\n" + \
+        "{% if Program is SMED %}Sme suggestions for SMED{% endif %}\n" + \
+        "Kind regards\n" + \
+        "Jane Doe"
+
     def setUp(self):
-        super(TutorialCaptures, self).setUp()
+        super().setUp()
         test.create_users()
 
     def test(self):
@@ -67,7 +77,7 @@ class TutorialCaptures(ScreenTests):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
-                                             'Step 2: Select Columns')
+                                             'Select Columns')
         )
 
         # Uncheck two elements
@@ -91,11 +101,17 @@ class TutorialCaptures(ScreenTests):
         # Take picture of the table
         self.body_ss('tutorial_initial_table.png')
 
+        # Take picture of the top-bar menu
+        self.element_ss("//nav[contains(@class, 'fixed-top')]",
+                        'tutorial_top_menu_bar.png')
+
         # Go back to details
         self.go_to_details()
-
-        # New details (with the first set of columns)
         self.body_ss('tutorial_details_1.png')
+
+        # Go back to details
+        self.go_to_workflow_operations()
+        self.body_ss('tutorial_workflow_operations.png')
 
         # Create a new view
         self.go_to_table()
@@ -165,14 +181,23 @@ class TutorialCaptures(ScreenTests):
 
         # Go to the actions page
         self.go_to_actions()
-
         self.body_ss('tutorial_action_index.png')
+
+        # Go to the import action page
+        self.selenium.find_element_by_link_text('Import action').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//input[@id='id_name']")
+            )
+        )
+        self.body_ss('tutorial_action_import.png')
+        self.go_to_actions()
 
         #
         # Merge data from Moodle
         #
         self.go_to_upload_merge()
-        self.selenium.find_element_by_link_text("CSV Upload/Merge").click()
+        self.selenium.find_element_by_link_text("CSV").click()
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Upload/Merge CSV')
         )
@@ -242,8 +267,7 @@ class TutorialCaptures(ScreenTests):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
-                (By.XPATH, "//body/div/h1"),
-                'Step 4: Review and confirm')
+                (By.XPATH, "//body/div/h1"), 'Review and confirm')
         )
 
         # Picture of the body
@@ -287,16 +311,10 @@ class TutorialCaptures(ScreenTests):
         # Action editor
         self.body_ss('tutorial_personalized_text_editor.png')
 
-        self.selenium.execute_script(
-            """$('#id_content').summernote(
-                   'editor.insertText', "Dear ");
-               $('#summernote').summernote('editor.saveRange');""")
-
-        select = Select(self.selenium.find_element_by_id(
-            'select-column-name'))
-        select.select_by_visible_text('GivenName')
-        self.selenium.execute_script(
-            """$('#summernote').summernote('editor.saveRange');""")
+        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.find_element_by_class_name('note-editable').send_keys(
+            self.script1
+        )
 
         # Take picture of the html editor
         self.element_ss("//div[@id='html-editor']",
@@ -316,20 +334,10 @@ class TutorialCaptures(ScreenTests):
         self.cancel_modal()
 
         self.select_text_tab()
-        self.selenium.execute_script(
-            "$('#id_content').summernote('code', '');"
-            "$('#id_content').summernote("
-            "'editor.insertText',"
-            "'Dear {{ GivenName }}');")
-
-        self.selenium.execute_script(
-            "$('#id_content').summernote('editor.insertParagraph');")
-
-        self.selenium.execute_script(
-            "$('#id_content').summernote("
-            "'editor.insertText',"
-            "'{% if Program is FASS %}Here are "
-            "some suggestions for FASS{% endif %}');")
+        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.find_element_by_class_name('note-editable').send_keys(
+            self.script2
+        )
 
         # Take picture of the html editor
         self.element_ss("//div[@id='html-editor']",
@@ -352,53 +360,10 @@ class TutorialCaptures(ScreenTests):
 
         # Insert additional sentences for each program
         self.select_text_tab()
-        self.selenium.execute_script(
-            "$('#id_content').summernote('code', '');"
-            "$('#id_content').summernote("
-            "'editor.insertText',"
-            "'Dear {{ GivenName }}');")
-        self.selenium.execute_script(
-            "$('#id_content').summernote('editor.insertParagraph');")
-        self.selenium.execute_script(
-            "$('#id_content').summernote("
-            "'editor.insertText',"
-            "'{% if Program is FASS %}Here are "
-            "some suggestions for FASS{% endif %}');")
-        self.selenium.execute_script(
-            "$('#id_content').summernote('editor.insertParagraph');")
-        self.selenium.execute_script(
-            "$('#id_content').summernote("
-            "'editor.insertText',"
-            "'{% if Program is FSCI %}Here are "
-            "some suggestions for FSCI{% endif %}');")
-        self.selenium.execute_script(
-            "$('#id_content').summernote('editor.insertParagraph');")
-        self.selenium.execute_script(
-            "$('#id_content').summernote("
-            "'editor.insertText',"
-            "'{% if Program is FEIT %}Here are "
-            "some suggestions for FEIT{% endif %}');")
-        self.selenium.execute_script(
-            "$('#id_content').summernote('editor.insertParagraph');")
-        self.selenium.execute_script(
-            "$('#id_content').summernote("
-            "'editor.insertText',"
-            "'{% if Program is SMED %}Here are "
-            "some suggestions for SMED{% endif %}');")
-        self.selenium.execute_script(
-            "$('#id_content').summernote('editor.insertParagraph');")
-        self.selenium.execute_script(
-            "$('#id_content').summernote('editor.insertParagraph');")
-        self.selenium.execute_script(
-            "$('#id_content').summernote("
-            "'editor.insertText',"
-            "'Kind regards');")
-        self.selenium.execute_script(
-            "$('#id_content').summernote('editor.insertParagraph');")
-        self.selenium.execute_script(
-            "$('#id_content').summernote("
-            "'editor.insertText',"
-            "'Jane Doe -- Course Coordinator');")
+        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.find_element_by_class_name('note-editable').send_keys(
+            self.script3
+        )
 
         # Take picture of the html editor
         self.element_ss("//div[@id='html-editor']",
@@ -446,7 +411,7 @@ class TutorialCaptures(ScreenTests):
             'id_email_column'))
         select.select_by_value('email')
         self.selenium.find_element_by_id('id_cc_email').send_keys(
-            'tutor1@bogus.com, tutor2@bogus.com'
+            'tutor1@example.com, tutor2@example.com'
         )
         self.selenium.find_element_by_id('id_bcc_email').send_keys(
             'coursecoordinator@bogus.com'
@@ -636,7 +601,7 @@ class TutorialCaptures(ScreenTests):
 
         # Click on the Add Column button
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Create new question']"
+            "//button[normalize-space()='Create question']"
         ).click()
         self.wait_for_modal_open()
 
@@ -665,7 +630,7 @@ class TutorialCaptures(ScreenTests):
 
         # Create the second column
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Create new question']"
+            "//button[normalize-space()='Create question']"
         ).click()
         self.wait_for_modal_open()
 
@@ -699,10 +664,8 @@ class TutorialCaptures(ScreenTests):
         self.select_parameters_tab()
 
         # Select email column as key column
-        self.select_parameters_tab()
-        select = Select(self.selenium.find_element_by_id(
-            'select-key-column-name'))
-        select.select_by_visible_text('email')
+        self.click_dropdown_option("//div[@id='select-key-column-name']",
+                                   'email')
         # Table disappears (page is updating) -- Wait for spinner, and then
         # refresh
         WebDriverWait(self.selenium, 10).until_not(
@@ -748,38 +711,29 @@ class TutorialCaptures(ScreenTests):
 
         # Action editor
         self.select_text_tab()
-        self.selenium.execute_script(
-            """$('#id_content').summernote(
-                   'editor.insertText', "Dear {{ GivenName }}");""")
-        self.selenium.execute_script(
-            "$('#id_content').summernote('editor.insertParagraph');")
-        self.selenium.execute_script(
-            """$('#id_content').summernote(
-                   'editor.insertText', "Here are some suggestions.");""")
-        self.selenium.execute_script(
-            "$('#id_content').summernote('editor.insertParagraph');")
+        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.find_element_by_class_name('note-editable').send_keys(
+            "Dear {{ GivenName }}\n" +
+            "Here are some suggestions.\n"
+        )
 
         # Add the text for those that failed
         for topic in topics:
-            self.selenium.execute_script(
-                ("""$("#id_content").summernote("editor.insertText",""" 
-                 """ "{{% if {0} - Fail %}}Tips about {0} """ 
-                 """for those that failed.{{% endif %}}");""").format(topic))
-            self.selenium.execute_script(
-                "$('#id_content').summernote('editor.insertParagraph');")
+            self.selenium.find_element_by_class_name('note-editable').send_keys(
+                ("{{% if {0} - Fail %}} Tips about {0} " +
+                 "for those that failed.{{% endif %}}\n").format(topic)
+            )
 
         # Add the text for those that passed
         for topic in topics:
-            self.selenium.execute_script(
-                ("""$('#id_content').summernote("editor.insertText",""" 
-                 """ "{{% if {0} - Passed %}}Tips about {0} """ 
-                 """for those that passed.{{% endif %}}");""").format(topic))
-            self.selenium.execute_script(
-                "$('#id_content').summernote('editor.insertParagraph');")
+            self.selenium.find_element_by_class_name('note-editable').send_keys(
+                ("{{% if {0} - Passed %}}Tips about {0} " +
+                 "for those that passed.{{% endif %}}\n").format(topic)
+            )
 
-        self.selenium.execute_script(
-            """$('#id_content').summernote(
-                   'editor.insertText', "Kind regards -- Jane Doe");""")
+        self.selenium.find_element_by_class_name('note-editable').send_keys(
+            "Kind regards -- Jane Doe"
+        )
 
         # Create the filter
         self.select_filter_tab()

@@ -5,24 +5,25 @@ functions to process request when receiving a "serve" action, cloning
 operations when cloning conditions and actions, and sending messages.
 """
 
-from builtins import zip
-from builtins import str
 import datetime
 import gzip
 import json
 import random
+from builtins import str
+from builtins import zip
 from io import BytesIO
 from time import sleep
 
 import html2text as html2text
 import pytz
 import requests
+from celery.utils.log import get_task_logger
 from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.core import signing, mail
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.mail import send_mail, EmailMultiAlternatives, EmailMessage
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import Context, Template, TemplateSyntaxError
@@ -32,22 +33,20 @@ from django.utils import timezone
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _, ugettext
 from rest_framework import serializers
+from rest_framework import status
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
-from validate_email import validate_email
-from django.db.models import Q
-from celery.utils.log import get_task_logger
-from rest_framework import status
 
 from action.evaluate import (
     evaluate_row_action_out, evaluate_action,
     get_row_values
 )
-from action.forms import EnterActionIn, field_prefix
-from action.models import Action
+from action.forms import EnterActionIn, field_prefix, EmailExcludeForm
+from action.models import Action, ActionColumnConditionTuple
 from action.serializers import ActionSelfcontainedSerializer
 from dataops import pandas_db, ops
 from logs.models import Log
+from ontask import is_correct_email, get_action_payload
 from ontask_oauth.models import OnTaskOAuthUserTokens
 from ontask_oauth.views import refresh_token
 from workflow.models import Column
@@ -75,7 +74,8 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
         user_attribute_value = request.user.email
 
     # Get the active columns attached to the action
-    columns = [c for c in action.columns.all() if c.is_active]
+    columns = [x.column for x in action.column_condition_pair.all()
+               if x.column.is_active]
     if action.shuffle:
         # Shuffle the columns if needed
         random.seed(request.user)
@@ -140,7 +140,7 @@ def serve_action_in(request, action, user_attribute_name, is_inst):
         set_values.append(value)
         log_payload.append((column.name, value))
 
-    pandas_db.update_row(action.workflow.id,
+    pandas_db.update_row(action.workflow.get_data_frame_table_name(),
                          set_fields,
                          set_values,
                          [where_field],
@@ -285,16 +285,19 @@ def clone_action(action, new_workflow=None, new_name=None):
     action.save()
 
     # Get back the old action
-    old_action = Action.objects.get(id=old_id)
+    old_action = Action.objects.prefetch_related(
+        'column_condition_pair', 'conditions'
+    ).get(id=old_id)
 
     # Clone the columns field (in case of an action in).
     if action.is_in:
-        column_names = old_action.columns.all().values_list('name', flat=True)
-        action.columns.clear()
-        action.columns.add(
-            *list(action.workflow.columns.filter(
-                name__in=column_names
-            )))
+        action.column_condition_pair.delete()
+        for acc_tuple in old_action.column_condition_pair.all():
+            __, __ = ActionColumnConditionTuple.objects.get_or_create(
+                action=action,
+                column=acc_tuple.column,
+                condition=acc_tuple.condition
+            )
 
     # Clone the conditions
     clone_conditions(old_action.conditions.all(), action)
@@ -373,7 +376,10 @@ def do_import_action(user, workflow, name, file_item):
     # Serialize content
     action_data = ActionSelfcontainedSerializer(
         data=data,
-        context={'user': user, 'name': name, 'workflow': workflow}
+        context={'user': user,
+                 'name': name,
+                 'workflow': workflow,
+                 'columns': workflow.columns.all()}
     )
 
     # If anything goes wrong, return a string to show in the page.
@@ -448,7 +454,9 @@ def send_messages(user,
     track_col_name = ''
     data_frame = None
     if track_read:
-        data_frame = pandas_db.load_from_db(action.workflow.id)
+        data_frame = pandas_db.load_from_db(
+            action.workflow.get_data_frame_table_name()
+        )
         # Make sure the column name does not collide with an existing one
         i = 0  # Suffix to rename
         while True:
@@ -475,9 +483,9 @@ def send_messages(user,
         bcc_email_list = []
 
     # Check that cc and bcc contain list of valid email addresses
-    if not all([validate_email(x) for x in cc_email_list]):
+    if not all([is_correct_email(x) for x in cc_email_list]):
         return _('Invalid email address in cc email')
-    if not all([validate_email(x) for x in bcc_email_list]):
+    if not all([is_correct_email(x) for x in bcc_email_list]):
         return _('Invalid email address in bcc email')
 
     # Everything seemed to work to create the messages.
@@ -507,18 +515,31 @@ def send_messages(user,
         else:
             track_str = ''
 
-        # Get the plain text content and bundle it together with the HTML in
-        # a message to be added to the list.
-        text_content = html2text.html2text(msg_body)
-        msg = EmailMultiAlternatives(
-            msg_subject,
-            text_content,
-            from_email,
-            [msg_to],
-            bcc=bcc_email_list,
-            cc=cc_email_list
-        )
-        msg.attach_alternative(msg_body + track_str, "text/html")
+        if ontask_settings.EMAIL_HTML_ONLY:
+            # Message only has the HTML text
+            msg = EmailMessage(
+                msg_subject,
+                msg_body + track_str,
+                from_email,
+                [msg_to],
+                bcc=bcc_email_list,
+                cc=cc_email_list
+            )
+            msg.content_subtype = "html"  # Main content is now text/html
+        else:
+            # Get the plain text content and bundle it together with the HTML in
+            # a message to be added to the list.
+            text_content = html2text.html2text(msg_body)
+            msg = EmailMultiAlternatives(
+                msg_subject,
+                text_content,
+                from_email,
+                [msg_to],
+                bcc=bcc_email_list,
+                cc=cc_email_list
+            )
+            msg.attach_alternative(msg_body + track_str, "text/html")
+
         msgs.append(msg)
         track_ids.append(track_str)
 
@@ -544,7 +565,7 @@ def send_messages(user,
 
         # Initial value in the data frame and store the table
         data_frame[track_col_name] = 0
-        ops.store_dataframe_in_db(data_frame, action.workflow.id)
+        ops.store_dataframe(data_frame, action.workflow)
 
     # Partition the list of emails into chunks as per the value of EMAIL_BURST
     chunk_size = len(msgs)
@@ -885,7 +906,7 @@ def send_json(user, action, token, key_column, exclude_values, log_item):
         idx += 1
         try:
             json_obj = json.loads(json_string[0])
-        except:
+        except Exception:
             return _('Incorrect JSON string in element number {0}').format(idx)
         json_objects.append(json_obj)
 
@@ -896,16 +917,16 @@ def send_json(user, action, token, key_column, exclude_values, log_item):
             response = requests.post(url=action.target_url,
                                      data=json_obj,
                                      headers=headers)
-            status = response.status_code
+            status_val = response.status_code
         else:
             logger.info('SEND JSON({0}): {1}'.format(
                 action.target_url,
                 json.dumps(json_obj)
             ))
-            status = 200
+            status_val = 200
 
         status_vals.append(
-            (status,
+            (status_val,
              datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)),
              json_obj)
         )
@@ -917,9 +938,9 @@ def send_json(user, action, token, key_column, exclude_values, log_item):
     }
 
     # Log all OBJ sent
-    for status, dt, json_obj in status_vals:
+    for status_val, dt, json_obj in status_vals:
         context['object'] = json.dumps(json_obj)
-        context['status'] = status
+        context['status'] = status_val
         context['json_sent_datetime'] = str(dt)
         Log.objects.register(user,
                              Log.ACTION_JSON_SENT,
@@ -948,7 +969,7 @@ def get_workflow_action(request, pk):
     """
 
     # Get the workflow first
-    workflow = get_workflow(request)
+    workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
         return None
 
@@ -959,11 +980,54 @@ def get_workflow_action(request, pk):
         return None
 
     # Get the action
-    try:
-        action = Action.objects.filter(
-            Q(workflow__user=request.user) |
-            Q(workflow__shared=request.user)).distinct().get(pk=pk)
-    except ObjectDoesNotExist:
+    action = workflow.actions.filter(
+        pk=pk
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+    ).prefetch_related(
+        'column_condition_pair'
+    ).first()
+    if not action:
         return None
 
     return workflow, action
+
+
+def run_action_item_filter(request):
+    """
+    Offer a select widget to tick students to exclude from the email.
+    :param request: HTTP request (GET)
+    :return: HTTP response
+    """
+
+    # Get the payload from the session, and if not, use the given one
+    payload = get_action_payload(request)
+    if not payload:
+        # Something is wrong with this execution. Return to the action table.
+        messages.error(request, _('Incorrect item filter invocation.'))
+        return redirect('action:index')
+
+    # Get the information from the payload
+    action = Action.objects.get(pk=payload['action_id'])
+
+    form = EmailExcludeForm(request.POST or None,
+                            action=action,
+                            column_name=payload['item_column'],
+                            exclude_values=payload.get('exclude_values', list))
+    context = {
+        'form': form,
+        'action': action,
+        'button_label': payload['button_label'],
+        'valuerange': range(payload.get('valuerange', 0)),
+        'step': payload.get('step', 0),
+        'prev_step': payload['prev_url']
+    }
+
+    # Process the initial loading of the form and return
+    if request.method != 'POST' or not form.is_valid():
+        return render(request, 'action/item_filter.html', context)
+
+    # Updating the content of the exclude_values in the payload
+    payload['exclude_values'] = form.cleaned_data['exclude_values']
+
+    return redirect(payload['post_url'])

@@ -24,7 +24,7 @@ def get_plugin_path():
     if os.path.isabs(plugin_folder):
         return plugin_folder
 
-    return os.path.join(django_settings.PROJECT_PATH, plugin_folder)
+    return os.path.join(django_settings.BASE_DIR, plugin_folder)
 
 
 def verify_plugin_elements(plugin_instance):
@@ -61,9 +61,7 @@ def verify_plugin_elements(plugin_instance):
         check_idx += 1
 
         result[check_idx] = _('Not found')
-        if not (plugin_instance.output_column_names and
-                isinstance(plugin_instance.output_column_names, list) and
-                len(plugin_instance.output_column_names) > 0 and
+        if not (isinstance(plugin_instance.output_column_names, list) and
                 all(isinstance(s, str) for s in
                     plugin_instance.output_column_names)):
             result[check_idx] = _('Incorrect type/value')
@@ -160,7 +158,8 @@ def verify_plugin(plugin_instance):
     3. Presence of a list of strings (possibly empty) with name
        "input_column_names"
 
-    4. Presence of a non-empty list of strings with name "output_column_names"
+    4. Presence of a list of strings with name "output_column_names". If the
+       list is empty, the columns present in the result will be used.
 
     5. Presence of a dictionary with name "parametes" that contains the
        tuples of the form:
@@ -186,7 +185,7 @@ def verify_plugin(plugin_instance):
         _('Presence of a field with name "input_column_names" storing a ('
           'possible empty) list of strings'),
         _('Presence of a field with name "output_column_names" storing a '
-          'non-empty list of strings'),
+          '(possibly empty) list of strings'),
         _('Presence of a (possible empty) list of tuples with name '
           '"parameters". The tuples must have six '
           'elements: name (a string), type (one of "double", "integer", '
@@ -221,14 +220,14 @@ def load_plugin(foldername):
         # Run some additional checks in the instance and if it does not
         # comply with them, bail out.
         tests = verify_plugin(plugin_instance)
-        if not all(x == 'Ok' for x, _ in tests):
-            return (None, tests)
+        if not all(x == 'Ok' for x, __ in tests):
+            return None, tests
     except AttributeError as e:
-        return (None, [(e, _('Class instantiation'))])
+        return None, [(e, _('Class instantiation'))]
     except Exception as e:
-        return (None, [(e, _('Instance creation'))])
+        return None, [(e, _('Instance creation'))]
 
-    return (plugin_instance, tests)
+    return plugin_instance, tests
 
 
 def load_plugin_info(plugin_folder, plugin_rego=None):
@@ -296,7 +295,7 @@ def refresh_plugin_data(request, workflow):
                                 '__init__.py')).st_mtime > \
                 time.mktime(rpin.modified.timetuple()):
             # A plugin has changed
-            pinstance = load_plugin_info(rpin.filename, rpin)
+            __ = load_plugin_info(rpin.filename, rpin)
 
             # Log the event
             Log.objects.register(request.user,
@@ -329,26 +328,3 @@ def refresh_plugin_data(request, workflow):
                              Log.PLUGIN_CREATE,
                              workflow,
                              {'id': rpin.id, 'name': rpin.filename})
-
-
-def run_plugin(plugin_instance, df, merge_key, params):
-    """
-    Execute the run method in a plugin with the given data frame
-    :param plugin_instance: Plugin instance
-    :param df: data frame to be passed as parameter
-    :param params: Parameter dictionary: (name, value)
-    :return: (result, message) If message is None, result is a valid data frame
-    """
-
-    # Try the execution and catch any exception
-    try:
-        new_df = plugin_instance.run(df, merge_key, parameters=params)
-    except Exception as e:
-        return None, str(e)
-
-    # If plugin does not return a data frame, flag as error
-    if not isinstance(new_df, pd.DataFrame):
-        return None, _('Result is not a pandas data frame.')
-
-    # Execution was correct
-    return new_df, None

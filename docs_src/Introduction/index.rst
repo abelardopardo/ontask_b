@@ -1,6 +1,5 @@
-**************
 What is OnTask
-**************
+##############
 
 Welcome to OnTask, the platform offering instructors and educational designers the capacity to use data to personalize the learner experience.
 
@@ -36,7 +35,7 @@ The :ref:`third part <tutorial>` contains a step by step tutorial on how to use 
 The :ref:`fourth part <advanced_features>` covers some more advanced functionalities such an application programming interface (API) that allows other platforms to upload data to OnTask.
 
 Research
-========
+********
 
 There are several platforms that implement similar functionality or follow a similar approach. OnTask has been implemented with numerous ideas initially present in the Student Relationship Engagement System `SRES <http://sres.io>`_) and subsequent versions. The common idea among them is the positive impact that personalized communication may have when supporting learners. There are a few scientific publications that document the ideas and processes that inspired the creation of OnTask:
 
@@ -50,6 +49,6 @@ There are several platforms that implement similar functionality or follow a sim
 
 
 License
-=======
+*******
 
 The OnTask software is open source and available under the MIT License.

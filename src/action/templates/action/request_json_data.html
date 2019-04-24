@@ -10,8 +10,12 @@
 {% endblock scripts %}
 {% block container %}
   <div class="container" id="json-action-request-data">
+    <div id="step_sequence" hidden>
+      {% include 'step_by_step.html' with valuerange=valuerange step=1 %}
+    </div>
     <h1 class="text-center">{% blocktrans with n=action.name %}Send JSON objects for
       action "{{ n }}"{% endblocktrans %}</h1>
+    {% include 'action/includes/partial_action_edit_out_warning.html' %}
     {% if num_msgs > 0 %}
       <p class="text-center">{% blocktrans with n=num_msgs%}{{ n }} JSON objects will be sent.{% endblocktrans %}</p>
       <div class="row justify-content-center">
@@ -19,14 +23,17 @@
           {% csrf_token %}
           {{ form|crispy }}
           <div class="text-center">
-            <a type="button" class="btn btn-outline-dark"
+            <a type="button" class="shadow btn btn-outline-dark"
                href="{% url 'action:index' %}"> {% trans 'Cancel' %}</a>
-            <button type="button" class="btn btn-outline-info js-action-preview"
+            <button type="button" class="shadow btn btn-outline-info js-action-preview"
                     data-url="{% url 'action:preview' action.id 1 %}">
               <span class="fa fa fa-eye"></span> {% trans 'Preview' %}</button>
-            <button type="Submit" name="Submit" value="Submit"
-                    class="btn btn-outline-primary btn-space">
+            <button type="Submit" name="Submit" value="Submit" id="next-step-on" hidden
+                    class="shadow btn btn-outline-primary btn-space spin">
               <span class="fa fa-angle-right"></span> {% trans 'Next' %}</button>
+            <button type="Submit" name="Submit" value="Submit" id="next-step-off"
+                    class="shadow btn btn-outline-primary btn-space spin">
+              <span class="fa fa-angle-right"></span> {% trans 'Send' %}</button>
           </div>
         </form>
       </div>

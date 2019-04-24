@@ -68,7 +68,7 @@ Desktop.ini
 # 2to3 baks
 *.bak
 
-/logs
+/logs/*.log
 .idea
 .git_OLD
 
@@ -104,4 +104,10 @@ src/celerybeat.pid
 ### Vagrant Patch ###
 *.box
 
-# End of https://www.gitignore.io/api/vagrant
+# Additional files
+src/*/fixtures/*.gz
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
