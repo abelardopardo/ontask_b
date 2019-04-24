@@ -168,7 +168,8 @@ $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip({
     trigger: "hover",
     placement: "auto",
-    container: "body"
+    container: "body",
+    boundary: 'window',
   });
   $("body").on("click", ".spin", function () {
     $('#div-spinner').show();
