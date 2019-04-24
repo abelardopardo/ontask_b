@@ -353,9 +353,13 @@ Create a new folder with name ``logs`` in the OnTask top folder, next to the ``r
 OnTask Installation
 ===================
 
-Once you have OnTask installed and configured and the tools Redis and Postgresql running, the next step is to create the initial database configuration, documentation, additional site files, and deploy. If at some point during the following steps you want to reset the content of the database, run the commands ``dropdb`` and ``createdb`` explained in :ref:`install_postgresql`.
+Once you have OnTask installed and configured and the tools Redis and Postgresql running, the next steps create the documentation, initial database configuration, additional site files, and deploy. To generate the documentation go to the folder ``docs_src``, make sure it contains the sub-folders with names ``_static`` and ``_templates`` and execute the command::
 
-1. Execute the following command from the ``src`` folder to create the database internal structure::
+     make clean html copy_to_docs
+
+The documentation is created by the application ``sphinx-doc`` and stored in the directory ``_build`` which is then copied to the ``../docs`` folder. Once the documentation has been created, the next steps configure the database. If at some point during the following steps you want to reset the content of the database, run the commands ``dropdb`` and ``createdb`` explained in :ref:`install_postgresql`. The following commands have to be execute from the ``src`` folder.
+
+1. Execute the following command to create the database internal structure::
 
      python3 manage.py migrate
 
@@ -373,19 +377,11 @@ Once you have OnTask installed and configured and the tools Redis and Postgresql
 
    Remember the data that you enter in this step so that you use it when you enter OnTask with your browser.
 
-#. Go to the ``docs_src`` folder to generate the documentation. Make sure this folder contains the sub-folders with name ``_static`` and ``_templates``. Execute the command::
-
-     make clean html copy_to_docs
-
-   The documentation is produced by the ``sphinx-doc`` application and generates the directory ``_build`` which is then created to the folder ``../docs`` folder.
-
-#. From the ``src`` folder execute the following command to collect and install
-   the static content::
+#. Execute the following command to collect and install the static content::
 
      python3 manage.py collectstatic
 
-#. If you are running a production instance, execute the following
-   command to check the status of the platform::
+#. If you are running a production instance, execute the following command to check the status of the platform::
 
      python3 manage.py check --deploy
 
@@ -949,3 +945,16 @@ data in a CSV file through the following steps:
      $ python3 manage.py initialize_db -e your_email_column_name -i scripts/initial_learners.csv"
 
 
+.. _docker:
+
+Creating a Development Server using Docker
+******************************************
+
+You may use `Docker <https://docker.com>` to create a set of containers that run a **development** server. The file ``docker-compose.yml`` and the folder ``docker`` contains the configuration files to create the required images and instantiate them as containers. The current configuration creates three containers: one running Postgresql, one running Redis (cache), and the third runs the web server (Apache) with the wsgi connector, and ``supervisord`` controlling the executing of two Celery workers (one for asynchronous tasks, and one for scheduled ones).
+
+After installing Docker in your computer, the sequence of commands to start the server is::
+
+  docker-compose build
+  docker-compose up
+
+If successful, the process will create three containers and the development server will be accessible through port 8080 in the host machine.

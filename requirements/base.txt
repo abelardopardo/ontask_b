@@ -49,6 +49,7 @@ future==0.17.1
 html2text==2018.1.9
 httplib2==0.12.1
 idna==2.7
+Image==1.5.27
 imagesize==1.1.0
 ims-lti-py==0.6
 ipykernel==5.1.0
@@ -90,7 +91,6 @@ Pillow==6.0.0
 ply==3.11
 prometheus-client==0.4.1
 prompt-toolkit==2.0.5
-psycopg2-binary==2.8.1
 ptyprocess==0.6.0
 pycparser==2.19
 Pygments==2.3.1
