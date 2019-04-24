@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import json
 import urllib.parse
 from builtins import next
 from builtins import object
@@ -1495,6 +1496,57 @@ def clone(request, pk):
     return redirect(reverse('action:index'))
 
 
+@user_passes_test(is_instructor)
+def timeline(request, pk=None):
+    """
+    Page to show a vertical timeline of action executions
+    :param request: HTTP request
+    :param pk: Action PK. If none, all of them are considered
+    :return: HTTP response
+    """
+
+    # Get the workflow first
+    workflow = get_workflow(request, prefetch_related='logs')
+    if not workflow:
+        return redirect('home')
+
+    action = None
+    if pk:
+        action = workflow.actions.filter(pk=pk).first()
+        if not action:
+            # The action is not part of the selected workflow
+            return redirect('home')
+
+    event_names = [Log.SCHEDULE_EMAIL_EXECUTE,
+                   Log.DOWNLOAD_ZIP_ACTION,
+                   Log.SCHEDULE_JSON_EXECUTE,
+                   Log.SCHEDULE_CANVAS_EMAIL_EXECUTE,
+                   Log.SCHEDULE_EMAIL_EDIT,
+                   Log.SCHEDULE_JSON_EDIT,
+                   Log.SCHEDULE_CANVAS_EMAIL_EXECUTE]
+
+    if action:
+        logs = workflow.logs.filter(payload__action_id=action.id)
+    else:
+        logs = workflow.logs.all()
+
+    # Filter the logs to display and transform into values (process the json
+    # and the long value for the log name
+    logs = [
+        {'id': x.id,
+         'name': x.get_name_display(),
+         'modified': x.modified,
+         'payload': json.dumps(x.payload, indent=2),
+         'action_name': x.payload['action'],
+         'action_id': x.payload['action_id']}
+        for x in logs.filter(name__in=event_names)
+    ]
+
+    return render(request,
+                  'action/timeline.html',
+                  {'event_list': logs, 'action': action})
+
+
 @login_required
 def thanks(request):
     """
@@ -1503,3 +1555,4 @@ def thanks(request):
     :return:
     """
     return render(request, 'thanks.html', {})
+

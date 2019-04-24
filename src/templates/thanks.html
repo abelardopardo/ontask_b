@@ -5,7 +5,8 @@
 {% block container %}
 <div class="container text-center my-3">
   <h1 class="text-center">{% trans 'Thanks' %}</h1>
-  <a class="shadow btn btn-outline-primary spin" style="margin-right:2ex;" href="{{ request.path }}">
+  <a href="{{request.META.HTTP_REFERER}}"
+     class="shadow btn btn-outline-dark spin">
     <span class="fa fa-triangle-left"></span> {% trans 'Back' %}
   </a>
 </div>

@@ -173,12 +173,11 @@ def save_email_schedule(request, action, schedule_item, op_payload):
     # property (only with respec to other actions)
     try:
         s_item.save()
-    except IntegrityError as e:
+    except IntegrityError:
         # There is an action with this name already
         form.add_error('name',
-                       _(
-                           'A scheduled execution of this action with this name '
-                           'already exists'))
+                       _('A scheduled execution of this action with this name '
+                         'already exists'))
         return render(request,
                       'scheduler/edit.html',
                       {'action': action,
@@ -205,6 +204,7 @@ def save_email_schedule(request, action, schedule_item, op_payload):
 
     # Go straight to the final step
     return finish_scheduling(request, s_item, op_payload)
+
 
 def save_canvas_email_schedule(request, action, schedule_item,
                                op_payload):
@@ -254,12 +254,11 @@ def save_canvas_email_schedule(request, action, schedule_item,
     # property (only with respect to other actions)
     try:
         s_item.save()
-    except IntegrityError as e:
+    except IntegrityError:
         # There is an action with this name already
         form.add_error('name',
-                       _(
-                           'A scheduled execution of this action with this name '
-                           'already exists'))
+                       _('A scheduled execution of this action with this name '
+                         'already exists'))
         return render(request,
                       'scheduler/edit.html',
                       {'action': action,
@@ -286,6 +285,7 @@ def save_canvas_email_schedule(request, action, schedule_item,
 
     # Go straight to the final step
     return finish_scheduling(request, s_item, op_payload)
+
 
 def save_json_schedule(request, action, schedule_item, op_payload):
     """
@@ -348,6 +348,7 @@ def save_json_schedule(request, action, schedule_item, op_payload):
 
     # Go straight to the final step
     return finish_scheduling(request, s_item, op_payload)
+
 
 def finish_scheduling(request, schedule_item=None, payload=None):
     """
@@ -468,6 +469,7 @@ def finish_scheduling(request, schedule_item=None, payload=None):
                   {'tdelta': delta_string,
                    's_item': schedule_item})
 
+
 @user_passes_test(is_instructor)
 def index(request):
     """
@@ -491,6 +493,7 @@ def index(request):
                   {'table': ScheduleActionTable(s_items,
                                                 orderable=False),
                    'workflow': workflow})
+
 
 @user_passes_test(is_instructor)
 def view(request, pk):
@@ -526,12 +529,13 @@ def view(request, pk):
     )
     return JsonResponse(data)
 
+
 @user_passes_test(is_instructor)
 def edit(request, pk):
     """
     Edit an existing scheduled email action
     :param request: HTTP request
-    :param pk: primary key of the email action
+    :param pk: primary key of the action
     :return: HTTP response
     """
 
@@ -598,6 +602,7 @@ def edit(request, pk):
     messages.error(request,
                    _('This action does not support scheduling'))
     return redirect('scheduler:index')
+
 
 @user_passes_test(is_instructor)
 def delete(request, pk):
