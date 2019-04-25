@@ -8,6 +8,8 @@
 
 - Timeline visualization of action executions. In a single page the timeline of the execution of either all the actions, or a single one.
 
+- Import operation now allows to either provide a workflow name for the import or use the original workflow name (stored in the file).
+
 ## 4.3.3 (2019-04-24)
 
 ### Fixed
