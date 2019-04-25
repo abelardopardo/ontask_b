@@ -10,6 +10,10 @@
 
 - Import operation now allows to either provide a workflow name for the import or use the original workflow name (stored in the file).
 
+### Fixed
+
+- Error when taking the conjunction between two queryset and not using distinct
+
 ## 4.3.4 (2019-04-25)
 
 ### Fixed

@@ -154,6 +154,7 @@ def index(request):
 
     workflows = request.user.workflows_owner.all() \
                 | request.user.workflows_shared.all()
+    workflows = workflows.distinct()
 
     # We include the table only if it is not empty.
     context = {
