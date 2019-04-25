@@ -10,6 +10,16 @@
 
 - Import operation now allows to either provide a workflow name for the import or use the original workflow name (stored in the file).
 
+## 4.3.4 (2019-04-25)
+
+### Fixed
+
+- Internal error while creating/editing shared users
+
+- Error when viewing the scheduled actions
+
+- Error in column operation button to insert formula and random row
+
 ## 4.3.3 (2019-04-24)
 
 ### Fixed

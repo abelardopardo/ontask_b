@@ -2,6 +2,7 @@
 
 
 import datetime
+import json
 from builtins import object
 
 import django_tables2 as tables
@@ -12,6 +13,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db import IntegrityError
 from django.db.models import Q
+from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse
 from django.template.loader import render_to_string
@@ -523,9 +525,15 @@ def view(request, pk):
         data['html_redirect'] = reverse('schedule:index')
         return JsonResponse(data)
 
+    # Get the values and remove the ones that are not needed
+    values = model_to_dict(sch_obj)
+    values.pop('id')
+    values.pop('user')
+    values['payload'] = json.dumps(values['payload'], indent=2)
+
     data['html_form'] = render_to_string(
         'scheduler/includes/partial_show_schedule_action.html',
-        {'s_vals': sch_obj.values(), 'id': sch_obj.id}
+        {'s_vals': values, 'id': sch_obj.id}
     )
     return JsonResponse(data)
 

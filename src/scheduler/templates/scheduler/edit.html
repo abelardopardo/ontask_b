@@ -22,7 +22,7 @@
       <form action="" method="post">
         {% csrf_token %}
         {{ form|crispy }}
-        <div class="text-center">
+        <div class="text-center mb-3">
           <a type="button" class="shadow btn btn-outline-dark"
              href="{% url 'scheduler:index' %}"> {% trans 'Cancel' %}</a>
           <button type="button" class="shadow btn btn-outline-info js-action-preview"
