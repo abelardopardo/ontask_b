@@ -18,12 +18,10 @@
   </table>
 </div>
 <div class="modal-footer">
-  <button type="button" class="shadow btn btn-outline-dark" data-dismiss="modal">{% trans 'Close' %}
-  </button>
-  <a href="{% url 'scheduler:edit' id %}" class="shadow btn btn-outline-primary spin"
+  <a href="{% url 'scheduler:edit' id %}" class="btn btn-outline-primary spin"
           data-toggle="tooltip" title="{% trans 'Edit this scheduled action execution' %}.">
     <span class="fa fa-pencil"></span> {% trans 'Edit' %}</a>
-  <button type="button" class="shadow btn btn-outline-danger js-scheduler-delete"
+  <button type="button" class="btn btn-outline-danger js-scheduler-delete"
           data-toggle="tooltip" title="{% trans 'Delete this scheduled action' %}"
           data-url="{% url 'scheduler:delete' id %}">
     <span class="fa fa-trash"></span> {% trans 'Delete' %}</button>

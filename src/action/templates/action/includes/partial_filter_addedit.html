@@ -20,10 +20,8 @@
     <div>{% trans 'The learner will be selected if' %}</div>
     <div id="builder"></div>
   </div>
-  <div class="modal-footer" style="text-align: center;">
-    <button type="button" class="shadow btn btn-outline-dark" data-dismiss="modal">{% trans 'Cancel' %}
-    </button>
-    <button type="submit" class="shadow btn btn-outline-primary">
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-outline-primary">
       {% if add %}
         <span class="glyphicon glyphicon-ok"></span> {% trans 'Create filter' %}</button>
       {% else %}

@@ -14,7 +14,7 @@
       action "{{ n }}"{% endblocktrans %}<super>*</super></h1>
     {% if num_msgs > 0 %}
       <p class="text-center">{% blocktrans with n=num_msgs%}A ZIP with {{ n }} files will be created.{% endblocktrans %}</p>
-      <div class="row justify-content-center">
+      <div class="row justify-content-center my-3">
         <form action="" method="post">
           {% csrf_token %}
           {{ form|crispy }}

@@ -12,7 +12,7 @@
       {% trans 'Upload or merge data' %}</a>
     <a href="{% url 'dataops:transform' %}"
        class="dropdown-item spin"
-       data-toggle="tooltip" data-container="body" data-placement="left"
+       data-toggle="tooltip" data-container="body"
        title="{% trans 'Execute one of the available plugins' %}">
       {% trans 'Execute plugin' %}</a>
     {% if workflow.nrows %}
