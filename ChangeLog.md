@@ -10,6 +10,10 @@
 
 - Import operation now allows to either provide a workflow name for the import or use the original workflow name (stored in the file).
 
+### Changed
+
+- Batch command for workflow import can now process multiple files (bulk upload of multiple workflows)
+
 ### Fixed
 
 - Error when taking the conjunction between two queryset and not using distinct
