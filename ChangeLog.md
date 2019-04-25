@@ -2,7 +2,11 @@
 
 ### Fixed
 
-- 
+- Internal error while creating/editing shared users
+
+- Error when viewing the scheduled actions
+
+- Error in column operation button to insert formula and random row
 
 ## 4.3.3 (2019-04-24)
 
