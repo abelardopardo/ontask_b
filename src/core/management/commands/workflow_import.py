@@ -21,9 +21,9 @@ class Command(BaseCommand):
                             required=True,
                             help='User email')
 
-        parser.add_argument('-n', '--name',
-                            required=True,
-                            help='workflow name')
+        parser.add_argument(
+            '-n', '--name',
+            help='Workflow name (only valid if a single file is given)')
 
         parser.add_argument('-r',
                             dest='replace',
@@ -33,10 +33,9 @@ class Command(BaseCommand):
         # Mandatory file name
         parser.add_argument('args',
                             metavar='workflow_file',
-                            nargs=1,
+                            nargs='+',
                             type=argparse.FileType('rb'),
                             help='Workflow file')
-
 
     def handle(self, *args, **options):
 
@@ -48,7 +47,12 @@ class Command(BaseCommand):
         if not user:
             raise CommandError('User {0} not found'.format(options['username']))
 
-        # if options['']
+        if options.get('name') and len(args) > 1:
+            raise CommandError(
+                'Workflow name cannot be given when importing '
+                'multiple workflows.'
+            )
+
         # Search for a workflow with the given name
         workflow = Workflow.objects.filter(
             user__email=options['useremail'],
@@ -76,4 +80,3 @@ class Command(BaseCommand):
             ))
 
         do_import_workflow_parse(user, options['name'], args[0])
-
