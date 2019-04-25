@@ -10,7 +10,7 @@
   <div class="modal-body">
     <p class="lead">{% blocktrans with n=workflow.name %}Are you sure you want to delete the workflow <strong>{{ n }}</strong>?{% endblocktrans %}</p>
     <p>{% trans 'This operation will also remove all the conditions and actions attached to it.' %}</p>
-    <p>{% trans 'Type the name of the workflow:' %}<input type="text" id="txtInput" class="textEnable" data-value="{{ workflow.name }}"/></p>
+    <p>{% trans 'Type the name of the workflow:' %} <input type="text" id="txtInput" class="textEnable" data-value="{{ workflow.name }}"/></p>
   </div>
   <div class="modal-footer">
     <button type="submit" class="btn btn-danger button-enable" disabled>

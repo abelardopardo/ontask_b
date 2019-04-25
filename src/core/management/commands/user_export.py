@@ -17,6 +17,7 @@ class Command(BaseCommand):
                             help='Prefix for the GZ files')
 
         parser.add_argument('-u', '--useremail',
+                            required=True,
                             help='User email')
 
 
@@ -49,4 +50,3 @@ class Command(BaseCommand):
             zbuf.seek(0)
             with open(filename, 'wb') as f:
                 shutil.copyfileobj(zbuf, f, length=131072)
-
