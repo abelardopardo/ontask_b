@@ -41,7 +41,7 @@ class Workflow(models.Model):
                              blank=False,
                              related_name='workflows_owner')
 
-    name = models.CharField(max_length=512, blank=False)
+    name = models.CharField(max_length=512, null=False, blank=False)
 
     description_text = models.CharField(max_length=2048,
                                         default='',

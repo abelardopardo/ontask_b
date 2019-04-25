@@ -231,7 +231,7 @@ def do_import_workflow_parse(user, name, file_item):
         raise serializers.ValidationError(workflow_data.errors)
 
     # Save the new workflow
-    workflow = workflow_data.save(user=user, name=name)
+    workflow = workflow_data.save()
 
     try:
         pandas_db.check_wf_df(workflow)
