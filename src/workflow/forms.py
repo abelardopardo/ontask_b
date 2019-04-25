@@ -448,8 +448,9 @@ class WorkflowImportForm(forms.Form):
     name = forms.CharField(
         max_length=512,
         strip=True,
-        required=True,
-        label='Name')
+        required=False,
+        initial='',
+        label='Name (leave empty to take the name stored in the file)')
 
     file = RestrictedFileField(
         max_upload_size=int(ontask_prefs.MAX_UPLOAD_SIZE),

@@ -231,7 +231,7 @@ def do_import_workflow_parse(user, name, file_item):
         raise serializers.ValidationError(workflow_data.errors)
 
     # Save the new workflow
-    workflow = workflow_data.save(user=user, name=name)
+    workflow = workflow_data.save()
 
     try:
         pandas_db.check_wf_df(workflow)
@@ -260,14 +260,14 @@ def do_import_workflow(user, name, file_item):
     except IOError:
         return _('Incorrect file. Expecting a GZIP file (exported workflow).')
     except (TypeError, NotImplementedError) as e:
-        return _('Unable to import workflow (Exception: {0})').format(e)
+        return _('Unable to import workflow. Exception: {0}').format(e)
     except serializers.ValidationError as e:
-        return _('Unable to import workflow. Validation error ({0})').format(e)
-    except AssertionError:
+        return _('Unable to import workflow. Validation error: {0}').format(e)
+    except AssertionError as e:
         # Something went wrong.
         return _('Workflow data with incorrect structure.')
     except Exception as e:
-        return _('Unable to import workflow (Exception: {0})').format(e)
+        return _('Unable to import workflow: {0}').format(e)
 
     # Success
     # Log the event

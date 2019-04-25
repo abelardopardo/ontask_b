@@ -106,12 +106,25 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
     @profile
     def create(self, validated_data, **kwargs):
 
+        # Check if a name is given. If not given, take the one in the data
+        wflow_name = self.context.get('name')
+        if not wflow_name:
+            wflow_name = self.validated_data.get('name')
+            if not wflow_name:
+                raise Exception(_('Unexpected empty workflow name.'))
+
+            if Workflow.objects.filter(name=wflow_name).exists():
+                raise Exception(
+                    _('There is a workflow with this name. '
+                      'Please provide a workflow name in the import page.')
+                )
+
         # Initial values
         workflow_obj = None
         try:
             workflow_obj = Workflow(
                 user=self.context['user'],
-                name=self.context['name'],
+                name=wflow_name,
                 description_text=validated_data['description_text'],
                 nrows=0,
                 ncols=0,
@@ -193,9 +206,11 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
         # fields = ('description_text', 'nrows', 'ncols', 'attributes',
         #           'query_builder_ops', 'columns', 'data_frame', 'actions')
 
-        exclude = ('id', 'user', 'created', 'modified', 'data_frame_table_name',
-                   'session_key', 'shared', 'luser_email_column',
-                   'luser_email_column_md5', 'lusers', 'lusers_is_outdated')
+        exclude = (
+            'id', 'user', 'created', 'modified', 'data_frame_table_name',
+            'session_key', 'shared', 'luser_email_column',
+            'luser_email_column_md5', 'lusers', 'lusers_is_outdated'
+        )
 
 
 class WorkflowImportSerializer(WorkflowExportSerializer):
