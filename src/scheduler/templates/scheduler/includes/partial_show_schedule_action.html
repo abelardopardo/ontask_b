@@ -6,14 +6,18 @@
   </button>
 </div>
 <div class="modal-body">
-  <table class="table shadow" width="100%">
+  <table class="table" width="100%">
     {% for s_key, s_val in s_vals.items %}
-      {% if s_key != 'id' and s_key != 'user_id' %}
-        <tr>
-          <td>{{ s_key }}</td>
-          <td>{{ s_val }}</td>
-        </tr>
-      {% endif %}
+      <tr>
+        <td>{{ s_key }}</td>
+        <td>
+          {% if s_key == 'payload' %}
+            <pre>{{ s_val }}</pre>
+          {% else %}
+            {{ s_val }}
+          {% endif %}
+        </td>
+      </tr>
     {% endfor %}
   </table>
 </div>

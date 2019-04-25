@@ -57,12 +57,12 @@ $(function () {
   $("#modal-item").on("submit", ".js-workflow-column-add-form", saveForm);
 
   // Derived column add
-  $("#workflow-index").on("click", ".js-workflow-formula-column-add", loadForm);
+  $("#workflow-detail").on("click", ".js-workflow-formula-column-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-formula-column-add-form",
   saveForm);
 
   // Random column add
-  $("#workflow-index").on("click", ".js-workflow-random-column-add", loadForm);
+  $("#workflow-detail").on("click", ".js-workflow-random-column-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-random-column-add-form",
   saveForm);
 

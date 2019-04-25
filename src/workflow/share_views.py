@@ -42,8 +42,7 @@ def share_create(request):
                                   'user_email': form.user_obj.email})
 
             data['form_is_valid'] = True
-            data['html_redirect'] = reverse('workflow:share',
-                                            kwargs={'pk': workflow.id})
+            data['html_redirect'] = ''
             return JsonResponse(data)
 
     data['html_form'] = render_to_string(
@@ -82,8 +81,7 @@ def share_delete(request, pk):
                               'user_email': user.email})
 
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:share',
-                                        kwargs={'pk': workflow.id})
+        data['html_redirect'] = ''
 
     data['html_form'] = render_to_string(
         'workflow/includes/partial_share_delete.html',
