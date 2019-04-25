@@ -22,11 +22,11 @@ class LoginForm(AuthenticationForm):
         self.helper.layout = Layout(
             Field('username', placeholder=_("Enter Email"), autofocus=""),
             Field('password', placeholder=_("Enter Password")),
+            Submit('sign_in', _("Log in"),
+                   css_class="btn btn-lg btn-outline-primary btn-block"),
             HTML('<a href="{}">Forgot Password?</a>'.format(
                reverse("accounts:password-reset"))),
             Field('remember_me'),
-            Submit('sign_in', _("Log in"),
-                   css_class="btn btn-lg btn-outline-primary btn-block"),
         )
 
 
