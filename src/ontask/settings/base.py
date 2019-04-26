@@ -45,7 +45,7 @@ def dump_config():
     print('DOMAIN_NAME:', DOMAIN_NAME)
     print('USE_SSL:', USE_SSL)
     print('ALLOWED_HOSTS:', ALLOWED_HOSTS)
-    print('TESTING:', TESTING)
+    print('ONTASK_TESTING:', ONTASK_TESTING)
     print('CELERY_TASK_ALWAYS_EAGER:', CELERY_TASK_ALWAYS_EAGER)
 
 
@@ -166,7 +166,7 @@ if not DATAOPS_PLUGIN_DIRECTORY:
 LOCALE_PATHS = [join(BASE_DIR(), 'locale')]
 
 # Variable flagging that this is a test enviromnet
-TESTING = sys.argv[1:2] == ['test']
+ONTASK_TESTING = sys.argv[1:2] == ['test']
 
 # Log everything to the logs directory at the top
 if not LOG_FOLDER:
@@ -485,7 +485,7 @@ CELERY_BEAT_SCHEDULE = {
         'args': (DEBUG,)
     }
 }
-CELERY_TASK_ALWAYS_EAGER = TESTING
+CELERY_TASK_ALWAYS_EAGER = ONTASK_TESTING
 
 ################################################################################
 #

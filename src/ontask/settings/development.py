@@ -17,13 +17,12 @@ else:
 if DEBUG:
     INSTALLED_APPS += ['debug_toolbar']
 
-TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
-if TESTING:
+if ONTASK_TESTING:
     EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
 else:
     # Show emails to console in DEBUG mode
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
     DEBUG_TOOLBAR_CONFIG = {
         'SHOW_TOOLBAR_CALLBACK': lambda r: True,  # enables it
