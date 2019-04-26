@@ -23,6 +23,7 @@ RUN apt-get -yqq update && \
       python3 \
       python3-pip \
       postgresql-client \
+      libpq-dev \
       rsync \
       vim \
 && rm -rf /var/lib/apt/lists/*
@@ -40,11 +41,13 @@ COPY --chown=www-data:www-data . $PROJECT_DIR
 
 # Install Requirements
 RUN python3 -m pip install --no-cache-dir --upgrade -r requirements/development.txt
-RUN python3 -m pip install --no-cache-dir --upgrade supervisor
+
+# Generate the documentation (so that this step is not repeated if restarting)
+WORKDIR $PROJECT_DIR/docs_src
+RUN make clean html copy_to_docs
 
 ENTRYPOINT ["/data/web/docker/server/docker-entrypoint.sh"]
 
-# CMD ["tail", "-f", "/dev/null"]
 CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
 
 EXPOSE 80

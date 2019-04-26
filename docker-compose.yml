@@ -2,8 +2,8 @@ version: '3'
 
 services:
 
-  ontask_development:
-    image: ontask:development
+  ontask_server:
+    image: ontask_server:development
     restart: always
     build:
       context: ./
@@ -27,6 +27,26 @@ services:
       - "8080:80"
     expose:
       - "80"
+
+  ontask_celery:
+    restart: always
+    image: ontask_celery:development
+    build:
+      context: ./
+      dockerfile: ./docker/worker/Dockerfile.development
+    container_name: ontask_celery
+    links:
+      - ontask_postgres
+      - ontask_redis
+    depends_on:
+      - ontask_server
+      - ontask_postgres
+      - ontask_redis
+    environment:
+      # OnTask configuration is on a separate env file (different REDIS, DATABASE)
+      - ENV_FILENAME=docker_dev.env
+      # Needed for Celery
+      - C_FORCE_ROOT=true
 
   ontask_postgres:
     restart: always
