@@ -23,7 +23,7 @@ RUN apt-get -yqq update && \
       python3 \
       python3-pip \
       postgresql-client \
-      postgresql-dev \
+      libpq-dev \
       rsync \
       vim \
 && rm -rf /var/lib/apt/lists/*

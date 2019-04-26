@@ -2,8 +2,8 @@ version: '3'
 
 services:
 
-  ontask_development:
-    image: ontask:development
+  ontask_server:
+    image: ontask_server:development
     restart: always
     build:
       context: ./
@@ -15,7 +15,6 @@ services:
     depends_on:
       - ontask_postgres
       - ontask_redis
-      - ontask_celery
     # Needed to get the DATABASE URL (Used in docker-entrypoint)
     env_file: ./src/ontask/settings/docker_dev.env
     environment:
@@ -30,7 +29,7 @@ services:
       - "80"
 
   ontask_celery:
-    # restart: always
+    restart: always
     image: ontask_celery:development
     build:
       context: ./
@@ -40,6 +39,7 @@ services:
       - ontask_postgres
       - ontask_redis
     depends_on:
+      - ontask_server
       - ontask_postgres
       - ontask_redis
     environment:
@@ -53,7 +53,7 @@ services:
     image: postgres:latest
     container_name: ontask_postgres
     volumes:
-      - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./docker/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       - pgdata:/var/lib/postgresql/data
     env_file: ./src/ontask/settings/docker_dev.env
 

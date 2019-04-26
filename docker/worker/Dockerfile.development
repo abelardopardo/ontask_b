@@ -1,0 +1,51 @@
+FROM python:3.7.3-alpine3.9
+
+MAINTAINER Abelardo Pardo
+
+# Project Files and Settings
+ENV PROJECT=ontask
+ARG PROJECT=ontask
+ARG PROJECT_DIR=/data/web
+ENV PROJECT_DIR=/data/web
+ENV PROJECT_PATH=/data/web
+ENV CELERY_BIN=/usr/local/bin/celery
+ENV PYTHONUNBUFFERED 1
+
+# Set up packages
+# Get pip and craeate the django project dir
+RUN apk update && \
+    apk add \
+      bash \
+      curl \
+      curl-dev \
+      dialog \
+      gcc \
+      python3-dev \
+      g++ \
+      libcurl \
+      libffi \
+      libffi-dev \
+      libjpeg-turbo-dev \
+      libwebp \
+      libxml2-dev \
+      libxslt-dev \
+      openjpeg \
+      postgresql-client \
+      postgresql-dev \
+      postgresql-libs \
+      rsync \
+      tk \
+      vim \
+      zlib-dev \
+&& python3 -m pip install --no-cache-dir --upgrade pip \
+&& mkdir -p $PROJECT_DIR
+
+# Copy django project
+WORKDIR $PROJECT_DIR
+COPY . $PROJECT_DIR
+
+# Install Requirements + supervisor
+RUN python3 -m pip install --no-cache-dir --upgrade -r requirements/development.txt \
+&& python3 -m pip install --no-cache-dir --upgrade supervisor
+
+CMD ["/usr/local/bin/supervisord", "-n" ,"-c", "/data/web/supervisor/supervisor.conf"]
