@@ -40,7 +40,7 @@ COPY --chown=www-data:www-data . $PROJECT_DIR
 
 # Install Requirements
 RUN python3 -m pip install --no-cache-dir --upgrade -r requirements/development.txt
-RUN python3 -m pip install --no-cache-dir --upgrade supervisor
+# RUN python3 -m pip install --no-cache-dir --upgrade supervisor
 
 ENTRYPOINT ["/data/web/docker/server/docker-entrypoint.sh"]
 

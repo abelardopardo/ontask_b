@@ -36,8 +36,8 @@ python3 manage.py create_superuser
 python3 manage.py collectstatic --noinput
 
 # Start supervisor
->&2 echo "Starting supervisor"
-supervisord -c $PROJECT_DIR/supervisor/supervisor.conf
+# >&2 echo "Starting supervisor"
+# supervisord -c $PROJECT_DIR/supervisor/supervisor.conf
 
 # Wait for the database to be up and running
 until psql $DATABASE_URL -c '\l'; do

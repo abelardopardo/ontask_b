@@ -15,6 +15,7 @@ services:
     depends_on:
       - ontask_postgres
       - ontask_redis
+      - ontask_celery
     # Needed to get the DATABASE URL (Used in docker-entrypoint)
     env_file: ./src/ontask/settings/docker_dev.env
     environment:
@@ -28,12 +29,31 @@ services:
     expose:
       - "80"
 
+  ontask_celery:
+    # restart: always
+    image: ontask_celery:development
+    build:
+      context: ./
+      dockerfile: ./docker/worker/Dockerfile.development
+    container_name: ontask_celery
+    links:
+      - ontask_postgres
+      - ontask_redis
+    depends_on:
+      - ontask_postgres
+      - ontask_redis
+    environment:
+      # OnTask configuration is on a separate env file (different REDIS, DATABASE)
+      - ENV_FILENAME=docker_dev.env
+      # Needed for Celery
+      - C_FORCE_ROOT=true
+
   ontask_postgres:
     restart: always
     image: postgres:latest
     container_name: ontask_postgres
     volumes:
-      - ./docker/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       - pgdata:/var/lib/postgresql/data
     env_file: ./src/ontask/settings/docker_dev.env
 
