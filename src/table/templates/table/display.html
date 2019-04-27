@@ -139,7 +139,7 @@
                 {% endfor %}
                 {% if view %}
                   <a class="dropdown-item spin"
-                     href="{% url 'table:display' %}">Full table</a>
+                     href="{% url 'table:display' %}">{% trans 'Full table' %}</a>
                 {% endif%}
               </div>
             {% endif %}
@@ -182,7 +182,6 @@
             </a>
           {% endif %}
         {% endif %}
-        {% include 'workflow/includes/manage_table_data.html' %}
       </div>
     </div>
     {% if columns %}

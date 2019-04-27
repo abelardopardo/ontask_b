@@ -297,6 +297,10 @@ def display(request):
     if not workflow:
         return redirect('home')
 
+    if workflow.nrows == 0:
+        # Table is empty, redirect to data upload
+        return redirect('dataops:uploadmerge')
+
     return render_table_display_page(
         request,
         workflow,
@@ -344,6 +348,10 @@ def display_view(request, pk):
     workflow = get_workflow(request, prefetch_related='views')
     if not workflow:
         return redirect('home')
+
+    if workflow.nrows == 0:
+        # Table is empty, redirect to data upload
+        return redirect('dataops:uploadmerge')
 
     view = workflow.views.filter(pk=pk).prefetch_related('columns').first()
     if not view:
