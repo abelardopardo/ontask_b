@@ -3,12 +3,14 @@ from __future__ import unicode_literals, print_function
 
 import pandas as pd
 
+from dataops.plugin import OnTaskPluginAbstract
+
 # The field class_name contains the name of the class to load to execute the
 # plugin.
 class_name = 'OnTaskTestPlugin'
 
 
-class OnTaskTestPlugin(object):
+class OnTaskTestPlugin(OnTaskPluginAbstract):
     """
     Example of a class that implements the OnTask plugin interface. The
     objects of this class have to provide the following elements:
@@ -73,25 +75,23 @@ class OnTaskTestPlugin(object):
                                 'help param datetime'),
         ]
 
-    def run(self, data_frame, merge_key, parameters=dict):
+    def run(self, data_frame, parameters=dict):
         """
         Method to overwrite. Receives a data frame wih a number of columns
         stipulated by the num_column_input pair, the name of a key column and a
         dictionary with parameters of the form name, value.
 
         Runs the algorithm and returns a pandas data frame structure that is
-        merged with the existing data frame in the workflow using the merge_key.
+        merged with the existing data frame in the workflow 
 
         :param data_frame: Input data for the plugin
-        :param merge_key: Name of the column key that will be used for merging
         :param parameters: Dictionary with (name, value) pairs.
 
-        :return: a Pandas data_frame to merge with the existing one (must
-        contain a column with name merge_key)
+        :return: a Pandas data_frame to merge with the existing one
         """
 
         # Extract the key column from the given data frame
-        result = pd.DataFrame(data_frame[merge_key])
+        result = pd.DataFrame()
 
         # Process the given data and create the result
         result[self.output_column_names[0]] = \
