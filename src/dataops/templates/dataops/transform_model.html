@@ -45,7 +45,11 @@
 {% endblock %}
 {% block container %}
   <div class="container">
-    <h1 class="text-center">{% trans 'Transformations' %}</h1>
+    {% if is_model %}
+      <h1 class="text-center">{% trans 'Models' %}</h1>
+    {% else %}
+      <h1 class="text-center">{% trans 'Transformations' %}</h1>
+    {% endif %}
     <div class="justify-content-center" id="transform-selection">
       {% render_table table %}
     </div>

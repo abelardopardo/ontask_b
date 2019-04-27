@@ -20,7 +20,8 @@ urlpatterns = [
     path('uploadmerge/', views.uploadmerge, name="uploadmerge"),
 
     # Show list of plugins
-    path('transform/', views.transform, name="transform"),
+    path('transform/', views.transform_model, name="transform"),
+    path('model/', views.transform_model, name="model"),
 
     # Show plugin diagnostics
     path('<int:pk>/plugin_diagnose/',

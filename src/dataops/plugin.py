@@ -18,6 +18,8 @@ class OnTaskPluginAbstract(with_metaclass(ABCMeta, object)):
 
     description_txt = ''
 
+    is_model = False
+
     num_column_input_from = 0
 
     num_column_input_to = 0
@@ -36,6 +38,9 @@ class OnTaskPluginAbstract(with_metaclass(ABCMeta, object)):
 
     def get_description_txt(self):
         return self.description_txt
+
+    def get_is_model(self):
+        return self.is_model
 
     def get_num_column_input_from(self):
         return self.num_column_input_from

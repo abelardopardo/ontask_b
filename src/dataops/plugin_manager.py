@@ -251,6 +251,8 @@ def load_plugin_info(plugin_folder, plugin_rego=None):
     if plugin_instance:
         plugin_rego.name = plugin_instance.name
         plugin_rego.description_txt = plugin_instance.description_txt
+        plugin_rego.is_model = hasattr(plugin_instance, '_is_model') and \
+                               plugin_instance._is_model
 
     plugin_rego.is_verified = plugin_instance is not None
 

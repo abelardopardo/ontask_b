@@ -16,6 +16,7 @@ from django.db.models import F
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
+from django.urls import resolve
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
@@ -118,20 +119,28 @@ def uploadmerge(request):
 
 
 @user_passes_test(is_instructor)
-def transform(request):
+def transform_model(request):
     # Get the workflow that is being used
     workflow = get_workflow(request)
     if not workflow:
         return redirect('home')
 
+    url_name = resolve(request.path).url_name
+
+    is_model = url_name == 'model'
+
     # Traverse the plugin folder and refresh the db content.
     refresh_plugin_data(request, workflow)
 
-    table = PluginRegistryTable(PluginRegistry.objects.all(),
-                                orderable=False,
-                                request=request)
+    table = PluginRegistryTable(
+        PluginRegistry.objects.filter(is_model=is_model),
+        orderable=False,
+        request=request
+    )
 
-    return render(request, 'dataops/transform.html', {'table': table})
+    return render(request,
+                  'dataops/transform_model.html',
+                  {'table': table, 'is_model': is_model})
 
 
 @user_passes_test(is_instructor)
@@ -358,23 +367,21 @@ def plugin_invoke(request, pk):
     try:
         celery_stats = inspect().stats()
     except Exception:
-        pass
-
-    # If the stats are empty, celery is not running.
-    if not celery_stats:
-        messages.error(
-            request,
-            _('Unable to run plugins due to a misconfiguration. '
-              'Ask your system administrator to enable queueing.'))
-        return redirect(reverse('table:display'))
+        # If the stats are empty, celery is not running.
+        if not celery_stats:
+            messages.error(
+                request,
+                _('Unable to run plugins due to a misconfiguration. '
+                  'Ask your system administrator to enable queueing.'))
+            return redirect(reverse('table:display'))
 
     # Get the workflow and the plugin information
     workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return redirect('home')
-    try:
-        plugin_info = PluginRegistry.objects.get(pk=pk)
-    except PluginRegistry.DoesNotExist:
+
+    plugin_info = PluginRegistry.objects.filter(pk=pk).first()
+    if not plugin_info:
         return redirect('home')
 
     plugin_instance, msgs = load_plugin(plugin_info.filename)
