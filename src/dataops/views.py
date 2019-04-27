@@ -27,7 +27,7 @@ from dataops.forms import PluginInfoForm
 from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tasks import run_plugin
-from workflow.ops import get_workflow
+from workflow.ops import get_workflow, store_workflow_in_session
 from .forms import RowForm, FIELD_PREFIX
 from .models import PluginRegistry
 from .plugin_manager import refresh_plugin_data, load_plugin
@@ -336,6 +336,9 @@ def row_create(request):
     # Restore the dataframe to the DB
     ops.store_dataframe(df, workflow)
 
+    # Update the session information
+    store_workflow_in_session(request, workflow)
+
     # Recompute all the values of the conditions in each of the actions
     for act in workflow.actions.all():
         act.update_n_rows_selected()
@@ -383,6 +386,12 @@ def plugin_invoke(request, pk):
     plugin_info = PluginRegistry.objects.filter(pk=pk).first()
     if not plugin_info:
         return redirect('home')
+
+    if workflow.nrows == 0:
+        return render(request,
+                      'dataops/plugin_info_for_run.html',
+                      {'empty_wflow': True,
+                       'is_model': plugin_info.get_is_model()})
 
     plugin_instance, msgs = load_plugin(plugin_info.filename)
     if plugin_instance is None:

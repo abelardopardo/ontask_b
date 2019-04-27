@@ -29,7 +29,7 @@ from ontask.tables import OperationsColumn
 from ontask.tasks import workflow_update_lusers
 from .forms import WorkflowForm
 from .models import Workflow
-from .ops import get_workflow
+from .ops import get_workflow, store_workflow_in_session
 
 
 class AttributeTable(tables.Table):
@@ -337,6 +337,11 @@ def flush(request, pk):
         return JsonResponse({'form_is_valid': True,
                              'html_redirect': reverse('home')})
 
+    if workflow.nrows == 0:
+        # Table is empty, redirect to data upload
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('dataops:uploadmerge')})
+
     data = dict()
 
     if request.user != workflow.user:
@@ -356,6 +361,9 @@ def flush(request, pk):
     if request.method == 'POST':
         # Delete the table
         workflow.flush()
+
+        # update the request object with the new number of rows
+        store_workflow_in_session(request, workflow)
 
         # Log the event
         Log.objects.register(request.user,
