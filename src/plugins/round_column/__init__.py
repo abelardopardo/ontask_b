@@ -17,7 +17,6 @@ class RoundColumn(OnTaskPluginAbstract):
     1) List of input columns to round (c1, c2, ..., ck)
 
     2) number of decimal places
-
     """
 
     def __init__(self):

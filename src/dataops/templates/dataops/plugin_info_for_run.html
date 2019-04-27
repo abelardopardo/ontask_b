@@ -49,11 +49,17 @@
                role="tab" aria-controls="outputs"
                aria-selected="false">{% trans 'Columns to store the result' %}</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item pr-1">
             <a class="nav-link border border-dark border-bottom-0"
                id="parameters-tab" data-toggle="tab" href="#parameters"
                role="tab" aria-controls="parameters"
                aria-selected="false">{% trans 'Parameters' %}</a>
+          </li>
+          <li class="nav-item pr-1">
+            <a class="nav-link border border-dark border-bottom-0"
+               id="description-tab" data-toggle="tab" href="#description"
+               role="tab" aria-controls="description"
+               aria-selected="false">{% trans 'Description' %}</a>
           </li>
         </ul>
         <div class="tab-content text-center" id="dataops-get-plugin-info-tab-content">
@@ -101,6 +107,12 @@
                   {{ field_item|as_crispy_field }}
                 </div>
               {% endfor %}
+            </div>
+          </div>
+          <div class="shadow rounded tab-pane px-3 fade show border border-dark"
+             id="description" role="tabpanel" aria-labelledby="description-tab">
+            <div class="d-inline-flex text-center my-3">
+              <pre class="text-left">{{ pinstance.get_long_description }}</pre>
             </div>
           </div>
         </div>

@@ -39,6 +39,9 @@ class OnTaskPluginAbstract(with_metaclass(ABCMeta, object)):
     def get_description_txt(self):
         return self.description_txt
 
+    def get_long_description(self):
+        return self.__doc__
+
     def get_is_model(self):
         return self.is_model
 
