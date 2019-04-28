@@ -390,14 +390,23 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         )
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, "//button[normalize-space() = 'Manage table data']")
+                (By.XPATH,
+                 "//button[contains(@class, 'js-create-action')]")
             )
         )
-        self.assertIn('Manage table data', self.selenium.page_source)
         self.assertIn('js-create-action', self.selenium.page_source)
 
     def go_to_table(self):
+        # Click in the top menu
         self.selenium.find_element_by_id('ontask-base-table').click()
+        # Wait for the Full View to be clickable
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.LINK_TEXT, 'Full view')
+            )
+        )
+        # Click on the full view element
+        self.selenium.find_element_by_link_text('Full view').click()
         # Wait for page to refresh
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'table-content'))
@@ -410,7 +419,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             # The table is present!
             self.wait_for_datatable('table-data_previous')
 
-        self.assertIn('Manage table data', self.selenium.page_source)
+        self.assertIn('CSV Download', self.selenium.page_source)
 
     def go_to_workflow_operations(self):
         # Goto the details page
@@ -451,7 +460,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             # The table is present!
             self.wait_for_datatable('column-table_previous')
 
-        self.assertIn('Manage table data', self.selenium.page_source)
+        self.assertIn('Column Operations', self.selenium.page_source)
 
     def go_to_scheduler(self):
         self.selenium.find_element_by_id('ontask-base-settings').click()
@@ -497,9 +506,15 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         )
 
     def go_to_upload_merge(self):
-        self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Manage table data']"
-        ).click()
+        # Click in the top menu
+        self.selenium.find_element_by_id('ontask-base-table').click()
+        # Wait for the Full View to be clickable
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.LINK_TEXT, 'Upload or merge data')
+            )
+        )
+        # Click on the upload and wait...
         self.selenium.find_element_by_link_text('Upload or merge data').click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
@@ -559,10 +574,29 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         )
 
     def go_to_transform(self):
-        self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Manage table data']"
-        ).click()
-        self.selenium.find_element_by_link_text('Execute plugin').click()
+        # Click in the top menu
+        self.selenium.find_element_by_id('ontask-base-table').click()
+        # Wait for the Full View to be clickable
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.LINK_TEXT, 'Run Transformation')
+            )
+        )
+        # Click on the upload and wait...
+        self.selenium.find_element_by_link_text('Run Transformation').click()
+        self.wait_for_datatable('transform-table_previous')
+
+    def go_to_model(self):
+        # Click in the top menu
+        self.selenium.find_element_by_id('ontask-base-table').click()
+        # Wait for the Full View to be clickable
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.LINK_TEXT, 'Run Model')
+            )
+        )
+        # Click on the upload and wait...
+        self.selenium.find_element_by_link_text('Run Model').click()
         self.wait_for_datatable('transform-table_previous')
 
     def go_to_attribute_page(self):
@@ -608,24 +642,17 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         )
 
     def go_to_workflow_flush(self):
-        # Click on manage table data link
-        if self.selenium.find_elements_by_xpath(
-                "//button[normalize-space()='Manage table data']"
-        ):
-            # Click in the Manage table data button if it exists
-            self.selenium.find_element_by_xpath(
-                "//button[normalize-space()='Manage table data']"
-            ).click()
-            WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
-                (By.XPATH,
-                 self.class_and_text_xpath.format('button',
-                                                  'dropdown-item',
-                                                  'Flush data table'))
-            ))
-
-        # Click in the Flush data table button
+        # Click in the top menu
+        self.selenium.find_element_by_id('ontask-base-table').click()
+        # Wait for the Full View to be clickable
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//button[normalize-space() = 'Flush data table']")
+            )
+        )
+        # Click on the flush
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Flush data table']"
+            "//button[normalize-space() = 'Flush data table']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
@@ -999,7 +1026,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
         # Button to add a view
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Add View']"
+            "//button[normalize-space() = 'View']"
         ).click()
         # Wait for the form to create the derived column
         self.wait_for_modal_open()
@@ -1200,18 +1227,26 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
         for x in range(n):
             self.selenium.find_element_by_xpath(
-                "//div[@id='modal-item']/div/div/div/div[2]/button[3]/span"
+                "//div[@id='modal-item']"
+                "//button[contains(@class, 'js-action-preview-nxt')]"
             ).click()
+
             # Wait for the modal to appear
             WebDriverWait(self.selenium, 10).until(
                 EC.presence_of_element_located(
                     (By.ID, "preview-body")
                 )
             )
+            WebDriverWait(self.selenium, 10).until(
+                EC.element_to_be_clickable(
+                    (By.CLASS_NAME, 'js-action-preview-nxt')
+                )
+            )
+
 
         if close:
             self.selenium.find_element_by_xpath(
-                "//div[@id='modal-item']/div/div/div/div[2]/button[2]"
+                "//div[@id='modal-item']//button[@data-dismiss='modal']"
             ).click()
             # Close modal (wail until the modal-open element disappears)
             WebDriverWait(self.selenium, 10).until_not(

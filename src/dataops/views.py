@@ -456,7 +456,7 @@ def plugin_invoke(request, pk):
         for idx, __ in enumerate(plugin_instance.input_column_names):
             cid = form.cleaned_data[FIELD_PREFIX + 'input_%s' % idx]
             input_column_names.append(
-                workflow.columns.get(pk=cid).name
+                workflow.columns.get(pk=int(cid)).name
             )
     else:
         input_column_names = [c.name for c in form.cleaned_data['columns']]

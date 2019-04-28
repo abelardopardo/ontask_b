@@ -94,10 +94,14 @@ class OnTaskTestPlugin(OnTaskPluginAbstract):
         """
 
         # Initial data frame
-        result = pd.DataFrame()
+        result = data_frame.copy(deep=True)
 
         # Process the given data and create the result
         result[self.output_column_names[0]] = 1
         result[self.output_column_names[1]] = 2
+
+        result.drop([n for x, n in enumerate(list(data_frame.columns))],
+                    axis=1,
+                    inplace=True)
 
         return result

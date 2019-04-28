@@ -119,7 +119,7 @@ class TutorialCaptures(ScreenTests):
 
         # Button to add a view
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Add View']"
+            "//button[normalize-space() = 'View']"
         ).click()
         # Wait for the form to create the derived column
         self.wait_for_modal_open()

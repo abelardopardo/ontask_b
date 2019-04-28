@@ -60,7 +60,7 @@ class PluginInfoForm(forms.Form):
                     forms.ChoiceField(
                         initial=('', _('Select column')),
                         label=_('Column for input {0}').format(icolumn),
-                        required=False,
+                        required=True,
                         choices=[('', _('Select column'))] +
                                 [(x.id, x.name) for x in
                                  self.workflow.columns.all()]

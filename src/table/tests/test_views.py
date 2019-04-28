@@ -371,7 +371,7 @@ class TableViews(test.OnTaskLiveTestCase):
 
         # Button to add a view
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Add View']"
+            "//button[normalize-space()='View']"
         ).click()
         self.wait_for_modal_open()
 
@@ -411,7 +411,7 @@ class TableViews(test.OnTaskLiveTestCase):
         # Click in the link to see the table resulting from this view
         self.selenium.find_element_by_xpath(
             "//table[@id='view-table']"
-            "//td[1][normalize-space() = 'v1']/../td[3]/div/a"
+            "//td[1][normalize-space() = 'v1']/../td[3]/a"
         ).click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
@@ -428,7 +428,7 @@ class TableViews(test.OnTaskLiveTestCase):
 
         # Add a second view
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Add View']"
+            "//button[normalize-space()='View']"
         ).click()
         self.wait_for_modal_open()
 
@@ -472,7 +472,7 @@ class TableViews(test.OnTaskLiveTestCase):
         # Check the table resulting from the view
         self.selenium.find_element_by_xpath(
             "//table[@id='view-table']"
-            "//td[1][normalize-space() = 'v2']/../td[3]/div/a"
+            "//td[1][normalize-space() = 'v2']/../td[3]/a"
         ).click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
@@ -510,7 +510,7 @@ class TableViews(test.OnTaskLiveTestCase):
         # Click in the clone link of the first view
         self.selenium.find_element_by_xpath(
             "//table[@id='view-table']//tr/td[1][normalize-space() = 'v1']/"
-            "../td[3]/div/button[1]"
+            "../td[3]/button[1]"
         ).click()
         # Confirm view cloning
         self.selenium.find_element_by_xpath(
@@ -522,7 +522,7 @@ class TableViews(test.OnTaskLiveTestCase):
         # Open the view with the clone
         self.selenium.find_element_by_xpath(
             "//table[@id='view-table']"
-            "//td[1][normalize-space() = 'Copy_of_v1']/../td[3]/div/a"
+            "//td[1][normalize-space() = 'Copy_of_v1']/../td[3]/a"
         ).click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
