@@ -46,14 +46,10 @@ class OnTaskTestPlugin(OnTaskPluginAbstract):
 
     6. method "run" that receives:
        - a pandas data frame with the data to process
-       - a string with the name of the key column that will be used to merge
-       the result.
        - A dictionary of pairs (name, value) with the parameters described in
        the previous element.
 
-       and returns a result Pandas data frame. This frame **must** have one
-       column with the key column name provided so that it can be properly
-       merged with the existing data.
+       and returns a result Pandas data frame. 
     """
 
     def __init__(self):
@@ -78,7 +74,7 @@ class OnTaskTestPlugin(OnTaskPluginAbstract):
     def run(self, data_frame, parameters=dict):
         """
         Method to overwrite. Receives a data frame wih a number of columns
-        stipulated by the num_column_input pair, the name of a key column and a
+        stipulated by the num_column_input pair and a
         dictionary with parameters of the form name, value.
 
         Runs the algorithm and returns a pandas data frame structure that is
@@ -90,7 +86,7 @@ class OnTaskTestPlugin(OnTaskPluginAbstract):
         :return: a Pandas data_frame to merge with the existing one
         """
 
-        # Extract the key column from the given data frame
+        # Initial result
         result = pd.DataFrame()
 
         # Process the given data and create the result

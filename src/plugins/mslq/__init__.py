@@ -96,7 +96,6 @@ class MSLQEvaluate(OnTaskPluginAbstract):
         :return: a Pandas data_frame to merge with the existing one 
         """
 
-        # Extract the key column from the given data frame
         alist = parameters.get('answer_list', None)
         if not alist:
             raise Exception('Required parameter "answer_list" not found.')

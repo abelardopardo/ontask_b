@@ -55,16 +55,16 @@ class RoundColumn(OnTaskPluginAbstract):
         try:
             decimal_places = int(decimal_places)
         except Exception:
-            return 'The decimal places needs to be an integer'
+            raise Exception('The decimal places needs to be an integer')
 
         if decimal_places < 0:
-            return 'The decimal places needs to be larger than zero'
+            raise Exception('The decimal places needs to be larger than zero')
 
         # Loop over columns and verify they have the right type
         for column_name in self.input_column_names:
 
             if not np.issubdtype(data_frame[column_name], np.number):
-                return 'Column {0} has incorrect type'
+                raise Exception('Column {0} has incorrect type')
 
         # And now perform the rounding
         result_df = pd.DataFrame()
