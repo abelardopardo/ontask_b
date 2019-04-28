@@ -64,21 +64,9 @@
                      data-toggle="tooltip" title="{% trans 'Messages and Surveys' %}">
                     <span class="fa fa-comments"></span> {% trans 'Actions' %}</a>
                 </li>
-                {% comment %}
-                <li class="nav-item">
-                  <a class="nav-link spin{% if '/table/' in request.path or '/dataops' in request.path %} active{% endif %}"
-                    href="{% url 'table:display' %}"  id="ontask-base-table"
-                    data-toggle="tooltip" title="{% trans 'Data Table' %}">
-                    <span class="fa fa-table"></span> {% trans 'Table' %}
-                  </a>
-                </li>
-                {% endcomment %}
-
-
                 <li class="nav-item dropdown">
                   <a href="#"  class="nav-link dropdown-toggle{% if '/table/' in request.path or '/dataops' in request.path %} active{% endif %}"
-                    id="ontask-base-table2"
-                    data-toggle="dropdown">
+                    id="ontask-base-table" data-toggle="dropdown">
                     <span class="fa fa-table"></span> {% trans 'Table' %}
                   </a>
                   <div class="shadow dropdown-menu" aria-labelledby="ontask-base-table">
@@ -111,9 +99,6 @@
                     </button>
                   </div>
                 </li>
-
-
-
                 <li class="nav-item dropdown">
                   <a href="#" class="nav-link dropdown-toggle {% if '/logs/' in request.path or '/scheduler/' in request.path or '/detail/' in request.path or '/operations/' in request.path %} active{% endif %}"
                      data-toggle="dropdown" id="ontask-base-settings">
