@@ -53,10 +53,34 @@ class MSLQEvaluate(OnTaskPluginAbstract):
     """
     Plugin to process the results of the MSLQ test.
 
-    The possible input values are given as the param answer_list
+    Pintrich, P. R., & de Groot, E. V. (1990). Motivational and self-regulated
+    learning components of classroom academic performance. Journal of
+    Educational Psychology, 82, 33-40. doi:10.1037//0022-0663.82.1.33
+
+    It assumes 44 input columns named MSLQ_Q01 to MSLQ_Q44.
+
+    It produces 5 output columns with names
+
+    - MSLQ_IVAL: Intrinsic value
+    - MSLQ_SEFF: Self efficacy
+    - MSLQ_TANX: Test anxiety
+    - MSLQ_CSUS: Cognitive Strategy Use
+    - MSLQ_SREL: Self-regulation
+
+
+    The input columns assume one of the following five values:
+
+    'Slightly true of me,'
+    'Moderately true of me,'
+    'Always true of me,'
+    'Never true of me,'
+    'Frequently true of me'
     """
 
     def __init__(self):
+
+        super().__init__()
+
         self.name = 'MSLQ Score calculation'
         self.description_txt = """Plugin to calculate the scores of MSLQ 
         The names of the columns must be MSLQ_Q01 to MSLQ_Q44."""
@@ -140,7 +164,6 @@ def main():
     # df.to_csv('mslq_sample.csv', index=False)
     plugin_instance = MSLQEvaluate()
     result = plugin_instance.run(df,
-                                 'email',
                                  parameters={'answer_list': ', '.join(answers)})
 
     print(result)

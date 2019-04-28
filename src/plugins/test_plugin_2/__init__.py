@@ -13,50 +13,81 @@ class_name = 'OnTaskTestPlugin'
 class OnTaskTestPlugin(OnTaskPluginAbstract):
     """
     Example of a class that implements the OnTask plugin interface. The
-    objects of this class have to provide the following elements:
+    class has to satisfy the following properties:
 
-    1. name: Plugin name show to the users.
+    - Class defined in the file __init__.py in its own folder (Python module)
 
-    2. description_txt: A string with the detailed description of what the
-    plugin does
+    - The file must have the field with name "class_name" containing the name
+      of the class implementing the plugin (allows for multiple classes to be
+      defined in the same file.
 
-    3. input_column_names: A potentially empty list of column names (strings).
-    If the list is empty, the columns are selected by the user at execution
-    time.
+    - The class implementing the plugin must inherit from OnTaskPluginAbstract
 
-    4. output_column_names: Non empty list of names (strings) of the columns
-    to be used for the output of the transformation.
+    - The class must have a non-empty doc string (like this one) explaining
+      in detail the operations implemented by the plugin
 
-    5. parameters: an optionally empty list with tuples with the following
-      structure:
+    - The objects of the class must have the following fields:
 
-      ('name', type, [list of allowed values], initial value, help_text)
+      - name (string): Plugin name show to the users.
 
-      These elements will be requested from the user before executing the
-      plugin through a form. The conditions on these values are:
+      - description_txt (sting): A string with a brief description of what
+        the plugin does
 
-      - name must be a string
-      - type must be a string equal to "integer", "double", "string", 
-        "datetime" or "boolean". 
-      - The list of values is to restrict the
-        possible values
-      - The initial value must be of the type specified by the second 
-        element.
-      - Help_text a string to show as help text
+      - input_column_names (list of strings): A potentially empty list of column
+        names. If the list is empty, OnTask will allow the user to specify any
+        arbitrary set of columns. If the list is not empty, the user will be
+        required to provide a list with names of existing columns to map to the
+        inputs to the plugin.
 
-    6. method "run" that receives:
+      - output_column_names (list of strings): List of names (strings) to use as
+        column names for the result of the calculations.
+
+      - parameters (list of tuples): an optionally empty list with tuples with
+        the following structure:
+
+        ('name', type, [list of allowed values], initial value, help_text)
+
+        These elements will be requested from the user before executing the
+        plugin through a form. The values in the tuple must satisfy the
+        following conditions:
+
+        - name must be a string
+
+        - type must be a string equal to "integer", "double", "string",
+          "datetime" or "boolean".
+
+        - The list of values is to restrict the possible values for this
+          parameter.
+
+        - The initial value must be of the type specified by the second
+          element.
+
+        - Help_text a string to show as help text
+
+    - The class must implement the method "run" that receives:
        - a pandas data frame with the data to process
-       - A dictionary of pairs (name, value) with the parameters described in
-       the previous element.
+       - A dictionary of pairs (name, value) with the parameters previously
+         described.
 
-       and returns a result Pandas data frame. 
+    - The method run must return a result data frame that will be merged with
+      the existing data. The order of the rows will be assumed to be identical
+      than the existing data frame.
     """
 
     def __init__(self):
+
+        super().__init__()
+
+        # Short name shown to the user
         self.name = 'Test Plugin 2 Name'
-        self.description_txt = 'Test Plugin 2 Description Text'
+        # Brief description
+        self.description_txt = \
+            'Create addition and subtraction of the given columns'
+        # Input data frame must have two columns
         self.input_column_names = ['A1', 'A2']
+        # Two result columns are produced
         self.output_column_names = ['RESULT 3', 'RESULT 4']
+        # Example of how to use the parameters field (not used)
         self.parameters = [
             ('param string', 'string', ['v1', 'v2'], 'v1', 'help param string'),
             ('param integer', 'integer', [], None, 'help param integer'),
@@ -86,7 +117,7 @@ class OnTaskTestPlugin(OnTaskPluginAbstract):
         :return: a Pandas data_frame to merge with the existing one
         """
 
-        # Initial result
+        # Create the result
         result = pd.DataFrame()
 
         # Process the given data and create the result

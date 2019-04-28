@@ -8,8 +8,6 @@ from builtins import str
 
 from dataops.plugin import OnTaskPluginAbstract
 
-# The field class_name contains the name of the class to load to execute the
-# plugin.
 class_name = 'SPQEvaluate'
 
 
@@ -51,12 +49,35 @@ def spq_encode(answers):
 
 class SPQEvaluate(OnTaskPluginAbstract):
     """
-    Plugin to process the results of the SPQ test.
+    Plugin to encode the results of the SPQ test.
 
-    The possible input values are given as the param answer_list
+    Biggs, J., Kember, D., & Leung, D. Y. P. (2001). The revised two-factor
+    Study Process Questionnaire: R-SPQ-2F. British Journal of Educational
+    Psychology, 71(1), 133-149. doi:10.1348/000709901158433
+
+    It requires 20 columns with the answers to the questions and produces
+    six result columns with the DA, SA, DM, SM, DS, and SS variables:
+
+    - DA: Deep approach,
+    - SA: Surface approach,
+    - DM: Deep motive,
+    - SM: Surface motive,
+    - DS: Deep strategy,
+    - SS: Surface strategy
+
+    The input columns assume one of the following five values:
+
+    'Slightly true of me,'
+    'Moderately true of me,'
+    'Always true of me,'
+    'Never true of me,'
+    'Frequently true of me'
     """
 
     def __init__(self):
+
+        super().__init__()
+
         self.name = 'SPQ Score calculation'
         self.description_txt = """Plugin to calculate the scores of SPQ
         The names of the columns must be SPQ_Q01 to SPQ_Q44."""
