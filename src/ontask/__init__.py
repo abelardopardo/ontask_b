@@ -72,11 +72,14 @@ def is_legal_name(val):
     """
 
     if "'" in val:
-        return _("The symbol ' cannot be used in the column name.")
+        return _("The symbol ' cannot be used in the name.")
 
     if '"' in val:
-        return _('The symbol " cannot be used in the column name.')
+        return _('The symbol " cannot be used in the name.')
 
+    if val.startswith('__'):
+        return _('The name cannot start with "__"')
+    
     return None
 
 
