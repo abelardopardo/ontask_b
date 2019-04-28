@@ -16,8 +16,9 @@ from django.db.models import F
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
+from django.urls import resolve
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 import dataops.ops as ops
 import dataops.pandas_db
@@ -25,8 +26,8 @@ from dataops import pandas_db
 from dataops.forms import PluginInfoForm
 from logs.models import Log
 from ontask.permissions import is_instructor
-from ontask.tasks import run_plugin
-from workflow.ops import get_workflow
+from ontask.tasks import run_plugin_task
+from workflow.ops import get_workflow, store_workflow_in_session
 from .forms import RowForm, FIELD_PREFIX
 from .models import PluginRegistry
 from .plugin_manager import refresh_plugin_data, load_plugin
@@ -39,7 +40,10 @@ class PluginRegistryTable(tables.Table):
     customisation.
     """
 
-    filename = tables.Column(verbose_name=_('Folder'))
+    more_button = """"
+    <button type="button" 
+      class="btn btn-sm btn-light float-right js-plugin-show-description"
+      data-url="{0}" data-toggle="tooltip" title="{1}">&plus;</button>"""
 
     name = tables.Column(verbose_name=_('Name'))
 
@@ -68,6 +72,14 @@ class PluginRegistryTable(tables.Table):
 
         return record.name
 
+    def render_description_txt(self, record):
+        return format_html(record.description_txt) + \
+               format_html(self.more_button,
+                           reverse('dataops:plugin_moreinfo',
+                                   kwargs={'pk': record.id}),
+                           ugettext(_('More information'))
+                           )
+
     def render_is_verified(self, record):
         if record.is_verified:
             return format_html('<span class="true">✔</span>')
@@ -92,10 +104,9 @@ class PluginRegistryTable(tables.Table):
     class Meta(object):
         model = PluginRegistry
 
-        fields = ('filename', 'name', 'description_txt', 'is_verified')
+        fields = ('name', 'description_txt', 'is_verified')
 
-        sequence = ('filename', 'name', 'description_txt', 'is_verified',
-                    'last_exec')
+        sequence = ('name', 'description_txt', 'is_verified', 'last_exec')
 
         attrs = {
             'class': 'table table-hover table-bordered shadow',
@@ -118,20 +129,28 @@ def uploadmerge(request):
 
 
 @user_passes_test(is_instructor)
-def transform(request):
+def transform_model(request):
     # Get the workflow that is being used
     workflow = get_workflow(request)
     if not workflow:
         return redirect('home')
 
+    url_name = resolve(request.path).url_name
+
+    is_model = url_name == 'model'
+
     # Traverse the plugin folder and refresh the db content.
     refresh_plugin_data(request, workflow)
 
-    table = PluginRegistryTable(PluginRegistry.objects.all(),
-                                orderable=False,
-                                request=request)
+    table = PluginRegistryTable(
+        PluginRegistry.objects.filter(is_model=is_model),
+        orderable=False,
+        request=request
+    )
 
-    return render(request, 'dataops/transform.html', {'table': table})
+    return render(request,
+                  'dataops/transform_model.html',
+                  {'table': table, 'is_model': is_model})
 
 
 @user_passes_test(is_instructor)
@@ -145,6 +164,12 @@ def diagnose(request, pk):
     :return:
     """
 
+    # Get the corresponding workflow
+    workflow = get_workflow(request)
+    if not workflow:
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
+
     # To include in the JSON response
     data = dict()
 
@@ -152,7 +177,7 @@ def diagnose(request, pk):
     plugin = PluginRegistry.objects.filter(id=pk).first()
     if not plugin:
         data['form_is_valid'] = True
-        data['html_redirect'] = reverse('dataops:transform')
+        data['html_redirect'] = reverse('home')
         return JsonResponse(data)
 
     # Reload the plugin to get the messages stored in the right place.
@@ -327,6 +352,9 @@ def row_create(request):
     # Restore the dataframe to the DB
     ops.store_dataframe(df, workflow)
 
+    # Update the session information
+    store_workflow_in_session(request, workflow)
+
     # Recompute all the values of the conditions in each of the actions
     for act in workflow.actions.all():
         act.update_n_rows_selected()
@@ -358,24 +386,28 @@ def plugin_invoke(request, pk):
     try:
         celery_stats = inspect().stats()
     except Exception:
-        pass
-
-    # If the stats are empty, celery is not running.
-    if not celery_stats:
-        messages.error(
-            request,
-            _('Unable to run plugins due to a misconfiguration. '
-              'Ask your system administrator to enable queueing.'))
-        return redirect(reverse('table:display'))
+        # If the stats are empty, celery is not running.
+        if not celery_stats:
+            messages.error(
+                request,
+                _('Unable to run plugins due to a misconfiguration. '
+                  'Ask your system administrator to enable queueing.'))
+            return redirect(reverse('table:display'))
 
     # Get the workflow and the plugin information
     workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
         return redirect('home')
-    try:
-        plugin_info = PluginRegistry.objects.get(pk=pk)
-    except PluginRegistry.DoesNotExist:
+
+    plugin_info = PluginRegistry.objects.filter(pk=pk).first()
+    if not plugin_info:
         return redirect('home')
+
+    if workflow.nrows == 0:
+        return render(request,
+                      'dataops/plugin_info_for_run.html',
+                      {'empty_wflow': True,
+                       'is_model': plugin_info.get_is_model()})
 
     plugin_instance, msgs = load_plugin(plugin_info.filename)
     if plugin_instance is None:
@@ -385,18 +417,6 @@ def plugin_invoke(request, pk):
         )
         return redirect('dataops:transform')
 
-    if len(plugin_instance.input_column_names) > 0:
-        # The plug in works with a fixed set of columns
-        cnames = workflow.columns.all().values_list('name', flat=True)
-        if not set(plugin_instance.input_column_names) < set(cnames):
-            # The set of columns are not part of the workflow
-            messages.error(
-                request,
-                _('Workflow does not have the correct columns to run this '
-                  'plugin')
-            )
-            return redirect('dataops:transform')
-
     # create the form to select the columns and the corresponding dictionary
     form = PluginInfoForm(request.POST or None,
                           workflow=workflow,
@@ -405,6 +425,8 @@ def plugin_invoke(request, pk):
     # Set the basic elements in the context
     context = {
         'form': form,
+        'input_column_fields': [x for x in list(form)
+                                if x.name.startswith(FIELD_PREFIX + 'input')],
         'output_column_fields': [x for x in list(form)
                                  if x.name.startswith(FIELD_PREFIX + 'output')],
         'parameters': [x for x in list(form)
@@ -429,7 +451,14 @@ def plugin_invoke(request, pk):
 
     # Take the list of inputs from the form if empty list is given.
     input_column_names = []
-    if not plugin_instance.input_column_names:
+    if plugin_instance.input_column_names:
+        # Traverse the fields and get the names of the columns
+        for idx, __ in enumerate(plugin_instance.input_column_names):
+            cid = form.cleaned_data[FIELD_PREFIX + 'input_%s' % idx]
+            input_column_names.append(
+                workflow.columns.get(pk=int(cid)).name
+            )
+    else:
         input_column_names = [c.name for c in form.cleaned_data['columns']]
 
     output_column_names = []
@@ -466,7 +495,7 @@ def plugin_invoke(request, pk):
          'parameters': json.dumps(parameters, default=str),
          'status': 'preparing execution'})
 
-    run_plugin.apply_async(
+    run_plugin_task.apply_async(
         (request.user.id,
          workflow.id,
          pk,
@@ -482,3 +511,42 @@ def plugin_invoke(request, pk):
     return render(request,
                   'dataops/plugin_execution_report.html',
                   {'log_id': log_item.id})
+
+
+@user_passes_test(is_instructor)
+def moreinfo(request, pk):
+    """
+    HTML request to show the detailed information about a plugin
+
+    :param request: HTML request object
+    :param pk: Primary key of the PluginRegistry element
+    :return:
+    """
+
+    # Get the corresponding workflow
+    workflow = get_workflow(request)
+    if not workflow:
+        return JsonResponse({'form_is_valid': True,
+                             'html_redirect': reverse('home')})
+
+    # To include in the JSON response
+    data = dict()
+
+    # Action being used
+    plugin = PluginRegistry.objects.filter(id=pk).first()
+    if not plugin:
+        data['form_is_valid'] = True
+        data['html_redirect'] = reverse('home')
+        return JsonResponse(data)
+
+    # Reload the plugin to get the messages stored in the right place.
+    pinstance, msgs = load_plugin(plugin.filename)
+
+    # Get the descriptions and show them in the modal
+    data['html_form'] = render_to_string(
+        'dataops/includes/partial_plugin_long_description.html',
+        {'pinstance': pinstance},
+        request=request)
+    return JsonResponse(data)
+
+

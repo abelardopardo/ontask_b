@@ -21,6 +21,10 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         super().setUp()
         test.create_users()
 
+    def tearDown(self):
+        test.delete_all_tables()
+        super().tearDown()
+
     def test_01_workflow_create_upload_merge_column_edit(self):
         """
         Create a workflow, upload data and merge
@@ -454,7 +458,7 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
 
         # Click in the submit button
         self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[2]"
+            "//div[@id = 'modal-item']//div[@class='modal-footer']/button"
         ).click()
 
         # Go back to the attribute table page
@@ -476,7 +480,7 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         ).click()
         # Click in the delete confirm button
         self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[2]"
+            "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
         # MODAL WAITING
         self.wait_for_page(element_id='workflow-detail')
@@ -537,7 +541,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
 
         # Click in the share button
         self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[2]"
+            "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
 
         # MODAL WAITING
@@ -570,7 +574,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
 
         # Click in the button to add the user
         self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[2]"
+            "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
         # MODAL WAITING
         WebDriverWait(self.selenium, 10).until_not(
@@ -610,7 +614,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
         )
         # Click in the delete confirm button
         self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[2]"
+            "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
 
         # MODAL WAITING

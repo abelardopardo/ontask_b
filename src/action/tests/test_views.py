@@ -1011,15 +1011,7 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
                       self.selenium.page_source)
 
         # Close the preview
-        self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']/div/div/div/div[2]/button[2]"
-        ).click()
-        # Close modal (wail until the modal-open element disappears)
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
+        self.cancel_modal()
 
         # Create filter
         self.create_filter("The filter", [('another', 'equal', 'bbb')])

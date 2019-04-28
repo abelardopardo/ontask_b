@@ -2,7 +2,6 @@
 from __future__ import unicode_literals, print_function
 
 import os
-from time import sleep
 
 from django.conf import settings
 from django.utils.html import escape
@@ -101,7 +100,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         ).click()
         # Click in the delete confirm button
         self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[2]"
+            "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
         # MODAL WAITING
         self.wait_for_page(element_id='workflow-detail')
@@ -121,6 +120,9 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
 
         # Edit the action-in
         self.open_action_edit('action in')
+
+        # Go to questions
+        self.select_questions_tab()
 
         # Set the right columns to process
         self.click_dropdown_option(
@@ -611,7 +613,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         # Click in the first plugin
         element = self.search_table_row_by_string('transform-table',
                                                   1,
-                                                  'test_plugin_1')
+                                                  'Test Plugin 1 Name')
         element.find_element_by_link_text('Test Plugin 1 Name').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
@@ -654,20 +656,10 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name='Plugin test')
-        # Wait maximum 10 seconds for the data frame to be updated
-        idx = 0
-        while (not is_column_in_table(wflow.get_data_frame_table_name(),
-                                     'RESULT 1') or
-               not is_column_in_table(wflow.get_data_frame_table_name(),
-                                      'RESULT 2')) and idx < 10:
-            print(not is_column_in_table(wflow.get_data_frame_table_name(),
-                                     'RESULT 1'))
-            print(not is_column_in_table(wflow.get_data_frame_table_name(),
-                                     'RESULT 2'))
-            sleep(1)
-            idx += 1
-
-        self.assertTrue(idx != 10)
+        self.assertTrue(is_column_in_table(wflow.get_data_frame_table_name(),
+                                           'RESULT 1'))
+        self.assertTrue(is_column_in_table(wflow.get_data_frame_table_name(),
+                                           'RESULT 2'))
         df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
         self.assertTrue(all([x == 1 for x in df['RESULT 1']]))
         self.assertTrue(all([x == 2 for x in df['RESULT 2']]))
@@ -679,7 +671,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         # Click in the first plugin
         element = self.search_table_row_by_string('transform-table',
                                                   1,
-                                                  'test_plugin_1')
+                                                  'Test Plugin 1 Name')
         element.find_element_by_link_text('Test Plugin 1 Name').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
@@ -731,16 +723,11 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         )
 
         # Assert the content of the dataframe
-        # Wait maximum 10 seconds for the data frame to be updated
         wflow = Workflow.objects.get(name='Plugin test')
-        idx = 0
-        while (not is_column_in_table(wflow.get_data_frame_table_name(),
-                                      'RESULT 1_2') or
-               not is_column_in_table(wflow.get_data_frame_table_name(),
-                                      'RESULT 2_2')) and idx < 10:
-            sleep(1)
-            idx += 1
-        self.assertTrue(idx != 10)
+        self.assertTrue(is_column_in_table(wflow.get_data_frame_table_name(),
+                                           'RESULT 1_2'))
+        self.assertTrue(is_column_in_table(wflow.get_data_frame_table_name(),
+                                           'RESULT 2_2'))
         df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
         self.assertTrue(all([x == 1 for x in df['RESULT 1_2']]))
         self.assertTrue(all([x == 2 for x in df['RESULT 2_2']]))
@@ -763,13 +750,26 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         # Click in the second plugin
         element = self.search_table_row_by_string('transform-table',
                                                   1,
-                                                  'test_plugin_2')
+                                                  'Test Plugin 2 Name')
         element.find_element_by_link_text('Test Plugin 2 Name').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
 
-        # Provide the execution data
+        # Provide the execution data (input columns and merge key
+        self.selenium.find_element_by_id(
+            "id____ontask___upload_input_0"
+        ).click()
+        Select(self.selenium.find_element_by_id(
+            "id____ontask___upload_input_0"
+        )).select_by_visible_text('A1')
+        self.selenium.find_element_by_id(
+            "id____ontask___upload_input_1"
+        ).click()
+        Select(self.selenium.find_element_by_id(
+            "id____ontask___upload_input_1"
+        )).select_by_visible_text('A2')
+        # merge key
         self.select_plugin_output_tab()
         self.selenium.find_element_by_id("id_merge_key").click()
         Select(self.selenium.find_element_by_id(
@@ -997,6 +997,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # End of session
         self.logout()
+
 
 class DataopsEmptyKeyAfterMerge(DataopsMerge):
     wf_name = 'Test Empty Key after Merge'

@@ -13,7 +13,7 @@ from django.utils.translation import ugettext as _
 from dataops import ops, pandas_db
 from logs.models import Log
 from ontask.permissions import is_instructor
-from workflow.ops import get_workflow
+from workflow.ops import get_workflow, store_workflow_in_session
 from .forms import SelectColumnUploadForm, SelectKeysForm
 
 
@@ -177,6 +177,9 @@ def upload_s2(request):
                    'valuerange': range(5) if workflow.has_table() else range(3),
                    'df_info': df_info}
         return render(request, 'dataops/upload_s2.html', context)
+
+    # Update the session information
+    store_workflow_in_session(request, workflow)
 
     # Nuke the temporary table
     pandas_db.delete_upload_table(workflow.get_data_frame_upload_table_name())
@@ -430,6 +433,9 @@ def upload_s4(request):
                               'column_names': col_info[0],
                               'column_types': col_info[1],
                               'column_unique': col_info[2]})
+
+        # Update the session information
+        store_workflow_in_session(request, workflow)
 
         # Remove the csvupload from the session object
         request.session.pop('upload_data', None)

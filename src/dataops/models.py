@@ -28,6 +28,12 @@ class PluginRegistry(models.Model):
                                        default='',
                                        blank=True)
 
+    # Boolean stating if the plugin is a model or a transformation
+    is_model = models.BooleanField(default=False,
+                                      verbose_name=_('Plugin is a model'),
+                                      null=False,
+                                      blank=False)
+
     # Boolean stating if the column is a unique key
     is_verified = models.BooleanField(default=False,
                                       verbose_name=_('Ready to run'),

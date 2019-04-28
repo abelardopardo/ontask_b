@@ -2,6 +2,9 @@
 
 Current Version: 4.3.4 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
+![Issues](https://img.shields.io/github/issues/abelardopardo/ontask_b.svg?style=flat-square)
+![License](https://img.shields.io/github/license/abelardopardo/ontask_b.svg?style=flat-square)
+
 ## OnTask in a nutshell
 
 - Data upload through CSV, Excel files or SQL connections

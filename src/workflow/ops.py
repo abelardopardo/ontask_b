@@ -29,7 +29,7 @@ from workflow.serializers import (
 from .models import Workflow
 
 
-def store_workflow_in_session(request, obj):
+def store_workflow_nrows_in_session(request, obj):
     """
     Store the workflow id and name in the request.session dictionary
     :param request: Request object
@@ -37,9 +37,22 @@ def store_workflow_in_session(request, obj):
     :return: Nothing. Store the id and the name in the session
     """
 
+    request.session['ontask_workflow_rows'] = obj.nrows
+    request.session.save()
+
+
+def store_workflow_in_session(request, obj):
+    """
+    Store the workflow id, name, and number of rows in the
+    request.session dictionary
+    :param request: Request object
+    :param obj: Workflow object
+    :return: Nothing. Store the id, name and nrows in the session
+    """
+
     request.session['ontask_workflow_id'] = obj.id
     request.session['ontask_workflow_name'] = obj.name
-    request.session.save()
+    store_workflow_nrows_in_session(request, obj)
 
 
 def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
@@ -111,6 +124,8 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
             # Step 2: If the workflow is locked by this user session, return
             # correct result (the session_key may be None if using the API)
             if request.session.session_key == workflow.session_key:
+                # Update nrows. Asynch execution of plugin may have modified it
+                store_workflow_nrows_in_session(request, workflow)
                 return workflow
 
             # Step 3: If the workflow is unlocked, LOCK and return
@@ -120,20 +135,27 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
                 if update_session:
                     # If the session does not have this info, update.
                     store_workflow_in_session(request, workflow)
+                else:
+                    # Update nrows in case it was asynch modified
+                    store_workflow_nrows_in_session(request, workflow)
                 return workflow
 
             # Step 4: The workflow is locked. See if the session locking it is
             # still valid
-            try:
-                session = Session.objects.get(session_key=workflow.session_key)
-            except Session.DoesNotExist:
-                # An exception means that the session stored as locking the
+            session = Session.objects.filter(
+                session_key=workflow.session_key
+            ).first()
+            if not session:
+                # The session stored as locking the
                 # workflow is no longer in the session table, so the user can
                 # access the workflow
                 workflow.lock(request, True)
                 if update_session:
                     # If the session does not have this info, update.
                     store_workflow_in_session(request, workflow)
+                else:
+                    # Update nrows in case it was asynch modified
+                    store_workflow_nrows_in_session(request, workflow)
                 return workflow
 
             # Get the owner of the session locking the workflow
@@ -144,12 +166,15 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
             # Step 5: The workflow is locked by a session that is valid. See
             # if the session locking happens to be from the same user (a
             # previous session that has not been properly closed, or an API
-            # call from the same user  )
+            # call from the same user)
             if owner == request.user:
                 workflow.lock(request)
                 if update_session:
                     # If the session does not have this info, update.
                     store_workflow_in_session(request, workflow)
+                else:
+                    # Update nrows in case it was asynch modified
+                    store_workflow_nrows_in_session(request, workflow)
                 return workflow
 
             # Step 6: The workflow is locked by an existing session. See if the
@@ -171,6 +196,10 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
             if update_session:
                 # If the session does not have this info, update.
                 store_workflow_in_session(request, workflow)
+            else:
+                # Update nrows in case it was asynch modified
+                store_workflow_nrows_in_session(request, workflow)
+
         except Exception:
             # Something went wrong when fetching the object
             messages.error(request,
@@ -180,32 +209,6 @@ def get_workflow(request, wid=None, select_related=None, prefetch_related=None):
         # All good. Return workflow.
         return workflow
 
-
-def detach_dataframe(workflow):
-    """
-    Given a workflow object, delete its dataframe
-    :param workflow:
-    :return: Nothing, the workflow object is updated
-    """
-    pandas_db.delete_table(workflow.get_data_frame_table_name())
-
-    # Delete number of rows and columns
-    workflow.nrows = 0
-    workflow.ncols = 0
-    workflow.n_filterd_rows = -1
-    workflow.save()
-
-    # Delete the column_names, column_types and column_unique
-    workflow.columns.delete()
-
-    # Delete the info for QueryBuilder
-    workflow.set_query_builder_ops()
-
-    # Table name
-    workflow.data_frame_table_name = ''
-
-    # Save the workflow with the new fields.
-    workflow.save()
 
 def do_import_workflow_parse(user, name, file_item):
     """

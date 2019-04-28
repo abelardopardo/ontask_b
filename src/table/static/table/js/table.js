@@ -49,9 +49,6 @@ $(function () {
   $("#view-content").on("click", ".js-view-clone", loadForm);
   $("#modal-item").on("click", ".js-view-clone-form", saveForm);
 
-  // Flush workflow in detail view
-  $("#table-content").on("click", ".js-workflow-flush", loadForm);
-  $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
 });
 window.onload = function(){
   setDateTimePickers();

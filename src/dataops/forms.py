@@ -49,12 +49,27 @@ class PluginInfoForm(forms.Form):
         if self.plugin_instance.input_column_names:
             # The set of columns is fixed, remove the field.
             self.fields.pop('columns')
+
+            # Create the fields of type select to map the inputs in the plugin
+            # to the names in the workflow columns. We will allow them to be
+            # empty
+            for idx, icolumn in enumerate(
+                    self.plugin_instance.input_column_names
+            ):
+                self.fields[FIELD_PREFIX + 'input_%s' % idx] = \
+                    forms.ChoiceField(
+                        initial=('', _('Select column')),
+                        label=_('Column for input {0}').format(icolumn),
+                        required=True,
+                        choices=[('', _('Select column'))] +
+                                [(x.id, x.name) for x in
+                                 self.workflow.columns.all()]
+                    )
         else:
+            # The plugin allows for an arbitrary set of columns to be selected.
             # The queryset for the columns must be extracted from the
-            # workflow and should only include the non-key columns
-            self.fields['columns'].queryset = self.workflow.columns.filter(
-                is_key=False
-            )
+            # workflow
+            self.fields['columns'].queryset = self.workflow.columns.all()
 
         # Field to choose the Key column to merge the results
         self.fields['merge_key'] = forms.ChoiceField(
@@ -145,11 +160,20 @@ class PluginInfoForm(forms.Form):
 
         data = super().clean()
 
+        # Input columns need to be non-empty
         columns = data.get('columns', None)
         if columns and columns.count() == 0:
             self.add_error(
                 'columns',
                 _('The plugin needs at least one input column')
+            )
+
+        # Output columns cannot have the same name as any key columns
+        # (otherwise they will collide in the final merge)
+        if self.workflow.columns.filter(name__in=[]).exists():
+            self.add_error(
+                None,
+                'Output name cannot be the same as key column. Please change'
             )
 
         return data

@@ -191,4 +191,8 @@ $('#modal-item').on('hide.bs.modal', function (e) {
 $(document).on("keyup", '.textEnable', function() {
   $(".button-enable").prop( "disabled", $(this).val() != $(this).attr('data-value'));
 });
-
+$(function () {
+  // Flush workflow
+  $(".js-workflow-flush").on("click", loadForm);
+  $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
+})

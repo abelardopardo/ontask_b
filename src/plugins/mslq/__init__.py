@@ -6,6 +6,8 @@ import random
 import pandas as pd
 from builtins import str
 
+from dataops.plugin import OnTaskPluginAbstract
+
 # The field class_name contains the name of the class to load to execute the
 # plugin.
 class_name = 'MSLQEvaluate'
@@ -47,7 +49,7 @@ def mslq_encode(answers, num):
             1.0 * sum([answers[i - 1] for i in srel_idx]) / len(srel_idx))
 
 
-class MSLQEvaluate(object):
+class MSLQEvaluate(OnTaskPluginAbstract):
     """
     Plugin to process the results of the MSLQ test.
 
@@ -83,21 +85,17 @@ class MSLQEvaluate(object):
              'Comma separated list of possible answer values')
         ]
 
-    def run(self, data_frame, merge_key, parameters=dict):
+    def run(self, data_frame, parameters=dict):
         """
-        Runs the algorithm and returns a pandas data frame structure that is
-        merged with the existing data frame in the workflow using the merge_key.
+        Algorithm to encode MSLQ test responses. Creates a data frame to
+        be merged with the existing data.
 
         :param data_frame: Input data for the plugin
-        :param merge_key: Name of the column key that will be used for merging
         :param parameters: Dictionary with (name, value) pairs.
 
-        :return: a Pandas data_frame to merge with the existing one (must
-        contain a column with name merge_key)
+        :return: a Pandas data_frame to merge with the existing one 
         """
 
-        # Extract the key column from the given data frame
-        result = pd.DataFrame(data_frame[merge_key])
         alist = parameters.get('answer_list', None)
         if not alist:
             raise Exception('Required parameter "answer_list" not found.')
@@ -117,15 +115,9 @@ class MSLQEvaluate(object):
             new_df['MSLQ_Q{:02}'.format(qidx)] = \
                 [answer_values.index(x) + 1
                  for x in data_frame['MSLQ_Q{:02}'.format(qidx)]]
-        result = pd.concat([result,
-                            pd.DataFrame(
-                                [mslq_encode(x, len(answer_values))
-                                 for __, x in new_df.iterrows()],
-                                columns=self.output_column_names
-                            )],
-                           axis=1
-                           )
-        return result
+        return pd.DataFrame([mslq_encode(x, len(answer_values))
+                             for __, x in new_df.iterrows()],
+                            columns=self.output_column_names)
 
 
 def main():

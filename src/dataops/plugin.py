@@ -18,18 +18,23 @@ class OnTaskPluginAbstract(with_metaclass(ABCMeta, object)):
 
     description_txt = ''
 
-    num_column_input_from = 0
+    is_model = False
 
-    num_column_input_to = 0
+    input_column_names = []
+
+    output_column_names = []
 
     output_suffix = ''
+
+    parameters = {}
 
     def __init__(self):
         self.name = ''
         self.description_txt = ''
-        self.num_column_input_from = 0
-        self.num_column_input_to = 0
+        self.input_column_names = []
+        self.output_column_names = []
         self.output_suffix = ''
+        self.paramters = {}
 
     def get_name(self):
         return self.name
@@ -37,13 +42,25 @@ class OnTaskPluginAbstract(with_metaclass(ABCMeta, object)):
     def get_description_txt(self):
         return self.description_txt
 
-    def get_num_column_input_from(self):
-        return self.num_column_input_from
+    def get_long_description(self):
+        return self.__doc__
 
-    def get_num_column_input_to(self):
-        return self.num_column_input_to
+    def get_is_model(self):
+        return self.is_model
 
-    def run(self, data_frame, merge_key, parameters=dict):
+    def get_input_column_names(self):
+        return self.input_column_names
+
+    def get_output_column_names(self):
+        return self.output_column_names
+
+    def get_output_suffix(self):
+        return self.output_suffix
+
+    def get_parameters(self):
+        return self.parameters
+
+    def run(self, data_frame, parameters=dict):
         """
         Method to ovewrite. Receives a data frame wih a number of columns
         between num_column_input_from and num_column_input_to and returns a
@@ -51,7 +68,6 @@ class OnTaskPluginAbstract(with_metaclass(ABCMeta, object)):
         after column renaming).
 
         :param data_frame: Input data for the plugin
-        :param merge_key: column name used for merging
         :param parameters: dictionary with the parameters
         :return: a Pandas data_frame to append to the existing one
         """

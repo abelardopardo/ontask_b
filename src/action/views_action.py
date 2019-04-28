@@ -724,8 +724,6 @@ def edit_action_in(request, workflow, action):
         ),
         # Conditions
         'filter_condition': filter_condition,
-        'selected_rows':
-            filter_condition.n_rows_selected if filter_condition else -1,
         'conditions': all_conditions,
         'vis_scripts': PlotlyHandler.get_engine_scripts()
     }

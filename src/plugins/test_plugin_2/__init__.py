@@ -3,12 +3,14 @@ from __future__ import unicode_literals, print_function
 
 import pandas as pd
 
+from dataops.plugin import OnTaskPluginAbstract
+
 # The field class_name contains the name of the class to load to execute the
 # plugin.
 class_name = 'OnTaskTestPlugin'
 
 
-class OnTaskTestPlugin(object):
+class OnTaskTestPlugin(OnTaskPluginAbstract):
     """
     Example of a class that implements the OnTask plugin interface. The
     objects of this class have to provide the following elements:
@@ -44,14 +46,10 @@ class OnTaskTestPlugin(object):
 
     6. method "run" that receives:
        - a pandas data frame with the data to process
-       - a string with the name of the key column that will be used to merge
-       the result.
        - A dictionary of pairs (name, value) with the parameters described in
        the previous element.
 
-       and returns a result Pandas data frame. This frame **must** have one
-       column with the key column name provided so that it can be properly
-       merged with the existing data.
+       and returns a result Pandas data frame. 
     """
 
     def __init__(self):
@@ -73,25 +71,23 @@ class OnTaskTestPlugin(object):
                                 'help param datetime'),
         ]
 
-    def run(self, data_frame, merge_key, parameters=dict):
+    def run(self, data_frame, parameters=dict):
         """
         Method to overwrite. Receives a data frame wih a number of columns
-        stipulated by the num_column_input pair, the name of a key column and a
+        stipulated by the num_column_input pair and a
         dictionary with parameters of the form name, value.
 
         Runs the algorithm and returns a pandas data frame structure that is
-        merged with the existing data frame in the workflow using the merge_key.
+        merged with the existing data frame in the workflow 
 
         :param data_frame: Input data for the plugin
-        :param merge_key: Name of the column key that will be used for merging
         :param parameters: Dictionary with (name, value) pairs.
 
-        :return: a Pandas data_frame to merge with the existing one (must
-        contain a column with name merge_key)
+        :return: a Pandas data_frame to merge with the existing one
         """
 
-        # Extract the key column from the given data frame
-        result = pd.DataFrame(data_frame[merge_key])
+        # Initial result
+        result = pd.DataFrame()
 
         # Process the given data and create the result
         result[self.output_column_names[0]] = \
