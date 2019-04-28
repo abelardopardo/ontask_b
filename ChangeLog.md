@@ -14,6 +14,11 @@
 
 - Batch command for workflow import can now process multiple files (bulk upload of multiple workflows)
 
+- New UI to differentiate between the execution of transformations and of statistical models.
+
+- Refactoring of plugin infrastructure to execute arbitrary transformations and
+  models
+
 ### Fixed
 
 - Error when taking the conjunction between two queryset and not using distinct
