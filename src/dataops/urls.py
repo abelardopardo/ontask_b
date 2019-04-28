@@ -24,9 +24,10 @@ urlpatterns = [
     path('model/', views.transform_model, name="model"),
 
     # Show plugin diagnostics
-    path('<int:pk>/plugin_diagnose/',
-         views.diagnose,
-         name="plugin_diagnose"),
+    path('<int:pk>/plugin_diagnose/', views.diagnose, name="plugin_diagnose"),
+
+    # Show detailed information about the plugin
+    path('<int:pk>/plugin_moreinfo/', views.moreinfo, name="plugin_moreinfo"),
 
     # Plugin invocation
     path('<int:pk>/plugin_invoke/', views.plugin_invoke,

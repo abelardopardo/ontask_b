@@ -63,16 +63,21 @@
           </li>
         </ul>
         <div class="tab-content text-center" id="dataops-get-plugin-info-tab-content">
-          <div class="shadow rounded tab-pane px-3 fade show active border border-dark"
+          <div class="shadow rounded tab-pane px-3 py-3 fade show active border border-dark"
                id="inputs" role="tabpanel" aria-labelledby="inputs-tab">
-            <div class="text-center form-group{% if form.columns.errors %} has-danger{% endif %}">
-              {% if pinstance.input_column_names %}
-                <p class="my-3">{% trans 'Input columns' %}</p>
-                <p class="lead">{{ pinstance.input_column_names|join:", " }}</p>
-              {% else %}
+            {% if input_column_fields %}
+              <div class="text-center form-group">
+                {% for field_item in input_column_fields %}
+                  <div class="row justify-content-center">
+                    {{ field_item|as_crispy_field }}
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="text-center form-group{% if form.columns.errors %} has-danger{% endif %}">
                 {{ form.columns|as_crispy_field }}
-              {% endif %}
-            </div>
+              </div>
+            {% endif %}
           </div>
           <div class="shadow rounded tab-pane px-3 fade show border border-dark"
                id="outputs" role="tabpanel" aria-labelledby="outputs-tab">
@@ -112,7 +117,11 @@
           <div class="shadow rounded tab-pane px-3 fade show border border-dark"
              id="description" role="tabpanel" aria-labelledby="description-tab">
             <div class="d-inline-flex text-center my-3">
-              <pre class="text-left">{{ pinstance.get_long_description }}</pre>
+              {% if not pinstance.get_long_description %}
+                <p class="text-center">{% trans 'No description available' %}</p>
+              {% else %}
+                <pre class="text-left">{{ pinstance.get_long_description }}</pre>
+              {% endif %}
             </div>
           </div>
         </div>
