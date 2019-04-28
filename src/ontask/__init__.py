@@ -79,7 +79,7 @@ def is_legal_name(val):
 
     if val.startswith('__'):
         return _('The name cannot start with "__"')
-    
+
     return None
 
 

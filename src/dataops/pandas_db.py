@@ -1063,16 +1063,6 @@ def delete_table_row_by_key(table_name, kv_pair):
 
 def num_rows(table_name, cond_filter=None):
     """
-    Obtain the number of rows of the table storing workflow with given pk
-    :param table_name: Primary key of the table storing the data frame
-    :param cond_filter: Condition element to filter the query
-    :return:
-    """
-    return num_rows_by_name(table_name, cond_filter)
-
-
-def num_rows_by_name(table_name, cond_filter=None):
-    """
     Given a table name, get its number of rows
     :param table_name: Table name
     :param cond_filter: Condition element used to filter the query
