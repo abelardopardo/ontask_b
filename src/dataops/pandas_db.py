@@ -3,8 +3,7 @@
 import logging
 import os.path
 import subprocess
-from builtins import next
-from builtins import zip
+from builtins import next, zip
 from collections import OrderedDict
 from urllib.parse import urlparse, urlunparse
 
@@ -18,7 +17,11 @@ from django.utils.translation import ugettext as _
 from smart_open import smart_open
 from sqlalchemy import create_engine
 
-from dataops.formula_evaluation import NodeEvaluation, evaluate
+from dataops.formula_evaluation import NodeEvaluation, evaluate_formula
+from dataops.sql_query import (
+    get_table_select_cursor,
+    sql_to_ontask_datatype_names,
+)
 from ontask import fix_pctg_in_name, OnTaskDataFrameNoKey
 
 SITE_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -44,13 +47,8 @@ pandas_datatype_names = TypeDict({
 })
 
 # Translation between SQL data type names, and those handled in OnTask
-sql_datatype_names = {
-    'text': 'string',
-    'bigint': 'integer',
-    'double precision': 'double',
-    'boolean': 'boolean',
-    'timestamp with time zone': 'datetime'
-}
+
+# Translation between SQL data type names, and those handled in OnTask
 
 # Translation between OnTask data types and SQLAlchemy
 ontask_to_sqlalchemy = {
@@ -556,8 +554,9 @@ def df_column_types_rename(table_name):
     # for tname, ntname in pandas_datatype_names.items():
     #     result[:] = [x if x != tname else ntname for x in result]
 
-    return [sql_datatype_names.get(x) for __, x in
-            get_table_column_types(table_name)]
+    return [
+        sql_to_ontask_datatype_names.get(dtype)
+        for __, dtype in get_table_column_types(table_name)]
 
 
 def db_column_rename(table, old_name, new_name):
@@ -593,17 +592,17 @@ def df_drop_column(table_name, column_name):
         cursor.execute(query)
 
 
-def get_subframe(table_name, cond_filter, column_names):
+def get_subframe(table_name, filter_formula, column_names):
     """
     Execute a select query to extract a subset of the dataframe and turn the
      resulting query set into a data frame.
     :param table_name: Table
-    :param cond_filter: Condition object to filter the data (or None)
+    :param filter_formula: Formula to filter the data (or None)
     :param column_names: [list of column names], QuerySet with the data rows
     :return:
     """
     # Get the cursor
-    cursor = get_table_cursor(table_name, cond_filter, column_names)
+    cursor = get_table_select_cursor(table_name, filter_formula, column_names)
 
     # Create the DataFrame and set the column names
     result = pd.DataFrame.from_records(cursor.fetchall(), coerce_float=True)
@@ -612,44 +611,13 @@ def get_subframe(table_name, cond_filter, column_names):
     return result
 
 
-def get_table_cursor(table_name, cond_filter, column_names):
-    """
-    Execute a select query in the database with an optional filter obtained
-    from the jquery QueryBuilder.
-
-    :param table_name: Primary key of the workflow storing the data
-    :param cond_filter: Condition object to filter the data (or None)
-    :param column_names: optional list of columns to select
-    :return: ([list of column names], QuerySet with the data rows)
-    """
-
-    # Create the query
-    safe_column_names = [fix_pctg_in_name(x) for x in column_names]
-    query = 'SELECT "{0}" from "{1}"'.format(
-        '", "'.join(safe_column_names),
-        table_name
-    )
-
-    # See if the action has a filter or not
-    fields = []
-    if cond_filter is not None:
-        cond_filter, fields = evaluate(cond_filter.formula,
-                                       NodeEvaluation.EVAL_SQL)
-        if cond_filter:
-            # The condition may be empty, in which case, nothing is needed.
-            query += ' WHERE ' + cond_filter
-
-    # Execute the query
-    cursor = connection.cursor()
-    cursor.execute(query, fields)
-
-    return cursor
-
-
-def get_table_data(table_name, cond_filter, column_names):
+def get_table_data(table_name, filter_formula, column_names):
     # Get first the cursor
     with connection.cursor() as cursor:
-        cursor = get_table_cursor(table_name, cond_filter, column_names)
+        cursor = get_table_select_cursor(
+            table_name,
+            filter_formula,
+            column_names)
         result = cursor.fetchall()
 
     # Return the data
@@ -770,12 +738,12 @@ def increase_row_integer(table_name, set_field, where_field, where_value):
         connection.commit()
 
 
-def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names):
+def get_table_row_by_key(workflow, filter_formula, kv_pair, column_names):
     """
     Select the set of elements after filtering and with the key=value pair
 
     :param workflow: workflow object to get to the table
-    :param cond_filter: Condition object to filter the data (or None)
+    :param filter_formula: Formula to filter the data (or None)
     :param kv_pair: A key=value pair to identify the row. Key is suppose to
            be unique.
     :param column_names: Optional list of column names to select
@@ -793,10 +761,10 @@ def get_table_row_by_key(workflow, cond_filter, kv_pair, column_names):
     fields = [kv_pair[1]]
 
     # See if the action has a filter or not
-    if cond_filter is not None:
-        cond_filter, filter_fields = \
-            evaluate(cond_filter.formula, NodeEvaluation.EVAL_SQL)
-        query += ' AND (' + cond_filter + ')'
+    if filter_formula is not None:
+        filter_formula, filter_fields = \
+            evaluate_formula(filter_formula.formula, NodeEvaluation.EVAL_SQL)
+        query += ' AND (' + filter_formula + ')'
         fields = fields + filter_fields
 
     # Execute the query
@@ -930,8 +898,9 @@ def get_filter_query(table_name, column_names, filter_exp):
     filter_txt = ''
     filter_fields = []
     if filter_exp:
-        filter_txt, filter_fields = evaluate(filter_exp,
-                                             NodeEvaluation.EVAL_SQL)
+        filter_txt, filter_fields = evaluate_formula(
+            filter_exp,
+            NodeEvaluation.EVAL_SQL)
 
     # Build the query so far appending the filter and/or the cv_tuples
     if filter_txt:
@@ -976,15 +945,17 @@ def search_table_rows(table_name,
 
     # Create the query
     safe_column_names = [fix_pctg_in_name(x) for x in column_names]
-    query = 'SELECT "{0}" FROM "{1}"'.format('", "'.join(safe_column_names),
-                                             table_name)
+    query = 'SELECT "{0}" FROM "{1}"'.format(
+        '", "'.join(safe_column_names),
+        table_name)
 
     # Calculate the first suffix to add to the query
     filter_txt = ''
     filter_fields = []
     if pre_filter:
-        filter_txt, filter_fields = evaluate(pre_filter,
-                                             NodeEvaluation.EVAL_SQL)
+        filter_txt, filter_fields = evaluate_formula(
+            pre_filter,
+            NodeEvaluation.EVAL_SQL)
 
     tuple_txt = ''
     tuple_fields = []
@@ -1074,7 +1045,7 @@ def num_rows(table_name, cond_filter=None):
 
     fields = []
     if cond_filter is not None:
-        cond_filter, fields = evaluate(cond_filter, NodeEvaluation.EVAL_SQL)
+        cond_filter, fields = evaluate_formula(cond_filter, NodeEvaluation.EVAL_SQL)
         query += ' WHERE ' + cond_filter
 
     with connection.cursor() as cursor:

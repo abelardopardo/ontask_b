@@ -1,31 +1,39 @@
 # -*- coding: utf-8 -*-
 
+"""Admin definitions."""
 
 from django.contrib import admin
 
-from .models import Action, Condition
+from action.models import Action, Condition
 
 
 class ActionAdmin(admin.ModelAdmin):
-    list_display = ('id',
-                    'workflow',
-                    'name',
-                    'description_text',
-                    'created',
-                    'modified',
-                    'content',
-                    'serve_enabled'
-                    )
+    """Define Action Admin."""
+
+    list_display = (
+        'id',
+        'workflow',
+        'name',
+        'description_text',
+        'created',
+        'modified',
+        'text_content',
+        'serve_enabled',
+    )
 
 
 class ConditionAdmin(admin.ModelAdmin):
-    list_display = ('id',
-                    'name',
-                    'action',
-                    'description_text',
-                    'formula',
-                    'n_rows_selected',
-                    'is_filter')
+    """Define Condition Admin."""
+
+    list_display = (
+        'id',
+        'name',
+        'action',
+        'description_text',
+        'formula',
+        'n_rows_selected',
+        'is_filter',
+    )
 
 
 admin.site.register(Action, ActionAdmin)

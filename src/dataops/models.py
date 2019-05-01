@@ -55,7 +55,7 @@ class PluginRegistry(models.Model):
         """
         Define the criteria for ordering
         """
-        ordering = ('name',)
+        ordering = ['name',]
 
 
 class SQLConnection(models.Model):
@@ -149,4 +149,4 @@ class SQLConnection(models.Model):
         """
         Define the criteria for ordering
         """
-        ordering = ('name',)
+        ordering = ['name',]

@@ -525,7 +525,7 @@ class SQLConnectionForm(forms.ModelForm):
     dialect[+driver]://user:password@host/dbname[?key=value..]
     """
 
-    class Meta:
+    class Meta(object):
         model = SQLConnection
 
         fields = [

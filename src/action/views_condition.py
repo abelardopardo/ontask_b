@@ -15,14 +15,14 @@ from django.views.decorators.http import require_http_methods
 from action import ops
 from dataops.formula_evaluation import (
     get_variables,
-    evaluate,
+    evaluate_formula,
     NodeEvaluation
 )
 from logs.models import Log
 from ontask.permissions import is_instructor, UserIsInstructor
 from workflow.ops import get_workflow
 from .forms import ConditionForm, FilterForm
-from .models import Condition
+from action.models import Condition
 
 
 def save_condition_form(request,
@@ -74,7 +74,7 @@ def save_condition_form(request,
     # If the request has the 'action_content' field, update the action
     action_content = request.POST.get('action_content', None)
     if action_content:
-        action.set_content(action_content)
+        action.set_text_content(action_content)
 
     # Reset the counter of rows with all conditions false
     action.rows_all_false = None
@@ -159,8 +159,8 @@ def save_condition_form(request,
     else:
         condition = form.save()
 
-    # Update the number of selected rows for the conditions
-    condition.update_n_rows_selected()
+    # Update the number of selected rows for all the conditions
+    condition.action.update_n_rows_selected()
 
     # Update the columns field
     condition.columns.set(
@@ -171,7 +171,7 @@ def save_condition_form(request,
     condition.save()
 
     # Log the event
-    formula, __ = evaluate(condition.formula, NodeEvaluation.EVAL_SQL)
+    formula, __ = evaluate_formula(condition.formula, NodeEvaluation.EVAL_SQL)
     if is_new:
         if is_filter:
             log_type = Log.FILTER_CREATE
@@ -335,11 +335,11 @@ def delete_filter(request, pk):
         # If the request has 'action_content', update the action
         action_content = request.POST.get('action_content', None)
         if action_content:
-            cond_filter.action.set_content(action_content)
+            cond_filter.action.set_text_content(action_content)
             cond_filter.action.save()
 
         # Log the event
-        formula, fields = evaluate(cond_filter.formula, NodeEvaluation.EVAL_SQL)
+        formula, fields = evaluate_formula(cond_filter.formula, NodeEvaluation.EVAL_SQL)
         Log.objects.register(request.user,
                              Log.FILTER_DELETE,
                              cond_filter.action.workflow,
@@ -511,10 +511,10 @@ def delete_condition(request, pk):
         # If the request has the 'action_content', update the action
         action_content = request.POST.get('action_content', None)
         if action_content:
-            condition.action.set_content(action_content)
+            condition.action.set_text_content(action_content)
             condition.action.save()
 
-        formula, fields = evaluate(condition.formula, NodeEvaluation.EVAL_SQL)
+        formula, fields = evaluate_formula(condition.formula, NodeEvaluation.EVAL_SQL)
         Log.objects.register(request.user,
                              Log.CONDITION_DELETE,
                              condition.action.workflow,
@@ -583,7 +583,7 @@ def clone(request, pk, action_pk=None):
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content', None)
     if action_content:
-        condition.action.set_content(action_content)
+        condition.action.set_text_content(action_content)
         condition.action.save()
 
     # Get the new name appending as many times as needed the 'Copy of '

@@ -11,9 +11,10 @@ from django.conf import settings
 import test
 from action.models import Action
 from dataops import pandas_db
-from dataops.formula_evaluation import evaluate, NodeEvaluation
+from dataops.formula_evaluation import evaluate_formula, NodeEvaluation
 from dataops.ops import perform_dataframe_upload_merge
-from dataops.pandas_db import get_filter_query, load_from_db, get_table_cursor
+from dataops.pandas_db import get_filter_query, load_from_db
+from dataops.sql_query import get_table_select_cursor
 from workflow.models import Workflow
 
 
@@ -169,7 +170,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
                    value2,
                    value3):
 
-        result1 = evaluate(
+        result1 = evaluate_formula(
             self.set_skel(input_value,
                           op_value.format(''),
                           type_value,
@@ -177,7 +178,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
             NodeEvaluation.EVAL_EXP,
             {'variable': value2}
         )
-        result2 = evaluate(
+        result2 = evaluate_formula(
             self.set_skel(input_value,
                           op_value.format(''),
                           type_value,
@@ -196,7 +197,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.assertFalse(result2)
 
         if op_value.find('{0}') != -1:
-            result1 = evaluate(
+            result1 = evaluate_formula(
                 self.set_skel(input_value,
                               op_value.format('not_'),
                               type_value,
@@ -204,7 +205,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
                 NodeEvaluation.EVAL_EXP,
                 {'variable': value2}
             )
-            result2 = evaluate(
+            result2 = evaluate_formula(
                 self.set_skel(input_value,
                               op_value.format('not_'),
                               type_value,
@@ -597,29 +598,29 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
 
         # Get wflow table, filter and column names
         wflow_table = self.action.workflow.get_data_frame_table_name()
-        cond_filter = self.action.get_filter()
+        filter_formula = self.action.get_filter_formula()
         column_names = self.action.workflow.get_column_names()
         conditions = self.action.conditions.filter(is_filter=False)
 
         # Get dataframe
-        df = pandas_db.get_subframe(wflow_table, cond_filter, column_names)
+        df = pandas_db.get_subframe(wflow_table, filter_formula, column_names)
 
         # Get the query set
-        qs = get_table_cursor(wflow_table, cond_filter, column_names)
+        qs = get_table_select_cursor(wflow_table, filter_formula, column_names)
 
         # Iterate over the rows in the dataframe and compare
         for idx, row in enumerate(qs):
             row_value_df = dict(list(zip(column_names, df.loc[idx, :])))
             row_value_qs = dict(list(zip(column_names, row)))
 
-            cond_eval1 = [evaluate(x.formula,
-                                   NodeEvaluation.EVAL_EXP,
-                                   row_value_df)
+            cond_eval1 = [evaluate_formula(x.formula,
+                                           NodeEvaluation.EVAL_EXP,
+                                           row_value_df)
                           for x in conditions]
 
-            cond_eval2 = [evaluate(x.formula,
-                                   NodeEvaluation.EVAL_EXP,
-                                   row_value_qs)
+            cond_eval2 = [evaluate_formula(x.formula,
+                                           NodeEvaluation.EVAL_EXP,
+                                           row_value_qs)
                           for x in conditions]
 
             assert cond_eval1 == cond_eval2

@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 
+"""Configuration parameters for aciton emails."""
 
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-NOTIFICATION_TEMPLATE = \
-    getattr(settings,
-            'EMAIL_ACTION_NOTIFICATION_TEMPLATE',
-            """
-<html>
+TEMPLATE_LENGTH = 65536
+SUBJECT_LENGTH = 1024
+SENDER_LENGTH = 1024
+
+NOTIFICATION_TEMPLATE = getattr(
+    settings,
+    'EMAIL_ACTION_NOTIFICATION_TEMPLATE',
+    """<html>
 <head/>
 <body>
 <p>Dear {{ user.name }}</p>
@@ -29,39 +33,47 @@ Regards.
 The OnTask Support Team
 </body></html>""")
 
-NOTIFICATION_SUBJECT = getattr(settings,
-                               'EMAIL_ACTION_NOTIFICATION_SUBJECT',
-                               _("OnTask: Action executed"))
+NOTIFICATION_SUBJECT = getattr(
+    settings,
+    'EMAIL_ACTION_NOTIFICATION_SUBJECT',
+    _('OnTask: Action executed'))
 
-NOTIFICATION_SENDER = getattr(settings,
-                              'EMAIL_ACTION_NOTIFICATION_SENDER',
-                              'ontask@ontasklearning.org')
+NOTIFICATION_SENDER = getattr(
+    settings,
+    'EMAIL_ACTION_NOTIFICATION_SENDER',
+    'ontask@ontasklearning.org')
 
 PIXEL = getattr(settings, 'EMAIL_ACTION_PIXEL', None)
 
 if 'siteprefs' in settings.INSTALLED_APPS:
     # Respect those users who don't have siteprefs installed.
-    from siteprefs.toolbox import patch_locals, register_prefs, pref, \
-        pref_group
+    from siteprefs.toolbox import (  # noqa Z435
+        patch_locals, register_prefs, pref,
+        pref_group,
+    )
 
     patch_locals()  # That's bootstrap.
 
     register_prefs(
         pref_group(
             _('Notification Emails'),
-            (pref(NOTIFICATION_TEMPLATE,
-                  verbose_name=_('Template to send email notification'),
-                  static=False,
-                  field=models.TextField(max_length=65536)),
-             pref(NOTIFICATION_SUBJECT,
-                  verbose_name=_('Subject line for notification messages'),
-                  static=False,
-                  field=models.CharField(max_length=1024)),
-             pref(NOTIFICATION_SENDER,
-                  verbose_name=_('To: field in notification emails'),
-                  static=False,
-                  field=models.CharField(max_length=1024)),
-             ),
-            static=False
+            (
+                pref(
+                    NOTIFICATION_TEMPLATE,
+                    verbose_name=_('Template to send email notification'),
+                    static=False,
+                    field=models.TextField(max_length=TEMPLATE_LENGTH)),
+                pref(
+                    NOTIFICATION_SUBJECT,
+                    verbose_name=_('Subject line for notification messages'),
+                    static=False,
+                    field=models.CharField(max_length=SUBJECT_LENGTH)),
+                pref(
+                    NOTIFICATION_SENDER,
+                    verbose_name=_('To: field in notification emails'),
+                    static=False,
+                    field=models.CharField(max_length=SENDER_LENGTH)),
+            ),
+            static=False,
         ),
     )

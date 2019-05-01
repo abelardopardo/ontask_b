@@ -635,7 +635,7 @@ class ScreenTestFixture(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.PERSONALIZED_CANVAS_EMAIL)
+        select.select_by_value(Action.personalized_canvas_email)
         desc.send_keys('Week 3 reminder to review material')
 
         self.modal_ss('action_personalized_canvas_email_create.png')

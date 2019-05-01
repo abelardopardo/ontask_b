@@ -670,4 +670,4 @@ class Column(models.Model):
         verbose_name = 'column'
         verbose_name_plural = 'columns'
         unique_together = ('name', 'workflow')
-        ordering = ('position',)
+        ordering = ['position',]

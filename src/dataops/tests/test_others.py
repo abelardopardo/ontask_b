@@ -64,7 +64,7 @@ class HasVariableTest(TestCase):
     def test_evaluate_formula(self):
 
         self.assertTrue(
-            formula_evaluation.evaluate(
+            formula_evaluation.evaluate_formula(
                 self.formula1,
                 NodeEvaluation.EVAL_EXP,
                 {'Course_Code_a': 'df', 'ANOTHER': 'v2'}

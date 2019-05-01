@@ -291,7 +291,7 @@ class TutorialCaptures(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.PERSONALIZED_TEXT)
+        select.select_by_value(Action.personalized_text)
         desc.send_keys('')
 
         self.modal_ss('tutorial_personalized_text_create.png')
@@ -511,7 +511,7 @@ class TutorialCaptures(ScreenTests):
         )
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.PERSONALIZED_JSON)
+        select.select_by_value(Action.personalized_json)
         desc.send_keys('')
 
         self.modal_ss('tutorial_personalized_json_create.png')
@@ -579,7 +579,7 @@ class TutorialCaptures(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.SURVEY)
+        select.select_by_value(Action.survey)
         desc.send_keys('Survey description for the learners')
 
         self.modal_ss('tutorial_survey_create.png')

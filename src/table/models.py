@@ -85,4 +85,4 @@ class View(models.Model):
         name
         """
         unique_together = ('name', 'workflow')
-        ordering = ('name',)
+        ordering = ['name',]

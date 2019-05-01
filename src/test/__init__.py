@@ -763,7 +763,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.PERSONALIZED_TEXT)
+        select.select_by_value(Action.personalized_text)
         desc.send_keys(adesc)
         desc.send_keys(Keys.RETURN)
         # Wait for the spinner to disappear, and then for the button to be
@@ -788,7 +788,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.PERSONALIZED_JSON)
+        select.select_by_value(Action.personalized_json)
         desc.send_keys(adesc)
         desc.send_keys(Keys.RETURN)
         # Wait for the spinner to disappear, and then for the button to be
@@ -813,7 +813,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.PERSONALIZED_CANVAS_EMAIL)
+        select.select_by_value(Action.personalized_canvas_email)
         desc.send_keys(adesc)
         desc.send_keys(Keys.RETURN)
         # Wait for the spinner to disappear, and then for the button to be
@@ -863,7 +863,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.SURVEY)
+        select.select_by_value(Action.survey)
         desc.send_keys(adesc)
         desc.send_keys(Keys.RETURN)
         # Wait for the spinner to disappear, and then for the button to be

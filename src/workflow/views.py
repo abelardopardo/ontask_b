@@ -582,7 +582,8 @@ def clone(request, pk):
     ops.store_dataframe(data_frame, workflow_new)
 
     # Clone actions
-    action.ops.clone_actions([a for a in workflow.actions.all()], workflow_new)
+    for action in workflow.actions.all():
+        action.ops.clone_action(action, workflow_new)
 
     # Done!
     workflow_new.save()

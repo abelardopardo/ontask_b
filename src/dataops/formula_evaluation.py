@@ -7,6 +7,7 @@ from builtins import str
 import pandas as pd
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext
+from psycopg2 import sql
 
 from ontask import OnTaskException, fix_pctg_in_name
 
@@ -228,7 +229,7 @@ class NodeEvaluation:
             # Python evaluation
             varvalue = self.get_value()
             return (not self.is_null(varvalue)) and \
-                varvalue.find(constant) != -1
+                   varvalue.find(constant) != -1
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -258,7 +259,7 @@ class NodeEvaluation:
             # Python evaluation
             varvalue = self.get_value()
             return (not self.is_null(varvalue)) and \
-                varvalue.find(constant) == -1
+                   varvalue.find(constant) == -1
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
@@ -738,7 +739,7 @@ def rename_variable(formula, old_name, new_name):
     return formula
 
 
-def evaluate(node, eval_type, given_variables=None):
+def evaluate_formula(node, eval_type, given_variables=None):
     """
     Given a node representing a formula, and a dictionary with (name, values),
     evaluates the expression represented by the node.
@@ -749,61 +750,54 @@ def evaluate(node, eval_type, given_variables=None):
     :param given_variables: Dictionary (name, value) of variables
     :return: True/False, SQL query or text depending on eval_type
     """
-    if 'condition' in node:
-        # Node is a condition, get the values of the sub-clauses
-        sub_clauses = [evaluate(x, eval_type, given_variables)
-                       for x in node['rules']]
+    if 'condition' not in node:
+        # Terminal case. Evaluate leave node
+        return NodeEvaluation(
+            node,
+            given_variables
+        ).get_evaluation(eval_type)
 
-        # Now combine
-        if eval_type == NodeEvaluation.EVAL_EXP:
-            if node['condition'] == 'AND':
-                result = all(sub_clauses)
-            else:
-                result = any(sub_clauses)
+    # Node is a COMPOSITION, get the values of the sub-clauses recursively
+    sub_clauses = [evaluate_formula(x, eval_type, given_variables)
+                   for x in node['rules']]
 
-            if node.get('not', False):
-                result = not result
-
-            return result
-
-        if eval_type == NodeEvaluation.EVAL_SQL:
-
-            if not sub_clauses:
-                # Nothing has been returned, so it is an empty query
-                return '', []
-
-            if node['condition'] == 'AND':
-                result = '((' + \
-                         ') AND ('.join([x for x, __ in sub_clauses]) + '))'
-            else:
-                result = '((' + \
-                         ') OR ('.join([x for x, __ in sub_clauses]) + '))'
-            result_fields = \
-                list(itertools.chain.from_iterable(
-                    [x for __, x in sub_clauses]))
-
-            if node.get('not', False):
-                result = '(NOT (' + result + '))'
-
-            return result, result_fields
-
-        # Text evaluation
-        if len(sub_clauses) > 1:
-            if node['condition'] == 'AND':
-                result = '(' + \
-                         ') AND ('.join([x for x in sub_clauses]) + ')'
-            else:
-                result = '(' + \
-                         ') OR ('.join([x for x in sub_clauses]) + ')'
+    # Combine subresults depending on the type of evaluation
+    if eval_type == NodeEvaluation.EVAL_EXP:
+        if node['condition'] == 'AND':
+            result_bool = all(sub_clauses)
         else:
-            result = sub_clauses[0]
+            result_bool = any(sub_clauses)
+        if node.get('not', False):
+            result = not result_bool
+        return result_bool
+
+    join_str = ') ' + node['condition'] + '('
+    if eval_type == NodeEvaluation.EVAL_SQL:
+        if not sub_clauses:
+            # Nothing has been returned, so it is an empty query
+            return '', []
+
+        result_query = sql.SQL('({})').format(
+            sql.SQL(join_str).join(
+                [sub_c for sub_c, __ in sub_clauses]
+            ),
+        )
+        result_fields = list(itertools.chain.from_iterable(
+            [sub_field for __, sub_field in sub_clauses]))
 
         if node.get('not', False):
-            result = 'NOT (' + result + ')'
+            result_query = sql.SQL('NOT ({})').format(result_query)
 
-        return result
+        return result_query, result_fields
 
-    return NodeEvaluation(
-        node,
-        given_variables
-    ).get_evaluation(eval_type)
+    # Text evaluation
+    if len(sub_clauses) > 1:
+        result_txt = '(' + join_str.join([x for x in sub_clauses]) + ')'
+    else:
+        result_txt = sub_clauses[0]
+
+    if node.get('not', False):
+        result_txt = 'NOT (' + result_txt + ')'
+
+    return result_txt
+

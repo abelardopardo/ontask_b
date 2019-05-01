@@ -14,7 +14,9 @@ from django.core import signing
 from django.utils.translation import ugettext
 
 from action.models import Action
-from action.ops import send_messages, send_json, send_canvas_messages
+from action.send_canvas_email import send_canvas_messages
+from action.send_json import send_json
+from action.send_messages import send_messages
 from dataops import pandas_db
 from dataops.models import PluginRegistry
 from dataops.plugin_manager import run_plugin
@@ -544,7 +546,7 @@ def execute_scheduled_actions(debug):
         #
         # EMAIL ACTION
         #
-        if item.action.action_type == Action.PERSONALIZED_TEXT:
+        if item.action.action_type == Action.personalized_text:
             subject = item.payload.get('subject', '')
             cc_email = item.payload.get('cc_email', [])
             bcc_email = item.payload.get('bcc_email', [])
@@ -590,7 +592,7 @@ def execute_scheduled_actions(debug):
         #
         # JSON action
         #
-        elif item.action.action_type == Action.PERSONALIZED_JSON:
+        elif item.action.action_type == Action.personalized_json:
             # Get the information from the payload
             token = item.payload['token']
             key_column = None
@@ -619,7 +621,7 @@ def execute_scheduled_actions(debug):
         #
         # Canvas Email Action
         #
-        elif item.action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        elif item.action.action_type == Action.personalized_canvas_email:
             # Get the information from the payload
             token = item.payload['token']
             subject = item.payload.get('subject', '')

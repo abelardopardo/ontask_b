@@ -72,16 +72,16 @@ class ScheduleActionTable(tables.Table):
 
     def render_action(self, record):
         icon = 'file-text'
-        if record.action.action_type == Action.PERSONALIZED_TEXT:
+        if record.action.action_type == Action.personalized_text:
             icon = 'file-text'
             title = 'Personalized text'
-        elif record.action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        elif record.action.action_type == Action.personalized_canvas_email:
             icon = 'envelope-square'
             title = 'Personalized Canvas Email'
-        elif record.action.action_type == Action.PERSONALIZED_JSON:
+        elif record.action.action_type == Action.personalized_json:
             icon = 'code'
             title = 'Personalized JSON'
-        elif record.action.action_type == Action.SURVEY:
+        elif record.action.action_type == Action.survey:
             icon = 'question-circle-o'
             title = 'Survey'
 
@@ -402,7 +402,7 @@ def finish_scheduling(request, schedule_item=None, payload=None):
         'action_id': schedule_item.action.id,
         'execute': schedule_item.execute.isoformat(),
     }
-    if schedule_item.action.action_type == Action.PERSONALIZED_TEXT:
+    if schedule_item.action.action_type == Action.personalized_text:
         log_payload.update({
             'email_column': schedule_item.item_column.name,
             'subject': schedule_item.payload.get('subject'),
@@ -414,7 +414,7 @@ def finish_scheduling(request, schedule_item=None, payload=None):
             'track_read': schedule_item.payload.get('track_read', False)
         })
         log_type = Log.SCHEDULE_EMAIL_EDIT
-    elif schedule_item.action.action_type == Action.PERSONALIZED_JSON:
+    elif schedule_item.action.action_type == Action.personalized_json:
         ivalue = None
         if schedule_item.item_column:
             ivalue = schedule_item.item_column.name
@@ -423,7 +423,7 @@ def finish_scheduling(request, schedule_item=None, payload=None):
             'token': schedule_item.payload.get('subject')
         })
         log_type = Log.SCHEDULE_JSON_EDIT
-    elif schedule_item.action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+    elif schedule_item.action.action_type == Action.personalized_canvas_email:
         ivalue = None
         if schedule_item.item_column:
             ivalue = schedule_item.item_column.name
@@ -598,12 +598,12 @@ def edit(request, pk):
               'Ask your system administrator to enable queueing.'))
         return redirect(reverse('action:index'))
 
-    if action.action_type == Action.PERSONALIZED_TEXT:
+    if action.action_type == Action.personalized_text:
         return save_email_schedule(request, action, s_item, op_payload)
-    elif action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+    elif action.action_type == Action.personalized_canvas_email:
         return save_canvas_email_schedule(request, action, s_item,
                                           op_payload)
-    elif action.action_type == Action.PERSONALIZED_JSON:
+    elif action.action_type == Action.personalized_json:
         return save_json_schedule(request, action, s_item, op_payload)
 
     # Action type not found, so return to the main table view
@@ -649,11 +649,11 @@ def delete(request, pk):
         return JsonResponse(data)
 
     log_type = None
-    if s_item.action.action_type == Action.PERSONALIZED_TEXT:
+    if s_item.action.action_type == Action.personalized_text:
         log_type = Log.SCHEDULE_EMAIL_DELETE
-    elif s_item.action.action_type == Action.PERSONALIZED_JSON:
+    elif s_item.action.action_type == Action.personalized_json:
         log_type = Log.SCHEDULE_JSON_DELETE
-    elif s_item.action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+    elif s_item.action.action_type == Action.personalized_canvas_email:
         log_type = Log.SCHEDULE_CANVAS_EMAIL_DELETE
 
     # Log the event

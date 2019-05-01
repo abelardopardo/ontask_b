@@ -13,7 +13,7 @@
       </div>
     </div>
     {% if conditions|length %}
-      {% if conditions.0.action.action_type == conditions.0.action.PERSONALIZED_TEXT %}
+      {% if conditions.0.action.action_type == conditions.0.action.personalized_text %}
         {% trans 'Use condition in highlighted text' as header %}
       {% else %}
         {% trans 'Insert condition in text' as header %}

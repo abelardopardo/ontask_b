@@ -34,11 +34,11 @@ var insert_fields = function (the_form) {
     }
     return true;
 };
-var get_id_content = function() {
-  if (typeof $("#id_content").summernote != "undefined") {
-    value = $("#id_content").summernote("code");
+var get_id_text_content = function() {
+  if (typeof $("#id_text_content").summernote != "undefined") {
+    value = $("#id_text_content").summernote("code");
   } else {
-    value = $("#id_content").val();
+    value = $("#id_text_content").val();
   }
   return value;
 };
@@ -98,8 +98,8 @@ var saveForm = function () {
       $("#id_formula").val(f_text);
     }
     var data = form.serializeArray();
-    if (document.getElementById("id_content") != null) {
-      value = get_id_content();
+    if (document.getElementById("id_text_content") != null) {
+      value = get_id_text_content();
       data.push({"name": "action_content", "value": value});
     }
     $("#modal-item .modal-content").html("");

@@ -135,12 +135,12 @@ def store_dataframe(data_frame, workflow, temporary=False, reset_keys=True):
     return None
 
 
-def get_table_row_by_index(workflow, cond_filter, idx):
+def get_table_row_by_index(workflow, filter_formula, idx):
     """
     Select the set of elements in the row with the given index
 
     :param workflow: Workflow object storing the data
-    :param cond_filter: Condition object to filter the data (or None)
+    :param filter_formula: Condition object to filter the data (or None)
     :param idx: Row number to get (first row is idx = 1)
     :return: A dictionary with the (column_name, value) data or None if the
      index is out of bounds
@@ -149,7 +149,7 @@ def get_table_row_by_index(workflow, cond_filter, idx):
     # Get the data
     data = get_table_data(
         workflow.get_data_frame_table_name(),
-        cond_filter,
+        filter_formula,
         workflow.get_column_names()
     )
 
@@ -476,7 +476,7 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
     return None
 
 
-def data_frame_add_column(df, column, initial_value):
+def data_frame_add_column(df, column, initial_value=None):
     """
     Function that add a new column to the data frame with the structure to match
     the given column. If the initial value is not give, it is decided based

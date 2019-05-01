@@ -19,14 +19,14 @@ from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.csrf import csrf_exempt
 
-from action.evaluate import (
+from action.evaluate_action import (
     get_row_values,
     evaluate_row_action_out,
     evaluate_row_action_in, evaluate_action
 )
 from action.models import Action
 from action.ops import get_workflow_action
-from dataops.pandas_db import get_table_cursor
+from dataops.sql_query import get_table_select_cursor
 from logs.models import Log
 from ontask import action_session_dictionary, get_action_payload
 from ontask.permissions import is_instructor
@@ -37,8 +37,9 @@ from ontask.tasks import (
 from ontask_oauth.models import OnTaskOAuthUserTokens
 from ontask_oauth.views import get_initial_token_step1, refresh_token
 from workflow.ops import get_workflow
-from .forms import (
-    EmailActionForm, JSONActionForm, ZipActionForm, CanvasEmailActionForm
+from action.forms_run import (
+    EmailActionForm, ZipActionForm, JSONActionForm,
+    CanvasEmailActionForm,
 )
 
 html_body = """<!DOCTYPE html>
@@ -238,7 +239,7 @@ def zip_action(request, pk):
     # Extract workflow and action
     workflow, action = wflow_action
 
-    if action.action_type != Action.PERSONALIZED_TEXT:
+    if action.action_type != Action.personalized_text:
         # Incorrect type of action.
         return redirect(reverse('action:index'))
 
@@ -401,14 +402,13 @@ def action_zip_export(request):
     # Obtain the personalised text
     # Invoke evaluate_action
     # Returns: [ (HTML, None, column name value) ] or String error!
-    result = evaluate_action(action,
-                             column_name=participant_column,
-                             exclude_values=exclude_values)
-
-    # Check the type of the result to see if it was successful
-    if not isinstance(result, list):
+    try:
+        result = evaluate_action(action,
+                                 column_name=participant_column,
+                                 exclude_values=exclude_values)
+    except Exception as exc:
         # Something went wrong. The result contains a message
-        messages.error(request, _('Unable to generate zip:') + result)
+        messages.error(request, _('Unable to generate zip: {0}').format(result))
         return redirect('action:index')
 
     if not result:
@@ -418,7 +418,7 @@ def action_zip_export(request):
 
     if user_fname_column:
         # Get the user_fname_column values
-        user_fname_data = get_table_cursor(
+        user_fname_data = get_table_select_cursor(
             action.workflow.get_data_frame_table_name(),
             None,
             column_names=[user_fname_column]
@@ -961,7 +961,7 @@ def preview_response(request, pk, idx, action=None):
     correct_json = True
     if action.is_out:
         action_content = evaluate_row_action_out(action, context)
-        if action.action_type == Action.PERSONALIZED_JSON:
+        if action.action_type == Action.personalized_json:
             try:
                 __ = json.loads(action_content)
             except Exception:
@@ -985,8 +985,8 @@ def preview_response(request, pk, idx, action=None):
             ["{0} = {1}".format(x.name, row_values[x.name]) for x in act_vars]
         )
 
-    if action.action_type == Action.PERSONALIZED_CANVAS_EMAIL or \
-            action.action_type == Action.PERSONALIZED_JSON:
+    if action.action_type == Action.personalized_canvas_email or \
+            action.action_type == Action.personalized_json:
         action_content = escape(action_content)
 
     # See if there is prelude content in the request

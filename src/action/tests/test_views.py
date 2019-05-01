@@ -759,7 +759,6 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
             workflow=workflow
         )
         condition = Condition.objects.get(name='Registered', action=action_out)
-        filter_obj = action_out.get_filter()
 
         # pre-conditions
         # Column name is the correct one
@@ -775,7 +774,7 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         # Attribute name is present in action_out text
         self.assertTrue('{{ attribute name }}' in action_out.content)
         # Column name is present in action-in filter
-        self.assertTrue(has_variable(filter_obj.formula, 'age'))
+        self.assertTrue(has_variable(action_out.get_filter_formula(), 'age'))
 
         # Login
         self.login('instructor01@bogus.com')
@@ -829,7 +828,7 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         attributes = workflow.attributes
         action_out = Action.objects.get(pk=action_out.id)
         condition = Condition.objects.get(pk=condition.id)
-        filter_obj = action_out.get_filter()
+        filter_formula = action_out.get_filter_formula()
 
         # Post conditions
         # Column name is the correct one
@@ -849,8 +848,8 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         # Attribute name is present in action_out text
         self.assertTrue('{{ attribute name new }}' in action_out.content)
         # Column age is present in action-in filter
-        self.assertFalse(has_variable(filter_obj.formula, 'age'))
-        self.assertTrue(has_variable(filter_obj.formula, 'age new'))
+        self.assertFalse(has_variable(filter_formula, 'age'))
+        self.assertTrue(has_variable(filter_formula, 'age new'))
 
         # End of session
         self.logout()

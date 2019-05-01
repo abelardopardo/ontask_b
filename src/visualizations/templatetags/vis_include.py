@@ -5,7 +5,11 @@ from django import template
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
-from action.evaluate import action_context_var, viz_number_context_var, tr_item
+from action.evaluate_template import (
+    action_context_var,
+    viz_number_context_var,
+    tr_item,
+)
 from dataops import pandas_db
 from visualizations.plotly import PlotlyColumnHistogram
 
@@ -40,13 +44,10 @@ def vis_html_content(context, column_name):
     if ivalue is not None:
         viz_ctx['individual_value'] = ivalue
 
-    # Get the condition filter
-    cond_filter = action.get_filter()
-
     # Get the data from the data frame
     df = pandas_db.get_subframe(
         workflow.get_data_frame_table_name(),
-        cond_filter,
+        action.get_filter_formula(),
         [column_name])
 
     # Get the visualisation
