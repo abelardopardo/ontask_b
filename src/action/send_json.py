@@ -51,7 +51,12 @@ def send_and_log_json(
         context)
 
 
-def send_json(user, action, token, key_column, exclude_values, log_item):
+def send_json(
+    user,
+    action,
+    log_item,
+    action_info,
+):
     """Send json objects to target URL.
 
     Sends the json objects evaluated per row to the URL in the action
@@ -66,13 +71,14 @@ def send_json(user, action, token, key_column, exclude_values, log_item):
     # Evaluate the action string and obtain the list of list of JSON objects
     action_evals = evaluate_action(
         action,
-        column_name=key_column,
-        exclude_values=exclude_values)
+        column_name=action_info['key_column'],
+        exclude_values=action_info['exclude_values'],
+    )
 
     # Create the headers to use for all requests
     headers = {
         'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'Authorization': 'Bearer {0}'.format(token),
+        'Authorization': 'Bearer {0}'.format(action_info['token']),
     }
 
     # Create the context for the log events

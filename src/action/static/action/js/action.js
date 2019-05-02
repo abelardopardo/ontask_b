@@ -20,8 +20,8 @@ var insertText = function(areaId, insert_text) {
 }
 var insertConditionInContent = function() {
   var btn = $(this);
-  if (typeof $('#id_txt_content').summernote != 'undefined') {
-    var range = $("#id_txt_content").summernote('createRange');
+  if (typeof $('#id_text_content').summernote != 'undefined') {
+    var range = $("#id_text_content").summernote('createRange');
     condition_text = gettext('YOUR TEXT HERE');
     range_text = range.toString();
     if (range_text != '') {
@@ -32,7 +32,7 @@ var insertConditionInContent = function() {
   }
   insert_text = "{% if " + btn.text() +
       " %}" + condition_text + "{% endif %}";
-  insertText('id_txt_content', insert_text);
+  insertText('id_text_content', insert_text);
   $(this).val(this.defaultSelected);
 };
 var insertAttributeInContent = function() {

@@ -2,7 +2,7 @@
 
 """Direct SQL operations in the DB."""
 
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Tuple, Union, Optional
 
 import psycopg2.extras
 from django.db import connection
@@ -116,7 +116,7 @@ def select_id_all_false(
 def get_table_select_cursor(
     table_name: str,
     filter_formula,
-    column_names: Union[None, List[str]] = None,
+    column_names: Optional[List[str]] = None,
 ):
     """Get a DB cursor with the result of a SELECT query for a single row.
 

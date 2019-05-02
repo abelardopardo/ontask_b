@@ -24,11 +24,11 @@
     {% endwith %}
     {% if load_summernote %}
       $(document).ready(function() {
-        if (document.getElementById("id_content") != null) {
+        if (document.getElementById("id_text_content") != null) {
           initSummernote();
         }
       });
-      $("#id_content").on("summernote.paste",function(e,ne) {
+      $("#id_text_content").on("summernote.paste",function(e,ne) {
         var bufferText = ((ne.originalEvent || ne).clipboardData || window.clipboardData).getData('Text');
         ne.preventDefault();
         document.execCommand('insertText', false, bufferText);

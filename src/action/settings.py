@@ -6,9 +6,6 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-TEMPLATE_LENGTH = 65536
-SUBJECT_LENGTH = 1024
-SENDER_LENGTH = 1024
 
 NOTIFICATION_TEMPLATE = getattr(
     settings,
@@ -62,17 +59,17 @@ if 'siteprefs' in settings.INSTALLED_APPS:
                     NOTIFICATION_TEMPLATE,
                     verbose_name=_('Template to send email notification'),
                     static=False,
-                    field=models.TextField(max_length=TEMPLATE_LENGTH)),
+                    field=models.TextField(max_length=65536)),
                 pref(
                     NOTIFICATION_SUBJECT,
                     verbose_name=_('Subject line for notification messages'),
                     static=False,
-                    field=models.CharField(max_length=SUBJECT_LENGTH)),
+                    field=models.CharField(max_length=1024)),
                 pref(
                     NOTIFICATION_SENDER,
                     verbose_name=_('To: field in notification emails'),
                     static=False,
-                    field=models.CharField(max_length=SENDER_LENGTH)),
+                    field=models.CharField(max_length=1024)),
             ),
             static=False,
         ),

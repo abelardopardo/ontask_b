@@ -30,9 +30,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from action.forms import SUFFIX_LENGTH
 from action.models import Action
+from action.payloads import EmailPayload
 from dataops.pandas_db import (
-    execute_select_on_table, get_table_data,
-    is_column_table_unique,
+    execute_select_on_table, get_table_data, is_column_table_unique,
 )
 from dataops.sql_query import get_table_select_cursor
 from ontask import is_correct_email
@@ -95,54 +95,48 @@ class EmailActionForm(forms.Form):
         """Store column names, action, payload, and adjust initial values."""
         self.column_names: List[str] = kargs.pop('column_names')
         self.action: Action = kargs.pop('action')
-        self.op_payload: Dict = kargs.pop('op_payload')
+        self.action_info: EmailPayload = kargs.pop('op_payload')
 
         super().__init__(*args, **kargs)
 
-        # Set the initial values from the payload
-        self.fields['subject'].initial = self.op_payload.get('subject', '')
-        email_column = self.op_payload.get('item_column', None)
-        self.fields['cc_email'].initial = self.op_payload.get('cc_email', '')
-        self.fields['bcc_email'].initial = self.op_payload.get('bcc_email', '')
-        self.fields['confirm_items'].initial = self.op_payload.get(
-            'confirm_items',
-            default=False,
-        )
-        self.fields['send_confirmation'].initial = self.op_payload.get(
-            'send_confirmation',
-            default=False,
-        )
-        self.fields['track_read'].initial = self.op_payload.get(
-            'track_read',
-            default=False,
-        )
-        self.fields['export_wf'].initial = self.op_payload.get(
-            'export_wf',
-            default=False,
-        )
-
-        if email_column is None:
+        email_column_name = self.fields['email_column']. initial
+        if email_column_name is None:
             # Try to guess if there is an "email" column
-            email_column = next(
+            email_column_name = next(
                 (cname for cname in self.column_names
                  if cname.lower() == 'email'),
                 None,
             )
 
-        if email_column is None:
-            email_column = ('', '---')
+        if email_column_name is None:
+            email_column_name = ('', '---')
         else:
-            email_column = (email_column, email_column)
+            email_column_name = (email_column_name, email_column_name)
 
-        email_field = self.fields['email_column']
-        email_field.initial = email_column
-        email_field.choices = [(cname, cname) for cname in self.column_names]
+        self.fields['email_column'].initial = email_column_name
+        self.fields['email_column'].choices = [
+            (cname, cname) for cname in self.column_names]
 
     def clean(self):
         """Verify email values."""
         form_data = super().clean()
 
-        email_column = self.cleaned_data['email_column']
+        # Move data to the payload so that is ready to be used
+        self.action_info['subject'] = form_data['subject']
+        self.action_info['item_column'] = form_data['email_column']
+        self.action_info['cc_email'] = [
+            email.strip()
+            for email in form_data['cc_email'].split(',') if email]
+        self.action_info['bcc_email'] = [
+            email.strip()
+            for email in form_data['bcc_email'].split(',') if email]
+        self.action_info['confirm_items'] = form_data['confirm_items']
+        self.action_info['send_confirmation'] = form_data[
+            'send_confirmation'
+        ]
+        self.action_info['track_read'] = form_data['track_read']
+        self.action_info['export_wf'] = form_data['export_wf']
+        self.action_info['exclude_values'] = []
 
         # Check if the values in the email column are correct emails
         try:
@@ -150,7 +144,7 @@ class EmailActionForm(forms.Form):
                 self.action.workflow.get_data_frame_table_name(),
                 [],
                 [],
-                column_names=[email_column],
+                column_names=[self.action_info['item_column']],
             )
             if not all(is_correct_email(cdata[0]) for cdata in column_data):
                 # column has incorrect email addresses
@@ -165,9 +159,7 @@ class EmailActionForm(forms.Form):
             )
 
         all_correct = all(
-            is_correct_email(email.strip())
-            for email in self.cleaned_data['cc_email'].split(',')
-            if email
+            is_correct_email(email) for email in self.action_info['cc_email']
         )
         if not all_correct:
             self.add_error(
@@ -176,9 +168,7 @@ class EmailActionForm(forms.Form):
             )
 
         all_correct = all(
-            is_correct_email(email)
-            for email in self.cleaned_data['bcc_email'].split(',')
-            if email
+            is_correct_email(email) for email in self.action_info['bcc_email']
         )
         if not all_correct:
             self.add_error(
@@ -224,7 +214,7 @@ class ZipActionForm(forms.Form):
         label=_('This ZIP will be uploaded to Moodle as feedback'),
     )
 
-    confirm_users = forms.BooleanField(
+    confirm_items = forms.BooleanField(
         initial=False,
         required=False,
         label=_('Check/exclude users before sending?'),
@@ -234,16 +224,13 @@ class ZipActionForm(forms.Form):
         """Store column names, action and payload, adjust fields."""
         self.column_names: List = kargs.pop('column_names')
         self.action: Action = kargs.pop('action')
-        self.op_payload: Dict = kargs.pop('op_payload')
+        self.action_info: Dict = kargs.pop('action_info')
 
         super().__init__(*args, **kargs)
 
         # Set the initial values from the payload
-        user_fname_column = self.op_payload.get(
-            'user_fname_column',
-            default=None,
-        )
-        participant_column = self.op_payload.get('item_column', default=None)
+        user_fname_column = self.action_info.get('user_fname_column')
+        participant_column = self.action_info.get('item_column', default=None)
 
         ufn_field = self.fields['user_fname_column']
         if user_fname_column:
@@ -265,14 +252,16 @@ class ZipActionForm(forms.Form):
             ]
             pc_field.initial = ('', '---')
 
-        self.fields['confirm_users'].initial = self.op_payload.get(
-            'confirm_users',
-            default=False,
-        )
-
     def clean(self):
         """Detect uniques values in one column, and different column names."""
         form_data = super().clean()
+
+        # Move data to the payload so that is ready to be used
+        self.action_info['item_column'] = form_data['participant_column']
+        self.action_info['user_fname_column'] = form_data['user_fname_column']
+        self.action_info['file_suffix'] = form_data['file_suffix']
+        self.action_info['zip_for_moodle'] = form_data['zip_for_moodle']
+        self.action_info['confirm_items'] = form_data['confirm_items']
 
         # Participant column must be unique
         pcolumn = form_data['participant_column']
@@ -368,28 +357,21 @@ class JSONBasicActionForm(forms.Form):
     def __init__(self, *args, **kargs):
         """Store column names, payload and modify key_column and confirm."""
         self.column_names: List = kargs.pop('column_names')
-        self.op_payload: Dict = kargs.pop('op_payload')
+        self.action_info: Dict = kargs.pop('action_info')
 
         super().__init__(*args, **kargs)
 
         # Handle the key column setting the initial value if given and
         # selecting the choices
-        key_column = self.op_payload.get('item_column', None)
+        key_column = self.action_info.get('item_column', None)
         if key_column is None:
             key_column = ('', '---')
         else:
             key_column = (key_column, key_column)
 
-        k_field = self.fields['key_column']
-        k_field.initial = key_column
-        k_field.choices = [('', '---')] + [
-            (cname, cname) for cname in self.column_names
-        ]
-
-        self.fields['confirm_items'].initial = self.op_payload.get(
-            'confirm_items',
-            default=False,
-        )
+        self.fields['key_column'].initial = key_column
+        self.fields['key_column'].choices = [
+            (cname, cname) for cname in self.column_names]
 
 
 class JSONActionForm(JSONBasicActionForm):
@@ -416,14 +398,23 @@ class JSONActionForm(JSONBasicActionForm):
         self.fields['key_column'].label = _(
             'Column to exclude objects to send (empty to skip step)',
         )
-        self.fields['key_column'].required = False
 
-        self.fields['token'].initial = self.op_payload.get('token', '')
         self.fields['token'].help_text = _(
             'Authentication token provided by the external platform.',
         )
 
         self.order_fields(['key_column', 'token', 'confirm_items'])
+
+    def clean(self):
+        """Verify form values."""
+        form_data = super().clean()
+
+        # Move data to the payload so that is ready to be used
+        self.action_info['token'] = form_data['token']
+        self.action_info['item_column'] = form_data['key_column']
+        self.action_info['exclude_values'] = []
+
+        return form_data
 
 
 class CanvasEmailActionForm(JSONBasicActionForm):
@@ -466,15 +457,7 @@ class CanvasEmailActionForm(JSONBasicActionForm):
         self.fields['confirm_items'].label = _(
             'Check/Exclude Canvas IDs before sending?',
         )
-        self.fields['subject'].initial = self.op_payload.get('subject', '')
-        self.fields['confirm_items'].initial = self.op_payload.get(
-            'confirm_items',
-            default=False,
-        )
-        self.fields['export_wf'].initial = self.op_payload.get(
-            'export_wf',
-            default=False,
-        )
+
         self.order_fields(
             ['key_column',
              'subject',
@@ -482,6 +465,29 @@ class CanvasEmailActionForm(JSONBasicActionForm):
              'confirm_items',
              'export_wf'],
         )
+
+    def clean(self):
+        """Verify email values."""
+        form_data = super().clean()
+
+        # Move data to the payload so that is ready to be used
+        self.action_info['subject'] = form_data['subject']
+        self.action_info['item_column'] = form_data['key_column']
+        self.action_info['confirm_items'] = form_data['confirm_items']
+        self.action_info['export_wf'] = form_data['export_wf']
+        if not form_data.get('target_url'):
+            self.action_info['target_url'] = next(
+                iter(ontask_settings.CANVAS_INFO_DICT.keys()),
+            )
+        if not self.action_info['target_url']:
+            self.add_error(
+                None,
+                _('No Canvas Service available for this action.'),
+            )
+
+        self.action_info['exclude_values'] = []
+
+        return form_data
 
     class Meta(JSONBasicActionForm):
         """Set the size for the subject field."""

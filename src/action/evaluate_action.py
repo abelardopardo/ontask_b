@@ -13,7 +13,7 @@
 
 from builtins import str
 from datetime import datetime
-from typing import Dict, List, Mapping, Tuple, Union
+from typing import Dict, List, Mapping, Optional, Tuple, Union
 
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
@@ -31,7 +31,7 @@ from dataops.sql_query import get_table_select_cursor
 def action_condition_evaluation(
     action: Action,
     row_values: Mapping,
-) -> Union[Dict[str, bool], None]:
+) -> Optional[Dict[str, bool]]:
     """Calculate dictionary with column_name: Boolean evaluations.
 
     :param action: Action objects to obtain the columns
@@ -95,7 +95,7 @@ def action_evaluation_context(
     action: Action,
     row_values: Mapping,
     condition_eval: Mapping = None,
-) -> Union[Dict, None]:
+) -> Optional[Dict]:
     """Create a dictionary with name:value to evaluate action content.
 
     :param action: Action object for which the dictionary is needed
@@ -126,9 +126,8 @@ def action_evaluation_context(
                 # Something went wrong evaluating a condition. Stop.
                 return None
 
-    # Step 2: Create the context with the attributes, the evaluation of the
+    # Create the context with the attributes, the evaluation of the
     # conditions and the values of the columns.
-
     return dict(
         dict(row_values, **condition_eval),
         **action.workflow.attributes,

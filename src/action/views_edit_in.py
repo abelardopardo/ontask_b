@@ -2,25 +2,103 @@
 
 """Views for editing Surveys and TODO_list actions."""
 
-from typing import Union
+from typing import Optional
 
+import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
+from action.forms import ActionDescriptionForm
 from action.models import Action, ActionColumnConditionTuple
-from action.views_action import ColumnSelectedTable
+from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from visualizations.plotly import PlotlyHandler
 from workflow.models import Workflow
 from workflow.ops import get_workflow
+
+
+class ColumnSelectedTable(tables.Table):
+    """Table to render the columns selected for a given action in."""
+
+    column__name = tables.Column(verbose_name=_('Name'))  # noqa: Z116
+    column__description_text = tables.Column(   # noqa: Z116
+        verbose_name=_('Description (shown to learners)'),
+        default='',
+    )
+    condition = tables.Column(  # noqa: Z116
+        verbose_name=_('Condition'),
+        empty_values=[-1],
+    )
+
+    # Template to render the extra column created dynamically
+    ops_template = 'action/includes/partial_column_selected_operations.html'
+
+    def __init__(self, *args, **kwargs):
+        """Store the condition list."""
+        self.condition_list = kwargs.pop('condition_list')
+        super().__init__(*args, **kwargs)
+
+    def render_column__name(self, record):  # noqa: Z116
+        """Render as a link."""
+        return format_html(
+            '<a href="#" data-toggle="tooltip"'
+            + ' class="js-workflow-question-edit" data-url="{0}"'
+            + ' title="{1}">{2}</a>',
+            reverse(
+                'workflow:question_edit',
+                kwargs={'pk': record['column__id']}),
+            _('Edit the question'),
+            record['column__name'],
+        )
+
+    def render_condition(self, record):
+        """Render with template to select condition."""
+        return render_to_string(
+            'action/includes/partial_column_selected_condition.html',
+            {
+                'id': record['id'],
+                'cond_selected': record['condition__name'],
+                'conditions': self.condition_list,
+            },
+        )
+
+    class Meta(object):
+        """Define fields, sequence, attrs and row attrs."""
+
+        fields = (
+            'column__id',
+            'column__name',
+            'column__description_text',
+            'condition',
+            'operations')
+
+        sequence = (
+            'column__name',
+            'column__description_text',
+            'condition',
+            'operations')
+
+        attrs = {
+            'class': 'table table-hover table-bordered',
+            'style': 'width: 100%;',
+            'id': 'column-selected-table',
+        }
+
+        row_attrs = {
+            'class': lambda record: 'danger' if not record[
+                'column__description_text'
+            ] else '',
+        }
 
 
 def edit_action_in(
@@ -106,7 +184,7 @@ def select_column_action(
     request: HttpRequest,
     apk: int,
     cpk: int,
-    key: Union[None, bool] = None,
+    key: Optional[bool] = None,
 ) -> JsonResponse:
     """Operation to add a column to action in.
 
@@ -209,7 +287,7 @@ def unselect_column_action(
 def select_condition(
     request: HttpRequest,
     tpk: int,
-    condpk: Union[None, int] = None,
+    condpk: Optional[int] = None,
 ) -> JsonResponse:
     """Select condition for action in.
 
@@ -283,3 +361,67 @@ def shuffle_questions(request: HttpRequest, pk: int) -> HttpResponse:
     action.save()
 
     return JsonResponse({'shuffle': action.shuffle})
+
+
+@user_passes_test(is_instructor)
+def edit_description(request: HttpRequest, pk: int) -> JsonResponse:
+    """Edit the description attached to an action.
+
+    :param request: AJAX request
+    :param pk: Action ID
+    :return: AJAX response
+    """
+    # Try to get the workflow first
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        return JsonResponse(
+            {'form_is_valid': True,
+             'html_redirect': reverse('home')})
+
+    # Get the action
+    action = workflow.actions.filter(
+        pk=pk,
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user),
+    ).first()
+    if not action:
+        return JsonResponse(
+            {'form_is_valid': True,
+             'html_redirect': reverse('action:index')})
+
+    # Initial result. In principle, re-render page
+    resp_data = {'form_is_valid': False}
+
+    # Create the form
+    form = ActionDescriptionForm(
+        request.POST or None,
+        instance=action)
+
+    if request.method == 'GET' or not form.is_valid():
+        resp_data['html_form'] = render_to_string(
+            'action/includes/partial_action_edit_description.html',
+            {'form': form, 'action': action},
+            request=request)
+
+        return JsonResponse(resp_data)
+
+    # Process the POST
+    # Save item in the DB
+    action.save()
+
+    # Log the event
+    Log.objects.register(
+        request.user,
+        Log.ACTION_UPDATE,
+        action.workflow,
+        {'id': action.id,
+         'name': action.name,
+         'workflow_id': workflow.id,
+         'workflow_name': workflow.name})
+
+    # Request is correct
+    resp_data['form_is_valid'] = True
+    resp_data['html_redirect'] = ''
+
+    # Enough said. Respond.
+    return JsonResponse(resp_data)

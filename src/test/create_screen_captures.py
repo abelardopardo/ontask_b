@@ -663,7 +663,7 @@ class ScreenTestFixture(ScreenTests):
         )
 
         self.select_canvas_text_tab()
-        self.selenium.find_element_by_id('id_content').send_keys(
+        self.selenium.find_element_by_id('id_text_content').send_keys(
             """Dear {{ GivenName }}
 
 We recommend that you review the discussions in the online forum about the topics we are going to cover this week

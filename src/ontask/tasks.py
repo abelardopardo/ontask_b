@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-
-
+import contextlib
 import datetime
 from builtins import str
 from datetime import datetime, timedelta
+from typing import Mapping
 
 import pytz
 from celery import shared_task
+from celery.bin.control import inspect
 from celery.utils.log import get_task_logger
 from django.conf import settings as ontask_settings
 from django.contrib.auth import get_user_model
@@ -14,6 +15,7 @@ from django.core import signing
 from django.utils.translation import ugettext
 
 from action.models import Action
+from action.payloads import JSONPayload
 from action.send_canvas_email import send_canvas_messages
 from action.send_json import send_json
 from action.send_messages import send_messages
@@ -26,6 +28,17 @@ from workflow.models import Workflow
 from workflow.ops import do_workflow_update_lusers
 
 logger = get_task_logger('celery_execution')
+
+
+def celery_is_up():
+    """Check if celery is up.
+
+    :return: Boolean encoding if the process is running
+    """
+    # Verify that celery is running!
+    with contextlib.suppress(Exception):
+        celery_stats = inspect().stats()
+        return celery_stats is not None
 
 
 def get_log_item(log_id):
@@ -133,32 +146,20 @@ def get_execution_items(user_id, action_id, log_id):
 
 
 @shared_task
-def send_email_messages(user_id,
-                        action_id,
-                        subject,
-                        email_column,
-                        from_email,
-                        cc_email_list,
-                        bcc_email_list,
-                        send_confirmation,
-                        track_read,
-                        exclude_values,
-                        log_id):
-    """
-    This function invokes send_messages in action/ops.py, gets the message
+def send_email_messages(
+    user_id: int,
+    log_id: int,
+    action_info: Mapping
+) -> bool:
+    """Task to invoke send_messages to send email messages from action.
+
+    This function invokes send_messages in action, gets the message
     that may be sent as a result, and records the appropriate events.
 
     :param user_id: Id of User object that is executing the action
-    :param action_id: Id of Action object from where the messages are taken
-    :param subject: String for the email subject
-    :param email_column: Name of the column to extract email addresses
-    :param from_email: String with email from sender
-    :param cc_email_list: List of CC emails
-    :param bcc_email_list: List of BCC emails
-    :param send_confirmation: Boolean to send confirmation to sender
-    :param track_read: Boolean to try to track reads
-    :param exclude_values: List of values to exclude from the mailing
     :param log_id: Id of the log object where the status has to be reflected
+    :param action_info: EmailPayload object with the required pairs key, value
+
     :return: bool stating if execution has been correct
     """
     # First get the log item to make sure we can record diagnostics
@@ -166,27 +167,21 @@ def send_email_messages(user_id,
     if not log_item:
         return False
 
-    to_return = True
     try:
         user = get_user(user_id)
 
-        action = get_action(user, action_id)
+        action = get_action(user, action_info['action_id'])
 
         # Set the status to "executing" before calling the function
         log_item.payload['status'] = 'Executing'
         log_item.save()
 
-        send_messages(user,
-                      action,
-                      subject,
-                      email_column,
-                      from_email,
-                      cc_email_list,
-                      bcc_email_list,
-                      send_confirmation,
-                      track_read,
-                      exclude_values,
-                      log_item)
+        send_messages(
+            user,
+            action,
+            log_item,
+            action_info)
+
         # Reflect status in the log event
         log_item.payload['status'] = 'Execution finished successfully'
         log_item.save()
@@ -194,21 +189,19 @@ def send_email_messages(user_id,
         log_item.payload['status'] = \
             ugettext('Error: {0}').format(e)
         log_item.save()
-        to_return = False
+        return False
 
-    return to_return
+    return True
 
 
 @shared_task
-def send_canvas_email_messages(user_id,
-                               action_id,
-                               subject,
-                               email_column,
-                               exclude_values,
-                               target_url,
-                               log_id):
+def send_canvas_email_messages(
+    user_id: int,
+    log_id: int,
+    action_info: Mapping
+) -> bool:
     """
-    This function invokes send_messages in action/ops.py, gets the message
+    This function invokes send_messages in action, gets the message
     that may be sent as a result, and records the appropriate events.
 
     :param user_id: Id of User object that is executing the action
@@ -226,23 +219,22 @@ def send_canvas_email_messages(user_id,
     if not log_item:
         return False
 
-    to_return = True
     try:
         user = get_user(user_id)
 
-        action = get_action(user, action_id)
+        action = get_action(user, action_info['action_id'])
 
         # Set the status to "executing" before calling the function
         log_item.payload['status'] = 'Executing'
         log_item.save()
 
-        send_canvas_messages(user,
-                             action,
-                             subject,
-                             email_column,
-                             exclude_values,
-                             target_url,
-                             log_item)
+        send_canvas_messages(
+            user,
+            action,
+            log_item,
+            action_info,
+        )
+
         # Reflect status in the log event
         log_item.payload['status'] = 'Execution finished successfully'
         log_item.save()
@@ -250,21 +242,22 @@ def send_canvas_email_messages(user_id,
         log_item.payload['status'] = \
             ugettext('Error: {0}').format(e)
         log_item.save()
-        to_return = False
 
-    return to_return
+        return False
+
+    return True
 
 
 @shared_task
-def send_json_objects(user_id,
-                      action_id,
-                      token,
-                      key_column,
-                      exclude_values,
-                      log_id):
-    """
-    This function invokes send_json in action/ops.py, gets the JSON objects
-    that may be sent as a result, and records the appropriate events.
+def send_json_objects(
+    user_id: int,
+    log_id: Log,
+    action_info: JSONPayload,
+) -> bool:
+    """Invokes send_json in action
+
+    Gets the JSON objects that may be sent as a result, and records the
+    appropriate events.
 
     :param user_id: Id of User object that is executing the action
     :param action_id: Id of Action object from where the messages are taken
@@ -274,7 +267,6 @@ def send_json_objects(user_id,
     :param log_id: Id of the log object where the status has to be reflected
     :return: Nothing
     """
-
     # First get the log item to make sure we can record diagnostics
     log_item = get_log_item(log_id)
     if not log_item:
@@ -284,18 +276,14 @@ def send_json_objects(user_id,
     try:
         user = get_user(user_id)
 
-        action = get_action(user, action_id)
+        action = get_action(user, action_info['action_id'])
 
         # Set the status to "executing" before calling the function
         log_item.payload['status'] = 'Executing'
         log_item.save()
 
-        send_json(user,
-                  action,
-                  token,
-                  key_column,
-                  exclude_values,
-                  log_item)
+        send_json(user, action, log_item, action_info)
+
         # Reflect status in the log event
         log_item.payload['status'] = 'Execution finished successfully'
         log_item.save()

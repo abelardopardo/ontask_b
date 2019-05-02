@@ -23,7 +23,7 @@ from django_tables2 import A
 from past.utils import old_div
 
 from action.models import Action
-from action.views_out import action_session_dictionary
+from action.payloads import action_session_dictionary
 from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
@@ -451,7 +451,7 @@ def finish_scheduling(request, schedule_item=None, payload=None):
     tdelta = schedule_item.execute - now
 
     # Reset object to carry action info throughout dialogs
-    request.session[action_session_dictionary] = {}
+    request.session[action_session_dictionary] = None
     request.session.save()
 
     # Create the timedelta string

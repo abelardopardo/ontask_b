@@ -1,37 +1,72 @@
 # -*- coding: utf-8 -*-
 
-"""Views to run actions."""
-import random
-from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
+"""Views to run and serve actions."""
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.db.models import Q
-from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
 
 from action.evaluate_action import (
-    action_condition_evaluation, action_evaluation_context, get_row_values,
+    action_evaluation_context, evaluate_row_action_out, get_row_values,
 )
-from action.form_edit import EnterActionIn
-from action.forms import field_prefix
 from action.forms_run import ValueExcludeForm
 from action.models import Action
-from action.ops import get_workflow_action, serve_action_out
-from action.views_out import (
-    run_canvas_email_action, run_email_action, run_json_action,
-)
-from dataops import pandas_db
+from action.payloads import get_action_payload
+from action.views_run_action_in import get_workflow_action, run_survey_action
+from action.views_run_canvas_email import run_canvas_email_action
+from action.views_run_email import run_email_action
+from action.views_run_json import run_json_action
+from action.views_serve_action_in import serve_action_in
 from logs.models import Log
-from ontask import get_action_payload
+from ontask import OnTaskEmptyWorkflow, OnTaskNoWorkflow
 from ontask.permissions import is_instructor
-from ontask.views import ontask_handler404
-from workflow.ops import get_workflow
+
+fn_distributor = {
+    Action.personalized_text: run_email_action,
+    Action.personalized_canvas_email: run_canvas_email_action,
+    Action.personalized_json: run_json_action,
+    Action.survey: run_survey_action,
+}
+
+
+@user_passes_test(is_instructor)
+def run(request: HttpRequest, pk: int) -> HttpResponse:
+    """Run specific run action view depending on action type.
+
+    If it is a Survey or todo, renders a table with all rows that
+    satisfy the filter condition and includes a link to enter data for each
+    of them.
+
+    :param request: HttpRequest
+    :param pk: Action id. It is assumed to be an action In
+    :return: HttpResponse
+    """
+    # Get the workflow and action
+    try:
+        workflow, action = get_workflow_action(request, pk)
+    except OnTaskNoWorkflow:
+        return redirect(reverse('action:index'))
+    except OnTaskEmptyWorkflow:
+        messages.error(
+            request,
+            'Workflow has no data. Go to "Manage table data" to upload data.',
+        )
+        return redirect(reverse('action:index'))
+    except Exception:
+        messages.error(request, _('Incorrect action request.'))
+        return redirect(reverse('action:index'))
+
+    if action.action_type not in fn_distributor:
+        # Incorrect type of action.
+        return redirect(reverse('action:index'))
+
+    return fn_distributor[action.action_type](request, workflow, action)
 
 
 @csrf_exempt
@@ -81,378 +116,48 @@ def serve(request: HttpRequest, action_id: int) -> HttpResponse:
     if action.is_out:
         return serve_action_out(request.user, action, user_attribute_name)
 
-    return serve_action_in(request, action, user_attribute_name, False)
-
-
-@user_passes_test(is_instructor)
-def run(request: HttpRequest, pk: int) -> HttpResponse:
-    """Run specific run action view depending on action type.
-
-    If it is a Survey or todo, renders a table with all rows that
-    satisfy the filter condition and includes a link to enter data for each
-    of them.
-
-    :param request: HttpRequest
-    :param pk: Action id. It is assumed to be an action In
-    :return: HttpResponse
-    """
-    # Get the workflow and action
-    workflow, action = get_workflow_action(request, pk)
-
-    # If nothing found, return
-    if not workflow:
-        return redirect(reverse('action:index'))
-
-    if action.action_type == Action.personalized_text:
-        return run_email_action(request, workflow, action)
-
-    if action.action_type == Action.survey \
-        or action.action_type == Action.todo_list:
-        # Render template with active columns.
-        response = render(
-            request,
-            'action/run_survey.html',
-            {
-                'columns': [
-                    cc_pair.column
-                    for cc_pair in action.column_condition_pair.all()
-                    if cc_pair.column.is_active],
-                'action': action,
-            },
-        )
-
-    elif action.action_type == Action.personalized_canvas_email:
-        response = run_canvas_email_action(request, workflow, action)
-
-    elif action.action_type == Action.personalized_json:
-        response = run_json_action(request, workflow, action)
-    else:
-        # Incorrect type of action.
-        response = redirect(reverse('action:index'))
-
-    return response
-
-
-@user_passes_test(is_instructor)
-@csrf_exempt
-@require_http_methods(['POST'])
-def run_survey_ss(request: HttpRequest, pk: int) -> JsonResponse:
-    """Show elements in table that satisfy filter request.
-
-    Serve the AJAX requests to show the elements in the table that satisfy
-    the filter and between the given limits.
-    :param request:
-    :param pk: action id being run
-    :return:
-    """
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return JsonResponse(
-            {'error': _('Incorrect request. Unable to process')},
-        )
-
-    # If there is not DF, go to workflow details.
-    if not workflow.has_table():
-        return JsonResponse({'error': _('There is no data in the table')})
-
-    # Get the action
-    action = workflow.actions.filter(
-        pk=pk,
-    ).filter(
-        Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-    ).first()
-    if not action:
-        return redirect('action:index')
-
-    # Check that the GET parameter are correctly given
-    try:
-        draw = int(request.POST.get('draw', None))
-        start = int(request.POST.get('start', None))
-        length = int(request.POST.get('length', None))
-        order_col = request.POST.get('order[0][column]', None)
-        order_dir = request.POST.get('order[0][dir]', 'asc')
-    except ValueError:
-        return JsonResponse(
-            {'error': _('Incorrect request. Unable to process')},
-        )
-
-    # Get the column information from the request and the rest of values.
-    search_value = request.POST.get('search[value]', None)
-
-    # Get columns and the position of the first key
-    columns = [ccpair.column for ccpair in action.column_condition_pair.all()]
-    column_names = [col.name for col in columns]
-    key_idx = next(idx for idx, col in enumerate(columns) if col.is_key)
-
-    # See if an order column has been given.
-    if order_col:
-        order_col = columns[int(order_col)]
-
-    # Get the search pairs of field, value
-    cv_tuples = []
-    if search_value:
-        cv_tuples = [
-            (col.name, search_value, col.data_type) for col in columns]
-
-    # Get the query set (including the filter in the action)
-    qs = pandas_db.search_table_rows(
-        workflow.get_data_frame_table_name(),
-        cv_tuples,
-        True,
-        order_col.name,
-        order_dir == 'asc',
-        column_names,  # Column names in the action
-        action.get_filter_formula(),
-    )
-
-    # Post processing + adding operations
-    final_qs = []
-    item_count = 0
-    for row in qs[start:start + length]:
-        item_count += 1
-
-        # Render the first element (the key) as the link to the page to update
-        # the content.
-        dst_url = reverse('action:run_survey_row', kwargs={'pk': action.id})
-        url_parts = list(urlparse(dst_url))
-        query = dict(parse_qs(url_parts[4]))
-        query.update({'uatn': column_names[key_idx], 'uatv': row[key_idx]})
-        url_parts[4] = urlencode(query)
-        link_item = '<a href="{0}">{1}</a>'.format(
-            urlunparse(url_parts), row[key_idx],
-        )
-        row = list(row)
-        row[key_idx] = link_item
-
-        # Add the row for rendering
-        final_qs.append(row)
-
-        if item_count == length:
-            # We reached the number or requested elements, abandon loop
-            break
-
-    return JsonResponse({
-        'draw': draw,
-        'recordsTotal': workflow.nrows,
-        'recordsFiltered': len(qs),
-        'data': final_qs,
-    })
-
-
-@user_passes_test(is_instructor)
-def run_survey_row(request: HttpRequest, pk: int) -> HttpResponse:
-    """Render form for introducing information in a single row.
-
-    Function that runs the action in for a single row. The request
-    must have query parameters uatn = key name and uatv = key value to
-    perform the lookup.
-
-    :param request:
-    :param pk: Action id. It is assumed to be an action In
-    :return:
-    """
-    # Get the workflow first
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return redirect('home')
-
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _('Workflow has no data. '
-              + 'Go to "Manage table data" to upload data.'),
-        )
-        return redirect(reverse('action:index'))
-
-    # Get the action
-    action = workflow.actions.filter(
-        pk=pk,
-    ).filter(
-        Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-    ).first()
-    if not action:
-        return redirect('action:index')
-
-    # If the action is an "out" action, return to index
-    if action.is_out:
-        return redirect('action:index')
-
-    # Get the parameters
-    user_attribute_name = request.GET.get('uatn', 'email')
-
-    return serve_action_in(request, action, user_attribute_name, True)
-
-
-def serve_action_in(
-    request: HttpRequest,
-    action: Action,
-    user_attribute_name: str,
-    is_inst: bool,
-) -> HttpResponse:
-    """Serve a request for action in.
-
-    Function that given a request, and an action IN, it performs the lookup
-     and data input of values.
-    :param request: HTTP request
-    :param action:  Action In
-    :param user_attribute_name: The column name used to check for email
-    :param is_inst: Boolean stating if the user is instructor
-    :return:
-    """
-    # Get the attribute value
-    if is_inst:
-        user_attribute_value = request.GET.get('uatv', None)
-    else:
-        user_attribute_value = request.user.email
-
-    # Get the active columns attached to the action
-    colcon_items = [
-        pair for pair in action.column_condition_pair.all()
-        if pair.column.is_active
-    ]
-
-    if action.shuffle:
-        # Shuffle the columns if needed
-        random.seed(request.user)
-        random.shuffle(colcon_items)
-
-    # Get the row values. User_instance has the record used for verification
-    # User_instance has the record used for verification
-    row_values = get_row_values(
-        action,
-        (user_attribute_name, user_attribute_value))
-    # Obtain the dictionary with the condition evaluation
-    condition_evaluation = action_condition_evaluation(action, row_values)
-    # Get the dictionary containing column names, attributes and condition
-    # valuations:
-    context = action_evaluation_context(
-        action,
-        row_values,
-        condition_evaluation)
-
-    if not row_values:
-        # If the data has not been found, flag
-        if not is_inst:
-            return ontask_handler404(request, None)
-
-        messages.error(
-            request,
-            _('Data not found in the table'))
-        return redirect(reverse('action:run', kwargs={'pk': action.id}))
-
-    # Bind the form with the existing data
-    form = EnterActionIn(
-        request.POST or None,
-        tuples=colcon_items,
-        context=context,
-        values=[context[colcon.column.name] for colcon in colcon_items],
-        show_key=is_inst)
-
-    cancel_url = None
-    if is_inst:
-        cancel_url = reverse('action:run', kwargs={'pk': action.id})
-
-    no_process = (
-        request.method == 'GET'
-        or not form.is_valid()
-        or request.POST.get('lti_version', None))
-    if no_process:
-        return render(
-            request,
-            'action/run_survey_row.html',
-            {'form': form,
-             'action': action,
-             'cancel_url': cancel_url})
-
-    # Post with different data. # Update content in the DB
-    set_fields = []
-    set_values = []
-    where_field = 'email'
-    where_value = request.user.email
-    log_payload = []
-    # Create the SET name = value part of the query
-    for idx, colcon in enumerate(colcon_items):
-        if not is_inst and colcon.column.is_key:
-            # If it is a learner request and a key column, skip
-            continue
-
-        # Skip the element if there is a condition and it is false
-        if colcon.condition and not context[colcon.condition.name]:
-            continue
-
-        field_value = form.cleaned_data[field_prefix + '{0}'.format(idx)]
-        if colcon.column.is_key:
-            # Remember one unique key for selecting the row
-            where_field = colcon.column.name
-            where_value = field_value
-            continue
-
-        set_fields.append(colcon.column.name)
-        set_values.append(field_value)
-        log_payload.append((colcon.column.name, field_value))
-
-    pandas_db.update_row(
-        action.workflow.get_data_frame_table_name(),
-        set_fields,
-        set_values,
-        [where_field],
-        [where_value])
-
-    # Recompute all the values of the conditions in each of the actions
-    for act in action.workflow.actions.all():
-        act.update_n_rows_selected()
-
-    # Log the event and update its content in the action
-    log_item = Log.objects.register(
-        request.user,
-        Log.TABLEROW_UPDATE,
-        action.workflow,
-        {'id': action.workflow.id,
-         'name': action.workflow.name,
-         'new_values': log_payload})
-
-    # Modify the time of execution for the action
-    action.last_executed_log = log_item
-    action.save()
-
-    # If not instructor, just thank the user!
-    if not is_inst:
-        return render(request, 'thanks.html', {})
-
-    # Back to running the action
-    return redirect(reverse('action:run', kwargs={'pk': action.id}))
+    return serve_action_in(request, action, user_attribute_name)
 
 
 @user_passes_test(is_instructor)
 def run_action_item_filter(request: HttpRequest) -> HttpResponse:
-    """Offer a select widget to tick students to exclude from the email.
+    """Offer a select widget to tick items to exclude from selection.
 
-    :param request: HTTP request (GET)
+    This is a generic Web function. It assumes that the session object has a
+    dictionary with a field stating what objects need to be considered for
+    selection. It creates the right web form and then updates in the session
+    dictionary the result and proceeds to a URL given also as part of that
+    dictionary.
+
+    :param request: HTTP request (GET) with a session object and a dictionary
+    with the right parameters. The selected values are stored in the field
+    'exclude_values'.
+
     :return: HTTP response
     """
     # Get the payload from the session, and if not, use the given one
-    payload = get_action_payload(request)
-    if not payload:
+    action_info = get_action_payload(request.session)
+    if not action_info:
         # Something is wrong with this execution. Return to the action table.
         messages.error(request, _('Incorrect item filter invocation.'))
         return redirect('action:index')
 
     # Get the information from the payload
-    action = Action.objects.get(pk=payload['action_id'])
+    action = Action.objects.get(pk=action_info['action_id'])
 
     form = ValueExcludeForm(
         request.POST or None,
         action=action,
-        column_name=payload['item_column'],
-        exclude_values=payload.get('exclude_values', list),
+        column_name=action_info['item_column'],
+        exclude_values=action_info.get('exclude_values', list),
     )
     context = {
         'form': form,
         'action': action,
-        'button_label': payload['button_label'],
-        'valuerange': range(payload.get('valuerange', 0)),
-        'step': payload.get('step', 0),
-        'prev_step': payload['prev_url'],
+        'button_label': action_info['button_label'],
+        'valuerange': range(action_info.get('valuerange', 0)),
+        'step': action_info.get('step', 0),
+        'prev_step': action_info['prev_url'],
     }
 
     # Process the initial loading of the form and return
@@ -460,6 +165,74 @@ def run_action_item_filter(request: HttpRequest) -> HttpResponse:
         return render(request, 'action/item_filter.html', context)
 
     # Updating the content of the exclude_values in the payload
-    payload['exclude_values'] = form.cleaned_data['exclude_values']
+    action_info['exclude_values'] = form.cleaned_data['exclude_values']
 
-    return redirect(payload['post_url'])
+    return redirect(action_info['post_url'])
+
+
+def serve_action_out(
+    user,
+    action: Action,
+    user_attribute_name: str,
+):
+    """Serve request for an action out.
+
+    Function that given a user and an Action Out
+    searches for the appropriate data in the table with the given
+    attribute name equal to the user email and returns the HTTP response.
+    :param user: User object making the request
+    :param action: Action to execute (action out)
+    :param user_attribute_name: Column to check for email
+    :return:
+    """
+    # For the response
+    payload = {
+        'action': action.name,
+        'action_id': action.id,
+    }
+
+    # User_instance has the record used for verification
+    row_values = get_row_values(
+        action,
+        (user_attribute_name, user.email),
+    )
+
+    # Get the dictionary containing column names, attributes and condition
+    # valuations:
+    context = action_evaluation_context(action, row_values)
+    if context is None:
+        payload['error'] = (
+            _('Error when evaluating conditions for user {0}').format(
+                user.email,
+            )
+        )
+        # Log the event
+        Log.objects.register(
+            user,
+            Log.ACTION_SERVED_EXECUTE,
+            workflow=action.workflow,
+            payload=payload)
+        return HttpResponse(render_to_string(
+            'action/action_unavailable.html',
+            {}))
+
+    # Evaluate the action content.
+    action_content = evaluate_row_action_out(action, context)
+
+    # If the action content is empty, forget about it
+    response = action_content
+    if action_content is None:
+        response = render_to_string('action/action_unavailable.html', {})
+        payload['error'] = _('Action not enabled for user {0}').format(
+            user.email,
+        )
+
+    # Log the event
+    Log.objects.register(
+        user,
+        Log.ACTION_SERVED_EXECUTE,
+        workflow=action.workflow,
+        payload=payload)
+
+    # Respond the whole thing
+    return HttpResponse(response)

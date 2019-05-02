@@ -17,6 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 from action.models import Condition, ActionColumnConditionTuple
 from dataops import ops, formula_evaluation, pandas_db
 from logs.models import Log
+from ontask import create_new_name
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 from .forms import (
@@ -712,12 +713,12 @@ def column_clone(request, pk):
 
     # Get the new name appending as many times as needed the 'Copy of '
     old_name = column.name
-    new_name = 'Copy_of_' + old_name
-    while workflow.columns.filter(name=new_name).exists():
-        new_name = 'Copy_of_' + new_name
 
     # Proceed to clone the column
-    column = clone_column(column, None, new_name)
+    column = clone_column(
+        column,
+        None,
+        create_new_name(column.name, workflow.columns))
 
     # Log the event
     Log.objects.register(request.user,

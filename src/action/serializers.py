@@ -3,7 +3,7 @@
 """Classes to serialize Actions and Conditions."""
 
 from builtins import object
-from typing import Union
+from typing import Optional
 
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
@@ -126,7 +126,7 @@ class ConditionSerializer(serializers.ModelSerializer):
     columns = ColumnNameSerializer(required=False, many=True)
 
     @profile
-    def create(self, validated_data, **kwargs) -> Union[Condition, None]:
+    def create(self, validated_data, **kwargs) -> Optional[Condition]:
         """Create a new condition object based on the validated_data.
 
         :param validated_data: Validated data obtained by the parser

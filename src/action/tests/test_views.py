@@ -250,7 +250,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.select_text_tab()
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_content').summernote(
+            """$('#id_text_content').summernote(
                    'editor.insertText', 
                    "{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}")""")
 
@@ -363,13 +363,13 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.assertEqual(
             "{% comment %}Your action content here{% endcomment %}",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id_text_content").summernote('code')"""
             )
         )
 
         # insert the first mark
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "mark1");"""
+            """$('#id_text_content').summernote('editor.insertText', "mark1");"""
         )
 
         # Create filter.
@@ -380,7 +380,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.assertIn(
             "mark1",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id_text_content").summernote('code')"""
             )
         )
 
@@ -388,7 +388,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.select_text_tab()
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "mark2");"""
+            """$('#id_text_content').summernote('editor.insertText', "mark2");"""
         )
 
         # Modify the filter. Click in the edit filter button
@@ -399,7 +399,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.assertIn(
             "mark2",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id_text_content").summernote('code')"""
             )
         )
 
@@ -407,7 +407,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.select_text_tab()
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "mark3");"""
+            """$('#id_text_content').summernote('editor.insertText', "mark3");"""
         )
 
         # Click in the more ops and then the delete filter button
@@ -417,14 +417,14 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.assertIn(
             "mark3",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id_text_content").summernote('code')"""
             )
         )
         # insert the first mark
         self.select_text_tab()
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "cmark1");"""
+            """$('#id_text_content').summernote('editor.insertText', "cmark1");"""
         )
 
         # Create condition. Click in the add condition button
@@ -436,14 +436,14 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.assertIn(
             "cmark1",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id_text_content").summernote('code')"""
             )
         )
 
         # insert the second mark
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "cmark2");"""
+            """$('#id_text_content').summernote('editor.insertText', "cmark2");"""
         )
 
         # Modify the condition. Click in the condition edit button
@@ -454,14 +454,14 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.assertIn(
             "cmark2",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id_text_content").summernote('code')"""
             )
         )
 
         # insert the third mark
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "cmark3");"""
+            """$('#id_text_content').summernote('editor.insertText', "cmark3");"""
         )
 
         # Delete the condition
@@ -473,7 +473,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.assertIn(
             "cmark3",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id_text_content").summernote('code')"""
             )
         )
 
@@ -500,7 +500,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Introduce text and then the URL
         self.select_json_text_tab()
-        self.selenium.find_element_by_id('id_content').send_keys(content_txt)
+        self.selenium.find_element_by_id('id_text_content').send_keys(content_txt)
         self.selenium.find_element_by_id('id_target_url').send_keys(target_url)
 
         # Save action and back to action index
@@ -997,7 +997,7 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
         self.select_text_tab()
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', 
+            """$('#id_text_content').summernote('editor.insertText', 
             "{0}");""".format(self.action_text)
         )
 

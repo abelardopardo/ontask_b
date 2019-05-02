@@ -768,10 +768,10 @@ def evaluate_formula(node, eval_type, given_variables=None):
         else:
             result_bool = any(sub_clauses)
         if node.get('not', False):
-            result = not result_bool
+            result_bool = not result_bool
         return result_bool
 
-    join_str = ') ' + node['condition'] + '('
+    join_str = ') ' + node['condition'] + ' ('
     if eval_type == NodeEvaluation.EVAL_SQL:
         if not sub_clauses:
             # Nothing has been returned, so it is an empty query

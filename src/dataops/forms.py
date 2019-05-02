@@ -19,8 +19,9 @@ from dataops import pandas_db, ops
 from dataops.models import SQLConnection
 from ontask import OnTaskDataFrameNoKey
 from ontask.forms import (
-    RestrictedFileField, column_to_field, dateTimeWidgetOptions
+    RestrictedFileField, dateTimeWidgetOptions
 )
+from action.form_edit import column_to_field
 
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)

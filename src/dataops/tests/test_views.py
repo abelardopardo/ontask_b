@@ -570,7 +570,7 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         # insert the action text
         self.select_text_tab()
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', 
+            """$('#id_text_content').summernote('editor.insertText', 
             "{0}");""".format(self.action_text)
         )
 

@@ -198,10 +198,12 @@ def render_template(
     new_template_text = template_text
     for rexpr in var_use_res:
         new_template_text = rexpr.sub(
-            lambda match: match.group('mup_pre')
-                          + translate(match.group('vname'))
-                          + match.group('mup_post'),
-            new_template_text)
+            lambda match: (
+                match.group('mup_pre')
+                + translate(match.group('vname'))
+                + match.group('mup_post'),
+                new_template_text),
+        )
 
     # Step 2.2 Remove pre-and post white space from the {% if %} and
     # {% endif %} conditions (to reduce white space when using non HTML
@@ -230,40 +232,3 @@ def render_template(
 
     # Step 4. Return the redering of the new elements
     return Template(new_template_text).render(Context(new_context))
-
-
-def run(*unused):
-    """Script for testing purposes.
-
-    :param script_args:
-    :return: Nothing
-    """
-    # template = """
-    # hi --{{ one }}--
-    # --{% if var1 %}var1{% endif %}--
-    # --{% if var2 %}var2{% endif %}--
-    # --{% if !"# %}var3{% endif %}--
-    # --{% if $%& %}var4{% endif %}--
-    # --{% if '() %}var5{% endif %}--
-    # --{{ +,- }}--
-    # --{{ ./: }}--
-    # --{{ ;<= }}--
-    # --{{ >?@ }}--
-    # --{{ [\] }}--
-    # --{{ ^_` }}--
-    # --{{ {|}~ }}--
-    # --{{ this one has spaces }}--
-    # --{{ OT_ The prefix }}--
-    # --{{ OT_The prefix 2 }}--
-    # """
-
-    template = (
-        '<p>Hi&nbsp;{{ !"#$%&amp;()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~ }}</p>'
-    )
-
-    context = {
-        '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~': 'Carmelo Coton',
-    }
-
-    print((escape(list(context.items())[0][0])))
-    print((render_template(template, context)))

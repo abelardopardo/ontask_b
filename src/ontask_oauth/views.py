@@ -15,7 +15,7 @@ from rest_framework import status
 
 from ontask.permissions import is_instructor
 from .models import OnTaskOAuthUserTokens
-from ontask import get_action_payload
+from action.payloads import get_action_payload
 
 return_url_key = 'oauth_return_url'
 oauth_hash_key = 'oauth_hash'
@@ -69,12 +69,11 @@ def get_initial_token_step1(request, oauth_info, return_url):
     )
 
 
-def refresh_token(user_token, oauth_instance, oauth_info):
+def refresh_token(user_token, oauth_info):
     """
      Obtain a OAuth2 token for the user in this request from the oauth instance
      encoded in the oauth_info
     :param user_token: User token to be refreshed
-    :param oauth_instance: Name of the oauth info below
     :param oauth_info: a dict with the following fields:
     # {
     #   domain_port: VALUE,
@@ -100,16 +99,15 @@ def refresh_token(user_token, oauth_instance, oauth_info):
     )
 
     if response.status_code != status.HTTP_200_OK:
-        raise Exception(_('Unable to refresh access token from OAuth'))
+        raise Exception(_('Unable to refresh OAuth token.'))
 
     # Response is correct. Parse and extract elements
     response_data = response.json()
 
     # Get the new token and expire datetime and save the token
     user_token.access_token = response_data['access_token']
-    user_token.valid_until = timezone.now() + \
-                             timedelta(seconds=response_data.get('expires_in',
-                                                                 0))
+    user_token.valid_until = timezone.now() + timedelta(
+        seconds=response_data.get('expires_in', 0))
     user_token.save()
 
     return user_token.access_token

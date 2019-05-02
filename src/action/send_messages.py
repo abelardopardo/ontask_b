@@ -4,7 +4,7 @@
 
 import datetime
 from time import sleep
-from typing import List, Union
+from typing import List, Mapping, Union
 
 import html2text
 import pytz
@@ -21,6 +21,7 @@ from django.utils.translation import ugettext_lazy as _
 from action import settings
 from action.evaluate_action import evaluate_action
 from action.models import Action
+from action.payloads import EmailPayload
 from dataops.sql_query import add_column_integer
 from logs.models import Log
 from ontask import is_correct_email
@@ -101,13 +102,12 @@ def create_single_message(
 ) -> Union[EmailMessage, EmailMultiAlternatives]:
     """Create either an EmailMessage or EmailMultiAlternatives object.
 
-    :param msg_subject: Subject text
-    :param msg_body: Body
+    :param msg_body_sbj_to: Tuple with body, subject, to
     :param track_str: String to add to track
     :param from_email: From email
-    :param msg_to: To field
     :param cc_email_list: CC list
     :param bcc_email_list: BCC list
+
     :return: Either EmailMessage or EmailMultiAlternatives
     """
     if ontask_settings.EMAIL_HTML_ONLY:
@@ -140,24 +140,16 @@ def create_messages(
     user,
     action: Action,
     action_evals: List,
-    track_read: bool,
-    email_column: str,
-    from_email: str,
-    cc_email_list: List[str],
-    bcc_email_list: List[str],
     track_col_name: str,
+    action_info: EmailPayload,
 ) -> List[Union[EmailMessage, EmailMultiAlternatives]]:
     """Create the email messages to send and the tracking ids.
 
     :param user: User that sends the message (encoded in the track-id)
     :param action: Action to process
     :param action_evals: Action content already evaluated
-    :param track_read: Boolean saying of tracking is needed
-    :param email_column: Column name containing email
-    :param from_email: From email
-    :param cc_email_list: List of cc emails
-    :param bcc_email_list: List of bcc emails
     :param track_col_name: column name to track
+    :param action_info: EmailPayload Mapping with the required fields
     :return:
     """
     # Context to log the events (one per email)
@@ -176,7 +168,7 @@ def create_messages(
     for msg_body_sbj_to in action_evals:
         # If read tracking is on, add suffix for message (or empty)
         track_str = ''
-        if track_read:
+        if action_info['track_read']:
             # The track id must identify: action & user
             track_str = (
                 '<img src="https://{0}{1}{2}?v={3}" alt=""'
@@ -190,7 +182,7 @@ def create_messages(
                         'action': action.id,
                         'sender': user.email,
                         'to': msg_body_sbj_to[2],
-                        'column_to': email_column,
+                        'column_to': action_info['item_column'],
                         'column_dst': track_col_name,
                     },
                 ),
@@ -199,9 +191,9 @@ def create_messages(
         msg = create_single_message(
             msg_body_sbj_to,
             track_str,
-            from_email,
-            cc_email_list,
-            bcc_email_list,
+            user.email,
+            action_info['cc_email_list'],
+            action_info['bcc_email_list'],
         )
         msgs.append(msg)
 
@@ -258,7 +250,6 @@ def send_confirmation_message(
 
     :param user: Destination email
     :param action: Action being considered
-    :param cfilter: Condition to use as filter
     :param nmsgs: Number of messages being sent
     :return:
     """
@@ -272,7 +263,7 @@ def send_confirmation_message(
         'email_sent_datetime': now,
         'filter_present': cfilter is not None,
         'num_rows': action.workflow.nrows,
-        'num_selected': cfilter.n_rows_selected if cfilter else -1,
+        'num_selected': action.get_rows_selected(),
     }
 
     # Create template and render with context
@@ -320,15 +311,8 @@ def send_confirmation_message(
 def send_messages(
     user,
     action: Action,
-    subject: str,
-    email_column: str,
-    from_email: str,
-    cc_email_list: List[str],
-    bcc_email_list: List[str],
-    send_confirmation: bool,
-    track_read: bool,
-    exclude_values: List[str],
     log_item: Log,
+    action_info: Mapping,
 ) -> None:
     """Send action content evaluated for each row.
 
@@ -341,29 +325,23 @@ def send_messages(
 
     :param user: User object that executed the action
     :param action: Action from where to take the messages
-    :param subject: Email subject
-    :param email_column: Name of the column from which to extract emails
-    :param from_email: Email of the sender
-    :param cc_email_list: List of emails to include in the CC
-    :param bcc_email_list: List of emails to include in the BCC
-    :param send_confirmation: Boolean to send confirmation to sender
-    :param track_read: Should read tracking be included?
-    :param exclude_values: List of values to exclude from the mailing
     :param log_item: Log object to store results
+    :param action_info: Mapping key, value as defined in EmailPayload
+
     :return: Send the emails
     """
     # Evaluate the action string, evaluate the subject, and get the value of
     # the email column.
     action_evals = evaluate_action(
         action,
-        extra_string=subject,
-        column_name=email_column,
-        exclude_values=exclude_values)
+        extra_string=action_info['subject'],
+        column_name=action_info['email_column'],
+        exclude_values=action_info['exclude_values'])
 
-    check_cc_lists(cc_email_list, bcc_email_list)
+    check_cc_lists(action_info['cc_email_list'], action_info['bcc_email_list'])
 
     track_col_name = ''
-    if track_read:
+    if action['track_read']:
         track_col_name = create_track_column(action)
         # Get the log item payload to store the tracking column
         log_item.payload['track_column'] = track_col_name
@@ -373,12 +351,8 @@ def send_messages(
         user,
         action,
         action_evals,
-        track_read,
-        email_column,
-        from_email,
-        cc_email_list,
-        bcc_email_list,
         track_col_name,
+        action_info,
     )
 
     deliver_msg_burst(msgs)
@@ -391,6 +365,6 @@ def send_messages(
     )
     log_item.save()
 
-    if send_confirmation:
+    if action_info['send_confirmation']:
         # Confirmation message requested
         send_confirmation_message(user, action, len(msgs))

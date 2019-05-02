@@ -15,6 +15,7 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
+from core.datatables import DataTablesServerSidePaging
 from ontask import simplify_datetime_str
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
@@ -50,29 +51,23 @@ def display_ss(request):
         )
 
     # Check that the GET parameter are correctly given
-    try:
-        draw = int(request.POST.get('draw', None))
-        start = int(request.POST.get('start', None))
-        length = int(request.POST.get('length', None))
-    except ValueError:
+    dt_page = DataTablesServerSidePaging(request)
+    if not dt_page.is_valid:
         return JsonResponse(
-            {'error': _('Incorrect request. Unable to process')}
+            {'error': _('Incorrect request. Unable to process')},
         )
-
-    # Get the column information from the request and the rest of values.
-    search_value = request.POST.get('search[value]', None)
 
     # Get the logs
     qs = workflow.logs
     recordsTotal = qs.count()
 
-    if search_value:
+    if dt_page.search_value:
         # Refine the log
         qs = qs.filter(
-            Q(id__icontains=search_value) |
-            Q(user__email__icontains=search_value) |
-            Q(name__icontains=search_value) |
-            Q(payload__icontains=search_value),
+            Q(id__icontains=dt_page.search_value) |
+            Q(user__email__icontains=dt_page.search_value) |
+            Q(name__icontains=dt_page.search_value) |
+            Q(payload__icontains=dt_page.search_value),
             workflow__id=workflow.id,
         ).distinct()
 
@@ -83,7 +78,7 @@ def display_ss(request):
     recordsFiltered = qs.count()
 
     final_qs = []
-    for item in qs[start:start + length]:
+    for item in qs[dt_page.start:dt_page.start + dt_page.length]:
         row = [
             """<a href="{0}" class="spin"
                   data-toggle="tooltip" title="{1}">{2}</a>""".format(
@@ -101,7 +96,7 @@ def display_ss(request):
 
     # Result to return as AJAX response
     data = {
-        'draw': draw,
+        'draw': dt_page.draw,
         'recordsTotal': recordsTotal,
         'recordsFiltered': recordsFiltered,
         'data': final_qs

@@ -23,8 +23,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
+from core.datatables import DataTablesServerSidePaging
 from dataops import pandas_db
 from logs.models import Log
+from ontask import create_new_name
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from visualizations.plotly import PlotlyHandler
@@ -185,27 +187,19 @@ def render_table_display_data(request, workflow, columns, formula,
     """
 
     # Check that the GET parameter are correctly given
-    try:
-        draw = int(request.POST.get('draw', None))
-        start = int(request.POST.get('start', None))
-        length = int(request.POST.get('length', None))
-        order_col_name = request.POST.get('order[0][column]', None)
-        order_dir = request.POST.get('order[0][dir]', 'asc')
-    except ValueError:
+    dt_page = DataTablesServerSidePaging(request)
+    if not dt_page.is_valid:
         return JsonResponse(
-            {'error': _('Incorrect request. Unable to process')}
+            {'error': _('Incorrect request. Unable to process')},
         )
-
-    # Get the column information from the request and the rest of values.
-    search_value = request.POST.get('search[value]', None)
 
     # Get columns and names
     column_names = [x.name for x in columns]
 
     # See if an order has been given.
-    if order_col_name:
+    if dt_page.order_col_name:
         # The first column is ops
-        order_col_name = column_names[int(order_col_name) - 1]
+        order_col_name = column_names[dt_page.order_col_name - 1]
 
     # Find the first key column
     key_name, key_idx = next(((c.name, idx) for idx, c in enumerate(columns)
@@ -213,9 +207,9 @@ def render_table_display_data(request, workflow, columns, formula,
 
     # Get the filters to apply when fetching the query set
     cv_tuples = []
-    if search_value:
+    if dt_page.search_value:
         cv_tuples.extend(
-            [(c.name, search_value, c.data_type) for c in columns]
+            [(c.name, dt_page.search_value, c.data_type) for c in columns]
         )
 
     qs = pandas_db.search_table_rows(
@@ -223,7 +217,7 @@ def render_table_display_data(request, workflow, columns, formula,
         cv_tuples,
         True,
         order_col_name,
-        order_dir == 'asc',
+        dt_page.order_dir == 'asc',
         column_names,
         formula
     )
@@ -231,7 +225,7 @@ def render_table_display_data(request, workflow, columns, formula,
     # Post processing + adding operation columns and performing the search
     final_qs = []
     items = 0  # For counting the number of elements in the result
-    for row in qs[start:start + length]:
+    for row in qs[dt_page.start:dt_page.start + dt_page.length]:
         items += 1
         new_element = {}
         if view_id:
@@ -271,13 +265,13 @@ def render_table_display_data(request, workflow, columns, formula,
         # Create the list of elements to display and add it ot the final QS
         final_qs.append(new_element)
 
-        if items == length:
+        if items == dt_page.length:
             # We reached the number or requested elements, abandon.
             break
 
     # Result to return as Ajax response
     data = {
-        'draw': draw,
+        'draw': dt_page.draw,
         'recordsTotal': workflow.nrows,
         'recordsFiltered': len(qs),
         'data': final_qs
@@ -666,15 +660,10 @@ def view_clone(request, pk):
 
     # POST REQUEST
 
-    # Get the new name appending as many times as needed the 'Copy of '
-    new_name = 'Copy_of_' + view.name
-    while workflow.views.filter(name=new_name).exists():
-        new_name = 'Copy_of_' + new_name
-
     # Proceed to clone the view
     old_name = view.name
     view.id = None
-    view.name = new_name
+    view.name = create_new_name(view.name, workflow.views)
     view.save()
 
     # Clone the columns

@@ -538,7 +538,7 @@ class TutorialCaptures(ScreenTests):
                               [('Total', 'greater or equal', '50')])
 
         self.select_json_text_tab()
-        self.selenium.find_element_by_id('id_content').send_keys(
+        self.selenium.find_element_by_id('id_text_content').send_keys(
             """{
   "sid": {{ SID }},
   "midterm_total": {{ Total }},

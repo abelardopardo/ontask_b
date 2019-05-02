@@ -19,11 +19,11 @@ from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-import action.ops
+from core.datatables import DataTablesServerSidePaging
 from dataops import ops, pandas_db
 from dataops.pandas_db import get_text_column_hash
 from logs.models import Log
-from ontask import is_correct_email
+from ontask import is_correct_email, create_new_name
 from ontask.permissions import is_instructor, UserIsInstructor
 from ontask.tables import OperationsColumn
 from ontask.tasks import workflow_update_lusers
@@ -451,19 +451,11 @@ def column_ss(request):
         return JsonResponse({'error': _('There is no data in the workflow')})
 
     # Check that the GET parameter are correctly given
-    try:
-        draw = int(request.POST.get('draw', None))
-        start = int(request.POST.get('start', None))
-        length = int(request.POST.get('length', None))
-        order_col = request.POST.get('order[0][column]', None)
-        order_dir = request.POST.get('order[0][dir]', 'asc')
-    except ValueError:
+    dt_page = DataTablesServerSidePaging(request)
+    if not dt_page.is_valid:
         return JsonResponse(
-            {'error': _('Incorrect request. Unable to process')}
+            {'error': _('Incorrect request. Unable to process')},
         )
-
-    # Get the column information from the request and the rest of values.
-    search_value = request.POST.get('search[value]', None)
 
     # Get the initial set
     qs = workflow.columns.all()
@@ -471,24 +463,24 @@ def column_ss(request):
     records_filtered = records_total
 
     # Reorder if required
-    if order_col:
+    if dt_page.order_col:
         col_name = ['position',
                     'name',
                     'description_text',
                     'data_type',
-                    'is_key'][int(order_col)]
-        if order_dir == 'desc':
+                    'is_key'][dt_page.order_col]
+        if dt_page.order_dir == 'desc':
             col_name = '-' + col_name
         qs = qs.order_by(col_name)
 
-    if search_value:
-        qs = qs.filter(Q(name__icontains=search_value) |
-                       Q(data_type__icontains=search_value))
+    if dt_page.search_value:
+        qs = qs.filter(Q(name__icontains=dt_page.search_value) |
+                       Q(data_type__icontains=dt_page.search_value))
         records_filtered = qs.count()
 
     # Creating the result
     final_qs = []
-    for col in qs[start:start + length]:
+    for col in qs[dt_page.start:dt_page.start + dt_page.length]:
         ops_string = render_to_string(
             'workflow/includes/workflow_column_operations.html',
             {'id': col.id, 'is_key': col.is_key}
@@ -510,12 +502,12 @@ def column_ss(request):
             'operations': ops_string
         })
 
-        if len(final_qs) == length:
+        if len(final_qs) == dt_page.length:
             break
 
     # Result to return as Ajax response
     data = {
-        'draw': draw,
+        'draw': dt_page.draw,
         'recordsTotal': records_total,
         'recordsFiltered': records_filtered,
         'data': final_qs
@@ -564,7 +556,13 @@ def clone(request, pk):
         new_name = 'Copy of ' + new_name
 
     workflow.id = None
-    workflow.name = new_name
+    workflow.name = create_new_name(
+        workflow.name,
+        Workflow.objects.filter(
+            Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+        )
+    )
+
     try:
         workflow.save()
     except IntegrityError:
@@ -589,13 +587,14 @@ def clone(request, pk):
     workflow_new.save()
 
     # Log event
-    Log.objects.register(request.user,
-                         Log.WORKFLOW_CLONE,
-                         workflow_new,
-                         {'id_old': workflow_new.id,
-                          'id_new': workflow.id,
-                          'name_old': workflow_new.name,
-                          'name_new': workflow.name})
+    Log.objects.register(
+        request.user,
+        Log.WORKFLOW_CLONE,
+        workflow_new,
+        {'id_old': workflow_new.id,
+         'id_new': workflow.id,
+         'name_old': workflow_new.name,
+         'name_new': workflow.name})
 
     messages.success(request,
                      _('Workflow successfully cloned.'))

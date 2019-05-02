@@ -17,7 +17,7 @@ from dataops import ops, pandas_db
 from dataops.forms import SQLConnectionForm, SQLRequestPassword
 from dataops.models import SQLConnection
 from logs.models import Log
-from ontask import OnTaskDataFrameNoKey
+from ontask import OnTaskDataFrameNoKey, create_new_name
 from ontask.permissions import is_instructor, is_admin
 from ontask.tables import OperationsColumn
 from workflow.models import Workflow
@@ -290,14 +290,9 @@ def sqlconn_clone(request, pk):
 
     # POST REQUEST
 
-    # Get the new name appending as many times as needed the 'Copy of '
-    new_name = 'Copy_of_' + conn.name
-    while SQLConnection.objects.filter(name=new_name).exists():
-        new_name = 'Copy_of_' + new_name
-
-    # Proceed to clone the view
+    # Proceed to clone the connection
     conn.id = None
-    conn.name = new_name
+    conn.name = create_new_name(conn.name, SQLConnection.objects)
     conn.save()
 
     # Log the event

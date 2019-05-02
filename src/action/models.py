@@ -213,6 +213,14 @@ class Action(models.Model):
         f_obj = self.conditions.filter(is_filter=True).first()
         return f_obj.formula if f_obj else None
 
+    def get_rows_selected(self):
+        """Get the number of rows in table selected for this action."""
+        action_filter = self.get_filter()
+        if not action_filter:
+            return self.workflow.nrows
+
+        return action_filter.n_rows_selected
+
     def set_text_content(self, text_content: str):
         """Set the action content and update the list of columns."""
         # Method only used for self.is_out

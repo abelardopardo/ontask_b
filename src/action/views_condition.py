@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
 from django.http import JsonResponse
@@ -9,20 +8,16 @@ from django.template.loader import render_to_string
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
 
-from action import ops
+from action.models import Condition
 from dataops.formula_evaluation import (
-    get_variables,
-    evaluate_formula,
-    NodeEvaluation
+    NodeEvaluation, evaluate_formula, get_variables,
 )
 from logs.models import Log
-from ontask.permissions import is_instructor, UserIsInstructor
+from ontask.permissions import UserIsInstructor, is_instructor
 from workflow.ops import get_workflow
+
 from .forms import ConditionForm, FilterForm
-from action.models import Condition
 
 
 def save_condition_form(request,
@@ -45,10 +40,8 @@ def save_condition_form(request,
     :return:
     """
     # Ajax response
-    data = dict()
-
     # In principle we re-render until proven otherwise
-    data['form_is_valid'] = False
+    data = {'form_is_valid': False}
 
     # The condition is new if no value is given
     is_new = condition is None
@@ -539,75 +532,3 @@ def delete_condition(request, pk):
                          request=request)
 
     return JsonResponse(data)
-
-
-@user_passes_test(is_instructor)
-@csrf_exempt
-@require_http_methods(['POST'])
-def clone(request, pk, action_pk=None):
-    """
-    JSON request to clone a condition. The post request must come with the
-    action_content
-    :param request: Request object
-    :param pk: id of the condition to clone
-    :param action_pk: Primary key of the action to receive the condition
-    :return: JSON response
-    """
-
-    # Check if the workflow is locked
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Get the condition
-    condition = Condition.objects.filter(pk=pk).filter(
-        Q(action__workflow__user=request.user) |
-        Q(action__workflow__shared=request.user),
-        is_filter=False,
-        action__workflow=workflow
-    ).select_related('action').first()
-
-    if not condition:
-        messages.error(request,
-                       _('Condition cannot be cloned.'))
-        return JsonResponse({'html_redirect': reverse('action:index')})
-
-    if action_pk:
-        action = workflow.actions.filter(pk=action_pk).first()
-        if not action:
-            # The given action is not attached to the workflow
-            return JsonResponse({'html_redirect': reverse('home')})
-    else:
-        action = condition.action
-
-    # If the request has the 'action_content', update the action
-    action_content = request.POST.get('action_content', None)
-    if action_content:
-        condition.action.set_text_content(action_content)
-        condition.action.save()
-
-    # Get the new name appending as many times as needed the 'Copy of '
-    # new_name = 'Copy of ' + condition.name
-    new_name = condition.name
-    while action.conditions.filter(name=new_name).exists():
-        new_name = 'Copy of ' + new_name
-
-    old_id = condition.id
-    old_name = condition.name
-    condition = ops.clone_condition(condition,
-                                    new_action=action,
-                                    new_name=new_name)
-
-    # Log event
-    Log.objects.register(request.user,
-                         Log.CONDITION_CLONE,
-                         condition.action.workflow,
-                         {'id_old': old_id,
-                          'id_new': condition.id,
-                          'name_old': old_name,
-                          'name_new': condition.name})
-
-    messages.success(request, _('Condition successfully cloned.'))
-
-    # Refresh the page to show the column in the list.
-    return JsonResponse({'html_redirect': ''})

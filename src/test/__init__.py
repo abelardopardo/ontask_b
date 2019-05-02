@@ -1336,7 +1336,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         self.selenium.find_element_by_id('text-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, "//textarea[@id='id_content']")
+                (By.XPATH, "//textarea[@id='id_text_content']")
             )
         )
 

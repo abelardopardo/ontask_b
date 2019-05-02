@@ -4,7 +4,7 @@
 import datetime
 import json
 from time import sleep
-from typing import Dict, List, Tuple
+from typing import Dict, Mapping, Tuple
 
 import pytz
 import requests
@@ -37,10 +37,7 @@ def refresh_and_retry_send(
     user_token = None
     result_msg = ugettext('OAuth token refreshed')
     try:
-        user_token = refresh_token(
-            user_token,
-            target_url,
-            oauth_info)
+        user_token = refresh_token(user_token, oauth_info)
     except Exception as exc:
         result_msg = str(exc)
 
@@ -129,11 +126,8 @@ def send_single_canvas_message(
 def send_canvas_messages(
     user,
     action: Action,
-    subject: str,
-    canvas_id_column: str,
-    exclude_values: List[str],
-    target_url: str,
     log_item: Log,
+    action_info: Mapping,
 ):
     """Send CANVAS emails with the action content evaluated for each row.
 
@@ -142,22 +136,20 @@ def send_canvas_messages(
     rows, attributes, and conditions.
     :param user: User object that executed the action
     :param action: Action from where to take the messages
-    :param subject: Email subject
-    :param canvas_id_column: Name of the column from which to extract canvas ID
-    :param exclude_values: List of values to exclude from the mailing
-    :param target_url: Server name to use to send the emails
     :param log_item: Log object to store results
+    :param action_info: Mapping key, value as defined in CanvasEmailPayload
     :return: Send the emails
     """
     # Evaluate the action string, evaluate the subject, and get the value of
     # the email column.
     action_evals = evaluate_action(
         action,
-        extra_string=subject,
-        column_name=canvas_id_column,
-        exclude_values=exclude_values)
+        extra_string=action_info['subject'],
+        column_name=action_info['item_column'],
+        exclude_values=action_info['exclude_values'])
 
     # Get the oauth info
+    target_url = action_info['target_url']
     oauth_info = ontask_settings.CANVAS_INFO_DICT.get(target_url)
     if not oauth_info:
         raise Exception(_('Unable to find OAuth Information Record'))

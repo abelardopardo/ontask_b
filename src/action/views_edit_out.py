@@ -2,21 +2,19 @@
 
 """Views to edit actions."""
 
-from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
 from action.evaluate_template import render_template
 from action.form_edit import EditActionOutForm
-from action.forms import ActionDescriptionForm, FilterForm
+from action.forms import FilterForm
+from action.forms_run import EnableURLForm
 from action.models import Action, Condition
-from action.views_edit_in import edit_action_in
 from logs.models import Log
 from ontask.permissions import is_instructor
 from visualizations.plotly import PlotlyHandler
@@ -24,71 +22,7 @@ from workflow.models import Workflow
 from workflow.ops import get_workflow
 
 
-@user_passes_test(is_instructor)
-def edit_description(request: HttpRequest, pk: int) -> JsonResponse:
-    """Edit the description attached to an action.
-
-    :param request: AJAX request
-    :param pk: Action ID
-    :return: AJAX response
-    """
-    # Try to get the workflow first
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('home')})
-
-    # Get the action
-    action = workflow.actions.filter(
-        pk=pk,
-    ).filter(
-        Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-    ).first()
-    if not action:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('action:index')})
-
-    # Initial result. In principle, re-render page
-    resp_data = {'form_is_valid': False}
-
-    # Create the form
-    form = ActionDescriptionForm(
-        request.POST or None,
-        instance=action)
-
-    if request.method == 'GET' or not form.is_valid():
-        resp_data['html_form'] = render_to_string(
-            'action/includes/partial_action_edit_description.html',
-            {'form': form, 'action': action},
-            request=request)
-
-        return JsonResponse(resp_data)
-
-    # Process the POST
-    # Save item in the DB
-    action.save()
-
-    # Log the event
-    Log.objects.register(
-        request.user,
-        Log.ACTION_UPDATE,
-        action.workflow,
-        {'id': action.id,
-         'name': action.name,
-         'workflow_id': workflow.id,
-         'workflow_name': workflow.name})
-
-    # Request is correct
-    resp_data['form_is_valid'] = True
-    resp_data['html_redirect'] = ''
-
-    # Enough said. Respond.
-    return JsonResponse(resp_data)
-
-
-def check_text(
+def text_renders_correctly(
     text_content: str,
     action: Action,
     form: EditActionOutForm,
@@ -98,7 +32,7 @@ def check_text(
     :param text_content: String with the text
     :param action: Action to obtain the context
     :param form: Form to report errors.
-    :return: Boolean
+    :return: Boolean stating correctness
     """
     # Render the content as a template and catch potential problems.
     # This seems to be only possible if dealing directly with Jinja2
@@ -156,51 +90,6 @@ def action_out_save_content(request: HttpRequest, pk: int) -> JsonResponse:
     return JsonResponse({'form_is_valid': True, 'html_redirect': ''})
 
 
-@user_passes_test(is_instructor)
-def edit_action(request: HttpRequest, pk: int) -> HttpResponse:
-    """Invoke the specific edit view.
-
-    :param request: Request object
-    :param pk: Action PK
-    :return: HTML response
-    """
-    # Try to get the workflow first
-    workflow = get_workflow(
-        request,
-        prefetch_related=['actions', 'columns'])
-    if not workflow:
-        return redirect('home')
-
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _('Workflow has no data. '
-              + 'Go to "Manage table data" to upload data.'),
-        )
-        return redirect(reverse('action:index'))
-
-    # Get the action and the columns
-    action = workflow.actions.filter(
-        pk=pk,
-    ).filter(
-        Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-    ).first()
-    if not action:
-        messages.error(request, _('Incorrect action request'))
-        return redirect('action:index')
-
-    if action.action_type == Action.todo_list:
-        return redirect(reverse('under_construction'), {})
-
-    distributor = {
-        Action.personalized_text: edit_action_out,
-        Action.personalized_canvas_email: edit_action_out,
-        Action.personalized_json: edit_action_out,
-        Action.survey: edit_action_in,
-    }
-    return distributor[action.action_type](request, workflow, action)
-
-
 def edit_action_out(
     request: HttpRequest,
     workflow: Workflow,
@@ -226,7 +115,7 @@ def edit_action_out(
         text_content = form.cleaned_data.get('text_content', None)
 
         # Render the content as a template and catch potential problems.
-        if not check_text(text_content, action, form):
+        if text_renders_correctly(text_content, action, form):
             # Log the event
             Log.objects.register(
                 request.user,
@@ -287,3 +176,68 @@ def edit_action_out(
 
     # Return the same form in the same page
     return render(request, 'action/edit_out.html', context=context)
+
+
+@user_passes_test(is_instructor)
+def showurl(request: HttpRequest, pk: int) -> HttpResponse:
+    """Create page to show URL to access action.
+
+    Function that given a JSON request with an action pk returns the URL used
+    to retrieve the personalised message.
+    :param request: Json request
+    :param pk: Primary key of the action to show the URL
+    :return: Json response with the content to show in the screen
+    """
+    # AJAX result
+    resp_data = {'form_is_valid': False}
+
+    # Get the current workflow
+    workflow = get_workflow(request, prefetch_related='actions')
+    if not workflow:
+        resp_data['form_is_valid'] = True
+        resp_data['html_redirect'] = reverse('home')
+        return JsonResponse(resp_data)
+
+    # Get the action object
+    action = workflow.actions.filter(
+        pk=pk,
+    ).filter(
+        Q(workflow__user=request.user) | Q(workflow__shared=request.user),
+    ).first()
+    if not action:
+        resp_data['form_is_valid'] = True
+        resp_data['html_redirect'] = reverse('home')
+        return JsonResponse(resp_data)
+
+    form = EnableURLForm(request.POST or None, instance=action)
+
+    if request.method == 'POST' and form.is_valid():
+        if form.has_changed():
+            # Reflect the change in the action element
+            form.save()
+
+            # Recording the event
+            Log.objects.register(
+                request.user,
+                Log.ACTION_SERVE_TOGGLED,
+                action.workflow,
+                {'id': action.id,
+                 'name': action.name,
+                 'serve_enabled': action.serve_enabled})
+
+        resp_data['form_is_valid'] = True
+        resp_data['html_redirect'] = reverse('action:index')
+        return JsonResponse(resp_data)
+
+    # Create the text for the action
+    url_text = reverse('action:serve', kwargs={'action_id': action.pk})
+
+    # Render the page with the abolute URI
+    resp_data['html_form'] = render_to_string(
+        'action/includes/partial_action_showurl.html',
+        {'url_text': request.build_absolute_uri(url_text),
+         'form': form,
+         'action': action},
+        request=request)
+
+    return JsonResponse(resp_data)

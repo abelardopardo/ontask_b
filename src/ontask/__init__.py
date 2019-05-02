@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
-Basic functions and definitions used all over the platform.
-"""
 
+"""Basic functions and definitions used all over the platform."""
 
 import json
+
 import pytz
 from django.conf import settings as ontask_settings
 from django.utils.translation import ugettext_lazy as _
@@ -12,9 +11,11 @@ from email_validator import validate_email
 
 from ontask.celery import app as celery_app
 
-__all__ = ['celery_app', 'OnTaskException', 'is_legal_name', 'fix_pctg_in_name',
-           'OnTaskDataFrameNoKey', 'action_session_dictionary',
-           'get_action_payload', 'simplify_datetime_str', 'is_correct_email']
+__all__ = [
+    'celery_app', 'OnTaskException', 'is_legal_name', 'fix_pctg_in_name',
+    'OnTaskDataFrameNoKey', 'simplify_datetime_str', 'is_correct_email',
+    'OnTaskEmptyWorkflow'
+]
 
 __version__ = 'B.4.3.4'
 
@@ -36,9 +37,6 @@ AVAILABLE_ACTION_TYPES = [
     atype for atype in ACTION_TYPES
     if atype not in ontask_settings.DISABLED_ACTIONS
 ]
-
-# Dictionary to store in the session the data between forms.
-action_session_dictionary = 'action_run_payload'
 
 
 def is_legal_name(val):
@@ -103,20 +101,25 @@ def is_json(text):
     return True
 
 
-def get_action_payload(request):
-    """
-    Gets the payload from the current session
-    :param request: Request object
-    :return: request.session[session_dictionary_name] or None
-    """
-
-    return request.session.get(action_session_dictionary, None)
-
-
 def simplify_datetime_str(dtime):
     return dtime.astimezone(
-                    pytz.timezone(ontask_settings.TIME_ZONE)
-                ).strftime('%Y-%m-%d %H:%M:%S %z')
+        pytz.timezone(ontask_settings.TIME_ZONE)
+    ).strftime('%Y-%m-%d %H:%M:%S %z')
+
+
+def create_new_name(old_name: str, obj_manager) -> str:
+    """Provide a new name that does not exist in current manager
+
+    :param old_name: Current name
+    :param obj_manager: Query to use to filter by name
+    :return: New name
+    """
+    # Get the new name appending as many times as needed the 'Copy of '
+    new_name = old_name
+    while obj_manager.filter(name=new_name).exists():
+        new_name = _('Copy of ') + new_name
+
+    return new_name
 
 
 class OnTaskException(Exception):
@@ -140,7 +143,20 @@ class OnTaskDataFrameNoKey(OnTaskException):
 
 
 class OnTaskDataFrameHasDuplicatedColumns(OnTaskException):
-    """
-    Exception to raise when the column names are duplicated
-    """
+    """Exception to raise when the column names are duplicated."""
+    pass
+
+
+class OnTaskNoWorkflow(OnTaskException):
+    """Exception to raise when there is no workflow"""
+    pass
+
+
+class OnTaskEmptyWorkflow(OnTaskException):
+    """Exception to raise when the workflow has no table"""
+    pass
+
+
+class OnTaskNoAction(OnTaskException):
+    """Exception to raise when there is no action"""
     pass

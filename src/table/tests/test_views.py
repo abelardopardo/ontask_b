@@ -522,7 +522,7 @@ class TableViews(test.OnTaskLiveTestCase):
         # Open the view with the clone
         self.selenium.find_element_by_xpath(
             "//table[@id='view-table']"
-            "//td[1][normalize-space() = 'Copy_of_v1']/../td[3]/a"
+            "//td[1][normalize-space() = 'Copy of v1']/../td[3]/a"
         ).click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
