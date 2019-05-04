@@ -4,7 +4,7 @@
 
 import datetime
 from time import sleep
-from typing import List, Mapping, Union
+from typing import List, Union
 
 import html2text
 import pytz
@@ -19,7 +19,7 @@ from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
 from action import settings
-from action.evaluate_action import evaluate_action
+from action.evaluate.action import evaluate_action
 from action.models import Action
 from action.payloads import EmailPayload
 from dataops.sql_query import add_column_to_db
@@ -28,6 +28,68 @@ from ontask import is_correct_email
 from workflow.models import Column
 
 logger = get_task_logger('celery_execution')
+
+
+def send_emails(
+    user,
+    action: Action,
+    log_item: Log,
+    action_info: EmailPayload,
+) -> None:
+    """Send action content evaluated for each row.
+
+    Sends the emails for the given action and with the
+    given subject. The subject will be evaluated also with respect to the
+    rows, attributes, and conditions.
+
+    The messages are sent in bursts with a pause in seconds as specified by the
+    configuration variables EMAIL_BURST  and EMAIL_BURST_PAUSE
+
+    :param user: User object that executed the action
+    :param action: Action from where to take the messages
+    :param log_item: Log object to store results
+    :param action_info: Mapping key, value as defined in EmailPayload
+
+    :return: Send the emails
+    """
+    # Evaluate the action string, evaluate the subject, and get the value of
+    # the email column.
+    action_evals = evaluate_action(
+        action,
+        extra_string=action_info['subject'],
+        column_name=action_info['email_column'],
+        exclude_values=action_info['exclude_values'])
+
+    check_cc_lists(action_info['cc_email_list'], action_info['bcc_email_list'])
+
+    track_col_name = ''
+    if action['track_read']:
+        track_col_name = create_track_column(action)
+        # Get the log item payload to store the tracking column
+        log_item.payload['track_column'] = track_col_name
+        log_item.save()
+
+    msgs = create_messages(
+        user,
+        action,
+        action_evals,
+        track_col_name,
+        action_info,
+    )
+
+    deliver_msg_burst(msgs)
+
+    # Update data in the log item
+    log_item.payload['objects_sent'] = len(action_evals)
+    log_item.payload['filter_present'] = action.get_filter() is not None
+    log_item.payload['datetime'] = str(
+        datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)),
+    )
+    log_item.save()
+
+    if action_info['send_confirmation']:
+        # Confirmation message requested
+        send_confirmation_message(user, action, len(msgs))
 
 
 def check_cc_lists(cc_email_list: List[str], bcc_email_list: List[str]):
@@ -88,7 +150,7 @@ def create_track_column(action: Action) -> str:
     add_column_to_db(
         action.workflow.get_data_frame_table_name(),
         track_col_name,
-        'integer'
+        'integer',
     )
 
     return track_col_name
@@ -307,65 +369,3 @@ def send_confirmation_message(
         raise Exception(
             _('Error when sending the notification: {0}').format(exc),
         )
-
-
-def send_messages(
-    user,
-    action: Action,
-    log_item: Log,
-    action_info: Mapping,
-) -> None:
-    """Send action content evaluated for each row.
-
-    Sends the emails for the given action and with the
-    given subject. The subject will be evaluated also with respect to the
-    rows, attributes, and conditions.
-
-    The messages are sent in bursts with a pause in seconds as specified by the
-    configuration variables EMAIL_BURST  and EMAIL_BURST_PAUSE
-
-    :param user: User object that executed the action
-    :param action: Action from where to take the messages
-    :param log_item: Log object to store results
-    :param action_info: Mapping key, value as defined in EmailPayload
-
-    :return: Send the emails
-    """
-    # Evaluate the action string, evaluate the subject, and get the value of
-    # the email column.
-    action_evals = evaluate_action(
-        action,
-        extra_string=action_info['subject'],
-        column_name=action_info['email_column'],
-        exclude_values=action_info['exclude_values'])
-
-    check_cc_lists(action_info['cc_email_list'], action_info['bcc_email_list'])
-
-    track_col_name = ''
-    if action['track_read']:
-        track_col_name = create_track_column(action)
-        # Get the log item payload to store the tracking column
-        log_item.payload['track_column'] = track_col_name
-        log_item.save()
-
-    msgs = create_messages(
-        user,
-        action,
-        action_evals,
-        track_col_name,
-        action_info,
-    )
-
-    deliver_msg_burst(msgs)
-
-    # Update data in the log item
-    log_item.payload['objects_sent'] = len(action_evals)
-    log_item.payload['filter_present'] = action.get_filter() is not None
-    log_item.payload['datetime'] = str(
-        datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)),
-    )
-    log_item.save()
-
-    if action_info['send_confirmation']:
-        # Confirmation message requested
-        send_confirmation_message(user, action, len(msgs))

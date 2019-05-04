@@ -5,7 +5,7 @@ from django import template
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
-from action.evaluate_template import (
+from action.evaluate import (
     action_context_var,
     viz_number_context_var,
     tr_item,

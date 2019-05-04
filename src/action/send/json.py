@@ -11,8 +11,9 @@ import requests
 from celery.utils.log import get_task_logger
 from django.conf import settings as ontask_settings
 
-from action.evaluate_action import evaluate_action
+from action.evaluate.action import evaluate_action
 from action.models import Action
+from action.payloads import JSONPayload
 from logs.models import Log
 
 logger = get_task_logger('celery_execution')
@@ -53,20 +54,27 @@ def send_and_log_json(
 
 def send_json(
     user,
-    action,
-    log_item,
-    action_info,
+    action: Action,
+    log_item: Log,
+    action_info: JSONPayload,
 ):
     """Send json objects to target URL.
 
     Sends the json objects evaluated per row to the URL in the action
+
     :param user: User object that executed the action
+
     :param action: Action from where to take the messages
+
     :param token: String to include as authorisation token
+
     :param key_column: Key column name to use to exclude elements (if needed)
+
     :param exclude_values: List of values to exclude from the mailing
+
     :param log_item: Log object to store results
-    :return: Send the json objects
+
+    :return: Nothing
     """
     # Evaluate the action string and obtain the list of list of JSON objects
     action_evals = evaluate_action(

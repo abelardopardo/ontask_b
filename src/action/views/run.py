@@ -12,17 +12,17 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 
-from action.evaluate_action import (
-    action_evaluation_context, evaluate_row_action_out, get_row_values,
+from action.evaluate import (
+    evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
-from action.forms_run import ValueExcludeForm
+from action.forms import ValueExcludeForm
 from action.models import Action
 from action.payloads import get_action_payload
-from action.views_run_action_in import get_workflow_action, run_survey_action
-from action.views_run_canvas_email import run_canvas_email_action
-from action.views_run_email import run_email_action
-from action.views_run_json import run_json_action
-from action.views_serve_action_in import serve_action_in
+from action.views.run_canvas_email import run_canvas_email_action
+from action.views.run_email import run_email_action
+from action.views.run_json import run_json_action
+from action.views.run_survey import get_workflow_action, run_survey_action
+from action.views.serve_survey import serve_survey_row
 from logs.models import Log
 from ontask import OnTaskEmptyWorkflow, OnTaskNoWorkflow
 from ontask.permissions import is_instructor
@@ -36,7 +36,7 @@ fn_distributor = {
 
 
 @user_passes_test(is_instructor)
-def run(request: HttpRequest, pk: int) -> HttpResponse:
+def run_action(request: HttpRequest, pk: int) -> HttpResponse:
     """Run specific run action view depending on action type.
 
     If it is a Survey or todo, renders a table with all rows that
@@ -72,7 +72,7 @@ def run(request: HttpRequest, pk: int) -> HttpResponse:
 @csrf_exempt
 @xframe_options_exempt
 @login_required
-def serve(request: HttpRequest, action_id: int) -> HttpResponse:
+def serve_action(request: HttpRequest, action_id: int) -> HttpResponse:
     """Serve the rendering of an action in a workflow for a given user.
 
     - uatn: User attribute name. The attribute to check for authentication.
@@ -116,7 +116,7 @@ def serve(request: HttpRequest, action_id: int) -> HttpResponse:
     if action.is_out:
         return serve_action_out(request.user, action, user_attribute_name)
 
-    return serve_action_in(request, action, user_attribute_name)
+    return serve_survey_row(request, action, user_attribute_name)
 
 
 @user_passes_test(is_instructor)
@@ -199,7 +199,7 @@ def serve_action_out(
 
     # Get the dictionary containing column names, attributes and condition
     # valuations:
-    context = action_evaluation_context(action, row_values)
+    context = get_action_evaluation_context(action, row_values)
     if context is None:
         payload['error'] = (
             _('Error when evaluating conditions for user {0}').format(

@@ -13,15 +13,14 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from action.evaluate_action import evaluate_action
-from action.forms_run import ZipActionForm
+from action.evaluate.action import evaluate_action
+from action.forms import ZipActionForm
 from action.models import Action
 from action.payloads import (
-    ZipPayload, action_session_dictionary, get_action_payload,
-    get_action_info,
+    ZipPayload, action_session_dictionary, get_action_info,
 )
-from action.views_run_action_in import get_workflow_action
-from action.views_run_email import html_body
+from action.views.run_email import html_body
+from action.views.run_survey import get_workflow_action
 from dataops.sql_query import get_rows
 from logs.models import Log
 from ontask import OnTaskEmptyWorkflow, OnTaskNoWorkflow
@@ -98,11 +97,11 @@ def zip_action(request: HttpRequest, pk: int) -> HttpResponse:
         return redirect('action:item_filter')
 
     # Go straight to the final step.
-    return zip_action_done(request, action_info)
+    return run_zip_done(request, action_info)
 
 
 @user_passes_test(is_instructor)
-def zip_action_done(
+def run_zip_done(
     request: HttpRequest,
     action_info: Optional[ZipPayload] = None,
 ) -> HttpResponse:

@@ -11,7 +11,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteInplaceWidget
 
-from action.forms import field_prefix
+from action.forms import FIELD_PREFIX
 from action.models import Action
 from ontask.forms import dateTimeWidgetOptions
 
@@ -155,7 +155,7 @@ class EnterActionIn(forms.Form):
             if cc_item.condition and not self.context[cc_item.condition.name]:
                 continue
 
-            field_name = field_prefix + '{0}'.format(idx)
+            field_name = FIELD_PREFIX + '{0}'.format(idx)
             the_field = column_to_field(
                 cc_item.column,
                 self.form_values[idx],

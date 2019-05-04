@@ -13,10 +13,9 @@ from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
-from action.evaluate_action import (
-    action_evaluation_context, evaluate_row_action_in, evaluate_row_action_out,
-    get_row_values,
-    action_condition_evaluation,
+from action.evaluate import (
+    action_condition_evaluation, evaluate_row_action_in,
+    evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
 from action.models import Action
 from ontask.permissions import is_instructor
@@ -148,7 +147,7 @@ def preview_response(
     condition_evaluation = action_condition_evaluation(action, row_values)
     # Get the dictionary containing column names, attributes and condition
     # valuations:
-    context = action_evaluation_context(
+    context = get_action_evaluation_context(
         action,
         row_values,
         condition_evaluation)

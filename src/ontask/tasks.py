@@ -15,9 +15,9 @@ from django.utils.translation import ugettext
 
 from action.models import Action
 from action.payloads import JSONPayload
-from action.send_canvas_email import send_canvas_messages
-from action.send_json import send_json
-from action.send_messages import send_messages
+from action.send import send_canvas_emails
+from action.send import send_json
+from action.send import send_emails
 from dataops import sql_query
 from dataops.models import PluginRegistry
 from dataops.plugin_manager import run_plugin
@@ -178,7 +178,7 @@ def send_email_messages(
         log_item.payload['status'] = 'Executing'
         log_item.save()
 
-        send_messages(
+        send_emails(
             user,
             action,
             log_item,
@@ -230,7 +230,7 @@ def send_canvas_email_messages(
         log_item.payload['status'] = 'Executing'
         log_item.save()
 
-        send_canvas_messages(
+        send_canvas_emails(
             user,
             action,
             log_item,

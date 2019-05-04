@@ -13,7 +13,7 @@ from django.conf import settings as ontask_settings
 from django.utils.translation import ugettext, ugettext_lazy as _
 from rest_framework import status
 
-from action.evaluate_action import evaluate_action
+from action.evaluate.action import evaluate_action
 from action.models import Action
 from logs.models import Log
 from ontask_oauth.models import OnTaskOAuthUserTokens
@@ -22,108 +22,7 @@ from ontask_oauth.views import refresh_token
 logger = get_task_logger('celery_execution')
 
 
-def refresh_and_retry_send(
-    target_url,
-    oauth_info,
-    conversation_url,
-    canvas_email_payload,
-):
-    """Refresh OAuth token and retry send.
-
-    :return:
-    """
-    # Request rejected due to token expiration. Refresh the
-    # token
-    user_token = None
-    result_msg = ugettext('OAuth token refreshed')
-    try:
-        user_token = refresh_token(user_token, oauth_info)
-    except Exception as exc:
-        result_msg = str(exc)
-
-    if user_token:
-        # Update the header with the new token
-        headers = {
-            'content-type':
-                'application/x-www-form-urlencoded; charset=UTF-8',
-            'Authorization': 'Bearer {0}'.format(
-                user_token.access_token,
-            ),
-        }
-
-        # Second attempt at executing the API call
-        response = requests.post(
-            url=conversation_url,
-            data=canvas_email_payload,
-            headers=headers)
-        response_status = response.status_code
-
-    return result_msg, response_status
-
-
-def burst_pause(burst: int, burst_pause: int, idx: int):
-    """Detect end of burst and pause if needed.
-
-    :param burst: Burst length
-    :param burst_pause: Pause after length is reached
-    :param idx: Current index
-    :return:
-    """
-    if burst and (idx % burst) == 0:
-        # Burst exists and the limit has been reached
-        logger.info(
-            'Burst ({burst}) reached. Waiting for {pause} secs',
-            extra={'burst': burst, 'pause': burst_pause},
-        )
-        sleep(burst_pause)
-
-
-def send_single_canvas_message(
-    target_url: str,
-    conversation_url: str,
-    canvas_email_payload,
-    headers: Dict,
-    oauth_info,
-) -> Tuple[str, int]:
-    """Send a single email to Canvas using the API.
-
-    :param target_url: Target URL in the canvas server
-    :param conversation_url: URL pointing to the conversation object
-    :param canvas_email_payload: Email message
-    :param headers: HTTP headers for the request
-    :param oauth_info: Authentication info
-    :return: response message, response status
-    """
-    result_msg = ugettext('Message successfuly sent')
-
-    # Send the email through the API call
-    # First attempt
-    response = requests.post(
-        url=conversation_url,
-        data=canvas_email_payload,
-        headers=headers)
-    response_status = response.status_code
-
-    req_rejected = (
-        response.status_code == status.HTTP_401_UNAUTHORIZED
-        and response.headers.get('WWW-Authenticate')
-    )
-    if req_rejected:
-        result_msg, response_status = refresh_and_retry_send(
-            target_url,
-            oauth_info,
-            conversation_url,
-            canvas_email_payload,
-        )
-    elif response_status != status.HTTP_201_CREATED:
-        result_msg = ugettext(
-            'Unable to deliver message (code {0})').format(
-            response_status)
-
-    return result_msg, response_status
-
-
-def send_canvas_messages(
+def send_canvas_emails(
     user,
     action: Action,
     log_item: Log,
@@ -238,3 +137,104 @@ def send_canvas_messages(
     log_item.save()
 
     return None
+
+
+def refresh_and_retry_send(
+    target_url,
+    oauth_info,
+    conversation_url,
+    canvas_email_payload,
+):
+    """Refresh OAuth token and retry send.
+
+    :return:
+    """
+    # Request rejected due to token expiration. Refresh the
+    # token
+    user_token = None
+    result_msg = ugettext('OAuth token refreshed')
+    try:
+        user_token = refresh_token(user_token, oauth_info)
+    except Exception as exc:
+        result_msg = str(exc)
+
+    if user_token:
+        # Update the header with the new token
+        headers = {
+            'content-type':
+                'application/x-www-form-urlencoded; charset=UTF-8',
+            'Authorization': 'Bearer {0}'.format(
+                user_token.access_token,
+            ),
+        }
+
+        # Second attempt at executing the API call
+        response = requests.post(
+            url=conversation_url,
+            data=canvas_email_payload,
+            headers=headers)
+        response_status = response.status_code
+
+    return result_msg, response_status
+
+
+def burst_pause(burst: int, burst_pause: int, idx: int):
+    """Detect end of burst and pause if needed.
+
+    :param burst: Burst length
+    :param burst_pause: Pause after length is reached
+    :param idx: Current index
+    :return:
+    """
+    if burst and (idx % burst) == 0:
+        # Burst exists and the limit has been reached
+        logger.info(
+            'Burst ({burst}) reached. Waiting for {pause} secs',
+            extra={'burst': burst, 'pause': burst_pause},
+        )
+        sleep(burst_pause)
+
+
+def send_single_canvas_message(
+    target_url: str,
+    conversation_url: str,
+    canvas_email_payload,
+    headers: Dict,
+    oauth_info,
+) -> Tuple[str, int]:
+    """Send a single email to Canvas using the API.
+
+    :param target_url: Target URL in the canvas server
+    :param conversation_url: URL pointing to the conversation object
+    :param canvas_email_payload: Email message
+    :param headers: HTTP headers for the request
+    :param oauth_info: Authentication info
+    :return: response message, response status
+    """
+    result_msg = ugettext('Message successfuly sent')
+
+    # Send the email through the API call
+    # First attempt
+    response = requests.post(
+        url=conversation_url,
+        data=canvas_email_payload,
+        headers=headers)
+    response_status = response.status_code
+
+    req_rejected = (
+        response.status_code == status.HTTP_401_UNAUTHORIZED
+        and response.headers.get('WWW-Authenticate')
+    )
+    if req_rejected:
+        result_msg, response_status = refresh_and_retry_send(
+            target_url,
+            oauth_info,
+            conversation_url,
+            canvas_email_payload,
+        )
+    elif response_status != status.HTTP_201_CREATED:
+        result_msg = ugettext(
+            'Unable to deliver message (code {0})').format(
+            response_status)
+
+    return result_msg, response_status

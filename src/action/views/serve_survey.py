@@ -12,9 +12,8 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from action.evaluate_action import action_evaluation_context, get_row_values
-from action.form_edit import EnterActionIn
-from action.forms import field_prefix
+from action.evaluate import get_action_evaluation_context, get_row_values
+from action.forms import FIELD_PREFIX, EnterActionIn
 from action.models import Action, ActionColumnConditionTuple
 from dataops.sql_query import update_row
 from logs.models import Log
@@ -22,7 +21,7 @@ from ontask.permissions import has_access
 from ontask.views import ontask_handler404
 
 
-def serve_action_in(
+def serve_survey_row(
     request: HttpRequest,
     action: Action,
     user_attribute_name: str,
@@ -47,7 +46,7 @@ def serve_action_in(
 
     # Get the dictionary containing column names, attributes and condition
     # valuations:
-    context = action_evaluation_context(
+    context = get_action_evaluation_context(
         action,
         get_row_values(
             action,
@@ -178,7 +177,7 @@ def survey_update_row_values(
         if colcon.condition and not context[colcon.condition.name]:
             continue
 
-        field_value = form_data[field_prefix + '{0}'.format(idx)]
+        field_value = form_data[FIELD_PREFIX + '{0}'.format(idx)]
         if colcon.column.is_key:
             # Remember one unique key for selecting the row
             where_field = colcon.column.name

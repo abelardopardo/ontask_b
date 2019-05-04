@@ -1,5 +1,17 @@
 # -*- coding: utf-8 -*-
 
+"""Functions to evaluate the formulas in OnTask.
+
+There are three possible evaluation types:
+
+- Conventional Boolean evalaution: Done with a set of values and returns
+either true or false.
+
+- SQL Evaluation: Returns a SQL query object suitable to be sent to the DB
+for execution.
+
+- Text rendering: Render a formula to a readable format.
+"""
 
 import itertools
 from builtins import str
@@ -110,8 +122,9 @@ class NodeEvaluation:
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
-            query = sql.SQL('({0} = %s) AND ({0} is not null)').format(
-                sql.Identifier(self.node['field'])
+            query = sql.SQL('({0} = {1}) AND ({0} is not null)').format(
+                sql.Identifier(self.node['field']),
+                sql.Placeholder(),
             )
             fields = [str(constant)]
 
@@ -140,8 +153,9 @@ class NodeEvaluation:
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
-            query = sql.SQL('({0} != %s) OR ({0} is null)').format(
+            query = sql.SQL('({0} != {1}) OR ({0} is null)').format(
                 sql.Identifier(self.node['field']),
+                sql.Placeholder()
             )
             fields = [str(constant)]
 
@@ -172,8 +186,9 @@ class NodeEvaluation:
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
-            query = sql.SQL('({0} LIKE %s) AND ({0} is not null)').format(
+            query = sql.SQL('({0} LIKE {1}) AND ({0} is not null)').format(
                 sql.Identifier(self.node['field']),
+                sql.Placeholder(),
             )
             fields = [self.node['value'] + '%']
 
@@ -201,8 +216,9 @@ class NodeEvaluation:
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
-            query = sql.SQL('({0} NOT LIKE %s) OR ({0} is null)').format(
+            query = sql.SQL('({0} NOT LIKE {1}) OR ({0} is null)').format(
                 sql.Identifier(self.node['field']),
+                sql.Placeholder(),
             )
             fields = [self.node['value'] + '%']
 
@@ -232,8 +248,9 @@ class NodeEvaluation:
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
-            query = sql.SQL('({0} LIKE %s) AND ({0} is not null)').format(
+            query = sql.SQL('({0} LIKE {1}) AND ({0} is not null)').format(
                 sql.Identifier(self.node['field']),
+                sql.Placeholder(),
             )
             fields = ['%' + self.node['value'] + '%']
 
@@ -262,8 +279,9 @@ class NodeEvaluation:
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
-            query = sql.SQL('({0} NOT LIKE %s) OR ({0} is null)').format(
+            query = sql.SQL('({0} NOT LIKE {1}) OR ({0} is null)').format(
                 sql.Identifier(self.node['field']),
+                sql.Placeholder(),
             )
             fields = ['%' + self.node['value'] + '%']
 
@@ -290,8 +308,9 @@ class NodeEvaluation:
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
-            query = sql.SQL('({0} LIKE %s) AND ({0} is not null)').format(
+            query = sql.SQL('({0} LIKE {1}) AND ({0} is not null)').format(
                 sql.Identifier(self.node['field']),
+                sql.Placeholder(),
             )
             fields = ['%' + self.node['value']]
 
@@ -321,8 +340,9 @@ class NodeEvaluation:
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
-            query = sql.SQL('({0} NOT LIKE %s) OR ({0} is null)').format(
+            query = sql.SQL('({0} NOT LIKE {1}) OR ({0} is null)').format(
                 sql.Identifier(self.node['field']),
+                sql.Placeholder(),
             )
             fields = ['%' + self.node['value']]
 
@@ -448,8 +468,9 @@ class NodeEvaluation:
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
-            query = sql.SQL('({0} < %s) AND ({0} is not null)').format(
+            query = sql.SQL('({0} < {1}) AND ({0} is not null)').format(
                 sql.Identifier(self.node['field']),
+                sql.Placeholder(),
             )
             fields = [str(constant)]
 
@@ -485,8 +506,9 @@ class NodeEvaluation:
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
-            query = sql.SQL('({0} <= %s) AND ({0} is not null)').format(
+            query = sql.SQL('({0} <= {1}) AND ({0} is not null)').format(
                 sql.Identifier(self.node['field']),
+                sql.Placeholder(),
             )
             fields = [str(constant)]
 
@@ -523,8 +545,9 @@ class NodeEvaluation:
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
-            query = sql.SQL('({0} > %s) AND ({0} is not null)').format(
+            query = sql.SQL('({0} > {1}) AND ({0} is not null)').format(
                 sql.Identifier(self.node['field']),
+                sql.Placeholder(),
             )
             fields = [str(constant)]
 
@@ -560,8 +583,9 @@ class NodeEvaluation:
 
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
-            query = sql.SQL('({0} >= %s) AND ({0} is not null)').format(
+            query = sql.SQL('({0} >= {1}) AND ({0} is not null)').format(
                 sql.Identifier(self.node['field']),
+                sql.Placeholder(),
             )
             fields = [str(constant)]
 
@@ -605,8 +629,12 @@ class NodeEvaluation:
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
             query = sql.SQL(
-                '({0} BETWEEN %s AND %s) AND ({0} is not null)',
-            ).format(sql.Identifier(self.node['field']))
+                '({0} BETWEEN {1} AND {2}) AND ({0} is not null)',
+            ).format(
+                sql.Identifier(self.node['field']),
+                sql.Placeholder(),
+                sql.Placeholder(),
+            )
 
             fields = [str(num) for num in self.node['value']]
 
@@ -651,8 +679,12 @@ class NodeEvaluation:
         if eval_type == self.EVAL_SQL:
             # SQL evaluation
             query = sql.SQL(
-                '({0} NOT BETWEEN %s AND %s) AND ({0} is null)',
-            ).format(sql.Identifier(self.node['field']))
+                '({0} NOT BETWEEN {1} AND {2}) AND ({0} is null)',
+            ).format(
+                sql.Identifier(self.node['field']),
+                sql.Placeholder(),
+                sql.Placeholder(),
+            )
 
             fields = [str(number) for number in self.node['value']]
 

@@ -15,7 +15,7 @@ from workflow.ops import get_workflow
 
 
 @user_passes_test(is_instructor)
-def timeline(request: HttpRequest, pk: Optional[int]) -> HttpResponse:
+def show_timeline(request: HttpRequest, pk: Optional[int]) -> HttpResponse:
     """Show a vertical timeline of action executions.
 
     :param request: HTTP request

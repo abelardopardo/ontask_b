@@ -35,7 +35,7 @@ ACTION_TYPES = [
 
 AVAILABLE_ACTION_TYPES = [
     atype for atype in ACTION_TYPES
-    if atype not in ontask_settings.DISABLED_ACTIONS
+    if atype[0] not in ontask_settings.DISABLED_ACTIONS
 ]
 
 

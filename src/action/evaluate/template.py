@@ -141,7 +141,7 @@ def clean_whitespace(template_text: str) -> str:
     return template_text
 
 
-def render_template(
+def render_action_template(
     template_text: str,
     context_dict: Mapping,
     action: Action = None,

@@ -10,10 +10,8 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from action.evaluate_template import render_template
-from action.form_edit import EditActionOutForm
-from action.forms import FilterForm
-from action.forms_run import EnableURLForm
+from action.evaluate import render_action_template
+from action.forms import EditActionOutForm, EnableURLForm, FilterForm
 from action.models import Action, Condition
 from logs.models import Log
 from ontask.permissions import is_instructor
@@ -39,7 +37,7 @@ def text_renders_correctly(
     # instead of Django.
     try:
         render_error = False
-        render_template(text_content, {}, action)
+        render_action_template(text_content, {}, action)
     except Exception as exc:
         # Pass the django exception to the form (fingers crossed)
         form.add_error(None, exc)

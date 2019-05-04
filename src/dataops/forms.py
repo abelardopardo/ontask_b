@@ -13,7 +13,7 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 
 import dataops.dataframeupload
 import ontask.ontask_prefs
-from action.form_edit import column_to_field
+from action.forms import column_to_field
 from dataops import ops, pandas_db
 from dataops.models import SQLConnection
 from ontask import OnTaskDataFrameNoKey

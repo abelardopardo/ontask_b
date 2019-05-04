@@ -96,7 +96,7 @@ class EmailActionForm(forms.Form):
 
         super().__init__(*args, **kargs)
 
-        email_column_name = self.fields['email_column']. initial
+        email_column_name = self.fields['email_column'].initial
         if email_column_name is None:
             # Try to guess if there is an "email" column
             email_column_name = next(
@@ -292,7 +292,8 @@ class ZipActionForm(forms.Form):
             # Participant columns must match the pattern 'Participant [0-9]+'
             pcolumn_data = get_rows(
                 self.action.workflow.get_data_frame_table_name(),
-                column_names=[pcolumn], filter_formula=None)
+                column_names=[pcolumn],
+                filter_formula=None)
             participant_error = any(
                 not participant_re.search(str(col_value))
                 for __, col_value in pcolumn_data

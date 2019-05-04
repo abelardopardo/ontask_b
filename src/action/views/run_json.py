@@ -10,11 +10,10 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from action.forms_run import JSONActionForm
+from action.forms import JSONActionForm
 from action.models import Action
 from action.payloads import (
-    JSONPayload, action_session_dictionary, get_action_payload,
-    get_action_info,
+    JSONPayload, action_session_dictionary, get_action_info,
 )
 from logs.models import Log
 from ontask.permissions import is_instructor
@@ -90,11 +89,11 @@ def run_json_action(
         return redirect('action:item_filter')
 
     # Go straight to the final step.
-    return json_done(request, action_info)
+    return run_json_done(request, action_info)
 
 
 @user_passes_test(is_instructor)
-def json_done(
+def run_json_done(
     request: HttpRequest,
     action_info: Optional[JSONPayload] = None,
 ) -> HttpResponse:

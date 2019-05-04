@@ -15,17 +15,16 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.views import generic
 
+from action.forms import ActionForm, ActionUpdateForm
+from action.models import Action
 from action.payloads import action_session_dictionary
-from action.views_edit_in import edit_action_in
-from action.views_edit_out import edit_action_out
+from action.views.edit_personalized import edit_action_out
+from action.views.edit_survey import edit_action_in
 from logs.models import Log
 from ontask import simplify_datetime_str
 from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
 from workflow.ops import get_workflow
-
-from .forms import ActionForm, ActionUpdateForm
-from .models import Action
 
 
 #
@@ -219,7 +218,7 @@ def save_action_form(request, form, template_name):
 
 
 @user_passes_test(is_instructor)
-def action_index_set(request, pk=None):
+def action_index(request, pk=None):
     """
     Set the workflow in the session object (if not given) and create the page
     with the list of actions.

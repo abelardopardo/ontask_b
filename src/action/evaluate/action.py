@@ -20,10 +20,10 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 import ontask
-from action.evaluate_template import render_template
-from action.form_edit import EnterActionIn
+from action.evaluate.template import render_action_template
+from action.forms import EnterActionIn
 from action.models import Action
-from dataops import ops, pandas_db, sql_query
+from dataops import ops, sql_query
 from dataops.formula_evaluation import NodeEvaluation, evaluate_formula
 from dataops.sql_query import get_rows
 
@@ -74,7 +74,7 @@ def render_tuple_result(
               column value (optional)]
     """
     # Run the template with the given context
-    partial_result = [render_template(
+    partial_result = [render_action_template(
         action.text_content,
         context,
         action,
@@ -82,7 +82,7 @@ def render_tuple_result(
 
     # If there is extra message, render with context and append
     if extra_string:
-        partial_result.append(render_template(extra_string, context))
+        partial_result.append(render_action_template(extra_string, context))
 
     # If column_name was given (and it exists), add as third component
     if column_name and column_name in context:
@@ -91,7 +91,7 @@ def render_tuple_result(
     return partial_result
 
 
-def action_evaluation_context(
+def get_action_evaluation_context(
     action: Action,
     row_values: Mapping,
     condition_eval: Mapping = None,
@@ -166,8 +166,9 @@ def evaluate_action(
     :return: list of lists resulting from the evaluation of the action
     """
     # Get the table data
-    rows = get_rows(action.workflow.get_data_frame_table_name(),
-                    action.get_filter_formula())
+    rows = get_rows(
+        action.workflow.get_data_frame_table_name(),
+        action.get_filter_formula())
     list_of_renders = []
     for row in rows:
         if (exclude_values and str(row[column_name]) in exclude_values):
@@ -176,7 +177,7 @@ def evaluate_action(
 
         # Step 4: Create the context with the attributes, the evaluation of the
         # conditions and the values of the columns.
-        context = action_evaluation_context(action, row)
+        context = get_action_evaluation_context(action, row)
 
         # Append result
         list_of_renders.append(
@@ -266,7 +267,7 @@ def evaluate_row_action_out(
     # Run the template with the given context
     # First create the template with the string stored in the action
     try:
-        action_text = render_template(text, context, action)
+        action_text = render_action_template(text, context, action)
     except TemplateSyntaxError as exc:
         return render_to_string('action/syntax_error.html', {'msg': exc})
 

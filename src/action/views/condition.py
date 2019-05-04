@@ -9,6 +9,7 @@ from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
+from action.forms import ConditionForm, FilterForm
 from action.models import Condition
 from dataops.formula_evaluation import (
     NodeEvaluation, evaluate_formula, get_variables,
@@ -16,7 +17,6 @@ from dataops.formula_evaluation import (
 from logs.models import Log
 from ontask.permissions import UserIsInstructor, is_instructor
 from workflow.ops import get_workflow
-from .forms import ConditionForm, FilterForm
 
 
 def save_condition_form(request,

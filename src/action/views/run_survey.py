@@ -24,9 +24,8 @@ from django.views.decorators.http import require_http_methods
 
 import dataops.sql_query
 from action.models import Action
-from action.views_serve_action_in import serve_action_in
+from action.views.serve_survey import serve_survey_row
 from core.datatables import DataTablesServerSidePaging
-from dataops import pandas_db
 from ontask import OnTaskEmptyWorkflow, OnTaskNoAction, OnTaskNoWorkflow
 from ontask.permissions import is_instructor
 from workflow.models import Column, Workflow
@@ -153,7 +152,7 @@ def run_survey_row(request: HttpRequest, pk: int) -> HttpResponse:
     # Get the parameters
     user_attribute_name = request.GET.get('uatn', 'email')
 
-    return serve_action_in(request, action, user_attribute_name)
+    return serve_survey_row(request, action, user_attribute_name)
 
 
 def create_initial_qs(
@@ -252,7 +251,7 @@ def create_link_to_survey_row(
 
 
 @login_required
-def thanks(request: HttpRequest) -> HttpResponse:
+def survey_thanks(request: HttpRequest) -> HttpResponse:
     """Responde simply saying thanks.
 
     :param request: Http requst
