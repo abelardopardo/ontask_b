@@ -13,14 +13,16 @@ from django.contrib.postgres.fields import JSONField
 from django.contrib.sessions.models import Session
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import models
+from django.db import models, connection
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
 import ontask.templatetags.ontask_tags
-from dataops import pandas_db
-from dataops.pandas_db import is_table_in_db
+from dataops.pandas_db import (
+    load_table, pandas_datatype_names,
+)
+from dataops.sql_query import delete_table
 
 
 class Workflow(models.Model):
@@ -276,11 +278,11 @@ class Workflow(models.Model):
         """
         :return: If the workflow has a dataframe
         """
-        return pandas_db.is_table_in_db(self.get_data_frame_table_name())
+        return is_table_in_db(self.get_data_frame_table_name())
 
     def data_frame(self):
         # Function used by the serializer to access the data frame in the DB
-        return pandas_db.load_from_db(self.get_data_frame_table_name())
+        return load_table(self.get_data_frame_table_name())
 
     def is_locked(self):
         """
@@ -383,7 +385,7 @@ class Workflow(models.Model):
         """
 
         # Step 1: Delete the data frame from the database
-        pandas_db.delete_table(self.get_data_frame_table_name())
+        delete_table(self.get_data_frame_table_name())
 
         # Reset some of the workflow fields
         self.nrows = 0
@@ -485,7 +487,7 @@ class Column(models.Model):
         blank=False,
         null=False,
         choices=[(x, x)
-                 for __, x in list(pandas_db.pandas_datatype_names.items())],
+                 for __, x in list(pandas_datatype_names.items())],
         verbose_name=_('type of data to store in the column')
     )
 
@@ -671,3 +673,12 @@ class Column(models.Model):
         verbose_name_plural = 'columns'
         unique_together = ('name', 'workflow')
         ordering = ['position',]
+
+
+def is_table_in_db(table_name: str) -> bool:
+    with connection.cursor() as cursor:
+        return next(
+            (True for x in connection.introspection.get_table_list(cursor)
+             if x.name == table_name),
+            False
+        )

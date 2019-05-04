@@ -22,6 +22,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
+import dataops.sql_query
 from action.models import Action
 from action.views_serve_action_in import serve_action_in
 from core.datatables import DataTablesServerSidePaging
@@ -174,21 +175,14 @@ def create_initial_qs(
     if dt_page.order_col:
         order_col_name = columns[dt_page.order_col].name
 
-    # Get the search pairs of field, value
-    cv_tuples = []
-    if dt_page.search_value:
-        cv_tuples = [
-            (col.name, dt_page.search_value, col.data_type) for col in columns
-        ]
-
     # Get the query set (including the filter in the action)
-    qs = pandas_db.search_table_rows(
+    qs = dataops.sql_query.search_table(
         table_name,
-        cv_tuples=cv_tuples,
+        dt_page.search_value,
+        columns_to_search=[col.name for col in columns],
+        filter_formula=filter_formula,
         order_col_name=order_col_name,
         order_asc=dt_page.order_dir == 'asc',
-        column_names=[col.name for col in columns],
-        pre_filter=filter_formula,
     )
 
     return qs

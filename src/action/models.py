@@ -5,6 +5,7 @@
 import datetime
 import re
 from builtins import object
+from typing import List
 
 import pytz
 from django.conf import settings
@@ -14,6 +15,7 @@ from django.db import models
 from django.utils import functional, html
 from django.utils.translation import ugettext_lazy as _
 
+import dataops.sql_query
 import ontask
 from dataops import pandas_db, sql_query
 from dataops.formula_evaluation import NodeEvaluation, evaluate_formula
@@ -29,6 +31,8 @@ var_use_res = [
 
 ACTION_NAME_LENGTH = 512
 ACTION_TYPE_LENGTH = 64
+
+CONDITION_NAME_LENGTH = 512
 
 
 class Action(models.Model):
@@ -221,6 +225,22 @@ class Action(models.Model):
 
         return action_filter.n_rows_selected
 
+    def get_used_conditions(self) -> List[str]:
+        """Get list of conditions that are used in the text_content.
+
+        Iterate over the match of the regular expression in the content and
+        concatenate the condition names.
+
+        :return: List of condition names
+        """
+        cond_names = []
+        for rexpr in var_use_res:
+            cond_names += [
+                match.group('vname')
+                for match in rexpr.finditer(self.text_content)
+            ]
+        return cond_names
+
     def set_text_content(self, text_content: str):
         """Set the action content and update the list of columns."""
         # Method only used for self.is_out
@@ -245,18 +265,13 @@ class Action(models.Model):
         # Update the list of columns used in the action
         # Loop over the regular expressions, match the expressions and
         # extract the list of vname fields.
-        cond_names = []
-        for rexpr in var_use_res:
-            cond_names += [
-                match.group('vname')
-                for match in rexpr.finditer(self.text_content)
-            ]
+        cond_names = self.get_used_conditions()
 
         columns = self.workflow.columns.filter(
             conditions__name__in=set().union(*cond_names),
         ).distinct()
         for col in columns:
-            __, __ = ActionColumnConditionTuple.objects.get_or_create(
+            ActionColumnConditionTuple.objects.get_or_create(
                 action=self,
                 column=col,
                 condition=None,
@@ -284,27 +299,31 @@ class Action(models.Model):
         )
         self.save()
 
-    def update_n_rows_selected(self, column=None):
+    def update_n_rows_selected(self, filter_formula=None, column=None):
         """Reset the field n_rows_selected in all conditions.
 
         If the column argument is present, select only those conditions that
         have column as part of their variables.
 
-        :param column: Optional column name to process only those
-        conditions that use this column
-        :return: All appropriate conditions are updated
+        :param filter_formula: If given, the evaluation of the filter
+        condition is bypassed.
+
+        :param column: Optional column name to process only those conditions
+        that use this column
+
+        :return: All conditions (except the filter) are updated
         """
         start_idx = 0
-        conditions = self.conditions.all()
 
-        # Get the filter, if it exists.
-        filter_formula = None
-        if conditions and conditions[0].is_filter:
-            # If there is a filter, update the filter and this call
-            # propagates to the other conditions. Nothing else is needed.
-            conditions[0].update_n_rows_selected(column=column)
-            filter_formula = conditions[0].formula
-            start_idx = 1
+        if not filter_formula:
+            # Get the filter, if it exists.
+            filter_formula = None
+            conditions = self.conditions.all()
+            if conditions and conditions[0].is_filter:
+                # If there is a filter, update the formula
+                conditions[0].update_n_rows_selected(column=column)
+                filter_formula = conditions[0].formula
+                start_idx = 1
 
         # Recalculate for the rest of conditions
         for cond in conditions[start_idx:]:
@@ -337,20 +356,13 @@ class Action(models.Model):
 
             # Workflow has a data frame and condition list is non empty
 
-            query, cond_fields = sql_query.select_id_all_false(
+            # Get the list of indeces
+            self.rows_all_false = sql_query.select_ids_all_false(
                 self.workflow.get_data_frame_table_name(),
                 filter_item.formula if filter_item else None,
                 cond_list.values_list('formula', flat=True),
             )
 
-            # Run the query
-            qs = pandas_db.execute_query(query, cond_fields).fetchall()
-
-            # If the list is not empty, flatten its structure
-            if qs:
-                self.rows_all_false = [row_data[0] for row_data in qs]
-            else:
-                self.rows_all_false = qs
             self.save()
 
         return self.rows_all_false
@@ -360,9 +372,6 @@ class Action(models.Model):
 
         unique_together = ('name', 'workflow')
         ordering = ['name']
-
-
-CONDITION_NAME_LENGTH = 512
 
 
 class Condition(models.Model):
@@ -453,14 +462,14 @@ class Condition(models.Model):
                 'valid': True,
             }
 
-        new_count = pandas_db.num_rows(
+        new_count = dataops.sql_query.get_num_rows(
             self.action.workflow.get_data_frame_table_name(),
             formula,
         )
         if new_count != self.n_rows_selected:
-            # Reset the field storing rows with all conditions false. Needs to
-            # be recalculated because there is at least one condition that has
-            # changed its count. Flush the field to None
+            # Reset the field in the action storing rows with all conditions
+            # false. Needs to be recalculated because there is at least one
+            # condition that has changed its count. Flush the field to None
             self.action.rows_all_false = None
             self.action.save()
 

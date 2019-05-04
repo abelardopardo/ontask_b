@@ -134,10 +134,10 @@ class EnterActionIn(forms.Form):
     def __init__(self, *args, **kargs):
         """Store parameters and adjust questions, columns, etc."""
         # Store the parameters
-        self.tuples = kargs.pop('tuples', default=None)
-        self.context = kargs.pop('context', default=None)
-        self.form_values = kargs.pop('values', default=None)
-        self.show_key = kargs.pop('show_key', defaut=False)
+        self.tuples = kargs.pop('tuples', None)
+        self.context = kargs.pop('context', None)
+        self.form_values = kargs.pop('values', None)
+        self.show_key = kargs.pop('show_key', None)
         self.is_empty = True
 
         super().__init__(*args, **kargs)

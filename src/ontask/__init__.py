@@ -12,7 +12,7 @@ from email_validator import validate_email
 from ontask.celery import app as celery_app
 
 __all__ = [
-    'celery_app', 'OnTaskException', 'is_legal_name', 'fix_pctg_in_name',
+    'celery_app', 'OnTaskException', 'is_legal_name',
     'OnTaskDataFrameNoKey', 'simplify_datetime_str', 'is_correct_email',
     'OnTaskEmptyWorkflow'
 ]
@@ -82,15 +82,6 @@ def is_correct_email(email_txt):
         return False
 
     return True
-
-
-def fix_pctg_in_name(val):
-    """
-    Function that escapes a value for SQL processing (replacing % by double %%)
-    :param val: Value to escape
-    :return: Escaped value
-    """
-    return val.replace('%', '%%')
 
 
 def is_json(text):

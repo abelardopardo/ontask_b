@@ -8,13 +8,14 @@ import os
 import pandas as pd
 from django.conf import settings
 
+import dataops.dataframeupload
 import test
 from action.models import Action
 from dataops import pandas_db
 from dataops.formula_evaluation import evaluate_formula, NodeEvaluation
 from dataops.ops import perform_dataframe_upload_merge
-from dataops.pandas_db import get_filter_query, load_from_db
-from dataops.sql_query import get_table_select_cursor
+from dataops.pandas_db import load_table
+from dataops.sql_query import get_rows, get_select_query_txt
 from workflow.models import Workflow
 
 
@@ -64,7 +65,7 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -75,17 +76,17 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
 
         if self.workflow:
             # Get the workflow data frame
-            df_dst = load_from_db(self.workflow.get_data_frame_table_name())
+            df_dst = load_table(self.workflow.get_data_frame_table_name())
         else:
-            df_dst = pandas_db.load_df_from_csvfile(
+            df_dst = dataops.dataframeupload.load_df_from_csvfile(
                 io.StringIO(self.csv1),
                 0,
                 0
             )
 
-        df_src = pandas_db.load_df_from_csvfile(io.StringIO(self.csv2),
-                                                0,
-                                                0)
+        df_src = dataops.dataframeupload.load_df_from_csvfile(io.StringIO(self.csv2),
+                                                              0,
+                                                              0)
 
         # Fix the merge_info fields.
         self.merge_info['initial_column_names'] = list(df_src.columns)
@@ -97,9 +98,9 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
     def test_df_equivalent_after_sql(self):
 
         # Parse the CSV
-        df_source = pandas_db.load_df_from_csvfile(io.StringIO(self.csv1),
-                                                   0,
-                                                   0)
+        df_source = dataops.dataframeupload.load_df_from_csvfile(io.StringIO(self.csv1),
+                                                                 0,
+                                                                 0)
 
         # Store the DF in the DB
         pandas_db.store_table(df_source, self.table_name)
@@ -126,7 +127,7 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
                                                 self.merge_info)
 
         # Load again the workflow data frame
-        df_dst = load_from_db(self.workflow.get_data_frame_table_name())
+        df_dst = load_table(self.workflow.get_data_frame_table_name())
 
         # Result must be correct (None)
         self.assertEquals(result, None)
@@ -222,20 +223,24 @@ class FormulaEvaluation(test.OnTaskTestCase):
                 # If value2 is None, then all formulas should be false
                 self.assertFalse(result2)
 
-    def do_sql_operand(self,
-                       input_value,
-                       op_value,
-                       type_value,
-                       value):
+    def do_sql_operand(
+        self,
+        input_value,
+        op_value,
+        type_value,
+        value
+    ):
         self.set_skel(
             input_value,
             op_value.format(''),
             type_value,
             value, 'v_' + type_value
         )
-        query, fields = get_filter_query(self.test_table,
-                                         self.test_columns,
-                                         self.skel)
+        query, fields = get_select_query_txt(
+            self.test_table,
+            self.test_columns,
+            self.skel,
+        )
         result = pd.read_sql_query(query, pandas_db.engine, params=fields)
         self.assertEqual(len(result), 1)
 
@@ -586,7 +591,7 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -606,7 +611,7 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
         df = pandas_db.get_subframe(wflow_table, filter_formula, column_names)
 
         # Get the query set
-        qs = get_table_select_cursor(wflow_table, filter_formula, column_names)
+        qs = get_rows(wflow_table, column_names, filter_formula)
 
         # Iterate over the rows in the dataframe and compare
         for idx, row in enumerate(qs):

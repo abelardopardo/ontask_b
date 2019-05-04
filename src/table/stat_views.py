@@ -12,7 +12,8 @@ from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from dataops import pandas_db
-from dataops.pandas_db import load_from_db, get_column_stats_from_df
+from dataops.pandas_db import load_table, get_column_statistics
+from dataops.sql_query import get_rows
 from ontask.permissions import is_instructor
 from table.models import View
 from visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
@@ -103,27 +104,24 @@ def get_row_visualisations(request, view_id=None):
         columns_to_view = view.columns.all()
         column_names = [c.name for c in columns_to_view]
 
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name(),
-                                    column_names,
-                                    view.formula)
+        df = pandas_db.load_table(workflow.get_data_frame_table_name(),
+                                  column_names,
+                                  view.formula)
     else:
         # No view given, fetch the entire data frame
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = pandas_db.load_table(workflow.get_data_frame_table_name())
 
     # Get the rows from the table
-    row = pandas_db.execute_select_on_table(
+    row = get_rows(
         workflow.get_data_frame_table_name(),
-        [update_key],
-        [update_val],
-        column_names
+        column_names=column_names,
+        filter_pairs={update_key: update_val},
     )[0]
 
     vis_scripts = []
     visualizations = []
-    idx = -1
     context = {'style': 'width:400px; height:225px;'}
-    for column in columns_to_view:
-        idx += 1
+    for idx, column in enumerate(columns_to_view):
 
         # Skip primary keys (no point to represent any of them)
         if column.is_key:
@@ -138,7 +136,7 @@ def get_row_visualisations(request, view_id=None):
                                   "</p><hr/>")
             continue
 
-        if row[idx] is None or row[idx] == '':
+        if row[column.name] is None or row[column.name] == '':
             visualizations.append(
                 '<p class="alert-warning">' +
                 _('No value for this student in this column') + '</p>'
@@ -153,7 +151,7 @@ def get_row_visualisations(request, view_id=None):
             df[[column.name]],
             vis_scripts=vis_scripts,
             id='column_{0}'.format(idx),
-            single_val=row[idx],
+            single_val=row[column.name],
             context=context)
 
         visualizations.extend([x.html_content for x in v])
@@ -192,18 +190,18 @@ def get_view_visualisations(request, view_id=None):
     columns_to_view = workflow.columns.all()
     view = None
     if view_id:
-        view = workflow.vhews.filter(pk=view_id).first()
+        view = workflow.views.filter(pk=view_id).first()
         if not view:
             # View not found. Redirect to workflow detail
             return redirect('workflow:detail', workflow.id)
         columns_to_view = view.columns.all()
 
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name(),
-                                    [x.name for x in columns_to_view],
-                                    view.formula)
+        df = pandas_db.load_table(workflow.get_data_frame_table_name(),
+                                  [x.name for x in columns_to_view],
+                                  view.formula)
     else:
         # No view given, fetch the entire data frame
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = pandas_db.load_table(workflow.get_data_frame_table_name())
 
     vis_scripts = []
     visualizations = []
@@ -258,10 +256,10 @@ def get_column_visualization_items(workflow,
     visualization HTML
     """
     # Get the dataframe
-    df = load_from_db(workflow.get_data_frame_table_name())
+    df = load_table(workflow.get_data_frame_table_name())
 
     # Extract the data to show at the top of the page
-    stat_data = get_column_stats_from_df(df[column.name])
+    stat_data = get_column_statistics(df[column.name])
 
     vis_scripts = []
     visualizations = get_column_visualisations(

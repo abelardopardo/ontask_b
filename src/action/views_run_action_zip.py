@@ -22,7 +22,7 @@ from action.payloads import (
 )
 from action.views_run_action_in import get_workflow_action
 from action.views_run_email import html_body
-from dataops.sql_query import get_table_select_cursor
+from dataops.sql_query import get_rows
 from logs.models import Log
 from ontask import OnTaskEmptyWorkflow, OnTaskNoWorkflow
 from ontask.permissions import is_instructor
@@ -241,11 +241,9 @@ def create_eval_data_tuple(
 
     if user_fname_column:
         # Get the user_fname_column values
-        user_fname_data = get_table_select_cursor(
+        user_fname_data = get_rows(
             action.workflow.get_data_frame_table_name(),
-            None,
-            column_names=[user_fname_column],
-        ).fetchall()
+            column_names=[user_fname_column], filter_formula=None).fetchall()
     else:
         # Array of Nones for the merge
         user_fname_data = [''] * len(action_evals)

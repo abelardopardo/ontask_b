@@ -198,12 +198,10 @@ def render_template(
     new_template_text = template_text
     for rexpr in var_use_res:
         new_template_text = rexpr.sub(
-            lambda match: (
-                match.group('mup_pre')
+            lambda match: match.group('mup_pre')
                 + translate(match.group('vname'))
                 + match.group('mup_post'),
-                new_template_text),
-        )
+            new_template_text)
 
     # Step 2.2 Remove pre-and post white space from the {% if %} and
     # {% endif %} conditions (to reduce white space when using non HTML

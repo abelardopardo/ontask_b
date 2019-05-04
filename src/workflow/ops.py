@@ -19,6 +19,7 @@ from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
+import dataops.sql_query
 from action.models import Condition
 from dataops import pandas_db, ops
 from logs.models import Log
@@ -340,7 +341,7 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
     """
 
     # Drop the column from the DB table storing the data frame
-    pandas_db.df_drop_column(workflow.get_data_frame_table_name(), column.name)
+    dataops.sql_query.df_drop_column(workflow.get_data_frame_table_name(), column.name)
 
     # Reposition the columns above the one being deleted
     workflow.reposition_columns(column.position, workflow.ncols + 1)
@@ -371,6 +372,7 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
 
     # Traverse the actions for which the filter has been deleted and reassess
     #  all their conditions
+    # TODO: Expensive operation. See how to improve it.
     for action in actions_without_filters:
         action.update_n_rows_selected()
 
@@ -393,7 +395,7 @@ def workflow_restrict_column(column):
     """
 
     # Load the data frame
-    data_frame = pandas_db.load_from_db(
+    data_frame = pandas_db.load_table(
         column.workflow.get_data_frame_table_name())
 
     cat_values = set(data_frame[column.name].dropna())
@@ -446,7 +448,7 @@ def clone_column(column, new_workflow=None, new_name=None):
     column.workflow.reposition_columns(column.position, old_position + 1)
 
     # Add the column to the table and update it.
-    data_frame = pandas_db.load_from_db(
+    data_frame = pandas_db.load_table(
         column.workflow.get_data_frame_table_name())
     data_frame[new_name] = data_frame[old_name]
     ops.store_dataframe(data_frame, column.workflow)
@@ -465,15 +467,13 @@ def do_workflow_update_lusers(workflow, log_item):
     """
 
     # Get the column content
-    emails = pandas_db.get_table_data(
+    emails = pandas_db.get_rows(
         workflow.get_data_frame_table_name(),
-        None,
-        [workflow.luser_email_column.name]
-    )
+        [workflow.luser_email_column.name], None)
 
     result = []
     created = 0
-    for uemail, in emails:
+    for __, uemail, in emails:
         luser = get_user_model().objects.filter(email=uemail).first()
         if not luser:
             # Create user

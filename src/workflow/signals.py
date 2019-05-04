@@ -5,6 +5,7 @@ import logging
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
+import dataops.sql_query
 from dataops import pandas_db
 from workflow.models import Workflow
 
@@ -16,4 +17,4 @@ def delete_data_frame_table(sender, instance, **kwargs):
     del sender
     del kwargs
     if instance.has_table():
-        pandas_db.delete_table(instance.get_data_frame_table_name())
+        dataops.sql_query.delete_table(instance.get_data_frame_table_name())

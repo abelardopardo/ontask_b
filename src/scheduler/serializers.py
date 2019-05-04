@@ -1,18 +1,18 @@
 # -*- coding: UTF-8 -*-#
 
 
-from builtins import object
 import datetime
+from builtins import object
 
 import pytz
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _, ugettext
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
-from django.conf import settings
 
-from ontask import is_correct_email
 from action.models import Action
-from dataops.pandas_db import execute_select_on_table
+from dataops.sql_query import get_rows
+from ontask import is_correct_email
 from scheduler.models import ScheduledAction
 
 
@@ -181,12 +181,10 @@ class ScheduledEmailSerializer(ScheduledActionSerializer):
 
         # Check if the values in the email column are correct emails
         try:
-            column_data = execute_select_on_table(
+            column_data = get_rows(
                 action.workflow.get_data_frame_table_name(),
-                [],
-                [],
                 column_names=[item_column.name])
-            if not all([is_correct_email(x[0]) for x in column_data]):
+            if not all(is_correct_email(email) for __, email in column_data):
                 # column has incorrect email addresses
                 raise APIException(
                     _('The column with email addresses has incorrect values.')
@@ -196,14 +194,17 @@ class ScheduledEmailSerializer(ScheduledActionSerializer):
                 _('The column with email addresses has incorrect values.')
             )
 
-        if not all([is_correct_email(x)
-                    for x in payload.get('cc_email', []) if x]):
+        if not all(
+            is_correct_email(email_val)
+            for email_val in payload.get('cc_email', [])
+            if email_val
+        ):
             raise APIException(
                 _('cc_email must be a comma-separated list of emails.')
             )
 
-        if not all([is_correct_email(x)
-                    for x in payload.get('bcc_email', []) if x]):
+        if not all(is_correct_email(x)
+                   for x in payload.get('bcc_email', []) if x):
             raise APIException(
                 _('bcc_email must be a comma-separated list of emails.')
             )

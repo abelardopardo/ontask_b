@@ -6,18 +6,14 @@ from builtins import zip
 import numpy as np
 import pandas as pd
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _, gettext
+from django.utils.translation import gettext, ugettext_lazy as _
 
 from dataops import formula_evaluation
 from dataops.pandas_db import (
-    store_table,
-    df_column_types_rename,
-    get_table_data,
-    pandas_datatype_names,
-    is_unique_column,
-    are_unique_columns,
-    has_unique_column
+    are_unique_columns, has_unique_column, is_unique_column,
+    pandas_datatype_names, store_table,
 )
+from dataops.sql_query import get_df_column_types, get_rows
 from workflow.models import Column, Workflow
 
 
@@ -57,7 +53,7 @@ def store_dataframe(data_frame, workflow, temporary=False, reset_keys=True):
         store_table(data_frame, table_name)
 
         # Get the column types
-        df_column_types = df_column_types_rename(table_name)
+        df_column_types = get_df_column_types(table_name)
 
         # Return a list with three list with information about the
         # data frame that will be needed in the next steps
@@ -118,7 +114,7 @@ def store_dataframe(data_frame, workflow, temporary=False, reset_keys=True):
                 dtype=dict([(x.name, x.data_type) for x in wf_columns]))
 
     # Review the column types because some "objects" are stored as booleans
-    column_types = df_column_types_rename(workflow.get_data_frame_table_name())
+    column_types = get_df_column_types(workflow.get_data_frame_table_name())
     for ctype, col in zip(column_types, wf_columns):
         if col.data_type != ctype:
             # If the column type in the DB is different from the one in the
@@ -147,17 +143,14 @@ def get_table_row_by_index(workflow, filter_formula, idx):
     """
 
     # Get the data
-    data = get_table_data(
-        workflow.get_data_frame_table_name(),
-        filter_formula,
-        workflow.get_column_names()
-    )
+    data = get_rows(workflow.get_data_frame_table_name(),
+                    workflow.get_column_names(), filter_formula)
 
     # If the data is not there, return None
     if idx > len(data):
         return None
 
-    return dict(list(zip(workflow.get_column_names(), data[idx - 1])))
+    return data[idx - 1]
 
 
 def perform_overlap_update(dst_df, src_df, dst_key, src_key, how_merge):

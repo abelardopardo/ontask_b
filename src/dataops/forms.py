@@ -2,26 +2,22 @@
 
 
 import json
-from builtins import next
-from builtins import range
-from builtins import str
-from builtins import zip
+from builtins import next, range, str, zip
 from io import TextIOWrapper
 
 import pandas as pd
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.utils.dateparse import parse_datetime
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext, ugettext_lazy as _
 
+import dataops.dataframeupload
 import ontask.ontask_prefs
-from dataops import pandas_db, ops
+from action.form_edit import column_to_field
+from dataops import ops, pandas_db
 from dataops.models import SQLConnection
 from ontask import OnTaskDataFrameNoKey
-from ontask.forms import (
-    RestrictedFileField, dateTimeWidgetOptions
-)
-from action.form_edit import column_to_field
+from ontask.forms import RestrictedFileField, dateTimeWidgetOptions
 
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)
@@ -283,7 +279,7 @@ class UploadCSVFileForm(UploadBasic):
 
         # Process CSV file using pandas read_csv
         try:
-            self.data_frame = pandas_db.load_df_from_csvfile(
+            self.data_frame = dataops.dataframeupload.load_df_from_csvfile(
                 TextIOWrapper(self.files['file'].file,
                               encoding=self.data.encoding),
                 self.cleaned_data['skip_lines_at_top'],
@@ -330,7 +326,7 @@ class UploadExcelFileForm(UploadBasic):
 
         # # Process Excel file using pandas read_excel
         try:
-            self.data_frame = pandas_db.load_df_from_excelfile(
+            self.data_frame = dataops.dataframeupload.load_df_from_excelfile(
                 self.files['file'],
                 data['sheet']
             )
@@ -404,7 +400,7 @@ class UploadGoogleSheetForm(UploadBasic):
             return data
 
         try:
-            self.data_frame = pandas_db.load_df_from_googlesheet(
+            self.data_frame = dataops.dataframeupload.load_df_from_googlesheet(
                 data['google_url'],
                 self.cleaned_data['skip_lines_at_top'],
                 self.cleaned_data['skip_lines_at_bottom']
@@ -497,7 +493,7 @@ class UploadS3FileForm(UploadBasic):
 
         # Process S3 file using pandas read_excel
         try:
-            self.data_frame = pandas_db.load_df_from_s3(
+            self.data_frame = dataops.dataframeupload.load_df_from_s3(
                 self.cleaned_data['aws_access_key'],
                 self.cleaned_data['aws_secret_access_key'],
                 self.cleaned_data['aws_bucket_name'],

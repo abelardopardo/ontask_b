@@ -12,7 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 import test
 from dataops import pandas_db
-from dataops.pandas_db import is_column_in_table
+from dataops.sql_query import is_column_in_table
 from workflow.models import Workflow
 
 
@@ -27,7 +27,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -594,7 +594,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -660,7 +660,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
                                            'RESULT 1'))
         self.assertTrue(is_column_in_table(wflow.get_data_frame_table_name(),
                                            'RESULT 2'))
-        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
+        df = pandas_db.load_table(wflow.get_data_frame_table_name())
         self.assertTrue(all([x == 1 for x in df['RESULT 1']]))
         self.assertTrue(all([x == 2 for x in df['RESULT 2']]))
 
@@ -728,7 +728,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
                                            'RESULT 1_2'))
         self.assertTrue(is_column_in_table(wflow.get_data_frame_table_name(),
                                            'RESULT 2_2'))
-        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
+        df = pandas_db.load_table(wflow.get_data_frame_table_name())
         self.assertTrue(all([x == 1 for x in df['RESULT 1_2']]))
         self.assertTrue(all([x == 2 for x in df['RESULT 2_2']]))
 
@@ -795,7 +795,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name='Plugin test')
-        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
+        df = pandas_db.load_table(wflow.get_data_frame_table_name())
         self.assertTrue('RESULT 3' in set(df.columns))
         self.assertTrue('RESULT 4' in set(df.columns))
         self.assertTrue(df['RESULT 3'].equals(df['A1'] + df['A2']))
@@ -825,7 +825,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -903,7 +903,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
+        df = pandas_db.load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' in set(df.columns))
@@ -922,7 +922,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
+        df = pandas_db.load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' not in set(df.columns))
@@ -941,7 +941,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
+        df = pandas_db.load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' in set(df.columns))
@@ -960,7 +960,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
+        df = pandas_db.load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('text3' in set(df.columns))
@@ -984,7 +984,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_from_db(wflow.get_data_frame_table_name())
+        df = pandas_db.load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' not in set(df.columns))

@@ -22,6 +22,7 @@ from django import forms
 from django.conf import settings as ontask_settings
 from django.utils.translation import ugettext_lazy as _
 
+import ontask
 from action.models import ACTION_NAME_LENGTH, Action, Condition
 from ontask import is_legal_name, ontask_prefs
 from ontask.forms import RestrictedFileField
@@ -38,8 +39,8 @@ class ActionUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         """Store user and wokflow."""
-        self.user = kwargs.pop(str('workflow_user'), default=None)
-        self.workflow = kwargs.pop(str('action_workflow'), default=None)
+        self.user = kwargs.pop(str('workflow_user'), None)
+        self.workflow = kwargs.pop(str('action_workflow'), None)
         super().__init__(*args, **kwargs)
 
     class Meta(object):
@@ -57,13 +58,13 @@ class ActionForm(ActionUpdateForm):
         super().__init__(*args, **kargs)
 
         at_field = self.fields['action_type']
-        at_field.widget.choices = ontask_settings.AVAILABLE_ACTION_TYPES
+        at_field.widget.choices = ontask.AVAILABLE_ACTION_TYPES
         # Remove those actions that are not available
-        if len(ontask_settings.AVAILABLE_ACTION_TYPES) == 1:
+        if len(ontask.AVAILABLE_ACTION_TYPES) == 1:
             # There is only one type of action. No need to generate the field.
             # Set to value and hide
             at_field.widget = forms.HiddenInput()
-            at_field.initial = ontask_settings.AVAILABLE_ACTION_TYPES[0][0]
+            at_field.initial = ontask.AVAILABLE_ACTION_TYPES[0][0]
 
     class Meta(ActionUpdateForm.Meta):
         """Select action and the three fields."""

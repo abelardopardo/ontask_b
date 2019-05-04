@@ -16,6 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from action.evaluate_action import (
     action_evaluation_context, evaluate_row_action_in, evaluate_row_action_out,
     get_row_values,
+    action_condition_evaluation,
 )
 from action.models import Action
 from ontask.permissions import is_instructor
@@ -122,7 +123,7 @@ def preview_response(
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content', None)
     if action_content:
-        action.set_content(action_content)
+        action.set_text_content(action_content)
         action.save()
 
     # Get the total number of items
@@ -144,7 +145,7 @@ def preview_response(
     row_values = get_row_values(action, idx)
 
     # Obtain the dictionary with the condition evaluation
-    condition_evaluation = action.get_condition_evaluation(row_values)
+    condition_evaluation = action_condition_evaluation(action, row_values)
     # Get the dictionary containing column names, attributes and condition
     # valuations:
     context = action_evaluation_context(
@@ -193,8 +194,8 @@ def preview_response(
             ],
         )
 
-    if action.is_out:
-        # If action is out, save the content
+    if action.action_type == Action.personalized_canvas_email or \
+        action.action_type == Action.personalized_json:
         action_content = escape(action_content)
 
     # See if there is prelude content in the request

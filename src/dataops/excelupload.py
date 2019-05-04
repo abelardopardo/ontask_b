@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow
+
 from .forms import UploadExcelFileForm
 
 

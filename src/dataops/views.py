@@ -2,10 +2,7 @@
 
 
 import json
-from builtins import object
-from builtins import range
-from builtins import str
-from builtins import zip
+from builtins import object, range, str, zip
 
 import django_tables2 as tables
 import pandas as pd
@@ -18,19 +15,21 @@ from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
 from django.urls import resolve
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext, ugettext_lazy as _
 
 import dataops.ops as ops
 import dataops.pandas_db
 from dataops import pandas_db
 from dataops.forms import PluginInfoForm
+from dataops.sql_query import get_rows, update_row
 from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tasks import run_plugin_task
 from workflow.ops import get_workflow, store_workflow_in_session
-from .forms import RowForm, FIELD_PREFIX
+
+from .forms import FIELD_PREFIX, RowForm
 from .models import PluginRegistry
-from .plugin_manager import refresh_plugin_data, load_plugin
+from .plugin_manager import load_plugin, refresh_plugin_data
 
 
 class PluginRegistryTable(tables.Table):
@@ -229,11 +228,10 @@ def row_update(request):
                       {'message': _('Unable to update table row')})
 
     # Get the rows from the table
-    rows = pandas_db.execute_select_on_table(
+    rows = get_rows(
         workflow.get_data_frame_table_name(),
-        [update_key],
-        [update_val],
-        workflow.get_column_names()
+        column_names=workflow.get_column_names(),
+        filter_pairs={update_key: update_val},
     )
 
     row_form = RowForm(request.POST or None,
@@ -250,33 +248,29 @@ def row_update(request):
     # This is a valid POST request
 
     # Create the query to update the row
-    set_fields = []
-    set_values = []
+    set_pairs = {}
     unique_names = workflow.get_unique_columns().values_list('name', flat=True)
-    unique_field = None
-    unique_value = None
+    filter_pair = {}
     log_payload = []
     for idx, colname in enumerate(unique_names):
         value = row_form.cleaned_data[FIELD_PREFIX + '%s' % idx]
-        set_fields.append(colname)
-        set_values.append(value)
+        set_pairs[colname] = value
         log_payload.append((colname, str(value)))
 
-        if not unique_field and colname in unique_names:
-            unique_field = colname
-            unique_value = value
+        if not filter_pair and colname in unique_names:
+            filter_pair[colname] = value
 
     # If there is no unique key, something went wrong.
-    if not unique_field:
+    if not filter_pair:
         raise Exception(_('Key value not found when updating row'))
 
-    pandas_db.update_row(workflow.get_data_frame_table_name(),
-                         set_fields,
-                         set_values,
-                         [unique_field],
-                         [unique_value])
+    update_row(
+        workflow.get_data_frame_table_name(),
+        set_pairs=set_pairs,
+        filter_pairs=filter_pair)
 
     # Recompute all the values of the conditions in each of the actions
+    # TODO: See if this can be pushed asychronously (probably not)
     for act in workflow.actions.all():
         act.update_n_rows_selected()
 
@@ -327,7 +321,7 @@ def row_create(request):
                 for idx in range(len(columns))]
 
     # Load the existing df from the db
-    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+    df = pandas_db.load_table(workflow.get_data_frame_table_name())
 
     # Perform the row addition in the DF first
     # df2 = pd.DataFrame([[5, 6], [7, 8]], columns=list('AB'))
@@ -356,6 +350,7 @@ def row_create(request):
     store_workflow_in_session(request, workflow)
 
     # Recompute all the values of the conditions in each of the actions
+    # TODO: Can we do this asynchronously?
     for act in workflow.actions.all():
         act.update_n_rows_selected()
 
@@ -548,5 +543,3 @@ def moreinfo(request, pk):
         {'pinstance': pinstance},
         request=request)
     return JsonResponse(data)
-
-

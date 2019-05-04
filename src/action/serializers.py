@@ -10,7 +10,7 @@ from rest_framework import serializers
 
 from action.models import Action, ActionColumnConditionTuple, Condition
 from dataops.formula_evaluation import get_variables
-from dataops.sql_query import add_column
+from dataops.sql_query import add_column_to_db
 from workflow.column_serializers import ColumnNameSerializer, ColumnSerializer
 
 try:
@@ -49,7 +49,7 @@ def create_columns(new_columns, context):
 
     # Add columns to DB
     for col in new_columns:
-        add_column(
+        add_column_to_db(
             workflow.get_data_frame_table_name(),
             col.name,
             col.data_type)

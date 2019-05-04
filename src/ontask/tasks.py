@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import contextlib
 import datetime
 from builtins import str
 from datetime import datetime, timedelta
@@ -7,7 +6,7 @@ from typing import Mapping
 
 import pytz
 from celery import shared_task
-from celery.bin.control import inspect
+from celery.task.control import inspect
 from celery.utils.log import get_task_logger
 from django.conf import settings as ontask_settings
 from django.contrib.auth import get_user_model
@@ -19,7 +18,7 @@ from action.payloads import JSONPayload
 from action.send_canvas_email import send_canvas_messages
 from action.send_json import send_json
 from action.send_messages import send_messages
-from dataops import pandas_db
+from dataops import sql_query
 from dataops.models import PluginRegistry
 from dataops.plugin_manager import run_plugin
 from logs.models import Log
@@ -36,9 +35,12 @@ def celery_is_up():
     :return: Boolean encoding if the process is running
     """
     # Verify that celery is running!
-    with contextlib.suppress(Exception):
-        celery_stats = inspect().stats()
-        return celery_stats is not None
+    try:
+        inspect().stats()
+    except Exception:
+        return False
+
+    return True
 
 
 def get_log_item(log_id):
@@ -366,7 +368,7 @@ def increase_track_count(method, get_dict):
     if column_dst:
         try:
             # Increase the relevant cell by one
-            pandas_db.increase_row_integer(
+            sql_query.increase_row_integer(
                 action.workflow.get_data_frame_table_name(),
                 column_dst,
                 column_to,

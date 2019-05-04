@@ -31,10 +31,7 @@ from django.utils.translation import ugettext_lazy as _
 from action.forms import SUFFIX_LENGTH
 from action.models import Action
 from action.payloads import EmailPayload
-from dataops.pandas_db import (
-    execute_select_on_table, get_table_data, is_column_table_unique,
-)
-from dataops.sql_query import get_table_select_cursor
+from dataops.sql_query import get_rows, is_column_table_unique
 from ontask import is_correct_email
 from ontask.forms import dateTimeWidgetOptions
 
@@ -95,7 +92,7 @@ class EmailActionForm(forms.Form):
         """Store column names, action, payload, and adjust initial values."""
         self.column_names: List[str] = kargs.pop('column_names')
         self.action: Action = kargs.pop('action')
-        self.action_info: EmailPayload = kargs.pop('op_payload')
+        self.action_info: EmailPayload = kargs.pop('action_info')
 
         super().__init__(*args, **kargs)
 
@@ -140,13 +137,10 @@ class EmailActionForm(forms.Form):
 
         # Check if the values in the email column are correct emails
         try:
-            column_data = execute_select_on_table(
+            column_data = get_rows(
                 self.action.workflow.get_data_frame_table_name(),
-                [],
-                [],
-                column_names=[self.action_info['item_column']],
-            )
-            if not all(is_correct_email(cdata[0]) for cdata in column_data):
+                column_names=[self.action_info['item_column']])
+            if not all(is_correct_email(iname) for __, iname in column_data):
                 # column has incorrect email addresses
                 self.add_error(
                     'email_column',
@@ -296,15 +290,12 @@ class ZipActionForm(forms.Form):
                 return form_data
 
             # Participant columns must match the pattern 'Participant [0-9]+'
-            pcolumn_data = get_table_data(
+            pcolumn_data = get_rows(
                 self.action.workflow.get_data_frame_table_name(),
-                None,
-                column_names=[pcolumn],
-            )
-            participant_error = next(
-                (cpair for cpair in pcolumn_data
-                 if not participant_re.search(str(cpair[0]))),
-                None,
+                column_names=[pcolumn], filter_formula=None)
+            participant_error = any(
+                not participant_re.search(str(col_value))
+                for __, col_value in pcolumn_data
             )
             if participant_error:
                 self.add_error(
@@ -334,11 +325,10 @@ class ValueExcludeForm(forms.Form):
 
         super().__init__(form_data, *args, **kwargs)
 
-        self.fields['exclude_values'].choices = get_table_select_cursor(
+        self.fields['exclude_values'].choices = get_rows(
             self.action.workflow.get_data_frame_table_name(),
-            self.action.get_filter_formula(),
             [self.column_name, self.column_name],
-        ).fetchall()
+            self.action.get_filter_formula()).fetchall()
         self.fields['exclude_values'].initial = self.exclude_init
 
 

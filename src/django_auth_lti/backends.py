@@ -8,7 +8,7 @@ from django.contrib.auth.backends import ModelBackend
 from django.core.exceptions import PermissionDenied
 from ontask_lti.tool_provider import DjangoToolProvider
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('onTask')
 
 
 class LTIAuthBackend(ModelBackend):

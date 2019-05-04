@@ -27,7 +27,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -308,7 +308,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
         self.wait_close_modal_refresh_table('table-data_previous')
 
         # Check that the data is correct
-        df = pandas_db.load_from_db(
+        df = pandas_db.load_table(
             Workflow.objects.all()[0].get_data_frame_table_name()
         )
 
@@ -349,7 +349,7 @@ class TableViews(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -549,7 +549,7 @@ class TableInsertRow(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()

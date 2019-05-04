@@ -14,6 +14,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
+import dataops.sql_query
 from action.models import Condition, ActionColumnConditionTuple
 from dataops import ops, formula_evaluation, pandas_db
 from logs.models import Log
@@ -153,7 +154,7 @@ def column_add(request, pk=None):
 
     # Update the data frame, which must be stored in the form because
     # it was loaded when validating it.
-    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+    df = pandas_db.load_table(workflow.get_data_frame_table_name())
 
     # Add the column with the initial value to the dataframe
     df = ops.data_frame_add_column(df, column, column_initial_value)
@@ -258,7 +259,7 @@ def formula_column_add(request):
         return JsonResponse(data)
 
     # Update the data frame
-    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+    df = pandas_db.load_table(workflow.get_data_frame_table_name())
 
     try:
         # Add the column with the appropriate computation
@@ -391,7 +392,7 @@ def random_column_add(request):
         return JsonResponse(data)
 
     # Update the data frame
-    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+    df = pandas_db.load_table(workflow.get_data_frame_table_name())
 
     # Get the values and interpret its meaning
     values = form.cleaned_data['values']
@@ -537,9 +538,9 @@ def column_edit(request, pk):
 
         # If there is a new name, rename the data frame columns
         if 'name' in form.changed_data:
-            pandas_db.db_column_rename(workflow.get_data_frame_table_name(),
-                                       old_name,
-                                       column.name)
+            dataops.sql_query.db_rename_column(workflow.get_data_frame_table_name(),
+                                               old_name,
+                                               column.name)
             ops.rename_df_column(workflow, old_name, column.name)
 
         if 'position' in form.changed_data:
@@ -879,7 +880,7 @@ def column_restrict_values(request, pk):
     context['cname'] = column.name
 
     # Get the values from the data frame
-    df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+    df = pandas_db.load_table(workflow.get_data_frame_table_name())
     context['values'] = ', '.join(set(df[column.name]))
 
     if request.method == 'POST':

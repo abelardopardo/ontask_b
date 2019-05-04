@@ -3,9 +3,7 @@
 File containing functions to implement all views related to the table element.
 """
 
-from builtins import next
-from builtins import object
-from builtins import str
+from builtins import next, object, str
 from datetime import datetime
 
 import django_tables2 as tables
@@ -23,6 +21,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
+import dataops.sql_query
 from core.datatables import DataTablesServerSidePaging
 from dataops import pandas_db
 from logs.models import Log
@@ -197,30 +196,23 @@ def render_table_display_data(request, workflow, columns, formula,
     column_names = [x.name for x in columns]
 
     # See if an order has been given.
-    if dt_page.order_col_name:
+    order_col_name = None
+    if dt_page.order_col:
         # The first column is ops
-        order_col_name = column_names[dt_page.order_col_name - 1]
+        order_col_name = column_names[dt_page.order_col - 1]
+
+    qs = dataops.sql_query.search_table(
+        workflow.get_data_frame_table_name(),
+        dt_page.search_value,
+        columns_to_search=column_names,
+        filter_formula=formula,
+        order_col_name=order_col_name,
+        order_asc=dt_page.order_dir == 'asc',
+    )
 
     # Find the first key column
     key_name, key_idx = next(((c.name, idx) for idx, c in enumerate(columns)
                               if c.is_key), None)
-
-    # Get the filters to apply when fetching the query set
-    cv_tuples = []
-    if dt_page.search_value:
-        cv_tuples.extend(
-            [(c.name, dt_page.search_value, c.data_type) for c in columns]
-        )
-
-    qs = pandas_db.search_table_rows(
-        workflow.get_data_frame_table_name(),
-        cv_tuples,
-        True,
-        order_col_name,
-        dt_page.order_dir == 'asc',
-        column_names,
-        formula
-    )
 
     # Post processing + adding operation columns and performing the search
     final_qs = []
@@ -239,17 +231,20 @@ def render_table_display_data(request, workflow, columns, formula,
         esc_key_value = escape(row[key_idx])
         ops_string = render_to_string(
             'table/includes/partial_table_ops.html',
-            {'stat_url': stat_url + '?{0}'.format(urlencode(
-                {'key': esc_key_name, 'val': esc_key_value}
-            )),
-             'edit_url': reverse('dataops:rowupdate') + '?{0}'.format(urlencode(
-                 {'update_key': esc_key_name,
-                  'update_val': esc_key_value}
-             )),
-             'delete_key': '?{0}'.format(urlencode(
-                 {'key': esc_key_name, 'value': esc_key_value}
-             )),
-             'view_id': view_id}
+            {
+                'stat_url': stat_url + '?{0}'.format(urlencode(
+                    {'key': esc_key_name, 'val': esc_key_value}
+                )),
+                'edit_url': reverse('dataops:rowupdate') + '?{0}'.format(
+                    urlencode(
+                        {'update_key': esc_key_name,
+                         'update_val': esc_key_value}
+                    )),
+                'delete_key': '?{0}'.format(urlencode(
+                    {'key': esc_key_name, 'value': esc_key_value}
+                )),
+                'view_id': view_id,
+            }
         )
 
         # Element to add to the final queryset
@@ -434,14 +429,16 @@ def row_delete(request):
             return JsonResponse(data)
 
         # Proceed to delete the row
-        pandas_db.delete_table_row_by_key(workflow.get_data_frame_table_name(),
-                                          (key, value))
+        dataops.sql_query.delete_row(
+            workflow.get_data_frame_table_name(),
+            (key, value))
 
         # Update rowcount
         workflow.nrows -= 1
         workflow.save()
 
         # Update the value of all the conditions in the actions
+        # TODO: Can we do this asynchronously
         for action in workflow.actions.all():
             action.update_n_rows_selected()
 
@@ -709,7 +706,7 @@ def csvdownload(request, pk=None):
             pk=pk
         ).filter(
             Q(workflow__user=request.user) | Q(workflow__shared=request.user)
-        ).prefetch_selected('columns').first()
+        ).prefetch_related('columns').first()
         if not view:
             # Go back to show the workflow detail
             return redirect(reverse('workflow:detail',
@@ -718,11 +715,13 @@ def csvdownload(request, pk=None):
     # Fetch the data frame
     if view:
         col_names = [x.name for x in view.columns.all()]
+        formula = view.formula
     else:
         col_names = workflow.get_column_names()
+        formula = None
     data_frame = pandas_db.get_subframe(
         workflow.get_data_frame_table_name(),
-        view,
+        formula,
         col_names
     )
 

@@ -31,22 +31,21 @@ import ontask
 #
 ################################################################################
 def dump_config():
-    print('DEBUG:', DEBUG)
+    print('ALLOWED_HOSTS:', ALLOWED_HOSTS)
     print('BASE_DIR:', BASE_DIR())
-    print('STATICFILES_DIRS:', ', '.join(STATICFILES_DIRS))
-    print('STATIC_ROOT:', STATIC_ROOT)
-    print('STATIC_URL:', STATIC_URL)
+    print('CELERY_TASK_ALWAYS_EAGER:', CELERY_TASK_ALWAYS_EAGER)
     print('DATABASE_URL:', DATABASES['default'])
-    print('REDIS_URL:', REDIS_URL)
+    print('DEBUG:', DEBUG)
+    print('DOMAIN_NAME:', DOMAIN_NAME)
     print('MEDIA_ROOT:', MEDIA_ROOT)
     print('MEDIA_URL:', MEDIA_URL)
     print('ONTASK_HELP_URL:', ONTASK_HELP_URL)
-    print('REDIS_URL:', REDIS_URL)
-    print('DOMAIN_NAME:', DOMAIN_NAME)
-    print('USE_SSL:', USE_SSL)
-    print('ALLOWED_HOSTS:', ALLOWED_HOSTS)
     print('ONTASK_TESTING:', ONTASK_TESTING)
-    print('CELERY_TASK_ALWAYS_EAGER:', CELERY_TASK_ALWAYS_EAGER)
+    print('REDIS_URL:', REDIS_URL)
+    print('STATICFILES_DIRS:', ', '.join(STATICFILES_DIRS))
+    print('STATIC_ROOT:', STATIC_ROOT)
+    print('STATIC_URL:', STATIC_URL)
+    print('USE_SSL:', USE_SSL)
 
 
 def get_from_os_or_env(key, env_obj, default_value=''):

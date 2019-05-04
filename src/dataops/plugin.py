@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import object
 from abc import ABCMeta
+from builtins import object
+
 from django.utils.translation import ugettext_lazy as _
 from future.utils import with_metaclass
 

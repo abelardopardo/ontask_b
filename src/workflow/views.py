@@ -21,7 +21,7 @@ from django.views.decorators.http import require_http_methods
 
 from core.datatables import DataTablesServerSidePaging
 from dataops import ops, pandas_db
-from dataops.pandas_db import get_text_column_hash
+from dataops.sql_query import get_text_column_hash
 from logs.models import Log
 from ontask import is_correct_email, create_new_name
 from ontask.permissions import is_instructor, UserIsInstructor
@@ -576,7 +576,7 @@ def clone(request, pk):
     workflow = get_workflow(request, pk, prefetch_related='actions')
 
     # Clone the data frame
-    data_frame = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+    data_frame = pandas_db.load_table(workflow.get_data_frame_table_name())
     ops.store_dataframe(data_frame, workflow_new)
 
     # Clone actions
@@ -653,10 +653,10 @@ def assign_luser_column(request, pk=None):
     table_name = workflow.get_data_frame_table_name()
 
     # Get the column content
-    emails = pandas_db.get_table_data(table_name, None, [column.name])
+    emails = pandas_db.get_rows(table_name, [column.name], None)
 
     # Verify that the column as a valid set of emails
-    if not all([is_correct_email(x[0]) for x in emails]):
+    if not all([is_correct_email(email_val) for __, email_val in emails]):
         messages.error(
             request,
             _('The selected column does not contain email addresses.')

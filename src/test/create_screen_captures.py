@@ -129,7 +129,7 @@ class ScreenTestFixture(ScreenTests):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
         # Insert a SQL Connection
         # sqlc = SQLConnection(

@@ -22,7 +22,7 @@ from action import settings
 from action.evaluate_action import evaluate_action
 from action.models import Action
 from action.payloads import EmailPayload
-from dataops.sql_query import add_column_integer
+from dataops.sql_query import add_column_to_db
 from logs.models import Log
 from ontask import is_correct_email
 from workflow.models import Column
@@ -85,9 +85,10 @@ def create_track_column(action: Action) -> str:
     action.workflow.save()
 
     # Add the column to the DB table
-    add_column_integer(
+    add_column_to_db(
         action.workflow.get_data_frame_table_name(),
         track_col_name,
+        'integer'
     )
 
     return track_col_name

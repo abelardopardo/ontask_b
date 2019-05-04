@@ -63,10 +63,10 @@ LOGGING = {
             'filename': join(LOG_FOLDER, 'django.log'),
             'formatter': 'verbose'
         },
-        'proj_log_file': {
+        'ontask_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOG_FOLDER, 'project.log'),
+            'filename': join(LOG_FOLDER, 'ontask.log'),
             'formatter': 'verbose'
         },
         'script_log_file': {
@@ -93,8 +93,8 @@ LOGGING = {
             'propagate': True,
             'level': 'DEBUG',
         },
-        'project': {
-            'handlers': ['proj_log_file'],
+        'ontask': {
+            'handlers': ['ontask_log_file'],
             'level': 'DEBUG',
         },
         'scripts': {
@@ -113,11 +113,11 @@ LOGGING = {
             'level': 'DEBUG',
         },
         'django_auth_lti.backends': {
-            'handlers': ['proj_log_file'],
+            'handlers': ['ontask_log_file'],
             'level': 'DEBUG',
         },
         'django_auth_lti.middleware_patched': {
-            'handlers': ['proj_log_file'],
+            'handlers': ['ontask_log_file'],
             'level': 'DEBUG',
         },
     }

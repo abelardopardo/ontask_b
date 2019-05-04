@@ -81,7 +81,7 @@ class TableBasicOps(APIView):
         workflow = self.get_object(pk)
         serializer = self.serializer_class(
             {'data_frame':
-                 pandas_db.load_from_db(workflow.get_data_frame_table_name())
+                 pandas_db.load_table(workflow.get_data_frame_table_name())
              }
         )
         return Response(serializer.data)
@@ -90,7 +90,7 @@ class TableBasicOps(APIView):
     def post(self, request, pk, format=None):
         # If there is a table in the workflow, ignore the request
         w = Workflow.objects.get(pk=pk)
-        if pandas_db.load_from_db(w.get_data_frame_table_name()) is not None:
+        if pandas_db.load_table(w.get_data_frame_table_name()) is not None:
             raise APIException(_('Post request requires workflow without '
                                  'a table'))
         return self.override(request, pk, format)
@@ -209,7 +209,7 @@ class TableBasicMerge(APIView):
         workflow = self.get_object(pk)
         serializer = self.serializer_class(
             {'src_df':
-                 pandas_db.load_from_db(workflow.get_data_frame_table_name()),
+                 pandas_db.load_table(workflow.get_data_frame_table_name()),
              'how': '',
              'left_on': '',
              'right_on': ''}
@@ -221,7 +221,7 @@ class TableBasicMerge(APIView):
         # Try to retrieve the wflow to check for permissions
         workflow = self.get_object(pk)
         # Get the dst_df
-        dst_df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        dst_df = pandas_db.load_table(workflow.get_data_frame_table_name())
 
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():

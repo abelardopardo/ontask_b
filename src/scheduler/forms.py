@@ -10,7 +10,7 @@ from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-from dataops.pandas_db import execute_select_on_table
+from dataops.sql_query import get_rows
 from ontask.forms import dateTimeWidgetOptions
 from ontask import is_correct_email
 from workflow.models import Column
@@ -296,12 +296,10 @@ def scheduled_email_action_data_is_correct(action, cleaned_data):
 
     # Check if the values in the email column are correct emails
     try:
-        column_data = execute_select_on_table(
+        column_data = get_rows(
             action.workflow.get_data_frame_table_name(),
-            [],
-            [],
             column_names=[item_column.name])
-        if not all([is_correct_email(x[0]) for x in column_data]):
+        if not all([is_correct_email(email) for __, email in column_data]):
             # column has incorrect email addresses
             result.append(
                 ('item_column',

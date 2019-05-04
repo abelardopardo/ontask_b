@@ -103,7 +103,7 @@ class ColumnBasicForm(forms.ModelForm):
 
         # Load the data frame from the DB for various checks and leave it in
         # the form for future use
-        self.data_frame = pandas_db.load_from_db(
+        self.data_frame = pandas_db.load_table(
             self.workflow.get_data_frame_table_name()
         )
 

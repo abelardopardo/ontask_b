@@ -16,7 +16,6 @@ from dataops.formula_evaluation import (
 from logs.models import Log
 from ontask.permissions import UserIsInstructor, is_instructor
 from workflow.ops import get_workflow
-
 from .forms import ConditionForm, FilterForm
 
 
@@ -88,7 +87,7 @@ def save_condition_form(request,
             name=form.cleaned_data['name'],
             is_filter=False)
         if (is_new and qs.exists()) or \
-                (not is_new and qs.filter(~Q(id=condition_id)).exists()):
+            (not is_new and qs.filter(~Q(id=condition_id)).exists()):
             form.add_error(
                 'name',
                 _('A condition with that name already exists in this action')
@@ -152,9 +151,6 @@ def save_condition_form(request,
     else:
         condition = form.save()
 
-    # Update the number of selected rows for all the conditions
-    condition.action.update_n_rows_selected()
-
     # Update the columns field
     condition.columns.set(
         workflow.columns.filter(name__in=get_variables(condition.formula))
@@ -163,8 +159,15 @@ def save_condition_form(request,
     # Update the condition
     condition.save()
 
+    if condition.is_filter:
+        # This update must propagate to the rest of conditions
+        condition.action.update_n_rows_selected()
+        condition.refresh_from_db(fields='n_rows_selected')
+    else:
+        # Update the number of rows selected in the condition
+        condition.update_n_rows_selected()
+
     # Log the event
-    formula, __ = evaluate_formula(condition.formula, NodeEvaluation.EVAL_SQL)
     if is_new:
         if is_filter:
             log_type = Log.FILTER_CREATE
@@ -177,13 +180,17 @@ def save_condition_form(request,
             log_type = Log.CONDITION_UPDATE
 
     # Log the event
-    Log.objects.register(request.user,
-                         log_type,
-                         workflow,
-                         {'id': condition.id,
-                          'name': condition.name,
-                          'selected_rows': condition.n_rows_selected,
-                          'formula': formula})
+    Log.objects.register(
+        request.user,
+        log_type,
+        workflow,
+        {
+            'id': condition.id,
+            'name': condition.name,
+            'selected_rows': condition.n_rows_selected,
+            'formula': evaluate_formula(
+                condition.formula, NodeEvaluation.EVAL_TXT),
+        })
 
     data['html_redirect'] = ''
     return JsonResponse(data)
@@ -283,13 +290,14 @@ def edit_filter(request, pk):
     form = FilterForm(request.POST or None, instance=cond_filter)
 
     # Render the form with the Condition information
-    return save_condition_form(request,
-                               workflow,
-                               form,
-                               'action/includes/partial_filter_addedit.html',
-                               cond_filter.action,
-                               cond_filter,  # Condition object
-                               True)  # It is a filter
+    return save_condition_form(
+        request,
+        workflow,
+        form,
+        'action/includes/partial_filter_addedit.html',
+        cond_filter.action,
+        cond_filter,  # Condition object
+        True)  # It is a filter
 
 
 @user_passes_test(is_instructor)
@@ -322,44 +330,49 @@ def delete_filter(request, pk):
     data = dict()
     data['form_is_valid'] = False
 
-    # Treat the two types of requests
-    if request.method == 'POST':
+    if request.method == 'GET':
+        data['html_form'] = render_to_string(
+            'action/includes/partial_filter_delete.html',
+            {'id': cond_filter.id},
+            request=request,
+        )
 
-        # If the request has 'action_content', update the action
-        action_content = request.POST.get('action_content', None)
-        if action_content:
-            cond_filter.action.set_text_content(action_content)
-            cond_filter.action.save()
+        return JsonResponse(data)
 
-        # Log the event
-        formula, fields = evaluate_formula(cond_filter.formula, NodeEvaluation.EVAL_SQL)
-        Log.objects.register(request.user,
-                             Log.FILTER_DELETE,
-                             cond_filter.action.workflow,
-                             {'id': cond_filter.id,
-                              'name': cond_filter.name,
-                              'selected_rows': cond_filter.n_rows_selected,
-                              'formula': formula,
-                              'formula_fields': fields})
+    # If the request has 'action_content', update the action
+    action_content = request.POST.get('action_content', None)
+    if action_content:
+        cond_filter.action.set_text_content(action_content)
+        cond_filter.action.save()
 
-        # Get the action object for further processing
-        action = cond_filter.action
+    # Log the event
+    formula, fields = evaluate_formula(
+        cond_filter.formula, NodeEvaluation.EVAL_SQL)
 
-        # Perform the delete operation
-        cond_filter.delete()
+    Log.objects.register(
+        request.user,
+        Log.FILTER_DELETE,
+        cond_filter.action.workflow,
+        {
+            'id': cond_filter.id,
+            'name': cond_filter.name,
+            'selected_rows': cond_filter.n_rows_selected,
+            'formula': formula,
+            'formula_fields': fields,
+        }
+    )
 
-        # Number of selected rows now needs to be updated in all remaining
-        # conditions
-        action.update_n_rows_selected()
+    # Get the action object for further processing
+    action = cond_filter.action
 
-        return JsonResponse({'form_is_valid': True, 'html_redirect': ''})
+    # Perform the delete operation
+    cond_filter.delete()
 
-    data['html_form'] = \
-        render_to_string('action/includes/partial_filter_delete.html',
-                         {'id': cond_filter.id},
-                         request=request)
+    # Number of selected rows now needs to be updated in all remaining
+    # conditions
+    action.update_n_rows_selected()
 
-    return JsonResponse(data)
+    return JsonResponse({'form_is_valid': True, 'html_redirect': ''})
 
 
 class ConditionCreateView(UserIsInstructor, generic.TemplateView):
@@ -507,7 +520,8 @@ def delete_condition(request, pk):
             condition.action.set_text_content(action_content)
             condition.action.save()
 
-        formula, fields = evaluate_formula(condition.formula, NodeEvaluation.EVAL_SQL)
+        formula, fields = evaluate_formula(condition.formula,
+                                           NodeEvaluation.EVAL_SQL)
         Log.objects.register(request.user,
                              Log.CONDITION_DELETE,
                              condition.action.workflow,

@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import range
-from builtins import zip
+from builtins import range, zip
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -10,10 +9,11 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
-from dataops import ops, pandas_db
+from dataops import ops, pandas_db, sql_query
 from logs.models import Log
 from ontask.permissions import is_instructor
 from workflow.ops import get_workflow, store_workflow_in_session
+
 from .forms import SelectColumnUploadForm, SelectKeysForm
 
 
@@ -143,7 +143,7 @@ def upload_s2(request):
     request.session['upload_data'] = upload_data
 
     # Load the existing DF or None if it doesn't exist
-    existing_df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+    existing_df = pandas_db.load_table(workflow.get_data_frame_table_name())
 
     if existing_df is not None:
         # This is a merge operation, so move to Step 3
@@ -182,7 +182,7 @@ def upload_s2(request):
     store_workflow_in_session(request, workflow)
 
     # Nuke the temporary table
-    pandas_db.delete_upload_table(workflow.get_data_frame_upload_table_name())
+    sql_query.delete_table(workflow.get_data_frame_upload_table_name())
 
     # Log the event
     col_info = workflow.get_column_info()
@@ -383,10 +383,10 @@ def upload_s4(request):
 
         # Get the dataframes to merge
         try:
-            dst_df = pandas_db.load_from_db(
+            dst_df = pandas_db.load_table(
                 workflow.get_data_frame_table_name()
             )
-            src_df = pandas_db.load_from_db(
+            src_df = pandas_db.load_table(
                 workflow.get_data_frame_upload_table_name()
             )
         except Exception:
@@ -401,7 +401,7 @@ def upload_s4(request):
                                                     upload_data)
 
         # Nuke the temporary table
-        pandas_db.delete_upload_table(
+        sql_query.delete_table(
             workflow.get_data_frame_upload_table_name()
         )
 

@@ -4,13 +4,8 @@
 from django.urls import path
 
 from . import (
+    csvupload, excelupload, googlesheetupload, s3upload, sqlcon_views, upload,
     views,
-    csvupload,
-    excelupload,
-    sqlcon_views,
-    googlesheetupload,
-    upload,
-    s3upload
 )
 
 app_name = 'dataops'

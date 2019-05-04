@@ -23,9 +23,9 @@ import ontask
 from action.evaluate_template import render_template
 from action.form_edit import EnterActionIn
 from action.models import Action
-from dataops import ops, pandas_db
+from dataops import ops, pandas_db, sql_query
 from dataops.formula_evaluation import NodeEvaluation, evaluate_formula
-from dataops.sql_query import get_table_select_cursor
+from dataops.sql_query import get_rows
 
 
 def action_condition_evaluation(
@@ -166,10 +166,8 @@ def evaluate_action(
     :return: list of lists resulting from the evaluation of the action
     """
     # Get the table data
-    rows = get_table_select_cursor(
-        action.workflow.get_data_frame_table_name(),
-        action.get_filter_formula(),
-    )
+    rows = get_rows(action.workflow.get_data_frame_table_name(),
+                    action.get_filter_formula())
     list_of_renders = []
     for row in rows:
         if (exclude_values and str(row[column_name]) in exclude_values):
@@ -190,7 +188,8 @@ def evaluate_action(
     if action_filter and action_filter.n_rows_selected != len(rows):
         # Filter now returns different number of rows. Action conditions need
         # to be refreshed
-        action.update_n_rows_selected()
+        action_filter.n_rows_selected = len(rows)
+        action.update_n_rows_selected(filter_formula=action_filter.formula)
 
     return list_of_renders
 
@@ -213,19 +212,21 @@ def get_row_values(
 
     # If row_idx is an integer, get the data by index, otherwise, by key
     if isinstance(row_idx, int):
-        row_dict = ops.get_table_row_by_index(
+        row = ops.get_table_row_by_index(
             action.workflow,
             filter_formula,
             row_idx,
         )
     else:
-        row_dict = pandas_db.get_table_row_by_key(
-            action.workflow,
-            filter_formula,
-            row_idx,
-            action.workflow.get_column_names(),
+
+        row = sql_query.get_row(
+            action.workflow.get_data_frame_table_name(),
+            row_idx[0],
+            row_idx[1],
+            column_names=action.workflow.get_column_names(),
+            filter_formula=filter_formula,
         )
-    return row_dict
+    return row
 
 
 def evaluate_row_action_out(

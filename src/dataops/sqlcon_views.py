@@ -7,18 +7,19 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db import IntegrityError
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
+import dataops.dataframeupload
 from dataops import ops, pandas_db
 from dataops.forms import SQLConnectionForm, SQLRequestPassword
 from dataops.models import SQLConnection
 from logs.models import Log
 from ontask import OnTaskDataFrameNoKey, create_new_name
-from ontask.permissions import is_instructor, is_admin
+from ontask.permissions import is_admin, is_instructor
 from ontask.tables import OperationsColumn
 from workflow.models import Workflow
 from workflow.ops import get_workflow
@@ -428,7 +429,7 @@ def sqlupload1(request, pk):
 
     # Process SQL connection using pandas
     try:
-        data_frame = pandas_db.load_df_from_sqlconnection(conn, read_pwd)
+        data_frame = dataops.dataframeupload.load_df_from_sqlconnection(conn, read_pwd)
     except Exception as e:
         messages.error(request,
                        _('Unable to obtain data: {0}').format(e))

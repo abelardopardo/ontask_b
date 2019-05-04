@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import subprocess
+
 from django.db import connection
 from future import standard_library
 
@@ -1696,3 +1698,20 @@ def delete_all_tables():
     # To make sure the table is dropped.
     connection.commit()
     return
+
+
+def pg_restore_table(filename):
+    """
+    Function that given a file produced with a pg_dump, it uploads its
+    content to the existing database
+
+    :param filename: File in pg_dump format to restore
+    :return:
+    """
+    process = subprocess.Popen(['psql',
+                                '-d',
+                                settings.DATABASES['default']['NAME'],
+                                '-q',
+                                '-f',
+                                filename])
+    process.wait()

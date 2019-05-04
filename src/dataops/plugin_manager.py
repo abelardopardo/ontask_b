@@ -11,11 +11,12 @@ import pytz
 from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.utils.dateparse import parse_datetime
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext, ugettext_lazy as _
 
-from dataops import pandas_db, ops
+from dataops import ops, pandas_db
 from dataops.plugin import OnTaskPluginAbstract
 from logs.models import Log
+
 from . import plugin, settings
 from .models import PluginRegistry
 
@@ -399,7 +400,7 @@ def run_plugin(workflow,
 
     # Get the data frame from the workflow
     try:
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = pandas_db.load_table(workflow.get_data_frame_table_name())
     except Exception as e:
         raise Exception(
             ugettext(
@@ -505,5 +506,3 @@ def run_plugin(workflow,
     plugin_info.save()
 
     return True
-
-

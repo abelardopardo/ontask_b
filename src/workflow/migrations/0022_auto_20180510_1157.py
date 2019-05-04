@@ -17,7 +17,7 @@ def forwards(apps, schema_editor):
         if not pandas_db.is_wf_table_in_db(w):
             continue
 
-        df = pandas_db.load_from_db(w.id)
+        df = pandas_db.load_table(w.id)
 
         if len(df.columns) != w.ncols:
             raise Exception('Inconsistent number of columns')

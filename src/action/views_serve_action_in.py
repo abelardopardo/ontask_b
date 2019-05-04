@@ -16,7 +16,7 @@ from action.evaluate_action import action_evaluation_context, get_row_values
 from action.form_edit import EnterActionIn
 from action.forms import field_prefix
 from action.models import Action, ActionColumnConditionTuple
-from dataops import pandas_db
+from dataops.sql_query import update_row
 from logs.models import Log
 from ontask.permissions import has_access
 from ontask.views import ontask_handler404
@@ -167,8 +167,7 @@ def survey_update_row_values(
     :param context: Condition values
     :return: Zip iterator with pairs (name, value)
     """
-    field_list = []
-    value_list = []
+    set_pairs = {}
     # Create the SET name = value part of the query
     for idx, colcon in enumerate(colcon_items):
         if colcon.column.is_key and not show_key:
@@ -186,20 +185,18 @@ def survey_update_row_values(
             where_value = field_value
             continue
 
-        field_list.append(colcon.column.name)
-        value_list.append(field_value)
+        set_pairs[colcon.column.name] = field_value
 
     # Execute the query
-    pandas_db.update_row(
+    update_row(
         action.workflow.get_data_frame_table_name(),
-        field_list,
-        value_list,
-        [where_field],
-        [where_value])
+        set_pairs=set_pairs,
+        filter_pairs={where_field: where_value},
+    )
 
     # Recompute all the values of the conditions in each of the actions
     # TODO: Explore how to do this asynchronously
     for act in action.workflow.actions.all():
         act.update_n_rows_selected()
 
-    return list(zip(field_list, value_list))
+    return list(set_pairs.items())
