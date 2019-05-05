@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 
 from ontask.permissions import UserIsInstructor
 from .models import Workflow
-from .ops import get_workflow
+from ontask.decorators import get_workflow
 from .serializers import WorkflowListSerializer, WorkflowLockSerializer
 
 

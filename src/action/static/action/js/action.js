@@ -77,7 +77,7 @@ var ajax_post = function(url, data, req_type) {
       $("#modal-item").modal("show");
     },
     success: function(data) {
-      if (data.form_is_valid) {
+      if (typeof data.html_redirect != 'undefined') {
         if (data.html_redirect == "") {
           $('#div-spinner').show();
           window.location.reload(true);

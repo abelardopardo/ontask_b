@@ -19,7 +19,7 @@ from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tasks import celery_is_up, send_json_objects
 from workflow.models import Workflow
-from workflow.ops import get_workflow
+from ontask.decorators import get_workflow
 
 
 def run_json_action(

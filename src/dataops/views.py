@@ -23,10 +23,10 @@ from dataops import pandas_db
 from dataops.forms import PluginInfoForm
 from dataops.sql_query import get_rows, update_row
 from logs.models import Log
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from ontask.tasks import run_plugin_task
-from workflow.ops import get_workflow, store_workflow_in_session
-
+from workflow.ops import store_workflow_in_session
 from .forms import FIELD_PREFIX, RowForm
 from .models import PluginRegistry
 from .plugin_manager import load_plugin, refresh_plugin_data
@@ -154,20 +154,18 @@ def transform_model(request):
 
 @user_passes_test(is_instructor)
 def diagnose(request, pk):
-    """
-    HTML request to show the diagnostics of a plugin that failed the
-    verification tests.
+    """Show the diagnostics of a plugin that failed the verification tests.
 
     :param request: HTML request object
+
     :param pk: Primary key of the transform element
+
     :return:
     """
-
     # Get the corresponding workflow
     workflow = get_workflow(request)
     if not workflow:
-        return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('home')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # To include in the JSON response
     data = dict()
@@ -175,9 +173,7 @@ def diagnose(request, pk):
     # Action being used
     plugin = PluginRegistry.objects.filter(id=pk).first()
     if not plugin:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Reload the plugin to get the messages stored in the right place.
     pinstance, msgs = load_plugin(plugin.filename)
@@ -187,17 +183,15 @@ def diagnose(request, pk):
     if pinstance:
         plugin.is_verified = True
         plugin.save()
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('dataops:transform')
-
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('dataops:transform')})
 
     # Get the diagnostics from the plugin and use it for rendering.
-    data['html_form'] = render_to_string(
-        'dataops/includes/partial_diagnostics.html',
-        {'diagnostic_table': msgs},
-        request=request)
-    return JsonResponse(data)
+    return JsonResponse({
+        'html_form': render_to_string(
+            'dataops/includes/partial_diagnostics.html',
+            {'diagnostic_table': msgs},
+            request=request)
+    })
 
 
 @user_passes_test(is_instructor)
@@ -510,36 +504,31 @@ def plugin_invoke(request, pk):
 
 @user_passes_test(is_instructor)
 def moreinfo(request, pk):
-    """
-    HTML request to show the detailed information about a plugin
+    """Show the detailed information about a plugin.
 
     :param request: HTML request object
+
     :param pk: Primary key of the PluginRegistry element
+
     :return:
     """
-
     # Get the corresponding workflow
     workflow = get_workflow(request)
     if not workflow:
-        return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('home')})
-
-    # To include in the JSON response
-    data = dict()
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Action being used
     plugin = PluginRegistry.objects.filter(id=pk).first()
     if not plugin:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Reload the plugin to get the messages stored in the right place.
     pinstance, msgs = load_plugin(plugin.filename)
 
     # Get the descriptions and show them in the modal
-    data['html_form'] = render_to_string(
-        'dataops/includes/partial_plugin_long_description.html',
-        {'pinstance': pinstance},
-        request=request)
-    return JsonResponse(data)
+    return JsonResponse({
+        'html_form': render_to_string(
+            'dataops/includes/partial_plugin_long_description.html',
+            {'pinstance': pinstance},
+            request=request)
+    })

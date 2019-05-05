@@ -18,8 +18,8 @@ from action.evaluate import (
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
 from action.models import Action
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
-from workflow.ops import get_workflow
 
 
 @csrf_exempt
@@ -43,30 +43,21 @@ def preview_next_all_false_response(
     :param idx:
     :return:
     """
-    # To include in the JSON response
-    resp_data = {}
-
     workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        resp_data['form_is_valid'] = True
-        resp_data['html_redirect'] = reverse('home')
-        return JsonResponse(resp_data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Action being used
     action = workflow.actions.filter(id=pk).first()
     if not action:
-        resp_data['form_is_valid'] = True
-        resp_data['html_redirect'] = reverse('home')
-        return JsonResponse(resp_data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get the list of indeces
     idx_list = action.rows_all_false
 
     if not idx_list:
         # If empty, or None, something went wrong.
-        resp_data['form_is_valid'] = True
-        resp_data['html_redirect'] = reverse('home')
-        return JsonResponse(resp_data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Search for the next element bigger than idx
     next_idx = next((nxt for nxt in idx_list if nxt > idx), None)
@@ -99,14 +90,9 @@ def preview_response(
     :param action: Might have been fetched already
     :return: JsonResponse
     """
-    # To include in the JSON response
-    resp_data = {}
-
     workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        resp_data['form_is_valid'] = True
-        resp_data['html_redirect'] = reverse('home')
-        return JsonResponse(resp_data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get the workflow to obtain row numbers
     if not action:
@@ -115,9 +101,7 @@ def preview_response(
             'conditions',
         ).first()
         if not action:
-            resp_data['form_is_valid'] = True
-            resp_data['html_redirect'] = reverse('home')
-            return JsonResponse(resp_data)
+            return JsonResponse({'html_redirect': reverse('home')})
 
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content', None)
@@ -202,18 +186,20 @@ def preview_response(
     if prelude:
         prelude = evaluate_row_action_out(action, context, prelude)
 
-    resp_data['html_form'] = render_to_string(
-        'action/includes/partial_preview.html',
-        {'action': action,
-         'action_content': action_content,
-         'index': idx,
-         'n_items': n_items,
-         'nxt': nxt,
-         'prv': prv,
-         'prelude': prelude,
-         'correct_json': correct_json,
-         'show_values': show_values,
-         'all_false': all_false},
-        request=request)
-
-    return JsonResponse(resp_data)
+    return JsonResponse({
+        'html_form': render_to_string(
+            'action/includes/partial_preview.html',
+            {
+                'action': action,
+                'action_content': action_content,
+                'index': idx,
+                'n_items': n_items,
+                'nxt': nxt,
+                'prv': prv,
+                'prelude': prelude,
+                'correct_json': correct_json,
+                'show_values': show_values,
+                'all_false': all_false
+            },
+            request=request)
+    })

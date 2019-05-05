@@ -302,12 +302,12 @@ class Workflow(models.Model):
         # date is beyond the current time.
         return session.expire_date >= timezone.now()
 
-    def lock(self, request, create_new_session=False):
+    def lock(self, request, create_session=False):
         """
         Function that sets the session key in the workflow to flag that is
         locked.
         :param request: HTTP request
-        :param create_new_session: Boolean to flag if a new session has to be
+        :param create_session: Boolean to flag if a new session has to be
                created.
         :return: The session_key is assigned and saved.
         """
@@ -332,9 +332,8 @@ class Workflow(models.Model):
         # Case 4: The workflow has a perfectly valid session: UPDATE THE
         # EXPIRE DATE OF THE SESSION
         #
-        if create_new_session:
+        if create_session:
             # Cases 1 and 2. Create a session and store the user_id
-            request.session.save()
             request.session['_auth_user_id'] = request.user.id
             request.session.save()
             self.session_key = request.session.session_key
@@ -343,9 +342,8 @@ class Workflow(models.Model):
 
         # Cases 3 and 4. Update the existing session
         session = Session.objects.get(pk=self.session_key)
-        session.expire_date = \
-            timezone.now() + \
-            datetime.timedelta(seconds=settings.SESSION_COOKIE_AGE)
+        session.expire_date = timezone.now() + datetime.timedelta(
+            seconds=settings.SESSION_COOKIE_AGE)
         session.save()
 
     def unlock(self):

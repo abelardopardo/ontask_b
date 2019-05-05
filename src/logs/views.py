@@ -3,22 +3,19 @@
 
 import json
 
-import pytz
-from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import F, Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, reverse, render
-from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from core.datatables import DataTablesServerSidePaging
 from ontask import simplify_datetime_str
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
-from workflow.ops import get_workflow
 from .models import Log
 
 
@@ -107,23 +104,24 @@ def display_ss(request):
 
 @user_passes_test(is_instructor)
 def view(request, pk):
+    """View the content of one of the logs.
 
-    # Ajax response
-    data = dict()
-    data['form_is_valid'] = False
+    :param request:
 
+    :param pk:
+
+    :return:
+    """
     # Try to get workflow and if not present, go to home page
     workflow = get_workflow(request)
     if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get the log item
     log_item = Log.objects.filter(
         pk=pk,
         user=request.user,
-        workflow=workflow
+        workflow=workflow,
     ).first()
 
     # If the log item is not there, flag!
@@ -133,8 +131,9 @@ def view(request, pk):
 
     context = {'log_item': log_item}
 
-    context['json_pretty'] = json.dumps(log_item.payload,
-                                        sort_keys=True,
-                                        indent=4)
+    context['json_pretty'] = json.dumps(
+        log_item.payload,
+        sort_keys=True,
+        indent=4)
 
     return render(request, 'logs/view.html', context)

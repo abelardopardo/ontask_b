@@ -24,12 +24,13 @@ from dataops import ops, pandas_db
 from dataops.sql_query import get_text_column_hash
 from logs.models import Log
 from ontask import is_correct_email, create_new_name
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor, UserIsInstructor
 from ontask.tables import OperationsColumn
 from ontask.tasks import workflow_update_lusers
 from .forms import WorkflowForm
 from .models import Workflow
-from .ops import get_workflow, store_workflow_in_session
+from .ops import store_workflow_in_session
 
 
 class AttributeTable(tables.Table):
@@ -89,15 +90,24 @@ class WorkflowShareTable(tables.Table):
 
 
 def save_workflow_form(request, form, template_name):
-    # Ajax response. Form is not valid until proven otherwise
-    data = {'form_is_valid': False}
+    """Save the workflow to create a form.
 
+    :param request:
+
+    :param form:
+
+    :param template_name:
+
+    :return:
+    """
     if request.method == 'GET' or not form.is_valid():
         context = {'form': form}
-        data['html_form'] = render_to_string(template_name,
-                                             context,
-                                             request=request)
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                template_name,
+                context,
+                request=request),
+        })
 
     # Correct form submitted
 
@@ -116,32 +126,37 @@ def save_workflow_form(request, form, template_name):
     try:
         workflow_item = form.save()
     except IntegrityError:
-        form.add_error('name',
-                       _('A workflow with that name already exists'))
+        form.add_error(
+            'name',
+            _('A workflow with that name already exists'))
         context = {'form': form}
-        data['html_form'] = render_to_string(template_name,
-                                             context,
-                                             request=request)
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                template_name,
+                context,
+                request=request),
+        })
 
     # Log event
-    Log.objects.register(request.user,
-                         log_type,
-                         workflow_item,
-                         {'id': workflow_item.id,
-                          'name': workflow_item.name})
+    Log.objects.register(
+        request.user,
+        log_type,
+        workflow_item,
+        {
+            'id': workflow_item.id,
+            'name': workflow_item.name,
+        },
+    )
 
     # Set the new workflow as the current one
     workflow_item = get_workflow(request, workflow_item.id)
     if not workflow_item:
-        messages.error(request,
-                       _('The newly created workflow could not be accessed'))
+        messages.error(
+            request,
+            _('The newly created workflow could not be accessed'))
 
     # Here we can say that the form processing is done.
-    data['form_is_valid'] = True
-    data['html_redirect'] = redirect_url
-
-    return JsonResponse(data)
+    return JsonResponse({'html_redirect': redirect_url})
 
 
 @user_passes_test(is_instructor)
@@ -298,18 +313,18 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
 @user_passes_test(is_instructor)
 def update(request, pk):
-    """
-    Update the workflow information (name, description)
+    """Update the workflow information (name, description).
+
     :param request: Request object
+
     :param pk: Workflow ID
+
     :return: JSON response
     """
-
     workflow = get_workflow(request, pk)
     if not workflow:
         # Workflow is not accessible. Go back to index page.
-        return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('home')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     form = WorkflowForm(request.POST or None, instance=workflow)
 
@@ -322,11 +337,10 @@ def update(request, pk):
 
     # If the user does not own the workflow, notify error and go back to
     # index
-    messages.error(request,
-                   _('You can only rename workflows you created.'))
-    data = {'form_is_valid': True,
-            'html_redirect': ''}
-    return JsonResponse(data)
+    messages.error(
+        request,
+        _('You can only rename workflows you created.'))
+    return JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)
@@ -334,15 +348,11 @@ def flush(request, pk):
     workflow = get_workflow(request, pk)
     if not workflow:
         # Workflow is not accessible. Go back to index page.
-        return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('home')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     if workflow.nrows == 0:
         # Table is empty, redirect to data upload
-        return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('dataops:uploadmerge')})
-
-    data = dict()
+        return JsonResponse({'html_redirect': reverse('dataops:uploadmerge')})
 
     if request.user != workflow.user:
         # If the user does not own the workflow, notify error and go back to
@@ -352,9 +362,7 @@ def flush(request, pk):
             _('You can only flush the data of  workflows you created.'))
 
         if request.is_ajax():
-            data = {'form_is_valid': True,
-                    'html_redirect': reverse('home')}
-            return JsonResponse(data)
+            return JsonResponse({'html_redirect': reverse('home')})
 
         return redirect('home')
 
@@ -366,22 +374,21 @@ def flush(request, pk):
         store_workflow_in_session(request, workflow)
 
         # Log the event
-        Log.objects.register(request.user,
-                             Log.WORKFLOW_DATA_FLUSH,
-                             workflow,
-                             {'id': workflow.id,
-                              'name': workflow.name})
+        Log.objects.register(
+            request.user,
+            Log.WORKFLOW_DATA_FLUSH,
+            workflow,
+            {'id': workflow.id, 'name': workflow.name})
 
         # In this case, the form is valid
-        data['form_is_valid'] = True
-        data['html_redirect'] = ''
-    else:
-        data['html_form'] = \
-            render_to_string('workflow/includes/partial_workflow_flush.html',
-                             {'workflow': workflow},
-                             request=request)
+        return JsonResponse({'html_redirect': ''})
 
-    return JsonResponse(data)
+    return JsonResponse({
+        'html_form': render_to_string(
+            'workflow/includes/partial_workflow_flush.html',
+            {'workflow': workflow},
+            request=request),
+    })
 
 
 @user_passes_test(is_instructor)
@@ -389,8 +396,7 @@ def delete(request, pk):
     workflow = get_workflow(request, pk)
     if not workflow:
         # Workflow is not accessible. Go back to index page.
-        return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('home')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Ajax result
     data = dict()
@@ -401,32 +407,32 @@ def delete(request, pk):
                        _('You can only delete workflows that you created.'))
 
         if request.is_ajax():
-            data['form_is_valid'] = True
-            data['html_redirect'] = reverse('home')
-            return JsonResponse(data)
+            return JsonResponse({'html_redirect': reverse('home')})
 
         return redirect('home')
 
     if request.method == 'POST':
         # Log the event
-        Log.objects.register(request.user,
-                             Log.WORKFLOW_DELETE,
-                             workflow,
-                             {'id': workflow.id,
-                              'name': workflow.name})
+        Log.objects.register(
+            request.user,
+            Log.WORKFLOW_DELETE,
+            workflow,
+            {
+                'id': workflow.id,
+                'name': workflow.name})
 
         # Perform the delete operation
         workflow.delete()
 
         # In this case, the form is valid anyway
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-    else:
-        data['html_form'] = \
-            render_to_string('workflow/includes/partial_workflow_delete.html',
-                             {'workflow': workflow},
-                             request=request)
-    return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('home')})
+
+    return JsonResponse({
+        'html_form': render_to_string(
+            'workflow/includes/partial_workflow_delete.html',
+            {'workflow': workflow},
+            request=request)
+    })
 
 
 @user_passes_test(is_instructor)
@@ -518,37 +524,29 @@ def column_ss(request):
 
 @user_passes_test(is_instructor)
 def clone(request, pk):
-    """
-    AJAX view to clone a workflow
+    """Clone a workflow.
+
     :param request: HTTP request
+
     :param pk: Workflow id
+
     :return: JSON data
     """
-
-    # JSON response
-    data = dict()
-
     # Get the current workflow
     workflow = get_workflow(request, pk)
     if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': 'home'})
 
     # Initial data in the context
-    data['form_is_valid'] = False
-    context = {'pk': pk,
-               'name': workflow.name}
+    context = {'pk': pk, 'name': workflow.name}
 
     if request.method == 'GET':
-        data['html_form'] = render_to_string(
-            'workflow/includes/partial_workflow_clone.html',
-            context,
-            request=request
-        )
-        return JsonResponse(data)
-
-    # POST REQUEST
+        return JsonResponse({
+            'html_form': render_to_string(
+                'workflow/includes/partial_workflow_clone.html',
+                context,
+                request=request),
+        })
 
     # Get the new name appending as many times as needed the 'Copy of '
     new_name = 'Copy of ' + workflow.name
@@ -566,10 +564,8 @@ def clone(request, pk):
     try:
         workflow.save()
     except IntegrityError:
-        data['form_is_valid'] = True
-        data['html_redirect'] = ''
         messages.error(request, _('Unable to clone workflow'))
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': ''})
 
     # Get the initial object back
     workflow_new = workflow
@@ -591,17 +587,16 @@ def clone(request, pk):
         request.user,
         Log.WORKFLOW_CLONE,
         workflow_new,
-        {'id_old': workflow_new.id,
-         'id_new': workflow.id,
-         'name_old': workflow_new.name,
-         'name_new': workflow.name})
+        {
+            'id_old': workflow_new.id,
+            'id_new': workflow.id,
+            'name_old': workflow_new.name,
+            'name_new': workflow.name})
 
-    messages.success(request,
-                     _('Workflow successfully cloned.'))
-    data['form_is_valid'] = True
-    data['html_redirect'] = ""  # Reload page
-
-    return JsonResponse(data)
+    messages.success(
+        request,
+        _('Workflow successfully cloned.'))
+    return JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)

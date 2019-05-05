@@ -18,7 +18,7 @@ from table.serializers import (
     DataFrameJSONMergeSerializer
 )
 from workflow.models import Workflow
-from workflow.ops import get_workflow
+from ontask.decorators import get_workflow
 
 
 class TableBasicOps(APIView):

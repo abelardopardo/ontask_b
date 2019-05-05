@@ -20,18 +20,18 @@ from django.views.decorators.http import require_http_methods
 from action.forms import ActionDescriptionForm
 from action.models import Action, ActionColumnConditionTuple
 from logs.models import Log
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from visualizations.plotly import PlotlyHandler
 from workflow.models import Workflow
-from workflow.ops import get_workflow
 
 
 class ColumnSelectedTable(tables.Table):
     """Table to render the columns selected for a given action in."""
 
     column__name = tables.Column(verbose_name=_('Name'))  # noqa: Z116
-    column__description_text = tables.Column(   # noqa: Z116
+    column__description_text = tables.Column(  # noqa: Z116
         verbose_name=_('Description (shown to learners)'),
         default='',
     )
@@ -374,9 +374,7 @@ def edit_description(request: HttpRequest, pk: int) -> JsonResponse:
     # Try to get the workflow first
     workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('home')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get the action
     action = workflow.actions.filter(
@@ -385,12 +383,7 @@ def edit_description(request: HttpRequest, pk: int) -> JsonResponse:
         Q(workflow__user=request.user) | Q(workflow__shared=request.user),
     ).first()
     if not action:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('action:index')})
-
-    # Initial result. In principle, re-render page
-    resp_data = {'form_is_valid': False}
+        return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Create the form
     form = ActionDescriptionForm(
@@ -398,12 +391,12 @@ def edit_description(request: HttpRequest, pk: int) -> JsonResponse:
         instance=action)
 
     if request.method == 'GET' or not form.is_valid():
-        resp_data['html_form'] = render_to_string(
-            'action/includes/partial_action_edit_description.html',
-            {'form': form, 'action': action},
-            request=request)
-
-        return JsonResponse(resp_data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                'action/includes/partial_action_edit_description.html',
+                {'form': form, 'action': action},
+                request=request)
+        })
 
     # Process the POST
     # Save item in the DB
@@ -420,8 +413,4 @@ def edit_description(request: HttpRequest, pk: int) -> JsonResponse:
          'workflow_name': workflow.name})
 
     # Request is correct
-    resp_data['form_is_valid'] = True
-    resp_data['html_redirect'] = ''
-
-    # Enough said. Respond.
-    return JsonResponse(resp_data)
+    return JsonResponse({'html_redirect': ''})

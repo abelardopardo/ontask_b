@@ -21,7 +21,7 @@ from logs.models import Log
 from ontask import create_new_name
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
-from workflow.ops import get_workflow
+from ontask.decorators import get_workflow
 
 
 def do_clone_condition(
@@ -109,12 +109,11 @@ def clone_action(request: HttpRequest, pk: int) -> JsonResponse:
     :return:
     """
     # JSON response
-    resp_data = {'form_is_valid': False}
+    resp_data = {}
 
     # Get the current workflow
     workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        resp_data['form_is_valid'] = True
         resp_data['html_redirect'] = reverse('home')
         return JsonResponse(resp_data)
 
@@ -125,7 +124,6 @@ def clone_action(request: HttpRequest, pk: int) -> JsonResponse:
         Q(workflow__user=request.user) | Q(workflow__shared=request.user),
     ).first()
     if not action:
-        resp_data['form_is_valid'] = True
         resp_data['html_redirect'] = reverse('action:index')
         return JsonResponse(resp_data)
 
@@ -160,7 +158,6 @@ def clone_action(request: HttpRequest, pk: int) -> JsonResponse:
 
     messages.success(request, _('Action successfully cloned.'))
 
-    resp_data['form_is_valid'] = True
     resp_data['html_redirect'] = reverse('action:index')
     return redirect(reverse('action:index'))
 

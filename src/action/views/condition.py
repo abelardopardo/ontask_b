@@ -18,9 +18,9 @@ from dataops.formula_evaluation import (
     NodeEvaluation, evaluate_formula, get_variables,
 )
 from logs.models import Log
+from ontask.decorators import get_workflow
 from ontask.permissions import UserIsInstructor, is_instructor
 from workflow.models import Workflow
-from workflow.ops import get_workflow
 
 
 def save_condition_form(
@@ -52,8 +52,7 @@ def save_condition_form(
     :return: JSON response
     """
     # Ajax response
-    # In principle we re-render until proven otherwise
-    resp_data = {'form_is_valid': False}
+    resp_data = {}
 
     # The condition is new if no value is given
     is_new = condition is None
@@ -93,7 +92,6 @@ def save_condition_form(
         # flag the error
         if is_new and action.get_filter():
             # Should not happen. Go back to editing the action
-            resp_data['form_is_valid'] = True
             resp_data['html_redirect'] = ''
             return JsonResponse(resp_data)
     else:
@@ -156,9 +154,6 @@ def save_condition_form(
                 escape(replacing.format(form.old_name)),
                 escape(replacing.format(condition.name)))
             action.save()
-
-    # Ok, here we can say that the data in the form is correct.
-    resp_data['form_is_valid'] = True
 
     # Proceed to update the DB
     if is_new:
@@ -299,9 +294,7 @@ def edit_filter(request: HttpRequest, pk: int) -> JsonResponse:
     """
     workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('home')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get the filter
     cond_filter = Condition.objects.filter(
@@ -342,9 +335,7 @@ def delete_filter(request: HttpRequest, pk: int) -> JsonResponse:
     """
     workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('home')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get the filter
     cond_filter = Condition.objects.filter(
@@ -359,7 +350,7 @@ def delete_filter(request: HttpRequest, pk: int) -> JsonResponse:
     if not cond_filter:
         return redirect('home')
 
-    resp_data = {'form_is_valid': False}
+    resp_data = {}
 
     if request.method == 'GET':
         resp_data['html_form'] = render_to_string(
@@ -403,7 +394,7 @@ def delete_filter(request: HttpRequest, pk: int) -> JsonResponse:
     # conditions
     action.update_n_rows_selected()
 
-    return JsonResponse({'form_is_valid': True, 'html_redirect': ''})
+    return JsonResponse({'html_redirect': ''})
 
 
 class ConditionCreateView(UserIsInstructor, generic.TemplateView):
@@ -480,9 +471,7 @@ def edit_condition(request: HttpRequest, pk: int) -> JsonResponse:
     # Get the workflow
     workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('home')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get the condition
     condition = Condition.objects.filter(
@@ -495,9 +484,7 @@ def edit_condition(request: HttpRequest, pk: int) -> JsonResponse:
     ).select_related('action').first()
 
     if not condition:
-        return JsonResponse({
-            'form_is_valid': True,
-            'html_redirect': reverse('home')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     form = ConditionForm(request.POST or None, instance=condition)
 
@@ -522,14 +509,9 @@ def delete_condition(request: HttpRequest, pk: int) -> JsonResponse:
 
     :return: AJAX response to render
     """
-    # AJAX result
-    resp_data = {}
-
     workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
-        return JsonResponse({
-            'form_is_valid': True,
-            'html_redirect': reverse('home')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get the condition
     condition = Condition.objects.filter(
@@ -541,11 +523,7 @@ def delete_condition(request: HttpRequest, pk: int) -> JsonResponse:
         is_filter=False,
     ).select_related('action').first()
     if not condition:
-        resp_data['form_is_valid'] = True
-        resp_data['html_redirect'] = reverse('home')
-        return JsonResponse(resp_data)
-
-    resp_data = {'form_is_valid': False}
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Treat the two types of requests
     if request.method == 'POST':
@@ -574,13 +552,11 @@ def delete_condition(request: HttpRequest, pk: int) -> JsonResponse:
         # Reset the count of number of rows with all conditions false
         condition.action.rows_all_false = None
 
-        resp_data['form_is_valid'] = True
-        resp_data['html_redirect'] = ''
-        return JsonResponse(resp_data)
+        return JsonResponse({'html_redirect': ''})
 
-    resp_data['html_form'] = render_to_string(
-        'action/includes/partial_condition_delete.html',
-        {'condition_id': condition.id},
-        request=request)
-
-    return JsonResponse(resp_data)
+    return JsonResponse({
+        'html_form': render_to_string(
+            'action/includes/partial_condition_delete.html',
+            {'condition_id': condition.id},
+            request=request)
+    })

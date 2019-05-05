@@ -12,7 +12,8 @@ from django.utils.translation import ugettext as _
 from dataops import ops, pandas_db, sql_query
 from logs.models import Log
 from ontask.permissions import is_instructor
-from workflow.ops import get_workflow, store_workflow_in_session
+from workflow.ops import store_workflow_in_session
+from ontask.decorators import get_workflow
 
 from .forms import SelectColumnUploadForm, SelectKeysForm
 

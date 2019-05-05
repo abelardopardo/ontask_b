@@ -26,10 +26,10 @@ from core.datatables import DataTablesServerSidePaging
 from dataops import pandas_db
 from logs.models import Log
 from ontask import create_new_name
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from visualizations.plotly import PlotlyHandler
-from workflow.ops import get_workflow
 from .forms import ViewAddForm
 from .models import View
 
@@ -75,17 +75,16 @@ class ViewTable(tables.Table):
 
 
 def save_view_form(request, form, template_name):
-    """
-    Save the data attached to a view as provided in a form.
+    """Save the data attached to a view as provided in a form.
+
     :param request: HTTP request
+
     :param form: Form object with the collected information
+
     :param template_name: To render the response
+
     :return: AJAX Response
     """
-
-    # Ajax response. Form is not valid until proven otherwise
-    data = {'form_is_valid': False}
-
     # Type of event to be recorded
     if form.instance.id:
         event_type = Log.VIEW_EDIT
@@ -94,12 +93,12 @@ def save_view_form(request, form, template_name):
 
     # If a GET or incorrect request, render the form again
     if request.method == 'GET' or not form.is_valid():
-        data['html_form'] = render_to_string(
-            template_name,
-            {'form': form, 'id': form.instance.id},
-            request=request
-        )
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                template_name,
+                {'form': form, 'id': form.instance.id},
+                request=request)
+        })
 
     # Correct POST submission
     view = form.save(commit=False)
@@ -112,12 +111,12 @@ def save_view_form(request, form, template_name):
     except IntegrityError:
         form.add_error('name',
                        _('A view with that name already exists'))
-        data['html_form'] = render_to_string(
-            template_name,
-            {'form': form, 'id': form.instance.id},
-            request=request
-        )
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                template_name,
+                {'form': form, 'id': form.instance.id},
+                request=request),
+        })
 
     # Log the event
     Log.objects.register(request.user,
@@ -128,9 +127,7 @@ def save_view_form(request, form, template_name):
                           'workflow_name': view.workflow.name,
                           'workflow_id': view.workflow.id})
 
-    data['form_is_valid'] = True
-    data['html_redirect'] = ''  # Refresh the page
-    return JsonResponse(data)
+    return JsonResponse({'html_redirect': ''})
 
 
 def render_table_display_page(request, workflow, view, columns, ajax_url):
@@ -403,9 +400,6 @@ def row_delete(request):
     if not request.is_ajax():
         return redirect('home')
 
-    # Result to return
-    data = {}
-
     # Get the workflow
     workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
@@ -417,16 +411,13 @@ def row_delete(request):
 
     # Process the confirmed response
     if request.method == 'POST':
-        # The response will require going to the table display anyway
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('table:display')
-
         # if there is no key or value, flag the message and return to table
         # view
         if not key or not value:
             messages.error(request,
                            _('Incorrect URL invoked to delete a row'))
-            return JsonResponse(data)
+            # The response will require going to the table display anyway
+            return JsonResponse({'html_redirect': reverse('table:display')})
 
         # Proceed to delete the row
         dataops.sql_query.delete_row(
@@ -442,16 +433,15 @@ def row_delete(request):
         for action in workflow.actions.all():
             action.update_n_rows_selected()
 
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('table:display')})
 
     # Render the page
-    data['html_form'] = render_to_string(
-        'table/includes/partial_row_delete.html',
-        {'delete_key': '?key={0}&value={1}'.format(key, value)},
-        request=request
-    )
-
-    return JsonResponse(data)
+    return JsonResponse({
+        'html_form': render_to_string(
+            'table/includes/partial_row_delete.html',
+            {'delete_key': '?key={0}&value={1}'.format(key, value)},
+            request=request),
+    })
 
 
 @user_passes_test(is_instructor)
@@ -484,27 +474,22 @@ def view_index(request):
 
 @user_passes_test(is_instructor)
 def view_add(request):
-    """
-    Create a new view by processing the GET/POST requests related to the form.
+    """Create a new view by processing the GET/POST requests related to the form.
+
     :param request: Request object
+
     :return: AJAX response
     """
     # Get the workflow element
     workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('home')}
-        )
+        return JsonResponse({'html_redirect': reverse('home')})
 
     if workflow.nrows == 0:
         messages.error(
             request,
             _('Cannot add a view to a workflow without data'))
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': ''}
-        )
+        return JsonResponse({'html_redirect': ''})
 
     # Form to read/process data
     form = ViewAddForm(request.POST or None, workflow=workflow)
@@ -525,19 +510,13 @@ def view_edit(request, pk):
     # Get the workflow element
     workflow = get_workflow(request, prefetch_related='views')
     if not workflow:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('home')}
-        )
+        return JsonResponse({'html_redirect': reverse('home')})
 
     if workflow.nrows == 0:
         messages.error(
             request,
             _('Cannot add a view to a workflow without data'))
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': ''}
-        )
+        return JsonResponse({'html_redirect': ''})
 
     # Get the view
     view = workflow.views.filter(
@@ -546,10 +525,7 @@ def view_edit(request, pk):
         Q(workflow__user=request.user) | Q(workflow__shared=request.user)
     ).prefetch_related('columns').first()
     if not view:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('table:view_index')}
-        )
+        return JsonResponse({'html_redirect': reverse('table:view_index')})
 
     # Form to read/process data
     form = ViewAddForm(request.POST or None, instance=view, workflow=workflow)
@@ -570,13 +546,7 @@ def view_delete(request, pk):
     # Get the workflow element
     workflow = get_workflow(request, prefetch_related='views')
     if not workflow:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('home')}
-        )
-
-    # Data to send as JSON response, in principle, assume form is not valid
-    data = {'form_is_valid': False}
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get the appropriate action object
     view = workflow.views.filter(
@@ -585,53 +555,48 @@ def view_delete(request, pk):
         Q(workflow__user=request.user) | Q(workflow__shared=request.user)
     ).first()
     if not view:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('table:view_index')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('table:view_index')})
 
     if request.method == 'POST':
         # Log the event
-        Log.objects.register(request.user,
-                             Log.VIEW_DELETE,
-                             view.workflow,
-                             {'id': view.id,
-                              'name': view.name,
-                              'workflow_name': view.workflow.name,
-                              'workflow_id': view.workflow.id})
+        Log.objects.register(
+            request.user,
+            Log.VIEW_DELETE,
+            view.workflow,
+            {
+                'id': view.id,
+                'name': view.name,
+                'workflow_name': view.workflow.name,
+                'workflow_id': view.workflow.id})
 
         # Perform the delete operation
         view.delete()
 
         # In this case, the form is valid anyway
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('table:view_index')
+        return JsonResponse({'html_redirect': reverse('table:view_index')})
 
-        return JsonResponse(data)
-
-    data['html_form'] = render_to_string(
-        'table/includes/partial_view_delete.html',
-        {'view': view},
-        request=request)
-    return JsonResponse(data)
+    return JsonResponse({
+        'html_form': render_to_string(
+            'table/includes/partial_view_delete.html',
+            {'view': view},
+            request=request)
+    })
 
 
 @user_passes_test(is_instructor)
 def view_clone(request, pk):
-    """
-    AJAX handshake to clone a view attached to the table
+    """AJAX handshake to clone a view attached to the table.
+
     :param request: HTTP request
+
     :param pk: ID of the view to clone. The workflow is taken from the session
+
     :return: AJAX response
     """
-    # Data to send as JSON response, in principle, assume form is not valid
-    data = {'form_is_valid': False}
-
     # Get the workflow element
     workflow = get_workflow(request, prefetch_related='views')
     if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     context = {'pk': pk}  # For rendering
 
@@ -639,21 +604,21 @@ def view_clone(request, pk):
     view = workflow.views.filter(pk=pk).first()
     if not view:
         # The view is not there. Redirect to workflow detail
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:detail',
-                                        kwargs={'pk': workflow.id})
-        return JsonResponse(data)
+        return JsonResponse(
+            {'html_redirect': reverse(
+                'workflow:detail', kwargs={'pk': workflow.id})},
+        )
 
     # Get the name of the view to clone
     context['vname'] = view.name
 
     if request.method == 'GET':
-        data['html_form'] = render_to_string(
-            'table/includes/partial_view_clone.html',
-            context,
-            request=request)
-
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                'table/includes/partial_view_clone.html',
+                context,
+                request=request),
+        })
 
     # POST REQUEST
 
@@ -668,15 +633,16 @@ def view_clone(request, pk):
     view.columns.add(*list(workflow.views.get(pk=pk).columns.all()))
 
     # Log the event
-    Log.objects.register(request.user,
-                         Log.VIEW_CLONE,
-                         workflow,
-                         {'id': workflow.id,
-                          'name': workflow.name,
-                          'old_view_name': old_name,
-                          'new_view_name': view.name})
+    Log.objects.register(
+        request.user,
+        Log.VIEW_CLONE,
+        workflow,
+        {'id': workflow.id,
+         'name': workflow.name,
+         'old_view_name': old_name,
+         'new_view_name': view.name})
 
-    return JsonResponse({'form_is_valid': True, 'html_redirect': ''})
+    return JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)

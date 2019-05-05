@@ -14,10 +14,10 @@ from action.evaluate import render_action_template
 from action.forms import EditActionOutForm, EnableURLForm, FilterForm
 from action.models import Action, Condition
 from logs.models import Log
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from visualizations.plotly import PlotlyHandler
 from workflow.models import Workflow
-from workflow.ops import get_workflow
 
 
 def text_renders_correctly(
@@ -58,9 +58,7 @@ def action_out_save_content(request: HttpRequest, pk: int) -> JsonResponse:
     # Try to get the workflow first
     workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('home')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get the action
     action = workflow.actions.filter(
@@ -69,15 +67,11 @@ def action_out_save_content(request: HttpRequest, pk: int) -> JsonResponse:
         Q(workflow__user=request.user) | Q(workflow__shared=request.user),
     ).first()
     if not filter:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('home')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Wrong type of action.
     if action.is_in:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('home')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content')
@@ -85,7 +79,7 @@ def action_out_save_content(request: HttpRequest, pk: int) -> JsonResponse:
         action.set_text_content(action_content)
         action.save()
 
-    return JsonResponse({'form_is_valid': True, 'html_redirect': ''})
+    return JsonResponse({'html_redirect': ''})
 
 
 def edit_action_out(
@@ -186,15 +180,10 @@ def showurl(request: HttpRequest, pk: int) -> HttpResponse:
     :param pk: Primary key of the action to show the URL
     :return: Json response with the content to show in the screen
     """
-    # AJAX result
-    resp_data = {'form_is_valid': False}
-
     # Get the current workflow
     workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        resp_data['form_is_valid'] = True
-        resp_data['html_redirect'] = reverse('home')
-        return JsonResponse(resp_data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get the action object
     action = workflow.actions.filter(
@@ -203,9 +192,7 @@ def showurl(request: HttpRequest, pk: int) -> HttpResponse:
         Q(workflow__user=request.user) | Q(workflow__shared=request.user),
     ).first()
     if not action:
-        resp_data['form_is_valid'] = True
-        resp_data['html_redirect'] = reverse('home')
-        return JsonResponse(resp_data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     form = EnableURLForm(request.POST or None, instance=action)
 
@@ -223,19 +210,18 @@ def showurl(request: HttpRequest, pk: int) -> HttpResponse:
                  'name': action.name,
                  'serve_enabled': action.serve_enabled})
 
-        resp_data['form_is_valid'] = True
-        resp_data['html_redirect'] = reverse('action:index')
-        return JsonResponse(resp_data)
+        return JsonResponse({'html_redirect': reverse('action:index')})
 
     # Create the text for the action
     url_text = reverse('action:serve', kwargs={'action_id': action.pk})
 
     # Render the page with the abolute URI
-    resp_data['html_form'] = render_to_string(
-        'action/includes/partial_action_showurl.html',
-        {'url_text': request.build_absolute_uri(url_text),
-         'form': form,
-         'action': action},
-        request=request)
+    return JsonResponse({
+        'html_form': render_to_string(
+            'action/includes/partial_action_showurl.html',
+            {'url_text': request.build_absolute_uri(url_text),
+             'form': form,
+             'action': action},
+            request=request)
+    })
 
-    return JsonResponse(resp_data)

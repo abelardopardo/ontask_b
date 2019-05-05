@@ -29,7 +29,7 @@ from core.datatables import DataTablesServerSidePaging
 from ontask import OnTaskEmptyWorkflow, OnTaskNoAction, OnTaskNoWorkflow
 from ontask.permissions import is_instructor
 from workflow.models import Column, Workflow
-from workflow.ops import get_workflow
+from ontask.decorators import get_workflow
 
 
 def run_survey_action(

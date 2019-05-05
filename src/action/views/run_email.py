@@ -20,7 +20,7 @@ from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tasks import celery_is_up, send_email_messages
 from workflow.models import Workflow
-from workflow.ops import get_workflow
+from ontask.decorators import get_workflow
 
 html_body = """<!DOCTYPE html>
 <html>

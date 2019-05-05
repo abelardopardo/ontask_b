@@ -19,19 +19,19 @@ from action.models import Condition, ActionColumnConditionTuple
 from dataops import ops, formula_evaluation, pandas_db
 from logs.models import Log
 from ontask import create_new_name
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 from .forms import (
     ColumnRenameForm,
     ColumnAddForm,
     FormulaColumnAddForm,
-    RandomColumnAddForm, QuestionAddForm, QuestionRenameForm
+    RandomColumnAddForm, QuestionAddForm, QuestionRenameForm,
 )
 from .ops import (
-    get_workflow,
     workflow_delete_column,
     clone_column,
-    workflow_restrict_column
+    workflow_restrict_column,
 )
 
 # These are the column operands offered through the GUI. They have immediate
@@ -71,9 +71,14 @@ def partition(list_in, n):
 
 @user_passes_test(is_instructor)
 def column_add(request, pk=None):
-    # Data to send as JSON response
-    data = {}
+    """Add column.
 
+    :param request:
+
+    :param pk:
+
+    :return:
+    """
     # Detect if this operation is to add a new column or a new question (in
     # the edit in page)
     is_question = pk is not None
@@ -81,13 +86,9 @@ def column_add(request, pk=None):
     # Get the workflow element
     workflow = get_workflow(request, prefetch_related=['actions', 'columns'])
     if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': 'home'})
 
     if workflow.nrows == 0:
-        data['form_is_valid'] = True
-        data['html_redirect'] = ''
         if is_question:
             messages.error(
                 request,
@@ -98,7 +99,7 @@ def column_add(request, pk=None):
                 request,
                 _('Cannot add column to a workflow without data')
             )
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': ''})
 
     action = None
     action_id = None
@@ -126,14 +127,16 @@ def column_add(request, pk=None):
         else:
             template = 'workflow/includes/partial_column_addedit.html'
 
-        data['html_form'] = render_to_string(template,
-                                             {'form': form,
-                                              'is_question': is_question,
-                                              'action_id': action_id,
-                                              'add': True},
-                                             request=request)
-
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                template,
+                {
+                    'form': form,
+                    'is_question': is_question,
+                    'action_id': action_id,
+                    'add': True},
+                request=request),
+        })
 
     # Processing now a valid POST request
     # Access the updated information
@@ -187,39 +190,38 @@ def column_add(request, pk=None):
         event_type = Log.QUESTION_ADD
     else:
         event_type = Log.COLUMN_ADD
-    Log.objects.register(request.user,
-                         event_type,
-                         workflow,
-                         {'id': workflow.id,
-                          'name': workflow.name,
-                          'column_name': column.name,
-                          'column_type': column.data_type})
+    Log.objects.register(
+        request.user,
+        event_type,
+        workflow,
+        {
+            'id': workflow.id,
+            'name': workflow.name,
+            'column_name': column.name,
+            'column_type': column.data_type})
 
-    data['form_is_valid'] = True
-    data['html_redirect'] = ''
-    return JsonResponse(data)
+    return JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)
 def formula_column_add(request):
-    # Data to send as JSON response, in principle, assume form is not valid
-    data = {'form_is_valid': False}
+    """Add a formula column.
 
+    :param request:
+
+    :return:
+    """
     # Get the workflow element
     workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     if workflow.nrows == 0:
-        data['form_is_valid'] = True
-        data['html_redirect'] = ''
         messages.error(
             request,
             _('Cannot add column to a workflow without data')
         )
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': ''})
 
     # Form to read/process data
     form = FormulaColumnAddForm(
@@ -230,13 +232,13 @@ def formula_column_add(request):
 
     # If a GET or incorrect request, render the form again
     if request.method == 'GET' or not form.is_valid():
-        data['html_form'] = render_to_string(
-            'workflow/includes/partial_formula_column_add.html',
-            {'form': form},
-            request=request
-        )
-
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                'workflow/includes/partial_formula_column_add.html',
+                {'form': form},
+                request=request,
+            )
+        })
 
     # Processing now a valid POST request
 
@@ -251,12 +253,12 @@ def formula_column_add(request):
         form.save_m2m()
     except IntegrityError:
         form.add_error('name', _('A column with that name already exists'))
-        data['html_form'] = render_to_string(
-            'workflow/includes/partial_formula_column_add.html',
-            {'form': form},
-            request=request
-        )
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                'workflow/includes/partial_formula_column_add.html',
+                {'form': form},
+                request=request),
+        })
 
     # Update the data frame
     df = pandas_db.load_table(workflow.get_data_frame_table_name())
@@ -327,49 +329,40 @@ def formula_column_add(request):
                           'column_type': column.data_type})
 
     # The form has been successfully processed
-    data['form_is_valid'] = True
-    data['html_redirect'] = ''  # Refresh the page
-    return JsonResponse(data)
+    return JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)
 def random_column_add(request):
-    """
-    Function that creates a column with random values (Modal)
+    """Create a column with random values (Modal).
+
     :param request:
+
     :return:
     """
-    # Data to send as JSON response, in principle, assume form is not valid
-    data = {'form_is_valid': False}
-
     # Get the workflow element
     workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     if workflow.nrows == 0:
-        data['form_is_valid'] = True
-        data['html_redirect'] = ''
         messages.error(
             request,
             _('Cannot add column to a workflow without data')
         )
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': ''})
 
     # Form to read/process data
     form = RandomColumnAddForm(data=request.POST or None)
 
     # If a GET or incorrect request, render the form again
     if request.method == 'GET' or not form.is_valid():
-        data['html_form'] = render_to_string(
-            'workflow/includes/partial_random_column_add.html',
-            {'form': form},
-            request=request
-        )
-
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                'workflow/includes/partial_random_column_add.html',
+                {'form': form},
+                request=request),
+        })
 
     # Processing now a valid POST request
 
@@ -384,12 +377,12 @@ def random_column_add(request):
         form.save_m2m()
     except IntegrityError:
         form.add_error('name', _('A column with that name already exists'))
-        data['html_form'] = render_to_string(
-            'workflow/includes/partial_random_column_add.html',
-            {'form': form},
-            request=request
-        )
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                'workflow/includes/partial_random_column_add.html',
+                {'form': form},
+                request=request),
+        })
 
     # Update the data frame
     df = pandas_db.load_table(workflow.get_data_frame_table_name())
@@ -408,12 +401,12 @@ def random_column_add(request):
         if int_value <= 1:
             form.add_error('values',
                            _('The integer value has to be larger than 1'))
-            data['html_form'] = render_to_string(
-                'workflow/includes/partial_random_column_add.html',
-                {'form': form},
-                request=request
-            )
-            return JsonResponse(data)
+            return JsonResponse({
+                'html_form': render_to_string(
+                    'workflow/includes/partial_random_column_add.html',
+                    {'form': form},
+                    request=request),
+            })
 
         vals = [x + 1 for x in range(int_value)]
         # df[column.name] = [random.randint(1, int_value)
@@ -468,36 +461,39 @@ def random_column_add(request):
                           'value': values})
 
     # The form has been successfully processed
-    data['form_is_valid'] = True
-    data['html_redirect'] = ''  # Refresh the page
-    return JsonResponse(data)
+    return JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)
 def column_edit(request, pk):
-    # Data to send as JSON response
-    data = {}
+    """Edit a column.
 
+    :param request:
+
+    :param pk:
+
+    :return:
+    """
     # Detect if this operation is to edit a new column or a new question (in
     # the edit in page)
     is_question = 'question_edit' in request.path_info
 
     # Get the workflow element
-    workflow = get_workflow(request,
-                            prefetch_related=['columns', 'views', 'actions'])
+    workflow = get_workflow(
+        request,
+        prefetch_related=['columns', 'views', 'actions'])
     if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get the column object and make sure it belongs to the workflow
     column = workflow.columns.filter(pk=pk).first()
     if not column:
         # Something went wrong, redirect to the workflow detail page
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:detail',
-                                        kwargs={'pk': workflow.id})
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_redirect': reverse(
+                'workflow:detail',
+                kwargs={'pk': workflow.id})
+        })
 
     # Form to read/process data
     if is_question:
@@ -521,13 +517,12 @@ def column_edit(request, pk):
             template = 'workflow/includes/partial_question_addedit.html'
         else:
             template = 'workflow/includes/partial_column_addedit.html'
-        data['html_form'] = render_to_string(template,
-                                             context,
-                                             request=request)
-
-        return JsonResponse(data)
-
-    # Processing a POST request with valid data in the form
+        return JsonResponse({
+            'html_form': render_to_string(
+                template,
+                context,
+                request=request),
+        })
 
     # Process further only if any data changed.
     if form.changed_data:
@@ -538,9 +533,10 @@ def column_edit(request, pk):
 
         # If there is a new name, rename the data frame columns
         if 'name' in form.changed_data:
-            dataops.sql_query.db_rename_column(workflow.get_data_frame_table_name(),
-                                               old_name,
-                                               column.name)
+            dataops.sql_query.db_rename_column(
+                workflow.get_data_frame_table_name(),
+                old_name,
+                column.name)
             ops.rename_df_column(workflow, old_name, column.name)
 
         if 'position' in form.changed_data:
@@ -561,57 +557,52 @@ def column_edit(request, pk):
         # Save the workflow
         workflow.save()
 
-    data['form_is_valid'] = True
-    data['html_redirect'] = ''
-
     # Log the event
     if is_question:
         event_type = Log.QUESTION_ADD
     else:
         event_type = Log.COLUMN_ADD
-    Log.objects.register(request.user,
-                         event_type,
-                         workflow,
-                         {'id': workflow.id,
-                          'name': workflow.name,
-                          'column_name': old_name,
-                          'new_name': column.name})
+    Log.objects.register(
+        request.user,
+        event_type,
+        workflow,
+        {
+            'id': workflow.id,
+            'name': workflow.name,
+            'column_name': old_name,
+            'new_name': column.name})
 
     # Done processing the correct POST request
-    return JsonResponse(data)
+    return JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)
 def column_delete(request, pk):
-    """
-    Delete a column in the table attached to a workflow
+    """Delete a column in the table attached to a workflow.
+
     :param request: HTTP request
+
     :param pk: ID of the column to delete. The workflow element is taken
      from the session.
+
     :return: Render the delete column form
     """
-
-    # JSON response, context and default values
-    data = dict()  # JSON response
-
     # Get the workflow element
     workflow = get_workflow(request, prefetch_related=['columns', 'actions'])
     if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
-    data['form_is_valid'] = False
     context = {'pk': pk}  # For rendering
 
     # Get the column
     column = workflow.columns.filter(pk=pk).first()
     if not column:
         # The column is not there. Redirect to workflow detail
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:detail',
-                                        kwargs={'pk': workflow.id})
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_redirect': reverse(
+                'workflow:detail',
+                kwargs={'pk': workflow.id}),
+        })
 
     # If the columns is unique and it is the only one, we cannot allow
     # the operation
@@ -619,10 +610,11 @@ def column_delete(request, pk):
     if column.is_key and len([x for x in unique_column if x]) == 1:
         # This is the only key column
         messages.error(request, _('You cannot delete the only key column'))
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:detail',
-                                        kwargs={'pk': workflow.id})
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_redirect': reverse(
+                'workflow:detail',
+                kwargs={'pk': workflow.id}),
+        })
 
     # Get the name of the column to delete
     context['cname'] = column.name
@@ -641,74 +633,74 @@ def column_delete(request, pk):
         workflow_delete_column(workflow, column, cond_to_delete)
 
         # Log the event
-        Log.objects.register(request.user,
-                             Log.COLUMN_DELETE,
-                             workflow,
-                             {'id': workflow.id,
-                              'name': workflow.name,
-                              'column_name': column.name})
-
-        data['form_is_valid'] = True
+        Log.objects.register(
+            request.user,
+            Log.COLUMN_DELETE,
+            workflow,
+            {
+                'id': workflow.id,
+                'name': workflow.name,
+                'column_name': column.name})
 
         # There are various points of return
         from_url = request.META['HTTP_REFERER']
         if from_url.endswith(reverse('table:display')):
-            data['html_redirect'] = reverse('table:display')
-        else:
-            data['html_redirect'] = reverse('workflow:detail',
-                                            kwargs={'pk': workflow.id})
-        return JsonResponse(data)
+            return JsonResponse({'html_redirect': reverse('table:display')})
 
-    data['html_form'] = render_to_string(
-        'workflow/includes/partial_column_delete.html',
-        context,
-        request=request)
+        return JsonResponse({
+            'html_redirect': reverse(
+                'workflow:detail',
+                kwargs={'pk': workflow.id}),
+        })
+
+    return JsonResponse({
+        'html_form': render_to_string(
+            'workflow/includes/partial_column_delete.html',
+            context,
+            request=request),
+    })
 
     return JsonResponse(data)
 
 
 @user_passes_test(is_instructor)
 def column_clone(request, pk):
-    """
-    Clone a column in the table attached to a workflow
+    """Clone a column in the table attached to a workflow.
+
     :param request: HTTP request
+
     :param pk: ID of the column to clone. The workflow element is taken
      from the session.
+
     :return: Render the clone column form
     """
-
-    # JSON response, context and default values
-    data = dict()  # JSON response
-
     # Get the workflow element
     workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
-    data['form_is_valid'] = False
     context = {'pk': pk}  # For rendering
 
     # Get the column
     column = workflow.columns.filter(pk=pk).first()
     if not column:
         # The column is not there. Redirect to workflow detail
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:detail',
-                                        kwargs={'pk': workflow.id})
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_redirect': reverse(
+                'workflow:detail',
+                kwargs={'pk': workflow.id}),
+        })
 
     # Get the name of the column to clone
     context['cname'] = column.name
 
     if request.method == 'GET':
-        data['html_form'] = render_to_string(
-            'workflow/includes/partial_column_clone.html',
-            context,
-            request=request)
-
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                'workflow/includes/partial_column_clone.html',
+                context,
+                request=request)
+        })
 
     # POST REQUEST
 
@@ -722,29 +714,23 @@ def column_clone(request, pk):
         create_new_name(column.name, workflow.columns))
 
     # Log the event
-    Log.objects.register(request.user,
-                         Log.COLUMN_CLONE,
-                         workflow,
-                         {'id': workflow.id,
-                          'name': workflow.name,
-                          'old_column_name': old_name,
-                          'new_column_name': column.name})
+    Log.objects.register(
+        request.user,
+        Log.COLUMN_CLONE,
+        workflow,
+        {
+            'id': workflow.id,
+            'name': workflow.name,
+            'old_column_name': old_name,
+            'new_column_name': column.name})
 
-    data['form_is_valid'] = True
-    data['html_redirect'] = ''
-
-    return JsonResponse(data)
+    return JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)
 @csrf_exempt
 def column_move(request):
-    """
-    Function to process an AJAX request to move a column by providing two
-    column names. There are two possible cases (columns are assumed to be in
-    order a, b, c, d)
-    1) a -> d: Result b, c, d, a
-    2) d -> a: Result d, a, b, c
+    """Move a column using two names: from_name and to_name (POST params).
 
     The changes are reflected in the DB
 
@@ -784,10 +770,12 @@ def column_move(request):
 
 @user_passes_test(is_instructor)
 def column_move_top(request, pk):
-    """
+    """Move column to the first position.
 
     :param request: HTTP request to move a column to the top of the list
+
     :param pk: Column ID
+
     :return: Once done, redirects to the column page
     """
 
@@ -810,10 +798,12 @@ def column_move_top(request, pk):
 
 @user_passes_test(is_instructor)
 def column_move_bottom(request, pk):
-    """
+    """Move column to the last position.
 
     :param request: HTTP request to move a column to end of the list
+
     :param pk: Column ID
+
     :return: Once done, redirects to the column page
     """
 
@@ -836,45 +826,41 @@ def column_move_bottom(request, pk):
 
 @user_passes_test(is_instructor)
 def column_restrict_values(request, pk):
-    """
-    Restrict future values in this column to one of those already present.
+    """Restrict future values in this column to one of those already present.
+
     :param request: HTTP request
+
     :param pk: ID of the column to restrict. The workflow element is taken
      from the session.
+
     :return: Render the delete column form
     """
-
-    # JSON response, context and default values
-    data = dict()  # JSON response
-
     # Get the workflow element
     workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
-    data['form_is_valid'] = False
     context = {'pk': pk}  # For rendering
 
     # Get the column
     column = workflow.columns.filter(pk=pk).first()
     if not column:
         # The column is not there. Redirect to workflow detail
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:detail',
-                                        kwargs={'pk': workflow.id})
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_redirect': reverse(
+                'workflow:detail',
+                kwargs={'pk': workflow.id}),
+        })
 
     # If the columns is unique and it is the only one, we cannot allow
     # the operation
     if column.is_key:
         # This is the only key column
         messages.error(request, _('You cannot restrict a key column'))
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('workflow:detail',
-                                        kwargs={'pk': workflow.id})
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_redirect': reverse('workflow:detail',
+                                     kwargs={'pk': workflow.id})
+        })
 
     # Get the name of the column to delete
     context['cname'] = column.name
@@ -892,28 +878,29 @@ def column_restrict_values(request, pk):
             messages.error(request, result)
 
             # Log the event
-            Log.objects.register(request.user,
-                                 Log.COLUMN_RESTRICT,
-                                 workflow,
-                                 {'id': workflow.id,
-                                  'name': workflow.name,
-                                  'column_name': column.name,
-                                  'values': context['values']})
-
-        data['form_is_valid'] = True
+            Log.objects.register(
+                request.user,
+                Log.COLUMN_RESTRICT,
+                workflow,
+                {
+                    'id': workflow.id,
+                    'name': workflow.name,
+                    'column_name': column.name,
+                    'values': context['values']})
 
         # There are various points of return
         from_url = request.META['HTTP_REFERER']
         if from_url.endswith(reverse('table:display')):
-            data['html_redirect'] = reverse('table:display')
-        else:
-            data['html_redirect'] = reverse('workflow:detail',
-                                            kwargs={'pk': workflow.id})
-        return JsonResponse(data)
+            return JsonResponse({'html_redirect': reverse('table:display')})
 
-    data['html_form'] = render_to_string(
-        'workflow/includes/partial_column_restrict.html',
-        context,
-        request=request)
+        return JsonResponse({
+            'html_redirect': reverse('workflow:detail',
+                                     kwargs={'pk': workflow.id})
+        })
 
-    return JsonResponse(data)
+    return JsonResponse({
+        'html_form': render_to_string(
+            'workflow/includes/partial_column_restrict.html',
+            context,
+            request=request),
+    })

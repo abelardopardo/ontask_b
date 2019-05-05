@@ -25,7 +25,7 @@ from dataops.sql_query import get_rows
 from logs.models import Log
 from ontask import OnTaskEmptyWorkflow, OnTaskNoWorkflow
 from ontask.permissions import is_instructor
-from workflow.ops import get_workflow
+from ontask.decorators import get_workflow
 
 
 @user_passes_test(is_instructor)

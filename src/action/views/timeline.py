@@ -11,7 +11,7 @@ from django.shortcuts import redirect, render
 
 from logs.models import Log
 from ontask.permissions import is_instructor
-from workflow.ops import get_workflow
+from ontask.decorators import get_workflow
 
 
 @user_passes_test(is_instructor)

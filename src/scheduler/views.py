@@ -25,10 +25,10 @@ from past.utils import old_div
 from action.models import Action
 from action.payloads import action_session_dictionary
 from logs.models import Log
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from scheduler.models import ScheduledAction
-from workflow.ops import get_workflow
 from .forms import EmailScheduleForm, JSONScheduleForm, CanvasEmailScheduleForm
 
 
@@ -499,31 +499,27 @@ def index(request):
 
 @user_passes_test(is_instructor)
 def view(request, pk):
-    """
-    View an existing scheduled action
+    """View an existing scheduled action.
+
     :param request: HTTP request
+
     :param pk: primary key of the scheduled action
+
     :return: HTTP response
     """
-
-    data = {'form_is_valid': False}
-
     # Get first the current workflow
     workflow = get_workflow(request)
     if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('schedule:index')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('schedule:index')})
 
     # Get the scheduled action
-    sch_obj = ScheduledAction.objects.filter(action__workflow=workflow,
-                                             pk=pk).first()
+    sch_obj = ScheduledAction.objects.filter(
+        action__workflow=workflow,
+        pk=pk).first()
 
     if not sch_obj:
         # Connection object not found, go to table of sql connections
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('schedule:index')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('schedule:index')})
 
     # Get the values and remove the ones that are not needed
     values = model_to_dict(sch_obj)
@@ -531,11 +527,12 @@ def view(request, pk):
     values.pop('user')
     values['payload'] = json.dumps(values['payload'], indent=2)
 
-    data['html_form'] = render_to_string(
-        'scheduler/includes/partial_show_schedule_action.html',
-        {'s_vals': values, 'id': sch_obj.id}
-    )
-    return JsonResponse(data)
+    return JsonResponse({
+        'html_form': render_to_string(
+            'scheduler/includes/partial_show_schedule_action.html',
+            {'s_vals': values, 'id': sch_obj.id}
+        )
+    })
 
 
 @user_passes_test(is_instructor)
@@ -614,39 +611,34 @@ def edit(request, pk):
 
 @user_passes_test(is_instructor)
 def delete(request, pk):
-    """
-    View to handle the AJAX form to delete a scheduled item.
+    """View screen to confirm deletion scheduled item.
+
     :param request: Request object
+
     :param pk: Scheduled item id to delete
+
     :return:
     """
-
-    # JSON response object
-    data = dict()
-
     # Get first the current workflow
     workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get the appropriate scheduled action
     s_item = ScheduledAction.objects.filter(
         action__workflow=workflow,
-        pk=pk
+        pk=pk,
     ).first()
     if not s_item:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('scheduler:index')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('scheduler:index')})
 
     if request.method == 'GET':
-        data['html_form'] = render_to_string(
-            'scheduler/includes/partial_scheduler_delete.html',
-            {'s_item': s_item},
-            request=request)
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                'scheduler/includes/partial_scheduler_delete.html',
+                {'s_item': s_item},
+                request=request)
+        })
 
     log_type = None
     if s_item.action.action_type == Action.personalized_text:
@@ -681,8 +673,4 @@ def delete(request, pk):
     # Perform the delete operation
     s_item.delete()
 
-    # In this case, the form is valid anyway
-    data['form_is_valid'] = True
-    data['html_redirect'] = reverse('scheduler:index')
-
-    return JsonResponse(data)
+    return JsonResponse({'html_redirect': reverse('scheduler:index')})

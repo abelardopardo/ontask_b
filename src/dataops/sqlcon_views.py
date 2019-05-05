@@ -19,10 +19,10 @@ from dataops.forms import SQLConnectionForm, SQLRequestPassword
 from dataops.models import SQLConnection
 from logs.models import Log
 from ontask import OnTaskDataFrameNoKey, create_new_name
+from ontask.decorators import get_workflow
 from ontask.permissions import is_admin, is_instructor
 from ontask.tables import OperationsColumn
 from workflow.models import Workflow
-from workflow.ops import get_workflow
 
 
 class SQLConnectionTableAdmin(tables.Table):
@@ -85,10 +85,6 @@ def save_conn_form(request, form, template_name):
     :param template_name: To render the response
     :return: AJAX response
     """
-
-    # AJAX response. Form is not valid until proven otherwise
-    data = {'form_is_valid': False}
-
     # Type of event to record
     if form.instance.id:
         event_type = Log.SQL_CONNECTION_EDIT
@@ -106,45 +102,50 @@ def save_conn_form(request, form, template_name):
         except IntegrityError:
             form.add_error('name',
                            _('A connection with this name already exists'))
-            data['html_form'] = render_to_string(
-                template_name,
-                {'form': form,
-                 'id': form.instance.id,
-                 'add': is_add},
-                request=request
-            )
-            return JsonResponse(data)
+            return JsonResponse({
+                'html_form': render_to_string(
+                    template_name,
+                    {
+                        'form': form,
+                        'id': form.instance.id,
+                        'add': is_add
+                    },
+                    request=request,
+                )
+            })
 
         # Log the event
         Log.objects.register(
             request.user,
             event_type,
             None,
-            {'name': conn.name,
-             'description': conn.description_txt,
-             'conn_type': conn.conn_type,
-             'conn_driver': conn.conn_driver,
-             'db_user': conn.db_user,
-             'db_passwd': _('<PROTECTED>') if conn.db_password else '',
-             'db_host': conn.db_host,
-             'db_port': conn.db_port,
-             'db_name': conn.db_name,
-             'db_table': conn.db_table}
+            {
+                'name': conn.name,
+                'description': conn.description_txt,
+                'conn_type': conn.conn_type,
+                'conn_driver': conn.conn_driver,
+                'db_user': conn.db_user,
+                'db_passwd': _('<PROTECTED>') if conn.db_password else '',
+                'db_host': conn.db_host,
+                'db_port': conn.db_port,
+                'db_name': conn.db_name,
+                'db_table': conn.db_table
+            }
         )
 
-        data['form_is_valid'] = True
-        data['html_redirect'] = ''  # Refresh the page
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': ''})
 
     # Request is a GET
-    data['html_form'] = render_to_string(
-        template_name,
-        {'form': form,
-         'id': form.instance.id,
-         'add': is_add},
-        request=request
-    )
-    return JsonResponse(data)
+    return JsonResponse({
+        'html_form': render_to_string(
+            template_name,
+            {
+                'form': form,
+                'id': form.instance.id,
+                'add': is_add},
+            request=request
+        ),
+    })
 
 
 @user_passes_test(is_admin)
@@ -160,14 +161,17 @@ def sqlconnection_admin_index(request):
         Workflow.unlock_workflow_by_id(wid)
     request.session.pop('ontask_workflow_name', None)
 
-    return render(request,
-                  'dataops/sql_connections_admin.html',
-                  {'table': SQLConnectionTableAdmin(
-                      SQLConnection.objects.all().values('id',
-                                                         'name',
-                                                         'description_txt'),
-                      orderable=False)}
-                  )
+    return render(
+        request,
+        'dataops/sql_connections_admin.html',
+        {
+            'table': SQLConnectionTableAdmin(
+                SQLConnection.objects.all().values(
+                    'id',
+                    'name',
+                    'description_txt'),
+                orderable=False)},
+    )
 
 
 @user_passes_test(is_instructor)
@@ -197,22 +201,19 @@ def sqlconn_view(request, pk):
     :return: AJAX response
     """
 
-    # Initial value of the data to return as AJAX response
-    data = {'form_is_valid': False}
-
     # Get the connection object
     c_obj = SQLConnection.objects.filter(pk=pk)
     if not c_obj:
         # Connection object not found, go to table of sql connections
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('dataops:sqlconns_admin_index')
-        return JsonResponse(data)
+        return JsonResponse(
+            {'html_redirect': reverse('dataops:sqlconns_admin_index')})
 
-    data['html_form'] = render_to_string(
-        'dataops/includes/partial_show_sql_connection.html',
-        {'c_vals': c_obj.values()[0], 'id': c_obj[0].id, 'request': request}
-    )
-    return JsonResponse(data)
+    return JsonResponse({
+        'html_form': render_to_string(
+            'dataops/includes/partial_show_sql_connection.html',
+            {'c_vals': c_obj.values()[0], 'id': c_obj[0].id, 'request': request}
+        ),
+    })
 
 
 @user_passes_test(is_admin)
@@ -234,60 +235,56 @@ def sqlconn_add(request):
 
 @user_passes_test(is_admin)
 def sqlconn_edit(request, pk):
-    """
-    Respond to the reqeust to edit a SQL CONN object
+    """Respond to the reqeust to edit a SQL CONN object.
+
     :param request: HTML request
+
     :param pk: Primary key
+
     :return:
     """
-
     # Get the connection
     conn = SQLConnection.objects.filter(pk=pk).first()
     if not conn:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('home')}
-        )
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Create the form
     form = SQLConnectionForm(request.POST or None, instance=conn)
 
-    return save_conn_form(request,
-                          form,
-                          'dataops/includes/partial_sqlconn_addedit.html')
+    return save_conn_form(
+        request,
+        form,
+        'dataops/includes/partial_sqlconn_addedit.html')
 
 
 @user_passes_test(is_admin)
 def sqlconn_clone(request, pk):
-    """
-    AJAX handshake to clone a SQL connection
+    """AJAX handshake to clone a SQL connection.
+
     :param request: HTTP request
+
     :param pk: ID of the connection to clone.
+
     :return: AJAX response
     """
-    # Data to send as JSON response, in principle, assume form is not valid
-    data = {'form_is_valid': False}
-
     context = {'pk': pk}  # For rendering
 
     # Get the connection
     conn = SQLConnection.objects.filter(pk=pk).first()
     if not conn:
         # The view is not there. Redirect to workflow detail
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get the name of the connection to clone
     context['cname'] = conn.name
 
     if request.method == 'GET':
-        data['html_form'] = render_to_string(
-            'dataops/includes/partial_sqlconn_clone.html',
-            context,
-            request=request)
-
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                'dataops/includes/partial_sqlconn_clone.html',
+                context,
+                request=request)
+        })
 
     # POST REQUEST
 
@@ -301,35 +298,35 @@ def sqlconn_clone(request, pk):
         request.user,
         Log.SQL_CONNECTION_CLONE,
         None,
-        {'name': conn.name,
-         'description': conn.description_txt,
-         'conn_type': conn.conn_type,
-         'conn_driver': conn.conn_driver,
-         'db_user': conn.db_user,
-         'db_passwd': _('<PROTECTED>') if conn.db_password else '',
-         'db_host': conn.db_host,
-         'db_port': conn.db_port,
-         'db_name': conn.db_name,
-         'db_table': conn.db_table})
+        {
+            'name': conn.name,
+            'description': conn.description_txt,
+            'conn_type': conn.conn_type,
+            'conn_driver': conn.conn_driver,
+            'db_user': conn.db_user,
+            'db_passwd': _('<PROTECTED>') if conn.db_password else '',
+            'db_host': conn.db_host,
+            'db_port': conn.db_port,
+            'db_name': conn.db_name,
+            'db_table': conn.db_table})
 
-    return JsonResponse({'form_is_valid': True, 'html_redirect': ''})
+    return JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_admin)
 def sqlconn_delete(request, pk):
-    """
-    AJAX processor for the delete sql connection operation
+    """AJAX processor for the delete sql connection operation.
+
     :param request: AJAX request
+
     :param pk: primary key for the sql connection
+
     :return: AJAX response to handle the form
     """
-
     # Get the connection
     conn = SQLConnection.objects.filter(pk=pk).first()
     if not conn:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('home')}
+        return JsonResponse({'html_redirect': reverse('home')}
         )
 
     if request.method == 'POST':
@@ -354,12 +351,10 @@ def sqlconn_delete(request, pk):
         conn.delete()
 
         # In this case, the form is valid anyway
-        return JsonResponse({'form_is_valid': True,
-                             'html_redirect': reverse('home')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # This is a GET request
     return JsonResponse({
-        'form_is_valid': False,
         'html_form': render_to_string(
             'dataops/includes/partial_sqlconn_delete.html',
             {'sqlconn': conn},
@@ -429,7 +424,8 @@ def sqlupload1(request, pk):
 
     # Process SQL connection using pandas
     try:
-        data_frame = dataops.dataframeupload.load_df_from_sqlconnection(conn, read_pwd)
+        data_frame = dataops.dataframeupload.load_df_from_sqlconnection(conn,
+                                                                        read_pwd)
     except Exception as e:
         messages.error(request,
                        _('Unable to obtain data: {0}').format(e))

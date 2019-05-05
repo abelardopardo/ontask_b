@@ -14,10 +14,9 @@ from django.utils.translation import ugettext as _
 from dataops import pandas_db
 from dataops.pandas_db import load_table, get_column_statistics
 from dataops.sql_query import get_rows
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
-from table.models import View
 from visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
-from workflow.ops import get_workflow
 
 
 def get_column_visualisations(column, col_data, vis_scripts,
@@ -268,9 +267,9 @@ def get_column_visualization_items(workflow,
         vis_scripts,
         context={'style': 'max-width:{0}px; max-height:{1}px;'
                           'display:inline-block;'.format(
-                               max_width,
-                               max_height
-                          )
+            max_width,
+            max_height
+        )
         }
     )
 
@@ -328,18 +327,14 @@ def stat_column_JSON(request, pk):
     # Get the workflow to obtain row numbers
     workflow = get_workflow(request, prefetch_related='columns')
     if not workflow:
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Get column, must be in the workflow
     column = workflow.columns.filter(pk=pk).first()
     if not column or column.is_key:
         # Something went wrong, the column requested does not belong to the
         # workflow selected, or the column requested is a key column
-        data['form_is_valid'] = True
-        data['html_redirect'] = reverse('home')
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': reverse('home')})
 
     # Request to see the statistics for a non-key column that belongs to the
     # selected workflow
@@ -351,28 +346,28 @@ def stat_column_JSON(request, pk):
                                        max_width=468)
 
     # Create the right key/value pair in the result dictionary
-    data['html_form'] = render_to_string(
-        'table/includes/partial_column_stats_modal.html',
-        context={'column': column,
-                 'stat_data': stat_data,
-                 'visualizations': [v.html_content for v in visualizations]},
-        request=request
-    )
-
-    return JsonResponse(data)
+    return JsonResponse({
+        'html_form': render_to_string(
+            'table/includes/partial_column_stats_modal.html',
+            context={
+                'column': column,
+                'stat_data': stat_data,
+                'visualizations': [v.html_content for v in visualizations]},
+            request=request)
+    })
 
 
 @user_passes_test(is_instructor)
 def stat_row(request):
-    """
-    Render the page with stats and visualizations for a row in the table.
+    """Render page with stats and viz of a table row.
+
     The request must include key and value to get the right row. In
     principle, there is a visualisation for each row.
 
     :param request: HTTP request
+
     :return: Render the page
     """
-
     return get_row_visualisations(request)
 
 

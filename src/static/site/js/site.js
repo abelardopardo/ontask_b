@@ -61,7 +61,7 @@ var loadForm = function () {
         $("#modal-item").modal("show");
       },
       success: function(data) {
-        if (data.form_is_valid) {
+        if (typeof data.html_redirect != 'undefined') {
           if (data.html_redirect == "") {
             $("#div-spinner").show();
             window.location.reload(true);
@@ -109,7 +109,7 @@ var saveForm = function () {
       type: form.attr("method"),
       dataType: 'json',
       success: function (data) {
-        if (data.form_is_valid) {
+        if (typeof data.html_redirect != 'undefined') {
           if (data.html_redirect == "") {
             $('#div-spinner').show();
             window.location.reload(true);

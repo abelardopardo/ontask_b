@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from ontask.permissions import is_instructor
-from workflow.ops import get_workflow
+from ontask.decorators import get_workflow
 
 from .forms import UploadGoogleSheetForm
 

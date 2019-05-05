@@ -9,33 +9,34 @@ from django.utils.translation import ugettext_lazy as _
 
 from action.models import Condition
 from logs.models import Log
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from .forms import (AttributeItemForm)
-from .ops import (get_workflow)
 
 
 def save_attribute_form(request, workflow, template, form, attr_idx):
-    """
-    Function to process the AJAX request to create or update an attribute
+    """Process the AJAX request to create or update an attribute.
+
     :param request: Request object received
+
     :param workflow: current workflow being manipulated
+
     :param template: Template to render in the response
+
     :param form: Form used to ask for data
+
     :param attr_idx: Index of the attribute being manipulated
+
     :return: AJAX reponse
     """
-
-    # Ajax response. Form is not valid until proven otherwise
-    data = {'form_is_valid': False}
-
     if request.method != 'POST' or not form.is_valid():
-        data['html_form'] = render_to_string(
-            template,
-            {'form': form,
-             'id': attr_idx},
-            request=request)
-
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                template,
+                {'form': form,
+                 'id': attr_idx},
+                request=request),
+        })
 
     # Correct form submitted
 
@@ -47,13 +48,13 @@ def save_attribute_form(request, workflow, template, form, attr_idx):
             'key',
             _('There is a column with this name. Please change.')
         )
-        data['html_form'] = render_to_string(
-            template,
-            {'form': form,
-             'id': attr_idx},
-            request=request)
-
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                template,
+                {'form': form,
+                 'id': attr_idx},
+                request=request)
+        })
 
     # Check if there is a condition with that name
     cond_name = Condition.objects.filter(
@@ -65,13 +66,13 @@ def save_attribute_form(request, workflow, template, form, attr_idx):
             'key',
             _('There is a condition already with this name.')
         )
-        data['html_form'] = render_to_string(
-            'workflow/includes/partial_attribute_create.html',
-            {'form': form,
-             'id': attr_idx},
-            request=request)
-
-        return JsonResponse(data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                'workflow/includes/partial_attribute_create.html',
+                {'form': form,
+                 'id': attr_idx},
+                request=request)
+        })
 
     # proceed with updating the attributes.
     wf_attributes = workflow.attributes
@@ -92,17 +93,17 @@ def save_attribute_form(request, workflow, template, form, attr_idx):
     workflow.save()
 
     # Log the event
-    Log.objects.register(request.user,
-                         Log.WORKFLOW_ATTRIBUTE_CREATE,
-                         workflow,
-                         {'id': workflow.id,
-                          'name': workflow.name,
-                          'attr_key': form.cleaned_data['key'],
-                          'attr_val': form.cleaned_data['value']})
+    Log.objects.register(
+        request.user,
+        Log.WORKFLOW_ATTRIBUTE_CREATE,
+        workflow,
+        {
+            'id': workflow.id,
+            'name': workflow.name,
+            'attr_key': form.cleaned_data['key'],
+            'attr_val': form.cleaned_data['value']})
 
-    data['form_is_valid'] = True
-    data['html_redirect'] = ''
-    return JsonResponse(data)
+    return JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)
@@ -157,20 +158,18 @@ def attribute_edit(request, pk):
 
 @user_passes_test(is_instructor)
 def attribute_delete(request, pk):
-    """
-    Request to delete an attribute attached to the workflow
+    """Delete an attribute attached to the workflow.
+
     :param request: Request object
+
     :param pk: number of the attribute with respect to the sorted list of items.
+
     :return:
     """
     # Get the workflow
     workflow = get_workflow(request)
     if not workflow:
         return redirect('home')
-
-    # JSON answer
-    data = dict()
-    data['form_is_valid'] = False
 
     # Get the key
     wf_attributes = workflow.attributes
@@ -184,22 +183,24 @@ def attribute_delete(request, pk):
         workflow.attributes = wf_attributes
 
         # Log the event
-        Log.objects.register(request.user,
-                             Log.WORKFLOW_ATTRIBUTE_DELETE,
-                             workflow,
-                             {'id': workflow.id,
-                              'attr_key': key,
-                              'attr_val': val})
+        Log.objects.register(
+            request.user,
+            Log.WORKFLOW_ATTRIBUTE_DELETE,
+            workflow,
+            {
+                'id': workflow.id,
+                'attr_key': key,
+                'attr_val': val,
+            },
+        )
 
         workflow.save()
 
-        data['form_is_valid'] = True
-        data['html_redirect'] = ''
-        return JsonResponse(data)
+        return JsonResponse({'html_redirect': ''})
 
-    data['html_form'] = render_to_string(
-        'workflow/includes/partial_attribute_delete.html',
-        {'pk': pk, 'key': key},
-        request=request)
-
-    return JsonResponse(data)
+    return JsonResponse({
+        'html_form': render_to_string(
+            'workflow/includes/partial_attribute_delete.html',
+            {'pk': pk, 'key': key},
+            request=request)
+    })

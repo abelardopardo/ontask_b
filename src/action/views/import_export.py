@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from action.forms import ActionImportForm
 from action.importexport import do_export_action, do_import_action
 from ontask.permissions import is_instructor
-from workflow.ops import get_workflow
+from ontask.decorators import get_workflow
 
 
 @user_passes_test(is_instructor)

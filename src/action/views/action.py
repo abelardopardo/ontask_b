@@ -27,7 +27,8 @@ from logs.models import Log
 from ontask import simplify_datetime_str
 from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
-from workflow.ops import get_workflow
+from ontask.decorators import get_workflow, check_workflow
+from workflow.models import Workflow
 
 
 class ActionTable(tables.Table):
@@ -45,7 +46,7 @@ class ActionTable(tables.Table):
 
     last_executed_log = tables.Column(
         verbose_name=_('Last executed'),
-        empty_values='---',
+        empty_values=['', None],
     )
 
     #
@@ -94,6 +95,12 @@ class ActionTable(tables.Table):
             reverse('action:edit', kwargs={'pk': record.id}),
             _('Edit the text, conditions and filter'),
             record.name)
+
+    def render_action_type(self, record):
+        # TODO: With this solution, there is no possibility to i18n the title
+        # in the element (it is done in the JS embedded in the page). Explore
+        # using a template.
+        return record.action_type
 
     def render_last_executed_log(self, record):
         """Render the date/time or insert a --- if none"""
@@ -150,12 +157,9 @@ def save_action_form(
     # Get the corresponding workflow
     workflow = get_workflow(request)
     if not workflow:
-        return JsonResponse(
-            {'form_is_valid': True,
-             'html_redirect': reverse('home')})
+        return JsonResponse({'html_redirect': reverse('home')})
 
-    # By default, we assume that the POST is not correct.
-    resp_data = {'form_is_valid': False}
+    resp_data = {}
 
     # Process the GET request
     if request.method == 'GET' or not form.is_valid():
@@ -171,10 +175,7 @@ def save_action_form(
     # Process the POST request
     if action_item.action_type == Action.todo_list:
         # To be implemented
-        return JsonResponse(
-            {'html_redirect': reverse('under_construction'),
-             'form_is_valid': True},
-        )
+        return JsonResponse({'html_redirect': reverse('under_construction')})
 
     # Is this a new action?
     is_new = action_item.pk is None
@@ -210,7 +211,6 @@ def save_action_form(
          'workflow_name': workflow.name})
 
     # Request is correct
-    resp_data['form_is_valid'] = True
     if is_new:
         resp_data['html_redirect'] = reverse(
             'action:edit', kwargs={'pk': action_item.id},
@@ -223,9 +223,11 @@ def save_action_form(
 
 
 @user_passes_test(is_instructor)
+@check_workflow(pf_related='actions')
 def action_index(
     request: HttpRequest,
-    pk: Optional[int] = None,
+    wid: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
     """Process request to show all the actions.
 
@@ -235,24 +237,17 @@ def action_index(
 
     :return: HTTP response
     """
-    # Get the appropriate workflow object
-    workflow = get_workflow(
-        request,
-        wid=pk,
-        prefetch_related='actions')
-    if not workflow:
-        return redirect('home')
-
     # Reset object to carry action info throughout dialogs
     request.session[action_session_dictionary] = None
     request.session.save()
 
-    qs = workflow.actions.all()
-
     return render(
         request,
         'action/index.html',
-        {'workflow': workflow, 'table': ActionTable(qs, orderable=False)},
+        {
+            'workflow': workflow,
+            'table': ActionTable(workflow.actions.all(), orderable=False)
+        },
     )
 
 
@@ -339,7 +334,6 @@ def delete_action(request: HttpRequest, pk: int) -> HttpResponse:
     # Get the current workflow
     workflow = get_workflow(request, prefetch_related='actions')
     if not workflow:
-        resp_data['form_is_valid'] = True
         resp_data['html_redirect'] = reverse('home')
         return JsonResponse(resp_data)
 
@@ -350,7 +344,6 @@ def delete_action(request: HttpRequest, pk: int) -> HttpResponse:
         Q(workflow__user=request.user) | Q(workflow__shared=request.user),
     ).first()
     if not action:
-        resp_data['form_is_valid'] = True
         resp_data['html_redirect'] = reverse('home')
         return JsonResponse(resp_data)
 
@@ -369,7 +362,6 @@ def delete_action(request: HttpRequest, pk: int) -> HttpResponse:
         action.delete()
 
         # In this case, the form is valid anyway
-        resp_data['form_is_valid'] = True
         resp_data['html_redirect'] = reverse('action:index')
 
         return JsonResponse(resp_data)

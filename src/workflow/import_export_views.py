@@ -18,9 +18,9 @@ from .forms import (
 from .models import Workflow
 from .ops import (
     do_import_workflow,
-    do_export_workflow,
-    get_workflow
+    do_export_workflow
 )
+from ontask.decorators import get_workflow
 
 
 @user_passes_test(is_instructor)

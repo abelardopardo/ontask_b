@@ -25,7 +25,7 @@ urlpatterns = [
     #
     # List them all
     path('', action_index, name='index'),
-    path('<int:pk>/index/', action_index, name='index_set'),
+    path('<int:wid>/index/', action_index, name='index_set'),
 
     # Create an action of type 0: in, 1: Out
     path('create/', ActionCreateView.as_view(), name='create'),
