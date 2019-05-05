@@ -1,21 +1,24 @@
 # -*- coding: utf-8 -*-
 
-
+"""
+Docstring
+"""
 from builtins import object
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
 class PluginRegistry(models.Model):
-    """
-    @DynamicAttrs
-    """
+    """@DynamicAttrs"""
 
     # file in the server
-    filename = models.CharField(max_length=2048,
-                                null=False,
-                                blank=False,
-                                unique=True)
+    filename = models.CharField(
+        max_length=2048,
+        null=False,
+        blank=False,
+        unique=True
+    )
 
     # Last time the file was checked (to detect changes)
     modified = models.DateTimeField(auto_now=True, null=False)
@@ -24,21 +27,27 @@ class PluginRegistry(models.Model):
     name = models.CharField(max_length=256, blank=False)
 
     # Description text
-    description_txt = models.CharField(max_length=65535,
-                                       default='',
-                                       blank=True)
+    description_txt = models.CharField(
+        max_length=65535,
+        default='',
+        blank=True
+    )
 
     # Boolean stating if the plugin is a model or a transformation
-    is_model = models.BooleanField(default=False,
-                                      verbose_name=_('Plugin is a model'),
-                                      null=False,
-                                      blank=False)
+    is_model = models.BooleanField(
+        default=False,
+        verbose_name=_('Plugin is a model'),
+        null=False,
+        blank=False
+    )
 
     # Boolean stating if the column is a unique key
-    is_verified = models.BooleanField(default=False,
-                                      verbose_name=_('Ready to run'),
-                                      null=False,
-                                      blank=False)
+    is_verified = models.BooleanField(
+        default=False,
+        verbose_name=_('Ready to run'),
+        null=False,
+        blank=False
+    )
 
     # Last time the file was checked (to detect changes)
     executed = models.DateTimeField(
