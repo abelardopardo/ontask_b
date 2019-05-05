@@ -25,7 +25,7 @@ urlpatterns = [
     path('column_ss/', views.column_ss, name='column_ss'),
 
     # Import Export
-    path('<int:pk>/export_ask/',
+    path('<int:wid>/export_ask/',
          import_export_views.export_ask,
          name='export_ask'),
     re_path(r'(?P<data>(\d+(,\d+)*)?)/export/',

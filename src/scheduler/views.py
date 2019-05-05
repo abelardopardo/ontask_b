@@ -4,6 +4,7 @@
 import datetime
 import json
 from builtins import object
+from typing import Optional
 
 import django_tables2 as tables
 import pytz
@@ -14,7 +15,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.db import IntegrityError
 from django.db.models import Q
 from django.forms.models import model_to_dict
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, reverse
 from django.template.loader import render_to_string
 from django.utils.html import format_html
@@ -25,10 +26,11 @@ from past.utils import old_div
 from action.models import Action
 from action.payloads import action_session_dictionary
 from logs.models import Log
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, check_workflow
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from scheduler.models import ScheduledAction
+from workflow.models import Workflow
 from .forms import EmailScheduleForm, JSONScheduleForm, CanvasEmailScheduleForm
 
 
@@ -473,32 +475,38 @@ def finish_scheduling(request, schedule_item=None, payload=None):
 
 
 @user_passes_test(is_instructor)
-def index(request):
+@check_workflow(pf_related='actions')
+def index(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """
     Render the list of actions attached to a workflow.
     :param request: Request object
     :return: HTTP response with the table.
     """
-
-    # Get the appropriate workflow object
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return redirect('home')
-
     # Get the actions
     s_items = ScheduledAction.objects.filter(
         action__workflow=workflow.id
     )
 
-    return render(request,
-                  'scheduler/index.html',
-                  {'table': ScheduleActionTable(s_items,
-                                                orderable=False),
-                   'workflow': workflow})
+    return render(
+        request,
+        'scheduler/index.html',
+        {
+            'table': ScheduleActionTable(
+                s_items,
+                orderable=False),
+            'workflow': workflow})
 
 
 @user_passes_test(is_instructor)
-def view(request, pk):
+@check_workflow()
+def view(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """View an existing scheduled action.
 
     :param request: HTTP request
@@ -507,11 +515,6 @@ def view(request, pk):
 
     :return: HTTP response
     """
-    # Get first the current workflow
-    workflow = get_workflow(request)
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('schedule:index')})
-
     # Get the scheduled action
     sch_obj = ScheduledAction.objects.filter(
         action__workflow=workflow,
@@ -536,26 +539,26 @@ def view(request, pk):
 
 
 @user_passes_test(is_instructor)
-def edit(request, pk):
+@check_workflow(pf_related='actions')
+def edit(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """
     Edit an existing scheduled email action
     :param request: HTTP request
     :param pk: primary key of the action
     :return: HTTP response
     """
-
-    # Get first the current workflow
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return redirect('home')
-
     # Distinguish between creating a new element or editing an existing one
-    new_item = request.path.endswith(reverse('scheduler:create',
-                                             kwargs={'pk': pk}))
+    new_item = request.path.endswith(reverse(
+        'scheduler:create',
+        kwargs={'pk': pk}))
 
     if new_item:
         action = workflow.actions.filter(
-            pk=pk
+            pk=pk,
         ).filter(
             Q(workflow__user=request.user) |
             Q(workflow__shared=request.user)
@@ -610,7 +613,12 @@ def edit(request, pk):
 
 
 @user_passes_test(is_instructor)
-def delete(request, pk):
+@check_workflow(pf_related='actions')
+def delete(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """View screen to confirm deletion scheduled item.
 
     :param request: Request object
@@ -619,11 +627,6 @@ def delete(request, pk):
 
     :return:
     """
-    # Get first the current workflow
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
     # Get the appropriate scheduled action
     s_item = ScheduledAction.objects.filter(
         action__workflow=workflow,

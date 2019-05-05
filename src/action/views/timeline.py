@@ -10,23 +10,24 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 
 from logs.models import Log
+from ontask.decorators import check_workflow
 from ontask.permissions import is_instructor
-from ontask.decorators import get_workflow
+from workflow.models import Workflow
 
 
 @user_passes_test(is_instructor)
-def show_timeline(request: HttpRequest, pk: Optional[int]) -> HttpResponse:
+@check_workflow(pf_related='logs')
+def show_timeline(
+    request: HttpRequest,
+    pk: Optional[int],
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """Show a vertical timeline of action executions.
 
     :param request: HTTP request
     :param pk: Action PK. If none, all of them are considered
     :return: HTTP response
     """
-    # Get the workflow first
-    workflow = get_workflow(request, prefetch_related='logs')
-    if not workflow:
-        return redirect('home')
-
     action = None
     if pk:
         action = workflow.actions.filter(pk=pk).first()

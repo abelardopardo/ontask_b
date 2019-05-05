@@ -20,7 +20,7 @@ from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tasks import celery_is_up, send_email_messages
 from workflow.models import Workflow
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, check_workflow
 
 html_body = """<!DOCTYPE html>
 <html>
@@ -102,9 +102,11 @@ def run_email_action(
 
 
 @user_passes_test(is_instructor)
+@check_workflow(pf_related='actions')
 def run_email_done(
     request: HttpRequest,
     action_info: Optional[EmailPayload] = None,
+    workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
     """Create the log object, queue the operation request and render done.
 
@@ -113,10 +115,6 @@ def run_email_done(
     empty, the dictionary is taken from the session.
     :return: HTTP response
     """
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return redirect('home')
-
     # Get the payload from the session if not given
     action_info = get_action_info(request.session, EmailPayload, action_info)
     if action_info is None:

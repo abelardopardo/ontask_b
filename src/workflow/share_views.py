@@ -1,29 +1,31 @@
 # -*- coding: utf-8 -*-
+from typing import Optional
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import user_passes_test
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 
 from logs.models import Log
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, check_workflow
 from ontask.permissions import is_instructor
+from workflow.models import Workflow
 from .forms import SharedForm
 
 
 @user_passes_test(is_instructor)
-def share_create(request):
+@check_workflow(pf_related='shared')
+def share_create(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """Add a new user to the list of those sharing the workflow.
 
     :param request:
 
     :return:
     """
-    # Get the workflow
-    workflow = get_workflow(request, prefetch_related='shared')
-    if not workflow:
-        return redirect('home')
-
     # Create the form object with the form_fields just computed
     form = SharedForm(
         request.POST or None,
@@ -57,7 +59,12 @@ def share_create(request):
 
 
 @user_passes_test(is_instructor)
-def share_delete(request, pk):
+@check_workflow(pf_related='shared')
+def share_delete(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """Delete one of the users sharing the workflow.
 
     :param request:
@@ -66,11 +73,6 @@ def share_delete(request, pk):
 
     :return:
     """
-    # Get the workflow
-    workflow = get_workflow(request, prefetch_related='shared')
-    if not workflow:
-        return redirect('home')
-
     # If the user does not exist, go back to home page
     user = get_user_model().objects.filter(id=pk).first()
     if not user:

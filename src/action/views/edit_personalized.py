@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 """Views to edit actions."""
+from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test
-from django.db.models import Q
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
@@ -14,7 +14,7 @@ from action.evaluate import render_action_template
 from action.forms import EditActionOutForm, EnableURLForm, FilterForm
 from action.models import Action, Condition
 from logs.models import Log
-from ontask.decorators import get_workflow
+from ontask.decorators import get_action
 from ontask.permissions import is_instructor
 from visualizations.plotly import PlotlyHandler
 from workflow.models import Workflow
@@ -28,47 +28,41 @@ def text_renders_correctly(
     """Check that the text content renders correctly as a template.
 
     :param text_content: String with the text
+
     :param action: Action to obtain the context
+
     :param form: Form to report errors.
+
     :return: Boolean stating correctness
     """
     # Render the content as a template and catch potential problems.
     # This seems to be only possible if dealing directly with Jinja2
     # instead of Django.
     try:
-        render_error = False
         render_action_template(text_content, {}, action)
     except Exception as exc:
         # Pass the django exception to the form (fingers crossed)
         form.add_error(None, exc)
-        render_error = True
+        return False
 
-    return render_error
+    return True
 
 
 @user_passes_test(is_instructor)
 @csrf_exempt
-def action_out_save_content(request: HttpRequest, pk: int) -> JsonResponse:
+@get_action(pf_related='actions')
+def action_out_save_content(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+) -> JsonResponse:
     """Save content of the action out.
 
     :param request: HTTP request (POST)
     :param pk: Action ID
     :return: Nothing, changes reflected in the DB
     """
-    # Try to get the workflow first
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Get the action
-    action = workflow.actions.filter(
-        pk=pk,
-    ).filter(
-        Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-    ).first()
-    if not filter:
-        return JsonResponse({'html_redirect': reverse('home')})
-
     # Wrong type of action.
     if action.is_in:
         return JsonResponse({'html_redirect': reverse('home')})
@@ -171,29 +165,23 @@ def edit_action_out(
 
 
 @user_passes_test(is_instructor)
-def showurl(request: HttpRequest, pk: int) -> HttpResponse:
+def showurl(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+) -> HttpResponse:
     """Create page to show URL to access action.
 
     Function that given a JSON request with an action pk returns the URL used
     to retrieve the personalised message.
+
     :param request: Json request
+
     :param pk: Primary key of the action to show the URL
+
     :return: Json response with the content to show in the screen
     """
-    # Get the current workflow
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Get the action object
-    action = workflow.actions.filter(
-        pk=pk,
-    ).filter(
-        Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-    ).first()
-    if not action:
-        return JsonResponse({'html_redirect': reverse('home')})
-
     form = EnableURLForm(request.POST or None, instance=action)
 
     if request.method == 'POST' and form.is_valid():
@@ -222,6 +210,5 @@ def showurl(request: HttpRequest, pk: int) -> HttpResponse:
             {'url_text': request.build_absolute_uri(url_text),
              'form': form,
              'action': action},
-            request=request)
+            request=request),
     })
-

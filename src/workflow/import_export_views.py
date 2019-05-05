@@ -2,9 +2,11 @@
 
 
 from builtins import str
+from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpResponse, HttpRequest
 from django.shortcuts import redirect, render
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
@@ -20,16 +22,16 @@ from .ops import (
     do_import_workflow,
     do_export_workflow
 )
-from ontask.decorators import get_workflow
+from ontask.decorators import check_workflow
 
 
 @user_passes_test(is_instructor)
-def export_ask(request, pk):
-    # Get the workflow
-    workflow = get_workflow(request, pk, prefetch_related='actions')
-    if not workflow:
-        return redirect('home')
-
+@check_workflow(pf_related='actions')
+def export_ask(
+    request: HttpRequest,
+    wid,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     form = WorkflowExportRequestForm(request.POST or None,
                                      actions=workflow.actions.all(),
                                      put_labels=True)
@@ -63,7 +65,12 @@ def export_ask(request, pk):
 
 @user_passes_test(is_instructor)
 @require_http_methods(['GET'])
-def export(request, data):
+@check_workflow(pf_related='actions')
+def export(
+    request: HttpRequest,
+    data,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """
     This request receives a parameter include with a comma separated list. The
     first value is a 0/1 stating if the data has to be included. The
@@ -74,12 +81,6 @@ def export(request, data):
     the actions to include
     :return:
     """
-
-    # Get the workflow
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return redirect('home')
-
     # Get the param encoding which elements to include in the export.
     action_ids = []
     if data and data != '':

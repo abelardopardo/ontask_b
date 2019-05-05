@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from builtins import object
 from collections import Counter
+from typing import Optional
 
 import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db import IntegrityError
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -364,7 +365,11 @@ def sqlconn_delete(request, pk):
 
 
 @user_passes_test(is_instructor)
-def sqlupload1(request, pk):
+def sqlupload1(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """
     The four step process will populate the following dictionary with name
     upload_data (divided by steps in which they are set
@@ -383,13 +388,7 @@ def sqlupload1(request, pk):
     :param pk: primary key of the SQL conn used
     :return: Creates the upload_data dictionary in the session
     """
-
-    # Get the current workflow
-    workflow = get_workflow(request)
-    if not workflow:
-        return redirect('home')
-
-        # Get the connection
+    # Get the connection
     conn = SQLConnection.objects.filter(pk=pk).first()
     if not conn:
         return redirect('dataops:sqlconns_instructor_index_instructor_index')

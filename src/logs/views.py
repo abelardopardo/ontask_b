@@ -2,11 +2,12 @@
 
 
 import json
+from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import F, Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.shortcuts import redirect, reverse, render
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.decorators.csrf import csrf_exempt
@@ -14,18 +15,19 @@ from django.views.decorators.http import require_http_methods
 
 from core.datatables import DataTablesServerSidePaging
 from ontask import simplify_datetime_str
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, check_workflow
 from ontask.permissions import is_instructor
+from workflow.models import Workflow
 from .models import Log
 
 
 @user_passes_test(is_instructor)
-def display(request):
+@check_workflow()
+def display(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     # Try to get workflow and if not present, go to home page
-    workflow = get_workflow(request)
-    if not workflow:
-        return redirect('home')
-
     # Create the context with the column names
     context = {
         'workflow': workflow,
@@ -39,14 +41,12 @@ def display(request):
 @user_passes_test(is_instructor)
 @csrf_exempt
 @require_http_methods(['POST'])
-def display_ss(request):
+@check_workflow(pf_related='logs')
+def display_ss(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     # Try to get workflow and if not present, go to home page
-    workflow = get_workflow(request, prefetch_related='logs')
-    if not workflow:
-        return JsonResponse(
-            {'error': _('Incorrect request. Unable to process')}
-        )
-
     # Check that the GET parameter are correctly given
     dt_page = DataTablesServerSidePaging(request)
     if not dt_page.is_valid:
@@ -103,7 +103,12 @@ def display_ss(request):
 
 
 @user_passes_test(is_instructor)
-def view(request, pk):
+@check_workflow()
+def view(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """View the content of one of the logs.
 
     :param request:
@@ -112,11 +117,6 @@ def view(request, pk):
 
     :return:
     """
-    # Try to get workflow and if not present, go to home page
-    workflow = get_workflow(request)
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
     # Get the log item
     log_item = Log.objects.filter(
         pk=pk,

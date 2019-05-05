@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
-
+from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 from action.models import Condition
 from logs.models import Log
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, check_workflow
 from ontask.permissions import is_instructor
+from workflow.models import Workflow
 from .forms import (AttributeItemForm)
 
 
@@ -107,12 +108,12 @@ def save_attribute_form(request, workflow, template, form, attr_idx):
 
 
 @user_passes_test(is_instructor)
-def attribute_create(request):
+@check_workflow()
+def attribute_create(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     # Get the workflow
-    workflow = get_workflow(request)
-    if not workflow:
-        return redirect('home')
-
     # Create the form object with the form_fields just computed
     form = AttributeItemForm(request.POST or None,
                              keys=list(workflow.attributes.keys()))
@@ -126,12 +127,11 @@ def attribute_create(request):
 
 
 @user_passes_test(is_instructor)
-def attribute_edit(request, pk):
-    # Get the workflow
-    workflow = get_workflow(request)
-    if not workflow:
-        return redirect('home')
-
+def attribute_edit(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     # Get the list of keys
     keys = sorted(workflow.attributes.keys())
 
@@ -157,7 +157,13 @@ def attribute_edit(request, pk):
 
 
 @user_passes_test(is_instructor)
-def attribute_delete(request, pk):
+@check_workflow()
+def attribute_delete(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
+
     """Delete an attribute attached to the workflow.
 
     :param request: Request object
@@ -166,11 +172,6 @@ def attribute_delete(request, pk):
 
     :return:
     """
-    # Get the workflow
-    workflow = get_workflow(request)
-    if not workflow:
-        return redirect('home')
-
     # Get the key
     wf_attributes = workflow.attributes
     key = sorted(wf_attributes.keys())[int(pk)]

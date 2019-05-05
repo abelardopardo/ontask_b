@@ -2,21 +2,22 @@
 """
 Implementation of views providing visualisation and stats
 """
+from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
-from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from dataops import pandas_db
 from dataops.pandas_db import load_table, get_column_statistics
 from dataops.sql_query import get_rows
-from ontask.decorators import get_workflow
+from ontask.decorators import check_workflow, get_column
 from ontask.permissions import is_instructor
 from visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
+from workflow.models import Workflow, Column
 
 
 def get_column_visualisations(column, col_data, vis_scripts,
@@ -72,17 +73,128 @@ def get_column_visualisations(column, col_data, vis_scripts,
     return visualizations
 
 
-def get_row_visualisations(request, view_id=None):
+def get_column_visualization_items(workflow,
+                                   column,
+                                   max_width=800,
+                                   max_height=450):
+    """
+    Get the visualization items (scripts and HTML) for a column
+    :param workflow: Workflow being processed
+    :param column: Column requested
+    :param max_width: Maximum width attribute in pixels
+    :param max_width: Maximum height attribute in pixels
+    :return: Tuple stat_data with descriptive stats, visualization scripts and
+    visualization HTML
+    """
+    # Get the dataframe
+    df = load_table(workflow.get_data_frame_table_name())
+
+    # Extract the data to show at the top of the page
+    stat_data = get_column_statistics(df[column.name])
+
+    vis_scripts = []
+    visualizations = get_column_visualisations(
+        column,
+        df[[column.name]],
+        vis_scripts,
+        context={'style': 'max-width:{0}px; max-height:{1}px;'
+                          'display:inline-block;'.format(
+            max_width,
+            max_height
+        )
+        }
+    )
+
+    return stat_data, vis_scripts, visualizations
+
+
+@user_passes_test(is_instructor)
+@get_column(pf_related='columns')
+def stat_column(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    column: Optional[Column] = None,
+) -> HttpResponse:
+    """
+    Render the page with stats and visualizations for the given column
+    The page includes the following visualizations:
+      First row: quartile information (only for integer and double)
+      V1. Box plot. Only for columns of type integer and double.
+      V2. Histogram. For columns of type integer, double, string, boolean
+
+    :param request: HTTP request
+
+    :param pk: primary key of the column
+
+    :return: Render the page
+    """
+    stat_data, vis_scripts, visualizations = \
+        get_column_visualization_items(workflow, column)
+
+    return render(request,
+                  'table/stat_column.html',
+                  {'column': column,
+                   'stat_data': stat_data,
+                   'vis_scripts': vis_scripts,
+                   'visualizations': [v.html_content for v in visualizations]}
+                  )
+
+
+@user_passes_test(is_instructor)
+@get_column(pf_related='columns')
+def stat_column_JSON(request: HttpRequest,
+                     pk: int,
+                     workflow: Optional[Workflow] = None,
+                     column: Optional[Column] = None,
+                     ) -> HttpResponse:
+    """
+    Function to respond a JSON GET request to show the column statistics
+    in a modal
+    :param request: HTTP request
+    :param pk: Column primary key
+    :return: HTML rendering of the visualization
+    """
+    # Request to see the statistics for a non-key column that belongs to the
+    # selected workflow
+
+    stat_data, __, visualizations = \
+        get_column_visualization_items(
+            workflow,
+            column,
+            max_height=250,
+            max_width=468)
+
+    # Create the right key/value pair in the result dictionary
+    return JsonResponse({
+        'html_form': render_to_string(
+            'table/includes/partial_column_stats_modal.html',
+            context={
+                'column': column,
+                'stat_data': stat_data,
+                'visualizations': [v.html_content for v in visualizations]},
+            request=request)
+    })
+
+
+@user_passes_test(is_instructor)
+@check_workflow(pf_related=['columns', 'views'])
+def stat_row_view(
+    request: HttpRequest,
+    pk: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
+    """
+    Render the page with stats and visualizations for a row in the table and
+    a view (subset of columns).
+    The request must include key and value to get the right row. In
+    principle, there is a visualisation for each row.
+
+    :param request: HTTP request
+    :param pk: View id to use
+    :return: Render the page
+    """
     # If there is no workflow object, go back to the index
-    workflow = get_workflow(request, prefetch_related=['columns', 'views'])
-    if not workflow:
-        return redirect('home')
-
-    # If the workflow has no data, something went wrong, go back to the
-    # workflow details page
-    if workflow.nrows == 0:
-        return redirect('worflow:detail', workflow.id)
-
     # Get the pair key,value to fetch the row from the table
     update_key = request.GET.get('key', None)
     update_val = request.GET.get('val', None)
@@ -95,8 +207,8 @@ def get_row_visualisations(request, view_id=None):
     # If a view is given, filter the columns
     columns_to_view = workflow.columns.all()
     column_names = workflow.get_column_names()
-    if view_id:
-        view = workflow.views.filter(pk=view_id).first()
+    if pk:
+        view = workflow.views.filter(pk=pk).first()
         if not view:
             # View not found. Redirect to workflow detail
             return redirect('workflow:detail', workflow.id)
@@ -163,21 +275,20 @@ def get_row_visualisations(request, view_id=None):
                    'visualizations': visualizations})
 
 
-def get_view_visualisations(request, view_id=None):
+@user_passes_test(is_instructor)
+@check_workflow(pf_related=['columns', 'views'])
+def stat_table_view(
+    request: HttpRequest,
+    pk: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """
-    Function that returns the visualisations for a view (or the entire table)
+    Render the page with stats and visualizations for a view.
+
     :param request: HTTP request
-    :param view_id: View id being used
-    :return: HTTP response
-
-    TODO: Review this function and get_row_visualisation because there is a
-    significant overlap.
+    :param pk: View id to use
+    :return: Render the page
     """
-    # If there is no workflow object, go back to the index
-    workflow = get_workflow(request, prefetch_related=['columns', 'views'])
-    if not workflow:
-        return redirect('home')
-
     # If the workflow has no data, something went wrong, go back to the
     # workflow details page
     if workflow.nrows == 0:
@@ -188,8 +299,8 @@ def get_view_visualisations(request, view_id=None):
     # If a view is given, filter the columns
     columns_to_view = workflow.columns.all()
     view = None
-    if view_id:
-        view = workflow.views.filter(pk=view_id).first()
+    if pk:
+        view = workflow.views.filter(pk=pk).first()
         if not view:
             # View not found. Redirect to workflow detail
             return redirect('workflow:detail', workflow.id)
@@ -239,174 +350,3 @@ def get_view_visualisations(request, view_id=None):
                   {'view': view,
                    'vis_scripts': vis_scripts,
                    'visualizations': visualizations})
-
-
-def get_column_visualization_items(workflow,
-                                   column,
-                                   max_width=800,
-                                   max_height=450):
-    """
-    Get the visualization items (scripts and HTML) for a column
-    :param workflow: Workflow being processed
-    :param column: Column requested
-    :param max_width: Maximum width attribute in pixels
-    :param max_width: Maximum height attribute in pixels
-    :return: Tuple stat_data with descriptive stats, visualization scripts and
-    visualization HTML
-    """
-    # Get the dataframe
-    df = load_table(workflow.get_data_frame_table_name())
-
-    # Extract the data to show at the top of the page
-    stat_data = get_column_statistics(df[column.name])
-
-    vis_scripts = []
-    visualizations = get_column_visualisations(
-        column,
-        df[[column.name]],
-        vis_scripts,
-        context={'style': 'max-width:{0}px; max-height:{1}px;'
-                          'display:inline-block;'.format(
-            max_width,
-            max_height
-        )
-        }
-    )
-
-    return stat_data, vis_scripts, visualizations
-
-
-@user_passes_test(is_instructor)
-def stat_column(request, pk):
-    """
-    Render the page with stats and visualizations for the given column
-    The page includes the following visualizations:
-      First row: quartile information (only for integer and double)
-      V1. Box plot. Only for columns of type integer and double.
-      V2. Histogram. For columns of type integer, double, string, boolean
-
-    :param request: HTTP request
-    :param pk: primary key of the column
-    :return: Render the page
-    """
-
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return redirect('home')
-
-    # Get the column
-    column = workflow.columns.filter(pk=pk).first()
-    if not column:
-        return redirect('home')
-
-    stat_data, vis_scripts, visualizations = \
-        get_column_visualization_items(workflow, column)
-
-    return render(request,
-                  'table/stat_column.html',
-                  {'column': column,
-                   'stat_data': stat_data,
-                   'vis_scripts': vis_scripts,
-                   'visualizations': [v.html_content for v in visualizations]}
-                  )
-
-
-@user_passes_test(is_instructor)
-def stat_column_JSON(request, pk):
-    """
-    Function to respond a JSON GET request to show the column statistics
-    in a modal
-    :param request: HTTP request
-    :param pk: Column primary key
-    :return: HTML rendering of the visualization
-    """
-
-    # To include in the JSON response
-    data = dict()
-
-    # Get the workflow to obtain row numbers
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Get column, must be in the workflow
-    column = workflow.columns.filter(pk=pk).first()
-    if not column or column.is_key:
-        # Something went wrong, the column requested does not belong to the
-        # workflow selected, or the column requested is a key column
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Request to see the statistics for a non-key column that belongs to the
-    # selected workflow
-
-    stat_data, __, visualizations = \
-        get_column_visualization_items(workflow,
-                                       column,
-                                       max_height=250,
-                                       max_width=468)
-
-    # Create the right key/value pair in the result dictionary
-    return JsonResponse({
-        'html_form': render_to_string(
-            'table/includes/partial_column_stats_modal.html',
-            context={
-                'column': column,
-                'stat_data': stat_data,
-                'visualizations': [v.html_content for v in visualizations]},
-            request=request)
-    })
-
-
-@user_passes_test(is_instructor)
-def stat_row(request):
-    """Render page with stats and viz of a table row.
-
-    The request must include key and value to get the right row. In
-    principle, there is a visualisation for each row.
-
-    :param request: HTTP request
-
-    :return: Render the page
-    """
-    return get_row_visualisations(request)
-
-
-@user_passes_test(is_instructor)
-def stat_row_view(request, pk):
-    """
-    Render the page with stats and visualizations for a row in the table and
-    a view (subset of columns).
-    The request must include key and value to get the right row. In
-    principle, there is a visualisation for each row.
-
-    :param request: HTTP request
-    :param pk: View id to use
-    :return: Render the page
-    """
-
-    return get_row_visualisations(request, pk)
-
-
-@user_passes_test(is_instructor)
-def stat_table(request):
-    """
-    Render the page with stats and visualizations for the whole table.
-
-    :param request: HTTP request
-    :return: Render the page
-    """
-
-    return get_view_visualisations(request)
-
-
-@user_passes_test(is_instructor)
-def stat_table_view(request, pk):
-    """
-    Render the page with stats and visualizations for a view.
-
-    :param request: HTTP request
-    :param pk: View id to use
-    :return: Render the page
-    """
-
-    return get_view_visualisations(request, pk)

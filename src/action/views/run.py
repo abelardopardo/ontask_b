@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Views to run and serve actions."""
+from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -25,7 +26,9 @@ from action.views.run_survey import get_workflow_action, run_survey_action
 from action.views.serve_survey import serve_survey_row
 from logs.models import Log
 from ontask import OnTaskEmptyWorkflow, OnTaskNoWorkflow
+from ontask.decorators import get_action
 from ontask.permissions import is_instructor
+from workflow.models import Workflow
 
 fn_distributor = {
     Action.personalized_text: run_email_action,
@@ -36,7 +39,13 @@ fn_distributor = {
 
 
 @user_passes_test(is_instructor)
-def run_action(request: HttpRequest, pk: int) -> HttpResponse:
+@get_action('actions')
+def run_action(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+) -> HttpResponse:
     """Run specific run action view depending on action type.
 
     If it is a Survey or todo, renders a table with all rows that
@@ -47,21 +56,6 @@ def run_action(request: HttpRequest, pk: int) -> HttpResponse:
     :param pk: Action id. It is assumed to be an action In
     :return: HttpResponse
     """
-    # Get the workflow and action
-    try:
-        workflow, action = get_workflow_action(request, pk)
-    except OnTaskNoWorkflow:
-        return redirect(reverse('action:index'))
-    except OnTaskEmptyWorkflow:
-        messages.error(
-            request,
-            'Workflow has no data. Go to "Manage table data" to upload data.',
-        )
-        return redirect(reverse('action:index'))
-    except Exception:
-        messages.error(request, _('Incorrect action request.'))
-        return redirect(reverse('action:index'))
-
     if action.action_type not in fn_distributor:
         # Incorrect type of action.
         return redirect(reverse('action:index'))

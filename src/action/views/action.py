@@ -6,14 +6,13 @@ from builtins import object
 from typing import Optional, Union
 
 import django_tables2 as tables
-from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db import IntegrityError
-from django.db.models import Q
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.html import format_html
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.views import generic
@@ -25,9 +24,9 @@ from action.views.edit_personalized import edit_action_out
 from action.views.edit_survey import edit_action_in
 from logs.models import Log
 from ontask import simplify_datetime_str
+from ontask.decorators import check_workflow, get_action
 from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
-from ontask.decorators import get_workflow, check_workflow
 from workflow.models import Workflow
 
 
@@ -97,13 +96,14 @@ class ActionTable(tables.Table):
             record.name)
 
     def render_action_type(self, record):
+        """Render the action type."""
         # TODO: With this solution, there is no possibility to i18n the title
         # in the element (it is done in the JS embedded in the page). Explore
         # using a template.
         return record.action_type
 
     def render_last_executed_log(self, record):
-        """Render the date/time or insert a --- if none"""
+        """Render the date/time or insert a --- if none."""
         log_item = record.last_executed_log
         return format_html(
             '<a class="spin" href="{0}">{1}</a>',
@@ -139,6 +139,7 @@ def save_action_form(
     request: HttpRequest,
     form: Union[ActionForm, ActionUpdateForm],
     template_name: str,
+    workflow: Optional[Workflow] = None,
 ) -> JsonResponse:
     """Save information from the form to manipulate condition/filter.
 
@@ -154,20 +155,14 @@ def save_action_form(
 
     :return: JSON response
     """
-    # Get the corresponding workflow
-    workflow = get_workflow(request)
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    resp_data = {}
-
     # Process the GET request
     if request.method == 'GET' or not form.is_valid():
-        resp_data['html_form'] = render_to_string(
-            template_name,
-            {'form': form},
-            request=request)
-        return JsonResponse(resp_data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                template_name,
+                {'form': form},
+                request=request),
+        })
 
     # Fill in the fields of the action (without saving to DB)_
     action_item = form.save(commit=False)
@@ -194,32 +189,34 @@ def save_action_form(
         form.add_error(
             'name',
             _('An action with that name already exists'))
-        resp_data['html_form'] = render_to_string(
-            template_name,
-            {'form': form},
-            request=request)
-        return JsonResponse(resp_data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                template_name,
+                {'form': form},
+                request=request),
+        })
 
     # Log the event
     Log.objects.register(
         request.user,
         Log.ACTION_CREATE if is_new else Log.ACTION_UPDATE,
         action_item.workflow,
-        {'id': action_item.id,
-         'name': action_item.name,
-         'workflow_id': workflow.id,
-         'workflow_name': workflow.name})
+        {
+            'id': action_item.id,
+            'name': action_item.name,
+            'workflow_id': workflow.id,
+            'workflow_name': workflow.name},
+    )
 
     # Request is correct
     if is_new:
-        resp_data['html_redirect'] = reverse(
-            'action:edit', kwargs={'pk': action_item.id},
-        )
-    else:
-        resp_data['html_redirect'] = reverse('action:index')
+        return JsonResponse({
+            'html_redirect': reverse(
+                'action:edit', kwargs={'pk': action_item.id},
+            ),
+        })
 
-    # Enough said. Respond.
-    return JsonResponse(resp_data)
+    return JsonResponse({'html_redirect': reverse('action:index')})
 
 
 @user_passes_test(is_instructor)
@@ -229,7 +226,7 @@ def action_index(
     wid: Optional[int] = None,
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
-    """Process request to show all the actions.
+    """Show all the actions attached to the workflow.
 
     :param request: HTTP Request
 
@@ -246,7 +243,7 @@ def action_index(
         'action/index.html',
         {
             'workflow': workflow,
-            'table': ActionTable(workflow.actions.all(), orderable=False)
+            'table': ActionTable(workflow.actions.all(), orderable=False),
         },
     )
 
@@ -258,21 +255,27 @@ class ActionCreateView(UserIsInstructor, generic.TemplateView):
 
     template_name = 'action/includes/partial_action_create.html'
 
+    @method_decorator(check_workflow())
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """Process the get requet when creating an action."""
         form = self.form_class()
         return save_action_form(
             request,
             form,
-            self.template_name)
+            self.template_name,
+            workflow=kwargs.get('workflow'),
+        )
 
-    def post(self, request: HttpRequest) -> HttpResponse:
+    @method_decorator(check_workflow())
+    def post(self, request: HttpRequest, **kwargs) -> HttpResponse:
         """Process the post request when creating an action."""
         form = self.form_class(request.POST)
         return save_action_form(
             request,
             form,
-            self.template_name)
+            self.template_name,
+            workflow=kwargs.get('workflow'),
+        )
 
 
 class ActionUpdateView(UserIsInstructor, generic.DetailView):
@@ -297,6 +300,7 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
 
         return act_obj
 
+    @method_decorator(check_workflow())
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """Process the get request."""
         form = self.form_class(instance=self.get_object())
@@ -305,6 +309,7 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
             form,
             self.template_name)
 
+    @method_decorator(check_workflow())
     def post(self, request: HttpRequest, **kwargs) -> HttpResponse:
         """Process post request."""
         form = self.form_class(request.POST, instance=self.get_object())
@@ -319,7 +324,13 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
 
 
 @user_passes_test(is_instructor)
-def delete_action(request: HttpRequest, pk: int) -> HttpResponse:
+@get_action()
+def delete_action(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+) -> JsonResponse:
     """Process AJAX request to delete an action.
 
     :param request: Request object
@@ -329,83 +340,46 @@ def delete_action(request: HttpRequest, pk: int) -> HttpResponse:
     :return:
     """
     # JSON response object
-    resp_data = {}
-
-    # Get the current workflow
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        resp_data['html_redirect'] = reverse('home')
-        return JsonResponse(resp_data)
-
     # Get the appropriate action object
-    action = workflow.actions.filter(
-        pk=pk,
-    ).filter(
-        Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-    ).first()
-    if not action:
-        resp_data['html_redirect'] = reverse('home')
-        return JsonResponse(resp_data)
-
     if request.method == 'POST':
         # Log the event
         Log.objects.register(
             request.user,
             Log.ACTION_DELETE,
             action.workflow,
-            {'id': action.id,
-             'name': action.name,
-             'workflow_name': action.workflow.name,
-             'workflow_id': action.workflow.id})
+            {
+                'id': action.id,
+                'name': action.name,
+                'workflow_name': action.workflow.name,
+                'workflow_id': action.workflow.id})
 
         # Perform the delete operation
         action.delete()
 
-        # In this case, the form is valid anyway
-        resp_data['html_redirect'] = reverse('action:index')
+        return JsonResponse({'html_redirect': reverse('action:index')})
 
-        return JsonResponse(resp_data)
-
-    resp_data['html_form'] = render_to_string(
-        'action/includes/partial_action_delete.html',
-        {'action': action},
-        request=request)
-    return JsonResponse(resp_data)
+    return JsonResponse({
+        'html_form': render_to_string(
+            'action/includes/partial_action_delete.html',
+            {'action': action},
+            request=request),
+    })
 
 
 @user_passes_test(is_instructor)
-def edit_action(request: HttpRequest, pk: int) -> HttpResponse:
+@get_action(pf_related=['actions', 'columns'])
+def edit_action(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+) -> HttpResponse:
     """Invoke the specific edit view.
 
     :param request: Request object
     :param pk: Action PK
     :return: HTML response
     """
-    # Try to get the workflow first
-    workflow = get_workflow(
-        request,
-        prefetch_related=['actions', 'columns'])
-    if not workflow:
-        return redirect('home')
-
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _('Workflow has no data. '
-              + 'Go to "Manage table data" to upload data.'),
-        )
-        return redirect(reverse('action:index'))
-
-    # Get the action and the columns
-    action = workflow.actions.filter(
-        pk=pk,
-    ).filter(
-        Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-    ).first()
-    if not action:
-        messages.error(request, _('Incorrect action request'))
-        return redirect('action:index')
-
     if action.action_type == Action.todo_list:
         return redirect(reverse('under_construction'), {})
 

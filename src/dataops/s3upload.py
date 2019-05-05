@@ -1,18 +1,25 @@
 # -*- coding: utf-8 -*-
+from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from ontask.permissions import is_instructor
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, check_workflow
+from workflow.models import Workflow
 
 from .forms import UploadS3FileForm
 
 
 @user_passes_test(is_instructor)
-def s3upload1(request):
+@check_workflow()
+def s3upload1(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """
     The four step process will populate the following dictionary with name
     upload_data (divided by steps in which they are set
@@ -30,12 +37,6 @@ def s3upload1(request):
     :param request: Web request
     :return: Creates the upload_data dictionary in the session
     """
-
-    # Get the current workflow
-    workflow = get_workflow(request)
-    if not workflow:
-        return redirect('home')
-
     # Bind the form with the received data
     form = UploadS3FileForm(request.POST or None,
                             request.FILES or None,

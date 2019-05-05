@@ -3,11 +3,12 @@
 
 import random
 from builtins import range
+from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db import IntegrityError
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -19,9 +20,9 @@ from action.models import Condition, ActionColumnConditionTuple
 from dataops import ops, formula_evaluation, pandas_db
 from logs.models import Log
 from ontask import create_new_name
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, check_workflow, get_column
 from ontask.permissions import is_instructor
-from workflow.models import Workflow
+from workflow.models import Workflow, Column
 from .forms import (
     ColumnRenameForm,
     ColumnAddForm,
@@ -70,7 +71,12 @@ def partition(list_in, n):
 
 
 @user_passes_test(is_instructor)
-def column_add(request, pk=None):
+@check_workflow(pf_related=['actions', 'columns'])
+def column_add(
+    request: HttpRequest,
+    pk: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """Add column.
 
     :param request:
@@ -82,11 +88,6 @@ def column_add(request, pk=None):
     # Detect if this operation is to add a new column or a new question (in
     # the edit in page)
     is_question = pk is not None
-
-    # Get the workflow element
-    workflow = get_workflow(request, prefetch_related=['actions', 'columns'])
-    if not workflow:
-        return JsonResponse({'html_redirect': 'home'})
 
     if workflow.nrows == 0:
         if is_question:
@@ -204,7 +205,11 @@ def column_add(request, pk=None):
 
 
 @user_passes_test(is_instructor)
-def formula_column_add(request):
+@check_workflow(pf_related='columns')
+def formula_column_add(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """Add a formula column.
 
     :param request:
@@ -212,10 +217,6 @@ def formula_column_add(request):
     :return:
     """
     # Get the workflow element
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
     if workflow.nrows == 0:
         messages.error(
             request,
@@ -333,7 +334,11 @@ def formula_column_add(request):
 
 
 @user_passes_test(is_instructor)
-def random_column_add(request):
+@check_workflow(pf_related='columns')
+def random_column_add(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """Create a column with random values (Modal).
 
     :param request:
@@ -341,10 +346,6 @@ def random_column_add(request):
     :return:
     """
     # Get the workflow element
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
     if workflow.nrows == 0:
         messages.error(
             request,
@@ -465,7 +466,13 @@ def random_column_add(request):
 
 
 @user_passes_test(is_instructor)
-def column_edit(request, pk):
+@get_column(pf_related=['columns', 'views', 'actions'])
+def column_edit(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    column: Optional[Column] = None
+) -> HttpResponse:
     """Edit a column.
 
     :param request:
@@ -477,24 +484,6 @@ def column_edit(request, pk):
     # Detect if this operation is to edit a new column or a new question (in
     # the edit in page)
     is_question = 'question_edit' in request.path_info
-
-    # Get the workflow element
-    workflow = get_workflow(
-        request,
-        prefetch_related=['columns', 'views', 'actions'])
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Get the column object and make sure it belongs to the workflow
-    column = workflow.columns.filter(pk=pk).first()
-    if not column:
-        # Something went wrong, redirect to the workflow detail page
-        return JsonResponse({
-            'html_redirect': reverse(
-                'workflow:detail',
-                kwargs={'pk': workflow.id})
-        })
-
     # Form to read/process data
     if is_question:
         form = QuestionRenameForm(request.POST or None,
@@ -577,7 +566,13 @@ def column_edit(request, pk):
 
 
 @user_passes_test(is_instructor)
-def column_delete(request, pk):
+@get_column(pf_related=['columns', 'actions'])
+def column_delete(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    column: Optional[Column] = None
+) -> HttpResponse:
     """Delete a column in the table attached to a workflow.
 
     :param request: HTTP request
@@ -588,22 +583,6 @@ def column_delete(request, pk):
     :return: Render the delete column form
     """
     # Get the workflow element
-    workflow = get_workflow(request, prefetch_related=['columns', 'actions'])
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    context = {'pk': pk}  # For rendering
-
-    # Get the column
-    column = workflow.columns.filter(pk=pk).first()
-    if not column:
-        # The column is not there. Redirect to workflow detail
-        return JsonResponse({
-            'html_redirect': reverse(
-                'workflow:detail',
-                kwargs={'pk': workflow.id}),
-        })
-
     # If the columns is unique and it is the only one, we cannot allow
     # the operation
     unique_column = workflow.get_column_unique()
@@ -617,13 +596,13 @@ def column_delete(request, pk):
         })
 
     # Get the name of the column to delete
-    context['cname'] = column.name
+    context = {'pk': pk, 'cname': column.name}
 
     # Get the conditions/actions attached to this workflow
-    cond_to_delete = [x for x in Condition.objects.filter(
-        action__workflow=workflow)
-                      if formula_evaluation.has_variable(x.formula,
-                                                         column.name)]
+    cond_to_delete = [
+        x for x in Condition.objects.filter(
+            action__workflow=workflow)
+        if formula_evaluation.has_variable(x.formula, column.name)]
     # Put it in the context because it is shown to the user before confirming
     # the deletion
     context['cond_to_delete'] = cond_to_delete
@@ -664,7 +643,13 @@ def column_delete(request, pk):
 
 
 @user_passes_test(is_instructor)
-def column_clone(request, pk):
+@get_column(pf_related='columns')
+def column_clone(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    column: Optional[Column] = None
+) -> HttpResponse:
     """Clone a column in the table attached to a workflow.
 
     :param request: HTTP request
@@ -674,25 +659,8 @@ def column_clone(request, pk):
 
     :return: Render the clone column form
     """
-    # Get the workflow element
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    context = {'pk': pk}  # For rendering
-
-    # Get the column
-    column = workflow.columns.filter(pk=pk).first()
-    if not column:
-        # The column is not there. Redirect to workflow detail
-        return JsonResponse({
-            'html_redirect': reverse(
-                'workflow:detail',
-                kwargs={'pk': workflow.id}),
-        })
-
     # Get the name of the column to clone
-    context['cname'] = column.name
+    context = {'pk': pk, 'cname': column.name}
 
     if request.method == 'GET':
         return JsonResponse({
@@ -729,7 +697,11 @@ def column_clone(request, pk):
 
 @user_passes_test(is_instructor)
 @csrf_exempt
-def column_move(request):
+@check_workflow(pf_related='columns')
+def column_move(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """Move a column using two names: from_name and to_name (POST params).
 
     The changes are reflected in the DB
@@ -737,17 +709,6 @@ def column_move(request):
     :param request:
     :return: AJAX response, empty.
     """
-
-    # Check if the workflow is locked
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        # No workflow present
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    if workflow.nrows == 0:
-        # Workflow is empty
-        return JsonResponse({})
-
     from_name = request.POST.get('from_name')
     to_name = request.POST.get('to_name')
     if not from_name or not to_name:
@@ -769,7 +730,14 @@ def column_move(request):
 
 
 @user_passes_test(is_instructor)
-def column_move_top(request, pk):
+@get_column(pf_related='columns')
+def column_move_top(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    column: Optional[Column] = None
+) -> HttpResponse:
+
     """Move column to the first position.
 
     :param request: HTTP request to move a column to the top of the list
@@ -778,17 +746,6 @@ def column_move_top(request, pk):
 
     :return: Once done, redirects to the column page
     """
-
-    # Get the workflow element
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return redirect('home')
-
-    # Get the column
-    column = workflow.columns.filter(pk=pk).first()
-    if not column:
-        return redirect('workflow:detail', pk=workflow.id)
-
     # The workflow and column objects have been correctly obtained
     if column.position > 1:
         column.reposition_and_update_df(1)
@@ -797,7 +754,14 @@ def column_move_top(request, pk):
 
 
 @user_passes_test(is_instructor)
-def column_move_bottom(request, pk):
+@get_column(pf_related='columns')
+def column_move_bottom(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    column: Optional[Column] = None
+) -> HttpResponse:
+
     """Move column to the last position.
 
     :param request: HTTP request to move a column to end of the list
@@ -806,17 +770,6 @@ def column_move_bottom(request, pk):
 
     :return: Once done, redirects to the column page
     """
-
-    # Get the workflow element
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return redirect('home')
-
-    # Get the column
-    column = workflow.columns.filter(pk=pk).first()
-    if not column:
-        return redirect('workflow:detail', pk=workflow.id)
-
     # The workflow and column objects have been correctly obtained
     if column.position < workflow.ncols:
         column.reposition_and_update_df(workflow.ncols)
@@ -825,7 +778,13 @@ def column_move_bottom(request, pk):
 
 
 @user_passes_test(is_instructor)
-def column_restrict_values(request, pk):
+@get_column(pf_related='columns')
+def column_restrict_values(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    column: Optional[Column] = None
+) -> HttpResponse:
     """Restrict future values in this column to one of those already present.
 
     :param request: HTTP request
@@ -835,23 +794,6 @@ def column_restrict_values(request, pk):
 
     :return: Render the delete column form
     """
-    # Get the workflow element
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    context = {'pk': pk}  # For rendering
-
-    # Get the column
-    column = workflow.columns.filter(pk=pk).first()
-    if not column:
-        # The column is not there. Redirect to workflow detail
-        return JsonResponse({
-            'html_redirect': reverse(
-                'workflow:detail',
-                kwargs={'pk': workflow.id}),
-        })
-
     # If the columns is unique and it is the only one, we cannot allow
     # the operation
     if column.is_key:
@@ -863,7 +805,7 @@ def column_restrict_values(request, pk):
         })
 
     # Get the name of the column to delete
-    context['cname'] = column.name
+    context = {'pk': pk, 'cname': column.name}
 
     # Get the values from the data frame
     df = pandas_db.load_table(workflow.get_data_frame_table_name())

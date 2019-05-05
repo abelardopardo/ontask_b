@@ -3,19 +3,22 @@
 """Decorators for functions in OnTask."""
 
 from functools import wraps
-from typing import Optional, Union, List
+from typing import List, Optional, Union
 
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
 from django.core.cache import cache
 from django.db.models import Q
-from django.http import HttpRequest
+from django.http import HttpRequest, JsonResponse
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+from action.models import Condition, ActionColumnConditionTuple
 from ontask import OnTaskException
+from table.models import View
 from workflow.models import Workflow
 from workflow.ops import (
     store_workflow_in_session, store_workflow_nrows_in_session,
@@ -23,9 +26,9 @@ from workflow.ops import (
 
 
 def check_workflow(
-    s_related=None,
-    pf_related=None,
-    is_json: bool = False):
+    s_related: object = None,
+    pf_related: object = None,
+):
     """Check that the request has the correct workflow stored.
 
     It also passes the select_related and prefetch_related fields.
@@ -36,46 +39,24 @@ def check_workflow(
     :param s_related: select_related to use when fetching the workflow
 
     :param pf_related: prefetch_related to use when fetching the workflow
+
     """
     def check_workflow_decorator(func):  # noqa Z430
-        @wraps(func)
+        @wraps(func)  # noqa Z430
         def function_wrapper(request, **kwargs):  # noqa Z430
-            try:
-                sid = request.session.get('ontask_workflow_id')
-                wid = kwargs['wid']
-                if wid is None and sid is None:
-                    # No key was given and none was found in the session (anomaly)
-                    raise OnTaskException(_('Please select a workflow.'))
-
-                update_session = False
-                if wid is None:
-                    # No WID provided, but the session contains one, carry on
-                    # with this one
-                    wid = sid
-                elif sid is None:
-                    # Update the value in the session
-                    update_session = True
-                elif sid != wid:
-                    Workflow.unlock_workflow_by_id(sid)
-                    # Update the value in the session
-                    update_session = True
-
-                workflow = get_workflow2(
-                    request,
-                    wid=wid,
-                    select_related=s_related,
-                    prefetch_related=pf_related
-                )
-            except OnTaskException as exc:
-                messages.error(request, str(exc))
-                return redirect('home')
-
+            workflow = get_workflow2(
+                request,
+                wid=kwargs.get('wid'),
+                select_related=s_related,
+                prefetch_related=pf_related,
+            )
             if not workflow:
+                if request.is_ajax():
+                    return JsonResponse({'html_redirect': reverse('home')})
                 return redirect('home')
 
-            if update_session:
-                # If the session does not have this info, update.
-                store_workflow_in_session(request, workflow)
+            # Update the session
+            store_workflow_in_session(request, workflow)
 
             kwargs['workflow'] = workflow
 
@@ -86,11 +67,295 @@ def check_workflow(
     return check_workflow_decorator
 
 
+def get_column(
+    s_related=None,
+    pf_related=None,
+):
+    """Check that the pk parameter refers to an action in the Workflow."""
+    def check_column_decorator(func):  # noqa Z430
+        @wraps(func)  # noqa: Z430
+        def function_wrapper(request, pk, **kwargs):  # noqa Z430
+            workflow = get_workflow2(
+                request,
+                wid=kwargs.get('wid'),
+                select_related=s_related,
+                prefetch_related=pf_related,
+            )
+            if not workflow:
+                if request.is_ajax():
+                    return JsonResponse({'html_redirect': reverse('home')})
+                return redirect('home')
+
+            # Update the session
+            store_workflow_in_session(request, workflow)
+
+            kwargs['workflow'] = workflow
+
+            if workflow.nrows == 0:
+                messages.error(
+                    request,
+                    _('Workflow has no data. '
+                      + 'Go to "Manage table data" to upload data.'),
+                )
+                if request.is_ajax():
+                    return JsonResponse(
+                        {'html_redirect': reverse('action:index')})
+                return redirect(reverse('action:index'))
+
+            if not kwargs.get('column'):
+                column = workflow.columns.filter(
+                    pk=pk,
+                ).filter(
+                    Q(workflow__user=request.user)
+                    | Q(workflow__shared=request.user),
+                ).first()
+                if not column:
+                    if request.is_ajax():
+                        return JsonResponse({'html_redirect': reverse('home')})
+                    return redirect('home')
+
+                kwargs['column'] = column
+
+            return func(request, pk, **kwargs)
+
+        return function_wrapper
+
+    return check_column_decorator
+
+
+def get_action(
+    s_related=None,
+    pf_related=None,
+):
+    """Check that the pk parameter refers to an action in the Workflow."""
+    def check_action_decorator(func):  # noqa Z430
+        @wraps(func)  # noqa: Z430
+        def function_wrapper(request, pk, **kwargs):  # noqa Z430
+            workflow = get_workflow2(
+                request,
+                wid=kwargs.get('wid'),
+                select_related=s_related,
+                prefetch_related=pf_related,
+            )
+            if not workflow:
+                if request.is_ajax():
+                    return JsonResponse({'html_redirect': reverse('home')})
+                return redirect('home')
+
+            # Update the session
+            store_workflow_in_session(request, workflow)
+
+            kwargs['workflow'] = workflow
+
+            if workflow.nrows == 0:
+                messages.error(
+                    request,
+                    _('Workflow has no data. '
+                      + 'Go to "Manage table data" to upload data.'),
+                )
+                if request.is_ajax():
+                    return JsonResponse(
+                        {'html_redirect': reverse('action:index')})
+                return redirect(reverse('action:index'))
+
+            if not kwargs.get('action'):
+                action = workflow.actions.filter(
+                    pk=pk,
+                ).filter(
+                    Q(workflow__user=request.user)
+                    | Q(workflow__shared=request.user),
+                ).first()
+                if not action:
+                    if request.is_ajax():
+                        return JsonResponse({'html_redirect': reverse('home')})
+                    return redirect('home')
+
+                kwargs['action'] = action
+
+            return func(request, pk, **kwargs)
+
+        return function_wrapper
+
+    return check_action_decorator
+
+
+def get_condition(
+    s_related=None,
+    pf_related=None,
+    is_filter=False,
+):
+    """Check that the pk parameter refers to a condition in the Workflow."""
+    def check_condition_decorator(func):  # noqa Z430
+        @wraps(func)  # noqa: Z430
+        def function_wrapper(request, pk, **kwargs):  # noqa Z430
+            workflow = get_workflow2(
+                request,
+                wid=kwargs.get('wid'),
+                select_related=s_related,
+                prefetch_related=pf_related,
+            )
+            if not workflow:
+                if request.is_ajax():
+                    return JsonResponse({'html_redirect': reverse('home')})
+                return redirect('home')
+
+            # Update the session
+            store_workflow_in_session(request, workflow)
+
+            kwargs['workflow'] = workflow
+
+            if workflow.nrows == 0:
+                messages.error(
+                    request,
+                    _('Workflow has no data. '
+                      + 'Go to "Manage table data" to upload data.'),
+                )
+                if request.is_ajax():
+                    return JsonResponse(
+                        {'html_redirect': reverse('action:index')})
+                return redirect(reverse('action:index'))
+
+            if not kwargs.get('condition'):
+                # Get the condition
+                condition = Condition.objects.filter(pk=pk).filter(
+                    Q(action__workflow__user=request.user) |
+                    Q(action__workflow__shared=request.user),
+                    is_filter=is_filter,
+                    action__workflow=workflow,
+                ).select_related('action').first()
+
+                if not condition:
+                    if request.is_ajax():
+                        return JsonResponse({'html_redirect': reverse('home')})
+                    return redirect('home')
+
+                kwargs['condition'] = condition
+
+            return func(request, pk, **kwargs)
+
+        return function_wrapper
+
+    return check_condition_decorator
+
+
+def get_columncondition(
+    s_related=None,
+    pf_related=None,
+):
+    """Check that the pk parameter refers to a condition in the Workflow."""
+    def check_columncondition_decorator(func):  # noqa Z430
+        @wraps(func)  # noqa: Z430
+        def function_wrapper(request, pk, **kwargs):  # noqa Z430
+            workflow = get_workflow2(
+                request,
+                wid=kwargs.get('wid'),
+                select_related=s_related,
+                prefetch_related=pf_related,
+            )
+            if not workflow:
+                if request.is_ajax():
+                    return JsonResponse({'html_redirect': reverse('home')})
+                return redirect('home')
+
+            # Update the session
+            store_workflow_in_session(request, workflow)
+
+            kwargs['workflow'] = workflow
+
+            if workflow.nrows == 0:
+                messages.error(
+                    request,
+                    _('Workflow has no data. '
+                      + 'Go to "Manage table data" to upload data.'),
+                )
+                if request.is_ajax():
+                    return JsonResponse(
+                        {'html_redirect': reverse('action:index')})
+                return redirect(reverse('action:index'))
+
+            # Get the column-condition
+            cc_tuple = ActionColumnConditionTuple.objects.filter(
+                pk=pk).filter(
+                Q(action__workflow__user=request.user)
+                | Q(action__workflow__shared=request.user),
+                action__workflow=workflow,
+            ).select_related(['action', 'condition', 'column']).first()
+
+            if not cc_tuple:
+                if request.is_ajax():
+                    return JsonResponse({'html_redirect': reverse('home')})
+                return redirect('home')
+
+            kwargs['cc_tuple'] = cc_tuple
+
+            return func(request, pk, **kwargs)
+
+        return function_wrapper
+
+    return check_columncondition_decorator
+
+
+def get_view(
+    s_related=None,
+    pf_related=None,
+):
+    """Check that the pk parameter refers to a condition in the Workflow."""
+    def check_view_decorator(func):  # noqa Z430
+        @wraps(func)  # noqa: Z430
+        def function_wrapper(request, pk, **kwargs):  # noqa Z430
+            workflow = get_workflow2(
+                request,
+                wid=kwargs.get('wid'),
+                select_related=s_related,
+                prefetch_related=pf_related,
+            )
+            if not workflow:
+                if request.is_ajax():
+                    return JsonResponse({'html_redirect': reverse('home')})
+                return redirect('home')
+
+            # Update the session
+            store_workflow_in_session(request, workflow)
+
+            kwargs['workflow'] = workflow
+
+            if workflow.nrows == 0:
+                messages.error(
+                    request,
+                    _('Workflow has no data. '
+                      + 'Go to "Manage table data" to upload data.'),
+                )
+                if request.is_ajax():
+                    return JsonResponse(
+                        {'html_redirect': reverse('action:index')})
+                return redirect(reverse('action:index'))
+
+            if not kwargs.get('view'):
+                # Get the condition
+                view = View.objects.filter(pk=pk).filter(
+                    Q(action__workflow__user=request.user)
+                    | Q(action__workflow__shared=request.user),
+                ).prefetch_related('columns').first()
+
+                if not view:
+                    if request.is_ajax():
+                        return JsonResponse({'html_redirect': reverse('home')})
+                    return redirect('home')
+
+                kwargs['view'] = view
+
+            return func(request, pk, **kwargs)
+
+        return function_wrapper
+
+    return check_view_decorator
+
+
 def get_workflow2(
     request,
     wid: int,
-    select_related: Optional[Union[str, List[str]]] = None,
-    prefetch_related: Optional[Union[str, List[str]]] = None,
+    select_related: Optional[Union[str, List]] = None,
+    prefetch_related: Optional[Union[str, List]] = None,
 ) -> Workflow:
     """Verify that the workflow stored in the request can be accessed.
 
@@ -106,6 +371,18 @@ def get_workflow2(
     """
     # Lock the workflow object while deciding if it is accessible or not to
     # avoid race conditions.
+    sid = request.session.get('ontask_workflow_id')
+    if wid is None and sid is None:
+        # No key was given and none was found in the session (anomaly)
+        return None
+
+    if wid is None:
+        # No WID provided, but the session contains one, carry on
+        # with this one
+        wid = sid
+    elif sid != wid:
+        Workflow.unlock_workflow_by_id(sid)
+
     with cache.lock('ONTASK_WORKFLOW_{0}'.format(wid)):
 
         # Step 1: Get the workflow that is being accessed
@@ -114,7 +391,7 @@ def get_workflow2(
         )
 
         if not workflow:
-            raise OnTaskException(_('Incorrect workflow request'))
+            return None
 
         # Apply select and prefetch if given
         if select_related:

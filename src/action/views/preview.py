@@ -18,16 +18,20 @@ from action.evaluate import (
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
 from action.models import Action
-from ontask.decorators import get_workflow
+from ontask.decorators import get_action
 from ontask.permissions import is_instructor
+from workflow.models import Workflow
 
 
 @csrf_exempt
 @user_passes_test(is_instructor)
+@get_action(pf_related='actions')
 def preview_next_all_false_response(
     request: HttpRequest,
     pk: int,
     idx: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
 ) -> JsonResponse:
     """Preview message with all conditions evaluting to false.
 
@@ -39,19 +43,13 @@ def preview_next_all_false_response(
     the preview_response method
 
     :param request: HTTP Request object
+
     :param pk: Primary key of the action
+
     :param idx:
+
     :return:
     """
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Action being used
-    action = workflow.actions.filter(id=pk).first()
-    if not action:
-        return JsonResponse({'html_redirect': reverse('home')})
-
     # Get the list of indeces
     idx_list = action.rows_all_false
 
@@ -72,10 +70,12 @@ def preview_next_all_false_response(
 
 @csrf_exempt
 @user_passes_test(is_instructor)
+@get_action(pf_related='actions')
 def preview_response(
     request: HttpRequest,
     pk: int,
     idx: int,
+    workflow: Optional[Workflow] = None,
     action: Optional[Action] = None,
 ) -> JsonResponse:
     """Preview content of action.
@@ -85,24 +85,15 @@ def preview_response(
     denote which instance to show.
 
     :param request: HTML request object
+
     :param pk: Primary key of the an action for which to do the preview
+
     :param idx: Index of the reponse to preview
+
     :param action: Might have been fetched already
+
     :return: JsonResponse
     """
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Get the workflow to obtain row numbers
-    if not action:
-        # Action being used
-        action = workflow.actions.filter(id=pk).prefetch_related(
-            'conditions',
-        ).first()
-        if not action:
-            return JsonResponse({'html_redirect': reverse('home')})
-
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content', None)
     if action_content:
@@ -177,8 +168,8 @@ def preview_response(
             ],
         )
 
-    if action.action_type == Action.personalized_canvas_email or \
-        action.action_type == Action.personalized_json:
+    if action.action_type == Action.personalized_canvas_email \
+       or action.action_type == Action.personalized_json:
         action_content = escape(action_content)
 
     # See if there is prelude content in the request
@@ -199,7 +190,7 @@ def preview_response(
                 'prelude': prelude,
                 'correct_json': correct_json,
                 'show_values': show_values,
-                'all_false': all_false
+                'all_false': all_false,
             },
-            request=request)
+            request=request),
     })

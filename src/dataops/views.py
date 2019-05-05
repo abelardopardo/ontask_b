@@ -3,6 +3,7 @@
 
 import json
 from builtins import object, range, str, zip
+from typing import Optional
 
 import django_tables2 as tables
 import pandas as pd
@@ -10,7 +11,7 @@ from celery.task.control import inspect
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import F
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
 from django.urls import resolve
@@ -23,9 +24,10 @@ from dataops import pandas_db
 from dataops.forms import PluginInfoForm
 from dataops.sql_query import get_rows, update_row
 from logs.models import Log
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, check_workflow
 from ontask.permissions import is_instructor
 from ontask.tasks import run_plugin_task
+from workflow.models import Workflow
 from workflow.ops import store_workflow_in_session
 from .forms import FIELD_PREFIX, RowForm
 from .models import PluginRegistry
@@ -115,27 +117,26 @@ class PluginRegistryTable(tables.Table):
 
 
 @user_passes_test(is_instructor)
-def uploadmerge(request):
+@check_workflow()
+def uploadmerge(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     # Get the workflow that is being used
-    workflow = get_workflow(request)
-    if not workflow:
-        return redirect('home')
-
-    return render(request,
-                  'dataops/uploadmerge.html',
-                  {'valuerange':
-                       range(5) if workflow.has_table() else range(3)})
+    return render(
+        request,
+        'dataops/uploadmerge.html',
+        {'valuerange': range(5) if workflow.has_table() else range(3)})
 
 
 @user_passes_test(is_instructor)
-def transform_model(request):
+@check_workflow()
+def transform_model(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     # Get the workflow that is being used
-    workflow = get_workflow(request)
-    if not workflow:
-        return redirect('home')
-
     url_name = resolve(request.path).url_name
-
     is_model = url_name == 'model'
 
     # Traverse the plugin folder and refresh the db content.
@@ -147,13 +148,18 @@ def transform_model(request):
         request=request
     )
 
-    return render(request,
-                  'dataops/transform_model.html',
-                  {'table': table, 'is_model': is_model})
+    return render(
+        request,
+        'dataops/transform_model.html',
+        {'table': table, 'is_model': is_model})
 
 
 @user_passes_test(is_instructor)
-def diagnose(request, pk):
+def diagnose(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """Show the diagnostics of a plugin that failed the verification tests.
 
     :param request: HTML request object
@@ -162,14 +168,6 @@ def diagnose(request, pk):
 
     :return:
     """
-    # Get the corresponding workflow
-    workflow = get_workflow(request)
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # To include in the JSON response
-    data = dict()
-
     # Action being used
     plugin = PluginRegistry.objects.filter(id=pk).first()
     if not plugin:
@@ -195,23 +193,16 @@ def diagnose(request, pk):
 
 
 @user_passes_test(is_instructor)
-def row_update(request):
+@check_workflow(pf_related='columns')
+def row_update(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """
     Receives a POST request to update a row in the data table
     :param request: Request object with all the data.
     :return:
     """
-
-    # If there is no workflow object, go back to the index
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return redirect('home')
-
-    # If the workflow has no data, something went wrong, go back to the
-    # main dataops page
-    if workflow.nrows == 0:
-        return redirect('dataops:uploadmerge')
-
     # Get the pair key,value to fetch the row from the table
     update_key = request.GET.get('update_key', None)
     update_val = request.GET.get('update_val', None)
@@ -280,19 +271,16 @@ def row_update(request):
 
 
 @user_passes_test(is_instructor)
-def row_create(request):
+@check_workflow(pf_related=['columns', 'actions'])
+def row_create(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """
     Receives a POST request to create a new row in the data table
     :param request: Request object with all the data.
     :return:
     """
-
-    # If there is no workflow object, go back to the index
-    workflow = get_workflow(request,
-                            prefetch_related=['columns', 'actions'])
-    if not workflow:
-        return redirect('home')
-
     # If the workflow has no data, the operation should not be allowed
     if workflow.nrows == 0:
         return redirect('dataops:uploadmerge')
@@ -362,7 +350,12 @@ def row_create(request):
 
 
 @user_passes_test(is_instructor)
-def plugin_invoke(request, pk):
+@check_workflow(pf_related='columns')
+def plugin_invoke(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """
     View provided as the first step to execute a plugin.
     :param request: HTTP request received
@@ -382,11 +375,6 @@ def plugin_invoke(request, pk):
                 _('Unable to run plugins due to a misconfiguration. '
                   'Ask your system administrator to enable queueing.'))
             return redirect(reverse('table:display'))
-
-    # Get the workflow and the plugin information
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return redirect('home')
 
     plugin_info = PluginRegistry.objects.filter(pk=pk).first()
     if not plugin_info:
@@ -503,7 +491,12 @@ def plugin_invoke(request, pk):
 
 
 @user_passes_test(is_instructor)
-def moreinfo(request, pk):
+@check_workflow()
+def moreinfo(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """Show the detailed information about a plugin.
 
     :param request: HTML request object
@@ -512,11 +505,6 @@ def moreinfo(request, pk):
 
     :return:
     """
-    # Get the corresponding workflow
-    workflow = get_workflow(request)
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
     # Action being used
     plugin = PluginRegistry.objects.filter(id=pk).first()
     if not plugin:

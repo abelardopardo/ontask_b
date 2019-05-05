@@ -5,6 +5,7 @@ File containing functions to implement all views related to the table element.
 
 from builtins import next, object, str
 from datetime import datetime
+from typing import Optional
 
 import django_tables2 as tables
 import pytz
@@ -13,7 +14,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db import IntegrityError
 from django.db.models import Q
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpRequest
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
 from django.utils.html import format_html, escape, urlencode
@@ -26,10 +27,11 @@ from core.datatables import DataTablesServerSidePaging
 from dataops import pandas_db
 from logs.models import Log
 from ontask import create_new_name
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, check_workflow, get_view
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from visualizations.plotly import PlotlyHandler
+from workflow.models import Workflow
 from .forms import ViewAddForm
 from .models import View
 
@@ -130,7 +132,13 @@ def save_view_form(request, form, template_name):
     return JsonResponse({'html_redirect': ''})
 
 
-def render_table_display_page(request, workflow, view, columns, ajax_url):
+def render_table_display_page(
+    request: HttpRequest,
+    workflow: Workflow,
+    view: Optional[View],
+    columns,
+    ajax_url: str,
+):
     """
     Function to render the content of the display page taking into account
     the columns to show and the AJAX url to use to render the table content.
@@ -273,16 +281,16 @@ def render_table_display_data(request, workflow, columns, formula,
 
 
 @user_passes_test(is_instructor)
-def display(request):
+@check_workflow(pf_related='columns')
+def display(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """
     Initial page to show the table
     :param request: HTTP request
     :return: Initial rendering of the page with the table skeleton
     """
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return redirect('home')
-
     if workflow.nrows == 0:
         # Table is empty, redirect to data upload
         return redirect('dataops:uploadmerge')
@@ -299,18 +307,16 @@ def display(request):
 @user_passes_test(is_instructor)
 @csrf_exempt
 @require_http_methods(['POST'])
-def display_ss(request):
+@check_workflow(pf_related='columns')
+def display_ss(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """
     AJAX function to provide a subset of the table for visualisation
     :param request: HTTP request from dataTables
     :return: AJAX response
     """
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return JsonResponse(
-            {'error': _('Incorrect request. Unable to process')}
-        )
-
     # If there is not DF, go to workflow details.
     if not workflow.has_table():
         return JsonResponse({'error': _('There is no data in the table')})
@@ -324,26 +330,19 @@ def display_ss(request):
 
 
 @user_passes_test(is_instructor)
-def display_view(request, pk):
+@get_view(pf_related='views')
+def display_view(
+    request: HttpRequest,
+    pk: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+    view: Optional[View] = None,
+) -> HttpResponse:
     """
     Initial page to show the table using a VIEW
     :param request: HTTP request
     :param pk: PK of the view to use
     :return: Initial rendering of the page with the table skeleton
     """
-    workflow = get_workflow(request, prefetch_related='views')
-    if not workflow:
-        return redirect('home')
-
-    if workflow.nrows == 0:
-        # Table is empty, redirect to data upload
-        return redirect('dataops:uploadmerge')
-
-    view = workflow.views.filter(pk=pk).prefetch_related('columns').first()
-    if not view:
-        # The view has not been found, so it must be due to a session expire
-        return redirect('table:display')
-
     return render_table_display_page(
         request,
         workflow,
@@ -356,30 +355,23 @@ def display_view(request, pk):
 @user_passes_test(is_instructor)
 @csrf_exempt
 @require_http_methods(['POST'])
-def display_view_ss(request, pk):
+@get_view(pf_related='views')
+def display_view_ss(
+    request: HttpRequest,
+    pk: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+    view: Optional[View] = None,
+) -> HttpResponse:
     """
     AJAX function to provide a subset of the table for visualisation. The
     subset is defined by the elements in a view
+
     :param request: HTTP request from dataTables
+
     :param pk: Primary key of the view to be used
+
     :return: AJAX response
     """
-
-    workflow = get_workflow(request, prefetch_related='views')
-    if not workflow:
-        return JsonResponse(
-            {'error': _('Incorrect request. Unable to process')}
-        )
-
-    # If there is not DF, go to workflow details.
-    if not workflow.has_table():
-        return JsonResponse({'error': _('There is no data in the table')})
-
-    view = workflow.views.filter(pk=pk).prefetch_related('columns').first()
-    if not view:
-        # The view has not been found, so it must be due to a session expire
-        return JsonResponse({'error': _('Incorrect view reference')})
-
     return render_table_display_data(
         request,
         workflow,
@@ -390,21 +382,16 @@ def display_view_ss(request, pk):
 
 
 @user_passes_test(is_instructor)
-def row_delete(request):
+@check_workflow(pf_related='actions')
+def row_delete(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """
     Handle the steps to delete a row in the table
     :param request: HTTP request
     :return: AJAX response
     """
-    # We only accept ajax requests here
-    if not request.is_ajax():
-        return redirect('home')
-
-    # Get the workflow
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return redirect('home')
-
     # Get the key/value pair to delete
     key = request.GET.get('key', None)
     value = request.GET.get('value', None)
@@ -445,35 +432,40 @@ def row_delete(request):
 
 
 @user_passes_test(is_instructor)
-def view_index(request):
+@check_workflow(pf_related='views')
+def view_index(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """
     Render the list of views attached to a workflow
     :param request:
     :return: HTTP response with the table
     """
-
-    # Get the appropriate workflow object
-    workflow = get_workflow(request, prefetch_related='views')
-    if not workflow:
-        return redirect('home')
-
     # Get the views
-    views = workflow.views.values('id',
-                                  'name',
-                                  'description_text',
-                                  'modified')
-
-    # Context to render the template
-    context = {'query_builder_ops': workflow.get_query_builder_ops_as_str(),
-               'table': ViewTable(views, orderable=False)}
+    views = workflow.views.values(
+        'id',
+        'name',
+        'description_text',
+        'modified')
 
     # Build the table only if there is anything to show (prevent empty table)
-
-    return render(request, 'table/view_index.html', context)
+    return render(
+        request,
+        'table/view_index.html',
+        {
+            'query_builder_ops': workflow.get_query_builder_ops_as_str(),
+            'table': ViewTable(views, orderable=False),
+        },
+    )
 
 
 @user_passes_test(is_instructor)
-def view_add(request):
+@check_workflow(pf_related='columns')
+def view_add(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """Create a new view by processing the GET/POST requests related to the form.
 
     :param request: Request object
@@ -481,10 +473,6 @@ def view_add(request):
     :return: AJAX response
     """
     # Get the workflow element
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
     if workflow.nrows == 0:
         messages.error(
             request,
@@ -494,69 +482,50 @@ def view_add(request):
     # Form to read/process data
     form = ViewAddForm(request.POST or None, workflow=workflow)
 
-    return save_view_form(request,
-                          form,
-                          'table/includes/partial_view_add.html')
+    return save_view_form(
+        request,
+        form,
+        'table/includes/partial_view_add.html'
+    )
 
 
 @user_passes_test(is_instructor)
-def view_edit(request, pk):
+@get_view(pf_related='views')
+def view_edit(
+    request: HttpRequest,
+    pk: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+    view: Optional[View] = None,
+) -> HttpResponse:
     """
     Process the GET/POST for the form to edit the content of a view
     :param request: Request object
     :param pk: Primary key of the view
     :return: AJAX Response
     """
-    # Get the workflow element
-    workflow = get_workflow(request, prefetch_related='views')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _('Cannot add a view to a workflow without data'))
-        return JsonResponse({'html_redirect': ''})
-
-    # Get the view
-    view = workflow.views.filter(
-        pk=pk
-    ).filter(
-        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
-    ).prefetch_related('columns').first()
-    if not view:
-        return JsonResponse({'html_redirect': reverse('table:view_index')})
-
     # Form to read/process data
     form = ViewAddForm(request.POST or None, instance=view, workflow=workflow)
 
-    return save_view_form(request,
-                          form,
-                          'table/includes/partial_view_edit.html')
+    return save_view_form(
+        request,
+        form,
+        'table/includes/partial_view_edit.html')
 
 
 @user_passes_test(is_instructor)
-def view_delete(request, pk):
+@check_workflow(pf_related='views')
+def view_delete(
+    request: HttpRequest,
+    pk: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+    view: Optional[View] = None,
+) -> HttpResponse:
     """
     AJAX processor for the delete view operation
     :param request: AJAX request
     :param pk: primary key of the view to delete
     :return: AJAX response to handle the form.
     """
-    # Get the workflow element
-    workflow = get_workflow(request, prefetch_related='views')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Get the appropriate action object
-    view = workflow.views.filter(
-        pk=pk
-    ).filter(
-        Q(workflow__user=request.user) | Q(workflow__shared=request.user)
-    ).first()
-    if not view:
-        return JsonResponse({'html_redirect': reverse('table:view_index')})
-
     if request.method == 'POST':
         # Log the event
         Log.objects.register(
@@ -584,7 +553,13 @@ def view_delete(request, pk):
 
 
 @user_passes_test(is_instructor)
-def view_clone(request, pk):
+@check_workflow(pf_related='views')
+def view_clone(
+    request: HttpRequest,
+    pk: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+    view: Optional[View] = None,
+) -> HttpResponse:
     """AJAX handshake to clone a view attached to the table.
 
     :param request: HTTP request
@@ -593,30 +568,11 @@ def view_clone(request, pk):
 
     :return: AJAX response
     """
-    # Get the workflow element
-    workflow = get_workflow(request, prefetch_related='views')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    context = {'pk': pk}  # For rendering
-
-    # Get the view
-    view = workflow.views.filter(pk=pk).first()
-    if not view:
-        # The view is not there. Redirect to workflow detail
-        return JsonResponse(
-            {'html_redirect': reverse(
-                'workflow:detail', kwargs={'pk': workflow.id})},
-        )
-
-    # Get the name of the view to clone
-    context['vname'] = view.name
-
     if request.method == 'GET':
         return JsonResponse({
             'html_form': render_to_string(
                 'table/includes/partial_view_clone.html',
-                context,
+                {'pk': pk, 'vname': view.name},
                 request=request),
         })
 
@@ -646,38 +602,19 @@ def view_clone(request, pk):
 
 
 @user_passes_test(is_instructor)
-def csvdownload(request, pk=None):
+@get_view(pf_related=['columns', 'views'])
+def csvdownload(
+    request: HttpRequest,
+    pk: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+    view: Optional[View] = None,
+) -> HttpResponse:
     """
 
     :param request: HTML request
     :param pk: If given, the PK of the view to subset the table
     :return: Return a CSV download of the data in the table
     """
-
-    # Get the appropriate workflow object
-    workflow = get_workflow(request, prefetch_related=['columns', 'views'])
-    if not workflow:
-        return redirect('home')
-
-    # Check if dataframe is present
-    if not workflow.has_table():
-        # Go back to show the workflow detail
-        return redirect(reverse('workflow:detail',
-                                kwargs={'pk': workflow.id}))
-
-    # Get the columns from the view (if given)
-    view = None
-    if pk:
-        view = workflow.views.filter(
-            pk=pk
-        ).filter(
-            Q(workflow__user=request.user) | Q(workflow__shared=request.user)
-        ).prefetch_related('columns').first()
-        if not view:
-            # Go back to show the workflow detail
-            return redirect(reverse('workflow:detail',
-                                    kwargs={'pk': workflow.id}))
-
     # Fetch the data frame
     if view:
         col_names = [x.name for x in view.columns.all()]

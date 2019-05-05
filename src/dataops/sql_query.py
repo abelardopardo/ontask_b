@@ -469,10 +469,11 @@ def search_table(
         filter_query, filter_fields = evaluate_formula(
             filter_formula,
             NodeEvaluation.EVAL_SQL)
-        query = sql.SQL('{0} AND ').format(
-            sql.SQL('').join([query, filter_query]),
-        )
-        query_fields += filter_fields
+        if filter_query:
+            query = sql.SQL('{0} AND ').format(
+                sql.SQL('').join([query, filter_query]),
+            )
+            query_fields += filter_fields
 
     # Combine the search subqueries
     if any_join:

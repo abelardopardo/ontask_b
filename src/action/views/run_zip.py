@@ -20,16 +20,21 @@ from action.payloads import (
     ZipPayload, action_session_dictionary, get_action_info,
 )
 from action.views.run_email import html_body
-from action.views.run_survey import get_workflow_action
 from dataops.sql_query import get_rows
 from logs.models import Log
-from ontask import OnTaskEmptyWorkflow, OnTaskNoWorkflow
+from ontask.decorators import check_workflow, get_action
 from ontask.permissions import is_instructor
-from ontask.decorators import get_workflow
+from workflow.models import Workflow
 
 
 @user_passes_test(is_instructor)
-def zip_action(request: HttpRequest, pk: int) -> HttpResponse:
+@get_action(pf_related='actions')
+def zip_action(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+) -> HttpResponse:
     """Request data to create a zip file.
 
     Form asking for participant column, user file name column, file suffix,
@@ -39,21 +44,6 @@ def zip_action(request: HttpRequest, pk: int) -> HttpResponse:
     :param pk: Action key
     :return: HTTP response
     """
-    # Get the workflow and action
-    try:
-        workflow, action = get_workflow_action(request, pk)
-    except OnTaskNoWorkflow:
-        return redirect(reverse('action:index'))
-    except OnTaskEmptyWorkflow:
-        messages.error(
-            request,
-            'Workflow has no data. Go to "Manage table data" to upload data.',
-        )
-        return redirect(reverse('action:index'))
-    except Exception:
-        messages.error(request, _('Incorrect action request.'))
-        return redirect(reverse('action:index'))
-
     # Get the payload from the session, and if not, use the given one
     action_info = get_action_info(request.session, ZipPayload)
     if not action_info:
@@ -101,9 +91,11 @@ def zip_action(request: HttpRequest, pk: int) -> HttpResponse:
 
 
 @user_passes_test(is_instructor)
+@check_workflow(pf_related='actions')
 def run_zip_done(
     request: HttpRequest,
     action_info: Optional[ZipPayload] = None,
+    workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
     """Create the zip object, send it for download and render the DONE page.
 
@@ -112,10 +104,6 @@ def run_zip_done(
     empty, the dictionary is taken from the session.
     :return: HTTP response
     """
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return redirect('home')
-
     # Get the payload from the session if not given
     action_info = get_action_info(request.session, ZipPayload, action_info)
     if action_info is None:
@@ -152,18 +140,17 @@ def run_zip_done(
 
 
 @user_passes_test(is_instructor)
-def action_zip_export(request):
+@check_workflow(pf_related='actions')
+def action_zip_export(
+    request,
+    workflow: Optional[Workflow] = None,
+):
     """Create a zip with the personalised text and return it as response.
 
     :param request: Request object with a Dictionary with all the required
     information
     :return: Response (download)
     """
-    # Get the workflow first
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return redirect('home')
-
     # Get the payload from the session if not given
     action_info = get_action_info(request.session, ZipPayload)
     if not action_info:
@@ -242,7 +229,8 @@ def create_eval_data_tuple(
         # Get the user_fname_column values
         user_fname_data = get_rows(
             action.workflow.get_data_frame_table_name(),
-            column_names=[user_fname_column], filter_formula=None).fetchall()
+            column_names=[user_fname_column],
+            filter_formula=None).fetchall()
     else:
         # Array of Nones for the merge
         user_fname_data = [''] * len(action_evals)

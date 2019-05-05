@@ -95,7 +95,7 @@ urlpatterns = [
     #
     # Select key column for action in
     path(
-        '<int:apk>/<int:cpk>/<int:key>/select_column_action/',
+        '<int:pk>/<int:cpk>/<int:key>/select_column_action/',
         select_column_action,
         name='select_key_column_action'),
 
@@ -107,7 +107,7 @@ urlpatterns = [
 
     # Unselect column for action in
     path(
-        '<int:apk>/<int:cpk>/unselect_column_action/',
+        '<int:pk>/<int:cpk>/unselect_column_action/',
         unselect_column_action,
         name='unselect_column_action'),
 
@@ -119,7 +119,7 @@ urlpatterns = [
 
     # Select condition for a column/question
     path(
-        '<int:tpk>/<int:condpk>/select_condition/',
+        '<int:pk>/<int:condpk>/select_condition/',
         select_condition,
         name='edit_in_select_condition'),
     path(

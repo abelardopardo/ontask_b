@@ -19,7 +19,7 @@ from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tasks import celery_is_up, send_json_objects
 from workflow.models import Workflow
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, check_workflow
 
 
 def run_json_action(
@@ -93,21 +93,21 @@ def run_json_action(
 
 
 @user_passes_test(is_instructor)
+@check_workflow(pf_related='actions')
 def run_json_done(
     request: HttpRequest,
     action_info: Optional[JSONPayload] = None,
+    workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
     """Create the log object, queue the operation request, render DONE page.
 
     :param request: HTTP request (GET)
+
     :param action_info: Dictionary containing all the required parameters. If
     empty, the dictionary is taken from the session.
+
     :return: HTTP response
     """
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return redirect('home')
-
     # Get the payload from the session if not given
     action_info = get_action_info(request.session, JSONPayload, action_info)
     if action_info is None:

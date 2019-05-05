@@ -6,8 +6,8 @@ from typing import Optional
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
 from django.http import HttpRequest, JsonResponse
-from django.shortcuts import redirect, reverse
 from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
@@ -18,7 +18,7 @@ from dataops.formula_evaluation import (
     NodeEvaluation, evaluate_formula, get_variables,
 )
 from logs.models import Log
-from ontask.decorators import get_workflow
+from ontask.decorators import get_action, get_condition
 from ontask.permissions import UserIsInstructor, is_instructor
 from workflow.models import Workflow
 
@@ -227,63 +227,41 @@ class FilterCreateView(UserIsInstructor, generic.TemplateView):
         context['add'] = True
         return context
 
+    @method_decorator(get_action(pf_related=['actions', 'columns']))
     def get(self, request, *args, **kwargs):
         """Process GET request to create a filter."""
-        workflow = get_workflow(
-            request,
-            prefetch_related=['actions', 'columns'])
-        if not workflow:
-            return redirect('home')
-
-        # Get the action that is being used
-        action = workflow.actions.filter(
-            pk=kwargs['pk'],
-        ).filter(
-            Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-        ).distinct().first()
-        if not action:
-            return redirect('home')
-
         form = self.form_class()
         return save_condition_form(
             request,
-            workflow,
+            kwargs.get('workflow'),
             form,
             self.template_name,
-            action,
+            kwargs.get('action'),
             None,  # no current condition object
             True)  # Is Filter
 
+    @method_decorator(get_action(pf_related=['actions', 'columns']))
     def post(self, request, *args, **kwargs):
         """Process POST request to  create a filter."""
-        workflow = get_workflow(
-            request,
-            prefetch_related=['actions', 'columns'])
-        if not workflow:
-            return redirect('home')
-
-        # Get the action that is being used
-        action = workflow.actions.filter(
-            pk=kwargs['pk'],
-        ).filter(
-            Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-        ).first()
-        if not action:
-            return redirect('home')
-
         form = self.form_class(request.POST)
         return save_condition_form(
             request,
-            workflow,
+            kwargs['workflow'],
             form,
             self.template_name,
-            action,
+            kwargs['action'],
             None,  # No current condition object
             True)  # Is Filter
 
 
 @user_passes_test(is_instructor)
-def edit_filter(request: HttpRequest, pk: int) -> JsonResponse:
+@get_condition(pf_related='columns')
+def edit_filter(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    condition: Optional[Condition] = None,
+) -> JsonResponse:
     """Edit the filter of an action through AJAX.
 
     :param request: HTTP request
@@ -292,39 +270,25 @@ def edit_filter(request: HttpRequest, pk: int) -> JsonResponse:
 
     :return: AJAX response
     """
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Get the filter
-    cond_filter = Condition.objects.filter(
-        pk=pk,
-    ).filter(
-        Q(action__workflow__user=request.user)
-        | Q(action__workflow__shared=request.user),
-        action__workflow=workflow,
-        is_filter=True,
-    ).select_related('action').first()
-
-    if not cond_filter:
-        return redirect('home')
-
-    # Create the filter and populate with existing data
-    form = FilterForm(request.POST or None, instance=cond_filter)
-
     # Render the form with the Condition information
     return save_condition_form(
         request,
         workflow,
-        form,
+        FilterForm(request.POST or None, instance=condition),
         'action/includes/partial_filter_addedit.html',
-        cond_filter.action,
-        cond_filter,  # Condition object
+        condition.action,
+        condition,  # Condition object
         True)  # It is a filter
 
 
 @user_passes_test(is_instructor)
-def delete_filter(request: HttpRequest, pk: int) -> JsonResponse:
+@get_condition(pf_related='columns')
+def delete_filter(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    condition: Optional[Condition] = None,
+) -> JsonResponse:
     """Handle the AJAX request to delete a filter.
 
     :param request: AJAX request
@@ -333,62 +297,42 @@ def delete_filter(request: HttpRequest, pk: int) -> JsonResponse:
 
     :return: AJAX response
     """
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Get the filter
-    cond_filter = Condition.objects.filter(
-        pk=pk,
-    ).filter(
-        Q(action__workflow__user=request.user)
-        | Q(action__workflow__shared=request.user),
-        action__workflow=workflow,
-        is_filter=True,
-    ).select_related('action').first()
-
-    if not cond_filter:
-        return redirect('home')
-
-    resp_data = {}
-
     if request.method == 'GET':
-        resp_data['html_form'] = render_to_string(
-            'action/includes/partial_filter_delete.html',
-            {'id': cond_filter.id},
-            request=request,
-        )
-
-        return JsonResponse(resp_data)
+        return JsonResponse({
+            'html_form': render_to_string(
+                'action/includes/partial_filter_delete.html',
+                {'id': condition.id},
+                request=request),
+        })
 
     # If the request has 'action_content', update the action
     action_content = request.POST.get('action_content', None)
     if action_content:
-        cond_filter.action.set_text_content(action_content)
-        cond_filter.action.save()
+        condition.action.set_text_content(action_content)
+        condition.action.save()
 
     # Log the event
     formula, fields = evaluate_formula(
-        cond_filter.formula, NodeEvaluation.EVAL_SQL)
+        condition.formula, NodeEvaluation.EVAL_SQL)
 
     Log.objects.register(
         request.user,
         Log.FILTER_DELETE,
-        cond_filter.action.workflow,
+        condition.action.workflow,
         {
-            'id': cond_filter.id,
-            'name': cond_filter.name,
-            'selected_rows': cond_filter.n_rows_selected,
+            'id': condition.id,
+            'name': condition.name,
+            'selected_rows': condition.n_rows_selected,
             'formula': formula,
             'formula_fields': fields,
         },
     )
 
     # Get the action object for further processing
-    action = cond_filter.action
+    action = condition.action
 
     # Perform the delete operation
-    cond_filter.delete()
+    condition.delete()
 
     # Number of selected rows now needs to be updated in all remaining
     # conditions
@@ -404,62 +348,40 @@ class ConditionCreateView(UserIsInstructor, generic.TemplateView):
 
     template_name = 'action/includes/partial_condition_addedit.html'
 
+    @method_decorator(get_action(pf_related=['actions', 'columns']))
     def get(self, request, *args, **kwargs):
         """Process the GET request when creating a condition."""
-        # Get the workflow
-        workflow = get_workflow(request, prefetch_related='actions')
-        if not workflow:
-            return redirect('home')
-
-        # Get the action that is being used
-        action = workflow.actions.filter(
-            pk=kwargs['pk'],
-        ).filter(
-            Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-        ).first()
-        if not action:
-            return redirect('home')
-
-        form = self.form_class()
         return save_condition_form(
             request,
-            workflow,
-            form,
+            kwargs['workflow'],
+            self.form_class(),
             self.template_name,
-            action,
+            kwargs['action'],
             None,
             False)  # Is it a filter?
 
+    @method_decorator(get_action(pf_related=['actions', 'columns']))
     def post(self, request, *args, **kwargs):
         """Process the POST request when creating a condition."""
         # Get the workflow
-        workflow = get_workflow(request, prefetch_related='actions')
-        if not workflow:
-            return redirect('home')
-
-        # Get the action that is being used
-        action = workflow.actions.filter(
-            pk=kwargs['pk'],
-        ).filter(
-            Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-        ).first()
-        if not action:
-            return redirect('home')
-
-        form = self.form_class(request.POST)
-
         return save_condition_form(
             request,
-            workflow,
-            form,
+            kwargs['workflow'],
+            self.form_class(request.POST),
             self.template_name,
-            action,
+            kwargs['action'],
             None,
             False)
 
 
 @user_passes_test(is_instructor)
-def edit_condition(request: HttpRequest, pk: int) -> JsonResponse:
+@get_condition(pf_related=['columns'])
+def edit_condition(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    condition: Optional[Condition] = None,
+) -> JsonResponse:
     """Handle the AJAX request to edit a condition.
 
     :param request: AJAX request
@@ -468,31 +390,11 @@ def edit_condition(request: HttpRequest, pk: int) -> JsonResponse:
 
     :return: AJAX reponse
     """
-    # Get the workflow
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Get the condition
-    condition = Condition.objects.filter(
-        pk=pk,
-    ).filter(
-        Q(action__workflow__user=request.user)
-        | Q(action__workflow__shared=request.user),
-        is_filter=False,
-        action__workflow=workflow,
-    ).select_related('action').first()
-
-    if not condition:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    form = ConditionForm(request.POST or None, instance=condition)
-
     # Render the form with the Condition information
     return save_condition_form(
         request,
         workflow,
-        form,
+        ConditionForm(request.POST or None, instance=condition),
         'action/includes/partial_condition_addedit.html',
         condition.action,
         condition,
@@ -500,7 +402,13 @@ def edit_condition(request: HttpRequest, pk: int) -> JsonResponse:
 
 
 @user_passes_test(is_instructor)
-def delete_condition(request: HttpRequest, pk: int) -> JsonResponse:
+@get_condition(pf_related='columns')
+def delete_condition(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    condition: Optional[Condition] = None,
+) -> JsonResponse:
     """Handle the AJAX request to delete a condition.
 
     :param request: HTTP request
@@ -509,22 +417,6 @@ def delete_condition(request: HttpRequest, pk: int) -> JsonResponse:
 
     :return: AJAX response to render
     """
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Get the condition
-    condition = Condition.objects.filter(
-        pk=pk,
-    ).filter(
-        Q(action__workflow__user=request.user)
-        | Q(action__workflow__shared=request.user),
-        action__workflow=workflow,
-        is_filter=False,
-    ).select_related('action').first()
-    if not condition:
-        return JsonResponse({'html_redirect': reverse('home')})
-
     # Treat the two types of requests
     if request.method == 'POST':
         # If the request has the 'action_content', update the action
@@ -558,5 +450,5 @@ def delete_condition(request: HttpRequest, pk: int) -> JsonResponse:
         'html_form': render_to_string(
             'action/includes/partial_condition_delete.html',
             {'condition_id': condition.id},
-            request=request)
+            request=request),
     })

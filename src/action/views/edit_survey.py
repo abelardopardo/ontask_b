@@ -5,9 +5,7 @@
 from typing import Optional
 
 import django_tables2 as tables
-from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.db.models import Q
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
@@ -20,7 +18,7 @@ from django.views.decorators.http import require_http_methods
 from action.forms import ActionDescriptionForm
 from action.models import Action, ActionColumnConditionTuple
 from logs.models import Log
-from ontask.decorators import get_workflow
+from ontask.decorators import get_action, get_columncondition
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from visualizations.plotly import PlotlyHandler
@@ -180,41 +178,27 @@ def edit_action_in(
 @user_passes_test(is_instructor)
 @csrf_exempt
 @require_http_methods(['POST'])
+@get_action(pf_related=['columns', 'actions'])
 def select_column_action(
     request: HttpRequest,
-    apk: int,
-    cpk: int,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+    cpk: Optional[int] = -1,
     key: Optional[bool] = None,
 ) -> JsonResponse:
     """Operation to add a column to action in.
 
     :param request: Request object
-    :param apk: Action PK
+
+    :param pk: Action PK
+
     :param cpk: column PK
+
     :param key: The columns is a key column
+
     :return: JSON response
     """
-    # Check if the workflow is locked
-    workflow = get_workflow(request, prefetch_related=['columns', 'actions'])
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _('Workflow has no data. '
-              + 'Go to "Manage table data" to upload data.'))
-        return JsonResponse({'html_redirect': reverse('action:index')})
-
-    # Get the action and the columns
-    action = workflow.actions.filter(
-        pk=apk,
-    ).filter(
-        Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-    ).first()
-    if not action:
-        return JsonResponse({'html_redirect': reverse('action:index')})
-
     # Get the column
     column = workflow.columns.filter(pk=cpk).first()
     if not column:
@@ -236,10 +220,13 @@ def select_column_action(
 
 
 @user_passes_test(is_instructor)
+@get_action(pf_related=['actions', 'columns'])
 def unselect_column_action(
     request: HttpRequest,
-    apk: int,
-    cpk: int,
+    pk: int,
+    cpk: Optional[int] = -1,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
 ) -> HttpResponse:
     """Unselect a column from action in.
 
@@ -248,28 +235,6 @@ def unselect_column_action(
     :param cpk: column PK
     :return: JSON response
     """
-    # Check if the workflow is locked
-    workflow = get_workflow(request, prefetch_related=['actions', 'columns'])
-    if not workflow:
-        return reverse('home')
-
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _('Workflow has no data. '
-              + 'Go to "Manage table data" to upload data.'),
-        )
-        return redirect(reverse('action:index'))
-
-    # Get the action and the columns
-    action = workflow.actions.filter(
-        pk=apk,
-    ).filter(
-        Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-    ).first()
-    if not action:
-        return redirect(reverse('action:index'))
-
     # Get the column
     column = workflow.columns.filter(pk=cpk).first()
     if not column:
@@ -284,34 +249,25 @@ def unselect_column_action(
 @user_passes_test(is_instructor)
 @csrf_exempt
 @require_http_methods(['POST'])
+@get_columncondition(pf_related=['columns', 'actions'])
 def select_condition(
     request: HttpRequest,
-    tpk: int,
+    pk: int,
     condpk: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+    cc_tuple: Optional[ActionColumnConditionTuple] = None,
 ) -> JsonResponse:
-    """Select condition for action in.
+    """Select condition for a question in a survey.
 
     :param request: Request object
+
     :param tpk: tuple ActionColumnCondition PK
+
     :param condpk: Condition PK
+
     :return: JSON response
     """
-    # Check if the workflow is locked
-    workflow = get_workflow(request, prefetch_related=['columns', 'actions'])
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _('Workflow has no data. '
-              + 'Go to "Manage table data" to upload data.'))
-        return JsonResponse({'html_redirect': reverse('action:index')})
-
-    cc_tuple = ActionColumnConditionTuple.objects.filter(pk=tpk).first()
-    if not cc_tuple:
-        return JsonResponse({'html_redirect': reverse('action:index')})
-
+    # TODO: This function should have a different name
     condition = None
     if condpk:
         # Get the condition
@@ -328,7 +284,13 @@ def select_condition(
 
 
 @user_passes_test(is_instructor)
-def shuffle_questions(request: HttpRequest, pk: int) -> HttpResponse:
+@get_action(pf_related='actions')
+def shuffle_questions(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+) -> HttpResponse:
     """Enable/Disable the shuffle question flag in Surveys.
 
     :param request: Request object
@@ -336,27 +298,6 @@ def shuffle_questions(request: HttpRequest, pk: int) -> HttpResponse:
     :return: HTML response
     """
     # Check if the workflow is locked
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return reverse('home')
-
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _('Workflow has no data. '
-              + 'Go to "Manage table data" to upload data.'),
-        )
-        return redirect(reverse('action:index'))
-
-    # Get the action
-    action = workflow.actions.filter(
-        pk=pk,
-    ).filter(
-        Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-    ).first()
-    if not action:
-        return redirect(reverse('action:index'))
-
     action.shuffle = not action.shuffle
     action.save()
 
@@ -364,27 +305,21 @@ def shuffle_questions(request: HttpRequest, pk: int) -> HttpResponse:
 
 
 @user_passes_test(is_instructor)
-def edit_description(request: HttpRequest, pk: int) -> JsonResponse:
+@get_action(pf_related='actions')
+def edit_description(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+) -> JsonResponse:
     """Edit the description attached to an action.
 
     :param request: AJAX request
+
     :param pk: Action ID
+
     :return: AJAX response
     """
-    # Try to get the workflow first
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Get the action
-    action = workflow.actions.filter(
-        pk=pk,
-    ).filter(
-        Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-    ).first()
-    if not action:
-        return JsonResponse({'html_redirect': reverse('action:index')})
-
     # Create the form
     form = ActionDescriptionForm(
         request.POST or None,
@@ -395,7 +330,7 @@ def edit_description(request: HttpRequest, pk: int) -> JsonResponse:
             'html_form': render_to_string(
                 'action/includes/partial_action_edit_description.html',
                 {'form': form, 'action': action},
-                request=request)
+                request=request),
         })
 
     # Process the POST

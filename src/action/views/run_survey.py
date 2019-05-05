@@ -9,12 +9,10 @@ This module implements three views:
 
 - run_survey_row: Run the survey as instructor for a single row
 """
-from typing import List, Tuple
+from typing import List, Optional
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.db.models import Q
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -26,10 +24,9 @@ import dataops.sql_query
 from action.models import Action
 from action.views.serve_survey import serve_survey_row
 from core.datatables import DataTablesServerSidePaging
-from ontask import OnTaskEmptyWorkflow, OnTaskNoAction, OnTaskNoWorkflow
+from ontask.decorators import get_action
 from ontask.permissions import is_instructor
 from workflow.models import Column, Workflow
-from ontask.decorators import get_workflow
 
 
 def run_survey_action(
@@ -62,7 +59,13 @@ def run_survey_action(
 @user_passes_test(is_instructor)
 @csrf_exempt
 @require_http_methods(['POST'])
-def run_survey_ss(request: HttpRequest, pk: int) -> JsonResponse:
+@get_action(pf_related='actions')
+def run_survey_ss(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+) -> JsonResponse:
     """Show elements in table that satisfy filter request.
 
     Serve the AJAX requests to show the elements in the table that satisfy
@@ -71,11 +74,6 @@ def run_survey_ss(request: HttpRequest, pk: int) -> JsonResponse:
     :param pk: action id being run
     :return:
     """
-    try:
-        workflow, action = get_workflow_action(request, pk)
-    except Exception as exc:
-        return JsonResponse({'error': exc})
-
     # Check that the GET parameter are correctly given
     dt_page = DataTablesServerSidePaging(request)
     if not dt_page.is_valid:
@@ -112,7 +110,13 @@ def run_survey_ss(request: HttpRequest, pk: int) -> JsonResponse:
 
 
 @user_passes_test(is_instructor)
-def run_survey_row(request: HttpRequest, pk: int) -> HttpResponse:
+@get_action(pf_related='actions')
+def run_survey_row(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+) -> HttpResponse:
     """Render form for introducing information in a single row.
 
     Function that runs the action in for a single row. The request
@@ -120,31 +124,11 @@ def run_survey_row(request: HttpRequest, pk: int) -> HttpResponse:
     perform the lookup.
 
     :param request:
+
     :param pk: Action id. It is assumed to be an action In
+
     :return:
     """
-    # Get the workflow first
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        return redirect('home')
-
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _('Workflow has no data. '
-              + 'Go to "Manage table data" to upload data.'),
-        )
-        return redirect(reverse('action:index'))
-
-    # Get the action
-    action = workflow.actions.filter(
-        pk=pk,
-    ).filter(
-        Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-    ).first()
-    if not action:
-        return redirect('action:index')
-
     # If the action is an "out" action, return to index
     if action.is_out:
         return redirect('action:index')
@@ -258,38 +242,3 @@ def survey_thanks(request: HttpRequest) -> HttpResponse:
     :return: Http response
     """
     return render(request, 'thanks.html', {})
-
-
-def get_workflow_action(
-    request: HttpRequest,
-    pk: int,
-) -> Tuple:
-    """Get workflow and action for the session.
-
-    Function that returns the action for the given PK and the workflow for
-    the session.
-
-    :param request:
-    :param pk: Action id.
-    :return: (workflow, Action) or Exception
-    """
-    # Get the workflow first
-    workflow = get_workflow(request, prefetch_related='actions')
-    if not workflow:
-        raise OnTaskNoWorkflow(_('Incorrect request. Unable to process.'))
-
-    if workflow.nrows == 0:
-        raise OnTaskEmptyWorkflow(_('There is no data in the table'))
-
-    # Get the action
-    action = workflow.actions.filter(
-        pk=pk,
-    ).filter(
-        Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-    ).prefetch_related(
-        'column_condition_pair',
-    ).first()
-    if not action:
-        raise OnTaskNoAction(_('Incorrect action requested.'))
-
-    return workflow, action

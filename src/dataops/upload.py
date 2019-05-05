@@ -2,9 +2,11 @@
 
 
 from builtins import range, zip
+from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
@@ -12,14 +14,19 @@ from django.utils.translation import ugettext as _
 from dataops import ops, pandas_db, sql_query
 from logs.models import Log
 from ontask.permissions import is_instructor
+from workflow.models import Workflow
 from workflow.ops import store_workflow_in_session
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, check_workflow
 
 from .forms import SelectColumnUploadForm, SelectKeysForm
 
 
 @user_passes_test(is_instructor)
-def upload_s2(request):
+@check_workflow('columns')
+def upload_s2(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """
     The four step process will populate the following dictionary with name
     upload_data (divided by steps in which they are set
@@ -47,10 +54,6 @@ def upload_s2(request):
     :param request: Web request
     :return: the dictionary upload_data in the session object
     """
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return redirect('home')
-
     # Get the dictionary to store information about the upload
     # is stored in the session.
     upload_data = request.session.get('upload_data', None)
@@ -203,9 +206,12 @@ def upload_s2(request):
 
 
 @user_passes_test(is_instructor)
-def upload_s3(request):
+@check_workflow('columns')
+def upload_s3(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """
-
     Step 3: This is already a merge operation (not an upload)
 
     The columns to merge have been selected and renamed. The data frame to
@@ -248,11 +254,6 @@ def upload_s3(request):
     :param request: Web request
     :return: the dictionary upload_data in the session object
     """
-    # Get the workflow id we are processing
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return redirect('home')
-
     # Get the dictionary to store information about the upload
     # is stored in the session.
     upload_data = request.session.get('upload_data', None)
@@ -331,10 +332,12 @@ def upload_s3(request):
 
 
 @user_passes_test(is_instructor)
-def upload_s4(request):
-    """
-
-    Step 4: Show the user the expected effect of the merge and perform it.
+@check_workflow('columns')
+def upload_s4(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
+    """Step 4: Show the user the expected effect of the merge and perform it.
 
     ASSUMES:
 
@@ -367,11 +370,6 @@ def upload_s4(request):
     :param request: Web request
     :return:
     """
-    # Get the workflow id we are processing
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return redirect('home')
-
     # Get the dictionary containing the information about the upload
     upload_data = request.session.get('upload_data', None)
     if not upload_data:
