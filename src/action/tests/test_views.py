@@ -510,7 +510,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.wait_for_datatable('action-table_previous')
 
         action = Action.objects.get(name=action_name)
-        self.assertTrue(action.content == content_txt)
+        self.assertTrue(action.text_content == content_txt)
         self.assertTrue(action.target_url == target_url)
 
         # End of session
@@ -770,9 +770,9 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         # Column name is present in condition formula
         self.assertTrue(has_variable(condition.formula, 'registered'))
         # Column name is present in action_out text
-        self.assertTrue('{{ registered }}' in action_out.content)
+        self.assertTrue('{{ registered }}' in action_out.text_content)
         # Attribute name is present in action_out text
-        self.assertTrue('{{ attribute name }}' in action_out.content)
+        self.assertTrue('{{ attribute name }}' in action_out.text_content)
         # Column name is present in action-in filter
         self.assertTrue(has_variable(action_out.get_filter_formula(), 'age'))
 
@@ -844,9 +844,9 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         self.assertTrue(has_variable(condition.formula,
                                      'registered new'))
         # Column name is present in action_out text
-        self.assertTrue('{{ registered new }}' in action_out.content)
+        self.assertTrue('{{ registered new }}' in action_out.text_content)
         # Attribute name is present in action_out text
-        self.assertTrue('{{ attribute name new }}' in action_out.content)
+        self.assertTrue('{{ attribute name new }}' in action_out.text_content)
         # Column age is present in action-in filter
         self.assertFalse(has_variable(filter_formula, 'age'))
         self.assertTrue(has_variable(filter_formula, 'age new'))

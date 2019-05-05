@@ -98,6 +98,7 @@ class ActionPayload(collections.MutableMapping):
         return key
 
     def get_store(self):
+        """Return the store."""
         return self.store
 
 

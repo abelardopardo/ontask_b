@@ -147,7 +147,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         for x, y in zip(w1.actions.all(), w2.actions.all()):
             self.assertEqual(x.name, y.name)
             self.assertEqual(x.description_text, y.description_text)
-            self.assertEqual(x.content, y.content)
+            self.assertEqual(x.text_content, y.text_content)
             self.assertEqual(x.conditions.count(),
                              y.conditions.count())
             for c1, c2 in zip(x.conditions.all(), y.conditions.all()):
@@ -251,7 +251,7 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
             self.assertEqual(a1.active_from, a2.active_from)
             self.assertEqual(a1.active_to, a2.active_to)
             self.assertEqual(a1.rows_all_false, a2.rows_all_false)
-            self.assertEqual(a1.content, a2.content)
+            self.assertEqual(a1.text_content, a2.text_content)
             self.assertEqual(a1.target_url, a2.target_url)
             self.assertEqual(a1.shuffle, a2.shuffle)
 

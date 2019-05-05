@@ -15,9 +15,8 @@ from django.db import models
 from django.utils import functional, html
 from django.utils.translation import ugettext_lazy as _
 
-import dataops.sql_query
 import ontask
-from dataops import pandas_db, sql_query
+from dataops import sql_query
 from dataops.formula_evaluation import NodeEvaluation, evaluate_formula
 from logs.models import Log
 from workflow.models import Column, Workflow
@@ -462,7 +461,7 @@ class Condition(models.Model):
                 'valid': True,
             }
 
-        new_count = dataops.sql_query.get_num_rows(
+        new_count = sql_query.get_num_rows(
             self.action.workflow.get_data_frame_table_name(),
             formula,
         )

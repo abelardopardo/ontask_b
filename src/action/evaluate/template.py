@@ -95,6 +95,20 @@ tr_item = make_xlat(
 )
 
 
+def change_vname(match) -> str:
+    """Change variable name using the match object from re.
+
+    :param match:
+
+    :return: String with the variable name translated
+    """
+    return (
+        match.group('mup_pre')
+        + translate(match.group('vname'))
+        + match.group('mup_post')
+    )
+
+
 def translate(varname: str) -> str:
     """Apply several translations to the value of a variable.
 
@@ -197,11 +211,7 @@ def render_action_template(
     # appear in the the template text
     new_template_text = template_text
     for rexpr in var_use_res:
-        new_template_text = rexpr.sub(
-            lambda match: match.group('mup_pre')
-                + translate(match.group('vname'))
-                + match.group('mup_post'),
-            new_template_text)
+        new_template_text = rexpr.sub(change_vname, new_template_text)
 
     # Step 2.2 Remove pre-and post white space from the {% if %} and
     # {% endif %} conditions (to reduce white space when using non HTML
