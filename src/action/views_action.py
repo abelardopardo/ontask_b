@@ -601,7 +601,7 @@ def edit_action_out(request, workflow, action):
                'query_builder_ops': workflow.get_query_builder_ops_as_str(),
                'attribute_names': [x for x in
                                    list(workflow.attributes.keys())],
-               'columns': workflow.columns.filter(is_key=False),
+               'columns': workflow.columns.filter(),
                'selected_rows':
                    filter_condition.n_rows_selected if filter_condition else -1,
                'has_data': action.workflow.has_table(),
