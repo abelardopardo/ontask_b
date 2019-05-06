@@ -919,3 +919,46 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
 
         # End of session
         self.logout()
+
+
+class ActionAllKeyColumns(test.OnTaskLiveTestCase):
+    action_name = 'Test1'
+    fixtures = ['all_key_columns']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'action',
+        'fixtures',
+        'all_key_columns.sql'
+    )
+
+    wflow_name = 'all key columns'
+
+    def setUp(self):
+        super().setUp()
+        pandas_db.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        test.delete_all_tables()
+        super().tearDown()
+
+    # Test action rename
+    def test_action_insert_column_value(self):
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
+
+        # Click in the page to send email
+        self.open_action_edit(self.action_name)
+
+        # There should be four elements (all key column) in the drop-down
+        self.assertEqual(
+            len(self.selenium.find_elements_by_xpath(
+                '//div[@id="column-selector"]/div/div/button'
+            )),
+            4
+        )
+
+        # End of session
+        self.logout()
