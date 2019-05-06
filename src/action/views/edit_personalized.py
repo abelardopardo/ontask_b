@@ -145,7 +145,7 @@ def edit_action_out(
         'attribute_names': [
             attr for attr in list(workflow.attributes.keys())
         ],
-        'columns': workflow.columns.filter(is_key=False),
+        'columns': workflow.columns.filter(),
         'selected_rows':
             filter_condition.n_rows_selected
             if filter_condition else -1,

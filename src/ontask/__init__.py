@@ -17,7 +17,7 @@ __all__ = [
     'OnTaskEmptyWorkflow'
 ]
 
-__version__ = 'B.4.3.4'
+__version__ = 'B.4.3.5'
 
 PERSONALIZED_TEXT = 'personalized_text'
 PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
