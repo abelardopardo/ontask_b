@@ -155,7 +155,7 @@ def clone_action(
 @user_passes_test(is_instructor)
 @csrf_exempt
 @require_http_methods(['POST'])
-@get_condition(pf_related='actions')
+@get_condition(pf_related='actions', is_filter=None)
 def clone_condition(
     request: HttpRequest,
     pk: int,

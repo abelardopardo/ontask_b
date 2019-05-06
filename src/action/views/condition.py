@@ -255,7 +255,7 @@ class FilterCreateView(UserIsInstructor, generic.TemplateView):
 
 
 @user_passes_test(is_instructor)
-@get_condition(pf_related='columns')
+@get_condition(pf_related='columns', is_filter=True)
 def edit_filter(
     request: HttpRequest,
     pk: int,
@@ -282,7 +282,7 @@ def edit_filter(
 
 
 @user_passes_test(is_instructor)
-@get_condition(pf_related='columns')
+@get_condition(pf_related='columns', is_filter=True)
 def delete_filter(
     request: HttpRequest,
     pk: int,

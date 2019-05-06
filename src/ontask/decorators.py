@@ -72,7 +72,7 @@ def get_column(
     pf_related=None,
 ):
     """Check that the pk parameter refers to an action in the Workflow."""
-    def check_column_decorator(func):  # noqa Z430
+    def get_column_decorator(func):  # noqa Z430
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
             workflow = access_workflow(
@@ -120,7 +120,7 @@ def get_column(
 
         return function_wrapper
 
-    return check_column_decorator
+    return get_column_decorator
 
 
 def get_action(
@@ -128,7 +128,7 @@ def get_action(
     pf_related=None,
 ):
     """Check that the pk parameter refers to an action in the Workflow."""
-    def check_action_decorator(func):  # noqa Z430
+    def get_action_decorator(func):  # noqa Z430
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
             workflow = access_workflow(
@@ -176,7 +176,7 @@ def get_action(
 
         return function_wrapper
 
-    return check_action_decorator
+    return get_action_decorator
 
 
 def get_condition(
@@ -185,7 +185,7 @@ def get_condition(
     is_filter=False,
 ):
     """Check that the pk parameter refers to a condition in the Workflow."""
-    def check_condition_decorator(func):  # noqa Z430
+    def get_condition_decorator(func):  # noqa Z430
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
             workflow = access_workflow(
@@ -220,10 +220,12 @@ def get_condition(
                 condition = Condition.objects.filter(pk=pk).filter(
                     Q(action__workflow__user=request.user) |
                     Q(action__workflow__shared=request.user),
-                    is_filter=is_filter,
                     action__workflow=workflow,
-                ).select_related('action').first()
-
+                )
+                if is_filter is not None:
+                    condition = condition.filter(is_filter=is_filter)
+                    # Get the condition
+                condition = condition.select_related('action').first()
                 if not condition:
                     if request.is_ajax():
                         return JsonResponse({'html_redirect': reverse('home')})
@@ -235,7 +237,7 @@ def get_condition(
 
         return function_wrapper
 
-    return check_condition_decorator
+    return get_condition_decorator
 
 
 def get_columncondition(
@@ -243,7 +245,7 @@ def get_columncondition(
     pf_related=None,
 ):
     """Check that the pk parameter refers to a condition in the Workflow."""
-    def check_columncondition_decorator(func):  # noqa Z430
+    def get_columncondition_decorator(func):  # noqa Z430
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
             workflow = access_workflow(
@@ -292,7 +294,7 @@ def get_columncondition(
 
         return function_wrapper
 
-    return check_columncondition_decorator
+    return get_columncondition_decorator
 
 
 def get_view(
@@ -300,7 +302,7 @@ def get_view(
     pf_related=None,
 ):
     """Check that the pk parameter refers to a condition in the Workflow."""
-    def check_view_decorator(func):  # noqa Z430
+    def get_view_decorator(func):  # noqa Z430
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
             workflow = access_workflow(
@@ -348,7 +350,7 @@ def get_view(
 
         return function_wrapper
 
-    return check_view_decorator
+    return get_view_decorator
 
 
 def access_workflow(
