@@ -1,3 +1,9 @@
+## 4.3.5 (2019-05-06)
+
+### Fixed
+
+- Incorrect column filter when editing (Issue #150)
+
 ## 4.3.4 (2019-04-25)
 
 ### Fixed
