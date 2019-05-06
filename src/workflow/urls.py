@@ -13,10 +13,10 @@ app_name = 'workflow'
 
 urlpatterns = [
     path('create/', views.WorkflowCreateView.as_view(), name='create'),
-    path('<int:pk>/clone/', views.clone, name='clone'),
-    path('<int:pk>/update/', views.update, name='update'),
-    path('<int:pk>/delete/', views.delete, name='delete'),
-    path('<int:pk>/flush/', views.flush, name='flush'),
+    path('<int:wid>/clone/', views.clone, name='clone'),
+    path('<int:wid>/update/', views.update, name='update'),
+    path('<int:wid>/delete/', views.delete, name='delete'),
+    path('<int:wid>/flush/', views.flush, name='flush'),
     path('<int:pk>/detail/', views.WorkflowDetailView.as_view(),
          name='detail'),
     path('operations/', views.operations, name='operations'),
@@ -54,7 +54,7 @@ urlpatterns = [
     path('assign_luser_column/',
          views.assign_luser_column,
          name='assign_luser_column'),
-    path('<int:pk>/assign_luser_column/',
+    path('<int:wid>/assign_luser_column/',
          views.assign_luser_column,
          name='assign_luser_column'),
 
@@ -101,7 +101,7 @@ urlpatterns = [
          name='api_workflows'),
 
     # Get, update content or destroy workflows
-    path('<int:pk>/rud/',
+    path('<int:id>/rud/',
          api.WorkflowAPIRetrieveUpdateDestroy.as_view(),
          name='api_rud'),
 

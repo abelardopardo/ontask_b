@@ -19,7 +19,7 @@ from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tasks import celery_is_up, send_json_objects
 from workflow.models import Workflow
-from ontask.decorators import get_workflow, check_workflow
+from ontask.decorators import access_workflow, get_workflow
 
 
 def run_json_action(
@@ -93,7 +93,7 @@ def run_json_action(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='actions')
+@get_workflow(pf_related='actions')
 def run_json_done(
     request: HttpRequest,
     action_info: Optional[JSONPayload] = None,

@@ -10,13 +10,13 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 
 from logs.models import Log
-from ontask.decorators import check_workflow
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='logs')
+@get_workflow(pf_related='logs')
 def show_timeline(
     request: HttpRequest,
     pk: Optional[int],

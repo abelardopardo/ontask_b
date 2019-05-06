@@ -2,6 +2,7 @@
 
 
 from builtins import range
+from typing import Optional
 
 import django_tables2 as tables
 from celery.task.control import inspect
@@ -10,9 +11,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db import IntegrityError
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
@@ -24,7 +26,7 @@ from dataops import ops, pandas_db
 from dataops.sql_query import get_text_column_hash
 from logs.models import Log
 from ontask import is_correct_email, create_new_name
-from ontask.decorators import get_workflow
+from ontask.decorators import access_workflow, get_workflow
 from ontask.permissions import is_instructor, UserIsInstructor
 from ontask.tables import OperationsColumn
 from ontask.tasks import workflow_update_lusers
@@ -89,7 +91,11 @@ class WorkflowShareTable(tables.Table):
         }
 
 
-def save_workflow_form(request, form, template_name):
+def save_workflow_form(
+    request: HttpRequest,
+    form,
+    template_name: str
+) -> JsonResponse:
     """Save the workflow to create a form.
 
     :param request:
@@ -148,13 +154,6 @@ def save_workflow_form(request, form, template_name):
         },
     )
 
-    # Set the new workflow as the current one
-    workflow_item = get_workflow(request, workflow_item.id)
-    if not workflow_item:
-        messages.error(
-            request,
-            _('The newly created workflow could not be accessed'))
-
     # Here we can say that the form processing is done.
     return JsonResponse({'html_redirect': redirect_url})
 
@@ -196,20 +195,17 @@ def index(request):
 
 
 @user_passes_test(is_instructor)
-def operations(request):
-    """
-    Http request to serve the operations page for the workflow
+@get_workflow(s_related='luser_email_column', pf_related=['columns', 'shared'])
+def operations(
+    request: HttpRequest,
+    workflow: Optional[Workflow]
+) -> HttpResponse:
+    """Http request to serve the operations page for the workflow.
+
     :param request: HTTP Request
+
     :return:
     """
-
-    # Get the appropriate workflow object
-    workflow = get_workflow(request,
-                            select_related='luser_email_column',
-                            prefetch_related=['columns', 'shared'])
-    if not workflow:
-        return redirect('home')
-
     # Check if lusers is active and if so, if it needs to be refreshed
     if workflow.luser_email_column:
         md5_hash = get_text_column_hash(
@@ -245,16 +241,30 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         return context
 
-    def get(self, request, *args, **kwargs):
+    def get(
+        self,
+        request: HttpRequest,
+        *args,
+        **kwargs,
+    ) -> JsonResponse:
         del args
-        form = self.form_class()
-        return save_workflow_form(request, form, self.template_name)
+        return save_workflow_form(
+            request,
+            self.form_class(),
+            self.template_name)
 
-    def post(self, request, *args, **kwargs):
+    def post(
+        self,
+        request: HttpRequest,
+        *args,
+        **kwargs,
+    ) -> HttpResponse:
         del args
         del kwargs
-        form = self.form_class(request.POST)
-        return save_workflow_form(request, form, self.template_name)
+        return save_workflow_form(
+            request,
+            self.form_class(request.POST),
+            self.template_name)
 
 
 class WorkflowDetailView(UserIsInstructor, generic.DetailView):
@@ -269,9 +279,9 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
         old_obj = super().get_object(queryset=queryset)
 
         # Check if the workflow is locked
-        obj = get_workflow(self.request,
-                           old_obj.id,
-                           prefetch_related=['actions', 'columns'])
+        obj = access_workflow(self.request,
+                              old_obj.id,
+                              prefetch_related=['actions', 'columns'])
         return obj
 
     def get_context_data(self, **kwargs):
@@ -312,7 +322,12 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
 
 @user_passes_test(is_instructor)
-def update(request, pk):
+@get_workflow()
+def update(
+    request: HttpRequest,
+    wid: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+) -> JsonResponse:
     """Update the workflow information (name, description).
 
     :param request: Request object
@@ -321,11 +336,6 @@ def update(request, pk):
 
     :return: JSON response
     """
-    workflow = get_workflow(request, pk)
-    if not workflow:
-        # Workflow is not accessible. Go back to index page.
-        return JsonResponse({'html_redirect': reverse('home')})
-
     form = WorkflowForm(request.POST or None, instance=workflow)
 
     # If the user owns the workflow, proceed
@@ -344,12 +354,12 @@ def update(request, pk):
 
 
 @user_passes_test(is_instructor)
-def flush(request, pk):
-    workflow = get_workflow(request, pk)
-    if not workflow:
-        # Workflow is not accessible. Go back to index page.
-        return JsonResponse({'html_redirect': reverse('home')})
-
+@get_workflow()
+def flush(
+    request: HttpRequest,
+    wid: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+) -> JsonResponse:
     if workflow.nrows == 0:
         # Table is empty, redirect to data upload
         return JsonResponse({'html_redirect': reverse('dataops:uploadmerge')})
@@ -392,15 +402,13 @@ def flush(request, pk):
 
 
 @user_passes_test(is_instructor)
-def delete(request, pk):
-    workflow = get_workflow(request, pk)
-    if not workflow:
-        # Workflow is not accessible. Go back to index page.
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Ajax result
-    data = dict()
-
+@get_workflow()
+def delete(
+    request: HttpRequest,
+    wid: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+) -> JsonResponse:
+    """Delete a workflow."""
     # If the request is not done by the user, flat the error
     if workflow.user != request.user:
         messages.error(request,
@@ -436,26 +444,97 @@ def delete(request, pk):
 
 
 @user_passes_test(is_instructor)
+@get_workflow()
+def clone(
+    request: HttpRequest,
+    wid: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+) -> JsonResponse:
+    """Clone a workflow.
+
+    :param request: HTTP request
+
+    :param pk: Workflow id
+
+    :return: JSON data
+    """
+    # Get the current workflow
+    # Initial data in the context
+    context = {'pk': wid, 'name': workflow.name}
+
+    if request.method == 'GET':
+        return JsonResponse({
+            'html_form': render_to_string(
+                'workflow/includes/partial_workflow_clone.html',
+                context,
+                request=request),
+        })
+
+    # Get the new name appending as many times as needed the 'Copy of '
+    new_name = 'Copy of ' + workflow.name
+    while Workflow.objects.filter(name=new_name).exists():
+        new_name = 'Copy of ' + new_name
+
+    workflow.id = None
+    workflow.name = create_new_name(
+        workflow.name,
+        Workflow.objects.filter(
+            Q(workflow__user=request.user) | Q(workflow__shared=request.user)
+        )
+    )
+
+    try:
+        workflow.save()
+    except IntegrityError:
+        messages.error(request, _('Unable to clone workflow'))
+        return JsonResponse({'html_redirect': ''})
+
+    # Get the initial object back
+    workflow_new = workflow
+    workflow = access_workflow(request, wid, prefetch_related='actions')
+
+    # Clone the data frame
+    data_frame = pandas_db.load_table(workflow.get_data_frame_table_name())
+    ops.store_dataframe(data_frame, workflow_new)
+
+    # Clone actions
+    for action in workflow.actions.all():
+        action.ops.clone_action(action, workflow_new)
+
+    # Done!
+    workflow_new.save()
+
+    # Log event
+    Log.objects.register(
+        request.user,
+        Log.WORKFLOW_CLONE,
+        workflow_new,
+        {
+            'id_old': workflow_new.id,
+            'id_new': workflow.id,
+            'name_old': workflow_new.name,
+            'name_new': workflow.name})
+
+    messages.success(
+        request,
+        _('Workflow successfully cloned.'))
+    return JsonResponse({'html_redirect': ''})
+
+
+@user_passes_test(is_instructor)
 @csrf_exempt
 @require_http_methods(['POST'])
-def column_ss(request):
+@get_workflow(pf_related='columns')
+def column_ss(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> JsonResponse:
     """
     Given the workflow id and the request, return to DataTable the proper
     list of columns to be rendered.
     :param request: Http request received from DataTable
     :return: Data to visualize in the table
     """
-    workflow = get_workflow(request, prefetch_related='columns')
-    if not workflow:
-        return JsonResponse(
-            {'error': _('Incorrect request. Unable to process')}
-        )
-
-    # If there is no DF, there are no columns to show, this should be
-    # detected before this is executed
-    if not workflow.has_table():
-        return JsonResponse({'error': _('There is no data in the workflow')})
-
     # Check that the GET parameter are correctly given
     dt_page = DataTablesServerSidePaging(request)
     if not dt_page.is_valid:
@@ -523,102 +602,20 @@ def column_ss(request):
 
 
 @user_passes_test(is_instructor)
-def clone(request, pk):
-    """Clone a workflow.
-
-    :param request: HTTP request
-
-    :param pk: Workflow id
-
-    :return: JSON data
-    """
-    # Get the current workflow
-    workflow = get_workflow(request, pk)
-    if not workflow:
-        return JsonResponse({'html_redirect': 'home'})
-
-    # Initial data in the context
-    context = {'pk': pk, 'name': workflow.name}
-
-    if request.method == 'GET':
-        return JsonResponse({
-            'html_form': render_to_string(
-                'workflow/includes/partial_workflow_clone.html',
-                context,
-                request=request),
-        })
-
-    # Get the new name appending as many times as needed the 'Copy of '
-    new_name = 'Copy of ' + workflow.name
-    while Workflow.objects.filter(name=new_name).exists():
-        new_name = 'Copy of ' + new_name
-
-    workflow.id = None
-    workflow.name = create_new_name(
-        workflow.name,
-        Workflow.objects.filter(
-            Q(workflow__user=request.user) | Q(workflow__shared=request.user)
-        )
-    )
-
-    try:
-        workflow.save()
-    except IntegrityError:
-        messages.error(request, _('Unable to clone workflow'))
-        return JsonResponse({'html_redirect': ''})
-
-    # Get the initial object back
-    workflow_new = workflow
-    workflow = get_workflow(request, pk, prefetch_related='actions')
-
-    # Clone the data frame
-    data_frame = pandas_db.load_table(workflow.get_data_frame_table_name())
-    ops.store_dataframe(data_frame, workflow_new)
-
-    # Clone actions
-    for action in workflow.actions.all():
-        action.ops.clone_action(action, workflow_new)
-
-    # Done!
-    workflow_new.save()
-
-    # Log event
-    Log.objects.register(
-        request.user,
-        Log.WORKFLOW_CLONE,
-        workflow_new,
-        {
-            'id_old': workflow_new.id,
-            'id_new': workflow.id,
-            'name_old': workflow_new.name,
-            'name_new': workflow.name})
-
-    messages.success(
-        request,
-        _('Workflow successfully cloned.'))
-    return JsonResponse({'html_redirect': ''})
-
-
-@user_passes_test(is_instructor)
-def assign_luser_column(request, pk=None):
+@get_workflow(pf_related=['columns', 'lusers'])
+def assign_luser_column(
+    request: HttpRequest,
+    wid: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+) -> JsonResponse:
     """
     AJAX view to assign the column with id PK to the field luser_email_column
     and calculate the hash
 
     :param request: HTTP request
-    :param pk: Column id
+    :param wid: Column id
     :return: JSON data
     """
-
-    # Get the current workflow
-    if pk:
-        workflow = get_workflow(request, prefetch_related='columns')
-    else:
-        workflow = get_workflow(request, prefetch_related='lusers')
-
-    if not workflow:
-        return JsonResponse({'html_redirect': reverse('home')})
-
     if workflow.nrows == 0:
         messages.error(
             request,
@@ -627,7 +624,7 @@ def assign_luser_column(request, pk=None):
         )
         return JsonResponse({'html_redirect': reverse('action:index')})
 
-    if not pk:
+    if not wid:
         # Empty pk, means reset the field.
         workflow.luser_email_column = None
         workflow.luser_email_column_md5 = ''
@@ -636,7 +633,7 @@ def assign_luser_column(request, pk=None):
         return JsonResponse({'html_redirect': ''})
 
     # Get the column
-    column = workflow.columns.filter(pk=pk).first()
+    column = workflow.columns.filter(pk=wid).first()
 
     if not column:
         messages.error(

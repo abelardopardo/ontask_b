@@ -22,7 +22,7 @@ from action.payloads import get_action_payload
 from action.views.run_canvas_email import run_canvas_email_action
 from action.views.run_email import run_email_action
 from action.views.run_json import run_json_action
-from action.views.run_survey import get_workflow_action, run_survey_action
+from action.views.run_survey import run_survey_action
 from action.views.serve_survey import serve_survey_row
 from logs.models import Log
 from ontask import OnTaskEmptyWorkflow, OnTaskNoWorkflow

@@ -20,7 +20,7 @@ from logs.models import Log
 from ontask.permissions import is_instructor
 from ontask.tasks import celery_is_up, send_email_messages
 from workflow.models import Workflow
-from ontask.decorators import get_workflow, check_workflow
+from ontask.decorators import access_workflow, get_workflow
 
 html_body = """<!DOCTYPE html>
 <html>
@@ -102,7 +102,7 @@ def run_email_action(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='actions')
+@get_workflow(pf_related='actions')
 def run_email_done(
     request: HttpRequest,
     action_info: Optional[EmailPayload] = None,

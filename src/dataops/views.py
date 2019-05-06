@@ -24,7 +24,7 @@ from dataops import pandas_db
 from dataops.forms import PluginInfoForm
 from dataops.sql_query import get_rows, update_row
 from logs.models import Log
-from ontask.decorators import get_workflow, check_workflow
+from ontask.decorators import access_workflow, get_workflow
 from ontask.permissions import is_instructor
 from ontask.tasks import run_plugin_task
 from workflow.models import Workflow
@@ -56,7 +56,7 @@ class PluginRegistryTable(tables.Table):
     )
 
     def __init__(self, *args, **kwargs):
-
+        self.workflow = kwargs.get('workflow')
         self.request = kwargs.get("request", None)
 
         super().__init__(*args, **kwargs)
@@ -92,8 +92,7 @@ class PluginRegistryTable(tables.Table):
         )
 
     def render_last_exec(self, record):
-        workflow = get_workflow(self.request)
-        log_item = workflow.logs.filter(
+        log_item = self.workflow.logs.filter(
             user=self.request.user,
             name=Log.PLUGIN_EXECUTE,
             payload__name=record.name
@@ -117,7 +116,7 @@ class PluginRegistryTable(tables.Table):
 
 
 @user_passes_test(is_instructor)
-@check_workflow()
+@get_workflow()
 def uploadmerge(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -130,7 +129,7 @@ def uploadmerge(
 
 
 @user_passes_test(is_instructor)
-@check_workflow()
+@get_workflow()
 def transform_model(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -145,7 +144,8 @@ def transform_model(
     table = PluginRegistryTable(
         PluginRegistry.objects.filter(is_model=is_model),
         orderable=False,
-        request=request
+        request=request,
+        workflow=workflow,
     )
 
     return render(
@@ -193,7 +193,7 @@ def diagnose(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='columns')
+@get_workflow(pf_related='columns')
 def row_update(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -271,7 +271,7 @@ def row_update(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related=['columns', 'actions'])
+@get_workflow(pf_related=['columns', 'actions'])
 def row_create(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -350,7 +350,7 @@ def row_create(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='columns')
+@get_workflow(pf_related='columns')
 def plugin_invoke(
     request: HttpRequest,
     pk: int,
@@ -491,7 +491,7 @@ def plugin_invoke(
 
 
 @user_passes_test(is_instructor)
-@check_workflow()
+@get_workflow()
 def moreinfo(
     request: HttpRequest,
     pk: int,

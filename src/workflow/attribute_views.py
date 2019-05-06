@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from action.models import Condition
 from logs.models import Log
-from ontask.decorators import get_workflow, check_workflow
+from ontask.decorators import access_workflow, get_workflow
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 from .forms import (AttributeItemForm)
@@ -108,7 +108,7 @@ def save_attribute_form(request, workflow, template, form, attr_idx):
 
 
 @user_passes_test(is_instructor)
-@check_workflow()
+@get_workflow()
 def attribute_create(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -157,7 +157,7 @@ def attribute_edit(
 
 
 @user_passes_test(is_instructor)
-@check_workflow()
+@get_workflow()
 def attribute_delete(
     request: HttpRequest,
     pk: int,

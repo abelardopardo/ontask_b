@@ -20,7 +20,7 @@ from dataops.forms import SQLConnectionForm, SQLRequestPassword
 from dataops.models import SQLConnection
 from logs.models import Log
 from ontask import OnTaskDataFrameNoKey, create_new_name
-from ontask.decorators import get_workflow
+from ontask.decorators import access_workflow
 from ontask.permissions import is_admin, is_instructor
 from ontask.tables import OperationsColumn
 from workflow.models import Workflow

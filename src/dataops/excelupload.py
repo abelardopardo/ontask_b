@@ -8,14 +8,14 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask.permissions import is_instructor
-from ontask.decorators import get_workflow, check_workflow
+from ontask.decorators import access_workflow, get_workflow
 from workflow.models import Workflow
 
 from .forms import UploadExcelFileForm
 
 
 @user_passes_test(is_instructor)
-@check_workflow()
+@get_workflow()
 def excelupload1(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,

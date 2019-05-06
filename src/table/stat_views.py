@@ -14,7 +14,7 @@ from django.utils.translation import ugettext as _
 from dataops import pandas_db
 from dataops.pandas_db import load_table, get_column_statistics
 from dataops.sql_query import get_rows
-from ontask.decorators import check_workflow, get_column
+from ontask.decorators import get_workflow, get_column
 from ontask.permissions import is_instructor
 from visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
 from workflow.models import Workflow, Column
@@ -178,7 +178,7 @@ def stat_column_JSON(request: HttpRequest,
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related=['columns', 'views'])
+@get_workflow(pf_related=['columns', 'views'])
 def stat_row_view(
     request: HttpRequest,
     pk: Optional[int] = None,
@@ -210,8 +210,8 @@ def stat_row_view(
     if pk:
         view = workflow.views.filter(pk=pk).first()
         if not view:
-            # View not found. Redirect to workflow detail
-            return redirect('workflow:detail', workflow.id)
+            # View not found. Redirect to home
+            return redirect('home')
         columns_to_view = view.columns.all()
         column_names = [c.name for c in columns_to_view]
 
@@ -276,7 +276,7 @@ def stat_row_view(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related=['columns', 'views'])
+@get_workflow(pf_related=['columns', 'views'])
 def stat_table_view(
     request: HttpRequest,
     pk: Optional[int] = None,
@@ -303,7 +303,7 @@ def stat_table_view(
         view = workflow.views.filter(pk=pk).first()
         if not view:
             # View not found. Redirect to workflow detail
-            return redirect('workflow:detail', workflow.id)
+            return redirect('home')
         columns_to_view = view.columns.all()
 
         df = pandas_db.load_table(workflow.get_data_frame_table_name(),

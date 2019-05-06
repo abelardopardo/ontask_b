@@ -27,7 +27,7 @@ from core.datatables import DataTablesServerSidePaging
 from dataops import pandas_db
 from logs.models import Log
 from ontask import create_new_name
-from ontask.decorators import get_workflow, check_workflow, get_view
+from ontask.decorators import access_workflow, get_workflow, get_view
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from visualizations.plotly import PlotlyHandler
@@ -281,7 +281,7 @@ def render_table_display_data(request, workflow, columns, formula,
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='columns')
+@get_workflow(pf_related='columns')
 def display(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -307,7 +307,7 @@ def display(
 @user_passes_test(is_instructor)
 @csrf_exempt
 @require_http_methods(['POST'])
-@check_workflow(pf_related='columns')
+@get_workflow(pf_related='columns')
 def display_ss(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -382,7 +382,7 @@ def display_view_ss(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='actions')
+@get_workflow(pf_related='actions')
 def row_delete(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -432,7 +432,7 @@ def row_delete(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='views')
+@get_workflow(pf_related='views')
 def view_index(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -461,7 +461,7 @@ def view_index(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='columns')
+@get_workflow(pf_related='columns')
 def view_add(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -513,7 +513,7 @@ def view_edit(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='views')
+@get_workflow(pf_related='views')
 def view_delete(
     request: HttpRequest,
     pk: Optional[int] = None,
@@ -553,7 +553,7 @@ def view_delete(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='views')
+@get_workflow(pf_related='views')
 def view_clone(
     request: HttpRequest,
     pk: Optional[int] = None,

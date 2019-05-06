@@ -18,7 +18,7 @@ from action.forms import ActionImportForm
 from action.models import Action
 from action.serializers import ActionSelfcontainedSerializer
 from logs.models import Log
-from ontask.decorators import check_workflow, get_action
+from ontask.decorators import get_workflow, get_action
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 
@@ -109,7 +109,7 @@ def export_download(
 
 
 @user_passes_test(is_instructor)
-@check_workflow('actions')
+@get_workflow('actions')
 def action_import(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,

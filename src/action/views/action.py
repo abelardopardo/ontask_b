@@ -24,7 +24,7 @@ from action.views.edit_personalized import edit_action_out
 from action.views.edit_survey import edit_action_in
 from logs.models import Log
 from ontask import simplify_datetime_str
-from ontask.decorators import check_workflow, get_action
+from ontask.decorators import get_workflow, get_action
 from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
 from workflow.models import Workflow
@@ -220,7 +220,7 @@ def save_action_form(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='actions')
+@get_workflow(pf_related='actions')
 def action_index(
     request: HttpRequest,
     wid: Optional[int] = None,
@@ -255,7 +255,7 @@ class ActionCreateView(UserIsInstructor, generic.TemplateView):
 
     template_name = 'action/includes/partial_action_create.html'
 
-    @method_decorator(check_workflow())
+    @method_decorator(get_workflow())
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """Process the get requet when creating an action."""
         form = self.form_class()
@@ -266,7 +266,7 @@ class ActionCreateView(UserIsInstructor, generic.TemplateView):
             workflow=kwargs.get('workflow'),
         )
 
-    @method_decorator(check_workflow())
+    @method_decorator(get_workflow())
     def post(self, request: HttpRequest, **kwargs) -> HttpResponse:
         """Process the post request when creating an action."""
         form = self.form_class(request.POST)
@@ -300,7 +300,7 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
 
         return act_obj
 
-    @method_decorator(check_workflow())
+    @method_decorator(get_workflow())
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """Process the get request."""
         form = self.form_class(instance=self.get_object())
@@ -309,7 +309,7 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
             form,
             self.template_name)
 
-    @method_decorator(check_workflow())
+    @method_decorator(get_workflow())
     def post(self, request: HttpRequest, **kwargs) -> HttpResponse:
         """Process post request."""
         form = self.form_class(request.POST, instance=self.get_object())

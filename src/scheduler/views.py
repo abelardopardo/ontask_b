@@ -26,7 +26,7 @@ from past.utils import old_div
 from action.models import Action
 from action.payloads import action_session_dictionary
 from logs.models import Log
-from ontask.decorators import get_workflow, check_workflow
+from ontask.decorators import access_workflow, get_workflow
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from scheduler.models import ScheduledAction
@@ -475,7 +475,7 @@ def finish_scheduling(request, schedule_item=None, payload=None):
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='actions')
+@get_workflow(pf_related='actions')
 def index(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -501,7 +501,7 @@ def index(
 
 
 @user_passes_test(is_instructor)
-@check_workflow()
+@get_workflow()
 def view(
     request: HttpRequest,
     pk: int,
@@ -539,7 +539,7 @@ def view(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='actions')
+@get_workflow(pf_related='actions')
 def edit(
     request: HttpRequest,
     pk: int,
@@ -613,7 +613,7 @@ def edit(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='actions')
+@get_workflow(pf_related='actions')
 def delete(
     request: HttpRequest,
     pk: int,

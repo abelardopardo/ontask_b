@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
+
+"""Wrapper around task execution.
+
+    TODO: Review the functions get_task_* and see if they can be implemented
+    as decorators to take care of anomalies.
+"""
+
 import datetime
 from builtins import str
 from datetime import datetime, timedelta
-from typing import Mapping
 
 import pytz
 from celery import shared_task
@@ -14,10 +20,8 @@ from django.core import signing
 from django.utils.translation import ugettext
 
 from action.models import Action
-from action.payloads import JSONPayload
-from action.send import send_canvas_emails
-from action.send import send_json
-from action.send import send_emails
+from action.payloads import JSONPayload, CanvasEmailPayload, EmailPayload
+from action.send import send_canvas_emails, send_json, send_emails
 from dataops import sql_query
 from dataops.models import PluginRegistry
 from dataops.plugin_manager import run_plugin
@@ -64,7 +68,7 @@ def get_log_item(log_id):
     return log_item
 
 
-def get_user(user_id):
+def get_task_user(user_id):
     """
     Fetch a user given its id
     :param user_id: User to fetch
@@ -79,7 +83,7 @@ def get_user(user_id):
     return user
 
 
-def get_workflow(user, workflow_id):
+def get_task_workflow(user, workflow_id):
     """
     Obtain the workflow with the given id and from the given user
     :param user: User object
@@ -99,7 +103,7 @@ def get_workflow(user, workflow_id):
     return workflow
 
 
-def get_action(user, action_id):
+def get_task_action(user, action_id):
     """
     Obtain the action with the given id and from the given user
     :param user: User object
@@ -151,7 +155,7 @@ def get_execution_items(user_id, action_id, log_id):
 def send_email_messages(
     user_id: int,
     log_id: int,
-    action_info: Mapping
+    action_info: EmailPayload
 ) -> bool:
     """Task to invoke send_messages to send email messages from action.
 
@@ -170,9 +174,8 @@ def send_email_messages(
         return False
 
     try:
-        user = get_user(user_id)
-
-        action = get_action(user, action_info['action_id'])
+        user = get_task_user(user_id)
+        action = get_task_action(user, action_info['action_id'])
 
         # Set the status to "executing" before calling the function
         log_item.payload['status'] = 'Executing'
@@ -200,7 +203,7 @@ def send_email_messages(
 def send_canvas_email_messages(
     user_id: int,
     log_id: int,
-    action_info: Mapping
+    action_info: CanvasEmailPayload
 ) -> bool:
     """
     This function invokes send_messages in action, gets the message
@@ -222,9 +225,8 @@ def send_canvas_email_messages(
         return False
 
     try:
-        user = get_user(user_id)
-
-        action = get_action(user, action_info['action_id'])
+        user = get_task_user(user_id)
+        action = get_task_action(user, action_info['action_id'])
 
         # Set the status to "executing" before calling the function
         log_item.payload['status'] = 'Executing'
@@ -276,9 +278,8 @@ def send_json_objects(
 
     to_return = True
     try:
-        user = get_user(user_id)
-
-        action = get_action(user, action_info['action_id'])
+        user = get_task_user(user_id)
+        action = get_task_action(user, action_info['action_id'])
 
         # Set the status to "executing" before calling the function
         log_item.payload['status'] = 'Executing'
@@ -427,9 +428,9 @@ def run_plugin_task(user_id,
 
     to_return = True
     try:
-        user = get_user(user_id)
+        user = get_task_user(user_id)
 
-        workflow = get_workflow(user, workflow_id)
+        workflow = get_task_workflow(user, workflow_id)
 
         plugin_info = PluginRegistry.objects.filter(pk=plugin_id).first()
         if not plugin_info:
@@ -483,9 +484,9 @@ def workflow_update_lusers(user_id, workflow_id, log_id):
 
     to_return = True
     try:
-        user = get_user(user_id)
+        user = get_task_user(user_id)
 
-        workflow = get_workflow(user, workflow_id)
+        workflow = get_task_workflow(user, workflow_id)
 
         do_workflow_update_lusers(workflow, log_item)
 

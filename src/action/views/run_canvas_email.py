@@ -25,7 +25,7 @@ from ontask.tasks import celery_is_up, send_canvas_email_messages
 from ontask_oauth.models import OnTaskOAuthUserTokens
 from ontask_oauth.views import get_initial_token_step1, refresh_token
 from workflow.models import Workflow
-from ontask.decorators import get_workflow, check_workflow
+from ontask.decorators import access_workflow, get_workflow
 
 
 def run_canvas_email_action(
@@ -157,7 +157,7 @@ def canvas_get_or_set_oauth_token(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='actions')
+@get_workflow(pf_related='actions')
 def run_canvas_email_done(
     request: HttpRequest,
     action_info: Optional[CanvasEmailPayload] = None,

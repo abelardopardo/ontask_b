@@ -22,11 +22,11 @@ from .ops import (
     do_import_workflow,
     do_export_workflow
 )
-from ontask.decorators import check_workflow
+from ontask.decorators import get_workflow
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='actions')
+@get_workflow(pf_related='actions')
 def export_ask(
     request: HttpRequest,
     wid,
@@ -65,7 +65,7 @@ def export_ask(
 
 @user_passes_test(is_instructor)
 @require_http_methods(['GET'])
-@check_workflow(pf_related='actions')
+@get_workflow(pf_related='actions')
 def export(
     request: HttpRequest,
     data,

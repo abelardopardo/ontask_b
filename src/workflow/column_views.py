@@ -20,7 +20,7 @@ from action.models import Condition, ActionColumnConditionTuple
 from dataops import ops, formula_evaluation, pandas_db
 from logs.models import Log
 from ontask import create_new_name
-from ontask.decorators import get_workflow, check_workflow, get_column
+from ontask.decorators import access_workflow, get_workflow, get_column
 from ontask.permissions import is_instructor
 from workflow.models import Workflow, Column
 from .forms import (
@@ -71,7 +71,7 @@ def partition(list_in, n):
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related=['actions', 'columns'])
+@get_workflow(pf_related=['actions', 'columns'])
 def column_add(
     request: HttpRequest,
     pk: Optional[int] = None,
@@ -205,7 +205,7 @@ def column_add(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='columns')
+@get_workflow(pf_related='columns')
 def formula_column_add(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -334,7 +334,7 @@ def formula_column_add(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='columns')
+@get_workflow(pf_related='columns')
 def random_column_add(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -697,7 +697,7 @@ def column_clone(
 
 @user_passes_test(is_instructor)
 @csrf_exempt
-@check_workflow(pf_related='columns')
+@get_workflow(pf_related='columns')
 def column_move(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,

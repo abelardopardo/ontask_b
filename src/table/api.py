@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+from typing import Optional
 
-
+from django.http import HttpResponse, HttpRequest
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import status
 from rest_framework.exceptions import APIException
@@ -10,15 +12,15 @@ from rest_framework.views import APIView
 import dataops.pandas_db
 from dataops import pandas_db, ops
 from ontask import OnTaskDataFrameNoKey
+from ontask.decorators import access_workflow, get_workflow
 from ontask.permissions import UserIsInstructor
 from table.serializers import (
     DataFramePandasMergeSerializer,
     DataFramePandasSerializer,
     DataFrameJSONSerializer,
-    DataFrameJSONMergeSerializer
+    DataFrameJSONMergeSerializer,
 )
 from workflow.models import Workflow
-from ontask.decorators import get_workflow
 
 
 class TableBasicOps(APIView):
@@ -33,23 +35,25 @@ class TableBasicOps(APIView):
     serializer_class = None
     permission_classes = (UserIsInstructor,)
 
-    def get_object(self, pk):
-        workflow = get_workflow(self.request, pk, prefetch_related='actions')
-        if workflow is None:
-            raise APIException(_('Unable to access the workflow'))
-        return workflow
+    @method_decorator(get_workflow(pf_related='columns'))
+    def override(
+        self,
+        request: HttpRequest,
+        pk: int,
+        format=None,
+        workflow: Optional[Workflow] = None
+    ) -> HttpResponse:
+        """Method to override the content in the workflow.
 
-    def override(self, request, pk, format=None):
-        """
-        Method to override the content in the workflow
         :param request: Received request object
+
         :param pk: Workflow ID
+
         :param format: format for the response
+
         :return:
         """
-
         # Try to retrieve the wflow to check for permissions
-        wflow = self.get_object(pk)
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             # Flag the error
@@ -67,18 +71,23 @@ class TableBasicOps(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
         # Store the content in the db and...
-        ops.store_dataframe(df, wflow)
+        ops.store_dataframe(df, workflow)
 
         # Update all the counters in the conditions
-        for action in wflow.actions.all():
+        for action in workflow.actions.all():
             action.update_n_rows_selected()
 
         return Response(None, status=status.HTTP_201_CREATED)
 
     # Retrieve
-    def get(self, request, pk, format=None):
-        # Try to retrieve the wflow to check for permissions
-        workflow = self.get_object(pk)
+    @method_decorator(get_workflow(pf_related='columns'))
+    def get(
+        self,
+        request: HttpRequest,
+        pk: int,
+        format=None,
+        workflow: Optional[Workflow] = None
+    ) -> HttpResponse:
         serializer = self.serializer_class(
             {'data_frame':
                  pandas_db.load_table(workflow.get_data_frame_table_name())
@@ -87,10 +96,15 @@ class TableBasicOps(APIView):
         return Response(serializer.data)
 
     # Create
-    def post(self, request, pk, format=None):
-        # If there is a table in the workflow, ignore the request
-        w = Workflow.objects.get(pk=pk)
-        if pandas_db.load_table(w.get_data_frame_table_name()) is not None:
+    @method_decorator(get_workflow(pf_related='columns'))
+    def post(
+        self,
+        request: HttpRequest,
+        pk: int,
+        format=None,
+        workflow: Optional[Workflow] = None
+    ) -> HttpResponse:
+        if pandas_db.load_table(workflow.get_data_frame_table_name()) is not None:
             raise APIException(_('Post request requires workflow without '
                                  'a table'))
         return self.override(request, pk, format)
@@ -100,9 +114,15 @@ class TableBasicOps(APIView):
         return self.override(request, pk, format)
 
     # Delete
-    def delete(self, request, pk, format=None):
-        wflow = self.get_object(pk)
-        wflow.flush()
+    @method_decorator(get_workflow(pf_related='columns'))
+    def delete(
+        self,
+        request: HttpRequest,
+        pk: int,
+        format=None,
+        workflow: Optional[Workflow] = None
+    ) -> HttpResponse:
+        workflow.flush()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -184,8 +204,8 @@ class TablePandasOps(TableBasicOps):
 
 
 class TableBasicMerge(APIView):
-    """
-    These are basic merge methods to be invoked by the subclasses
+    """Basic table merge methods.
+
     get:
     Retrieves the data frame attached to the workflow and returns it labeled
     as "data_frame"
@@ -193,20 +213,19 @@ class TableBasicMerge(APIView):
     post:
     Request to merge a given data frame with the one attached to the workflow.
     """
-
     serializer_class = None
     permission_classes = (UserIsInstructor,)
 
-    def get_object(self, pk):
-        workflow = get_workflow(self.request, pk, prefetch_related='columns')
-        if workflow is None:
-            raise APIException(_('Unable to access the workflow'))
-        return workflow
-
     # Retrieve
-    def get(self, request, pk, format=None):
+    @method_decorator(get_workflow(pf_related='columns'))
+    def get(
+        self,
+        request: HttpRequest,
+        pk: int,
+        format=None,
+        workflow: Optional[Workflow] = None
+    ) -> HttpResponse:
         # Try to retrieve the wflow to check for permissions
-        workflow = self.get_object(pk)
         serializer = self.serializer_class(
             {'src_df':
                  pandas_db.load_table(workflow.get_data_frame_table_name()),
@@ -217,9 +236,14 @@ class TableBasicMerge(APIView):
         return Response(serializer.data)
 
     # Update
-    def put(self, request, pk, format=None):
-        # Try to retrieve the wflow to check for permissions
-        workflow = self.get_object(pk)
+    @method_decorator(get_workflow(pf_related='columns'))
+    def put(
+        self,
+        request: HttpRequest,
+        pk: int,
+        format=None,
+        workflow: Optional[Workflow] = None
+    ) -> HttpResponse:
         # Get the dst_df
         dst_df = pandas_db.load_table(workflow.get_data_frame_table_name())
 

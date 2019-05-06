@@ -22,7 +22,7 @@ from action.payloads import (
 from action.views.run_email import html_body
 from dataops.sql_query import get_rows
 from logs.models import Log
-from ontask.decorators import check_workflow, get_action
+from ontask.decorators import get_workflow, get_action
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 
@@ -91,7 +91,7 @@ def zip_action(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='actions')
+@get_workflow(pf_related='actions')
 def run_zip_done(
     request: HttpRequest,
     action_info: Optional[ZipPayload] = None,
@@ -140,7 +140,7 @@ def run_zip_done(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='actions')
+@get_workflow(pf_related='actions')
 def action_zip_export(
     request,
     workflow: Optional[Workflow] = None,

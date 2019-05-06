@@ -15,14 +15,14 @@ from django.views.decorators.http import require_http_methods
 
 from core.datatables import DataTablesServerSidePaging
 from ontask import simplify_datetime_str
-from ontask.decorators import get_workflow, check_workflow
+from ontask.decorators import access_workflow, get_workflow
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 from .models import Log
 
 
 @user_passes_test(is_instructor)
-@check_workflow()
+@get_workflow()
 def display(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -41,7 +41,7 @@ def display(
 @user_passes_test(is_instructor)
 @csrf_exempt
 @require_http_methods(['POST'])
-@check_workflow(pf_related='logs')
+@get_workflow(pf_related='logs')
 def display_ss(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -103,7 +103,7 @@ def display_ss(
 
 
 @user_passes_test(is_instructor)
-@check_workflow()
+@get_workflow()
 def view(
     request: HttpRequest,
     pk: int,

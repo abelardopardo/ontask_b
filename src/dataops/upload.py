@@ -16,13 +16,13 @@ from logs.models import Log
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 from workflow.ops import store_workflow_in_session
-from ontask.decorators import get_workflow, check_workflow
+from ontask.decorators import access_workflow, get_workflow
 
 from .forms import SelectColumnUploadForm, SelectKeysForm
 
 
 @user_passes_test(is_instructor)
-@check_workflow('columns')
+@get_workflow('columns')
 def upload_s2(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -206,7 +206,7 @@ def upload_s2(
 
 
 @user_passes_test(is_instructor)
-@check_workflow('columns')
+@get_workflow('columns')
 def upload_s3(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -332,7 +332,7 @@ def upload_s3(
 
 
 @user_passes_test(is_instructor)
-@check_workflow('columns')
+@get_workflow('columns')
 def upload_s4(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,

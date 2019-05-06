@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-
+from typing import Optional
 
 from django.db.models import Q
+from django.http import HttpRequest, HttpResponse
+from django.utils.decorators import method_decorator
 from rest_framework import generics, status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
@@ -9,7 +11,7 @@ from rest_framework.views import APIView
 
 from ontask.permissions import UserIsInstructor
 from .models import Workflow
-from ontask.decorators import get_workflow
+from ontask.decorators import access_workflow, get_workflow
 from .serializers import WorkflowListSerializer, WorkflowLockSerializer
 
 
@@ -94,41 +96,40 @@ class WorkflowAPILock(APIView):
     delete:
     unlock the workflow
     """
-
     serializer_class = WorkflowLockSerializer
     permission_classes = (UserIsInstructor,)
 
-    def get_object(self, pk):
-        try:
-            if self.request.user.is_superuser:
-                workflow = Workflow.objects.get(pk=pk)
-            else:
-                workflow = Workflow.objects.filter(
-                    Q(user=self.request.user) |
-                    Q(shared__id=self.request.user.id)
-                ).distinct().get(id=pk)
-        except Workflow.DoesNotExist:
-            raise APIException('Incorrect object')
-
-        return workflow
-
     # Retrieve the value of the lock property in the workflow
-    def get(self, request, pk, format=None):
+    @method_decorator(get_workflow(pf_related='columns'))
+    def get(
+        self,
+        request: HttpRequest,
+        pk: int,
+        format=None,
+        workflow: Optional[Workflow] = None
+    ) -> HttpResponse:
         # Retrieve the workflow and return the serialized value of the boolean
-        workflow = self.get_object(pk)
         serializer = self.serializer_class({'lock': workflow.is_locked()})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # Create: Try to set the value of the workflow
-    def post(self, request, pk, format=None):
-        workflow = get_workflow(request, pk)
-        if not workflow:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
+    @method_decorator(get_workflow(pf_related='columns'))
+    def post(
+        self,
+        request: HttpRequest,
+        pk: int,
+        format=None,
+        workflow: Optional[Workflow] = None
+    ) -> HttpResponse:
         return Response(status=status.HTTP_201_CREATED)
 
-    # Delete
-    def delete(self, request, pk, format=None):
-        workflow = self.get_object(pk)
+    @method_decorator(get_workflow(pf_related='columns'))
+    def delete(
+        self,
+        request: HttpRequest,
+        pk: int,
+        format=None,
+        workflow: Optional[Workflow] = None
+    ) -> HttpResponse:
         workflow.unlock()
         return Response(status=status.HTTP_200_OK)

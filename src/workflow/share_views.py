@@ -8,14 +8,14 @@ from django.shortcuts import redirect
 from django.template.loader import render_to_string
 
 from logs.models import Log
-from ontask.decorators import get_workflow, check_workflow
+from ontask.decorators import access_workflow, get_workflow
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 from .forms import SharedForm
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='shared')
+@get_workflow(pf_related='shared')
 def share_create(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -59,7 +59,7 @@ def share_create(
 
 
 @user_passes_test(is_instructor)
-@check_workflow(pf_related='shared')
+@get_workflow(pf_related='shared')
 def share_delete(
     request: HttpRequest,
     pk: int,

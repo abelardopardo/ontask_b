@@ -7,14 +7,14 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
-from ontask.decorators import check_workflow
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 from .forms import UploadCSVFileForm
 
 
 @user_passes_test(is_instructor)
-@check_workflow()
+@get_workflow()
 def csvupload1(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,

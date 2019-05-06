@@ -19,7 +19,7 @@ from django.views.decorators.http import require_http_methods
 from action.models import Action, ActionColumnConditionTuple, Condition
 from logs.models import Log
 from ontask import create_new_name
-from ontask.decorators import get_action, get_workflow, get_condition
+from ontask.decorators import get_action, access_workflow, get_condition
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 
