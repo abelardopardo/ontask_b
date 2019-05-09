@@ -13,7 +13,7 @@ from django_summernote.widgets import SummernoteInplaceWidget
 
 from action.forms import FIELD_PREFIX
 from action.models import Action
-from ontask.forms import dateTimeWidgetOptions
+from ontask.forms import date_time_widget_options
 
 
 def column_to_field(col, initial=None, required=False, label=None):
@@ -66,7 +66,7 @@ def column_to_field(col, initial=None, required=False, label=None):
         new_field.initial = ''
 
     if col.data_type == 'datetime':
-        new_field.widget = DateTimePickerInput(options=dateTimeWidgetOptions)
+        new_field.widget = DateTimePickerInput(options=date_time_widget_options)
 
     return new_field
 

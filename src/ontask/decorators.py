@@ -16,7 +16,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from action.models import Condition, ActionColumnConditionTuple
+from action.models import ActionColumnConditionTuple, Condition
 from ontask import OnTaskException
 from table.models import View
 from workflow.models import Workflow
@@ -218,8 +218,8 @@ def get_condition(
             if not kwargs.get('condition'):
                 # Get the condition
                 condition = Condition.objects.filter(pk=pk).filter(
-                    Q(action__workflow__user=request.user) |
-                    Q(action__workflow__shared=request.user),
+                    Q(action__workflow__user=request.user)
+                    | Q(action__workflow__shared=request.user),
                     action__workflow=workflow,
                 )
                 if is_filter is not None:
@@ -473,5 +473,3 @@ def wf_lock_and_update(
     store_workflow_nrows_in_session(request, workflow)
 
     return workflow
-
-

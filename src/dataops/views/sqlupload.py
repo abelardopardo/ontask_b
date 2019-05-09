@@ -82,12 +82,12 @@ def sqlupload_start(
             # Verify the data frame
             verify_data_frame(data_frame)
         except OnTaskDataFrameNoKey as exc:
-            messages.error(request, exc)
+            messages.error(request, str(exc))
             return render(request, 'dataops/sqlupload_start.html', context)
         except Exception as exc:
             messages.error(
                 request,
-                _('Unable to obtain data: {0}').format(exc))
+                _('Unable to obtain data: {0}').format(str(exc)))
             return render(request, 'dataops/sqlupload_start.html', context)
 
         # Store the data frame in the DB.

@@ -12,7 +12,7 @@ import pandas as pd
 
 from dataops.pandas import load_table, is_unique_column
 from ontask import is_legal_name, ontask_prefs
-from ontask.forms import RestrictedFileField, dateTimeWidgetOptions
+from ontask.forms import RestrictedFileField, date_time_widget_options
 from workflow.models import Column, Workflow
 
 
@@ -180,8 +180,8 @@ class ColumnBasicForm(forms.ModelForm):
                   'active_from', 'active_to']
 
         widgets = {
-            'active_from': DateTimePickerInput(options=dateTimeWidgetOptions),
-            'active_to': DateTimePickerInput(options=dateTimeWidgetOptions),
+            'active_from': DateTimePickerInput(options=date_time_widget_options),
+            'active_to': DateTimePickerInput(options=date_time_widget_options),
         }
 
 

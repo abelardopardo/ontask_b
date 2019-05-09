@@ -22,7 +22,8 @@ from action.payloads import (
 from logs.models import Log
 from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
-from ontask.tasks import celery_is_up, send_canvas_email_messages
+from ontask.celery import celery_is_up
+from ontask.tasks import send_canvas_email_messages
 from ontask_oauth.models import OnTaskOAuthUserTokens
 from ontask_oauth.views import get_initial_token_step1, refresh_token
 from workflow.models import Workflow

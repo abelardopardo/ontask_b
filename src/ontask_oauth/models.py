@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
+"""Table storing oauth tokens."""
 
 from django.conf import settings
 from django.db import models

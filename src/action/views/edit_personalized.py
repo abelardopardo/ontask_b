@@ -42,7 +42,7 @@ def text_renders_correctly(
         render_action_template(text_content, {}, action)
     except Exception as exc:
         # Pass the django exception to the form (fingers crossed)
-        form.add_error(None, exc)
+        form.add_error(None, str(exc))
         return False
 
     return True

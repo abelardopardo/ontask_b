@@ -281,9 +281,9 @@ def load_plugin(foldername):
         if not all(test_result == 'Ok' for test_result, __ in tests):
             return None, tests
     except AttributeError as exc:
-        return None, [(exc, _('Class instantiation'))]
+        return None, [(str(exc), _('Class instantiation'))]
     except Exception as exc:
-        return None, [(exc, _('Instance creation'))]
+        return None, [(str(exc), _('Instance creation'))]
 
     return plugin_instance, tests
 
@@ -438,7 +438,7 @@ def run_plugin(
         raise Exception(
             ugettext(
                 'Exception when retrieving the data frame from workflow: {0}',
-            ).format(exc),
+            ).format(str(exc)),
         )
 
     # Set the updated names of the input, output columns, and the suffix
@@ -456,7 +456,7 @@ def run_plugin(
     except Exception as exc:
         raise Exception(
             ugettext(
-                'Error when creating data frame for plugin: {0}').format(exc),
+                'Error when creating data frame for plugin: {0}').format(str(exc)),
         )
 
     # Try the execution and catch any exception
@@ -464,7 +464,7 @@ def run_plugin(
         new_df = plugin_instance.run(sub_df, parameters=plugin_params)
     except Exception as exc:
         raise Exception(
-            ugettext('Error while executing plugin: {0}').format(exc),
+            ugettext('Error while executing plugin: {0}').format(str(exc)),
         )
 
     # If plugin does not return a data frame, flag as error
@@ -516,7 +516,7 @@ def run_plugin(
         )
     except Exception as exc:
         raise Exception(
-            ugettext('Error while merging result: {0}.').format(exc),
+            ugettext('Error while merging result: {0}.').format(str(exc)),
         )
 
     if isinstance(new_frame, str):

@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 
+"""Basic views to render error."""
 
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render, redirect
+from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views import generic
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 
-from action import settings
 from django_auth_lti.decorators import lti_role_required
-from ontask.permissions import UserIsInstructor
+from ontask.permissions import UserIsInstructor, is_admin, is_instructor
 from ontask.tasks import increase_track_count
-from ontask.permissions import is_instructor, is_admin
 from workflow.views import index
 
 
-def home(request):
+def home(request: HttpRequest) -> HttpResponse:
+    """Render the home page."""
     if not request.user.is_authenticated:
         # Unauthenticated request, go to login
         return redirect(reverse('accounts:login'))
@@ -31,15 +31,20 @@ def home(request):
 
 
 class AboutPage(generic.TemplateView):
-    template_name = "about.html"
+    """ABout page."""
+
+    template_name = 'about.html'
 
 
 class ToBeDone(UserIsInstructor, generic.TemplateView):
-    template_name = "base.html"
+    """Page showing the to be done."""
+
+    template_name = 'base.html'
 
 
 @login_required
 def entry(request):
+    """Entry point."""
     return redirect('home')
 
 
@@ -47,32 +52,33 @@ def entry(request):
 @xframe_options_exempt
 @lti_role_required(['Instructor', 'Student'])
 def lti_entry(request):
+    """Enter the application through LTI."""
     return redirect('home')
 
 
 # No permissions in this URL as it is supposed to be wide open to track email
 #  reads.
 def trck(request):
-    """
-    Receive a request with a token from email read tracking
+    """Receive a request with a token from email read tracking.
+
     :param request: Request object
-    :return: Reflects in the DB the reception and (optionally) in the data 
+
+    :return: Reflects in the DB the reception and (optionally) in the data
     table of the workflow
     """
-
     # Push the tracking to the asynchronous queue
     increase_track_count.delay(request.method, request.GET)
 
-    return  HttpResponse(status=200)
+    return HttpResponse(status=200)
 
 
 @login_required
 @csrf_exempt
 def keep_alive(request):
-    """
-    Function invoked by the session Timeout Javascript fragment when the
-    session is about to expire and the user clicks on "continue connected"
+    """Return empty response to keep session alive.
+
     :param request:
+
     :return:
     """
     return JsonResponse({})
@@ -80,34 +86,38 @@ def keep_alive(request):
 
 @login_required
 def under_construction(request):
-    """
-    Produce a page saying that this is under construction
+    """Produce a page saying that this is under construction.
+
     :param request: Request object
+
     :return: HTML response
     """
-
     return render(request, 'under_construction.html', {})
 
 
 def ontask_handler400(request, exception):
+    """Return error 400."""
     response = render(request, '400.html', {})
     response.status_code = 400
     return response
 
 
 def ontask_handler403(request, exception):
+    """Return error 403."""
     response = render(request, '403.html', {})
     response.status_code = 403
     return response
 
 
 def ontask_handler404(request, exception):
+    """Return error 404."""
     response = render(request, '404.html', {})
     response.status_code = 404
     return response
 
 
 def ontask_handler500(request):
+    """Return error 500."""
     response = render(request, '500.html', {})
     response.status_code = 500
     return response

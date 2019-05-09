@@ -271,7 +271,7 @@ def evaluate_row_action_out(
     try:
         action_text = render_action_template(text, context, action)
     except TemplateSyntaxError as exc:
-        return render_to_string('action/syntax_error.html', {'msg': exc})
+        return render_to_string('action/syntax_error.html', {'msg': str(exc)})
 
     return action_text
 

@@ -62,7 +62,7 @@ class UploadBasic(forms.Form):
             # Verify the data frame
             verify_data_frame(self.data_frame)
         except OnTaskDataFrameNoKey as exc:
-            self.add_error(None, exc)
+            self.add_error(None, str(exc))
             return
 
         # Store the data frame in the DB.
@@ -75,7 +75,7 @@ class UploadBasic(forms.Form):
         except Exception as exc:
             self.add_error(
                 None,
-                _('Unable to process file ({0}).'.format(exc)))
+                _('Unable to process file ({0}).').format(str(exc)))
 
 
 # Step 1 of the CSV upload
@@ -142,7 +142,7 @@ class UploadCSVFileForm(UploadBasic):
         except Exception as exc:
             self.add_error(
                 'tex_file',
-                _('File could not be processed ({0})').format(exc))
+                _('File could not be processed ({0})').format(str(exc)))
             return form_data
 
         # Check the validity of the data frame
@@ -187,7 +187,7 @@ class UploadExcelFileForm(UploadBasic):
         except Exception as exc:
             self.add_error(
                 'text_file',
-                _('File could not be processed: {0}').format(exc))
+                _('File could not be processed: {0}').format(str(exc)))
             return form_data
 
         # Check the validity of the data frame
@@ -253,7 +253,7 @@ class UploadGoogleSheetForm(UploadBasic):
         except Exception as exc:
             self.add_error(
                 None,
-                _('File could not be processed: {0}').format(exc))
+                _('File could not be processed: {0}').format(str(exc)))
             return form_data
 
         # Check the validity of the data frame
@@ -343,7 +343,7 @@ class UploadS3FileForm(UploadBasic):
         except Exception as exc:
             self.add_error(
                 None,
-                _('S3 bucket file could not be processed: {0}').format(exc),
+                _('S3 bucket file could not be processed: {0}').format(str(exc)),
             )
             return resp_data
 

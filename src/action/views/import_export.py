@@ -145,7 +145,7 @@ def action_import(
             # Attach the exception to the request
             messages.error(
                 request,
-                _('Unable to import action: {0}').format(exc),
+                _('Unable to import action: {0}').format(str(exc)),
             )
 
         # Go back to the list of actions

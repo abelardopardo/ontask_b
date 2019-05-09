@@ -34,7 +34,7 @@ from action.payloads import EmailPayload
 from dataops.sql.row_queries import get_rows
 from dataops.sql.column_queries import is_column_table_unique
 from ontask import is_correct_email
-from ontask.forms import dateTimeWidgetOptions
+from ontask.forms import date_time_widget_options
 
 # Format of column name to produce a Moodle compatible ZIP
 participant_re = re.compile(r'^Participant \d+$')
@@ -516,6 +516,6 @@ class EnableURLForm(forms.ModelForm):
         fields = ('serve_enabled', 'active_from', 'active_to')
 
         widgets = {
-            'active_from': DateTimePickerInput(options=dateTimeWidgetOptions),
-            'active_to': DateTimePickerInput(options=dateTimeWidgetOptions),
+            'active_from': DateTimePickerInput(options=date_time_widget_options),
+            'active_to': DateTimePickerInput(options=date_time_widget_options),
         }

@@ -337,7 +337,7 @@ def send_confirmation_message(
         text_content = strip_tags(html_content)
     except TemplateSyntaxError as exc:
         raise Exception(
-            _('Syntax error in notification template ({0})').format(exc),
+            _('Syntax error in notification template ({0})').format(str(exc)),
         )
 
     # Log the event
@@ -367,5 +367,5 @@ def send_confirmation_message(
             html_message=html_content)
     except Exception as exc:
         raise Exception(
-            _('Error when sending the notification: {0}').format(exc),
+            _('Error when sending the notification: {0}').format(str(exc)),
         )
