@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+"""Extra configuration parameters."""
 
 from django.conf import settings
 from django.db import models
@@ -15,14 +16,17 @@ if 'siteprefs' in settings.INSTALLED_APPS:
     patch_locals()  # That's bootstrap.
 
     register_prefs(
-        pref(HELP_URL,
-             verbose_name=_('URL prefix to access the documentation in the '
-                            'static area'),
-             static=False,
-             field=models.CharField(max_length=256, blank=True)),
+        pref
+        (HELP_URL,
+         verbose_name=_(
+             'URL prefix to access the documentation in the '
+             + 'static area'),
+         static=False,
+         field=models.CharField(max_length=256, blank=True)),
 
-        pref(MINUTE_STEP,
-             verbose_name=_('Minute interval to program scheduled tasks'),
-             static=False,
-             field=models.IntegerField(blank=True)),
+        pref(
+            MINUTE_STEP,
+            verbose_name=_('Minute interval to program scheduled tasks'),
+            static=False,
+            field=models.IntegerField(blank=True)),
     )

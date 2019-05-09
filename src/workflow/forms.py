@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
 
 
+from builtins import next, object, str
 import json
-from builtins import next
-from builtins import object
-from builtins import str
 
-import pandas as pd
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
+import pandas as pd
 
-from dataops import pandas_db
-from ontask import ontask_prefs, is_legal_name
+from dataops.pandas import load_table, is_unique_column
+from ontask import is_legal_name, ontask_prefs
 from ontask.forms import RestrictedFileField, dateTimeWidgetOptions
-from .models import Workflow, Column
+from workflow.models import Column, Workflow
 
 
 class WorkflowForm(forms.ModelForm):
@@ -103,7 +101,7 @@ class ColumnBasicForm(forms.ModelForm):
 
         # Load the data frame from the DB for various checks and leave it in
         # the form for future use
-        self.data_frame = pandas_db.load_table(
+        self.data_frame = load_table(
             self.workflow.get_data_frame_table_name()
         )
 
@@ -118,7 +116,7 @@ class ColumnBasicForm(forms.ModelForm):
             # Check that the name is not present already
             if next((c for c in self.workflow.columns.all()
                      if c.id != self.instance.id and
-                     c.name == data['name']), None):
+                        c.name == data['name']), None):
                 # New column name collides with existing one
                 self.add_error(
                     'name',
@@ -146,9 +144,9 @@ class ColumnBasicForm(forms.ModelForm):
                 # Condition 2: The values in the dataframe column must be in
                 # these categories (only if the column is being edited, though
                 if self.instance.name and \
-                        not all([x in valid_values
-                                 for x in self.data_frame[self.instance.name]
-                                 if x and not pd.isnull(x)]):
+                    not all([x in valid_values
+                             for x in self.data_frame[self.instance.name]
+                             if x and not pd.isnull(x)]):
                     self.add_error(
                         'raw_categories',
                         _('The values in the column are not compatible ' +
@@ -318,7 +316,7 @@ class ColumnRenameForm(ColumnBasicForm):
             # allowed
             column_unique = self.instance.workflow.get_column_unique()
             if self.instance.is_key and \
-                    len([x for x in column_unique if x]) == 1:
+                len([x for x in column_unique if x]) == 1:
                 self.add_error(
                     'is_key',
                     _('There must be at least one column with unique values')
@@ -327,8 +325,7 @@ class ColumnRenameForm(ColumnBasicForm):
 
             # Case 2: False -> True Unique values must be verified
             if not self.instance.is_key and \
-                    not pandas_db.is_unique_column(self.data_frame[
-                                                       self.instance.name]):
+                not is_unique_column(self.data_frame[self.instance.name]):
                 self.add_error(
                     'is_key',
                     _('The column does not have unique values for each row.')

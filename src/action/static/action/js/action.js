@@ -131,9 +131,9 @@ var conditionClone = function() {
         } else {
           location.href = data.html_redirect;
         }
-      } else {
-        $('#div-spinner').hide();
+        return;
       }
+      $('#div-spinner').hide();
     },
     error: function(jqXHR, textStatus, errorThrown) {
       location.reload(true);

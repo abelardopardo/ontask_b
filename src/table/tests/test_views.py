@@ -10,7 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.common.action_chains import ActionChains
 
 import test
-from dataops import pandas_db
+from dataops.pandas import load_table
 from workflow.models import Workflow
 
 
@@ -308,8 +308,8 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
         self.wait_close_modal_refresh_table('table-data_previous')
 
         # Check that the data is correct
-        df = pandas_db.load_table(
-            Workflow.objects.all()[0].get_data_frame_table_name()
+        df = load_table(
+            Workflow.objects.all()[0].get_data_frame_table_name(),
         )
 
         # d1 = c1 + c2

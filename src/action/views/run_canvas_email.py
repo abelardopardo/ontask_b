@@ -3,7 +3,7 @@
 """Views to run the personalized canvas email action."""
 
 from datetime import datetime, timedelta
-from typing import Mapping, Optional
+from typing import Optional
 
 import pytz
 from django.conf import settings as ontask_settings
@@ -20,12 +20,12 @@ from action.payloads import (
     CanvasEmailPayload, action_session_dictionary, get_action_info,
 )
 from logs.models import Log
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from ontask.tasks import celery_is_up, send_canvas_email_messages
 from ontask_oauth.models import OnTaskOAuthUserTokens
 from ontask_oauth.views import get_initial_token_step1, refresh_token
 from workflow.models import Workflow
-from ontask.decorators import access_workflow, get_workflow
 
 
 def run_canvas_email_action(
@@ -70,35 +70,32 @@ def run_canvas_email_action(
         action=action,
         action_info=action_info)
 
-    # Process the GET or invalid
-    if request.method == 'GET' or not form.is_valid():
-        # Get the number of rows from the action
-        num_msgs = action.get_rows_selected()
+    if request.method == 'POST' and form.is_valid():
+        # Request is a POST and is valid
 
-        # Render the form
-        return render(
-            request,
-            'action/request_canvas_email_data.html',
-            {'action': action,
-             'num_msgs': num_msgs,
-             'form': form,
-             'valuerange': range(2),
-             'rows_all_false': action.get_row_all_false_count()})
+        if action_info['confirm_items']:
+            # Create a dictionary in the session to carry over all the
+            # information to execute the next pages
+            action_info['button_label'] = ugettext('Send')
+            action_info['valuerange'] = 2
+            action_info['step'] = 2
+            request.session[
+                action_session_dictionary] = action_info.get_store()
 
-    # Request is a POST and is valid
+            return redirect('action:item_filter')
 
-    if action_info['confirm_items']:
-        # Create a dictionary in the session to carry over all the information
-        # to execute the next pages
-        action_info['button_label'] = ugettext('Send')
-        action_info['valuerange'] = 2
-        action_info['step'] = 2
-        request.session[action_session_dictionary] = action_info.get_store()
+        # Go straight to the token request step
+        return canvas_get_or_set_oauth_token(request, action_info['target_url'])
 
-        return redirect('action:item_filter')
-
-    # Go straight to the token request step
-    return canvas_get_or_set_oauth_token(request, action_info['target_url'])
+    # Render the form
+    return render(
+        request,
+        'action/request_canvas_email_data.html',
+        {'action': action,
+         'num_msgs': action.get_rows_selected(),
+         'form': form,
+         'valuerange': range(2),
+         'rows_all_false': action.get_row_all_false_count()})
 
 
 @user_passes_test(is_instructor)

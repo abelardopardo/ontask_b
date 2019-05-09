@@ -18,7 +18,7 @@ from action.forms import ActionImportForm
 from action.models import Action
 from action.serializers import ActionSelfcontainedSerializer
 from logs.models import Log
-from ontask.decorators import get_workflow, get_action
+from ontask.decorators import get_action, get_workflow
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 
@@ -126,35 +126,32 @@ def action_import(
         workflow=workflow,
         user=request.user)
 
-    context = {'form': form}
+    if request.method == 'POST' and form.is_valid():
+        # Process the reception of the file
+        if not form.is_multipart():
+            form.add_error(
+                None,
+                _('Incorrect form (it does not have a file attached)'))
+            return render(request, 'action/import.html', {'form': form})
 
-    # If a get request or the form is not valid, render the page.
-    if request.method == 'GET' or not form.is_valid():
-        return render(request, 'action/import.html', context)
+        # UPLOAD THE FILE!
+        try:
+            do_import_action(
+                request.user,
+                workflow,
+                form.cleaned_data['name'],
+                request.FILES['upload_file'])
+        except Exception as exc:
+            # Attach the exception to the request
+            messages.error(
+                request,
+                _('Unable to import action: {0}').format(exc),
+            )
 
-    # Process the reception of the file
-    if not form.is_multipart():
-        form.add_error(
-            None,
-            _('Incorrect form request (it is not multipart)'))
-        return render(request, 'action/import.html', context)
+        # Go back to the list of actions
+        return redirect('action:index')
 
-    # UPLOAD THE FILE!
-    try:
-        do_import_action(
-            request.user,
-            workflow,
-            form.cleaned_data['name'],
-            request.FILES['upload_file'])
-    except Exception as exc:
-        # Attach the exception to the request
-        messages.error(
-            request,
-            _('Unable to import action: {0}').format(exc),
-        )
-
-    # Go back to the list of actions
-    return redirect('action:index')
+    return render(request, 'action/import.html', {'form': form})
 
 
 def do_import_action(
@@ -197,7 +194,7 @@ def do_import_action(
         raise Exception(
             _('Unable to import action: {0}').format(action_data.errors),
         )
-    # Save the new workflow
+    # Save the new action
     action = action_data.save(user=user, name=name)
 
     # Success, log the event

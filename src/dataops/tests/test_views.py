@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+from __future__ import print_function, unicode_literals
 
 import os
+import test
 
 from django.conf import settings
 from django.utils.html import escape
@@ -10,9 +11,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
-import test
-from dataops import pandas_db
-from dataops.sql_query import is_column_in_table
+from dataops.pandas import check_wf_df, load_table
+from dataops.sql.column_queries import is_column_in_table
 from workflow.models import Workflow
 
 
@@ -235,7 +235,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']/div/div/div/div[2]/button[2]").click()
 
-        assert pandas_db.check_wf_df(Workflow.objects.get(name='sss'))
+        assert check_wf_df(Workflow.objects.get(name='sss'))
 
         # End of session
         self.logout()
@@ -369,7 +369,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.assertIn('<td class=" dt-center">16</td>',
                       self.selenium.page_source)
 
-        assert pandas_db.check_wf_df(Workflow.objects.get(name='sss'))
+        assert check_wf_df(Workflow.objects.get(name='sss'))
 
         # End of session
         self.logout()
@@ -418,7 +418,7 @@ class DataopsExcelUpload(test.OnTaskLiveTestCase):
         self.assertEqual(wflow.nrows, 29)
         self.assertEqual(wflow.ncols, 14)
 
-        assert pandas_db.check_wf_df(Workflow.objects.get(name='wflow1'))
+        assert check_wf_df(Workflow.objects.get(name='wflow1'))
 
         # End of session
         self.logout()
@@ -464,7 +464,7 @@ class DataopsExcelUploadSheet(test.OnTaskLiveTestCase):
         self.assertEqual(wflow.nrows, 19)
         self.assertEqual(wflow.ncols, 14)
 
-        assert pandas_db.check_wf_df(Workflow.objects.get(name='wflow1'))
+        assert check_wf_df(Workflow.objects.get(name='wflow1'))
 
         # End of session
         self.logout()
@@ -577,7 +577,7 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         # Click in the preview and circle around the 12 rows
         self.open_browse_preview(11)
 
-        assert pandas_db.check_wf_df(Workflow.objects.get(name='wflow1'))
+        assert check_wf_df(Workflow.objects.get(name='wflow1'))
 
         # End of session
         self.logout()
@@ -660,7 +660,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
                                            'RESULT 1'))
         self.assertTrue(is_column_in_table(wflow.get_data_frame_table_name(),
                                            'RESULT 2'))
-        df = pandas_db.load_table(wflow.get_data_frame_table_name())
+        df = load_table(wflow.get_data_frame_table_name())
         self.assertTrue(all([x == 1 for x in df['RESULT 1']]))
         self.assertTrue(all([x == 2 for x in df['RESULT 2']]))
 
@@ -728,11 +728,11 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
                                            'RESULT 1_2'))
         self.assertTrue(is_column_in_table(wflow.get_data_frame_table_name(),
                                            'RESULT 2_2'))
-        df = pandas_db.load_table(wflow.get_data_frame_table_name())
+        df = load_table(wflow.get_data_frame_table_name())
         self.assertTrue(all([x == 1 for x in df['RESULT 1_2']]))
         self.assertTrue(all([x == 2 for x in df['RESULT 2_2']]))
 
-        assert pandas_db.check_wf_df(Workflow.objects.get(name='Plugin test'))
+        assert check_wf_df(Workflow.objects.get(name='Plugin test'))
 
         # End of session
         self.logout()
@@ -795,13 +795,13 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name='Plugin test')
-        df = pandas_db.load_table(wflow.get_data_frame_table_name())
+        df = load_table(wflow.get_data_frame_table_name())
         self.assertTrue('RESULT 3' in set(df.columns))
         self.assertTrue('RESULT 4' in set(df.columns))
         self.assertTrue(df['RESULT 3'].equals(df['A1'] + df['A2']))
         self.assertTrue(df['RESULT 4'].equals(df['A1'] - df['A2']))
 
-        assert pandas_db.check_wf_df(Workflow.objects.get(name='Plugin test'))
+        assert check_wf_df(Workflow.objects.get(name='Plugin test'))
 
         # End of session
         self.logout()
@@ -903,7 +903,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_table(wflow.get_data_frame_table_name())
+        df = load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' in set(df.columns))
@@ -912,7 +912,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
         self.assertTrue('bool3' in set(df.columns))
         self.assertTrue('date3' in set(df.columns))
 
-        assert pandas_db.check_wf_df(Workflow.objects.get(name='Testing Merge'))
+        assert check_wf_df(Workflow.objects.get(name='Testing Merge'))
 
         # End of session
         self.logout()
@@ -922,7 +922,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_table(wflow.get_data_frame_table_name())
+        df = load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' not in set(df.columns))
@@ -931,7 +931,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
         self.assertTrue('bool3' in set(df.columns))
         self.assertTrue('date3' in set(df.columns))
 
-        assert pandas_db.check_wf_df(Workflow.objects.get(name='Testing Merge'))
+        assert check_wf_df(Workflow.objects.get(name='Testing Merge'))
 
         # End of session
         self.logout()
@@ -941,7 +941,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_table(wflow.get_data_frame_table_name())
+        df = load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' in set(df.columns))
@@ -950,7 +950,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
         self.assertTrue('bool3' in set(df.columns))
         self.assertTrue('date3' in set(df.columns))
 
-        assert pandas_db.check_wf_df(Workflow.objects.get(name='Testing Merge'))
+        assert check_wf_df(Workflow.objects.get(name='Testing Merge'))
 
         # End of session
         self.logout()
@@ -960,7 +960,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_table(wflow.get_data_frame_table_name())
+        df = load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('text3' in set(df.columns))
@@ -968,7 +968,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
         self.assertTrue('bool3' in set(df.columns))
         self.assertTrue('date3' in set(df.columns))
 
-        assert pandas_db.check_wf_df(Workflow.objects.get(name='Testing Merge'))
+        assert check_wf_df(Workflow.objects.get(name='Testing Merge'))
 
         # End of session
         self.logout()
@@ -984,7 +984,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = Workflow.objects.get(name=self.wf_name)
-        df = pandas_db.load_table(wflow.get_data_frame_table_name())
+        df = load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' not in set(df.columns))
@@ -993,7 +993,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
         self.assertTrue('bool3' not in set(df.columns))
         self.assertTrue('date3' not in set(df.columns))
 
-        assert pandas_db.check_wf_df(Workflow.objects.get(name='Testing Merge'))
+        assert check_wf_df(Workflow.objects.get(name='Testing Merge'))
 
         # End of session
         self.logout()

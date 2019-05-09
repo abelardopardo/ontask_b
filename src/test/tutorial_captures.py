@@ -12,7 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 import test
 from action.models import Action
-from dataops import pandas_db
+from dataops.pandas import destroy_db_engine, engine
 from test import ElementHasFullOpacity, ScreenTests
 
 
@@ -760,4 +760,4 @@ class TutorialCaptures(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine(engine)

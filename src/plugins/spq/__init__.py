@@ -6,7 +6,7 @@ import random
 import pandas as pd
 from builtins import str
 
-from dataops.plugin import OnTaskPluginAbstract
+from dataops.plugin.ontask_plugin import OnTaskPluginAbstract
 
 class_name = 'SPQEvaluate'
 

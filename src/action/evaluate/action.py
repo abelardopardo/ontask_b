@@ -19,13 +19,15 @@ from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
+import dataops.sql.row_queries
 import ontask
 from action.evaluate.template import render_action_template
 from action.forms import EnterActionIn
 from action.models import Action
-from dataops import ops, sql_query
-from dataops.formula_evaluation import NodeEvaluation, evaluate_formula
-from dataops.sql_query import get_rows
+from dataops.sql import table_queries
+from dataops.pandas import get_table_row_by_index
+from dataops.formula import evaluate_formula, EVAL_EXP
+from dataops.sql.row_queries import get_rows
 
 
 def action_condition_evaluation(
@@ -47,7 +49,7 @@ def action_condition_evaluation(
         try:
             condition_eval[condition['name']] = evaluate_formula(
                 condition['formula'],
-                NodeEvaluation.EVAL_EXP,
+                EVAL_EXP,
                 row_values,
             )
         except ontask.OnTaskException:
@@ -119,7 +121,7 @@ def get_action_evaluation_context(
             try:
                 condition_eval[condition['name']] = evaluate_formula(
                     condition['formula'],
-                    NodeEvaluation.EVAL_EXP,
+                    EVAL_EXP,
                     row_values,
                 )
             except ontask.OnTaskException:
@@ -213,14 +215,14 @@ def get_row_values(
 
     # If row_idx is an integer, get the data by index, otherwise, by key
     if isinstance(row_idx, int):
-        row = ops.get_table_row_by_index(
+        row = get_table_row_by_index(
             action.workflow,
             filter_formula,
             row_idx,
         )
     else:
 
-        row = sql_query.get_row(
+        row = dataops.sql.row_queries.get_row(
             action.workflow.get_data_frame_table_name(),
             row_idx[0],
             row_idx[1],

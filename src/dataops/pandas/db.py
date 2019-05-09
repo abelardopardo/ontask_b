@@ -3,7 +3,6 @@
 """Functions to manipulate Pandas DataFrames an related operations."""
 
 import logging
-from builtins import next
 from typing import Dict, List, Mapping, Optional
 
 import pandas as pd
@@ -15,30 +14,14 @@ from django.utils.translation import ugettext as _
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 
-from dataops.sql_query import get_rows, get_select_query_txt
+from dataops.sql import get_select_query_txt
+from dataops.pandas.columns import (
+    has_unique_column, is_unique_column
+)
+from dataops.pandas import pandas_datatype_names
 from ontask import OnTaskDataFrameNoKey
 
 logger = logging.getLogger('console')
-
-
-class TypeDict(dict):
-    """Class to detect multiple datetime types in Pandas."""
-
-    def get(self, key):
-        """Detect if given key is equal to any stored value."""
-        return next(
-            otype for dtype, otype in self.items() if key.startswith(dtype)
-        )
-
-
-# Translation between pandas data type names, and those handled in OnTask
-pandas_datatype_names = TypeDict({
-    'object': 'string',
-    'int64': 'integer',
-    'float64': 'double',
-    'bool': 'boolean',
-    'datetime64[ns': 'datetime',
-})
 
 # Translation between OnTask data types and SQLAlchemy
 ontask_to_sqlalchemy = {
@@ -51,6 +34,17 @@ ontask_to_sqlalchemy = {
 
 # SQLAlchemy DB Engine to use with Pandas (required by to_sql, from_sql
 engine: Optional[Engine] = None
+
+
+def set_engine():
+    engine = create_db_engine(
+        'postgresql',
+        '+psycopg2',
+        settings.DATABASES['default']['USER'],
+        settings.DATABASES['default']['PASSWORD'],
+        settings.DATABASES['default']['HOST'],
+        settings.DATABASES['default']['NAME'],
+    )
 
 
 def create_db_engine(
@@ -74,7 +68,9 @@ def create_db_engine(
     :param dbname: database name
     :return: the engine
     """
-    # DB engine
+    if engine:
+        return engine
+
     database_url = '{dial}{drv}://{usr}:{pwd}@{h}/{dbname}'.format(
         dial=dialect,
         drv=driver,
@@ -189,90 +185,6 @@ def store_table(
         )
 
 
-def get_subframe(table_name, filter_formula, column_names) -> pd.DataFrame:
-    """Load the subframe using the filter and column names.
-
-    Execute a select query to extract a subset of the dataframe and turn the
-     resulting query set into a data frame.
-
-    :param table_name: Table
-
-    :param filter_formula: Formula to filter the data (or None)
-
-    :param column_names: [list of column names], QuerySet with the data rows
-
-    :return: DataFrame
-    """
-    # Create the DataFrame and set the column names
-    return pd.DataFrame.from_records(
-        get_rows(
-            table_name,
-            column_names,
-            filter_formula,
-        ).fetchall(),
-        columns=column_names,
-        coerce_float=True)
-
-
-def get_column_statistics(df_column):
-    """Calculate a set of statistics or a DataFrame columm.
-
-    Given a data frame with a single column, return a set of statistics
-    depending on its type.
-
-    :param df_column: data frame with a single column
-
-    :return: A dictionary with keys depending on the type of column
-      {'min': minimum value (integer, double an datetime),
-       'q1': Q1 value (0.25) (integer, double),
-       'mean': mean value (integer, double),
-       'median': median value (integer, double),
-       'mean': mean value (integer, double),
-       'q3': Q3 value (0.75) (integer, double),
-       'max': maximum value (integer, double an datetime),
-       'std': standard deviation (integer, double),
-       'counts': (integer, double, string, datetime, Boolean',
-       'mode': (integer, double, string, datetime, Boolean,
-       or None if the column has all its values to NaN
-    """
-    if len(df_column.loc[df_column.notnull()]) == 0:
-        # The column has no data
-        return None
-
-    # Dictionary to return
-    to_return = {
-        'min': 0,
-        'q1': 0,
-        'mean': 0,
-        'median': 0,
-        'q3': 0,
-        'max': 0,
-        'std': 0,
-        'mode': None,
-        'counts': {},
-    }
-
-    data_type = pandas_datatype_names.get(df_column.dtype.name)
-
-    if data_type == 'integer' or data_type == 'double':
-        quantiles = df_column.quantile([0, .25, .5, .75, 1])
-        to_return['min'] = '{0:g}'.format(quantiles[0])
-        to_return['q1'] = '{0:g}'.format(quantiles[.25])
-        to_return['mean'] = '{0:g}'.format(df_column.mean())
-        to_return['median'] = '{0:g}'.format(quantiles[.5])
-        to_return['q3'] = '{0:g}'.format(quantiles[.75])
-        to_return['max'] = '{0:g}'.format(quantiles[1])
-        to_return['std'] = '{0:g}'.format(df_column.std())
-
-    to_return['counts'] = df_column.value_counts().to_dict()
-    mode = df_column.mode()
-    if len(mode) == 0:
-        mode = '--'
-    to_return['mode'] = mode[0]
-
-    return to_return
-
-
 def check_wf_df(workflow):
     """Check consistency between Workflow info and the data frame.
 
@@ -325,40 +237,6 @@ def check_wf_df(workflow):
         )
 
     return True
-
-
-def is_unique_column(df_column):
-    """Check if a column has unique non-empty values.
-
-    :param df_column: Column of a pandas data frame
-
-    :return: Boolean encoding if the column has unique values
-    """
-    return len(df_column.dropna().unique()) == len(df_column)
-
-
-def are_unique_columns(data_frame: pd.DataFrame) -> List[bool]:
-    """Check if columns have unique non-empty values.
-
-    :param data_frame: Pandas data frame
-
-    :return: Array of Booleans stating of a column has unique values
-    """
-    return [
-        is_unique_column(data_frame[col]) for col in list(data_frame.columns)
-    ]
-
-
-def has_unique_column(data_frame: pd.DataFrame) -> bool:
-    """Verify if the data frame has a unique column.
-
-    :param data_frame:
-
-    :return: Boolean with the result
-    """
-    return any(
-        is_unique_column(data_frame[col]) for col in data_frame.columns
-    )
 
 
 def verify_data_frame(data_frame: pd.DataFrame) -> None:

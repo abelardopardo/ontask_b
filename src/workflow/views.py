@@ -14,7 +14,6 @@ from django.db.models import Q
 from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.shortcuts import redirect, reverse, render
 from django.template.loader import render_to_string
-from django.utils.decorators import method_decorator
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
@@ -22,8 +21,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from core.datatables import DataTablesServerSidePaging
-from dataops import ops, pandas_db
-from dataops.sql_query import get_text_column_hash
+from dataops.pandas import check_wf_df, load_table, store_dataframe
+from dataops.sql.column_queries import get_text_column_hash
+from dataops.sql.row_queries import get_rows
 from logs.models import Log
 from ontask import is_correct_email, create_new_name
 from ontask.decorators import access_workflow, get_workflow
@@ -106,57 +106,53 @@ def save_workflow_form(
 
     :return:
     """
-    if request.method == 'GET' or not form.is_valid():
-        context = {'form': form}
-        return JsonResponse({
-            'html_form': render_to_string(
-                template_name,
-                context,
-                request=request),
-        })
+    if request.method == 'POST' and form.is_valid():
+        if not form.instance.id:
+            # This is a new instance!
+            form.instance.user = request.user
+            form.instance.nrows = 0
+            form.instance.ncols = 0
+            log_type = Log.WORKFLOW_CREATE
+            redirect_url = reverse('dataops:uploadmerge')
+        else:
+            log_type = Log.WORKFLOW_UPDATE
+            redirect_url = ''
 
-    # Correct form submitted
+        # Save the instance
+        try:
+            workflow_item = form.save()
+        except IntegrityError:
+            form.add_error(
+                'name',
+                _('A workflow with that name already exists'))
+            context = {'form': form}
+            return JsonResponse({
+                'html_form': render_to_string(
+                    template_name,
+                    {'form': form},
+                    request=request),
+            })
 
-    if not form.instance.id:
-        # This is a new instance!
-        form.instance.user = request.user
-        form.instance.nrows = 0
-        form.instance.ncols = 0
-        log_type = Log.WORKFLOW_CREATE
-        redirect_url = reverse('dataops:uploadmerge')
-    else:
-        log_type = Log.WORKFLOW_UPDATE
-        redirect_url = ''
+        # Log event
+        Log.objects.register(
+            request.user,
+            log_type,
+            workflow_item,
+            {
+                'id': workflow_item.id,
+                'name': workflow_item.name,
+            },
+        )
 
-    # Save the instance
-    try:
-        workflow_item = form.save()
-    except IntegrityError:
-        form.add_error(
-            'name',
-            _('A workflow with that name already exists'))
-        context = {'form': form}
-        return JsonResponse({
-            'html_form': render_to_string(
-                template_name,
-                context,
-                request=request),
-        })
+        # Here we can say that the form processing is done.
+        return JsonResponse({'html_redirect': redirect_url})
 
-    # Log event
-    Log.objects.register(
-        request.user,
-        log_type,
-        workflow_item,
-        {
-            'id': workflow_item.id,
-            'name': workflow_item.name,
-        },
-    )
-
-    # Here we can say that the form processing is done.
-    return JsonResponse({'html_redirect': redirect_url})
-
+    return JsonResponse({
+        'html_form': render_to_string(
+            template_name,
+            {'form': form},
+            request=request),
+    })
 
 @user_passes_test(is_instructor)
 def index(request):
@@ -312,7 +308,7 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
         # Safety check for consistency (only in development)
         if settings.DEBUG:
-            pandas_db.check_wf_df(self.object)
+            check_wf_df(self.object)
 
             # Columns are properly numbered
             cpos = self.object.columns.all().values_list('position', flat=True)
@@ -494,8 +490,8 @@ def clone(
     workflow = access_workflow(request, wid, prefetch_related='actions')
 
     # Clone the data frame
-    data_frame = pandas_db.load_table(workflow.get_data_frame_table_name())
-    ops.store_dataframe(data_frame, workflow_new)
+    data_frame = load_table(workflow.get_data_frame_table_name())
+    store_dataframe(data_frame, workflow_new)
 
     # Clone actions
     for action in workflow.actions.all():
@@ -645,7 +641,7 @@ def assign_luser_column(
     table_name = workflow.get_data_frame_table_name()
 
     # Get the column content
-    emails = pandas_db.get_rows(table_name, [column.name], None)
+    emails = get_rows(table_name, [column.name], None)
 
     # Verify that the column as a valid set of emails
     if not all([is_correct_email(email_val) for __, email_val in emails]):

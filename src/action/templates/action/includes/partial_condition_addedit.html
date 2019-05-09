@@ -1,20 +1,20 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 <form method="post"
-  {% if add %}
-    action="{% url 'action:create_condition' action_id %}" 
+  {% if condition.id is None %}
+    action="{% url 'action:create_condition' action_id %}"
     class="js-condition-create-form"
   {% else %}
-    action="{% url 'action:edit_condition' condition_id %}" 
+    action="{% url 'action:edit_condition' condition.id %}"
     class="js-condition-edit-form"
   {% endif %}>
   {% csrf_token %}
   <div class="modal-header">
     <h4 class="modal-title">
-     {% if add %}
+     {% if condition.id is None %}
        {% trans 'Create condition' %}
      {% else %}
-       {% trans 'Edit condition' %}
+       {% trans 'Update condition' %}
      {% endif %}</h4>
     <button type="button" class="close" data-dismiss="modal" arial-label="Close">
       <span aria-hidden="true">&times;</span>
@@ -28,7 +28,7 @@
   <div class="modal-footer">
     <button type="submit" class="btn btn-outline-primary">
       <span class="fa fa-check"></span>
-      {% if add %}
+      {% if condition.id is None %}
         {% trans 'Create condition' %}
       {% else %}
         {% trans 'Update condition' %}{% endif %}</button>

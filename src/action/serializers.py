@@ -9,8 +9,8 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 from action.models import Action, ActionColumnConditionTuple, Condition
-from dataops.formula_evaluation import get_variables
-from dataops.sql_query import add_column_to_db
+from dataops.formula import get_variables
+from dataops.sql.column_queries import add_column_to_db
 from workflow.column_serializers import ColumnNameSerializer, ColumnSerializer
 
 try:

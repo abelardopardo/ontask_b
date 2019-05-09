@@ -20,9 +20,9 @@ from action.payloads import (
     ZipPayload, action_session_dictionary, get_action_info,
 )
 from action.views.run_email import html_body
-from dataops.sql_query import get_rows
+from dataops.sql.row_queries import get_rows
 from logs.models import Log
-from ontask.decorators import get_workflow, get_action
+from ontask.decorators import get_action, get_workflow
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 
@@ -62,32 +62,26 @@ def zip_action(
         action_info=action_info,
     )
 
-    # Process the GET or invalid
-    if request.method == 'GET' or not form.is_valid():
-        # Get the number of rows from the action
-        num_msgs = action.get_rows_selected()
+    if request.method == 'POST' and form.is_valid():
+        if action_info['confirm_items']:
+            # Add information to the session object to execute the next pages
+            action_info['button_label'] = ugettext('Create ZIP')
+            action_info['valuerange'] = 2
+            action_info['step'] = 2
+            request.session[action_session_dictionary] = action_info.get_store()
 
-        # Render the form
-        return render(
-            request,
-            'action/action_zip_step1.html',
-            {'action': action,
-             'num_msgs': num_msgs,
-             'form': form})
+            return redirect('action:item_filter')
 
-    # Request is a POST and is valid
+        # Go straight to the final step.
+        return run_zip_done(request, action_info)
 
-    if action_info['confirm_items']:
-        # Add information to the session object to execute the next pages
-        action_info['button_label'] = ugettext('Create ZIP')
-        action_info['valuerange'] = 2
-        action_info['step'] = 2
-        request.session[action_session_dictionary] = action_info.get_store()
-
-        return redirect('action:item_filter')
-
-    # Go straight to the final step.
-    return run_zip_done(request, action_info)
+    # Render the form
+    return render(
+        request,
+        'action/action_zip_step1.html',
+        {'action': action,
+         'num_msgs': action.get_rows_selected(),
+         'form': form})
 
 
 @user_passes_test(is_instructor)

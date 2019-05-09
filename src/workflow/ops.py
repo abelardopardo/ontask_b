@@ -14,9 +14,10 @@ from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
-import dataops.sql_query
+from dataops.sql.row_queries import get_rows
+from dataops.sql.column_queries import df_drop_column
 from action.models import Condition
-from dataops import pandas_db, ops
+from dataops.pandas import load_table, store_dataframe, check_wf_df
 from logs.models import Log
 from workflow.serializers import (
     WorkflowExportSerializer,
@@ -77,7 +78,7 @@ def do_import_workflow_parse(user, name, file_item):
     workflow = workflow_data.save()
 
     try:
-        pandas_db.check_wf_df(workflow)
+        check_wf_df(workflow)
     except AssertionError:
         # Something went wrong.
         if workflow:
@@ -180,7 +181,7 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
     """
 
     # Drop the column from the DB table storing the data frame
-    dataops.sql_query.df_drop_column(workflow.get_data_frame_table_name(), column.name)
+    df_drop_column(workflow.get_data_frame_table_name(), column.name)
 
     # Reposition the columns above the one being deleted
     workflow.reposition_columns(column.position, workflow.ncols + 1)
@@ -234,7 +235,7 @@ def workflow_restrict_column(column):
     """
 
     # Load the data frame
-    data_frame = pandas_db.load_table(
+    data_frame = load_table(
         column.workflow.get_data_frame_table_name())
 
     cat_values = set(data_frame[column.name].dropna())
@@ -287,10 +288,10 @@ def clone_column(column, new_workflow=None, new_name=None):
     column.workflow.reposition_columns(column.position, old_position + 1)
 
     # Add the column to the table and update it.
-    data_frame = pandas_db.load_table(
+    data_frame = load_table(
         column.workflow.get_data_frame_table_name())
     data_frame[new_name] = data_frame[old_name]
-    ops.store_dataframe(data_frame, column.workflow)
+    store_dataframe(data_frame, column.workflow)
 
     return column
 
@@ -306,7 +307,7 @@ def do_workflow_update_lusers(workflow, log_item):
     """
 
     # Get the column content
-    emails = pandas_db.get_rows(
+    emails = get_rows(
         workflow.get_data_frame_table_name(),
         [workflow.luser_email_column.name], None)
 

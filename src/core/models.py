@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
+
+"""Model extending the information to store in the user."""
+
 from django.contrib.auth import get_user_model
 from django.db import models
 
 
 class OnTaskUser(models.Model):
-    """
-    This model is to extend the existing authtools.User with additional fields
-     relevant to OnTask
-    """
+    """Extend the existing authtools.User with additional fields."""
 
     # OneToOne relationship with the authentication model
     user = models.OneToOneField(
@@ -18,11 +18,11 @@ class OnTaskUser(models.Model):
     )
 
     def __str__(self):
-        return self.user.email
-
-    def __unicode__(self):
+        """Provide string representation (email)."""
         return self.user.email
 
     class Meta(object):
+        """Additional attributes for the model."""
+
         verbose_name = 'ontaskuser'
         verbose_name_plural = 'ontaskusers'

@@ -16,10 +16,10 @@ from action.payloads import (
     JSONPayload, action_session_dictionary, get_action_info,
 )
 from logs.models import Log
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from ontask.tasks import celery_is_up, send_json_objects
 from workflow.models import Workflow
-from ontask.decorators import access_workflow, get_workflow
 
 
 def run_json_action(
@@ -62,34 +62,30 @@ def run_json_action(
             col.name for col in workflow.columns.filter(is_key=True)],
         action_info=action_info)
 
-    # Process the GET or invalid
-    if request.method == 'GET' or not form.is_valid():
-        # Get the number of rows from the action
-        num_msgs = action.get_rows_selected()
+    if request.method == 'POST' and form.is_valid():
+        if action_info['confirm_items']:
+            # Add information to the session object to execute the next pages
+            action_info['button_label'] = ugettext('Send')
+            action_info['valuerange'] = 2
+            action_info['step'] = 2
+            request.session[
+                action_session_dictionary] = action_info.get_store()
 
-        # Render the form
-        return render(
-            request,
-            'action/request_json_data.html',
-            {'action': action,
-             'num_msgs': num_msgs,
-             'form': form,
-             'valuerange': range(2),
-             'rows_all_false': action.get_row_all_false_count()})
+            return redirect('action:item_filter')
 
-    # Request is a POST and is valid
+        # Go straight to the final step.
+        return run_json_done(request, action_info)
 
-    if action_info['confirm_items']:
-        # Add information to the session object to execute the next pages
-        action_info['button_label'] = ugettext('Send')
-        action_info['valuerange'] = 2
-        action_info['step'] = 2
-        request.session[action_session_dictionary] = action_info.get_store()
+    # Render the form
+    return render(
+        request,
+        'action/request_json_data.html',
+        {'action': action,
+         'num_msgs': action.get_rows_selected(),
+         'form': form,
+         'valuerange': range(2),
+         'rows_all_false': action.get_row_all_false_count()})
 
-        return redirect('action:item_filter')
-
-    # Go straight to the final step.
-    return run_json_done(request, action_info)
 
 
 @user_passes_test(is_instructor)

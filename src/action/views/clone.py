@@ -7,7 +7,6 @@ from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.db.models import Q
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
@@ -19,7 +18,7 @@ from django.views.decorators.http import require_http_methods
 from action.models import Action, ActionColumnConditionTuple, Condition
 from logs.models import Log
 from ontask import create_new_name
-from ontask.decorators import get_action, access_workflow, get_condition
+from ontask.decorators import get_action, get_condition
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 
@@ -122,7 +121,7 @@ def clone_action(
             'html_form': render_to_string(
                 'action/includes/partial_action_clone.html',
                 {'pk': pk, 'name': action.name},
-                request=request)
+                request=request),
         })
 
     # POST REQUEST!

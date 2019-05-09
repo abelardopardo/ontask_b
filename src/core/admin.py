@@ -5,6 +5,7 @@ from django.contrib import admin
 
 from .models import OnTaskUser
 
+
 class OnTaskUserAdmin(admin.ModelAdmin):
     pass
 

@@ -4,18 +4,16 @@
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test
-from django.db.models import Q
 from django.http import HttpRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
 from django.utils.html import escape
-from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
 from action.forms import ConditionForm, FilterForm
 from action.models import Action, Condition
-from dataops.formula_evaluation import (
-    NodeEvaluation, evaluate_formula, get_variables,
+from dataops.formula import (
+    evaluate_formula, get_variables, EVAL_TXT
 )
 from logs.models import Log
 from ontask.decorators import get_action, get_condition
@@ -25,19 +23,15 @@ from workflow.models import Workflow
 
 def save_condition_form(
     request: HttpRequest,
-    workflow: Workflow,
     form,
     template_name: str,
     action: Action,
-    condition: Optional[Condition],
-    is_filter: bool,
+    is_filter: Optional[bool] = False,
 ) -> JsonResponse:
     """
     Process the AJAX form to create and update conditions and filters.
 
     :param request: HTTP request
-
-    :param workflow: workflow object where the action/condition is inserted
 
     :param form: Form being used to ask for the fields
 
@@ -45,173 +39,106 @@ def save_condition_form(
 
     :param action: The action to which the condition is attached to
 
-    :param condition: Condition object being manipulated or None if creating
-
     :param is_filter: The condition is a filter
 
     :return: JSON response
     """
-    # Ajax response
-    resp_data = {}
+    if request.method == 'POST' and form.is_valid():
 
-    # The condition is new if no value is given
-    is_new = condition is None
+        if not form.has_changed():
+            return JsonResponse({'html_redirect': None})
 
-    if is_new:
-        condition_id = -1
-    else:
-        condition_id = condition.id
-
-    # Context for rendering
-    context = {
-        'form': form,
-        'action_id': action.id,
-        'condition_id': condition_id,
-        'add': is_new}
-
-    # If the method is GET or the form is not valid, re-render the page.
-    if request.method == 'GET' or not form.is_valid():
-        resp_data['html_form'] = render_to_string(
-            template_name,
-            context,
-            request=request)
-        return JsonResponse(resp_data)
-
-    # If the request has the 'action_content' field, update the action
-    action_content = request.POST.get('action_content', None)
-    if action_content:
-        action.set_text_content(action_content)
-
-    # Reset the counter of rows with all conditions false
-    action.rows_all_false = None
-    action.save()
-
-    if is_filter:
-        # Process the filter form
-        # If this is a create filter operation, but the action has one,
-        # flag the error
-        if is_new and action.get_filter():
+        if is_filter and form.instance.id is None and action.get_filter():
             # Should not happen. Go back to editing the action
-            resp_data['html_redirect'] = ''
-            return JsonResponse(resp_data)
-    else:
-        # Verify that the condition name does not exist yet (Uniqueness FIX)
-        qs = action.conditions.filter(
-            name=form.cleaned_data['name'],
-            is_filter=False)
-        if (is_new and qs.exists()) or \
-            (not is_new and qs.filter(~Q(id=condition_id)).exists()):
-            form.add_error(
-                'name',
-                _('A condition with that name already exists in this action'),
-            )
-            resp_data['html_form'] = render_to_string(
-                template_name,
-                context,
-                request=request)
-            return JsonResponse(resp_data)
-        # New condition name does not collide with column name
-        if form.cleaned_data['name'] in workflow.get_column_names():
-            form.add_error(
-                'name',
-                _('A column name with that name already exists.'),
-            )
-            context = {
-                'form': form,
-                'action_id': action.id,
-                'condition_id': condition_id,
-                'add': is_new}
-            resp_data['html_form'] = render_to_string(
-                template_name,
-                context,
-                request=request)
-            return JsonResponse(resp_data)
+            return JsonResponse({'html_redirect': ''})
 
-        # New condition name does not collide with attribute names
-        if form.cleaned_data['name'] in list(workflow.attributes.keys()):
-            form.add_error(
-                'name',
-                _('The workflow has an attribute with this name.'),
-            )
-            context = {
-                'form': form,
-                'action_id': action.id,
-                'condition_id': condition_id,
-                'add': is_new}
-            resp_data['html_form'] = render_to_string(
-                template_name,
-                context,
-                request=request)
-            return JsonResponse(resp_data)
+        is_new = form.instance.id is None
 
-        # If condition name has changed, rename appearances in the content
-        # field of the action.
-        if form.old_name and 'name' in form.changed_data:
-            # Performing string substitution in the content and saving
-            # TODO: Review!
-            replacing = '{{% if {0} %}}'
-            action.text_content = action.text_content.replace(
-                escape(replacing.format(form.old_name)),
-                escape(replacing.format(condition.name)))
-            action.save()
-
-    # Proceed to update the DB
-    if is_new:
-        # Get the condition from the form, but don't commit as there are
-        # changes pending.
+        # Update fields and save the condition
         condition = form.save(commit=False)
         condition.action = action
         condition.is_filter = is_filter
         condition.save()
-    else:
-        condition = form.save()
+        condition.columns.set(action.workflow.columns.filter(
+            name__in=get_variables(condition.formula),
+        ))
 
-    # Update the columns field
-    condition.columns.set(workflow.columns.filter(
-        name__in=get_variables(condition.formula),
-    ))
+        # If the request has the 'action_content' field, update the action
+        action_content = request.POST.get('action_content')
+        if action_content:
+            action.set_text_content(action_content)
 
-    # Update the condition
-    condition.save()
+        propagate_changes(condition, form.changed_data, form.old_name, is_new)
 
-    if condition.is_filter:
-        # This update must propagate to the rest of conditions
-        condition.action.update_n_rows_selected()
-        condition.refresh_from_db(fields='n_rows_selected')
-    else:
-        # Update the number of rows selected in the condition
-        condition.update_n_rows_selected()
-
-    # Log the event
-    if is_new:
-        if is_filter:
-            log_type = Log.FILTER_CREATE
+        # Store the type of event to log
+        if is_new:
+            if is_filter:
+                log_type = Log.FILTER_CREATE
+            else:
+                log_type = Log.CONDITION_CREATE
         else:
-            log_type = Log.CONDITION_CREATE
-    else:
-        if is_filter:
-            log_type = Log.FILTER_UPDATE
-        else:
-            log_type = Log.CONDITION_UPDATE
+            if is_filter:
+                log_type = Log.FILTER_UPDATE
+            else:
+                log_type = Log.CONDITION_UPDATE
 
-    # Log the event
-    Log.objects.register(
-        request.user,
-        log_type,
-        workflow,
-        {
-            'id': condition.id,
-            'name': condition.name,
-            'selected_rows': condition.n_rows_selected,
-            'formula': evaluate_formula(
-                condition.formula, NodeEvaluation.EVAL_TXT),
-        })
+        # Log the event
+        Log.objects.register(
+            request.user,
+            log_type,
+            action.workflow,
+            {
+                'id': condition.id,
+                'name': condition.name,
+                'selected_rows': condition.n_rows_selected,
+                'formula': evaluate_formula(condition.formula, EVAL_TXT),
+            })
 
-    resp_data['html_redirect'] = ''
-    return JsonResponse(resp_data)
+        return JsonResponse({'html_redirect': ''})
+
+    # GET request or invalid form
+    return JsonResponse({
+        'html_form': render_to_string(
+            template_name,
+            {
+                'form': form,
+                'action_id': action.id,
+                'condition': form.instance},
+            request=request),
+    })
 
 
-class FilterCreateView(UserIsInstructor, generic.TemplateView):
+class ConditionFilterCreateView(UserIsInstructor, generic.TemplateView):
+    """Class to create a filter."""
+
+    form_class = None
+
+    template_name = None
+
+    @method_decorator(user_passes_test(is_instructor))
+    @method_decorator(get_action(pf_related=['actions', 'columns']))
+    def get(self, request: HttpRequest, *args, **kwargs) -> JsonResponse:
+        """Process GET request to create a filter."""
+        return save_condition_form(
+            request,
+            self.form_class(action=kwargs['action']),
+            self.template_name,
+            kwargs.get('action'),
+            is_filter=isinstance(self, FilterCreateView))
+
+    @method_decorator(user_passes_test(is_instructor))
+    @method_decorator(get_action(pf_related=['actions', 'columns']))
+    def post(self, request: HttpRequest, *args, **kwargs) -> JsonResponse:
+        """Process POST request to  create a filter."""
+        return save_condition_form(
+            request,
+            self.form_class(request.POST, action=kwargs['action']),
+            self.template_name,
+            kwargs['action'],
+            is_filter=isinstance(self, FilterCreateView))
+
+
+class FilterCreateView(ConditionFilterCreateView):
     """Process AJAX request to create a filter through AJAX calls.
 
     It receives the action IDwhere the condition needs to be connected.
@@ -220,38 +147,6 @@ class FilterCreateView(UserIsInstructor, generic.TemplateView):
     form_class = FilterForm
 
     template_name = 'action/includes/partial_filter_addedit.html'
-
-    def get_context_data(self, **kwargs):
-        """Add a flag to the context."""
-        context = super().get_context_data(**kwargs)
-        context['add'] = True
-        return context
-
-    @method_decorator(get_action(pf_related=['actions', 'columns']))
-    def get(self, request, *args, **kwargs):
-        """Process GET request to create a filter."""
-        form = self.form_class()
-        return save_condition_form(
-            request,
-            kwargs.get('workflow'),
-            form,
-            self.template_name,
-            kwargs.get('action'),
-            None,  # no current condition object
-            True)  # Is Filter
-
-    @method_decorator(get_action(pf_related=['actions', 'columns']))
-    def post(self, request, *args, **kwargs):
-        """Process POST request to  create a filter."""
-        form = self.form_class(request.POST)
-        return save_condition_form(
-            request,
-            kwargs['workflow'],
-            form,
-            self.template_name,
-            kwargs['action'],
-            None,  # No current condition object
-            True)  # Is Filter
 
 
 @user_passes_test(is_instructor)
@@ -273,12 +168,13 @@ def edit_filter(
     # Render the form with the Condition information
     return save_condition_form(
         request,
-        workflow,
-        FilterForm(request.POST or None, instance=condition),
+        FilterForm(
+            request.POST or None,
+            instance=condition,
+            action=condition.action),
         'action/includes/partial_filter_addedit.html',
         condition.action,
-        condition,  # Condition object
-        True)  # It is a filter
+        is_filter=True)
 
 
 @user_passes_test(is_instructor)
@@ -312,8 +208,7 @@ def delete_filter(
         condition.action.save()
 
     # Log the event
-    formula, fields = evaluate_formula(
-        condition.formula, NodeEvaluation.EVAL_SQL)
+    formula = evaluate_formula(condition.formula, EVAL_TXT)
 
     Log.objects.register(
         request.user,
@@ -324,7 +219,6 @@ def delete_filter(
             'name': condition.name,
             'selected_rows': condition.n_rows_selected,
             'formula': formula,
-            'formula_fields': fields,
         },
     )
 
@@ -341,37 +235,12 @@ def delete_filter(
     return JsonResponse({'html_redirect': ''})
 
 
-class ConditionCreateView(UserIsInstructor, generic.TemplateView):
+class ConditionCreateView(ConditionFilterCreateView):
     """Handle AJAX requests to create a non-filter condition."""
 
     form_class = ConditionForm
 
     template_name = 'action/includes/partial_condition_addedit.html'
-
-    @method_decorator(get_action(pf_related=['actions', 'columns']))
-    def get(self, request, *args, **kwargs):
-        """Process the GET request when creating a condition."""
-        return save_condition_form(
-            request,
-            kwargs['workflow'],
-            self.form_class(),
-            self.template_name,
-            kwargs['action'],
-            None,
-            False)  # Is it a filter?
-
-    @method_decorator(get_action(pf_related=['actions', 'columns']))
-    def post(self, request, *args, **kwargs):
-        """Process the POST request when creating a condition."""
-        # Get the workflow
-        return save_condition_form(
-            request,
-            kwargs['workflow'],
-            self.form_class(request.POST),
-            self.template_name,
-            kwargs['action'],
-            None,
-            False)
 
 
 @user_passes_test(is_instructor)
@@ -393,12 +262,12 @@ def edit_condition(
     # Render the form with the Condition information
     return save_condition_form(
         request,
-        workflow,
-        ConditionForm(request.POST or None, instance=condition),
+        ConditionForm(
+            request.POST or None,
+            instance=condition,
+            action=condition.action),
         'action/includes/partial_condition_addedit.html',
-        condition.action,
-        condition,
-        False)
+        condition.action)
 
 
 @user_passes_test(is_instructor)
@@ -425,9 +294,7 @@ def delete_condition(
             condition.action.set_text_content(action_content)
             condition.action.save()
 
-        formula, fields = evaluate_formula(
-            condition.formula,
-            NodeEvaluation.EVAL_SQL)
+        formula = evaluate_formula(condition.formula, EVAL_TXT)
 
         Log.objects.register(
             request.user,
@@ -435,8 +302,7 @@ def delete_condition(
             condition.action.workflow,
             {'id': condition.id,
              'name': condition.name,
-             'formula': formula,
-             'formula_fields': fields})
+             'formula': formula})
 
         # Perform the delete operation
         condition.delete()
@@ -452,3 +318,46 @@ def delete_condition(
             {'condition_id': condition.id},
             request=request),
     })
+
+
+def propagate_changes(condition, changed_data, old_name, is_new):
+    """Propagate changes in the condition to the rest of the action.
+
+    If the formula has been modified, the action rows_all_false is flushed and
+    the relevant conditions are updated.
+
+    If the name has changed, the text_content in the action is updated.
+
+    :param condition: Object being manipulated
+
+    :param changed_data: Non-empty list of fields that have changed
+
+    :param old_name: Previous name of the condition
+
+    :param is_new: if the condition has just been created
+
+    :return: Nothing
+    """
+    if is_new or 'formula' in changed_data:
+        # Reset the counter of rows with all conditions false
+        condition.action.rows_all_false = None
+        condition.action.save()
+
+        if condition.is_filter:
+            # This update must propagate to the rest of conditions
+            condition.action.update_n_rows_selected()
+            condition.refresh_from_db(fields=['n_rows_selected'])
+        else:
+            # Update the number of rows selected in the condition
+            condition.update_n_rows_selected()
+
+    # If condition name has changed, rename appearances in the content
+    # field of the action.
+    if is_new or 'name' in changed_data:
+        # Performing string substitution in the content and saving
+        # TODO: Review!
+        replacing = '{{% if {0} %}}'
+        condition.action.text_content = condition.action.text_content.replace(
+            escape(replacing.format(old_name)),
+            escape(replacing.format(condition.name)))
+        condition.action.save()

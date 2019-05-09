@@ -31,7 +31,8 @@ from django.utils.translation import ugettext_lazy as _
 from action.forms import SUFFIX_LENGTH
 from action.models import Action
 from action.payloads import EmailPayload
-from dataops.sql_query import get_rows, is_column_table_unique
+from dataops.sql.row_queries import get_rows
+from dataops.sql.column_queries import is_column_table_unique
 from ontask import is_correct_email
 from ontask.forms import dateTimeWidgetOptions
 

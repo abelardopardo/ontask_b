@@ -15,9 +15,10 @@ from django.db import models
 from django.utils import functional, html
 from django.utils.translation import ugettext_lazy as _
 
+import dataops.sql.row_queries
 import ontask
-from dataops import sql_query
-from dataops.formula_evaluation import NodeEvaluation, evaluate_formula
+from dataops.sql import table_queries
+from dataops.formula import evaluate_formula, EVAL_TXT
 from logs.models import Log
 from workflow.models import Column, Workflow
 
@@ -356,7 +357,7 @@ class Action(models.Model):
             # Workflow has a data frame and condition list is non empty
 
             # Get the list of indeces
-            self.rows_all_false = sql_query.select_ids_all_false(
+            self.rows_all_false = dataops.sql.row_queries.select_ids_all_false(
                 self.workflow.get_data_frame_table_name(),
                 filter_item.formula if filter_item else None,
                 cond_list.values_list('formula', flat=True),
@@ -461,7 +462,7 @@ class Condition(models.Model):
                 'valid': True,
             }
 
-        new_count = sql_query.get_num_rows(
+        new_count = dataops.sql.row_queries.get_num_rows(
             self.action.workflow.get_data_frame_table_name(),
             formula,
         )
@@ -481,7 +482,7 @@ class Condition(models.Model):
         Return the content of the formula in a string that is human readable
         :return: String
         """
-        return evaluate_formula(self.formula, NodeEvaluation.EVAL_TXT)
+        return evaluate_formula(self.formula, EVAL_TXT)
 
     def __str__(self):
         """Render string."""

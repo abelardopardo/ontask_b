@@ -4,16 +4,13 @@ from __future__ import unicode_literals, print_function
 import os
 
 from django.conf import settings
-from django.shortcuts import reverse
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
 import test
-from dataops import pandas_db
+from dataops.pandas import db
 from workflow.models import Workflow
-from action.models import Action
 
 
 class WorkflowInitial(test.OnTaskLiveTestCase):
@@ -176,7 +173,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        db.destroy_db_engine(db.engine)
 
     def test_02_workflow_create_upload_with_prelude(self):
         """
@@ -301,7 +298,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         for cname, ctype, clist, cinit in new_cols:
             # ADD A NEW COLUMN
             self.add_column(cname, ctype, clist, cinit, idx)
-            pandas_db.check_wf_df(Workflow.objects.get(pk=1))
+            db.check_wf_df(Workflow.objects.get(pk=1))
             idx += 1
 
         # CHECK THAT THE COLUMNS HAVE BEEN CREATED (starting in the sixth)

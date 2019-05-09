@@ -9,7 +9,7 @@ import pandas as pd
 from smart_open import smart_open
 
 from dataops.models import SQLConnection
-from dataops.pandas_db import create_db_engine
+from dataops.pandas import create_db_engine
 
 
 def load_df_from_csvfile(

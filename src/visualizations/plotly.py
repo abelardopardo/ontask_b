@@ -3,10 +3,10 @@
 Implementation of visualizations using the Plotly JS library
 """
 
-import json
 from builtins import str
+import json
 
-from dataops import pandas_db
+from dataops.pandas import pandas_datatype_names
 from . import VisHandler
 
 
@@ -131,10 +131,11 @@ class PlotlyColumnHistogram(PlotlyHandler):
 
         self.format_dict['id'] = 'histogram-id'
 
-        self.layout.update({'autobinx': True,
-                            'autobiny': True,
-                            'bargap': 0.01,
-                            'yaxis': {'title': 'Count'}})
+        self.layout.update(
+            {'autobinx': True,
+             'autobiny': True,
+             'bargap': 0.01,
+             'yaxis': {'title': 'Count'}})
 
         # Transfer the keys to the formatting dictionary
         for key, value in list(kwargs.pop('context', {}).items()):
@@ -143,13 +144,13 @@ class PlotlyColumnHistogram(PlotlyHandler):
         data = []
         for column in self.data.columns:
             column_dtype = \
-                pandas_db.pandas_datatype_names.get(
+                pandas_datatype_names.get(
                     self.data[column].dtype.name)
         data_list = self.data[column].dropna().tolist()
         # Special case for bool and datetime. Turn into strings to be
         # treated as such
         if column_dtype == 'boolean' or column_dtype == 'datetime' or \
-                column_dtype == 'string':
+            column_dtype == 'string':
             data_list = [str(x) for x in data_list]
 
         data.append(

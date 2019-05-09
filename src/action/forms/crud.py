@@ -14,9 +14,8 @@ FilterForm: Form to process filter elements
 ConditionForm: Form to process condition elements
 """
 
-import contextlib
-import json
 from builtins import object, str
+import json
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -37,9 +36,24 @@ class ActionUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         """Store user and wokflow."""
-        self.user = kwargs.pop(str('workflow_user'), None)
-        self.workflow = kwargs.pop(str('action_workflow'), None)
+        self.workflow = kwargs.pop('workflow')
         super().__init__(*args, **kwargs)
+
+    def clean(self):
+        """Verify that the name is not taken."""
+        form_data = super().clean()
+
+        # Check if the name already exists
+        name_exists = self.workflow.actions.filter(
+            name=self.data['name'],
+        ).exclude(id=self.instance.id).exists()
+        if name_exists:
+            self.add_error(
+                'name',
+                _('There is already an action with this name.'),
+            )
+
+        return form_data
 
     class Meta(object):
         """Select Action and the two fields."""
@@ -57,7 +71,7 @@ class ActionForm(ActionUpdateForm):
 
         at_field = self.fields['action_type']
         at_field.widget.choices = AVAILABLE_ACTION_TYPES
-        # Remove those actions that are not available
+
         if len(AVAILABLE_ACTION_TYPES) == 1:
             # There is only one type of action. No need to generate the field.
             # Set to value and hide
@@ -68,6 +82,7 @@ class ActionForm(ActionUpdateForm):
         """Select action and the three fields."""
 
         model = Action
+
         fields = ('name', 'description_text', 'action_type')
 
 
@@ -82,14 +97,16 @@ class ActionDescriptionForm(forms.ModelForm):
 
 
 class FilterForm(forms.ModelForm):
-    """Form to read information about a filter.
+    """Form to read/write information about a filter."""
 
-    The required property of the formula field is set to False because it is
-    enforced in the server.
-    """
+    action = None
+
+    old_name = None
 
     def __init__(self, *args, **kwargs):
         """Adjust formula field parameters to use QueryBuilder."""
+        self.action = kwargs.pop('action')
+
         super().__init__(*args, **kwargs)
 
         # Required enforced in the server (not in the browser)
@@ -105,7 +122,7 @@ class FilterForm(forms.ModelForm):
         fields = ('description_text', 'formula')
 
 
-class ConditionForm(forms.ModelForm):
+class ConditionForm(FilterForm):
     """Form to read information about a condition.
 
     The same as the filter but we need to enforce that the name is a valid
@@ -113,25 +130,19 @@ class ConditionForm(forms.ModelForm):
     """
 
     def __init__(self, *args, **kwargs):
-        """Adjust formula field to use the QueryBuilder."""
+        """Remember the old name."""
         super().__init__(*args, **kwargs)
 
-        # Required enforced in the server (not in the browser)
-        self.fields['formula'].required = False
-
-        # Filter should be hidden.
-        self.fields['formula'].widget = forms.HiddenInput()
-
         # Remember the condition name to perform content substitution
-        self.old_name = None
-        with contextlib.suppress(AttributeError):
+        if self.instance.name:
             self.old_name = self.instance.name
 
     def clean(self):
         """Check that data is not empty."""
         form_data = super().clean()
 
-        if not form_data.get('name'):
+        name = form_data.get('name')
+        if not name:
             self.add_error('name', _('Name cannot be empty'))
             return form_data
 
@@ -139,12 +150,35 @@ class ConditionForm(forms.ModelForm):
         if msg:
             self.add_error('name', msg)
 
+        # Check if the name already exists
+        name_exists = self.action.conditions.filter(
+            name=name,
+        ).exclude(id=self.instance.id).exists()
+        if name_exists:
+            self.add_error(
+                'name',
+                _('There is already a condition with this name.'),
+            )
+
+        # Check that the name does not collide with other attribute or column
+        if name in self.action.workflow.get_column_names():
+            self.add_error(
+                'name',
+                _('The workflow has a column with this name.'),
+            )
+
+        # New condition name does not collide with attribute names
+        if name in list(self.action.workflow.attributes.keys()):
+            self.add_error(
+                'name',
+                _('The workflow has an attribute with this name.'),
+            )
+
         return form_data
 
-    class Meta(object):
-        """Define condition model and select fields."""
+    class Meta(FilterForm.Meta):
+        """Select name as extra field."""
 
-        model = Condition
         fields = ('name', 'description_text', 'formula')
 
 
@@ -178,10 +212,7 @@ class ActionImportForm(forms.Form):
         """Verify that the name of the action is not present already."""
         form_data = super().clean()
 
-        name_exists = self.workflow.actions.filter(
-            workflow__user=self.user, name=form_data['name'],
-        ).exists()
-        if name_exists:
+        if self.workflow.actions.filter(name=form_data['name']).exists():
             # There is an action with this name. Return error.
             self.add_error(
                 'name',

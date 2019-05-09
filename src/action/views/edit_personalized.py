@@ -93,7 +93,9 @@ def edit_action_out(
 
     form_filter = FilterForm(
         request.POST or None,
-        instance=action.get_filter())
+        instance=action.get_filter(),
+        action=action
+    )
 
     # Processing the request after receiving the text from the editor
     if request.method == 'POST' and form.is_valid() and form_filter.is_valid():

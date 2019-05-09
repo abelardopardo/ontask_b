@@ -15,7 +15,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 import test
-from dataops import pandas_db
+from dataops.pandas import destroy_db_engine, engine
 from workflow.models import Workflow
 from workflow.ops import (
     do_export_workflow,
@@ -161,7 +161,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine(engine)
 
 
 class WorkflowImportExportCycle(test.OnTaskTestCase):

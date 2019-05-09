@@ -22,7 +22,7 @@ from action import settings
 from action.evaluate.action import evaluate_action
 from action.models import Action
 from action.payloads import EmailPayload
-from dataops.sql_query import add_column_to_db
+from dataops.sql.column_queries import add_column_to_db
 from logs.models import Log
 from ontask import is_correct_email
 from workflow.models import Column

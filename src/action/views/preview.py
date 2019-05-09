@@ -168,8 +168,11 @@ def preview_response(
             ],
         )
 
-    if action.action_type == Action.personalized_canvas_email \
-       or action.action_type == Action.personalized_json:
+    uses_plain_text = (
+        action.action_type == Action.personalized_canvas_email
+        or action.action_type == Action.personalized_json
+    )
+    if uses_plain_text:
         action_content = escape(action_content)
 
     # See if there is prelude content in the request

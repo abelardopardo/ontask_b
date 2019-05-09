@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+from __future__ import print_function, unicode_literals
 
 from django.test import TestCase
 
-from dataops import formula_evaluation
-from dataops.formula_evaluation import NodeEvaluation
+from dataops.formula import evaluation
+from dataops.formula import EVAL_EXP
 
 
 class HasVariableTest(TestCase):
@@ -51,22 +51,22 @@ class HasVariableTest(TestCase):
 
         self.assertTrue(self.compare(self.formula1, self.formula2))
 
-        f3 = formula_evaluation.rename_variable(self.formula1,
+        f3 = evaluation.rename_variable(self.formula1,
                                                 'Course_Code_a',
                                                 'Course_Code_b')
 
         self.assertTrue(self.compare(self.formula3, f3))
 
-        f3 = formula_evaluation.rename_variable(self.formula1,
+        f3 = evaluation.rename_variable(self.formula1,
                                                 'Course_Code_b',
                                                 'Course_Code_a')
 
     def test_evaluate_formula(self):
 
         self.assertTrue(
-            formula_evaluation.evaluate_formula(
+            evaluation.evaluate_formula(
                 self.formula1,
-                NodeEvaluation.EVAL_EXP,
+                EVAL_EXP,
                 {'Course_Code_a': 'df', 'ANOTHER': 'v2'}
             )
         )

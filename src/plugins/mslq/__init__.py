@@ -6,7 +6,7 @@ import random
 import pandas as pd
 from builtins import str
 
-from dataops.plugin import OnTaskPluginAbstract
+from dataops.plugin.ontask_plugin import OnTaskPluginAbstract
 
 # The field class_name contains the name of the class to load to execute the
 # plugin.

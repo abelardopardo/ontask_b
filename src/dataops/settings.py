@@ -8,10 +8,11 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-PLUGIN_DIRECTORY = getattr(settings,
-                           'DATAOPS_PLUGIN_DIRECTORY',
-                           os.path.join(settings.BASE_DIR,
-                                        'plugins'))
+PLUGIN_DIRECTORY = getattr(
+    settings,
+    'DATAOPS_PLUGIN_DIRECTORY',
+    os.path.join(settings.BASE_DIR,
+                 'plugins'))
 
 # Get the plugin path in the sys.path
 plugin_folder = PLUGIN_DIRECTORY
@@ -27,8 +28,9 @@ if 'siteprefs' in settings.INSTALLED_APPS:
     patch_locals()  # That's bootstrap.
 
     register_prefs(
-        pref(PLUGIN_DIRECTORY,
-             verbose_name=_('Folder where plugins are stored'),
-             static=False,
-             field=models.CharField(max_length=2048, blank=True)),
+        pref(
+            PLUGIN_DIRECTORY,
+            verbose_name=_('Folder where plugins are stored'),
+            static=False,
+            field=models.CharField(max_length=2048, blank=True)),
     )

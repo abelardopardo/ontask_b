@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from typing import Optional
 
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import status
@@ -9,16 +9,16 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-import dataops.pandas_db
-from dataops import pandas_db, ops
+from dataops.pandas import (
+    load_table, store_dataframe, verify_data_frame, is_unique_column,
+    perform_dataframe_upload_merge
+)
 from ontask import OnTaskDataFrameNoKey
-from ontask.decorators import access_workflow, get_workflow
+from ontask.decorators import get_workflow
 from ontask.permissions import UserIsInstructor
 from table.serializers import (
-    DataFramePandasMergeSerializer,
-    DataFramePandasSerializer,
-    DataFrameJSONSerializer,
-    DataFrameJSONMergeSerializer,
+    DataFrameJSONMergeSerializer, DataFrameJSONSerializer,
+    DataFramePandasMergeSerializer, DataFramePandasSerializer,
 )
 from workflow.models import Workflow
 
@@ -65,13 +65,13 @@ class TableBasicOps(APIView):
 
         try:
             # Verify the data frame
-            pandas_db.verify_data_frame(df)
+            verify_data_frame(df)
         except OnTaskDataFrameNoKey as e:
             return Response(str(e),
                             status=status.HTTP_400_BAD_REQUEST)
 
         # Store the content in the db and...
-        ops.store_dataframe(df, workflow)
+        store_dataframe(df, workflow)
 
         # Update all the counters in the conditions
         for action in workflow.actions.all():
@@ -90,7 +90,7 @@ class TableBasicOps(APIView):
     ) -> HttpResponse:
         serializer = self.serializer_class(
             {'data_frame':
-                 pandas_db.load_table(workflow.get_data_frame_table_name())
+                 load_table(workflow.get_data_frame_table_name())
              }
         )
         return Response(serializer.data)
@@ -104,7 +104,7 @@ class TableBasicOps(APIView):
         format=None,
         workflow: Optional[Workflow] = None
     ) -> HttpResponse:
-        if pandas_db.load_table(workflow.get_data_frame_table_name()) is not None:
+        if load_table(workflow.get_data_frame_table_name()) is not None:
             raise APIException(_('Post request requires workflow without '
                                  'a table'))
         return self.override(request, pk, format)
@@ -228,7 +228,7 @@ class TableBasicMerge(APIView):
         # Try to retrieve the wflow to check for permissions
         serializer = self.serializer_class(
             {'src_df':
-                 pandas_db.load_table(workflow.get_data_frame_table_name()),
+                 load_table(workflow.get_data_frame_table_name()),
              'how': '',
              'left_on': '',
              'right_on': ''}
@@ -245,7 +245,7 @@ class TableBasicMerge(APIView):
         workflow: Optional[Workflow] = None
     ) -> HttpResponse:
         # Get the dst_df
-        dst_df = pandas_db.load_table(workflow.get_data_frame_table_name())
+        dst_df = load_table(workflow.get_data_frame_table_name())
 
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
@@ -259,7 +259,7 @@ class TableBasicMerge(APIView):
                                  'or inner'))
 
         left_on = serializer.validated_data['left_on']
-        if not dataops.pandas_db.is_unique_column(dst_df[left_on]):
+        if not is_unique_column(dst_df[left_on]):
             raise APIException(_('column {0} does not contain a unique '
                                  'key.').format(left_on))
 
@@ -272,7 +272,7 @@ class TableBasicMerge(APIView):
                 right_on)
             )
 
-        if not dataops.pandas_db.is_unique_column(src_df[right_on]):
+        if not is_unique_column(src_df[right_on]):
             raise APIException(
                 _('column {0} does not contain a unique key.').format(right_on)
             )
@@ -288,10 +288,11 @@ class TableBasicMerge(APIView):
 
         # Ready to perform the MERGE
         try:
-            merge_result = ops.perform_dataframe_upload_merge(workflow,
-                                                              dst_df,
-                                                              src_df,
-                                                              merge_info)
+            merge_result = perform_dataframe_upload_merge(
+                workflow,
+                dst_df,
+                src_df,
+                merge_info)
         except Exception:
             raise APIException(_('Unable to perform merge operation'))
 

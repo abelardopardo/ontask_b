@@ -10,7 +10,7 @@ from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-from dataops.sql_query import get_rows
+from dataops.sql.row_queries import get_rows
 from ontask.forms import dateTimeWidgetOptions
 from ontask import is_correct_email
 from workflow.models import Column

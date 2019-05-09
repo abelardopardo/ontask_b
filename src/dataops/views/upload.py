@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+"""Views for steps 2 - 4 of the upload process."""
 
 from builtins import range, zip
 from typing import Optional
@@ -11,14 +12,14 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
-from dataops import ops, pandas_db, sql_query
+from dataops.forms import SelectColumnUploadForm, SelectKeysForm
+from dataops.pandas import load_table, perform_dataframe_upload_merge
+from dataops.sql import table_queries
 from logs.models import Log
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 from workflow.ops import store_workflow_in_session
-from ontask.decorators import access_workflow, get_workflow
-
-from .forms import SelectColumnUploadForm, SelectKeysForm
 
 
 @user_passes_test(is_instructor)
@@ -115,94 +116,94 @@ def upload_s2(
                                     column_types,
                                     src_key_fields)]
 
-    # Process the initial loading of the form and return
-    if request.method == 'GET' or not form.is_valid():
+    if request.method == 'POST' and form.is_valid():
+
+        # We need to modify upload_data with the information received in the post
+        for i in range(len(initial_columns)):
+            new_name = form.cleaned_data['new_name_%s' % i]
+            upload_data['rename_column_names'][i] = new_name
+            upload = form.cleaned_data['upload_%s' % i]
+            upload_data['columns_to_upload'][i] = upload
+
+            if src_is_key_column[i]:
+                # If the column is key, check if the user wants to keep it
+                keep_key_column[i] = form.cleaned_data['make_key_%s' % i]
+
         # Update the dictionary with the session information
         request.session['upload_data'] = upload_data
-        context = {'form': form,
-                   'wid': workflow.id,
-                   'prev_step': upload_data['step_1'],
-                   'valuerange': range(5) if workflow.has_table() else range(3),
-                   'df_info': df_info}
 
-        if not workflow.has_table():
-            # It is an upload, not a merge, set the next step to finish
-            context['next_name'] = _('Finish')
-        return render(request, 'dataops/upload_s2.html', context)
+        # Load the existing DF or None if it doesn't exist
+        existing_df = load_table(workflow.get_data_frame_table_name())
 
-    # At this point we are processing a valid POST request
+        if existing_df is not None:
+            # This is a merge operation, so move to Step 3
+            return redirect('dataops:upload_s3')
 
-    # We need to modify upload_data with the information received in the post
-    for i in range(len(initial_columns)):
-        new_name = form.cleaned_data['new_name_%s' % i]
-        upload_data['rename_column_names'][i] = new_name
-        upload = form.cleaned_data['upload_%s' % i]
-        upload_data['columns_to_upload'][i] = upload
+        # This is an upload operation (not a merge) save the uploaded dataframe in
+        # the DB and finish.
 
-        if src_is_key_column[i]:
-            # If the column is key, check if the user wants to keep it
-            keep_key_column[i] = form.cleaned_data['make_key_%s' % i]
+        # Get the uploaded data_frame
+        try:
+            data_frame = load_table(
+                workflow.get_data_frame_upload_table_name()
+            )
+        except Exception:
+            return render(
+                request,
+                'error.html',
+                {'message': _('Exception while retrieving the data frame')})
+
+        # Update the data frame
+        status = perform_dataframe_upload_merge(
+            workflow,
+            existing_df,
+            data_frame,
+            upload_data)
+
+        if status:
+            # Something went wrong. Flag it and reload
+            context = {'form': form,
+                       'wid': workflow.id,
+                       'prev_step': upload_data['step_1'],
+                       'valuerange': range(
+                           5) if workflow.has_table() else range(3),
+                       'df_info': df_info}
+            return render(request, 'dataops/upload_s2.html', context)
+
+        # Update the session information
+        store_workflow_in_session(request, workflow)
+
+        # Nuke the temporary table
+        table_queries.delete_table(workflow.get_data_frame_upload_table_name())
+
+        # Log the event
+        col_info = workflow.get_column_info()
+        Log.objects.register(request.user,
+                             Log.WORKFLOW_DATA_UPLOAD,
+                             workflow,
+                             {'id': workflow.id,
+                              'name': workflow.name,
+                              'num_rows': workflow.nrows,
+                              'num_cols': workflow.ncols,
+                              'column_names': col_info[0],
+                              'column_types': col_info[1],
+                              'column_unique': col_info[2]})
+
+        # Go back to show the workflow detail
+        return redirect(reverse('table:display'))
 
     # Update the dictionary with the session information
     request.session['upload_data'] = upload_data
+    context = {'form': form,
+               'wid': workflow.id,
+               'prev_step': upload_data['step_1'],
+               'valuerange': range(5) if workflow.has_table() else range(3),
+               'df_info': df_info}
 
-    # Load the existing DF or None if it doesn't exist
-    existing_df = pandas_db.load_table(workflow.get_data_frame_table_name())
-
-    if existing_df is not None:
-        # This is a merge operation, so move to Step 3
-        return redirect('dataops:upload_s3')
-
-    # This is an upload operation (not a merge) save the uploaded dataframe in
-    # the DB and finish.
-
-    # Get the uploaded data_frame
-    try:
-        data_frame = pandas_db.load_table(
-            workflow.get_data_frame_upload_table_name()
-        )
-    except Exception:
-        return render(
-            request,
-            'error.html',
-            {'message': _('Exception while retrieving the data frame')})
-
-    # Update the data frame
-    status = ops.perform_dataframe_upload_merge(workflow,
-                                                existing_df,
-                                                data_frame,
-                                                upload_data)
-
-    if status:
-        # Something went wrong. Flag it and reload
-        context = {'form': form,
-                   'wid': workflow.id,
-                   'prev_step': upload_data['step_1'],
-                   'valuerange': range(5) if workflow.has_table() else range(3),
-                   'df_info': df_info}
-        return render(request, 'dataops/upload_s2.html', context)
-
-    # Update the session information
-    store_workflow_in_session(request, workflow)
-
-    # Nuke the temporary table
-    sql_query.delete_table(workflow.get_data_frame_upload_table_name())
-
-    # Log the event
-    col_info = workflow.get_column_info()
-    Log.objects.register(request.user,
-                         Log.WORKFLOW_DATA_UPLOAD,
-                         workflow,
-                         {'id': workflow.id,
-                          'name': workflow.name,
-                          'num_rows': workflow.nrows,
-                          'num_cols': workflow.ncols,
-                          'column_names': col_info[0],
-                          'column_types': col_info[1],
-                          'column_unique': col_info[2]})
-
-    # Go back to show the workflow detail
-    return redirect(reverse('table:display'))
+    if not workflow.has_table():
+        # It is an upload, not a merge, set the next step to finish
+        context['next_name'] = _('Finish')
+    return render(request, 'dataops/upload_s2.html', context)
 
 
 @user_passes_test(is_instructor)
@@ -300,6 +301,7 @@ def upload_s3(
     )
 
     # Process the initial loading of the form
+    # TODO: Review this code
     if request.method != 'POST':
         # Update the dictionary with the session information
         request.session['upload_data'] = upload_data
@@ -318,7 +320,7 @@ def upload_s3(
             request, 'dataops/upload_s3.html',
             {'form': form,
              'valuerange': range(5),
-             'prev_step': reverse('dataops:upload_s3')})
+             'prev_step': reverse('dataops:upload_s2')})
 
     # Get the keys and merge method and store them in the session dict
     upload_data['dst_selected_key'] = form.cleaned_data['dst_key']
@@ -382,10 +384,10 @@ def upload_s4(
 
         # Get the dataframes to merge
         try:
-            dst_df = pandas_db.load_table(
+            dst_df = load_table(
                 workflow.get_data_frame_table_name()
             )
-            src_df = pandas_db.load_table(
+            src_df = load_table(
                 workflow.get_data_frame_upload_table_name()
             )
         except Exception:
@@ -394,13 +396,14 @@ def upload_s4(
                           {'message': _('Exception while loading data frame')})
 
         # Performing the merge
-        status = ops.perform_dataframe_upload_merge(workflow,
-                                                    dst_df,
-                                                    src_df,
-                                                    upload_data)
+        status = perform_dataframe_upload_merge(
+            workflow,
+            dst_df,
+            src_df,
+            upload_data)
 
         # Nuke the temporary table
-        sql_query.delete_table(
+        table_queries.delete_table(
             workflow.get_data_frame_upload_table_name()
         )
 

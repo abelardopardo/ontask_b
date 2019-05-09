@@ -11,7 +11,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
 from action.models import Action
-from dataops.sql_query import get_rows
+from dataops.sql.row_queries import get_rows
 from ontask import is_correct_email
 from scheduler.models import ScheduledAction
 

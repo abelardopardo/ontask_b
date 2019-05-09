@@ -22,9 +22,10 @@ from django.utils.translation import ugettext
 from action.models import Action
 from action.payloads import JSONPayload, CanvasEmailPayload, EmailPayload
 from action.send import send_canvas_emails, send_json, send_emails
-from dataops import sql_query
+from dataops.sql import table_queries
 from dataops.models import PluginRegistry
-from dataops.plugin_manager import run_plugin
+from dataops.plugin.plugin_manager import run_plugin
+import dataops.sql.row_queries
 from logs.models import Log
 from scheduler.models import ScheduledAction
 from workflow.models import Workflow
@@ -369,7 +370,7 @@ def increase_track_count(method, get_dict):
     if column_dst:
         try:
             # Increase the relevant cell by one
-            sql_query.increase_row_integer(
+            dataops.sql.row_queries.increase_row_integer(
                 action.workflow.get_data_frame_table_name(),
                 column_dst,
                 column_to,

@@ -32,7 +32,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.firefox.options import Options
 
 from action.models import Action
-from dataops import pandas_db
+from dataops.pandas import destroy_db_engine, engine
 from ontask.permissions import group_names
 
 # email, [groups], Superuser?
@@ -113,7 +113,7 @@ class OnTaskTestCase(TransactionTestCase):
     @classmethod
     def tearDownClass(cls):
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine(engine)
         super().tearDownClass()
 
 
@@ -121,7 +121,7 @@ class OnTaskApiTestCase(APITransactionTestCase):
     @classmethod
     def tearDownClass(cls):
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine(engine)
         super().tearDownClass()
 
     def compare_wflows(self, jwflow, workflow):
@@ -212,7 +212,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     @classmethod
     def tearDownClass(cls):
         cls.selenium.quit()
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine(engine)
         super().tearDownClass()
 
     def open(self, url):

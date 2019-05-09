@@ -325,27 +325,25 @@ def edit_description(
         request.POST or None,
         instance=action)
 
-    if request.method == 'GET' or not form.is_valid():
-        return JsonResponse({
-            'html_form': render_to_string(
-                'action/includes/partial_action_edit_description.html',
-                {'form': form, 'action': action},
-                request=request),
-        })
+    if request.method == 'POST' and form.is_valid():
+        action.save()
 
-    # Process the POST
-    # Save item in the DB
-    action.save()
+        # Log the event
+        Log.objects.register(
+            request.user,
+            Log.ACTION_UPDATE,
+            action.workflow,
+            {'id': action.id,
+             'name': action.name,
+             'workflow_id': workflow.id,
+             'workflow_name': workflow.name})
 
-    # Log the event
-    Log.objects.register(
-        request.user,
-        Log.ACTION_UPDATE,
-        action.workflow,
-        {'id': action.id,
-         'name': action.name,
-         'workflow_id': workflow.id,
-         'workflow_name': workflow.name})
+        # Request is correct
+        return JsonResponse({'html_redirect': ''})
 
-    # Request is correct
-    return JsonResponse({'html_redirect': ''})
+    return JsonResponse({
+        'html_form': render_to_string(
+            'action/includes/partial_action_edit_description.html',
+            {'form': form, 'action': action},
+            request=request),
+    })

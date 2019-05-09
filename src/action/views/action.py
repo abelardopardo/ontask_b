@@ -7,7 +7,6 @@ from typing import Optional, Union
 
 import django_tables2 as tables
 from django.contrib.auth.decorators import user_passes_test
-from django.db import IntegrityError
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
@@ -24,7 +23,7 @@ from action.views.edit_personalized import edit_action_out
 from action.views.edit_survey import edit_action_in
 from logs.models import Log
 from ontask import simplify_datetime_str
-from ontask.decorators import get_workflow, get_action
+from ontask.decorators import get_action, get_workflow
 from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
 from workflow.models import Workflow
@@ -155,68 +154,52 @@ def save_action_form(
 
     :return: JSON response
     """
-    # Process the GET request
-    if request.method == 'GET' or not form.is_valid():
-        return JsonResponse({
-            'html_form': render_to_string(
-                template_name,
-                {'form': form},
-                request=request),
-        })
+    if request.method == 'POST' and form.is_valid():
 
-    # Fill in the fields of the action (without saving to DB)_
-    action_item = form.save(commit=False)
+        if not form.has_changed():
+            return JsonResponse({'html_redirect': None})
 
-    # Process the POST request
-    if action_item.action_type == Action.todo_list:
-        # To be implemented
-        return JsonResponse({'html_redirect': reverse('under_construction')})
+        if Action.todo_list == form.cleaned_data.get('action_type'):
+            # To be implemented
+            return JsonResponse(
+                {'html_redirect': reverse('under_construction')})
 
-    # Is this a new action?
-    is_new = action_item.pk is None
+        # Fill in the fields of the action (without saving to DB)_
+        action_item = form.save(commit=False)
 
-    if is_new:  # Action is New. Update user and workflow fields
-        action_item.user = request.user
-        action_item.workflow = workflow
+        if action_item.pk is None:
+            # Action is New. Update certain vars
+            action_item.user = request.user
+            action_item.workflow = workflow
+            action_item.save()
+            log_type = Log.ACTION_CREATE
+            return_url = reverse('action:edit', kwargs={'pk': action_item.id})
+        else:
+            action_item.save()
+            log_type = Log.ACTION_UPDATE
+            return_url = reverse('action:index')
 
-    # Verify that that action does comply with the name uniqueness
-    # property (only with respec to other actions)
-    try:
-        action_item.save()
-        form.save_m2m()  # Propagate the save effect to M2M relations
-    except IntegrityError:
-        # There is an action with this name already
-        form.add_error(
-            'name',
-            _('An action with that name already exists'))
-        return JsonResponse({
-            'html_form': render_to_string(
-                template_name,
-                {'form': form},
-                request=request),
-        })
+        # Log the event
+        Log.objects.register(
+            request.user,
+            log_type,
+            action_item.workflow,
+            {
+                'id': action_item.id,
+                'name': action_item.name,
+                'workflow_id': workflow.id,
+                'workflow_name': workflow.name},
+        )
 
-    # Log the event
-    Log.objects.register(
-        request.user,
-        Log.ACTION_CREATE if is_new else Log.ACTION_UPDATE,
-        action_item.workflow,
-        {
-            'id': action_item.id,
-            'name': action_item.name,
-            'workflow_id': workflow.id,
-            'workflow_name': workflow.name},
-    )
+        # Request is correct
+        return JsonResponse({'html_redirect': return_url})
 
-    # Request is correct
-    if is_new:
-        return JsonResponse({
-            'html_redirect': reverse(
-                'action:edit', kwargs={'pk': action_item.id},
-            ),
-        })
-
-    return JsonResponse({'html_redirect': reverse('action:index')})
+    return JsonResponse({
+        'html_form': render_to_string(
+            template_name,
+            {'form': form},
+            request=request),
+    })
 
 
 @user_passes_test(is_instructor)
@@ -255,24 +238,24 @@ class ActionCreateView(UserIsInstructor, generic.TemplateView):
 
     template_name = 'action/includes/partial_action_create.html'
 
+    @method_decorator(user_passes_test(is_instructor))
     @method_decorator(get_workflow())
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """Process the get requet when creating an action."""
-        form = self.form_class()
         return save_action_form(
             request,
-            form,
+            self.form_class(workflow=kwargs.get('workflow')),
             self.template_name,
             workflow=kwargs.get('workflow'),
         )
 
+    @method_decorator(user_passes_test(is_instructor))
     @method_decorator(get_workflow())
     def post(self, request: HttpRequest, **kwargs) -> HttpResponse:
         """Process the post request when creating an action."""
-        form = self.form_class(request.POST)
         return save_action_form(
             request,
-            form,
+            self.form_class(request.POST, workflow=kwargs.get('workflow')),
             self.template_name,
             workflow=kwargs.get('workflow'),
         )
@@ -300,27 +283,54 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
 
         return act_obj
 
+    @method_decorator(user_passes_test(is_instructor))
     @method_decorator(get_workflow())
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """Process the get request."""
-        form = self.form_class(instance=self.get_object())
         return save_action_form(
             request,
-            form,
+            self.form_class(
+                instance=self.get_object(),
+                workflow=kwargs['workflow']),
             self.template_name)
 
+    @method_decorator(user_passes_test(is_instructor))
     @method_decorator(get_workflow())
     def post(self, request: HttpRequest, **kwargs) -> HttpResponse:
         """Process post request."""
-        form = self.form_class(request.POST, instance=self.get_object())
         return save_action_form(
             request,
-            form,
+            self.form_class(
+                request.POST,
+                instance=self.get_object(),
+                workflow=kwargs['workflow'],
+            ),
             self.template_name)
 
 
-# This method only requires the user to be authenticated since it is conceived
-#  to serve content that is not only for instructors.
+@user_passes_test(is_instructor)
+@get_action(pf_related=['actions', 'columns'])
+def edit_action(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+) -> HttpResponse:
+    """Invoke the specific edit view.
+
+    :param request: Request object
+    :param pk: Action PK
+    :return: HTML response
+    """
+    if action.action_type == Action.todo_list:
+        return redirect(reverse('under_construction'), {})
+
+    if action.is_out:
+        response = edit_action_out(request, workflow, action)
+    else:
+        response = edit_action_in(request, workflow, action)
+
+    return response
 
 
 @user_passes_test(is_instructor)
@@ -364,28 +374,3 @@ def delete_action(
             {'action': action},
             request=request),
     })
-
-
-@user_passes_test(is_instructor)
-@get_action(pf_related=['actions', 'columns'])
-def edit_action(
-    request: HttpRequest,
-    pk: int,
-    workflow: Optional[Workflow] = None,
-    action: Optional[Action] = None,
-) -> HttpResponse:
-    """Invoke the specific edit view.
-
-    :param request: Request object
-    :param pk: Action PK
-    :return: HTML response
-    """
-    if action.action_type == Action.todo_list:
-        return redirect(reverse('under_construction'), {})
-
-    if action.is_out:
-        response = edit_action_out(request, workflow, action)
-    else:
-        response = edit_action_in(request, workflow, action)
-
-    return response

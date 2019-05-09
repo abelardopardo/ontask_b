@@ -5,7 +5,7 @@ from builtins import object
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
-from dataops.pandas_db import pandas_datatype_names
+from dataops.pandas import pandas_datatype_names
 from workflow.models import Column
 
 

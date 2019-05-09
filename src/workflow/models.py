@@ -19,10 +19,8 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
 import ontask.templatetags.ontask_tags
-from dataops.pandas_db import (
-    load_table, pandas_datatype_names,
-)
-from dataops.sql_query import delete_table
+from dataops.pandas import pandas_datatype_names
+from dataops.sql import delete_table
 
 
 class Workflow(models.Model):
@@ -280,10 +278,6 @@ class Workflow(models.Model):
         """
         return is_table_in_db(self.get_data_frame_table_name())
 
-    def data_frame(self):
-        # Function used by the serializer to access the data frame in the DB
-        return load_table(self.get_data_frame_table_name())
-
     def is_locked(self):
         """
         :return: Is the given workflow locked?
@@ -404,6 +398,21 @@ class Workflow(models.Model):
 
         # Save the workflow with the new fields.
         self.save()
+
+    def add_new_columns(self, col_names, data_types, are_keys):
+        """Add a set of columns to the workflow"""
+        idx = self.columns.count() + 1
+        new_indeces = range(idx, idx + len(col_names))
+        for idx in new_indeces:
+            # Create the new column
+            column = Column(
+                name=col_names[idx],
+                workflow=self,
+                data_type=pandas_datatype_names.get(data_types[idx]),
+                is_key=are_keys[idx],
+                position=idx)
+            column.save()
+            idx += 1
 
     def reposition_columns(self, from_idx, to_idx):
         """
@@ -680,3 +689,5 @@ def is_table_in_db(table_name: str) -> bool:
              if x.name == table_name),
             False
         )
+
+

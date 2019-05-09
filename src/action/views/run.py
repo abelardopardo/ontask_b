@@ -25,7 +25,6 @@ from action.views.run_json import run_json_action
 from action.views.run_survey import run_survey_action
 from action.views.serve_survey import serve_survey_row
 from logs.models import Log
-from ontask import OnTaskEmptyWorkflow, OnTaskNoWorkflow
 from ontask.decorators import get_action
 from ontask.permissions import is_instructor
 from workflow.models import Workflow

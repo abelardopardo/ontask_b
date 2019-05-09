@@ -7,7 +7,7 @@ from django.conf import settings
 from django.shortcuts import reverse
 
 import test
-from dataops import pandas_db
+from dataops.pandas import load_table
 from workflow.models import Workflow
 
 
@@ -55,7 +55,7 @@ class EmailActionTracking(test.OnTaskTestCase):
 
             # Get the workflow and the data frame
             workflow = Workflow.objects.get(name=self.wflow_name)
-            df = pandas_db.load_table(workflow.get_data_frame_table_name())
+            df = load_table(workflow.get_data_frame_table_name())
 
             # Check that the results have been updated in the DB (to 1)
             for uemail in [x[1] for x in test.user_info

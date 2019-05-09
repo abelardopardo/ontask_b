@@ -6,18 +6,17 @@ from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.http import JsonResponse, HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
 
-from dataops import pandas_db
-from dataops.pandas_db import load_table, get_column_statistics
-from dataops.sql_query import get_rows
-from ontask.decorators import get_workflow, get_column
+from dataops.pandas import get_column_statistics, load_table
+from dataops.sql.row_queries import get_rows
+from ontask.decorators import get_column, get_workflow
 from ontask.permissions import is_instructor
 from visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
-from workflow.models import Workflow, Column
+from workflow.models import Column, Workflow
 
 
 def get_column_visualisations(column, col_data, vis_scripts,
@@ -215,12 +214,13 @@ def stat_row_view(
         columns_to_view = view.columns.all()
         column_names = [c.name for c in columns_to_view]
 
-        df = pandas_db.load_table(workflow.get_data_frame_table_name(),
-                                  column_names,
-                                  view.formula)
+        df = load_table(
+            workflow.get_data_frame_table_name(),
+            column_names,
+            view.formula)
     else:
         # No view given, fetch the entire data frame
-        df = pandas_db.load_table(workflow.get_data_frame_table_name())
+        df = load_table(workflow.get_data_frame_table_name())
 
     # Get the rows from the table
     row = get_rows(
@@ -306,12 +306,13 @@ def stat_table_view(
             return redirect('home')
         columns_to_view = view.columns.all()
 
-        df = pandas_db.load_table(workflow.get_data_frame_table_name(),
-                                  [x.name for x in columns_to_view],
-                                  view.formula)
+        df = load_table(
+            workflow.get_data_frame_table_name(),
+            [x.name for x in columns_to_view],
+            view.formula)
     else:
         # No view given, fetch the entire data frame
-        df = pandas_db.load_table(workflow.get_data_frame_table_name())
+        df = load_table(workflow.get_data_frame_table_name())
 
     vis_scripts = []
     visualizations = []

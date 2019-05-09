@@ -3,7 +3,7 @@ from __future__ import unicode_literals, print_function
 
 import pandas as pd
 
-from dataops.plugin import OnTaskPluginAbstract
+from dataops.plugin.ontask_plugin import OnTaskPluginAbstract
 
 # This field class_name contains the name of the class to load to execute the
 # plugin.

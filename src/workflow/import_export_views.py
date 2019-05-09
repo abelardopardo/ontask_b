@@ -106,31 +106,33 @@ def import_workflow(request):
     """
     form = WorkflowImportForm(request.POST or None, request.FILES or None)
 
-    context = {'form': form}
+    if request.method == 'POST' and form.is_valid():
+        new_wf_name = form.cleaned_data['name']
+        if Workflow.objects.filter(user=request.user, name=new_wf_name).exists():
+            # There is a workflow with this name. Return error.
+            # TODO: Move to form
+            form.add_error(None, _('A workflow with this name already exists'))
+            return render(request, 'workflow/import.html', {'form': form})
 
-    # If a get request or the form is not valid, render the page.
-    if request.method == 'GET' or not form.is_valid():
-        return render(request, 'workflow/import.html', context)
+        # Process the reception of the file
+        if not form.is_multipart():
+            # TODO: Move to Form
+            form.add_error(
+                None,
+                _('Incorrect form request (it is not multipart)')
+            )
+            return render(request, 'workflow/import.html', {'form': form})
 
-    new_wf_name = form.cleaned_data['name']
-    if Workflow.objects.filter(user=request.user, name=new_wf_name).exists():
-        # There is a workflow with this name. Return error.
-        form.add_error(None, _('A workflow with this name already exists'))
-        return render(request, 'workflow/import.html', context)
+        # UPLOAD THE FILE!
+        status = do_import_workflow(request.user,
+                                    form.cleaned_data['name'],
+                                    request.FILES['file'])
 
-    # Process the reception of the file
-    if not form.is_multipart():
-        form.add_error(None, _('Incorrect form request (it is not multipart)'))
-        return render(request, 'workflow/import.html', context)
+        # If something went wrong, show at to the top of the page
+        if status:
+            messages.error(request, status)
 
-    # UPLOAD THE FILE!
-    status = do_import_workflow(request.user,
-                                form.cleaned_data['name'],
-                                request.FILES['file'])
+        # Go back to the list of workflows
+        return redirect('home')
 
-    # If something went wrong, show at to the top of the page
-    if status:
-        messages.error(request, status)
-
-    # Go back to the list of workflows
-    return redirect('home')
+    return render(request, 'workflow/import.html', {'form': form})

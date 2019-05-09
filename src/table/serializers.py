@@ -14,7 +14,7 @@ from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
 
 from workflow.column_serializers import ColumnNameSerializer
-from dataops import ops
+from dataops.pandas import detect_datetime_columns
 from .models import View
 
 
@@ -62,9 +62,9 @@ class DataFrameJSONField(serializers.Field):
         try:
             df = pd.DataFrame(data)
             # Detect date/time columns
-            df = ops.detect_datetime_columns(df)
-        except Exception as e:
-            raise serializers.ValidationError(e)
+            df = detect_datetime_columns(df)
+        except Exception as exc:
+            raise serializers.ValidationError(exc)
 
         return df
 
@@ -90,8 +90,9 @@ class DataFramePandasField(serializers.Field):
 
 class DataFramePandasSerializer(serializers.Serializer):
     data_frame = DataFramePandasField(
-        help_text=_('This field must be the Base64 encoded '
-                    'result of the pandas.to_pickle() function')
+        help_text=_(
+            'This field must be the Base64 encoded result of the '
+            + 'pandas.to_pickle() function')
     )
 
 

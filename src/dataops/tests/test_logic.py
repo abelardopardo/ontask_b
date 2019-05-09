@@ -5,17 +5,18 @@ import datetime
 import io
 import os
 
-import pandas as pd
 from django.conf import settings
+import pandas as pd
 
-import dataops.dataframeupload
-import test
 from action.models import Action
-from dataops import pandas_db
-from dataops.formula_evaluation import evaluate_formula, NodeEvaluation
-from dataops.ops import perform_dataframe_upload_merge
-from dataops.pandas_db import load_table
-from dataops.sql_query import get_rows, get_select_query_txt
+import dataops.forms
+from dataops.forms.upload import load_df_from_csvfile
+from dataops.formula import EVAL_EXP, evaluate_formula
+from dataops.pandas import (
+    engine, load_table, perform_dataframe_upload_merge, store_table,
+)
+from dataops.sql import get_select_query_txt, get_rows
+import test
 from workflow.models import Workflow
 
 
@@ -78,15 +79,16 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
             # Get the workflow data frame
             df_dst = load_table(self.workflow.get_data_frame_table_name())
         else:
-            df_dst = dataops.dataframeupload.load_df_from_csvfile(
+            df_dst = load_df_from_csvfile(
                 io.StringIO(self.csv1),
                 0,
                 0
             )
 
-        df_src = dataops.dataframeupload.load_df_from_csvfile(io.StringIO(self.csv2),
-                                                              0,
-                                                              0)
+        df_src = dataops.forms.dataframeupload.load_df_from_csvfile(
+            io.StringIO(self.csv2),
+            0,
+            0)
 
         # Fix the merge_info fields.
         self.merge_info['initial_column_names'] = list(df_src.columns)
@@ -98,15 +100,16 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
     def test_df_equivalent_after_sql(self):
 
         # Parse the CSV
-        df_source = dataops.dataframeupload.load_df_from_csvfile(io.StringIO(self.csv1),
-                                                                 0,
-                                                                 0)
+        df_source = load_df_from_csvfile(
+            io.StringIO(self.csv1),
+            0,
+            0)
 
         # Store the DF in the DB
-        pandas_db.store_table(df_source, self.table_name)
+        store_table(df_source, self.table_name)
 
         # Load it from the DB
-        df_dst = pandas_db.load_table(self.table_name)
+        df_dst = load_table(self.table_name)
 
         # Data frames mut be identical
         assert df_source.equals(df_dst)
@@ -176,7 +179,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
                           op_value.format(''),
                           type_value,
                           value1),
-            NodeEvaluation.EVAL_EXP,
+            EVAL_EXP,
             {'variable': value2}
         )
         result2 = evaluate_formula(
@@ -184,7 +187,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
                           op_value.format(''),
                           type_value,
                           value1),
-            NodeEvaluation.EVAL_EXP,
+            EVAL_EXP,
             {'variable': value3}
         )
 
@@ -203,7 +206,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
                               op_value.format('not_'),
                               type_value,
                               value1),
-                NodeEvaluation.EVAL_EXP,
+                EVAL_EXP,
                 {'variable': value2}
             )
             result2 = evaluate_formula(
@@ -211,7 +214,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
                               op_value.format('not_'),
                               type_value,
                               value1),
-                NodeEvaluation.EVAL_EXP,
+                EVAL_EXP,
                 {'variable': value3}
             )
 
@@ -241,7 +244,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
             self.test_columns,
             self.skel,
         )
-        result = pd.read_sql_query(query, pandas_db.engine, params=fields)
+        result = pd.read_sql_query(query, engine, params=fields)
         self.assertEqual(len(result), 1)
 
     def test_eval_node(self):
@@ -474,7 +477,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
             columns=self.test_columns)
 
         # Store the data frame
-        pandas_db.store_table(df, 'TEST_TABLE')
+        store_table(df, 'TEST_TABLE')
 
         #
         # EQUAL
@@ -608,7 +611,8 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
         conditions = self.action.conditions.filter(is_filter=False)
 
         # Get dataframe
-        df = pandas_db.get_subframe(wflow_table, filter_formula, column_names)
+        df = dataops.pandas.dataframe.get_subframe(wflow_table, filter_formula,
+                                                   column_names)
 
         # Get the query set
         qs = get_rows(wflow_table, column_names, filter_formula)
@@ -619,12 +623,12 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
             row_value_qs = dict(list(zip(column_names, row)))
 
             cond_eval1 = [evaluate_formula(x.formula,
-                                           NodeEvaluation.EVAL_EXP,
+                                           EVAL_EXP,
                                            row_value_df)
                           for x in conditions]
 
             cond_eval2 = [evaluate_formula(x.formula,
-                                           NodeEvaluation.EVAL_EXP,
+                                           EVAL_EXP,
                                            row_value_qs)
                           for x in conditions]
 

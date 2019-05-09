@@ -113,8 +113,10 @@ var saveForm = function () {
           if (data.html_redirect == "") {
             $('#div-spinner').show();
             window.location.reload(true);
-          } else {
+          } else if (data.html_redirect != null) {
             location.href = data.html_redirect;
+          } else {
+            $("#modal-item").modal('hide');
           }
         }
         else {

@@ -16,7 +16,7 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
 import test
-from dataops import pandas_db
+from dataops.pandas import destroy_db_engine, engine
 from test import ElementHasFullOpacity, ScreenTests
 
 class ScreenTutorialTest(ScreenTests):
@@ -63,7 +63,7 @@ class ScreenTutorialTest(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine(engine)
 
 
 class ScreenImportTest(ScreenTests):
@@ -113,7 +113,7 @@ class ScreenImportTest(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine(engine)
 
 
 class ScreenTestFixture(ScreenTests):
@@ -178,7 +178,7 @@ class ScreenTestFixture(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine(engine)
 
     def test_ss_workflow(self):
         # Login
@@ -264,7 +264,7 @@ class ScreenTestFixture(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine(engine)
 
     def test_ss_details(self):
         # Login
@@ -293,7 +293,7 @@ class ScreenTestFixture(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine(engine)
 
     def test_ss_dataops(self):
         # Login
@@ -440,7 +440,7 @@ class ScreenTestFixture(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine(engine)
 
     def test_ss_table(self):
         # Login
@@ -493,7 +493,7 @@ class ScreenTestFixture(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine(engine)
 
     def test_ss_action(self):
         # Login
@@ -753,7 +753,7 @@ Course Coordinator""")
         self.logout()
 
         # Close the db_engine
-        # pandas_db.destroy_db_engine(pandas_db.engine)
+        # pandas_destroy_db_engine(pandas_engine)
 
     def test_ss_scheduler(self):
         # Login
@@ -841,7 +841,7 @@ Course Coordinator""")
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine(engine)
 
     def test_ss_logs(self):
         # Login
@@ -862,4 +862,4 @@ Course Coordinator""")
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine(engine)

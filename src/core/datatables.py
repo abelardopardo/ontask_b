@@ -2,6 +2,7 @@
 
 """Various functions to support DataTables."""
 
+
 class DataTablesServerSidePaging(object):
     """Class to handle DataTables Server Side Paging request.
 
@@ -25,13 +26,9 @@ class DataTablesServerSidePaging(object):
             self.length = int(request_data.POST.get('length', None))
             self.order_col = int(request_data.POST.get(
                 'order[0][column]',
-                None)
-            )
+                None))
             self.order_dir = request_data.POST.get('order[0][dir]', 'asc')
             self.search_value = request_data.POST.get('search[value]', None)
 
         except ValueError:
             self.is_valid = False
-
-
-

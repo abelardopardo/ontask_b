@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
 
+from builtins import object
 import datetime
 import json
-from builtins import object
 from typing import Optional
 
-import django_tables2 as tables
-import pytz
 from celery.task.control import inspect
 from django.conf import settings
 from django.contrib import messages
@@ -15,23 +13,25 @@ from django.contrib.auth.decorators import user_passes_test
 from django.db import IntegrityError
 from django.db.models import Q
 from django.forms.models import model_to_dict
-from django.http import JsonResponse, HttpRequest, HttpResponse
-from django.shortcuts import render, redirect, reverse
+from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext, ugettext_lazy as _
 from django_tables2 import A
+import django_tables2 as tables
 from past.utils import old_div
+import pytz
 
 from action.models import Action
 from action.payloads import action_session_dictionary
 from logs.models import Log
-from ontask.decorators import access_workflow, get_workflow
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from scheduler.models import ScheduledAction
 from workflow.models import Workflow
-from .forms import EmailScheduleForm, JSONScheduleForm, CanvasEmailScheduleForm
+from .forms import CanvasEmailScheduleForm, EmailScheduleForm, JSONScheduleForm
 
 
 class ScheduleActionTable(tables.Table):
@@ -133,7 +133,6 @@ def save_email_schedule(request, action, schedule_item, op_payload):
     :param op_payload: dictionary to carry over the request to the next step
     :return:
     """
-
     # Create the form to ask for the email subject and other information
     form = EmailScheduleForm(
         data=request.POST or None,
@@ -142,72 +141,72 @@ def save_email_schedule(request, action, schedule_item, op_payload):
         columns=action.workflow.columns.filter(is_key=True),
         confirm_items=op_payload.get('confirm_items', False))
 
-    # Check if the request is GET, or POST but not valid
-    if request.method == 'GET' or not form.is_valid():
-        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-        # Render the form
-        return render(request,
-                      'scheduler/edit.html',
-                      {'action': action,
-                       'form': form,
-                       'now': now})
-
     # Processing a valid POST request
+    if request.method == 'POST' and form.is_valid():
 
-    # Save the schedule item object
-    s_item = form.save(commit=False)
+        # Save the schedule item object
+        s_item = form.save(commit=False)
 
-    # Assign additional fields and save
-    s_item.user = request.user
-    s_item.action = action
-    s_item.status = ScheduledAction.STATUS_CREATING
-    s_item.payload = {
-        'subject': form.cleaned_data['subject'],
-        'cc_email': [x for x in form.cleaned_data['cc_email'].split(',')
-                     if
-                     x],
-        'bcc_email': [x
-                      for x in form.cleaned_data['bcc_email'].split(',')
-                      if
-                      x],
-        'send_confirmation': form.cleaned_data['send_confirmation'],
-        'track_read': form.cleaned_data['track_read']
-    }
-    # Verify that that action does comply with the name uniqueness
-    # property (only with respec to other actions)
-    try:
-        s_item.save()
-    except IntegrityError:
-        # There is an action with this name already
-        form.add_error('name',
-                       _('A scheduled execution of this action with this name '
-                         'already exists'))
-        return render(request,
-                      'scheduler/edit.html',
-                      {'action': action,
-                       'form': form,
-                       'now': datetime.datetime.now(pytz.timezone(
-                           settings.TIME_ZONE))})
+        # Assign additional fields and save
+        s_item.user = request.user
+        s_item.action = action
+        s_item.status = ScheduledAction.STATUS_CREATING
+        s_item.payload = {
+            'subject': form.cleaned_data['subject'],
+            'cc_email': [x for x in form.cleaned_data['cc_email'].split(',')
+                         if
+                         x],
+            'bcc_email': [x
+                          for x in form.cleaned_data['bcc_email'].split(',')
+                          if
+                          x],
+            'send_confirmation': form.cleaned_data['send_confirmation'],
+            'track_read': form.cleaned_data['track_read']
+        }
+        # Verify that that action does comply with the name uniqueness
+        # property (only with respec to other actions)
+        try:
+            s_item.save()
+        except IntegrityError:
+            # There is an action with this name already
+            form.add_error('name',
+                           _(
+                               'A scheduled execution of this action with this name '
+                               'already exists'))
+            return render(request,
+                          'scheduler/edit.html',
+                          {'action': action,
+                           'form': form,
+                           'now': datetime.datetime.now(pytz.timezone(
+                               settings.TIME_ZONE))})
 
-    # Upload information to the op_payload
-    op_payload['schedule_id'] = s_item.id
-    op_payload['confirm_items'] = form.cleaned_data['confirm_items']
+        # Upload information to the op_payload
+        op_payload['schedule_id'] = s_item.id
+        op_payload['confirm_items'] = form.cleaned_data['confirm_items']
 
-    if op_payload['confirm_items']:
-        # Update information to carry to the filtering stage
-        op_payload['exclude_values'] = s_item.exclude_values
-        op_payload['item_column'] = s_item.item_column.name
-        op_payload['button_label'] = ugettext('Schedule')
-        request.session[action_session_dictionary] = op_payload
+        if op_payload['confirm_items']:
+            # Update information to carry to the filtering stage
+            op_payload['exclude_values'] = s_item.exclude_values
+            op_payload['item_column'] = s_item.item_column.name
+            op_payload['button_label'] = ugettext('Schedule')
+            request.session[action_session_dictionary] = op_payload
 
-        return redirect('action:item_filter')
-    else:
-        # If there is not item_column, the exclude values should be empty.
-        s_item.exclude_values = []
-        s_item.save()
+            return redirect('action:item_filter')
+        else:
+            # If there is not item_column, the exclude values should be empty.
+            s_item.exclude_values = []
+            s_item.save()
 
-    # Go straight to the final step
-    return finish_scheduling(request, s_item, op_payload)
+        # Go straight to the final step
+        return finish_scheduling(request, s_item, op_payload)
+
+    # Render the form
+    return render(
+        request,
+        'scheduler/edit.html',
+        {'action': action,
+         'form': form,
+         'now': datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))})
 
 
 def save_canvas_email_schedule(request, action, schedule_item,
@@ -231,64 +230,64 @@ def save_canvas_email_schedule(request, action, schedule_item,
         columns=action.workflow.columns.filter(is_key=True),
         confirm_items=op_payload.get('confirm_items', False))
 
-    # Check if the request is GET, or POST but not valid
-    if request.method == 'GET' or not form.is_valid():
-        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-        # Render the form
-        return render(request,
-                      'scheduler/edit.html',
-                      {'action': action,
-                       'form': form,
-                       'now': now})
+    # TO BE IMPLEMENTED!!!
+    if request.method == 'POST' and form.is_valid():
 
-    # Processing a valid POST request
+        # Save the schedule item object
+        s_item = form.save(commit=False)
 
-    # Save the schedule item object
-    s_item = form.save(commit=False)
+        # Assign additional fields and save
+        s_item.user = request.user
+        s_item.action = action
+        s_item.status = ScheduledAction.STATUS_CREATING
+        s_item.payload = {
+            'subject': form.cleaned_data['subject'],
+            'token': form.cleaned_data['token'],
+        }
+        # Verify that that action does comply with the name uniqueness
+        # property (only with respect to other actions)
+        try:
+            s_item.save()
+        except IntegrityError:
+            # There is an action with this name already
+            form.add_error('name',
+                           _(
+                               'A scheduled execution of this action with this name '
+                               'already exists'))
+            return render(request,
+                          'scheduler/edit.html',
+                          {'action': action,
+                           'form': form,
+                           'now': datetime.datetime.now(pytz.timezone(
+                               settings.TIME_ZONE))})
 
-    # Assign additional fields and save
-    s_item.user = request.user
-    s_item.action = action
-    s_item.status = ScheduledAction.STATUS_CREATING
-    s_item.payload = {
-        'subject': form.cleaned_data['subject'],
-        'token': form.cleaned_data['token'],
-    }
-    # Verify that that action does comply with the name uniqueness
-    # property (only with respect to other actions)
-    try:
-        s_item.save()
-    except IntegrityError:
-        # There is an action with this name already
-        form.add_error('name',
-                       _('A scheduled execution of this action with this name '
-                         'already exists'))
-        return render(request,
-                      'scheduler/edit.html',
-                      {'action': action,
-                       'form': form,
-                       'now': datetime.datetime.now(pytz.timezone(
-                           settings.TIME_ZONE))})
+        # Upload information to the op_payload
+        op_payload['schedule_id'] = s_item.id
+        op_payload['confirm_items'] = form.cleaned_data['confirm_items']
 
-    # Upload information to the op_payload
-    op_payload['schedule_id'] = s_item.id
-    op_payload['confirm_items'] = form.cleaned_data['confirm_items']
+        if op_payload['confirm_items']:
+            # Update information to carry to the filtering stage
+            op_payload['exclude_values'] = s_item.exclude_values
+            op_payload['item_column'] = s_item.item_column.name
+            op_payload['button_label'] = ugettext('Schedule')
+            request.session[action_session_dictionary] = op_payload
 
-    if op_payload['confirm_items']:
-        # Update information to carry to the filtering stage
-        op_payload['exclude_values'] = s_item.exclude_values
-        op_payload['item_column'] = s_item.item_column.name
-        op_payload['button_label'] = ugettext('Schedule')
-        request.session[action_session_dictionary] = op_payload
+            return redirect('action:item_filter')
+        else:
+            # If there is not item_column, the exclude values should be empty.
+            s_item.exclude_values = []
+            s_item.save()
 
-        return redirect('action:item_filter')
-    else:
-        # If there is not item_column, the exclude values should be empty.
-        s_item.exclude_values = []
-        s_item.save()
+        # Go straight to the final step
+        return finish_scheduling(request, s_item, op_payload)
 
-    # Go straight to the final step
-    return finish_scheduling(request, s_item, op_payload)
+    # Render the form
+    return render(
+        request,
+        'scheduler/edit.html',
+        {'action': action,
+         'form': form,
+         'now': datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))})
 
 
 def save_json_schedule(request, action, schedule_item, op_payload):
@@ -300,7 +299,6 @@ def save_json_schedule(request, action, schedule_item, op_payload):
     :param op_payload: dictionary to carry over the request to the next step
     :return:
     """
-
     # Create the form to ask for the email subject and other information
     form = JSONScheduleForm(
         data=request.POST or None,
@@ -309,49 +307,48 @@ def save_json_schedule(request, action, schedule_item, op_payload):
         columns=action.workflow.columns.filter(is_key=True),
         confirm_items=op_payload.get('confirm_items', False))
 
-    # Check if the request is GET, or POST but not valid
-    if request.method == 'GET' or not form.is_valid():
-        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-        # Render the form
-        return render(request,
-                      'scheduler/edit.html',
-                      {'action': action,
-                       'form': form,
-                       'now': now})
-
     # Processing a valid POST request
+    if request.method == 'POST' and form.is_valid():
 
-    # Save the schedule item object
-    s_item = form.save(commit=False)
+        # Save the schedule item object
+        s_item = form.save(commit=False)
 
-    # Assign additional fields and save
-    s_item.user = request.user
-    s_item.action = action
-    s_item.status = ScheduledAction.STATUS_CREATING
-    s_item.payload = {
-        'token': form.cleaned_data['token']
-    }
-    s_item.save()
-
-    # Upload information to the op_payload
-    op_payload['schedule_id'] = s_item.id
-
-    if s_item.item_column:
-        # Create a dictionary in the session to carry over all the
-        # information to execute the next steps
-        op_payload['item_column'] = s_item.item_column.name
-        op_payload['exclude_values'] = s_item.exclude_values
-        op_payload['button_label'] = ugettext('Schedule')
-        request.session[action_session_dictionary] = op_payload
-
-        return redirect('action:item_filter')
-    else:
-        # If there is not item_column, the exclude values should be empty.
-        s_item.exclude_values = []
+        # Assign additional fields and save
+        s_item.user = request.user
+        s_item.action = action
+        s_item.status = ScheduledAction.STATUS_CREATING
+        s_item.payload = {
+            'token': form.cleaned_data['token']
+        }
         s_item.save()
 
-    # Go straight to the final step
-    return finish_scheduling(request, s_item, op_payload)
+        # Upload information to the op_payload
+        op_payload['schedule_id'] = s_item.id
+
+        if s_item.item_column:
+            # Create a dictionary in the session to carry over all the
+            # information to execute the next steps
+            op_payload['item_column'] = s_item.item_column.name
+            op_payload['exclude_values'] = s_item.exclude_values
+            op_payload['button_label'] = ugettext('Schedule')
+            request.session[action_session_dictionary] = op_payload
+
+            return redirect('action:item_filter')
+        else:
+            # If there is not item_column, the exclude values should be empty.
+            s_item.exclude_values = []
+            s_item.save()
+
+        # Go straight to the final step
+        return finish_scheduling(request, s_item, op_payload)
+
+    # Render the form
+    return render(
+        request,
+        'scheduler/edit.html',
+        {'action': action,
+         'form': form,
+         'now': datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))})
 
 
 def finish_scheduling(request, schedule_item=None, payload=None):

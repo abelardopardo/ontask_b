@@ -1,38 +1,38 @@
 # -*- coding: utf-8 -*-
 
 
-import random
 from builtins import range
+import random
 from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db import IntegrityError
-from django.http import JsonResponse, HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
-import dataops.sql_query
-from action.models import Condition, ActionColumnConditionTuple
-from dataops import ops, formula_evaluation, pandas_db
+from action.models import ActionColumnConditionTuple, Condition
+from dataops.formula import evaluation
+from dataops.pandas import (
+    add_column_to_df, load_table, pandas_datatype_names, store_dataframe,
+    rename_df_column
+)
+from dataops.sql import db_rename_column
 from logs.models import Log
 from ontask import create_new_name
-from ontask.decorators import access_workflow, get_workflow, get_column
+from ontask.decorators import get_column, get_workflow
 from ontask.permissions import is_instructor
-from workflow.models import Workflow, Column
+from workflow.models import Column, Workflow
 from .forms import (
-    ColumnRenameForm,
-    ColumnAddForm,
-    FormulaColumnAddForm,
-    RandomColumnAddForm, QuestionAddForm, QuestionRenameForm,
+    ColumnAddForm, ColumnRenameForm, FormulaColumnAddForm, QuestionAddForm,
+    QuestionRenameForm, RandomColumnAddForm,
 )
 from .ops import (
-    workflow_delete_column,
-    clone_column,
-    workflow_restrict_column,
+    clone_column, workflow_delete_column, workflow_restrict_column,
 )
 
 # These are the column operands offered through the GUI. They have immediate
@@ -121,87 +121,87 @@ def column_add(
     else:
         form = ColumnAddForm(request.POST or None, workflow=workflow)
 
-    # If a GET or incorrect request, render the form again
-    if request.method == 'GET' or not form.is_valid():
+    if request.method == 'POST' and form.is_valid():
+        # Processing now a valid POST request
+        # Access the updated information
+        column_initial_value = form.initial_valid_value
+
+        # Save the column object attached to the form
+        column = form.save(commit=False)
+
+        # Catch the special case of integer type and no initial value. Pandas
+        # encodes it as NaN but a cycle through the database transforms it into
+        # a string. To avoid this case, integer + empty value => double
+        if column.data_type == 'integer' and not column_initial_value:
+            column.data_type = 'double'
+
+        # Fill in the remaining fields in the column
+        column.workflow = workflow
+        column.is_key = False
+
+        # Update the data frame, which must be stored in the form because
+        # it was loaded when validating it.
+        df = load_table(workflow.get_data_frame_table_name())
+
+        # Add the column with the initial value to the dataframe
+        df = add_column_to_df(df, column, column_initial_value)
+
+        # Update the column type with the value extracted from the data frame
+        # column.data_type = \
+        #     pandas_db.pandas_datatype_names[df[column.name].dtype.name]
+
+        # Update the positions of the appropriate columns
+        workflow.reposition_columns(workflow.ncols + 1, column.position)
+
+        # Save column and clear prefetch queryset
+        column.save()
+        form.save_m2m()
+        workflow = Workflow.objects.prefetch_related('columns').get(
+            pk=workflow.id)
+
+        # Store the df to DB
+        store_dataframe(df, workflow)
+
+        # If the column is a question, add it to the action
         if is_question:
-            template = 'workflow/includes/partial_question_addedit.html'
+            __, __ = ActionColumnConditionTuple.objects.get_or_create(
+                action=action,
+                column=column,
+                condition=None
+            )
+
+        # Log the event
+        if is_question:
+            event_type = Log.QUESTION_ADD
         else:
-            template = 'workflow/includes/partial_column_addedit.html'
+            event_type = Log.COLUMN_ADD
+        Log.objects.register(
+            request.user,
+            event_type,
+            workflow,
+            {
+                'id': workflow.id,
+                'name': workflow.name,
+                'column_name': column.name,
+                'column_type': column.data_type})
 
-        return JsonResponse({
-            'html_form': render_to_string(
-                template,
-                {
-                    'form': form,
-                    'is_question': is_question,
-                    'action_id': action_id,
-                    'add': True},
-                request=request),
-        })
+        return JsonResponse({'html_redirect': ''})
 
-    # Processing now a valid POST request
-    # Access the updated information
-    column_initial_value = form.initial_valid_value
-
-    # Save the column object attached to the form
-    column = form.save(commit=False)
-
-    # Catch the special case of integer type and no initial value. Pandas
-    # encodes it as NaN but a cycle through the database transforms it into
-    # a string. To avoid this case, integer + empty value => double
-    if column.data_type == 'integer' and not column_initial_value:
-        column.data_type = 'double'
-
-    # Fill in the remaining fields in the column
-    column.workflow = workflow
-    column.is_key = False
-
-    # Update the data frame, which must be stored in the form because
-    # it was loaded when validating it.
-    df = pandas_db.load_table(workflow.get_data_frame_table_name())
-
-    # Add the column with the initial value to the dataframe
-    df = ops.data_frame_add_column(df, column, column_initial_value)
-
-    # Update the column type with the value extracted from the data frame
-    # column.data_type = \
-    #     pandas_db.pandas_datatype_names[df[column.name].dtype.name]
-
-    # Update the positions of the appropriate columns
-    workflow.reposition_columns(workflow.ncols + 1, column.position)
-
-    # Save column and clear prefetch queryset
-    column.save()
-    form.save_m2m()
-    workflow = Workflow.objects.prefetch_related('columns').get(pk=workflow.id)
-
-    # Store the df to DB
-    ops.store_dataframe(df, workflow)
-
-    # If the column is a question, add it to the action
     if is_question:
-        __, __ = ActionColumnConditionTuple.objects.get_or_create(
-            action=action,
-            column=column,
-            condition=None
-        )
-
-    # Log the event
-    if is_question:
-        event_type = Log.QUESTION_ADD
+        template = 'workflow/includes/partial_question_addedit.html'
     else:
-        event_type = Log.COLUMN_ADD
-    Log.objects.register(
-        request.user,
-        event_type,
-        workflow,
-        {
-            'id': workflow.id,
-            'name': workflow.name,
-            'column_name': column.name,
-            'column_type': column.data_type})
+        template = 'workflow/includes/partial_column_addedit.html'
 
-    return JsonResponse({'html_redirect': ''})
+    return JsonResponse({
+        'html_form': render_to_string(
+            template,
+            {
+                'form': form,
+                'is_question': is_question,
+                'action_id': action_id,
+                'add': True},
+            request=request),
+    })
 
 
 @user_passes_test(is_instructor)
@@ -231,106 +231,106 @@ def formula_column_add(
         columns=workflow.columns.all()
     )
 
-    # If a GET or incorrect request, render the form again
-    if request.method == 'GET' or not form.is_valid():
-        return JsonResponse({
-            'html_form': render_to_string(
-                'workflow/includes/partial_formula_column_add.html',
-                {'form': form},
-                request=request,
+    if request.method == 'POST' and form.is_valid():
+        # Save the column object attached to the form and add additional fields
+        column = form.save(commit=False)
+        column.workflow = workflow
+        column.is_key = False
+
+        # Save the instance
+        try:
+            column.save()
+            form.save_m2m()
+        except IntegrityError:
+            form.add_error('name', _('A column with that name already exists'))
+            return JsonResponse({
+                'html_form': render_to_string(
+                    'workflow/includes/partial_formula_column_add.html',
+                    {'form': form},
+                    request=request),
+            })
+
+        # Update the data frame
+        df = load_table(workflow.get_data_frame_table_name())
+
+        try:
+            # Add the column with the appropriate computation
+            operation = form.cleaned_data['op_type']
+            cnames = [c.name for c in form.selected_columns]
+            if operation == 'sum':
+                df[column.name] = df[cnames].sum(axis=1)
+            elif operation == 'prod':
+                df[column.name] = df[cnames].prod(axis=1)
+            elif operation == 'max':
+                df[column.name] = df[cnames].max(axis=1)
+            elif operation == 'min':
+                df[column.name] = df[cnames].min(axis=1)
+            elif operation == 'mean':
+                df[column.name] = df[cnames].mean(axis=1)
+            elif operation == 'median':
+                df[column.name] = df[cnames].median(axis=1)
+            elif operation == 'std':
+                df[column.name] = df[cnames].std(axis=1)
+            elif operation == 'all':
+                df[column.name] = df[cnames].all(axis=1)
+            elif operation == 'any':
+                df[column.name] = df[cnames].any(axis=1)
+            else:
+                raise Exception(
+                    _('Operand {0} not implemented').format(operation)
+                )
+        except Exception as e:
+            # Something went wrong in pandas, we need to remove the column
+            column.delete()
+
+            # Notify in the form
+            form.add_error(
+                None,
+                _('Unable to perform the requested operation ({0})').format(e)
             )
-        })
+            return JsonResponse({
+                'html_form': render_to_string(
+                    'workflow/includes/partial_formula_column_add.html',
+                    {'form': form},
+                    request=request
+                )
+            })
 
-    # Processing now a valid POST request
+        # Populate the column type
+        column.data_type = \
+            pandas_datatype_names.get(df[column.name].dtype.name)
 
-    # Save the column object attached to the form and add additional fields
-    column = form.save(commit=False)
-    column.workflow = workflow
-    column.is_key = False
+        # Update the positions of the appropriate columns
+        workflow.reposition_columns(workflow.ncols + 1, column.position)
 
-    # Save the instance
-    try:
+        # Save column and refresh the prefetched related in the workflow
         column.save()
-        form.save_m2m()
-    except IntegrityError:
-        form.add_error('name', _('A column with that name already exists'))
-        return JsonResponse({
-            'html_form': render_to_string(
-                'workflow/includes/partial_formula_column_add.html',
-                {'form': form},
-                request=request),
-        })
+        workflow = Workflow.objects.prefetch_related('columns').get(
+            pk=workflow.id)
 
-    # Update the data frame
-    df = pandas_db.load_table(workflow.get_data_frame_table_name())
+        # Store the df to DB
+        store_dataframe(df, workflow)
 
-    try:
-        # Add the column with the appropriate computation
-        operation = form.cleaned_data['op_type']
-        cnames = [c.name for c in form.selected_columns]
-        if operation == 'sum':
-            df[column.name] = df[cnames].sum(axis=1)
-        elif operation == 'prod':
-            df[column.name] = df[cnames].prod(axis=1)
-        elif operation == 'max':
-            df[column.name] = df[cnames].max(axis=1)
-        elif operation == 'min':
-            df[column.name] = df[cnames].min(axis=1)
-        elif operation == 'mean':
-            df[column.name] = df[cnames].mean(axis=1)
-        elif operation == 'median':
-            df[column.name] = df[cnames].median(axis=1)
-        elif operation == 'std':
-            df[column.name] = df[cnames].std(axis=1)
-        elif operation == 'all':
-            df[column.name] = df[cnames].all(axis=1)
-        elif operation == 'any':
-            df[column.name] = df[cnames].any(axis=1)
-        else:
-            raise Exception(
-                _('Operand {0} not implemented').format(operation)
-            )
-    except Exception as e:
-        # Something went wrong in pandas, we need to remove the column
-        column.delete()
+        # Log the event
+        Log.objects.register(
+            request.user,
+            Log.COLUMN_ADD_FORMULA,
+            workflow,
+            {'id': workflow.id,
+             'name': workflow.name,
+             'column_name': column.name,
+             'column_type': column.data_type})
 
-        # Notify in the form
-        form.add_error(
-            None,
-            _('Unable to perform the requested operation ({0})').format(e)
-        )
-        data['html_form'] = render_to_string(
+        # The form has been successfully processed
+        return JsonResponse({'html_redirect': ''})
+
+    return JsonResponse({
+        'html_form': render_to_string(
             'workflow/includes/partial_formula_column_add.html',
             {'form': form},
-            request=request
+            request=request,
         )
-        return JsonResponse(data)
-
-    # Populate the column type
-    column.data_type = \
-        pandas_db.pandas_datatype_names.get(df[column.name].dtype.name)
-
-    # Update the positions of the appropriate columns
-    workflow.reposition_columns(workflow.ncols + 1, column.position)
-
-    # Save column and refresh the prefetched related in the workflow
-    column.save()
-    workflow = Workflow.objects.prefetch_related('columns').get(pk=workflow.id)
-
-    # Store the df to DB
-    ops.store_dataframe(df, workflow)
-
-    # Log the event
-    Log.objects.register(request.user,
-                         Log.COLUMN_ADD_FORMULA,
-                         workflow,
-                         {'id': workflow.id,
-                          'name': workflow.name,
-                          'column_name': column.name,
-                          'column_type': column.data_type})
-
-    # The form has been successfully processed
-    return JsonResponse({'html_redirect': ''})
+    })
 
 
 @user_passes_test(is_instructor)
@@ -356,52 +356,19 @@ def random_column_add(
     # Form to read/process data
     form = RandomColumnAddForm(data=request.POST or None)
 
-    # If a GET or incorrect request, render the form again
-    if request.method == 'GET' or not form.is_valid():
-        return JsonResponse({
-            'html_form': render_to_string(
-                'workflow/includes/partial_random_column_add.html',
-                {'form': form},
-                request=request),
-        })
+    if request.method == 'POST' and form.is_valid():
 
-    # Processing now a valid POST request
+        # Save the column object attached to the form and add additional fields
+        column = form.save(commit=False)
+        column.workflow = workflow
+        column.is_key = False
 
-    # Save the column object attached to the form and add additional fields
-    column = form.save(commit=False)
-    column.workflow = workflow
-    column.is_key = False
-
-    # Save the instance
-    try:
-        column = form.save()
-        form.save_m2m()
-    except IntegrityError:
-        form.add_error('name', _('A column with that name already exists'))
-        return JsonResponse({
-            'html_form': render_to_string(
-                'workflow/includes/partial_random_column_add.html',
-                {'form': form},
-                request=request),
-        })
-
-    # Update the data frame
-    df = pandas_db.load_table(workflow.get_data_frame_table_name())
-
-    # Get the values and interpret its meaning
-    values = form.cleaned_data['values']
-    int_value = None
-    # First, try to see if the field is a valid integer
-    try:
-        int_value = int(values)
-    except ValueError:
-        pass
-
-    if int_value:
-        # At this point the field is an integer
-        if int_value <= 1:
-            form.add_error('values',
-                           _('The integer value has to be larger than 1'))
+        # Save the instance
+        try:
+            column = form.save()
+            form.save_m2m()
+        except IntegrityError:
+            form.add_error('name', _('A column with that name already exists'))
             return JsonResponse({
                 'html_form': render_to_string(
                     'workflow/includes/partial_random_column_add.html',
@@ -409,60 +376,93 @@ def random_column_add(
                     request=request),
             })
 
-        vals = [x + 1 for x in range(int_value)]
-        # df[column.name] = [random.randint(1, int_value)
-        #                    for __ in range(workflow.nrows)]
-    else:
-        # At this point the field is a string and the values are the comma
-        # separated strings.
-        vals = [x.strip() for x in values.strip().split(',') if x]
-        if not vals:
-            form.add_error('values',
-                           _('The value has to be a comma-separated list'))
-            data['html_form'] = render_to_string(
-                'workflow/includes/partial_random_column_add.html',
-                {'form': form},
-                request=request
-            )
-            return JsonResponse(data)
+        # Update the data frame
+        df = load_table(workflow.get_data_frame_table_name())
 
-    # Empty new column
-    new_column = [None] * workflow.nrows
-    # Create the random partitions
-    partitions = partition([x for x in range(workflow.nrows)], len(vals))
-    # Assign values to partitions
-    for idx, indexes in enumerate(partitions):
-        for x in indexes:
-            new_column[x] = vals[idx]
+        # Get the values and interpret its meaning
+        values = form.cleaned_data['values']
+        int_value = None
+        # First, try to see if the field is a valid integer
+        try:
+            int_value = int(values)
+        except ValueError:
+            pass
 
-    # Assign the new column to the data frame
-    df[column.name] = new_column
+        if int_value:
+            # At this point the field is an integer
+            if int_value <= 1:
+                form.add_error('values',
+                               _('The integer value has to be larger than 1'))
+                return JsonResponse({
+                    'html_form': render_to_string(
+                        'workflow/includes/partial_random_column_add.html',
+                        {'form': form},
+                        request=request),
+                })
 
-    # Populate the column type
-    column.data_type = \
-        pandas_db.pandas_datatype_names.get(df[column.name].dtype.name)
+            vals = [x + 1 for x in range(int_value)]
+            # df[column.name] = [random.randint(1, int_value)
+            #                    for __ in range(workflow.nrows)]
+        else:
+            # At this point the field is a string and the values are the comma
+            # separated strings.
+            vals = [x.strip() for x in values.strip().split(',') if x]
+            if not vals:
+                form.add_error('values',
+                               _('The value has to be a comma-separated list'))
+                return JsonResponse({
+                    'html_form': render_to_string(
+                        'workflow/includes/partial_random_column_add.html',
+                        {'form': form},
+                        request=request)
+                })
 
-    # Update the positions of the appropriate columns
-    workflow.reposition_columns(workflow.ncols + 1, column.position)
+        # Empty new column
+        new_column = [None] * workflow.nrows
+        # Create the random partitions
+        partitions = partition([x for x in range(workflow.nrows)], len(vals))
+        # Assign values to partitions
+        for idx, indexes in enumerate(partitions):
+            for x in indexes:
+                new_column[x] = vals[idx]
 
-    column.save()
-    workflow = Workflow.objects.prefetch_related('columns').get(pk=workflow.id)
+        # Assign the new column to the data frame
+        df[column.name] = new_column
 
-    # Store the df to DB
-    ops.store_dataframe(df, workflow)
+        # Populate the column type
+        column.data_type = \
+            pandas_datatype_names.get(df[column.name].dtype.name)
 
-    # Log the event
-    Log.objects.register(request.user,
-                         Log.COLUMN_ADD_RANDOM,
-                         workflow,
-                         {'id': workflow.id,
-                          'name': workflow.name,
-                          'column_name': column.name,
-                          'column_type': column.data_type,
-                          'value': values})
+        # Update the positions of the appropriate columns
+        workflow.reposition_columns(workflow.ncols + 1, column.position)
 
-    # The form has been successfully processed
-    return JsonResponse({'html_redirect': ''})
+        column.save()
+        workflow = Workflow.objects.prefetch_related('columns').get(
+            pk=workflow.id)
+
+        # Store the df to DB
+        store_dataframe(df, workflow)
+
+        # Log the event
+        Log.objects.register(
+            request.user,
+            Log.COLUMN_ADD_RANDOM,
+            workflow,
+            {'id': workflow.id,
+             'name': workflow.name,
+             'column_name': column.name,
+             'column_type': column.data_type,
+             'value': values})
+
+        # The form has been successfully processed
+        return JsonResponse({'html_redirect': ''})
+
+    return JsonResponse({
+        'html_form': render_to_string(
+            'workflow/includes/partial_random_column_add.html',
+            {'form': form},
+            request=request),
+    })
 
 
 @user_passes_test(is_instructor)
@@ -497,72 +497,70 @@ def column_edit(
     old_name = column.name
     # Keep a copy of the previous position
     old_position = column.position
-    context = {'form': form,
-               'cname': old_name,
-               'pk': pk}
+    if request.method == 'POST' and form.is_valid():
+        # Process further only if any data changed.
+        if form.changed_data:
 
-    if request.method == 'GET' or not form.is_valid():
+            # Some field changed value, so save the result, but
+            # no commit as we need to propagate the info to the df
+            column = form.save(commit=False)
+
+            # If there is a new name, rename the data frame columns
+            if 'name' in form.changed_data:
+                db_rename_column(
+                    workflow.get_data_frame_table_name(),
+                    old_name,
+                    column.name)
+                rename_df_column(workflow, old_name, column.name)
+
+            if 'position' in form.changed_data:
+                # Update the positions of the appropriate columns
+                workflow.reposition_columns(old_position, column.position)
+
+            # Save the column information
+            column.save()
+
+            # Go back to the DB because the prefetch columns are not valid any more
+            workflow = Workflow.objects.prefetch_related('columns').get(
+                pk=workflow.id
+            )
+
+            # Changes in column require rebuilding the query_builder_ops
+            workflow.set_query_builder_ops()
+
+            # Save the workflow
+            workflow.save()
+
+        # Log the event
         if is_question:
-            template = 'workflow/includes/partial_question_addedit.html'
+            event_type = Log.QUESTION_ADD
         else:
-            template = 'workflow/includes/partial_column_addedit.html'
-        return JsonResponse({
-            'html_form': render_to_string(
-                template,
-                context,
-                request=request),
-        })
+            event_type = Log.COLUMN_ADD
+        Log.objects.register(
+            request.user,
+            event_type,
+            workflow,
+            {
+                'id': workflow.id,
+                'name': workflow.name,
+                'column_name': old_name,
+                'new_name': column.name})
 
-    # Process further only if any data changed.
-    if form.changed_data:
+        # Done processing the correct POST request
+        return JsonResponse({'html_redirect': ''})
 
-        # Some field changed value, so save the result, but
-        # no commit as we need to propagate the info to the df
-        column = form.save(commit=False)
-
-        # If there is a new name, rename the data frame columns
-        if 'name' in form.changed_data:
-            dataops.sql_query.db_rename_column(
-                workflow.get_data_frame_table_name(),
-                old_name,
-                column.name)
-            ops.rename_df_column(workflow, old_name, column.name)
-
-        if 'position' in form.changed_data:
-            # Update the positions of the appropriate columns
-            workflow.reposition_columns(old_position, column.position)
-
-        # Save the column information
-        column.save()
-
-        # Go back to the DB because the prefetch columns are not valid any more
-        workflow = Workflow.objects.prefetch_related('columns').get(
-            pk=workflow.id
-        )
-
-        # Changes in column require rebuilding the query_builder_ops
-        workflow.set_query_builder_ops()
-
-        # Save the workflow
-        workflow.save()
-
-    # Log the event
     if is_question:
-        event_type = Log.QUESTION_ADD
+        template = 'workflow/includes/partial_question_addedit.html'
     else:
-        event_type = Log.COLUMN_ADD
-    Log.objects.register(
-        request.user,
-        event_type,
-        workflow,
-        {
-            'id': workflow.id,
-            'name': workflow.name,
-            'column_name': old_name,
-            'new_name': column.name})
-
-    # Done processing the correct POST request
-    return JsonResponse({'html_redirect': ''})
+        template = 'workflow/includes/partial_column_addedit.html'
+    return JsonResponse({
+        'html_form': render_to_string(
+            template,
+            {'form': form,
+             'cname': old_name,
+             'pk': pk},
+            request=request),
+    })
 
 
 @user_passes_test(is_instructor)
@@ -602,7 +600,7 @@ def column_delete(
     cond_to_delete = [
         x for x in Condition.objects.filter(
             action__workflow=workflow)
-        if formula_evaluation.has_variable(x.formula, column.name)]
+        if evaluation.has_variable(x.formula, column.name)]
     # Put it in the context because it is shown to the user before confirming
     # the deletion
     context['cond_to_delete'] = cond_to_delete
@@ -737,7 +735,6 @@ def column_move_top(
     workflow: Optional[Workflow] = None,
     column: Optional[Column] = None
 ) -> HttpResponse:
-
     """Move column to the first position.
 
     :param request: HTTP request to move a column to the top of the list
@@ -761,7 +758,6 @@ def column_move_bottom(
     workflow: Optional[Workflow] = None,
     column: Optional[Column] = None
 ) -> HttpResponse:
-
     """Move column to the last position.
 
     :param request: HTTP request to move a column to end of the list
@@ -808,7 +804,7 @@ def column_restrict_values(
     context = {'pk': pk, 'cname': column.name}
 
     # Get the values from the data frame
-    df = pandas_db.load_table(workflow.get_data_frame_table_name())
+    df = load_table(workflow.get_data_frame_table_name())
     context['values'] = ', '.join(set(df[column.name]))
 
     if request.method == 'POST':

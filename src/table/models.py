@@ -6,8 +6,7 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-import dataops.sql_query
-from dataops import pandas_db
+from dataops.sql import get_num_rows
 from workflow.models import Workflow, Column
 
 
@@ -73,7 +72,7 @@ class View(models.Model):
         :return: Number of rows resulting from using the formula
         """
         if not self.nrows:
-            self.nrows = dataops.sql_query.get_num_rows(
+            self.nrows = get_num_rows(
                 self.workflow.get_data_frame_table_name(),
                 self.formula
             )

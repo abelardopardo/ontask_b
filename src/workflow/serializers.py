@@ -9,7 +9,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
 from action.serializers import ActionSerializer
-from dataops.pandas_db import store_table
+from dataops.pandas import store_table
 from table.serializers import DataFramePandasField, ViewSerializer
 from workflow.column_serializers import ColumnSerializer
 from .models import Workflow

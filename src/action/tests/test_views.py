@@ -11,8 +11,8 @@ from selenium.webdriver.support.ui import WebDriverWait, Select
 
 import test
 from action.models import Action, Condition
-from dataops import pandas_db
-from dataops.formula_evaluation import has_variable
+from dataops.pandas import check_wf_df
+from dataops.formula import has_variable
 from workflow.models import Workflow
 
 
@@ -344,7 +344,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # self.assertIn('EmailRead_1', self.selenium.page_source)
 
         # Make sure the workflow is consistent
-        pandas_db.check_wf_df(Workflow.objects.get(name=self.wflow_name))
+        check_wf_df(Workflow.objects.get(name=self.wflow_name))
 
         # End of session
         self.logout()
@@ -1047,7 +1047,7 @@ class ActionAllKeyColumns(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()

@@ -7,33 +7,32 @@ from builtins import next, object, str
 from datetime import datetime
 from typing import Optional
 
-import django_tables2 as tables
-import pytz
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db import IntegrityError
-from django.db.models import Q
-from django.http import JsonResponse, HttpResponse, HttpRequest
-from django.shortcuts import redirect, reverse, render
+from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
-from django.utils.html import format_html, escape, urlencode
+from django.utils.html import escape, format_html, urlencode
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+import django_tables2 as tables
+import pytz
 
-import dataops.sql_query
 from core.datatables import DataTablesServerSidePaging
-from dataops import pandas_db
+from dataops.pandas import get_subframe
+from dataops.sql import delete_row, search_table
 from logs.models import Log
 from ontask import create_new_name
-from ontask.decorators import access_workflow, get_workflow, get_view
+from ontask.decorators import get_view, get_workflow
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from visualizations.plotly import PlotlyHandler
 from workflow.models import Workflow
-from .forms import ViewAddForm
-from .models import View
+from table.forms import ViewAddForm
+from table.models import View
 
 
 class ViewTable(tables.Table):
@@ -87,49 +86,49 @@ def save_view_form(request, form, template_name):
 
     :return: AJAX Response
     """
-    # Type of event to be recorded
-    if form.instance.id:
-        event_type = Log.VIEW_EDIT
-    else:
-        event_type = Log.VIEW_CREATE
+    if request.method == 'POST' and form.is_valid():
+        # Correct POST submission
+        view = form.save(commit=False)
+        view.workflow = form.workflow
 
-    # If a GET or incorrect request, render the form again
-    if request.method == 'GET' or not form.is_valid():
-        return JsonResponse({
-            'html_form': render_to_string(
-                template_name,
-                {'form': form, 'id': form.instance.id},
-                request=request)
-        })
+        # Type of event to be recorded
+        if form.instance.id:
+            event_type = Log.VIEW_EDIT
+        else:
+            event_type = Log.VIEW_CREATE
 
-    # Correct POST submission
-    view = form.save(commit=False)
-    view.workflow = form.workflow
+        # Save the new vew
+        # TODO: Fix handling this in the form clean method!
+        try:
+            view.save()
+            form.save_m2m()  # Needed to propagate the save effect to M2M relations
+        except IntegrityError:
+            form.add_error('name',
+                           _('A view with that name already exists'))
+            return JsonResponse({
+                'html_form': render_to_string(
+                    template_name,
+                    {'form': form, 'id': form.instance.id},
+                    request=request),
+            })
 
-    # Save the new vew
-    try:
-        view.save()
-        form.save_m2m()  # Needed to propagate the save effect to M2M relations
-    except IntegrityError:
-        form.add_error('name',
-                       _('A view with that name already exists'))
-        return JsonResponse({
-            'html_form': render_to_string(
-                template_name,
-                {'form': form, 'id': form.instance.id},
-                request=request),
-        })
+        # Log the event
+        Log.objects.register(request.user,
+                             event_type,
+                             view.workflow,
+                             {'id': view.id,
+                              'name': view.name,
+                              'workflow_name': view.workflow.name,
+                              'workflow_id': view.workflow.id})
 
-    # Log the event
-    Log.objects.register(request.user,
-                         event_type,
-                         view.workflow,
-                         {'id': view.id,
-                          'name': view.name,
-                          'workflow_name': view.workflow.name,
-                          'workflow_id': view.workflow.id})
+        return JsonResponse({'html_redirect': ''})
 
-    return JsonResponse({'html_redirect': ''})
+    return JsonResponse({
+        'html_form': render_to_string(
+            template_name,
+            {'form': form, 'id': form.instance.id},
+            request=request)
+    })
 
 
 def render_table_display_page(
@@ -206,7 +205,7 @@ def render_table_display_data(request, workflow, columns, formula,
         # The first column is ops
         order_col_name = column_names[dt_page.order_col - 1]
 
-    qs = dataops.sql_query.search_table(
+    qs = search_table(
         workflow.get_data_frame_table_name(),
         dt_page.search_value,
         columns_to_search=column_names,
@@ -407,9 +406,7 @@ def row_delete(
             return JsonResponse({'html_redirect': reverse('table:display')})
 
         # Proceed to delete the row
-        dataops.sql_query.delete_row(
-            workflow.get_data_frame_table_name(),
-            (key, value))
+        delete_row(workflow.get_data_frame_table_name(), (key, value))
 
         # Update rowcount
         workflow.nrows -= 1
@@ -622,7 +619,7 @@ def csvdownload(
     else:
         col_names = workflow.get_column_names()
         formula = None
-    data_frame = pandas_db.get_subframe(
+    data_frame = get_subframe(
         workflow.get_data_frame_table_name(),
         formula,
         col_names

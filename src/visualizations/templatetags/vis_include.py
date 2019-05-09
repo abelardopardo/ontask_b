@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+"""functions to include the visualization code."""
+
 from __future__ import unicode_literals
 
 from django import template
@@ -10,13 +13,14 @@ from action.evaluate import (
     viz_number_context_var,
     tr_item,
 )
-from dataops import pandas_db
+from dataops.pandas import get_subframe
 from visualizations.plotly import PlotlyColumnHistogram
 
 register = template.Library()
 
 
 def vis_html_content(context, column_name):
+    """Create the HTML visualization code."""
     # Get the action
     action = context.get(action_context_var, None)
     if not action:
@@ -45,7 +49,7 @@ def vis_html_content(context, column_name):
         viz_ctx['individual_value'] = ivalue
 
     # Get the data from the data frame
-    df = pandas_db.get_subframe(
+    df = get_subframe(
         workflow.get_data_frame_table_name(),
         action.get_filter_formula(),
         [column_name])

@@ -17,10 +17,10 @@ from action.payloads import (
     EmailPayload, action_session_dictionary, get_action_info,
 )
 from logs.models import Log
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from ontask.tasks import celery_is_up, send_email_messages
 from workflow.models import Workflow
-from ontask.decorators import access_workflow, get_workflow
 
 html_body = """<!DOCTYPE html>
 <html>
@@ -72,33 +72,30 @@ def run_email_action(
         action=action,
         action_info=action_info)
 
-    # Process the GET or invalid
-    if request.method == 'GET' or not form.is_valid():
-        # Get the number of rows from the action
-        num_msgs = action.get_rows_selected()
-
-        # Render the form
-        return render(
-            request,
-            'action/request_email_data.html',
-            {'action': action,
-             'num_msgs': num_msgs,
-             'form': form,
-             'valuerange': range(2)})
-
     # Request is a POST and is valid
+    if request.method == 'POST' and form.is_valid():
 
-    if action_info['confirm_items']:
-        # Add information to the session object to execute the next pages
-        action_info['button_label'] = ugettext('Send')
-        action_info['valuerange'] = 2
-        action_info['step'] = 2
-        request.session[action_session_dictionary] = action_info.get_store()
+        if action_info['confirm_items']:
+            # Add information to the session object to execute the next pages
+            action_info['button_label'] = ugettext('Send')
+            action_info['valuerange'] = 2
+            action_info['step'] = 2
+            request.session[
+                action_session_dictionary] = action_info.get_store()
 
-        return redirect('action:item_filter')
+            return redirect('action:item_filter')
 
-    # Go straight to the final step.
-    return run_email_done(request, action_info)
+        # Go straight to the final step.
+        return run_email_done(request, action_info)
+
+    # Render the form
+    return render(
+        request,
+        'action/request_email_data.html',
+        {'action': action,
+         'num_msgs': action.get_rows_selected(),
+         'form': form,
+         'valuerange': range(2)})
 
 
 @user_passes_test(is_instructor)

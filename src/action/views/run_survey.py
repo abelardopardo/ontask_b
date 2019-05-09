@@ -9,6 +9,7 @@ This module implements three views:
 
 - run_survey_row: Run the survey as instructor for a single row
 """
+
 from typing import List, Optional
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
@@ -20,7 +21,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-import dataops.sql_query
+from dataops.sql import search_table
 from action.models import Action
 from action.views.serve_survey import serve_survey_row
 from core.datatables import DataTablesServerSidePaging
@@ -159,7 +160,7 @@ def create_initial_qs(
         order_col_name = columns[dt_page.order_col].name
 
     # Get the query set (including the filter in the action)
-    qs = dataops.sql_query.search_table(
+    qs = search_table(
         table_name,
         dt_page.search_value,
         columns_to_search=[col.name for col in columns],

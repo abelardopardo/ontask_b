@@ -15,7 +15,7 @@ from django.utils.translation import ugettext_lazy as _
 from action.evaluate import get_action_evaluation_context, get_row_values
 from action.forms import FIELD_PREFIX, EnterActionIn
 from action.models import Action, ActionColumnConditionTuple
-from dataops.sql_query import update_row
+from dataops.sql.row_queries import update_row
 from logs.models import Log
 from ontask.permissions import has_access
 from ontask.views import ontask_handler404
@@ -75,52 +75,52 @@ def serve_survey_row(
         values=[context[colcon.column.name] for colcon in colcon_items],
         show_key=manager)
 
-    no_process = (
-        request.method == 'GET'
-        or not form.is_valid()
-        or request.POST.get('lti_version', None))
-    if no_process:
-        return render(
-            request,
-            'action/run_survey_row.html',
-            {
-                'form': form,
-                'action': action,
-                'cancel_url': reverse(
-                    'action:run', kwargs={'pk': action.id},
-                ) if manager else None,
-            },
-        )
+    keep_processing = (
+        request.method == 'POST'
+        and form.is_valid()
+        and not request.POST.get('lti_version'))
+    if keep_processing:
+        # Update the content in the DB
+        name_value_pairs = survey_update_row_values(
+            action,
+            colcon_items,
+            manager,
+            form.cleaned_data,
+            'email',
+            request.user.email,
+            context)
 
-    # Update the content in the DB
-    name_value_pairs = survey_update_row_values(
-        action,
-        colcon_items,
-        manager,
-        form.cleaned_data,
-        'email',
-        request.user.email,
-        context)
+        # Log the event and update its content in the action
+        log_item = Log.objects.register(
+            request.user,
+            Log.TABLEROW_UPDATE,
+            action.workflow,
+            {'id': action.workflow.id,
+             'name': action.workflow.name,
+             'new_values': json.dumps(name_value_pairs)})
 
-    # Log the event and update its content in the action
-    log_item = Log.objects.register(
-        request.user,
-        Log.TABLEROW_UPDATE,
-        action.workflow,
-        {'id': action.workflow.id,
-         'name': action.workflow.name,
-         'new_values': json.dumps(name_value_pairs)})
+        # Modify the time of execution for the action
+        action.last_executed_log = log_item
+        action.save()
 
-    # Modify the time of execution for the action
-    action.last_executed_log = log_item
-    action.save()
+        # If not instructor, just thank the user!
+        if not manager:
+            return render(request, 'thanks.html', {})
 
-    # If not instructor, just thank the user!
-    if not manager:
-        return render(request, 'thanks.html', {})
+        # Back to running the action
+        return redirect(reverse('action:run', kwargs={'pk': action.id}))
 
-    # Back to running the action
-    return redirect(reverse('action:run', kwargs={'pk': action.id}))
+    return render(
+        request,
+        'action/run_survey_row.html',
+        {
+            'form': form,
+            'action': action,
+            'cancel_url': reverse(
+                'action:run', kwargs={'pk': action.id},
+            ) if manager else None,
+        },
+    )
 
 
 def extract_survey_questions(

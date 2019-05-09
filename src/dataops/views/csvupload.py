@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+"""First step for CSV upload."""
+
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test
@@ -7,19 +10,20 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
+from dataops.forms import UploadCSVFileForm
 from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
-from .forms import UploadCSVFileForm
 
 
 @user_passes_test(is_instructor)
 @get_workflow()
-def csvupload1(
+def csvupload_start(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
-    """
+    """Upload the CSV file as first step.
+
     The four step process will populate the following dictionary with name
     upload_data (divided by steps in which they are set
 
@@ -42,21 +46,9 @@ def csvupload1(
         request.FILES or None,
         workflow=workflow)
 
-    # Process the initial loading of the form
-    if request.method == 'GET':
-        return render(
-            request, 'dataops/upload1.html',
-            {'form': form,
-             'wid': workflow.id,
-             'dtype': 'CSV',
-             'dtype_select': _('CSV file'),
-             'valuerange': range(5) if workflow.has_table() else range(3),
-             'prev_step': reverse('dataops:uploadmerge')}
-        )
-
-    # Process the reception of the file
+    # The form must be multipart
     if not form.is_multipart():
-        msg = _("CSV upload form is not multiform")
+        msg = _('CSV upload form is not multiform')
         context = {'message': msg}
 
         meta = request.META.get('HTTP_REFERER', None)
@@ -64,24 +56,26 @@ def csvupload1(
             context['meta'] = meta
         return render(request, 'critical_error.html', context=context)
 
-    # If not valid, this is probably because the file submitted was too big
-    if not form.is_valid():
-        return render(
-            request, 'dataops/upload1.html',
-            {'form': form,
-             'wid': workflow.id,
-             'dtype': 'CSV',
-             'dtype_select': _('CSV file'),
-             'valuerange': range(5) if workflow.has_table() else range(3),
-             'prev_step': reverse('dataops:uploadmerge')})
+    if request.method == 'POST' and form.is_valid():
+        # Dictionary to populate gradually throughout the sequence of steps. It
+        # is stored in the session.
+        request.session['upload_data'] = {
+            'initial_column_names': form.frame_info[0],
+            'column_types': form.frame_info[1],
+            'src_is_key_column': form.frame_info[2],
+            'step_1': reverse('dataops:csvupload_start'),
+        }
 
-    # Dictionary to populate gradually throughout the sequence of steps. It
-    # is stored in the session.
-    request.session['upload_data'] = {
-        'initial_column_names': form.frame_info[0],
-        'column_types': form.frame_info[1],
-        'src_is_key_column': form.frame_info[2],
-        'step_1': reverse('dataops:csvupload1')
-    }
+        return redirect('dataops:upload_s2')
 
-    return redirect('dataops:upload_s2')
+    return render(
+        request,
+        'dataops/upload1.html',
+        {
+            'form': form,
+            'wid': workflow.id,
+            'dtype': 'CSV',
+            'dtype_select': _('CSV file'),
+            'valuerange': range(5) if workflow.has_table() else range(3),
+            'prev_step': reverse('dataops:uploadmerge')},
+    )

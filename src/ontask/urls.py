@@ -22,7 +22,7 @@ import profiles.urls
 import scheduler.urls
 import table.urls
 import workflow.urls
-from dataops import pandas_db
+from dataops.pandas import set_engine
 from ontask.templatetags.ontask_tags import ontask_version
 from . import views
 import workflow.views
@@ -112,14 +112,7 @@ handler404 = 'ontask.views.ontask_handler404'
 handler500 = 'ontask.views.ontask_handler500'
 
 # Create the DB engine with SQLAlchemy (once!)
-pandas_db.engine = pandas_db.create_db_engine(
-    'postgresql',
-    '+psycopg2',
-    settings.DATABASES['default']['USER'],
-    settings.DATABASES['default']['PASSWORD'],
-    settings.DATABASES['default']['HOST'],
-    settings.DATABASES['default']['NAME'],
-)
+set_engine()
 
 # Make sure the Site has the right information
 try:
