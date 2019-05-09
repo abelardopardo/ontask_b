@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from django.utils.translation import ugettext_lazy as _
-
 from django.conf import settings
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 MAX_LIST_SIZE = getattr(settings, 'LOGS_MAX_LIST_SIZE', 200)
 
@@ -14,8 +13,9 @@ if 'siteprefs' in settings.INSTALLED_APPS:
     patch_locals()  # That's bootstrap.
 
     register_prefs(
-        pref(MAX_LIST_SIZE,
-             verbose_name=_('Maximum number of logs shown to the user'),
-             static=False,
-             field=models.IntegerField(blank=True)),
+        pref(
+            MAX_LIST_SIZE,
+            verbose_name=_('Maximum number of logs shown to the user'),
+            static=False,
+            field=models.IntegerField(blank=True)),
     )

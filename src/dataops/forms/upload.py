@@ -62,10 +62,6 @@ class UploadBasic(forms.Form):
             # Verify the data frame
             verify_data_frame(self.data_frame)
         except OnTaskDataFrameNoKey as exc:
-            self.add_error('data_file', exc)
-            # TODO: Revisit to see if this bug has been fixed
-            # FIX Once django-bootstrap4 fixes the bug preventing file feedback
-            # showing. REMOVE
             self.add_error(None, exc)
             return
 
@@ -77,12 +73,6 @@ class UploadBasic(forms.Form):
                 self.workflow,
                 temporary=True)
         except Exception as exc:
-            self.add_error(
-                'data_file',
-                _('Unable to process file: {0}.'.format(exc)))
-            # TODO: Revisit to see if this bug has been fixed
-            # FIX Once django-bootstrap4 fixes the bug preventing file feedback
-            # showing. REMOVE
             self.add_error(
                 None,
                 _('Unable to process file ({0}).'.format(exc)))

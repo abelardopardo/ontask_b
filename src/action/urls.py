@@ -12,7 +12,7 @@ from action.views import (
     export_ask, export_done, export_download, preview_next_all_false_response,
     preview_response, run_action, run_action_item_filter,
     run_canvas_email_done, run_email_done, run_json_done, run_survey_row,
-    run_survey_ss, run_zip_done, select_column_action, select_condition,
+    run_survey_ss, run_zip_done, select_column_action, select_condition_for_question,
     serve_action, show_timeline, showurl, shuffle_questions, survey_thanks,
     unselect_column_action, zip_action,
 )
@@ -120,11 +120,11 @@ urlpatterns = [
     # Select condition for a column/question
     path(
         '<int:pk>/<int:condpk>/select_condition/',
-        select_condition,
+        select_condition_for_question,
         name='edit_in_select_condition'),
     path(
         '<int:tpk>/select_condition/',
-        select_condition,
+        select_condition_for_question,
         name='edit_in_select_condition'),
 
     #

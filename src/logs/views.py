@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+"""Views to show logs and log table."""
 
 import json
 from typing import Optional
@@ -7,18 +8,18 @@ from typing import Optional
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import F, Q
-from django.http import JsonResponse, HttpRequest, HttpResponse
-from django.shortcuts import redirect, reverse, render
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.shortcuts import redirect, render, reverse
+from django.utils.translation import ugettext, ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from core.datatables import DataTablesServerSidePaging
+from logs.models import Log
 from ontask import simplify_datetime_str
-from ontask.decorators import access_workflow, get_workflow
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
-from .models import Log
 
 
 @user_passes_test(is_instructor)
@@ -27,11 +28,19 @@ def display(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
+    """Render the table frame for the logs.
+
+    :param request: Http request
+
+    :param workflow: workflow
+
+    :return: Http response
+    """
     # Try to get workflow and if not present, go to home page
     # Create the context with the column names
     context = {
         'workflow': workflow,
-        'column_names': [_('ID'), _('Date/Time'), _('User'), _('Event type')]
+        'column_names': [_('ID'), _('Date/Time'), _('User'), _('Event type')],
     }
 
     # Render the page with the table
@@ -46,6 +55,7 @@ def display_ss(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
+    """Return the subset of logs to include in a table page."""
     # Try to get workflow and if not present, go to home page
     # Check that the GET parameter are correctly given
     dt_page = DataTablesServerSidePaging(request)
@@ -56,50 +66,52 @@ def display_ss(
 
     # Get the logs
     qs = workflow.logs
-    recordsTotal = qs.count()
+    records_total = qs.count()
 
     if dt_page.search_value:
         # Refine the log
         qs = qs.filter(
-            Q(id__icontains=dt_page.search_value) |
-            Q(user__email__icontains=dt_page.search_value) |
-            Q(name__icontains=dt_page.search_value) |
-            Q(payload__icontains=dt_page.search_value),
+            Q(id__icontains=dt_page.search_value)
+            | Q(user__email__icontains=dt_page.search_value)
+            | Q(name__icontains=dt_page.search_value)
+            | Q(payload__icontains=dt_page.search_value),
             workflow__id=workflow.id,
         ).distinct()
 
     # Order and select values
     qs = qs.order_by(F('created').desc()).values_list(
-        'id', 'created', 'user__email', 'name'
+        'id',
+        'created',
+        'user__email',
+        'name',
     )
-    recordsFiltered = qs.count()
+    records_filtered = qs.count()
 
     final_qs = []
-    for item in qs[dt_page.start:dt_page.start + dt_page.length]:
+    for log_item in qs[dt_page.start:dt_page.start + dt_page.length]:
         row = [
-            """<a href="{0}" class="spin"
-                  data-toggle="tooltip" title="{1}">{2}</a>""".format(
-                reverse('logs:view', kwargs={'pk': item[0]}),
+            '<a href="{0}" class="spin"'.format(
+                reverse('logs:view', kwargs={'pk': log_item[0]}),
+            )
+            + ' data-toggle="tooltip" title="{0}">{1}</a>'.format(
                 ugettext('View log content'),
-                item[0]
+                log_item[0],
             ),
-            simplify_datetime_str(item[1]),
-            item[2],
-            item[3],
+            simplify_datetime_str(log_item[1]),
+            log_item[2],
+            log_item[3],
         ]
 
         # Add the row to the final query_set
         final_qs.append(row)
 
-    # Result to return as AJAX response
-    data = {
-        'draw': dt_page.draw,
-        'recordsTotal': recordsTotal,
-        'recordsFiltered': recordsFiltered,
-        'data': final_qs
-    }
     # Render the page with the table
-    return JsonResponse(data)
+    return JsonResponse({
+        'draw': dt_page.draw,
+        'recordsTotal': records_total,
+        'recordsFiltered': records_filtered,
+        'data': final_qs,
+    })
 
 
 @user_passes_test(is_instructor)

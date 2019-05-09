@@ -13,7 +13,7 @@ from action.views.condition import (
 )
 from action.views.edit_personalized import action_out_save_content, showurl
 from action.views.edit_survey import (
-    edit_description, select_column_action, select_condition,
+    edit_description, select_column_action, select_condition_for_question,
     shuffle_questions, unselect_column_action,
 )
 from action.views.import_export import (

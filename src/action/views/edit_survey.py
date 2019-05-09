@@ -250,7 +250,7 @@ def unselect_column_action(
 @csrf_exempt
 @require_http_methods(['POST'])
 @get_columncondition(pf_related=['columns', 'actions'])
-def select_condition(
+def select_condition_for_question(
     request: HttpRequest,
     pk: int,
     condpk: Optional[int] = None,
@@ -267,7 +267,6 @@ def select_condition(
 
     :return: JSON response
     """
-    # TODO: This function should have a different name
     condition = None
     if condpk:
         # Get the condition

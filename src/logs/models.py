@@ -1,32 +1,35 @@
 # -*- coding: utf-8 -*-
 
+"""Model for OnTask Logs."""
 
 import json
 
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.utils.functional import cached_property
+from django.utils.translation import ugettext_lazy as _
 
 from workflow.models import Workflow
 
 
 class LogManager(models.Manager):
+    """Manager to create elements with the right parameters."""
 
     def register(self, user, name, workflow, payload):
-        log_item = self.create(user=user,
-                               name=name,
-                               workflow=workflow,
-                               payload=payload)
+        """Handle user, name, workflow and payload."""
+        log_item = self.create(
+            user=user,
+            name=name,
+            workflow=workflow,
+            payload=payload)
         return log_item
 
 
 class Log(models.Model):
-    """
-    @DynamicAttrs
+    """Model to encode logs in OnTask.
 
-    Model to encode logs in OnTask
+    @DynamicAttrs
     """
 
     WORKFLOW_CREATE = 'workflow_create'
@@ -167,40 +170,46 @@ class Log(models.Model):
         (SCHEDULE_JSON_EXECUTE, _('Execute scheduled JSON action')),
     ]
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             db_index=True,
-                             on_delete=models.CASCADE,
-                             null=False,
-                             blank=False)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        db_index=True,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False)
 
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
     modified = models.DateTimeField(auto_now=True, null=False)
 
     # Type of event logged see above
-    name = models.CharField(max_length=256,
-                            blank=False,
-                            choices=LOG_TYPES)
+    name = models.CharField(
+        max_length=256,
+        blank=False,
+        choices=LOG_TYPES)
 
-    workflow = models.ForeignKey(Workflow,
-                                 db_index=True,
-                                 on_delete=models.CASCADE,
-                                 null=True,
-                                 related_name='logs')
+    workflow = models.ForeignKey(
+        Workflow,
+        db_index=True,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name='logs')
 
     # JSON element with additional information
-    payload = JSONField(default=dict,
-                        blank=True,
-                        null=True,
-                        verbose_name=_('payload'))
+    payload = JSONField(
+        default=dict,
+        blank=True,
+        null=True,
+        verbose_name=_('payload'))
 
     # Use our own manager
     objects = LogManager()
 
     def get_payload(self):
-        """
-        Function to access the payload information. If using a DB that
-        supports JSON this function should be rewritten (to be transparent).
+        """Function to access the payload information.
+
+        If using a DB that supports JSON this function should be rewritten (
+        to be transparent).
+
         :return: The JSON structure with the payload
         """
 
@@ -210,15 +219,16 @@ class Log(models.Model):
         return json.loads(self.payload)
 
     def set_payload(self, payload):
-        """
-        Save the payload structure as text. If using a DB that supports JSON,
-        this function should be rewritten.
+        """Save the payload structure as text.
+
+        If using a DB that supports JSON, this function should be rewritten.
+
         :return: Nothing.
         """
-
         self.payload = json.dumps(payload)
 
     def __unicode__(self):
+        """Represent as a tuple."""
         return '%s %s %s %s' % (self.user,
                                 self.created,
                                 self.name,
@@ -226,4 +236,5 @@ class Log(models.Model):
 
     @cached_property
     def log_useremail(self):
+        """Return the user email."""
         return self.user.email
