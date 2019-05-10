@@ -19,6 +19,7 @@ from ontask.permissions import UserIsInstructor
 from table.serializers import (
     DataFrameJSONMergeSerializer, DataFrameJSONSerializer,
     DataFramePandasMergeSerializer,
+    DataFramePandasSerializer,
 )
 from workflow.models import Workflow
 

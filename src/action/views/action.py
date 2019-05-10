@@ -5,6 +5,7 @@
 from builtins import object
 from typing import Optional, Union
 
+from django_tables2 import A
 import django_tables2 as tables
 from django.contrib.auth.decorators import user_passes_test
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
@@ -47,6 +48,15 @@ class ActionTable(tables.Table):
         empty_values=['', None],
     )
 
+    # FIX: Consider this column instead of the one above.
+    # last_executed_log = tables.LinkColumn(
+    #     verbose_name=_('Last executed'),
+    #     empty_values=['', None],
+    #     viewname='logs:view',
+    #     kwargs={'pk': A['id']},
+    #     attrs={'class': 'spin'}
+    # )
+
     #
     # Operatiosn available per action type (see partial_action_operations.html)
     #
@@ -71,28 +81,16 @@ class ActionTable(tables.Table):
 
     def render_name(self, record):
         """Render name as a link with a potential flag."""
-        # TODO: Move to a template
-        render_txt = '<a href="{0}" data-toggle="tooltip" title="{1}">{2}</a>'
-        danger_txt = ''
-        if record.get_row_all_false_count():
-            danger_txt = ugettext(
-                'Some users have all conditions equal to FALSE',
-            )
-        if not record.is_executable:
-            danger_txt = ugettext('Some elements in the survey are incomplete')
-
-        if danger_txt:
-            render_txt += (
-                ' <span class="fa fa-exclamation-triangle"'
-                + ' style="color:red;"'
-                + ' data-toggle="tooltip"'
-                + ' title="{0}"></span>'.format(danger_txt))
-
-        return format_html(
-            render_txt,
-            reverse('action:edit', kwargs={'pk': record.id}),
-            _('Edit the text, conditions and filter'),
-            record.name)
+        return render_to_string(
+            'action/includes/partial_action_name.html',
+            context={
+                'action_id': record.id,
+                'danger_msg': (
+                    record.get_row_all_false_count or not record.is_executable
+                ),
+                'action_name': record.name,
+            }
+        )
 
     def render_action_type(self, record):
         """Render the action type."""

@@ -10,7 +10,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from dataops.formula import evaluation
-from dataops.pandas import pandas_datatype_names
+from dataops.pandas.datatypes import pandas_datatype_names
 from dataops.pandas.columns import are_unique_columns, is_unique_column
 from dataops.pandas.db import store_table
 from dataops.sql.column_queries import get_df_column_types

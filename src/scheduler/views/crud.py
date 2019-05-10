@@ -2,14 +2,11 @@
 
 """Views to manipulate the CRUD for scheduled exections."""
 
-import datetime
 import json
 from builtins import object
 from typing import Optional
 
 import django_tables2 as tables
-import pytz
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
@@ -18,9 +15,8 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
 from django.utils.html import format_html
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 from django_tables2 import A
-from past.utils import old_div
 
 from action.models import Action
 from action.payloads import action_session_dictionary
@@ -117,132 +113,6 @@ class ScheduleActionTable(tables.Table):
             'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
             'id': 'scheduler-table'}
-
-
-def finish_scheduling(request, schedule_item=None, payload=None):
-    """Finalize the creation of a scheduled action.
-
-    All required data is passed through the payload.
-
-    :param request: Request object received
-
-    :param schedule_item: ScheduledAction item being processed. If None,
-    it has to be extracted from the information in the payload.
-
-    :param payload: Dictionary with all the required data coming from
-    previous requests.
-
-    :return:
-    """
-    # Get the payload from the session if not given
-    if payload is None:
-        payload = request.session.get(action_session_dictionary)
-
-        # If there is no payload, something went wrong.
-        if payload is None:
-            # Something is wrong with this execution. Return to action table.
-            messages.error(
-                request,
-                _('Incorrect action scheduling invocation.'))
-            return redirect('action:index')
-
-    # Get the scheduled item if needed
-    if not schedule_item:
-        s_item_id = payload.get('schedule_id')
-        if not s_item_id:
-            messages.error(
-                request,
-                _('Incorrect parameters in action scheduling'))
-            return redirect('action:index')
-
-        # Get the item being processed
-        schedule_item = ScheduledAction.objects.get(pk=s_item_id)
-
-    # Check for exclude values and store them if needed
-    exclude_values = payload.get('exclude_values')
-    if exclude_values:
-        schedule_item.exclude_values = exclude_values
-
-    schedule_item.status = ScheduledAction.STATUS_PENDING
-    schedule_item.save()
-
-    # Create the payload to record the event in the log
-    log_payload = {
-        'action': schedule_item.action.name,
-        'action_id': schedule_item.action.id,
-        'execute': schedule_item.execute.isoformat(),
-    }
-    if schedule_item.action.action_type == Action.personalized_text:
-        log_payload.update({
-            'email_column': schedule_item.item_column.name,
-            'subject': schedule_item.payload.get('subject'),
-            'cc_email': schedule_item.payload.get('cc_email', []),
-            'bcc_email': schedule_item.payload.get('bcc_email', []),
-            'send_confirmation': schedule_item.payload.get(
-                'send_confirmation',
-                False),
-            'track_read': schedule_item.payload.get('track_read', False),
-        })
-        log_type = Log.SCHEDULE_EMAIL_EDIT
-    elif schedule_item.action.action_type == Action.personalized_json:
-        ivalue = None
-        if schedule_item.item_column:
-            ivalue = schedule_item.item_column.name
-        log_payload.update({
-            'item_column': ivalue,
-            'token': schedule_item.payload.get('subject'),
-        })
-        log_type = Log.SCHEDULE_JSON_EDIT
-    elif schedule_item.action.action_type == Action.personalized_canvas_email:
-        ivalue = None
-        if schedule_item.item_column:
-            ivalue = schedule_item.item_column.name
-        log_payload.update({
-            'item_column': ivalue,
-            'token': schedule_item.payload.get('subject'),
-            'subject': schedule_item.payload.get('subject'),
-        })
-        log_type = Log.SCHEDULE_CANVAS_EMAIL_EXECUTE
-    else:
-        messages.error(
-            request,
-            _('This type of actions cannot be scheduled'))
-        return redirect('action:index')
-
-    # Create the log
-    Log.objects.register(
-        request.user,
-        log_type,
-        schedule_item.action.workflow,
-        log_payload)
-
-    # Notify the user. Show the time left until execution and a link to
-    # view the scheduled events with possibility of editing/deleting.
-    # Successful processing.
-    now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-    tdelta = schedule_item.execute - now
-
-    # Reset object to carry action info throughout dialogs
-    request.session[action_session_dictionary] = None
-    request.session.save()
-
-    # Create the timedelta string
-    delta_string = ''
-    if tdelta.days != 0:
-        delta_string += ugettext('{0} days').format(tdelta.days)
-    hours = old_div(tdelta.seconds, 3600)
-    if hours != 0:
-        delta_string += ugettext(', {0} hours').format(hours)
-    minutes = old_div((tdelta.seconds % 3600), 60)
-    if minutes != 0:
-        delta_string += ugettext(', {0} minutes').format(minutes)
-
-    # Successful processing.
-    return render(
-        request,
-        'scheduler/schedule_done.html',
-        {'tdelta': delta_string,
-         's_item': schedule_item})
 
 
 @user_passes_test(is_instructor)
