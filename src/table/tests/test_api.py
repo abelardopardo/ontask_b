@@ -3,14 +3,14 @@
 
 import os
 
-import pandas as pd
 from django.conf import settings
 from django.shortcuts import reverse
+import pandas as pd
 from rest_framework.authtoken.models import Token
 
+from dataops.pandas import check_wf_df, detect_datetime_columns, load_table
+from table.serializers import string_to_df
 import test
-from dataops.pandas import detect_datetime_columns, load_table, check_wf_df
-from table import serializers
 from workflow.models import Workflow
 from workflow.ops import workflow_delete_column
 
@@ -115,7 +115,7 @@ class TableApiCreate(TableApiBase):
                                            kwargs={'pk': workflow.id}))
 
         # Transform the response into a data frame
-        r_df = serializers.string_to_df(response.data['data_frame'])
+        r_df = string_to_df(response.data['data_frame'])
 
         # Load the df from the db
         df = load_table(workflow.get_data_frame_table_name())
@@ -227,7 +227,7 @@ class TableApiCreate(TableApiBase):
         response = self.client.post(
             reverse('table:api_pops',
                     kwargs={'pk': workflow.id}),
-            {'data_frame': serializers.df_to_string(r_df)},
+            {'data_frame': df_to_string(r_df)},
             format='json')
 
         # Refresh wflow (has been updated)
@@ -284,7 +284,7 @@ class TableApiCreate(TableApiBase):
         response = self.client.put(
             reverse('table:api_pops',
                     kwargs={'pk': workflow.id}),
-            {'data_frame': serializers.df_to_string(r_df)},
+            {'data_frame': table.serializers.pandas.df_to_string(r_df)},
             format='json')
 
         # Refresh wflow (has been updated)
@@ -359,7 +359,7 @@ class TableApiMerge(TableApiBase):
         workflow = Workflow.objects.all()[0]
 
         # Transform new table into string
-        r_df = serializers.string_to_df(response.data['src_df'])
+        r_df = table.serializers.pandas.string_to_df(response.data['src_df'])
 
         # Load the df from the db
         df = load_table(workflow.get_data_frame_table_name())
@@ -402,7 +402,7 @@ class TableApiMerge(TableApiBase):
         response = self.client.put(
             reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
             {
-                "src_df": serializers.df_to_string(r_df),
+                "src_df": table.serializers.pandas.df_to_string(r_df),
                 "how": "inner",
                 "left_on": "sid",
                 "right_on": "sid"
@@ -452,7 +452,7 @@ class TableApiMerge(TableApiBase):
         response = self.client.put(
             reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
             {
-                "src_df": serializers.df_to_string(r_df),
+                "src_df": table.serializers.pandas.df_to_string(r_df),
                 "how": "inner",
                 "left_on": "sid",
                 "right_on": "sid"
@@ -523,7 +523,7 @@ class TableApiMerge(TableApiBase):
         response = self.client.put(
             reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
             {
-                "src_df": serializers.df_to_string(r_df),
+                "src_df": table.serializers.pandas.df_to_string(r_df),
                 "how": "outer",
                 "left_on": "sid",
                 "right_on": "sid"
@@ -590,7 +590,7 @@ class TableApiMerge(TableApiBase):
         response = self.client.put(
             reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
             {
-                "src_df": serializers.df_to_string(r_df),
+                "src_df": table.serializers.pandas.df_to_string(r_df),
                 "how": "left",
                 "left_on": "sid",
                 "right_on": "sid"
@@ -692,7 +692,7 @@ class TableApiMerge(TableApiBase):
         response = self.client.put(
             reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
             {
-                "src_df": serializers.df_to_string(r_df),
+                "src_df": table.serializers.pandas.df_to_string(r_df),
                 "how": "outer",
                 "left_on": "sid",
                 "right_on": "sid"

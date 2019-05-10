@@ -10,12 +10,12 @@ from rest_framework.exceptions import APIException
 
 from action.serializers import ActionSerializer
 from dataops.pandas import store_table
-from table.serializers import DataFramePandasField, ViewSerializer
+from table.serializers import ViewSerializer, DataFramePandasField
 from workflow.column_serializers import ColumnSerializer
-from .models import Workflow
+from workflow.models import Workflow
 
 try:
-    profile
+    profile  # noqa:
 except NameError:
     profile = lambda x: x
 

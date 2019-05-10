@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-"""
-Implementation of views providing visualisation and stats
-"""
+
+"""Implementation of views providing visualisation and stats."""
+
 from typing import Optional
 
 from django.contrib import messages
@@ -18,24 +18,39 @@ from ontask.permissions import is_instructor
 from visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
 from workflow.models import Column, Workflow
 
+VISUALIZATION_WIDTH = 468
+VISUALIZATION_HEIGHT = 250
 
-def get_column_visualisations(column, col_data, vis_scripts,
-                              id='', single_val=None, context=None):
-    """
-    Given a column object and a dataframe, create the visualisations for
-    this column. The list vis_scripts is modified to include the scripts to
-    include in the HTML page. If single_val is not None, its position in
-    the visualisation is marked (place individual value in population
-    measure.
+
+def get_column_visualisations(
+    column,
+    col_data,
+    vis_scripts,
+    viz_id='',
+    single_val=None,
+    context=None,
+):
+    """Create a column visualization.
+
+    Given a column object and a dataframe, create the visualisations for this
+    column. The list vis_scripts is modified to include the scripts to
+    include in the HTML page. If single_val is not None, its position in the
+    visualisation is marked (place individual value in population measure.
+
     :param column: Column element to visualize
+
     :param col_data: Data in the column (extracted from the data frame)
-    :param id: String to use to label the visualization
+
+    :param viz_id: String to use to label the visualization
+
     :param vis_scripts: Collection of visualisation scripts needed in HTML
+
     :param single_val: Mark a specific value (or None)
+
     :param context: Dictionary to pass to the rendering
+
     :return:
     """
-
     # Result to return
     visualizations = []
 
@@ -47,41 +62,49 @@ def get_column_visualisations(column, col_data, vis_scripts,
     if column.data_type == 'integer' or column.data_type == 'double':
 
         # Propagate the id if given
-        if id:
-            context['id'] = id + '_boxplot'
+        if viz_id:
+            context['id'] = viz_id + '_boxplot'
 
         if single_val is not None:
             context['individual_value'] = single_val
-        v1 = PlotlyBoxPlot(data=col_data,
-                           context=context)
+        v1 = PlotlyBoxPlot(
+            data=col_data,
+            context=context)
         v1.get_engine_scripts(vis_scripts)
         visualizations.append(v1)
 
     # Create V2
     # Propagate the id if given
-    if id:
-        context['id'] = id + '_histogram'
+    if viz_id:
+        context['id'] = viz_id + '_histogram'
 
     if single_val is not None:
         context['individual_value'] = single_val
-    v2 = PlotlyColumnHistogram(data=col_data,
-                               context=context)
+    v2 = PlotlyColumnHistogram(
+        data=col_data,
+        context=context)
     v2.get_engine_scripts(vis_scripts)
     visualizations.append(v2)
 
     return visualizations
 
 
-def get_column_visualization_items(workflow,
-                                   column,
-                                   max_width=800,
-                                   max_height=450):
-    """
-    Get the visualization items (scripts and HTML) for a column
+def get_column_visualization_items(
+    workflow,
+    column,
+    max_width=VISUALIZATION_WIDTH,
+    max_height=VISUALIZATION_HEIGHT,
+):
+    """Get the visualization items (scripts and HTML) for a column.
+
     :param workflow: Workflow being processed
+
     :param column: Column requested
+
     :param max_width: Maximum width attribute in pixels
+
     :param max_width: Maximum height attribute in pixels
+
     :return: Tuple stat_data with descriptive stats, visualization scripts and
     visualization HTML
     """
@@ -96,12 +119,12 @@ def get_column_visualization_items(workflow,
         column,
         df[[column.name]],
         vis_scripts,
-        context={'style': 'max-width:{0}px; max-height:{1}px;'
-                          'display:inline-block;'.format(
-            max_width,
-            max_height
-        )
-        }
+        context={
+            'style': 'max-width:{0}px; max-height:{1}px;'.format(
+                max_width,
+                max_height,
+            ) + 'display:inline-block;',
+        },
     )
 
     return stat_data, vis_scripts, visualizations
@@ -115,12 +138,13 @@ def stat_column(
     workflow: Optional[Workflow] = None,
     column: Optional[Column] = None,
 ) -> HttpResponse:
-    """
-    Render the page with stats and visualizations for the given column
-    The page includes the following visualizations:
-      First row: quartile information (only for integer and double)
-      V1. Box plot. Only for columns of type integer and double.
-      V2. Histogram. For columns of type integer, double, string, boolean
+    """Render the stat page for a column.
+
+    Render the page with stats and visualizations for the given column The
+    page includes the following visualizations: First row: quartile
+    information (only for integer and double) V1. Box plot. Only for columns
+    of type integer and double. V2. Histogram. For columns of type integer,
+    double, string, boolean
 
     :param request: HTTP request
 
@@ -128,41 +152,44 @@ def stat_column(
 
     :return: Render the page
     """
-    stat_data, vis_scripts, visualizations = \
-        get_column_visualization_items(workflow, column)
+    stat_data, vis_scripts, visualizations = get_column_visualization_items(
+        workflow, column)
 
-    return render(request,
-                  'table/stat_column.html',
-                  {'column': column,
-                   'stat_data': stat_data,
-                   'vis_scripts': vis_scripts,
-                   'visualizations': [v.html_content for v in visualizations]}
-                  )
+    return render(
+        request,
+        'table/stat_column.html',
+        {
+            'column': column,
+            'stat_data': stat_data,
+            'vis_scripts': vis_scripts,
+            'visualizations': [viz.html_content for viz in visualizations]},
+    )
 
 
 @user_passes_test(is_instructor)
 @get_column(pf_related='columns')
-def stat_column_JSON(request: HttpRequest,
-                     pk: int,
-                     workflow: Optional[Workflow] = None,
-                     column: Optional[Column] = None,
-                     ) -> HttpResponse:
-    """
-    Function to respond a JSON GET request to show the column statistics
-    in a modal
+def stat_column_json(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    column: Optional[Column] = None,
+) -> HttpResponse:
+    """Process JSON GET request to show the column statistics in a modal.
+
     :param request: HTTP request
+
     :param pk: Column primary key
+
     :return: HTML rendering of the visualization
     """
     # Request to see the statistics for a non-key column that belongs to the
     # selected workflow
 
-    stat_data, __, visualizations = \
-        get_column_visualization_items(
-            workflow,
-            column,
-            max_height=250,
-            max_width=468)
+    stat_data, __, visualizations = get_column_visualization_items(
+        workflow,
+        column,
+        max_height=VISUALIZATION_HEIGHT,
+        max_width=VISUALIZATION_WIDTH)
 
     # Create the right key/value pair in the result dictionary
     return JsonResponse({
@@ -171,8 +198,10 @@ def stat_column_JSON(request: HttpRequest,
             context={
                 'column': column,
                 'stat_data': stat_data,
-                'visualizations': [v.html_content for v in visualizations]},
-            request=request)
+                'visualizations': [
+                    viz.html_content for viz in visualizations],
+            },
+            request=request),
     })
 
 
@@ -183,14 +212,16 @@ def stat_row_view(
     pk: Optional[int] = None,
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
-    """
+    """Render stats for a row.
+
     Render the page with stats and visualizations for a row in the table and
-    a view (subset of columns).
-    The request must include key and value to get the right row. In
-    principle, there is a visualisation for each row.
+    a view (subset of columns). The request must include key and value to get
+    the right row. In principle, there is a visualisation for each row.
 
     :param request: HTTP request
+
     :param pk: View id to use
+
     :return: Render the page
     """
     # If there is no workflow object, go back to the index
@@ -200,8 +231,10 @@ def stat_row_view(
 
     if not update_key or not update_val:
         # Malformed request
-        return render(request, 'error.html',
-                      {'message': _('Unable to visualize table row')})
+        return render(
+            request,
+            'error.html',
+            {'message': _('Unable to visualize table row')})
 
     # If a view is given, filter the columns
     columns_to_view = workflow.columns.all()
@@ -212,7 +245,7 @@ def stat_row_view(
             # View not found. Redirect to home
             return redirect('home')
         columns_to_view = view.columns.all()
-        column_names = [c.name for c in columns_to_view]
+        column_names = [col.name for col in columns_to_view]
 
         df = load_table(
             workflow.get_data_frame_table_name(),
@@ -241,38 +274,38 @@ def stat_row_view(
         # Add the title and surrounding container
         visualizations.append('<h4>' + column.name + '</h4>')
         # If all values are empty, no need to proceed
-        if all([not x for x in df[column.name]]):
-            visualizations.append("<p>" +
-                                  _('No values in this column') +
-                                  "</p><hr/>")
+        if all(not col for col in df[column.name]):
+            visualizations.append(
+                '<p>' + _('No values in this column') + '</p><hr/>')
             continue
 
         if row[column.name] is None or row[column.name] == '':
             visualizations.append(
-                '<p class="alert-warning">' +
-                _('No value for this student in this column') + '</p>'
+                '<p class="alert-warning">'
+                + _('No value for this student in this column')
+                + '</p>',
             )
 
-        visualizations.append(
-            '<div style="display: inline-flex;">'
-        )
+        visualizations.append('<div style="display: inline-flex;">')
 
-        v = get_column_visualisations(
+        col_viz = get_column_visualisations(
             column,
             df[[column.name]],
             vis_scripts=vis_scripts,
-            id='column_{0}'.format(idx),
+            viz_id='column_{0}'.format(idx),
             single_val=row[column.name],
             context=context)
 
-        visualizations.extend([x.html_content for x in v])
+        visualizations.extend([viz.html_content for viz in col_viz])
         visualizations.append('</div><hr/>')
 
-    return render(request,
-                  'table/stat_row.html',
-                  {'value': update_val,
-                   'vis_scripts': vis_scripts,
-                   'visualizations': visualizations})
+    return render(
+        request,
+        'table/stat_row.html',
+        {
+            'value': update_val,
+            'vis_scripts': vis_scripts,
+            'visualizations': visualizations})
 
 
 @user_passes_test(is_instructor)
@@ -282,18 +315,20 @@ def stat_table_view(
     pk: Optional[int] = None,
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
-    """
-    Render the page with stats and visualizations for a view.
+    """Render the page with stats and visualizations for a view.
 
     :param request: HTTP request
+
     :param pk: View id to use
+
     :return: Render the page
     """
     # If the workflow has no data, something went wrong, go back to the
     # workflow details page
     if workflow.nrows == 0:
-        messages.error(request,
-                       _('Unable to provide visualisation without data.'))
+        messages.error(
+            request,
+            _('Unable to provide visualisation without data.'))
         return redirect('worflow:detail', workflow.id)
 
     # If a view is given, filter the columns
@@ -308,7 +343,7 @@ def stat_table_view(
 
         df = load_table(
             workflow.get_data_frame_table_name(),
-            [x.name for x in columns_to_view],
+            [col.name for col in columns_to_view],
             view.formula)
     else:
         # No view given, fetch the entire data frame
@@ -328,26 +363,25 @@ def stat_table_view(
         # Add the title and surrounding container
         visualizations.append('<h4>' + column.name + '</h4>')
         # If all values are empty, no need to proceed
-        if all([not x for x in df[column.name]]):
-            visualizations.append("<p>No values in this column</p><hr/>")
+        if all(not col_data for col_data in df[column.name]):
+            visualizations.append('<p>No values in this column</p><hr/>')
             continue
 
-        visualizations.append(
-            '<div style="display: inline-flex;">'
-        )
+        visualizations.append('<div style="display: inline-flex;">')
 
-        v = get_column_visualisations(
+        column_viz = get_column_visualisations(
             column,
             df[[column.name]],
             vis_scripts=vis_scripts,
-            id='column_{0}'.format(idx),
+            viz_id='column_{0}'.format(idx),
             context=context)
 
-        visualizations.extend([x.html_content for x in v])
+        visualizations.extend([vis.html_content for vis in column_viz])
         visualizations.append('</div><hr/>')
 
-    return render(request,
-                  'table/stat_view.html',
-                  {'view': view,
-                   'vis_scripts': vis_scripts,
-                   'visualizations': visualizations})
+    return render(
+        request,
+        'table/stat_view.html',
+        {'view': view,
+         'vis_scripts': vis_scripts,
+         'visualizations': visualizations})

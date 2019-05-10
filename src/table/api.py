@@ -17,8 +17,9 @@ from ontask import OnTaskDataFrameNoKey
 from ontask.decorators import get_workflow
 from ontask.permissions import UserIsInstructor
 from table.serializers import (
-    DataFrameJSONMergeSerializer, DataFrameJSONSerializer,
-    DataFramePandasMergeSerializer, DataFramePandasSerializer,
+    DataFrameJSONSerializer,
+    DataFrameJSONMergeSerializer,
+    DataFramePandasMergeSerializer,
 )
 from workflow.models import Workflow
 
