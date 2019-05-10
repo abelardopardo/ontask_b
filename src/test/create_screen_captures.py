@@ -1,23 +1,24 @@
 # -*- coding: utf-8 -*-
 
 
-from future import standard_library
-
-from action.models import Action
-
-standard_library.install_aliases()
 import os
+import test
+from test import ElementHasFullOpacity, ScreenTests
 
 from django.conf import settings
+from future import standard_library
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
-import test
+from action.models import Action
 from dataops.pandas import destroy_db_engine, engine
-from test import ElementHasFullOpacity, ScreenTests
+
+standard_library.install_aliases()
+
+
 
 class ScreenTutorialTest(ScreenTests):
 

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+from __future__ import print_function, unicode_literals
 
 import random
+from builtins import str
 
 import pandas as pd
-from builtins import str
 
 from dataops.plugin.ontask_plugin import OnTaskPluginAbstract
 

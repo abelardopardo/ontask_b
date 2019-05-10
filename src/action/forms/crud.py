@@ -14,8 +14,8 @@ FilterForm: Form to process filter elements
 ConditionForm: Form to process condition elements
 """
 
-from builtins import object, str
 import json
+from builtins import object, str
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _

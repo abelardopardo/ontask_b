@@ -4,7 +4,7 @@ from django.utils.translation import ugettext
 from action.payloads import JSONPayload
 from action.send import send_json
 from logs.models import Log
-from ontask.tasks.basic import get_log_item, get_execution_items
+from ontask.tasks.basic import get_execution_items, get_log_item
 
 
 @shared_task

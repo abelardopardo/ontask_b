@@ -21,10 +21,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from dataops.sql import search_table
 from action.models import Action
 from action.views.serve_survey import serve_survey_row
 from core.datatables import DataTablesServerSidePaging
+from dataops.sql import search_table
 from ontask.decorators import get_action
 from ontask.permissions import is_instructor
 from workflow.models import Column, Workflow

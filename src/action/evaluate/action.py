@@ -24,9 +24,9 @@ import ontask
 from action.evaluate.template import render_action_template
 from action.forms import EnterActionIn
 from action.models import Action
-from dataops.sql import table_queries
+from dataops.formula import EVAL_EXP, evaluate_formula
 from dataops.pandas import get_table_row_by_index
-from dataops.formula import evaluate_formula, EVAL_EXP
+from dataops.sql import table_queries
 from dataops.sql.row_queries import get_rows
 
 

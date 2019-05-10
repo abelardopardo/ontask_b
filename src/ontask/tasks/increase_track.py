@@ -3,8 +3,8 @@ from django.contrib.auth import get_user_model
 from django.core import signing
 from django.utils.translation import ugettext
 
-from action.models import Action
 import dataops.sql
+from action.models import Action
 from logs.models import Log
 from ontask.tasks.basic import logger
 

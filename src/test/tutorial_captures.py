@@ -2,6 +2,8 @@
 
 
 import os
+import test
+from test import ElementHasFullOpacity, ScreenTests
 
 from django.conf import settings
 from selenium.webdriver.common.by import By
@@ -10,10 +12,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
-import test
 from action.models import Action
 from dataops.pandas import destroy_db_engine, engine
-from test import ElementHasFullOpacity, ScreenTests
 
 
 class TutorialCaptures(ScreenTests):

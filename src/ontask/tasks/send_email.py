@@ -3,7 +3,7 @@ from django.utils.translation import ugettext
 
 from action.payloads import EmailPayload
 from action.send import send_emails
-from ontask.tasks.basic import get_log_item, get_execution_items
+from ontask.tasks.basic import get_execution_items, get_log_item
 
 
 @shared_task

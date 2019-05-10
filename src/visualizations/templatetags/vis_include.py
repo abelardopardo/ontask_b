@@ -8,11 +8,7 @@ from django import template
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
-from action.evaluate import (
-    action_context_var,
-    viz_number_context_var,
-    tr_item,
-)
+from action.evaluate import action_context_var, tr_item, viz_number_context_var
 from dataops.pandas import get_subframe
 from visualizations.plotly import PlotlyColumnHistogram
 

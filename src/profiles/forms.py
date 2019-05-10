@@ -1,10 +1,12 @@
 
 from builtins import object
-from django import forms
+
+from crispy_forms.bootstrap import AppendedText, FormActions, PrependedText
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field
-from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
+from crispy_forms.layout import HTML, Button, Div, Field, Layout, Row, Submit
+from django import forms
 from django.contrib.auth import get_user_model
+
 from . import models
 
 User = get_user_model()

@@ -13,7 +13,7 @@ from __future__ import unicode_literals
 import json
 import os
 import sys
-from os.path import dirname, join, exists
+from os.path import dirname, exists, join
 
 import environ
 from celery.schedules import crontab

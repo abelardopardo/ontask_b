@@ -1,6 +1,7 @@
 
-from builtins import object
 import time
+from builtins import object
+
 
 class Timer(object):
     def __init__(self, verbose=False):

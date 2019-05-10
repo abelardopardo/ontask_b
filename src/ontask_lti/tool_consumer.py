@@ -1,8 +1,8 @@
+import time
 from collections import defaultdict
 from urllib.parse import unquote
 
 import oauth2
-import time
 
 from .launch_params import LaunchParamsMixin
 from .request_validator import RequestValidatorMixin

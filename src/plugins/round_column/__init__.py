@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+from __future__ import print_function, unicode_literals
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from dataops.plugin.ontask_plugin import OnTaskPluginAbstract
 

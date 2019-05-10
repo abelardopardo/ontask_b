@@ -1,17 +1,15 @@
 
-from builtins import object
-import logging
 import json
-
+import logging
+from builtins import object
 from collections import OrderedDict
 
+from django.conf import settings
 from django.contrib import auth
 from django.core.exceptions import ImproperlyConfigured
-from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from .timer import Timer
-
 
 logger = logging.getLogger('onTask')
 

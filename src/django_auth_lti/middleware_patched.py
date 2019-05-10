@@ -6,8 +6,8 @@ from django.conf import settings
 from django.contrib import auth
 from django.core.exceptions import ImproperlyConfigured
 
-from .timer import Timer
 from .thread_local import set_current_request
+from .timer import Timer
 
 logger = logging.getLogger('onTask')
 

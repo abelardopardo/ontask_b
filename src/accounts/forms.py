@@ -1,9 +1,9 @@
 
 
-from django import forms
 from authtools import forms as authtoolsforms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, HTML, Field
+from crispy_forms.layout import HTML, Field, Layout, Submit
+from django import forms
 from django.contrib.auth import forms as authforms
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import reverse

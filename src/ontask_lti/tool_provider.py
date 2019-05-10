@@ -1,11 +1,13 @@
-from .launch_params import LaunchParamsMixin
-from .request_validator import RequestValidatorMixin, \
-    FlaskRequestValidatorMixin, DjangoRequestValidatorMixin
-from .outcome_request import OutcomeRequest
-from collections import defaultdict
 import re
-from urllib.parse import urlencode
-from urllib.parse import urlsplit, urlunsplit
+from collections import defaultdict
+from urllib.parse import urlencode, urlsplit, urlunsplit
+
+from .launch_params import LaunchParamsMixin
+from .outcome_request import OutcomeRequest
+from .request_validator import (
+    DjangoRequestValidatorMixin, FlaskRequestValidatorMixin,
+    RequestValidatorMixin,
+)
 
 try:
     from urllib.parse import parse_qsl

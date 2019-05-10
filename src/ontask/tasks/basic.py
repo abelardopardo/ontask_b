@@ -4,11 +4,11 @@
 
 from typing import Optional, Tuple
 
+from celery.utils.log import get_task_logger
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext
 
 from action.models import Action
-from celery.utils.log import get_task_logger
 from logs.models import Log
 from workflow.models import Workflow
 

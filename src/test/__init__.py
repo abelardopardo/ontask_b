@@ -1,39 +1,37 @@
 # -*- coding: utf-8 -*-
-import subprocess
-
-from django.db import connection
-from future import standard_library
-
-from workflow.models import Workflow
-
-standard_library.install_aliases()
-from builtins import str
-from builtins import range
-from builtins import object
 import io
-import os
 import math
-from PIL import Image
-import pandas as pd
+import os
+import subprocess
+from builtins import object, range, str
 
+import pandas as pd
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
+from django.db import connection
 from django.shortcuts import reverse
-from django.test import TransactionTestCase, LiveServerTestCase
+from django.test import LiveServerTestCase, TransactionTestCase
+from future import standard_library
+from PIL import Image
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITransactionTestCase
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.firefox.options import Options
 
 from action.models import Action
 from dataops.pandas import destroy_db_engine, engine
 from ontask.permissions import group_names
+from workflow.models import Workflow
+
+standard_library.install_aliases()
+
+
 
 # email, [groups], Superuser?
 user_info = [

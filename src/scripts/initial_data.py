@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import str
 import codecs
 import csv
 import getopt
 import os
 import shlex
 import sys
+from builtins import str
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group

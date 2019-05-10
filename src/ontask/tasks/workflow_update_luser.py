@@ -1,7 +1,7 @@
 from celery import shared_task
 from django.utils.translation import ugettext
 
-from ontask.tasks.basic import get_log_item, get_execution_items
+from ontask.tasks.basic import get_execution_items, get_log_item
 from workflow.ops import do_workflow_update_lusers
 
 

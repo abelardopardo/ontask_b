@@ -12,9 +12,7 @@ from django.views import generic
 
 from action.forms import ConditionForm, FilterForm
 from action.models import Action, Condition
-from dataops.formula import (
-    evaluate_formula, get_variables, EVAL_TXT
-)
+from dataops.formula import EVAL_TXT, evaluate_formula, get_variables
 from logs.models import Log
 from ontask.decorators import get_action, get_condition
 from ontask.permissions import UserIsInstructor, is_instructor

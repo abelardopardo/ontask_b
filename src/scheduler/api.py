@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
+from django.db.models import Q
 from rest_framework import generics, status
 
-from django.db.models import Q
+from action.models import Action
 from ontask.permissions import UserIsInstructor
 from scheduler.models import ScheduledAction
-from scheduler.serializers import ScheduledEmailSerializer, \
-    ScheduledJSONSerializer
-
-from action.models import Action
+from scheduler.serializers import (
+    ScheduledEmailSerializer, ScheduledJSONSerializer,
+)
 
 
 class ScheduledActionAPIListCreate(generics.ListCreateAPIView):

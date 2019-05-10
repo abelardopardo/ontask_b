@@ -1,11 +1,13 @@
 from builtins import object
+
 from braces.views import LoginRequiredMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 
 from django_auth_lti.verification import is_allowed
-from django.utils.translation import ugettext_lazy as _
+
 
 class LTIUtilityMixin(object):
     def get_lti_param(self, keyword, default=None):

@@ -1,4 +1,5 @@
 from collections import defaultdict
+
 from lxml import etree, objectify
 
 from .utils import InvalidLTIConfigError

@@ -3,7 +3,6 @@ Allow for setting/getting of the current request in thread local
 """
 import threading
 
-
 _thread_local = threading.local()
 
 

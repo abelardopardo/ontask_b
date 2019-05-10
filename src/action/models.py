@@ -17,8 +17,8 @@ from django.utils.translation import ugettext_lazy as _
 
 import dataops.sql.row_queries
 import ontask
+from dataops.formula import EVAL_TXT, evaluate_formula
 from dataops.sql import table_queries
-from dataops.formula import evaluate_formula, EVAL_TXT
 from logs.models import Log
 from workflow.models import Column, Workflow
 

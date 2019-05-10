@@ -16,9 +16,9 @@ from action.payloads import (
     JSONPayload, action_session_dictionary, get_action_info,
 )
 from logs.models import Log
+from ontask.celery import celery_is_up
 from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
-from ontask.celery import celery_is_up
 from ontask.tasks import send_json_objects
 from workflow.models import Workflow
 

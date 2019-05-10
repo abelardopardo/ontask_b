@@ -2,6 +2,6 @@
 
 from workflow.serializers.column import ColumnNameSerializer, ColumnSerializer
 from workflow.serializers.workflow import (
-    WorkflowListSerializer, WorkflowExportSerializer, WorkflowImportSerializer,
-    WorkflowLockSerializer
+    WorkflowExportSerializer, WorkflowImportSerializer, WorkflowListSerializer,
+    WorkflowLockSerializer,
 )

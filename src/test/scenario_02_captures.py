@@ -2,15 +2,15 @@
 
 
 import os
+import test
+from test import ScreenTests
 
 from django.conf import settings
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-import test
 from dataops.pandas import destroy_db_engine, engine
-from test import ScreenTests
 
 
 class Scenario2Captures(ScreenTests):

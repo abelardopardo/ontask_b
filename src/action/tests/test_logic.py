@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+from __future__ import print_function, unicode_literals
 
 import os
+import test
 
 from django.conf import settings
 from django.shortcuts import reverse
 
-import test
 from dataops.pandas import load_table
 from workflow.models import Workflow
 

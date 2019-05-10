@@ -3,8 +3,7 @@ from __future__ import print_function, unicode_literals
 
 from django.test import TestCase
 
-from dataops.formula import evaluation
-from dataops.formula import EVAL_EXP
+from dataops.formula import EVAL_EXP, evaluation
 
 
 class HasVariableTest(TestCase):

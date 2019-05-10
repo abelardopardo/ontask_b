@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+from __future__ import print_function, unicode_literals
 
 import gzip
 import os
 import shutil
 import tempfile
+import test
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -14,13 +15,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-import test
 from dataops.pandas import destroy_db_engine, engine
 from workflow.models import Workflow
 from workflow.ops import (
-    do_export_workflow,
-    do_import_workflow_parse,
-    do_export_workflow_parse
+    do_export_workflow, do_export_workflow_parse, do_import_workflow_parse,
 )
 
 
@@ -280,4 +278,3 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
                 self.assertEqual(t1.column.name, t2.column.name)
                 if t1.condition:
                     self.assertEqual(t1.condition.name, t2.condition.name)
-

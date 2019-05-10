@@ -1,18 +1,17 @@
 
 
-from django.contrib.auth.decorators import login_required
-from django.views import generic
-from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
-from rest_framework.authtoken.models import Token
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
+from django.views import generic
+from rest_framework.authtoken.models import Token
 
 from ontask.permissions import is_instructor
 from ontask_oauth.models import OnTaskOAuthUserTokens
-from . import forms
-from . import models
+
+from . import forms, models
 
 
 class ShowProfile(LoginRequiredMixin, generic.TemplateView):

@@ -29,7 +29,7 @@ from dataops.forms.dataframeupload import (
     load_df_from_s3,
 )
 from dataops.models import SQLConnection
-from dataops.pandas import verify_data_frame, store_dataframe
+from dataops.pandas import store_dataframe, verify_data_frame
 from ontask import OnTaskDataFrameNoKey, ontask_prefs
 from ontask.forms import RestrictedFileField
 # Field prefix to use in forms to avoid using column names (they are given by

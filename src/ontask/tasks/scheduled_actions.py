@@ -3,11 +3,11 @@
 """Process the scheduled actions."""
 
 import datetime
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 
+import pytz
 from celery import shared_task
 from django.conf import settings as ontask_settings
-import pytz
 
 from action.models import Action
 from logs.models import Log

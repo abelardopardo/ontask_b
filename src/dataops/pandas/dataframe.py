@@ -10,11 +10,11 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from dataops.formula import evaluation
+from dataops.pandas import pandas_datatype_names
 from dataops.pandas.columns import are_unique_columns, is_unique_column
 from dataops.pandas.db import store_table
-from dataops.pandas import pandas_datatype_names
-from dataops.sql.row_queries import get_rows
 from dataops.sql.column_queries import get_df_column_types
+from dataops.sql.row_queries import get_rows
 
 
 def _store_temporary_dataframe(data_frame, workflow):

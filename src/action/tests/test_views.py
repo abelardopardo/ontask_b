@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+from __future__ import print_function, unicode_literals
 
 import os
+import test
 
 from django.conf import settings
 from django.core import mail
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.webdriver.support.ui import Select, WebDriverWait
 
-import test
 from action.models import Action, Condition
-from dataops.pandas import check_wf_df
 from dataops.formula import has_variable
+from dataops.pandas import check_wf_df
 from workflow.models import Workflow
 
 
