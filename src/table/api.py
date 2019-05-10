@@ -10,15 +10,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from dataops.pandas import (
-    load_table, store_dataframe, verify_data_frame, is_unique_column,
-    perform_dataframe_upload_merge
+    is_unique_column, load_table, perform_dataframe_upload_merge,
+    store_dataframe, verify_data_frame,
 )
 from ontask import OnTaskDataFrameNoKey
 from ontask.decorators import get_workflow
 from ontask.permissions import UserIsInstructor
 from table.serializers import (
-    DataFrameJSONSerializer,
-    DataFrameJSONMergeSerializer,
+    DataFrameJSONMergeSerializer, DataFrameJSONSerializer,
     DataFramePandasMergeSerializer,
 )
 from workflow.models import Workflow

@@ -11,7 +11,7 @@ from rest_framework import serializers
 from action.models import Action, ActionColumnConditionTuple, Condition
 from dataops.formula import get_variables
 from dataops.sql.column_queries import add_column_to_db
-from workflow.column_serializers import ColumnNameSerializer, ColumnSerializer
+from workflow.serializers import ColumnNameSerializer, ColumnSerializer
 
 try:
     profile  # noqa: Z444

@@ -3,8 +3,7 @@
 
 import datetime
 import json
-from builtins import object
-from builtins import str
+from builtins import object, str
 
 import pytz
 from django.conf import settings
@@ -13,7 +12,7 @@ from django.contrib.postgres.fields import JSONField
 from django.contrib.sessions.models import Session
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import models, connection
+from django.db import connection, models
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
@@ -689,5 +688,3 @@ def is_table_in_db(table_name: str) -> bool:
              if x.name == table_name),
             False
         )
-
-

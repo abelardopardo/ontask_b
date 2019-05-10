@@ -1,29 +1,33 @@
 # -*- coding: utf-8 -*-
 
+"""Serializers to import/export columns and column names."""
 
 from builtins import object
+
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 from dataops.pandas import pandas_datatype_names
 from workflow.models import Column
 
-
 try:
-    profile
+    profile  # noqa: Z444
 except NameError:
-    profile = lambda x: x
+    profile = lambda bogus_param: bogus_param  # noqa: E731
 
 
 class ColumnSerializer(serializers.ModelSerializer):
+    """Serialize the entire object."""
 
     @profile
     def create(self, validated_data, **kwargs):
-
+        """Create a new column."""
         # Preliminary checks
         data_type = validated_data.get('data_type', None)
-        if data_type is None or \
-                data_type not in list(pandas_datatype_names.values()):
+        if (
+            data_type is None
+            or data_type not in list(pandas_datatype_names.values())
+        ):
             # The data type is not legal
             raise Exception(_('Incorrect data type {0}.').format(data_type))
 
@@ -45,30 +49,39 @@ class ColumnSerializer(serializers.ModelSerializer):
             # Set the categories if they exists
             column_obj.set_categories(
                 validated_data.get('categories', []),
-                True
-            )
+                True)
 
-            if column_obj.active_from and column_obj.active_to and \
-                    column_obj.active_from > column_obj.active_to:
+            if (
+                column_obj.active_from and column_obj.active_to
+                and column_obj.active_from > column_obj.active_to
+            ):
                 raise Exception(
-                    _('Incorrect date/times in the active window for '
-                      'column {0}').format(validated_data['name']))
+                    _(
+                        'Incorrect date/times in the active window for '
+                        + 'column {0}').format(validated_data['name']))
 
             # All tests passed, proceed to save the object.
             column_obj.save()
-        except Exception as e:
+        except Exception as exc:
             if column_obj:
                 column_obj.delete()
-            raise e
+            raise exc
 
         return column_obj
 
     class Meta(object):
+        """Select the model and the fields."""
+
         model = Column
         exclude = ('id', 'workflow')
 
 
 class ColumnNameSerializer(serializers.ModelSerializer):
+    """Serializer to return only the name."""
+
     class Meta(object):
+        """Select the model and the name."""
+
         model = Column
+
         fields = ('name',)

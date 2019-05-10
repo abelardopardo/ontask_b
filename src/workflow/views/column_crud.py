@@ -1,39 +1,36 @@
 # -*- coding: utf-8 -*-
 
+"""Views for create/rename/update/delete columns."""
 
-from builtins import range
 import random
+from builtins import range
 from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db import IntegrityError
 from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.csrf import csrf_exempt
 
 from action.models import ActionColumnConditionTuple, Condition
 from dataops.formula import evaluation
 from dataops.pandas import (
-    add_column_to_df, load_table, pandas_datatype_names, store_dataframe,
-    rename_df_column
+    add_column_to_df, load_table, pandas_datatype_names, rename_df_column,
+    store_dataframe,
 )
 from dataops.sql import db_rename_column
 from logs.models import Log
 from ontask import create_new_name
 from ontask.decorators import get_column, get_workflow
 from ontask.permissions import is_instructor
-from workflow.models import Column, Workflow
-from .forms import (
+from workflow.forms import (
     ColumnAddForm, ColumnRenameForm, FormulaColumnAddForm, QuestionAddForm,
     QuestionRenameForm, RandomColumnAddForm,
 )
-from .ops import (
-    clone_column, workflow_delete_column, workflow_restrict_column,
-)
+from workflow.models import Column, Workflow
+from workflow.ops import clone_column, workflow_delete_column
 
 # These are the column operands offered through the GUI. They have immediate
 # translations onto Pandas operators over dataframes.
@@ -43,31 +40,41 @@ from .ops import (
 # - List of data types that are allowed (for data type checking)
 formula_column_operands = [
     ('sum', _('sum: Sum selected columns'), ['integer', 'double']),
-    ('prod', _('prod: Product of the selected columns'), ['integer', 'double']),
+    ('prod',
+     _('prod: Product of the selected columns'),
+     ['integer', 'double']),
     ('max', _('max: Maximum of the selected columns'), ['integer', 'double']),
     ('min', _('min: Minimum of the selected columns'), ['integer', 'double']),
     ('mean', _('mean: Mean of the selected columns'), ['integer', 'double']),
-    ('median', _('median: Median of the selected columns'),
+    ('median',
+     _('median: Median of the selected columns'),
      ['integer', 'double']),
-    ('std', _('std: Standard deviation over the selected columns'),
+    ('std',
+     _('std: Standard deviation over the selected columns'),
      ['integer', 'double']),
-    ('all', _('all: True when all elements in selected columns are true'),
+    ('all',
+     _('all: True when all elements in selected columns are true'),
      ['boolean']),
-    ('any', _('any: True when any element in selected columns is true'),
+    ('any',
+     _('any: True when any element in selected columns is true'),
      ['boolean']),
 ]
 
 
-def partition(list_in, n):
-    """
+def partition(list_in, num):
+    """Partitions the list in num lists.
+
     Given a list and n, returns a list with n lists, and inside each of them a
     set of elements from the shuffled list. All lists are of the same size
+
     :param list_in: List of elements to partition
-    :param n: Number of partitions
+
+    :param num: Number of partitions
+
     :return: List of lists with shuffled elements partitioned
     """
     random.shuffle(list_in)
-    return [list_in[i::n] for i in range(n)]
+    return [list_in[idx::num] for idx in range(num)]
 
 
 @user_passes_test(is_instructor)
@@ -93,12 +100,12 @@ def column_add(
         if is_question:
             messages.error(
                 request,
-                _('Cannot add question to a workflow without data')
+                _('Cannot add question to a workflow without data'),
             )
         else:
             messages.error(
                 request,
-                _('Cannot add column to a workflow without data')
+                _('Cannot add column to a workflow without data'),
             )
         return JsonResponse({'html_redirect': ''})
 
@@ -111,7 +118,7 @@ def column_add(
         if not action:
             messages.error(
                 request,
-                _('Cannot find action to add question.')
+                _('Cannot find action to add question.'),
             )
             return JsonResponse({'html_redirect': reverse('action:index')})
 
@@ -146,10 +153,6 @@ def column_add(
         # Add the column with the initial value to the dataframe
         df = add_column_to_df(df, column, column_initial_value)
 
-        # Update the column type with the value extracted from the data frame
-        # column.data_type = \
-        #     pandas_db.pandas_datatype_names[df[column.name].dtype.name]
-
         # Update the positions of the appropriate columns
         workflow.reposition_columns(workflow.ncols + 1, column.position)
 
@@ -164,11 +167,10 @@ def column_add(
 
         # If the column is a question, add it to the action
         if is_question:
-            __, __ = ActionColumnConditionTuple.objects.get_or_create(
+            ActionColumnConditionTuple.objects.get_or_create(
                 action=action,
                 column=column,
-                condition=None
-            )
+                condition=None)
 
         # Log the event
         if is_question:
@@ -220,15 +222,15 @@ def formula_column_add(
     if workflow.nrows == 0:
         messages.error(
             request,
-            _('Cannot add column to a workflow without data')
+            _('Cannot add column to a workflow without data'),
         )
         return JsonResponse({'html_redirect': ''})
 
     # Form to read/process data
     form = FormulaColumnAddForm(
-        data=request.POST or None,
+        form_data=request.POST or None,
         operands=formula_column_operands,
-        columns=workflow.columns.all()
+        columns=workflow.columns.all(),
     )
 
     if request.method == 'POST' and form.is_valid():
@@ -256,7 +258,7 @@ def formula_column_add(
         try:
             # Add the column with the appropriate computation
             operation = form.cleaned_data['op_type']
-            cnames = [c.name for c in form.selected_columns]
+            cnames = [col.name for col in form.selected_columns]
             if operation == 'sum':
                 df[column.name] = df[cnames].sum(axis=1)
             elif operation == 'prod':
@@ -277,28 +279,30 @@ def formula_column_add(
                 df[column.name] = df[cnames].any(axis=1)
             else:
                 raise Exception(
-                    _('Operand {0} not implemented').format(operation)
+                    _('Operand {0} not implemented').format(operation),
                 )
-        except Exception as e:
+        except Exception as exc:
             # Something went wrong in pandas, we need to remove the column
             column.delete()
 
             # Notify in the form
             form.add_error(
                 None,
-                _('Unable to perform the requested operation ({0})').format(e)
+                _('Unable to perform the requested operation ({0})').format(
+                    exc,
+                ),
             )
             return JsonResponse({
                 'html_form': render_to_string(
                     'workflow/includes/partial_formula_column_add.html',
                     {'form': form},
-                    request=request
-                )
+                    request=request,
+                ),
             })
 
         # Populate the column type
-        column.data_type = \
-            pandas_datatype_names.get(df[column.name].dtype.name)
+        column.data_type = pandas_datatype_names.get(
+            df[column.name].dtype.name)
 
         # Update the positions of the appropriate columns
         workflow.reposition_columns(workflow.ncols + 1, column.position)
@@ -329,7 +333,7 @@ def formula_column_add(
             'workflow/includes/partial_formula_column_add.html',
             {'form': form},
             request=request,
-        )
+        ),
     })
 
 
@@ -349,8 +353,7 @@ def random_column_add(
     if workflow.nrows == 0:
         messages.error(
             request,
-            _('Cannot add column to a workflow without data')
-        )
+            _('Cannot add column to a workflow without data'))
         return JsonResponse({'html_redirect': ''})
 
     # Form to read/process data
@@ -380,19 +383,19 @@ def random_column_add(
         df = load_table(workflow.get_data_frame_table_name())
 
         # Get the values and interpret its meaning
-        values = form.cleaned_data['values']
-        int_value = None
+        column_values = form.cleaned_data['column_values']
         # First, try to see if the field is a valid integer
         try:
-            int_value = int(values)
+            int_value = int(column_values)
         except ValueError:
-            pass
+            int_value = None
 
         if int_value:
             # At this point the field is an integer
             if int_value <= 1:
-                form.add_error('values',
-                               _('The integer value has to be larger than 1'))
+                form.add_error(
+                    'values',
+                    _('The integer value has to be larger than 1'))
                 return JsonResponse({
                     'html_form': render_to_string(
                         'workflow/includes/partial_random_column_add.html',
@@ -400,38 +403,45 @@ def random_column_add(
                         request=request),
                 })
 
-            vals = [x + 1 for x in range(int_value)]
-            # df[column.name] = [random.randint(1, int_value)
-            #                    for __ in range(workflow.nrows)]
+            intvals = [idx + 1 for idx in range(int_value)]
         else:
             # At this point the field is a string and the values are the comma
             # separated strings.
-            vals = [x.strip() for x in values.strip().split(',') if x]
-            if not vals:
-                form.add_error('values',
-                               _('The value has to be a comma-separated list'))
+            intvals = [
+                valstr.strip() for valstr in column_values.strip().split(',')
+                if valstr
+            ]
+            if not intvals:
+                form.add_error(
+                    'values',
+                    _('The value has to be a comma-separated list'),
+                )
                 return JsonResponse({
                     'html_form': render_to_string(
                         'workflow/includes/partial_random_column_add.html',
                         {'form': form},
-                        request=request)
+                        request=request),
                 })
 
         # Empty new column
         new_column = [None] * workflow.nrows
         # Create the random partitions
-        partitions = partition([x for x in range(workflow.nrows)], len(vals))
+        partitions = partition(
+            [idx for idx in range(workflow.nrows)],
+            len(intvals))
+
         # Assign values to partitions
         for idx, indexes in enumerate(partitions):
-            for x in indexes:
-                new_column[x] = vals[idx]
+            for col_idx in indexes:
+                new_column[col_idx] = intvals[idx]
 
         # Assign the new column to the data frame
         df[column.name] = new_column
 
         # Populate the column type
-        column.data_type = \
-            pandas_datatype_names.get(df[column.name].dtype.name)
+        column.data_type = pandas_datatype_names.get(
+            df[column.name].dtype.name,
+        )
 
         # Update the positions of the appropriate columns
         workflow.reposition_columns(workflow.ncols + 1, column.position)
@@ -452,7 +462,7 @@ def random_column_add(
              'name': workflow.name,
              'column_name': column.name,
              'column_type': column.data_type,
-             'value': values})
+             'value': column_values})
 
         # The form has been successfully processed
         return JsonResponse({'html_redirect': ''})
@@ -471,7 +481,7 @@ def column_edit(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
-    column: Optional[Column] = None
+    column: Optional[Column] = None,
 ) -> HttpResponse:
     """Edit a column.
 
@@ -486,13 +496,15 @@ def column_edit(
     is_question = 'question_edit' in request.path_info
     # Form to read/process data
     if is_question:
-        form = QuestionRenameForm(request.POST or None,
-                                  workflow=workflow,
-                                  instance=column)
+        form = QuestionRenameForm(
+            request.POST or None,
+            workflow=workflow,
+            instance=column)
     else:
-        form = ColumnRenameForm(request.POST or None,
-                                workflow=workflow,
-                                instance=column)
+        form = ColumnRenameForm(
+            request.POST or None,
+            workflow=workflow,
+            instance=column)
 
     old_name = column.name
     # Keep a copy of the previous position
@@ -520,9 +532,10 @@ def column_edit(
             # Save the column information
             column.save()
 
-            # Go back to the DB because the prefetch columns are not valid any more
+            # Go back to the DB because the prefetch columns are not valid
+            # any more
             workflow = Workflow.objects.prefetch_related('columns').get(
-                pk=workflow.id
+                pk=workflow.id,
             )
 
             # Changes in column require rebuilding the query_builder_ops
@@ -569,7 +582,7 @@ def column_delete(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
-    column: Optional[Column] = None
+    column: Optional[Column] = None,
 ) -> HttpResponse:
     """Delete a column in the table attached to a workflow.
 
@@ -584,7 +597,7 @@ def column_delete(
     # If the columns is unique and it is the only one, we cannot allow
     # the operation
     unique_column = workflow.get_column_unique()
-    if column.is_key and len([x for x in unique_column if x]) == 1:
+    if column.is_key and len([col for col in unique_column if col]) == 1:
         # This is the only key column
         messages.error(request, _('You cannot delete the only key column'))
         return JsonResponse({
@@ -598,9 +611,8 @@ def column_delete(
 
     # Get the conditions/actions attached to this workflow
     cond_to_delete = [
-        x for x in Condition.objects.filter(
-            action__workflow=workflow)
-        if evaluation.has_variable(x.formula, column.name)]
+        col for col in Condition.objects.filter(action__workflow=workflow)
+        if evaluation.has_variable(col.formula, column.name)]
     # Put it in the context because it is shown to the user before confirming
     # the deletion
     context['cond_to_delete'] = cond_to_delete
@@ -637,8 +649,6 @@ def column_delete(
             request=request),
     })
 
-    return JsonResponse(data)
-
 
 @user_passes_test(is_instructor)
 @get_column(pf_related='columns')
@@ -646,7 +656,7 @@ def column_clone(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
-    column: Optional[Column] = None
+    column: Optional[Column] = None,
 ) -> HttpResponse:
     """Clone a column in the table attached to a workflow.
 
@@ -665,7 +675,7 @@ def column_clone(
             'html_form': render_to_string(
                 'workflow/includes/partial_column_clone.html',
                 context,
-                request=request)
+                request=request),
         })
 
     # POST REQUEST
@@ -691,154 +701,3 @@ def column_clone(
             'new_column_name': column.name})
 
     return JsonResponse({'html_redirect': ''})
-
-
-@user_passes_test(is_instructor)
-@csrf_exempt
-@get_workflow(pf_related='columns')
-def column_move(
-    request: HttpRequest,
-    workflow: Optional[Workflow] = None,
-) -> HttpResponse:
-    """Move a column using two names: from_name and to_name (POST params).
-
-    The changes are reflected in the DB
-
-    :param request:
-    :return: AJAX response, empty.
-    """
-    from_name = request.POST.get('from_name')
-    to_name = request.POST.get('to_name')
-    if not from_name or not to_name:
-        # Incorrect parameter
-        return JsonResponse({})
-
-    from_col = workflow.columns.filter(name=from_name).first()
-    to_col = workflow.columns.filter(name=to_name).first()
-
-    if not from_col or not to_col:
-        # Incorrect condition name
-        return JsonResponse({})
-
-    # Two correct condition names, perform the swap
-    # workflow.reposition_columns(from_col, to_col.position)
-    from_col.reposition_and_update_df(to_col.position)
-
-    return JsonResponse({})
-
-
-@user_passes_test(is_instructor)
-@get_column(pf_related='columns')
-def column_move_top(
-    request: HttpRequest,
-    pk: int,
-    workflow: Optional[Workflow] = None,
-    column: Optional[Column] = None
-) -> HttpResponse:
-    """Move column to the first position.
-
-    :param request: HTTP request to move a column to the top of the list
-
-    :param pk: Column ID
-
-    :return: Once done, redirects to the column page
-    """
-    # The workflow and column objects have been correctly obtained
-    if column.position > 1:
-        column.reposition_and_update_df(1)
-
-    return redirect('workflow:detail', pk=workflow.id)
-
-
-@user_passes_test(is_instructor)
-@get_column(pf_related='columns')
-def column_move_bottom(
-    request: HttpRequest,
-    pk: int,
-    workflow: Optional[Workflow] = None,
-    column: Optional[Column] = None
-) -> HttpResponse:
-    """Move column to the last position.
-
-    :param request: HTTP request to move a column to end of the list
-
-    :param pk: Column ID
-
-    :return: Once done, redirects to the column page
-    """
-    # The workflow and column objects have been correctly obtained
-    if column.position < workflow.ncols:
-        column.reposition_and_update_df(workflow.ncols)
-
-    return redirect('workflow:detail', pk=workflow.id)
-
-
-@user_passes_test(is_instructor)
-@get_column(pf_related='columns')
-def column_restrict_values(
-    request: HttpRequest,
-    pk: int,
-    workflow: Optional[Workflow] = None,
-    column: Optional[Column] = None
-) -> HttpResponse:
-    """Restrict future values in this column to one of those already present.
-
-    :param request: HTTP request
-
-    :param pk: ID of the column to restrict. The workflow element is taken
-     from the session.
-
-    :return: Render the delete column form
-    """
-    # If the columns is unique and it is the only one, we cannot allow
-    # the operation
-    if column.is_key:
-        # This is the only key column
-        messages.error(request, _('You cannot restrict a key column'))
-        return JsonResponse({
-            'html_redirect': reverse('workflow:detail',
-                                     kwargs={'pk': workflow.id})
-        })
-
-    # Get the name of the column to delete
-    context = {'pk': pk, 'cname': column.name}
-
-    # Get the values from the data frame
-    df = load_table(workflow.get_data_frame_table_name())
-    context['values'] = ', '.join(set(df[column.name]))
-
-    if request.method == 'POST':
-        # Proceed restricting the column
-        result = workflow_restrict_column(column)
-
-        if isinstance(result, str):
-            # Something went wrong. Show it
-            messages.error(request, result)
-
-            # Log the event
-            Log.objects.register(
-                request.user,
-                Log.COLUMN_RESTRICT,
-                workflow,
-                {
-                    'id': workflow.id,
-                    'name': workflow.name,
-                    'column_name': column.name,
-                    'values': context['values']})
-
-        # There are various points of return
-        from_url = request.META['HTTP_REFERER']
-        if from_url.endswith(reverse('table:display')):
-            return JsonResponse({'html_redirect': reverse('table:display')})
-
-        return JsonResponse({
-            'html_redirect': reverse('workflow:detail',
-                                     kwargs={'pk': workflow.id})
-        })
-
-    return JsonResponse({
-        'html_form': render_to_string(
-            'workflow/includes/partial_column_restrict.html',
-            context,
-            request=request),
-    })

@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
+"""URLs to manipulate workflows, attributes, columns and shared."""
 
 from django.urls import path, re_path
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from . import (
-    attribute_views, column_views, import_export_views, share_views,
-    views, api
-)
+from workflow import api, views
 
 app_name = 'workflow'
 
@@ -25,90 +23,111 @@ urlpatterns = [
     path('column_ss/', views.column_ss, name='column_ss'),
 
     # Import Export
-    path('<int:wid>/export_ask/',
-         import_export_views.export_ask,
-         name='export_ask'),
-    re_path(r'(?P<data>(\d+(,\d+)*)?)/export/',
-            import_export_views.export,
-            name='export'),
-    path('import/', import_export_views.import_workflow, name='import'),
+    path(
+        '<int:wid>/export_ask/',
+        views.export_ask,
+        name='export_ask'),
+    re_path(
+        r'(?P<data>(\d+(,\d+)*)?)/export/',
+        views.export,
+        name='export'),
+    path('import/', views.import_export.import_workflow, name='import'),
 
     # Attributes
-    path('attribute_create/',
-         attribute_views.attribute_create,
-         name='attribute_create'),
-    path('<int:pk>/attribute_edit/',
-         attribute_views.attribute_edit,
-         name='attribute_edit'),
-    path('<int:pk>/attribute_delete/',
-         attribute_views.attribute_delete,
-         name='attribute_delete'),
+    path(
+        'attribute_create/',
+        views.attribute_create,
+        name='attribute_create'),
+    path(
+        '<int:pk>/attribute_edit/',
+        views.attribute_edit,
+        name='attribute_edit'),
+    path(
+        '<int:pk>/attribute_delete/',
+        views.attribute_delete,
+        name='attribute_delete'),
 
     # Sharing
-    path('share_create/', share_views.share_create, name='share_create'),
-    path('<int:pk>/share_delete/',
-         share_views.share_delete,
-         name='share_delete'),
+    path('share_create/', views.share_create, name='share_create'),
+    path(
+        '<int:pk>/share_delete/',
+        views.share_delete,
+        name='share_delete'),
 
     # Assign learner user email column
-    path('assign_luser_column/',
-         views.assign_luser_column,
-         name='assign_luser_column'),
-    path('<int:wid>/assign_luser_column/',
-         views.assign_luser_column,
-         name='assign_luser_column'),
+    path(
+        'assign_luser_column/',
+        views.assign_luser_column,
+        name='assign_luser_column'),
+    path(
+        '<int:wid>/assign_luser_column/',
+        views.assign_luser_column,
+        name='assign_luser_column'),
 
     # Column manipulation
-    path('column_add/', column_views.column_add, name='column_add'),
-    path('<int:pk>/question_add/', column_views.column_add,
-         name='question_add'),
-    path('formula_column_add',
-         column_views.formula_column_add,
-         name='formula_column_add'),
-    path('random_column_add/',
-         column_views.random_column_add,
-         name='random_column_add'),
-    path('<int:pk>/column_delete/',
-         column_views.column_delete,
-         name='column_delete'),
-    path('<int:pk>/column_edit/',
-         column_views.column_edit,
-         name='column_edit'),
-    path('<int:pk>/question_edit/',
-         column_views.column_edit,
-         name='question_edit'),
-    path('<int:pk>/column_clone/',
-         column_views.column_clone,
-         name='column_clone'),
+    path('column_add/', views.column_add, name='column_add'),
+    path(
+        '<int:pk>/question_add/', views.column_add,
+        name='question_add'),
+    path(
+        'formula_column_add',
+        views.formula_column_add,
+        name='formula_column_add'),
+    path(
+        'random_column_add/',
+        views.random_column_add,
+        name='random_column_add'),
+    path(
+        '<int:pk>/column_delete/',
+        views.column_delete,
+        name='column_delete'),
+    path(
+        '<int:pk>/column_edit/',
+        views.column_edit,
+        name='column_edit'),
+    path(
+        '<int:pk>/question_edit/',
+        views.column_edit,
+        name='question_edit'),
+    path(
+        '<int:pk>/column_clone/',
+        views.column_clone,
+        name='column_clone'),
 
     # Column movement
-    path('column_move/', column_views.column_move, name='column_move'),
-    path('<int:pk>/column_move_top/',
-         column_views.column_move_top,
-         name='column_move_top'),
-    path('<int:pk>/column_move_bottom/',
-         column_views.column_move_bottom,
-         name='column_move_bottom'),
-    path('<int:pk>/column_restrict/',
-         column_views.column_restrict_values,
-         name='column_restrict'),
+    path('column_move/', views.column_ops.column_move, name='column_move'),
+    path(
+        '<int:pk>/column_move_top/',
+        views.column_ops.column_move_top,
+        name='column_move_top'),
+    path(
+        '<int:pk>/column_move_bottom/',
+        views.column_ops.column_move_bottom,
+        name='column_move_bottom'),
+    path(
+        '<int:pk>/column_restrict/',
+        views.column_ops.column_restrict_values,
+        name='column_restrict'),
 
     # API
 
     # Listing and creating workflows
-    path('workflows/',
-         api.WorkflowAPIListCreate.as_view(),
-         name='api_workflows'),
+    path(
+        'workflows/',
+        api.WorkflowAPIListCreate.as_view(),
+        name='api_workflows'),
 
     # Get, update content or destroy workflows
-    path('<int:id>/rud/',
-         api.WorkflowAPIRetrieveUpdateDestroy.as_view(),
-         name='api_rud'),
+    path(
+        '<int:id>/rud/',
+        api.WorkflowAPIRetrieveUpdateDestroy.as_view(),
+        name='api_rud'),
 
     # Manage workflow locks (get, set (post, put), unset (delete))
-    path('<int:pk>/lock/',
-         api.WorkflowAPILock.as_view(),
-         name='api_lock'),
+    path(
+        '<int:pk>/lock/',
+        api.WorkflowAPILock.as_view(),
+        name='api_lock'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

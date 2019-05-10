@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import next
-from builtins import object
+from builtins import next, object
+
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 

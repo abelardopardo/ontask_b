@@ -2,15 +2,15 @@
 
 
 import os
+import test
 
+import pandas as pd
 from django.conf import settings
 from django.shortcuts import reverse
-import pandas as pd
 from rest_framework.authtoken.models import Token
 
 from dataops.pandas import check_wf_df, detect_datetime_columns, load_table
 from table.serializers import string_to_df
-import test
 from workflow.models import Workflow
 from workflow.ops import workflow_delete_column
 

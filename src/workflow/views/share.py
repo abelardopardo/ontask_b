@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -*-
+
+"""Views to create and delete a "share" item for a workflow."""
+
 from typing import Optional
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import user_passes_test
-from django.http import JsonResponse, HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 
 from logs.models import Log
-from ontask.decorators import access_workflow, get_workflow
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
+from workflow.forms import SharedForm
 from workflow.models import Workflow
-from .forms import SharedForm
 
 
 @user_passes_test(is_instructor)
@@ -54,7 +57,7 @@ def share_create(
         'html_form': render_to_string(
             'workflow/includes/partial_share_create.html',
             {'form': form},
-            request=request)
+            request=request),
     })
 
 
@@ -98,5 +101,5 @@ def share_delete(
         'html_form': render_to_string(
             'workflow/includes/partial_share_delete.html',
             {'uid': pk, 'uemail': user.email},
-            request=request)
+            request=request),
     })

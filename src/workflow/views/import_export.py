@@ -1,28 +1,22 @@
 # -*- coding: utf-8 -*-
 
+"""Functions to import/export a workflow."""
 
 from builtins import str
 from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from action.models import Action
-from ontask.permissions import is_instructor
-from .forms import (
-    WorkflowImportForm,
-    WorkflowExportRequestForm
-)
-from .models import Workflow
-from .ops import (
-    do_import_workflow,
-    do_export_workflow
-)
 from ontask.decorators import get_workflow
+from ontask.permissions import is_instructor
+from workflow.forms import WorkflowExportRequestForm, WorkflowImportForm
+from workflow.models import Workflow
+from workflow.ops import do_export_workflow, do_import_workflow
 
 
 @user_passes_test(is_instructor)
@@ -32,9 +26,11 @@ def export_ask(
     wid,
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
-    form = WorkflowExportRequestForm(request.POST or None,
-                                     actions=workflow.actions.all(),
-                                     put_labels=True)
+    """Request additional information for the export."""
+    form = WorkflowExportRequestForm(
+        request.POST or None,
+        actions=workflow.actions.all(),
+        put_labels=True)
 
     context = {
         'form': form,
@@ -42,22 +38,21 @@ def export_ask(
         'nrows': workflow.nrows,
         'ncols': workflow.ncols,
         'nactions': workflow.actions.count(),
-        'wid': workflow.id
+        'wid': workflow.id,
     }
 
-    if request.method == 'POST':
-        if form.is_valid():
-            to_include = []
-            for idx, a_id in enumerate(
-                    workflow.actions.all().values_list("id", flat=True)
-            ):
-                if form.cleaned_data['select_%s' % idx]:
-                    to_include.append(str(a_id))
-            return render(
-                request,
-                'workflow/export_done.html',
-                {'include': ','.join(to_include),
-                 'wid': workflow.id})
+    if request.method == 'POST' and form.is_valid():
+        to_include = []
+        for idx, a_id in enumerate(
+            workflow.actions.all().values_list('id', flat=True),
+        ):
+            if form.cleaned_data['select_%s' % idx]:
+                to_include.append(str(a_id))
+        return render(
+            request,
+            'workflow/export_done.html',
+            {'include': ','.join(to_include),
+             'wid': workflow.id})
 
     # GET request, simply render the form
     return render(request, 'workflow/export.html', context)
@@ -68,25 +63,29 @@ def export_ask(
 @get_workflow(pf_related='actions')
 def export(
     request: HttpRequest,
-    data,
+    page_data,
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
-    """
-    This request receives a parameter include with a comma separated list. The
-    first value is a 0/1 stating if the data has to be included. The
+    """Render the view to export a workflow.
+
+    This request receives a parameter include with a comma separated list.
+    The first value is a 0/1 stating if the data has to be included. The
     remaining elements are the ids of the actions to include
+
     :param request:
-    :param data: Comma separated list of integers: First one is include: 0
+
+    :param page_data: Comma separated list of integers: First one is include: 0
     (do not include) or 1 include data and conditions, followed by the ids of
     the actions to include
+
     :return:
     """
     # Get the param encoding which elements to include in the export.
     action_ids = []
-    if data and data != '':
+    if page_data and page_data != '':
         # Data has at least one integer
         try:
-            action_ids = [int(x) for x in data.split(',')]
+            action_ids = [int(a_idx) for a_idx in page_data.split(',')]
         except ValueError:
             return redirect('home')
 
@@ -97,18 +96,25 @@ def export(
 
 @user_passes_test(is_instructor)
 def import_workflow(request):
-    """
+    """View to handle the workflow import.
+
     View that handles a form for workflow import. It receives a file that
     needs to be unpacked and the data uploaded. In this method there are some
     basic checks to verify that the import procedure can go ahead.
+
     :param request: HTTP request
+
     :return: Rendering of the import page or back to the workflow index
     """
     form = WorkflowImportForm(request.POST or None, request.FILES or None)
 
     if request.method == 'POST' and form.is_valid():
         new_wf_name = form.cleaned_data['name']
-        if Workflow.objects.filter(user=request.user, name=new_wf_name).exists():
+        if (
+            Workflow.objects.filter(
+                user=request.user,
+                name=new_wf_name).exists()
+        ):
             # There is a workflow with this name. Return error.
             # TODO: Move to form
             form.add_error(None, _('A workflow with this name already exists'))
@@ -119,14 +125,15 @@ def import_workflow(request):
             # TODO: Move to Form
             form.add_error(
                 None,
-                _('Incorrect form request (it is not multipart)')
+                _('Incorrect form request (it is not multipart)'),
             )
             return render(request, 'workflow/import.html', {'form': form})
 
         # UPLOAD THE FILE!
-        status = do_import_workflow(request.user,
-                                    form.cleaned_data['name'],
-                                    request.FILES['file'])
+        status = do_import_workflow(
+            request.user,
+            form.cleaned_data['name'],
+            request.FILES['wf_file'])
 
         # If something went wrong, show at to the top of the page
         if status:

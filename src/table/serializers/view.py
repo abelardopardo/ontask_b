@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 from table.models import View
-from workflow.column_serializers import ColumnNameSerializer
+from workflow.serializers import ColumnNameSerializer
 
 
 class ViewSerializer(serializers.ModelSerializer):

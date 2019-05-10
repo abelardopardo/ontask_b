@@ -3,10 +3,10 @@
 """Functions to serialize data frames as JSON, pandas."""
 
 from table.serializers.json import DataFrameJSONSerializer
-from table.serializers.view import ViewSerializer
 from table.serializers.merge import (
-    DataFrameJSONMergeSerializer, DataFramePandasMergeSerializer
+    DataFrameJSONMergeSerializer, DataFramePandasMergeSerializer,
 )
 from table.serializers.pandas import (
-    DataFramePandasField, DataFramePandasSerializer, string_to_df
+    DataFramePandasField, DataFramePandasSerializer, string_to_df,
 )
+from table.serializers.view import ViewSerializer

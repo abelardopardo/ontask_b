@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+from __future__ import print_function, unicode_literals
 
 import os
+import test
 
 from django.conf import settings
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait, Select
-from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import Select, WebDriverWait
 
-import test
 from dataops.pandas import load_table
 from workflow.models import Workflow
 
