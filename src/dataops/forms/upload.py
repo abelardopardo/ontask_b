@@ -44,12 +44,10 @@ URL_FIELD_LENGTH = 1024
 class UploadBasic(forms.Form):
     """Basic class to use for inheritance."""
 
-    data_frame: Optional[pd.DataFrame] = None
-    frame_info = None
-    workflow: Optional[Workflow] = None
-
     def __init__(self, *args, **kwargs):
         """Store the workflow for further processing."""
+        self.data_frame: Optional[pd.DataFrame] = None
+        self.frame_info = None
         self.workflow = kwargs.pop(str('workflow'), None)
         super().__init__(*args, **kwargs)
 
@@ -135,13 +133,13 @@ class UploadCSVFileForm(UploadBasic):
         try:
             self.data_frame = load_df_from_csvfile(
                 TextIOWrapper(
-                    self.files['text_file'].file,
+                    self.files['data_file'].file,
                     encoding=self.data.encoding),
                 self.cleaned_data['skip_lines_at_top'],
                 self.cleaned_data['skip_lines_at_bottom'])
         except Exception as exc:
             self.add_error(
-                'tex_file',
+                'data_file',
                 _('File could not be processed ({0})').format(str(exc)))
             return form_data
 

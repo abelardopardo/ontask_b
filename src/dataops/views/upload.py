@@ -23,7 +23,7 @@ from workflow.ops import store_workflow_in_session
 
 
 @user_passes_test(is_instructor)
-@get_workflow('columns')
+@get_workflow(pf_related='columns')
 def upload_s2(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -207,7 +207,7 @@ def upload_s2(
 
 
 @user_passes_test(is_instructor)
-@get_workflow('columns')
+@get_workflow(pf_related='columns')
 def upload_s3(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -334,7 +334,7 @@ def upload_s3(
 
 
 @user_passes_test(is_instructor)
-@get_workflow('columns')
+@get_workflow(pf_related='columns')
 def upload_s4(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,

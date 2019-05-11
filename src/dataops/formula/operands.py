@@ -22,7 +22,7 @@ GET_CONSTANT = {
 }
 
 
-def is_null(node, given_variables, eval_type):
+def is_null(node,eval_type, given_variables):
     """Process the is_null operator.
 
     :param eval_type: Type of evaluation
@@ -72,7 +72,7 @@ def get_value(node, given_variables):
     return varvalue
 
 
-def equal(node, given_variables, eval_type):
+def equal(node,eval_type, given_variables):
     """Process the equal operator.
 
     :param eval_type: Type of evaluation
@@ -102,7 +102,7 @@ def equal(node, given_variables, eval_type):
     )
 
 
-def not_equal(node, given_variables, eval_type):
+def not_equal(node,eval_type, given_variables):
     """Process the not equal operator.
 
     :param eval_type: Type of evaluation
@@ -132,7 +132,7 @@ def not_equal(node, given_variables, eval_type):
     )
 
 
-def begins_with(node, given_variables, eval_type):
+def begins_with(node,eval_type, given_variables):
     """Process the begins_with operator.
 
     :param eval_type: Type of evaluation
@@ -162,7 +162,7 @@ def begins_with(node, given_variables, eval_type):
     return '{0} starts with {1}'.format(node['field'], constant)
 
 
-def not_begins_with(node, given_variables, eval_type):
+def not_begins_with(node,eval_type, given_variables):
     """Process the not_begins_with operator.
 
     :param eval_type: Type of evaluation
@@ -192,7 +192,7 @@ def not_begins_with(node, given_variables, eval_type):
         node['field'], constant)
 
 
-def contains(node, given_variables, eval_type):
+def contains(node,eval_type, given_variables):
     """Process the contains operator.
 
     :param eval_type: Type of evaluation
@@ -222,7 +222,7 @@ def contains(node, given_variables, eval_type):
     return '{0} contains {1}'.format(node['field'], constant)
 
 
-def not_contains(node, given_variables, eval_type):
+def not_contains(node,eval_type, given_variables):
     """Process the not_contains operator.
 
     :param eval_type: Type of evaluation
@@ -252,7 +252,7 @@ def not_contains(node, given_variables, eval_type):
     return '{0} does not contain {1}'.format(node['field'], constant)
 
 
-def ends_with(node, given_variables, eval_type):
+def ends_with(node,eval_type, given_variables):
     """Process the ends_with operator.
 
     :param eval_type: Type of evaluation
@@ -280,7 +280,7 @@ def ends_with(node, given_variables, eval_type):
     return '{0} ends with {1}'.format(node['field'], constant)
 
 
-def not_ends_with(node, given_variables, eval_type):
+def not_ends_with(node,eval_type, given_variables):
     """Process the not_ends_width operator.
 
     :param eval_type: Type of evaluation
@@ -311,7 +311,7 @@ def not_ends_with(node, given_variables, eval_type):
     return '{0} does not end with {1}'.format(node['field'], constant)
 
 
-def is_empty(node, given_variables, eval_type):
+def is_empty(node,eval_type, given_variables):
     """Process the is_empty operator.
 
     :param eval_type: Type of evaluation
@@ -336,7 +336,7 @@ def is_empty(node, given_variables, eval_type):
     return '{0} is empty'.format(node['field'])
 
 
-def is_not_empty(node, given_variables, eval_type):
+def is_not_empty(node,eval_type, given_variables):
     """Process the is_empty operator.
 
     :param eval_type: Type of evaluation
@@ -361,7 +361,7 @@ def is_not_empty(node, given_variables, eval_type):
     return '{0} is not empty'.format(node['field'])
 
 
-def is_not_null(node, given_variables, eval_type):
+def is_not_null(node,eval_type, given_variables):
     """Process the is_not_null operator.
 
     :param eval_type: Type of evaluation
@@ -384,7 +384,7 @@ def is_not_null(node, given_variables, eval_type):
     return '{0} is not null'.format(node['field'])
 
 
-def less(node, given_variables, eval_type):
+def less(node,eval_type, given_variables):
     """Process the less operator.
 
     :param eval_type: Type of evaluation
@@ -421,7 +421,7 @@ def less(node, given_variables, eval_type):
     )
 
 
-def less_or_equal(node, given_variables, eval_type):
+def less_or_equal(node,eval_type, given_variables):
     """Process the less_or_equal operator.
 
     :param eval_type: Type of evaluation
@@ -459,7 +459,7 @@ def less_or_equal(node, given_variables, eval_type):
     )
 
 
-def greater(node, given_variables, eval_type):
+def greater(node,eval_type, given_variables):
     """Process the greater operator.
 
     :param eval_type: Type of evaluation
@@ -496,7 +496,7 @@ def greater(node, given_variables, eval_type):
     )
 
 
-def greater_or_equal(node, given_variables, eval_type):
+def greater_or_equal(node,eval_type, given_variables):
     """Process the greater_or_equal operator.
 
     :param eval_type: Type of evaluation
@@ -534,7 +534,7 @@ def greater_or_equal(node, given_variables, eval_type):
     )
 
 
-def between(node, given_variables, eval_type):
+def between(node,eval_type, given_variables):
     """Process the between operator.
 
     :param eval_type: Type of evaluation
@@ -581,7 +581,7 @@ def between(node, given_variables, eval_type):
     )
 
 
-def not_between(node, given_variables, eval_type):
+def not_between(node,eval_type, given_variables):
     """Process the not_between operator.
 
     :param eval_type: Type of evaluation

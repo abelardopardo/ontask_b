@@ -63,10 +63,7 @@ def _update_key_and_position(workflow, data_frame, wf_cols, reset_keys):
     # column objects in the workflow
     workflow.add_new_columns(
         df_column_names,
-        [
-            pandas_datatype_names.get(data_frame[col].dtype.name)
-            for col in df_column_names
-        ],
+        [data_frame[col].dtype.name for col in df_column_names],
         [is_unique_column(data_frame[col]) for col in df_column_names]
     )
 
@@ -95,7 +92,7 @@ def store_dataframe(data_frame, workflow, temporary=False, reset_keys=True):
     """
     # if the data frame is temporary, the procedure is much simpler
     if temporary:
-        return list(data_frame.columns) + _store_temporary_dataframe(
+        return [list(data_frame.columns)] + _store_temporary_dataframe(
             data_frame, workflow)
 
     # We are modifying an existing DF

@@ -281,7 +281,7 @@ def get_columncondition(
                 Q(action__workflow__user=request.user)
                 | Q(action__workflow__shared=request.user),
                 action__workflow=workflow,
-            ).select_related(['action', 'condition', 'column']).first()
+            ).select_related('action', 'condition', 'column').first()
 
             if not cc_tuple:
                 if request.is_ajax():
@@ -335,8 +335,8 @@ def get_view(
             if not kwargs.get('view'):
                 # Get the condition
                 view = View.objects.filter(pk=pk).filter(
-                    Q(action__workflow__user=request.user)
-                    | Q(action__workflow__shared=request.user),
+                    Q(workflow__user=request.user)
+                    | Q(workflow__shared=request.user),
                 ).prefetch_related('columns').first()
 
                 if not view:

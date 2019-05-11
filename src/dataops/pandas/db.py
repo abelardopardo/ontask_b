@@ -35,6 +35,12 @@ engine: Optional[Engine] = None
 
 
 def set_engine():
+    """Create a persistmt SQLAlchemy connection to the DB."""
+    global engine
+
+    if engine:
+        return engine
+
     engine = create_db_engine(
         'postgresql',
         '+psycopg2',
@@ -59,16 +65,19 @@ def create_db_engine(
     object is required by the pandas functions to_sql and from_sql
 
     :param dialect: Dialect for the engine (oracle, mysql, postgresql, etc)
+
     :param driver: DBAPI driver (psycopg2, ...)
+
     :param username: Username to connect with the database
+
     :param password: Password to connect with the database
+
     :param host: Host to connect with the database
+
     :param dbname: database name
+
     :return: the engine
     """
-    if engine:
-        return engine
-
     database_url = '{dial}{drv}://{usr}:{pwd}@{h}/{dbname}'.format(
         dial=dialect,
         drv=driver,
@@ -177,7 +186,7 @@ def store_table(
             if_exists='replace',
             index=False,
             dtype={
-                (key, ontask_to_sqlalchemy[tvalue])
+                key: ontask_to_sqlalchemy[tvalue]
                 for key, tvalue in dtype.items()
             },
         )

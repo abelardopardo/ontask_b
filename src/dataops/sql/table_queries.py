@@ -91,7 +91,8 @@ def get_select_query(
             filter_pairs=filter_pairs,
         )
 
-        query = sql.SQL(' WHERE ').join([query, bool_clause])
+        if bool_clause:
+            query = sql.SQL(' WHERE ').join([query, bool_clause])
 
     return query, query_fields
 

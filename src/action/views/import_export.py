@@ -109,7 +109,7 @@ def export_download(
 
 
 @user_passes_test(is_instructor)
-@get_workflow('actions')
+@get_workflow(pf_related='actions')
 def action_import(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,

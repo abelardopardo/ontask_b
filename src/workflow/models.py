@@ -400,16 +400,15 @@ class Workflow(models.Model):
 
     def add_new_columns(self, col_names, data_types, are_keys):
         """Add a set of columns to the workflow"""
-        idx = self.columns.count() + 1
-        new_indeces = range(idx, idx + len(col_names))
-        for idx in new_indeces:
+        start = self.columns.count() + 1
+        for idx in range(len(col_names)):
             # Create the new column
             column = Column(
                 name=col_names[idx],
                 workflow=self,
                 data_type=pandas_datatype_names.get(data_types[idx]),
                 is_key=are_keys[idx],
-                position=idx)
+                position=start + idx)
             column.save()
             idx += 1
 

@@ -247,8 +247,10 @@ class ActionSerializer(serializers.ModelSerializer):
     column_condition_pair = ColumnConditionNameSerializer(
         many=True,
         required=False)
+
     # Needed for backward compatibility
     is_out = serializers.BooleanField(required=False, initial=True)
+    content = serializers.CharField(required=False, initial='')
 
     def create_column_condition_pairs(
         self,
@@ -330,9 +332,12 @@ class ActionSerializer(serializers.ModelSerializer):
                 serve_enabled=validated_data['serve_enabled'],
                 active_from=validated_data['active_from'],
                 active_to=validated_data['active_to'],
-                content=validated_data.get('content', None),
+                text_content=validated_data.get(
+                    'content',
+                    validated_data.get('text_content')  # Legacy
+                ),
                 target_url=validated_data.get('target_url', None),
-                shuffle=validated_data.get('shuffle', default=False),
+                shuffle=validated_data.get('shuffle', False),
             )
             action_obj.save()
 

@@ -101,7 +101,7 @@ urlpatterns = [
 
     # Select column for action in
     path(
-        '<int:apk>/<int:cpk>/select_column_action/',
+        '<int:pk>/<int:cpk>/select_column_action/',
         select_column_action,
         name='select_column_action'),
 

@@ -30,7 +30,7 @@ class SelectColumnUploadForm(forms.Form):
 
         # Create as many fields as the given columns
         col_info = zip(self.column_names, self.columns_to_upload)
-        for idx, colname, upload in enumerate(col_info):
+        for idx, (colname, upload) in enumerate(col_info):
             self.fields['upload_%s' % idx] = forms.BooleanField(
                 initial=upload,
                 label='',

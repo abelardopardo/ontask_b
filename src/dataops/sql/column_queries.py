@@ -68,7 +68,7 @@ def is_column_in_table(table_name: str, column_name: str) -> bool:
     query = sql.SQL(
         'SELECT EXISTS (SELECT 1 FROM information_schema.columns '
         + 'WHERE table_name = {0} AND column_name = {1})',
-    ).format(sql.Identifier(table_name), sql.Identifier(column_name))
+    ).format(sql.Literal(table_name), sql.Literal(column_name))
 
     with connection.cursor() as cursor:
         cursor.execute(query, [table_name, column_name])
@@ -105,11 +105,11 @@ def get_df_column_types(table_name: str) -> List[str]:
     with connection.cursor() as cursor:
         cursor.execute(sql.SQL(
             'SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS '
-            + 'WHERE TABLE_NAME = {0}').format(sql.Identifier(table_name)))
+            + 'WHERE TABLE_NAME = {0}').format(sql.Literal(table_name)))
 
         type_names = cursor.fetchall()
 
-    return [sql_to_ontask_datatype_names[dtype] for dtype in type_names]
+    return [sql_to_ontask_datatype_names[dtype[0]] for dtype in type_names]
 
 
 def db_rename_column(table: str, old_name: str, new_name: str):
