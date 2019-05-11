@@ -82,7 +82,7 @@ class PlotlyBoxPlot(PlotlyHandler):
 
         # If an individual value has been given, add the annotation and the
         # layout to the rendering.
-        if self.format_dict.get('individual_value', None) is not None:
+        if self.format_dict.get('individual_value') is not None:
             self.layout['annotations'] = [{
                 'bgcolor': 'white',
                 'x': 0,
@@ -106,7 +106,7 @@ class PlotlyBoxPlot(PlotlyHandler):
         self.format_dict['data'] = json.dumps(data)
 
         self.html_content = ''
-        if self.format_dict.get('title', None):
+        if self.format_dict.get('title'):
             self.html_content = self.format_dict['title']
 
         self.html_content += self.html_skel.format(**self.format_dict)
@@ -166,7 +166,7 @@ class PlotlyColumnHistogram(PlotlyHandler):
 
         # If an individual value has been given, add the annotation and the
         # layout to the rendering.
-        if self.format_dict.get('individual_value', None) is not None:
+        if self.format_dict.get('individual_value') is not None:
             ival = self.format_dict['individual_value']
             if column_dtype == 'boolean' or column_dtype == 'datetime':
                 ival = str(ival)
@@ -185,7 +185,7 @@ class PlotlyColumnHistogram(PlotlyHandler):
         self.format_dict['layout'] = json.dumps(self.layout)
 
         self.html_content = ''
-        if self.format_dict.get('title', None):
+        if self.format_dict.get('title'):
             self.html_content = self.format_dict['title']
 
         self.html_content += self.html_skel.format(**self.format_dict)

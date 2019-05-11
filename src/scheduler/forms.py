@@ -56,7 +56,7 @@ class ScheduleForm(forms.ModelForm):
 
         # The executed time must be in the future
         now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-        when_data = self.cleaned_data.get('execute', None)
+        when_data = self.cleaned_data.get('execute')
         if when_data and when_data <= now:
             self.add_error(
                 'execute',
@@ -292,7 +292,7 @@ def scheduled_action_data_is_correct(cleaned_data):
 
     # The executed time must be in the future
     now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-    when_data = cleaned_data.get('execute', None)
+    when_data = cleaned_data.get('execute')
     if when_data and when_data <= now:
         pair_list.append(
             ('execute', _('Date/time must be in the future')))

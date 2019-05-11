@@ -100,7 +100,7 @@ def edit_action_out(
     # Processing the request after receiving the text from the editor
     if request.method == 'POST' and form.is_valid() and form_filter.is_valid():
         # Get content
-        text_content = form.cleaned_data.get('text_content', None)
+        text_content = form.cleaned_data.get('text_content')
 
         # Render the content as a template and catch potential problems.
         if text_renders_correctly(text_content, action, form):

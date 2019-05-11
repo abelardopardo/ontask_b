@@ -311,8 +311,8 @@ def row_delete(
     :return: AJAX response
     """
     # Get the key/value pair to delete
-    key = request.GET.get('key', None)
-    row_value = request.GET.get('value', None)
+    key = request.GET.get('key')
+    row_value = request.GET.get('value')
 
     # Process the confirmed response
     if request.method == 'POST':

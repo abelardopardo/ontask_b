@@ -29,8 +29,8 @@ def row_update(
     :return:
     """
     # Get the pair key,value to fetch the row from the table
-    update_key = request.GET.get('update_key', None)
-    update_val = request.GET.get('update_val', None)
+    update_key = request.GET.get('update_key')
+    update_val = request.GET.get('update_val')
 
     if not update_key or not update_val:
         # Malformed request

@@ -76,7 +76,7 @@ def process_columns(validated_data, context):
     """
     new_columns = []
     for citem in validated_data:
-        cname = citem.get('name', None)
+        cname = citem.get('name')
         if not cname:
             raise Exception(
                 _('Incorrect column name {0}.').format(cname))
@@ -93,7 +93,7 @@ def process_columns(validated_data, context):
 
         # Processing an existing column. Check data type compatibility
         is_not_compatible = (
-            col.data_type != citem.get('data_type', None)
+            col.data_type != citem.get('data_type')
             or col.is_key != citem['is_key']
             or set(col.categories) != set(citem['categories'])
         )
@@ -317,7 +317,7 @@ class ActionSerializer(serializers.ModelSerializer):
         """
         action_obj = None
         try:
-            action_type = validated_data.get('action_type', None)
+            action_type = validated_data.get('action_type')
             if not action_type:
                 if validated_data['is_out']:
                     action_type = Action.personalized_text
@@ -336,7 +336,7 @@ class ActionSerializer(serializers.ModelSerializer):
                     'content',
                     validated_data.get('text_content')  # Legacy
                 ),
-                target_url=validated_data.get('target_url', None),
+                target_url=validated_data.get('target_url'),
                 shuffle=validated_data.get('shuffle', False),
             )
             action_obj.save()

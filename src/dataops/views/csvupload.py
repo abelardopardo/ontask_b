@@ -51,7 +51,7 @@ def csvupload_start(
         msg = _('CSV upload form is not multiform')
         context = {'message': msg}
 
-        meta = request.META.get('HTTP_REFERER', None)
+        meta = request.META.get('HTTP_REFERER')
         if meta:
             context['meta'] = meta
         return render(request, 'critical_error.html', context=context)

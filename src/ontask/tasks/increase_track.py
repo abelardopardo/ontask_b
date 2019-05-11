@@ -25,7 +25,7 @@ def increase_track_count(method, get_dict):
         return False
 
     # Obtain the track_id from the request
-    track_id = get_dict.get('v', None)
+    track_id = get_dict.get('v')
     if not track_id:
         logger.error(ugettext('No track_id found in request'))
         # No track id, nothing to do

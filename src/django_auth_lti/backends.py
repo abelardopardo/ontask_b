@@ -33,7 +33,7 @@ class LTIAuthBackend(ModelBackend):
             logger.error("No request object in authenticatiton")
             return None
 
-        request_key = request.POST.get('oauth_consumer_key', None)
+        request_key = request.POST.get('oauth_consumer_key')
 
         if request_key is None:
             logger.error(

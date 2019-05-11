@@ -161,7 +161,7 @@ class PluginInfoForm(forms.Form):
         form_data = super().clean()
 
         # Input columns need to be non-empty
-        columns = form_data.get('columns', None)
+        columns = form_data.get('columns')
         if columns and columns.count() == 0:
             self.add_error(
                 'columns',

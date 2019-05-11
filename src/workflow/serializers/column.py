@@ -23,7 +23,7 @@ class ColumnSerializer(serializers.ModelSerializer):
     def create(self, validated_data, **kwargs):
         """Create a new column."""
         # Preliminary checks
-        data_type = validated_data.get('data_type', None)
+        data_type = validated_data.get('data_type')
         if (
             data_type is None
             or data_type not in list(pandas_datatype_names.values())
@@ -42,8 +42,8 @@ class ColumnSerializer(serializers.ModelSerializer):
                 is_key=validated_data.get('is_key', False),
                 position=validated_data.get('position', 0),
                 in_viz=validated_data.get('in_viz', True),
-                active_from=validated_data.get('active_from', None),
-                active_to=validated_data.get('active_to', None),
+                active_from=validated_data.get('active_from'),
+                active_to=validated_data.get('active_to'),
             )
 
             # Set the categories if they exists

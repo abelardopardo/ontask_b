@@ -174,7 +174,7 @@ def clone_condition(
     action = condition.action
 
     # If the request has the 'action_content', update the action
-    action_content = request.POST.get('action_content', None)
+    action_content = request.POST.get('action_content')
     if action_content:
         condition.action.set_text_content(action_content)
         condition.action.save()

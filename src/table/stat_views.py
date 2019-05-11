@@ -226,8 +226,8 @@ def stat_row_view(
     """
     # If there is no workflow object, go back to the index
     # Get the pair key,value to fetch the row from the table
-    update_key = request.GET.get('key', None)
-    update_val = request.GET.get('val', None)
+    update_key = request.GET.get('key')
+    update_val = request.GET.get('val')
 
     if not update_key or not update_val:
         # Malformed request

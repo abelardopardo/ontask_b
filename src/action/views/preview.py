@@ -95,7 +95,7 @@ def preview_response(
     :return: JsonResponse
     """
     # If the request has the 'action_content', update the action
-    action_content = request.POST.get('action_content', None)
+    action_content = request.POST.get('action_content')
     if action_content:
         action.set_text_content(action_content)
         action.save()
@@ -176,7 +176,7 @@ def preview_response(
         action_content = escape(action_content)
 
     # See if there is prelude content in the request
-    prelude = request.GET.get('subject_content', None)
+    prelude = request.GET.get('subject_content')
     if prelude:
         prelude = evaluate_row_action_out(action, context, prelude)
 

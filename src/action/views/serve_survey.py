@@ -40,7 +40,7 @@ def serve_survey_row(
     # it as shared
     manager = has_access(request.user, action. workflow)
     if manager:
-        user_attribute_value = request.GET.get('uatv', None)
+        user_attribute_value = request.GET.get('uatv')
     else:
         user_attribute_value = request.user.email
 

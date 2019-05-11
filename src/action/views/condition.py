@@ -200,7 +200,7 @@ def delete_filter(
         })
 
     # If the request has 'action_content', update the action
-    action_content = request.POST.get('action_content', None)
+    action_content = request.POST.get('action_content')
     if action_content:
         condition.action.set_text_content(action_content)
         condition.action.save()
@@ -287,7 +287,7 @@ def delete_condition(
     # Treat the two types of requests
     if request.method == 'POST':
         # If the request has the 'action_content', update the action
-        action_content = request.POST.get('action_content', None)
+        action_content = request.POST.get('action_content')
         if action_content:
             condition.action.set_text_content(action_content)
             condition.action.save()

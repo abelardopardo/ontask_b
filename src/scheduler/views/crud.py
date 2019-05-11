@@ -215,7 +215,7 @@ def edit(
         action = s_item.action
 
     # Get the payload from the session, and if not, use the given one
-    op_payload = request.session.get(action_session_dictionary, None)
+    op_payload = request.session.get(action_session_dictionary)
     if not op_payload:
         op_payload = {
             'action_id': action.id,

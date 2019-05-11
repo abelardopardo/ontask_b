@@ -18,7 +18,7 @@ register = template.Library()
 def vis_html_content(context, column_name):
     """Create the HTML visualization code."""
     # Get the action
-    action = context.get(action_context_var, None)
+    action = context.get(action_context_var)
     if not action:
         raise Exception(_('Action object not found when processing tag'))
     workflow = action.workflow
@@ -40,7 +40,7 @@ def vis_html_content(context, column_name):
     # If the template is simply being saved and rendered to detect syntax
     # errors, we may not have the data of an individual, so we have to relax
     # this restriction.
-    ivalue = context.get(tr_item(column_name), None)
+    ivalue = context.get(tr_item(column_name))
     if ivalue is not None:
         viz_ctx['individual_value'] = ivalue
 

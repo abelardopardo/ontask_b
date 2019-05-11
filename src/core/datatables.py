@@ -21,14 +21,14 @@ class DataTablesServerSidePaging(object):
     def __init__(self, request_data):
         """Extract the data from the request."""
         try:
-            self.draw = int(request_data.POST.get('draw', None))
-            self.start = int(request_data.POST.get('start', None))
-            self.length = int(request_data.POST.get('length', None))
+            self.draw = int(request_data.POST.get('draw'))
+            self.start = int(request_data.POST.get('start'))
+            self.length = int(request_data.POST.get('length'))
             self.order_col = int(request_data.POST.get(
                 'order[0][column]',
                 None))
             self.order_dir = request_data.POST.get('order[0][dir]', 'asc')
-            self.search_value = request_data.POST.get('search[value]', None)
+            self.search_value = request_data.POST.get('search[value]')
 
         except ValueError:
             self.is_valid = False

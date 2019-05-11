@@ -141,7 +141,7 @@ def callback(request):
         return redirect('action:index')
 
     # Check first if there has been some error
-    error_string = request.GET.get('error', None)
+    error_string = request.GET.get('error')
     if error_string:
         messages.error(
             request,
@@ -199,7 +199,7 @@ def callback(request):
         user=request.user,
         instance_name=oauth_instance,
         access_token=response_data['access_token'],
-        refresh_token=response_data.get('refresh_token', None),
+        refresh_token=response_data.get('refresh_token'),
         valid_until=timezone.now() + timedelta(
             seconds=response_data.get('expires_in', 0)),
     )

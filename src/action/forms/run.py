@@ -355,7 +355,7 @@ class JSONBasicActionForm(forms.Form):
 
         # Handle the key column setting the initial value if given and
         # selecting the choices
-        key_column = self.action_info.get('item_column', None)
+        key_column = self.action_info.get('item_column')
         if key_column is None:
             key_column = ('', '---')
         else:

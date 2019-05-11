@@ -493,7 +493,7 @@ class TableApiMerge(TableApiBase):
             format='json')
 
         # No anomaly should be detected
-        self.assertEqual(None, response.data.get('detail', None))
+        self.assertEqual(None, response.data.get('detail'))
 
         # Get the new workflow
         workflow = Workflow.objects.all()[0]
@@ -531,7 +531,7 @@ class TableApiMerge(TableApiBase):
             format='json')
 
         # No anomaly should be detected
-        self.assertEqual(None, response.data.get('detail', None))
+        self.assertEqual(None, response.data.get('detail'))
 
         # Get the new workflow
         workflow = Workflow.objects.all()[0]

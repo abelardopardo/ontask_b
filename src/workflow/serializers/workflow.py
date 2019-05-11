@@ -159,7 +159,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
                     col.save()
 
             # Load the data frame
-            data_frame = validated_data.get('data_frame', None)
+            data_frame = validated_data.get('data_frame')
             if data_frame is not None:
                 # Store the table in the DB
                 store_table(

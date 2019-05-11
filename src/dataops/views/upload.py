@@ -57,7 +57,7 @@ def upload_s2(
     """
     # Get the dictionary to store information about the upload
     # is stored in the session.
-    upload_data = request.session.get('upload_data', None)
+    upload_data = request.session.get('upload_data')
     if not upload_data:
         # If there is no object, or it is an empty dict, it denotes a direct
         # jump to this step, get back to the dataops page
@@ -74,19 +74,19 @@ def upload_s2(
                                         reverse('dataops:uploadmerge')))
 
     # Get or create the list with the renamed column names
-    rename_column_names = upload_data.get('rename_column_names', None)
+    rename_column_names = upload_data.get('rename_column_names')
     if rename_column_names is None:
         rename_column_names = initial_columns[:]
         upload_data['rename_column_names'] = rename_column_names
 
     # Get or create list of booleans identifying columns to be uploaded
-    columns_to_upload = upload_data.get('columns_to_upload', None)
+    columns_to_upload = upload_data.get('columns_to_upload')
     if columns_to_upload is None:
         columns_to_upload = [True] * len(initial_columns)
         upload_data['columns_to_upload'] = columns_to_upload
 
     # Get or create list of booleans identifying key columns to be kept
-    keep_key_column = upload_data.get('keep_key_column', None)
+    keep_key_column = upload_data.get('keep_key_column')
     if keep_key_column is None:
         keep_key_column = upload_data['src_is_key_column'][:]
         upload_data['keep_key_column'] = keep_key_column
@@ -257,13 +257,13 @@ def upload_s3(
     """
     # Get the dictionary to store information about the upload
     # is stored in the session.
-    upload_data = request.session.get('upload_data', None)
+    upload_data = request.session.get('upload_data')
     if not upload_data:
         # If there is no object, someone is trying to jump directly here.
         return redirect('dataops:uploadmerge')
 
     # Get column names in dst_df
-    dst_column_names = upload_data.get('dst_column_names', None)
+    dst_column_names = upload_data.get('dst_column_names')
     if not dst_column_names:
         dst_column_names = workflow.get_column_names()
         upload_data['dst_column_names'] = dst_column_names
@@ -275,7 +275,7 @@ def upload_s3(
         upload_data['dst_is_unique_column'] = dst_is_unique_column
 
     # Array of unique col names in DST
-    dst_unique_col_names = upload_data.get('dst_unique_col_names', None)
+    dst_unique_col_names = upload_data.get('dst_unique_col_names')
     if dst_unique_col_names is None:
         dst_unique_col_names = [v for x, v in enumerate(dst_column_names)
                                 if dst_is_unique_column[x]]
@@ -295,9 +295,9 @@ def upload_s3(
         request.POST or None,
         dst_keys=dst_unique_col_names,
         src_keys=src_unique_col_names,
-        src_selected_key=upload_data.get('src_selected_key', None),
-        dst_selected_key=upload_data.get('dst_selected_key', None),
-        how_merge=upload_data.get('how_merge', None)
+        src_selected_key=upload_data.get('src_selected_key'),
+        dst_selected_key=upload_data.get('dst_selected_key'),
+        how_merge=upload_data.get('how_merge')
     )
 
     # Process the initial loading of the form
@@ -373,7 +373,7 @@ def upload_s4(
     :return:
     """
     # Get the dictionary containing the information about the upload
-    upload_data = request.session.get('upload_data', None)
+    upload_data = request.session.get('upload_data')
     if not upload_data:
         # If there is nsendo object, someone is trying to jump directly here.
         return redirect('dataops:uploadmerge')
