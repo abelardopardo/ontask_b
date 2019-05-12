@@ -155,10 +155,10 @@ def get_table_row_by_index(workflow, filter_formula, idx):
         filter_formula)
 
     # If the data is not there, return None
-    if idx > len(df_data):
+    if idx > df_data.rowcount:
         return None
 
-    return df_data[idx - 1]
+    return df_data.fetchall()[idx - 1]
 
 
 def add_column_to_df(df, column, initial_value=None):
