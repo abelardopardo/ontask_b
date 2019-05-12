@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Functions to evaluate the operands in OnTask conditions and filters."""
+
 import pandas as pd
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext
@@ -33,6 +34,8 @@ def get_value(node, given_variables):
 
     :param given_variables: Dictionary with the list of variables/values
 
+    :param given_variables: Dictionary of var/values
+
     :return: The value
     """
     # Get the variable name
@@ -55,7 +58,11 @@ def get_value(node, given_variables):
 def equal(node, eval_type, given_variables):
     """Process the equal operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -85,7 +92,11 @@ def equal(node, eval_type, given_variables):
 def not_equal(node, eval_type, given_variables):
     """Process the not equal operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -115,7 +126,11 @@ def not_equal(node, eval_type, given_variables):
 def begins_with(node, eval_type, given_variables):
     """Process the begins_with operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -145,7 +160,11 @@ def begins_with(node, eval_type, given_variables):
 def not_begins_with(node, eval_type, given_variables):
     """Process the not_begins_with operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -175,7 +194,11 @@ def not_begins_with(node, eval_type, given_variables):
 def contains(node, eval_type, given_variables):
     """Process the contains operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -205,7 +228,11 @@ def contains(node, eval_type, given_variables):
 def not_contains(node, eval_type, given_variables):
     """Process the not_contains operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -235,7 +262,11 @@ def not_contains(node, eval_type, given_variables):
 def ends_with(node, eval_type, given_variables):
     """Process the ends_with operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -263,7 +294,11 @@ def ends_with(node, eval_type, given_variables):
 def not_ends_with(node, eval_type, given_variables):
     """Process the not_ends_width operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -294,7 +329,11 @@ def not_ends_with(node, eval_type, given_variables):
 def is_empty(node, eval_type, given_variables):
     """Process the is_empty operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -319,7 +358,11 @@ def is_empty(node, eval_type, given_variables):
 def is_not_empty(node, eval_type, given_variables):
     """Process the is_empty operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -344,7 +387,11 @@ def is_not_empty(node, eval_type, given_variables):
 def is_null(node, eval_type, given_variables):
     """Process the is_null operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -368,7 +415,11 @@ def is_null(node, eval_type, given_variables):
 def is_not_null(node, eval_type, given_variables):
     """Process the is_not_null operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -391,7 +442,11 @@ def is_not_null(node, eval_type, given_variables):
 def less(node, eval_type, given_variables):
     """Process the less operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -428,7 +483,11 @@ def less(node, eval_type, given_variables):
 def less_or_equal(node, eval_type, given_variables):
     """Process the less_or_equal operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -466,7 +525,11 @@ def less_or_equal(node, eval_type, given_variables):
 def greater(node, eval_type, given_variables):
     """Process the greater operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -503,7 +566,11 @@ def greater(node, eval_type, given_variables):
 def greater_or_equal(node, eval_type, given_variables):
     """Process the greater_or_equal operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -541,7 +608,11 @@ def greater_or_equal(node, eval_type, given_variables):
 def between(node, eval_type, given_variables):
     """Process the between operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
@@ -588,7 +659,11 @@ def between(node, eval_type, given_variables):
 def not_between(node, eval_type, given_variables):
     """Process the not_between operator.
 
+    :param node: Formula node
+
     :param eval_type: Type of evaluation
+
+    :param given_variables: Dictionary of var/values
 
     :return: Boolean result, SQL query, or text result
     """
