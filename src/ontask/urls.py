@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+"""First entry point to define URLs."""
 
 from django.conf import settings
 from django.conf.urls import include
@@ -22,11 +23,10 @@ import profiles.urls
 import scheduler.urls
 import table.urls
 import workflow.urls
-import workflow.views
 from dataops.pandas import set_engine
 from ontask.templatetags.ontask_tags import ontask_version
 
-from . import views
+from ontask import views
 
 api_description = ugettext(
     'The OnTask API offers functionality to manipulate workflows, tables '
@@ -132,4 +132,4 @@ try:
 except Exception:
     # To bypass the migrate command execution that fails because the Site
     # table is not created yet.
-    pass
+    site = None

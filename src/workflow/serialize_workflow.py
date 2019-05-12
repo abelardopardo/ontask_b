@@ -12,7 +12,7 @@ from action.serializers import ActionSerializer
 from dataops.pandas import store_table
 from table.serializers import DataFramePandasField, ViewSerializer
 from workflow.models import Workflow
-from workflow.serializers.column import ColumnSerializer
+from workflow.serialize_column import ColumnSerializer
 
 try:
     profile  # noqa: Z444

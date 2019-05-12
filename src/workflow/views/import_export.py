@@ -16,7 +16,7 @@ from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from workflow.forms import WorkflowExportRequestForm, WorkflowImportForm
 from workflow.models import Workflow
-from workflow.ops import do_export_workflow, do_import_workflow
+from workflow.import_export import do_export_workflow, do_import_workflow
 
 
 @user_passes_test(is_instructor)

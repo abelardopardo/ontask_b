@@ -14,7 +14,7 @@ from rest_framework.views import APIView
 from ontask.decorators import get_workflow
 from ontask.permissions import UserIsInstructor
 from workflow.models import Workflow
-from workflow.serializers import WorkflowListSerializer, WorkflowLockSerializer
+from workflow.serialize_workflow import WorkflowListSerializer, WorkflowLockSerializer
 
 
 class WorkflowAPIListCreate(generics.ListCreateAPIView):

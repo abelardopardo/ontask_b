@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
 from workflow.models import Workflow
-from workflow.ops import do_export_workflow_parse
+from workflow.import_export import do_export_workflow_parse
 
 
 class Command(BaseCommand):

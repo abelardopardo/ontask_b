@@ -7,7 +7,7 @@ import shutil
 from django.core.management.base import BaseCommand
 
 from workflow.models import Workflow
-from workflow.ops import do_export_workflow_parse
+from workflow.import_export import do_export_workflow_parse
 
 
 class Command(BaseCommand):

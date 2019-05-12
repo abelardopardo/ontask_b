@@ -17,7 +17,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 from dataops.pandas import destroy_db_engine, engine
 from workflow.models import Workflow
-from workflow.ops import (
+from workflow.import_export import (
     do_export_workflow, do_export_workflow_parse, do_import_workflow_parse,
 )
 

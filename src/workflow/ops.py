@@ -1,184 +1,70 @@
 # -*- coding: utf-8 -*-
 
-import gzip
-from builtins import str
-from datetime import datetime
-from io import BytesIO
+"""Functions to perform various operations in a workflow."""
+
+from typing import List, Optional
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.http import HttpResponse
+from django.http import HttpRequest
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext, ugettext_lazy as _
-from rest_framework import serializers
-from rest_framework.parsers import JSONParser
-from rest_framework.renderers import JSONRenderer
 
 from action.models import Condition
-from dataops.pandas import check_wf_df, load_table, store_dataframe
+from dataops.pandas import load_table, store_dataframe
 from dataops.sql.column_queries import df_drop_column
 from dataops.sql.row_queries import get_rows
 from logs.models import Log
-from workflow.serializers import (
-    WorkflowExportSerializer, WorkflowImportSerializer,
-)
+from workflow.models import Column, Workflow
+
+RANDOM_PWD_LENGTH = 50
 
 
-def store_workflow_nrows_in_session(request, obj):
-    """
-    Store the workflow id and name in the request.session dictionary
+def store_workflow_nrows_in_session(request: HttpRequest, wflow: Workflow):
+    """Store the workflow id and name in the request.session dictionary.
+
     :param request: Request object
-    :param obj: Workflow object
+
+    :param wflow: Workflow object
+
     :return: Nothing. Store the id and the name in the session
     """
-
-    request.session['ontask_workflow_rows'] = obj.nrows
+    request.session['ontask_workflow_rows'] = wflow.nrows
     request.session.save()
 
 
-def store_workflow_in_session(request, obj):
-    """
-    Store the workflow id, name, and number of rows in the
-    request.session dictionary
+def store_workflow_in_session(request: HttpRequest, wflow: Workflow):
+    """Store the workflow id, name, and number of rows in the session.
+
     :param request: Request object
-    :param obj: Workflow object
+
+    :param wflow: Workflow object
     :return: Nothing. Store the id, name and nrows in the session
     """
-
-    request.session['ontask_workflow_id'] = obj.id
-    request.session['ontask_workflow_name'] = obj.name
-    store_workflow_nrows_in_session(request, obj)
-
-
-def do_import_workflow_parse(user, name, file_item):
-    """
-    Three steps: read the GZIP file, create ther serializer, parse the data,
-    check for validity and create the workflow
-    :param user: User used for the operation
-    :param name: Workflow name
-    :param file_item: File item previously opened
-    :return: workflow object or raise exception
-    """
-
-    data_in = gzip.GzipFile(fileobj=file_item)
-    data = JSONParser().parse(data_in)
-
-    # Serialize content
-    workflow_data = WorkflowImportSerializer(
-        data=data,
-        context={'user': user, 'name': name}
-    )
-
-    # If anything went wrong, return the string to show to the form.
-    if not workflow_data.is_valid():
-        raise serializers.ValidationError(workflow_data.errors)
-
-    # Save the new workflow
-    workflow = workflow_data.save()
-
-    try:
-        check_wf_df(workflow)
-    except AssertionError:
-        # Something went wrong.
-        if workflow:
-            workflow.delete()
-        raise
-
-    return workflow
+    request.session['ontask_workflow_id'] = wflow.id
+    request.session['ontask_workflow_name'] = wflow.name
+    store_workflow_nrows_in_session(request, wflow)
 
 
-def do_import_workflow(user, name, file_item):
-    """
-    Receives a name and a file item (submitted through a form) and creates
-    the structure of workflow, conditions, actions and data table.
+def workflow_delete_column(
+    workflow: Workflow,
+    column: Column,
+    cond_to_delete: Optional[List[Condition]] = None,
+):
+    """Remove column from workflow.
 
-    :param user: User record to use for the import (own all created items)
-    :param name: Workflow name (it has been checked that it does not exist)
-    :param file_item: File item obtained through a form
-    :return:
-    """
-
-    try:
-        workflow = do_import_workflow_parse(user, name, file_item)
-    except IOError:
-        return _('Incorrect file. Expecting a GZIP file (exported workflow).')
-    except (TypeError, NotImplementedError) as e:
-        return _('Unable to import workflow. Exception: {0}').format(e)
-    except serializers.ValidationError as e:
-        return _('Unable to import workflow. Validation error: {0}').format(e)
-    except AssertionError as e:
-        # Something went wrong.
-        return _('Workflow data with incorrect structure.')
-    except Exception as e:
-        return _('Unable to import workflow: {0}').format(e)
-
-    # Success
-    # Log the event
-    Log.objects.register(user,
-                         Log.WORKFLOW_IMPORT,
-                         workflow,
-                         {'id': workflow.id,
-                          'name': workflow.name})
-    return None
-
-
-def do_export_workflow_parse(workflow, selected_actions=None):
-    """
-    Serialize the workflow and attach its content to a BytesIO object
-    :param workflow: Workflow to serialize
-    :param selected_actions: Subset of actions
-    :return: BytesIO
-    """
-    # Get the info to send from the serializer
-    serializer = WorkflowExportSerializer(
-        workflow,
-        context={'selected_actions': selected_actions}
-    )
-    to_send = JSONRenderer().render(serializer.data)
-
-    # Get the in-memory file to compress
-    zbuf = BytesIO()
-    zfile = gzip.GzipFile(mode='wb', compresslevel=6, fileobj=zbuf)
-    zfile.write(to_send)
-    zfile.close()
-
-    return zbuf
-
-
-def do_export_workflow(workflow, selected_actions=None):
-    """
-    Proceed with the workflow export.
-    :param workflow: Workflow record to export be included.
-    :param selected_actions: A subset of actions to export
-    :return: Page that shows a confirmation message and starts the download
-    """
-    # Get the in-memory compressed file
-    zbuf = do_export_workflow_parse(workflow, selected_actions)
-
-    suffix = datetime.now().strftime('%y%m%d_%H%M%S')
-    # Attach the compressed value to the response and send
-    compressed_content = zbuf.getvalue()
-    response = HttpResponse(compressed_content)
-    response['Content-Type'] = 'application/octet-stream'
-    response['Content-Transfer-Encoding'] = 'binary'
-    response['Content-Disposition'] = \
-        'attachment; filename="ontask_workflow_{0}.gz"'.format(suffix)
-    response['Content-Length'] = str(len(compressed_content))
-
-    return response
-
-
-def workflow_delete_column(workflow, column, cond_to_delete=None):
-    """
     Given a workflow and a column, removes it from the workflow (and the
     corresponding data frame
+
     :param workflow: Workflow object
+
     :param column: Column object to delete
+
     :param cond_to_delete: List of conditions to delete after removing the
     column
+
     :return: Nothing. Effect reflected in the database
     """
-
     # Drop the column from the DB table storing the data frame
     df_drop_column(workflow.get_data_frame_table_name(), column.name)
 
@@ -196,8 +82,10 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
         # The conditions to delete are not given, so calculate them
         # Get the conditions/actions attached to this workflow
         cond_to_delete = [
-            x for x in Condition.objects.filter(action__workflow=workflow)
-            if column in x.columns.all()]
+            cond for cond in Condition.objects.filter(
+                action__workflow=workflow,
+            )
+            if column in cond.columns.all()]
 
     # If a column disappears, the conditions that contain that variable
     # are removed
@@ -221,18 +109,17 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
         if view.columns.count() == 0:
             view.delete()
 
-    return
 
+def workflow_restrict_column(column: Column) -> Optional[str]:
+    """Set category of the column to the existing set of values.
 
-def workflow_restrict_column(column):
-    """
     Given a workflow and a column, modifies the column so that only the
     values already present are allowed for future updates.
 
     :param column: Column object to restrict
+
     :return: String with error or None if correct
     """
-
     # Load the data frame
     data_frame = load_table(
         column.workflow.get_data_frame_table_name())
@@ -254,12 +141,19 @@ def workflow_restrict_column(column):
     return None
 
 
-def clone_column(column, new_workflow=None, new_name=None):
-    """
-    Function that given a column clones it and changes workflow and name
+def clone_column(
+    column: Column,
+    new_workflow: Optional[Workflow] = None,
+    new_name: Optional[str] = None,
+) -> Column:
+    """Create a clone of a column.
+
     :param column: Object to clone
+
     :param new_workflow: New workflow object to point
+
     :param new_name: New name
+
     :return: Cloned object
     """
     # Store the old object name before squashing it
@@ -295,22 +189,24 @@ def clone_column(column, new_workflow=None, new_name=None):
     return column
 
 
-def do_workflow_update_lusers(workflow, log_item):
-    """
+def do_workflow_update_lusers(workflow: Workflow, log_item: Log):
+    """Recalculate the field lusers.
+
     Recalculate the elements in the field lusers of the workflow based on the
-     fields luser_email_column and luser_email_column_MD5
+    fields luser_email_column and luser_email_column_MD5
 
     :param workflow: Workflow to update
+
     :param log_item: Log where to leave the status of the operation
+
     :return: Changes in the lusers ManyToMany relationships
     """
-
     # Get the column content
     emails = get_rows(
         workflow.get_data_frame_table_name(),
-        [workflow.luser_email_column.name], None)
+        [workflow.luser_email_column.name])
 
-    result = []
+    luser_list = []
     created = 0
     for __, uemail, in emails:
         luser = get_user_model().objects.filter(email=uemail).first()
@@ -318,26 +214,24 @@ def do_workflow_update_lusers(workflow, log_item):
             # Create user
             if settings.DEBUG:
                 # Define users with the same password in development
-                password='boguspwd'
+                password = 'boguspwd'  # NOQA
             else:
-                password = get_random_string(length=50)
+                password = get_random_string(length=RANDOM_PWD_LENGTH)
             luser = get_user_model().objects.create_user(
                 email=uemail,
-                password=password
+                password=password,
             )
             created += 1
 
-        result.append(luser)
+        luser_list.append(luser)
 
     # Assign result
-    workflow.lusers.set(result)
+    workflow.lusers.set(luser_list)
 
     # Report status
     log_item.payload['total_users'] = len(emails)
     log_item.payload['new_users'] = created
     log_item.payload['status'] = ugettext(
-        'Learner emails successfully updated.'
+        'Learner emails successfully updated.',
     )
     log_item.save()
-
-    return
