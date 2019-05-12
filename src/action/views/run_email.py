@@ -87,7 +87,10 @@ def run_email_action(
             return redirect('action:item_filter')
 
         # Go straight to the final step.
-        return run_email_done(request, action_info)
+        return run_email_done(
+            request,
+            action_info=action_info,
+            workflow=workflow)
 
     # Render the form
     return render(
@@ -145,11 +148,15 @@ def run_email_done(
             'status': 'Preparing to execute',
         })
 
+    # Update the last_execution_log
+    action.last_executed_log = log_item
+    action.save()
+
     # Send the emails!
     send_email_messages.delay(
         request.user.id,
         log_item.id,
-        action_info)
+        action_info.get_store())
 
     # Reset object to carry action info throughout dialogs
     request.session[action_session_dictionary] = None

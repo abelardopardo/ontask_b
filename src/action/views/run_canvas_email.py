@@ -201,11 +201,15 @@ def run_canvas_email_done(
             'status': 'Preparing to execute',
         })
 
+    # Update the last_execution_log
+    action.last_executed_log = log_item
+    action.save()
+
     # Send the emails!
     send_canvas_email_messages.delay(
         request.user.id,
         log_item.id,
-        action_info)
+        action_info.get_store())
 
     # Reset object to carry action info throughout dialogs
     request.session[action_session_dictionary] = None

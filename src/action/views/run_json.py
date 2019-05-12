@@ -129,11 +129,15 @@ def run_json_done(
          'status': 'Preparing to execute',
          'target_url': action.target_url})
 
+    # Update the last_execution_log
+    action.last_executed_log = log_item
+    action.save()
+
     # Send the objects
     send_json_objects.delay(
         request.user.id,
         log_item.id,
-        action_info)
+        action_info.get_store())
 
     # Reset object to carry action info throughout dialogs
     request.session[action_session_dictionary] = None

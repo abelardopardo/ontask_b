@@ -177,7 +177,7 @@ $(document).ready(function(){
     $('#div-spinner').show();
   });
 });
-$(window).bind("load", function() {
+$(window).bind("pageshow", function() {
    $('#div-spinner').hide();
 });
 $(':input').on('invalid', function(e){

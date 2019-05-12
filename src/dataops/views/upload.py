@@ -300,37 +300,22 @@ def upload_s3(
         how_merge=upload_data.get('how_merge')
     )
 
-    # Process the initial loading of the form
-    # TODO: Review this code
-    if request.method != 'POST':
-        # Update the dictionary with the session information
+    if request.method == 'POST' and form.is_valid():
+        # Get the keys and merge method and store them in the session dict
+        upload_data['dst_selected_key'] = form.cleaned_data['dst_key']
+        upload_data['src_selected_key'] = form.cleaned_data['src_key']
+        upload_data['how_merge'] = form.cleaned_data['how_merge']
+
+        # Update session object
         request.session['upload_data'] = upload_data
-        return render(
-            request, 'dataops/upload_s3.html',
-            {'form': form,
-             'valuerange': range(5),
-             'prev_step': reverse('dataops:upload_s2'),
-             'wid': workflow.id})
 
-    # We are processing a post request with the information given by the user
+        return redirect('dataops:upload_s4')
 
-    # If the form is not valid, re-visit (nothing is checked so far...)
-    if not form.is_valid():
-        return render(
-            request, 'dataops/upload_s3.html',
-            {'form': form,
-             'valuerange': range(5),
-             'prev_step': reverse('dataops:upload_s2')})
-
-    # Get the keys and merge method and store them in the session dict
-    upload_data['dst_selected_key'] = form.cleaned_data['dst_key']
-    upload_data['src_selected_key'] = form.cleaned_data['src_key']
-    upload_data['how_merge'] = form.cleaned_data['how_merge']
-
-    # Update session object
-    request.session['upload_data'] = upload_data
-
-    return redirect('dataops:upload_s4')
+    return render(
+        request, 'dataops/upload_s3.html',
+        {'form': form,
+         'valuerange': range(5),
+         'prev_step': reverse('dataops:upload_s2')})
 
 
 @user_passes_test(is_instructor)

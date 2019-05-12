@@ -21,8 +21,8 @@ class ViewAddForm(forms.ModelForm):
 
         # Rename some of the fields
         self.fields['name'].label = _('View name')
-        self.fields['columns'].label = _('Columns to show')
         self.fields['description_text'].label = _('View Description')
+        self.fields['columns'].label = _('Columns to show')
 
         # Required enforced in the server (not in the browser)
         self.fields['formula'].required = False
@@ -34,22 +34,39 @@ class ViewAddForm(forms.ModelForm):
         self.fields['columns'].queryset = self.workflow.columns.all()
 
     def clean(self):
+        """Check if three properties in the form.
 
-        data = super().clean()
+        1) Number of columns is not empty
 
-        if data['columns'].count() == 0:
+        2) There is at least one key column
+
+        3) There is no view with that name.
+        """
+        form_data = super().clean()
+
+        if form_data['columns'].count() == 0:
             self.add_error(
                 None,
                 _('The view needs at least one column to show')
             )
 
-        if not next((x for x in data['columns'] if x.is_key), None):
+        if not next((x for x in form_data['columns'] if x.is_key), None):
             self.add_error(
                 None,
                 _('There needs to be at least one key column')
             )
 
-        return data
+        # Check if the name already exists
+        name_exists = self.workflow.views.filter(
+            name=self.cleaned_data['name'],
+        ).exclude(id=self.instance.id).exists()
+        if name_exists:
+            self.add_error(
+                'name',
+                _('There is already a view with this name.'),
+            )
+
+        return form_data
 
     class Meta(object):
         model = View

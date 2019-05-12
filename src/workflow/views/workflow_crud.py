@@ -47,7 +47,7 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
         """Process the get request."""
         return save_workflow_form(
             request,
-            self.form_class(),
+            self.form_class(workflow_user=request.user),
             self.template_name)
 
     def post(
@@ -59,7 +59,7 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
         """Process the post request."""
         return save_workflow_form(
             request,
-            self.form_class(request.POST),
+            self.form_class(request.POST, workflow_user=request.user),
             self.template_name)
 
 
@@ -153,29 +153,14 @@ def save_workflow_form(
             redirect_url = reverse('dataops:uploadmerge')
 
         # Save the instance
-        try:
-            workflow_item = form.save()
-        except IntegrityError:
-            form.add_error(
-                'name',
-                _('A workflow with that name already exists'))
-            return JsonResponse({
-                'html_form': render_to_string(
-                    template_name,
-                    {'form': form},
-                    request=request),
-            })
+        workflow_item = form.save()
 
         # Log event
         Log.objects.register(
             request.user,
             log_type,
             workflow_item,
-            {
-                'id': workflow_item.id,
-                'name': workflow_item.name,
-            },
-        )
+            {'id': workflow_item.id, 'name': workflow_item.name})
 
         # Here we can say that the form processing is done.
         return JsonResponse({'html_redirect': redirect_url})
@@ -239,7 +224,9 @@ def update(
 
     :return: JSON response
     """
-    form = WorkflowForm(request.POST or None, instance=workflow)
+    form = WorkflowForm(request.POST or None,
+                        instance=workflow,
+                        workflow_user=workflow.user)
 
     # If the user owns the workflow, proceed
     if workflow.user == request.user:

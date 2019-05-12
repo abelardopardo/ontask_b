@@ -29,7 +29,6 @@ from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
 from workflow.models import Workflow
 
-
 class ActionTable(tables.Table):
     """Class to render the list of actions per workflow.
 
@@ -41,21 +40,25 @@ class ActionTable(tables.Table):
 
     description_text = tables.Column(verbose_name=_('Description'))
 
-    action_type = tables.Column(verbose_name=_('Type'))
-
-    last_executed_log = tables.Column(
-        verbose_name=_('Last executed'),
-        empty_values=['', None],
+    action_type = tables.TemplateColumn(
+        template_name='action/includes/partial_action_type.html',
+        verbose_name=_('Type'),
+        attrs={
+            'td': {
+                'data-backcolor': lambda record: record.action_type,
+            },
+        },
     )
 
-    # FIX: Consider this column instead of the one above.
-    # last_executed_log = tables.LinkColumn(
-    #     verbose_name=_('Last executed'),
-    #     empty_values=['', None],
-    #     viewname='logs:view',
-    #     kwargs={'pk': A['id']},
-    #     attrs={'class': 'spin'}
-    # )
+    last_executed_log = tables.LinkColumn(
+        verbose_name=_('Last executed'),
+        empty_values=['', None],
+        viewname='logs:view',
+        text=lambda record: simplify_datetime_str(
+            record.last_executed_log.modified),
+        kwargs={'pk': A('last_executed_log.id')},
+        attrs={'a': {'class': 'spin'}}
+    )
 
     #
     # Operatiosn available per action type (see partial_action_operations.html)
@@ -90,22 +93,6 @@ class ActionTable(tables.Table):
                 ),
                 'action_name': record.name,
             }
-        )
-
-    def render_action_type(self, record):
-        """Render the action type."""
-        # TODO: With this solution, there is no possibility to i18n the title
-        # in the element (it is done in the JS embedded in the page). Explore
-        # using a template.
-        return record.action_type
-
-    def render_last_executed_log(self, record):
-        """Render the date/time or insert a --- if none."""
-        log_item = record.last_executed_log
-        return format_html(
-            '<a class="spin" href="{0}">{1}</a>',
-            reverse('logs:view', kwargs={'pk': log_item.id}),
-            simplify_datetime_str(log_item.modified),
         )
 
     class Meta(object):

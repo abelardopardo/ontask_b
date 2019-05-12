@@ -324,7 +324,7 @@ def scheduled_email_action_data_is_correct(action, cleaned_data):
         column_data = get_rows(
             action.workflow.get_data_frame_table_name(),
             column_names=[item_column.name])
-        if not all(is_correct_email(email) for __, email in column_data):
+        if not all(is_correct_email(row['email']) for row in column_data):
             # column has incorrect email addresses
             pair_list.append(
                 ('item_column',

@@ -54,7 +54,7 @@ class ActionPayload(collections.MutableMapping):
         """Initialize the store and store given arguments."""
         super().__init__()
         self.store = {}
-        if args:
+        if args or kwargs:
             self.update(dict(*args, **kwargs))
 
     def __getitem__(self, key):

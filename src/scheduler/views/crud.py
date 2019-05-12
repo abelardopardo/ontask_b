@@ -2,11 +2,10 @@
 
 """Views to manipulate the CRUD for scheduled exections."""
 
-import json
 from builtins import object
+import json
 from typing import Optional
 
-import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
@@ -17,6 +16,7 @@ from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from django_tables2 import A
+import django_tables2 as tables
 
 from action.models import Action
 from action.payloads import action_session_dictionary
@@ -35,6 +35,21 @@ from workflow.models import Workflow
 class ScheduleActionTable(tables.Table):
     """Table to show the email actions scheduled for a workflow."""
 
+    action = tables.LinkColumn(
+        verbose_name=_('Action'),
+        viewname='action:edit',
+        text=lambda record: record.action.name,
+        kwargs={'pk': A('action.id')},
+        attrs={
+            'a': {
+                'class': 'spin',
+                'data-toggle': 'tooltip',
+                'title': _('Edit the action scheduled for execution'),
+            },
+            'td': {'data-backcolor': lambda record: record.action.action_type},
+        },
+    )
+
     operations = OperationsColumn(
         verbose_name='',
         orderable=False,
@@ -43,10 +58,6 @@ class ScheduleActionTable(tables.Table):
     )
 
     name = tables.Column(verbose_name=_('Name'))
-
-    action = tables.Column(
-        verbose_name=_('Action'),
-        accessor=A('action.name'))
 
     execute = tables.DateTimeColumn(
         verbose_name=_('Scheduled'))
@@ -62,31 +73,6 @@ class ScheduleActionTable(tables.Table):
             reverse('scheduler:edit', kwargs={'pk': record.id}),
             _('Edit this scheduled action execution'),
             record.name)
-
-    def render_action(self, record):
-        """Render action depending on type."""
-        # TODO: This belongs in CSS being consistent with the action icons!!
-        icon = 'file-text'
-        if record.action.action_type == Action.personalized_text:
-            icon = 'file-text'
-        elif record.action.action_type == Action.personalized_canvas_email:
-            icon = 'envelope-square'
-        elif record.action.action_type == Action.personalized_json:
-            icon = 'code'
-        elif record.action.action_type == Action.survey:
-            icon = 'question-circle-o'
-
-        return format_html(
-            '<a class="spin" href="{0}"'.format(
-                reverse(
-                    'action:edit',
-                    kwargs={'pk': record.action.id}),
-            )
-            + ' data-toggle="tooltip" title="{0}">{1}'.format(
-                _('Edit the action scheduled for execution'),
-                record.action.name,
-                icon),
-        )
 
     def render_status(self, record):
         """Render status as a link."""

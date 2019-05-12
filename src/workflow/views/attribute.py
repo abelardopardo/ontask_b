@@ -35,39 +35,6 @@ def save_attribute_form(request, workflow, template, form, attr_idx):
     if request.method == 'POST' and form.is_valid():
         # Correct form submitted
 
-        # Enforce the property that Attribute names, column names and
-        # condition names cannot overlap.
-        attr_name = form.cleaned_data['key']
-        if attr_name in workflow.get_column_names():
-            form.add_error(
-                'key',
-                _('There is a column with this name. Please change.'),
-            )
-            return JsonResponse({
-                'html_form': render_to_string(
-                    template,
-                    {'form': form, 'id': attr_idx},
-                    request=request),
-            })
-
-        # Check if there is a condition with that name
-        cond_name = Condition.objects.filter(
-            action__workflow=workflow,
-            name=attr_name,
-        ).first()
-        if cond_name:
-            form.add_error(
-                'key',
-                _('There is a condition already with this name.'),
-            )
-            return JsonResponse({
-                'html_form': render_to_string(
-                    'workflow/includes/partial_attribute_create.html',
-                    {'form': form,
-                     'id': attr_idx},
-                    request=request),
-            })
-
         # proceed with updating the attributes.
         wf_attributes = workflow.attributes
 
@@ -115,11 +82,11 @@ def attribute_create(
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
     """Render the view to create an attribute."""
-    # Get the workflow
-    # Create the form object with the form_fields just computed
     form = AttributeItemForm(
         request.POST or None,
-        keys=list(workflow.attributes.keys()))
+        keys=list(workflow.attributes.keys()),
+        workflow=workflow,
+    )
 
     return save_attribute_form(
         request,
@@ -130,6 +97,7 @@ def attribute_create(
 
 
 @user_passes_test(is_instructor)
+@get_workflow()
 def attribute_edit(
     request: HttpRequest,
     pk: int,
@@ -151,7 +119,8 @@ def attribute_edit(
         request.POST or None,
         key=key,
         value=attr_value,
-        keys=keys)
+        keys=keys,
+        workflow=workflow)
 
     return save_attribute_form(
         request,

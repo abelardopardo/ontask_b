@@ -211,7 +211,7 @@ def workflow_delete_column(workflow, column, cond_to_delete=None):
 
     # Traverse the actions for which the filter has been deleted and reassess
     #  all their conditions
-    # TODO: Expensive operation. See how to improve it.
+    # TODO: Explore how to do this asynchronously (or lazy)
     for action in actions_without_filters:
         action.update_n_rows_selected()
 

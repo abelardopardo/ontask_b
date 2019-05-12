@@ -320,6 +320,7 @@ def row_delete(
         # view
         if not key or not row_value:
             messages.error(
+                request,
                 _('Incorrect URL invoked to delete a row'))
             # The response will require going to the table display anyway
             return JsonResponse({'html_redirect': reverse('table:display')})
@@ -332,7 +333,7 @@ def row_delete(
         workflow.save()
 
         # Update the value of all the conditions in the actions
-        # TODO: Can we do this asynchronously
+        # TODO: Explore how to do this asynchronously (or lazy)
         for action in workflow.actions.all():
             action.update_n_rows_selected()
 

@@ -141,7 +141,7 @@ class EmailActionForm(forms.Form):
             column_data = get_rows(
                 self.action.workflow.get_data_frame_table_name(),
                 column_names=[self.action_info['item_column']])
-            if not all(is_correct_email(iname) for __, iname in column_data):
+            if not all(is_correct_email(iname[0]) for iname in column_data):
                 # column has incorrect email addresses
                 self.add_error(
                     'email_column',

@@ -73,7 +73,7 @@ def row_update(
             filter_pairs=filter_pair)
 
         # Recompute all the values of the conditions in each of the actions
-        # TODO: See if this can be pushed asychronously (probably not)
+        # TODO: Explore how to do this asynchronously (or lazy)
         for act in workflow.actions.all():
             act.update_n_rows_selected()
 
@@ -150,7 +150,7 @@ def row_create(
         store_workflow_in_session(request, workflow)
 
         # Recompute all the values of the conditions in each of the actions
-        # TODO: Can we do this asynchronously?
+        # TODO: Explore how to do this asynchronously (or lazy)
         for act in workflow.actions.all():
             act.update_n_rows_selected()
 

@@ -24,11 +24,11 @@ class DataTablesServerSidePaging(object):
             self.draw = int(request_data.POST.get('draw'))
             self.start = int(request_data.POST.get('start'))
             self.length = int(request_data.POST.get('length'))
-            self.order_col = int(request_data.POST.get(
-                'order[0][column]',
-                None))
+            self.order_col = request_data.POST.get('order[0][column]')
             self.order_dir = request_data.POST.get('order[0][dir]', 'asc')
             self.search_value = request_data.POST.get('search[value]')
-
         except ValueError:
             self.is_valid = False
+
+        if self.order_col:
+            self.order_col = int(self.order_col)

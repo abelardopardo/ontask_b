@@ -43,10 +43,13 @@ class AttributeTable(tables.Table):
     )
 
     def render_name(self, record):
-        """Render name field as a link."""
-        # TODO: Move to a template.
+        """Render name field as a link.
+
+        Impossible to use LinkColumn because href="#". A template may be an
+        overkill.
+        """
         return format_html(
-            '<a href="#" data-toggle="tooltip'
+            '<a href="#" data-toggle="tooltip"'
             + ' class="js-attribute-edit" data-url="{0}" title="{1}">{2}</a>',
             reverse('workflow:attribute_edit', kwargs={'pk': record['id']}),
             _('Edit the attribute'),
@@ -118,7 +121,7 @@ def operations(
         'workflow': workflow,
         'attribute_table': AttributeTable([
             {'id': idx, 'name': key, 'value': kval}
-            for idx, key, kval in enumerate(sorted(
+            for idx, (key, kval) in enumerate(sorted(
                 workflow.attributes.items()))],
             orderable=False,
         ),

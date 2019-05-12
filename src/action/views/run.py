@@ -38,7 +38,7 @@ fn_distributor = {
 
 
 @user_passes_test(is_instructor)
-@get_action('actions')
+@get_action(pf_related='actions')
 def run_action(
     request: HttpRequest,
     pk: int,

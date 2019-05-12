@@ -22,6 +22,23 @@ class WorkflowForm(forms.ModelForm):
         self.user = kwargs.pop('workflow_user', None)
         super().__init__(*args, **kwargs)
 
+    def clean(self):
+        """Check if the name for the workflow is unique."""
+        form_data = super().clean()
+
+        # Check if the name already exists
+        name_exists = Workflow.objects.filter(
+            user=self.user,
+            name=self.cleaned_data['name']
+        ).exclude(id=self.instance.id).exists()
+        if name_exists:
+            self.add_error(
+                'name',
+                _('A workflow with this name already exists'),
+            )
+
+        return form_data
+
     class Meta(object):
         """Identify the model and the fields."""
 
@@ -47,6 +64,33 @@ class WorkflowImportForm(forms.Form):
         label=_('File'),
         help_text=_('File containing a previously exported workflow'))
 
+    def __init__(self, data, *args, **kwargs):
+        """Store the user that prompted the request."""
+        self.user = kwargs.pop('user', None)
+
+        super().__init__(data, *args, **kwargs)
+
+    def clean(self):
+        """Check that the name is unique and form multipart."""
+        form_data = super().clean()
+
+        if not self.is_multipart():
+            self.add_error(
+                None,
+                _('Incorrect form request (it is not multipart)'),
+            )
+
+        # Check if the name already exists
+        name_exists = Workflow.objects.filter(
+            user=self.user,
+            name=self.cleaned_data['name']).exists()
+        if name_exists:
+            self.add_error(
+                'name',
+                _('A workflow with this name already exists'),
+            )
+
+        return form_data
 
 class WorkflowExportRequestForm(forms.Form):
     """Form to request which actions to export from the workflow."""

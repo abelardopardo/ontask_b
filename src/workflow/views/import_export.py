@@ -106,29 +106,12 @@ def import_workflow(request):
 
     :return: Rendering of the import page or back to the workflow index
     """
-    form = WorkflowImportForm(request.POST or None, request.FILES or None)
+    form = WorkflowImportForm(
+        request.POST or None,
+        request.FILES or None,
+        user=request.user)
 
     if request.method == 'POST' and form.is_valid():
-        new_wf_name = form.cleaned_data['name']
-        if (
-            Workflow.objects.filter(
-                user=request.user,
-                name=new_wf_name).exists()
-        ):
-            # There is a workflow with this name. Return error.
-            # TODO: Move to form
-            form.add_error(None, _('A workflow with this name already exists'))
-            return render(request, 'workflow/import.html', {'form': form})
-
-        # Process the reception of the file
-        if not form.is_multipart():
-            # TODO: Move to Form
-            form.add_error(
-                None,
-                _('Incorrect form request (it is not multipart)'),
-            )
-            return render(request, 'workflow/import.html', {'form': form})
-
         # UPLOAD THE FILE!
         status = do_import_workflow(
             request.user,

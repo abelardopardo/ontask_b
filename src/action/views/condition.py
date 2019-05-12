@@ -353,7 +353,6 @@ def propagate_changes(condition, changed_data, old_name, is_new):
     # field of the action.
     if is_new or 'name' in changed_data:
         # Performing string substitution in the content and saving
-        # TODO: Review!
         replacing = '{{% if {0} %}}'
         condition.action.text_content = condition.action.text_content.replace(
             escape(replacing.format(old_name)),

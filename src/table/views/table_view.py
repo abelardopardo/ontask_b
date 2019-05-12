@@ -1,15 +1,14 @@
 from typing import Optional
 
-import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.db import IntegrityError
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
+import django_tables2 as tables
 
 from dataops.pandas import get_subframe
 from logs.models import Log
@@ -273,7 +272,11 @@ def csvdownload(
     return response
 
 
-def save_view_form(request, form, template_name):
+def save_view_form(
+    request: HttpRequest,
+    form: ViewAddForm,
+    template_name: str
+) -> HttpResponse:
     """Save the data attached to a view as provided in a form.
 
     :param request: HTTP request
@@ -289,35 +292,25 @@ def save_view_form(request, form, template_name):
         view = form.save(commit=False)
         view.workflow = form.workflow
 
-        # Type of event to be recorded
+        # Type of event to be recorded (before object is saved and ID is set)
         if form.instance.id:
             event_type = Log.VIEW_EDIT
         else:
             event_type = Log.VIEW_CREATE
 
-        # Save the new vew
-        # TODO: Fix handling this in the form clean method!
-        try:
-            view.save()
-            form.save_m2m()  # Needed to propagate the save effect to M2M relations
-        except IntegrityError:
-            form.add_error('name',
-                           _('A view with that name already exists'))
-            return JsonResponse({
-                'html_form': render_to_string(
-                    template_name,
-                    {'form': form, 'id': form.instance.id},
-                    request=request),
-            })
+        view.save()
+        form.save_m2m()  # Needed to propagate the save effect to M2M relations
 
         # Log the event
-        Log.objects.register(request.user,
-                             event_type,
-                             view.workflow,
-                             {'id': view.id,
-                              'name': view.name,
-                              'workflow_name': view.workflow.name,
-                              'workflow_id': view.workflow.id})
+        Log.objects.register(
+            request.user,
+            event_type,
+            view.workflow,
+            {
+                'id': view.id,
+                'name': view.name,
+                'workflow_name': view.workflow.name,
+                'workflow_id': view.workflow.id})
 
         return JsonResponse({'html_redirect': ''})
 

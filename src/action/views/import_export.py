@@ -24,7 +24,7 @@ from workflow.models import Workflow
 
 
 @user_passes_test(is_instructor)
-@get_action('actions')
+@get_action(pf_related='actions')
 def export_ask(
     request: HttpRequest,
     pk: int,
@@ -49,7 +49,7 @@ def export_ask(
 
 
 @user_passes_test(is_instructor)
-@get_action('actions')
+@get_action(pf_related='actions')
 def export_done(
     request: HttpRequest,
     pk: int,
@@ -68,7 +68,7 @@ def export_done(
 
 
 @user_passes_test(is_instructor)
-@get_action('actions')
+@get_action(pf_related='actions')
 def export_download(
     request: HttpRequest,
     pk: int,

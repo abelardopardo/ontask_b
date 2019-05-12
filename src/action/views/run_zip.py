@@ -125,10 +125,6 @@ def run_zip_done(
             'exclude_values': action_info['exclude_values'],
         })
 
-    # Update the last_execution_log
-    action.last_executed_log = log_item
-    action.save()
-
     # Successful processing.
     return render(request, 'action/action_zip_done.html', {})
 
