@@ -21,29 +21,9 @@ GET_CONSTANT = {
     'datetime': lambda operand: parse_datetime(operand),
 }
 
-
-def is_null(node,eval_type, given_variables):
-    """Process the is_null operator.
-
-    :param eval_type: Type of evaluation
-
-    :return: Boolean result, SQL query, or text result
-    """
-    if eval_type == EVAL_EXP:
-        # Python evaluation
-        node_value = get_value(node, given_variables)
-        return node_value is None or pd.isna(node_value)
-
-    if eval_type == EVAL_SQL:
-        # SQL evaluation
-        query = sql.SQL('({0} is null)').format(
-            sql.Identifier(node['field']),
-        )
-
-        return query, []
-
-    # Text evaluation
-    return '{0} is null'.format(node['field'])
+def value_is_null(var_value):
+    """Check if the value is None or NaN."""
+    return var_value is None or pd.isna(var_value)
 
 
 def get_value(node, given_variables):
@@ -72,7 +52,7 @@ def get_value(node, given_variables):
     return varvalue
 
 
-def equal(node,eval_type, given_variables):
+def equal(node, eval_type, given_variables):
     """Process the equal operator.
 
     :param eval_type: Type of evaluation
@@ -84,7 +64,7 @@ def equal(node,eval_type, given_variables):
     if eval_type == EVAL_EXP:
         # Python evaluation
         varvalue = get_value(node, given_variables)
-        return (not is_null(varvalue)) and varvalue == constant
+        return (not value_is_null(varvalue)) and varvalue == constant
 
     if eval_type == EVAL_SQL:
         # SQL evaluation
@@ -102,7 +82,7 @@ def equal(node,eval_type, given_variables):
     )
 
 
-def not_equal(node,eval_type, given_variables):
+def not_equal(node, eval_type, given_variables):
     """Process the not equal operator.
 
     :param eval_type: Type of evaluation
@@ -114,7 +94,7 @@ def not_equal(node,eval_type, given_variables):
     if eval_type == EVAL_EXP:
         # Python evaluation
         varvalue = get_value(node, given_variables)
-        return (not is_null(varvalue)) and varvalue != constant
+        return (not value_is_null(varvalue)) and varvalue != constant
 
     if eval_type == EVAL_SQL:
         # SQL evaluation
@@ -132,7 +112,7 @@ def not_equal(node,eval_type, given_variables):
     )
 
 
-def begins_with(node,eval_type, given_variables):
+def begins_with(node, eval_type, given_variables):
     """Process the begins_with operator.
 
     :param eval_type: Type of evaluation
@@ -144,7 +124,7 @@ def begins_with(node,eval_type, given_variables):
     if eval_type == EVAL_EXP:
         # Python evaluation
         varvalue = get_value(node, given_variables)
-        return (not is_null(varvalue)) and varvalue.startswith(
+        return (not value_is_null(varvalue)) and varvalue.startswith(
             constant,
         )
 
@@ -162,7 +142,7 @@ def begins_with(node,eval_type, given_variables):
     return '{0} starts with {1}'.format(node['field'], constant)
 
 
-def not_begins_with(node,eval_type, given_variables):
+def not_begins_with(node, eval_type, given_variables):
     """Process the not_begins_with operator.
 
     :param eval_type: Type of evaluation
@@ -174,7 +154,7 @@ def not_begins_with(node,eval_type, given_variables):
     if eval_type == EVAL_EXP:
         # Python evaluation
         varvalue = get_value(node, given_variables)
-        return (not is_null(varvalue)) and not varvalue.startswith(
+        return (not value_is_null(varvalue)) and not varvalue.startswith(
             constant)
 
     if eval_type == EVAL_SQL:
@@ -192,7 +172,7 @@ def not_begins_with(node,eval_type, given_variables):
         node['field'], constant)
 
 
-def contains(node,eval_type, given_variables):
+def contains(node, eval_type, given_variables):
     """Process the contains operator.
 
     :param eval_type: Type of evaluation
@@ -205,7 +185,7 @@ def contains(node,eval_type, given_variables):
         # Python evaluation
         varvalue = get_value(node, given_variables)
         return (
-            (not is_null(varvalue)) and varvalue.find(constant) != -1
+            (not value_is_null(varvalue)) and varvalue.find(constant) != -1
         )
 
     if eval_type == EVAL_SQL:
@@ -222,7 +202,7 @@ def contains(node,eval_type, given_variables):
     return '{0} contains {1}'.format(node['field'], constant)
 
 
-def not_contains(node,eval_type, given_variables):
+def not_contains(node, eval_type, given_variables):
     """Process the not_contains operator.
 
     :param eval_type: Type of evaluation
@@ -235,7 +215,7 @@ def not_contains(node,eval_type, given_variables):
         # Python evaluation
         varvalue = get_value(node, given_variables)
         return (
-            (not is_null(varvalue)) and varvalue.find(constant) == -1
+            (not value_is_null(varvalue)) and varvalue.find(constant) == -1
         )
 
     if eval_type == EVAL_SQL:
@@ -252,7 +232,7 @@ def not_contains(node,eval_type, given_variables):
     return '{0} does not contain {1}'.format(node['field'], constant)
 
 
-def ends_with(node,eval_type, given_variables):
+def ends_with(node, eval_type, given_variables):
     """Process the ends_with operator.
 
     :param eval_type: Type of evaluation
@@ -264,7 +244,7 @@ def ends_with(node,eval_type, given_variables):
     if eval_type == EVAL_EXP:
         # Python evaluation
         varvalue = get_value(node, given_variables)
-        return (not is_null(varvalue)) and varvalue.endswith(constant)
+        return (not value_is_null(varvalue)) and varvalue.endswith(constant)
 
     if eval_type == EVAL_SQL:
         # SQL evaluation
@@ -280,7 +260,7 @@ def ends_with(node,eval_type, given_variables):
     return '{0} ends with {1}'.format(node['field'], constant)
 
 
-def not_ends_with(node,eval_type, given_variables):
+def not_ends_with(node, eval_type, given_variables):
     """Process the not_ends_width operator.
 
     :param eval_type: Type of evaluation
@@ -293,7 +273,7 @@ def not_ends_with(node,eval_type, given_variables):
         # Python evaluation
         varvalue = get_value(node, given_variables)
         return (
-            (not is_null(varvalue))
+            (not value_is_null(varvalue))
             and (not varvalue.endswith(constant))
         )
 
@@ -311,7 +291,7 @@ def not_ends_with(node,eval_type, given_variables):
     return '{0} does not end with {1}'.format(node['field'], constant)
 
 
-def is_empty(node,eval_type, given_variables):
+def is_empty(node, eval_type, given_variables):
     """Process the is_empty operator.
 
     :param eval_type: Type of evaluation
@@ -321,7 +301,7 @@ def is_empty(node,eval_type, given_variables):
     if eval_type == EVAL_EXP:
         # Python evaluation
         varvalue = get_value(node, given_variables)
-        return (not is_null(varvalue)) and varvalue == ''
+        return (not value_is_null(varvalue)) and varvalue == ''
 
     if eval_type == EVAL_SQL:
         # SQL evaluation
@@ -336,7 +316,7 @@ def is_empty(node,eval_type, given_variables):
     return '{0} is empty'.format(node['field'])
 
 
-def is_not_empty(node,eval_type, given_variables):
+def is_not_empty(node, eval_type, given_variables):
     """Process the is_empty operator.
 
     :param eval_type: Type of evaluation
@@ -346,7 +326,7 @@ def is_not_empty(node,eval_type, given_variables):
     if eval_type == EVAL_EXP:
         # Python evaluation
         varvalue = get_value(node, given_variables)
-        return (not is_null(varvalue)) and varvalue != ''
+        return (not value_is_null(varvalue)) and varvalue != ''
 
     if eval_type == EVAL_SQL:
         # SQL evaluation
@@ -361,7 +341,31 @@ def is_not_empty(node,eval_type, given_variables):
     return '{0} is not empty'.format(node['field'])
 
 
-def is_not_null(node,eval_type, given_variables):
+def is_null(node, eval_type, given_variables):
+    """Process the is_null operator.
+
+    :param eval_type: Type of evaluation
+
+    :return: Boolean result, SQL query, or text result
+    """
+    if eval_type == EVAL_EXP:
+        # Python evaluation
+        node_value = get_value(node, given_variables)
+        return value_is_null(node_value)
+
+    if eval_type == EVAL_SQL:
+        # SQL evaluation
+        query = sql.SQL('({0} is null)').format(
+            sql.Identifier(node['field']),
+        )
+
+        return query, []
+
+    # Text evaluation
+    return '{0} is null'.format(node['field'])
+
+
+def is_not_null(node, eval_type, given_variables):
     """Process the is_not_null operator.
 
     :param eval_type: Type of evaluation
@@ -370,7 +374,7 @@ def is_not_null(node,eval_type, given_variables):
     """
     if eval_type == EVAL_EXP:
         # Python evaluation
-        return not is_null(get_value(node, given_variables))
+        return not value_is_null(get_value(node, given_variables))
 
     if eval_type == EVAL_SQL:
         # SQL evaluation
@@ -384,7 +388,7 @@ def is_not_null(node,eval_type, given_variables):
     return '{0} is not null'.format(node['field'])
 
 
-def less(node,eval_type, given_variables):
+def less(node, eval_type, given_variables):
     """Process the less operator.
 
     :param eval_type: Type of evaluation
@@ -397,7 +401,7 @@ def less(node,eval_type, given_variables):
         # Python evaluation
         varvalue = get_value(node, given_variables)
         if node['type'] in ('integer', 'double', 'datetime'):
-            return (not is_null(varvalue)) and varvalue < constant
+            return (not value_is_null(varvalue)) and varvalue < constant
         raise Exception(
             ugettext(
                 'Evaluation error: '
@@ -421,7 +425,7 @@ def less(node,eval_type, given_variables):
     )
 
 
-def less_or_equal(node,eval_type, given_variables):
+def less_or_equal(node, eval_type, given_variables):
     """Process the less_or_equal operator.
 
     :param eval_type: Type of evaluation
@@ -434,7 +438,7 @@ def less_or_equal(node,eval_type, given_variables):
         # Python evaluation
         varvalue = get_value(node, given_variables)
         if node['type'] in ('integer', 'double', 'datetime'):
-            return (not is_null(varvalue)) and varvalue <= constant
+            return (not value_is_null(varvalue)) and varvalue <= constant
         raise Exception(
             ugettext(
                 'Evaluation error: Type {0} not allowed '
@@ -459,7 +463,7 @@ def less_or_equal(node,eval_type, given_variables):
     )
 
 
-def greater(node,eval_type, given_variables):
+def greater(node, eval_type, given_variables):
     """Process the greater operator.
 
     :param eval_type: Type of evaluation
@@ -472,7 +476,7 @@ def greater(node,eval_type, given_variables):
         # Python evaluation
         varvalue = get_value(node, given_variables)
         if node['type'] in ('integer', 'double', 'datetime'):
-            return (not is_null(varvalue)) and varvalue > constant
+            return (not value_is_null(varvalue)) and varvalue > constant
         raise Exception(
             ugettext(
                 'Evaluation error: Type {0} not allowed '
@@ -496,7 +500,7 @@ def greater(node,eval_type, given_variables):
     )
 
 
-def greater_or_equal(node,eval_type, given_variables):
+def greater_or_equal(node, eval_type, given_variables):
     """Process the greater_or_equal operator.
 
     :param eval_type: Type of evaluation
@@ -509,7 +513,7 @@ def greater_or_equal(node,eval_type, given_variables):
         # Python evaluation
         varvalue = get_value(node, given_variables)
         if node['type'] in ('integer', 'double', 'datetime'):
-            return (not is_null(varvalue)) and varvalue >= constant
+            return (not value_is_null(varvalue)) and varvalue >= constant
         raise Exception(
             ugettext(
                 'Evaluation error: Type {0} not allowed '
@@ -534,7 +538,7 @@ def greater_or_equal(node,eval_type, given_variables):
     )
 
 
-def between(node,eval_type, given_variables):
+def between(node, eval_type, given_variables):
     """Process the between operator.
 
     :param eval_type: Type of evaluation
@@ -544,7 +548,7 @@ def between(node,eval_type, given_variables):
     if eval_type == EVAL_EXP:
         # Python evaluation
         varvalue = get_value(node, given_variables)
-        if is_null(varvalue):
+        if value_is_null(varvalue):
             return False
 
         if node['type'] not in ('integer', 'double', 'datetime'):
@@ -581,7 +585,7 @@ def between(node,eval_type, given_variables):
     )
 
 
-def not_between(node,eval_type, given_variables):
+def not_between(node, eval_type, given_variables):
     """Process the not_between operator.
 
     :param eval_type: Type of evaluation
@@ -591,7 +595,7 @@ def not_between(node,eval_type, given_variables):
     if eval_type == EVAL_EXP:
         # Python evaluation
         varvalue = get_value(node, given_variables)
-        if is_null(varvalue):
+        if value_is_null(varvalue):
             return False
 
         if node['type'] not in ('integer', 'double', 'datetime'):
