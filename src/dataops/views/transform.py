@@ -51,8 +51,8 @@ class PluginRegistryTable(tables.Table):
 
     def __init__(self, *args, **kwargs):
         """Set workflow and request."""
-        self.workflow = kwargs.get('workflow')
-        self.request = kwargs.get('request')
+        self.workflow = kwargs.pop('workflow')
+        self.request = kwargs.pop('request')
 
         super().__init__(*args, **kwargs)
 
