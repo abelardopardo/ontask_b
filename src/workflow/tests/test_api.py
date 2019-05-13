@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, unicode_literals
 
-import test
-
 from django.shortcuts import reverse
 from rest_framework.authtoken.models import Token
 
+import test
 from workflow.models import Workflow
 
 
@@ -55,9 +54,11 @@ class WorkflowApiCreate(test.OnTaskApiTestCase):
 
     def test_workflow_no_post_on_update(self):
         # POST method is not allowed in this URL
-        response = self.client.post(reverse('workflow:api_rud',
-                                            kwargs={'pk': 1}),
-                                    {'name': test.wflow_name + '2'})
+        response = self.client.post(
+            reverse(
+                'workflow:api_rud',
+                kwargs={'pk': 1}),
+            {'name': test.wflow_name + '2'})
 
         # Verify that the method post is not allowed
         self.assertIn('Method "POST" not allowed', response.data['detail'])

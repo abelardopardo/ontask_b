@@ -18,6 +18,8 @@
 
 - Refactoring of plugin infrastructure to execute arbitrary transformations and
   models
+  
+- Major refactoring of the code to use type hints and an more adequate division into packages. 
 
 ### Fixed
 

@@ -2,15 +2,16 @@
 from __future__ import print_function, unicode_literals
 
 import test
-
 from workflow.forms import WorkflowForm
 
 
 class WorkflowFormTest(test.OnTaskTestCase):
     # Valid data
     def test_workflow_valid(self):
-        form = WorkflowForm(data={'name': 'workflow1',
-                                  'description_text': 'Fake description text'})
+        form = WorkflowForm(
+            data={
+                'name': 'workflow1',
+                'description_text': 'Fake description text'})
 
         self.assertTrue(form.is_valid())
 

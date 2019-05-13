@@ -5,7 +5,6 @@ import gzip
 import os
 import shutil
 import tempfile
-import test
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -16,10 +15,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 from dataops.pandas import destroy_db_engine, engine
-from workflow.models import Workflow
+import test
 from workflow.import_export import (
     do_export_workflow, do_export_workflow_parse, do_import_workflow_parse,
 )
+from workflow.models import Workflow
 
 
 class WorkflowImportExport(test.OnTaskTestCase):
@@ -95,7 +95,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         # Set the workflow name and file
         wname = self.selenium.find_element_by_id('id_name')
         wname.send_keys('newwf')
-        wfile = self.selenium.find_element_by_id('id_file')
+        wfile = self.selenium.find_element_by_id('id_wf_file')
         wfile.send_keys(os.path.join(settings.BASE_DIR(),
                                      'workflow',
                                      'fixtures',
@@ -186,14 +186,13 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
         # User must exist
         self.assertIsNotNone(user, 'User instructor01@bogus.com not found')
 
-        # Search for a workflow with the given name
-        workflow = Workflow.objects.filter(
-            user__email='instructor01@bogus.com',
-            name=self.wflow_name
-        ).first()
-
         # Workflow must not exist
-        self.assertIsNone(workflow, 'A workflow with this name already exists')
+        self.assertFalse(
+            Workflow.objects.filter(
+                user__email='instructor01@bogus.com',
+                name=self.wflow_name
+            ).exists(),
+            'A workflow with this name already exists')
 
         with open(self.filename, 'rb') as f:
             do_import_workflow_parse(user, self.wflow_name, f)
