@@ -107,7 +107,8 @@ def destroy_db_engine(db_engine):
 
     :return: Nothing
     """
-    db_engine.dispose()
+    if db_engine:
+        db_engine.dispose()
 
 
 def load_table(
