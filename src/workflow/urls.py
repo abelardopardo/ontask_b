@@ -119,7 +119,7 @@ urlpatterns = [
 
     # Get, update content or destroy workflows
     path(
-        '<int:id>/rud/',
+        '<int:pk>/rud/',
         api.WorkflowAPIRetrieveUpdateDestroy.as_view(),
         name='api_rud'),
 
