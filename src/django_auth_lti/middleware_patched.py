@@ -9,7 +9,7 @@ from django.core.exceptions import ImproperlyConfigured
 from .thread_local import set_current_request
 from .timer import Timer
 
-logger = logging.getLogger('onTask')
+logger = logging.getLogger('django_auth_lti.backends')
 
 
 class MultiLTILaunchAuthMiddleware:
