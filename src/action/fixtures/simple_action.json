@@ -782,7 +782,7 @@
         "rows_all_false": [
             2
         ],
-        "content": "{% comment %}Your action content here{% endcomment %}",
+        "text_content": "{% comment %}Your action content here{% endcomment %}",
         "target_url": "",
         "shuffle": false
     }

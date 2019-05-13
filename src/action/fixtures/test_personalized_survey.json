@@ -998,7 +998,7 @@
         "active_from": null,
         "active_to": null,
         "rows_all_false": null,
-        "content": "",
+        "text_content": "",
         "target_url": "",
         "shuffle": false
     }

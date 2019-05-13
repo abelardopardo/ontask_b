@@ -889,7 +889,7 @@
         "active_from": null,
         "active_to": null,
         "rows_all_false": null,
-        "content": "<p>Hello&nbsp;</p>",
+        "text_content": "<p>Hello&nbsp;</p>",
         "target_url": "",
         "shuffle": false
     }

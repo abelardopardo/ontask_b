@@ -830,7 +830,7 @@
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
-        "content": "{% comment %}Your action content here{% endcomment %}",
+        "text_content": "{% comment %}Your action content here{% endcomment %}",
         "target_url": "",
         "shuffle": false
     }
@@ -849,7 +849,7 @@
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
-        "content": "<p><br></p>",
+        "text_content": "<p><br></p>",
         "target_url": "",
         "shuffle": false
     }

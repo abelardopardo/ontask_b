@@ -1073,7 +1073,7 @@
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
-        "content": "<p>{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}</p>",
+        "text_content": "<p>{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}</p>",
         "target_url": "",
         "shuffle": false
     }
