@@ -44,7 +44,7 @@ class Scenario3Captures(ScreenTests):
         self.selenium.find_element_by_id('id_name').send_keys(
             self.workflow_name
         )
-        self.selenium.find_element_by_id('id_file').send_keys(
+        self.selenium.find_element_by_id('id_wf_file').send_keys(
             os.path.join(settings.BASE_DIR(),
                          '..',
                          'docs_src',
