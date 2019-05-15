@@ -39,7 +39,7 @@ def _get_plugin_path():
     return os.path.join(ontask_settings.BASE_DIR, plugin_folder)
 
 
-def _verify_plugin(plugin_instance):
+def _verify_plugin(pinobj):
     """Verify that plugin complies with certain tests.
 
     Run some tests in the plugin instance to make sure it complies with the
@@ -74,7 +74,7 @@ def _verify_plugin(plugin_instance):
        initial value: one value of the type described by 'type string'
        help text: string
 
-    :param plugin_instance: Plugin instance
+    :param pinobj: Plugin instance
 
     :return: List of Booleans with the result of the tests
     """
@@ -105,7 +105,7 @@ def _verify_plugin(plugin_instance):
     check_idx = 0
     try:
         # Verify that the class inherits from OnTaskPluginAbstract
-        if issubclass(type(plugin_instance), OnTaskPluginAbstract):
+        if issubclass(type(pinobj), OnTaskPluginAbstract):
             diag[check_idx] = _('Ok')
         else:
             diag[check_idx] = _('Incorrect parent class')
@@ -113,7 +113,7 @@ def _verify_plugin(plugin_instance):
         check_idx += 1
 
         # Verify that the class has a non empty documentation string
-        if plugin_instance.__doc__:
+        if pinobj.__doc__ and isinstance(pinobj.__doc__, str):
             diag[check_idx] = _('Ok')
         else:
             diag[check_idx] = _('Class is not documented')
@@ -121,23 +121,23 @@ def _verify_plugin(plugin_instance):
 
         # Verify that all the fields and methods are present in the instance
         diag[check_idx] = _('Not found')
-        if isinstance(plugin_instance.name, str):
+        if pinobj.name is not None and isinstance(pinobj.name, str):
             diag[check_idx] = _('Ok')
         else:
             diag[check_idx] = _('Incorrect type')
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if isinstance(plugin_instance.description_txt, str):
+        if isinstance(pinobj.description_txt, str):
             diag[check_idx] = _('Ok')
         else:
             diag[check_idx] = _('Incorrect type')
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if all(
+        if isinstance(pinobj.input_column_names, list) and all(
             isinstance(colname, str)
-            for colname in plugin_instance.input_column_names
+            for colname in pinobj.input_column_names
         ):
             diag[check_idx] = _('Ok')
         else:
@@ -145,11 +145,9 @@ def _verify_plugin(plugin_instance):
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if (
-            plugin_instance.output_column_names
-        ) and all(
+        if isinstance(pinobj.output_column_names, list) and all(
             isinstance(cname, str)
-            for cname in plugin_instance.output_column_names
+            for cname in pinobj.output_column_names
         ):
             diag[check_idx] = _('Ok')
         else:
@@ -157,11 +155,11 @@ def _verify_plugin(plugin_instance):
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if not isinstance(plugin_instance.parameters, list):
+        if not isinstance(pinobj.parameters, list):
             diag[check_idx] = _('Incorrect type')
             return list(zip(diag, checks))
 
-        for key, ptype, pallow, pinit, phelp in plugin_instance.parameters:
+        for key, ptype, pallow, pinit, phelp in pinobj.parameters:
 
             if not isinstance(key, str):
                 # The type should be a string
@@ -209,7 +207,7 @@ def _verify_plugin(plugin_instance):
 
         # Test the method run
         try:
-            plugin_instance.run()
+            pinobj.run()
         except AttributeError:
             # Run is either not in the class, or not a method.
             diag[check_idx] = _('Incorrect run method')
