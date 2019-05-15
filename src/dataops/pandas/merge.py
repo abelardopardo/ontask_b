@@ -117,7 +117,7 @@ def _review_column_data_types(columns, new_df):
                     + 'remove the rows that cause this problem in the new '
                     + 'dataset').format(col.name)
 
-        return None
+    return None
 
 
 def _update_is_key_field(merge_info, workflow):
