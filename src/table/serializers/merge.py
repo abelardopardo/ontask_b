@@ -23,10 +23,10 @@ class DataFrameJSONField(serializers.Field):
         """
         return json.loads(instance.to_json(date_format='iso'))
 
-    def to_internal_value(self, serial_data):
+    def to_internal_value(self, data):
         """Create the data frame from the given data detecting date/time."""
         try:
-            df = pd.DataFrame(serial_data)
+            df = pd.DataFrame(data)
             # Detect date/time columns
             df = detect_datetime_columns(df)
         except Exception as exc:
