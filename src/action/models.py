@@ -17,7 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 
 import dataops.sql.row_queries
 import ontask
-from dataops.formula import EVAL_TXT, evaluate_formula
+from dataops.formula import EVAL_TXT, evaluate_formula, evaluation
 from dataops.sql import table_queries
 from logs.models import Log
 from workflow.models import Column, Workflow
@@ -284,20 +284,29 @@ class Action(models.Model):
     ) -> None:
         """Rename a variable present in the action content.
 
+        Two steps are performed. Rename the variable in the text_content, and
+        rename the varaible in all the conditions.
         :param old_name: Old name of the variable
         :param new_name: New name of the variable
         :return: Updates the current object
         """
-        assert self.is_out
-        # Need to change name appearances in content
-        self.text_content = var_use_res[0].sub(
-            lambda match: '{{ ' + (
-                new_name if match.group('vname') == html.escape(old_name)
-                else match.group('vname')
-            ) + ' }}',
-            self.text_content,
-        )
-        self.save()
+        if self.text_content:
+            # Need to change name appearances in content
+            self.text_content = var_use_res[0].sub(
+                lambda match: '{{ ' + (
+                    new_name if match.group('vname') == html.escape(old_name)
+                    else match.group('vname')
+                ) + ' }}',
+                self.text_content,
+            )
+            self.save()
+
+        # Rename the variable in all conditions
+        for cond in self.conditions.all():
+            cond.formula = evaluation.rename_variable(
+                cond.formula, old_name, new_name)
+            cond.save()
+
 
     def update_n_rows_selected(self, filter_formula=None, column=None):
         """Reset the field n_rows_selected in all conditions.
