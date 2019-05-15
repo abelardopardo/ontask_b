@@ -39,7 +39,7 @@ def set_engine():
     global engine
 
     if engine:
-        return engine
+        return
 
     engine = create_db_engine(
         'postgresql',
@@ -107,9 +107,12 @@ def destroy_db_engine(db_engine):
 
     :return: Nothing
     """
+    global engine
+
     if db_engine:
         db_engine.dispose()
-
+    else:
+        engine.dispose()
 
 def load_table(
     table_name: str,
