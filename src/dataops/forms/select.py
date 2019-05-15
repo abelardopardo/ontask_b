@@ -99,17 +99,19 @@ class SelectKeysForm(forms.Form):
     def __init__(self, *args, **kargs):
         """Adjust the choices for the select fields."""
         # Get the dst choices
+        selected_key = kargs.pop('dst_selected_key')
         dst_choices = [(dkey, dkey) for dkey in kargs.pop('dst_keys')]
         dst_choice_initial = next((
             skey for skey in dst_choices
-            if kargs.pop('dst_selected_key') == skey[0]),
+            if skey[0] == selected_key),
             ('', '---'))
 
         # Get the src choices
+        selected_key = kargs.pop('src_selected_key')
         src_choices = [(skey, skey) for skey in kargs.pop('src_keys')]
         src_choice_initial = next((
             skey for skey in src_choices
-            if kargs.pop('src_selected_key') == skey[0]),
+            if selected_key == skey[0]),
             ('', _('- Select merge option -')))
 
         how_merge_initial = next((
