@@ -180,7 +180,7 @@ class UploadExcelFileForm(UploadBasic):
         # # Process Excel file using pandas read_excel
         try:
             self.data_frame = load_df_from_excelfile(
-                self.files['text_file'],
+                self.files['data_file'],
                 form_data['sheet'])
         except Exception as exc:
             self.add_error(
